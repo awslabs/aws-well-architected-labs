@@ -4,4 +4,4 @@ Documentation and code to help you learn, measure, and build using architectural
 
 ## License
 
-This library is licensed under the Apache 2.0 License. 
+This library is licensed under the Apache 2.0 and MITnoAttr License. 
