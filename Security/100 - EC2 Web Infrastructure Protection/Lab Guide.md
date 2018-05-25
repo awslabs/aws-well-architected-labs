@@ -83,7 +83,7 @@ AWS WAF configuration for use with CloudFront.
 
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Click Create New Stack.
-3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://` and click Next.
+3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-global.yaml` and click Next.
 4. Enter the following details:
   * WAFName: Enter the base name to be used for resource and export names for this stack. For this lab, you can use `Lab1`.
   * WAFCloudWatchPrefix: Enter the name of the CloudWatch prefix to use for each rule using alphanumeric
