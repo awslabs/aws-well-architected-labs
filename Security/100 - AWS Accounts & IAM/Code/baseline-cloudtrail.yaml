@@ -47,7 +47,6 @@ Parameters:
   CloudTrailBucketName:
     Type: String
     Description: The name of the new S3 bucket to create for CloudTrail to send logs to.
-    Default: cloudtrail-prod-logs-syd-123456789012
     MinLength: '3'
     MaxLength: '63'
     AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
