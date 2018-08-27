@@ -1,11 +1,16 @@
-# Level 200: Automated Deployment Detective Controls
+# Level 100: Basic Identity & Access Management User, Group, Role
 
 ## Introduction
-This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure detective controls including AWS CloudTrail.
-You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of AWS CloudTrail. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management
+(IAM)
+and AWS accounts.
+You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the
+configuration of a new AWS account with IAM best practices. The skills you learn will help you
+secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Goals:
-* Implement detective controls
+* Protecting AWS credentials
+* Fine-grained authorization
 
 ## Prerequisites:
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
@@ -13,6 +18,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 ## Overview
 * **[Lab Guide.md](Lab%20Guide.md) the guide for this lab**
+* [Checklist.md](Checklist.md) best practice checklist related to this lab
 * [/Code](Code/) Code including CloudFormation templates related to this lab
 * [/Images](Images/) referenced by this lab
 

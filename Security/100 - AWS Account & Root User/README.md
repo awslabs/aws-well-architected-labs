@@ -1,4 +1,4 @@
-# Level 100: AWS Account & IAM
+# Level 100: AWS Account & Root User
 
 ## Introduction
 This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management

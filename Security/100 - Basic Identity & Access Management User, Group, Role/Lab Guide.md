@@ -1,4 +1,4 @@
-# Level 100: Basic Identity & Access Management User and Group: Lab Guide
+# Level 100: Basic Identity & Access Management User, Group, Role: Lab Guide
 
 ## 1. AWS Identity & Access Management
 As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then make those users administrators by placing the users into an "Administrators" group to which you attach the AdministratorAccess managed policy.
