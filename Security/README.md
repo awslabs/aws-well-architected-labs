@@ -6,8 +6,11 @@ This repository contains documentation and code in the format of hands-on labs t
 For more information about security on AWS visit [AWS Security](https://aws.amazon.com/security/) and read the [AWS Well-Architected Security whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf).
 
 ## Labs:
-* [Level 100: AWS Accounts & IAM](100%20-%20AWS%20Accounts%20%26%20IAM%2F)
+* [Level 100: AWS Account & Root User](100%20-%20AWS%20Account%20%26%20Root%20User)
+* [Level 100: Basic Identity & Access Management User, Group, Role](100%20-%20Basic%20Identity%20%26%20Access%20Management%20User%2C%20Group%2C%20Role)
 * [Level 100: EC2 Web Infrastructure Protection](100%20-%20EC2%20Web%20Infrastructure%20Protection%2F)
+* [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
+* [Level 200: Automated Deployment of Detective Controls](200%20-%20Automated%20Deployment%20of%20Detective%20Controls)
 
 ***
 
