@@ -1,4 +1,4 @@
-# Level 100: AWS Accounts & IAM: Lab Guide
+# Level 100: AWS Account & IAM: Lab Guide
 
 ## 1. Account Settings & Root User Security
 When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account.
