@@ -1,4 +1,4 @@
-# Level 200: Automated Deployment IAM Groups and Roles
+# Level 200: Automated Deployment of IAM Groups and Roles
 
 ## Introduction
 This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure AWS Identity and Access Management (IAM) Groups and
