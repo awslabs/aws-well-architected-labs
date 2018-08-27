@@ -7,6 +7,7 @@ We strongly recommend that you do not use the root user for your everyday tasks,
 
 ### 1.1 Generate and Review the AWS Account Credential Report
 You should audit your security configuration in the following situations:
+ 
 * On a periodic basis. You should perform the steps described in this document at regular intervals as a best practice for security.
 * If there are changes in your organization, such as people leaving.
 * If you have stopped using one or more individual AWS services. This is important for removing permissions that users in your account no longer need.
@@ -17,11 +18,12 @@ As you review your account's security configuration, follow these guidelines:
 * **Don't assume**. If you are unfamiliar with some aspect of your security configuration (for example, the reasoning behind a particular policy or the existence of a role), investigate the business need until you are satisfied.
 * **Keep things simple**. To make auditing (and management) easier, use IAM groups, consistent naming schemes, and straightforward policies.
 
-*More information can be found at https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html*
+*More information can be found at [https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html*](https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html)
 
 You can use the AWS Management Console to download a credential report as a comma-separated values (CSV) file.
 To download a credential report using the AWS Management Console:
-1. Sign in to the AWS Management Console and open the IAM console at https://console.aws.amazon.com/iam/.
+
+1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click Credential report.
 3. Click Download Report.
 ![iam-credential-report](Images/iam-credential-report.png)
@@ -30,7 +32,8 @@ To download a credential report using the AWS Management Console:
 
 ### 1.2 Configure Account Security Challenge Questions
 Configure account security challenge questions because they are used to verify that you own an AWS account.
-1. Sign in to the AWS Management Console and open the AWS account settings page at https://console.aws.amazon.com/billing/home?#/account/.
+
+1. Sign in to the AWS Management Console and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to security challenge questions configuration section.
 3. Select three challenge questions and enter answers for each.
 ![account-challenge-questions](Images/account-challenge-questions.png)
@@ -83,6 +86,7 @@ The device is ready for use with AWS. For information about using MFA with the A
 
 ### 1.4 Remove Your AWS Account Root User Access Keys
 You use an access key (an access key ID and secret access key) to make programmatic requests to AWS. However, **do not** use your AWS account root user access key. The access key for your AWS account gives full access to all your resources for all AWS services, including your billing information. You cannot restrict the permissions associated with your AWS account access key.
+
 * Check in the credential report; if you don't already have an access key for your AWS account, don't
 create one unless you absolutely need to. Instead, use your account email address and password to sign
 in to the AWS Management Console and create an IAM user for yourself that has administrative privileges.
@@ -149,7 +153,7 @@ for further analysis.
 3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-cloudtrail.yaml` and click Next.
 4. Enter the following details:
   * Stack name: The name of this stack. For this lab, use `cloudtrail`.
-  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.
+  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  **IMPORTANT** Specify a bucket name that is unique. The default bucket name likely has already been created.  
   * S3AccessLogsBucketName: The name of an existing S3 bucket for storing S3 access logs (optional).
   * CloudWatchLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.
   * EncryptLogs: (optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.
@@ -174,6 +178,7 @@ Thereafter, the users in the administrators group should set up the groups, user
 
 ### 2.1 Create Administrator IAM User and Group
 To create an administrator user for yourself and add the user to an administrators group:
+
 1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at https://console.aws.amazon.com/iam/.
 2. In the navigation pane, choose Users and then choose Add user.
 ![iam-create-user](Images/iam-create-user.png)
@@ -200,7 +205,7 @@ You can use this same process to create more groups and users and to give your u
 Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/) we are going to deploy a set of groups,
 roles, and managed policies that will help with your "baseline" of your AWS account.
 
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
 2. Click Create New Stack.
 3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-iam.yaml` and click Next.
 4. Enter the following details:
