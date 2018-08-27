@@ -2,13 +2,13 @@
 
 ## 1. Account Settings & Root User Security
 When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account.
-We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Then securely lock away the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
+We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user, groups and roles. Then securely lock away the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
 
 
 ### 1.1 Generate and Review the AWS Account Credential Report
 You should audit your security configuration in the following situations:
  
-* On a periodic basis. You should perform the steps described in this document at regular intervals as a best practice for security.
+* On a periodic basis. You should perform the steps described here at regular intervals as a best practice for security.
 * If there are changes in your organization, such as people leaving.
 * If you have stopped using one or more individual AWS services. This is important for removing permissions that users in your account no longer need.
 * If you've added or removed software in your accounts, such as applications on Amazon EC2 instances, AWS OpsWorks stacks, AWS CloudFormation templates, etc.
@@ -18,7 +18,7 @@ As you review your account's security configuration, follow these guidelines:
 * **Don't assume**. If you are unfamiliar with some aspect of your security configuration (for example, the reasoning behind a particular policy or the existence of a role), investigate the business need until you are satisfied.
 * **Keep things simple**. To make auditing (and management) easier, use IAM groups, consistent naming schemes, and straightforward policies.
 
-*More information can be found at [https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html*](https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html)
+*More information can be found at [https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html](https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html)*
 
 You can use the AWS Management Console to download a credential report as a comma-separated values (CSV) file.
 To download a credential report using the AWS Management Console:

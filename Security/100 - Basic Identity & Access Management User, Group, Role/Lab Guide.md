@@ -2,39 +2,10 @@
 
 ## 1. AWS Identity & Access Management
 As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then make those users administrators by placing the users into an "Administrators" group to which you attach the AdministratorAccess managed policy.
-Thereafter, the users in the administrators group should set up the groups, users, and so on, for the AWS account. All future interaction should be through the AWS account's users and their own keys instead of the root user.
+Thereafter, the users in the administrators group should assume a role to perform their tasks for the AWS account. All future interaction should be through the AWS account's users assuming roles, instead of the IAM user directly or the root user.
 
 
-When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account. For securing your AWS account and root user, check out our other lab. We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones.
-Instead, adhere to the best practice of using the root user only to create your first IAM administrator group, and a user in that group. Thereafter, the users in the administrators group set up the groups, users, and so on, for the AWS account. All future interaction should be through the AWS account's users and their own keys instead of the root user.
-
-
-### 1.1 Generate and Review the AWS Account Credential Report
-You should audit your security configuration in the following situations:
- 
-* On a periodic basis. You should perform the steps described in this document at regular intervals as a best practice for security.
-* If there are changes in your organization, such as people leaving.
-* If you have stopped using one or more individual AWS services. This is important for removing permissions that users in your account no longer need.
-* If you've added or removed software in your accounts, such as applications on Amazon EC2 instances, AWS OpsWorks stacks, AWS CloudFormation templates, etc.
-* If you ever suspect that an unauthorized person might have accessed your account.
-As you review your account's security configuration, follow these guidelines:
-* **Be thorough**. Look at all aspects of your security configuration, including those you might not use regularly.
-* **Don't assume**. If you are unfamiliar with some aspect of your security configuration (for example, the reasoning behind a particular policy or the existence of a role), investigate the business need until you are satisfied.
-* **Keep things simple**. To make auditing (and management) easier, use IAM groups, consistent naming schemes, and straightforward policies.
-
-*More information can be found at [https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html*](https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html)*
-
-You can use the AWS Management Console to download a credential report as a comma-separated values (CSV) file.
-To download a credential report using the AWS Management Console:
-
-1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
-2. In the navigation pane, click Credential report.
-3. Click Download Report.
-![iam-credential-report](Images/iam-credential-report.png)
-*Further information about the report can be found at https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html*
-
-
-### 1.2 Create Administrator IAM User and Group
+### 1.1 Create Administrator IAM User and Group
 To create an administrator user for yourself and add the user to an administrators group:
 
 1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at https://console.aws.amazon.com/iam/.
@@ -59,19 +30,20 @@ You can use this same process to create more groups and users and to give your u
 ![iam-user-mfa](Images/iam-user-mfa.png)
 15. You can now use this administrator user instead of your root user for this AWS account.
 
+## 2. Assume Roles from an IAM user
+We will assume the roles previously created in the web console and command line interface (CLI) using an existing IAM user.
 
-### 2.3 Use Restricted Administrator Role in Console
-A *role* specifies a set of permissions that you can use to access AWS resources that you need. In that sense, it is similar to a user in AWS Identity and Access Management (IAM). When you sign in as a user, you get a specific set of permissions. However, you don't sign in to a role, but once signed in you can switch to a role. This temporarily sets aside your original user permissions and instead gives you the permissions assigned to the role. The role can be in your own account or any other AWS account. By default, your AWS Management Console session lasts for one hour.
+### 2.1 Use Restricted Administrator Role in Web Console
+A *role* specifies a set of permissions that you can use to access AWS resources that you need. In that sense, it is similar to a user in AWS Identity and Access Management (IAM). When you sign in as a user, you get a specific set of permissions. However, you don't sign in to a role, but once signed in (as a user) you can switch to a role. This temporarily sets aside your original user permissions and instead gives you the permissions assigned to the role. The role can be in your own account or any other AWS account. By default, your AWS Management Console session lasts for one hour.
 
   **Important**
 
     The permissions of your IAM user and any roles that you switch to are not cumulative. Only one set of permissions is active at a time. When you switch to a role, you temporarily give up your user permissions and work with the permissions that are assigned to the role. When you exit the role, your user permissions are automatically restored.
 
-1. Sign in to the AWS Management Console as an IAM user https://console.aws.amazon.com.
+1. Sign in to the AWS Management Console as an IAM user [https://console.aws.amazon.com](https://console.aws.amazon.com).
 2. In the IAM console, choose your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`.
 3. Choose Switch Role. If this is the first time choosing this option, a page appears with more information. After reading it, choose Switch Role. If you clear your browser cookies, this page can appear again.
-4. On the Switch Role page, type the account ID number or the account alias and the name of the role that
-you created for the Restricted Admin in the previous step, for example, `arn:aws:iam::account_ID:role/Baseline-RestrictedAdmin`.
+4. On the Switch Role page, type the account ID number or the account alias and the name of the role that you created for the Restricted Admin in the previous step, for example, `arn:aws:iam::account_ID:role/Baseline-RestrictedAdmin`.
 5. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name. The name and color can help remind you when this role is active, which changes your permissions. For example, for a role that gives you access to the test environment, you might specify a Display Name of Test and select the green Color. For the role that gives you access to production, you might specify a Display Name of Production and select red as the Color.
 6. Choose Switch Role. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.
 
@@ -82,6 +54,9 @@ you created for the Restricted Admin in the previous step, for example, `arn:aws
 	**To stop using a role**
     In the IAM console, choose your role's Display Name on the right side of the navigation bar.
     Choose Back to UserName. The role and its permissions are deactivated, and the permissions associated with your IAM user and groups are automatically restored.
+
+### 2.2 Use Restricted Administrator Role in Command Line Interface (CLI)
+Coming soon, for now check out: [https://docs.aws.amazon.com/cli/latest/userguide/cli-roles.html](https://docs.aws.amazon.com/cli/latest/userguide/cli-roles.html)
 
 
 ***
