@@ -8,27 +8,37 @@ Thereafter, the users in the administrators group should assume a role to perfor
 ### 1.1 Create Administrator IAM User and Group
 To create an administrator user for yourself and add the user to an administrators group:
 
-1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at https://console.aws.amazon.com/iam/.
-2. In the navigation pane, choose Users and then choose Add user.
-![iam-create-user](Images/iam-create-user.png)
+1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+2. In the navigation pane, choose Users and then choose Add user.  
+![iam-create-user](Images/iam-create-user.png)  
 3. For User name, type a user name, such as Administrator. The name can consist of letters, digits, and the following characters: plus `(+)`, equal `(=)`, comma `(,)`, period `(.)`, at `(@)`, underscore `(_)`, and hyphen `(-)`. The name is not case sensitive and can be a maximum of 64 characters in length.
-4. Select the check box next to AWS Management Console access, select Custom password, and then type your new password in the text box. If you're creating the user for someone other than yourself, you can optionally select Require password reset to force the user to create a new password when first signing in.
-![iam-add-user-1](Images/iam-add-user-1.png)
+4. Select the check box next to AWS Management Console access, select Custom password, and then type your new password in the text box. For this highly privileged user it is not recommended to enable programmatic access, if you do not protect the access and secret keys that are generated then someone could gain access to your resources. If you're creating the user for someone other than yourself, you can optionally select Require password reset to force the user to create a new password when first signing in.
+![iam-add-user-1](Images/iam-add-user-1.png)  
 5. Choose Next: Permissions.
 6. On the Set permissions for user page, choose Add user to group.
 7. Choose Create group.
-8. In the Create group dialog box, type the name for the new group. The name can consist of letters, digits, and the following characters: `plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-).` The name is not case sensitive and can be a maximum of 128 characters in length.
-9. In the policy list, select the check box next to AdministratorAccess. Then choose Create group.
-10. Back in the list of groups, select the check box for your new group. Choose Refresh if necessary to see the group in the list.
-![iam-add-user-2](Images/iam-add-user-2.png)
+8. In the Create group dialog box, type the name for the new group such as Administrators. The name can consist of letters, digits, and the following characters: `plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-).` The name is not case sensitive and can be a maximum of 128 characters in length.
+9. In the policy list, select the check box next to AdministratorAccess. Then choose Create group. ![iam-add-user-2](Images/iam-add-user-2.png)  
+10. Back in the list of groups, verify the check box is next to your new group. Choose Refresh if necessary to see the group in the list. ![iam-add-user-3](Images/iam-add-user-3.png)  
 11. Choose Next: Review to see the list of group memberships to be added to the new user. When you are ready to proceed, choose Create user.
-![iam-add-user-2](Images/iam-add-user-4.png)
+![iam-add-user-4](Images/iam-add-user-4.png)  
 You can use this same process to create more groups and users and to give your users access to your AWS account resources. To learn about using policies that restrict user permissions to specific AWS resources, see [Access Management](https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html) and [Example Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_examples.html). To add users to the group after it's created, see [Adding and Removing Users in an IAM Group](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_add-remove-users.html).
 12. Configure MFA on your new administrator user by choosing Users from the navigation pane.
 13. In the User Name list, choose the name of the intended MFA user.
 14. Choose the Security credentials tab. Next to Assigned MFA device, choose the edit icon.
-![iam-user-mfa](Images/iam-user-mfa.png)
-15. You can now use this administrator user instead of your root user for this AWS account.
+![iam-user-mfa](Images/iam-user-mfa.png)  
+15. You can now use this administrator user instead of your root user for this AWS account. In the following steps we will further secure this administrator user. It is a best practice to use least a least privileged approach to granting permissions, not everyone needs full administrator access!
+
+### 1.2 Create Administrator IAM Role
+To create an administrator role for yourself (and other administrators) to be used with the administrator user and group you just created:
+1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+2. In the navigation pane, click Credential report.
+
+### 1.3 Create Administrator IAM Role
+To create an administrator role for yourself (and other administrators) to be used with the administrator user and group you just created:
+1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+2. In the navigation pane, click Credential report.
+
 
 ## 2. Assume Roles from an IAM user
 We will assume the roles previously created in the web console and command line interface (CLI) using an existing IAM user.

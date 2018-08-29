@@ -1,11 +1,8 @@
 # Level 100: Basic Identity & Access Management User, Group, Role
 
 ## Introduction
-This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management
-(IAM)
-and AWS accounts.
-You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the
-configuration of a new AWS account with IAM best practices. The skills you learn will help you
+This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management (IAM).  
+You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of a new AWS account with IAM best practices. The skills you learn will help you
 secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Goals:

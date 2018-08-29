@@ -27,13 +27,13 @@ To download a credential report using the AWS Management Console:
 2. In the navigation pane, click Credential report.
 3. Click Download Report.
 ![iam-credential-report](Images/iam-credential-report.png)
-*Further information about the report can be found at https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html*
+*Further information about the report can be found at [https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)*
 
 
 ### 1.2 Configure Account Security Challenge Questions
 Configure account security challenge questions because they are used to verify that you own an AWS account.
 
-1. Sign in to the AWS Management Console and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
+1. Use your AWS account email address and password to sign in as the AWS account root user and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to security challenge questions configuration section.
 3. Select three challenge questions and enter answers for each.
 ![account-challenge-questions](Images/account-challenge-questions.png)
@@ -46,7 +46,7 @@ You can use IAM in the AWS Management Console to configure and enable a virtual 
 
 If your MFA device is lost, stolen, or not working, you can still sign in using alternative factors of authentication. To do this, you must verify your identity using the email and phone that are registered with your account. This means that if you can't sign in with your MFA device, you can sign in by verifying your identity using the email and phone that are registered with your account. Before you enable MFA for your root user, review your account settings and contact information to make sure that you have access to the email and phone number. To learn about signing in using alternative factors of authentication, see [What If an MFA Device Is Lost or Stops Working](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_lost-or-broken.html)?. To disable this feature, contact [AWS Support](https://console.aws.amazon.com/support/home#/).
 
-1. Sign in to the AWS Management Console and open the IAM console at https://console.aws.amazon.com/iam/.
+1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/)
 2. Do one of the following:
 
    * **Option 1**: Choose Dashboard, and under Security Status, expand Activate MFA on your root user.
@@ -154,10 +154,13 @@ Please note that the changes you made to the account and root user have no charg
 
 
 ## References & useful resources:
+[AWS Tasks That Require Root User](http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html)
+[https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
 [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)  
 [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)  
-[AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html)  
-[AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)  
+[Resetting Your Lost or Forgotten Passwords or Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys_retrieve.html)
+[Using MFA Devices With Your IAM Sign-in Page](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_sign-in-mfa.html)
+[What If an MFA Device Is Lost or Stops Working](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_lost-or-broken.html)
 
 
 ***
