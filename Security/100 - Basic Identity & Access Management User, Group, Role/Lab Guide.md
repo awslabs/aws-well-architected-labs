@@ -34,8 +34,9 @@ To create an administrator role for yourself (and other administrators) to be us
 1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click Roles and then click Create role.
 3. Click Another AWS account, then enter your account ID and tick Require MFA, then click Next: Permissions ![iam-role-1](Images/iam-role-create-1.png)  
-4. Tick AdministratorAccess from the list, and then click Next: Review![iam-role-2](Images/iam-role-create-2.png)  
+4. Tick AdministratorAccess from the list, and then click Next: Review. ![iam-role-2](Images/iam-role-create-2.png)  
 5. Enter a role name, e.g. 'Administrators' then click Create role.  ![iam-role-3](Images/iam-role-create-3.png)  
+6. Check the role you have configured by clicking the role you have just created. Record both the Role ARN and the link to the console. You can also optionally change the session duration timeout. ![iam-role-created](Images/iam-role-created.png)
 6. The role is now created, with full administrative access and MFA enforced.
 
 
@@ -43,7 +44,7 @@ To create an administrator role for yourself (and other administrators) to be us
 We will assume the roles previously created in the web console and command line interface (CLI) using an existing IAM user.
 
 ### 2.1 Use Administrator Role in Web Console
-A *role* specifies a set of permissions that you can use to access AWS resources that you need. In that sense, it is similar to a user in AWS Identity and Access Management (IAM). When you sign in as a user, you get a specific set of permissions. However, you don't sign in to a role, but once signed in (as a user) you can switch to a role. This temporarily sets aside your original user permissions and instead gives you the permissions assigned to the role. The role can be in your own account or any other AWS account. By default, your AWS Management Console session lasts for one hour.
+A *role* specifies a set of permissions that you can use to access AWS resources that you need. In that sense, it is similar to a user in AWS Identity and Access Management (IAM). A benefit of roles is they allow you to enforce the use of an MFA token to help protect your credentials. When you sign in as a user, you get a specific set of permissions. However, you don't sign in to a role, but once signed in (as a user) you can switch to a role. This temporarily sets aside your original user permissions and instead gives you the permissions assigned to the role. The role can be in your own account or any other AWS account. By default, your AWS Management Console session lasts for one hour.
 
   **Important**
 
