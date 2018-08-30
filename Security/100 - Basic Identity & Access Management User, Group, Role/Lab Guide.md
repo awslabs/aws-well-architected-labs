@@ -32,10 +32,11 @@ You can use this same process to create more groups and users and to give your u
 ### 1.2 Create Administrator IAM Role
 To create an administrator role for yourself (and other administrators) to be used with the administrator user and group you just created:
 1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
-2. In the navigation pane, click Roles and then click Create roll.
-3. Click Another AWS account, then enter your account ID and tick Require MFA, then click Next: Permissions ![iam-role-1](Images/iam-role-1.png)  
-4. Tick AdministratorAccess from the list, and then click Next: Review![iam-role-2](Images/iam-role-2.png)  
-5. Enter a role name, e.g. 'Administrators' then click Create role.  ![iam-role-3](Images/iam-role-3.png)  
+2. In the navigation pane, click Roles and then click Create role.
+3. Click Another AWS account, then enter your account ID and tick Require MFA, then click Next: Permissions ![iam-role-1](Images/iam-role-create-1.png)  
+4. Tick AdministratorAccess from the list, and then click Next: Review![iam-role-2](Images/iam-role-create-2.png)  
+5. Enter a role name, e.g. 'Administrators' then click Create role.  ![iam-role-3](Images/iam-role-create-3.png)  
+6. The role is now created, with full administrative access and MFA enforced.
 
 
 ## 2. Assume Roles from an IAM user
