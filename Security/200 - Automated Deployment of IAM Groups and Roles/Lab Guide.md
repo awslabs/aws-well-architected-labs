@@ -22,8 +22,7 @@ Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/) we are going 
 8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click
 Create.
 9. After a few minutes, the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
-10. You have now set up a number of managed polices, groups, and roles that you can test to improve your
-AWS security!
+10. You have now set up a number of managed polices, groups, and roles that you can test to improve your AWS security!
 
 ## 2. Assume Roles from an IAM user
 We will assume the roles previously created in the web console and command line interface (CLI) using an existing IAM user.
