@@ -78,8 +78,8 @@ Configure account security challenge questions because they are used to verify t
 
 1. Use your AWS account email address and password to sign in as the AWS account root user and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to security challenge questions configuration section.
-3. Select three challenge questions and enter answers for each.
 ![account-challenge-questions](Images/account-challenge-questions.png)  
+3. Select three challenge questions and enter answers for each.
 4. Securely store the questions and answers as you would passwords or other credentials.
 5. Click update.
 
@@ -89,8 +89,8 @@ Alternate contacts enable AWS to contact another person about issues with the ac
 
 1. Use your AWS account email address and password to sign in as the AWS account root user and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to alternate contacts configuration section.
-3. Enter contact details for billing, operations and security. 
 ![account-alternate-contacts](Images/account-alternate-contacts.png)  
+3. Enter contact details for billing, operations and security.
 4. Click update.
 
 
@@ -149,8 +149,8 @@ To create or change a password policy:
 1. Sign in to the AWS Management Console and open the IAM console at https://console.aws.amazon.com/iam/.
 2. In the navigation pane, click Account Settings.
 3. In the Password Policy section, select the options you want to apply to your password policy.
-4. Click Apply Password Policy.
-![iam-password-policy](Images/iam-password-policy.png)  
+4. Click Apply Password Policy.  
+![iam-password-policy](Images/iam-password-policy.png)
 
 
 ***
