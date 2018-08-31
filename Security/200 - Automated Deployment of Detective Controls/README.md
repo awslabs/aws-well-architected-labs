@@ -6,6 +6,7 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 
 ## Goals:
 * Implement detective controls
+* Automate security best practices
 
 ## Prerequisites:
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  

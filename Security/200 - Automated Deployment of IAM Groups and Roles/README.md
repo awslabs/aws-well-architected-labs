@@ -7,6 +7,7 @@ secure your workloads in alignment with the [AWS Well-Architected Framework](htt
 
 ## Goals:
 * Fine-grained authorization
+* Automate security best practices
 
 ## Prerequisites:
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
