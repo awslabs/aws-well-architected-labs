@@ -19,16 +19,14 @@ for further analysis.
   * ExpirationDays: Number of days to retain logs in the S3 bucket before they are automatically deleted.
 5. Click Next.
 ![cloudformation-cloudtrail-params](Images/cloudformation-cloudtrail-params.png)
-6. In this scenario, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 7. Review the information for the stack. When you're satisfied with the settings, click Next.
-8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click
-Create.
+8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click Create.
 9. After a few minutes the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
 You have now set up CloudTrail to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!
 
 
 ***
-
 
 
 ### 2. Tear down this lab
