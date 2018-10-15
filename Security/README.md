@@ -8,9 +8,11 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 ## Labs:
 * [Level 100: AWS Account & Root User](100%20-%20AWS%20Account%20%26%20Root%20User)
 * [Level 100: Basic Identity & Access Management User, Group, Role](100%20-%20Basic%20Identity%20%26%20Access%20Management%20User%2C%20Group%2C%20Role)
-* [Level 100: EC2 Web Infrastructure Protection](100%20-%20EC2%20Web%20Infrastructure%20Protection%2F)
-* [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
 * [Level 200: Automated Deployment of Detective Controls](200%20-%20Automated%20Deployment%20of%20Detective%20Controls)
+* [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
+* [Level 200: Basic EC2 with WAF Protection](200%20-%20Basic%20EC2%20with%20WAF%20Protection)
+* [Level 200: CloudFront with WAF Protection](200%20-%20CloudFront%20with%20WAF%20Protection)
+
 
 ***
 

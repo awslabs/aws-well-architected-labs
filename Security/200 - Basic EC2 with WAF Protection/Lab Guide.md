@@ -7,29 +7,28 @@ For launching your first instance, we are going to use the launch wizard in the 
 You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see [Launching an Instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html).
 Launch an instance:
 1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the console dashboard, choose Launch Instance.
+2. From the console dashboard, choose Launch Instance.  
 ![ec2-launch-wizard](Images/ec2-launch-wizard-button.png)
-3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux 2).
+3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux 2).  
 ![ec2-launch-wizard](Images/ec2-launch-wizard-ami.png)
-4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
+4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.  
 ![ec2-launch-wizard](Images/ec2-launch-wizard-type.png)
 5. On the Configure Instance Details page, make the following changes:
-  5.1 Select Create new IAM role.
+  5.1 Select Create new IAM role.  
   ![ec2-launch-wizard](Images/ec2-launch-wizard-role.png)
-  5.2	In the new tab that opens, select Create role.
-  	![ec2-launch-wizard](Images/ec2-launch-wizard-create-role.png)
-  5.3	With AWS service pre-selected, select EC2 from the top of the list, then click Next: Permissions.
-
-  	![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-start.png)
+  5.2	In the new tab that opens, select Create role.  
+  ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role.png)
+  5.3	With AWS service pre-selected, select EC2 from the top of the list, then click Next: Permissions.  
+  ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-start.png)
   5.4	Enter `s3` in the search and select AmazonS3ReadOnlyAccess from the list of policies, then click
   Next: Review. This policy will give this EC2 instance access to read and list any objects in Amazon
-  S3 within your AWS account.
-  	![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-policy.png)
-  5.5	Enter a role name, such as `ec2-s3-read-only-role`, and then click Create role.
-  	![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-name.png)
+  S3 within your AWS account.  
+  ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-policy.png)
+  5.5	Enter a role name, such as `ec2-s3-read-only-role`, and then click Create role.  
+  ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-name.png)
   5.6	Back on the EC2 launch web browser tab, select the refresh button next to Create new IAM role,
-  and click the role you just created.
-  	![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-final.png)
+  and click the role you just created.  
+  ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-final.png)
   5.7 Scroll down and expand the Advanced Details section. Enter the following in the User Data test box to automatically install Apache web server and apply basic configuration when the instance is launched:
   	```
 	#!/bin/bash
@@ -51,13 +50,13 @@ Launch an instance:
 	Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
   exposed. However, for simplicity in this lab, we are opening the access to anywhere. Later modules will
   secure access with Elastic Load Balancer.
-	7.2 Select Add Rule to add both SSH and HTTP, and on source, select `My IP`.
+	7.2 Select Add Rule to add both SSH and HTTP, and on source, select `My IP`.  
 	![Security Group](Images/ec2-launch-wizard-security-group.png)
-	7.3 Click Review and Launch.
+	7.3 Click Review and Launch.  
 	![ec2-launch-wizard](Images/ec2-launch-wizard-launch.png)
 8. On the Review Instance Launch page, check the details, and then click Launch.
 9. If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
-then type a name such as `lab`, click Download Key Pair, and then click Launch Instances.
+then type a name such as `lab`, click Download Key Pair, and then click Launch Instances.  
 ![ec2-launch-wizard](Images/ec2-launch-wizard-keys.png)
     **Important**
 
@@ -66,7 +65,7 @@ then type a name such as `lab`, click Download Key Pair, and then click Launch I
     to the instance.
 
 10. Click View Instances.
-11. When your instance is launched, its status will change to running, and it will need a few minutes to apply patches and install Apache web server.
+11. When your instance is launched, its status will change to running, and it will need a few minutes to apply patches and install Apache web server.  
 ![ec2-status](Images/ec2-status.png)
 12. You can connect to the Apache test page by entering the public DNS, which you can find on the description
 tab or instances list. Take note of this public DNS value.
@@ -125,7 +124,7 @@ ACL we previously created and test.
 10. A successfull message should appear, click Close.
 11. Take not of the DNS name under the Description tab, you will need this for testing.
 
-### 3.2 Configure Application Load Balancer with Web WAF
+### 3.2 Configure Application Load Balancer with WAF
 1. Open the AWS WAF console at https://console.aws.amazon.com/waf/.
 2. In the navigation pane, choose Web ACLs.
 ![waf-alb-1](Images/waf-alb-1.png)
@@ -171,8 +170,7 @@ Delete the AWS WAF stack:
 ***
 
 ## References & useful resources:
-[Amazon Elastic Compute Cloud User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html)  
-[Amazon CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html)  
+[Amazon Elastic Compute Cloud User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html)   
 [Tutorial: Configure Apache Web Server on Amazon Linux 2 to Use SSL/TLS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-an-instance.html)  
 [AWS WAF, AWS Firewall Manager, and AWS Shield Advanced Developer Guide](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html)  
 
