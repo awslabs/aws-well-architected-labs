@@ -12,7 +12,7 @@ Launch an instance:
 3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux 2).  
 ![ec2-launch-wizard](Images/ec2-launch-wizard-ami.png)
 4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.  
-![ec2-launch-wizard](Images/ec2-launch-wizard-type.png)
+![ec2-launch-wizard](Images/ec2-launch-wizard-type.png)  
 5. On the Configure Instance Details page, make the following changes:
   5.1 Select Create new IAM role.  
   ![ec2-launch-wizard](Images/ec2-launch-wizard-role.png)
