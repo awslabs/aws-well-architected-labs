@@ -131,13 +131,6 @@ For more information on configuring CloudFront, see [Viewing and Updating CloudF
 ### 3. Tear down this lab
 The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.
-Terminate the instance:
-1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the left console instance menu, select Instances.
-3. Select the instance you created to terminate.
-4. From the Actions button (or right click) select Instance State > Terminate.
-![ec2-terminate](Images/ec2-terminate.png)
-5. Verify this is the instance you want terminated, then click the Yes, Terminate button.
 
 Delete the CloudFront distribution:
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.

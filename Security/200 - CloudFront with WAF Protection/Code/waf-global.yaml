@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS WAF example for a CloudFront. This AWS CloudFormation
+  AWS WAF example for CloudFront. This AWS CloudFormation
   template provisions WAF with basic rules for proof of concept.
   **WARNING** You will be billed for the AWS resources created if you create a 
   stack from this template.
