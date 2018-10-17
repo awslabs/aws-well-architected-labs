@@ -255,7 +255,7 @@ Resources:
       RoleName: !Sub '${BaselineNamePrefix}-RestrictedAdmin'
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
-        - 'arn:aws:iam::aws:policy/PowerUserAccess'
+        - !Ref CloudFormationAdminRolePolicy
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -342,7 +342,6 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
         - !Ref IdentityAdminRolePolicy
-        - !Ref CloudFormationAdminRolePolicy
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -401,7 +400,7 @@ Resources:
               - 'cloudformation:SignalResource'
               - 'cloudformation:UpdateStack'
             Resource:
-              - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${BaselineNamePrefix}*'
+              - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*'
               - !Sub 'arn:aws:cloudformation:${AWS::Region}:aws:transform/*'
           - Effect: Allow
             Action:
@@ -409,7 +408,7 @@ Resources:
               - 'sts:AssumeRole'
               - 'sts:GetSessionToken'
             Resource:
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${BaselineNamePrefix}-DailyAdminCloudFormation'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${BaselineNamePrefix}-CloudFormation'
   CloudFormationRole:
     Type: 'AWS::IAM::Role'
     Properties:

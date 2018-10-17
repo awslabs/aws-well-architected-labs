@@ -10,7 +10,7 @@ Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/) we are going 
 3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-iam.yaml` and click Next.
 4. Enter the following details:
   * Stack name: The name of this stack. For this lab, use `baseline-iam`.
-  * AllowRegion: A single region to restrict access, for future use.
+  * AllowRegion: A single region to restrict access, enter your preferred region.
   * BaselineExportName: The CloudFormation export name prefix used with the resource name for the resources created, for example, Baseline-PrivilegedAdminRole.
   * BaselineNamePrefix: The prefix for roles, groups, and policies created by this stack.
   * IdentityManagementAccount: (optional) AccountId that contains centralized IAM users and is trusted to assume all roles, or blank for no cross-account trust. Note that the trusted account needs to be appropriately secured.

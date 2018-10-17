@@ -11,7 +11,7 @@ for further analysis.
 3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-cloudtrail.yaml` and click Next.
 4. Enter the following details:
   * Stack name: The name of this stack. For this lab, use `cloudtrail`.
-  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  **IMPORTANT** Specify a bucket name that is unique. The default bucket name likely has already been created.  
+  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  **IMPORTANT** Specify a bucket name that is unique.  
   * S3AccessLogsBucketName: The name of an existing S3 bucket for storing S3 access logs (optional).
   * CloudWatchLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.
   * EncryptLogs: (optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.
