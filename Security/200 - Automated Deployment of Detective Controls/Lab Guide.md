@@ -23,7 +23,7 @@ for further analysis.
 7. Review the information for the stack. When you're satisfied with the settings, click Next.
 8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click Create.
 9. After a few minutes the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
-You have now set up CloudTrail to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!
+You have now set up AWS CloudTrail to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!
 
 
 ### 2. AWS CloudFormation to Configure Amazon GuardDuty
@@ -44,13 +44,34 @@ Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/), we are going
 7. Review the information for the stack. When you're satisfied with the settings, click Create.
 9. After a few minutes the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
 10. You should receive an email to confirm the SNS email subscription, you must confirm this.
-You have now set up GuardDuty to detect threats and email alerts.
+You have now set up Amazon GuardDuty to detect threats and email alerts.
+
+### 3. AWS CloudFormation to Configure AWS Config
+[AWS Config](https://aws.amazon.com/config/) is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. Config continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.
+Using [AWS Config](https://aws.amazon.com/config/), we are going to create a new Amazon
+S3 bucket, and configure Config to save snapshots to the bucket.
+
+1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+2. Click Create New Stack.
+3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baselineconfig.yaml` and click Next.
+4. Enter the following details:
+  * Stack name: The name of this stack. For this lab, use `config`.
+  * ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  **IMPORTANT** Specify a bucket name that is unique.  
+  * S3AccessLogsBucketName: The name of an existing S3 bucket for storing S3 access logs (optional).
+  * InfrequentAccessTransitionTime: Number of days to keep S3 objects in standard tier before moving to infrequently accessed.
+  * BucketPolicyExplicitDeny: (optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.
+5. Click Next.
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+7. Review the information for the stack. When you're satisfied with the settings, click Next.
+8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click Create.
+9. After a few minutes the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
+You have now set up AWS Config to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!
 
 
 ***
 
 
-### 3. Tear down this lab
+### 4. Tear down this lab
 The following instructions will remove the resources that have a cost for running them.
 
 Delete the CloudTrail stack:
@@ -79,6 +100,11 @@ Delete the GuardDuty stack:
 3. Click the Actions button then click Delete Stack.
 4. Confirm the stack and then click the Yes, Delete button.
 
+Delete the Config stack:
+1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+2. Select the `config` stack.
+3. Click the Actions button then click Delete Stack.
+4. Confirm the stack and then click the Yes, Delete button.
 
 ***
 
@@ -86,6 +112,7 @@ Delete the GuardDuty stack:
 [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html)  
 [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)  
 [Amazon GuardDuty User Guide](https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html)  
+[AWS Config User Guide](https://docs.aws.amazon.com/config/latest/)  
 
 
 ***
