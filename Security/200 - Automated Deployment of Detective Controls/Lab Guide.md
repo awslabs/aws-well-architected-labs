@@ -53,7 +53,7 @@ S3 bucket, and configure Config to save snapshots to the bucket.
 
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Click Create New Stack.
-3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baselineconfig.yaml` and click Next.
+3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-config.yaml` and click Next.
 4. Enter the following details:
   * Stack name: The name of this stack. For this lab, use `config`.
   * ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  **IMPORTANT** Specify a bucket name that is unique.  
