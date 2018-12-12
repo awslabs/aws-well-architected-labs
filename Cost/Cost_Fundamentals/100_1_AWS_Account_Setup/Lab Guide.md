@@ -2,6 +2,7 @@
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
+- Spencer Marley, Commercial Architect 
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
