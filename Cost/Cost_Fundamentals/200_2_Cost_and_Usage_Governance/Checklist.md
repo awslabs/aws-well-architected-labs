@@ -1,4 +1,4 @@
-# Level 100: Cost and Usage Governance
+# Level 200: Cost and Usage Governance
 
 - [ ] Create a cost optimizaion team, to manage cost optimization across your organization
 - [ ] Create an IAM Policy to restrict EC2 usage by region
