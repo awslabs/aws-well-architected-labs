@@ -1,0 +1,41 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "ForAllValues:StringLikeIfExists": {
+                    "ec2:InstanceType": [
+                        "*.nano",
+                        "*.micro",
+                        "*.small",
+                        "*.medium"
+                    ]
+                },
+                "ForAllValues:StringEquals": {
+                    "ec2:Region": "us-east-1"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "ForAllValues:StringLike": {
+                    "ec2:InstanceType": [
+                        "m5.*"
+                    ]
+                },
+                "ForAllValues:StringEquals": {
+                    "ec2:Region": "us-east-1"
+                }
+            }
+        }
+    ]
+}
+

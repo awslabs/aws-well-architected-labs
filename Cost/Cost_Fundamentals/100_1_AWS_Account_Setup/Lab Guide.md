@@ -2,13 +2,21 @@
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
-- Spencer Marley, Commercial Architect 
+- Spencer Marley, Commercial Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 
-## 1. Create an account structure 
+# Table of Contents
+1. [Create an account structure](#account_structure)
+2. [Configure account settings](#account_settings)
+3. [Configure IAM access](#IAM_access)
+4. [Configure Cost and Usage reports](#CUR)
+
+
+
+## 1. Create an account structure<a name="account_structure"></a>
 You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
 
 ### 1.1 Create an AWS Organization
@@ -70,7 +78,7 @@ You will now join other accounts to your organization.
 Repeat the steps above (exercise 1.2) for each additional account in your organization. 
 
 
-## 2. Configure billing account settings
+## 2. Configure billing account settings<a name="account_settings"></a>
 It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by muptile team members for redudancy. Ensure the email accounts are actively monitored.
 
 1. Log in to your Master account, Click on the account name in the top right, and click on **My Account** from the menu:
@@ -83,7 +91,7 @@ It is important to ensure your account contacts are up to date and correct. This
 ![Images/AWSAcct3.png](Images/AWSAcct3.png)
 
 
-## 3. Configure IAM access to your billing
+## 3. Configure IAM access to your billing<a name="IAM_access"></a>
 **NOTE**: You will need to sign into the account with root account credentials to perform this action. You need to enter in the account email and password for root access.
 You need to enable IAM access to your billing so the correct IAM users can access the information. This allows other users (non-root) to access billing information in the master account. It is also required if you wish for member accounts to see their usage and billing information. This step will not provide access to the information, that is configured through IAM policies.
 
@@ -102,7 +110,7 @@ You need to enable IAM access to your billing so the correct IAM users can acces
 
 You will now be able to provide access to non-root users to billing information via IAM policies.
 
-## 4. Configure Cost and Usage Reports
+## 4. Configure Cost and Usage Reports<a name="CUR"></a>
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information. This will allow you to make modifications to your usage, and make your applications more efficient.
 
 ### 4.1 Setup S3 Billing bucket 

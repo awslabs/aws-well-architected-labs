@@ -1,30 +1,28 @@
-# Level 100: AWS Account Setup
+# Level 100: Cost and Usage Governance
 
 ## Introduction
- This hands-on lab will guide you through the steps to create and setup an initial account structure, and enable access to billing reports. This will ensure that you can complete the Well-Architected Cost workshops, and enable you to optimize your workloads inline with the Well-Architected Framework.
+ This hands-on lab will guide you through the steps to implement cost and usage governance. The skills you learn will help you control your cost and usage in alignment with your business requirements.
  
 
 ## Goals
-- Implemenet an account structure
-- Configure billing services
+- Create a Cost Optimization team to monitor usage, cost, and enforce policies
+- Implement IAM Policies to control usage
+- Implement AWS Budgets to notify on usage and spend
 
 
 ## Prerequisites
-- Multiple AWS accounts (at least two) 
-- Root user access to the master account
+- An AWS Account
+
 
 ## Overview
-
 - Lab Guide.md the guide for this lab
 - Checklist.md best practice checklist related to this lab
 - /Code Code including CloudFormation templates related to this lab
 - /Images referenced by this lab
 
 ## Permissions required
-
-- Root user access to the master account
-- [./Code/master_policy](./Code/master_policy) IAM policy required for Master account user
-- [./Code/member_policy](./Code/member_policy) IAM policy required for Member account user 
+- [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
+ 
 
 
 ## License
