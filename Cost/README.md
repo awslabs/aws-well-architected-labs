@@ -11,7 +11,7 @@ For more information about cost optimization on AWS visit the Well-Architected t
 ### Cost Fundamentals
 These labs must be done in order, from 1 to 5.
 - [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup)
-- [100 #2 Governance - Coming soon]
+- [100 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance)
 - [100 #3 Pricing Models - Coming soon]
 - [100 #4 Billing Analysis - Coming soon]
 - [100 #5 Cost Visualization - Coming soon]
