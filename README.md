@@ -17,7 +17,7 @@ The labs are structured around the five pillars of the [Well-Architected Framewo
 * [Security](Security/)
 * Reliability (No labs currently available)
 * Performance Efficiency (No labs currently available)
-* Cost Optimization (No labs currently available)
+* [Cost Optimization](Cost)
 
 ***
 
