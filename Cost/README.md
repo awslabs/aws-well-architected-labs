@@ -13,7 +13,7 @@ These labs must be done in order, from 1 to 5.
 - [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup)
 - [200 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance)
 - [200 #3 Pricing Models](./Cost_Fundamentals/200_3_Pricing_Models) 
-- [200 #4 Billing Analysis - Coming soon]
+- [200 #4 Billing Analysis](./Cost_Fundamentals/200_4_Billing_Analysis)
 - [200 #5 Cost Visualization - Coming soon]
 
 

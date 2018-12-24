@@ -1,17 +1,21 @@
-# Level 200: Pricing Models
+# Level 200: Billing Analysis
 
 ## Introduction
-This hands-on lab will guide you through the steps to perform a Reserved Instance analysis, and make low risk, high return RI purchases at scale. The skills you learn will help you ensure your workloads utilize different pricing models in alignment with the AWS Well-Architected Framework.
+ This hands-on lab will guide you through the steps to setup a platform to analyze your cost and usage reports. The skills you learn will help you perform analysis on your cost and usage, in alignment with the AWS Well-Architected Framework.
  
 
 ## Goals
-- Perform a Reserved Instance analysis
-- Filter and sort the recommendations
+- Setup an analysis platform for your cost and usage data
+- Perform basic analysis of your cost and usage
 
 
 ## Prerequisites
-- An AWS Account
+- A master AWS Account
+- A linked AWS Account (preferred, not mandatory)
+- Have your Cost and Usage Report (CUR) enabled [as per 100_1_Account Setup](../100_1_AWS_Account_Setup/Lab%20Guide.md#CUR)
 - [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/) has been completed
+- Have usage that is tagged (preferred, not mandatory)
+
 
 ## Overview
 - Lab Guide.md the guide for this lab
