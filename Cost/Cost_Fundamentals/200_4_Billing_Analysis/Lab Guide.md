@@ -52,6 +52,14 @@ We will verify the CUR files are being delivered, they are in the correct format
 
 You have successfully verified that the CUR files are being delivered and in the correct format.  You have also verified that Athena support was enabled through the delivery of the sql file.
 
+**Sample Files**
+You may not have substantial or interesting usage, in this case there are sample files that you can use in the code section. You will need to create the required structure in S3, download these files and then upload them into s3.
+-[Workshop.sql](Code/WorkshopCUR-create-table.sql)
+-[October 2018 Usage](Code/Oct2018-WorkshopCUR-00001.snappy.parquet)
+-[November 2018 Usage](Code/Nov2018-WorkshopCUR-00001.snappy.parquet)
+-[December 2018 Usage](Code/Dec2018-WorkshopCUR-00001.snappy.parquet)
+
+
 ## 2. Setup Amazon Athena and load the CUR files <a name="Setup_Athena"></a>
 We will configure Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.
 
