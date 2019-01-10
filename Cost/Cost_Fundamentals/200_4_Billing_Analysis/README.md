@@ -18,10 +18,10 @@
 
 
 ## Overview
-- Lab Guide.md the guide for this lab
-- Checklist.md best practice checklist related to this lab
-- /Code Code including CloudFormation templates related to this lab
-- /Images referenced by this lab
+- [Lab Guide.md](Lab%20Guide.md) the guide for this lab
+- [Checklist.md](Checklist.md) best practice checklist related to this lab
+- [/Code](Code/) including CloudFormation templates related to this lab
+- [/Images](Images/) referenced by this lab
 
 
 ## Permissions required
