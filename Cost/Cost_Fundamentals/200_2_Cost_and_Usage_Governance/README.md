@@ -22,6 +22,7 @@
 
 ## Permissions required
 - [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
+- NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
  
 
 

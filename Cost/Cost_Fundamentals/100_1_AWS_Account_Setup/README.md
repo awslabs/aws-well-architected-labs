@@ -15,16 +15,17 @@
 
 ## Overview
 
-- Lab Guide.md the guide for this lab
-- Checklist.md best practice checklist related to this lab
-- /Code Code including CloudFormation templates related to this lab
-- /Images referenced by this lab
+- [Lab Guide.md](Lab Guide.md) the guide for this lab
+- [Checklist.md](Checklist.md) best practice checklist related to this lab
+- [/Code](Code/) including CloudFormation templates related to this lab
+- [/Images](Images/) referenced by this lab
 
 ## Permissions required
 
 - Root user access to the master account
 - [./Code/master_policy](./Code/master_policy) IAM policy required for Master account user
 - [./Code/member_policy](./Code/member_policy) IAM policy required for Member account user 
+- NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 
 ## License
