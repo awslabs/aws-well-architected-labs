@@ -225,6 +225,7 @@ You have successfully attached the policy to the Cost Optimizaiton group.
 
 
 ### 2.3 Verify the policy is in effect <a name="verify_EC2_policy"></a>
+Login as costworkshop user now
 1. Go to the EC2 Service dashboard: 
 ![Images/AWSPolicy14.png](Images/AWSPolicy14.png)
 
