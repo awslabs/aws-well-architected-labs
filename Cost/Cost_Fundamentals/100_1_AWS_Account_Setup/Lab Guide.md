@@ -13,7 +13,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 2. [Configure account settings](#account_settings)
 3. [Configure IAM access](#IAM_access)
 4. [Configure Cost and Usage reports](#CUR)
-
+5. [Tear down](#tear_down)
+6. [Feedback survey](#survey)
 
 
 ## 1. Create an account structure<a name="account_structure"></a>
@@ -194,6 +195,15 @@ The bucket is now configured and ready to receive the billing reports.
 
 You have successfully configured a Cost and Usage Report to be delivered.  It may take up to 24hrs for the first report to be delivered.
 
-## 5. Tear down
+## 5. Tear down<a name="tear_down"></a>  
 This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. 
+
+## 6. Survey <a name="survey"></a>
+Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
+
+[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)
+
+
+This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
+ 
