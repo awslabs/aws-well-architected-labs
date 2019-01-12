@@ -13,7 +13,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 2. [Create an EC2 Policy](#EC2_policy)
 3. [Create an AWS BUdget](#budget)
 4. [Tear down](#tear_down)
- 
+5. [Feedback survey](#survey)  
 
 ## 1. Create a cost optimization team <a name="create_team"></a>
 We are going to create a cost optimization team. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
@@ -424,5 +424,14 @@ You will be notified that the deletion was successful.
 
 4. Click on the **3 dot menu** in the top right, select **Delete**:
 ![Images/AWSTeardown18.png](Images/AWSTeardown18.png)
+
+## 5. Survey <a name="survey"></a>
+Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
+
+[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_9EPtEoy72tDcIDP)
+
+
+This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
+ 
 
 

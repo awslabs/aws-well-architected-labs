@@ -14,7 +14,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 2. [Setup Amazon Athena and load the CUR files](#Setup_Athena)
 3. [Cost and Usage analysis](#CUR_Analysis)
 4. [Tear down](#tear_down)
-
+5. [Feedback survey](#survey)
 
 
 ## 1. Verify your CUR files are being delivered <a name="Verify_CUR"></a>
@@ -275,4 +275,13 @@ order by bill_billing_period_start_date, reservation_unused_recurring_fee desc
 Amazon Athena only charges when it is being used, i.e. data is being scanned - so if it is not being actively queried, there are no charges. It is also best practice to regularly analyze your usage and cost, so there is no teardown for this lab.
 
 
+## 5. Survey <a name="survey"></a>
+Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
+
+[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_bdUZiCBDHx4M4At)
+
+
+This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
+
+ 
 
