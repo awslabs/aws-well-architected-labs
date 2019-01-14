@@ -54,6 +54,7 @@ You have successfully verified that the CUR files are being delivered and in the
 
 **Sample Files**
 You may not have substantial or interesting usage, in this case there are sample files that you can use in the code section. You will need to create the required structure in S3, download these files and then upload them into s3.
+
 **NOTE**: Do not save the links below, open them in a new window and download the files. They should be approximately 1Mb in size each, if you have files that are 65kb - then you have downloaded the web page and not the parquet files.
 - [Workshop.sql](Code/WorkshopCUR-create-table.sql)
 - [October 2018 Usage](Code/Oct2018-WorkshopCUR-00001.snappy.parquet)
