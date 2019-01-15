@@ -1,4 +1,4 @@
-# AWS Well-Architected Security Labs
+﻿# AWS Well-Architected Security Labs
 
 ## Introduction
 This repository contains documentation and code in the format of hands-on labs to help you learn, measure, and build using architectural best practices. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
@@ -12,6 +12,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
 * [Level 200: Basic EC2 with WAF Protection](200%20-%20Basic%20EC2%20with%20WAF%20Protection)
 * [Level 200: CloudFront with WAF Protection](200%20-%20CloudFront%20with%20WAF%20Protection)
+* [Level 300: IAM Permission Boundaries Delegating Role Creation](300%20-%20IAM%20Permission%20Boundaries%20Delegating%20Role%20Creation)
 
 
 ***
