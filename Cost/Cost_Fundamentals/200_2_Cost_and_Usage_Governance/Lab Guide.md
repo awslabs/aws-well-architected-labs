@@ -35,66 +35,75 @@ This provides access to allow the cost optimization team to perform their work, 
 4. Select the **JSON** tab:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
   
-5. Copy & paste the following policy into the the field:
+5. Modify the policy below, replace **<billing bucket>** (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy & paste the policy into the the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "iam:GetPolicyVersion",
-                "quicksight:CreateAdmin",
-                "iam:CreateRole",
-                "iam:DeletePolicy",
-                "s3:ListBucket",
-                "aws-portal:ViewUsage",
-                "iam:DetachGroupPolicy",
-                "iam:GetGroup",
-                "aws-portal:ModifyBilling",
-                "ds:UnauthorizeApplication",
-                "aws-portal:ViewBilling",
-                "iam:ListAttachedGroupPolicies",
-                "iam:CreatePolicyVersion",
-                "ds:CheckAlias",
-                "ds:DeleteDirectory",
-                "quicksight:Subscribe",
-                "iam:ListPolicies",
-                "ds:CreateIdentityPoolDirectory",
-                "ds:DescribeTrusts",
-                "iam:GetPolicy",
-                "iam:ListGroupPolicies",
-                "aws-portal:ViewAccount",
-                "iam:AttachUserPolicy",
-                "budgets:*",
-                "iam:CreatePolicy",
-                "iam:AttachRolePolicy",
-                "iam:DeleteRole",
-                "iam:DetachRolePolicy",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
-                "iam:GetRole",
-                "iam:ListAttachedRolePolicies",
-                "iam:ListEntitiesForPolicy",
-                "iam:ListRoles",
-                "s3:GetObject",
-                "quicksight:CreateUser",
-                "s3:ListAllMyBuckets",
-                "iam:ListPolicyVersions",
-                "iam:AttachGroupPolicy",
-                "ds:DescribeDirectories",
-                "iam:ListAccountAliases",
-                "ds:CreateAlias",
-                "iam:ListGroups",
-                "iam:GetGroupPolicy",
-                "ds:AuthorizeApplication",
-                "iam:DeletePolicyVersion"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<billing bucket>",
+        "arn:aws:s3:::<billing bucket>/*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetPolicyVersion",
+        "quicksight:CreateAdmin",
+        "iam:DeletePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "aws-portal:ViewUsage",
+        "iam:GetGroup",
+        "aws-portal:ModifyBilling",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "ds:UnauthorizeApplication",
+        "aws-portal:ViewBilling",
+        "iam:DetachGroupPolicy",
+        "iam:ListAttachedGroupPolicies",
+        "iam:CreatePolicyVersion",
+        "ds:CheckAlias",
+        "quicksight:Subscribe",
+        "ds:DeleteDirectory",
+        "iam:ListPolicies",
+        "iam:GetRole",
+        "ds:CreateIdentityPoolDirectory",
+        "ds:DescribeTrusts",
+        "iam:GetPolicy",
+        "iam:ListGroupPolicies",
+        "aws-portal:ViewAccount",
+        "iam:ListEntitiesForPolicy",
+        "iam:AttachUserPolicy",
+        "iam:ListRoles",
+        "iam:DeleteRole",
+        "budgets:*",
+        "iam:CreatePolicy",
+        "quicksight:CreateUser",
+        "s3:ListAllMyBuckets",
+        "iam:ListPolicyVersions",
+        "iam:AttachGroupPolicy",
+        "quicksight:Unsubscribe",
+        "iam:ListAccountAliases",
+        "ds:DescribeDirectories",
+        "iam:ListGroups",
+        "iam:GetGroupPolicy",
+        "ds:CreateAlias",
+        "ds:AuthorizeApplication",
+        "iam:DeletePolicyVersion"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
 ```
 5. Click **Review policy**: 
