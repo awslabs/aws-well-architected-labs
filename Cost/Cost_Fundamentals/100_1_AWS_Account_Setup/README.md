@@ -5,7 +5,7 @@
  
 
 ## Goals
-- Implemenet an account structure
+- Implement an account structure
 - Configure billing services
 
 
