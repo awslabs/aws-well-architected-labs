@@ -35,7 +35,7 @@ This provides access to allow the cost optimization team to perform their work, 
 4. Select the **JSON** tab:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
   
-5. Modify the policy below, replace **<billing bucket>** (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy & paste the policy into the the field:
+5. Modify the policy below, replace **-billing bucket-** (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy & paste the policy into the the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
@@ -49,8 +49,8 @@ This provides access to allow the cost optimization team to perform their work, 
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::<billing bucket>",
-        "arn:aws:s3:::<billing bucket>/*"
+        "arn:aws:s3:::-billing bucket-",
+        "arn:aws:s3:::-billing bucket-/*"
       ]
     },
     {
