@@ -56,6 +56,8 @@ You have successfully verified that the CUR files are being delivered and in the
 You may not have substantial or interesting usage, in this case there are sample files that you can use in the code section. You will need to create the required structure in S3, download these files and then upload them into s3.
 
 **NOTE**: Do not save the links below, open them in a new window and download the files. They should be approximately 1Mb in size each, if you have files that are 65kb - then you have downloaded the web page and not the parquet files.
+
+Create a folder structure, such as -bucket name-/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder. You will need to edit the SQL file with the correct name.
 - [Workshop.sql](Code/WorkshopCUR-create-table.sql)
 - [October 2018 Usage](Code/Oct2018-WorkshopCUR-00001.snappy.parquet)
 - [November 2018 Usage](Code/Nov2018-WorkshopCUR-00001.snappy.parquet)
