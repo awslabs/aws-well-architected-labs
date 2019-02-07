@@ -13,7 +13,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: Basic EC2 with WAF Protection](200%20-%20Basic%20EC2%20with%20WAF%20Protection)
 * [Level 200: CloudFront with WAF Protection](200%20-%20CloudFront%20with%20WAF%20Protection)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300%20-%20IAM%20Permission%20Boundaries%20Delegating%20Role%20Creation)
-
+* [Level 300: IAM IAM Tag Based Access Control for EC2](300%20-%20IAM%20Tag%20Based%20Access%20Control%20for%20EC2)
 
 ***
 
