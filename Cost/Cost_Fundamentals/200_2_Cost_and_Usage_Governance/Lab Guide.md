@@ -11,7 +11,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 # Table of Contents
 1. [Create a cost optimization team](#create_team)
 2. [Create an EC2 Policy](#EC2_policy)
-3. [Create an AWS BUdget](#budget)
+3. [Create an AWS Budget](#budget)
 4. [Tear down](#tear_down)
 5. [Feedback survey](#survey)  
 

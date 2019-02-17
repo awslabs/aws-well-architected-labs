@@ -13,8 +13,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 2. [Configure account settings](#account_settings)
 3. [Configure IAM access](#IAM_access)
 4. [Configure Cost and Usage reports](#CUR)
-5. [Tear down](#tear_down)
-6. [Feedback survey](#survey)
+5. [Enable AWS Cost Explorer](#cost_explorer)
+6. [Tear down](#tear_down)
+7. [Feedback survey](#survey)
 
 
 ## 1. Create an account structure<a name="account_structure"></a>
@@ -195,11 +196,26 @@ The bucket is now configured and ready to receive the billing reports.
 
 You have successfully configured a Cost and Usage Report to be delivered.  It may take up to 24hrs for the first report to be delivered.
 
-## 5. Tear down<a name="tear_down"></a>  
+### 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
+1. Log into your Master account, and go to the **Billing** console:
+![Images/AWSExplorer0.png](Images/AWSExplorer0.png)
+
+2. Select **Cost Explorer** from the left menu:
+![Images/AWSExplorer1.png](Images/AWSExplorer1.png)
+
+3. Click on **Enable Cost Explorer**:
+![Images/AWSExplorer2.png](Images/AWSExplorer2.png)
+
+4. You will receive notification that Cost Explorer has been enabled, and data will be populated:
+![Images/AWSExplorer3.png](Images/AWSExplorer3.png)
+
+
+
+## 6. Tear down<a name="tear_down"></a>  
 This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. 
 
-## 6. Survey <a name="survey"></a>
+## 7. Survey <a name="survey"></a>
 Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
 
 [![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)
