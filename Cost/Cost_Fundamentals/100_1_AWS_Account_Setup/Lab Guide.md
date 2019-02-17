@@ -189,13 +189,51 @@ The bucket is now configured and ready to receive the billing reports.
 4. Enter a **Report name** (it can be any name), ensure you have selected **Include resource IDs** and **Data refresh settings**, then click on **Next**:
 ![Images/AWSCUR4.png](Images/AWSCUR4.png)
 
-5. Enter the **S3 bucket** name you configured above, click **Verify** and ensure it shows a green tick (if it fails check your bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
-![Images/AWSCUR5.png](Images/AWSCUR5.png)
+5. Click on **Configure**:
+![Images/AWSCURDelivery0.png](Images/AWSCURDelivery0.png)
 
-6. Review the configuration, scroll to the bottom and click on **Review and Complete**:
+6. Select the bucket configured above:
+![Images/AWSCURDelivery1.png](Images/AWSCURDelivery1.png)
+
+7. Click on **Next**:
+![Images/AWSCURDelivery2.png](Images/AWSCURDelivery2.png)
+
+8. Read and verify the policy, this will allow AWS to deliver billing reports to the bucket. Click on **I have confirmed that this policy is correct**, then click **Save**:
+![Images/AWSCURDelivery3.png](Images/AWSCURDelivery3.png)
+
+9. Esure your bucket is a **Valid Bucket** (if not, verify the bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
+![Images/AWSCURDelivery4.png](Images/AWSCURDelivery4.png)
+
+10. Review the configuration, scroll to the bottom and click on **Review and Complete**:
 ![Images/AWSCUR6.png](Images/AWSCUR6.png)
 
 You have successfully configured a Cost and Usage Report to be delivered.  It may take up to 24hrs for the first report to be delivered.
+
+### 4.3 Enable monthly billing report
+The monthly billing report contains estimated AWS charges for the month. It contains line items for each unique combination of AWS product, usage type, and operation that the account uses.
+
+1. Go to the billng console:
+![Images/AWSMonthlyUsage0.png](Images/AWSMonthlyUsage0.png)
+
+2. Click on **Preferences** from the left menu:
+![Images/AWSMonthlyUsage1.png](Images/AWSMonthlyUsage1.png)
+
+3. Scroll down, and click on **Receive Billing Reports**, then click on **Configure**:
+![Images/AWSMonthlyUsage2.png](Images/AWSMonthlyUsage2.png)
+
+4. From the left dropdown, select your S3 billing bucket configured above:
+![Images/AWSMonthlyUsage3.png](Images/AWSMonthlyUsage3.png)
+
+5. Click on **Next**:
+![Images/AWSMonthlyUsage4.png](Images/AWSMonthlyUsage4.png)
+
+6. Read and verify the policy, this will allow AWS to deliver billing reports to the bucket. Click on **I have confirmed that this policy is correct**, then click **Save**:
+![Images/AWSMonthlyUsage5.png](Images/AWSMonthlyUsage5.png)
+
+7. Ensure only **Monthly report** is selected, and uncheck all other boxes.  Click on **Save preferences**:
+![Images/AWSMonthlyUsage6.png](Images/AWSMonthlyUsage6.png)
+
+
 
 ## 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
 AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.
