@@ -14,8 +14,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 3. [Configure IAM access](#IAM_access)
 4. [Configure Cost and Usage reports](#CUR)
 5. [Enable AWS Cost Explorer](#cost_explorer)
-6. [Tear down](#tear_down)
-7. [Feedback survey](#survey)
+6. [Enable AWS-Generated Cost Allocation Tags](#cost_tags)
+7. [Tear down](#tear_down)
+8. [Feedback survey](#survey)
 
 
 ## 1. Create an account structure<a name="account_structure"></a>
@@ -196,7 +197,9 @@ The bucket is now configured and ready to receive the billing reports.
 
 You have successfully configured a Cost and Usage Report to be delivered.  It may take up to 24hrs for the first report to be delivered.
 
-### 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
+## 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
+AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.
+ 
 1. Log into your Master account, and go to the **Billing** console:
 ![Images/AWSExplorer0.png](Images/AWSExplorer0.png)
 
@@ -210,12 +213,28 @@ You have successfully configured a Cost and Usage Report to be delivered.  It ma
 ![Images/AWSExplorer3.png](Images/AWSExplorer3.png)
 
 
+## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
+Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 
 
-## 6. Tear down<a name="tear_down"></a>  
+1. Log into your Master account, and go to the **Billing** console:
+![Images/AWSBillTag0.png](Images/AWSBillTag0.png)
+
+2. Select **Cost Allocation Tags** from the left menu:
+![Images/AWSBillTag1.png](Images/AWSBillTag1.png)
+
+3. Click on **Activate** to enable the tags:
+![Images/AWSBillTag2.png](Images/AWSBillTag2.png)
+
+4. You will see that it is actiavted: 
+![Images/AWSBillTag3.png](Images/AWSBillTag3.png)
+
+
+
+## 7. Tear down<a name="tear_down"></a>  
 This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. 
 
-## 7. Survey <a name="survey"></a>
+## 8. Survey <a name="survey"></a>
 Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
 
 [![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)

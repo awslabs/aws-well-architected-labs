@@ -5,3 +5,4 @@
 - [ ] Configure IAM access to billing information
 - [ ] Configure a Cost and Usage Report (CUR)
 - [ ] Enable AWS Cost Explorer
+- [ ] Enable AWS-Generated Cost Allocation Tags
