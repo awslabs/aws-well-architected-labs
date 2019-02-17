@@ -21,7 +21,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1. Setup Amazon QuickSight <a name="setup_quicksight"></a>
 The first step is to setup Amazon QuickSight, so that you can use the service in your account, and it has access to all the resources in your account.
 
-1. Go to the **Amazon QuickSight** console:
+1. Log into the console as an IAM user with the required permissions, go to the **Amazon QuickSight** console:
 ![Images/AWSQuicksight1.png](Images/AWSQuicksight1.png)
 
 ### 1.1 Setup QuickSight for the first time

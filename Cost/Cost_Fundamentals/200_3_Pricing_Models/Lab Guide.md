@@ -21,7 +21,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1. View an RI report<a name="ri_report"></a>
 We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.
 
-1. Log in to the console, go to the **AWS Cost Explorer** service page:
+1. Log into the console as an IAM user with the required permissions, go to the **AWS Cost Explorer** service page:
 ![Images/AWSRI1.png](Images/AWSRI1.png)
 
 2. In the left menu select **Recommendations**: 

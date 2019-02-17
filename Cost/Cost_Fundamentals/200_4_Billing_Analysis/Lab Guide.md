@@ -20,7 +20,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1. Verify your CUR files are being delivered <a name="Verify_CUR"></a>
 We will verify the CUR files are being delivered, they are in the correct format and the region they are in.
 
-1. Go to the **Billing** console, and view the CUR report you created in [AWS Account Setup](../100_1_AWS_Account_Setup/Lab%20Guide.md), confirm the **S3 bucket**, and **Report path prefix**:
+1. Log into the console as an IAM user with the required permissions, go to the **Billing** console, and view the CUR report you created in [AWS Account Setup](../100_1_AWS_Account_Setup/Lab%20Guide.md), confirm the **S3 bucket**, and **Report path prefix**:
 ![Images/AWSBillingAnalysis_0.png](Images/AWSBillingAnalysis_0.png)
 
 2. Go to the **S3** Service console: 

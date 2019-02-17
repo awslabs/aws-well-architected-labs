@@ -23,7 +23,7 @@ This team will then be able to manage the organizations cost and usage, and star
 ### 1.1 Create an IAM policy for the team
 This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.
 
-1. Log in and go to the **IAM** Service page:
+1. Log into the console as an IAM user with the required permissions and go to the **IAM** Service page:
 ![Images/AWSIAM1.png](Images/AWSIAM1.png)
 
 2. Select **Policies** from the left menu:

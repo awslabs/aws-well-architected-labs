@@ -119,7 +119,7 @@ Cost and Usage Reports provide the most detailed information on your usage and b
 ### 4.1 Setup S3 Billing bucket 
 We will create an S3 bucket that will be used to deliver the Cost and Usage Reports into. It will be a bucket that allows the AWS Billing account access to put objects.
 
-1. Log into your Master account, and go to the **S3** console:
+1. Login to the AWS console (master account) as an IAM user with the required permissions, and go to the **S3** console:
 ![Images/AWSS31.png](Images/AWSS31.png)
 
 2. Click on **Create bucket**:
@@ -177,7 +177,7 @@ The bucket is now configured and ready to receive the billing reports.
 
 
 ### 4.2 Configure a Cost and Usage Report
-1. Log into your Master account, and go to the **Billing** console:
+1. Log into your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](Images/AWSCUR1.png) 
 
 2. Select **Reports** from the left menu:
@@ -238,7 +238,7 @@ The monthly billing report contains estimated AWS charges for the month. It cont
 ## 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
 AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.
  
-1. Log into your Master account, and go to the **Billing** console:
+1. Log into the console of your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSExplorer0.png](Images/AWSExplorer0.png)
 
 2. Select **Cost Explorer** from the left menu:
@@ -254,7 +254,7 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, understa
 ## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 
 
-1. Log into your Master account, and go to the **Billing** console:
+1. Log into the console of your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSBillTag0.png](Images/AWSBillTag0.png)
 
 2. Select **Cost Allocation Tags** from the left menu:
