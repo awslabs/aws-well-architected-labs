@@ -1,4 +1,4 @@
-# Level 200: Cost and Usage Governance
+# Level 100: Cost and Usage Governance
 
 - [ ] Create a cost optimizaion team, to manage cost optimization across your organization
 - [ ] Create an AWS budget to notify on forecasted account cost
