@@ -17,7 +17,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## 1. View your AWS Invoices <a name="view_invoices"></a>
-At the end of a billing cycle or at the time you choose to incur a one-time fee, AWS charges the payment method you have and issues your invoice as a PDF file. You can view these invoices through the AWS console.
+At the end of a billing cycle or at the time you choose to incur a one-time fee, AWS charges the payment method you have and issues your invoice as a PDF file. You can view these invoices through the AWS console, which will show summary information of all usage and cost incurred for that one off item, or billing period.
 
 1. Log into the console as an IAM user with the required permissions, go to the billing dashboard:
 ![Images/AWSInvoice0.png](Images/AWSInvoice0.png)
@@ -33,7 +33,7 @@ At the end of a billing cycle or at the time you choose to incur a one-time fee,
 
     
 ## 2. View your cost and usage in detail<a name="cost_usage_detail"></a>
-You can view past and present bills through the console, which also provides more detailed information on cost and usage. Here you can drill down to view costs by service across all accounts, or look at costs and usage for a specific account.
+You can view past and present costs and usage through the console, which also provides more detailed information on cost and usage. We will go through accessing your cost and usage by service, and by linked account (if applicable). We will then drill down into a specific service.
 
 1. Go to the billing dashboard:
 ![Images/AWSBillDetail0.png](Images/AWSBillDetail0.png)
@@ -53,6 +53,7 @@ You can view past and present bills through the console, which also provides mor
 
 
 ## 3. Download your monthly cost and usage file<a name="cost_usage_download"></a>
+It is possible to download a CSV version of your summary cost and usage information. This can be accessed by a spreadsheet application for ease of use.  We will download your monthly usage file and view it.  
 
 1. Go to the billing dashboard:
 ![Images/AWSBillDetail0.png](Images/AWSBillDetail0.png)
