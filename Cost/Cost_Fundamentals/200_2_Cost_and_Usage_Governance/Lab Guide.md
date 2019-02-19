@@ -11,9 +11,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 # Table of Contents
 1. [Create a cost optimization team](#create_team)
 2. [Create an EC2 Policy](#EC2_policy)
-3. [Create an AWS Budget](#budget)
-4. [Tear down](#tear_down)
-5. [Feedback survey](#survey)  
+3. [Tear down](#tear_down)
+4. [Feedback survey](#survey)  
 
 ## 1. Create a cost optimization team <a name="create_team"></a>
 We are going to create a cost optimization team. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
@@ -275,81 +274,7 @@ You have successfully implemented an IAM policy that restricts all EC2 operation
 By implementing an IAM policy to control usage, you not only ensure unnecessary resources are not created, but also potentially increase the usage of Reserved Instances - by enforcing specific instance families and sizes to be launched.  
 
 
-## 3. Create and implement AWS Budgets <a name="budget"></a> 
-Budgets allow you to manage cost and usage by providing notifications when usage or cost are outside of configured amounts. They are less intrusive then policies as they do not restrict actions. We will create a cost budget and also an RI coverage budget.
-
-### Create a monthly cost budget for your account 
-We will create a monthly cost budget which will notify if the forecasted amount exceeds the budget.
-
-1. Go to the **Billing console**:
-![Images/AWSBudget1.png](Images/AWSBudget1.png)
-
-2. Select **Budgets** from the left menu:
-![Images/AWSBudget2.png](Images/AWSBudget2.png)
-
-3. Click on **Create a budget**:
-![Images/AWSBudget3.png](Images/AWSBudget3.png)
-
-4. Ensure **Cost Budget** is selected, and click **Set your budget >**:
-![Images/AWSBudget4.png](Images/AWSBudget4.png)
-
-5. Create a cost budget, enter the following details:
-   **Name**: (enter a name), 
-   **Budgeted amount**: (enter an amount a lot LESS than last months cost), 
-   **Budget effective dates**: Select **Recurring Budget** and start month is the current month, 
-   Other fields: leave a defaults
-![Images/AWSBudget5.png](Images/AWSBudget5.png)
-
-6. Scroll down and click **Configure alerts >**:
-![Images/AWSBudget6.png](Images/AWSBudget6.png)
-
-7. Select:
-   **Send alert based on**: Forecasted Costs
-   **Alert threshold**: 100% of budgeted amount
-   **Email contacts**: (your email address)
-Click on **Confirm budget >**:
-![Images/AWSBudget7.png](Images/AWSBudget7.png)
-
-8. Review the configuration, and click **Create**:
-![Images/AWSBudget8.png](Images/AWSBudget8.png)
-
-9. You can see the current forecast will exceed the budget (it is red):
-![Images/AWSBudget9.png](Images/AWSBudget9.png) 
-
-10: You will receive an email similar to this within a few minutes:
-![Images/AWSBudget10.png](Images/AWSBudget10.png)
-
-
-You have created a forecasted budget, when your forecasted costs for the entire account are predicted to exceed the forecast, you will receive a notification. You can also create an actual budget, for when your current costs actually exceed a defined amount.
-
-### Create an RI Coverage budget
-We will create a monthly RI coverage budget which will notify if the forecasted amount is below the specified amount.
-
-1. Click **Create budget**:
-![Images/AWSBudget11.png](Images/AWSBudget11.png)
-
-2. Select **Reservation budget**, and click **Set your budget >**:
-![Images/AWSBudget12.png](Images/AWSBudget12.png)
-
-3. For **Reservation budget type** Select **RI Coverage**, enter a **Name**, select **Amazon Elastic Compute** as the **Service**, enter a high **Utilization threshold** of **99%** and click **Configure alerts >**:
-![Images/AWSBudget13.png](Images/AWSBudget13.png) 
-
-4. Enter an address for **Email contacts** and click **Confirm budget >**:
-![Images/AWSBudget14.png](Images/AWSBudget14.png)
-
-5. Review the configuration, and click **Create** in the lower right:
-![Images/AWSBudget15.png](Images/AWSBudget15.png)
-
-6. You will receive an email similar to this within a few minutes:
-![Images/AWSBudget16.png](Images/AWSBudget16.png)
-
-You have created an RI Coverage budget.  When creating coverage budgets you can consider specific services or instance types, but always ensure you have a high coverage across the entire account. High coverage is critical for cost optimization, as having low coverage costs the same as having additional & unused RI's - for example, t3 instance coverage at 50% is approximately the same as having an additional 10% of RI's - which are unused, d2 coverage at 50% is approximately the same as having an additional 48% of RI's - which are unused.
-
-  
-    
-        
-
-## 4. Tear down <a name="tear_down"></a>
+## 3. Tear down <a name="tear_down"></a>
 NOTE: The cost optimization user, group and policies are required for the completion of the fundamental labs. If you remove these resources you will not be able to complete the labs. There is no tear down for this component as it is best practices to have this group created in all organizations.
 
 ### Delete a security group
@@ -417,24 +342,7 @@ We will delete the EC2_Restricted policy created in [2.1 Create the IAM policy](
 
 
 
-### Delete a budget
-We will delete both budgets that were configured in [3. Create and implement AWS Budgets](#budget), the cost budget and the reservation coverage budget.
-
-1. From the budgets homepage, click on the budget name **CostBudget1**:
-![Images/AWSTeardown15.png](Images/AWSTeardown15.png)
-
-2. Click on the **3 dot menu** in the top right, select **Delete**:
-![Images/AWSTeardown16.png](Images/AWSTeardown16.png)
-
-You will be notified that the deletion was successful.
-
-3. Click on the other budget name **ReservationCoverage1**:
-![Images/AWSTeardown17.png](Images/AWSTeardown17.png)
-
-4. Click on the **3 dot menu** in the top right, select **Delete**:
-![Images/AWSTeardown18.png](Images/AWSTeardown18.png)
-
-## 5. Survey <a name="survey"></a>
+## 4. Survey <a name="survey"></a>
 Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
 
 [![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_9EPtEoy72tDcIDP)
