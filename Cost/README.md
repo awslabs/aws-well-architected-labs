@@ -14,7 +14,8 @@ These labs must be done in order from 1 to 5, starting at the 100 level labs.
 ## 100 Level
 - [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup)
 - [100 #2 Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance)
-
+- [100 #4 Billing Analysis](./Cost_Fundamentals/100_4_Billing_Analysis)
+- [100 #5 Cost Visualization](./Cost_Fundamentals/100_5_Cost_Visualization)
 
 ## 200 Level
 - [200 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance)

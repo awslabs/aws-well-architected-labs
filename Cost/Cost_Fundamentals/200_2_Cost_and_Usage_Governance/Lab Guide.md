@@ -306,7 +306,7 @@ We will remove the **EC2_Restricted** policy setup in [2.2 Apply it to a group](
 2. Select **Groups** from the left menu:
 ![Images/AWSTeardown6.png](Images/AWSTeardown6.png)
 
-3. Click on the **CostOIptimization** group (that was created previously):
+3. Click on the **CostOptimization** group (that was created previously):
 ![Images/AWSTeardown7.png](Images/AWSTeardown7.png) 
 
 4. Click on **Permissions**:
