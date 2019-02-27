@@ -243,7 +243,15 @@ limit 20
 To improve the use of pricing models across a business, these queries can assist to highlight the top opportunities for Reserved Instance (top On Demand cost), and also identify who is successful with pricing models (Top users of spot).
 **NOTE**: You will need specific usage in your account that matches the instance types below, for this to work correctly.
 
-1. T2 family instance usage
+1. Who used Reserved Instances
+Identify which accounts used the available RIs, and what they would have paid with public pricing. Ideal for chargeback within an organization.
+```
+select "bill_payer_account_id", "bill_billing_period_start_date", "line_item_usage_account_id", "reservation_reservation_a_r_n", "line_item_product_code", "line_item_usage_type", sum("line_item_usage_amount") as Usage, "line_item_unblended_rate", sum("line_item_unblended_cost") as Cost, "line_item_line_item_description", "pricing_public_on_demand_rate", sum("pricing_public_on_demand_cost") as PublicCost from "workshopcur"."workshop_c_u_r"
+where "line_item_line_item_Type" like '%DiscountedUsage%' 
+group by "bill_payer_account_id", "bill_billing_period_start_date", "line_item_usage_account_id", "reservation_reservation_a_r_n", "line_item_product_code", "line_item_usage_type", "line_item_unblended_rate", "line_item_line_item_description", "pricing_public_on_demand_rate"
+```
+
+2. T2 family instance usage
 Observe how much is being spent on each different family (usage type) and how much is covered by Reserved instances.
 ```
 select "line_item_usage_type", sum("line_item_usage_amount") as usage, round(sum("line_item_unblended_cost"),2) as cost from "workshopcur"."workshop_c_u_r"
@@ -252,7 +260,7 @@ group by "line_item_usage_type"
 order by "line_item_usage_type"
 ```
 
-2. Costs By running type
+3. Costs By running type
 Divide the cost by usage (hrs), and see how much is being spent per hour on each of the usage types. Compare **BoxUsgae** (On Demand), to **HeavyUsage** (Reserved instance), to **SpotUsage** (Spot).
 ``` 
 select "line_item_usage_type", round(sum("line_item_usage_amount"),2) as usage, round(sum("line_item_unblended_cost"),2) as cost, round(avg("line_item_unblended_cost"/"line_item_usage_amount"),4) as hourly_rate from "workshopcur"."workshop_c_u_r"
@@ -261,7 +269,7 @@ group by "line_item_usage_type"
 order by "line_item_usage_type"
 ```
 
-3. Show unused Reserved Instances
+4. Show unused Reserved Instances
 This will show how much of your reserved instances are not being used, and sorts it via cost of unused portion (recurring fee).
 You can use this in two ways:
 - See where you have spare RI's and modify instances to match, so they will use the RIs
