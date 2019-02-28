@@ -3,6 +3,7 @@
 ## Introduction
  This hands-on lab will guide you through the steps to perform analysis of your AWS cost and usage. The skills you learn will help you monitor your cost and usage, in alignment with the AWS Well-Architected Framework.
  
+![Images/AWSBillReadme.png](Images/AWSBillReadme.png)
 
 ## Goals
 - Perform basic analysis of your cost and usage

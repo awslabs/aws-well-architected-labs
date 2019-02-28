@@ -7,12 +7,11 @@
 ## Goals
 - Create a Cost Optimization team to monitor usage, cost, and enforce policies
 - Implement IAM Policies to control usage
-- Implement AWS Budgets to notify on usage and spend
 
 
 ## Prerequisites
 - An AWS Account
-
+- Completed all previous labs in the Cost Fundamentals series
 
 ## Overview
 - [Lab Guide.md](Lab%20Guide.md) the guide for this lab
