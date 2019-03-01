@@ -1,0 +1,4 @@
+com/app/resiliency/InstanceFailover.class
+com/app/resiliency/RDSFailover.class
+com/app/resiliency/Failover.class
+com/app/resiliency/AZFailover.class
