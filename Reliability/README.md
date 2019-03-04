@@ -9,7 +9,7 @@ For more information about Reliability, read the
 
 ## Labs:
 
-* [Level 300: Testing for Resiliency of EC2, RDS, and S3](300%20-%20Performing%20Resiliency%20Testing%20for%20EC2%2C%20RDS%2C%20and%20S3)
+* [Level 300: Testing for Resiliency of EC2, RDS, and S3](300%20-%20Testing%20for%20Resiliency%20of%20EC2%2C%20RDS%2C%20and%20S3)
 
 ***
 
