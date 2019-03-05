@@ -14,7 +14,7 @@ If you wish to build this code in this lab, the follow the instructions in the [
 
 ## Goals:
 
-* Reduce feear of implementing resiliency testing by providing examples in commong development and scripting languages
+* Reduce fear of implementing resiliency testing by providing examples in commong development and scripting languages
 * Resilience testing of EC2 instances
 * Resilience testing of RDS Multi-AZ instances
 * Resilience testing of S3 objects
