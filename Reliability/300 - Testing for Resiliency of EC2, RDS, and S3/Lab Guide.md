@@ -19,9 +19,9 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
 ![SelectIAMRoles](Images/SelectIAMRoles.png)  
 3. In the filter box, type “Service” to find the service linked roles that exist in your account and look for “AutoScaling,” “ELB” or “ElasticLoadBalancing,” and “RDS.” In this screenshot, the service linked role for AutoScaling exists, but the roles for ELB and RDS do not. Note which roles will need to be created as you will use this information when performing the next step.  
 ![LookingForServiceLinkedRoles](Images/LookingForServiceLinkedRoles.png)  
-4. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
+4. In the AWS Services Search Box, type “CloudFormation” and click enter.  
+5. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
 ![SelectOhio](Images/SelectOhio.png)  
-5. In the AWS Services Search Box, type “CloudFormation” and click enter.  
 6. On the CloudFormation console, click “Create Stack:”.  
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
 7. There are two versions that can be deployed. You can deploy in one AWS region, which will allow you start testing sooner, or you can deploy into 2 AWS regions, which will enable you to test some additional aspects of S3, as well as as simulation a regional failure of your application
