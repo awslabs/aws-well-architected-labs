@@ -44,7 +44,7 @@ You can view past and present costs and usage through the console, which also pr
 3. Select the **Date** you require from the drop down menu, by clicking on the menu item:
 ![Images/AWSBillDetail2.png](Images/AWSBillDetail2.png)
 
-4. You will be shown **Bill details by service**, where you can dynamicall drill down into the specific service cost and usage:
+4. You will be shown **Bill details by service**, where you can dynamically drill down into the specific service cost and usage. Pick your largest cost service and look into the region and line items:
 ![Images/AWSBillDetail3.png](Images/AWSBillDetail3.png)
 
 5. Select **Bill details by account** to see cost and usage for each account separately. Select the **Account name**, then drill down into the specific service cost and usage:

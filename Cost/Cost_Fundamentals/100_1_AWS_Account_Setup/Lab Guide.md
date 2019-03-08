@@ -9,9 +9,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 # Table of Contents
-1. [Create an account structure](#account_structure)
-2. [Configure account settings](#account_settings)
-3. [Configure IAM access](#IAM_access)
+1. [Configure IAM access](#IAM_access)
+2. [Create an account structure](#account_structure)
+3. [Configure account settings](#account_settings)
 4. [Configure Cost and Usage reports](#CUR)
 5. [Enable AWS Cost Explorer](#cost_explorer)
 6. [Enable AWS-Generated Cost Allocation Tags](#cost_tags)
@@ -19,10 +19,35 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 8. [Feedback survey](#survey)
 
 
-## 1. Create an account structure<a name="account_structure"></a>
-You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
+## 1. Configure IAM access to your billing<a name="IAM_access"></a>
+**NOTE**: You will need to sign into the account with root account credentials to perform this action. You need to enter in the account email and password for root access.
 
-### 1.1 Create an AWS Organization
+You need to enable IAM access to your billing so the correct IAM users can access the information. This allows other users (non-root) to access billing information in the master account. It is also required if you wish for member accounts to see their usage and billing information. This step will not provide access to the information, that is configured through IAM policies.
+
+
+1. Log in to your Master account as the root user, Click on the account name in the top right, and click on **My Account** from the menu:
+![Images/AWSAcct4.png](Images/AWSAcct4.png)
+
+2. Scroll down to **IAM User and Role Access to Billing Information**, and click **Edit**:
+![Images/AWSAcct5.png](Images/AWSAcct5.png)
+
+3. Select **Activeate IAM Access** and click on **Update**:
+![Images/AWSAcct6.png](Images/AWSAcct6.png)
+
+4. Confirm that **IAM user/role access to billing information is activated**:
+![Images/AWSAcct7.png](Images/AWSAcct7.png) 
+
+You will now be able to provide access to non-root users to billing information via IAM policies.
+
+**NOTE:** Logout as the root user before continuing.
+
+
+## 2. Create an account structure<a name="account_structure"></a>
+**NOTE**: Do NOT do this step if you already have an orgnization and consolidated billing setup.
+
+You will create an AWS Organization, and join one or more accounts to te master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
+
+### 2.1 Create an AWS Organization
 You will create an AWS Organization with the master account. 
 
 1. Login to the AWS console as an IAM user with the required permissions, start typing *AWS Organizations* into the **Find Services** box and click on **AWS Organizations**:
@@ -42,7 +67,7 @@ You will create an AWS Organization with the master account.
 
 You now have an organization that you can join other accounts to.
 
-### 1.2 Join member accounts
+### 2.2 Join member accounts
 You will now join other accounts to your organization.
 
 1. From the AWS Organizations console click on **Add account**:
@@ -81,10 +106,10 @@ You will now join other accounts to your organization.
 Repeat the steps above (exercise 1.2) for each additional account in your organization. 
 
 
-## 2. Configure billing account settings<a name="account_settings"></a>
+## 3. Configure billing account settings<a name="account_settings"></a>
 It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by muptile team members for redudancy. Ensure the email accounts are actively monitored.
 
-1. Log in to your Master account, Click on the account name in the top right, and click on **My Account** from the menu:
+1. Log in to your Master account as an IAM user with the required permissions, Click on the account name in the top right, and click on **My Account** from the menu:
 ![Images/AWSAcct11.png](Images/AWSAcct1.png)
 
 2. Scroll down to **Alternate Contacts** and click on **Edit**:
@@ -94,32 +119,13 @@ It is important to ensure your account contacts are up to date and correct. This
 ![Images/AWSAcct3.png](Images/AWSAcct3.png)
 
 
-## 3. Configure IAM access to your billing<a name="IAM_access"></a>
-**NOTE**: You will need to sign into the account with root account credentials to perform this action. You need to enter in the account email and password for root access.
-You need to enable IAM access to your billing so the correct IAM users can access the information. This allows other users (non-root) to access billing information in the master account. It is also required if you wish for member accounts to see their usage and billing information. This step will not provide access to the information, that is configured through IAM policies.
-
-
-1. Log in to your Master account, Click on the account name in the top right, and click on **My Account** from the menu:
-![Images/AWSAcct4.png](Images/AWSAcct4.png)
-
-2. Scroll down to **IAM User and Role Access to Billing Information**, and click **Edit**:
-![Images/AWSAcct5.png](Images/AWSAcct5.png)
-
-3. Select **Activeate IAM Access** and click on **Update**:
-![Images/AWSAcct6.png](Images/AWSAcct6.png)
-
-4. Confirm that **IAM user/role access to billing information is activated**:
-![Images/AWSAcct7.png](Images/AWSAcct7.png) 
-
-You will now be able to provide access to non-root users to billing information via IAM policies.
-
 ## 4. Configure Cost and Usage Reports<a name="CUR"></a>
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information. This will allow you to make modifications to your usage, and make your applications more efficient.
 
 ### 4.1 Setup S3 Billing bucket 
 We will create an S3 bucket that will be used to deliver the Cost and Usage Reports into. It will be a bucket that allows the AWS Billing account access to put objects.
 
-1. Login to the AWS console (master account) as an IAM user with the required permissions, and go to the **S3** console:
+1. Log in to your Master account as an IAM user with the required permissions, and go to the **S3** console:
 ![Images/AWSS31.png](Images/AWSS31.png)
 
 2. Click on **Create bucket**:
@@ -177,10 +183,10 @@ The bucket is now configured and ready to receive the billing reports.
 
 
 ### 4.2 Configure a Cost and Usage Report
-1. Log into your Master account as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](Images/AWSCUR1.png) 
 
-2. Select **Reports** from the left menu:
+2. Select **Cost & Usage Reports** from the left menu:
 ![Images/AWSCUR2.png](Images/AWSCUR2.png) 
 
 3. Click on **Create report**:
@@ -215,7 +221,7 @@ The monthly billing report contains estimated AWS charges for the month. It cont
 1. Go to the billng console:
 ![Images/AWSMonthlyUsage0.png](Images/AWSMonthlyUsage0.png)
 
-2. Click on **Preferences** from the left menu:
+2. Click on **Billing preferences** from the left menu:
 ![Images/AWSMonthlyUsage1.png](Images/AWSMonthlyUsage1.png)
 
 3. Scroll down, and click on **Receive Billing Reports**, then click on **Configure**:
@@ -238,7 +244,7 @@ The monthly billing report contains estimated AWS charges for the month. It cont
 ## 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
 AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.
  
-1. Log into the console of your Master account as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSExplorer0.png](Images/AWSExplorer0.png)
 
 2. Select **Cost Explorer** from the left menu:
@@ -254,7 +260,7 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, understa
 ## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 
 
-1. Log into the console of your Master account as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSBillTag0.png](Images/AWSBillTag0.png)
 
 2. Select **Cost Allocation Tags** from the left menu:

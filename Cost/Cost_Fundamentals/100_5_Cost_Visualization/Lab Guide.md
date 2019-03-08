@@ -77,7 +77,7 @@ We will now view usage by account. This helps to highlight where the costs and u
 3. It will show the default last 6 months, with a monthly granularity. 
 ![Images/AWSCostAccount2.png](Images/AWSCostAccount2.png)
 
-4. As above, chagne the graph to **Daily** granularity and from a bar graph to a **Line** graph:
+4. As above, change the graph to **Daily** granularity and from a bar graph to a **Line** graph:
 ![Images/AWSCostAccount3.png](Images/AWSCostAccount3.png)
 
 5. Here is the daily granularity line graph. You can see there is one account which has the most cost, so lets focus on that by applying a filter:
@@ -86,7 +86,7 @@ We will now view usage by account. This helps to highlight where the costs and u
 6. On the right click on **Linked Account**, select the checkbox next to the account we want to focus on, then click **Include only** and **Apply filters**:
 ![Images/AWSCostAccount6.png](Images/AWSCostAccount6.png)
 
-7. You can now see this one accounts usage. It has defaulted back to a bar graph, so change it to a **Line** graph: 
+7. You can now see this one accounts usage: 
 ![Images/AWSCostAccount7.png](Images/AWSCostAccount7.png)
 
 8. Lets see the services breakdown for this account, click on **Service** to group by services:
@@ -145,7 +145,7 @@ We will now create some custom EC2 reports, which will help to show ongoing cost
 5. Change it to a **Daily** **Line** graph, then select **More filters**: 
 ![Images/AWSCustomEC24.png](Images/AWSCustomEC25.png)
 
-6. click on **Purchase Type**, select **On Demand** and click **Apply filters**, which will ensure we are only looking at On-Demand costs: 
+6. click on **Purchase Option**, select **On Demand** and click **Apply filters**, which will ensure we are only looking at On-Demand costs: 
 ![Images/AWSCustomEC25.png](Images/AWSCustomEC26.png)
 
 7. These are your on-demand EC2 costs, you should setup a report like this for your services that have the highest usage or costs. We will now save this, click on **Save as...**:
