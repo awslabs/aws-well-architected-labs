@@ -21,6 +21,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1. View an RI report<a name="ri_report"></a>
 We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.
 
+NOTE: We do all analysis using **All Up Front**, as this allows the break even to show when the entire 12month term is paid off. After the analysis is performed, select the required RI type.
+
 1. Log into the console as an IAM user with the required permissions, go to the **AWS Cost Explorer** service page:
 ![Images/AWSRI1.png](Images/AWSRI1.png)
 
@@ -44,9 +46,11 @@ View the **Purcahse Recommendations**, if the 30 day recommendation is less than
 ![Images/AWSRI5.png](Images/AWSRI5.png)
 
 2. If you do not have sufficient usage, you can download the two sample files:
+
+Ctrl-click to open them in a new tab, then copy the text and paste it into a spreadsheet application.
+
 - [7_day_EC2_R_Rec.csv](./Code/7_day_EC2_RI_Rec.csv)
 - [30_day_EC2_R_Rec.csv](./Code/30_day_EC2_RI_Rec.csv)
-- NOTE: Ctrl-click on the links above to open then in a new Tab. select the lines and copy and paste them into your preferred spreadsheet application.
 
 
 3. Open both files, copy the **Recommended Instance Quantity Purchase** column from the **7 day** recommendaions, and insert it into the **30 day** recommendations file:
