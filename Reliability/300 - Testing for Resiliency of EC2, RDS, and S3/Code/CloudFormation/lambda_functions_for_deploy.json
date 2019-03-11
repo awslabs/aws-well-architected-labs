@@ -194,6 +194,14 @@
       }
     },
 
+    "AutoScalingServiceRole" : {
+      "Type" : "AWS::IAM::ServiceLinkedRole",
+      "Condition" : "CreateAutoScalingServiceRole",
+      "Properties" : {
+        "AWSServiceName" : "autoscaling.amazonaws.com",
+        "Description"    : "This should allow Auto Scaling to be created by this account"
+      }
+    },
     "RDSLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
