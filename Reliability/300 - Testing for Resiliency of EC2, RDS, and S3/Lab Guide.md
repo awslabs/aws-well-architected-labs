@@ -25,9 +25,9 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
 6. On the CloudFormation console, click “Create Stack:”.  
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
 7. There are two versions that can be deployed. You can deploy in one AWS region, which will allow you start testing sooner, or you can deploy into 2 AWS regions, which will enable you to test some additional aspects of S3, as well as as simulation a regional failure of your application
-    1. For a single region deployment, select the option to “Specify an Amazon S3 template" and enter **https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json**.  
+    1. For a single region deployment, select the option to “Specify an Amazon S3 template" and enter **https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json**  
 ![LambdaCFNEntered-ohio](Images/LambdaCFNEntered-ohio.png)
-    2. For a two region deployment, select the option to “Specify an Amazon S3 template" and enter **https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json**.  
+    2. For a two region deployment, select the option to “Specify an Amazon S3 template" and enter **https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json**  
 ![LambdaCFNEntered-tworegion](Images/LambdaCFNEntered-tworegion.png)
 8. Click the “Next” button. On this page you will enter the following information:
     1. For the single region deployment:
@@ -280,7 +280,7 @@ $./fail_az.sh <az> <vpc-id>
 ```
 * AZ Failure in Python: Execute the failure mode script for failing an instance:
 ```
-$ python fail_az.py <az> <vpc-id>
+$ python fail_az.py <vpc-id> <az>
 ```
 * AZ Failure in Java: Execute the failure mode script for failing an instance:
 ```
