@@ -265,7 +265,7 @@ The previous visual showed instance usage, however instances vary in cost and yo
 Hover over the large usage and you can see the actual costs.
 To use this graph, observe the top costs, then exclude them and continue to drill down on the highest cost visible.
 
-### 3.4 Dashboard Comple
+### 3.4 Dashboard Complete
 Your dashboard is now complete, you should have a similar dashboard to below:
 ![Images/AWSQuicksight64.png](Images/AWSQuicksight64.png)
 
