@@ -23,7 +23,7 @@
 
 
 ## Permissions required
-- [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
+- [./Code/IAM_policy.json](./Code/IAM_policy.json) IAM policy required for this lab
  
 
 

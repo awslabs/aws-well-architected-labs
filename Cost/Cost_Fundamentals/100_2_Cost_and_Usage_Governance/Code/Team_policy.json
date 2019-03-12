@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "aws-portal:ViewUsage",
+                "aws-portal:ModifyBilling",
+                "aws-portal:ViewBilling",
+                "aws-portal:ViewAccount",
+                "budgets:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
