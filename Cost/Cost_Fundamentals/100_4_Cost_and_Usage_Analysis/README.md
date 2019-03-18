@@ -1,4 +1,4 @@
-# Level 100: Billing Analysis
+# Level 100: Cost and Usage Analysis
 
 ## Introduction
  This hands-on lab will guide you through the steps to perform analysis of your AWS cost and usage. The skills you learn will help you monitor your cost and usage, in alignment with the AWS Well-Architected Framework.
