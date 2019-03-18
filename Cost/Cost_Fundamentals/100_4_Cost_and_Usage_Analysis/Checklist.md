@@ -1,4 +1,4 @@
-# Level 100: Billing Analysis
+# Level 100: Cost and Usage Analysis
 
 - [ ] View your AWS Invoices
 - [ ] View your cost and usage in detail through the console

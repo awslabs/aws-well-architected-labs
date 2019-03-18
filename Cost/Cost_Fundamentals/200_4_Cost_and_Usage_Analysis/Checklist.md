@@ -1,4 +1,4 @@
-# Level 200: AWS Account Setup: Best Practice Checklist
+# Level 200: Cost and Usage Analysis 
 
 - [ ] Load your CUR files into Athena for analysis
 - [ ] Create a separate table to contain only a specific member accounts usage 

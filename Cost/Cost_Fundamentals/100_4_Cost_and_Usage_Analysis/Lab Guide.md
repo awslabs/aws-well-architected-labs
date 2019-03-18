@@ -1,4 +1,4 @@
-# Level 100: Billing Analysis
+# Level 100: Cost and Usage Analysis
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected

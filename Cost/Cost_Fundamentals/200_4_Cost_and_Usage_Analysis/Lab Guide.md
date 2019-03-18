@@ -1,4 +1,4 @@
-# Level 200: Billing Analysis
+# Level 200: Cost and Usage Analysis
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
