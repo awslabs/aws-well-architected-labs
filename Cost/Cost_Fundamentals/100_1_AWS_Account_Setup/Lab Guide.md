@@ -122,67 +122,8 @@ It is important to ensure your account contacts are up to date and correct. This
 ## 4. Configure Cost and Usage Reports<a name="CUR"></a>
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information. This will allow you to make modifications to your usage, and make your applications more efficient.
 
-### 4.1 Setup S3 Billing bucket 
-We will create an S3 bucket that will be used to deliver the Cost and Usage Reports into. It will be a bucket that allows the AWS Billing account access to put objects.
 
-1. Log in to your Master account as an IAM user with the required permissions, and go to the **S3** console:
-![Images/AWSS31.png](Images/AWSS31.png)
-
-2. Click on **Create bucket**:
-![Images/AWSS32.png](Images/AWSS32.png)
-
-3. Enter a **Bucket name**, **Region** and click **Next**:
-NOTE: Later you will be using Athena and QuickSight, we suggest you create all resources in a single region for ease of access. Ensure that all required services are available in your chosen region.
-![Images/AWSS33.png](Images/AWSS33.png)
-
-4. Enter any additional information such as **Tags** if required, and click **Next**: 
-![Images/AWSS34.png](Images/AWSS34.png)
-
-5. It is suggested to leave the defaults to block public access, and click **Next**:
-![Images/AWSS35.png](Images/AWSS35.png)
-
-6. Verify the settings and click **Create bucket**:
-![Images/AWSS36.png](Images/AWSS36.png)
-
-7. Click on the name of the bucket you just created: 
-![Images/AWSS37.png](Images/AWSS37.png)
-
-8. Click on **Permissions**:
-![Images/AWSS38.png](Images/AWSS38.png)
-
-9. Click on **Bucket Policy**: 
-![Images/AWSS39.png](Images/AWSS39.png)
-
-10. Copy the following bucket policy:
-```
-{
-  "Version": "2008-10-17",
-  "Id": "Policy1335892530063",
-  "Statement": [
-    {
-      "Sid": "Stmt1335892150622",
-      "Effect": "Allow",
-      "Principal": {"AWS": "arn:aws:iam::386209384616:root"},
-      "Action": [ "s3:GetBucketAcl", "s3:GetBucketPolicy" ],
-      "Resource": "arn:aws:s3:::<change_me>"
-    },
-    {
-      "Sid": "Stmt1335892526596",
-      "Effect": "Allow",
-      "Principal": {"AWS": "arn:aws:iam::386209384616:root"},
-      "Action": [ "s3:PutObject" ],
-      "Resource": "arn:aws:s3:::<change_me>/*"
-    }
-  ]
-}
-```
-11. Modify the **<change_me>** to the name of your bucket, and paste it into the policy editor and click **Save**:
-![Images/AWSS310.png](Images/AWSS310.png)
-
-The bucket is now configured and ready to receive the billing reports.
-
-
-### 4.2 Configure a Cost and Usage Report
+### 4.1 Configure a Cost and Usage Report
 1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](Images/AWSCUR1.png) 
 
@@ -198,24 +139,21 @@ The bucket is now configured and ready to receive the billing reports.
 5. Click on **Configure**:
 ![Images/AWSCURDelivery0.png](Images/AWSCURDelivery0.png)
 
-6. Select the bucket configured above:
+6. Enter a unique bucket name, and ensure the region is correct, click **Next**:
 ![Images/AWSCURDelivery1.png](Images/AWSCURDelivery1.png)
 
-7. Click on **Next**:
-![Images/AWSCURDelivery2.png](Images/AWSCURDelivery2.png)
-
-8. Read and verify the policy, this will allow AWS to deliver billing reports to the bucket. Click on **I have confirmed that this policy is correct**, then click **Save**:
+7. Read and verify the policy, this will allow AWS to deliver billing reports to the bucket. Click on **I have confirmed that this policy is correct**, then click **Save**:
 ![Images/AWSCURDelivery3.png](Images/AWSCURDelivery3.png)
 
-9. Esure your bucket is a **Valid Bucket** (if not, verify the bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
+8. Esure your bucket is a **Valid Bucket** (if not, verify the bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
 ![Images/AWSCURDelivery4.png](Images/AWSCURDelivery4.png)
 
-10. Review the configuration, scroll to the bottom and click on **Review and Complete**:
+9. Review the configuration, scroll to the bottom and click on **Review and Complete**:
 ![Images/AWSCUR6.png](Images/AWSCUR6.png)
 
 You have successfully configured a Cost and Usage Report to be delivered.  It may take up to 24hrs for the first report to be delivered.
 
-### 4.3 Enable monthly billing report
+### 4.2 Enable monthly billing report
 The monthly billing report contains estimated AWS charges for the month. It contains line items for each unique combination of AWS product, usage type, and operation that the account uses.
 
 1. Go to the billng console:
