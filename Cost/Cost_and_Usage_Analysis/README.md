@@ -10,8 +10,8 @@ For more information about cost optimization on AWS visit the Well-Architected t
 
 ### 100 and 200
 These labs are from the fundamentals series and must be completed before you move onto the 300 series.
-- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis)
-- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis)
+- [100 #4 Cost and Usage Analysis](../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis)
+- [200 #4 Cost and Usage Analysis](../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis)
 
 
 ### 300
