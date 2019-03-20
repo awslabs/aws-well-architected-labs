@@ -24,3 +24,16 @@ These labs must be done in order from 1 to 5, starting at the 100 level labs.
 - [200 #5 Cost Visualization](./Cost_Fundamentals/200_5_Cost_Visualization) 
 
 
+### Cost and Usage Analysis
+
+#### 100 and 200 Level
+These labs are from the fundamentals series and must be completed before you move onto the 300 series.
+- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis)
+- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis)
+
+
+#### 300
+These labs focus on specific items within cost and usage analysis and are used to acheive a specific outcome. They must be done after the 100 and 200 labs, however they can be completed independantly of each other. 
+- [300 Billing Analysis - Automated CUR Updates and Ingestion](./300_Automated_CUR_Updates_and_Ingestion) 
+
+
