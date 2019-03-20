@@ -34,6 +34,6 @@ These labs are from the fundamentals series and must be completed before you mov
 
 #### 300
 These labs focus on specific items within cost and usage analysis and are used to acheive a specific outcome. They must be done after the 100 and 200 labs, however they can be completed independantly of each other. 
-- [300 Billing Analysis - Automated CUR Updates and Ingestion](./300_Automated_CUR_Updates_and_Ingestion) 
+- [300 Billing Analysis - Automated CUR Updates and Ingestion](./Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion) 
 
 
