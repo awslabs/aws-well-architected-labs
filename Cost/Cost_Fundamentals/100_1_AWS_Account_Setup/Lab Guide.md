@@ -124,6 +124,8 @@ Cost and Usage Reports provide the most detailed information on your usage and b
 
 
 ### 4.1 Configure a Cost and Usage Report
+If you configure multilpe Cost and Usage Reports (CURs), then it is recommended to have 1 CUR per bucket. If you **must** have multilpe CURs in a single bucket, ensure you use a different **report path prefix** so it is clear they are different reports.
+
 1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](Images/AWSCUR1.png) 
 
