@@ -8,6 +8,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 ## Labs:
 * [Level 100: AWS Account & Root User](100%20-%20AWS%20Account%20%26%20Root%20User)
 * [Level 100: Basic Identity & Access Management User, Group, Role](100%20-%20Basic%20Identity%20%26%20Access%20Management%20User%2C%20Group%2C%20Role)
+* [Level 100: CloudFront with S3 Bucket Origin](100%20-%20CloudFront%20with%20S3%20Bucket%20Origin)
 * [Level 200: Automated Deployment of Detective Controls](200%20-%20Automated%20Deployment%20of%20Detective%20Controls)
 * [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
 * [Level 200: Basic EC2 with WAF Protection](200%20-%20Basic%20EC2%20with%20WAF%20Protection)
@@ -20,7 +21,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
