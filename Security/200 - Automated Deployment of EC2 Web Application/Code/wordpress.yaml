@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+﻿AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   AWS CloudFormation Sample Template for WordPress. This template installs a highly-available, scalable WordPress deployment using a multi-az
   Amazon RDS database instance for storage. It demonstrates using the AWS CloudFormation bootstrap scripts to deploy WordPress.
@@ -276,7 +276,7 @@ Mappings:
       HVM64: ami-0ff8a91507f77f867
       HVMG2: ami-0a584ac55a7631c0c
     us-west-2:
-      HVM64: ami-a0cfeed8
+      HVM64: ami-01e24be29428c15b2
       HVMG2: ami-0e09505bc235aa82d
     us-west-1:
       HVM64: ami-0bdb828fd58c52235
@@ -561,8 +561,12 @@ Resources:
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Web1LaunchConfig --configsets wordpress_install --region ${AWS::Region}
           echo "Executing cfn-signal..."
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource Web1InstanceAutoScalingGroup --region ${AWS::Region}
+          # echo "Running yum update..."
+          # yum update -y
           echo "Restarting httpd..."
           service httpd restart
+          echo "Updating Amazon ssm agent..."
+          yum update amazon-ssm-agent -y          
           echo "UserData Complete"
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
@@ -579,13 +583,18 @@ Resources:
               - 'sts:AssumeRole'
       Path: /
       Policies:
-        - PolicyName: Web1InstanceLogs
+        - PolicyName: ec2
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action: 'ec2:DescribeInstances'
+                Action:
+                  - 'ec2:DescribeInstanceStatus'
                 Resource: '*'
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
               - Effect: Allow
                 Action: 
                   - 'logs:CreateLogGroup'
@@ -593,6 +602,61 @@ Resources:
                   - 'logs:PutLogEvents'
                   - 'logs:DescribeLogStreams'
                 Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - 'cloudwatch:PutMetricData'
+                Resource: '*'
+        - PolicyName: s3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:GetObject'
+                Resource:
+                - !Sub 'arn:aws:s3:::aws-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::aws-windows-downloads-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-packages-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::${AWS::Region}-birdwatcher-prod/*'
+                - !Sub 'arn:aws:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+        - PolicyName: ssm
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel'
+                Resource: '*'
+        - PolicyName: ec2messages
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
         #Allow secrets manager for future use
         # - PolicyName: Web1InstanceSecretsManager
         #   PolicyDocument:
