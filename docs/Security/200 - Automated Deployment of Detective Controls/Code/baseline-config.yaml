@@ -1,0 +1,226 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision AWS Config Service to log to a dedicated bucket at scheduled
+  intervals. The S3 bucket is created as part of the template.
+  **WARNING** You will be billed for the AWS resources created if you create a 
+  stack from this template.
+
+  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+
+Parameters:
+  ConfigSnapshotFrequency:
+    Type: String
+    Description: AWS Config configuration snapshot frequency
+    Default: One_Hour
+    AllowedValues:
+      - One_Hour
+      - Three_Hours
+      - Six_Hours
+      - Twelve_Hours
+      - TwentyFour_Hours
+  S3AccessLogsBucketName:
+    Type: String
+    Description: The name of an existing S3 bucket for storing S3 Access Logs on the newly created bucket. Also set BucketLogging to Yes.
+  ConfigBucketName:
+    Type: String
+    Description: >-
+      The name of the S3 bucket Config Service will store configuration
+      snapshots in.
+    MinLength: '3'
+    MaxLength: '63'
+    AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
+  BucketLogging:
+    Type: String
+    Description: Enable bucket access logging for the new config snapshot storage bucket
+    Default: 'No'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+  BucketPolicyExplicitDeny:
+    Type: String
+    Description: 'OPTIONAL: Explicitly deny destructive actions to the bucket'
+    Default: 'No'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  InfrequentAccessTransitionTime:
+    Type: Number
+    Description: >-
+      Number of days to retain logs in the S3 Bucket before moving to Infrequent
+      Access
+    Default: '90'
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Mandatory
+        Parameters:
+          - ConfigBucketName
+          - S3AccessLogsBucketName
+      - Label:
+          default: Optional
+        Parameters:
+          - ConfigSnapshotFrequency
+          - InfrequentAccessTransitionTime
+          - BucketPolicyExplicitDeny
+          - BucketLogging
+Resources:
+  ConfigRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: config.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSConfigRole'
+      Path: /service-role/
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                Resource: !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+                    - /*
+              - Effect: Allow
+                Action:
+                  - 's3:GetBucketAcl'
+                Resource: !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+            Version: 2012-10-17
+          PolicyName: ConfigServiceS3Interaction
+    Type: 'AWS::IAM::Role'
+  DeliveryChannel:
+    DependsOn: ConfigRole
+    Properties:
+      ConfigSnapshotDeliveryProperties:
+        DeliveryFrequency: !Ref ConfigSnapshotFrequency
+      S3BucketName: !Ref ConfigBucket
+    Type: 'AWS::Config::DeliveryChannel'
+  ConfigRecorder:
+    Properties:
+      Name: default
+      RecordingGroup:
+        AllSupported: 'true'
+        IncludeGlobalResourceTypes: 'true'
+      RoleARN: !GetAtt 
+        - ConfigRole
+        - Arn
+    Type: 'AWS::Config::ConfigurationRecorder'
+  ConfigBucket:
+    Properties:
+      BucketName: !Ref ConfigBucketName
+      VersioningConfiguration:
+        Status: Enabled
+      LoggingConfiguration: !If 
+        - BucketLogging
+        - DestinationBucketName: !Ref S3AccessLogsBucketName
+          LogFilePrefix: !Join 
+            - ''
+            - - !Ref ConfigBucketName
+              - /
+        - !Ref 'AWS::NoValue'
+      LifecycleConfiguration:
+        Rules:
+          - Id: TransitionToIA
+            Status: Enabled
+            Transitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: !Ref InfrequentAccessTransitionTime
+    DeletionPolicy: Retain
+    Type: 'AWS::S3::Bucket'
+  BucketPolicy:
+    DependsOn:
+      - ConfigBucket
+    Properties:
+      Bucket: !Ref ConfigBucket
+      PolicyDocument:
+        Id: ConfigService
+        Statement:
+          - !If 
+            - ExplicitDeny
+            - Action:
+                - 's3:DeleteBucket'
+                - 's3:DeleteBucketPolicy'
+                - 's3:DeleteBucketWebsite'
+                - 's3:DeleteObject'
+                - 's3:DeleteObjectVersion'
+                - 's3:PutAccelerateConfiguration'
+                - 's3:PutBucketAcl'
+                - 's3:PutBucketCORS'
+                - 's3:PutBucketLogging'
+                - 's3:PutBucketPolicy'
+                - 's3:PutBucketRequestPayment'
+                - 's3:PutBucketVersioning'
+                - 's3:PutBucketWebsite'
+                - 's3:PutLifecycleConfiguration'
+                - 's3:PutReplicationConfiguration'
+                - 's3:ReplicateDelete'
+                - 's3:ReplicateObject'
+                - 's3:RestoreObject'
+              Effect: Deny
+              Principal: '*'
+              Resource:
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+                    - /*
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+              Sid: DenyDestructiveActions
+            - !Ref 'AWS::NoValue'
+          - Action: 's3:GetBucketAcl'
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref ConfigBucket
+            Sid: ConfigServiceACLCheck
+          - Action: 's3:PutObject'
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': bucket-owner-full-control
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ConfigBucket
+                  - /*
+            Sid: ConfigServiceWrite
+        Version: 2012-10-17
+    Type: 'AWS::S3::BucketPolicy'
+Conditions:
+  BucketLogging: !Equals 
+    - !Ref BucketLogging
+    - 'Yes'
+  ExplicitDeny: !Equals 
+    - !Ref BucketPolicyExplicitDeny
+    - 'Yes'
