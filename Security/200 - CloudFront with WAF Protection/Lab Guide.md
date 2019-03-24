@@ -1,4 +1,4 @@
-# Level 100: EC2 Web Infrastructure Protection: Lab Guide
+﻿# Level 100: EC2 Web Infrastructure Protection: Lab Guide
 
 ## 1. Launch First Instance
 For launching your first instance, we are going to use the launch wizard in the Amazon EC2 console.
@@ -82,20 +82,21 @@ Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/), we are going
 AWS WAF configuration for use with CloudFront.
 
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Click Create New Stack.
-3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-global.yaml` and click Next.
+2. Click **Create stack**.  
+![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)  
+3. Enter the following **Amazon S3 URL**:  `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-global.yaml` and click **Next**.  
+![cloudformation-createstack-s3](Images/cloudformation-createstack-s3.png)   
 4. Enter the following details:
+  * Stack name: The name of this stack. For this lab, use `waf`.
   * WAFName: Enter the base name to be used for resource and export names for this stack. For this lab, you can use `Lab1`.
   * WAFCloudWatchPrefix: Enter the name of the CloudWatch prefix to use for each rule using alphanumeric
   characters only. For this lab, you can use `Lab1`.
   The remainder of the parameters can be left as defaults.
-  ![waf-create-stack](Images/waf-create-stack.png)
-5. Click Next.
-6. In this scenario, we won't add any tags or other options. Click Next.
-7. Review the information for the stack. When you're satisfied with the settings, click Next.
-8. Select I acknowledge that AWS CloudFormation might create IAM resources with custom names, and click
-Create.
-9. After a few minutes, the stack status should change from CREATE_IN_PROGRESS to CREATE_COMPLETE.
+  ![waf-create-stack](Images/waf-create-stack.png)  
+5. At the bottom of the page click **Next**.
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+7. Review the information for the stack. When you're satisfied with the configuration, click **Create stack**.  
+8. After a few minutes the stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
 10. You have now set up a basic AWS WAF configuration ready for CloudFront to use!
 
 
@@ -109,7 +110,7 @@ we previously created.
 3. Click Get Started in the Web section.
 ![cloudfront-getstarted](Images/cloudfront-get-started.png)
 4. Specify the following settings for the distribution:
-  * Enter the EC2 public DNS name you recorded from your instance launch.
+  * In **Origin Domain Name** enter the EC2 public DNS name you recorded from your instance launch.
   ![cloudfront-create-distribution](Images/cloudfront-create-distribution.png)
   * In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
   ![cloudfront-distribution-settings](Images/cloudfront-distribution-settings.png)
