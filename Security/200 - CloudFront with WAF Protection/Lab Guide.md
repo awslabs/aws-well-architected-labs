@@ -1,9 +1,15 @@
-﻿# Level 100: EC2 Web Infrastructure Protection: Lab Guide
+﻿# Level 100: CloudFront with WAF Protection: Lab Guide
 
-## 1. Launch First Instance
-For launching your first instance, we are going to use the launch wizard in the Amazon EC2 console.
+## Authors
+- Ben Potter, Security Lead, Well-Architected
 
-### 1.1 Launch Single Instance
+## Table of Contents
+1. [Launch Instance](#launch_instance)
+2. [Configure WAF](#waf)
+3. [Configure CloudFront](#cloudfront)
+4. [Tear Down](#tear_down)
+
+## 1. Launch Instance <a name="launch_instance"></a>
 You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see [Launching an Instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html).
 Launch an instance:
 1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
@@ -75,9 +81,7 @@ tab or instances list. Take note of this public DNS value.
 ***
 
 
-## 2. Configure Amazon CloudFront with AWS WAF
-
-### 2.1 AWS CloudFormation to create AWS WAF for Amazon CloudFront
+## 2. Configure AWS WAF <a name="waf"></a>
 Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/), we are going to deploy a basic example
 AWS WAF configuration for use with CloudFront.
 
@@ -100,7 +104,7 @@ AWS WAF configuration for use with CloudFront.
 10. You have now set up a basic AWS WAF configuration ready for CloudFront to use!
 
 
-### 2.2 Configure Amazon CloudFront
+## 3. Configure Amazon CloudFront <a name="cloudfront"></a>
 Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
 ACL
 we previously created.
@@ -129,7 +133,7 @@ For more information on configuring CloudFront, see [Viewing and Updating CloudF
 ***
 
 
-### 3. Tear down this lab
+### 3. Tear down this lab <a name="tear_down"></a>
 The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.
 
@@ -159,7 +163,7 @@ Delete the AWS WAF stack:
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
