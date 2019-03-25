@@ -1,0 +1,23 @@
+
+
+Prereq to build: Need maven and Java1.8 installed
+
+######################
+Building the jar
+#####################
+mvn clean package shade:shade
+
+Navigate to target folder after build is generated and execute the below commands to app-resiliency.jar
+
+########################
+Running the executable
+########################
+
+//EC2 failover
+java -jar app-resiliency-1.0.jar EC2 vpc-041e9a9574a0029d1
+
+//AZ Failover
+java -jar app-resiliency-1.0.jar AZ vpc-041e9a9574a0029d1 us-east-2a
+
+//RDS Failover
+java -jar app-resiliency-1.0.jar RDS vpc-041e9a9574a0029d1
