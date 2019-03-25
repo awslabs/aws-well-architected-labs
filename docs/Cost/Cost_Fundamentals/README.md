@@ -12,14 +12,14 @@ For more information about cost optimization on AWS visit the Well-Architected t
 These labs must be done in order from 1 to 5, starting at the 100 level labs.
 
 #### 100 Level
-- [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup)
-- [100 #2 Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance)
-- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis)
-- [100 #5 Cost Visualization](./Cost_Fundamentals/100_5_Cost_Visualization)
+- [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup/README.md)
+- [100 #2 Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md)
+- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)
+- [100 #5 Cost Visualization](./Cost_Fundamentals/100_5_Cost_Visualization/README.md)
 
 #### 200 Level
-- [200 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance)
-- [200 #3 Pricing Models](./Cost_Fundamentals/200_3_Pricing_Models) 
-- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis)
-- [200 #5 Cost Visualization](./Cost_Fundamentals/200_5_Cost_Visualization) 
+- [200 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md)
+- [200 #3 Pricing Models](./Cost_Fundamentals/200_3_Pricing_Models/README.md) 
+- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
+- [200 #5 Cost Visualization](./Cost_Fundamentals/200_5_Cost_Visualization/README.md) 
 
