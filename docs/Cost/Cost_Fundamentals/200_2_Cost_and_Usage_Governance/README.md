@@ -17,8 +17,6 @@
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
 - [Checklist.md](Checklist.md) best practice checklist related to this lab
-- [/Code](Code/) including CloudFormation templates related to this lab
-- [/Images](Images/) referenced by this lab
 
 ## Permissions required
 - [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
