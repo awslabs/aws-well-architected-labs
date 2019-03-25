@@ -5,6 +5,8 @@ site_description: 'A collection of AWS Well-Architected workshops'
 # Repository 
 repo_name: 'awslabs/aws-well-architected-labs' 
 repo_url: 'https://github.com/awslabs/aws-well-architected-labs' 
+edit_uri: '?query=root/path/' 
+
 
 # Copyright
 copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.' 
