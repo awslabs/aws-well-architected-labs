@@ -23,7 +23,6 @@ theme:
 
 nav: 
     - Home: index.md 
-    - About: index.md 
     - Cost Optimization: 
         - Cost Optimization: 'Cost/README.md' 
         - Cost Optimization Fundamentals: 'Cost/Cost_Fundamentals/README.md' 
