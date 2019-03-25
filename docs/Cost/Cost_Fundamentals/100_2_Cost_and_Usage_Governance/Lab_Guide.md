@@ -20,7 +20,7 @@ We are going to create a cost optimization team. Within your organization there 
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
 
 Log into the console as an IAM user with the required permissions, as per:
-- [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
+- [../Code/IAM_policy](../Code/IAM_policy) IAM policy required for this lab
       
 ### 1.1 Create an IAM policy for the team
 This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.
