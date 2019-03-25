@@ -67,7 +67,7 @@ It is possible to download a CSV version of your summary cost and usage informat
 4. Click on **Download CSV**:
 ![Images/AWSDownloadBill0.png](Images/AWSDownloadBill0.png)
 
-5. It will download a CSV version of the bill you can use in a spreadsheet application. It is recommended to NOT use this data source for calculations and analysis, instead you should use the Cost and Usage Report, which is covered in [200_4_Billing ansalysis](../200_4_Billing_Analysis/Lab%20Guide.md).
+5. It will download a CSV version of the bill you can use in a spreadsheet application. It is recommended to NOT use this data source for calculations and analysis, instead you should use the Cost and Usage Report, which is covered in [200_4_Cost_and_Usage_ansalysis](../200_4_Cost_and_Usage_Analysis/Lab_Guide.md).
 ![Images/AWSDownloadBill1.png](Images/AWSDownloadBill1.png)
 
 

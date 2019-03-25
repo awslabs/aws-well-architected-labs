@@ -16,7 +16,7 @@ These labs are designed to start you on your Cost Optimization journey. They cov
 
 #### 100 Level
 - [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup/README.md)
-- [100 #2 Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md)
+- [100 #2 Cost and Usage Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md)
 - [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)
 - [100 #5 Cost Visualization](./Cost_Fundamentals/100_5_Cost_Visualization/README.md)
 

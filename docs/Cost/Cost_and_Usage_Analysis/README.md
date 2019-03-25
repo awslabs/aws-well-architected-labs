@@ -10,12 +10,14 @@ For more information about cost optimization on AWS visit the Well-Architected t
 
 ### 100 and 200
 These labs are from the fundamentals series and must be completed before you move onto the 300 series.
+
 - [100 #4 Cost and Usage Analysis](../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)
 - [200 #4 Cost and Usage Analysis](../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
 
 
 ### 300
 These labs focus on specific items within cost and usage analysis and are used to acheive a specific outcome. They must be done after the 100 and 200 labs, however they can be completed independantly of each other. 
+
 - [300 Billing Analysis - Automated CUR Updates and Ingestion](./300_Automated_CUR_Updates_and_Ingestion/README.md) 
 
 

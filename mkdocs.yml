@@ -25,18 +25,80 @@ nav:
     - Home: index.md 
     - Cost Optimization: 
         - Cost Optimization: 'Cost/README.md' 
-        - Cost Optimization Fundamentals: 'Cost/Cost_Fundamentals/README.md' 
-        - Cost and Usage Analysis: 'Cost/Cost_and_Usage_Analysis/README.md' 
+        - Cost Optimization Fundamentals:
+            - Cost Fundamentals: 'Cost/Cost_Fundamentals/README.md' 
+            - 100 Account Setup: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.md' 
+            - 100 Governance: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.md' 
+            - 100 Analysis: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
+            - 100 Visualization: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.md' 
+            - 200 Governance: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.md' 
+            - 200 Pricing Models: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.md' 
+            - 200 Analysis: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Checklist.md'
+                - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
+            - 200 Visualization: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.md' 
+                - Checklist: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.md' 
+        - Cost and Usage Analysis: 
+            - Cost and Usage Analysis: 'Cost/Cost_and_Usage_Analysis/README.md' 
+            - 100 Analysis: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md'
+                - Checklist: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Checklist.md'
+                - Lab Guide: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.md'  
+            - 200 Analysis: 
+                - Lab Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md'
+                - Checklist: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
+            - 300 Automated CUR Updates and Ingestion: 
+                - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md'
+                - Checklist: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Checklist.md' 
+                - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.md'  
     - Security: 
         - Security: 'Security/README.md' 
-        - Cloudfront with S3: 'Security/100 - CloudFront with S3 Bucket Origin/README.md' 
+        - Security 100 Labs: 
+            - Account and Root User: 'Security/100 - AWS Account & Root User/README.md' 
+            - Basic Identity & Access Management User, Group, Role: 'Security/100 - Basic Identity & Access Management User, Group, Role/README.md' 
+            - CloudFront with S3 Bucket Origin: 'Security/100 - CloudFront with S3 Bucket Origin/README.md'  
+        - Security 200 Labs: 
+            - Automated Deployment of Detective Controls: 'Security/200 - Automated Deployment of Detective Controls/README.md' 
+            - Automated Deployment of EC2 Web Application: 'Security/200 - Automated Deployment of EC2 Web Application/README.md' 
+            - Automated Deployment of IAM Groups and Roles: 'Security/200 - Automated Deployment of IAM Groups and Roles/README.md' 
+            - Automated Deployment of VPC: 'Security/200 - Automated Deployment of VPC/README.md' 
+            - Basic EC2 with WAF Protection: 'Security/200 - Basic EC2 with WAF Protection/README.md' 
+            - CloudFront with WAF Protection: 'Security/200 - CloudFront with WAF Protection/README.md' 
+        - Security 300 Labs: 
+            - IAM Permission Boundaries Delegating Role Creation: 'Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md' 
+            - IAM Tag Based Access Control for EC2: 'Security/300 - IAM Tag Based Access Control for EC2/README.md' 
+ 
     - Operational Excellence: 
-        - 100 1 AWS Account Setup: 'Cost_Fundamentals/100_1_AWS_Account_Setup/README.md'
+        - Coming Soon: 'Operations/README.md' 
     - Reliability: 
-        - Reailibility: 'Reliability/README.md' 
-        - Testing Resiliency: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3' 
+        - Testing Resiliency: 
+            - Lab Overview: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/README.md'
+            - Checklist: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Checklist.md' 
+            - Lab Guide: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md'  
     - Performance Efficiency: 
-        - 100 1 AWS Account Setup: 'Cost_Fundamentals/100_1_AWS_Account_Setup/README.md'
+        - Coming Soon: 'Performance/README.md' 
 
  
  
