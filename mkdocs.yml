@@ -10,9 +10,14 @@ repo_url: 'https://github.com/awslabs/aws-well-architected-labs'
 copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.' 
 
 
-google_analytics:
-    - 'UA-136796500-1' 
-    - 'auto' 
+# Must use true for gh-deploy
+use_directory_urls: true  
+
+#use_directory_urls: false 
+
+
+extra_javascript:
+ - js/tracking.js 
 
 
 theme:
@@ -24,9 +29,9 @@ theme:
 nav: 
     - Home: index.md 
     - Cost Optimization: 
-        - Cost Optimization: 'Cost/README.md' 
+        - Overview: 'Cost/README.md' 
         - Cost Optimization Fundamentals:
-            - Cost Fundamentals: 'Cost/Cost_Fundamentals/README.md' 
+            - Fundamentals Overview: 'Cost/Cost_Fundamentals/README.md' 
             - 100 Account Setup: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.md' 
                 - Checklist: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Checklist.md' 
@@ -60,18 +65,9 @@ nav:
                 - Checklist: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.md' 
         - Cost and Usage Analysis: 
-            - Cost and Usage Analysis: 'Cost/Cost_and_Usage_Analysis/README.md' 
-            - 100 Analysis: 
-                - Lab Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md'
-                - Checklist: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Checklist.md'
-                - Lab Guide: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.md'  
-            - 200 Analysis: 
-                - Lab Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md'
-                - Checklist: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Checklist.md' 
-                - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
+            - Analysis Overview: 'Cost/Cost_and_Usage_Analysis/README.md' 
             - 300 Automated CUR Updates and Ingestion: 
                 - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md'
-                - Checklist: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.md'  
     - Security: 
         - Security: 'Security/README.md' 

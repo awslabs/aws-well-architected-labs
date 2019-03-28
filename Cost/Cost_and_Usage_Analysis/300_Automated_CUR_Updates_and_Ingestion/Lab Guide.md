@@ -22,7 +22,7 @@ This step is used when there is a single CUR being delivered, and have it automa
 
 We will follow the steps here: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/setting-up-athena.html#use-athena-cf to implement the CloudFormation template, which will automatically update existing CURs, and include new CURs when they are delivered. 
 
-NOTE: IAM roles will be created, these are used to:
+NOTE: IAM roles will be utilized, these are used to:
 - Add event notification to existing S3 buckets
 - Create s3 buckets and upload objects
 - Create and run a Glue crawler
