@@ -13,18 +13,18 @@ copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights
 # Must use true for gh-deploy
 use_directory_urls: true  
 
+# Must use for /site builds
+# NOTE: will break gh-deploy 
 #use_directory_urls: false 
 
 
-extra_javascript:
- - js/tracking.js 
 
 
 theme:
     name: material 
     feature: 
         tabs: true 
-
+    custom_dir: 'theme' 
 
 nav: 
     - Home: index.md 
