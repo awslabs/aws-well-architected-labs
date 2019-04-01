@@ -15,7 +15,7 @@ Launch an instance:
 1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
 2. From the console dashboard, choose Launch Instance.
 ![ec2-launch-wizard](Images/ec2-launch-wizard-button.png)
-3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux Version 2).
+3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI, either version.
 ![ec2-launch-wizard](Images/ec2-launch-wizard-ami.png)
 4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
 ![ec2-launch-wizard](Images/ec2-launch-wizard-type.png)
@@ -40,7 +40,7 @@ Launch an instance:
   	```
 	#!/bin/bash
 	yum update -y
-	yum install -y httpd24
+	yum install -y httpd
 	service httpd start
 	chkconfig httpd on
 	groupadd www
