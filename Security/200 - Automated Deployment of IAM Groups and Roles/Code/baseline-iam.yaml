@@ -20,8 +20,8 @@ Description: >-
 Parameters:
   AllowRegion:
     Type: String
-    Description: 'A single region that resources can be created in, where service supports this permissions including EC2'
-    Default: 'ap-southeast-2'  
+    Description: 'A single region e.g. us-east-1 that resources can be created in, where service supports this permissions including EC2'
+    Default: 'us-east-1'  
   BaselineNamePrefix:
     Type: String
     Description: 'The prefix for roles, groups and policies created by this stack'
