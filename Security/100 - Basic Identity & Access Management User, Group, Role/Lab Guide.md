@@ -55,7 +55,7 @@ A *role* specifies a set of permissions that you can use to access AWS resources
 1. Sign in to the AWS Management Console as an IAM user [https://console.aws.amazon.com](https://console.aws.amazon.com).
 2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`. Alternatively you can paste the link in your browser that you recorded earlier.
 3. Click Switch Role. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again. ![switch-role](Images/switch-role.png)
-4. On the Switch Role page, type the account ID number or the account alias and the name of the role that you created for the Administrator in the previous step, for example, `arn:aws:iam::account_ID:role/Administrator`.
+4. On the Switch Role page, type the account ID number or the account alias in the **Account** field, and the name of the role that you created for the Administrator in the **Role** field.
 5. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name. The name and color can help remind you when this role is active, which changes your permissions. For example, for a role that gives you access to the test environment, you might specify a Display Name of Test and select the green Color. For the role that gives you access to production, you might specify a Display Name of Production and select red as the Color.
 6. Click Switch Role. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.
 
@@ -89,7 +89,7 @@ Please note that the changes you made to the users, groups, and roles have no ch
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
