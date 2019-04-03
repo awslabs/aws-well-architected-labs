@@ -15,7 +15,7 @@ In this lab we use the RequestTag [condition key](https://docs.aws.amazon.com/IA
 The policies are split into five different functions for demonstration purposes, you may like to modify and combine them to use after this lab to your exact requirements. In addition to enforcing tags, a region restriction only allow regions us-east-1 (North Virginia) and us-west-1 (North California).  
 ### 1.1 Create policy named *ec2-list-read*
 This policy allows read only permissions with a region condition. The only service actions we are going to allow are EC2, note that you typically require additional supporting actions such as Elastic Load Balancing if you were to re-use this policy after this lab, depending on your requirements.
-1. Sign in to the AWS Maagement Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click **Policies** and then click **Create policy**.  
 ![Images/iam-role-policy-1.png](Images/iam-policy-create-1.png)  
 3. On the Create policy page click the **JSON** tab.
@@ -29,95 +29,8 @@ This policy allows read only permissions with a region condition. The only servi
             "Sid": "ec2listread",
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeInstances",
-                "ec2:DescribeAggregateIdFormat",
-                "ec2:DescribeVolumesModifications",
-                "ec2:GetHostReservationPurchasePreview",
-                "ec2:DescribeSnapshots",
-                "ec2:DescribePlacementGroups",
-                "ec2:GetConsoleScreenshot",
-                "ec2:DescribeHostReservationOfferings",
-                "ec2:DescribeInternetGateways",
-                "ec2:GetLaunchTemplateData",
-                "ec2:DescribeVolumeStatus",
-                "ec2:DescribeScheduledInstanceAvailability",
-                "ec2:DescribeSpotDatafeedSubscription",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeFpgaImageAttribute",
-                "ec2:DescribeExportTasks",
-                "ec2:DescribeAccountAttributes",
-                "ec2:DescribeNetworkInterfacePermissions",
-                "ec2:DescribeReservedInstances",
-                "ec2:DescribeKeyPairs",
-                "ec2:DescribeNetworkAcls",
-                "ec2:DescribeRouteTables",
-                "ec2:DescribeReservedInstancesListings",
-                "ec2:DescribeEgressOnlyInternetGateways",
-                "ec2:DescribeSpotFleetRequestHistory",
-                "ec2:DescribeLaunchTemplates",
-                "ec2:DescribeVpcClassicLinkDnsSupport",
-                "ec2:DescribeVpnConnections",
-                "ec2:DescribeSnapshotAttribute",
-                "ec2:DescribeVpcPeeringConnections",
-                "ec2:DescribeReservedInstancesOfferings",
-                "ec2:DescribeIdFormat",
-                "ec2:DescribeFleetInstances",
-                "ec2:DescribeVpcEndpointServiceConfigurations",
-                "ec2:DescribePrefixLists",
-                "ec2:GetReservedInstancesExchangeQuote",
-                "ec2:DescribeVolumeAttribute",
-                "ec2:DescribeInstanceCreditSpecifications",
-                "ec2:DescribeVpcClassicLink",
-                "ec2:DescribeImportSnapshotTasks",
-                "ec2:DescribeVpcEndpointServicePermissions",
-                "ec2:GetPasswordData",
-                "ec2:DescribeScheduledInstances",
-                "ec2:DescribeImageAttribute",
-                "ec2:DescribeFleets",
-                "ec2:DescribeVpcEndpoints",
-                "ec2:DescribeReservedInstancesModifications",
-                "ec2:DescribeElasticGpus",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVpnGateways",
-                "ec2:DescribeMovingAddresses",
-                "ec2:DescribeFleetHistory",
-                "ec2:DescribePrincipalIdFormat",
-                "ec2:DescribeAddresses",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeRegions",
-                "ec2:DescribeFlowLogs",
-                "ec2:DescribeDhcpOptions",
-                "ec2:DescribeVpcEndpointServices",
-                "ec2:DescribeSpotInstanceRequests",
-                "ec2:DescribeVpcAttribute",
-                "ec2:GetConsoleOutput",
-                "ec2:DescribeSpotPriceHistory",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DescribeAvailabilityZones",
-                "ec2:DescribeNetworkInterfaceAttribute",
-                "ec2:DescribeVpcEndpointConnections",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeHostReservations",
-                "ec2:DescribeIamInstanceProfileAssociations",
-                "ec2:DescribeTags",
-                "ec2:DescribeLaunchTemplateVersions",
-                "ec2:DescribeBundleTasks",
-                "ec2:DescribeIdentityIdFormat",
-                "ec2:DescribeImportImageTasks",
-                "ec2:DescribeClassicLinkInstances",
-                "ec2:DescribeNatGateways",
-                "ec2:DescribeCustomerGateways",
-                "ec2:DescribeVpcEndpointConnectionNotifications",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSpotFleetRequests",
-                "ec2:DescribeHosts",
-                "ec2:DescribeImages",
-                "ec2:DescribeFpgaImages",
-                "ec2:DescribeSpotFleetInstances",
-                "ec2:DescribeSecurityGroupReferences",
-                "ec2:DescribeVpcs",
-                "ec2:DescribeConversionTasks",
-                "ec2:DescribeStaleSecurityGroups"
+                "ec2:Describe*",
+                "ec2:Get*"
             ],
             "Resource": "*",
             "Condition": {
@@ -343,7 +256,7 @@ Now you will use an existing IAM user with MFA enabled to assume the new *ec2-ad
 ### 3.4 Manage Instances
 1. Continuing from 3.3 in the EC2 Management Console instances view, click the check box next to the instance named *Test*. Click *Actions* button then expand out *Instance State* then *Terminate*. Check the instance is the one you wish to terminate by it's name and click *Yes, Terminate*. The instance should now terminate.  
 ![ec2-instance-terminate](Images/ec2-instance-terminate.png)
-10. Congratulations! You have now learnt about IAM permission boundaries and have one working!
+10. Congratulations! You have now learnt about IAM tag based permissions for EC2!
 
 ***
 
