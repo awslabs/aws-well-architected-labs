@@ -58,10 +58,10 @@ This provides access to allow the cost optimization team to perform their work, 
     ]
 }
 ```
-5. Click **Review policy**: 
+6. Click **Review policy**: 
 ![Images/AWSIAM5.png](Images/AWSIAM5.png)
 
-6. Enter a **Name** and **Description** for the policy and click **Create policy**:
+7. Enter a **Name** and **Description** for the policy and click **Create policy**:
 ![Images/AWSIAM6.png](Images/AWSIAM6.png)
 
 You have successfully created the cost optimization teams policy.
@@ -125,6 +125,8 @@ You can continue to expand this group by adding additional users from your organ
 
 ## 2. Create and implement an AWS Budget for monthly forecasted usage<a name="budget_forecast"></a> 
 Budgets allow you to manage cost and usage by providing notifications when usage or cost are outside of configured amounts. They cannot be used to restrict actions, only notify on usage after it has occurred.
+
+**NOTE**: You may not receive an alarm for a forecasted budget if your account is new. Forecasting requires existing usage within the account.
 
 ### Create a monthly cost budget for your account 
 We will create a monthly cost budget which will notify if the forecasted amount exceeds the budget.

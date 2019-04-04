@@ -157,6 +157,7 @@ You have successfully configured a Cost and Usage Report to be delivered.  It ma
 
 ### 4.2 Enable monthly billing report
 The monthly billing report contains estimated AWS charges for the month. It contains line items for each unique combination of AWS product, usage type, and operation that the account uses.
+**NOTE**: Billing files will only be delivered from the current month onwards. It will not generate previous months billing files.
 
 1. Go to the billng console:
 ![Images/AWSMonthlyUsage0.png](Images/AWSMonthlyUsage0.png)
