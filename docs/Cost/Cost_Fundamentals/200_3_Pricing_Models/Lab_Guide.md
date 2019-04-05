@@ -32,7 +32,7 @@ NOTE: We do all analysis using **All Up Front**, as this allows the break even t
 3. On the right select the filters: **RI term** 1 year, **Payment Option** All upfront, **Based on the past** 7 days:
 ![Images/AWSRI3.png](Images/AWSRI3.png)
 
-The top section will show the estimated savings and number of recommendations, take note of the **Purcahse Recommendations**
+The top section will show the estimated savings and number of recommendations, take note of the **Purchase Recommendations**
 
 4. On the right select the filter: **Based on the past** 30 days:
 ![Images/AWSRI4.png](Images/AWSRI4.png)
@@ -94,11 +94,11 @@ It would be a large amount of effort to view the daily usage patterns over the m
 3. Minimum utilization required varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum of >80%. While this is reflected through the Break even (if utilization is low, break even would be very late), we'll double check & filter out only the very high utilization. Highlight anything above **90%** in green:
 ![Images/AWSRI15.png](Images/AWSRI15.png)
 
-4. Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the **7day Recommended Instance Quantity** is equal or more then the **30day Recommended Instance Quantity**, and close to (within 5%) or above the **Average Hourly usage in Historical Period**, then highlight the cell green:
+4. Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the **7day Recommended Instance Quantity** is equal or more than the **30day Recommended Instance Quantity**, and close to (within 5%) or above the **Average Hourly usage in Historical Period**, then highlight the cell green:
 ![Images/AWSRI16.png](Images/AWSRI16.png)
 
 The processed sample files are available here:
-![./Code/RI_Rec_Finish.xls](./Code/RI_Rec_Finish.xls)
+- [RI_Rec_Finish.xls](./Code/RI_Rec_Finish.xls)
 
 You have successfully filtered and processed all the recommendations. If all cells are green, these are your highly suggested recommendations in each risk group. If some cells are not green you should look deeper into your usage via Cost Explorer, and consider purchasing a portion of the recommendation in this cycle.
 
