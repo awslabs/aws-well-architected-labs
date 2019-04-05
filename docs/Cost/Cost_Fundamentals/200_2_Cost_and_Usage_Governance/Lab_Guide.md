@@ -207,7 +207,7 @@ We will create a policy that allows all EC2, RDS and S3 access in a single regio
 
 5. Open the following text file, copy and paste the policy into the console:
 **NOTE** Ensure you copy the entire policy, including the start '{' and end '}' 
-[./Code/Region_Restrict](./Code/Region_Restrict) 
+[./Code/Region_Restrict](./Code/Region_Restrict.md) 
                
 6. Click **Review policy**:
 ![Images/AWSPolicy5.png](Images/AWSPolicy5.png)
