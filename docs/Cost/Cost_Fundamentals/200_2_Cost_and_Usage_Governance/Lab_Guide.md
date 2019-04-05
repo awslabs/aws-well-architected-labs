@@ -500,7 +500,7 @@ We will create an IAM policy that denies operations that contain provisioned IOP
 
 5. Open the following text file, copy and paste the policy into the console:
 **NOTE** Ensure you copy the entire policy, including the start '{' and end '}' 
-![./Code/EC2EBS_Restrict](./Code/EC2EBS_Restrict) 
+![./Code/EC2EBS_Restrict](./Code/EC2EBS_Restrict.txt) 
 
 6. Click on **Review Policy**:
 ![Images/AWSEBSPolicy4.png](Images/AWSEBSPolicy4.png)
