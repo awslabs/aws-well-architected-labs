@@ -52,6 +52,8 @@ nav:
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md' 
                 - Checklist: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.md' 
+                - Code:
+                    - EC2EBS_Restrict: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Code/EC2EBS_Restrict.md' 
             - 200 Pricing Models: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md' 
                 - Checklist: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Checklist.md' 
