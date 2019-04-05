@@ -310,7 +310,7 @@ We will create a policy that allows operations on specific instance families onl
 
 5. Open the following text file, copy and paste the policy into the console:
 **NOTE** Ensure you copy the entire policy, including the start '{' and end '}' 
-![./Code/EC2Family_Restrict](./Code/EC2Family_Restrict.md) 
+[./Code/EC2Family_Restrict](./Code/EC2Family_Restrict.md) 
                
 6. Click **Review policy**:
 ![Images/AWSFamilyRestrict4.png](Images/AWSFamilyRestrict4.png)
