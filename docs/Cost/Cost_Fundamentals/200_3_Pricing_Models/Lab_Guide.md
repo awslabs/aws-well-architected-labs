@@ -54,6 +54,7 @@ Ctrl-click to open them in a new tab, then copy the text and paste it into a spr
 
 
 3. Open both files, copy the **Recommended Instance Quantity Purchase** column from the **7 day** recommendaions, and insert it into the **30 day** recommendations file:
+**NOTE**: make sure you match the Instance type, Location, OS, and Tenancy columns. You may also have a different number of recommendations between the two files.  
 ![Images/AWSRI6.png](Images/AWSRI6.png)
 
 4. Delete the following columns as they are not necessary: **Recommendation Date**, **Owner Account**, **Size Flexible Recommendation**, **Max hourly normalized unit usage in Historical Period**, **Min hourly normalized unit usage in Historical Period**, **Average hourly normalized unit usage in Historical Period**, **Offering Class**, **Term**, **Payment Option**, **Upfront Cost**, **Recurring Monthly Cost**.
