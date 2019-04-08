@@ -18,7 +18,6 @@ In this lab you will apply the concepts of _Infrastructure as Code_ and _Operati
 * An IAM user or role in your AWS account with full access to CloudFormation, EC2, VPC, IAM.  
 
 >**Important**
-<br>
 You will be billed for any applicable AWS resources used in this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). At the end of the lab guide there is an additional section on how to remove all the resources you have created.
 
 ## Overview
