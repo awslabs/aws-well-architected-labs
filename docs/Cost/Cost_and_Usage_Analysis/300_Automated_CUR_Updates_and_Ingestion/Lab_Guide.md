@@ -12,7 +12,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 # Table of Contents
 1. [Create the CloudFormation stack](#CF_stack)
-2. [Multilpe CURs](#multiple_CURs)
+2. [Multiple CURs](#multiple_CURs)
 3. [Tear down](#tear_down)
 4. [Survey](#survey)
 
