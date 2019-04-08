@@ -15,7 +15,7 @@ This hands-on lab will guide you through the steps to host static web content in
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 
 ## Overview
-* **[Lab Guide.md](Lab%20Guide.md) the guide for this lab**
+* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
 * [/Images](Images/) referenced by this lab
 
 ## Permissions required

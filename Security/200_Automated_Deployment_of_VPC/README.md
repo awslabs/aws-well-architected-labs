@@ -23,7 +23,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 * Basic understanding of [AWS CloudFormation](https://aws.amazon.com/cloudformation/), visit the [Getting Started](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html) section of the user guide.
 
 ## Overview
-* **[Lab Guide.md](Lab%20Guide.md) the guide for this lab**
+* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
 * [/Code](Code/) Code including CloudFormation templates related to this lab
 * [/Images](Images/) referenced by this lab
 

@@ -17,7 +17,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
 ## Overview
-* **[Lab Guide.md](Lab%20Guide.md) the guide for this lab**
+* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
 * [/Images](Images/) referenced by this lab
 
 ## Permissions required

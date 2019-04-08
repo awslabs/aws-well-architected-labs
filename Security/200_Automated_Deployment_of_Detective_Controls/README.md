@@ -13,7 +13,7 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
 ## Overview
-* **[Lab Guide.md](Lab%20Guide.md) the guide for this lab**
+* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
 * [/Code](Code/) Code including CloudFormation templates related to this lab
 * [/Images](Images/) referenced by this lab
 
