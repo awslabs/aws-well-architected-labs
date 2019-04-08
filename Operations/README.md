@@ -9,8 +9,7 @@ For more information about Operational Excellence on AWS visit the Well-Architec
 ## Labs:
 
 ### Operations Fundamentals
-These labs must be done in order, from 1 to 5.
-- [Level 100: Introduction to Inventory and Patch Management](100-%20-%20Introduction%20to%20Inventory%20and%20Patch%20Management)
+- [Level 100: Introduction to Inventory and Patch Management](100_Inventory_and_Patch_Mgmt)
 
 ***
 
