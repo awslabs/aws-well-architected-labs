@@ -14,7 +14,6 @@ Included in the lab guide are bonus sections that can be completed if you have t
 
 
 >**Important**
-<br>
 You will be billed for any applicable AWS resources used in this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). At the end of the lab guide there is an additional section on how to remove all the resources you have created.
 * Removing Lab Resources
 
@@ -199,7 +198,7 @@ SSM Agent is installed by default on:
    1. In the navigation pane, choose **Roles**.
    1. Then choose **Create role**.
    1. In the **Select type of trusted entity** section, verify that the default **AWS service** is selected.
-   1. In the **Choose the service that will use this role** section, scroll past the first reference to EC2 (EC2 `Allows EC2 instances to call AWS services on your behalf`) and choose **EC2** from within the field of services. This will open the **Select your use case** section further down the page.
+   1. In the **Choose the service that will use this role** section, scroll past the first reference to EC2 (**EC2 Allows EC2 instances to call AWS services on your behalf**) and choose **EC2** from within the field of services. This will open the **Select your use case** section further down the page.
    1. In the **Select your use case** section, choose **EC2 Role for Simple Systems Manager** to select it.
    1. Then choose **Next: Permissions**.
 1. Under **Attached permissions policy**, verify that **AmazonEC2RoleforSSM** is listed, and then choose **Next: Review**.
