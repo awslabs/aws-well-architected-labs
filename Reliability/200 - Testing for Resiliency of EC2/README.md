@@ -30,7 +30,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 ## Overview:
 
-* [Lab Guide](Lab%20Guide.md) for this lab
+* [Lab Guide](LabGuide.md) for this lab
 * [/Images](Images/) referenced by the guides
 ***
 
