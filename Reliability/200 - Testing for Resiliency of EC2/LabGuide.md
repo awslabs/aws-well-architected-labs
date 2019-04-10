@@ -128,11 +128,7 @@ $ .\fail_instance.ps1 <vpc-id>
 ## 3. Tear down this lab <a name="tear_down"></a>
 The following instructions will remove the resources that you have created in this lab.
 
-Delete the WordPress or Static Web Application CloudFormation stack:
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
-2. Click the radio button on the left of the *WebApp1-WordPress* or *WebApp1-Static* stack.
-3. Click the **Actions** button then click **Delete stack**.
-4. Confirm the stack and then click **Delete** button.
+There are no new resources to remove in this lab.
 
 ***
 
