@@ -10,8 +10,8 @@
 ## 1. Create Web Stack <a name="create_web_stack"></a>
 Please note a prerequisite to this lab is that you have deployed the CloudFormation VPC stack in the lab [Automated Deployment of VPC](../200_Automated_Deployment_of_VPC) with the default parameters and recommended stack name, and have an [EC2 SSH key](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) created for instances. This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. 
 1. Choose the version of the CloudFormation template from [/Code](Code/) to your computer:
-a. wordpress.yaml to create a wordpress site, including an RDS database
-b. staticwebapp.yaml to create a multi-AZ static web application that simply displays the instance ID for the instance it is running upon
+   a. wordpress.yaml to create a wordpress site, including an RDS database
+   b. staticwebapp.yaml to create a multi-AZ static web application that simply displays the instance ID for the instance it is running upon
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
 3. Click Create Stack.  
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)  
