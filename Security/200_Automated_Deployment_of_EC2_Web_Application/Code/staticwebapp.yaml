@@ -1,7 +1,7 @@
 ﻿AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation Sample Template for WordPress. This template installs a highly-available, scalable WordPress deployment using a multi-az
-  Amazon RDS database instance for storage. It demonstrates using the AWS CloudFormation bootstrap scripts to deploy WordPress.
+  AWS CloudFormation Sample Template for a static web app. This template installs a highly-available, scalable web application deployment.
+  It demonstrates using the AWS CloudFormation bootstrap scripts to deploy a stateless web application.
 
   **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
 
