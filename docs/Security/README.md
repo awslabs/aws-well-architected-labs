@@ -6,17 +6,17 @@ This repository contains documentation and code in the format of hands-on labs t
 For more information about security on AWS visit [AWS Security](https://aws.amazon.com/security/) and read the [AWS Well-Architected Security whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf).
 
 ## Labs:
-* [Level 100: AWS Account & Root User](100%20-%20AWS%20Account%20%26%20Root%20User)
-* [Level 100: Basic Identity & Access Management User, Group, Role](100%20-%20Basic%20Identity%20%26%20Access%20Management%20User%2C%20Group%2C%20Role)
-* [Level 100: CloudFront with S3 Bucket Origin](100%20-%20CloudFront%20with%20S3%20Bucket%20Origin)
-* [Level 200: Automated Deployment of Detective Controls](200%20-%20Automated%20Deployment%20of%20Detective%20Controls)
-* [Level 200: Automated Deployment of EC2 Web Application](200%20-%20Automated%20Deployment%20of%20EC2%20Web%20Application)
-* [Level 200: Automated Deployment of IAM Groups and Roles](200%20-%20Automated%20Deployment%20of%20IAM%20Groups%20and%20Roles)
-* [Level 200: Automated Deployment of VPC](200%20-%20Automated%20Deployment%20of%20VPC)
-* [Level 200: Basic EC2 with WAF Protection](200%20-%20Basic%20EC2%20with%20WAF%20Protection)
-* [Level 200: CloudFront with WAF Protection](200%20-%20CloudFront%20with%20WAF%20Protection)
-* [Level 300: IAM Permission Boundaries Delegating Role Creation](300%20-%20IAM%20Permission%20Boundaries%20Delegating%20Role%20Creation)
-* [Level 300: IAM IAM Tag Based Access Control for EC2](300%20-%20IAM%20Tag%20Based%20Access%20Control%20for%20EC2)
+* [Level 100: AWS Account and Root User](100_AWS_Account_and_Root_User)
+* [Level 100: Basic Identity and Access Management User, Group, Role](100_Basic_Identity_and_Access_Management_User_Group_Role)
+* [Level 100: CloudFront with S3 Bucket Origin](100_CloudFront_with_S3_Bucket_Origin)
+* [Level 200: Automated Deployment of Detective Controls](200_Automated_Deployment_of_Detective_Controls)
+* [Level 200: Automated Deployment of EC2 Web Application](200_Automated_Deployment_of_EC2_Web_Application)
+* [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles)
+* [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC)
+* [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection)
+* [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection)
+* [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation)
+* [Level 300: IAM IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2)
 
 ***
 

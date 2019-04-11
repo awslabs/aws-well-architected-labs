@@ -448,7 +448,7 @@
               "},\n",
               "\"WaitForRDSBeforeChecking\": {\n",
                 "\"Type\": \"Wait\",\n",
-                "\"Seconds\" : 720,\n",
+                "\"Seconds\" : 900,\n",
                 "\"Next\": \"WaitForRDSStack\"\n",
               "},\n",
               "\"WaitForRDSStack\": {\n",
