@@ -8,7 +8,7 @@ phases:
      - echo "pre_build step"
  build:
    commands:
-     - aws s3 sync --delete ./site "s3://awswellarchitectedlabs-static" 
+     - aws s3 sync --delete ./site "s3://awswellarchitectedlabs-static"
  post_build:
    commands:
-- echo "post_build step" 
+     - echo "post_build step" 
