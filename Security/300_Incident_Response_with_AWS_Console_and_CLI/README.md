@@ -1,6 +1,27 @@
-# Level 300: Incident Response with AWS Console and CLI
+﻿# Level 300: Incident Response with AWS Console and CLI
 
-Coming Soon!
+## Introduction
+This hands-on lab will guide you through a number of examples of how you could use the AWS Console and Command Line Interface (CLI) for responding to a security incident. The CLI is just one of many tools that can help automate your response, including gathering information, containment, and recovery.  
+
+The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+
+## Goals:
+* Identify tooling for incident response
+* Automate containment for incident response
+* Pre-deploy tools for incident response
+
+## Prerequisites:
+* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
+* An IAM user or role in your AWS account.  
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+
+## Overview
+* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
+* [/Images](Images/) referenced by this lab
+
+## Permissions required
+
+- IAM User with AdministratorAccess AWS managed policy
 
 ***
 
