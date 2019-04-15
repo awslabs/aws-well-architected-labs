@@ -11,7 +11,7 @@
 ## 1. Getting Started <a name="getting_Started"></a>
 
 ### 1.1 Install the AWS CLI
-Althrough instructions in this lab are written for both console and CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.  
+Although instructions in this lab are written for both console and CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.  
 [Install the AWS CLI on macOS](https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html)  
 [Install the AWS CLI on Linux](https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html)  
 [Install the AWS CLI on Windows](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html)  
