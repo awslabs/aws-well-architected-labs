@@ -19,6 +19,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation)
 * [Level 300: IAM IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2)
+* [Level 300: Incident Response with AWS Console and CLI](300_Incident_Response_with_AWS_Console_and_CLI)
 
 ## Quests:
 Quests are designed to collate a group of relevant labs and other resources together into a common theme for you to follow and learn.

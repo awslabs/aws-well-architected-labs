@@ -15,13 +15,13 @@ Althrough instructions in this lab are written for both console and CLI, its bes
 [Install the AWS CLI on macOS](https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html)  
 [Install the AWS CLI on Linux](https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html)  
 [Install the AWS CLI on Windows](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html)  
+You will also need jq to parse json from the CLI:  
+[Install jq ](https://stedolan.github.io/jq/download/)  
 
 A best practice is to enforce the use of MFA, so if you misplace your console password and/or access/secret key, there is nothing anyone can do without your MFA credentials. You can follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html) to configure AWS CLI to assume a role with MFA enforced.  
-You will also need jq to parse json from the CLI:  
-[Install jq ](https://stedolan.github.io/jq/download/)
 
 ### 1.2 CloudWatch Logs
-[CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) can be used to monitor, store, and access your log files from Amazon Elastic Compute Cloud (Amazon EC2) instances, AWS CloudTrail, Route 53, Amazon VPC Flow Logs, and other sources. It is a [best practice](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) to enable logging and analyze centrally, and develop investigation proceses. Using the CLI and developing runbooks for investigation into different events is significantly faster than using the console.  
+[CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) can be used to monitor, store, and access your log files from Amazon Elastic Compute Cloud (Amazon EC2) instances, AWS CloudTrail, Route 53, Amazon VPC Flow Logs, and other sources. It is a [best practice](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) to enable logging and analyze centrally, and develop investigation proceses. Using the CLI and developing runbooks for investigation into different events is significantly faster than using the console. If your logs are stored in Amazon S3 instead, you can use [Amazon Athena](https://docs.aws.amazon.com/athena/latest/ug/what-is.html) to directly analyze data.  
 
 To list the CloudWatch Logs Groups you have configured in each region, you can describe them. Note you must specify the region, if you need to query multiple regions you must run the command for each. You must use the region ID such as *us-east-1* instead of the region name of *US East (N. Virginia)* that you see in the console. You can obtain a list of the regions by viewing them in the [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html) or using the CLI command: `aws ec2 describe-regions`.  
 To list the log groups you have in a region, replace the example us-east-1 with your region:  
@@ -34,7 +34,7 @@ The default output is json, and it will give you all details. If you want to lis
 ## 2. Identity & Access Management <a name="iam"></a>
 
 ### 2.1 Investigate CloudTrail
-As CloudTrail logs API activity for supported services, it provides an audit trail of your AWS account that you can use to track history of an adversary. For example, listing recent access denied attempts in CloudTrail may indicate attempts to escalate privilege unsuccessfully. 
+As CloudTrail logs API activity for [supported services](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html), it provides an audit trail of your AWS account that you can use to track history of an adversary. For example, listing recent access denied attempts in CloudTrail may indicate attempts to escalate privilege unsuccessfully. Note that some services such as Amazon S3 have their own logging, for example read more about [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html).
 
 #### 2.1.1 Console
 The console provides a visual way of querying CloudWatch Logs, using [CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) and does not require any tools to be installed.  
@@ -59,6 +59,10 @@ If you suspect a particular IP address as an adversary you can search such as `1
 An access key id will be part of the responseElements when its created so you can query that:  
 `filter responseElements.credentials.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`  
+**S3 List Buckets**  
+Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details.  
+`filter eventName ="ListBuckets"
+| fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`  
 
 #### 2.1.2 CLI
 **IAM access denied attempts:**  
@@ -69,14 +73,16 @@ If you need to search for what actions an access key has performed you can modif
 `aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern AKIAIOSFODNN7EXAMPLE --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`  
 **IAM source ip address:**  
 If you suspect a particular IP address as an adversary you can modify the *--filter-pattern* parameter to be the IP address to search such as `192.0.2.1`:  
-`aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern 192.0.2.1 --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'` 
-
+`aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern 192.0.2.1 --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`  
+**S3 List Buckets**  
+Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details.  
+`aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern ListBuckets --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`  
 
 ### 2.2 Block access in IAM
 Blocking access to an IAM entity, that is a role, user or group can help when there is unauthorized activity as it will no longer be able to perform any actions. Be careful as blocking access may disrupt the operation of your workload, which is why it is important to practice in a non-production environment. Note that the IAM entity may have created another entity, or other resources that may allow access to your account. You can use [AWS CloudTrail](https://aws.amazon.com/cloudtrail/) that logs activity in your AWS account to determine the IAM entity that is performing the unauthorized operations. Additionally [service last accessed data](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html) in the AWS Console can help you audit permissions.
 
 ### 2.3 List IAM roles/users/groups
-If you need to confirm the name of the role you can list:  
+If you need to confirm the name of a role, user or group you can list:  
 
 #### 2.3.1 Console
 1. Sign in to the AWS Management Console as an IAM user or role in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
@@ -130,9 +136,8 @@ Delete policy from a user:
 Delete policy from a group:  
 `aws iam delete-group-policy --group-name GROUPNAME --policy-name DenyAll`  
 
-
 ## 3. VPC <a name="vpc"></a>
-A VPC may contain instances that require investigation and isolation if you suspect they are compromised.
+A VPC that has [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html) enabled captures information about the IP traffic going to and from network interfaces in your VPC. This log information may help you investigate how EC2 instances and other resources in your VPC are communicating, and what they are communicating with.
 
 ### 3.1 Investigate VPC Flow Logs
 
@@ -144,21 +149,33 @@ The console provides a visual way of querying CloudWatch Logs, using [CloudWatch
 4. Copy the following example queries below into the query input, then click **Run query**.  
 
 **Rejected requests by IP address:**  
-To list all denied attempts to connect by IP address:  
-`filter errorCode like /Unauthorized|Denied|Forbidden/
-| fields awsRegion, userIdentity.arn, eventSource, eventName, sourceIPAddress, userAgent`  
+Rejected requests indicate attempts to gain access to your VPC, however there can often be noise from internet scanners. To count the rejected requests by source IP address:  
+`filter action="REJECT"
+| stats count(*) as numRejections by srcAddr
+| sort numRejections desc`   
+**Reject requests originating from inside your VPC**  
+Rejected requests that originate from inside your VPC may indicate your infrastructure in your VPC is attempting to connect to something it is not allowed to, e.g. a database instance is trying to connect to the internet and is blocked. This example uses regex to match the start of your VPC as *10.*:  
+`filter action="REJECT" and srcAddr like /^10\./
+| stats count(*) as numRejections by srcAddr
+| sort numRejections desc`  
 **Requests from an IP address**  
-If you suspect an IP address and want to list all requests that originate:  
+If you suspect an IP address and want to list all requests that originate, replace *192.0.2.1* with the IP you suspect:  
 `filter srcAddr = "192.0.2.1"
 | fields @timestamp, interfaceId, dstAddr, dstPort, action`  
+**Request count from a private IP address by destination address**  
+If you want to list and count all connections by a private IP address, replace *10.1.1.1* with your private IP:  
+`filter srcAddr = "10.1.1.1"
+| stats count(*) as numConnections by dstAddr
+| sort numConnections desc`  
 
 
 ***
 
 
 ## References & useful resources:
-[AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)
+[AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)  
 [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)  
+[CloudWatch Logs Insights Query Syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html)  
 
 
 ***
