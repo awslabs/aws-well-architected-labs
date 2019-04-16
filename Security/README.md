@@ -11,6 +11,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 100: AWS Account and Root User](100_AWS_Account_and_Root_User)
 * [Level 100: Basic Identity and Access Management User, Group, Role](100_Basic_Identity_and_Access_Management_User_Group_Role)
 * [Level 100: CloudFront with S3 Bucket Origin](100_CloudFront_with_S3_Bucket_Origin)
+* [Level 100: Enable Security Hub](100_Enable_Security_Hub)
 * [Level 200: Automated Deployment of Detective Controls](200_Automated_Deployment_of_Detective_Controls)
 * [Level 200: Automated Deployment of EC2 Web Application](200_Automated_Deployment_of_EC2_Web_Application)
 * [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles)
