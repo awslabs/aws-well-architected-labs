@@ -40,22 +40,22 @@
       "Type" : "String"
     },
 
-    "EnableRDSServiceRole" : {
-      "Description" : "Used to disable creation of the RDS ServiceLinkedRole (if required)",
+    "CreateTheRDSServiceRole" : {
+      "Description" : "Should the automation create the RDS ServiceLinkedRole?",
       "Type" : "String",
       "AllowedValues" : ["true", "false"],
       "Default" : "true"
     },
 
-    "EnableELBServiceRole" : {
-      "Description" : "Used to disable creation of the ELB ServiceLinkedRole (if required)",
+    "CreateTheELBServiceRole" : {
+      "Description" : "Should the automation create the ELB ServiceLinkedRole?",
       "Type" : "String",
       "AllowedValues" : ["true", "false"],
       "Default" : "true"
     },
 
-    "EnableAutoScalingServiceRole" : {
-      "Description" : "Used to disable creation of the Auto Scaling ServiceLinkedRole (if required)",
+    "CreateTheAutoScalingServiceRole" : {
+      "Description" : "Should the automation create the Auto Scaling ServiceLinkedRole?",
       "Type" : "String",
       "AllowedValues" : ["true", "false"],
       "Default" : "true"
@@ -63,9 +63,9 @@
   },
 
   "Conditions" : {
-     "CreateRDSServiceRole" : {"Fn::Equals" : [{"Ref" : "EnableRDSServiceRole"}, "true"]},
-     "CreateELBServiceRole" : {"Fn::Equals" : [{"Ref" : "EnableELBServiceRole"}, "true"]},
-     "CreateAutoScalingServiceRole" : {"Fn::Equals" : [{"Ref" : "EnableAutoScalingServiceRole"}, "true"]}
+     "CreateRDSServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheRDSServiceRole"}, "true"]},
+     "CreateELBServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheELBServiceRole"}, "true"]},
+     "CreateAutoScalingServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheAutoScalingServiceRole"}, "true"]}
    },
 
   "Resources" : {

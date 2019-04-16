@@ -27,42 +27,34 @@ theme:
     custom_dir: 'theme' 
 
 nav: 
-    - Home: index.md 
+    - Home: README.md 
     - Cost Optimization: 
         - Overview: 'Cost/README.md' 
         - Cost Optimization Fundamentals:
             - Fundamentals Overview: 'Cost/Cost_Fundamentals/README.md' 
             - 100 Account Setup: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.md' 
             - 100 Governance: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.md' 
             - 100 Analysis: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
             - 100 Visualization: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.md' 
             - 200 Governance: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.md' 
             - 200 Pricing Models: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.md' 
             - 200 Analysis: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Checklist.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md' 
             - 200 Visualization: 
                 - Lab Overview: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.md' 
-                - Checklist: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Checklist.md' 
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.md' 
         - Cost and Usage Analysis: 
             - Analysis Overview: 'Cost/Cost_and_Usage_Analysis/README.md' 
@@ -91,7 +83,6 @@ nav:
     - Reliability: 
         - Testing Resiliency: 
             - Lab Overview: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/README.md'
-            - Checklist: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Checklist.md' 
             - Lab Guide: 'Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md'  
     - Performance Efficiency: 
         - Coming Soon: 'Performance/README.md' 

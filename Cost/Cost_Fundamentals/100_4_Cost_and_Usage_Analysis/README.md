@@ -17,7 +17,6 @@
 
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
 
 
 ## Permissions required
@@ -26,14 +25,12 @@
 
 
 ## Best Practice Checklist 
-
 - [ ] View your AWS Invoices
 - [ ] View your cost and usage in detail through the console
 - [ ] Download your monthly cost and usage CSV file
  
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
