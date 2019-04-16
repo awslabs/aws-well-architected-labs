@@ -85,7 +85,7 @@ nav:
         - Security 300 Labs: 
             - IAM Permission Boundaries Delegating Role Creation: 'Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md' 
             - IAM Tag Based Access Control for EC2: 'Security/300 - IAM Tag Based Access Control for EC2/README.md' 
- 
+            - Incident Response with AWS Console and CLI: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/README.md' 
     - Operational Excellence: 
         - Coming Soon: 'Operations/README.md' 
     - Reliability: 
