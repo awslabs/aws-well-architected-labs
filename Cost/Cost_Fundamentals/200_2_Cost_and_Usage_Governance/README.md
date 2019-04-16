@@ -23,6 +23,14 @@
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
  
 
+## Best Practice Checklist 
+
+- [ ] Create a cost optimizaion team, to manage cost optimization across your organization
+- [ ] Create an IAM Policy to restrict EC2 usage by region
+- [ ] Create an IAM Policy to restirct EC2 usage by family
+- [ ] Extend an IAM Policy to restrict EC2 usage by instance size
+- [ ] Create an IAM policy to restrict EBS Volume creation by volume type
+
 
 ## License
 

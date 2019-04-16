@@ -27,6 +27,12 @@
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
  
 
+## Best Practice Checklist 
+
+- [ ] Load your CUR files into Amazon QuickSight
+- [ ] Analyze Cost and Usage data visually
+
+
 ## License
 
 Licensed under the Apache 2.0 and MITnoAttr License.
