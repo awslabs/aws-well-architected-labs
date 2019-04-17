@@ -1,0 +1,1741 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="A collection of AWS Well-Architected workshops">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
+    
+    
+      
+        <title>Level 300: Incident Response with AWS Console and CLI - AWS Well-Architected Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.982221ab.css">
+      
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=PW0Ds1O7kI20L7" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#level-300-incident-response-with-aws-console-and-cli" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              AWS Well-Architected Labs
+            </span>
+            <span class="md-header-nav__topic">
+              Level 300: Incident Response with AWS Console and CLI
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+<nav class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../../.." title="Home" class="md-tabs__link md-tabs__link--active">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Cost/" title="Cost Optimization" class="md-tabs__link">
+          Cost Optimization
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../" title="Security" class="md-tabs__link">
+          Security
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Operations/" title="Operational Excellence" class="md-tabs__link">
+          Operational Excellence
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    
+    
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Reliability" class="md-tabs__link">
+          Reliability
+        </a>
+      
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Performance/" title="Performance Efficiency" class="md-tabs__link">
+          Performance Efficiency
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    AWS Well-Architected Labs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Cost Optimization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Cost Optimization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2">
+      Cost Optimization Fundamentals
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-2">
+        Cost Optimization Fundamentals
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/" title="Fundamentals Overview" class="md-nav__link">
+      Fundamentals Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-2" type="checkbox" id="nav-2-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2-2">
+      100 Account Setup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-2">
+        100 Account Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-3" type="checkbox" id="nav-2-2-3">
+    
+    <label class="md-nav__link" for="nav-2-2-3">
+      100 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-3">
+        100 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-4" type="checkbox" id="nav-2-2-4">
+    
+    <label class="md-nav__link" for="nav-2-2-4">
+      100 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-4">
+        100 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-5" type="checkbox" id="nav-2-2-5">
+    
+    <label class="md-nav__link" for="nav-2-2-5">
+      100 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-5">
+        100 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-6" type="checkbox" id="nav-2-2-6">
+    
+    <label class="md-nav__link" for="nav-2-2-6">
+      200 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-6">
+        200 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-7" type="checkbox" id="nav-2-2-7">
+    
+    <label class="md-nav__link" for="nav-2-2-7">
+      200 Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-7">
+        200 Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_3_Pricing_Models/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-8" type="checkbox" id="nav-2-2-8">
+    
+    <label class="md-nav__link" for="nav-2-2-8">
+      200 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-8">
+        200 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-9" type="checkbox" id="nav-2-2-9">
+    
+    <label class="md-nav__link" for="nav-2-2-9">
+      200 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-9">
+        200 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3" type="checkbox" id="nav-2-3">
+    
+    <label class="md-nav__link" for="nav-2-3">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-3">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_and_Usage_Analysis/" title="Analysis Overview" class="md-nav__link">
+      Analysis Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-2" type="checkbox" id="nav-2-3-2">
+    
+    <label class="md-nav__link" for="nav-2-3-2">
+      300 Automated CUR Updates and Ingestion
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-3-2">
+        300 Automated CUR Updates and Ingestion
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Security
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Security
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../" title="Security" class="md-nav__link">
+      Security
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Security 100 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Security 100 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
+      Account and Root User
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
+      Basic Identity & Access Management User, Group, Role
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
+      CloudFront with S3 Bucket Origin
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      Security 200 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        Security 200 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
+      Automated Deployment of Detective Controls
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+      Automated Deployment of EC2 Web Application
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
+      Automated Deployment of IAM Groups and Roles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
+      Automated Deployment of VPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
+      Basic EC2 with WAF Protection
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
+      CloudFront with WAF Protection
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Security 300 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        Security 300 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+      IAM Permission Boundaries Delegating Role Creation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+      IAM Tag Based Access Control for EC2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+      Incident Response with AWS Console and CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Operational Excellence
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Operational Excellence
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/" title="Coming Soon" class="md-nav__link">
+      Coming Soon
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Reliability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Reliability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-1" type="checkbox" id="nav-5-1">
+    
+    <label class="md-nav__link" for="nav-5-1">
+      Testing Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-1">
+        Testing Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Performance Efficiency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Performance Efficiency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Performance/" title="Coming Soon" class="md-nav__link">
+      Coming Soon
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" title="Table of Contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-getting-started" title="1. Getting Started " class="md-nav__link">
+    1. Getting Started 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-install-the-aws-cli" title="1.1 Install the AWS CLI" class="md-nav__link">
+    1.1 Install the AWS CLI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-cloudwatch-logs" title="1.2 CloudWatch Logs" class="md-nav__link">
+    1.2 CloudWatch Logs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-identity-access-management" title="2. Identity &amp; Access Management " class="md-nav__link">
+    2. Identity &amp; Access Management 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-investigate-cloudtrail" title="2.1 Investigate CloudTrail" class="md-nav__link">
+    2.1 Investigate CloudTrail
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211-console" title="2.1.1 Console" class="md-nav__link">
+    2.1.1 Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-cli" title="2.1.2 CLI" class="md-nav__link">
+    2.1.2 CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-block-access-in-iam" title="2.2 Block access in IAM" class="md-nav__link">
+    2.2 Block access in IAM
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-list-iam-rolesusersgroups" title="2.3 List IAM roles/users/groups" class="md-nav__link">
+    2.3 List IAM roles/users/groups
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#231-console" title="2.3.1 Console" class="md-nav__link">
+    2.3.1 Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232-cli" title="2.3.2 CLI" class="md-nav__link">
+    2.3.2 CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-attach-inline-deny-policy" title="2.4 Attach inline deny policy" class="md-nav__link">
+    2.4 Attach inline deny policy
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#241-console" title="2.4.1 Console" class="md-nav__link">
+    2.4.1 Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#242-cli" title="2.4.2 CLI" class="md-nav__link">
+    2.4.2 CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-delete-inline-deny-policy" title="2.5 Delete inline deny policy" class="md-nav__link">
+    2.5 Delete inline deny policy
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#251-console" title="2.5.1 Console" class="md-nav__link">
+    2.5.1 Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#252-cli" title="2.5.2 CLI" class="md-nav__link">
+    2.5.2 CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-vpc" title="3. VPC " class="md-nav__link">
+    3. VPC 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-investigate-vpc-flow-logs" title="3.1 Investigate VPC Flow Logs" class="md-nav__link">
+    3.1 Investigate VPC Flow Logs
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#311-console" title="3.1.1 Console" class="md-nav__link">
+    3.1.1 Console
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-useful-resources" title="References &amp; useful resources:" class="md-nav__link">
+    References &amp; useful resources:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-300-incident-response-with-aws-console-and-cli">Level 300: Incident Response with AWS Console and CLI</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Ben Potter, Security Lead, Well-Architected</li>
+</ul>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#getting_Started">Getting Started</a></li>
+<li><a href="#iam">Identity &amp; Access Management</a></li>
+<li><a href="#vpc">VPC</a></li>
+</ol>
+<h2 id="1-getting-started">1. Getting Started <a name="getting_Started"></a></h2>
+<h3 id="11-install-the-aws-cli">1.1 Install the AWS CLI</h3>
+<p>Although instructions in this lab are written for both console and CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.<br />
+<a href="https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html">Install the AWS CLI on macOS</a><br />
+<a href="https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html">Install the AWS CLI on Linux</a><br />
+<a href="https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html">Install the AWS CLI on Windows</a><br />
+You will also need jq to parse json from the CLI:<br />
+<a href="https://stedolan.github.io/jq/download/">Install jq </a>  </p>
+<p>A best practice is to enforce the use of MFA, so if you misplace your console password and/or access/secret key, there is nothing anyone can do without your MFA credentials. You can follow the instructions <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html">here</a> to configure AWS CLI to assume a role with MFA enforced.  </p>
+<h3 id="12-cloudwatch-logs">1.2 CloudWatch Logs</h3>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">CloudWatch Logs</a> can be used to monitor, store, and access your log files from Amazon Elastic Compute Cloud (Amazon EC2) instances, AWS CloudTrail, Route 53, Amazon VPC Flow Logs, and other sources. It is a <a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">best practice</a> to enable logging and analyze centrally, and develop investigation proceses. Using the CLI and developing runbooks for investigation into different events is significantly faster than using the console. If your logs are stored in Amazon S3 instead, you can use <a href="https://docs.aws.amazon.com/athena/latest/ug/what-is.html">Amazon Athena</a> to directly analyze data.  </p>
+<p>To list the CloudWatch Logs Groups you have configured in each region, you can describe them. Note you must specify the region, if you need to query multiple regions you must run the command for each. You must use the region ID such as <em>us-east-1</em> instead of the region name of <em>US East (N. Virginia)</em> that you see in the console. You can obtain a list of the regions by viewing them in the <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">AWS Regions and Endpoints</a> or using the CLI command: <code>aws ec2 describe-regions</code>.<br />
+To list the log groups you have in a region, replace the example us-east-1 with your region:<br />
+<code>aws logs describe-log-groups --region us-east-1</code><br />
+The default output is json, and it will give you all details. If you want to list only the names in a table:<br />
+<code>aws logs describe-log-groups --output table --query 'logGroups[*].logGroupName' --region us-east-1</code>  </p>
+<hr />
+<h2 id="2-identity-access-management">2. Identity &amp; Access Management <a name="iam"></a></h2>
+<h3 id="21-investigate-cloudtrail">2.1 Investigate CloudTrail</h3>
+<p>As CloudTrail logs API activity for <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html">supported services</a>, it provides an audit trail of your AWS account that you can use to track history of an adversary. For example, listing recent access denied attempts in CloudTrail may indicate attempts to escalate privilege unsuccessfully. Note that some services such as Amazon S3 have their own logging, for example read more about <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html">Amazon S3 server access logging</a>.</p>
+<h4 id="211-console">2.1.1 Console</h4>
+<p>The console provides a visual way of querying CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.<br />
+1. Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.
+2. From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.<br />
+3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.<br />
+4. Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </p>
+<p><strong>IAM access denied attempts:</strong><br />
+To list all IAM access denied attempts you can use the following example. Each of the line item results allows you to drill down to reveal further details.<br />
+<code>filter errorCode like /Unauthorized|Denied|Forbidden/
+| fields awsRegion, userIdentity.arn, eventSource, eventName, sourceIPAddress, userAgent</code><br />
+<strong>IAM access key:</strong><br />
+If you need to search for what actions an access key has performed you can search for it e.g. <code>AKIAIOSFODNN7EXAMPLE</code>:<br />
+<code>filter userIdentity.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
+| fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent</code><br />
+<strong>IAM source ip address:</strong><br />
+If you suspect a particular IP address as an adversary you can search such as <code>192.0.2.1</code>:<br />
+<code>filter sourceIPAddress = "192.0.2.1"
+| fields awsRegion, userIdentity.arn, eventSource, eventName, sourceIPAddress, userAgent</code><br />
+<strong>IAM access key created</strong><br />
+An access key id will be part of the responseElements when its created so you can query that:<br />
+<code>filter responseElements.credentials.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
+| fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent</code><br />
+<strong>S3 List Buckets</strong><br />
+Listing buckets may indicate someone trying to gain access to your buckets. Note that <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html">Amazon S3 server access logging</a> needs to be enabled on each bucket to gain further S3 access details.<br />
+<code>filter eventName ="ListBuckets"
+| fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent</code>  </p>
+<h4 id="212-cli">2.1.2 CLI</h4>
+<p><strong>IAM access denied attempts:</strong><br />
+To list all IAM access denied attempts you can use CloudWatch Logs with <em>--filter-pattern</em> parameter of <code>AccessDenied</code> for roles and <code>Client.UnauthorizedOperation</code> for users. You will need to replace the <em>--start-time</em> parameter to a millisecond epoch start time of how far back you wish to search. You can use a web conversion tool such as <a href="https://www.epochconverter.com/">www.epochconverter.com</a> or CLI tool:<br />
+<code>aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern AccessDenied --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'</code><br />
+<strong>IAM access key:</strong><br />
+If you need to search for what actions an access key has performed you can modify the <em>--filter-pattern</em> parameter to be the access key to search such as <code>AKIAIOSFODNN7EXAMPLE</code>:<br />
+<code>aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern AKIAIOSFODNN7EXAMPLE --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'</code><br />
+<strong>IAM source ip address:</strong><br />
+If you suspect a particular IP address as an adversary you can modify the <em>--filter-pattern</em> parameter to be the IP address to search such as <code>192.0.2.1</code>:<br />
+<code>aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern 192.0.2.1 --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'</code><br />
+<strong>S3 List Buckets</strong><br />
+Listing buckets may indicate someone trying to gain access to your buckets. Note that <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html">Amazon S3 server access logging</a> needs to be enabled on each bucket to gain further S3 access details.<br />
+<code>aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern ListBuckets --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'</code>  </p>
+<h3 id="22-block-access-in-iam">2.2 Block access in IAM</h3>
+<p>Blocking access to an IAM entity, that is a role, user or group can help when there is unauthorized activity as it will no longer be able to perform any actions. Be careful as blocking access may disrupt the operation of your workload, which is why it is important to practice in a non-production environment. Note that the IAM entity may have created another entity, or other resources that may allow access to your account. You can use <a href="https://aws.amazon.com/cloudtrail/">AWS CloudTrail</a> that logs activity in your AWS account to determine the IAM entity that is performing the unauthorized operations. Additionally <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">service last accessed data</a> in the AWS Console can help you audit permissions.</p>
+<h3 id="23-list-iam-rolesusersgroups">2.3 List IAM roles/users/groups</h3>
+<p>If you need to confirm the name of a role, user or group you can list:  </p>
+<h4 id="231-console">2.3.1 Console</h4>
+<ol>
+<li>Sign in to the AWS Management Console as an IAM user or role in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>Click Roles on the left, the role will be displayed and you can use the search field.</li>
+</ol>
+<h4 id="232-cli">2.3.2 CLI</h4>
+<p><code>aws iam list-roles</code><br />
+This provides a full json formatted list of all roles, if you only want to display the <em>RoleName</em> use an output of table and query:<br />
+<code>aws iam list-roles --output table --query 'Roles[*].RoleName'</code><br />
+List all users:<br />
+<code>aws iam list-users --output table --query 'Users[*].UserName'</code><br />
+List all groups:<br />
+<code>aws iam list-groups --output table --query 'Groups[*].GroupName'</code>  </p>
+<h3 id="24-attach-inline-deny-policy">2.4 Attach inline deny policy</h3>
+<p>Attaching an explicit deny policy to an IAM role, user or group will quickly block <strong>ALL</strong> access for that entity which is useful if it is performing unauthorized operations.  </p>
+<h4 id="241-console">2.4.1 Console</h4>
+<ol>
+<li>Sign in to the AWS Management Console as an IAM user or role in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>Click either <strong>Groups</strong>, <strong>Users</strong> or <strong>Roles</strong>  on the left, then click the name to modify.</li>
+<li>Click <strong>Permissions</strong> tab.</li>
+<li>Click <strong>Add inline policy</strong>.</li>
+<li>Click the <strong>JSON</strong> tab then replace the example with the following:<br />
+<code>{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }</code>  </li>
+<li>Click <strong>Review policy</strong>.</li>
+<li>Enter <strong>Name</strong> of <em>DenyAll</em> then click <strong>Create policy</strong>.</li>
+</ol>
+<h4 id="242-cli">2.4.2 CLI</h4>
+<p>Block a role, modify <em>ROLENAME</em> to match your role name:<br />
+<code>aws iam put-role-policy --role-name ROLENAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'</code><br />
+Block a user, modify <em>USERNAME</em> to match your user name:<br />
+<code>aws iam put-user-policy --user-name USERNAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'</code><br />
+Block a group, modify <em>GROUPNAME</em> to match your user name:<br />
+<code>aws iam put-group-policy --group-name GROUPNAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'</code>  </p>
+<h3 id="25-delete-inline-deny-policy">2.5 Delete inline deny policy</h3>
+<p>To delete the policy you just attached and restore the original permissions the entity had:</p>
+<h4 id="251-console">2.5.1 Console</h4>
+<ol>
+<li>Sign in to the AWS Management Console as an IAM user or role in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>Click <strong>Roles</strong> on the left.</li>
+<li>Click the checkbox next to the role to delete.</li>
+<li>Click <strong>Delete role</strong>.</li>
+<li>Confirm the role to delete then click <strong>Yes, delete</strong></li>
+</ol>
+<h4 id="252-cli">2.5.2 CLI</h4>
+<p>Delete policy from a role:<br />
+<code>aws iam delete-role-policy --role-name ROLENAME --policy-name DenyAll</code><br />
+Delete policy from a user:<br />
+<code>aws iam delete-user-policy --user-name USERNAME --policy-name DenyAll</code><br />
+Delete policy from a group:<br />
+<code>aws iam delete-group-policy --group-name GROUPNAME --policy-name DenyAll</code>  </p>
+<h2 id="3-vpc">3. VPC <a name="vpc"></a></h2>
+<p>A VPC that has <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> enabled captures information about the IP traffic going to and from network interfaces in your VPC. This log information may help you investigate how EC2 instances and other resources in your VPC are communicating, and what they are communicating with.</p>
+<h3 id="31-investigate-vpc-flow-logs">3.1 Investigate VPC Flow Logs</h3>
+<h4 id="311-console">3.1.1 Console</h4>
+<p>The console provides a visual way of querying CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.<br />
+1. Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.
+2. From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.<br />
+3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.<br />
+4. Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </p>
+<p><strong>Rejected requests by IP address:</strong><br />
+Rejected requests indicate attempts to gain access to your VPC, however there can often be noise from internet scanners. To count the rejected requests by source IP address:<br />
+<code>filter action="REJECT"
+| stats count(*) as numRejections by srcAddr
+| sort numRejections desc</code> <br />
+<strong>Reject requests originating from inside your VPC</strong><br />
+Rejected requests that originate from inside your VPC may indicate your infrastructure in your VPC is attempting to connect to something it is not allowed to, e.g. a database instance is trying to connect to the internet and is blocked. This example uses regex to match the start of your VPC as <em>10.</em>:<br />
+<code>filter action="REJECT" and srcAddr like /^10\./
+| stats count(*) as numRejections by srcAddr
+| sort numRejections desc</code><br />
+<strong>Requests from an IP address</strong><br />
+If you suspect an IP address and want to list all requests that originate, replace <em>192.0.2.1</em> with the IP you suspect:<br />
+<code>filter srcAddr = "192.0.2.1"
+| fields @timestamp, interfaceId, dstAddr, dstPort, action</code><br />
+<strong>Request count from a private IP address by destination address</strong><br />
+If you want to list and count all connections by a private IP address, replace <em>10.1.1.1</em> with your private IP:<br />
+<code>filter srcAddr = "10.1.1.1"
+| stats count(*) as numConnections by dstAddr
+| sort numConnections desc</code>  </p>
+<hr />
+<h2 id="references-useful-resources">References &amp; useful resources:</h2>
+<p><a href="https://docs.aws.amazon.com/cli/latest/reference/">AWS CLI Command Reference</a><br />
+<a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">AWS Identity and Access Management User Guide</a><br />
+<a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>  </p>
+<hr />
+<h2 id="license">License</h2>
+<p>Licensed under the Apache 2.0 and MITnoAttr License. </p>
+<p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
+<pre><code>http://aws.amazon.com/apache2.0/
+</code></pre>
+<p>or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.d9aa80ab.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

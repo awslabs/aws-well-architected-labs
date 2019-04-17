@@ -33,22 +33,32 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="/assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
     
     
       
-        <title>AWS Well-Architected Labs</title>
+        <title>Lab Guide - AWS Well-Architected Labs</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/application.982221ab.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/application.982221ab.css">
       
       
     
     
-      <script src="/assets/javascripts/modernizr.1f0bcf2b.js"></script>
-    
+      <script src="../../../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=PW0Ds1O7kI20L7" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -56,7 +66,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../../../assets/fonts/material-icons.css">
     
     
     
@@ -96,12 +106,16 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#level-300-automated-cur-updates-and-ingestion" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="/." title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+        <a href="../../../.." title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +131,7 @@
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              
+              Lab Guide
             </span>
           
         </div>
@@ -184,14 +198,16 @@
       
         
 
-<nav class="md-tabs" data-md-component="tabs">
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
       
         
   <li class="md-tabs__item">
     
-      <a href="/." title="Home" class="md-tabs__link md-tabs__link--active">
+      <a href="../../../.." title="Home" class="md-tabs__link">
         Home
       </a>
     
@@ -203,7 +219,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Cost/" title="Cost Optimization" class="md-tabs__link">
+        <a href="../../../" title="Cost Optimization" class="md-tabs__link md-tabs__link--active">
           Cost Optimization
         </a>
       
@@ -216,7 +232,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Security/" title="Security" class="md-tabs__link">
+        <a href="../../../../Security/" title="Security" class="md-tabs__link">
           Security
         </a>
       
@@ -229,7 +245,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Operations/" title="Operational Excellence" class="md-tabs__link">
+        <a href="../../../../Operations/" title="Operational Excellence" class="md-tabs__link">
           Operational Excellence
         </a>
       
@@ -246,7 +262,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Reliability" class="md-tabs__link">
+        <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Reliability" class="md-tabs__link">
           Reliability
         </a>
       
@@ -261,7 +277,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Performance/" title="Performance Efficiency" class="md-tabs__link">
+        <a href="../../../../Performance/" title="Performance Efficiency" class="md-tabs__link">
           Performance Efficiency
         </a>
       
@@ -282,7 +298,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="/." title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+    <a href="../../../.." title="AWS Well-Architected Labs" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
@@ -318,7 +334,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/." title="Home" class="md-nav__link">
+    <a href="../../../.." title="Home" class="md-nav__link">
       Home
     </a>
   </li>
@@ -328,10 +344,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       Cost Optimization
@@ -349,7 +367,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/" title="Overview" class="md-nav__link">
+    <a href="../../../" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -380,7 +398,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/" title="Fundamentals Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/" title="Fundamentals Overview" class="md-nav__link">
       Fundamentals Overview
     </a>
   </li>
@@ -411,7 +429,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_1_AWS_Account_Setup/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -423,7 +441,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -459,7 +477,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -471,7 +489,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -507,7 +525,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -519,7 +537,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -555,7 +573,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -567,7 +585,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -603,7 +621,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -615,7 +633,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -651,7 +669,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_3_Pricing_Models/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_3_Pricing_Models/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -663,7 +681,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -699,7 +717,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -711,7 +729,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -747,7 +765,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -759,7 +777,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -779,10 +797,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3" type="checkbox" id="nav-2-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3" type="checkbox" id="nav-2-3" checked>
     
     <label class="md-nav__link" for="nav-2-3">
       Cost and Usage Analysis
@@ -800,7 +820,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/" title="Analysis Overview" class="md-nav__link">
+    <a href="../../" title="Analysis Overview" class="md-nav__link">
       Analysis Overview
     </a>
   </li>
@@ -810,10 +830,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-2" type="checkbox" id="nav-2-3-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-2" type="checkbox" id="nav-2-3-2" checked>
     
     <label class="md-nav__link" for="nav-2-3-2">
       300 Automated CUR Updates and Ingestion
@@ -831,7 +853,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/" title="Lab Overview" class="md-nav__link">
+    <a href="../" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -841,11 +863,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Lab Guide
+      </label>
+    
+    <a href="./" title="Lab Guide" class="md-nav__link md-nav__link--active">
       Lab Guide
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -889,7 +956,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/" title="Security" class="md-nav__link">
+    <a href="../../../../Security/" title="Security" class="md-nav__link">
       Security
     </a>
   </li>
@@ -920,7 +987,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
+    <a href="../../../../Security/100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
       Account and Root User
     </a>
   </li>
@@ -932,7 +999,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
+    <a href="../../../../Security/100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
       Basic Identity & Access Management User, Group, Role
     </a>
   </li>
@@ -944,7 +1011,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
+    <a href="../../../../Security/100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
       CloudFront with S3 Bucket Origin
     </a>
   </li>
@@ -980,7 +1047,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
       Automated Deployment of Detective Controls
     </a>
   </li>
@@ -992,7 +1059,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
       Automated Deployment of EC2 Web Application
     </a>
   </li>
@@ -1004,7 +1071,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
       Automated Deployment of IAM Groups and Roles
     </a>
   </li>
@@ -1016,7 +1083,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
       Automated Deployment of VPC
     </a>
   </li>
@@ -1028,7 +1095,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
+    <a href="../../../../Security/200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
       Basic EC2 with WAF Protection
     </a>
   </li>
@@ -1040,7 +1107,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
+    <a href="../../../../Security/200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
       CloudFront with WAF Protection
     </a>
   </li>
@@ -1076,7 +1143,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+    <a href="../../../../Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
       IAM Permission Boundaries Delegating Role Creation
     </a>
   </li>
@@ -1088,7 +1155,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+    <a href="../../../../Security/300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
       IAM Tag Based Access Control for EC2
     </a>
   </li>
@@ -1100,7 +1167,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300_Incident_Response_with_AWS_Console_and_CLI/" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+    <a href="../../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/" title="Incident Response with AWS Console and CLI" class="md-nav__link">
       Incident Response with AWS Console and CLI
     </a>
   </li>
@@ -1141,7 +1208,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Operations/" title="Coming Soon" class="md-nav__link">
+    <a href="../../../../Operations/" title="Coming Soon" class="md-nav__link">
       Coming Soon
     </a>
   </li>
@@ -1196,7 +1263,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1208,7 +1275,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md" title="Lab Guide" class="md-nav__link">
+    <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1249,7 +1316,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Performance/" title="Coming Soon" class="md-nav__link">
+    <a href="../../../../Performance/" title="Coming Soon" class="md-nav__link">
       Coming Soon
     </a>
   </li>
@@ -1267,12 +1334,232 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-300-automated-cur-updates-and-ingestion">Level 300: Automated CUR Updates and Ingestion</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Nathan Besh, Cost Lead, Well-Architected</li>
+<li>Derrick Gold, Software Development Engineer, AWS Insights</li>
+</ul>
+<h2 id="feedback">Feedback</h2>
+<p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li><a href="#CF_stack">Create the CloudFormation stack</a></li>
+<li><a href="#multiple_CURs">Multiple CURs</a></li>
+<li><a href="#tear_down">Tear down</a></li>
+<li><a href="#survey">Survey</a></li>
+</ol>
+<h2 id="1-create-the-cloudformation-stack">1. Create the CloudFormation Stack<a name="CF_stack"></a></h2>
+<p>This step is used when there is a single CUR being delivered, and have it automatically update Athena/Glue when there are new versions and new months data.</p>
+<p>We will follow the steps here: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/setting-up-athena.html#use-athena-cf to implement the CloudFormation template, which will automatically update existing CURs, and include new CURs when they are delivered. </p>
+<p>NOTE: IAM roles will be created, these are used to:
+- Add event notification to existing S3 buckets
+- Create s3 buckets and upload objects
+- Create and run a Glue crawler
+- Create and update a Glue database and tables</p>
+<ul>
+<li>Please review the CloudFormation template with your security team.</li>
+</ul>
+<p>We will build the following solution:
+<img alt="Images/Setup.png" src="../Images/Setup.png" /></p>
+<ol>
+<li>
+<p>Log into the console as an IAM user with the required permissions. Go to the S3 dashboard, go to the bucket and folders which contain your CUR file. Open the CloudFormation(CF) file and save it locally:
+<img alt="Images/AWSCURAutoUpdate1.png" src="../Images/AWSCURAutoUpdate1.png" /></p>
+</li>
+<li>
+<p>Here is a sample of the CF file:
+<img alt="Images/AWSCURAutoUpdate2.png" src="../Images/AWSCURAutoUpdate2.png" /></p>
+</li>
+<li>
+<p>Go to the CloudFormation dashboard and create a stack:
+<img alt="Images/AWSCURAutoUpdate3.png" src="../Images/AWSCURAutoUpdate3.png" /></p>
+</li>
+<li>
+<p>Load the template and click <strong>Next</strong>:
+<img alt="Images/AWSCURAutoUpdate4.png" src="../Images/AWSCURAutoUpdate4.png" /></p>
+</li>
+<li>
+<p>Specify the details for the stack and click <strong>Next</strong>:
+<img alt="Images/AWSCURAutoUpdate5.png" src="../Images/AWSCURAutoUpdate5.png" /></p>
+</li>
+<li>
+<p>Review the configuration, click <strong>I acknowledge that AWS CloudFormation might create IAM resources</strong>, and click <strong>Create stack</strong>:
+<img alt="Images/AWSCURAutoUpdate6.png" src="../Images/AWSCURAutoUpdate6.png" /></p>
+</li>
+<li>
+<p>You will see the stack will start in <strong>CREATE_IN_PROGRESS</strong>:
+<img alt="Images/AWSCURAutoUpdate7.png" src="../Images/AWSCURAutoUpdate7.png" /></p>
+</li>
+<li>
+<p>Once complete, the stack will show <strong>CREATE_COMPLETE</strong>:
+<img alt="Images/AWSCURAutoUpdate8.png" src="../Images/AWSCURAutoUpdate8.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Resources</strong> to view the resources that it will create:
+<img alt="Images/AWSCURAutoUpdate9.png" src="../Images/AWSCURAutoUpdate9.png" /></p>
+</li>
+<li>
+<p>Go to the AWS Glue dashboard:
+<img alt="Images/AWSCURAutoUpdate10.png" src="../Images/AWSCURAutoUpdate10.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Databases</strong> and click the database starting with <strong>athenacurcfn</strong>:
+<img alt="Images/AWSCURAutoUpdate11.png" src="../Images/AWSCURAutoUpdate11.png" /></p>
+</li>
+<li>
+<p>View the table within that database and its properties: 
+<img alt="Images/AWSCURAutoUpdate12.png" src="../Images/AWSCURAutoUpdate12.png" /></p>
+</li>
+</ol>
+<p>You will see that the table is populated, the <strong>recordCount</strong> should be greater than 0. You can now go to Athena and load the partitions and view the cost and usage reports.</p>
+<h2 id="2-multiple-curs">2. Multiple CURs<a name="multiple_CURs"></a></h2>
+<p>This step is used when there are multilpe CURs being delivered into the same bucket - for example a CUR with hourly granularity and one with daily granularity. This will automatically update Athena/Glue when there are new versions and new months data for both reports.</p>
+<p>The easiest way to work with multiple CURs is to deliver each CUR to a different S3 bucket, and follow the previous process. If you <strong>must</strong> deliver to a single bucket, configure your CURs with different prefixes or folders and follow this process.</p>
+<ol>
+<li>Log into the console as an IAM user with the required permissions, verify you have multiple CURs with different prefixes being delivered into the same bucket.
+We will have the following configuration:</li>
+</ol>
+<pre><code>Format:
+&lt;bucket name&gt;/&lt;prefix&gt;/&lt;report_name&gt;/
 
+Configuration:
+&lt;bucket name&gt;/DailyCUR/daily/
+&lt;bucket name&gt;/HourlyCUR/hourly/
+</code></pre>
+
+<ol>
+<li>
+<p>Open the S3 console, and navigate to one of the directories where CURs are stored. Open and save the <strong>crawler-cfn.yml</strong> file:
+<img alt="Images/AWSMultiCUR0.png" src="../Images/AWSMultiCUR0.png" /></p>
+</li>
+<li>
+<p>Open the file in your favourite text editor</p>
+</li>
+<li>
+<p>Modify the following lines to remove all references to the prefix or report name. Replace the first line with the second in each case:<br/>
+Under <strong>AWSCurDatabase:</strong></p>
+</li>
+</ol>
+<pre><code>Name: 'athenacurcfn_daily'
+Name: 'athenacurcfn'
+</code></pre>
+
+<p>Under <strong>AWSCURCrawlerComponentFunction:</strong></p>
+<pre><code>Resource: arn:aws:s3:::&lt;bucket name&gt;/DailyCUR/daily/daily*
+Resource: arn:aws:s3:::&lt;bucket name&gt;*                
+</code></pre>
+
+<p>Under <strong>AWSCURCrawler:</strong></p>
+<pre><code>Name: AWSCURCrawler-daily
+Name: AWSCURCrawler
+</code></pre>
+
+<p>and</p>
+<pre><code>Path: 's3://&lt;bucket name&gt;/DailyCUR/daily/daily'
+Path: 's3://&lt;bucket name&gt;'
+</code></pre>
+
+<p>and under Exclusions after <strong>.zip</strong> add:</p>
+<pre><code>'aws-programmatic-access-test-object'
+</code></pre>
+
+<p>Under <strong>AWSPutS3CURNotification:</strong></p>
+<pre><code>ReportKey: 'DailyCUR/daily/daily'
+ReportKey: ''
+</code></pre>
+
+<p>Under <strong>AWSCURReportStatusTable:</strong></p>
+<pre><code>DatabaseName: athenacurcfn_daily
+DatabaseName: athenacurcfn
+</code></pre>
+
+<p>and</p>
+<pre><code>Location: 's3://&lt;bucket name&gt;/DailyCUR/daily/cost_and_usage_data_status/'
+Location: 's3://&lt;bucket name&gt;/cost_and_usage_data_status/'
+</code></pre>
+
+<p>A modified sample is provided here:
+<a href="../Code/crawler-cfn.yml">Code/crawler-cfn.yml</a>
+Look for the comments: ### New line</p>
+<ol>
+<li>
+<p>Save the template file. </p>
+</li>
+<li>
+<p>Go to the CloudFormation dashboard and execute the template you just created
+<img alt="Images/AWSMultiCUR1.png" src="../Images/AWSMultiCUR1.png" /></p>
+</li>
+<li>
+<p>Go to the Glue dashbaord and verify that there is a single database, containing multilpe tables:
+<img alt="Images/AWSMultiCUR2.png" src="../Images/AWSMultiCUR2.png" /></p>
+</li>
+</ol>
+<h2 id="3-tear-down">3. Tear down<a name="tear_down"></a></h2>
+<ol>
+<li>
+<p>Delete the Glue database, select the database name, click <strong>Action</strong> and click <strong>Delete database</strong>:
+<img alt="Images/AWSMultiCUR3.png" src="../Images/AWSMultiCUR3.png" /></p>
+</li>
+<li>
+<p>Delete the CloudFormation stack, select the stack, click <strong>Actions</strong> and click <strong>Delete stack</strong>:
+<img alt="Images/AWSMultiCUR4.png" src="../Images/AWSMultiCUR4.png" /> </p>
+</li>
+</ol>
+<h2 id="4-survey">4. Survey <a name="survey"></a></h2>
+<p>Thanks for taking the lab, We hope that you can take this short survey (&lt;2 minutes), to share your insights and help us improve our content.</p>
+<p><a href="https://amazonmr.au1.qualtrics.com/jfe/form/SV_8BxddFhAp8EGcxD"><img alt="Survey" src="../Images/survey.png" /></a></p>
+<p>This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazon’s Privacy Policy.</p>
+                
+                  
+                
+              
               
                 
 
@@ -1285,6 +1572,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../" title="Lab Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Lab Overview
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../../../Security/" title="Security" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Security
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1307,9 +1629,9 @@
       
     </div>
     
-      <script src="/assets/javascripts/application.d9aa80ab.js"></script>
+      <script src="../../../../assets/javascripts/application.d9aa80ab.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"/"}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../../../.."}})</script>
       
     
   </body>

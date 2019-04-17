@@ -33,22 +33,32 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="/assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
     
     
       
-        <title>AWS Well-Architected Labs</title>
+        <title>Lab Guide - AWS Well-Architected Labs</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/application.982221ab.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/application.982221ab.css">
       
       
     
     
-      <script src="/assets/javascripts/modernizr.1f0bcf2b.js"></script>
-    
+      <script src="../../../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=PW0Ds1O7kI20L7" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -56,7 +66,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../../../assets/fonts/material-icons.css">
     
     
     
@@ -96,12 +106,16 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#level-200-pricing-models" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="/." title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+        <a href="../../../.." title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -117,7 +131,7 @@
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              
+              Lab Guide
             </span>
           
         </div>
@@ -184,14 +198,16 @@
       
         
 
-<nav class="md-tabs" data-md-component="tabs">
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
       
         
   <li class="md-tabs__item">
     
-      <a href="/." title="Home" class="md-tabs__link md-tabs__link--active">
+      <a href="../../../.." title="Home" class="md-tabs__link">
         Home
       </a>
     
@@ -203,7 +219,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Cost/" title="Cost Optimization" class="md-tabs__link">
+        <a href="../../../" title="Cost Optimization" class="md-tabs__link md-tabs__link--active">
           Cost Optimization
         </a>
       
@@ -216,7 +232,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Security/" title="Security" class="md-tabs__link">
+        <a href="../../../../Security/" title="Security" class="md-tabs__link">
           Security
         </a>
       
@@ -229,7 +245,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Operations/" title="Operational Excellence" class="md-tabs__link">
+        <a href="../../../../Operations/" title="Operational Excellence" class="md-tabs__link">
           Operational Excellence
         </a>
       
@@ -246,7 +262,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Reliability" class="md-tabs__link">
+        <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Reliability" class="md-tabs__link">
           Reliability
         </a>
       
@@ -261,7 +277,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="/Performance/" title="Performance Efficiency" class="md-tabs__link">
+        <a href="../../../../Performance/" title="Performance Efficiency" class="md-tabs__link">
           Performance Efficiency
         </a>
       
@@ -282,7 +298,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="/." title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+    <a href="../../../.." title="AWS Well-Architected Labs" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
@@ -318,7 +334,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/." title="Home" class="md-nav__link">
+    <a href="../../../.." title="Home" class="md-nav__link">
       Home
     </a>
   </li>
@@ -328,10 +344,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       Cost Optimization
@@ -349,7 +367,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/" title="Overview" class="md-nav__link">
+    <a href="../../../" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -359,10 +377,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2" checked>
     
     <label class="md-nav__link" for="nav-2-2">
       Cost Optimization Fundamentals
@@ -380,7 +400,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/" title="Fundamentals Overview" class="md-nav__link">
+    <a href="../../" title="Fundamentals Overview" class="md-nav__link">
       Fundamentals Overview
     </a>
   </li>
@@ -411,7 +431,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/" title="Lab Overview" class="md-nav__link">
+    <a href="../../100_1_AWS_Account_Setup/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -423,7 +443,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../100_1_AWS_Account_Setup/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -459,7 +479,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+    <a href="../../100_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -471,7 +491,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../100_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -507,7 +527,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+    <a href="../../100_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -519,7 +539,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../100_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -555,7 +575,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+    <a href="../../100_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -567,7 +587,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../100_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -603,7 +623,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
+    <a href="../../200_2_Cost_and_Usage_Governance/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -615,7 +635,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../200_2_Cost_and_Usage_Governance/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -630,10 +650,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-7" type="checkbox" id="nav-2-2-7">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-7" type="checkbox" id="nav-2-2-7" checked>
     
     <label class="md-nav__link" for="nav-2-2-7">
       200 Pricing Models
@@ -651,7 +673,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_3_Pricing_Models/" title="Lab Overview" class="md-nav__link">
+    <a href="../" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -661,11 +683,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Lab Guide
+      </label>
+    
+    <a href="./" title="Lab Guide" class="md-nav__link md-nav__link--active">
       Lab Guide
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -699,7 +766,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
+    <a href="../../200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -711,7 +778,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../200_4_Cost_and_Usage_Analysis/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -747,7 +814,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
+    <a href="../../200_5_Cost_Visualization/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -759,7 +826,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../200_5_Cost_Visualization/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -800,7 +867,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/" title="Analysis Overview" class="md-nav__link">
+    <a href="../../../Cost_and_Usage_Analysis/" title="Analysis Overview" class="md-nav__link">
       Analysis Overview
     </a>
   </li>
@@ -831,7 +898,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -843,7 +910,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide/" title="Lab Guide" class="md-nav__link">
+    <a href="../../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide/" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -889,7 +956,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/" title="Security" class="md-nav__link">
+    <a href="../../../../Security/" title="Security" class="md-nav__link">
       Security
     </a>
   </li>
@@ -920,7 +987,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
+    <a href="../../../../Security/100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
       Account and Root User
     </a>
   </li>
@@ -932,7 +999,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
+    <a href="../../../../Security/100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
       Basic Identity & Access Management User, Group, Role
     </a>
   </li>
@@ -944,7 +1011,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
+    <a href="../../../../Security/100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
       CloudFront with S3 Bucket Origin
     </a>
   </li>
@@ -980,7 +1047,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
       Automated Deployment of Detective Controls
     </a>
   </li>
@@ -992,7 +1059,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
       Automated Deployment of EC2 Web Application
     </a>
   </li>
@@ -1004,7 +1071,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
       Automated Deployment of IAM Groups and Roles
     </a>
   </li>
@@ -1016,7 +1083,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
+    <a href="../../../../Security/200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
       Automated Deployment of VPC
     </a>
   </li>
@@ -1028,7 +1095,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
+    <a href="../../../../Security/200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
       Basic EC2 with WAF Protection
     </a>
   </li>
@@ -1040,7 +1107,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
+    <a href="../../../../Security/200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
       CloudFront with WAF Protection
     </a>
   </li>
@@ -1076,7 +1143,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+    <a href="../../../../Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
       IAM Permission Boundaries Delegating Role Creation
     </a>
   </li>
@@ -1088,7 +1155,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+    <a href="../../../../Security/300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
       IAM Tag Based Access Control for EC2
     </a>
   </li>
@@ -1100,7 +1167,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Security/300_Incident_Response_with_AWS_Console_and_CLI/" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+    <a href="../../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/" title="Incident Response with AWS Console and CLI" class="md-nav__link">
       Incident Response with AWS Console and CLI
     </a>
   </li>
@@ -1141,7 +1208,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Operations/" title="Coming Soon" class="md-nav__link">
+    <a href="../../../../Operations/" title="Coming Soon" class="md-nav__link">
       Coming Soon
     </a>
   </li>
@@ -1196,7 +1263,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Lab Overview" class="md-nav__link">
+    <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1208,7 +1275,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md" title="Lab Guide" class="md-nav__link">
+    <a href="../../../../Reliability/300 - Testing for Resiliency of EC2, RDS, and S3/Lab_Guide.md" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1249,7 +1316,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/Performance/" title="Coming Soon" class="md-nav__link">
+    <a href="../../../../Performance/" title="Coming Soon" class="md-nav__link">
       Coming Soon
     </a>
   </li>
@@ -1267,12 +1334,183 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
-
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-200-pricing-models">Level 200: Pricing Models</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Nathan Besh, Cost Lead, Well-Architected</li>
+<li>Spencer Marley, Commercial Architect</li>
+<li>Paul Lambden, Principal Technical Account Manager</li>
+</ul>
+<h2 id="feedback">Feedback</h2>
+<p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li><a href="#ri_report">View an RI report</a></li>
+<li><a href="#prepare_csv">Download and prepare the RI CSV files</a></li>
+<li><a href="#filter_csv">Sort and filter the RI CSV files</a></li>
+<li><a href="#tear_down">Teardown</a></li>
+<li><a href="#survey">Feedback survey</a> </li>
+</ol>
+<h2 id="1-view-an-ri-report">1. View an RI report<a name="ri_report"></a></h2>
+<p>We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.</p>
+<p>NOTE: We do all analysis using <strong>All Up Front</strong>, as this allows the break even to show when the entire 12month term is paid off. After the analysis is performed, select the required RI type.</p>
+<ol>
+<li>
+<p>Log into the console as an IAM user with the required permissions, go to the <strong>AWS Cost Explorer</strong> service page:
+<img alt="Images/AWSRI1.png" src="../Images/AWSRI1.png" /></p>
+</li>
+<li>
+<p>In the left menu select <strong>Recommendations</strong>: 
+<img alt="Images/AWSRI2.png" src="../Images/AWSRI2.png" /></p>
+</li>
+<li>
+<p>On the right select the filters: <strong>RI term</strong> 1 year, <strong>Payment Option</strong> All upfront, <strong>Based on the past</strong> 7 days:
+<img alt="Images/AWSRI3.png" src="../Images/AWSRI3.png" /></p>
+</li>
+</ol>
+<p>The top section will show the estimated savings and number of recommendations, take note of the <strong>Purchase Recommendations</strong></p>
+<ol>
+<li>On the right select the filter: <strong>Based on the past</strong> 30 days:
+<img alt="Images/AWSRI4.png" src="../Images/AWSRI4.png" /></li>
+</ol>
+<p>View the <strong>Purcahse Recommendations</strong>, if the 30 day recommendation is less than 7 days recommendation - your usage is <strong>increasing</strong> and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is <strong>decreasing</strong> and you need to look further into your usage patterns to see which RI's would be suitable.</p>
+<h2 id="2-download-and-prepare-the-ri-csv-files">2. Download and prepare the RI CSV files<a name="prepare_csv"></a></h2>
+<ol>
+<li>
+<p>Download the CSV for <strong>both</strong> the 7 day and 30 day recommendation files, by selecting the filter <strong>7 days</strong> or <strong>30 days</strong>, and clicking on <strong>Download CSV</strong>:
+<img alt="Images/AWSRI5.png" src="../Images/AWSRI5.png" /></p>
+</li>
+<li>
+<p>If you do not have sufficient usage, you can download the two sample files:</p>
+</li>
+</ol>
+<p>Ctrl-click to open them in a new tab, then copy the text and paste it into a spreadsheet application.</p>
+<ul>
+<li><a href="../Code/7_day_EC2_RI_Rec.csv">7_day_EC2_R_Rec.csv</a></li>
+<li>
+<p><a href="../Code/30_day_EC2_RI_Rec.csv">30_day_EC2_R_Rec.csv</a></p>
+</li>
+<li>
+<p>Open both files, copy the <strong>Recommended Instance Quantity Purchase</strong> column from the <strong>7 day</strong> recommendaions, and insert it into the <strong>30 day</strong> recommendations file:
+<strong>NOTE</strong>: make sure you match the Instance type, Location, OS, and Tenancy columns. You may also have a different number of recommendations between the two files.<br />
+<img alt="Images/AWSRI6.png" src="../Images/AWSRI6.png" /></p>
+</li>
+<li>
+<p>Delete the following columns as they are not necessary: <strong>Recommendation Date</strong>, <strong>Owner Account</strong>, <strong>Size Flexible Recommendation</strong>, <strong>Max hourly normalized unit usage in Historical Period</strong>, <strong>Min hourly normalized unit usage in Historical Period</strong>, <strong>Average hourly normalized unit usage in Historical Period</strong>, <strong>Offering Class</strong>, <strong>Term</strong>, <strong>Payment Option</strong>, <strong>Upfront Cost</strong>, <strong>Recurring Monthly Cost</strong>.
+<img alt="Images/AWSRI7.png" src="../Images/AWSRI7.png" /></p>
+</li>
+<li>
+<p>You should be left with the following columns:
+<img alt="Images/AWSRI8.png" src="../Images/AWSRI8.png" /></p>
+</li>
+</ul>
+<p>You now have all the data you need to make RI recommendations, you can then take these recommendations and calculate upfront costs, accounts to purchase them in, and other RI attributes at a later date.</p>
+<h2 id="3-sort-and-filter-the-ri-csv-files">3. Sort and filter the RI CSV files<a name="filter_csv"></a></h2>
+<p>RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: <strong>low risk</strong> and <strong>high return</strong> purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimising the risk of unused RIs.</p>
+<h3 id="31-filter-out-low-risk-and-high-return-ris">3.1 Filter out low risk, and high return RIs</h3>
+<ol>
+<li>
+<p>To get the lowest risk, we sort by <strong>Break Even Months</strong> smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that the RI's below are fully paid off in less than 6months - so if they are used for 6 months - they have paid themselves off completely.
+<img alt="Images/AWSRI9.png" src="../Images/AWSRI9.png" /></p>
+</li>
+<li>
+<p>We will separate the very low, low, and medium risk recommendtaions. Add in some empty lines between <strong>Break Even Months</strong> of 7, 10, and copy the header line across: 
+<img alt="Images/AWSRI10.png" src="../Images/AWSRI10.png" /></p>
+</li>
+<li>
+<p>We have categorized the risk, so we will now look for the highest return recommendations. Sort each of the three groups by <strong>Estimated Monthly Savings</strong>, largest to smallest:
+<img alt="Images/AWSRI11.png" src="../Images/AWSRI11.png" /></p>
+</li>
+<li>
+<p>Depending on your usage and business, chose a minimum estimated monthly savings - a typical value for larger customers is in the range of $50-100. While they save money, these recommendations do not save enough - aim for the top 50-70% of recommendations.  We have chosen $100, grey out anything less than this:
+<img alt="Images/AWSRI12.png" src="../Images/AWSRI12.png" /></p>
+</li>
+</ol>
+<h3 id="32-filter-out-usage-patterns">3.2 Filter out usage patterns</h3>
+<p>It would be a large amount of effort to view the daily usage patterns over the month for every recommendation, but we can do this programatically. By looking at the columns, we can assess the underlying usage pattern.</p>
+<ol>
+<li>
+<p>If the <strong>Max hourly usage</strong> is close to <strong>Min hourly usage</strong>, within 75-100% - then the usage would be relatively flat, with low variance.  Go through and highlight these cells green.  You could do this with a formula, but a very fast judgement is ok:
+<img alt="Images/AWSRI13.png" src="../Images/AWSRI13.png" /></p>
+</li>
+<li>
+<p>If the <strong>Average hourly usage</strong> is close to the <strong>Max hourly usage</strong>, then the minimum was only a small duration, so highlight anything green where the <strong>Average</strong> is within 75-100% of the <strong>Max</strong>:
+<img alt="Images/AWSRI14.png" src="../Images/AWSRI14.png" /> </p>
+</li>
+<li>
+<p>Minimum utilization required varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum of &gt;80%. While this is reflected through the Break even (if utilization is low, break even would be very late), we'll double check &amp; filter out only the very high utilization. Highlight anything above <strong>90%</strong> in green:
+<img alt="Images/AWSRI15.png" src="../Images/AWSRI15.png" /></p>
+</li>
+<li>
+<p>Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the <strong>7day Recommended Instance Quantity</strong> is equal or more than the <strong>30day Recommended Instance Quantity</strong>, and close to (within 5%) or above the <strong>Average Hourly usage in Historical Period</strong>, then highlight the cell green:
+<img alt="Images/AWSRI16.png" src="../Images/AWSRI16.png" /></p>
+</li>
+</ol>
+<p>The processed sample files are available here:
+- <a href="../Code/RI_Rec_Finish.xls">RI_Rec_Finish.xls</a></p>
+<p>You have successfully filtered and processed all the recommendations. If all cells are green, these are your highly suggested recommendations in each risk group. If some cells are not green you should look deeper into your usage via Cost Explorer, and consider purchasing a portion of the recommendation in this cycle.</p>
+<p>Other suggestions for the not fully green recommendations are:
+- Re-evaluate in another 7-14 days to observe the usage trend
+- Purchase a percentage of the 7 day recommendation
+- Purchase a lower percentage of the average hourly
+- Purchase a higher percentage of the minimum hourly</p>
+<p>You can then take those recommended numbers, and purchase the quantity in the required accounts, with the required payment option (All upfront, Partial upfront, No upfront), and class (standard or convertible).</p>
+<h2 id="4-teardown">4. Teardown<a name="tear_down"></a></h2>
+<p>There are no resources or configuration items that are created during this workshop. </p>
+<h2 id="5-survey">5. Survey <a name="survey"></a></h2>
+<p>Thanks for taking the lab, We hope that you can take this short survey (&lt;2 minutes), to share your insights and help us improve our content.</p>
+<p><a href="https://amazonmr.au1.qualtrics.com/jfe/form/SV_7OK2Pdsg9nqs1Yp"><img alt="Survey" src="../Images/survey.png" /></a></p>
+<p>This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.</p>
+                
+                  
+                
+              
               
                 
 
@@ -1285,6 +1523,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../" title="Lab Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Lab Overview
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../200_4_Cost_and_Usage_Analysis/" title="Lab Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Lab Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1307,9 +1580,9 @@
       
     </div>
     
-      <script src="/assets/javascripts/application.d9aa80ab.js"></script>
+      <script src="../../../../assets/javascripts/application.d9aa80ab.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"/"}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../../../.."}})</script>
       
     
   </body>
