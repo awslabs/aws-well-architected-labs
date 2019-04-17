@@ -13,13 +13,12 @@
 - Multiple AWS accounts (at least two) 
 - Root user access to the master account
 
-## Overview
 
+## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
+
 
 ## Permissions required
-
 - Root user access to the master account
 - [./Code/master_policy](./Code/master_policy) IAM policy required for Master account user
 - [./Code/member_policy](./Code/member_policy) IAM policy required for Member account user 
@@ -27,7 +26,6 @@
 
 
 ## Best Practice Checklist
-
 - [ ] Create a basic account structure, with a master (payer) account and at least 1 member (linked) account
 - [ ] Configure account parameters
 - [ ] Configure IAM access to billing information
@@ -37,7 +35,6 @@
 
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.

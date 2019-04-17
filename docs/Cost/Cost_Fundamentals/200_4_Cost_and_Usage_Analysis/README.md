@@ -20,7 +20,6 @@
 
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
 
 
 ## Permissions required
@@ -29,14 +28,12 @@
 
 
 ## Best Practice Checklist 
-
 - [ ] Load your CUR files into Athena for analysis
 - [ ] Create a separate table to contain only a specific member accounts usage
 - [ ] Analyze your cost and usage by executing queries against your CUR files
  
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.

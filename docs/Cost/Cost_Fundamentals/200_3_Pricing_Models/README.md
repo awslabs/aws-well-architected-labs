@@ -14,9 +14,9 @@ This hands-on lab will guide you through the steps to perform a Reserved Instanc
 - An AWS Account
 - [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/) has been completed
 
+
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
 
 
 ## Permissions required
@@ -25,14 +25,12 @@ This hands-on lab will guide you through the steps to perform a Reserved Instanc
 
  
 ## Best Practice Checklist 
-
 - [ ] Review RI Recommendations
 - [ ] Sort and filter RI Recommendations across an account
 - [ ] Prepare a final list of low risk, high return RI's based on usage patterns 
 
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.

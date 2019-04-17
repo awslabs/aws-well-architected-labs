@@ -14,9 +14,10 @@
 - An AWS Account
 - Completed all previous labs in the Cost Fundamentals series
 
+
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
+
 
 ## Permissions required
 - [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
@@ -24,7 +25,6 @@
  
 
 ## Best Practice Checklist 
-
 - [ ] Create a cost optimizaion team, to manage cost optimization across your organization
 - [ ] Create an IAM Policy to restrict EC2 usage by region
 - [ ] Create an IAM Policy to restirct EC2 usage by family
@@ -33,7 +33,6 @@
 
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.

@@ -15,9 +15,10 @@
 - A linked AWS Account (preferred, not mandatory)
 - Completed all previous labs in the Cost Fundamentals series
 
+
 ## Overview
 - [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [Checklist.md](Checklist.md) best practice checklist related to this lab
+
 
 ## Permissions required
 - Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../100_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
@@ -25,7 +26,6 @@
 
 
 ## Best Practice Checklist 
-
 - [ ] View your cost and usage by service
 - [ ] View your cost and usage by account
 - [ ] View your Reserved Instance Coverage
@@ -33,7 +33,6 @@
 
 
 ## License
-
 Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
