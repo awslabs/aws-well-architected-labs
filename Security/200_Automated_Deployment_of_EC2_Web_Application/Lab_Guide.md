@@ -21,8 +21,6 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
 5. Enter the following details:
   * Stack name: The name of this stack. For this lab, use *WebApp1-WordPress* or *WebApp1-Static* and match the case.  
   ![cloudformation-wp-params](Images/cloudformation-wp-params.png)  
-  * Web1SSHKeyName: Select an existing [EC2 SSH key](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) you have.  
-  ![cloudformation-wp-params-1](Images/cloudformation-wp-params-1.png)  
   * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.  
   ![cloudformation-wp-params-2](Images/cloudformation-wp-params-2.png)  
   * DB1User: User name of your choice for the RDS database that must contain 1 to 16 alphanumeric characters. first character must be a letter, cannot be a word reserved by the database engine.
@@ -30,13 +28,13 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
   ![cloudformation-wp-params-3](Images/cloudformation-wp-params-3.png)  
   The remaining parameters may be left as defaults, you can find out more in the description for each.  
 6. At the bottom of the page click **Next**.
-7. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+7. In this lab, we won't add any tags or other options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 8. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.  
 ![cloudformation-wp-createstack-final](Images/cloudformation-wp-createstack-final.png)  
-9. After a number of minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*. 
- 
-![cloudformation-wp-createstack-complete](Images/cloudformation-wp-createstack-complete.png)  
-You have now created the WordPress or static web app stack (well actually CloudFormation did it for you).
+9. After a number of minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.  
+ ![cloudformation-wp-createstack-complete](Images/cloudformation-wp-createstack-complete.png)  
+You have now created the WordPress stack (well actually CloudFormation did it for you).  
+10. In the stack click the **Outputs** tab, and open the *WebsiteURL* value in your web browser, this is how to access what you just created.
 
 ***
 
@@ -48,6 +46,7 @@ Delete the WordPress or Static Web Application CloudFormation stack:
 2. Click the radio button on the left of the *WebApp1-WordPress* or *WebApp1-Static* stack.
 3. Click the **Actions** button then click **Delete stack**.
 4. Confirm the stack and then click **Delete** button.
+5. Access the Key Management Service (KMS) console [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/)
 
 ***
 
