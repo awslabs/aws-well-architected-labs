@@ -9,9 +9,8 @@ For more information about the Well-Architected tool, read the
 
 ## Labs:
 
-* [Level 100: Walkthrough of the AWS Well-Architected Tool](100%20-%20Walkthrough%20of%20the%20Well-Architected%20Tool)
+- [Level 100: Walkthrough of the AWS Well-Architected Tool](100_Walkthrough_of_the_Well-Architected_Tool/README.md) 
 
-***
 
 ## License
 

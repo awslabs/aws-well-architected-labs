@@ -1,0 +1,2207 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="A collection of AWS Well-Architected workshops">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
+    
+    
+      
+        <title>Lab Guide - AWS Well-Architected Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=PW0Ds1O7kI20L7" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#level-100-inventory-and-patch-management-lab-guide" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../README.html" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              AWS Well-Architected Labs
+            </span>
+            <span class="md-header-nav__topic">
+              Lab Guide
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../../README.html" title="Home" class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Cost/README.html" title="Cost Optimization" class="md-tabs__link">
+          Cost Optimization
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Security/README.html" title="Security" class="md-tabs__link">
+          Security
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../README.html" title="Operational Excellence" class="md-tabs__link md-tabs__link--active">
+          Operational Excellence
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Reliability/README.html" title="Reliability" class="md-tabs__link">
+          Reliability
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Performance/README.html" title="Performance Efficiency" class="md-tabs__link">
+          Performance Efficiency
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Well-ArchitectedTool/README.html" title="Well Architected Tool" class="md-tabs__link">
+          Well Architected Tool
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../README.html" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    AWS Well-Architected Labs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../README.html" title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Cost Optimization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Cost Optimization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2">
+      Cost Optimization Fundamentals
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-2">
+        Cost Optimization Fundamentals
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/README.html" title="Fundamentals Overview" class="md-nav__link">
+      Fundamentals Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-2" type="checkbox" id="nav-2-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2-2">
+      100 Account Setup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-2">
+        100 Account Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-3" type="checkbox" id="nav-2-2-3">
+    
+    <label class="md-nav__link" for="nav-2-2-3">
+      100 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-3">
+        100 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-4" type="checkbox" id="nav-2-2-4">
+    
+    <label class="md-nav__link" for="nav-2-2-4">
+      100 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-4">
+        100 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-5" type="checkbox" id="nav-2-2-5">
+    
+    <label class="md-nav__link" for="nav-2-2-5">
+      100 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-5">
+        100 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-6" type="checkbox" id="nav-2-2-6">
+    
+    <label class="md-nav__link" for="nav-2-2-6">
+      200 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-6">
+        200 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-7" type="checkbox" id="nav-2-2-7">
+    
+    <label class="md-nav__link" for="nav-2-2-7">
+      200 Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-7">
+        200 Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-8" type="checkbox" id="nav-2-2-8">
+    
+    <label class="md-nav__link" for="nav-2-2-8">
+      200 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-8">
+        200 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-9" type="checkbox" id="nav-2-2-9">
+    
+    <label class="md-nav__link" for="nav-2-2-9">
+      200 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-9">
+        200 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3" type="checkbox" id="nav-2-3">
+    
+    <label class="md-nav__link" for="nav-2-3">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-3">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/README.html" title="Analysis Overview" class="md-nav__link">
+      Analysis Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-2" type="checkbox" id="nav-2-3-2">
+    
+    <label class="md-nav__link" for="nav-2-3-2">
+      300 Automated CUR Updates and Ingestion
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-3-2">
+        300 Automated CUR Updates and Ingestion
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Security
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Security
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Security 100 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Security 100 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
+      Account and Root User
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
+      Basic Identity & Access Management User, Group, Role
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
+      CloudFront with S3 Bucket Origin
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      Security 200 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        Security 200 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
+      Automated Deployment of Detective Controls
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+      Automated Deployment of EC2 Web Application
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
+      Automated Deployment of IAM Groups and Roles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
+      Automated Deployment of VPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
+      Basic EC2 with WAF Protection
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
+      CloudFront with WAF Protection
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Security 300 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        Security 300 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+      IAM Permission Boundaries Delegating Role Creation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+      IAM Tag Based Access Control for EC2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+      Incident Response with AWS Console and CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Operational Excellence
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Operational Excellence
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2" checked>
+    
+    <label class="md-nav__link" for="nav-4-2">
+      100 Inventory Patch Mgt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-2">
+        100 Inventory Patch Mgt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="Lab_Guide.html" title="Lab Guide" class="md-nav__link md-nav__link--active">
+      Lab Guide
+    </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Reliability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Reliability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Testing Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        Testing Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
+    
+    <label class="md-nav__link" for="nav-5-2-1">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-1">
+        300 EC2, RDS S3 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Performance Efficiency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Performance Efficiency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Performance/README.html" title="Coming Soon" class="md-nav__link">
+      Coming Soon
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Well Architected Tool
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Well Architected Tool
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Walkthrough
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Walkthrough
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-100-inventory-and-patch-management-lab-guide">Level 100: Inventory and Patch Management: Lab Guide</h1>
+<p>In the cloud, you can apply the same engineering discipline that you use for application code to your entire environment. You can define your entire workload (applications, infrastructure, etc.) as code and update it with code. You can script your operations procedures and automate their execution by triggering them in response to events. By performing operations as code, you limit human error and enable consistent execution of operations activities.</p>
+<p>In this lab you will apply the concepts of <em>Infrastructure as Code</em> and <em>Operations as Code</em> to the following activities:
+<em> Deployment of Infrastructure
+</em> Inventory Management
+* Patch Management</p>
+<p>Included in the lab guide are bonus sections that can be completed if you have time or later if interested.
+<em> Creating Maintenance Windows and Scheduling Automated Operations Activities
+</em> Create and Subscribe to a Simple Notification Service Topic</p>
+<blockquote>
+<p><strong>Important</strong>
+You will be billed for any applicable AWS resources used in this lab that are not covered in the <a href="https://aws.amazon.com/free/">AWS Free Tier</a>. At the end of the lab guide there is an additional section on how to remove all the resources you have created.
+* Removing Lab Resources</p>
+</blockquote>
+<h1 id="1-setup">1. Setup</h1>
+<h2 id="requirements">Requirements</h2>
+<p>You will need the following to be able to perform this lab:
+<em> Your own device for console access
+</em> An <a href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html">AWS account</a> that you are able to use for testing, <strong>that is not used for production</strong> or other purposes
+* An available region within your account with capacity to add 2 additional VPCs</p>
+<h2 id="user-and-group-management">User and Group Management</h2>
+<p>When you create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user. It is accessed by signing in with the email address and password that you used to create the account.</p>
+<p>We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Securely store the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">AWS Tasks That Require Root User</a>.</p>
+<h2 id="iam-users-groups">IAM Users &amp; Groups</h2>
+<p>As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then grant administrator access by placing the users into an "Administrators" group to which the <strong>AdministratorAccess</strong> managed policy is attached.</p>
+<p>Use administrators group members to manage permissions and policy for the AWS account. Limit use of the root user to only those <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">actions that require it</a>.</p>
+<h3 id="11-create-administrator-iam-user-and-group">1.1 Create Administrator IAM User and Group</h3>
+<p>To create an administrator user for yourself and add the user to an administrators group:</p>
+<ol>
+<li>Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>In the IAM navigation pane, choose <strong>Users</strong> and then choose <strong>Add user</strong>.</li>
+<li>In <strong>Set user details</strong> for <strong>User name</strong>, type a user name for the administrator account you are creating. The name can consist of letters, digits, and the following characters: plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-). The name is not case sensitive and can be a maximum of 64 characters in length.</li>
+<li>In <strong>Select AWS access type</strong> for <strong>Access type</strong>, select the check box next to <strong>AWS Management Console access</strong>, select <strong>Custom password</strong>, and then type your new password in the text box. If you're creating the user for someone other than yourself, you can leave <em>Require password reset</em> selected to force the user to create a new password when first signing in. Clear the box next to <strong>Require password reset</strong> and then choose <strong>Next: Permissions</strong>.</li>
+<li>In <strong>set permissions for user</strong> ensure <strong>Add user to group</strong> is selected.</li>
+<li>Under <strong>Add user to group</strong> choose <strong>Create group</strong>.</li>
+<li>In the <strong>Create group</strong> dialog box, type a <strong>Group name</strong> for the new group, such as Administrators. The name can consist of letters, digits, and the following characters: plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-). The name is not case sensitive and can be a maximum of 128 characters in length. In the policy list, select the check box next to <strong>AdministratorAccess</strong> and then choose <strong>Create group</strong>.</li>
+<li>Back at <strong>Add user to group</strong>, in the list of groups, ensure the check box for your new group is selected. Choose Refresh if necessary to see the group in the list. choose <strong>Next: Review</strong> to see the list of group memberships to be added to the new user. When you are ready to proceed, choose <strong>Create user</strong>.</li>
+<li>At the confirmation screen you do not need to download the user credentials for programmatic access at this time. You can create new credentials at any time.</li>
+</ol>
+<p>You can use this same process to create more groups and users and to give your users access to your AWS account resources. To learn about using policies that restrict user permissions to specific AWS resources, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_examples.html">Example Policies</a>. To add additional users to the group after it's created, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_add-remove-users.html">Adding and Removing Users in an IAM Group</a>.</p>
+<h3 id="12-log-in-to-the-aws-management-console-using-your-administrator-account">1.2 Log in to the AWS Management Console using your administrator account</h3>
+<ol>
+<li>You can now use this administrator user instead of your root user for this AWS account. <strong>Choose the link</strong> https\://\&lt;yourAccountNumber>.signin.aws.amazon.com/console and log in with your administrator user credentials.</li>
+<li><strong>Select the region</strong> you will use for the lab from the the list in the upper right corner.</li>
+<li>Verify that you have 2 available VPCs (3 or less in use) in the selected region by navigating to the VPC Console (https://console.aws.amazon.com/vpc/) and in the <strong>Resources</strong> section reviewing the number of VPCs.</li>
+</ol>
+<h3 id="13-create-an-ec2-key-pair">1.3 Create an EC2 Key Pair</h3>
+<p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 uses public-key cryptography</a> to encrypt and decrypt login information. Public-key cryptography uses a public key to encrypt a piece of data, such as a password, then the recipient uses the private key to decrypt the data. The public and private keys are known as a key pair. To <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html">log in to the Amazon Linux instances</a> we will create in this lab, you must create a key pair, specify the name of the key pair when you launch the instance, and provide the private key when you connect to the instance.</p>
+<ol>
+<li>Use your administrator account to access the Amazon EC2 console at <a href="https://console.aws.amazon.com/ec2/">https://console.aws.amazon.com/ec2/</a>.</li>
+<li>In the IAM navigation pane under <strong>Network &amp; Security</strong>, choose <strong>Key Pairs</strong> and then choose <strong>Create Key Pair</strong>.</li>
+<li>In the <strong>Create Key Pair</strong> dialog box, type a <strong>Key pair name</strong> such as <code>OELab2018</code> and then choose <strong>Create</strong>.</li>
+<li><strong>Save the</strong> <code>keyPairName.pem</code> <strong>file</strong> for optional later use <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html">accessing the EC2 instances</a> created in this lab.</li>
+</ol>
+<h1 id="2-deploy-an-environment-using-infrastructure-as-code">2. Deploy an Environment Using Infrastructure as Code</h1>
+<h2 id="tagging">Tagging</h2>
+<p>We will make extensive use of tagging throughout the lab. The CloudFormation template for the lab includes the definition of multiple tags against a variety of resources.</p>
+<p>AWS enables you to assign metadata to your AWS resources in the form of <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">tags</a>. Each tag is a simple label consisting of a customer-defined key and an optional value that can make it easier to manage, search for, and filter resources. Although there are no inherent types of tags, commonly adopted categories of tags include technical tags (e.g., Environment, Workload, InstanceRole, and Name), tags for automation (e.g., Patch Group, and SSMManaged), business tags (e.g., Owner), and security tags (e.g., Confidentiality).</p>
+<p>Apply the following best practices when using tags:
+<em> Use a standardized, case-sensitive format for tags, and implement it consistently across all resource types
+</em> Consider tag dimensions that support the following:
+  * <strong>Managing resource access control</strong> with <a href="https://aws.amazon.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">IAM</a>
+  * <strong>Cost tracking</strong>
+  * <strong>Automation</strong>
+  * <strong>AWS console organization</strong>
+<em> Implement automated tools to help manage resource tags. <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">The Resource Groups Tagging API</a> enables programmatic control of tags, making it easier to automatically manage, search, and filter tags and resources.
+</em> Err on the side of using too many tags rather than too few tags.
+* <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">Develop a tagging strategy</a>.</p>
+<blockquote>
+<p><strong>Note</strong><br>It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.</p>
+<p><strong>Important</strong><br><strong>Patch Group</strong> is a reserved tag key used by <strong>Systems Manager Patch Manager</strong> that is case sensitive with a space between the two words.</p>
+</blockquote>
+<h2 id="management-tools-cloudformation">Management Tools: CloudFormation</h2>
+<p><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html">AWS CloudFormation</a> is a service that helps you model and set up your Amazon Web Services resources so that you can spend less time managing those resources and more time focusing on your applications. You create a template that describes all the AWS resources that you want (like Amazon EC2 instances or Amazon RDS DB instances) and AWS CloudFormation provisions and configures those resources for you. AWS CloudFormation enables you to use a template file to create and delete a collection of resources as a single unit (a stack).</p>
+<p><a href="https://aws.amazon.com/cloudformation/pricing/">There is no additional charge for AWS CloudFormation</a>. You pay for AWS resources (such as Amazon EC2 instances, Elastic Load Balancing load balancers, etc.) created using AWS CloudFormation in the same manner as if you created the resources manually. You only pay for what you use as you use it. There are no minimum fees and no required upfront commitments.</p>
+<h3 id="21-deploy-the-lab-infrastructure">2.1 Deploy the Lab Infrastructure</h3>
+<p>To deploy the lab infrastructure:</p>
+<ol>
+<li><strong>Download the CloudFormation script</strong> for this lab from <a href="https://github.com/awslabs/aws-well-architected-labs/blob/master/Operations/100_Inventory_and_Patch_Mgmt/Code">/Code</a>.</li>
+<li>Use your administrator account to access the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.</li>
+<li>Choose <strong>Create Stack</strong>.</li>
+<li>On the <strong>Select Template</strong> page, select <strong>Specify an Amazon S3 template URL</strong> and enter the URL for the downloaded location.</li>
+</ol>
+<p><strong>AWS CloudFormation Designer</strong></p>
+<p>AWS <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/working-with-templates-cfn-designer.html">CloudFormation Designer</a> is a graphic tool for creating, viewing, and modifying AWS CloudFormation templates. With Designer you can diagram your template resources using a drag-and-drop interface. You can edit their details using the integrated JSON and YAML editor. AWS CloudFormation Designer can help you see the relationship between template resources.</p>
+<ol>
+<li>On the <strong>Select Template</strong> page, next to <strong>Specify an Amazon S3 template URL</strong>, choose the link to <strong>View/Edit template in Designer</strong>.</li>
+<li>Briefly review the graphical representation of the environment we are about to create, including the template in the JSON and YAML formats. You can use this feature to convert between JSON and YAML formats.</li>
+<li><strong>Choose the Create Stack icon</strong> (a cloud with an arrow) to return to the <strong>Select Template page</strong>.</li>
+<li>On the <strong>Select Template</strong> page, choose <strong>Next</strong>.</li>
+</ol>
+<p>A CloudFormation template is a JSON or YAML formatted text file that describes your AWS infrastructure <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html">containing both optional and required sections</a>. In the next steps, we will provide a name for our stack and parameters that will be passed into the template to help define the resources that will be implemented.</p>
+<ol>
+<li>In the <strong>Specify Details</strong> section, define a <strong>Stack name</strong>, such as <code>OELabStack1</code>.</li>
+<li>In the <strong>Parameters</strong> section:</li>
+<li>Leave <strong>InstanceProfile</strong> blank as we have not yet defined an instance profile.</li>
+<li>Leave <strong>InstanceTypeApp</strong> and <strong>InstanceTypeWeb</strong> as the default free-tier-eligible t2.micro value.</li>
+<li>Select the EC2 <strong>KeyName</strong> you defined earlier from the list.</li>
+<li>In a browser window, go to <a href="http://checkip.amazonaws.com/">http://checkip.amazonaws.com/</a> to get your IP. Enter your IP address in <strong>SSHLocation</strong> in CIDR notation (i.e., ending in /32).</li>
+<li>Define the <strong>Workload Name</strong> as <code>Test</code>.</li>
+<li>Choose <strong>Next</strong>.</li>
+<li>On the <strong>Options</strong> page under <strong>Tags</strong>, define a <strong>Key</strong> of <strong>Owner</strong>, with <strong>Value</strong> set to the username you choose for your administrator. You may define additional keys as needed. The CloudFormation template creates all the example tags given in the discussion on tagging above.</li>
+<li>Leave all other sections unmodified. Scroll to the bottom of the page and choose <strong>Next</strong>.</li>
+<li>On the <strong>Review</strong> page, review your choices and then choose <strong>Create</strong>.</li>
+<li>On the CloudFormation console page<ol>
+<li><strong>Check the box next to your Stack Name</strong> to see its details. </li>
+<li>If your <strong>Stack Name</strong> is not displayed, click the <strong>refresh</strong> button (circular arrow) in the top right until it appears.</li>
+<li>If the details are not displayed, choose the refresh button until details appear.</li>
+</ol>
+</li>
+<li>Choose the <strong>Events</strong> tab for your selected workload to see the activity log from the creation of your CloudFormation stack.</li>
+</ol>
+<p>When the <strong>Status</strong> of your stack displays <strong>CREATE_COMPLETE</strong> in the filter list, you have just created a representation of a typical lift and shift 2-tier application migrated to the cloud.</p>
+<ol>
+<li>Navigate to the <a href="https://console.aws.amazon.com/ec2/">EC2 console</a> to view the deployed systems:<ol>
+<li>Choose <strong>Instances</strong>.</li>
+<li>Select a server and review the details under its <strong>Description</strong> and <strong>Tag</strong> tabs.</li>
+<li>(Optional) choose <strong>Security Groups</strong> and select the Security Group whose name begins with the name of your stack. Examine the inbound rules.</li>
+<li>(Optional) navigate to the VPC console and examine the configuration of the VPC you just created.</li>
+</ol>
+</li>
+</ol>
+<h2 id="the-impact-of-infrastructure-as-code">The impact of Infrastructure as Code</h2>
+<p>With infrastructure as code, if you can deploy one environment, you can deploy any number of copies of that environment. In this example we have created a <code>Test</code> environment. Later, we will repeat these steps to deploy a <code>Prod</code> environment.</p>
+<p>The ability to dynamically deploy temporary environments on-demand enables parallel experimentation, development, and testing efforts. It allows duplication of environments to recreate and analyze errors, as well as cut-over deployment of production systems using blue-green methodologies. These practices contribute to reduced risk, increased operations effectiveness, and efficiency.</p>
+<h1 id="3-inventory-management-using-operations-as-code">3. Inventory Management using Operations as Code</h1>
+<h2 id="management-tools-systems-manager">Management Tools: Systems Manager</h2>
+<p><a href="https://aws.amazon.com/systems-manager/features/">AWS Systems Manager</a> is a collection of features that enable IT Operations that we will explore throughout this lab.</p>
+<p>There are <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html">set up tasks</a> and <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html">pre-requisites</a> that must be satisfied prior to using Systems Manager to manage your EC2 instances or on-premises systems in <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">hybrid environments</a>. 
+<em> You must use a supported operating system
+    * Supported operating systems include versions of Windows, Amazon Linux, Ubuntu Server, RHEL, and CentOS
+</em> The SSM Agent must be installed
+    * The SSM Agent for Windows also requires PowerShell 3.0 or later to run some <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html#prereqs-powershell">SSM documents</a>
+<em> Your EC2 instances must have outbound internet access
+</em> You must access Systems Manager in a supported region
+* Systems Manager requires IAM roles
+    * for instances that will process commands
+    * for users executing commands</p>
+<p>SSM Agent is installed by default on:
+<em> Amazon Linux <em>base</em> AMIs dated 2017.09 and later
+</em> Windows Server 2016 instances
+* Instances created from Windows Server 2003-2012 R2 AMIs published in November 2016 or later</p>
+<p><a href="https://aws.amazon.com/systems-manager/pricing/">There is no additional charge for AWS Systems Manager</a>. You only pay for your underlying AWS resources managed or created by AWS Systems Manager (e.g., Amazon EC2 instances or Amazon CloudWatch metrics). You only pay for what you use as you use it. There are no minimum fees and no upfront commitments.</p>
+<h3 id="31-setting-up-systems-manager">3.1 Setting up Systems Manager</h3>
+<ol>
+<li>Use your administrator account to access the Systems Manager console at <a href="https://console.aws.amazon.com/systems-manager/">https://console.aws.amazon.com/systems-manager/</a>.</li>
+<li>Choose <strong>Managed Instances</strong> from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the <strong>AWS Systems Manager Managed Instances</strong> page.</li>
+<li>As a user with AdministratorAccess permissions, you already have <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html">User Access to Systems Manager</a>.</li>
+<li>The Amazon Linux AMIs used to create the instances in your environment are dated 2017.09. They are <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html">supported operating systems</a> and have the <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html">SSM Agent</a> installed by default.</li>
+<li>If you are in a <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">supported region</a> the remaining step is to configure the IAM role for instances that will process commands.</li>
+<li>Create an Instance Profile for Systems Manager managed instances:</li>
+<li>Navigate to the <a href="https://console.aws.amazon.com/iam/">IAM console</a></li>
+<li>In the navigation pane, choose <strong>Roles</strong>.</li>
+<li>Then choose <strong>Create role</strong>.</li>
+<li>In the <strong>Select type of trusted entity</strong> section, verify that the default <strong>AWS service</strong> is selected.</li>
+<li>In the <strong>Choose the service that will use this role</strong> section, scroll past the first reference to EC2 (<strong>EC2 Allows EC2 instances to call AWS services on your behalf</strong>) and choose <strong>EC2</strong> from within the field of services. This will open the <strong>Select your use case</strong> section further down the page.</li>
+<li>In the <strong>Select your use case</strong> section, choose <strong>EC2 Role for Simple Systems Manager</strong> to select it.</li>
+<li>Then choose <strong>Next: Permissions</strong>.</li>
+<li>Under <strong>Attached permissions policy</strong>, verify that <strong>AmazonEC2RoleforSSM</strong> is listed, and then choose <strong>Next: Review</strong>.</li>
+<li>In the <strong>Review</strong> section:</li>
+<li>Enter a <strong>Role name</strong>, such as <code>ManagedInstancesRole</code>.</li>
+<li>Accept the default in the <strong>Role description</strong>.</li>
+<li>Choose <strong>Create role</strong>.</li>
+<li>Apply this role to the instances you wish to manage with Systems Manager:</li>
+<li>Navigate to the <a href="https://console.aws.amazon.com/ec2/">EC2 Console</a> and choose <strong>Instances</strong>.</li>
+<li>Select the first instance and then choose <strong>Actions</strong>, <strong>Instance Settings</strong>, and <strong>Attach/Replace IAM Role</strong>.</li>
+<li>Under <strong>Attach/Replace IAM Role</strong>, select <strong>ManagedInstancesRole</strong> from the drop down list and choose <strong>Apply</strong>.</li>
+<li>After you receive confirmation of success, choose <strong>Close</strong>.</li>
+<li>Repeat this process, assigning <strong>ManagedInstancesRole</strong> to each of the 3 remaining instances.</li>
+<li>Return to the <a href="https://console.aws.amazon.com/systems-manager/">Systems Manager console</a> and choose <strong>Managed Instances</strong> from the navigation bar. Periodically choose <strong>Managed Instances</strong> until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong><br>If desired, you can use a <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html">more restrictive permission set</a> to grant access to Systems Manager.</p>
+</blockquote>
+<h3 id="32-create-a-second-cloudformation-stack">3.2 Create a Second CloudFormation Stack</h3>
+<ol>
+<li>Create a second CloudFormation stack using the procedure in 2.1 with the following changes:</li>
+<li>In the <strong>Specify Details</strong> section, define a Stack name, such as <code>OELabStack2</code>.</li>
+<li>Specify the <strong>InstanceProfile</strong> using the <code>ManagedInstancesRole</code> you defined.</li>
+<li>Define the <strong>Workload Name</strong> as <code>Prod</code>.</li>
+</ol>
+<h2 id="systems-manager-inventory">Systems Manager: Inventory</h2>
+<p>You can use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-inventory.html">AWS Systems Manager Inventory</a> to collect operating system (OS), application, and instance metadata from your Amazon EC2 instances and your on-premises servers or virtual machines (VMs) in your hybrid environment. You can query the metadata to quickly understand which instances are running the software and configurations required by your software policy, and which instances need to be updated.</p>
+<h3 id="33-using-systems-manager-inventory-to-track-your-instances">3.3 Using Systems Manager Inventory to Track Your Instances</h3>
+<ol>
+<li>Under <strong>Insights</strong> in the AWS Systems Manager navigation bar, choose <strong>Inventory</strong>. </li>
+<li>Scroll down in the window to the <strong>Corresponding managed instances</strong> section. Inventory currently contains only the instance data available from the EC2</li>
+<li>Choose the <strong>InstanceID</strong> of one of your systems.</li>
+<li>Examine each of the available tabs of data under the <strong>Instance ID</strong> heading.</li>
+<li>Inventory collection must be specifically configured and the data types to be collected must be specified</li>
+<li>Choose <strong>Inventory</strong> in the navigation bar.</li>
+<li>Choose <strong>Setup Inventory</strong> in the top left corner of the window</li>
+<li>In the <strong>Setup Inventory</strong> screen, define targets for inventory:  </li>
+<li>Under <strong>Specify targets by</strong>, select <strong>Specifying a tag</strong></li>
+<li>
+<p>Under <strong>Tags</strong> specify <code>Environment</code> for the key and <code>OELab2018</code> for the value</p>
+<blockquote>
+<blockquote>
+<p><strong>Note</strong><br>You can select all managed instances in this account, ensuring that all managed instances will be inventoried. You can constrain inventoried instances to those with specific tags, such as Environment or Workload. Or you can manually select specific instances for inventory.</p>
+</blockquote>
+</blockquote>
+</li>
+<li>
+<p>Schedule the frequency with which inventory is collected. The default and minimum period is 30 minutes</p>
+</li>
+<li>For <strong>Collect inventory data every</strong>, accept the default <strong>30</strong> Minute(s)</li>
+<li>Under parameters, specify what information to collect with the inventory process</li>
+<li>Review the options and select the defaults</li>
+<li>(Optional) If desired, you may specify an S3 bucket to receive the inventory execution logs (you will need to <a href="https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html">create a destination bucket for the logs</a> prior to proceeding):</li>
+<li>Check the box next to <strong>Sync inventory execution logs to an S3 bucket</strong> under the <strong>Advanced</strong> options.</li>
+<li>Provide an S3 bucket name.</li>
+<li>(Optional) Provide an S3 bucket prefix.</li>
+<li>Choose <strong>Setup Inventory</strong> at the bottom of the page (it can take up to 10 minutes to deploy a new inventory policy to an instance). </li>
+<li>To create a new inventory policy, from <strong>Inventory</strong>, choose <strong>Setup inventory</strong>.</li>
+<li>To edit an existing policy, from <strong>State Manager</strong> in the left navigation menu, select the association and choose <strong>Edit</strong>.</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong><br>You can create multiple Inventory specifications. They will each be stored as <strong>associations</strong> within <strong>Systems Manager State Manager</strong>.</p>
+</blockquote>
+<h2 id="systems-manager-state-manager">Systems Manager: State Manager</h2>
+<p>In State Manager, an <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-associations.html">association</a> is the result of binding configuration information that defines the state you want your instances to be in to the instances themselves. This information specifies when and how you want instance-related operations to run that ensure your Amazon EC2 and hybrid infrastructure is in an intended or consistent state.</p>
+<p>An association defines the state you want to apply to a set of targets. An association includes three components and one optional set of components:
+  * A document that defines the state
+  * Target(s)
+  * A schedule
+  * (Optional) Runtime parameters.</p>
+<p>When you performed the <strong>Setup Inventory</strong> actions, you created an association in State Manager.</p>
+<h3 id="34-review-association-status">3.4 Review Association Status</h3>
+<ol>
+<li>Under <strong>Actions</strong> in the navigation bar, select <strong>State Manager</strong>. At this point, the <strong>Status</strong> may show that the inventory activity has not yet completed.</li>
+<li>Choose the single Association id that is the result of your <strong>Setup Inventory</strong> action.</li>
+<li>Examine each of the available tabs of data under the <strong>Association ID</strong> heading.</li>
+<li>Choose <strong>Edit</strong>.</li>
+<li>Enter a name under <strong>Name - optional</strong> to provide a more user friendly label to the association, such as <code>InventoryAllInstances</code> (white space is not permitted in an <em>Association Name</em>).</li>
+</ol>
+<p><em>Inventory</em> is accomplished through the following:
+   * The activities defined in the AWS-GatherSoftwareInventory command document.
+   * The parameters provided in the <strong>Parameters</strong> section are passed to the document at execution.
+   * The targets are defined in the <strong>Targets</strong> section.</p>
+<blockquote>
+<p><strong>Important</strong><br>In this example there is a single target, the wildcard. The wildcard matches <em>all</em> instances making them <em>all</em> targets.
+   * The schedule for this activity is defined under <strong>Specify schedule</strong> and <strong>Specify with</strong> to use a CRON/Rate expression on a 30 minute interval. 
+   * There is the option to specify <strong>Output options</strong>.
+<strong>Note</strong><br>If you change the command document, the <strong>Parameters</strong> section will change to be appropriate to the new command document.</p>
+</blockquote>
+<ol>
+<li>Navigate to <strong>Managed Instances</strong> under <strong>Shared Resources</strong> in the navigation bar. An <strong>Association Status</strong> has been established for the inventoried instances under management.</li>
+<li>Choose one of the <strong>Instance ID</strong> links to go to the inventory of the instance. The Inventory tab is now populated and you can track associations and their last activity under the Associations tab.</li>
+<li>Navigate to <strong>Compliance</strong> under <strong>Insights</strong> in the navigation bar. Here you can view the overall compliance status of your managed instances in the <strong>Compliance Summary</strong> and the individual compliance status of systems in the <strong>Corresponding managed instances</strong> section below.</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong><br>The inventory activity can take up to 10 minutes to complete. While waiting for the inventory activity to complete, you can proceed with the next section.</p>
+</blockquote>
+<h2 id="systems-manager-compliance">Systems Manager: Compliance</h2>
+<p>You can use AWS Systems Manager Configuration <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-compliance.html">Compliance</a> to scan your fleet of managed instances for patch compliance and configuration inconsistencies. You can collect and aggregate data from multiple AWS accounts and Regions, and then drill down into specific resources that aren’t compliant.</p>
+<p>By default, Configuration Compliance displays compliance data about Systems Manager Patch Manager patching and <strong>Systems Manager State Manager</strong> associations. You can also customize the service and create your own compliance types based on your IT or business requirements. You can also port data to <strong>Amazon Athena</strong> and <strong>Amazon QuickSight</strong> to generate fleet-wide reports.</p>
+<h1 id="4-patch-management">4. Patch Management</h1>
+<h2 id="systems-manager-patch-manager">Systems Manager: Patch Manager</h2>
+<p>AWS Systems Manager <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html">Patch Manager</a> automates the process of patching managed instances with security related updates. </p>
+<blockquote>
+<p><strong>Note</strong><br>For Linux-based instances, you can also install patches for non-security updates.</p>
+</blockquote>
+<p>You can patch fleets of Amazon EC2 instances or your on-premises servers and virtual machines (VMs) by operating system type. This includes supported versions of Windows, Ubuntu Server, Red Hat Enterprise Linux (RHEL), SUSE Linux Enterprise Server (SLES), and Amazon Linux. You can scan instances to see only a report of missing patches, or you can scan and automatically install all missing patches. You can target instances individually or in large groups by using Amazon EC2 tags.</p>
+<blockquote>
+<p><strong>Warning</strong>
+<em> <strong>AWS does not test patches for Windows or Linux before making them available in Patch Manager</strong> .
+</em> <strong>If any updates are installed by Patch Manager the patched instance is rebooted</strong>.
+* <strong>Always test patches thoroughly before deploying to production environments</strong>.</p>
+</blockquote>
+<h2 id="patch-baselines">Patch Baselines</h2>
+<p>Patch Manager uses <strong>patch baselines</strong>, which include rules for auto-approving patches within days of their release, as well as a list of approved and rejected patches. Later in this lab we will schedule patching to occur on a regular basis using a Systems Manager <strong>Maintenance Window</strong> task. Patch Manager integrates with AWS Identity and Access Management (IAM), AWS CloudTrail, and Amazon CloudWatch Events to provide a secure patching experience that includes event notifications and the ability to audit usage.</p>
+<blockquote>
+<p><strong>Warning</strong><br>The <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html">operating systems supported by Patch Manager</a> may vary from those supported by the SSM Agent.</p>
+</blockquote>
+<h3 id="41-create-a-patch-baseline">4.1 Create a Patch Baseline</h3>
+<ol>
+<li>Under <strong>Actions</strong> in the <strong>AWS Systems Manager</strong> navigation bar, choose <strong>Patch Manager</strong>.</li>
+<li>Choose <strong>Create patch baseline</strong>.</li>
+<li>On the <strong>Create patch baseline</strong> page in the <strong>Provide patch baseline details</strong> section:</li>
+<li>Enter a <strong>Name</strong> for your custom patch baseline, such as <code>AmazonLinuxSecAndNonSecBaseline</code>.</li>
+<li>Optionally enter a description, such as <code>Amazon Linux patch baseline including security and non-security patches</code>.</li>
+<li>Select <strong>Amazon Linux</strong> from the list.</li>
+<li>In the <strong>Approval rules</strong> section:</li>
+<li>Examine the options in the lists but leave <strong>Product</strong>, <strong>Classification</strong>, and <strong>Severity</strong> at their default of <strong>All</strong>.</li>
+<li>Leave the <strong>Auto approval delay</strong> at its default of <strong>0 days</strong>.</li>
+<li>Change the value of <strong>Compliance level - optional</strong> to <strong>Critical</strong>.</li>
+<li>Choose <strong>Add another rule</strong>.</li>
+<li>In the new rule, change the value of <strong>Compliance level - optional</strong> to <strong>Medium</strong>.</li>
+<li>Check the box under <strong>Include non-security updates</strong> to include all Amazon Linux updates when patching.</li>
+</ol>
+<p>If an approved patch is reported as missing, the option you choose in <strong>Compliance level</strong>, such as <code>Critical</code> or <code>Medium</code>, determines the severity of the compliance violation reported in System Manager <strong>Compliance</strong>.</p>
+<ol>
+<li>In the <strong>Patch exceptions</strong> section in the <strong>Rejected patches - optional</strong> text box, enter <code>system-release.*</code> This will <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">reject patches</a> to new Amazon Linux releases that may advance you beyond the <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html">Patch Manager supported operating systems</a> prior to your testing new releases.</li>
+<li>For Linux operating systems, you can optionally define an <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-how-it-works-alt-source-repository.html">alternative patch source repository</a>. Choose the <strong>X</strong> in the <strong>Patch sources</strong> area to remove the empty patch source definition.</li>
+<li>Choose <strong>Create patch baseline</strong> and you will go to the <strong>Patch Baselines</strong> page where the AWS provided default patch baselines, and your custom baseline, are displayed.</li>
+</ol>
+<h2 id="patch-groups">Patch Groups</h2>
+<p>A <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-patchgroups.html">patch group</a> is an optional method to organize instances for patching. For example, you can create patch groups for different operating systems (Linux or Windows), different environments (Development, Test, and Production), or different server functions (web servers, file servers, databases). Patch groups can help you avoid deploying patches to the wrong set of instances. They can also help you avoid deploying patches before they have been adequately tested.</p>
+<p>You create a patch group by using Amazon EC2 tags. Unlike other tagging scenarios across Systems Manager, a patch group must be defined with the tag key: <code>Patch Group</code> (tag keys are case sensitive). You can specify any value (for example, <code>web servers</code>) but the key must be <code>Patch Group</code>.</p>
+<blockquote>
+<p><strong>Note</strong><br>An instance can only be in one patch group.</p>
+</blockquote>
+<p>After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance. 
+<em> If the instance is assigned to a patch group, the system checks to see which patch baseline is registered to that group.
+</em> If a patch baseline is found for that group, the system applies that patch baseline. 
+* If an instance isn't assigned to a patch group, the system automatically uses the currently configured default patch baseline.</p>
+<h3 id="42-assign-a-patch-group">4.2 Assign a Patch Group</h3>
+<ol>
+<li>Choose the <strong>Baseline ID</strong> of your newly created baseline to enter the details screen.</li>
+<li>Choose <strong>Actions</strong> in the top right of the window and select <strong>Modify patch groups</strong>.</li>
+<li>In the <strong>Modify patch groups</strong> window under <strong>Patch groups</strong>, enter <code>Critical</code>, choose <strong>Add</strong>, and then choose <strong>Close</strong> to be returned to the <strong>Patch Baseline</strong> details screen.</li>
+</ol>
+<h2 id="aws-runpatchbaseline">AWS-RunPatchBaseline</h2>
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-ssm-documents.html#patch-manager-ssm-documents-recommended-AWS-RunPatchBaseline">AWS-RunPatchBaseline</a> is a command document that enables you to control patch approvals using patch baselines. It reports patch compliance information that you can view using the Systems Manager <strong>Compliance</strong> tools. For example,you can view which instances are missing patches and what those patches are. </p>
+<p>For Linux operating systems, compliance information is provided for patches from both the default source repository configured on an instance and from any alternative source repositories you specify in a custom patch baseline. AWS-RunPatchBaseline supports both Windows and Linux operating systems.</p>
+<h2 id="aws-systems-manager-document">AWS Systems Manager: Document</h2>
+<p>An <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager document</a> defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JavaScript Object Notation (JSON) or YAML, and they include steps and parameters that you specify. </p>
+<p>All AWS provided Automation and Run Command documents can be viewed in AWS Systems Manager <strong>Documents</strong>. You can <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-doc.html">create your own documents</a> or launch existing scripts using provided documents to implement custom operations as code activities.</p>
+<h3 id="43-examine-aws-runpatchbaseline-in-documents">4.3 <strong>Examine AWS-RunPatchBaseline in Documents</strong></h3>
+<p>To examine AWS-RunPatchBaseline in Documents:</p>
+<ol>
+<li>In the AWS Systems Manager navigation bar under <strong>Shared Resources</strong>, choose <strong>Documents</strong>.</li>
+<li>Click in the <strong>search box</strong>, select <strong>Document name prefix</strong>, and then <strong>Equal</strong>.</li>
+<li>Type <code>AWS-Run</code> into the text field and press <em>Enter</em> on your keyboard to start the search.</li>
+<li>Select AWS-RunPatchBaseline and choose <strong>View details</strong>.</li>
+<li>Review the content of each tab in the details page of the document.</li>
+</ol>
+<h2 id="aws-systems-manager-run-command">AWS Systems Manager: Run Command</h2>
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html">AWS Systems Manager Run Command</a> lets you remotely and securely manage the configuration of your managed instances.  Run Command enables you to automate common administrative tasks and perform ad hoc configuration changes at scale. You can use Run Command from the AWS Management Console, the AWS Command Line Interface, AWS Tools for Windows PowerShell, or the AWS SDKs.</p>
+<h3 id="44-scan-your-instances-with-aws-runpatchbaseline-via-run-command">4.4 Scan Your Instances with AWS-RunPatchBaseline via Run Command</h3>
+<ol>
+<li>Under <strong>Actions</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>. In the Run Command dashboard, you will see previously executed commands including the execution of AWS-RefreshAssociation, which was performed when you set up inventory.</li>
+<li>(Optional) choose a Command ID from the list and examine the record of the command execution.</li>
+<li>Choose <strong>Run Command</strong> in the top right of the window.</li>
+<li>In the <strong>Run a command</strong> window, under <strong>Command document</strong>:<ul>
+<li>Choose the search icon and select <code>Platform</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
+<li>Choose <strong>AWS-RunPatchBaseline</strong> in the list.</li>
+</ul>
+</li>
+<li>In the <strong>Targets</strong> section:</li>
+<li>Under <strong>Specify targets by</strong>, choose <strong>Specifying a tag</strong> to reveal the <strong>Tags</strong> sub-section.</li>
+<li>Under <strong>Enter a tag key</strong>, enter <code>Workload</code>, and under <strong>Enter a tag value</strong>, enter <code>Test</code>.</li>
+<li>In the <strong>Command parameters</strong> section, leave the <strong>Operation</strong> value as the default <strong>Scan</strong>.</li>
+</ol>
+<p>The remaining Run Command features enable you to:
+<em> Specify <strong>Rate control</strong>, limiting <strong>Concurrency</strong> to a specific number of targets or a calculated percentage of systems, or to specify an <strong>Error threshold</strong> by count or percentage of systems after which the command execution will end.
+</em> Specify <strong>Output options</strong> to record the entire output to a preconfigured <strong>S3 bucket</strong> and optional <strong>S3 key prefix</strong>.</p>
+<blockquote>
+<p><strong>Note</strong><br>Only the last 2500 characters of a command document's output are displayed in the console.
+<em> Specify <strong>SNS notifications</strong> to a specified <strong>SNS Topic</strong> on all events or on a specific event type for either the entire command or on a per-instance basis. This requires Amazon SNS to be preconfigured.
+</em> View the command as it would appear if executed within the AWS Command Line Interface.</p>
+</blockquote>
+<ol>
+<li>Choose <strong>Run</strong> to execute the command and return to its details page.</li>
+<li>Scroll down to <strong>Targets and outputs</strong> to view the status of the individual targets that were selected through your tag key and value pair. Refresh your page to update the status.</li>
+<li>Choose an <strong>Instance ID</strong> from the targets list to view the <strong>Output</strong> from command execution on that instance.</li>
+<li>Choose <strong>Step 1 - Output</strong> to view the first 2500 characters of the command output from Step 1 of the command, and choose <strong>Step 1 - Output</strong> again to conceal it.</li>
+<li>Choose <strong>Step 2 - Output</strong> to view the first 2500 characters of the command output from Step 2 of the command.  The execution step for <strong>PatchWindows</strong> was skipped as it did not apply to your Amazon Linux instance. </li>
+<li>Choose <strong>Step 1 - Output</strong> again to conceal it.</li>
+</ol>
+<h3 id="45-review-initial-patch-compliance">4.5 Review Initial Patch Compliance</h3>
+<ol>
+<li>Under <strong>Insights</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
+<li>On the <strong>Compliance</strong> page in the <strong>Compliance Summary</strong>, you will now see that there are 4 systems that have critical severity compliance issues. In the <strong>Corresponding managed instances</strong> list, you will see the individual compliance status and details.</li>
+</ol>
+<h3 id="46-patch-your-instances-with-aws-runpatchbaseline-via-run-command">4.6 Patch Your Instances with AWS-RunPatchBaseline via Run Command</h3>
+<ol>
+<li>Under <strong>Actions</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>.</li>
+<li>Choose <strong>Run Command</strong> in the top right of the window.</li>
+<li>In the <strong>Run a command</strong> window, under <strong>Command document</strong>:</li>
+<li>Choose the search icon, select <code>Platform</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
+<li>Choose <strong>AWS-RunPatchBaseline</strong> in the list.</li>
+<li>In the <strong>Targets</strong> section:</li>
+<li>Under <strong>Specify targets by</strong>, choose <strong>Specifying a tag</strong> to reveal the <strong>Tags</strong> sub-section.</li>
+<li>Under <strong>Enter a tag key</strong>, enter <code>Workload</code> and under <strong>Enter a tag value</strong> enter <code>Test</code>.</li>
+<li>In the <strong>Command parameters</strong> section, change the <strong>Operation</strong> value to <strong>Install</strong>.</li>
+<li>In the <strong>Targets</strong> section, choose <strong>Specify a tag</strong> using <code>Workload</code> and <code>Test</code>.<blockquote>
+<p><strong>Note</strong> You could have choosen <strong>Manually selecting instances</strong> and used the check box at the top of the list to select all instances displayed, or selected them individually.</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong> there are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.</p>
+</blockquote>
+<ol>
+<li>In the <strong>Rate control</strong> section:</li>
+<li>For <strong>Concurrency</strong>, leave the default <strong>targets</strong> selected and specify <code>1</code>.<blockquote>
+<p><strong>Tip</strong><br>Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.  </p>
+</blockquote>
+</li>
+<li>For <strong>Error threshold</strong>, leave the default <strong>errors</strong> selected and specify <code>1</code>.</li>
+<li>Choose <strong>Run</strong> to execute the command and to go to its details page.</li>
+<li>Refresh the page to view updated status and proceed when the execution is successful.</li>
+</ol>
+<blockquote>
+<p><strong>Warning</strong><br>Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.  </p>
+</blockquote>
+<h3 id="47-review-patch-compliance-after-patching">4.7 Review Patch Compliance After Patching</h3>
+<ol>
+<li>Under <strong>Insights</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
+<li>On the <strong>Compliance</strong> page, change the <strong>Compliance Type:</strong> to <code>Patch</code>. The <strong>Compliance Summary</strong> will now show that there are 4 systems that have satisfied critical severity patch compliance.</li>
+</ol>
+<p>In the optional Scheduling Automated Operations Activities section of this lab you can set up Systems Manager Maintenance Windows and schedule the automated application of patches.</p>
+<h3 id="the-impact-of-operations-as-code"><strong>The Impact of Operations as Code</strong></h3>
+<p>In a traditional environment, you would have had to set up the systems and software to perform these activities. You would require a server to execute your scripts. You would need to manage authentication credentials across all of your systems.</p>
+<p><em>Operations as code</em> reduces the resources, time, risk, and complexity of performing operations tasks and ensures consistent execution. You can take operations as code and automate operations activities by using scheduling and event triggers. Through integration at the infrastructure level you avoid "swivel chair" processes that require multiple interfaces and systems to complete a single operations activity.</p>
+<h1 id="bonus-content-creating-maintenance-windows-and-scheduling-automated-operations-activities">Bonus Content: Creating Maintenance Windows and Scheduling Automated Operations Activities</h1>
+<h2 id="aws-systems-manager-maintenance-windows">AWS Systems Manager: Maintenance Windows</h2>
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html">AWS Systems Manager Maintenance Windows</a> let you define a schedule for when to perform potentially disruptive actions on your instances such as patching an operating system (OS), updating drivers, or installing software. Each Maintenance Window has a schedule, a duration, a set of registered targets, and a set of registered tasks. With Maintenance Windows, you can perform tasks like the following:</p>
+<ul>
+<li>Installing applications, updating patches, installing or updating SSM Agent, or executing PowerShell commands and Linux shell scripts by using a Systems Manager Run Command task</li>
+<li>Building Amazon Machine Images (AMIs), boot-strapping software, and configuring instances by using Systems Manager Automation</li>
+<li>Executing AWS Lambda functions that trigger additional actions such as scanning your instances for patch updates</li>
+<li>Running AWS Step Function state machines to perform tasks such as removing an instance from an Elastic Load Balancing environment, patching the instance, and then adding the instance back to the Elastic Load Balancing environment  <blockquote>
+<p><strong>Note</strong><br>To register Step Function tasks you must use the AWS CLI.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="51-setting-up-maintenance-windows">5.1 Setting up Maintenance Windows</h3>
+<ol>
+<li><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-perm-console.html">Create the role</a> that allows Systems Manager to tasks in Maintenance Windows on your behalf:</li>
+<li>Navigate to the <a href="https://console.aws.amazon.com/iam/">IAM console</a>.</li>
+<li>In the navigation pane, choose <strong>Roles</strong>, and then choose <strong>Create role</strong>.</li>
+<li>In the <strong>Select type of trusted entity</strong> section, verify that the default <strong>AWS service</strong> is selected.</li>
+<li>In the <strong>Choose the service that will use this role</strong> section, choose <strong>EC2</strong>. This allows EC2 instances to call AWS services on your behalf.</li>
+<li>Choose <strong>Next: Permissions</strong>.</li>
+<li>Under <strong>Attached permissions policy</strong>:</li>
+<li>Search for <strong>AmazonSSMMaintenanceWindowRole</strong>.</li>
+<li>Check the box next to <strong>AmazonSSMMaintenanceWindowRole</strong> in the list.</li>
+<li>Choose <strong>Next: Review</strong>.</li>
+<li>In the <strong>Review</strong> section:</li>
+<li>Enter a <strong>Role name</strong>, such as <code>SSMMaintenanceWindowRole</code>.</li>
+<li>Enter a <strong>Role description</strong>, such as <code>Role for Amazon SSMMaintenanceWindow</code>.</li>
+<li>Choose <strong>Create role</strong>. Upon success you will be returned to the <strong>Roles</strong> screen.</li>
+<li>To enable the service to run tasks on your behalf, we need to edit the trust relationship for this role:</li>
+<li>Choose the role you just created to enter its <strong>Summary</strong> page.</li>
+<li>Choose the <strong>Trust relationships</strong> tab.</li>
+<li>Choose <strong>Edit trust relationship</strong>.</li>
+<li>Delete the current policy, and then copy and paste the following policy into the <strong>Policy Document</strong> field:</li>
+</ol>
+<pre><code>{
+   &quot;Version&quot;:&quot;2012-10-17&quot;,
+   &quot;Statement&quot;:[
+      {
+         &quot;Sid&quot;:&quot;&quot;,
+         &quot;Effect&quot;:&quot;Allow&quot;,
+         &quot;Principal&quot;:{
+            &quot;Service&quot;:[
+               &quot;ec2.amazonaws.com&quot;,
+               &quot;ssm.amazonaws.com&quot;,
+               &quot;sns.amazonaws.com&quot;
+            ]
+         },
+         &quot;Action&quot;:&quot;sts:AssumeRole&quot;
+      }
+   ]
+}
+</code></pre>
+
+<ol>
+<li>Choose <strong>Update Trust Policy</strong>. You will be returned to the now updated Summary page for your role.</li>
+<li>Copy the <strong>Role ARN</strong> to your clipboard by choosing the double document icon at the end of the ARN.</li>
+</ol>
+<p>When you register a task with a Maintenance Window, you specify the role you created, which the service will assume when it runs tasks on your behalf. To register the task, you must assign the IAM PassRole policy to your IAM user account. The policy in the following procedure provides the minimum permissions required to register tasks with a Maintenance Window.</p>
+<ol>
+<li>To create the IAM PassRole policy for your Administrators IAM user group:</li>
+<li>In the IAM console navigation pane, choose <strong>Policies</strong>, and then choose <strong>Create policy</strong>.</li>
+<li>On the Create policy page, in the <strong>Select a service area</strong>, next to <strong>Service</strong> choose <strong>Choose a service</strong>, and then choose <strong>IAM</strong>.</li>
+<li>In the <strong>Actions</strong> section, search for <strong>PassRole</strong> and check the box next to it when it appears in the list.</li>
+<li>In the <strong>Resources</strong> section, choose "You choose actions that require the <strong>role</strong> resource type.", and then choose <strong>Add ARN</strong> to restrict access. The Add ARN(s) window will open.</li>
+<li>In the <strong>Add ARN(s)</strong> window, in the <strong>Specify ARN for role field</strong>, delete the existing entry, paste in the role ARN you created in the previous procedure, and then choose <strong>Add</strong> to return to the Create policy window.</li>
+<li>Choose <strong>Review policy</strong>.</li>
+<li>On the <strong>Review Policy</strong> page, type a name in the <strong>Name</strong> box, such as <code>SSMMaintenanceWindowPassRole</code> and then choose <strong>Create policy</strong>. You will be returned to the <strong>Policies</strong> page.</li>
+<li>To assign the IAM PassRole policy to your Administrators IAM user group:</li>
+<li>In the IAM console navigation pane, choose <strong>Groups</strong>, and then choose your <strong>Administrators</strong> group to reach its Summary page.</li>
+<li>Under the permissions tab, choose <strong>Attach Policy</strong>.</li>
+<li>On the <strong>Attach Policy</strong> page, search for SSMMaintenanceWindowPassRole, check the box next to it in the list, and choose <strong>Attach Policy</strong>. You will be returned to the Summary page for the group.</li>
+</ol>
+<h2 id="creating-maintenance-windows">Creating Maintenance Windows</h2>
+<p>To <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-create-mw.html">create a Maintenance Window</a>, you must do the following:</p>
+<ol>
+<li>Create the window and define its schedule and duration.</li>
+<li>Assign targets for the window.</li>
+<li>Assign tasks to run during the window.</li>
+</ol>
+<p>After you complete these steps, the Maintenance Window runs according to the schedule you defined and runs the tasks on the targets you specified. After a task is finished, Systems Manager logs the details of the execution.</p>
+<h3 id="52-create-a-patch-maintenance-window">5.2 Create a Patch Maintenance Window</h3>
+<p>First, you must <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-create-mw.html">create the window</a> and define its schedule and duration:</p>
+<ol>
+<li>Open the AWS <a href="https://console.aws.amazon.com/systems-manager/">Systems Manager console</a>.</li>
+<li>In the navigation pane, choose <strong>Maintenance Windows</strong> and then choose <strong>Create a Maintenance Window</strong>.</li>
+<li>In the <strong>Provide maintenance window details</strong> section:</li>
+<li>In the <strong>Name</strong> field, type a descriptive name to help you identify this Maintenance Window, such as <code>PatchTestWorkloadWebServers</code>.</li>
+<li>(Optional) you may enter a description in the <strong>Description</strong> field.</li>
+<li>Choose <strong>Allow unregistered targets</strong> if you want to allow a Maintenance Window task to run on managed instances, even if you have not registered those instances as targets.<blockquote>
+<p><strong>Note</strong><br>If you choose <strong>Allow unregistered targets</strong>, then you can choose the unregistered instances (by instance ID) when you register a task with the Maintenance Window. If you don't, then you must choose previously registered targets when you register a task with the Maintenance Window.</p>
+</blockquote>
+</li>
+<li>Specify a schedule for the Maintenance Window by using one of the scheduling options:<ol>
+<li>Under <strong>Specify with</strong>, accept the default <strong>Cron schedule builder</strong>.</li>
+<li>Under <strong>Window starts</strong>, choose the third option, specify <strong>Every Day at</strong>, and select a time, such as <code>02:00</code>.</li>
+<li>In the <strong>Duration</strong> field, type the number of hours the Maintenance Window should run, such as '3' <strong>hours</strong>.</li>
+<li>In the <strong>Stop initiating tasks</strong> field, type the number of hours before the end of the Maintenance Window that the system should stop scheduling new tasks to run, such as <code>1</code> <strong>hour before the window closes</strong>. Allow enough time for initiate activities to complete before the close of the maintenance window.</li>
+</ol>
+</li>
+<li>(Optionally) to have the maintenance window execute more rapidly while engaged with the lab:</li>
+<li>Under <strong>Window starts</strong>, choose <strong>Every 30 minutes</strong> to have the tasks execute on every hour and every half hour.</li>
+<li>Set the <strong>Duration</strong> to the minimum <code>1</code> hours.</li>
+<li>Set the <strong>Stop initiation tasks</strong> to the minimum <code>0</code> hours.</li>
+<li>Choose <strong>Create maintenance window</strong>. The system returns you to the <strong>Maintenance Window</strong> page. The state of the Maintenance Window you just created is <strong>Enabled</strong>.</li>
+</ol>
+<h3 id="53-assigning-targets-to-your-patch-maintenance-window">5.3 Assigning Targets to Your Patch Maintenance Window</h3>
+<p>After you create a Maintenance Window, you <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-assign-targets.html">assign targets</a> where the tasks will run.</p>
+<ol>
+<li>On the <strong>Maintenance windows</strong> page, choose the <strong>Window ID</strong> of your maintenance window to enter its Details page.</li>
+<li>Choose <strong>Actions</strong> in the top right of the window and select <strong>Register targets</strong>.</li>
+<li>On the <strong>Register target</strong> page under <strong>Maintenance window target details</strong>:</li>
+<li>In the <strong>Target Name</strong> field, enter a name for the targets, such as <code>TestWebServers</code>.</li>
+<li>(Optional) Enter a description in the <strong>Description</strong> field.</li>
+<li>(Optional) Specify a name or work alias in the <strong>Owner information</strong> field.  <blockquote>
+<p><strong>Note</strong>: Owner information is included in any CloudWatch Events that are raised while running tasks for these targets in this Maintenance Window.</p>
+</blockquote>
+</li>
+<li>In the <strong>Targets</strong> section, under <strong>Select Targets by</strong>:</li>
+<li>Choose the default <strong>Specifying tags</strong> to target instances by using Amazon EC2 tags that were previously assigned to the instances.</li>
+<li>Under <strong>Tags</strong>, enter 'Workload' as the key and <code>Test</code> as the value. The option to add and additional tag key/value pair will appear.</li>
+<li>Add a second key/value pair using <code>InstanceRole</code> as the key and <code>WebServer</code> as the value.</li>
+<li>Choose <strong>Register target</strong> at the bottom of the page to return to the maintenance window details page.</li>
+</ol>
+<p>If you want to assign more targets to this window, choose the <strong>Targets</strong> tab, and then choose <strong>Register target</strong>to register new targets. With this option, you can choose a different means of targeting. For example, if you previously targeted instances by instance ID, you can register new targets and target instances by specifying Amazon EC2 tags. </p>
+<h3 id="54-assigning-tasks-to-your-patch-maintenance-window">5.4 Assigning Tasks to Your Patch Maintenance Window</h3>
+<p>After you assign targets, you <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-assign-tasks.html">assign tasks</a> to perform during the window:</p>
+<ol>
+<li>From the details page of your maintenance window, choose <strong>Actions</strong> in the top right of the window and select <strong>Register Run command task</strong>.</li>
+<li>On the <strong>Register Run command task</strong> page:</li>
+<li>In the <strong>Name</strong> field, enter a name for the task, such as <code>PatchTestWorkloadWebServers</code>.</li>
+<li>(Optional) Enter a description in the <strong>Description</strong> field.</li>
+<li>In the <strong>Command document</strong> section:</li>
+<li>Choose the search icon, select <code>Platform</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
+<li>Choose <strong>AWS-RunPatchBaseline</strong> in the list.</li>
+<li>Leave the <strong>Task priority</strong> at the default value of <strong>1</strong> (1 is the highest priority).</li>
+<li>Tasks in a Maintenance Window are scheduled in priority order, with tasks that have the same priority scheduled in parallel.</li>
+<li>In the <strong>Targets</strong> section:</li>
+<li>For <strong>Target by</strong>, select <strong>Selecting registered target groups</strong>.</li>
+<li>Select the group you created from the list.</li>
+<li>In the <strong>Rate control</strong> section:</li>
+<li>For <strong>Concurrency</strong>, leave the default <strong>targets</strong> selected and specify <code>1</code>.</li>
+<li>For <strong>Error threshold</strong>, leave the default <strong>errors</strong> selected and specify <code>1</code>.</li>
+<li>In the <strong>Role</strong> section, specify the role you defined with the AmazonSSMMaintenanceWindowRole. It will be <code>SSMMaintenanceWindowRole</code> if you followed the suggestion in the instructions above.</li>
+<li>In <strong>Output options</strong>, leave <strong>Enable writing to S3</strong> clear.</li>
+<li>(Optionally) Specify <strong>Output options</strong> to record the entire output to a preconfigured <strong>S3 bucket</strong> and optional <strong>S3 key prefix</strong>  <blockquote>
+<p><strong>Note</strong><br>Only the last 2500 characters of a command document's output are displayed in the console. To capture the complete output define and S3 bucket to receive the logs.</p>
+</blockquote>
+</li>
+<li>In <strong>SNS notifications</strong>, leave <strong>Enable SNS notifications</strong> clear.</li>
+<li>(Optional) Specify <strong>SNS notifications</strong> to a preconfigured <strong>SNS Topic</strong> on all events or a specific event type for either the entire command or on a per-instance basis.</li>
+<li>In the <strong>Parameters</strong> section, under <strong>Operation</strong>, select <strong>Install</strong>.</li>
+<li>Choose <strong>Register Run command task</strong> to complete the task definition and return to the details page.</li>
+</ol>
+<h3 id="55-review-maintenance-window-execution">5.5 Review Maintenance Window Execution</h3>
+<ol>
+<li>After allowing enough time for your maintenance window to complete:</li>
+<li>Navigte to the AWS <a href="https://console.aws.amazon.com/systems-manager/">Systems Manager console</a>.</li>
+<li>Choose <strong>Maintenance Windows</strong>, and then select the <strong>Window ID</strong> for your new maintenance window.</li>
+<li>On the <strong>Maintenance window ID</strong> details page, choose <strong>History</strong>.</li>
+<li>Select a <strong>Windows execution ID</strong> and choose <strong>View details</strong>.</li>
+<li>On the <strong>Command ID</strong> details page, scroll down to the <strong>Targets and outputs</strong> section, select an <strong>Instance ID</strong>, and choose <strong>View output</strong>.</li>
+<li>Choose <strong>Step 1 - Output</strong> and review the output.</li>
+<li>Choose <strong>Step 2 - Output</strong> and review the output.</li>
+</ol>
+<p>You have now configured a maintenance window, assigned targets, assigned tasks, and validated successful execution. The same procedures can be used to schedule the execution of any <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager Document</a>.</p>
+<h1 id="bonus-content-creating-a-simple-notification-service-topic">Bonus Content: Creating a Simple Notification Service Topic</h1>
+<p><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon Simple Notification Service</a> (Amazon SNS) coordinates and manages the delivery or sending of messages to subscribing endpoints or clients. In Amazon SNS, there are two types of clients: publishers and subscribers. These are also referred to as producers and consumers. Publishers communicate asynchronously with subscribers by producing and sending a message to a topic, which is a logical access point and communication channel. Subscribers (i.e., web servers, email addresses, Amazon SQS queues, AWS Lambda functions) consume or receive the message or notification over one of the supported protocols (i.e., Amazon SQS, HTTP/S, email, SMS, Lambda) when they are subscribed to the topic. </p>
+<h3 id="61-create-and-subscribe-to-an-sns-topic">6.1 Create and Subscribe to an SNS Topic</h3>
+<p>To create and subscribe to an SNS topic:</p>
+<ol>
+<li>Navigate to the SNS console at <a href="https://console.aws.amazon.com/sns/">https://console.aws.amazon.com/sns/</a>.</li>
+<li>Choose <strong>Create topic</strong>.</li>
+<li>In the <strong>Create new topic</strong> window:</li>
+<li>In the <strong>Topic name</strong> field, enter <code>AdminAlert</code>.</li>
+<li>In the <strong>Display name</strong> field, enter <code>AdminAlert</code>.</li>
+<li>Choose <strong>Create topic</strong>.</li>
+<li>On the <strong>Topic details: AdminAlert</strong> page, choose <strong>Create subscription</strong>.</li>
+<li>In the <strong>Create subscription</strong> window:</li>
+<li>Select <strong>Email</strong> from the <strong>Protocol</strong> list.</li>
+<li>Enter your email address in the <strong>Endpoint</strong> field.</li>
+<li>Choose <strong>Create subscription</strong>.</li>
+<li>You will receive an email request for confirmation. Your Subscription ID will remain <strong>PendingConfirmation</strong> until you confirm your subscription by clicking through the link to <strong>Confirm subscription</strong> in the email.</li>
+<li>Refresh the page after confirming your subscription to view the populated <strong>Subscription ARN</strong>.</li>
+</ol>
+<p>You can now use this SNS topic to send notifications to your Administrator user.</p>
+<h1 id="7-removing-lab-resources">7 Removing Lab Resources</h1>
+<blockquote>
+<p><strong>Note</strong><br>When the lab is complete, remove the resources you created. Otherwise you will be charged for any resources that are not covered in the AWS Free Tier.</p>
+</blockquote>
+<h3 id="71-remove-resources-created-with-cloudformation">7.1 Remove resources created with CloudFormation</h3>
+<ol>
+<li>Navigate to the <strong>CloudFormation</strong> dashboard at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>:</li>
+<li>Select your first stack.</li>
+<li>Choose <strong>Actions</strong> and choose <strong>delete stack</strong>.</li>
+<li>Select your second stack.</li>
+<li>Choose <strong>Actions</strong> and choose <strong>delete stack</strong>   .</li>
+<li>Navigate to Systems Manager console at <a href="https://console.aws.amazon.com/systems-manager/">https://console.aws.amazon.com/systems-manager/</a>:</li>
+<li>Choose <strong>State Manager</strong>.</li>
+<li>Select the association you created.</li>
+<li>Choose <strong>Delete</strong>.</li>
+<li>If you created an <strong>S3 bucket</strong> to store detailed output, delete the bucket and associated data:</li>
+<li>Navigate to the S3 console <a href="https://s3.console.aws.amazon.com/s3/">https://s3.console.aws.amazon.com/s3/</a>.</li>
+<li>Select the bucket.</li>
+<li>Choose <strong>Delete</strong> and provide the bucket name to confirm deletion.</li>
+<li>If you created the optional <strong>SNS Topic</strong>, delete the SNS topic:</li>
+<li>Navigate to the SNS console <a href="https://console.aws.amazon.com/sns/">https://console.aws.amazon.com/sns/</a>.</li>
+<li>Select your <strong>AdminAlert</strong> SNS topic from the list.</li>
+<li>Choose <strong>Actions</strong> and select <strong>Delete topics</strong>.</li>
+<li>If you created a <strong>Maintenance Window</strong>, delete the Maintenance Window:</li>
+<li>Navigate to the <strong>Systems Manager console</strong> at <a href="https://console.aws.amazon.com/systems-manager/">https://console.aws.amazon.com/systems-manager/</a>.</li>
+<li>Choose <strong>Maintenance Windows</strong>.</li>
+<li>Select the maintenance window you created.</li>
+<li>Choose <strong>Delete</strong>.</li>
+<li>In the <strong>Delete maintenance window</strong> window, choose <strong>Delete</strong>.</li>
+<li>If you do not intend to continue to use the Administrator account you created, delete the account:</li>
+<li>Navigate to the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>Choose <strong>Users</strong>.</li>
+<li>Select your user from the list.</li>
+<li>Choose <strong>Delete user</strong>.</li>
+<li>Select the check box next to "One or more of these users have recently accessed AWS. Deleting them could affect running systems. Check the box to confirm that you want to delete these users.".</li>
+<li>Choose <strong>Yes, delete</strong>.</li>
+<li>When next you navigate within the console you will be returned to the account login page.</li>
+<li>If you <strong>do</strong> intend to continue to use the Administrator account you created, we strongly suggest you <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable.html"><strong>enable MFA</strong></a>.</li>
+</ol>
+<p>Thank you for using this lab.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="README.html" title="Lab Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Lab Overview
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../Reliability/README.html" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.d9aa80ab.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

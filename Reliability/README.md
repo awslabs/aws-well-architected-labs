@@ -8,10 +8,8 @@ For more information about Reliability, read the
 [AWS Well-Architected Reliability whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Reliability-Pillar.pdf).
 
 ## Labs:
+- [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md) 
 
-* [Level 300: Testing for Resiliency of EC2, RDS, and S3](300%20-%20Testing%20for%20Resiliency%20of%20EC2%2C%20RDS%2C%20and%20S3)
-
-***
 
 ## License
 

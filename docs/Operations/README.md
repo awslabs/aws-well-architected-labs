@@ -9,7 +9,7 @@ For more information about Operational Excellence on AWS visit the Well-Architec
 ## Labs:
 
 ### Operations Fundamentals
-- [Level 100: Introduction to Inventory and Patch Management](100_Inventory_and_Patch_Mgmt)
+- [Level 100: Introduction to Inventory and Patch Management](100_Inventory_and_Patch_Mgmt/README.md)
 
 ***
 

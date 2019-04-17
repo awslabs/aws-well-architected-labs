@@ -1,0 +1,1750 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="A collection of AWS Well-Architected workshops">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
+    
+    
+      
+        <title>Level 100: CloudFront with WAF Protection: Lab Guide - AWS Well-Architected Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=PW0Ds1O7kI20L7" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#level-100-cloudfront-with-waf-protection-lab-guide" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../README.html" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              AWS Well-Architected Labs
+            </span>
+            <span class="md-header-nav__topic">
+              Level 100: CloudFront with WAF Protection: Lab Guide
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+<nav class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../../README.html" title="Home" class="md-tabs__link md-tabs__link--active">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Cost/README.html" title="Cost Optimization" class="md-tabs__link">
+          Cost Optimization
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../README.html" title="Security" class="md-tabs__link">
+          Security
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Operations/README.html" title="Operational Excellence" class="md-tabs__link">
+          Operational Excellence
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Reliability/README.html" title="Reliability" class="md-tabs__link">
+          Reliability
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Performance/README.html" title="Performance Efficiency" class="md-tabs__link">
+          Performance Efficiency
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../Well-ArchitectedTool/README.html" title="Well Architected Tool" class="md-tabs__link">
+          Well Architected Tool
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../README.html" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    AWS Well-Architected Labs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../README.html" title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Cost Optimization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Cost Optimization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2">
+      Cost Optimization Fundamentals
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-2">
+        Cost Optimization Fundamentals
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/README.html" title="Fundamentals Overview" class="md-nav__link">
+      Fundamentals Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-2" type="checkbox" id="nav-2-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2-2">
+      100 Account Setup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-2">
+        100 Account Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-3" type="checkbox" id="nav-2-2-3">
+    
+    <label class="md-nav__link" for="nav-2-2-3">
+      100 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-3">
+        100 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-4" type="checkbox" id="nav-2-2-4">
+    
+    <label class="md-nav__link" for="nav-2-2-4">
+      100 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-4">
+        100 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-5" type="checkbox" id="nav-2-2-5">
+    
+    <label class="md-nav__link" for="nav-2-2-5">
+      100 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-5">
+        100 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-6" type="checkbox" id="nav-2-2-6">
+    
+    <label class="md-nav__link" for="nav-2-2-6">
+      200 Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-6">
+        200 Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-7" type="checkbox" id="nav-2-2-7">
+    
+    <label class="md-nav__link" for="nav-2-2-7">
+      200 Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-7">
+        200 Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-8" type="checkbox" id="nav-2-2-8">
+    
+    <label class="md-nav__link" for="nav-2-2-8">
+      200 Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-8">
+        200 Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2-9" type="checkbox" id="nav-2-2-9">
+    
+    <label class="md-nav__link" for="nav-2-2-9">
+      200 Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-2-9">
+        200 Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3" type="checkbox" id="nav-2-3">
+    
+    <label class="md-nav__link" for="nav-2-3">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-3">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/README.html" title="Analysis Overview" class="md-nav__link">
+      Analysis Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-2" type="checkbox" id="nav-2-3-2">
+    
+    <label class="md-nav__link" for="nav-2-3-2">
+      300 Automated CUR Updates and Ingestion
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-3-2">
+        300 Automated CUR Updates and Ingestion
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Security
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Security
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Security 100 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Security 100 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../100 - AWS Account & Root User/README.md" title="Account and Root User" class="md-nav__link">
+      Account and Root User
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../100 - Basic Identity & Access Management User, Group, Role/README.md" title="Basic Identity & Access Management User, Group, Role" class="md-nav__link">
+      Basic Identity & Access Management User, Group, Role
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../100 - CloudFront with S3 Bucket Origin/README.md" title="CloudFront with S3 Bucket Origin" class="md-nav__link">
+      CloudFront with S3 Bucket Origin
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      Security 200 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        Security 200 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - Automated Deployment of Detective Controls/README.md" title="Automated Deployment of Detective Controls" class="md-nav__link">
+      Automated Deployment of Detective Controls
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - Automated Deployment of EC2 Web Application/README.md" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+      Automated Deployment of EC2 Web Application
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - Automated Deployment of IAM Groups and Roles/README.md" title="Automated Deployment of IAM Groups and Roles" class="md-nav__link">
+      Automated Deployment of IAM Groups and Roles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - Automated Deployment of VPC/README.md" title="Automated Deployment of VPC" class="md-nav__link">
+      Automated Deployment of VPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - Basic EC2 with WAF Protection/README.md" title="Basic EC2 with WAF Protection" class="md-nav__link">
+      Basic EC2 with WAF Protection
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../200 - CloudFront with WAF Protection/README.md" title="CloudFront with WAF Protection" class="md-nav__link">
+      CloudFront with WAF Protection
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Security 300 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        Security 300 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../300 - IAM Permission Boundaries Delegating Role Creation/README.md" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+      IAM Permission Boundaries Delegating Role Creation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../300 - IAM Tag Based Access Control for EC2/README.md" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+      IAM Tag Based Access Control for EC2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+      Incident Response with AWS Console and CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Operational Excellence
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Operational Excellence
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Operations/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+    
+    <label class="md-nav__link" for="nav-4-2">
+      100 Inventory Patch Mgt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-2">
+        100 Inventory Patch Mgt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Operations/100_Inventory_and_Patch_Mgmt/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Reliability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Reliability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2" type="checkbox" id="nav-5-2">
+    
+    <label class="md-nav__link" for="nav-5-2">
+      Testing Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-2">
+        Testing Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
+    
+    <label class="md-nav__link" for="nav-5-2-1">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-1">
+        300 EC2, RDS S3 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Performance Efficiency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Performance Efficiency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Performance/README.html" title="Coming Soon" class="md-nav__link">
+      Coming Soon
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Well Architected Tool
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Well Architected Tool
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Walkthrough
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Walkthrough
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" title="Table of Contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-launch-instance" title="1. Launch Instance " class="md-nav__link">
+    1. Launch Instance 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configure-aws-waf" title="2. Configure AWS WAF " class="md-nav__link">
+    2. Configure AWS WAF 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-configure-amazon-cloudfront" title="3. Configure Amazon CloudFront " class="md-nav__link">
+    3. Configure Amazon CloudFront 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-tear-down-this-lab" title="3. Tear down this lab " class="md-nav__link">
+    3. Tear down this lab 
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-useful-resources" title="References &amp; useful resources:" class="md-nav__link">
+    References &amp; useful resources:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Security/200_CloudFront_with_WAF_Protection/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-100-cloudfront-with-waf-protection-lab-guide">Level 100: CloudFront with WAF Protection: Lab Guide</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Ben Potter, Security Lead, Well-Architected</li>
+</ul>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#launch_instance">Launch Instance</a></li>
+<li><a href="#waf">Configure WAF</a></li>
+<li><a href="#cloudfront">Configure CloudFront</a></li>
+<li><a href="#tear_down">Tear Down</a></li>
+</ol>
+<h2 id="1-launch-instance">1. Launch Instance <a name="launch_instance"></a></h2>
+<p>You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html">Launching an Instance</a>.
+Launch an instance:
+1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+2. From the console dashboard, choose Launch Instance.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-button.png" />
+3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI, either version.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" />
+4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" />
+5. On the Configure Instance Details page, make the following changes:
+  5.1 Select Create new IAM role.
+  <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-role.png" />
+  5.2   In the new tab that opens, select Create role.
+    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role.png" />
+  5.3   With AWS service pre-selected, select EC2 from the top of the list, then click Next: Permissions.</p>
+<pre><code>![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-start.png)
+</code></pre>
+<p>5.4   Enter <code>s3</code> in the search and select AmazonS3ReadOnlyAccess from the list of policies, then click
+  Next: Review. This policy will give this EC2 instance access to read and list any objects in Amazon
+  S3 within your AWS account.
+    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-policy.png" />
+  5.5   Enter a role name, such as <code>ec2-s3-read-only-role</code>, and then click Create role.
+    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-name.png" />
+  5.6   Back on the EC2 launch web browser tab, select the refresh button next to Create new IAM role,
+  and click the role you just created.
+    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-final.png" />
+  5.7 Scroll down and expand the Advanced Details section. Enter the following in the User Data test box to automatically install Apache web server and apply basic configuration when the instance is launched:
+    <code>#!/bin/bash
+    yum update -y
+    yum install -y httpd
+    service httpd start
+    chkconfig httpd on
+    groupadd www
+    usermod -a -G www ec2-user
+    chown -R root:www /var/www
+    chmod 2775 /var/www
+    find /var/www -type d -exec chmod 2775 {} +
+    find /var/www -type f -exec chmod 0664 {} +</code>
+6. Accept defaults and Choose Next: Add tags.
+7. Click Next: Configure Security Group.
+    7.1 On type SSH, select Source as <code>My IP</code>
+    7.2 Click Add Rule, select Type as HTTP and source as <code>Anywhere</code>
+    Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
+  exposed. However, for simplicity in this lab, we are opening the access to anywhere. Later modules will
+  secure access with Elastic Load Balancer.
+    7.2 Select Add Rule to add both SSH and HTTP, and on source, select <code>My IP</code>.
+    <img alt="Security Group" src="Images/ec2-launch-wizard-security-group.png" />
+    7.3 Click Review and Launch.
+    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" />
+8. On the Review Instance Launch page, check the details, and then click Launch.
+9. If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
+then type a name such as <code>lab</code>, click Download Key Pair, and then click Launch Instances.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-keys.png" />
+    <strong>Important</strong></p>
+<pre><code>This is the only chance to save the private key file. You'll need to provide the name of your key
+pair when you launch an instance, and you'll provide the corresponding private key each time you connect
+to the instance.
+</code></pre>
+<ol>
+<li>Click View Instances.</li>
+<li>When your instance is launched, its status will change to running, and it will need a few minutes to apply patches and install Apache web server.
+<img alt="ec2-status" src="Images/ec2-status.png" /></li>
+<li>You can connect to the Apache test page by entering the public DNS, which you can find on the description
+tab or instances list. Take note of this public DNS value.</li>
+</ol>
+<hr />
+<h2 id="2-configure-aws-waf">2. Configure AWS WAF <a name="waf"></a></h2>
+<p>Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to deploy a basic example
+AWS WAF configuration for use with CloudFront.</p>
+<ol>
+<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
+<li>Click <strong>Create stack</strong>.<br />
+<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
+<li>Enter the following <strong>Amazon S3 URL</strong>:  <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-global.yaml</code> and click <strong>Next</strong>.<br />
+<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" />   </li>
+<li>Enter the following details:</li>
+<li>Stack name: The name of this stack. For this lab, use <code>waf</code>.</li>
+<li>WAFName: Enter the base name to be used for resource and export names for this stack. For this lab, you can use <code>Lab1</code>.</li>
+<li>WAFCloudWatchPrefix: Enter the name of the CloudWatch prefix to use for each rule using alphanumeric
+  characters only. For this lab, you can use <code>Lab1</code>.
+  The remainder of the parameters can be left as defaults.
+  <img alt="waf-create-stack" src="Images/waf-create-stack.png" />  </li>
+<li>At the bottom of the page click <strong>Next</strong>.</li>
+<li>In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.</li>
+<li>Review the information for the stack. When you're satisfied with the configuration, click <strong>Create stack</strong>.  </li>
+<li>After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.</li>
+<li>You have now set up a basic AWS WAF configuration ready for CloudFront to use!</li>
+</ol>
+<h2 id="3-configure-amazon-cloudfront">3. Configure Amazon CloudFront <a name="cloudfront"></a></h2>
+<p>Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
+ACL
+we previously created.
+1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
+2. From the console dashboard, choose Create Distribution.
+<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" />
+3. Click Get Started in the Web section.
+<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" />
+4. Specify the following settings for the distribution:
+  * In <strong>Origin Domain Name</strong> enter the EC2 public DNS name you recorded from your instance launch.
+  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" />
+  * In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
+  <img alt="cloudfront-distribution-settings" src="Images/cloudfront-distribution-settings.png" />
+  * Click Create Distrubution.
+  * For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.
+5. After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.
+<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" />
+6. When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.
+<img alt="cloudfront-test" src="Images/cloudfront-test.png" />
+For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.
+7. You have now configured Amazon CloudFront with basic settings and AWS WAF.</p>
+<p>For more information on configuring CloudFront, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToUpdateDistribution.html">Viewing and Updating CloudFront Distributions</a> in the CloudFront documentation.</p>
+<hr />
+<h3 id="3-tear-down-this-lab">3. Tear down this lab <a name="tear_down"></a></h3>
+<p>The following instructions will remove the resources that have a cost for running them. Please note that
+Security Groups and SSH key will exist. You may remove these also or leave for future use.</p>
+<p>Delete the CloudFront distribution:
+1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
+2. From the console dashboard, select the distribution you created earlier and click the Disable button.
+To confirm, click the Yes, Disable button.
+3. After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
+button, and then to confirm click the Yes, Delete button.</p>
+<p>Delete the AWS WAF stack:
+1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+2. Select the <code>waf-cloudfront</code> stack.
+3. Click the Actions button, and then click Delete Stack.
+4. Confirm the stack, and then click the Yes, Delete button.</p>
+<hr />
+<h2 id="references-useful-resources">References &amp; useful resources:</h2>
+<p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">Amazon Elastic Compute Cloud User Guide for Linux Instances</a><br />
+<a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html">Amazon CloudFront Developer Guide</a><br />
+<a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-an-instance.html">Tutorial: Configure Apache Web Server on Amazon Linux 2 to Use SSL/TLS</a><br />
+<a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF, AWS Firewall Manager, and AWS Shield Advanced Developer Guide</a>  </p>
+<hr />
+<h2 id="license">License</h2>
+<p>Licensed under the Apache 2.0 and MITnoAttr License. </p>
+<p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
+<pre><code>http://aws.amazon.com/apache2.0/
+</code></pre>
+<p>or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.d9aa80ab.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>
