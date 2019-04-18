@@ -24,6 +24,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 
 ## Quests:
 Quests are designed to collate a group of relevant labs and other resources together into a common theme for you to follow and learn.
+* [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
 * [Level 100: Quick Steps to Security Success](Quest_100_Quick_Steps_to_Security_Success) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
 
 ***
