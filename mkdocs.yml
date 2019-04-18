@@ -1,5 +1,6 @@
 site_name: AWS Well-Architected Labs 
 site_description: 'A collection of AWS Well-Architected workshops' 
+site_url: 'http://wellarchitectedlabs.com' 
 
 
 # Repository 
