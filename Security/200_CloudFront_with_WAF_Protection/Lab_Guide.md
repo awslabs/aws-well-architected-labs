@@ -1,4 +1,4 @@
-﻿# Level 100: CloudFront with WAF Protection: Lab Guide
+﻿# Level 200: CloudFront with WAF Protection: Lab Guide
 
 ## Authors
 - Ben Potter, Security Lead, Well-Architected
