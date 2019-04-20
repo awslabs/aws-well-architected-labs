@@ -10,12 +10,12 @@
 
 In this lab we use the RequestTag [condition key](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html) to require specific tag value during create actions in the EC2 service. This allows users to create tags when creating resources only if they meet specific requirements. To control which existing resources users can modify tags on we use a combination of RequestTag and ResourceTag conditions. To control resources users can manage based on tag values we use ResourceTag based on a tag that exists on a resource. You can think of RequestTag condition key is for new resources when you are creating, and ResourceTag is the tag that already exists on the resource.
 
-
 ## 1. Create IAM managed policies <a name="create_policies"></a>
 The policies are split into five different functions for demonstration purposes, you may like to modify and combine them to use after this lab to your exact requirements. In addition to enforcing tags, a region restriction only allow regions us-east-1 (North Virginia) and us-west-1 (North California).  
 ### 1.1 Create policy named *ec2-list-read*
 This policy allows read only permissions with a region condition. The only service actions we are going to allow are EC2, note that you typically require additional supporting actions such as Elastic Load Balancing if you were to re-use this policy after this lab, depending on your requirements.
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).  
+If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click **Policies** and then click **Create policy**.  
 ![Images/iam-role-policy-1.png](Images/iam-policy-create-1.png)  
 3. On the Create policy page click the **JSON** tab.
@@ -203,13 +203,12 @@ Create a role for EC2 administrators, and attach the managed policies previously
 8. Check the role you have created by clicking on *ec2-admin-team-alpha* in the list. Record both the Role ARN and the link to the console.
 9. The role is now created, ready to test!
 
-
 ## 3. Test Role<a name="test_role"></a>
 ### 3.1 Assume **ec2-admin-team-alpha** Role
 Now you will use an existing IAM user with MFA enabled to assume the new *ec2-admin-team-alpha* role.
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled. [https://console.aws.amazon.com](https://console.aws.amazon.com).
 2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`then click **Switch Role**. Alternatively you can paste the link in your browser that you recorded earlier.
-3. On the Switch Role page, type the account ID number or the account alias and the name of the role *ec2-admin-team-alpha* that you created in the previous step. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
+3. On the Switch Role page, type you account ID number in the **Account** field,  and the name of the role *ec2-admin-team-alpha* that you created in the previous step in the **Role** field. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
 4. Click **Switch Role**. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
 ![switch-role-developer](Images/switch-role-developer.png)  
 5. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you replacing the permission that you had as the IAM user.
@@ -218,7 +217,6 @@ Now you will use an existing IAM user with MFA enabled to assume the new *ec2-ad
 
 	The last several roles that you used appear on the menu. The next time you need to switch to one of those roles, you can simply click the role you want. You only need to type the account and role information manually if the role is not displayed on the Identity menu.
 	
-
 ### 3.2 Launch Instance With & Without Tags
 1. Navigate to the EC2 Management Console in the us-east-2 (Ohio) region [https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2). The EC2 Dashboard should display a list of errors including *You are not authorized*. This is the first test passed, as us-east-2 region is not allowed.  
 ![ec2-resources-denied](Images/ec2-resources-denied.png)
@@ -260,7 +258,6 @@ Now you will use an existing IAM user with MFA enabled to assume the new *ec2-ad
 
 ***
 
-
 ## 4. Tear down this lab <a name="tear_down"></a>
 Please note that the changes you made to the policies and roles have no charges associated with them.
 1. Using the original IAM user, select the *ec2-admin-team-alpha* role in the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/) and click  **Delete role**.  
@@ -274,14 +271,13 @@ The policies created are:
 
 ***
 
-
 ## References & useful resources:
 [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)  
 [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)  
 [Become an IAM Policy Master in 60 Minutes or Less](https://youtu.be/YQsK4MtsELU)  
 [Actions, Resources, and Condition Keys for Identity And Access Management](https://docs.aws.amazon.com/IAM/latest/UserGuide/list_identityandaccessmanagement.html)
-***
 
+***
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 

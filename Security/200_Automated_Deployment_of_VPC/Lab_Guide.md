@@ -9,7 +9,7 @@
 ## 1. Create VPC Stack <a name="create_vpc_stack"></a>
 This step will create the VPC and all components using the example CloudFormation template.
 1. Download the latest version of the CloudFormation template from [/Code](Code/) to your computer.
-2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
+2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/). Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
 3. Click Create Stack.  
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)  
 4. Click **Upload a template file** and then click **Choose file**.  
@@ -20,7 +20,7 @@ This step will create the VPC and all components using the example CloudFormatio
   The parameters may be left as defaults, you can find out more in the description for each. If you change the default name take note as you will need to use it for other labs including "Automated Deployment of EC2 Web Application".
 ![cloudformation-vpc-params](Images/cloudformation-vpc-params.png)  
 6. At the bottom of the page click **Next**.  
-7. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+7. In this lab, we won't add any tags or other options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 8. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.  
 ![cloudformation-vpc-createstack-final](Images/cloudformation-vpc-createstack-final.png)  
 9. After a few minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.

@@ -80,7 +80,7 @@ tab or instances list. Take note of this public DNS value.
 Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/), we are going to deploy a basic example
 AWS WAF configuration for use with Application Load Balancer.
 
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
 2. Click Create New Stack.
 3. Select Specify an Amazon S3 template URL and enter the following URL for the template: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-regional.yaml` and click Next.
 4. Enter the following details:

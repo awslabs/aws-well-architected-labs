@@ -12,7 +12,8 @@
 ## 1. Create IAM policies <a name="create_policies"></a>
 ### 1.1 Create policy for permission boundary
 This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab we are only going to allow regions us-east-1 (North Virginia) and us-west-1 (North California), optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow are ec2 and lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).  
+If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click **Policies** and then click **Create policy**.  
 ![Images/iam-role-policy-1.png](Images/iam-policy-create-1.png)  
 3. On the Create policy page click the **JSON** tab.

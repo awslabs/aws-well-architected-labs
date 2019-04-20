@@ -12,7 +12,7 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
 1. Choose the version of the CloudFormation template from [/Code](Code/) to your computer:
    - wordpress.yaml to create a wordpress site, including an RDS database
    - staticwebapp.yaml to create a multi-AZ static web application that simply displays the instance ID for the instance it is running upon
-2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
+2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/). Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
 3. Click Create Stack.  
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)  
 4. Click **Upload a template file** and then click **Choose file**.  
@@ -24,7 +24,7 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
   * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.  
   ![cloudformation-wp-params-2](Images/cloudformation-wp-params-2.png)  
   * DB1User: User name of your choice for the RDS database that must contain 1 to 16 alphanumeric characters. first character must be a letter, cannot be a word reserved by the database engine.
-  * DB1Password: Password of your choice for the RDS database that can be any printable ASCII character except "/", """, or "@". and contain 8 to 41 characters.
+  * DB1Password: Password of your choice for the RDS database and contain 8 to 41 alphanumeric characters.
   ![cloudformation-wp-params-3](Images/cloudformation-wp-params-3.png)  
   The remaining parameters may be left as defaults, you can find out more in the description for each.  
 6. At the bottom of the page click **Next**.

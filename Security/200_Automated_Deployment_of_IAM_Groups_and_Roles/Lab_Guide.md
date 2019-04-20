@@ -5,7 +5,7 @@
 Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/) we are going to deploy a set of groups, roles, and managed policies that will help with your security "baseline" of your AWS account.
 
 ### 1.1 Create AWS CloudFormation Stack
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
+1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
 2. Click **Create stack**.  
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)  
 3. Enter the following **Amazon S3 URL**: `https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-iam.yaml` and click **Next**.  
