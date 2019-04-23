@@ -1513,7 +1513,7 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
 1. Choose the version of the CloudFormation template from <a href="Code/">/Code</a> to your computer:
    - wordpress.yaml to create a wordpress site, including an RDS database
    - staticwebapp.yaml to create a multi-AZ static web application that simply displays the instance ID for the instance it is running upon
-2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.
+2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
 3. Click Create Stack.<br />
 <img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
 4. Click <strong>Upload a template file</strong> and then click <strong>Choose file</strong>.<br />
@@ -1525,7 +1525,7 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
   * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.<br />
 <img alt="cloudformation-wp-params-2" src="Images/cloudformation-wp-params-2.png" /><br />
   * DB1User: User name of your choice for the RDS database that must contain 1 to 16 alphanumeric characters. first character must be a letter, cannot be a word reserved by the database engine.
-  * DB1Password: Password of your choice for the RDS database that can be any printable ASCII character except "/", """, or "@". and contain 8 to 41 characters.
+  * DB1Password: Password of your choice for the RDS database and contain 8 to 41 alphanumeric characters.
   <img alt="cloudformation-wp-params-3" src="Images/cloudformation-wp-params-3.png" /><br />
   The remaining parameters may be left as defaults, you can find out more in the description for each.<br />
 6. At the bottom of the page click <strong>Next</strong>.

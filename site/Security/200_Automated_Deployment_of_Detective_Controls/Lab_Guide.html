@@ -1486,30 +1486,16 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-aws-cloudformation-to-configure-customized-aws-cloudtrail" title="1. AWS CloudFormation to Configure Customized AWS CloudTrail " class="md-nav__link">
-    1. AWS CloudFormation to Configure Customized AWS CloudTrail 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-aws-cloudformation-to-configure-amazon-guardduty" title="2. AWS CloudFormation to Configure Amazon GuardDuty " class="md-nav__link">
-    2. AWS CloudFormation to Configure Amazon GuardDuty 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-aws-cloudformation-to-configure-aws-config" title="3. AWS CloudFormation to Configure AWS Config " class="md-nav__link">
-    3. AWS CloudFormation to Configure AWS Config 
+  <a href="#1-aws-cloudformation-to-donfigure-aws-cloudtrail-aws-config-and-amazon-guardduty" title="1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty " class="md-nav__link">
+    1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty 
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#4-tear-down-this-lab" title="4. Tear down this lab " class="md-nav__link">
-    4. Tear down this lab 
+  <a href="#2-tear-down-this-lab" title="2. Tear down this lab " class="md-nav__link">
+    2. Tear down this lab 
   </a>
   
 </li>
@@ -1559,94 +1545,57 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
 </ul>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol>
-<li><a href="#cloudtrail">CloudTrail</a></li>
-<li><a href="#guardduty">GuardDuty</a></li>
-<li><a href="#config">Config</a></li>
+<li><a href="#deployment">Deployment</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
-<h2 id="1-aws-cloudformation-to-configure-customized-aws-cloudtrail">1. AWS CloudFormation to Configure Customized AWS CloudTrail <a name="cloudtrail"></a></h2>
-<p><a href="https://aws.amazon.com/cloudtrail/">AWS CloudTrail</a> is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related to actions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services.
-Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to create a new Amazon
-S3 bucket, and configure CloudTrail to send events to the bucket and to <a href="https://aws.amazon.com/cloudwatch/">Amazon CloudWatch Logs</a>
-for further analysis.</p>
-<ol>
-<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
-<li>Click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
-<li>Enter the following <strong>Amazon S3 URL</strong>: <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-cloudtrail.yaml</code> and click <strong>Next</strong>.<br />
-<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" />   </li>
-<li>Enter the following details:</li>
-<li>Stack name: The name of this stack. For this lab, use <code>cloudtrail</code>.</li>
-<li>CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.  </li>
-<li>S3AccessLogsBucketName: The name of an existing S3 bucket for storing S3 access logs (optional).</li>
-<li>CloudWatchLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.</li>
-<li>EncryptLogs: (optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.</li>
-<li>BucketPolicyExplicitDeny: (optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.</li>
-<li>ExpirationDays: Number of days to retain logs in the S3 bucket before they are automatically deleted.
-<img alt="cloudformation-cloudtrail-params" src="Images/cloudformation-cloudtrail-params.png" /></li>
-<li>At the bottom of the page click <strong>Next</strong>.</li>
-<li>In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.</li>
-<li>Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-createstack-final" src="Images/cloudformation-createstack-final.png" />  </li>
-<li>After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.
-You have now set up AWS CloudTrail to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!</li>
-</ol>
-<h2 id="2-aws-cloudformation-to-configure-amazon-guardduty">2. AWS CloudFormation to Configure Amazon GuardDuty <a name="guardduty"></a></h2>
-<p><a href="https://aws.amazon.com/guardduty/">Amazon GuardDuty</a> is a threat detection service that continuously monitors for malicious or unauthorized behavior to help you protect your AWS accounts and workloads. It monitors for activity such as unusual API calls or potentially unauthorized deployments that indicate a possible account compromise. GuardDuty also detects potentially compromised instances or reconnaissance by attackers.
-Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to configure GuardDuty, and configure alerting to your email address.</p>
-<ol>
-<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
-<li>Click <strong>Create stack</strong>.
-<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
-<li>Enter the following <strong>Amazon S3 URL</strong>: <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-guardduty.yaml</code> and click <strong>Next</strong>.<br />
-<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" />  </li>
-<li>Enter the following details:</li>
-<li>Stack name: The name of this stack. For this lab, use <code>guardduty</code>.</li>
-<li>CWEventId: The event Id for CloudWatch, leave as default.</li>
-<li>EmailAddress: The email address you own that will receive the alerts, you must have access to this address for testing.</li>
-<li>SNSTopicName: The name of the SNS topic to create, leave as default.
-<img alt="cloudformation-cloudtrail-params" src="Images/cloudformation-guardduty-params.png" />  </li>
-<li>At the bottom of the page click <strong>Next</strong>.</li>
-<li>In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.</li>
-<li>Review the information for the stack. When you're satisfied with the configuration, click <strong>Create stack</strong>.  </li>
-<li>After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.</li>
-<li>You should receive an email to confirm the SNS email subscription, you must confirm this.
-You have now set up Amazon GuardDuty to detect threats and email alerts.</li>
-</ol>
-<h2 id="3-aws-cloudformation-to-configure-aws-config">3. AWS CloudFormation to Configure AWS Config <a name="config"></a></h2>
-<p><a href="https://aws.amazon.com/config/">AWS Config</a> is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. Config continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.
-Using <a href="https://aws.amazon.com/config/">AWS Config</a>, we are going to create a new Amazon
-S3 bucket, and configure Config to save snapshots to the bucket.</p>
-<ol>
-<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
-<li>Click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
-<li>Enter the following <strong>Amazon S3 URL</strong>: <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/baseline-config.yaml</code> and click <strong>Next</strong>.<br />
-<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" /> 4. Enter the following details:</li>
-<li>Stack name: The name of this stack. For this lab, use <code>config</code>.</li>
-<li>ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.  </li>
-<li>S3AccessLogsBucketName: The name of an existing S3 bucket for storing S3 access logs (optional).</li>
-<li>InfrequentAccessTransitionTime: Number of days to keep S3 objects in standard tier before moving to infrequently accessed.</li>
-<li>BucketPolicyExplicitDeny: (optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.
-<img alt="cloudformation-config-params" src="Images/cloudformation-config-params.png" />  </li>
-<li>At the bottom of the page click <strong>Next</strong>.</li>
-<li>In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.</li>
-<li>Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-createstack-final" src="Images/cloudformation-createstack-final.png" />  </li>
-<li>After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.
-You have now set up AWS Config to log to your bucket and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!</li>
-</ol>
+<h2 id="1-aws-cloudformation-to-donfigure-aws-cloudtrail-aws-config-and-amazon-guardduty">1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty <a name="deployment"></a></h2>
+<p><a href="https://aws.amazon.com/cloudtrail/">AWS CloudTrail</a> is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related to actions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services.<br />
+<a href="https://aws.amazon.com/guardduty/">Amazon GuardDuty</a> is a threat detection service that continuously monitors for malicious or unauthorized behavior to help you protect your AWS accounts and workloads. It monitors for activity such as unusual API calls or potentially unauthorized deployments that indicate a possible account compromise. GuardDuty also detects potentially compromised instances or reconnaissance by attackers.
+Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to configure GuardDuty, and configure alerting to your email address.<br />
+<a href="https://aws.amazon.com/config/">AWS Config</a> is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. Config continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.
+1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
+2. Click <strong>Create stack</strong>.<br />
+<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
+3. Enter the following <strong>Amazon S3 URL</strong>: <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/cloudtrail-config-guardduty.yaml</code> and click <strong>Next</strong>.<br />
+<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" /> <br />
+4. Enter the following details:<br />
+<strong>General</strong><br />
+  * Stack name: The name of this stack. For this lab, use <code>DetectiveControls</code>.
+  * CloudTrail: Enable CloudTrail Yes/No. If you already have CloudTrail enabled select No.
+  * Config: Enable Config Yes/No. If you already have Config enabled select No.
+  * GuardDuty: Enable GuardDuty Yes/No. If you already have GuardDuty enabled select No. Not that GuardDuty will create and leave an IAM role the first time its enabled.
+  * S3BucketPolicyExplicitDeny: (Optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.
+  * S3AccessLogsBucketName: (Optional) The name of an existing S3 bucket for storing S3 access logs.<br />
+<strong>CloudTrail</strong><br />
+  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.<br />
+  * CloudTrailCWLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.
+  * CloudTrailS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.
+  * CloudTrailEncryptS3Logs: (Optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.
+  * CloudTrailLogS3DataEvents: (Optional) These events provide insight into the resource operations performed on or within S3.<br />
+<strong>Config</strong><br />
+  * ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.<br />
+  * ConfigSnapshotFrequency: AWS Config configuration snapshot frequency
+  * ConfigS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.<br />
+<strong>Guard Duty</strong><br />
+  * GuardDutyEmailAddress: The email address you own that will receive the alerts, you must have access to this address for testing.
+5. At the bottom of the page click <strong>Next</strong>.
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.<br />
+7. Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
+<img alt="cloudformation-createstack-final" src="Images/cloudformation-createstack-final.png" /><br />
+8. After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.<br />
+You have now set up detective controls to log to your buckets and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!<br />
+9. You should receive an email to confirm the SNS email subscription, you must confirm this. Note as the email is directly from GuardDuty via SNS is will be JSON format.  </p>
 <hr />
-<h3 id="4-tear-down-this-lab">4. Tear down this lab <a name="tear_down"></a></h3>
+<h3 id="2-tear-down-this-lab">2. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them.</p>
 <p>Delete the CloudTrail stack:
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>cloudtrail</code> stack.
+2. Select the <code>DetectiveControls</code> stack.
 3. Click the Actions button then click Delete Stack.
 4. Confirm the stack and then click the Yes, Delete button.</p>
-<p>Empty and delete the CloudTrail bucket:
+<p>Empty and delete the S3 buckets:
 1. Sign in to the AWS Management Console, and open the S3 console at https://console.aws.amazon.com/s3/.
-2. Select the bucket name you previously created without clicking the name.
+2. Select the CloudTrail bucket name you previously created without clicking the name.
 <img alt="s3-empty-bucket" src="Images/s3-empty-bucket.png" /><br />
 3. Click Empty bucket and enter the bucket name in the confirmation box.<br />
 <img alt="s3-empty-confirm" src="Images/s3-empty-confirm.png" /><br />
@@ -1656,17 +1605,7 @@ You have now set up AWS Config to log to your bucket and retain events, giving y
 <img alt="s3-delete-bucket" src="Images/s3-delete-bucket.png" />
 6. Enter the bucket name in the confirmation box and click Confirm.
 <img alt="s3-delete-confirm" src="Images/s3-delete-confirm.png" /><br />
-7. The bucket will then be removed from the console.</p>
-<p>Delete the GuardDuty stack:
-1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>guardduty</code> stack.
-3. Click the Actions button then click Delete Stack.
-4. Confirm the stack and then click the Yes, Delete button.</p>
-<p>Delete the Config stack:
-1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>config</code> stack.
-3. Click the Actions button then click Delete Stack.
-4. Confirm the stack and then click the Yes, Delete button.</p>
+7. Repeat steps 2 to 6 for the Config bucket you created.</p>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html">AWS CloudTrail User Guide</a><br />

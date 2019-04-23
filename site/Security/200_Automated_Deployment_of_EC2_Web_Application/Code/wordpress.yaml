@@ -117,7 +117,7 @@ Parameters:
     MinLength: '1'
     MaxLength: '64'
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
   DB1User:
     NoEcho: 'true'
     Description: The WordPress database admin account username
@@ -125,7 +125,7 @@ Parameters:
     MinLength: '1'
     MaxLength: '16'
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
   DB1Password:
     NoEcho: 'true'
     Description: The WordPress database admin account password
@@ -133,7 +133,7 @@ Parameters:
     MinLength: '8'
     MaxLength: '41'
     AllowedPattern: '[a-zA-Z0-9]*'
-    ConstraintDescription: must contain only alphanumeric characters.
+    ConstraintDescription: Must contain only alphanumeric characters.
 Mappings:
   AWSInstanceType2Arch:
     t2.nano:
@@ -663,6 +663,7 @@ Resources:
               - SubnetGroup
   DB1Cluster:
     Type: AWS::RDS::DBCluster
+    DeletionPolicy: Delete
     Properties:
       DatabaseName: !Ref DB1Name
       MasterUsername: !Ref DB1User

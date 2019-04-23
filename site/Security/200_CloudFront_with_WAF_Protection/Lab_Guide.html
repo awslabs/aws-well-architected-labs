@@ -1574,25 +1574,24 @@ Launch an instance:
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" />
 4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" />
-5. On the Configure Instance Details page, make the following changes:
-  5.1 Select Create new IAM role.
-  <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-role.png" />
-  5.2   In the new tab that opens, select Create role.
-    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role.png" />
-  5.3   With AWS service pre-selected, select EC2 from the top of the list, then click Next: Permissions.</p>
-<pre><code>![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-start.png)
-</code></pre>
-<p>5.4   Enter <code>s3</code> in the search and select AmazonS3ReadOnlyAccess from the list of policies, then click
+5. On the Configure Instance Details page, make the following changes:<br />
+  5.1 Select Create new IAM role.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-role.png" /><br />
+  5.2   In the new tab that opens, select Create role.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role.png" /><br />
+  5.3   With AWS service pre-selected, select EC2 from the top of the list, then click Next: Permissions.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-start.png" /><br />
+  5.4   Enter <code>s3</code> in the search and select AmazonS3ReadOnlyAccess from the list of policies, then click
   Next: Review. This policy will give this EC2 instance access to read and list any objects in Amazon
-  S3 within your AWS account.
-    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-policy.png" />
-  5.5   Enter a role name, such as <code>ec2-s3-read-only-role</code>, and then click Create role.
-    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-name.png" />
+  S3 within your AWS account.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-policy.png" /><br />
+  5.5   Enter a role name, such as <code>ec2-s3-read-only-role</code>, and then click Create role.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-name.png" /><br />
   5.6   Back on the EC2 launch web browser tab, select the refresh button next to Create new IAM role,
-  and click the role you just created.
-    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-final.png" />
-  5.7 Scroll down and expand the Advanced Details section. Enter the following in the User Data test box to automatically install Apache web server and apply basic configuration when the instance is launched:
-    <code>#!/bin/bash
+  and click the role you just created.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-create-role-final.png" /><br />
+  5.7 Scroll down and expand the Advanced Details section. Enter the following in the User Data test box to automatically install Apache web server and apply basic configuration when the instance is launched:<br />
+<code>#!/bin/bash
     yum update -y
     yum install -y httpd
     service httpd start
@@ -1603,17 +1602,17 @@ Launch an instance:
     chmod 2775 /var/www
     find /var/www -type d -exec chmod 2775 {} +
     find /var/www -type f -exec chmod 0664 {} +</code>
-6. Accept defaults and Choose Next: Add tags.
-7. Click Next: Configure Security Group.
-    7.1 On type SSH, select Source as <code>My IP</code>
-    7.2 Click Add Rule, select Type as HTTP and source as <code>Anywhere</code>
+6. Accept defaults and click <strong>Next: Add tags</strong>.
+7. Click <strong>Next: Configure Security Group</strong>.<br />
+    7.1 Accept default opton <strong>Create a new security group</strong>.<br />
+  7.2 On the line of the first default entry <em>SSH</em>, select <strong>Source</strong> as <em>My IP</em>.<br />
+    7.3 Click <strong>Add Rule</strong>, select Type as <em>HTTP</em> and <strong>Source</strong> as <em>Anywhere</em>.<br />
     Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
-  exposed. However, for simplicity in this lab, we are opening the access to anywhere. Later modules will
-  secure access with Elastic Load Balancer.
-    7.2 Select Add Rule to add both SSH and HTTP, and on source, select <code>My IP</code>.
-    <img alt="Security Group" src="Images/ec2-launch-wizard-security-group.png" />
-    7.3 Click Review and Launch.
-    <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" />
+  exposed to the internet. However, for simplicity in this lab, we are opening the access to anywhere. Other lab modules
+  secure access with Elastic Load Balancer.<br />
+<img alt="Security Group" src="Images/ec2-launch-wizard-security-group.png" /><br />
+    7.5 Click Review and Launch.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" /><br />
 8. On the Review Instance Launch page, check the details, and then click Launch.
 9. If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
 then type a name such as <code>lab</code>, click Download Key Pair, and then click Launch Instances.
@@ -1635,7 +1634,7 @@ tab or instances list. Take note of this public DNS value.</li>
 <p>Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to deploy a basic example
 AWS WAF configuration for use with CloudFront.</p>
 <ol>
-<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
+<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.</li>
 <li>Click <strong>Create stack</strong>.<br />
 <img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
 <li>Enter the following <strong>Amazon S3 URL</strong>:  <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/waf-global.yaml</code> and click <strong>Next</strong>.<br />
