@@ -1,8 +1,8 @@
 # Level 200: Automated Deployment of Detective Controls
 
 ## Introduction
-This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure detective controls including AWS CloudTrail and Amazon GuardDuty.
-You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of AWS CloudTrail. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure detective controls including AWS CloudTrail, AWS Config, and Amazon GuardDuty.
+You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of each service. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Goals:
 * Implement detective controls
