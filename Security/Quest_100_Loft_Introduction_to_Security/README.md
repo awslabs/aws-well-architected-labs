@@ -16,7 +16,7 @@ This hands-on lab will guide you through the introductory steps to configure a n
 [AWS Account and Root User](../100_AWS_Account_and_Root_User)  
 ### Further Considerations
 * Federate Identity Using SAML: [Leveraging a SAML provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html)
-* Separate production, non-production and different workloads using different AWS accounts: [Define your multi-account strategy](https://aws.amazon.com/answers/account-management/aws-multi-account-security-strategy/)
+* Separate production, non-production and different workloads using different AWS accounts: [AWS Multiple Account Billing Strategy](https://aws.amazon.com/answers/account-management/aws-multi-account-billing-strategy/)
 
 ## Step 2 - Basic Identity and Access Management User, Group, Role
 This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management (IAM).  
