@@ -59,8 +59,12 @@ If you suspect a particular IP address as an adversary you can search such as `1
 An access key id will be part of the responseElements when its created so you can query that:  
 `filter responseElements.credentials.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`  
+**IAM users and roles created**  
+Listing users and roles created can help identify unauthorized activity:  
+`filter eventName="CreateUser" or eventName = "CreateRole"
+| fields requestParameters.userName, requestParameters.roleName, responseElements.user.arn, responseElements.role.arn, sourceIPAddress, eventTime, errorCode`  
 **S3 List Buckets**  
-Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details.  
+Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details:  
 `filter eventName ="ListBuckets"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`  
 
