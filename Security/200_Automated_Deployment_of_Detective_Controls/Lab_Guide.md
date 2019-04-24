@@ -22,7 +22,7 @@ Using [AWS CloudFormation](https://aws.amazon.com/cloudformation/), we are going
   * Stack name: The name of this stack. For this lab, use `DetectiveControls`.
   * CloudTrail: Enable CloudTrail Yes/No. If you already have CloudTrail enabled select No.
   * Config: Enable Config Yes/No. If you already have Config enabled select No.
-  * GuardDuty: Enable GuardDuty Yes/No. If you already have GuardDuty enabled select No. Not that GuardDuty will create and leave an IAM role the first time its enabled.
+  * GuardDuty: Enable GuardDuty Yes/No. If you already have GuardDuty enabled select No. Note that GuardDuty will create and leave an IAM role the first time its enabled.
   * S3BucketPolicyExplicitDeny: (Optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.
   * S3AccessLogsBucketName: (Optional) The name of an existing S3 bucket for storing S3 access logs.  
   **CloudTrail**  
@@ -52,7 +52,7 @@ You have now set up detective controls to log to your buckets and retain events,
 ### 2. Tear down this lab <a name="tear_down"></a>
 The following instructions will remove the resources that have a cost for running them.
 
-Delete the CloudTrail stack:
+Delete the stack:
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the `DetectiveControls` stack.
 3. Click the Actions button then click Delete Stack.
