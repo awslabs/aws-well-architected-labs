@@ -17,13 +17,15 @@ The skills you learn will help you secure your workloads in alignment with the [
 * An IAM user with MFA enabled that can assume roles in your AWS account.  
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
-## Overview
-* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
-* [/Images](Images/) referenced by this lab
-
 ## Permissions required
+* IAM User with AdministratorAccess AWS managed policy
 
-- IAM User with AdministratorAccess AWS managed policy
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ***
 

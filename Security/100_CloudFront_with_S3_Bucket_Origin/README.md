@@ -14,12 +14,15 @@ This hands-on lab will guide you through the steps to host static web content in
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 
-## Overview
-* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
-* [/Images](Images/) referenced by this lab
-
 ## Permissions required
 * IAM User with *AdministratorAccess* AWS managed policy
+
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ***
 

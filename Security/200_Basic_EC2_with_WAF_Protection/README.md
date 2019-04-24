@@ -14,11 +14,12 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 * Select region with support for AWS WAF for Application Load Balancers from list: [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html).
 
-## Overview
-* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
-* [Checklist.md](Checklist.md) best practice checklist related to this lab
-* [/Code](Code/) Code including CloudFormation templates related to this lab
-* [/Images](Images/) referenced by this lab
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ***
 

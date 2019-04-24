@@ -13,10 +13,12 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 
-## Overview
-* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
-* [/Code](Code/) Code including CloudFormation templates related to this lab
-* [/Images](Images/) referenced by this lab
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ***
 

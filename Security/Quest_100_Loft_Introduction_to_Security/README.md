@@ -13,7 +13,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 ### Walkthrough
 This hands-on lab will guide you through the introductory steps to configure a new AWS account and secure the root user.
-[AWS Account and Root User](../100_AWS_Account_and_Root_User)  
+[AWS Account and Root User](../100_AWS_Account_and_Root_User/README.md)  
 ### Further Considerations
 * Federate Identity Using SAML: [Leveraging a SAML provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html)
 * Separate production, non-production and different workloads using different AWS accounts: [AWS Multiple Account Billing Strategy](https://aws.amazon.com/answers/account-management/aws-multi-account-billing-strategy/)
@@ -22,20 +22,20 @@ This hands-on lab will guide you through the introductory steps to configure a n
 This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management (IAM).  
 You will use the AWS Management Console to guide you through how to configure your first IAM user, group and role for administrative access.
 ### Walkthrough
-[Basic Identity and Access Management User, Group, Role](../100_Basic_Identity_and_Access_Management_User_Group_Role)  
+[Basic Identity and Access Management User, Group, Role](../100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)  
 
 ## Step 3 -  CloudFront with WAF Protection
 This hands-on lab will guide you through the steps to protect a workload from network based attacks using Amazon CloudFront and AWS Web Application Firewall (WAF).
 You will use the AWS Management Console and AWS CloudFormation to guide you through how to deploy CloudFront with WAF integration to apply defense in depth methods.  
 As CloudFront takes some time to update configuration in all edge locations, consider starting step 4 while its deploying.
 ### Walkthrough
-[CloudFront with WAF Protection](../200_CloudFront_with_WAF_Protection)  
+[CloudFront with WAF Protection](../200_CloudFront_with_WAF_Protection/README.md)  
 
 ## Step 4 - Automated Deployment of Detective Controls
 This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure detective controls including AWS CloudTrail and Amazon GuardDuty.
 You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of AWS CloudTrail.  
 ### Walkthrough
-Only complete step 2, GuardDuty from: [Automated Deployment of Detective Controls](../200_Automated_Deployment_of_Detective_Controls)  
+Only complete step 2, GuardDuty from: [Automated Deployment of Detective Controls](../200_Automated_Deployment_of_Detective_Controls/README.md)  
 
 ***
 

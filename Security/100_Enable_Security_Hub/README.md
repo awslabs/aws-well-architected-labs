@@ -9,8 +9,12 @@
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
-## Overview
-* **[Lab_Guide.md](Lab_Guide.md) the guide for this lab**
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ***
 
