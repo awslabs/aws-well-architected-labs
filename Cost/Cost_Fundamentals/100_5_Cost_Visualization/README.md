@@ -16,7 +16,8 @@
 - Completed all previous labs in the Cost Fundamentals series
 
 
-<a name="Lab_Guide.md">## Get Started</a> 
+## Get Started
+[Lab_Guide.md](Lab_Guide.md) the guide for this lab 
 
 
 ## Permissions required
