@@ -16,8 +16,8 @@
 - Completed all previous labs in the Cost Fundamentals series
 
 
-## Overview
-- [Lab_Guide.md](Lab_Guide.md) the guide for this lab
+## Get Started
+[Lab_Guide.md](Lab_Guide.md) the guide for this lab 
 
 
 ## Permissions required

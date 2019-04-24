@@ -14,8 +14,7 @@
 - Root user access to the master account
 
 
-## Overview
-- [Lab_Guide.md](Lab_Guide.md) the guide for this lab
+## [Get Started](Lab_Guide.md) 
 
 
 ## Permissions required
