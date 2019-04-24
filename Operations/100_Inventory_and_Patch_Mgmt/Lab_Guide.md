@@ -73,7 +73,7 @@ You can use this same process to create more groups and users and to give your u
 
 1. Use your administrator account to access the Amazon EC2 console at <https://console.aws.amazon.com/ec2/>.
 1. In the IAM navigation pane under **Network & Security**, choose **Key Pairs** and then choose **Create Key Pair**.
-1. In the **Create Key Pair** dialog box, type a **Key pair name** such as `OELab2018` and then choose **Create**.
+1. In the **Create Key Pair** dialog box, type a **Key pair name** such as `OELabIPM` and then choose **Create**.
 1. **Save the** `keyPairName.pem` **file** for optional later use [accessing the EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html) created in this lab.
 
 
@@ -239,7 +239,7 @@ You can use [AWS Systems Manager Inventory](https://docs.aws.amazon.com/systems-
    1. Choose **Setup Inventory** in the top left corner of the window
 1. In the **Setup Inventory** screen, define targets for inventory:  
    1. Under **Specify targets by**, select **Specifying a tag**
-   1. Under **Tags** specify `Environment` for the key and `OELab2018` for the value
+   1. Under **Tags** specify `Environment` for the key and `OELabIPM` for the value
 >>**Note**<br>You can select all managed instances in this account, ensuring that all managed instances will be inventoried. You can constrain inventoried instances to those with specific tags, such as Environment or Workload. Or you can manually select specific instances for inventory.
 
 4. Schedule the frequency with which inventory is collected. The default and minimum period is 30 minutes
