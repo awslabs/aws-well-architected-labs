@@ -15,13 +15,16 @@
 - [AWS Account Setup](../100_1_AWS_Account_Setup/) has been completed
 
 
-## Overview
-- [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-
-
 ## Permissions required
 - [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
 
+
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR> 
 
 ## Best Practice Checklist 
 - [ ] Create a cost optimizaion team, to manage cost optimization across your organization
@@ -29,6 +32,7 @@
 - [ ] Create an AWS budget to notify on actual cost of EC2
 - [ ] Create an AWS budget to notify on RI Coverage
 
+***
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.

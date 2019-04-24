@@ -18,20 +18,24 @@
 - Have usage that is tagged (preferred, not mandatory)
 
 
-## Overview
-- [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-
-
 ## Permissions required
 - Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR> 
+
 ## Best Practice Checklist 
 - [ ] Load your CUR files into Athena for analysis
 - [ ] Create a separate table to contain only a specific member accounts usage
 - [ ] Analyze your cost and usage by executing queries against your CUR files
- 
+
+*** 
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.

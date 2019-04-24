@@ -20,14 +20,20 @@ In this lab you will apply the concepts of _Infrastructure as Code_ and _Operati
 >**Important**
 You will be billed for any applicable AWS resources used in this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). At the end of the lab guide there is an additional section on how to remove all the resources you have created.
 
-## Overview
-* [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-* [/Code](Code/) Code including CloudFormation templates related to this lab
-
 
 ## Permissions required
 * IAM User with *AdministratorAccess* AWS managed policy
----
+
+
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR> 
+
+***
+
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 

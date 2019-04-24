@@ -15,15 +15,17 @@
 - A linked AWS Account (preferred, not mandatory)
 - Completed all previous labs in the Cost Fundamentals series
 
-
-## Get Started
-[Lab_Guide.md](Lab_Guide.md) the guide for this lab 
-
-
 ## Permissions required
 - Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../100_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
+
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR> 
 
 ## Best Practice Checklist 
 - [ ] View your cost and usage by service
@@ -31,6 +33,7 @@
 - [ ] View your Reserved Instance Coverage
 - [ ] Create a custom EC2 report 
 
+***
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.

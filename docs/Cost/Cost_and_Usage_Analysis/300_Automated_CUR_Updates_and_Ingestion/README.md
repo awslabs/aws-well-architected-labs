@@ -16,16 +16,19 @@
 - CUR enabled and delivered into S3, with Athena integration
 - 6-12 months AWS experience, able to navigate the console, and have an understanding of the underlying services and features
 
-## Overview
-- [Lab_Guide.md](Lab_Guide.md) the guide for this lab
-- [/Code](Code/) including CloudFormation templates related to this lab
-- [/Images](Images/) referenced by this lab
 
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
 
 ## Best Practice Checklist 
 - [ ] Run the CloudFormation template to update a single CUR in AWS Glue/Athena
 - [ ] Modify and run a CloudFormation template to update multilpe CURs in AWS Glue/Athena
 
+***
 
 ## License
 

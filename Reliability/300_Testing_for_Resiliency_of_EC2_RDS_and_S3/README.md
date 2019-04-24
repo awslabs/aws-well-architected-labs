@@ -32,13 +32,21 @@ If you wish to build this code in this lab, the follow the instructions in the [
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the 
 [AWS Free Tier](https://aws.amazon.com/free/).
 
-## Overview:
 
-* [Lab Guide](Lab_Guide.md) for this lab
+## Overview:
 * [Troubleshooting Guide](TroubleShooting_Guide.md) for common problems encountered while deploying and conducting this lab
 * [Builders Guide](Builders_Guide.md) for building the AWS Lambda functions and the web server and where to make changes in the lab guide to use the code you built instead of the publicly available executables.
-* [/Code](Code/) Code including CloudFormation templates, Lambda functions, and resiliency tests
-* [/Images](Images/) referenced by the guides
+
+
+
+<BR>
+
+## [Start the Lab!](Lab_Guide.md)
+
+<BR>
+<BR>
+
+
 ***
 
 ## License
