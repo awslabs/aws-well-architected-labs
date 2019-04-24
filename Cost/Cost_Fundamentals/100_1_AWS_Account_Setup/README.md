@@ -22,9 +22,11 @@
 
 
 <BR>
+
 ## [Start the Lab!](Lab_Guide.md)
+
 <BR>
-<BR>
+<BR> 
 
 
 ## Best Practice Checklist
