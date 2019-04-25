@@ -108,7 +108,7 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#level-100-quick-steps-to-security-success" tabindex="1" class="md-skip">
+      <a href="#quest-one-day-to-better-security" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -133,7 +133,7 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              Level 100: Quick Steps to Security Success
+              Quest: One Day to Better Security
             </span>
           
         </div>
@@ -1472,6 +1472,120 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#about-this-guide" title="About this Guide" class="md-nav__link">
+    About this Guide
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-multi-account-strategy" title="Step 1 - Multi-Account Strategy" class="md-nav__link">
+    Step 1 - Multi-Account Strategy
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough" title="Walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-identity" title="Step 2 - Identity" class="md-nav__link">
+    Step 2 - Identity
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough_1" title="Walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-data-bunker" title="Step 3 - Data Bunker" class="md-nav__link">
+    Step 3 - Data Bunker
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough-new-lab" title="Walkthrough  New Lab?" class="md-nav__link">
+    Walkthrough  New Lab?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-setup-organisations-policies" title="Step 4 - Setup organisations policies" class="md-nav__link">
+    Step 4 - Setup organisations policies
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough_2" title="Walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-detection-and-alerting" title="Step 5 - Detection and Alerting" class="md-nav__link">
+    Step 5 - Detection and Alerting
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough_3" title="Walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" title="Additional Resources" class="md-nav__link">
+    Additional Resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" title="License" class="md-nav__link">
     License
   </a>
@@ -1497,8 +1611,63 @@ _atrk_opts = { atrk_acct:"PW0Ds1O7kI20L7", domain:"awscostworkshop.com",dynamic:
                   <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Security/Quest_100_Quick_Steps_to_Security_Success/README.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="level-100-quick-steps-to-security-success">Level 100: Quick Steps to Security Success</h1>
-<p>Coming Soon!</p>
+                <h1 id="quest-one-day-to-better-security">Quest: One Day to Better Security</h1>
+<h2 id="about-this-guide">About this Guide</h2>
+<p>This quest is for you to improve your security posture. Every stakeholder involved in your organisation and product or service is entitled to make use of a secure platform. Security is important to earn the trust with your customers and your providers. A secure environment also helps to protect your intellectual property. Each set of activities can be done in one day or split over a week in your lunch break. By the end of the quest we will have a set of accounts with security best practices applied, ready to develop your product in knowing that when you launch your workload you have secure foundations in place.</p>
+<h2 id="step-1-multi-account-strategy">Step 1 - Multi-Account Strategy</h2>
+<p>Implementing multiple accounts for our workload improves our security by limiting the blast radius of any potential breaches and separating our workload into discrete accounts.</p>
+<p>Leverage AWS Organisations to create separate AWS accounts for a sandbox, your workload, a secure “data bunker” for audit logs and backups, and a shared services account for common tools. If you currently only have one account, create a new AWS account for your organisations master AWS account and invite your existing account to join as your sandbox AWS account.</p>
+<p>By the end of this step you will have a separate AWS account for:
+<em> Organisations root account – used only for identity and billing
+</em> Shared services – for common tools such as deployment tooling
+* Workload accounts – customers who have a single product will have a separate AWS account for each environment. If you have multiple workloads, or you rely on account separation for separation of customer data you will want to set up further accounts to reflect your structure</p>
+<h3 id="walkthrough">Walkthrough</h3>
+<ol>
+<li><a href="https://aws.amazon.com/answers/account-management/aws-multi-account-security-strategy/">Define your multi-account strategy</a></li>
+<li>(If required) <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sign-up-for-aws.html">Sign up a new root account</a></li>
+<li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_create.html">Create an AWS Organisations</a> in the root account</li>
+<li>Invite any existing accounts </li>
+<li>For each AWS account required</li>
+<li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html">Create a new account in organisations</a>. Make note of the organisations account access role.</li>
+<li>Create a new role for accessing that AWS account</li>
+</ol>
+<h2 id="step-2-identity">Step 2 - Identity</h2>
+<p>Every user must leverage unique credentials so we can trace actions within our accounts. Setup your identity structure in the master account and use cross account access to access the child accounts. As you create roles for your users ensure that you are implementing least privilege access by ensuring that users only have access to perform actions required for their role. Be careful who you give IAM permissions to as they can create their own permissions.</p>
+<h3 id="walkthrough_1">Walkthrough</h3>
+<ol>
+<li>Credentials audit</li>
+<li><a href="../100_AWS_Account_and_Root_User/README.html">Add multi factor authentication to root</a></li>
+<li>Federate Identity Using SAML</li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Leveraging a SAML provider</a></li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Use cross account access roles</a> that we setup in Step 1.</li>
+</ol>
+<h2 id="step-3-data-bunker">Step 3 - Data Bunker</h2>
+<p>Now we will create a data bunker account to store secure read only security logs and backups. In this step we will send our logs from CloudTrail to that account. The role for accessing this account will have read only access. Only ensure that this role can be accessed by those with a security role in your organisation.</p>
+<h3 id="walkthrough-new-lab">Walkthrough <strong> New Lab? </strong></h3>
+<ol>
+<li>Create a Security account</li>
+<li>Create a security role</li>
+<li>Create a target bucket for CloudTrail</li>
+<li>Turn on CloudTrail (CloudFormation?)</li>
+</ol>
+<h2 id="step-4-setup-organisations-policies">Step 4 - Setup organisations policies</h2>
+<h3 id="walkthrough_2">Walkthrough</h3>
+<ol>
+<li>Block public S3 buckets</li>
+<li>Prevent CloudTrail from being removed
+Config?
+Block access keys?
+Regions?</li>
+</ol>
+<h2 id="step-5-detection-and-alerting">Step 5 - Detection and Alerting</h2>
+<h3 id="walkthrough_3">Walkthrough</h3>
+<p>Guard duty?
+1. Lab - Enable security hub + alert on it (being worked on)
+2. Lab - Setup some AWS Config rules in production</p>
+<h2 id="additional-resources">Additional Resources</h2>
+<ul>
+<li>Permission Boundaries</li>
+</ul>
 <hr />
 <h2 id="license">License</h2>
 <p>Licensed under the Apache 2.0 and MITnoAttr License. </p>

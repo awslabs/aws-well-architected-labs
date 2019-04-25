@@ -8,24 +8,24 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 ![Images/aws_security_areas.png](Images/aws_security_areas.png)  
 
 ## Labs:
-* [Level 100: AWS Account and Root User](100_AWS_Account_and_Root_User)
-* [Level 100: Basic Identity and Access Management User, Group, Role](100_Basic_Identity_and_Access_Management_User_Group_Role)
-* [Level 100: CloudFront with S3 Bucket Origin](100_CloudFront_with_S3_Bucket_Origin)
-* [Level 100: Enable Security Hub](100_Enable_Security_Hub)
-* [Level 200: Automated Deployment of Detective Controls](200_Automated_Deployment_of_Detective_Controls)
-* [Level 200: Automated Deployment of EC2 Web Application](200_Automated_Deployment_of_EC2_Web_Application)
-* [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles)
-* [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC)
-* [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection)
-* [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection)
-* [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation)
-* [Level 300: IAM IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2)
-* [Level 300: Incident Response with AWS Console and CLI](300_Incident_Response_with_AWS_Console_and_CLI)
+* [Level 100: AWS Account and Root User](100_AWS_Account_and_Root_User/README.md)
+* [Level 100: Basic Identity and Access Management User, Group, Role](100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)
+* [Level 100: CloudFront with S3 Bucket Origin](100_CloudFront_with_S3_Bucket_Origin/README.md)
+* [Level 100: Enable Security Hub](100_Enable_Security_Hub/README.md)
+* [Level 200: Automated Deployment of Detective Controls](200_Automated_Deployment_of_Detective_Controls/README.md)
+* [Level 200: Automated Deployment of EC2 Web Application](200_Automated_Deployment_of_EC2_Web_Application/README.md)
+* [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md)
+* [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC/README.md)
+* [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection/README.md)
+* [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection/README.md)
+* [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md)
+* [Level 300: IAM IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2/README.md)
+* [Level 300: Incident Response with AWS Console and CLI](300_Incident_Response_with_AWS_Console_and_CLI/README.md)
 
 ## Quests:
 Quests are designed to collate a group of relevant labs and other resources together into a common theme for you to follow and learn.
-* [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
-* [Level 100: Quick Steps to Security Success](Quest_100_Quick_Steps_to_Security_Success) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
+* [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security/README.md) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
+* [Level 100: Quick Steps to Security Success](Quest_100_Quick_Steps_to_Security_Success/README.md) - In just one day (or an hour a day for a week!) implement some foundational security controls to immedietly improve your security posture.
 
 ***
 
