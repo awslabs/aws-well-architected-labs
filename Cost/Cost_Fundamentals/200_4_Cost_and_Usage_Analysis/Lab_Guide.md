@@ -287,7 +287,7 @@ order by bill_billing_period_start_date, reservation_unused_recurring_fee desc
 ## 4. Tear down <a name="tear_down"></a>
 Amazon Athena only charges when it is being used, i.e. data is being scanned - so if it is not being actively queried, there are no charges. It is also best practice to regularly analyze your usage and cost, so there is no teardown for this lab.
 
-## 5. Rate this lab<a name="rate_lab"</a> 
+## 5. Rate this lab<a name="rate_lab"></a> 
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_5star)
 
 

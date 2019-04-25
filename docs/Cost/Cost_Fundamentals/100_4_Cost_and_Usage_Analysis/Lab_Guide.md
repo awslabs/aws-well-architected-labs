@@ -77,7 +77,7 @@ It is possible to download a CSV version of your summary cost and usage informat
 There is no configuration performed within this lab, so no teardown is required.
 
 
-## 5. Rate this lab<a name="rate_lab"</a> 
+## 5. Rate this lab<a name="rate_lab"></a> 
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_4_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_4_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_4_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_4_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_4_5star)
 
 

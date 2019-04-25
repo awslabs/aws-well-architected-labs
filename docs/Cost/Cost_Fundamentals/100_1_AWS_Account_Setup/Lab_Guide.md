@@ -221,7 +221,7 @@ This exercise covered fundamental steps that are recommended for all AWS account
 Ensure you remove the IAM policies from the users/groups if they were used. 
 
 
-## 8. Rate this lab<a name="rate_lab"</a>  
+## 8. Rate this lab<a name="rate_lab"></a>  
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_5star) 
 
 

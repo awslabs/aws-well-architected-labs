@@ -651,7 +651,7 @@ We will delete the IAM policies created above, as they are no longer applied to 
 7. Perform the same steps above to delete the **Ec2_FamilyRestrict** and **EC2EBS_Restrict** policies.
 
 
-## 7. Rate this lab<a name="rate_lab"</a> 
+## 7. Rate this lab<a name="rate_lab"></a> 
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_5star)
 
 

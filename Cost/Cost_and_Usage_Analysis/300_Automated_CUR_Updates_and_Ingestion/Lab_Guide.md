@@ -163,7 +163,7 @@ Look for the comments: ### New line
 ![Images/AWSMultiCUR4.png](Images/AWSMultiCUR4.png) 
 
 
-## 4. Rate this lab<a name="rate_lab"</a>
+## 4. Rate this lab<a name="rate_lab"></a>
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Automated_CUR_Updates_and_Ingestion_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Automated_CUR_Updates_and_Ingestion_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Automated_CUR_Updates_and_Ingestion_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Automated_CUR_Updates_and_Ingestion_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Automated_CUR_Updates_and_Ingestion_5star) 
 
 
