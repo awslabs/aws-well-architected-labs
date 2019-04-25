@@ -13,7 +13,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 3. [Create an AWS Budget - EC2 actual](#budget_ec2actual)
 4. [Create an AWS Budget - RI Coverage](#budget_ricoverage)
 5. [Tear down](#tear_down)
-6. [Feedback survey](#survey)  
+6. [Rate this Lab](#rate_lab)  
+7. [Feedback survey](#survey)  
 
 ## 1. Create a cost optimization team <a name="create_team"></a>
 We are going to create a cost optimization team. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
@@ -270,8 +271,11 @@ We will delete all three budgets that were configured in sections 2,3 and 4.
 ![Images/AWSTeardown21.png](Images/AWSTeardown21.png)
 
 
+## 6. Rate this lab<a name="rate_lab"</a> 
+[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_2_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_2_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_2_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_2_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_2_5star) 
 
-## 6. Survey <a name="survey"></a>
+
+## 7. Survey <a name="survey"></a>
 Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
 
 [![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_9M48P1ZocaP940d)

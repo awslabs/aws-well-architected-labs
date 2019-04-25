@@ -15,7 +15,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 2. [Download and prepare the RI CSV files](#prepare_csv)
 3. [Sort and filter the RI CSV files](#filter_csv)
 4. [Teardown](#tear_down)
-5. [Feedback survey](#survey) 
+5. [Rate this Lab](#rate_lab) 
+6. [Feedback survey](#survey) 
 
 
 ## 1. View an RI report<a name="ri_report"></a>
@@ -115,8 +116,11 @@ You can then take those recommended numbers, and purchase the quantity in the re
 ## 4. Teardown<a name="tear_down"></a>
 There are no resources or configuration items that are created during this workshop. 
 
+## 5. Rate this lab<a name="rate_lab"</a> 
+[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_5star) 
 
-## 5. Survey <a name="survey"></a>
+
+## 6. Survey <a name="survey"></a>
 Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
 
 [![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_7OK2Pdsg9nqs1Yp)
