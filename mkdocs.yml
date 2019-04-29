@@ -25,6 +25,11 @@ theme:
     feature: 
         tabs: true 
     custom_dir: 'theme' 
+    palette: 
+        primary: 'grey' 
+        accent: 'grey' 
+    logo: 'images/wa.png' 
+
 
 nav:
     - Home: README.md 
