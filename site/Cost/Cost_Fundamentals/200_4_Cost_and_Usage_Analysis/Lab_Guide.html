@@ -1614,11 +1614,13 @@
 <p><strong>Sample Files</strong>
 You may not have substantial or interesting usage, in this case there are sample files that you can use in the code section. You will need to create the required structure in S3, download these files and then upload them into s3.</p>
 <p><strong>NOTE</strong>: Do not save the links below, open them in a new window and download the files. They should be approximately 1Mb in size each, if you have files that are 65kb - then you have downloaded the web page and not the parquet files.</p>
-<p>Create a folder structure, such as -bucket name-/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder. You will need to edit the SQL file with the correct name.
-- <a href="Code/WorkshopCUR-create-table.sql">Workshop.sql</a>
-- <a href="Code/Oct2018-WorkshopCUR-00001.snappy.parquet">October 2018 Usage</a>
-- <a href="Code/Nov2018-WorkshopCUR-00001.snappy.parquet">November 2018 Usage</a>
-- <a href="Code/Dec2018-WorkshopCUR-00001.snappy.parquet">December 2018 Usage</a></p>
+<p>Create a folder structure, such as -bucket name-/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder. You will need to edit the SQL file with the correct name.</p>
+<ul>
+<li><a href="Code/WorkshopCUR-create-table.sql">Workshop.sql</a></li>
+<li><a href="Code/Oct2018-WorkshopCUR-00001.snappy.parquet">October 2018 Usage</a></li>
+<li><a href="Code/Nov2018-WorkshopCUR-00001.snappy.parquet">November 2018 Usage</a></li>
+<li><a href="Code/Dec2018-WorkshopCUR-00001.snappy.parquet">December 2018 Usage</a></li>
+</ul>
 <h2 id="2-setup-amazon-athena-and-load-the-cur-files">2. Setup Amazon Athena and load the CUR files <a name="Setup_Athena"></a></h2>
 <p>We will configure Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.</p>
 <ol>

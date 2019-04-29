@@ -1456,40 +1456,41 @@
                 
                   <h1>Member policy</h1>
                 
-                <p>{
-    "Version": "2012-10-17",
-    "Statement": [
+                <pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
         {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateServiceLinkedRole",
-                "organizations:AcceptHandshake",
-                "organizations:DescribeHandshake"
+            &quot;Sid&quot;: &quot;VisualEditor0&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;iam:CreateServiceLinkedRole&quot;,
+                &quot;organizations:AcceptHandshake&quot;,
+                &quot;organizations:DescribeHandshake&quot;
             ],
-            "Resource": [
-                "arn:aws:iam::<em>:role/</em>",
-                "arn:aws:organizations::<em>:handshake/o-</em>/<em>/h-</em>"
+            &quot;Resource&quot;: [
+                &quot;arn:aws:iam::*:role/*&quot;,
+                &quot;arn:aws:organizations::*:handshake/o-*/*/h-*&quot;
             ]
         },
         {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": "organizations:DescribeAccount",
-            "Resource": "arn:aws:organizations::<em>:account/o-</em>/<em>"
+            &quot;Sid&quot;: &quot;VisualEditor1&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: &quot;organizations:DescribeAccount&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:organizations::*:account/o-*/*&quot;
         },
         {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": [
-                "organizations:ListHandshakesForAccount",
-                "organizations:DescribeOrganization",
-                "organizations:DescribeCreateAccountStatus"
+            &quot;Sid&quot;: &quot;VisualEditor2&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;organizations:ListHandshakesForAccount&quot;,
+                &quot;organizations:DescribeOrganization&quot;,
+                &quot;organizations:DescribeCreateAccountStatus&quot;
             ],
-            "Resource": "</em>"
+            &quot;Resource&quot;: &quot;*&quot;
         }
     ]
-} </p>
+} 
+</code></pre>
                 
                   
                 
