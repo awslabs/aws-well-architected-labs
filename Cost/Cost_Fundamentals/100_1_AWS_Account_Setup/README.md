@@ -16,8 +16,8 @@
 
 ## Permissions required
 - Root user access to the master account
-- [./Code/master_policy](./Code/master_policy) IAM policy required for Master account user
-- [./Code/member_policy](./Code/member_policy) IAM policy required for Member account user 
+- [./Code/master_policy](./Code/master_policy.md) IAM policy required for Master account user
+- [./Code/member_policy](./Code/member_policy.md) IAM policy required for Member account user 
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 

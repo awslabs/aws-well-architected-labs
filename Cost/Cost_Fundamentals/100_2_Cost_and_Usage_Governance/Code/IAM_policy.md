@@ -1,5 +1,5 @@
 NOTE: Policy is only required to complete the exercise to create a cost optimization team. It can be delelted once the first exercise is complete.
-
+```
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -34,3 +34,4 @@ NOTE: Policy is only required to complete the exercise to create a cost optimiza
         }
     ]
 }
+``` 

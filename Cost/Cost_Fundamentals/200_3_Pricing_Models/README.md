@@ -12,11 +12,11 @@ This hands-on lab will guide you through the steps to perform a Reserved Instanc
 
 ## Prerequisites
 - An AWS Account
-- [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/) has been completed
+- [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md) has been completed
 
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
+- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 <BR>

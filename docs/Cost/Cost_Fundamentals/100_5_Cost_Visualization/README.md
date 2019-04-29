@@ -16,7 +16,7 @@
 - Completed all previous labs in the Cost Fundamentals series
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../100_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
+- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../100_2_Cost_and_Usage_Governance/README.md)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 

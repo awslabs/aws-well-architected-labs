@@ -13,12 +13,12 @@
 
 ## Prerequisites
 - A master AWS Account
-- Have your Cost and Usage Report (CUR) enabled [as per 100_1_Account Setup](../100_1_AWS_Account_Setup/Lab_Guide/#CUR)
-- [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/) has been completed
+- Have your Cost and Usage Report (CUR) enabled [as per 100_1_Account Setup](../100_1_AWS_Account_Setup/README.md)
+- [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md) has been completed
 
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/Lab_Guide/#create_team)
+- Log in as the Cost Optimization team, created in [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
  
 

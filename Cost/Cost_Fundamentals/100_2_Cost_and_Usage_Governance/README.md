@@ -12,11 +12,11 @@
 
 ## Prerequisites
 - An AWS Account
-- [AWS Account Setup](../100_1_AWS_Account_Setup/) has been completed
+- [AWS Account Setup](../100_1_AWS_Account_Setup/README.md) has been completed
 
 
 ## Permissions required
-- [./Code/IAM_policy](./Code/IAM_policy) IAM policy required for this lab
+- [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
 
 
 <BR>

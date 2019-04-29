@@ -1,5 +1,5 @@
 NOTE: Policy should be removed from the user after this exercise is complete.
-
+```
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -43,4 +43,4 @@ NOTE: Policy should be removed from the user after this exercise is complete.
         }
     ]
 }
-
+```

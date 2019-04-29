@@ -390,15 +390,6 @@ We will create a policy that allows operations on specific instance families onl
 
 
 
-
-
-
-
-
-
-
-
-
 ## 4. Extend an IAM Policy to restrict EC2 usage by instance size <a name="EC2_restrict_size"></a>
 We can also restrict the size of instance that can be launched. This can be used to ensure only low cost instances can be created within an account. This is ideal for testing and development, where high capacity instances may not be required. We will extend the EC2 family policy above, and add restrictions by adding the sizes of instances allowed.
 
