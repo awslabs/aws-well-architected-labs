@@ -1,15 +1,20 @@
 ﻿# Level 200: Automated Deployment of VPC
 
 ## Introduction
-This hands-on lab will guide you through the steps to configure an [Amazon VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html) and outline some of the available security features. [AWS CloudFormation](https://aws.amazon.com/cloudformation/) will be used to automate the deployment and provide a repeatable way to re-use the template after this lab. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).  
-The example [CloudFormation template](Code/vpc-alb-app-db.yaml) will deploy a complete VPC incorporating a number of AWS security best practices.
-Subnets are created in multiple availability zones for the following network tiers:
+This hands-on lab will guide you through the steps to configure an [Amazon VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html) and outline some of the AWS security features. [AWS CloudFormation](https://aws.amazon.com/cloudformation/) will be used to automate the deployment and provide a repeatable way to re-use the template after this lab.  
+<br />
+The example [CloudFormation template](Code/vpc-alb-app-db.yaml) will deploy a completely new VPC incorporating a number of AWS security best practices which are:
+  
+[Networking subnets](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) created in multiple availability zones for the following network tiers:
   * Application Load Balancer - named *ALB1*
   * Application instances - named *App1*
   * Shared services - named *Shared1*
-  * Databases - named *DB1*  
+  * Databases - named *DB1*
 
-[VPC endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) are created for private connectivity to AWS services. [NAT Gateways](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html) created allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) configurations. [Network ACLs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html) control access at each subnet layer, while [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html) captures information about IP traffic and stores in Amazon CloudWatch Logs.
+[VPC endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) are created for private connectivity to AWS services.<br />
+[NAT Gateways](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html) are created to allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) configurations.<br />
+[Network ACLs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html) control access at each subnet layer.<br />
+While [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html) captures information about IP traffic and stores it in Amazon CloudWatch Logs.
 
 ## Goals:
 * VPC security features
@@ -21,6 +26,8 @@ Subnets are created in multiple availability zones for the following network tie
 * An IAM user or role in your AWS account with full access to CloudFormation, EC2, VPC, IAM.  
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 * Basic understanding of [AWS CloudFormation](https://aws.amazon.com/cloudformation/), visit the [Getting Started](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html) section of the user guide.
+* We recommend you [clone the Git repository](https://help.github.com/en/articles/cloning-a-repository) for easy access to the AWS CloudFormation templates.
+
 
 ## Permissions required
 * IAM User with *AdministratorAccess* AWS managed policy

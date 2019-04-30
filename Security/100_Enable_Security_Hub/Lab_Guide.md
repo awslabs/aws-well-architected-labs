@@ -30,7 +30,7 @@ You can review the service role permissions in the following screen. Remember to
 ![security-hub-service-permissions](Images/security-hub-service-permissions.png)
 
 ### 1.3 Explore AWS Security Hub
-With AWS Security Hub is now enabled in your account, you can explore the security insights AWS Security Hub offers.
+With AWS Security Hub now enabled in your account, you can explore the security insights AWS Security Hub offers.
 ![explore-aws-security-hub.png](Images/explore-aws-security-hub.png)
 
 ## References & useful resources:

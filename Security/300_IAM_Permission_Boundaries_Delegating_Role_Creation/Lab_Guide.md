@@ -7,11 +7,12 @@
 1. [Create IAM Policies](#create_policies)
 2. [Create and Test Developer Role](#developer_role)
 3. [Create and Test Region Restricted User Role](#user_role)
-4. [Tear Down](#tear_down)
+4. [Knowledge Check](#knowledge_check)
+5. [Tear Down](#tear_down)
 
 ## 1. Create IAM policies <a name="create_policies"></a>
 ### 1.1 Create policy for permission boundary
-This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab we are only going to allow regions us-east-1 (North Virginia) and us-west-1 (North California), optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow are ec2 and lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
+This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab using AWS IAM we are only going to allow the us-east-1 (North Virginia) and us-west-1 (North California) regions, optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow in these regions are AWS EC2 and AWS Lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).  
 If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click **Policies** and then click **Create policy**.  
@@ -203,10 +204,17 @@ Now you will use an existing IAM user to assume the new *app1-user-region-restri
 9. Navigate to the EC2 Management Console in a region that is not allowed, such as ap-southeast-2 (Sydney) [https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2](https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2). The EC2 Dashboard should display a number of unauthorized error messages. ![ec2-resources-denied](Images/ec2-resources-denied.png)  
 10. Congratulations! You have now learnt about IAM permission boundaries and have one working!
 
+
+## 4. Knowledge Check <a name="knowledge_check"></a>
+The security best practices followed in this lab are: <a name="best_practices"></a>
+* [Manage credentials and authentication](https://wa.aws.amazon.com/wat.question.SEC_1.en.html) Use of MFA for access to provide additional access control.
+* [Grant access through roles or federation:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) Roles with associated policies have been used to define appropriate permission boundaries.
+* [Grant least privileges:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) The roles are scoped with minimum privileges to accomplish the task.
+
 ***
 
 
-## 4. Tear down this lab <a name="tear_down"></a>
+## 5. Tear down this lab <a name="tear_down"></a>
 Please note that the changes you made to the users, groups, and roles have no charges associated with them.
 1. Using the original IAM user, for each of the roles you created select them in the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/) and click  **Delete role**.  
 The roles created are:  

@@ -67,6 +67,9 @@ Parameters:
     Description: 'The name of the subnet from VPC stack to import'
     Default: 'DB1Subnet3'
   #Application Tier
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
@@ -84,15 +87,6 @@ Parameters:
       - m4.large
       - m4.xlarge
       - m4.2xlarge
-      - c3.large
-      - c3.xlarge
-      - c3.2xlarge
-      - c4.large
-      - c4.xlarge
-      - c4.2xlarge
-      - r3.large
-      - r3.xlarge
-      - r3.2xlarge
     ConstraintDescription: must be a valid EC2 instance type.
   ALBSGSource:
     Description: The IP address range that can be used to access the EC2 instances
@@ -118,172 +112,7 @@ Parameters:
     MaxLength: '64'
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
     ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
-  DB1User:
-    NoEcho: 'true'
-    Description: The WordPress database admin account username
-    Type: String
-    MinLength: '1'
-    MaxLength: '16'
-    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
-  DB1Password:
-    NoEcho: 'true'
-    Description: The WordPress database admin account password
-    Type: String
-    MinLength: '8'
-    MaxLength: '41'
-    AllowedPattern: '[a-zA-Z0-9]*'
-    ConstraintDescription: Must contain only alphanumeric characters.
-Mappings:
-  AWSInstanceType2Arch:
-    t2.nano:
-      Arch: HVM64
-    t2.micro:
-      Arch: HVM64
-    t2.small:
-      Arch: HVM64
-    t2.medium:
-      Arch: HVM64
-    t2.large:
-      Arch: HVM64
-    m3.medium:
-      Arch: HVM64
-    m3.large:
-      Arch: HVM64
-    m3.xlarge:
-      Arch: HVM64
-    m3.2xlarge:
-      Arch: HVM64
-    m4.large:
-      Arch: HVM64
-    m4.xlarge:
-      Arch: HVM64
-    m4.2xlarge:
-      Arch: HVM64
-    c3.large:
-      Arch: HVM64
-    c3.xlarge:
-      Arch: HVM64
-    c3.2xlarge:
-      Arch: HVM64
-    c4.large:
-      Arch: HVM64
-    c4.xlarge:
-      Arch: HVM64
-    c4.2xlarge:
-      Arch: HVM64
-    r3.large:
-      Arch: HVM64
-    r3.xlarge:
-      Arch: HVM64
-    r3.2xlarge:
-      Arch: HVM64
-    d2.xlarge:
-      Arch: HVM64
-    d2.2xlarge:
-      Arch: HVM64
-  AWSInstanceType2NATArch:
-    t2.nano:
-      Arch: NATHVM64
-    t2.micro:
-      Arch: NATHVM64
-    t2.small:
-      Arch: NATHVM64
-    t2.medium:
-      Arch: NATHVM64
-    t2.large:
-      Arch: NATHVM64
-    m3.medium:
-      Arch: NATHVM64
-    m3.large:
-      Arch: NATHVM64
-    m3.xlarge:
-      Arch: NATHVM64
-    m3.2xlarge:
-      Arch: NATHVM64
-    m4.large:
-      Arch: NATHVM64
-    m4.xlarge:
-      Arch: NATHVM64
-    m4.2xlarge:
-      Arch: NATHVM64
-    c3.large:
-      Arch: NATHVM64
-    c3.xlarge:
-      Arch: NATHVM64
-    c3.2xlarge:
-      Arch: NATHVM64
-    c4.large:
-      Arch: NATHVM64
-    c4.xlarge:
-      Arch: NATHVM64
-    c4.2xlarge:
-      Arch: NATHVM64
-    r3.large:
-      Arch: NATHVM64
-    r3.xlarge:
-      Arch: NATHVM64
-    r3.2xlarge:
-      Arch: NATHVM64
-    d2.xlarge:
-      Arch: NATHVM64
-    d2.2xlarge:
-      Arch: NATHVM64
-  AWSRegionArch2AMI:
-    us-east-1:
-      HVM64: ami-0ff8a91507f77f867
-      HVMG2: ami-0a584ac55a7631c0c
-    us-west-2:
-      HVM64: ami-01e24be29428c15b2
-      HVMG2: ami-0e09505bc235aa82d
-    us-west-1:
-      HVM64: ami-0bdb828fd58c52235
-      HVMG2: ami-066ee5fd4a9ef77f1
-    eu-west-1:
-      HVM64: ami-047bb4163c506cd98
-      HVMG2: ami-0a7c483d527806435
-    eu-west-2:
-      HVM64: ami-f976839e
-      HVMG2: NOT_SUPPORTED
-    eu-west-3:
-      HVM64: ami-0ebc281c20e89ba4b
-      HVMG2: NOT_SUPPORTED
-    eu-central-1:
-      HVM64: ami-0233214e13e500f77
-      HVMG2: ami-06223d46a6d0661c7
-    ap-northeast-1:
-      HVM64: ami-06cd52961ce9f0d85
-      HVMG2: ami-053cdd503598e4a9d
-    ap-northeast-2:
-      HVM64: ami-0a10b2721688ce9d2
-      HVMG2: NOT_SUPPORTED
-    ap-northeast-3:
-      HVM64: ami-0d98120a9fb693f07
-      HVMG2: NOT_SUPPORTED
-    ap-southeast-1:
-      HVM64: ami-08569b978cc4dfa10
-      HVMG2: ami-0be9df32ae9f92309
-    ap-southeast-2:
-      HVM64: ami-09b42976632b27e9b
-      HVMG2: ami-0a9ce9fecc3d1daf8
-    ap-south-1:
-      HVM64: ami-0912f71e06545ad88
-      HVMG2: ami-097b15e89dbdcfcf4
-    us-east-2:
-      HVM64: ami-0b59bfac6be064b78
-      HVMG2: NOT_SUPPORTED
-    ca-central-1:
-      HVM64: ami-0b18956f
-      HVMG2: NOT_SUPPORTED
-    sa-east-1:
-      HVM64: ami-07b14488da8ea02a0
-      HVMG2: NOT_SUPPORTED
-    cn-north-1:
-      HVM64: ami-0a4eaf6c4454eda75
-      HVMG2: NOT_SUPPORTED
-    cn-northwest-1:
-      HVM64: ami-6b6a7d09
-      HVMG2: NOT_SUPPORTED
+
 Resources:
   ALB1SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -476,8 +305,9 @@ Resources:
                 #!/bin/bash -xe
                 cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
                 sed -i "s/'database_name_here'/'${DB1Name}'/g" wp-config.php
-                sed -i "s/'username_here'/'${DB1User}'/g" wp-config.php
-                sed -i "s/'password_here'/'${DB1Password}'/g" wp-config.php
+                sed -i "s/'username_here'/'admin'/g" wp-config.php
+                secret="$(aws secretsmanager get-secret-value --secret-id ${DB1Secret} --region ${AWS::Region} --query SecretString --output text |jq '.password' |sed -e 's/^\"//g' |sed -e 's/\"$//g')"
+                sed -i "s/password_here/$secret/g" wp-config.php
                 sed -i "s/'localhost'/'${DB1Cluster.Endpoint.Address}'/g" wp-config.php
                 chown -R apache /var/www
                 chgrp -R apache /var/www
@@ -497,33 +327,24 @@ Resources:
                 enabled: 'true'
                 ensureRunning: 'true'
     Properties:
-      ImageId: !FindInMap 
-        - AWSRegionArch2AMI
-        - !Ref 'AWS::Region'
-        - !FindInMap 
-          - AWSInstanceType2Arch
-          - !Ref InstanceType
-          - Arch
+      ImageId: !Ref LatestAmiId
       IamInstanceProfile: !Ref Web1InstanceInstanceProfile
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref Web1InstanceSecurityGroup
-      #KeyName: !Ref Web1SSHKeyName
+      #KeyName: A best practice is to use Systems Manager instead of directly accessing instances manually 
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
+          #yum update -y
           echo "Installing aws-cfn-bootstrap"
           yum install -y aws-cfn-bootstrap
           echo "Executing cfn-init..." 
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Web1LaunchConfig --configsets wordpress_install --region ${AWS::Region}
           echo "Executing cfn-signal..."
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource Web1InstanceAutoScalingGroup --region ${AWS::Region}
-          # echo "Running yum update..."
-          # yum update -y
           echo "Restarting httpd..."
           service httpd restart
-          echo "Updating Amazon ssm agent..."
-          yum update amazon-ssm-agent -y          
           echo "UserData Complete"
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
@@ -614,20 +435,35 @@ Resources:
                   - 'ec2messages:GetMessages'
                   - 'ec2messages:SendReply'
                 Resource: '*'
-        #Allow secrets manager for future use
-        # - PolicyName: Web1InstanceSecretsManager
-        #   PolicyDocument:
-        #     Version: 2012-10-17
-        #     Statement:
-        #       - Effect: Allow
-        #         Action: 'secretsmanager:GetSecretValue'
-        #         Resource:
+        - PolicyName: Web1InstanceSecretsManager
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                #Action: 'secretsmanager:GetSecretValue'
+                Action: 'secretsmanager:*'
+                Resource: '*'
   Web1InstanceInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
       Path: /Web1InstanceEc2Role/
       Roles:
         - !Ref Web1InstanceRole
+  DB1Secret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: 'This is the secret for my RDS instance'
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "admin"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 16
+        ExcludePunctuation: true
+  DB1SecretAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref DB1Secret
+      TargetId: !Ref DB1Cluster
+      TargetType: AWS::RDS::DBCluster
   DB1EC2SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -666,8 +502,8 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       DatabaseName: !Ref DB1Name
-      MasterUsername: !Ref DB1User
-      MasterUserPassword: !Ref DB1Password
+      MasterUsername: !Join ['', ['{{resolve:secretsmanager:', !Ref DB1Secret, ':SecretString:username}}' ]]
+      MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref DB1Secret, ':SecretString:password}}' ]]
       StorageEncrypted: true
       Engine: aurora
       EngineMode: serverless
@@ -728,6 +564,18 @@ Metadata:
           - NamingPrefix
       - 
         Label: 
+          default: "Application Tier Configuration"
+        Parameters: 
+          - InstanceType
+          - Web1AutoScaleDesired
+          - ALBSGSource
+      - 
+        Label: 
+          default: "Database Tier Configuration"
+        Parameters:
+          - DB1Name
+      - 
+        Label: 
           default: "VPC Stack Imports"
         Parameters: 
           - VPCImportName
@@ -740,19 +588,4 @@ Metadata:
           - VPCImportDB1Subnet1
           - VPCImportDB1Subnet2
           - VPCImportDB1Subnet3
-      - 
-        Label: 
-          default: "Application Tier Configuration"
-        Parameters: 
-          - Web1SSHKeyName
-          - InstanceType
-          - Web1AutoScaleDesired
-          - ALBSGSource
-      - 
-        Label: 
-          default: "Database Tier Configuration"
-        Parameters:
-          - DB1Name
-          - DB1User
-          - DB1Password
 

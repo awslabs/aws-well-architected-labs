@@ -6,7 +6,8 @@
 1. [Create IAM Policies](#create_policies)
 2. [Create IAM Role](#create_role)
 3. [Test](#test_role)
-4. [Tear Down](#tear_down)
+4. [Knowledge Check](#knowledge_check)
+5. [Tear Down](#tear_down)
 
 In this lab we use the RequestTag [condition key](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html) to require specific tag value during create actions in the EC2 service. This allows users to create tags when creating resources only if they meet specific requirements. To control which existing resources users can modify tags on we use a combination of RequestTag and ResourceTag conditions. To control resources users can manage based on tag values we use ResourceTag based on a tag that exists on a resource. You can think of RequestTag condition key is for new resources when you are creating, and ResourceTag is the tag that already exists on the resource.
 
@@ -256,9 +257,13 @@ Now you will use an existing IAM user with MFA enabled to assume the new *ec2-ad
 ![ec2-instance-terminate](Images/ec2-instance-terminate.png)
 10. Congratulations! You have now learnt about IAM tag based permissions for EC2!
 
+## 4. Knowledge Check <a name="knowledge_check"></a>
+The security best practices followed in this lab are: <a name="best_practices"></a>
+* [Grant least privileges:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) The roles are scoped with minimum privileges to accomplish the task.
+
 ***
 
-## 4. Tear down this lab <a name="tear_down"></a>
+## 5. Tear down this lab <a name="tear_down"></a>
 Please note that the changes you made to the policies and roles have no charges associated with them.
 1. Using the original IAM user, select the *ec2-admin-team-alpha* role in the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/) and click  **Delete role**.  
 2. For each of the policies you created, one at a time select the radio button then **Policy actions** drop down menu then **Delete**.  
