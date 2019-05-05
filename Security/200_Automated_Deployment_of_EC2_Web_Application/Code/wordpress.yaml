@@ -89,7 +89,7 @@ Parameters:
       - m4.2xlarge
     ConstraintDescription: must be a valid EC2 instance type.
   ALBSGSource:
-    Description: The IP address range that can be used to access the EC2 instances
+    Description: Your IP address range that will be used to access the WordPress instance behing the ALB.
     Type: String
     MinLength: '9'
     MaxLength: '18'

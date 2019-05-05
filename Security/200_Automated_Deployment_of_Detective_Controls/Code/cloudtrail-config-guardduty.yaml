@@ -276,7 +276,7 @@ Resources:
           - Id: Delete
             Status: Enabled
             ExpirationInDays: !Ref CloudTrailS3RetentionTime
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
   CloudTrailBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
@@ -500,7 +500,7 @@ Resources:
           - Id: Delete
             Status: Enabled
             ExpirationInDays: !Ref ConfigS3RetentionTime
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
   ConfigBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html

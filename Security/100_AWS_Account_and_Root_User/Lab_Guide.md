@@ -41,7 +41,10 @@ If your MFA device is lost, stolen, or not working, you can still sign in using 
    * **Option 1**: Click Dashboard, and under Security Status, expand Activate MFA on your root user.
 
    * **Option 2**: On the right side of the navigation bar, click your account name, and click Security Credentials. If necessary, click Continue to Security Credentials. Then expand the Multi-Factor Authentication (MFA) section on the page.
-        ![Security Credentials in the navigation menu](Images/security-credentials-root.shared.console.png)
+
+     ![Security Credentials in the navigation menu](Images/security-credentials-root.shared.console.png)
+     
+     ![MFA section in root credentials screen](Images/security-credentials-root-mfa.png)
 
 3. Click Manage MFA or Activate MFA, depending on which option you chose in the preceding step.
 4. In the wizard, click A virtual MFA device and then click Next Step.
