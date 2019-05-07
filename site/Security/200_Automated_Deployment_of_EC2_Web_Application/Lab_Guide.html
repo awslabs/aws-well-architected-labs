@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1478,6 +1526,68 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#table-of-contents" title="Table of Contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" title="1. Overview " class="md-nav__link">
+    1. Overview 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-create-web-stack" title="2. Create Web Stack " class="md-nav__link">
+    2. Create Web Stack 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-knowledge-check" title="3. Knowledge Check " class="md-nav__link">
+    3. Knowledge Check 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-further-considerations" title="4. Further considerations: " class="md-nav__link">
+    4. Further considerations: 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-tear-down-this-lab" title="5. Tear down this lab " class="md-nav__link">
+    5. Tear down this lab 
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-useful-resources" title="References &amp; useful resources:" class="md-nav__link">
+    References &amp; useful resources:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
       
       
       
@@ -1503,16 +1613,23 @@
 <li>Ben Potter, Security Lead, Well-Architected</li>
 <li>Rodney Lester, Reliability Lead, Well-Architected</li>
 </ul>
-<h1 id="table-of-contents">Table of Contents</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
+<li><a href="#overview">Overview</a></li>
 <li><a href="#create_web_stack">Create Web Stack</a></li>
+<li><a href="#knowledge_check">Knowledge Check</a></li>
+<li><a href="#further_considerations">Further Considerations</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
-<h2 id="1-create-web-stack">1. Create Web Stack <a name="create_web_stack"></a></h2>
-<p>Please note a prerequisite to this lab is that you have deployed the CloudFormation VPC stack in the lab <a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a> with the default parameters and recommended stack name, and have an <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair">EC2 SSH key</a> created for instances. This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. 
-1. Choose the version of the CloudFormation template from <a href="Code/">/Code</a> to your computer:
-   - wordpress.yaml to create a wordpress site, including an RDS database
-   - staticwebapp.yaml to create a multi-AZ static web application that simply displays the instance ID for the instance it is running upon
+<h2 id="1-overview">1. Overview <a name="overview"></a></h2>
+<p>Overview of wordpress stack architecture:
+<img alt="architecture" src="Images/architecture.png" /></p>
+<h2 id="2-create-web-stack">2. Create Web Stack <a name="create_web_stack"></a></h2>
+<p>Please note a prerequisite to this lab is that you have deployed the CloudFormation VPC stack in the lab <a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a> with the default parameters and recommended stack name.</p>
+<p>This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. An SSH key is not configured in this lab, instead <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html">AWS Systems Manager</a> should be used to manage the EC2 instances as a more secure and scalable method.
+1. Choose the version of the CloudFormation template and download to your computer or by <a href="https://help.github.com/en/articles/cloning-a-repository">cloning</a> this repository:
+   * <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml">wordpress.yaml</a> to create a WordPress site, including an RDS database.
+   * <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml">staticwebapp.yaml</a> to create a static web application that simply displays the instance ID for the instance it is running upon.
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
 3. Click Create Stack.<br />
 <img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
@@ -1520,13 +1637,10 @@
 <img alt="cloudformation-createstack-2" src="Images/cloudformation-createstack-2.png" /><br />
 5. Choose the CloudFormation template you downloaded in step 1, return to the CloudFormation console page and click <strong>Next</strong>.
 5. Enter the following details:
-  * Stack name: The name of this stack. For this lab, use <em>WebApp1-WordPress</em> or <em>WebApp1-Static</em> and match the case.<br />
+  * Stack name: The name of this stack. For this lab, for the WordPress stack use <em>WebApp1-WordPress</em> or for the static web stack use <em>WebApp1-Static</em> and match the case.<br />
 <img alt="cloudformation-wp-params" src="Images/cloudformation-wp-params.png" /><br />
   * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.<br />
 <img alt="cloudformation-wp-params-2" src="Images/cloudformation-wp-params-2.png" /><br />
-  * DB1User: User name of your choice for the RDS database that must contain 1 to 16 alphanumeric characters. first character must be a letter, cannot be a word reserved by the database engine.
-  * DB1Password: Password of your choice for the RDS database and contain 8 to 41 alphanumeric characters.
-  <img alt="cloudformation-wp-params-3" src="Images/cloudformation-wp-params-3.png" /><br />
   The remaining parameters may be left as defaults, you can find out more in the description for each.<br />
 6. At the bottom of the page click <strong>Next</strong>.
 7. In this lab, we won't add any tags or other options. Click <strong>Next</strong>. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.
@@ -1536,8 +1650,30 @@
 <img alt="cloudformation-wp-createstack-complete" src="Images/cloudformation-wp-createstack-complete.png" /><br />
 You have now created the WordPress stack (well actually CloudFormation did it for you).<br />
 10. In the stack click the <strong>Outputs</strong> tab, and open the <em>WebsiteURL</em> value in your web browser, this is how to access what you just created.</p>
+<h2 id="3-knowledge-check">3. Knowledge Check <a name="knowledge_check"></a></h2>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a>
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> A role is attached to the auto-scaled instances.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Implement dynamic authentication:</a> The role attached to the auto-scaled instances dynamically acquires credentials.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The role attached to the auto-scaled instances uses minimum privileges to accomplish the task.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features including secrets manager have been adopted.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Limit exposure:</a> Security groups restrict network traffic to a minimum.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to deploy the application automatically.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Control traffic at all layers:</a> Traffic is controlled in multiple tiers, using subnets with different route tables.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Reduce attack surface:</a> Instances do not allow for SSH, instead Systems Manager may be used for administration.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized including Secrets Manager, Aurora serverless.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Implement secure key management:</a> AWS Key Management Service is used for key management of Aurora database.
+* <a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Provide mechanisms to keep people away from data:</a> SSH to the instances is not allowed, Systems Manager may be used to control access and CloudFormation is used to deploy and update all infrastructure to reduce human error.</p>
+<h2 id="4-further-considerations">4. Further considerations: <a name="further_considerations"></a></h2>
+<ul>
+<li>Enable TLS (SSL) on application load balancer to encrypt communications, using Amazon Certificate Manager.</li>
+<li>WordPress that is deployed stores the database password in clear text in a configuration file and is not rotated, best practice if supported would be to encrypt and automatically rotate preferably accessing the Secrets Manager API.</li>
+<li>Encrypting the EC2 AMI for the web instances would automatically enable encrypted volumes.</li>
+<li>Implementing a Web Application Firewall such as AWS WAF, and a content delivery service such as Amazon CloudFront.</li>
+<li>Create an automated process for patching the AMI's and scanning for vulnerabilities before updating in production.</li>
+<li>Create a pipeline that verifies the CloudFormation template for misconfigurations before creating or updating the stack.</li>
+</ul>
 <hr />
-<h3 id="2-tear-down-this-lab">2. Tear down this lab</h3>
+<h3 id="5-tear-down-this-lab">5. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that you have created in this lab.</p>
 <p>Delete the WordPress or Static Web Application CloudFormation stack:
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.

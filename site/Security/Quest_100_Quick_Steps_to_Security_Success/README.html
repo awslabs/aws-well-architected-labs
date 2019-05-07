@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1527,26 +1575,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#walkthrough-new-lab" title="Walkthrough  New Lab?" class="md-nav__link">
-    Walkthrough  New Lab?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-setup-organisations-policies" title="Step 4 - Setup organisations policies" class="md-nav__link">
-    Step 4 - Setup organisations policies
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#walkthrough_2" title="Walkthrough" class="md-nav__link">
     Walkthrough
   </a>
@@ -1559,15 +1587,76 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-detection-and-alerting" title="Step 5 - Detection and Alerting" class="md-nav__link">
-    Step 5 - Detection and Alerting
+  <a href="#step-4-enable-organizations-policies" title="Step 4 - Enable organizations policies" class="md-nav__link">
+    Step 4 - Enable organizations policies
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#walkthrough-repeat-for-each-policy-below" title="Walkthrough (repeat for each policy below)" class="md-nav__link">
+    Walkthrough (repeat for each policy below)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-to-prevent-users-disabling-cloudtrail" title="Policy to prevent users disabling CloudTrail" class="md-nav__link">
+    Policy to prevent users disabling CloudTrail
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-disable-unused-regions" title="(Optional) Disable unused regions" class="md-nav__link">
+    (Optional) Disable unused regions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-disable-public-access-to-data-in-s3" title="Step 5 - Disable public access to data in S3" class="md-nav__link">
+    Step 5 - Disable public access to data in S3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#walkthrough_3" title="Walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#policy-to-block-public" title="Policy to block public" class="md-nav__link">
+    Policy to block public
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-monitoring-and-alerting" title="Step 6 - Monitoring and Alerting" class="md-nav__link">
+    Step 6 - Monitoring and Alerting
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough_4" title="Walkthrough" class="md-nav__link">
     Walkthrough
   </a>
   
@@ -1579,8 +1668,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#additional-resources" title="Additional Resources" class="md-nav__link">
-    Additional Resources
+  <a href="#additional-resources-and-next-steps" title="Additional Resources and next steps" class="md-nav__link">
+    Additional Resources and next steps
   </a>
   
 </li>
@@ -1613,7 +1702,7 @@
                 
                 <h1 id="quest-one-day-to-better-security">Quest: One Day to Better Security</h1>
 <h2 id="about-this-guide">About this Guide</h2>
-<p>This quest is for you to improve your security posture. Every stakeholder involved in your organisation and product or service is entitled to make use of a secure platform. Security is important to earn the trust with your customers and your providers. A secure environment also helps to protect your intellectual property. Each set of activities can be done in one day or split over a week in your lunch break. By the end of the quest we will have a set of accounts with security best practices applied, ready to develop your product in knowing that when you launch your workload you have secure foundations in place.</p>
+<p>This quest is for you to improve your security posture. Every stakeholder involved in your organization and product or service is entitled to make use of a secure platform. Security is important to earn the trust with your customers and your providers. A secure environment also helps to protect your intellectual property. Each set of activities can be done in one day or split over a week in your lunch break. By the end of the quest we will have a set of accounts with security best practices applied, ready to develop your product in knowing that when you launch your workload you have secure foundations in place.</p>
 <h2 id="step-1-multi-account-strategy">Step 1 - Multi-Account Strategy</h2>
 <p>Implementing multiple accounts for our workload improves our security by limiting the blast radius of any potential breaches and separating our workload into discrete accounts.</p>
 <p>Leverage AWS Organisations to create separate AWS accounts for a sandbox, your workload, a secure “data bunker” for audit logs and backups, and a shared services account for common tools. If you currently only have one account, create a new AWS account for your organisations master AWS account and invite your existing account to join as your sandbox AWS account.</p>
@@ -1623,50 +1712,117 @@
 * Workload accounts – customers who have a single product will have a separate AWS account for each environment. If you have multiple workloads, or you rely on account separation for separation of customer data you will want to set up further accounts to reflect your structure</p>
 <h3 id="walkthrough">Walkthrough</h3>
 <ol>
-<li><a href="https://aws.amazon.com/answers/account-management/aws-multi-account-security-strategy/">Define your multi-account strategy</a></li>
+<li><a href="https://d0.awsstatic.com/aws-answers/AWS_Multi_Account_Security_Strategy.pdf">Define your multi-account strategy</a>. A suggested structure is shown below. If you do not current have AWS Organizations setup it is recommended that you use your existing account as a sandbox
+<img alt="Suggested account structure" src="Images/multi-account-suggestion.png" /></li>
 <li>(If required) <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sign-up-for-aws.html">Sign up a new root account</a></li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_create.html">Create an AWS Organisations</a> in the root account</li>
 <li>Invite any existing accounts </li>
 <li>For each AWS account required</li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html">Create a new account in organisations</a>. Make note of the organisations account access role.</li>
-<li>Create a new role for accessing that AWS account</li>
+<li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html">Create a new IAM role in the root account</a> that has permission to assume that role to access the new AWS account</li>
 </ol>
 <h2 id="step-2-identity">Step 2 - Identity</h2>
 <p>Every user must leverage unique credentials so we can trace actions within our accounts. Setup your identity structure in the master account and use cross account access to access the child accounts. As you create roles for your users ensure that you are implementing least privilege access by ensuring that users only have access to perform actions required for their role. Be careful who you give IAM permissions to as they can create their own permissions.</p>
 <h3 id="walkthrough_1">Walkthrough</h3>
 <ol>
-<li>Credentials audit</li>
-<li><a href="../100_AWS_Account_and_Root_User/README.html">Add multi factor authentication to root</a></li>
-<li>Federate Identity Using SAML</li>
-<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Leveraging a SAML provider</a></li>
-<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Use cross account access roles</a> that we setup in Step 1.</li>
+<li><a href="../100_AWS_Account_and_Root_User/README.html">Perform a credentials audit, add multi factor authentication to root and ensure that details are up to date</a></li>
+<li>Federate Identity <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">leveraging a SAML provider</a></li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Use cross account access roles</a> to access the accounts that we setup in part 1.</li>
 </ol>
 <h2 id="step-3-data-bunker">Step 3 - Data Bunker</h2>
 <p>Now we will create a data bunker account to store secure read only security logs and backups. In this step we will send our logs from CloudTrail to that account. The role for accessing this account will have read only access. Only ensure that this role can be accessed by those with a security role in your organisation.</p>
-<h3 id="walkthrough-new-lab">Walkthrough <strong> New Lab? </strong></h3>
-<ol>
-<li>Create a Security account</li>
-<li>Create a security role</li>
-<li>Create a target bucket for CloudTrail</li>
-<li>Turn on CloudTrail (CloudFormation?)</li>
-</ol>
-<h2 id="step-4-setup-organisations-policies">Step 4 - Setup organisations policies</h2>
 <h3 id="walkthrough_2">Walkthrough</h3>
 <ol>
-<li>Block public S3 buckets</li>
-<li>Prevent CloudTrail from being removed
-Config?
-Block access keys?
-Regions?</li>
+<li><a href="../100_Create_a_Data_Bunker">Setup a security account, secure Amazon S3 bucket and turn on our AWS Organization CloudTrail</a></li>
 </ol>
-<h2 id="step-5-detection-and-alerting">Step 5 - Detection and Alerting</h2>
-<h3 id="walkthrough_3">Walkthrough</h3>
-<p>Guard duty?
-1. Lab - Enable security hub + alert on it (being worked on)
-2. Lab - Setup some AWS Config rules in production</p>
-<h2 id="additional-resources">Additional Resources</h2>
+<h2 id="step-4-enable-organizations-policies">Step 4 - Enable organizations policies</h2>
+<p><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html">AWS Organizations policies</a> allow you to apply additional controls to accounts. In the examples given below these are attached to the root which will affect all accounts within the organization. You can also create specific service control policies for separate organizational units within your organization.</p>
+<h3 id="walkthrough-repeat-for-each-policy-below">Walkthrough (repeat for each policy below)</h3>
+<ol>
+<li>Navigate to <strong>AWS Organization</strong> and select the <strong>Policies</strong> tab</li>
+<li>Click <strong>Create policy</strong></li>
+<li>Enter a <em>policy name</em> for your policy and paste the policy JSON below into the <em>policy</em> editor</li>
+<li>Click <strong>Create policy</strong></li>
+<li><strong>Select</strong> the policy you have just created and in the right-hand panel select *<em>roots</em></li>
+<li>Press <strong>Attach</strong> to attach the policy to your organizations root</li>
+</ol>
+<h3 id="policy-to-prevent-users-disabling-cloudtrail">Policy to prevent users disabling CloudTrail</h3>
+<pre><code class="json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: &quot;cloudtrail:StopLogging&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="optional-disable-unused-regions">(Optional) Disable unused regions</h3>
+<p>This policy specifically enables only <em>us-east-1</em> and <em>us-west-1</em>. Replace with the list of <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions">region codes</a> you wish to allow access to.</p>
+<pre><code class="json">{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Statement1&quot;,
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;Action&quot;: [
+                &quot;*&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;*&quot;
+            ],
+            &quot;Condition&quot;: {
+                &quot;ForAnyValue:StringNotEquals&quot;: {
+                    &quot;aws:RequestedRegion&quot;: [
+                        &quot;us-east-1&quot;,
+                        &quot;us-west-1&quot;
+                    ]
+                }
+            }
+        }
+    ]
+}
+</code></pre>
+
+<h2 id="step-5-disable-public-access-to-data-in-s3">Step 5 - Disable public access to data in S3</h2>
+<p>Amazon Simple Storage Service (S3) allows you to upload objects to a "bucket" which are then accessible depending on the access control list implemented. It is important to consider how you make data public. By blocking <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">public access</a> your team will have to be deliberate when it exposes data.</p>
+<p><strong>Note:</strong> The steps below apply at an individual account level. It is important to consider turning this on as you create additional accounts for your organization. At a minimum you should apply this to any account which hosts production data.</p>
+<h2 id="walkthrough_3">Walkthrough</h2>
+<ol>
+<li>For each account that you want to block public access to data stored in S3 - use a cross-account access role to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">block S3 public access</a> </li>
+<li>Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to shit to the root, apply this specifically to the accounts where you have blocked public access.</li>
+</ol>
+<h3 id="policy-to-block-public">Policy to block public</h3>
+<pre><code class="json">{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Statement1&quot;,
+            &quot;Effect&quot;: &quot;Deny&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:PutBucketPublicAccessBlock&quot;,
+                &quot;s3:PutAccountPublicAccessBlock&quot;
+            ],
+            &quot;Resource&quot;: &quot;*&quot;
+        }
+    ]
+}
+</code></pre>
+
+<h2 id="step-6-monitoring-and-alerting">Step 6 - Monitoring and Alerting</h2>
+<p>Lastly, we will setup our foundations for monitoring the security status of our AWS environment and look at how we can build some basic alerting to security incidents. AWS Security Hub gives you a comprehensive view of the security of your account including compliance checks against best practices such as the <a href="https://aws.amazon.com/quickstart/architecture/compliance-cis-benchmark/">Centre for Information Security AWS Foundational Benchmark</a>. We will also enable Amazon GuardDuty - a threat detection service which leverages machine learning to detect anomalies across our AWS CloudTrail, Amazon VPC Flow Logs, and DNS logs.</p>
+<h3 id="walkthrough_4">Walkthrough</h3>
+<ol>
+<li><a href="../100_Enable_Security_Hub">Enable Security Hub</a></li>
+<li><a href="../200_Automated_Deployment_of_Detective_Controls">Enable Amazon GuardDuty and implement basic detective controls</a></li>
+</ol>
+<h2 id="additional-resources-and-next-steps">Additional Resources and next steps</h2>
 <ul>
-<li>Permission Boundaries</li>
+<li>Find further information on the AWS website around <a href="https://aws.amazon.com/security/">AWS Cloud Security</a> and in particular what your responsibilities are under the <a href="https://aws.amazon.com/compliance/shared-responsibility-model/">shared security model</a></li>
+<li>Read more on how <a href="https://aws.amazon.com/blogs/security/how-to-use-service-control-policies-to-set-permission-guardrails-across-accounts-in-your-aws-organization/">permission boundaries and service control policies</a> allow you to delegate access across your organization</li>
+<li>Understand the <a href="https://aws.amazon.com/architecture/well-architected/">Well Architected Framework</a> and how applying it can improve your security posture</li>
 </ul>
 <hr />
 <h2 id="license">License</h2>

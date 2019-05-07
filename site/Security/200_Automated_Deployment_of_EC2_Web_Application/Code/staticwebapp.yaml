@@ -91,11 +91,11 @@ Parameters:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   Web1AutoScaleDesired:
-    Default: '3'
+    Default: '6'
     Description: The desired number of web instances in auto scaling group
     Type: Number
-    MinValue: '1'
-    MaxValue: '6'
+    MinValue: '3'
+    MaxValue: '9'
     ConstraintDescription: must be between 1 and 6 EC2 instances.
 Mappings:
   AWSInstanceType2Arch:
@@ -305,28 +305,28 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
     Properties:
       HealthCheckPath: /index.html
-      HealthCheckIntervalSeconds: 10
+      HealthCheckIntervalSeconds: 5
       #HealthCheckPath: 
       #HealthCheckPort: 
       #HealthCheckProtocol:
-      HealthCheckTimeoutSeconds: 5
+      HealthCheckTimeoutSeconds: 3
       HealthyThresholdCount: 2
       #Name: 
       Port: 80
       Protocol: HTTP
       #Tags:
         #-
-      TargetGroupAttributes:
-        - Key: stickiness.enabled
-          Value: 'true'
-        - Key: stickiness.type
-          Value: lb_cookie
-        - Key: stickiness.lb_cookie.duration_seconds
-          Value: '30'
+      #TargetGroupAttributes:
+        #- Key: stickiness.enabled
+        #  Value: 'true'
+        #- Key: stickiness.type
+        #  Value: lb_cookie
+        #- Key: stickiness.lb_cookie.duration_seconds
+        #  Value: '30'
       # Targets:
       #   - TargetDescription
       # TargetType: String
-      UnhealthyThresholdCount: 5
+      UnhealthyThresholdCount: 3
       VpcId: 
         Fn::ImportValue: !Sub '${VPCImportName}'
   Web1InstanceSecurityGroup:
@@ -370,7 +370,7 @@ Resources:
         - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet3'
       LaunchConfigurationName: !Ref Web1LaunchConfig
       MinSize: '1'
-      MaxSize: '5'
+      MaxSize: '9'
       DesiredCapacity: !Ref Web1AutoScaleDesired
       TargetGroupARNs:
         - !Ref ALB1TargetGroup

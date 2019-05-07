@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1486,16 +1534,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-aws-cloudformation-to-donfigure-aws-cloudtrail-aws-config-and-amazon-guardduty" title="1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty " class="md-nav__link">
-    1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty 
+  <a href="#1-aws-cloudformation-to-configure-aws-cloudtrail-aws-config-and-amazon-guardduty" title="1. AWS CloudFormation to configure AWS CloudTrail, AWS Config, and Amazon GuardDuty " class="md-nav__link">
+    1. AWS CloudFormation to configure AWS CloudTrail, AWS Config, and Amazon GuardDuty 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-knowledge-check" title="2. Knowledge Check " class="md-nav__link">
+    2. Knowledge Check 
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#2-tear-down-this-lab" title="2. Tear down this lab " class="md-nav__link">
-    2. Tear down this lab 
+  <a href="#3-tear-down-this-lab" title="3. Tear down this lab " class="md-nav__link">
+    3. Tear down this lab 
   </a>
   
 </li>
@@ -1546,48 +1601,62 @@
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol>
 <li><a href="#deployment">Deployment</a></li>
+<li><a href="#knowledge_check">Knowledge Check</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
-<h2 id="1-aws-cloudformation-to-donfigure-aws-cloudtrail-aws-config-and-amazon-guardduty">1. AWS CloudFormation to donfigure AWS CloudTrail, AWS Config, and Amazon GuardDuty <a name="deployment"></a></h2>
-<p><a href="https://aws.amazon.com/cloudtrail/">AWS CloudTrail</a> is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related to actions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services.<br />
-<a href="https://aws.amazon.com/guardduty/">Amazon GuardDuty</a> is a threat detection service that continuously monitors for malicious or unauthorized behavior to help you protect your AWS accounts and workloads. It monitors for activity such as unusual API calls or potentially unauthorized deployments that indicate a possible account compromise. GuardDuty also detects potentially compromised instances or reconnaissance by attackers.
-Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to configure GuardDuty, and configure alerting to your email address.<br />
-<a href="https://aws.amazon.com/config/">AWS Config</a> is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. Config continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
-2. Click <strong>Create stack</strong>.<br />
+<h2 id="1-aws-cloudformation-to-configure-aws-cloudtrail-aws-config-and-amazon-guardduty">1. AWS CloudFormation to configure AWS CloudTrail, AWS Config, and Amazon GuardDuty <a name="deployment"></a></h2>
+<p><a href="https://aws.amazon.com/cloudtrail/">AWS CloudTrail</a> is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related to actions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services.</p>
+<p><a href="https://aws.amazon.com/guardduty/">Amazon GuardDuty</a> is a threat detection service that continuously monitors for malicious or unauthorized behavior to help you protect your AWS accounts and workloads. It monitors for activity such as unusual API calls or potentially unauthorized deployments that indicate a possible account compromise. GuardDuty also detects potentially compromised instances or reconnaissance by attackers.</p>
+<p>Using <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, we are going to configure GuardDuty, and configure alerting to your email address.  </p>
+<p><a href="https://aws.amazon.com/config/">AWS Config</a> is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. AWS Config continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.</p>
+<ol>
+<li>Download the latest version of the <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_Detective_Controls/Code/cloudtrail-config-guardduty.yaml">cloudtrail-config-guardduty.yaml</a> CloudFormation template from GitHub raw, or by <a href="https://help.github.com/en/articles/cloning-a-repository">cloning</a> this repository.</li>
+<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.</li>
+<li>Click <strong>Create stack</strong>.<br />
 <img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
-3. Enter the following <strong>Amazon S3 URL</strong>: <code>https://s3-us-west-2.amazonaws.com/aws-well-architected-labs/Security/Code/cloudtrail-config-guardduty.yaml</code> and click <strong>Next</strong>.<br />
-<img alt="cloudformation-createstack-s3" src="Images/cloudformation-createstack-s3.png" /> <br />
-4. Enter the following details:<br />
-<strong>General</strong><br />
-  * Stack name: The name of this stack. For this lab, use <code>DetectiveControls</code>.
-  * CloudTrail: Enable CloudTrail Yes/No. If you already have CloudTrail enabled select No.
-  * Config: Enable Config Yes/No. If you already have Config enabled select No.
-  * GuardDuty: Enable GuardDuty Yes/No. If you already have GuardDuty enabled select No. Note that GuardDuty will create and leave an IAM role the first time its enabled.
-  * S3BucketPolicyExplicitDeny: (Optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.
-  * S3AccessLogsBucketName: (Optional) The name of an existing S3 bucket for storing S3 access logs.<br />
-<strong>CloudTrail</strong><br />
-  * CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.<br />
-  * CloudTrailCWLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.
-  * CloudTrailS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.
-  * CloudTrailEncryptS3Logs: (Optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.
-  * CloudTrailLogS3DataEvents: (Optional) These events provide insight into the resource operations performed on or within S3.<br />
-<strong>Config</strong><br />
-  * ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.<br />
-  * ConfigSnapshotFrequency: AWS Config configuration snapshot frequency
-  * ConfigS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.<br />
-<strong>Guard Duty</strong><br />
-  * GuardDutyEmailAddress: The email address you own that will receive the alerts, you must have access to this address for testing.
-5. At the bottom of the page click <strong>Next</strong>.
-6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.<br />
-7. Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-createstack-final" src="Images/cloudformation-createstack-final.png" /><br />
-8. After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.<br />
-You have now set up detective controls to log to your buckets and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!<br />
-9. You should receive an email to confirm the SNS email subscription, you must confirm this. Note as the email is directly from GuardDuty via SNS is will be JSON format.  </p>
+<img alt="upload_a_template" src="Images/cloudformation_upload_a_template.png" />   </li>
+<li>Enter the following details for each section:<br />
+<strong>General</strong>  </li>
+<li>Stack name: The name of this stack. For this lab, use <code>DetectiveControls</code>.</li>
+<li>CloudTrail: Enable CloudTrail Yes/No. If you already have CloudTrail enabled select No.</li>
+<li>Config: Enable Config Yes/No. If you already have Config enabled select No.</li>
+<li>GuardDuty: Enable GuardDuty Yes/No. If you already have GuardDuty enabled select No. Note that GuardDuty will create and leave an IAM role the first time its enabled.</li>
+<li>S3BucketPolicyExplicitDeny: (Optional) Explicitly deny destructive actions to the bucket. AWS root user will be required to modify this bucket if configured.</li>
+<li>S3AccessLogsBucketName: (Optional) The name of an existing S3 bucket for storing S3 access logs.<br />
+<strong>CloudTrail</strong>  </li>
+<li>CloudTrailBucketName: The name of the new S3 bucket to create for CloudTrail to send logs to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.  </li>
+<li>CloudTrailCWLogsRetentionTime: Number of days to retain logs in CloudWatch Logs.</li>
+<li>CloudTrailS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.</li>
+<li>CloudTrailEncryptS3Logs: (Optional) Use AWS KMS to encrypt logs stored in Amazon S3. A new KMS key will be created.</li>
+<li>CloudTrailLogS3DataEvents: (Optional) These events provide insight into the resource operations performed on or within S3.<br />
+<strong>Config</strong>  </li>
+<li>ConfigBucketName: The name of the new S3 bucket to create for Config to save config snapshots to.  <strong>IMPORTANT</strong> Specify a bucket name that is unique.  </li>
+<li>ConfigSnapshotFrequency: AWS Config configuration snapshot frequency</li>
+<li>ConfigS3RetentionTime: Number of days to retain logs in the S3 bucket before they are automatically deleted.<br />
+<strong>Guard Duty</strong>  </li>
+<li>
+<p>GuardDutyEmailAddress: The email address you own that will receive the alerts, you must have access to this address for testing.</p>
+</li>
+<li>
+<p>Once you have finished entering the details for the template continue to the bottom of the page and click <strong>Next</strong>.</p>
+</li>
+<li>In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.  </li>
+<li>Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
+<img alt="cloudformation-createstack-final" src="Images/cloudformation-createstack-final.png" />  </li>
+<li>After a few minutes the stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.<br />
+You have now set up detective controls to log to your buckets and retain events, giving you the ability to search history and later enable pro-active monitoring of your AWS account!  </li>
+<li>You should receive an email to confirm the SNS email subscription, you must confirm this. Note as the email is directly from GuardDuty via SNS is will be JSON format.  </li>
+</ol>
+<h2 id="2-knowledge-check">2. Knowledge Check <a name="knowledge_check"></a></h2>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a>
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Automate alerting on key indicators</a> AWS Cloudtrail, AWS Config and Amazon GuardDuty provide insights into your environment.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features such as Amazon GuardDuty have been adopted.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to configure AWS CloudTrail, AWS Config and Amazon GuardDuty.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized to increase your visibility and control of your environment.</p>
 <hr />
-<h3 id="2-tear-down-this-lab">2. Tear down this lab <a name="tear_down"></a></h3>
+<h3 id="3-tear-down-this-lab">3. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them.</p>
+<p>Note: If you are planning on doing the lab <a href="Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md">300_Incident_Response_with_AWS_Console_and_CLI</a> we recommend you only tear down this stack after completing that lab as their is a dependency on AWS CloudTrail being enabled for the other lab.</p>
 <p>Delete the stack:
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the <code>DetectiveControls</code> stack.

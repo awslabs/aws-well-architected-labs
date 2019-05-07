@@ -1,4 +1,5 @@
 # AWS Well-Architected Cost Optimization Labs
+http://wellarchitectedlabs.com 
 
 ## Introduction
 
@@ -28,7 +29,7 @@ These labs are designed to start you on your Cost Optimization journey. They cov
 
 
 ### Cost and Usage Analysis
-These labs focus on analysis of your cost and usage. The 100 and 200 level are from the fundamentals series and should be done before any other labs. The 300 cover specific areas of analysis and can be done independantly at any time.
+These labs focus on analysis of your cost and usage. The 100 and 200 level are from the fundamentals series and should be done before any other labs. The 300 cover specific areas of analysis and can be done independently at any time.
 
 #### 100 and 200 Level
 - [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)

@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1478,6 +1526,61 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#table-of-contents" title="Table of Contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" title="1. Overview " class="md-nav__link">
+    1. Overview 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-create-vpc-stack" title="2. Create VPC Stack " class="md-nav__link">
+    2. Create VPC Stack 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-knowledge-check" title="3. Knowledge Check " class="md-nav__link">
+    3. Knowledge Check 
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-tear-down-this-lab" title="4. Tear down this lab " class="md-nav__link">
+    4. Tear down this lab 
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-useful-resources" title="References &amp; useful resources:" class="md-nav__link">
+    References &amp; useful resources:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
       
       
       
@@ -1502,14 +1605,18 @@
 <ul>
 <li>Ben Potter, Security Lead, Well-Architected</li>
 </ul>
-<h1 id="table-of-contents">Table of Contents</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
+<li><a href="#overview">Overview</a></li>
 <li><a href="#create_vpc_stack">Create VPC Stack</a></li>
+<li><a href="#knowledge_check">Knowledge Check</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
-<h2 id="1-create-vpc-stack">1. Create VPC Stack <a name="create_vpc_stack"></a></h2>
+<h2 id="1-overview">1. Overview <a name="overview"></a></h2>
+<p><img alt="architecture" src="Images/architecture.png" /></p>
+<h2 id="2-create-vpc-stack">2. Create VPC Stack <a name="create_vpc_stack"></a></h2>
 <p>This step will create the VPC and all components using the example CloudFormation template.
-1. Download the latest version of the CloudFormation template from <a href="Code/">/Code</a> to your computer.
+1. Download the latest version of the <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml">vpc-alb-app-db.yaml</a> CloudFormation template from file from GitHub raw, or by <a href="https://help.github.com/en/articles/cloning-a-repository">cloning</a> this repository.
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
 3. Click Create Stack.<br />
 <img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
@@ -1526,9 +1633,17 @@
 <img alt="cloudformation-vpc-createstack-final" src="Images/cloudformation-vpc-createstack-final.png" /><br />
 9. After a few minutes the final stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.
 You have now created the VPC stack (well actually CloudFormation did it for you).</p>
+<h2 id="3-knowledge-check">3. Knowledge Check <a name="knowledge_check"></a></h2>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a>
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The roles are scoped with minimum privileges to accomplish the task.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features including secrets manager have been adopted.
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Limit exposure:</a> Security groups restrict network traffic to a minimum. Use of Internet Gateways and NAT Gateways in use to control traffic flows.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to deploy the networking constructs.
+* <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Control traffic at all layers:</a> Traffic is controlled in multiple tiers, using subnets with different route tables.</p>
 <hr />
-<h3 id="2-tear-down-this-lab">2. Tear down this lab</h3>
+<h3 id="4-tear-down-this-lab">4. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that you have created in this lab.</p>
+<p>Note: If you are planning on completing the lab <a href="../200_Automated_Deployment_of_EC2_Web_Application/README.html">200_Automated_Deployment_of_EC2_Web_Application</a> we recommend you only tear down this lab after completing both, as there is a dependency on this VPC.</p>
 <p>Delete the VPC CloudFormation stack:
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.
 2. Click the radio button on the left of the <em>WebApp1-VPC</em> stack.

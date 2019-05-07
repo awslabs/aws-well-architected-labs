@@ -53,7 +53,7 @@ Parameters:
   #CloudTrail
   CloudTrailBucketName:
     Type: String
-    Description: The name of the new S3 bucket to create for CloudTrail to send logs to.
+    Description: The name of the new S3 bucket to create for CloudTrail to send logs to. Can contain only lower-case characters, numbers, periods, and dashes.Each label in the bucket name must start with a lowercase letter or number.
     MinLength: '3'
     MaxLength: '63'
     AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
@@ -84,7 +84,7 @@ Parameters:
     Type: String
     Description: >-
       The name of the S3 bucket Config Service will store configuration
-      snapshots in.
+      snapshots in. Each label in the bucket name must start with a lowercase letter or number.
     MinLength: '3'
     MaxLength: '63'
     AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
@@ -276,7 +276,7 @@ Resources:
           - Id: Delete
             Status: Enabled
             ExpirationInDays: !Ref CloudTrailS3RetentionTime
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
   CloudTrailBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
@@ -500,7 +500,7 @@ Resources:
           - Id: Delete
             Status: Enabled
             ExpirationInDays: !Ref ConfigS3RetentionTime
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
   ConfigBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html

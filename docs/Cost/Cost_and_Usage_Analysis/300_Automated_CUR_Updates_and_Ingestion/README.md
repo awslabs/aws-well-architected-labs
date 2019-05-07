@@ -1,4 +1,5 @@
 # Level 300: Automated CUR Updates and Ingestion
+http://wellarchitectedlabs.com 
 
 ## Introduction
  This hands-on lab will guide you through the steps to enable automated updates of your CUR files into Athena. The skills you learn will help you perform cost and usage analysis in alignment with the AWS Well-Architected Framework.

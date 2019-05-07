@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1507,11 +1555,12 @@
 <li><a href="#create_policies">Create IAM Policies</a></li>
 <li><a href="#developer_role">Create and Test Developer Role</a></li>
 <li><a href="#user_role">Create and Test Region Restricted User Role</a></li>
+<li><a href="#knowledge_check">Knowledge Check</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
 <h2 id="1-create-iam-policies">1. Create IAM policies <a name="create_policies"></a></h2>
 <h3 id="11-create-policy-for-permission-boundary">1.1 Create policy for permission boundary</h3>
-<p>This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab we are only going to allow regions us-east-1 (North Virginia) and us-west-1 (North California), optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow are ec2 and lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
+<p>This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab using AWS IAM we are only going to allow the us-east-1 (North Virginia) and us-west-1 (North California) regions, optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow in these regions are AWS EC2 and AWS Lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.<br />
 If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html">IAM User Guide</a>. You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click <strong>Policies</strong> and then click <strong>Create policy</strong>.<br />
@@ -1697,8 +1746,13 @@ If you receive an error message a common mistake is not changing the account num
 8. Navigate to the EC2 Management Console in the us-east-1 region <a href="https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1">https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1</a>. The EC2 Dashboard should display a summary list of resources with the only error being <em>Error retrieving resource count</em> from Elastic Load Balancing as that requires additional permissions. <img alt="ec2-resources-allowed" src="Images/ec2-resources-allowed.png" /><br />
 9. Navigate to the EC2 Management Console in a region that is not allowed, such as ap-southeast-2 (Sydney) <a href="https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2">https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2</a>. The EC2 Dashboard should display a number of unauthorized error messages. <img alt="ec2-resources-denied" src="Images/ec2-resources-denied.png" /><br />
 10. Congratulations! You have now learnt about IAM permission boundaries and have one working!</p>
+<h2 id="4-knowledge-check">4. Knowledge Check <a name="knowledge_check"></a></h2>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a>
+<em> <a href="https://wa.aws.amazon.com/wat.question.SEC_1.en.html">Manage credentials and authentication</a> Use of MFA for access to provide additional access control.
+</em> <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> Roles with associated policies have been used to define appropriate permission boundaries.
+* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The roles are scoped with minimum privileges to accomplish the task.</p>
 <hr />
-<h2 id="4-tear-down-this-lab">4. Tear down this lab <a name="tear_down"></a></h2>
+<h2 id="5-tear-down-this-lab">5. Tear down this lab <a name="tear_down"></a></h2>
 <p>Please note that the changes you made to the users, groups, and roles have no charges associated with them.
 1. Using the original IAM user, for each of the roles you created select them in the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and click  <strong>Delete role</strong>.<br />
 The roles created are:<br />

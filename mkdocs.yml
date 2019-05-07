@@ -91,6 +91,9 @@ nav:
     - Reliability: 
         - Overview: 'Reliability/README.md'  
         - Testing Resiliency: 
+            - 200 EC2 Resiliency: 
+                - Lab Overview: 'Reliability/200_Testing_for_Resiliency_of_EC2/README.md' 
+                - Lab Guide: 'Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.md' 
             - 300 EC2, RDS S3 Resiliency: 
                 - Lab Overview: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md'
                 - Lab Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.md'  

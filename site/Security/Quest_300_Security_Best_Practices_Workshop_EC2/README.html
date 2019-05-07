@@ -108,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#coming-soon" tabindex="1" class="md-skip">
+      <a href="#quest-aws-security-best-practices-workshop" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -133,7 +133,7 @@
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              Coming Soon
+              Quest: AWS Security Best Practices Workshop
             </span>
           
         </div>
@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1468,6 +1516,184 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-this-guide" title="About this Guide" class="md-nav__link">
+    About this Guide
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" title="Prerequisites:" class="md-nav__link">
+    Prerequisites:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-1-identity-access-management" title="Lab 1 -  Identity &amp; Access Management:" class="md-nav__link">
+    Lab 1 -  Identity &amp; Access Management:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lab-1a-iam-permission-boundaries-delegating-role-creation" title="Lab 1a - IAM Permission Boundaries Delegating Role Creation:" class="md-nav__link">
+    Lab 1a - IAM Permission Boundaries Delegating Role Creation:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iam-permission-boundaries-delegating-role-creation" title="IAM Permission Boundaries Delegating Role Creation" class="md-nav__link">
+    IAM Permission Boundaries Delegating Role Creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab-1b-iam-tag-based-access-control-for-ec2" title="Lab 1b - IAM Tag Based Access Control for EC2:" class="md-nav__link">
+    Lab 1b - IAM Tag Based Access Control for EC2:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iam-tag-based-access-control-for-ec2" title="IAM Tag Based Access Control for EC2" class="md-nav__link">
+    IAM Tag Based Access Control for EC2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-2-automated-deployment-of-vpc" title="Lab 2 - Automated Deployment of VPC:" class="md-nav__link">
+    Lab 2 - Automated Deployment of VPC:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automated-deployment-of-vpc" title="Automated Deployment of VPC" class="md-nav__link">
+    Automated Deployment of VPC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-3-automated-deployment-of-ec2-web-application" title="Lab 3 - Automated Deployment of EC2 Web Application:" class="md-nav__link">
+    Lab 3 - Automated Deployment of EC2 Web Application:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automated-deployment-of-ec2-web-application" title="Automated Deployment of EC2 Web Application" class="md-nav__link">
+    Automated Deployment of EC2 Web Application
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-4-automated-deployment-of-detective-controls" title="Lab 4 - Automated Deployment of Detective Controls:" class="md-nav__link">
+    Lab 4 - Automated Deployment of Detective Controls:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automated-deployment-of-detective-controls" title="Automated Deployment of Detective Controls" class="md-nav__link">
+    Automated Deployment of Detective Controls
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-5-enable-security-hub" title="Lab 5 - Enable Security Hub:" class="md-nav__link">
+    Lab 5 - Enable Security Hub:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enable-security-hub" title="Enable Security Hub" class="md-nav__link">
+    Enable Security Hub
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-6-incident-response-with-aws-console-and-cli" title="Lab 6 - Incident Response with AWS Console and CLI:" class="md-nav__link">
+    Lab 6 - Incident Response with AWS Console and CLI:
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#incident-response-with-aws-console-and-cli" title="Incident Response with AWS Console and CLI" class="md-nav__link">
+    Incident Response with AWS Console and CLI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1481,7 +1707,69 @@
                   <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="coming-soon">Coming Soon</h1>
+                <h1 id="quest-aws-security-best-practices-workshop">Quest: AWS Security Best Practices Workshop</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Ben Potter, Security Lead, Well-Architected</li>
+<li>Pierre Liddle, Principal Solutions Architect</li>
+</ul>
+<h2 id="about-this-guide">About this Guide</h2>
+<p>This quest is the guide for an AWS led event including <a href="https://aws.amazon.com/events/summits/">AWS Summits</a> security best practices workshop. Using your own AWS account you will learn through hands-on labs in securing an Amazon EC2-based web application covering identity &amp; access management, detective controls, infrastructure protection, data protection and incident response. The skills you learn will help you secure your workloads in alignment with the <a href="https://aws.amazon.com/architecture/well-architected/">AWS Well-Architected Framework</a>.</p>
+<h2 id="prerequisites">Prerequisites:</h2>
+<ul>
+<li>An <a href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html">AWS account</a> that you are able to use for testing, that is not used for production or other purposes.<br />
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the <a href="https://aws.amazon.com/free/">AWS Free Tier</a>.</li>
+</ul>
+<hr />
+<h2 id="lab-1-identity-access-management">Lab 1 -  Identity &amp; Access Management:</h2>
+<p>For Lab 1 choose one of labs to run based on your interest or experience:  </p>
+<h3 id="lab-1a-iam-permission-boundaries-delegating-role-creation">Lab 1a - IAM Permission Boundaries Delegating Role Creation:</h3>
+<p>This hands-on lab will guide you through the steps to configure an example AWS Identity and Access Management (IAM) permission boundary. AWS supports permissions boundaries for IAM entities (users or roles). A permissions boundary is an advanced feature in which you use a managed policy to set the maximum permissions that an identity-based policy can grant to an IAM entity. When you set a permissions boundary for an entity, the entity can perform only the actions that are allowed by the policy.<br />
+<br />
+In this lab you will create a series of policies attached to a role that can be assumed by an individual such as a developer, the developer can then use this role to create additional user roles that are restricted to specific services and regions.
+This allows you to delegate access to create IAM roles and policies, without them exceeding the permissions in the permission boundary. We will also use a naming standard with a prefix, making it easier to control and organize policies and roles that your developers create.  </p>
+<h3 id="iam-permission-boundaries-delegating-role-creation"><a href="../300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html">IAM Permission Boundaries Delegating Role Creation</a></h3>
+<h3 id="lab-1b-iam-tag-based-access-control-for-ec2">Lab 1b - IAM Tag Based Access Control for EC2:</h3>
+<p>This hands-on lab will guide you through the steps to configure example AWS Identity and Access Management (IAM) policies, and a AWS IAM role with associated permissions to use EC2 resource tags for access control. Using tags is powerful as it helps you scale your permission management, however you need to be careful about the management of the tags which you will learn in this lab.<br />
+<br />
+In this lab you will create a series of policies attached to a role that can be assumed by an individual such as an EC2 administrator. This allows the EC2 administrator to create tags when creating resources only if they match the requirements, and control which existing resources and values they can tag.  </p>
+<h3 id="iam-tag-based-access-control-for-ec2"><a href="../300_IAM_Tag_Based_Access_Control_for_EC2/README.html">IAM Tag Based Access Control for EC2</a></h3>
+<h2 id="lab-2-automated-deployment-of-vpc">Lab 2 - Automated Deployment of VPC:</h2>
+<p>This hands-on lab will guide you through the steps to configure an <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a> and outline some of the AWS security features. <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a> will be used to automate the deployment and provide a repeatable way to re-use the template after this lab.<br />
+<br />
+The example CloudFormation template will deploy a completely new VPC incorporating a number of AWS security best practices which are:</p>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Networking subnets</a> created in multiple availability zones for the following network tiers:
+  * Application Load Balancer - named <em>ALB1</em>
+  * Application instances - named <em>App1</em>
+  * Shared services - named <em>Shared1</em>
+  * Databases - named <em>DB1</em></p>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC endpoints</a> are created for private connectivity to AWS services.<br />
+<a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> are created to allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Table</a> configurations.<br />
+<a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html">Network ACLs</a> control access at each subnet layer.<br />
+While <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> captures information about IP traffic and stores it in Amazon CloudWatch Logs.<br />
+Do not follow tear down instructions until you have completed this quest, as the EC2 lab requires this VPC.</p>
+<h3 id="automated-deployment-of-vpc"><a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a></h3>
+<h2 id="lab-3-automated-deployment-of-ec2-web-application">Lab 3 - Automated Deployment of EC2 Web Application:</h2>
+<p>This hands-on lab will guide you through the steps to configure a web application in <a href="https://aws.amazon.com/ec2/">Amazon EC2</a> with a defense in depth approach.<br /></p>
+<p>The <a href="https://wordpress.org/">WordPress</a> example <a href="Code/wordpress.yaml">CloudFormation template</a> will deploy a basic WordPress  content management system, incorporating a number of AWS security best practices. This example is not intended to be a comprehensive WordPress system, please consult <a href="https://aws.amazon.com/getting-started/projects/build-wordpress-website/">Build a WordPress Website</a> for more information.</p>
+<h3 id="automated-deployment-of-ec2-web-application"><a href="../200_Automated_Deployment_of_EC2_Web_Application/README.html">Automated Deployment of EC2 Web Application</a></h3>
+<h2 id="lab-4-automated-deployment-of-detective-controls">Lab 4 - Automated Deployment of Detective Controls:</h2>
+<p>This hands-on lab will guide you through how to use AWS CloudFormation to automatically configure detective controls including AWS CloudTrail, AWS Config, and Amazon GuardDuty. You will use the AWS Management Console and AWS CloudFormation to guide you through how to automate the configuration of each service.</p>
+<h3 id="automated-deployment-of-detective-controls"><a href="../200_Automated_Deployment_of_Detective_Controls/README.html">Automated Deployment of Detective Controls</a></h3>
+<h2 id="lab-5-enable-security-hub">Lab 5 - Enable Security Hub:</h2>
+<p><a href="https://aws.amazon.com/security-hub/">AWS Security Hub</a> gives you a comprehensive view of your high-priority security alerts and compliance status across AWS accounts. There are a range of powerful security tools at your disposal, from firewalls and endpoint protection to vulnerability and compliance scanners. But oftentimes this leaves your team switching back-and-forth between these tools to deal with hundreds, and sometimes thousands, of security alerts every day. With Security Hub, you now have a single place that aggregates, organizes, and prioritizes your security alerts, or findings, from multiple AWS services, such as Amazon GuardDuty, Amazon Inspector, and Amazon Macie, as well as from AWS Partner solutions. Your findings are visually summarized on integrated dashboards with actionable graphs and tables. You can also continuously monitor your environment using automated compliance checks based on the AWS best practices and industry standards your organization follows. Get started with AWS Security Hub in just a few clicks in the Management Console and once enabled, Security Hub will begin aggregating and prioritizing findings.</p>
+<h3 id="enable-security-hub"><a href="../100_Enable_Security_Hub/README.html">Enable Security Hub</a></h3>
+<h2 id="lab-6-incident-response-with-aws-console-and-cli">Lab 6 - Incident Response with AWS Console and CLI:</h2>
+<p>This hands-on lab will guide you through a number of examples of how you could use the AWS Console and Command Line Interface (CLI) for responding to a security incident. It is a best practice to be prepared for an incident, and have appropriate detective controls enabled. You can find more best practices by reading the <a href="https://wa.aws.amazon.com/wat.pillar.security.en.html">Security Pillar of the AWS Well-Architected Framework</a>.</p>
+<h3 id="incident-response-with-aws-console-and-cli"><a href="../300_Incident_Response_with_AWS_Console_and_CLI/README.html">Incident Response with AWS Console and CLI</a></h3>
+<hr />
+<h2 id="license">License</h2>
+<p>Licensed under the Apache 2.0 and MITnoAttr License. </p>
+<p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
+<pre><code>http://aws.amazon.com/apache2.0/
+</code></pre>
+<p>or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
                 
                   
                 

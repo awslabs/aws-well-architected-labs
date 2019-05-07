@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1507,6 +1555,7 @@
 <li><a href="#create_policies">Create IAM Policies</a></li>
 <li><a href="#create_role">Create IAM Role</a></li>
 <li><a href="#test_role">Test</a></li>
+<li><a href="#knowledge_check">Knowledge Check</a></li>
 <li><a href="#tear_down">Tear Down</a></li>
 </ol>
 <p>In this lab we use the RequestTag <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html">condition key</a> to require specific tag value during create actions in the EC2 service. This allows users to create tags when creating resources only if they meet specific requirements. To control which existing resources users can modify tags on we use a combination of RequestTag and ResourceTag conditions. To control resources users can manage based on tag values we use ResourceTag based on a tag that exists on a resource. You can think of RequestTag condition key is for new resources when you are creating, and ResourceTag is the tag that already exists on the resource.</p>
@@ -1754,8 +1803,11 @@ The last several roles that you used appear on the menu. The next time you need 
 <img alt="ec2-instance-terminate" src="Images/ec2-instance-terminate.png" /></li>
 <li>Congratulations! You have now learnt about IAM tag based permissions for EC2!</li>
 </ol>
+<h2 id="4-knowledge-check">4. Knowledge Check <a name="knowledge_check"></a></h2>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a>
+* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The roles are scoped with minimum privileges to accomplish the task.</p>
 <hr />
-<h2 id="4-tear-down-this-lab">4. Tear down this lab <a name="tear_down"></a></h2>
+<h2 id="5-tear-down-this-lab">5. Tear down this lab <a name="tear_down"></a></h2>
 <p>Please note that the changes you made to the policies and roles have no charges associated with them.
 1. Using the original IAM user, select the <em>ec2-admin-team-alpha</em> role in the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and click  <strong>Delete role</strong>.<br />
 2. For each of the policies you created, one at a time select the radio button then <strong>Policy actions</strong> drop down menu then <strong>Delete</strong>.<br />

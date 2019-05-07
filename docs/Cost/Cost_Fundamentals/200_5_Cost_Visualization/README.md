@@ -1,4 +1,5 @@
 # Level 200: Cost Visualization
+http://wellarchitectedlabs.com 
 
 ## Introduction
  This hands-on lab will guide you through the steps to visualize your cost and usage. The skills you learn will help you analyze your cost and usage, in alignment with the AWS Well-Architected Framework.

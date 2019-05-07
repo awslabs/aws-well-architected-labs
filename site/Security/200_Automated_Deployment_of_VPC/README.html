@@ -1283,10 +1283,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-1" type="checkbox" id="nav-5-2-1">
     
     <label class="md-nav__link" for="nav-5-2-1">
-      300 EC2, RDS S3 Resiliency
+      200 EC2 Resiliency
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-5-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2-2" type="checkbox" id="nav-5-2-2">
+    
+    <label class="md-nav__link" for="nav-5-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-5-2-2">
         300 EC2, RDS S3 Resiliency
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1534,14 +1582,18 @@
                 
                 <h1 id="level-200-automated-deployment-of-vpc">Level 200: Automated Deployment of VPC</h1>
 <h2 id="introduction">Introduction</h2>
-<p>This hands-on lab will guide you through the steps to configure an <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a> and outline some of the available security features. <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a> will be used to automate the deployment and provide a repeatable way to re-use the template after this lab. The skills you learn will help you secure your workloads in alignment with the <a href="https://aws.amazon.com/architecture/well-architected/">AWS Well-Architected Framework</a>.<br />
-The example <a href="Code/vpc-alb-app-db.yaml">CloudFormation template</a> will deploy a complete VPC incorporating a number of AWS security best practices.
-Subnets are created in multiple availability zones for the following network tiers:
+<p>This hands-on lab will guide you through the steps to configure an <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a> and outline some of the AWS security features. <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a> will be used to automate the deployment and provide a repeatable way to re-use the template after this lab.<br />
+<br />
+The example <a href="Code/vpc-alb-app-db.yaml">CloudFormation template</a> will deploy a completely new VPC incorporating a number of AWS security best practices which are:</p>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Networking subnets</a> created in multiple availability zones for the following network tiers:
   * Application Load Balancer - named <em>ALB1</em>
   * Application instances - named <em>App1</em>
   * Shared services - named <em>Shared1</em>
-  * Databases - named <em>DB1</em>  </p>
-<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC endpoints</a> are created for private connectivity to AWS services. <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> created allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Table</a> configurations. <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html">Network ACLs</a> control access at each subnet layer, while <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> captures information about IP traffic and stores in Amazon CloudWatch Logs.</p>
+  * Databases - named <em>DB1</em></p>
+<p><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC endpoints</a> are created for private connectivity to AWS services.<br />
+<a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> are created to allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Table</a> configurations.<br />
+<a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html">Network ACLs</a> control access at each subnet layer.<br />
+While <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> captures information about IP traffic and stores it in Amazon CloudWatch Logs.</p>
 <h2 id="goals">Goals:</h2>
 <ul>
 <li>VPC security features</li>
@@ -1554,6 +1606,7 @@ Subnets are created in multiple availability zones for the following network tie
 <li>An IAM user or role in your AWS account with full access to CloudFormation, EC2, VPC, IAM.<br />
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the <a href="https://aws.amazon.com/free/">AWS Free Tier</a>.</li>
 <li>Basic understanding of <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, visit the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html">Getting Started</a> section of the user guide.</li>
+<li>We recommend you <a href="https://help.github.com/en/articles/cloning-a-repository">clone the Git repository</a> for easy access to the AWS CloudFormation templates.</li>
 </ul>
 <h2 id="permissions-required">Permissions required</h2>
 <ul>
