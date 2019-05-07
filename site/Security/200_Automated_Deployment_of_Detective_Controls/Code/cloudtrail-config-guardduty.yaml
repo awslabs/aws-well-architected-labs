@@ -27,7 +27,7 @@ Parameters:
       - 'Yes'
   Config:
     Type: String
-    Description: 'Configure AWS GuardDuty. If you have previously enabled Config select No.'
+    Description: 'Configure AWS Config. If you have previously enabled Config select No.'
     Default: 'Yes'
     AllowedValues:
       - 'No'
