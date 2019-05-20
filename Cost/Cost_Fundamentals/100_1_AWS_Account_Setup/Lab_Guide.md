@@ -46,7 +46,7 @@ You will now be able to provide access to non-root users to billing information 
 ## 2. Create an account structure<a name="account_structure"></a>
 **NOTE**: Do NOT do this step if you already have an organization and consolidated billing setup.
 
-You will create an AWS Organization, and join one or more accounts to te master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
+You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
 
 ### 2.1 Create an AWS Organization
 You will create an AWS Organization with the master account. 
