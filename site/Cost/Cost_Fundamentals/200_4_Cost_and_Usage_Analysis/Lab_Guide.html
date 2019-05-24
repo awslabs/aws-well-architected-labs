@@ -1664,7 +1664,7 @@
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol>
 <li><a href="#Verify_CUR">Verify your CUR files are being delivered</a></li>
-<li><a href="#Setup_Athena">Setup Amazon Athena and load the CUR files</a></li>
+<li><a href="#Setup_Athena">Use AWS Glue to enable access to CUR files via Amazon Athena</a></li>
 <li><a href="#CUR_Analysis">Cost and Usage analysis</a></li>
 <li><a href="#tear_down">Tear down</a></li>
 <li><a href="#rate_lab">Rate this Lab</a>  </li>
@@ -1694,19 +1694,7 @@
 <img alt="Images/AWSBillingAnalysis_4.png" src="Images/AWSBillingAnalysis_4.png" /></p>
 </li>
 <li>
-<p>You should see a folder for each month, which contains the <strong>sql</strong> and <strong>manifest</strong> files. You will also have a folder from the prefix, labelled <strong>WorkshopCUR</strong> here. Click on the folder for the current month, for December 2018 it will be: <strong>20181201-20190101</strong>
-<img alt="Images/AWSBillingAnalysis_5.png" src="Images/AWSBillingAnalysis_21.png" /></p>
-</li>
-<li>
-<p>You will see the <strong>create-table.sql</strong> file, open this text file &amp; copy it to a text editor for later. This is delivered as you chose Athena support for your CUR. 
-<img alt="Images/AWSBillingAnalysis_6.png" src="Images/AWSBillingAnalysis_6.png" /></p>
-</li>
-<li>
-<p>Here is a sample of the SQL file:
-<img alt="Images/AWSBillingAnalysis_8.png" src="Images/AWSBillingAnalysis_8.png" /></p>
-</li>
-<li>
-<p>Go back up a level in the S3 console, and click on the <strong>prefix</strong> folder, here it is WorkshopCUR, then drill down in the current year and month:
+<p>Click on the <strong>prefix</strong> folder, here it is WorkshopCUR, then drill down in the current year and month:
 <img alt="Images/AWSBillingAnalysis_5.png" src="Images/AWSBillingAnalysis_5.png" /></p>
 </li>
 <li>
@@ -1714,7 +1702,7 @@
 <img alt="Images/AWSBillingAnalysis_7.png" src="Images/AWSBillingAnalysis_7.png" /></p>
 </li>
 </ol>
-<p>You have successfully verified that the CUR files are being delivered and in the correct format.  You have also verified that Athena support was enabled through the delivery of the sql file.</p>
+<p>You have successfully verified that the CUR files are being delivered and in the correct format.</p>
 <p><strong>Sample Files</strong>
 You may not have substantial or interesting usage, in this case there are sample files that you can use in the code section. You will need to create the required structure in S3, download these files and then upload them into s3.</p>
 <p><strong>NOTE</strong>: Do not save the links below, open them in a new window and download the files. They should be approximately 1Mb in size each, if you have files that are 65kb - then you have downloaded the web page and not the parquet files.</p>
@@ -1725,67 +1713,66 @@ You may not have substantial or interesting usage, in this case there are sample
 <li><a href="Code/Nov2018-WorkshopCUR-00001.snappy.parquet">November 2018 Usage</a></li>
 <li><a href="Code/Dec2018-WorkshopCUR-00001.snappy.parquet">December 2018 Usage</a></li>
 </ul>
-<h2 id="2-setup-amazon-athena-and-load-the-cur-files">2. Setup Amazon Athena and load the CUR files <a name="Setup_Athena"></a></h2>
-<p>We will configure Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.</p>
-<ol>
-<li>
-<p>Go to the <strong>Athena</strong> console: 
-<img alt="Images/AWSBillingAnalysis_9.png" src="Images/AWSBillingAnalysis_9.png" /></p>
-</li>
-<li>
-<p>If prompted, click on <strong>Get Started</strong>:
-<img alt="Images/AWSBillingAnalysis_10.png" src="Images/AWSBillingAnalysis_10.png" /></p>
-</li>
-<li>
-<p>Go to your text editor, view the first line in the SQL file and check the name of the database, here it is <strong>WorkshopCUR</strong> 
-<img alt="Images/AWSBillingAnalysis_20.png" src="Images/AWSBillingAnalysis_20.png" /></p>
-</li>
-<li>
-<p>In the Athena console, check the region in the top right is the same as the S3 bucket (here it is <strong>N.Virginia</strong>), then create the database in Athena - with the exact name above (check the case matches), by pasting the following code into the query window, and click on <strong>Run query</strong>:</p>
-</li>
-</ol>
-<pre><code>CREATE DATABASE IF NOT EXISTS WorkshopCUR
-  COMMENT 'Database for CUR files';
+<h2 id="2-use-aws-glue-to-enable-access-to-cur-files-via-amazon-athena">2. Use AWS Glue to enable access to CUR files via Amazon Athena <a name="Setup_Athena"></a></h2>
+<p>We will use AWS Glue and setup a scheduled Crawler, which will run each day. This crawler will scan the CUR files and create a database and tables for the delivered files. If there are new versions of a CUR, or new months delivered - they will be automatically included.</p>
+<p>We will use Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.</p>
+<p>1 -  Go to the <strong>Glue</strong> console: 
+<img alt="Images/Glue0.png" src="Images/Glue0.png" /></p>
+<p>2 - Click on <strong>Get started</strong> if you have not used Glue before</p>
+<p>3 - Ensure you are in the region where your CUR files are delivered, click on <strong>Crawlers</strong> and click <strong>Add crawler</strong>:
+<img alt="Images/Glue1.png" src="Images/Glue1.png" /></p>
+<p>4 - Enter a <strong>Crawler name</strong> and click <strong>Next</strong>: 
+<img alt="Images/Glue2.png" src="Images/Glue2.png" /></p>
+<p>5 - Select <strong>Select data stores</strong>, and click <strong>Next</strong>:
+<img alt="Images/Glue3.png" src="Images/Glue3.png" /></p>
+<p>6 - Ensure you select <strong>Specified path in my account</strong>, and click the <strong>Folder icon</strong>:
+<img alt="Images/Glue4.png" src="Images/Glue4.png" /></p>
+<p>7 - Select the bucket with the CUR files, and click <strong>Select</strong>: 
+<img alt="Images/Glue5.png" src="Images/Glue5.png" /></p>
+<p>8 - Enter the following exclude patterns (1 per line), and click <strong>Next</strong>:</p>
+<pre><code>**.json, **.yml, **.sql, **.csv, **.gz, **.zip
 </code></pre>
 
-<p><img alt="Images/AWSBillingAnalysis_11.png" src="Images/AWSBillingAnalysis_11.png" /></p>
-<ol>
-<li>
-<p>You will see in the lower <strong>Results</strong> window <strong>Query successful</strong>, and on the left - a new <strong>workshopcur</strong> database has been created:
-<img alt="Images/AWSBillingAnalysis_12.png" src="Images/AWSBillingAnalysis_12.png" /></p>
-</li>
-<li>
-<p>Select the <strong>workshopcur</strong> database on the left, copy and paste the entire <strong>.sql</strong> file you have in your text editor into the query window, and click <strong>Run query</strong>:
-<img alt="Images/AWSBillingAnalysis_13.png" src="Images/AWSBillingAnalysis_13.png" /></p>
-</li>
-<li>
-<p>A new table called <strong>workshop_c_u_r</strong> will have been created, we will now load the partitions. Click on the <strong>3 dot menu</strong> and select <strong>Load partitions</strong>:
+<p><img alt="Images/Glue6.png" src="Images/Glue6.png" /></p>
+<p>9 - Click <strong>Next</strong>:
+<img alt="Images/Glue7.png" src="Images/Glue7.png" /></p>
+<p>10 - Select <strong>Create an IAM role</strong>, enter a <strong>role name</strong>, and click <strong>Next</strong>:
+<img alt="Images/Glue8.png" src="Images/Glue8.png" /></p>
+<p>11 - Click the <strong>Down arrow</strong>, and select a <strong>Daily</strong> Frequency:
+<img alt="Images/Glue9.png" src="Images/Glue9.png" /></p>
+<p>12 - Enter in a <strong>Start Hour</strong> and <strong>Start Minute</strong>, then click <strong>Next</strong>:
+<img alt="Images/Glue10.png" src="Images/Glue10.png" /></p>
+<p>13 - Click <strong>Add database</strong>:
+<img alt="Images/Glue11.png" src="Images/Glue11.png" /></p>
+<p>14 - Enter a <strong>Database name</strong>, and click <strong>Create</strong>:
+<img alt="Images/Glue12.png" src="Images/Glue12.png" /></p>
+<p>15 - Click <strong>Next</strong>:
+<img alt="Images/Glue13.png" src="Images/Glue13.png" /></p>
+<p>16 - Review the crawler and click <strong>Finish</strong>:
+<img alt="Images/Glue14.png" src="Images/Glue14.png" /></p>
+<p>17 - Select the checkbox next to the crawler, click <strong>Run crawler</strong>:
+<img alt="Images/Glue15.png" src="Images/Glue15.png" /></p>
+<p>18 - You will see the Crawler was successful and created a table:
+<img alt="Images/Glue16.png" src="Images/Glue16.png" /></p>
+<p>19 - Go to the <strong>Athena</strong> Console:
+<img alt="Images/Glue17.png" src="Images/Glue17.png" /></p>
+<p>20 - Select the drop down arrow, and click on the new database:
+<img alt="Images/Glue18.png" src="Images/Glue18.png" /></p>
+<p>21 - A new table called <strong>workshop_c_u_r</strong> will have been created, we will now load the partitions. Click on the <strong>3 dot menu</strong> and select <strong>Load partitions</strong>:
 <img alt="Images/AWSBillingAnalysis_14.png" src="Images/AWSBillingAnalysis_14.png" /></p>
-</li>
-<li>
-<p>You will see it execute the command <strong>MSCK REPAIR TABLE</strong>, and in the results it will add partitions to the metastore for each month that has a billing file:
+<p>22 - You will see it execute the command <strong>MSCK REPAIR TABLE</strong>, and in the results it will add partitions to the metastore for each month that has a billing file:
 <img alt="Images/AWSBillingAnalysis_15.png" src="Images/AWSBillingAnalysis_15.png" />
 NOTE: If it did not add partitions, then there is an error and there will be no data. 
-Check</p>
-</li>
-<li>The database name is correct &amp; the same as the SQL file</li>
-<li>The folder names <strong>year</strong> and <strong>month</strong> are in S3 and the case matches</li>
-<li>
-<p>There are parquet files in each of the month folders</p>
-</li>
-<li>
-<p>We will now preview the data.  Click on the <strong>3 dot menu</strong> and select <strong>Preview table</strong>:
+Check
+- The database name is correct &amp; the same as the SQL file
+- The folder names <strong>year</strong> and <strong>month</strong> are in S3 and the case matches
+- There are parquet files in each of the month folders</p>
+<p>23 -  We will now preview the data.  Click on the <strong>3 dot menu</strong> and select <strong>Preview table</strong>:
 <img alt="Images/AWSBillingAnalysis_16.png" src="Images/AWSBillingAnalysis_16.png" /></p>
-</li>
-<li>
-<p>It will execute a <strong>Select * from</strong> query, and in the results you will see the first 10 lines of your CUR file:
+<p>24 - It will execute a <strong>Select * from</strong> query, and in the results you will see the first 10 lines of your CUR file:
 <img alt="Images/AWSBillingAnalysis_17.png" src="Images/AWSBillingAnalysis_17.png" /></p>
-</li>
-<li>
-<p>(Optional if you have a linked account) We will create a member account table, this is for large organizations or partners - that want only a single accounts usage to be visible to them.
+<p>25 - (Optional if you have a linked account) We will create a member account table, this is for large organizations or partners - that want only a single accounts usage to be visible to them.
 Copy and paste the following code:</p>
-</li>
-</ol>
 <pre><code>CREATE TABLE linked_AccountID
 WITH (
       format = 'Parquet',
