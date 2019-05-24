@@ -256,9 +256,11 @@ The other account will now need to create the tables in Athena, and also update 
 18 - Login to the other account as an IAM user with the required permissions, and go into the **Glue console**.
 
 19 - Add a **Crawler** with the following details:
-
  - **Include path**: the S3 bucket in the account with the delivered CURs
- - **Exclude patterns**: **.json, **.yml, **.sql, **.csv, **.gz, **.zip (1 per line)
+ - **Exclude patterns** (1 per line):
+```
+**.json, **.yml, **.sql, **.csv, **.gz, **.zip
+```
 ![Images/MultiAcctCUR11.png](Images/MultiAcctCUR11.png)
 
 20 - Create a daily schedule to update the tables each morning before you come into work

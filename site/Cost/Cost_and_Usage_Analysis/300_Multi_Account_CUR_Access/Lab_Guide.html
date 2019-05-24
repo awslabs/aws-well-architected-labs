@@ -1849,12 +1849,13 @@
 </ul>
 <p>The other account will now need to create the tables in Athena, and also update these tables when new versions and new months are delivered. We will do this with a recurring Glue crawler.</p>
 <p>18 - Login to the other account as an IAM user with the required permissions, and go into the <strong>Glue console</strong>.</p>
-<p>19 - Add a <strong>Crawler</strong> with the following details:</p>
-<ul>
-<li><strong>Include path</strong>: the S3 bucket in the account with the delivered CURs</li>
-<li><strong>Exclude patterns</strong>: <strong>.json, </strong>.yml, <strong>.sql, </strong>.csv, <strong>.gz, </strong>.zip (1 per line)
-<img alt="Images/MultiAcctCUR11.png" src="Images/MultiAcctCUR11.png" /></li>
-</ul>
+<p>19 - Add a <strong>Crawler</strong> with the following details:
+ - <strong>Include path</strong>: the S3 bucket in the account with the delivered CURs
+ - <strong>Exclude patterns</strong> (1 per line):</p>
+<pre><code>**.json, **.yml, **.sql, **.csv, **.gz, **.zip
+</code></pre>
+
+<p><img alt="Images/MultiAcctCUR11.png" src="Images/MultiAcctCUR11.png" /></p>
 <p>20 - Create a daily schedule to update the tables each morning before you come into work</p>
 <p>NOTE: CUR files are updated at least every day, a crawler with a daily schedule is a simple code-free solution for this.</p>
 <p>21 - Run the crawler, and check that it has created the database, the tables, and that the tables contain data.
