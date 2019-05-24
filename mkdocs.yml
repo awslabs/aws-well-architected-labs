@@ -66,6 +66,9 @@ nav:
             - 300 Automated CUR Updates and Ingestion: 
                 - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md'
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.md'  
+            - 300 Multi Account CUR Access:
+                - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md' 
+                - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.md' 
     - Security: 
         - Overview: 'Security/README.md' 
         - Security 100 Labs: 
