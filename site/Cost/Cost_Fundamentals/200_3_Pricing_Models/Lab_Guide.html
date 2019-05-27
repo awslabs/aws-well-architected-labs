@@ -1673,7 +1673,7 @@
 </ol>
 <h2 id="1-view-an-ri-report">1. View an RI report<a name="ri_report"></a></h2>
 <p>We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.</p>
-<p>NOTE: We do all analysis using <strong>All Up Front</strong>, as this allows the break even to show when the entire 12month term is paid off. After the analysis is performed, select the required RI type.</p>
+<p><strong>NOTE</strong>: Analysis can ONLY be done on <strong>All Up Front</strong> recommendations, as this allows the break even to show when the entire RI term (12 or 36 months) is paid off. After the analysis is performed, you can proceed to purchase the required RI type.</p>
 <ol>
 <li>
 <p>Log into the console as an IAM user with the required permissions, go to the <strong>AWS Cost Explorer</strong> service page:
@@ -1695,86 +1695,71 @@
 </ol>
 <p>View the <strong>Purcahse Recommendations</strong>, if the 30 day recommendation is less than 7 days recommendation - your usage is <strong>increasing</strong> and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is <strong>decreasing</strong> and you need to look further into your usage patterns to see which RI's would be suitable.</p>
 <h2 id="2-download-and-prepare-the-ri-csv-files">2. Download and prepare the RI CSV files<a name="prepare_csv"></a></h2>
-<ol>
-<li>
-<p>Download the CSV for <strong>both</strong> the 7 day and 30 day recommendation files, by selecting the filter <strong>7 days</strong> or <strong>30 days</strong>, and clicking on <strong>Download CSV</strong>:
+<p>1 - Download the CSV for <strong>both</strong> the 7 day and 30 day recommendation files, by selecting the filter <strong>7 days</strong> or <strong>30 days</strong>, and clicking on <strong>Download CSV</strong>:
 <img alt="Images/AWSRI5.png" src="Images/AWSRI5.png" /></p>
-</li>
-<li>
-<p>If you do not have sufficient usage, you can download the two sample files:</p>
-</li>
-</ol>
-<p>Ctrl-click to open them in a new tab, then copy the text and paste it into a spreadsheet application.</p>
+<p>2 - If you do not have sufficient usage, you can download the two sample files:</p>
+<p>Ctrl-click to open them in a new tab, then copy the text and paste it into a spreadsheet application. Paste the 30day recommendations into one worksheet, and the 7day recommendations into another worksheet called <strong>7Day Rec</strong>, in the same spreadsheet.</p>
 <ul>
 <li><a href="Code/7_day_EC2_RI_Rec.csv">7_day_EC2_R_Rec.csv</a></li>
-<li>
-<p><a href="Code/30_day_EC2_RI_Rec.csv">30_day_EC2_R_Rec.csv</a></p>
-</li>
-<li>
-<p>Open both files, copy the <strong>Recommended Instance Quantity Purchase</strong> column from the <strong>7 day</strong> recommendaions, and insert it into the <strong>30 day</strong> recommendations file:
-<strong>NOTE</strong>: make sure you match the Instance type, Location, OS, and Tenancy columns. You may also have a different number of recommendations between the two files.<br />
-<img alt="Images/AWSRI6.png" src="Images/AWSRI6.png" /></p>
-</li>
-<li>
-<p>Delete the following columns as they are not necessary: <strong>Recommendation Date</strong>, <strong>Owner Account</strong>, <strong>Size Flexible Recommendation</strong>, <strong>Max hourly normalized unit usage in Historical Period</strong>, <strong>Min hourly normalized unit usage in Historical Period</strong>, <strong>Average hourly normalized unit usage in Historical Period</strong>, <strong>Offering Class</strong>, <strong>Term</strong>, <strong>Payment Option</strong>, <strong>Upfront Cost</strong>, <strong>Recurring Monthly Cost</strong>.
-<img alt="Images/AWSRI7.png" src="Images/AWSRI7.png" /></p>
-</li>
-<li>
-<p>You should be left with the following columns:
-<img alt="Images/AWSRI8.png" src="Images/AWSRI8.png" /></p>
-</li>
+<li><a href="Code/30_day_EC2_RI_Rec.csv">30_day_EC2_R_Rec.csv</a></li>
 </ul>
-<p>You now have all the data you need to make RI recommendations, you can then take these recommendations and calculate upfront costs, accounts to purchase them in, and other RI attributes at a later date.</p>
+<p>3 - Create a new column called <strong>RI ID</strong> to the left of the <strong>Recommendation</strong> column on <strong>both</strong> 30Day and 7Day sheets, which is a unique identifier of the RI Type, the formula for this cell will concatenate the columns: <strong>Instance Type</strong>, <strong>Location</strong>,<strong>OS</strong> and <strong>Tenancy</strong>:</p>
+<pre><code>=CONCATENATE(C5,L5,M5,N5)
+</code></pre>
+
+<p><img alt="Images/RI_Proc0.png" src="Images/RI_Proc0.png" /></p>
+<p>4 - Add a column in the <strong>30Day</strong> worksheet to the right of the Recommendation column. This will be for the 7Day recommendations.  Add a VLOOKUP formula to get the values from the <strong>7Day</strong> worksheet, modify this formula for the number of rows you require (U column):</p>
+<pre><code>=VLOOKUP(T5,'7Day Rec'!T$4:U$48,2,FALSE)
+</code></pre>
+
+<p><img alt="Images/RI_Proc1.png" src="Images/RI_Proc1.png" /></p>
+<p>5 - Delete the following columns as they are not necessary: <strong>Recommendation Date</strong>, <strong>Owner Account</strong>, <strong>Size Flexible Recommendation</strong>, <strong>Max hourly normalized unit usage in Historical Period</strong>, <strong>Min hourly normalized unit usage in Historical Period</strong>, <strong>Average hourly normalized unit usage in Historical Period</strong>, <strong>Offering Class</strong>, <strong>Term</strong>, <strong>Payment Option</strong>, <strong>Upfront Cost</strong>, <strong>Recurring Monthly Cost</strong>. You should be left with the following columns:
+<img alt="Images/RI_Proc2.png" src="Images/RI_Proc2.png" /></p>
+<p>We now have the required data required to be able to analyze, and filter out the high risk and low return RIs.</p>
 <h2 id="3-sort-and-filter-the-ri-csv-files">3. Sort and filter the RI CSV files<a name="filter_csv"></a></h2>
-<p>RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: <strong>low risk</strong> and <strong>high return</strong> purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimising the risk of unused RIs.</p>
+<p>RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: <strong>low risk</strong> and <strong>high return</strong> purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimizing the risk of unused RIs.</p>
 <h3 id="31-filter-out-low-risk-and-high-return-ris">3.1 Filter out low risk, and high return RIs</h3>
-<ol>
-<li>
-<p>To get the lowest risk, we sort by <strong>Break Even Months</strong> smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that the RI's below are fully paid off in less than 6months - so if they are used for 6 months - they have paid themselves off completely.
-<img alt="Images/AWSRI9.png" src="Images/AWSRI9.png" /></p>
-</li>
-<li>
-<p>We will separate the very low, low, and medium risk recommendtaions. Add in some empty lines between <strong>Break Even Months</strong> of 7, 10, and copy the header line across: 
-<img alt="Images/AWSRI10.png" src="Images/AWSRI10.png" /></p>
-</li>
-<li>
-<p>We have categorized the risk, so we will now look for the highest return recommendations. Sort each of the three groups by <strong>Estimated Monthly Savings</strong>, largest to smallest:
-<img alt="Images/AWSRI11.png" src="Images/AWSRI11.png" /></p>
-</li>
-<li>
-<p>Depending on your usage and business, chose a minimum estimated monthly savings - a typical value for larger customers is in the range of $50-100. While they save money, these recommendations do not save enough - aim for the top 50-70% of recommendations.  We have chosen $100, grey out anything less than this:
-<img alt="Images/AWSRI12.png" src="Images/AWSRI12.png" /></p>
-</li>
-</ol>
+<p>1 - To get the lowest risk, we sort by <strong>Break Even Months</strong> smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that some of the RI's below are fully paid off in less than 6months - so if they are used for 6 months - they have paid themselves off completely.
+<img alt="Images/RI_Proc3.png" src="Images/RI_Proc3.png" /></p>
+<p>2 - We will separate the very low, low, and medium risk recommendations. Add in some empty lines between <strong>Break Even Months</strong> of 7, 10, and copy the header line across: 
+<img alt="Images/RI_Proc4.png" src="Images/RI_Proc4.png" /></p>
+<p>3 - We have categorized the risk, so we will now look for the highest return recommendations in each category. Sort each of the three groups by <strong>Estimated Monthly Savings</strong>, <strong>largest to smallest</strong>:
+<img alt="Images/RI_Proc5.png" src="Images/RI_Proc5.png" /></p>
+<p>4 - Depending on your usage and business, chose a minimum estimated monthly savings - a typical value for larger customers is in the range of $50-100. While they save money, these recommendations do not save enough - aim for the top 50-70% of recommendations.  We have chosen $100, grey out anything less than this:
+<img alt="Images/RI_Proc6.png" src="Images/RI_Proc6.png" /></p>
 <h3 id="32-filter-out-usage-patterns">3.2 Filter out usage patterns</h3>
-<p>It would be a large amount of effort to view the daily usage patterns over the month for every recommendation, but we can do this programatically. By looking at the columns, we can assess the underlying usage pattern.</p>
-<ol>
-<li>
-<p>If the <strong>Max hourly usage</strong> is close to <strong>Min hourly usage</strong>, within 75-100% - then the usage would be relatively flat, with low variance.  Go through and highlight these cells green.  You could do this with a formula, but a very fast judgement is ok:
-<img alt="Images/AWSRI13.png" src="Images/AWSRI13.png" /></p>
-</li>
-<li>
-<p>If the <strong>Average hourly usage</strong> is close to the <strong>Max hourly usage</strong>, then the minimum was only a small duration, so highlight anything green where the <strong>Average</strong> is within 75-100% of the <strong>Max</strong>:
-<img alt="Images/AWSRI14.png" src="Images/AWSRI14.png" /> </p>
-</li>
-<li>
-<p>Minimum utilization required varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum of &gt;80%. While this is reflected through the Break even (if utilization is low, break even would be very late), we'll double check &amp; filter out only the very high utilization. Highlight anything above <strong>90%</strong> in green:
-<img alt="Images/AWSRI15.png" src="Images/AWSRI15.png" /></p>
-</li>
-<li>
-<p>Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the <strong>7day Recommended Instance Quantity</strong> is equal or more than the <strong>30day Recommended Instance Quantity</strong>, and close to (within 5%) or above the <strong>Average Hourly usage in Historical Period</strong>, then highlight the cell green:
-<img alt="Images/AWSRI16.png" src="Images/AWSRI16.png" /></p>
-</li>
-</ol>
+<p>It would be a large amount of effort to view the daily usage patterns over the month for every recommendation - checking for declining usage or erratic usage, but we can do this programatically. By looking at the columns, we can assess the underlying usage pattern.</p>
+<p>1 - If the <strong>Max hourly usage</strong> is close to <strong>Min hourly usage</strong>, within 75-100% - then the usage would be relatively flat, with low variance.  Go through and highlight these cells green.  You could do this with a formula, but a very fast judgment is ok:
+<img alt="Images/RI_Proc7.png" src="Images/RI_Proc7.png" /></p>
+<p>2 - If the <strong>Average hourly usage</strong> is close to the <strong>Max hourly usage</strong>, then the minimum was only a small duration, so highlight anything green where the <strong>Average</strong> is roughly within 75-100% of the <strong>Max</strong>:
+<img alt="Images/RI_Proc8.png" src="Images/RI_Proc8.png" /></p>
+<p>3 - Minimum utilization required varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum utilization of &gt;80%. While this is reflected through the Break even (if utilization is low, break even would be very late), we'll double check &amp; filter out only the very high utilization. Highlight anything above <strong>90%</strong> in green:
+<img alt="Images/RI_Proc9.png" src="Images/RI_Proc9.png" /></p>
+<p>4 - Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the <strong>7day Recommended Instance Quantity</strong> is equal or more than the <strong>30day Recommended Instance Quantity</strong> then highlight the cell green:
+<img alt="Images/RI_Proc10.png" src="Images/RI_Proc10.png" /></p>
+<p>5 - Now we will see if the recommendation is close to the average, if its not then usage is varying. If the recommendation is <strong>NOT</strong> above, equal or close to the average (within 10%) then remove the highlighting from the recommendation column:
+<img alt="Images/RI_Proc11.png" src="Images/RI_Proc11.png" /></p>
 <p>The processed sample files are available here:
-- <a href="Code/RI_Rec_Finish.xls">RI_Rec_Finish.xls</a></p>
-<p>You have successfully filtered and processed all the recommendations. If all cells are green, these are your highly suggested recommendations in each risk group. If some cells are not green you should look deeper into your usage via Cost Explorer, and consider purchasing a portion of the recommendation in this cycle.</p>
-<p>Other suggestions for the not fully green recommendations are:
-- Re-evaluate in another 7-14 days to observe the usage trend
-- Purchase a percentage of the 7 day recommendation
-- Purchase a lower percentage of the average hourly
-- Purchase a higher percentage of the minimum hourly</p>
-<p>You can then take those recommended numbers, and purchase the quantity in the required accounts, with the required payment option (All upfront, Partial upfront, No upfront), and class (standard or convertible).</p>
+- <a href="Code/Combined_EC2_RI_Rec.xlsx">Combined_EC2_RI_Rec.xls</a></p>
+<h3 id="33-making-recommendations">3.3 Making recommendations</h3>
+<p>We look at each of the risk categories as follows:</p>
+<p>1 - Very low and low risk</p>
+<ul>
+<li>For any recommendations that are highlighted in the <strong>7Day</strong> column, recommend the lowest of the <strong>30Day</strong> or <strong>7Day</strong> Columns.</li>
+<li>For any recommendations that are highlighted in the <strong>Average hourly usage</strong> and <strong>Projected RI Utilization</strong>, select a percentage of either the <strong>30Day</strong> or <strong>7Day</strong> column (which ever is lower).</li>
+</ul>
+<p>2 - Medium risk</p>
+<ul>
+<li>From the recommendations highlighted in the <strong>7Day</strong> column, select a portion of these on a case by case basis based on business knowledge  </li>
+</ul>
+<p>Other suggestions for recommendations that do not fall into the categories above:</p>
+<ul>
+<li>Re-evaluate in another 7-14 days to observe the usage trend</li>
+<li>Purchase a lower percentage of the average hourly</li>
+<li>Purchase a higher percentage of the minimum hourly</li>
+</ul>
+<p>You have successfully filtered and processed all the recommendations. You can now make low risk and high return recommendations that are suitable based on your ongoing usage patterns with high confidence.
+You can then take those recommendations, and purchase the quantity in the required accounts, with the required payment option (All upfront, Partial upfront, No upfront), and class (standard or convertible).</p>
 <h2 id="4-teardown">4. Teardown<a name="tear_down"></a></h2>
 <p>There are no resources or configuration items that are created during this workshop. </p>
 <h2 id="5-rate-this-lab">5. Rate this lab<a name="rate_lab"></a></h2>
