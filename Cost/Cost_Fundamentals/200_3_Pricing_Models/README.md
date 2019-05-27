@@ -2,7 +2,7 @@
 http://wellarchitectedlabs.com 
 
 ## Introduction
-This hands-on lab will guide you through the steps to perform a Reserved Instance analysis, and make low risk, high return RI purchases at scale. The skills you learn will help you ensure your workloads utilize different pricing models in alignment with the AWS Well-Architected Framework.
+In a highly dynamic cloud environment it can be challenging to forecast your usage. This hands-on lab will guide you through the steps to perform a Reserved Instance analysis, and make low risk, high return RI purchases at scale. The skills you learn will help you ensure your workloads utilize different pricing models in alignment with the AWS Well-Architected Framework.
 
 ![Images/AWSCostReadme.png](Images/AWSCostReadme.png)
 
