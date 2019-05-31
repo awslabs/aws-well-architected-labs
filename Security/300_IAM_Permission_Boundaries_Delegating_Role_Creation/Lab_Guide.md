@@ -10,6 +10,10 @@
 4. [Knowledge Check](#knowledge_check)
 5. [Tear Down](#tear_down)
 
+The following image shows what you will be doing in this lab.
+
+![iam-create-user&group](Images/300_IAM_Permission_Boundaries_Delegating_Role_Creation.png)
+
 ## 1. Create IAM policies <a name="create_policies"></a>
 ### 1.1 Create policy for permission boundary
 This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab using AWS IAM we are only going to allow the us-east-1 (North Virginia) and us-west-1 (North California) regions, optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow in these regions are AWS EC2 and AWS Lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
@@ -111,7 +115,7 @@ This policy will be attached to the developer role, and will allow the developer
 }
 ```
 
-### 1.3 Create developer IAM console access role
+### 1.3 Create developer IAM console access policy
 This policy allows list and read type IAM service actions so you can see what you have created using the console. Note that it is not a requirement if you simply wanted to create the role and policy, or if you were using the Command Line Interface (CLI) or CloudFormation.
 1. Create a managed policy using the JSON policy below and name of *iam-restricted-list-read*.
 
