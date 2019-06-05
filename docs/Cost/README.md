@@ -39,5 +39,5 @@ These labs focus on analysis of your cost and usage. The 100 and 200 level are f
 #### 300
 - [300 Billing Analysis - Automated CUR Updates and Ingestion](./Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md) 
 - [300 Billing Analysis - Multi Account CUR Access](./Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md) 
-
+- [300 Billing Analysis - Splitting and Sharing CUR Access](./Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md)
 

@@ -21,7 +21,7 @@ These labs focus on specific items within cost and usage analysis and are used t
 
 - [300 Billing Analysis - Automated CUR Updates and Ingestion](./300_Automated_CUR_Updates_and_Ingestion/README.md) 
 - [300 Billing Analysis - Multi Account CUR Access](./300_Multi_Account_CUR_Access/README.md)
-
+- [300 Billing Analysis - Splitting and Sharing CUR Access](./300_Splitting_Sharing_CUR_Access/README.md)
 
 
 

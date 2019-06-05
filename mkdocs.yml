@@ -69,6 +69,9 @@ nav:
             - 300 Multi Account CUR Access:
                 - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md' 
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.md' 
+            - 300 Splitting Sharing CUR:
+                - Lab Overview: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md' 
+                - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.md' 
     - Security: 
         - Overview: 'Security/README.md' 
         - Security 100 Labs: 

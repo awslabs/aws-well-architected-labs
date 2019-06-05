@@ -925,6 +925,54 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-3-4" type="checkbox" id="nav-2-3-4">
+    
+    <label class="md-nav__link" for="nav-2-3-4">
+      300 Splitting Sharing CUR
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-2-3-4">
+        300 Splitting Sharing CUR
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -1657,6 +1705,8 @@
                 <h1 id="level-100-basic-identity-and-access-management-user-group-role-lab-guide">Level 100: Basic Identity and Access Management User, Group, Role: Lab Guide</h1>
 <h2 id="1-aws-identity-access-management">1. AWS Identity &amp; Access Management</h2>
 <p>As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then make those users administrators (only if they absolutely need full access to everything) by placing the users into an "Administrators" group to which you attach the AdministratorAccess managed policy.</p>
+<p>The following image shows what you will be doing in the next section 1.1 Create Administrator IAM User and Group.</p>
+<p><img alt="iam-create-user&amp;group" src="Images/iam-create-user&amp;group.png" /></p>
 <h3 id="11-create-administrator-iam-user-and-group">1.1 Create Administrator IAM User and Group</h3>
 <p>To create an administrator user for yourself and add the user to an administrators group:
 1. Use your AWS account email address and password to sign in as the AWS account root user to the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.
@@ -1679,7 +1729,9 @@ You can use this same process to create more groups and users and to give your u
 14. In the User Name list, click the name of the intended MFA user.
 15. Click the <strong>Security credentials</strong> tab. Next to <strong>Assigned MFA device</strong>, click the <strong>edit</strong> icon.
 <img alt="iam-user-mfa" src="Images/iam-user-mfa.png" /><br />
-16. You can now use this administrator user instead of your root user for this AWS account. It is a best practice to use least a least privileged approach to granting permissions, not everyone needs full administrator access!</p>
+16. You can now use this administrator user instead of your root user for this AWS account. It is a best practice to use least privileged access approach to granting permissions, not everyone needs full administrator access!</p>
+<p>The following image shows what you will be doing in the next section 1.2 Create Administrator IAM Role.
+<img alt="iam-create-user&amp;group" src="Images/iam-create-role.png" /></p>
 <h3 id="12-create-administrator-iam-role">1.2 Create Administrator IAM Role</h3>
 <p>To create an administrator role for yourself (and other administrators) to be used with the administrator user and group you just created:
 1. Sign in to the AWS Management Console and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.
@@ -1694,6 +1746,8 @@ You can use this same process to create more groups and users and to give your u
 6. The role is now created, with full administrative access and MFA enforced.</p>
 <h2 id="2-assume-administrator-role-from-an-iam-user">2. Assume Administrator Role from an IAM user</h2>
 <p>We will assume the role using the IAM user that we previously created in the web console. As the IAM user has full access it is a best practice not to have access keys to assume the role on the CLI, instead we should use a restricted IAM user for this so we can enforce the requirement of MFA.</p>
+<p>The following image shows what you will be doing in the next section 2.1 Use Administrator Role in Web Console.
+<img alt="iam-create-user&amp;group" src="Images/iam-switch-role.png" /></p>
 <h3 id="21-use-administrator-role-in-web-console">2.1 Use Administrator Role in Web Console</h3>
 <p>A <em>role</em> specifies a set of permissions that you can use to access AWS resources that you need. In that sense, it is similar to a user in AWS Identity and Access Management (IAM). A benefit of roles is they allow you to enforce the use of an MFA token to help protect your credentials. When you sign in as a user, you get a specific set of permissions. However, you don't sign in to a role, but once signed in (as a user) you can switch to a role. This temporarily sets aside your original user permissions and instead gives you the permissions assigned to the role. The role can be in your own account or any other AWS account. By default, your AWS Management Console session lasts for one hour.</p>
 <p><strong>Important</strong></p>
