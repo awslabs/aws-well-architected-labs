@@ -2,7 +2,7 @@
 http://wellarchitectedlabs.com 
 
 ## Introduction
- This hands-on lab will guide you on how to automatically extract part of your CUR file, and then deliver it to another S3 bucket and folder to allow another access to access it. This is useful to allow sub accounts or business units to access their data, but not see the rest of the original CUR file. You can also exclude specific columns such as pricing - only allowing a sub account to view their usage information.
+ This hands-on lab will guide you on how to automatically extract part of your CUR file, and then deliver it to another S3 bucket and folder to allow another account to access it. This is useful to allow sub accounts or business units to access their data, but not see the rest of the original CUR file. You can also exclude specific columns such as pricing - only allowing a sub account to view their usage information.
 
 
 Common use cases are:
