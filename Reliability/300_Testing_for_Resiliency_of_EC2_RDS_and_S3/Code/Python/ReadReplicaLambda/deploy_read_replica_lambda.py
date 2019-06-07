@@ -152,7 +152,7 @@ def deploy_read_replica(event):
     rds_parameters.append({'ParameterKey':'SourceDatabaseID', 'ParameterValue':rds_id, 'UsePreviousValue':True})
     rds_parameters.append({'ParameterKey':'DBSubnetIds', 'ParameterValue':rds_subnet_list, 'UsePreviousValue':True})
     rds_parameters.append({'ParameterKey':'DBSecurityGroups', 'ParameterValue':rds_sg, 'UsePreviousValue':True})
-    rds_parameters.append({'ParameterKey':'DBInstanceClass', 'ParameterValue':'db.t2.micro', 'UsePreviousValue':True})
+    rds_parameters.append({'ParameterKey':'DBInstanceClass', 'ParameterValue':'db.t2.xlarge', 'UsePreviousValue':True})
 
     stack_tags = []
     try:
