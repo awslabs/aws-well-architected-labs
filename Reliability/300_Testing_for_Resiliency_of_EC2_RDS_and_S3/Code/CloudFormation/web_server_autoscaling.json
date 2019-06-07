@@ -91,8 +91,8 @@
 
   "Mappings" : {
     "AMIRegionMap" : {
-      "us-east-2"      : { "WebServerAMI" : "ami-04328208f4f0cf1fe" },
-      "us-west-2"      : { "WebServerAMI" : "ami-032509850cf9ee54e" }
+      "us-east-2"      : { "WebServerAMI" : "ami-0ebbf2179e615c338" },
+      "us-west-2"      : { "WebServerAMI" : "ami-0cb72367e98845d43" }
     }
   },
 
