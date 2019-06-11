@@ -79,10 +79,10 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
   "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
 }
 ```
-        1. Then click the “Start Execution” button.  
+        b. Then click the “Start Execution” button.  
 ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
-    1. Two Region Deployment:
-        1. For Input, use the following:
+    ii. Two Region Deployment:
+        a. For Input, use the following:
         **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
 ```
 {
@@ -114,7 +114,7 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
   }
 }
 ```
-        1. Then click the “Start Execution” button.  
+        b. Then click the “Start Execution” button.  
 ![ExecutionInput-2Regions](Images/ExecutionInput-2Regions.png)  
 14. This will take approximately 20-25 minutes for one region to deploy and approximately 45-50 minutes for two regions to deploy. You will have enough to start executing the lab exercises for the two region in 25-30 minutes. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
     1. One Region:
@@ -309,7 +309,7 @@ How would you undo all these changes?
 What is the expected effect? How long does it take to take effect? How would you diagnose if this is a larger problem than permissions?
 
 ### 3.5 Looking for more to do?
-You can use drift detection in the CloudFormation console to see what had chanegd, or work on code to heal their failure modes.  
+You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal their failure modes.  
 1. Remove the network ACLs they added  
 2. Reconfigure the AutoScaling Groups to use the AZ  
 
