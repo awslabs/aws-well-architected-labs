@@ -2,137 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>http://wellarchitectedlabs.com/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Cost/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Operations/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Security/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
@@ -192,67 +82,202 @@
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Operations/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_100_Loft_Introduction_to_Security/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_100_Quick_Steps_to_Security_Success/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>http://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_300_Security_Best_Practices_Day/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Identity_Access_Management/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Reliability/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Reliability/200_Testing_for_Resiliency_of_EC2/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Performance/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Well-ArchitectedTool/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>http://wellarchitectedlabs.com/Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html</loc>
-     <lastmod>2019-06-06</lastmod>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

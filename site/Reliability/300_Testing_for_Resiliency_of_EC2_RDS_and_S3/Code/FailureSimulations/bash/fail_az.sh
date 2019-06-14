@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 # MIT No Attribution
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -30,8 +30,26 @@ result=`aws autoscaling describe-auto-scaling-groups`
 as_group=`echo $result | jq -r '.AutoScalingGroups[0].AutoScalingGroupName'`
 
 # Find where the equivalent subnet is in the VPCIdentifier
-subnet_index=`echo $result | jq -r --arg az $1 '.AutoScalingGroups[0].AvailabilityZones | indices($az)[0]'`
-subnet=`echo $result | jq -r --arg index $subnet_index '.AutoScalingGroups[0].VPCZoneIdentifier | split(",")[$index | tonumber]'`
+# Get a list of the subnets in the AZ
+az_subnets=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$2 Name=availabilityZone,Values=$1 | jq -r '.Subnets | map(. .SubnetId) | join(",")' | sed -e '{s/\[//g}' | sed -e '{s/\]//g}' | sed -e '{s/\ //g}'`
+
+# Get a list of the subnets in the Autoscaling Group
+asg_subnets=`echo $result | jq -r '.AutoScalingGroups[0].VPCZoneIdentifier | split(",")'`
+
+# The subnet to remove is the intersection of the two lists.
+# Read the list into an array so you can find it
+IFS=',' read -r -a az_subnet_array <<< "$az_subnets"
+subnet=""
+for az_subnet_id in "${az_subnet_array[@]}"
+do
+   subnet=`echo $asg_subnets | jq -r --arg az $az_subnet_id 'map(select(contains($az))) | join(",")'`
+   if [ -z "$subnet" ]
+   then
+      echo "Not found" >> /dev/null
+   else
+      break
+   fi
+done
 echo "Going to remove " $subnet " from the autoscaling group"
 
 # Now get the list of subnets excluding that subnet
@@ -84,6 +102,7 @@ echo "Associating new network ACL to the subnets in the AZ"
 for acl_assoc in "${acl_assoc_array[@]}"
 do
     echo "replacing " $acl_assoc
+
     aws ec2 replace-network-acl-association --association-id $acl_assoc --network-acl-id $new_network_acl
 done
 

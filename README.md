@@ -14,18 +14,18 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 ## Labs:
 The labs are structured around the five pillars of the [Well-Architected Framework](http://aws.amazon.com/well-architected):
 
-- [Cost Optimization](Cost/README.md) 
 - [Operational Excellence](Operations/README.md)
-- [Performance Efficiency](Performance/README.md) 
-- [Reliability](Reliability/README.md) 
 - [Security](Security/README.md)
+- [Reliability](Reliability/README.md) 
+- [Performance Efficiency](Performance/README.md) 
+- [Cost Optimization](Cost/README.md) 
 - [Well-Architected Tool](Well-ArchitectedTool/README.md) 
 
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2018-2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
