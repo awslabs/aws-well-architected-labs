@@ -24,10 +24,12 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 
 ## Quests:
 Quests are designed to collate a group of relevant labs and other resources together into a common theme for you to follow and learn.
-* [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security/README.md) - Introduction to AWS security basics, used as the workshop in AWS loft events.
-* [Level 100: Quick Steps to Security Success](Quest_100_Quick_Steps_to_Security_Success/README.md) - In just one day (or an hour a day for a week!) implement some foundational security controls to immediately improve your security posture.
-* [Level 300: Security Best Practices Workshop](Quest_300_Security_Best_Practices_Workshop_EC2/README.md) - This quest is the guide for security best practices workshop often ran at AWS led events including AWS Summits.
-* [Level 300: Security Best Practices Day](Quest_300_Security_Best_Practices_Day/README.md) - This quest is the guide for an AWS led event including security best practices day. Includes identity & access management, detective controls, infrastructure protection, data protection and incident response.
+* [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security/README.md) - Introduction to AWS security basics, used as the workshop in AWS loft events. 
+* [Level 100: Quick Steps to Security Success](Quest_100_Quick_Steps_to_Security_Success/README.md) - In just one day (or an hour a day for a week!) implement some foundational security controls to immediately improve your security posture. 
+* [Level 300: Security Best Practices Workshop](Quest_300_Security_Best_Practices_Workshop_EC2/README.md) - This quest is the guide for security best practices workshop often ran at AWS led events including AWS Summits. 
+* [Level 300: Security Best Practices Day](Quest_300_Security_Best_Practices_Day/README.md) - This quest is the guide for an AWS led event including security best practices day. Includes identity & access management, detective controls, infrastructure protection, data protection and incident response. 
+* [Identity & Access Management](Quest_Identity_Access_Management/README.md) - This guide will help you improve your security in the AWS Well-Architetced area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam). 
+
 
 ***
 
