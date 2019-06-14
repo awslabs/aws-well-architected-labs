@@ -22,9 +22,9 @@ This hands-on lab will guide you through the introductory steps to configure a n
 <br>
 
 ## Basic Identity and Access Management User, Group, Role:
+### Walkthrough
 This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management (IAM).  
 You will use the AWS Management Console to guide you through how to configure your first IAM user, group and role for administrative access.
-### Walkthrough
 ### [Basic Identity and Access Management User, Group, Role](../100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)  
 <br>
 
