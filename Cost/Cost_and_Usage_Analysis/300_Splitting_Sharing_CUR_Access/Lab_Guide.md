@@ -1,5 +1,5 @@
 # Level 300: Splitting the CUR and Sharing Access
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
@@ -394,11 +394,11 @@ We will tear down this lab, removing any data, resources and configuration that 
 
 
 ## 8. Rate this lab<a name="rate_lab"></a>
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_1star) 
-[![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_2star) 
-[![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_3star) 
-[![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_4star) 
-[![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_5star) 
+[![1 Star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_1star) 
+[![2 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_2star) 
+[![3 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_3star) 
+[![4 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_4star) 
+[![5 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_300_Splitting_Sharing_CUR_Access_5star) 
 
 
 

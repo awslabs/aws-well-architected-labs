@@ -1,5 +1,5 @@
 # Level 200: Pricing Models
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Introduction
 In a highly dynamic cloud environment it can be challenging to forecast your usage. This hands-on lab will guide you through the steps to perform a Reserved Instance analysis, and make low risk, high return RI purchases at scale. The skills you learn will help you ensure your workloads utilize different pricing models in alignment with the AWS Well-Architected Framework.
@@ -41,6 +41,6 @@ Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
-http://aws.amazon.com/apache2.0/
+https://aws.amazon.com/apache2.0/
 
 or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

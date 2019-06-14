@@ -1,5 +1,5 @@
 # Cost Optimization - Fundamentals 
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Introduction
 

@@ -322,7 +322,7 @@ It is best practice to regularly analyze your usage and cost, so you should not 
 
 
 ## 6. Rate this lab<a name="rate_lab"></a> 
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_5_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_5_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_5_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_5_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_5_5star) 
+[![1 Star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_200_5_1star) [![2 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_200_5_2star) [![3 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_200_5_3star) [![4 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_200_5_4star) [![5 star](Images/star.png)](https://dx1572sre29wk.cloudfront.net/Cost_200_5_5star) 
 
 
 ## 7. Survey <a name="survey"></a>

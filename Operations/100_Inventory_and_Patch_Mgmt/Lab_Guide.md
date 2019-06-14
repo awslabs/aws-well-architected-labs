@@ -33,14 +33,14 @@ You will need the following to be able to perform this lab:
 
 When you create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user. It is accessed by signing in with the email address and password that you used to create the account.
 
-We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Securely store the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
+We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Securely store the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
 
 
 ## IAM Users & Groups
 
 As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then grant administrator access by placing the users into an "Administrators" group to which the **AdministratorAccess** managed policy is attached.
 
-Use administrators group members to manage permissions and policy for the AWS account. Limit use of the root user to only those [actions that require it](http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
+Use administrators group members to manage permissions and policy for the AWS account. Limit use of the root user to only those [actions that require it](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
 
 
 ### 1.1 Create Administrator IAM User and Group
@@ -132,7 +132,7 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
    1. Leave **InstanceProfile** blank as we have not yet defined an instance profile.
    1. Leave **InstanceTypeApp** and **InstanceTypeWeb** as the default free-tier-eligible t2.micro value.
    1. Select the EC2 **KeyName** you defined earlier from the list.
-   * In a browser window, go to <http://checkip.amazonaws.com/> to get your IP. Enter your IP address in **SSHLocation** in CIDR notation (i.e., ending in /32).
+   * In a browser window, go to <https://checkip.amazonaws.com/> to get your IP. Enter your IP address in **SSHLocation** in CIDR notation (i.e., ending in /32).
    * Define the **Workload Name** as `Test`.
    * Choose **Next**.
 1. On the **Options** page under **Tags**, define a **Key** of **Owner**, with **Value** set to the username you choose for your administrator. You may define additional keys as needed. The CloudFormation template creates all the example tags given in the discussion on tagging above.
