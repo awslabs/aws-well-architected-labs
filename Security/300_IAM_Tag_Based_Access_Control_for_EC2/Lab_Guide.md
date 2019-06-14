@@ -13,8 +13,10 @@ In this lab we use the RequestTag [condition key](https://docs.aws.amazon.com/IA
 
 ## 1. Create IAM managed policies <a name="create_policies"></a>
 The policies are split into five different functions for demonstration purposes, you may like to modify and combine them to use after this lab to your exact requirements. In addition to enforcing tags, a region restriction only allow regions us-east-1 (North Virginia) and us-west-1 (North California).  
+
 ### 1.1 Create policy named *ec2-list-read*
 This policy allows read only permissions with a region condition. The only service actions we are going to allow are EC2, note that you typically require additional supporting actions such as Elastic Load Balancing if you were to re-use this policy after this lab, depending on your requirements.
+
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).  
 If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click **Policies** and then click **Create policy**.  
@@ -51,7 +53,8 @@ If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.co
 ![Images/iam-role-policy-3.png](Images/iam-policy-create-3.png)
 
 ### 1.2 Create policy named *ec2-create-tags*
-This policy allows the creation of tags for EC2, with a condition of the action being [RunInstances](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html), which is launching an instance.  
+This policy allows the creation of tags for EC2, with a condition of the action being [RunInstances](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html), which is launching an instance.
+
 1. Create a managed policy using the JSON policy below and name of *ec2-create-tags*.
 ```
 {
@@ -74,6 +77,7 @@ This policy allows the creation of tags for EC2, with a condition of the action 
 
 ### 1.3 Create policy named *ec2-create-tags-existing*
 This policy allows creation (and overwriting) of EC2 tags only if the resources are already tagged **Team / Alpha**.  
+
 1. Create a managed policy using the JSON policy below and name of *ec2-create-tags-existing*.
 ```
 {
@@ -105,6 +109,7 @@ This policy allows creation (and overwriting) of EC2 tags only if the resources 
 
 ### 1.4 Create policy named *ec2-run-instances*
 This first section of this policy allows instances to be launched, only if the conditions of region and specific tag keys are matched. The second section allows other resources to be created at instance launch time with region condition.  
+
 1. Create a managed policy using the JSON policy below and name of *ec2-run-instances*.
 ```
 {
@@ -160,6 +165,7 @@ This first section of this policy allows instances to be launched, only if the c
 ```
 ### 1.5 Create policy named *ec2-manage-instances*
 This policy allows reboot, terminate, start and stop of instances, with a condition of the key **Team** is **Alpha** and region.  
+
 1. Create a managed policy using the JSON policy below and name of *ec2-manage-instances*.
 
 ```
@@ -192,6 +198,7 @@ This policy allows reboot, terminate, start and stop of instances, with a condit
 
 ## 2. Create Role <a name="create_role"></a>
 Create a role for EC2 administrators, and attach the managed policies previously created.
+
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click **Roles** and then click **Create role**.  
 ![iam-role-1](Images/iam-role-create-1.png)  
@@ -207,6 +214,7 @@ Create a role for EC2 administrators, and attach the managed policies previously
 ## 3. Test Role<a name="test_role"></a>
 ### 3.1 Assume **ec2-admin-team-alpha** Role
 Now you will use an existing IAM user with MFA enabled to assume the new *ec2-admin-team-alpha* role.
+
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled. [https://console.aws.amazon.com](https://console.aws.amazon.com).
 2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`then click **Switch Role**. Alternatively you can paste the link in your browser that you recorded earlier.
 3. On the Switch Role page, type you account ID number in the **Account** field,  and the name of the role *ec2-admin-team-alpha* that you created in the previous step in the **Role** field. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
@@ -265,6 +273,7 @@ The security best practices followed in this lab are: <a name="best_practices"><
 
 ## 5. Tear down this lab <a name="tear_down"></a>
 Please note that the changes you made to the policies and roles have no charges associated with them.
+
 1. Using the original IAM user, select the *ec2-admin-team-alpha* role in the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/) and click  **Delete role**.  
 2. For each of the policies you created, one at a time select the radio button then **Policy actions** drop down menu then **Delete**.  
 The policies created are:  

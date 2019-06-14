@@ -9,6 +9,7 @@ Implementing multiple accounts for our workload improves our security by limitin
 Leverage AWS Organisations to create separate AWS accounts for a sandbox, your workload, a secure “data bunker” for audit logs and backups, and a shared services account for common tools. If you currently only have one account, create a new AWS account for your organisations master AWS account and invite your existing account to join as your sandbox AWS account.
 
 By the end of this step you will have a separate AWS account for:
+
 * Organisations root account – used only for identity and billing
 * Shared services – for common tools such as deployment tooling
 * Workload accounts – customers who have a single product will have a separate AWS account for each environment. If you have multiple workloads, or you rely on account separation for separation of customer data you will want to set up further accounts to reflect your structure

@@ -2,7 +2,8 @@
 
 ## 1. Create S3 bucket
 Create an Amazon S3 bucket to host static content using the Amazon S3 console.
-For more information about Amazon S3, see [Introduction to Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html).  
+For more information about Amazon S3, see [Introduction to Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html).
+
 1. Open the Amazon S3 console at [https://console.aws.amazon.com/s3/](https://console.aws.amazon.com/s3/).  
 2. From the console dashboard, choose **Create bucket**.  
 ![s3-create-bucket-1](Images/s3-create-bucket-1.png)
@@ -51,8 +52,8 @@ For more information about Amazon S3, see [Introduction to Amazon S3](https://do
 
 
 ## 3. Configure Amazon CloudFront
-
 Using the AWS Management Console, we will create a CloudFront distribution, and configure it to serve the S3 bucket we previously created.
+
 1. Open the Amazon CloudFront console at [https://console.aws.amazon.com/cloudfront/home](https://console.aws.amazon.com/cloudfront/home).
 2. From the console dashboard, click **Create Distribution**.  
 ![cloudfront-create](Images/cloudfront-create-button.png)  
@@ -84,6 +85,7 @@ For more information on configuring CloudFront, see [Viewing and Updating CloudF
 The following instructions will remove the CloudFront distribution and S3 bucket created in this lab.
 
 Delete the CloudFront distribution:
+
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
 2. From the console dashboard, select the distribution you created earlier and click the Disable button.
 To confirm, click the Yes, Disable button.
@@ -91,6 +93,7 @@ To confirm, click the Yes, Disable button.
 button, and then to confirm click the Yes, Delete button.
 
 Delete the S3 bucket:
+
 1. Open the Amazon S3 console at [https://console.aws.amazon.com/s3/](https://console.aws.amazon.com/s3/).  
 2. Check the box next to the bucket you created previously, then click **Empty** from the menu.
 3. Confirm the bucket you are emptying.  

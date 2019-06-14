@@ -54,6 +54,7 @@ You have now set up detective controls to log to your buckets and retain events,
 
 ## 2. Knowledge Check <a name="knowledge_check"></a>
 The security best practices followed in this lab are: <a name="best_practices"></a>
+
 * [Automate alerting on key indicators](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) AWS Cloudtrail, AWS Config and Amazon GuardDuty provide insights into your environment.
 * [Implement new security services and features:](https://wa.aws.amazon.com/wat.question.SEC_5.en.html) New features such as Amazon GuardDuty have been adopted.
 * [Automate configuration management:](https://wa.aws.amazon.com/wat.question.SEC_6.en.html) CloudFormation is being used to configure AWS CloudTrail, AWS Config and Amazon GuardDuty.
@@ -68,12 +69,14 @@ The following instructions will remove the resources that have a cost for runnin
 Note: If you are planning on doing the lab [300_Incident_Response_with_AWS_Console_and_CLI](../300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md) we recommend you only tear down this stack after completing that lab as their is a dependency on AWS CloudTrail being enabled for the other lab.
 
 Delete the stack:
+
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the `DetectiveControls` stack.
 3. Click the Actions button then click Delete Stack.
 4. Confirm the stack and then click the Yes, Delete button.
 
 Empty and delete the S3 buckets:
+
 1. Sign in to the AWS Management Console, and open the S3 console at https://console.aws.amazon.com/s3/.
 2. Select the CloudTrail bucket name you previously created without clicking the name.
 ![s3-empty-bucket](Images/s3-empty-bucket.png)  

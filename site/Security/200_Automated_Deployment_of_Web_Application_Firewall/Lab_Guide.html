@@ -38,42 +38,47 @@ AWS WAF configuration for use with CloudFront.</p>
 </ol>
 <h2 id="2-configure-amazon-cloudfront">2. Configure Amazon CloudFront <a name="cloudfront"></a></h2>
 <p>Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
-ACL
-we previously created.
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, choose Create Distribution.
-<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" />
-3. Click Get Started in the Web section.
-<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" />
-4. Specify the following settings for the distribution:
-  * In <strong>Origin Domain Name</strong> enter the DNS or domain name from your elastic load balancer or EC2 instance.
-  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" />
-  * In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
-  <img alt="cloudfront-distribution-settings" src="Images/cloudfront-distribution-settings.png" />
-  * Click Create Distrubution.
-  * For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.
-5. After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.<br />
-<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" /><br />
-6. When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.<br />
+ACL we previously created.</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, choose Create Distribution.
+<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" /></li>
+<li>Click Get Started in the Web section.
+<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" /></li>
+<li>Specify the following settings for the distribution:</li>
+<li>In <strong>Origin Domain Name</strong> enter the DNS or domain name from your elastic load balancer or EC2 instance.
+  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" /></li>
+<li>In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
+  <img alt="cloudfront-distribution-settings" src="Images/cloudfront-distribution-settings.png" /></li>
+<li>Click Create Distrubution.</li>
+<li>For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.</li>
+<li>After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.<br />
+<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" />  </li>
+<li>When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.<br />
 <img alt="cloudfront-test" src="Images/cloudfront-test.png" /><br />
-For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.
-7. You have now configured Amazon CloudFront with basic settings and AWS WAF.</p>
+For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.</li>
+<li>You have now configured Amazon CloudFront with basic settings and AWS WAF.</li>
+</ol>
 <p>For more information on configuring CloudFront, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToUpdateDistribution.html">Viewing and Updating CloudFront Distributions</a> in the CloudFront documentation.</p>
 <hr />
 <h3 id="3-tear-down-this-lab">3. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.</p>
-<p>Delete the CloudFront distribution:
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, select the distribution you created earlier and click the Disable button.
-To confirm, click the Yes, Disable button.
-3. After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
-button, and then to confirm click the Yes, Delete button.</p>
-<p>Delete the AWS WAF stack:
-1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>waf-cloudfront</code> stack.
-3. Click the Actions button, and then click Delete Stack.
-4. Confirm the stack, and then click the Yes, Delete button.</p>
+<p>Delete the CloudFront distribution:</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, select the distribution you created earlier and click the Disable button.
+To confirm, click the Yes, Disable button.</li>
+<li>After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
+button, and then to confirm click the Yes, Delete button.</li>
+</ol>
+<p>Delete the AWS WAF stack:</p>
+<ol>
+<li>Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
+<li>Select the <code>waf-cloudfront</code> stack.</li>
+<li>Click the Actions button, and then click Delete Stack.</li>
+<li>Confirm the stack, and then click the Yes, Delete button.</li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">Amazon Elastic Compute Cloud User Guide for Linux Instances</a><br />

@@ -19,14 +19,16 @@
 <p><img alt="iam-create-user&amp;group" src="Images/300_IAM_Permission_Boundaries_Delegating_Role_Creation.png" /></p>
 <h2 id="1-create-iam-policies">1. Create IAM policies <a name="create_policies"></a></h2>
 <h3 id="11-create-policy-for-permission-boundary">1.1 Create policy for permission boundary</h3>
-<p>This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab using AWS IAM we are only going to allow the us-east-1 (North Virginia) and us-west-1 (North California) regions, optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow in these regions are AWS EC2 and AWS Lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.<br />
-If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html">IAM User Guide</a>. You will need to log out and back in again with MFA so your session has MFA active.
-2. In the navigation pane, click <strong>Policies</strong> and then click <strong>Create policy</strong>.<br />
-<img alt="Images/iam-role-policy-1.png" src="Images/iam-policy-create-1.png" /><br />
-3. On the Create policy page click the <strong>JSON</strong> tab.
-<img alt="Images/iam-role-policy-2.png" src="Images/iam-policy-create-2.png" /><br />
-4. Replace the example start of the policy that is already in the editor with the policy below.</p>
+<p>This policy will be used for the permission boundary when the developer role creates their own user role with their delegated permissions. In this lab using AWS IAM we are only going to allow the us-east-1 (North Virginia) and us-west-1 (North California) regions, optionally you can change these to your favourite regions and add / remove as many as you need. The only service actions we are going to allow in these regions are AWS EC2 and AWS Lambda, note that these services require additional supporting actions if you were to re-use this policy after this lab, depending on your requirements.</p>
+<ol>
+<li>Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.<br />
+If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html">IAM User Guide</a>. You will need to log out and back in again with MFA so your session has MFA active.</li>
+<li>In the navigation pane, click <strong>Policies</strong> and then click <strong>Create policy</strong>.<br />
+<img alt="Images/iam-role-policy-1.png" src="Images/iam-policy-create-1.png" />  </li>
+<li>On the Create policy page click the <strong>JSON</strong> tab.
+<img alt="Images/iam-role-policy-2.png" src="Images/iam-policy-create-2.png" />  </li>
+<li>Replace the example start of the policy that is already in the editor with the policy below.</li>
+</ol>
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
@@ -68,8 +70,10 @@ If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/la
 <img alt="Images/iam-role-policy-3.png" src="Images/iam-policy-create-3.png" /></li>
 </ol>
 <h3 id="12-create-developer-iam-restricted-policy">1.2 Create developer IAM restricted policy</h3>
-<p>This policy will be attached to the developer role, and will allow the developer to create policies and roles with a name prefix of <em>app1</em>, and only if the permission boundary <em>restrict-region-boundary</em> is attached. You will need to change the account id placeholders of <em>123456789012</em> to your account number in 5 places. You can find your account id by navigating to <a href="https://console.aws.amazon.com/billing/home?#/account">https://console.aws.amazon.com/billing/home?#/account</a> in the console. Naming prefixes are useful when you have different teams or in this case different applications running in the same AWS account. They can be used to keep your resources looking tidy, and also in IAM policy as the resource as we are doing here.
-1. Create a managed policy using the JSON policy below and name of <em>createrole-restrict-region-boundary</em>.</p>
+<p>This policy will be attached to the developer role, and will allow the developer to create policies and roles with a name prefix of <em>app1</em>, and only if the permission boundary <em>restrict-region-boundary</em> is attached. You will need to change the account id placeholders of <em>123456789012</em> to your account number in 5 places. You can find your account id by navigating to <a href="https://console.aws.amazon.com/billing/home?#/account">https://console.aws.amazon.com/billing/home?#/account</a> in the console. Naming prefixes are useful when you have different teams or in this case different applications running in the same AWS account. They can be used to keep your resources looking tidy, and also in IAM policy as the resource as we are doing here.</p>
+<ol>
+<li>Create a managed policy using the JSON policy below and name of <em>createrole-restrict-region-boundary</em>.</li>
+</ol>
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
@@ -118,8 +122,10 @@ If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/la
 </code></pre>
 
 <h3 id="13-create-developer-iam-console-access-policy">1.3 Create developer IAM console access policy</h3>
-<p>This policy allows list and read type IAM service actions so you can see what you have created using the console. Note that it is not a requirement if you simply wanted to create the role and policy, or if you were using the Command Line Interface (CLI) or CloudFormation.
-1. Create a managed policy using the JSON policy below and name of <em>iam-restricted-list-read</em>.</p>
+<p>This policy allows list and read type IAM service actions so you can see what you have created using the console. Note that it is not a requirement if you simply wanted to create the role and policy, or if you were using the Command Line Interface (CLI) or CloudFormation.</p>
+<ol>
+<li>Create a managed policy using the JSON policy below and name of <em>iam-restricted-list-read</em>.</li>
+</ol>
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
@@ -146,82 +152,92 @@ If you need to enable MFA follow the <a href="https://docs.aws.amazon.com/IAM/la
 
 <h2 id="2-create-and-test-developer-role">2. Create and Test Developer Role <a name="developer_role"></a></h2>
 <h3 id="21-create-developer-role">2.1 Create Developer Role</h3>
-<p>Create a role for developers that will have permission to create roles and policies, with the permission boundary and naming prefix enforced:
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.
-2. In the navigation pane, click <strong>Roles</strong> and then click <strong>Create role</strong>.<br />
-<img alt="iam-role-1" src="Images/iam-role-create-1.png" /><br />
-3. Click Another AWS account, then enter your account ID and tick Require MFA, then click <strong>Next: Permissions</strong>. We enforce MFA here as it is a best practice.  <img alt="iam-role-2" src="Images/iam-role-create-2.png" /><br />
-4. In the search field start typing <em>createrole</em> then check the box next to the <em>createrole-restrict-region-boundary</em> policy.
-<img alt="iam-role-3" src="Images/iam-role-create-3.png" /><br />
-5. Erase your previous search and start typing <em>iam-res</em> then check the box next to the <em>iam-restricted-list-read</em> policy and then click <strong>Next: Tags</strong>.
-<img alt="iam-role-4" src="Images/iam-role-create-4.png" /><br />
-6. For this lab we will not use IAM tags, click <strong>Next: Review</strong>.
-7. Enter the name of <em>developer-restricted-iam</em> for the <strong>Role name</strong> and click <strong>Create role</strong>.
-<img alt="iam-role-6" src="Images/iam-role-create-5.png" /><br />
-8. Check the role you have created by clicking on <em>developer-restricted-iam</em> in the list. Record both the Role ARN and the link to the console.
-9. The role is now created, ready to test!</p>
-<h3 id="22-test-developer-role">2.2. Test Developer Role</h3>
-<p>Now you will use an existing IAM user with MFA enabled to assume the new <em>developer-restricted-iam</em> role.
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled. <a href="https://console.aws.amazon.com">https://console.aws.amazon.com</a>.
-2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: <code>username@account_ID_number_or_alias</code>then click <strong>Switch Role</strong>. Alternatively you can paste the link in your browser that you recorded earlier.
-3. On the Switch Role page, type the account ID number or the account alias and the name of the role <em>developer-restricted-iam</em> that you created in the previous step. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
-4. Click <strong>Switch Role</strong>. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
-<img alt="switch-role-developer" src="Images/switch-role-developer.png" /><br />
-5. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you replacing the permission that you had as the IAM user.</p>
-<pre><code>**Tip**
-
-The last several roles that you used appear on the menu. The next time you need to switch to one of those roles, you can simply click the role you want. You only need to type the account and role information manually if the role is not displayed on the Identity menu.
-</code></pre>
+<p>Create a role for developers that will have permission to create roles and policies, with the permission boundary and naming prefix enforced:</p>
 <ol>
-<li>You are now using the developer role with the granted permissions, stay logged in using the role for the next section.</li>
+<li>Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>.</li>
+<li>In the navigation pane, click <strong>Roles</strong> and then click <strong>Create role</strong>.<br />
+<img alt="iam-role-1" src="Images/iam-role-create-1.png" />  </li>
+<li>Click Another AWS account, then enter your account ID and tick Require MFA, then click <strong>Next: Permissions</strong>. We enforce MFA here as it is a best practice.  <img alt="iam-role-2" src="Images/iam-role-create-2.png" />  </li>
+<li>In the search field start typing <em>createrole</em> then check the box next to the <em>createrole-restrict-region-boundary</em> policy.
+<img alt="iam-role-3" src="Images/iam-role-create-3.png" />  </li>
+<li>Erase your previous search and start typing <em>iam-res</em> then check the box next to the <em>iam-restricted-list-read</em> policy and then click <strong>Next: Tags</strong>.
+<img alt="iam-role-4" src="Images/iam-role-create-4.png" />  </li>
+<li>For this lab we will not use IAM tags, click <strong>Next: Review</strong>.</li>
+<li>Enter the name of <em>developer-restricted-iam</em> for the <strong>Role name</strong> and click <strong>Create role</strong>.
+<img alt="iam-role-6" src="Images/iam-role-create-5.png" />  </li>
+<li>Check the role you have created by clicking on <em>developer-restricted-iam</em> in the list. Record both the Role ARN and the link to the console.</li>
+<li>The role is now created, ready to test!</li>
+</ol>
+<h3 id="22-test-developer-role">2.2. Test Developer Role</h3>
+<p>Now you will use an existing IAM user with MFA enabled to assume the new <em>developer-restricted-iam</em> role.</p>
+<ol>
+<li>Sign in to the AWS Management Console as an IAM user with MFA enabled. <a href="https://console.aws.amazon.com">https://console.aws.amazon.com</a>.</li>
+<li>In the console, click your user name on the navigation bar in the upper right. It typically looks like this: <code>username@account_ID_number_or_alias</code>then click <strong>Switch Role</strong>. Alternatively you can paste the link in your browser that you recorded earlier.</li>
+<li>On the Switch Role page, type the account ID number or the account alias and the name of the role <em>developer-restricted-iam</em> that you created in the previous step. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.</li>
+<li>Click <strong>Switch Role</strong>. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
+<img alt="switch-role-developer" src="Images/switch-role-developer.png" />  </li>
+<li>
+<p>The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you replacing the permission that you had as the IAM user.</p>
+<p><strong>Tip</strong></p>
+<p>The last several roles that you used appear on the menu. The next time you need to switch to one of those roles, you can simply click the role you want. You only need to type the account and role information manually if the role is not displayed on the Identity menu.
+6. You are now using the developer role with the granted permissions, stay logged in using the role for the next section.</p>
+</li>
 </ol>
 <h2 id="3-create-and-test-user-role">3. Create and Test User Role <a name="user_role"></a></h2>
 <h3 id="31-create-user-role">3.1 Create User Role</h3>
-<p>While you are still assuming the <em>developer-restricted-iam</em> role you created in the previous step, create a new user role with the boundary policy attached and name it with the prefix. We will use AWS managed policies for this user role, however the <em>createrole-restrict-region-boundary</em> policy will allow us to create and attach our own policies, only if they have a prefix of <em>app1</em>.
-1. Verify that you are Using the developer role previously created by checking the top bar it should look like <img alt="iam-role-developer-restricted-iam" src="Images/iam-role-developer-restricted-iam.png" /> and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>. You will notice a number of permission denied messages as this developer role is restricted. Least privilege is a best practice!
-2. In the navigation pane, click <strong>Roles</strong> and then click <strong>Create role</strong>.<br />
-<img alt="iam-role-1" src="Images/iam-role-create-1.png" /><br />
-3. Click <strong>Another AWS account</strong>, then enter your account ID that you have been using for this lab and tick <strong>Require MFA</strong>, then click <strong>Next: Permissions</strong>. <img alt="iam-role-2" src="Images/iam-role-create-2.png" /><br />
-4. In the search field start typing <em>ec2full</em> then check the box next to the <em>AmazonEC2FullAccess</em> policy.
-<img alt="iam-role-3" src="Images/iam-role-create-b3.png" /><br />
-5. Erase your previous search and start typing <em>lambda</em> then check the box next to the <em>AWSLambdaFullAccess</em> policy.
-<img alt="iam-role-4" src="Images/iam-role-create-b4.png" /><br />
-6. Expand the bottom section <strong>Set permissions boundary</strong> and click <strong>Use a permissions boundary to control the maximum role permissions</strong>. In the search field start typing <em>boundary</em> then click the radio button for <em>restrict-region-boundary</em> and then click <strong>Next: Tags</strong>.
-<img alt="iam-role-5" src="Images/iam-role-create-b5.png" /><br />
-7. For this lab we will not use IAM tags, click <strong>Next: Review</strong>.
-8. Enter the <strong>Role name</strong> of <em>app1-user-region-restricted-services</em> for the role and click <strong>Create role</strong>.
-<img alt="iam-role-6" src="Images/iam-role-create-b6.png" /><br />
-9. The role should create successfully if you followed all the steps. Record both the Role ARN and the link to the console.<br />
-If you receive an error message a common mistake is not changing the account number in the policies in the previous steps.</p>
+<p>While you are still assuming the <em>developer-restricted-iam</em> role you created in the previous step, create a new user role with the boundary policy attached and name it with the prefix. We will use AWS managed policies for this user role, however the <em>createrole-restrict-region-boundary</em> policy will allow us to create and attach our own policies, only if they have a prefix of <em>app1</em>.</p>
+<ol>
+<li>Verify that you are Using the developer role previously created by checking the top bar it should look like <img alt="iam-role-developer-restricted-iam" src="Images/iam-role-developer-restricted-iam.png" /> and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a>. You will notice a number of permission denied messages as this developer role is restricted. Least privilege is a best practice!</li>
+<li>In the navigation pane, click <strong>Roles</strong> and then click <strong>Create role</strong>.<br />
+<img alt="iam-role-1" src="Images/iam-role-create-1.png" />  </li>
+<li>Click <strong>Another AWS account</strong>, then enter your account ID that you have been using for this lab and tick <strong>Require MFA</strong>, then click <strong>Next: Permissions</strong>. <img alt="iam-role-2" src="Images/iam-role-create-2.png" />  </li>
+<li>In the search field start typing <em>ec2full</em> then check the box next to the <em>AmazonEC2FullAccess</em> policy.
+<img alt="iam-role-3" src="Images/iam-role-create-b3.png" />  </li>
+<li>Erase your previous search and start typing <em>lambda</em> then check the box next to the <em>AWSLambdaFullAccess</em> policy.
+<img alt="iam-role-4" src="Images/iam-role-create-b4.png" />  </li>
+<li>Expand the bottom section <strong>Set permissions boundary</strong> and click <strong>Use a permissions boundary to control the maximum role permissions</strong>. In the search field start typing <em>boundary</em> then click the radio button for <em>restrict-region-boundary</em> and then click <strong>Next: Tags</strong>.
+<img alt="iam-role-5" src="Images/iam-role-create-b5.png" />  </li>
+<li>For this lab we will not use IAM tags, click <strong>Next: Review</strong>.</li>
+<li>Enter the <strong>Role name</strong> of <em>app1-user-region-restricted-services</em> for the role and click <strong>Create role</strong>.
+<img alt="iam-role-6" src="Images/iam-role-create-b6.png" />  </li>
+<li>The role should create successfully if you followed all the steps. Record both the Role ARN and the link to the console.<br />
+If you receive an error message a common mistake is not changing the account number in the policies in the previous steps.</li>
+</ol>
 <h3 id="32-test-user-role">3.2 Test User Role</h3>
-<p>Now you will use an existing IAM user to assume the new <em>app1-user-region-restricted-services</em> role, as if you were a user who only needs to administer EC2 and Lambda in your allowed regions.
-1. In the console, click your role's Display Name on the right side of the navigation bar. Click Back to your previous <em>username</em>. You are now back to using your original IAM user.
-2. In the console, click your user name on the navigation bar in the upper right. Alternatively you can paste the link in your browser that you recorded earlier for the <em>app1-user-region-restricted-services</em> role.
-3. On the Switch Role page, type the account ID number or the account alias and the name of the role <em>app1-user-region-restricted-services</em> that you created in the previous step.
-5. Select a different color to before, otherwise it will overwrite that profile in your browser.
-6. Click <strong>Switch Role</strong>. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.<br />
-<img alt="switch-role-user" src="Images/switch-role-user.png" /><br />
-7. You are now using the user role with the only actions allowed of EC2 and Lambda in us-east-1 (North Virginia) and us-west-1 (North California) regions!
-8. Navigate to the EC2 Management Console in the us-east-1 region <a href="https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1">https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1</a>. The EC2 Dashboard should display a summary list of resources with the only error being <em>Error retrieving resource count</em> from Elastic Load Balancing as that requires additional permissions. <img alt="ec2-resources-allowed" src="Images/ec2-resources-allowed.png" /><br />
-9. Navigate to the EC2 Management Console in a region that is not allowed, such as ap-southeast-2 (Sydney) <a href="https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2">https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2</a>. The EC2 Dashboard should display a number of unauthorized error messages. <img alt="ec2-resources-denied" src="Images/ec2-resources-denied.png" /><br />
-10. Congratulations! You have now learnt about IAM permission boundaries and have one working!</p>
+<p>Now you will use an existing IAM user to assume the new <em>app1-user-region-restricted-services</em> role, as if you were a user who only needs to administer EC2 and Lambda in your allowed regions.</p>
+<ol>
+<li>In the console, click your role's Display Name on the right side of the navigation bar. Click Back to your previous <em>username</em>. You are now back to using your original IAM user.</li>
+<li>In the console, click your user name on the navigation bar in the upper right. Alternatively you can paste the link in your browser that you recorded earlier for the <em>app1-user-region-restricted-services</em> role.</li>
+<li>On the Switch Role page, type the account ID number or the account alias and the name of the role <em>app1-user-region-restricted-services</em> that you created in the previous step.</li>
+<li>Select a different color to before, otherwise it will overwrite that profile in your browser.</li>
+<li>Click <strong>Switch Role</strong>. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.<br />
+<img alt="switch-role-user" src="Images/switch-role-user.png" />  </li>
+<li>You are now using the user role with the only actions allowed of EC2 and Lambda in us-east-1 (North Virginia) and us-west-1 (North California) regions!</li>
+<li>Navigate to the EC2 Management Console in the us-east-1 region <a href="https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1">https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1</a>. The EC2 Dashboard should display a summary list of resources with the only error being <em>Error retrieving resource count</em> from Elastic Load Balancing as that requires additional permissions. <img alt="ec2-resources-allowed" src="Images/ec2-resources-allowed.png" />  </li>
+<li>Navigate to the EC2 Management Console in a region that is not allowed, such as ap-southeast-2 (Sydney) <a href="https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2">https://ap-southeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-2</a>. The EC2 Dashboard should display a number of unauthorized error messages. <img alt="ec2-resources-denied" src="Images/ec2-resources-denied.png" />  </li>
+<li>Congratulations! You have now learnt about IAM permission boundaries and have one working!</li>
+</ol>
 <h2 id="4-knowledge-check">4. Knowledge Check <a name="knowledge_check"></a></h2>
-<p>The security best practices followed in this lab are: <a name="best_practices"></a>
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_1.en.html">Manage credentials and authentication</a> Use of MFA for access to provide additional access control.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> Roles with associated policies have been used to define appropriate permission boundaries.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The roles are scoped with minimum privileges to accomplish the task.</p>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a></p>
+<ul>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_1.en.html">Manage credentials and authentication</a> Use of MFA for access to provide additional access control.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> Roles with associated policies have been used to define appropriate permission boundaries.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The roles are scoped with minimum privileges to accomplish the task.</li>
+</ul>
 <hr />
 <h2 id="5-tear-down-this-lab">5. Tear down this lab <a name="tear_down"></a></h2>
-<p>Please note that the changes you made to the users, groups, and roles have no charges associated with them.
-1. Using the original IAM user, for each of the roles you created select them in the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and click  <strong>Delete role</strong>.<br />
+<p>Please note that the changes you made to the users, groups, and roles have no charges associated with them.</p>
+<ol>
+<li>Using the original IAM user, for each of the roles you created select them in the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a> and click  <strong>Delete role</strong>.<br />
 The roles created are:<br />
 <em>app1-user-region-restricted-services</em><br />
-<em>developer-restricted-iam</em>
-2. For each of the policies you created, one at a time select the radio button then <strong>Policy actions</strong> drop down menu then <strong>Delete</strong>.<br />
+<em>developer-restricted-iam</em></li>
+<li>For each of the policies you created, one at a time select the radio button then <strong>Policy actions</strong> drop down menu then <strong>Delete</strong>.<br />
 The policies created are:<br />
 <em>restrict-region-boundary</em><br />
 <em>createrole-restrict-region-boundary</em><br />
-<em>iam-restricted-list-read</em></p>
+<em>iam-restricted-list-read</em></li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Entities</a><br />

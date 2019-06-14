@@ -14,6 +14,7 @@
 
 ## 2. Create VPC Stack <a name="create_vpc_stack"></a>
 This step will create the VPC and all components using the example CloudFormation template.
+
 1. Download the latest version of the [vpc-alb-app-db.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template from file from GitHub raw, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository.
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/). Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
 3. Click Create Stack.  
@@ -35,6 +36,7 @@ You have now created the VPC stack (well actually CloudFormation did it for you)
 
 ## 3. Knowledge Check <a name="knowledge_check"></a>
 The security best practices followed in this lab are: <a name="best_practices"></a>
+
 * [Grant least privileges:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) The roles are scoped with minimum privileges to accomplish the task.
 * [Implement new security services and features:](https://wa.aws.amazon.com/wat.question.SEC_5.en.html) New features including secrets manager have been adopted.
 * [Limit exposure:](https://wa.aws.amazon.com/wat.question.SEC_6.en.html) Security groups restrict network traffic to a minimum. Use of Internet Gateways and NAT Gateways in use to control traffic flows.
@@ -49,12 +51,14 @@ The following instructions will remove the resources that you have created in th
 Note: If you are planning on completing the lab [200_Automated_Deployment_of_EC2_Web_Application](../200_Automated_Deployment_of_EC2_Web_Application/README.md) we recommend you only tear down this lab after completing both, as there is a dependency on this VPC.
   
 Delete the VPC CloudFormation stack:
+
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
 2. Click the radio button on the left of the *WebApp1-VPC* stack.
 3. Click the **Actions** button then click **Delete stack**.
 4. Confirm the stack and then click **Delete** button.
 
 Delete the CloudWatch Logs:
+
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/).
 2. Click **Logs** in the left navigation.
 3. Click the radio button on the left of the **WebApp1-VPCFlowLog**.

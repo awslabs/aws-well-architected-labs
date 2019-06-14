@@ -7,15 +7,16 @@
 <p>For launching your first instance, we are going to use the launch wizard in the Amazon EC2 console.</p>
 <h3 id="11-launch-single-linux-instance">1.1 Launch Single Linux Instance</h3>
 <p>You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html">Launching an Instance</a>.
-Launch an instance:
-1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the console dashboard, choose Launch Instance.<br />
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-button.png" />
-3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux 2).<br />
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" />
-4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.<br />
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" /><br />
-5. On the Configure Instance Details page, make the following changes:<br />
+Launch an instance:</p>
+<ol>
+<li>Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.</li>
+<li>From the console dashboard, choose Launch Instance.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-button.png" /></li>
+<li>The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI (not Amazon Linux 2).<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" /></li>
+<li>On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.<br />
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" />  </li>
+<li>On the Configure Instance Details page, make the following changes:<br />
   5.1 Select Create new IAM role.<br />
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-role.png" /><br />
   5.2   In the new tab that opens, select Create role.<br />
@@ -42,9 +43,9 @@ Launch an instance:
     chown -R root:www /var/www
     chmod 2775 /var/www
     find /var/www -type d -exec chmod 2775 {} +
-    find /var/www -type f -exec chmod 0664 {} +</code>
-6. Accept defaults and Choose Next: Add tags.
-7. Click Next: Configure Security Group.
+    find /var/www -type f -exec chmod 0664 {} +</code></li>
+<li>Accept defaults and Choose Next: Add tags.</li>
+<li>Click Next: Configure Security Group.
     7.1 On type SSH, select Source as <code>My IP</code>
     7.2 Click Add Rule, select Type as HTTP and source as <code>Anywhere</code>
     Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
@@ -53,18 +54,20 @@ Launch an instance:
     7.2 Select Add Rule to add both SSH and HTTP, and on source, select <code>My IP</code>.<br />
 <img alt="Security Group" src="Images/ec2-launch-wizard-security-group.png" />
     7.3 Click Review and Launch.<br />
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" />
-8. On the Review Instance Launch page, check the details, and then click Launch.
-9. If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" /></li>
+<li>On the Review Instance Launch page, check the details, and then click Launch.</li>
+<li>
+<p>If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
 then type a name such as <code>lab</code>, click Download Key Pair, and then click Launch Instances.<br />
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-keys.png" />
     <strong>Important</strong></p>
-<pre><code>This is the only chance to save the private key file. You'll need to provide the name of your key
+<p>This is the only chance to save the private key file. You'll need to provide the name of your key
 pair when you launch an instance, and you'll provide the corresponding private key each time you connect
-to the instance.
-</code></pre>
-<ol>
-<li>Click View Instances.</li>
+to the instance.</p>
+</li>
+<li>
+<p>Click View Instances.</p>
+</li>
 <li>When your instance is launched, its status will change to running, and it will need a few minutes to apply patches and install Apache web server.<br />
 <img alt="ec2-status" src="Images/ec2-status.png" /></li>
 <li>You can connect to the Apache test page by entering the public DNS, which you can find on the description
@@ -135,25 +138,31 @@ ACL we previously created and test.</p>
 <h3 id="4-tear-down-this-lab">4. Tear down this lab</h3>
 <p>The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.</p>
-<p>Terminate the instance:
-1. Sign in to the AWS Management Console, and open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the left console instance menu, select Instances.
-3. Select the instance you created to terminate.
-4. From the Actions button (or right click) select Instance State &gt; Terminate.
-<img alt="ec2-terminate" src="Images/ec2-terminate.png" />
-5. Verify this is the instance you want terminated, then click the Yes, Terminate button.</p>
-<p>Delete the Application Load Balancer:
-1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the console dashboard, choose Load Balancers from the Load Balancing section.
-3. Choose the load balancer you created previously such as <code>lab-alb</code> and click Actions, then Delete.
-4. Confirm by clicking Yes, Delete.
-5. From the console dashboard, choose Target Groups from the Load Balancing section.
-3. Choose the target group you created previously such as <code>lab-alb</code> and click Actions, then Delete.</p>
-<p>Delete the AWS WAF stack:
-1. Open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>lab-waf-regional</code> stack.
-3. Click the Actions button, and then click Delete Stack.
-4. Confirm the stack, and then click the Yes, Delete button.</p>
+<p>Terminate the instance:</p>
+<ol>
+<li>Sign in to the AWS Management Console, and open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.</li>
+<li>From the left console instance menu, select Instances.</li>
+<li>Select the instance you created to terminate.</li>
+<li>From the Actions button (or right click) select Instance State &gt; Terminate.
+<img alt="ec2-terminate" src="Images/ec2-terminate.png" /></li>
+<li>Verify this is the instance you want terminated, then click the Yes, Terminate button.</li>
+</ol>
+<p>Delete the Application Load Balancer:</p>
+<ol>
+<li>Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.</li>
+<li>From the console dashboard, choose Load Balancers from the Load Balancing section.</li>
+<li>Choose the load balancer you created previously such as <code>lab-alb</code> and click Actions, then Delete.</li>
+<li>Confirm by clicking Yes, Delete.</li>
+<li>From the console dashboard, choose Target Groups from the Load Balancing section.</li>
+<li>Choose the target group you created previously such as <code>lab-alb</code> and click Actions, then Delete.</li>
+</ol>
+<p>Delete the AWS WAF stack:</p>
+<ol>
+<li>Open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
+<li>Select the <code>lab-waf-regional</code> stack.</li>
+<li>Click the Actions button, and then click Delete Stack.</li>
+<li>Confirm the stack, and then click the Yes, Delete button.</li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">Amazon Elastic Compute Cloud User Guide for Linux Instances</a> <br />

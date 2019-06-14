@@ -21,43 +21,47 @@
 <img alt="architecture" src="Images/architecture.png" /></p>
 <h2 id="2-create-web-stack">2. Create Web Stack <a name="create_web_stack"></a></h2>
 <p>Please note a prerequisite to this lab is that you have deployed the CloudFormation VPC stack in the lab <a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a> with the default parameters and recommended stack name.</p>
-<p>This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. An SSH key is not configured in this lab, instead <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html">AWS Systems Manager</a> should be used to manage the EC2 instances as a more secure and scalable method.
-1. Choose the version of the CloudFormation template and download to your computer or by <a href="https://help.github.com/en/articles/cloning-a-repository">cloning</a> this repository:
-   * <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml">wordpress.yaml</a> to create a WordPress site, including an RDS database.
-   * <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml">staticwebapp.yaml</a> to create a static web application that simply displays the instance ID for the instance it is running upon.
-2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.
-3. Click Create Stack.<br />
-<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" /><br />
-4. Click <strong>Upload a template file</strong> and then click <strong>Choose file</strong>.<br />
-<img alt="cloudformation-createstack-2" src="Images/cloudformation-createstack-2.png" /><br />
-5. Choose the CloudFormation template you downloaded in step 1, return to the CloudFormation console page and click <strong>Next</strong>.
-5. Enter the following details:
-  * Stack name: The name of this stack. For this lab, for the WordPress stack use <em>WebApp1-WordPress</em> or for the static web stack use <em>WebApp1-Static</em> and match the case.<br />
-<img alt="cloudformation-wp-params" src="Images/cloudformation-wp-params.png" /><br />
-  * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.<br />
+<p>This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. An SSH key is not configured in this lab, instead <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html">AWS Systems Manager</a> should be used to manage the EC2 instances as a more secure and scalable method.</p>
+<ol>
+<li>Choose the version of the CloudFormation template and download to your computer or by <a href="https://help.github.com/en/articles/cloning-a-repository">cloning</a> this repository:</li>
+<li><a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml">wordpress.yaml</a> to create a WordPress site, including an RDS database.</li>
+<li><a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml">staticwebapp.yaml</a> to create a static web application that simply displays the instance ID for the instance it is running upon.</li>
+<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>. Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking <strong>New Console</strong> in the <strong>CloudFormation</strong> menu.</li>
+<li>Click Create Stack.<br />
+<img alt="cloudformation-createstack-1" src="Images/cloudformation-createstack-1.png" />  </li>
+<li>Click <strong>Upload a template file</strong> and then click <strong>Choose file</strong>.<br />
+<img alt="cloudformation-createstack-2" src="Images/cloudformation-createstack-2.png" />  </li>
+<li>Choose the CloudFormation template you downloaded in step 1, return to the CloudFormation console page and click <strong>Next</strong>.</li>
+<li>Enter the following details:</li>
+<li>Stack name: The name of this stack. For this lab, for the WordPress stack use <em>WebApp1-WordPress</em> or for the static web stack use <em>WebApp1-Static</em> and match the case.<br />
+<img alt="cloudformation-wp-params" src="Images/cloudformation-wp-params.png" />  </li>
+<li>ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.<br />
 <img alt="cloudformation-wp-params-2" src="Images/cloudformation-wp-params-2.png" /><br />
-  The remaining parameters may be left as defaults, you can find out more in the description for each.<br />
-6. At the bottom of the page click <strong>Next</strong>.
-7. In this lab, we won't add any tags or other options. Click <strong>Next</strong>. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.
-8. Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
-<img alt="cloudformation-wp-createstack-final" src="Images/cloudformation-wp-createstack-final.png" /><br />
-9. After a number of minutes the final stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.<br />
+  The remaining parameters may be left as defaults, you can find out more in the description for each.  </li>
+<li>At the bottom of the page click <strong>Next</strong>.</li>
+<li>In this lab, we won't add any tags or other options. Click <strong>Next</strong>. Tags, which are key-value pairs, can help you identify your stacks. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html">Adding Tags to Your AWS CloudFormation Stack</a>.</li>
+<li>Review the information for the stack. When you're satisfied with the configuration, check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong> then click <strong>Create stack</strong>.<br />
+<img alt="cloudformation-wp-createstack-final" src="Images/cloudformation-wp-createstack-final.png" />  </li>
+<li>After a number of minutes the final stack status should change from <em>CREATE_IN_PROGRESS</em> to <em>CREATE_COMPLETE</em>.<br />
 <img alt="cloudformation-wp-createstack-complete" src="Images/cloudformation-wp-createstack-complete.png" /><br />
-You have now created the WordPress stack (well actually CloudFormation did it for you).<br />
-10. In the stack click the <strong>Outputs</strong> tab, and open the <em>WebsiteURL</em> value in your web browser, this is how to access what you just created.</p>
+You have now created the WordPress stack (well actually CloudFormation did it for you).  </li>
+<li>In the stack click the <strong>Outputs</strong> tab, and open the <em>WebsiteURL</em> value in your web browser, this is how to access what you just created.</li>
+</ol>
 <h2 id="3-knowledge-check">3. Knowledge Check <a name="knowledge_check"></a></h2>
-<p>The security best practices followed in this lab are: <a name="best_practices"></a>
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> A role is attached to the auto-scaled instances.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Implement dynamic authentication:</a> The role attached to the auto-scaled instances dynamically acquires credentials.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The role attached to the auto-scaled instances uses minimum privileges to accomplish the task.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features including secrets manager have been adopted.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Limit exposure:</a> Security groups restrict network traffic to a minimum.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to deploy the application automatically.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Control traffic at all layers:</a> Traffic is controlled in multiple tiers, using subnets with different route tables.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Reduce attack surface:</a> Instances do not allow for SSH, instead Systems Manager may be used for administration.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized including Secrets Manager, Aurora serverless.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Implement secure key management:</a> AWS Key Management Service is used for key management of Aurora database.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Provide mechanisms to keep people away from data:</a> SSH to the instances is not allowed, Systems Manager may be used to control access and CloudFormation is used to deploy and update all infrastructure to reduce human error.</p>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a></p>
+<ul>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant access through roles or federation:</a> A role is attached to the auto-scaled instances.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Implement dynamic authentication:</a> The role attached to the auto-scaled instances dynamically acquires credentials.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_3.en.html">Grant least privileges:</a> The role attached to the auto-scaled instances uses minimum privileges to accomplish the task.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features including secrets manager have been adopted.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Limit exposure:</a> Security groups restrict network traffic to a minimum.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to deploy the application automatically.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Control traffic at all layers:</a> Traffic is controlled in multiple tiers, using subnets with different route tables.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Reduce attack surface:</a> Instances do not allow for SSH, instead Systems Manager may be used for administration.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized including Secrets Manager, Aurora serverless.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Implement secure key management:</a> AWS Key Management Service is used for key management of Aurora database.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_9.en.html">Provide mechanisms to keep people away from data:</a> SSH to the instances is not allowed, Systems Manager may be used to control access and CloudFormation is used to deploy and update all infrastructure to reduce human error.</li>
+</ul>
 <h2 id="4-further-considerations">4. Further considerations: <a name="further_considerations"></a></h2>
 <ul>
 <li>Enable TLS (SSL) on application load balancer to encrypt communications, using Amazon Certificate Manager.</li>
@@ -70,12 +74,14 @@ You have now created the WordPress stack (well actually CloudFormation did it fo
 <hr />
 <h3 id="5-tear-down-this-lab">5. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that you have created in this lab.</p>
-<p>Delete the WordPress or Static Web Application CloudFormation stack:
-1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.
-2. Click the radio button on the left of the <em>WebApp1-WordPress</em> or <em>WebApp1-Static</em> stack.
-3. Click the <strong>Actions</strong> button then click <strong>Delete stack</strong>.
-4. Confirm the stack and then click <strong>Delete</strong> button.
-5. Access the Key Management Service (KMS) console <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a></p>
+<p>Delete the WordPress or Static Web Application CloudFormation stack:</p>
+<ol>
+<li>Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a>.</li>
+<li>Click the radio button on the left of the <em>WebApp1-WordPress</em> or <em>WebApp1-Static</em> stack.</li>
+<li>Click the <strong>Actions</strong> button then click <strong>Delete stack</strong>.</li>
+<li>Confirm the stack and then click <strong>Delete</strong> button.</li>
+<li>Access the Key Management Service (KMS) console <a href="https://console.aws.amazon.com/cloudformation/">https://console.aws.amazon.com/cloudformation/</a></li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html">AWS CloudFormation User Guide</a><br />

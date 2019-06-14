@@ -14,35 +14,38 @@
 </ol>
 <h2 id="1-configure-amazon-cloudfront-for-ec2-or-elastic-load-balancer">1. Configure Amazon CloudFront for EC2 or Elastic Load Balancer<a name="cloudfront1"></a></h2>
 <p>Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
-ACL
-we previously created.
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, choose Create Distribution.<br />
-<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" /><br />
-3. Click Get Started in the Web section.<br />
-<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" /><br />
-4. Specify the following settings for the distribution:
-  * In <strong>Origin Domain Name</strong> enter the DNS or domain name from your elastic load balancer or EC2 instance.
-  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" />
-  * Click Create Distrubution.
-  * For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.
-5. After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.<br />
-<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" /><br />
-6. When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.<br />
+ACL we previously created.</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, choose Create Distribution.<br />
+<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" />  </li>
+<li>Click Get Started in the Web section.<br />
+<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" />  </li>
+<li>Specify the following settings for the distribution:</li>
+<li>In <strong>Origin Domain Name</strong> enter the DNS or domain name from your elastic load balancer or EC2 instance.
+  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" /></li>
+<li>Click Create Distrubution.</li>
+<li>For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.</li>
+<li>After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.<br />
+<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" />  </li>
+<li>When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.<br />
 <img alt="cloudfront-test" src="Images/cloudfront-test.png" /><br />
-For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.
-7. You have now configured Amazon CloudFront with basic settings.  </p>
+For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.</li>
+<li>You have now configured Amazon CloudFront with basic settings.  </li>
+</ol>
 <p>For more information on configuring CloudFront, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToUpdateDistribution.html">Viewing and Updating CloudFront Distributions</a> in the CloudFront documentation.</p>
 <hr />
 <h3 id="2-tear-down-this-lab">2. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.</p>
-<p>Delete the CloudFront distribution:
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, select the distribution you created earlier and click the Disable button.
-To confirm, click the Yes, Disable button.
-3. After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
-button, and then to confirm click the Yes, Delete button.</p>
+<p>Delete the CloudFront distribution:</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, select the distribution you created earlier and click the Disable button.
+To confirm, click the Yes, Disable button.</li>
+<li>After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
+button, and then to confirm click the Yes, Delete button.</li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html">Amazon CloudFront Developer Guide</a><br />

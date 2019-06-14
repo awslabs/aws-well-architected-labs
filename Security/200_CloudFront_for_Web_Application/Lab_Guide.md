@@ -9,8 +9,8 @@
 
 ## 1. Configure Amazon CloudFront for EC2 or Elastic Load Balancer<a name="cloudfront1"></a>
 Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
-ACL
-we previously created.
+ACL we previously created.
+
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
 2. From the console dashboard, choose Create Distribution.  
 ![cloudfront-create](Images/cloudfront-create-button.png)  
@@ -37,6 +37,7 @@ The following instructions will remove the resources that have a cost for runnin
 Security Groups and SSH key will exist. You may remove these also or leave for future use.
 
 Delete the CloudFront distribution:
+
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
 2. From the console dashboard, select the distribution you created earlier and click the Disable button.
 To confirm, click the Yes, Disable button.

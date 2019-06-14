@@ -16,15 +16,16 @@
 </ol>
 <h2 id="1-launch-instance">1. Launch Instance <a name="launch_instance"></a></h2>
 <p>You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html">Launching an Instance</a>.
-Launch an instance:
-1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-2. From the console dashboard, choose Launch Instance.
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-button.png" />
-3. The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI, either version.
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" />
-4. On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" />
-5. On the Configure Instance Details page, make the following changes:<br />
+Launch an instance:</p>
+<ol>
+<li>Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.</li>
+<li>From the console dashboard, choose Launch Instance.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-button.png" /></li>
+<li>The choose an Amazon Machine Image (AMI) page displays a list of basic configurations, called Amazon Machine Images (AMIs), that serve as templates for your instance. Select the HVM edition of the Amazon Linux AMI, either version.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-ami.png" /></li>
+<li>On the Choose an Instance Type page, you can select the hardware configuration of your instance. Select the t2.micro type, which is selected by default. Notice that this instance type is eligible for the free tier. Then select Next: Configure Instance Details.
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-type.png" /></li>
+<li>On the Configure Instance Details page, make the following changes:<br />
   5.1 Select Create new IAM role.<br />
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-role.png" /><br />
   5.2   In the new tab that opens, select Create role.<br />
@@ -51,9 +52,9 @@ Launch an instance:
     chown -R root:www /var/www
     chmod 2775 /var/www
     find /var/www -type d -exec chmod 2775 {} +
-    find /var/www -type f -exec chmod 0664 {} +</code>
-6. Accept defaults and click <strong>Next: Add tags</strong>.
-7. Click <strong>Next: Configure Security Group</strong>.<br />
+    find /var/www -type f -exec chmod 0664 {} +</code></li>
+<li>Accept defaults and click <strong>Next: Add tags</strong>.</li>
+<li>Click <strong>Next: Configure Security Group</strong>.<br />
     7.1 Accept default opton <strong>Create a new security group</strong>.<br />
   7.2 On the line of the first default entry <em>SSH</em>, select <strong>Source</strong> as <em>My IP</em>.<br />
     7.3 Click <strong>Add Rule</strong>, select Type as <em>HTTP</em> and <strong>Source</strong> as <em>Anywhere</em>.<br />
@@ -62,18 +63,20 @@ Launch an instance:
   secure access with Elastic Load Balancer.<br />
 <img alt="Security Group" src="Images/ec2-launch-wizard-security-group.png" /><br />
     7.5 Click Review and Launch.<br />
-<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" /><br />
-8. On the Review Instance Launch page, check the details, and then click Launch.
-9. If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
+<img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-launch.png" />  </li>
+<li>On the Review Instance Launch page, check the details, and then click Launch.</li>
+<li>
+<p>If you do not have an existing key pair for access instances, a prompt will appear. Click Create New,
 then type a name such as <code>lab</code>, click Download Key Pair, and then click Launch Instances.
 <img alt="ec2-launch-wizard" src="Images/ec2-launch-wizard-keys.png" />
     <strong>Important</strong></p>
-<pre><code>This is the only chance to save the private key file. You'll need to provide the name of your key
+<p>This is the only chance to save the private key file. You'll need to provide the name of your key
 pair when you launch an instance, and you'll provide the corresponding private key each time you connect
-to the instance.
-</code></pre>
-<ol>
-<li>Click View Instances.</li>
+to the instance.</p>
+</li>
+<li>
+<p>Click View Instances.</p>
+</li>
 <li>When your instance is launched, its status will change to running, and it will need a few minutes to apply patches and install Apache web server.
 <img alt="ec2-status" src="Images/ec2-status.png" /></li>
 <li>You can connect to the Apache test page by entering the public DNS, which you can find on the description
@@ -105,36 +108,40 @@ AWS WAF configuration for use with CloudFront.</p>
 <h2 id="3-configure-amazon-cloudfront">3. Configure Amazon CloudFront <a name="cloudfront"></a></h2>
 <p>Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
 ACL
-we previously created.
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, choose Create Distribution.
-<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" />
-3. Click Get Started in the Web section.
-<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" />
-4. Specify the following settings for the distribution:
-  * In <strong>Origin Domain Name</strong> enter the EC2 public DNS name you recorded from your instance launch.
-  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" />
-  * In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
-  <img alt="cloudfront-distribution-settings" src="Images/cloudfront-distribution-settings.png" />
-  * Click Create Distrubution.
-  * For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.
-5. After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.
-<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" />
-6. When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.
+we previously created.</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, choose Create Distribution.
+<img alt="cloudfront-create" src="Images/cloudfront-create-button.png" /></li>
+<li>Click Get Started in the Web section.
+<img alt="cloudfront-getstarted" src="Images/cloudfront-get-started.png" /></li>
+<li>Specify the following settings for the distribution:</li>
+<li>In <strong>Origin Domain Name</strong> enter the EC2 public DNS name you recorded from your instance launch.
+  <img alt="cloudfront-create-distribution" src="Images/cloudfront-create-distribution.png" /></li>
+<li>In the distribution Settings section, click AWS WAF Web ACL, and select the one you created previously.
+  <img alt="cloudfront-distribution-settings" src="Images/cloudfront-distribution-settings.png" /></li>
+<li>Click Create Distrubution.</li>
+<li>For more information on the other configuration options, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html">Values That You Specify When You Create or Update a Web Distribution</a> in the CloudFront documentation.</li>
+<li>After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.
+<img alt="cloudfront-deployed" src="Images/cloudfront-deployed.png" /></li>
+<li>When your distribution is deployed, confirm that you can access your content using your new CloudFront URL or CNAME. Copy the Domain Name into a web browser to test.
 <img alt="cloudfront-test" src="Images/cloudfront-test.png" />
-For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.
-7. You have now configured Amazon CloudFront with basic settings and AWS WAF.</p>
+For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-testing.html">Testing a Web Distribution</a> in the CloudFront documentation.</li>
+<li>You have now configured Amazon CloudFront with basic settings and AWS WAF.</li>
+</ol>
 <p>For more information on configuring CloudFront, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToUpdateDistribution.html">Viewing and Updating CloudFront Distributions</a> in the CloudFront documentation.</p>
 <hr />
 <h3 id="3-tear-down-this-lab">3. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them. Please note that
 Security Groups and SSH key will exist. You may remove these also or leave for future use.</p>
-<p>Delete the CloudFront distribution:
-1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
-2. From the console dashboard, select the distribution you created earlier and click the Disable button.
-To confirm, click the Yes, Disable button.
-3. After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
-button, and then to confirm click the Yes, Delete button.</p>
+<p>Delete the CloudFront distribution:</p>
+<ol>
+<li>Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.</li>
+<li>From the console dashboard, select the distribution you created earlier and click the Disable button.
+To confirm, click the Yes, Disable button.</li>
+<li>After approximately 15 minutes when the status is Deployed, select the distribution and click the Delete
+button, and then to confirm click the Yes, Delete button.</li>
+</ol>
 <p>Delete the AWS WAF stack:
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the <code>waf-cloudfront</code> stack.

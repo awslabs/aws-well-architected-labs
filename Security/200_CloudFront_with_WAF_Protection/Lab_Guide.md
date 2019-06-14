@@ -12,6 +12,7 @@
 ## 1. Launch Instance <a name="launch_instance"></a>
 You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see [Launching an Instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html).
 Launch an instance:
+
 1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
 2. From the console dashboard, choose Launch Instance.
 ![ec2-launch-wizard](Images/ec2-launch-wizard-button.png)
@@ -107,6 +108,7 @@ AWS WAF configuration for use with CloudFront.
 Using the AWS Management Console, we will create a CloudFront distribution, and link it to the AWS WAF
 ACL
 we previously created.
+
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
 2. From the console dashboard, choose Create Distribution.
 ![cloudfront-create](Images/cloudfront-create-button.png)
@@ -137,6 +139,7 @@ The following instructions will remove the resources that have a cost for runnin
 Security Groups and SSH key will exist. You may remove these also or leave for future use.
 
 Delete the CloudFront distribution:
+
 1. Open the Amazon CloudFront console at https://console.aws.amazon.com/cloudfront/home.
 2. From the console dashboard, select the distribution you created earlier and click the Disable button.
 To confirm, click the Yes, Disable button.

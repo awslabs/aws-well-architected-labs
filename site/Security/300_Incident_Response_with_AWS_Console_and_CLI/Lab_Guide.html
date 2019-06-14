@@ -16,8 +16,8 @@
 </ol>
 <h2 id="1-getting-started">1. Getting Started <a name="getting_Started"></a></h2>
 <h3 id="11-install-the-aws-cli">1.1 Install the AWS CLI</h3>
-<p>Although instructions in this lab are written for both AWS Management console and AWS CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.<br />
-<a href="https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html">Install the AWS CLI on macOS</a><br />
+<p>Although instructions in this lab are written for both AWS Management console and AWS CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.</p>
+<p><a href="https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html">Install the AWS CLI on macOS</a><br />
 <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html">Install the AWS CLI on Linux</a><br />
 <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html">Install the AWS CLI on Windows</a><br />
 You will also need jq to parse json from the CLI:<br />
@@ -35,11 +35,13 @@ The default output is json, and it will give you all details. If you want to lis
 <h3 id="21-investigate-aws-cloudtrail">2.1 Investigate AWS CloudTrail</h3>
 <p>As AWS CloudTrail logs API activity for <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html">supported services</a>, it provides an audit trail of your AWS account that you can use to track history of an adversary. For example, listing recent access denied attempts in AWS CloudTrail may indicate attempts to escalate privilege unsuccessfully. Note that some services such as Amazon S3 have their own logging, for example read more about <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html">Amazon S3 server access logging</a>. You can enable AWS CloudTrail by following the <a href="../200_Automated_Deployment_of_Detective_Controls/README.html">Automated Deployment of Detective Controls</a> lab.</p>
 <h4 id="211-aws-console">2.1.1 AWS Console</h4>
-<p>The AWS console provides a visual way of querying Amazon CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.<br />
-1. Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.
-2. From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.<br />
-3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.<br />
-4. Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </p>
+<p>The AWS console provides a visual way of querying Amazon CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.  </p>
+<ol>
+<li>Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.</li>
+<li>From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.  </li>
+<li>From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.  </li>
+<li>Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </li>
+</ol>
 <p><strong>IAM access denied attempts:</strong><br />
 To list all IAM access denied attempts you can use the following example. Each of the line item results allows you to drill down to reveal further details.<br />
 <code>filter errorCode like /Unauthorized|Denied|Forbidden/
@@ -136,11 +138,13 @@ Delete policy from a group:<br />
 <p>A Amazon VPC that has <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> enabled captures information about the IP traffic going to and from network interfaces in your Amazon VPC. This log information may help you investigate how Amazon EC2 instances and other resources in your VPC are communicating, and what they are communicating with. You can follow the <a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a> lab for creating a Amazon VPC with Flow Logs enabled.  </p>
 <h3 id="31-investigate-amazon-vpc-flow-logs">3.1 Investigate Amazon VPC Flow Logs</h3>
 <h4 id="311-aws-management-console">3.1.1 AWS Management Console</h4>
-<p>The AWS Management console provides a visual way of querying CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.<br />
-1. Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.
-2. From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.<br />
-3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.<br />
-4. Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </p>
+<p>The AWS Management console provides a visual way of querying CloudWatch Logs, using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html">CloudWatch Logs Insights</a> and does not require any tools to be installed.  </p>
+<ol>
+<li>Open the Amazon CloudWatch console at <a href="https://console.aws.amazon.com/cloudwatch/">https://console.aws.amazon.com/cloudwatch/</a> and select your region.</li>
+<li>From the left menu, choose <strong>Insights</strong> under <strong>Logs</strong>.  </li>
+<li>From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.  </li>
+<li>Copy the following example queries below into the query input, then click <strong>Run query</strong>.  </li>
+</ol>
 <p><strong>Rejected requests by IP address:</strong><br />
 Rejected requests indicate attempts to gain access to your VPC, however there can often be noise from internet scanners. To count the rejected requests by source IP address:<br />
 <code>filter action="REJECT"
@@ -161,12 +165,16 @@ If you want to list and count all connections by a private IP address, replace <
 | stats count(*) as numConnections by dstAddr
 | sort numConnections desc</code>  </p>
 <h2 id="4-knowledge-check">4. Knowledge Check <a name="knowledge_check"></a></h2>
-<p>The security best practices followed in this lab are: <a name="best_practices"></a>
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Analyze logs centrally</a> Amazon CloudWatch is used to  monitor, store, and access your log files. You can use AWS CloudWatch to analyze your logs centrally.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Automate alerting on key indicators</a> AWS CloudTrail, AWS Config,Amazon GuardDuty and Amazon VPC Flow Logs provide insights into your environment.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features such as Amazon VPC Flow Logs have been adopted.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized to increase your visibility and control of your environment.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_11.en.html">Identify Tooling</a> Using the AWS Management Console and/or AWS CLI tools with prepared scripts will assist in your investigations.</p>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a></p>
+<ul>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Analyze logs centrally</a> Amazon CloudWatch is used to monitor, store, and access your log files. You can use AWS CloudWatch to analyze your logs centrally.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Automate alerting on key indicators</a> AWS CloudTrail, AWS Config,Amazon GuardDuty and Amazon VPC Flow Logs provide insights into your environment.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features such as Amazon VPC Flow Logs have been adopted.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a>
+Managed services are utilized to increase your visibility and control of your environment.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_11.en.html">Identify Tooling</a>
+Using the AWS Management Console and/or AWS CLI tools with prepared scripts will assist in your investigations.</li>
+</ul>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/cli/latest/reference/">AWS CLI Command Reference</a><br />

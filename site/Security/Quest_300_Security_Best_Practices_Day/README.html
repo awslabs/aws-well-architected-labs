@@ -55,17 +55,19 @@ In this lab you will create a series of policies attached to a role that can be 
 <h2 id="lab-4-automated-deployment-of-vpc">Lab 4 - Automated Deployment of VPC:</h2>
 <p>This hands-on lab will guide you through the steps to configure an <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a> and outline some of the AWS security features. <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a> will be used to automate the deployment and provide a repeatable way to re-use the template after this lab.<br />
 The example CloudFormation template will deploy a completely new VPC incorporating a number of AWS security best practices which are:<br />
-<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Networking subnets</a> created in multiple availability zones for the following network tiers:
-  * Application Load Balancer - named <em>ALB1</em>
-  * Application instances - named <em>App1</em>
-  * Shared services - named <em>Shared1</em>
-  * Databases - named <em>DB1</em>
+<a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Networking subnets</a> created in multiple availability zones for the following network tiers:</p>
+<ul>
+<li>Application Load Balancer - named <em>ALB1</em></li>
+<li>Application instances - named <em>App1</em></li>
+<li>Shared services - named <em>Shared1</em></li>
+<li>Databases - named <em>DB1</em>
 <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html">VPC endpoints</a> are created for private connectivity to AWS services.<br />
 <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateways</a> are created to allow different subnets in the VPC to connect to the internet, without any direct ingress access being possible due to <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html">Route Table</a> configurations.<br />
 <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html">Network ACLs</a> control access at each subnet layer.<br />
 While <a href="https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html">VPC Flow Logs</a> captures information about IP traffic and stores it in Amazon CloudWatch Logs.<br />
 Do not follow tear down instructions until you have completed this quest, as the EC2 lab requires this VPC.
-<br></p>
+<br></li>
+</ul>
 <h3 id="automated-deployment-of-vpc"><a href="../200_Automated_Deployment_of_VPC/README.html">Automated Deployment of VPC</a></h3>
 <p><br></p>
 <h2 id="lab-5-automated-deployment-of-ec2-web-application">Lab 5 - Automated Deployment of EC2 Web Application:</h2>

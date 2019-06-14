@@ -19,6 +19,7 @@ Overview of wordpress stack architecture:
 Please note a prerequisite to this lab is that you have deployed the CloudFormation VPC stack in the lab [Automated Deployment of VPC](../200_Automated_Deployment_of_VPC/README.md) with the default parameters and recommended stack name.
   
 This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. An SSH key is not configured in this lab, instead [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html) should be used to manage the EC2 instances as a more secure and scalable method.
+
 1. Choose the version of the CloudFormation template and download to your computer or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository:
    * [wordpress.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml) to create a WordPress site, including an RDS database.
    * [staticwebapp.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml) to create a static web application that simply displays the instance ID for the instance it is running upon.
@@ -45,6 +46,7 @@ You have now created the WordPress stack (well actually CloudFormation did it fo
 
 ## 3. Knowledge Check <a name="knowledge_check"></a>
 The security best practices followed in this lab are: <a name="best_practices"></a>
+
 * [Grant access through roles or federation:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) A role is attached to the auto-scaled instances.
 * [Implement dynamic authentication:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) The role attached to the auto-scaled instances dynamically acquires credentials.
 * [Grant least privileges:](https://wa.aws.amazon.com/wat.question.SEC_3.en.html) The role attached to the auto-scaled instances uses minimum privileges to accomplish the task.
@@ -71,6 +73,7 @@ The security best practices followed in this lab are: <a name="best_practices"><
 The following instructions will remove the resources that you have created in this lab.
 
 Delete the WordPress or Static Web Application CloudFormation stack:
+
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/).
 2. Click the radio button on the left of the *WebApp1-WordPress* or *WebApp1-Static* stack.
 3. Click the **Actions** button then click **Delete stack**.

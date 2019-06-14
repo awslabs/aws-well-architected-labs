@@ -57,33 +57,39 @@ You have now set up detective controls to log to your buckets and retain events,
 <li>You should receive an email to confirm the SNS email subscription, you must confirm this. Note as the email is directly from GuardDuty via SNS is will be JSON format.  </li>
 </ol>
 <h2 id="2-knowledge-check">2. Knowledge Check <a name="knowledge_check"></a></h2>
-<p>The security best practices followed in this lab are: <a name="best_practices"></a>
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Automate alerting on key indicators</a> AWS Cloudtrail, AWS Config and Amazon GuardDuty provide insights into your environment.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features such as Amazon GuardDuty have been adopted.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to configure AWS CloudTrail, AWS Config and Amazon GuardDuty.
-* <a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized to increase your visibility and control of your environment.</p>
+<p>The security best practices followed in this lab are: <a name="best_practices"></a></p>
+<ul>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_4.en.html">Automate alerting on key indicators</a> AWS Cloudtrail, AWS Config and Amazon GuardDuty provide insights into your environment.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_5.en.html">Implement new security services and features:</a> New features such as Amazon GuardDuty have been adopted.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_6.en.html">Automate configuration management:</a> CloudFormation is being used to configure AWS CloudTrail, AWS Config and Amazon GuardDuty.</li>
+<li><a href="https://wa.aws.amazon.com/wat.question.SEC_7.en.html">Implement managed services:</a> Managed services are utilized to increase your visibility and control of your environment.</li>
+</ul>
 <hr />
 <h3 id="3-tear-down-this-lab">3. Tear down this lab <a name="tear_down"></a></h3>
 <p>The following instructions will remove the resources that have a cost for running them.</p>
 <p>Note: If you are planning on doing the lab <a href="../300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html">300_Incident_Response_with_AWS_Console_and_CLI</a> we recommend you only tear down this stack after completing that lab as their is a dependency on AWS CloudTrail being enabled for the other lab.</p>
-<p>Delete the stack:
-1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
-2. Select the <code>DetectiveControls</code> stack.
-3. Click the Actions button then click Delete Stack.
-4. Confirm the stack and then click the Yes, Delete button.</p>
-<p>Empty and delete the S3 buckets:
-1. Sign in to the AWS Management Console, and open the S3 console at https://console.aws.amazon.com/s3/.
-2. Select the CloudTrail bucket name you previously created without clicking the name.
-<img alt="s3-empty-bucket" src="Images/s3-empty-bucket.png" /><br />
-3. Click Empty bucket and enter the bucket name in the confirmation box.<br />
-<img alt="s3-empty-confirm" src="Images/s3-empty-confirm.png" /><br />
-4. Click Confirm and the bucket will be emptied when the bottom task bar has 0 operations in progress.<br />
-<img alt="s3-progress.png" src="Images/s3-progress.png" /><br />
-5. With the bucket now empty, click Delete bucket.
-<img alt="s3-delete-bucket" src="Images/s3-delete-bucket.png" />
-6. Enter the bucket name in the confirmation box and click Confirm.
-<img alt="s3-delete-confirm" src="Images/s3-delete-confirm.png" /><br />
-7. Repeat steps 2 to 6 for the Config bucket you created.</p>
+<p>Delete the stack:</p>
+<ol>
+<li>Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.</li>
+<li>Select the <code>DetectiveControls</code> stack.</li>
+<li>Click the Actions button then click Delete Stack.</li>
+<li>Confirm the stack and then click the Yes, Delete button.</li>
+</ol>
+<p>Empty and delete the S3 buckets:</p>
+<ol>
+<li>Sign in to the AWS Management Console, and open the S3 console at https://console.aws.amazon.com/s3/.</li>
+<li>Select the CloudTrail bucket name you previously created without clicking the name.
+<img alt="s3-empty-bucket" src="Images/s3-empty-bucket.png" />  </li>
+<li>Click Empty bucket and enter the bucket name in the confirmation box.<br />
+<img alt="s3-empty-confirm" src="Images/s3-empty-confirm.png" />  </li>
+<li>Click Confirm and the bucket will be emptied when the bottom task bar has 0 operations in progress.<br />
+<img alt="s3-progress.png" src="Images/s3-progress.png" />  </li>
+<li>With the bucket now empty, click Delete bucket.
+<img alt="s3-delete-bucket" src="Images/s3-delete-bucket.png" /></li>
+<li>Enter the bucket name in the confirmation box and click Confirm.
+<img alt="s3-delete-confirm" src="Images/s3-delete-confirm.png" />  </li>
+<li>Repeat steps 2 to 6 for the Config bucket you created.</li>
+</ol>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources:</h2>
 <p><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html">AWS CloudTrail User Guide</a><br />

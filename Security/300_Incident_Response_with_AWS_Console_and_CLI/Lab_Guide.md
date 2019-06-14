@@ -12,7 +12,8 @@
 ## 1. Getting Started <a name="getting_Started"></a>
 
 ### 1.1 Install the AWS CLI
-Although instructions in this lab are written for both AWS Management console and AWS CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.  
+Although instructions in this lab are written for both AWS Management console and AWS CLI, its best to install the AWS CLI on the machine you will be using as you can modify the example commands to run different scenarios easily and across multiple AWS accounts.
+
 [Install the AWS CLI on macOS](https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html)  
 [Install the AWS CLI on Linux](https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html)  
 [Install the AWS CLI on Windows](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html)  
@@ -39,6 +40,7 @@ As AWS CloudTrail logs API activity for [supported services](https://docs.aws.am
 
 #### 2.1.1 AWS Console
 The AWS console provides a visual way of querying Amazon CloudWatch Logs, using [CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) and does not require any tools to be installed.  
+
 1. Open the Amazon CloudWatch console at [https://console.aws.amazon.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/) and select your region.
 2. From the left menu, choose **Insights** under **Logs**.  
 3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.  
@@ -150,6 +152,7 @@ A Amazon VPC that has [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/use
 
 #### 3.1.1 AWS Management Console
 The AWS Management console provides a visual way of querying CloudWatch Logs, using [CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) and does not require any tools to be installed.  
+
 1. Open the Amazon CloudWatch console at [https://console.aws.amazon.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/) and select your region.
 2. From the left menu, choose **Insights** under **Logs**.  
 3. From the dropdown near the top select your CloudTrail Logs group, then the relative time to search back on the right.  
@@ -178,11 +181,15 @@ If you want to list and count all connections by a private IP address, replace *
 
 ## 4. Knowledge Check <a name="knowledge_check"></a>
 The security best practices followed in this lab are: <a name="best_practices"></a>
-* [Analyze logs centrally](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) Amazon CloudWatch is used to  monitor, store, and access your log files. You can use AWS CloudWatch to analyze your logs centrally.
+
+* [Analyze logs centrally](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) Amazon CloudWatch is used to monitor, store, and access your log files. You can use AWS CloudWatch to analyze your logs centrally.
 * [Automate alerting on key indicators](https://wa.aws.amazon.com/wat.question.SEC_4.en.html) AWS CloudTrail, AWS Config,Amazon GuardDuty and Amazon VPC Flow Logs provide insights into your environment.
 * [Implement new security services and features:](https://wa.aws.amazon.com/wat.question.SEC_5.en.html) New features such as Amazon VPC Flow Logs have been adopted.
-* [Implement managed services:](https://wa.aws.amazon.com/wat.question.SEC_7.en.html) Managed services are utilized to increase your visibility and control of your environment.
-* [Identify Tooling](https://wa.aws.amazon.com/wat.question.SEC_11.en.html) Using the AWS Management Console and/or AWS CLI tools with prepared scripts will assist in your investigations.
+* [Implement managed services:](https://wa.aws.amazon.com/wat.question.SEC_7.en.html)
+Managed services are utilized to increase your visibility and control of your environment.
+* [Identify Tooling](https://wa.aws.amazon.com/wat.question.SEC_11.en.html)
+Using the AWS Management Console and/or AWS CLI tools with prepared scripts will assist in your investigations.
+
 
 ***
 

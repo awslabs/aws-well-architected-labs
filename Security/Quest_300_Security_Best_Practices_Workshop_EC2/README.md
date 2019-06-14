@@ -35,6 +35,7 @@ This hands-on lab will guide you through the steps to configure an [Amazon VPC](
 The example CloudFormation template will deploy a completely new VPC incorporating a number of AWS security best practices which are:
   
 [Networking subnets](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) created in multiple availability zones for the following network tiers:
+
   * Application Load Balancer - named *ALB1*
   * Application instances - named *App1*
   * Shared services - named *Shared1*

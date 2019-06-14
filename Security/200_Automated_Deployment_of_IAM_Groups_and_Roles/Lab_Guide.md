@@ -61,6 +61,7 @@ Coming soon, for now check out: [https://docs.aws.amazon.com/cli/latest/userguid
 The following instructions will remove the resources that have a cost for running them. Please note that the changes you made to the root login, users, groups, and policies have no charges associated with them.
 
 Delete the IAM stack:
+
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the `baseline-iam` stack.
 3. Click the Actions button then click Delete Stack.
