@@ -4,7 +4,7 @@
 - Ben Potter, Security Lead, Well-Architected
 
 ## About this Guide
-This guide will help you improve your security in the AWS Well-Architetced area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam). The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This guide will help you improve your security in the AWS Well-Architected area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam). The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Prerequisites:
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  

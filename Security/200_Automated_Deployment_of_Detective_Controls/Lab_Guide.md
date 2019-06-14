@@ -65,7 +65,7 @@ The security best practices followed in this lab are: <a name="best_practices"><
 ### 3. Tear down this lab <a name="tear_down"></a>
 The following instructions will remove the resources that have a cost for running them.
 
-Note: If you are planning on doing the lab [300_Incident_Response_with_AWS_Console_and_CLI](Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md) we recommend you only tear down this stack after completing that lab as their is a dependency on AWS CloudTrail being enabled for the other lab.
+Note: If you are planning on doing the lab [300_Incident_Response_with_AWS_Console_and_CLI](../300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md) we recommend you only tear down this stack after completing that lab as their is a dependency on AWS CloudTrail being enabled for the other lab.
 
 Delete the stack:
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.

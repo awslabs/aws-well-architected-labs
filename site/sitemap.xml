@@ -26,58 +26,63 @@
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/100_AWS_Account_and_Root_User/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/100_CloudFront_with_S3_Bucket_Origin/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Detective_Controls/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_EC2_Web_Application/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_VPC/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_Basic_EC2_with_WAF_Protection/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/200_CloudFront_with_WAF_Protection/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html</loc>
+     <lastmod>2019-06-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>

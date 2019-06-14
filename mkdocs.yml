@@ -41,19 +41,20 @@ nav:
     - Security: 
         - Overview: 'Security/README.md' 
         - Security 100 Labs: 
-            - Account and Root User: 'Security/100 - AWS Account & Root User/README.md' 
-            - Basic Identity & Access Management User, Group, Role: 'Security/100 - Basic Identity & Access Management User, Group, Role/README.md' 
-            - CloudFront with S3 Bucket Origin: 'Security/100 - CloudFront with S3 Bucket Origin/README.md'  
+            - Account and Root User: 'Security/100_AWS_Account_and_Root_User/README.md' 
+            - Basic Identity & Access Management User, Group, Role: 'Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.md' 
+            - CloudFront with S3 Bucket Origin: 'Security/100_CloudFront_with_S3_Bucket_Origin/README.md'  
         - Security 200 Labs: 
-            - Automated Deployment of Detective Controls: 'Security/200 - Automated Deployment of Detective Controls/README.md' 
-            - Automated Deployment of EC2 Web Application: 'Security/200 - Automated Deployment of EC2 Web Application/README.md' 
-            - Automated Deployment of IAM Groups and Roles: 'Security/200 - Automated Deployment of IAM Groups and Roles/README.md' 
-            - Automated Deployment of VPC: 'Security/200 - Automated Deployment of VPC/README.md' 
-            - Basic EC2 with WAF Protection: 'Security/200 - Basic EC2 with WAF Protection/README.md' 
-            - CloudFront with WAF Protection: 'Security/200 - CloudFront with WAF Protection/README.md' 
+            - Automated Deployment of Detective Controls: 'Security/200_Automated_Deployment_of_Detective_Controls/README.md' 
+            - Automated Deployment of EC2 Web Application: 'Security/200_Automated_Deployment_of_EC2_Web_Application/README.md' 
+            - Automated Deployment of IAM Groups and Roles: 'Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md' 
+            - Automated Deployment of VPC: 'Security/200_Automated_Deployment_of_VPC/README.md' 
+            - Automated Deployment of Web Application Firewall: 'Security/200_Automated_Deployment_of_Web_Application_Firewall/README.md'
+            - Basic EC2 with WAF Protection: 'Security/200_Basic_EC2_with_WAF_Protection/README.md' 
+            - CloudFront with WAF Protection: 'Security/200_CloudFront_with_WAF_Protection/README.md' 
         - Security 300 Labs: 
-            - IAM Permission Boundaries Delegating Role Creation: 'Security/300 - IAM Permission Boundaries Delegating Role Creation/README.md' 
-            - IAM Tag Based Access Control for EC2: 'Security/300 - IAM Tag Based Access Control for EC2/README.md' 
+            - IAM Permission Boundaries Delegating Role Creation: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md' 
+            - IAM Tag Based Access Control for EC2: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.md' 
             - Incident Response with AWS Console and CLI: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/README.md' 
         - Security Quests: 
             - Introduction to Security: 'Security/Quest_100_Loft_Introduction_to_Security/README.md'

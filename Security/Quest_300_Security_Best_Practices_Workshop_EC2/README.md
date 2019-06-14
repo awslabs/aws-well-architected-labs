@@ -50,7 +50,7 @@ Do not follow tear down instructions until you have completed this quest, as the
 ## Lab 3 - Automated Deployment of EC2 Web Application:
 This hands-on lab will guide you through the steps to configure a web application in [Amazon EC2](https://aws.amazon.com/ec2/) with a defense in depth approach.<br />
 
-The [WordPress](https://wordpress.org/) example [CloudFormation template](Code/wordpress.yaml) will deploy a basic WordPress  content management system, incorporating a number of AWS security best practices. This example is not intended to be a comprehensive WordPress system, please consult [Build a WordPress Website](https://aws.amazon.com/getting-started/projects/build-wordpress-website/) for more information.
+The [WordPress](https://wordpress.org/) example [CloudFormation template](../200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml) will deploy a basic WordPress  content management system, incorporating a number of AWS security best practices. This example is not intended to be a comprehensive WordPress system, please consult [Build a WordPress Website](https://aws.amazon.com/getting-started/projects/build-wordpress-website/) for more information.
 
 ### [Automated Deployment of EC2 Web Application](../200_Automated_Deployment_of_EC2_Web_Application/README.md)
 

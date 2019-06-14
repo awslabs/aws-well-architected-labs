@@ -16,6 +16,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: Automated Deployment of EC2 Web Application](200_Automated_Deployment_of_EC2_Web_Application/README.md)
 * [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md)
 * [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC/README.md)
+* [Level 200: Automated Deployment of Web Application Firewall](200_Automated_Deployment_of_Web_Application_Firewall/README.md)
 * [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection/README.md)
 * [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection/README.md)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md)
@@ -34,7 +35,7 @@ This quest is the guide for security best practices workshop often ran at AWS le
 * [Level 300: Security Best Practices Day](Quest_300_Security_Best_Practices_Day/README.md)
 This quest is the guide for an AWS led event including security best practices day. Includes identity & access management, detective controls, infrastructure protection, data protection and incident response.  
 * [Identity & Access Management](Quest_Identity_Access_Management/README.md)
-This guide will help you improve your security in the AWS Well-Architetced area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam).  
+This guide will help you improve your security in the AWS Well-Architected area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam).  
 
 
 ***
