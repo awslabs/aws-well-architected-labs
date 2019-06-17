@@ -1,4 +1,4 @@
-﻿# Quest: Identity & Access Management
+﻿# Quest: Control Human Access
 
 ## Authors
 - Ben Potter, Security Lead, Well-Architected
@@ -12,22 +12,12 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 ***
 
-## New AWS Account Setup and Securing Root User:
-### Walkthrough
-This hands-on lab will guide you through the introductory steps to configure a new AWS account and secure the root user.
-### [AWS Account and Root User](../100_AWS_Account_and_Root_User/README.md)  
-### Further Considerations
-* Federate Identity Using SAML: [Leveraging a SAML provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html)
-* Separate production, non-production and different workloads using different AWS accounts: [AWS Multiple Account Billing Strategy](https://aws.amazon.com/answers/account-management/aws-multi-account-billing-strategy/)
-<br>
-
 ## Basic Identity and Access Management User, Group, Role:
 ### Walkthrough
 This hands-on lab will guide you through the introductory steps to configure AWS Identity and Access Management (IAM).  
 You will use the AWS Management Console to guide you through how to configure your first IAM user, group and role for administrative access.
 ### [Basic Identity and Access Management User, Group, Role](../100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)  
 <br>
-
 
 ## IAM Permission Boundaries Delegating Role Creation:
 ### Walkthrough

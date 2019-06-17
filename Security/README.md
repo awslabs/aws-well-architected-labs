@@ -34,8 +34,11 @@ In just one day (or an hour a day for a week!) implement some foundational secur
 This quest is the guide for security best practices workshop often ran at AWS led events including AWS Summits.  
 * [Level 300: Security Best Practices Day](Quest_300_Security_Best_Practices_Day/README.md)
 This quest is the guide for an AWS led event including security best practices day. Includes identity & access management, detective controls, infrastructure protection, data protection and incident response.  
-* [Identity & Access Management](Quest_Identity_Access_Management/README.md)
-This guide will help you improve your security in the AWS Well-Architected area of [Identity & Access Management](https://wa.aws.amazon.com/wat.pillar.security.en.html#sec.iaam).  
+
+The following quests are aligned to the security [best practice questions](https://wa.aws.amazon.com/wat.pillar.security.en.html) in AWS Well-Architected.
+
+* [Managing Credentials & Authentication](Quest_Managing_Credentials_and_Authentication/README.md)
+* [Control Human Access](Quest_Control_Human_Access/README.md)
 
 
 ***
