@@ -111,8 +111,58 @@
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Managing_Credentials_and_Authentication/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Control_Human_Access/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Control_Programmatic_Access/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Detect_and_Investigate_Events/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Defend_Against_New_Threats/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Protect_Networks/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Protect_Compute/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Classify_Data/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Protect_Data_at_Rest/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Protect_Data_in_Transit/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>http://wellarchitectedlabs.com/Security/Quest_Incident_Response/README.html</loc>
+     <lastmod>2019-06-17</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>

@@ -37,7 +37,7 @@ A *role* specifies a set of permissions that you can use to access AWS resources
 
 1. Sign in to the AWS Management Console as an IAM user [https://console.aws.amazon.com](https://console.aws.amazon.com).
 2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`. Alternatively you can paste the link in your browser that you recorded earlier.
-3. Click Switch Role. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again. ![switch-role](Images/switch-role.png)
+3. Click Switch Role. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
 4. On the Switch Role page, type the account ID number or the account alias and the name of the role that you created for the Administrator in the previous step, for example, `arn:aws:iam::account_ID:role/Administrator`.
 5. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name. The name and color can help remind you when this role is active, which changes your permissions. For example, for a role that gives you access to the test environment, you might specify a Display Name of Test and select the green Color. For the role that gives you access to production, you might specify a Display Name of Production and select red as the Color.
 6. Click Switch Role. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.
@@ -61,7 +61,6 @@ Coming soon, for now check out: [https://docs.aws.amazon.com/cli/latest/userguid
 The following instructions will remove the resources that have a cost for running them. Please note that the changes you made to the root login, users, groups, and policies have no charges associated with them.
 
 Delete the IAM stack:
-
 1. Sign in to the AWS Management Console, and open the CloudFormation console at https://console.aws.amazon.com/cloudformation/.
 2. Select the `baseline-iam` stack.
 3. Click the Actions button then click Delete Stack.
