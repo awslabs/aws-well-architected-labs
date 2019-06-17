@@ -16,7 +16,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 5. [Create an IAM policy to restrict EBS Volume creation by volume type](#EC2_volume_type)
 6. [Tear down](#tear_down)
 7. [Rate this Lab](#rate_lab)  
-8. [Feedback survey](#survey)  
+
 
 
 
@@ -646,13 +646,5 @@ We will delete the IAM policies created above, as they are no longer applied to 
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_2_5star)
 
 
-## 8. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_9EPtEoy72tDcIDP)
-
-
-This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
- 
 
 

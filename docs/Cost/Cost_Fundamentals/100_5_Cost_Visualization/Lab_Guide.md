@@ -15,7 +15,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 4. [Create a custom EC2 report](#custom_ec2)
 5. [Tear down](#tear_down)
 6. [Rate this Lab](#rate_lab) 
-7. [Survey](#survey)
+
 
 
 
@@ -191,15 +191,6 @@ We will delete both custom reports that were created.
 
 ## 6. Rate this lab<a name="rate_lab"></a> 
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_5_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_5_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_5_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_5_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_5_5star) 
-
-
-## 7. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cLPnfCk4ynoui9v)
-
-
-This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazon’s Privacy Policy.
 
 
 

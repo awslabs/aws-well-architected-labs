@@ -17,7 +17,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 6. [Enable AWS-Generated Cost Allocation Tags](#cost_tags)
 7. [Tear down](#tear_down)
 8. [Rate this Lab](#rate_lab) 
-9. [Feedback survey](#survey)
+
 
 
 ## 1. Configure IAM access to your billing<a name="IAM_access"></a>
@@ -224,12 +224,3 @@ Ensure you remove the IAM policies from the users/groups if they were used.
 ## 8. Rate this lab<a name="rate_lab"></a>  
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_5star) 
 
-
-## 9. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)
-
-
-This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
- 

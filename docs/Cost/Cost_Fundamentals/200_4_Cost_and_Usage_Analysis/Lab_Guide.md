@@ -15,7 +15,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 3. [Cost and Usage analysis](#CUR_Analysis)
 4. [Tear down](#tear_down)
 5. [Rate this Lab](#rate_lab)  
-6. [Feedback survey](#survey)
+
 
 
 ## 1. Verify your CUR files are being delivered <a name="Verify_CUR"></a>
@@ -327,13 +327,6 @@ Amazon Athena only charges when it is being used, i.e. data is being scanned - s
 [![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_4_5star)
 
 
-## 6. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_bdUZiCBDHx4M4At)
-
-
-This survey is hosted by an external company (Qualtrics) , so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
 
  
 
