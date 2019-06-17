@@ -39,7 +39,15 @@ The following quests are aligned to the security [best practice questions](https
 
 * [Managing Credentials & Authentication](Quest_Managing_Credentials_and_Authentication/README.md)
 * [Control Human Access](Quest_Control_Human_Access/README.md)
-
+* [Control Programmatic Access](Quest_Control_Programmatic_Access/README.md)
+* [Detect and Investigate Events](Quest_Detect_and_Investigate_Events/README.md)
+* [Defend Against New Threats](Quest_Defend_Against_New_Threats/README.md)
+* [Protect Networks](Quest_Protect_Networks/README.md)
+* [Protect Compute](Quest_Protect_Compute/README.md)
+* [Classify Data](Quest_Classify_Data/README.md)
+* [Protect Data at Rest](Quest_Protect_Data_at_Rest/README.md)
+* [Protect Data in Transit](Quest_Protect_Data_in_Transit/README.md)
+* [Incident Response](Quest_Incident_Response/README.md)
 
 ***
 
