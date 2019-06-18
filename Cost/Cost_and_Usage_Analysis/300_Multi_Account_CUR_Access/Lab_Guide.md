@@ -311,11 +311,11 @@ Execute either of these steps depending on the implementation you chose above.
 
 
 ## 5. Rate this lab<a name="rate_lab"></a>
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Multi_Account_CUR_Access_1star) 
-[![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Multi_Account_CUR_Access_2star) 
-[![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Multi_Account_CUR_Access_3star) 
-[![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Multi_Account_CUR_Access_4star) 
-[![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_300_Multi_Account_CUR_Access_5star) 
+[![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_300_Multi_Account_CUR_Access_1star) 
+[![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_300_Multi_Account_CUR_Access_2star) 
+[![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_300_Multi_Account_CUR_Access_3star) 
+[![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_300_Multi_Account_CUR_Access_4star) 
+[![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_300_Multi_Account_CUR_Access_5star) 
 
 
 
