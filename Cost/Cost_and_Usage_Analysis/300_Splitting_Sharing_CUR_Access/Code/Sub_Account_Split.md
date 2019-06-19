@@ -5,12 +5,6 @@ You will need to modify the following variable:
  - **athena_output**: This is where Athena puts output data, this is typically the master/payer Account ID, which is the default folder for Athena output queries
  - **output bucket**: This is the output bucket for the Athena queries
 
-You will need to modify the following arrays, the order is important - the first folder in the subfolder array, will be given the permissions of the first element of the S3ObjectPolicies array.
-
- - **subfolders**: This contains the list of folders that the queries write to 
- - **S3ObjectPolicies**: This contains the S3 Object permissions ACL that will be written to objects in the corresponding folder. You will need to add the owners details (master/payer account) and the grantee (sub account) details.
-
-
 ```
 import boto3
 import json
@@ -25,10 +19,6 @@ now = datetime.datetime.now()
 currentmonth = '/year_1=' + str(now.year) + '/month_1=' + str(now.month) + '/'
 bucketname = '(output bucket)'
 
-#List of Subfolders & ACLs to apply to objects in them
-#There MUST be a 1:1 between subfolders & policies
-subfolders = ['<folder1>']
-S3ObjectPolicies = ['ACL=\'bucket-owner-full-control\',AccessControlPolicy={\'Grants\':[{\'Grantee\': {\'DisplayName\': \'<account name>\',\'ID\': \'<canonical ID>\',\'Type\': \'CanonicalUser\'},\'Permission\': \'FULL_CONTROL\'}],\'Owner\':{\'DisplayName\':\'<account name>\',\'ID\':\'<canonical ID>\'}},Bucket=\''+bucketname+'\',Key=\'objectkey\'']
 
 # Arrays to hold the Athena delete & create queries that we need to run
 delete_query_strings = []
