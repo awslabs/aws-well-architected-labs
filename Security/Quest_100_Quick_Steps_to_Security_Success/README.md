@@ -6,11 +6,11 @@ This quest is for you to improve your security posture. Every stakeholder involv
 ## Step 1 - Multi-Account Strategy
 Implementing multiple accounts for our workload improves our security by limiting the blast radius of any potential breaches and separating our workload into discrete accounts.
 
-Leverage AWS Organisations to create separate AWS accounts for a sandbox, your workload, a secure “data bunker” for audit logs and backups, and a shared services account for common tools. If you currently only have one account, create a new AWS account for your organisations master AWS account and invite your existing account to join as your sandbox AWS account.
+Leverage AWS Organizations to create separate AWS accounts for a sandbox, your workload, a secure “data bunker” for audit logs and backups, and a shared services account for common tools. If you currently only have one account, create a new AWS account for your organizations master AWS account and invite your existing account to join as your sandbox AWS account.
 
 By the end of this step you will have a separate AWS account for:
 
-* Organisations root account – used only for identity and billing
+* Organizations root account – used only for identity and billing
 * Shared services – for common tools such as deployment tooling
 * Workload accounts – customers who have a single product will have a separate AWS account for each environment. If you have multiple workloads, or you rely on account separation for separation of customer data you will want to set up further accounts to reflect your structure
 
@@ -19,10 +19,10 @@ By the end of this step you will have a separate AWS account for:
 1. [Define your multi-account strategy](https://d0.awsstatic.com/aws-answers/AWS_Multi_Account_Security_Strategy.pdf). A suggested structure is shown below. If you do not current have AWS Organizations setup it is recommended that you use your existing account as a sandbox
 ![Suggested account structure](Images/multi-account-suggestion.png)
 2. (If required) [Sign up a new root account](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sign-up-for-aws.html)
-3. [Create an AWS Organisations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_create.html) in the root account
+3. [Create an AWS Organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_create.html) in the root account
 4. Invite any existing accounts 
 4. For each AWS account required
-   * [Create a new account in organisations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html). Make note of the organisations account access role.
+   * [Create a new account in organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html). Make note of the organizations account access role.
    * [Create a new IAM role in the root account]( https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html) that has permission to assume that role to access the new AWS account
 
 ## Step 2 - Identity
@@ -34,10 +34,10 @@ Every user must leverage unique credentials so we can trace actions within our a
 3. [Use cross account access roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) to access the accounts that we setup in part 1.
 
 ## Step 3 - Data Bunker
-Now we will create a data bunker account to store secure read only security logs and backups. In this step we will send our logs from CloudTrail to that account. The role for accessing this account will have read only access. Only ensure that this role can be accessed by those with a security role in your organisation.
+Now we will create a data bunker account to store secure read only security logs and backups. In this step we will send our logs from CloudTrail to that account. The role for accessing this account will have read only access. Only ensure that this role can be accessed by those with a security role in your organization.
 
 ### Walkthrough
-1. [Setup a security account, secure Amazon S3 bucket and turn on our AWS Organization CloudTrail](../100_Create_a_Data_Bunker)
+1. [Setup a security account, secure Amazon S3 bucket and turn on our AWS Organization CloudTrail](../100_Create_a_Data_Bunker/README.md)
 
 ## Step 4 - Enable organizations policies
 [AWS Organizations policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html) allow you to apply additional controls to accounts. In the examples given below these are attached to the root which will affect all accounts within the organization. You can also create specific service control policies for separate organizational units within your organization.
@@ -125,8 +125,8 @@ Amazon Simple Storage Service (S3) allows you to upload objects to a "bucket" wh
 Lastly, we will setup our foundations for monitoring the security status of our AWS environment and look at how we can build some basic alerting to security incidents. AWS Security Hub gives you a comprehensive view of the security of your account including compliance checks against best practices such as the [Centre for Information Security AWS Foundational Benchmark](https://aws.amazon.com/quickstart/architecture/compliance-cis-benchmark/). We will also enable Amazon GuardDuty - a threat detection service which leverages machine learning to detect anomalies across our AWS CloudTrail, Amazon VPC Flow Logs, and DNS logs.
 
 ### Walkthrough
-1. [Enable Security Hub](../100_Enable_Security_Hub)
-2. [Enable Amazon GuardDuty and implement basic detective controls](../200_Automated_Deployment_of_Detective_Controls)
+1. [Enable Security Hub](../100_Enable_Security_Hub/README.md)
+2. [Enable Amazon GuardDuty and implement basic detective controls](../200_Automated_Deployment_of_Detective_Controls/README.md)
 
 ## Additional Resources and next steps
 * Find further information on the AWS website around [AWS Cloud Security]( https://aws.amazon.com/security/) and in particular what your responsibilities are under the [shared security model]( https://aws.amazon.com/compliance/shared-responsibility-model/)

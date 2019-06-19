@@ -4,6 +4,10 @@
 
 ## Labs coming soon!
 
+Check out:
+
+* [AWS Security Blog](https://aws.amazon.com/blogs/security/)
+* [AWS Security Bulletins](https://aws.amazon.com/security/security-bulletins/)
 ***
 
 ## License
