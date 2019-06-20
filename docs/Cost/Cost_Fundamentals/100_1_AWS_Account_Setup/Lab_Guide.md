@@ -226,19 +226,19 @@ Log into the console as an IAM user with the required permissions, as per:
 ### 7.1 Create an IAM policy for the team
 This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.
 
-1. Log in and go to the **IAM** Service page:
+1 - Log in and go to the **IAM** Service page:
 ![Images/AWSIAM1.png](Images/AWSIAM1.png)
 
-2. Select **Policies** from the left menu:
+2 - Select **Policies** from the left menu:
 ![Images/AWSIAM2.png](Images/AWSIAM2.png)
 
-3. Select **Create Policy**:
+3 - Select **Create Policy**:
 ![Images/AWSIAM3.png](Images/AWSIAM3.png)
   
-4. Select the **JSON** tab:
+4 - Select the **JSON** tab:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
   
-5. Copy & paste the following policy into the the field:
+5 - Copy & paste the following policy into the the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
@@ -259,10 +259,10 @@ This provides access to allow the cost optimization team to perform their work, 
     ]
 }
 ```
-6. Click **Review policy**: 
+6 - Click **Review policy**: 
 ![Images/AWSIAM5.png](Images/AWSIAM5.png)
 
-7. Enter a **Name** and **Description** for the policy and click **Create policy**:
+7 - Enter a **Name** and **Description** for the policy and click **Create policy**:
 ![Images/AWSIAM6.png](Images/AWSIAM6.png)
 
 You have successfully created the cost optimization teams policy.
@@ -271,22 +271,22 @@ You have successfully created the cost optimization teams policy.
 ### 7.2 Create an IAM Group
 This group will bring together IAM users and apply the required policies.
 
-1. While in the IAM console, select **Groups** from the left menu:
+1 - While in the IAM console, select **Groups** from the left menu:
 ![Images/AWSIAM7.png](Images/AWSIAM7.png)
 
-2. Click on **Create New Group**:
+2 - Click on **Create New Group**:
 ![Images/AWSIAM8.png](Images/AWSIAM8.png)
 
-3. Enter a **Group Name** and click **Next Step**:
+3 - Enter a **Group Name** and click **Next Step**:
 ![Images/AWSIAM9.png](Images/AWSIAM9.png)
 
-4. Click **Policy Type** and select **Customer Managed**:
+4 - Click **Policy Type** and select **Customer Managed**:
 ![Images/AWSIAM10.png](Images/AWSIAM10.png)
 
-5. Select the **CostOptimization_Summit** policy (created previously):
+5 - Select the **CostOptimization_Summit** policy (created previously):
 ![Images/AWSIAM11.png](Images/AWSIAM11.png)
 
-6. Click **Create Group**:
+6 - Click **Create Group**:
 ![Images/AWSIAM14.png](Images/AWSIAM14.png)
 
 
@@ -296,28 +296,28 @@ You have now successfully created the cost optimization group, and attached the 
 ### 7.3 Create an IAM User
 For this lab we will create a user and join them to the group above.
 
-1. In the IAM console, select **Users** from the left menu:
+1 - In the IAM console, select **Users** from the left menu:
 ![Images/AWSIAM15.png](Images/AWSIAM15.png)
 
-2. Click **Add user**:
+2 - Click **Add user**:
 ![Images/AWSIAM16.png](Images/AWSIAM16.png)
 
-3. Enter a **User name**, select **AWS Management Console access**, choose **Custom Password**, type a suitable password, deselect **Require password reset**, and click **Next: Permissions**:
+3 - Enter a **User name**, select **AWS Management Console access**, choose **Custom Password**, type a suitable password, deselect **Require password reset**, and click **Next: Permissions**:
 ![Images/AWSIAM17.png](Images/AWSIAM17.png)
 
-4. Select the **CostOptimization** group (created previously), and click **Next: Tags**:
+4 - Select the **CostOptimization** group (created previously), and click **Next: Tags**:
 ![Images/AWSIAM18.png](Images/AWSIAM18.png)
 
-5. Click **Next Review**:
+5 - Click **Next Review**:
 ![Images/AWSIAM19.png](Images/AWSIAM19.png)
 
-6. Click **Create user**:
+6 - Click **Create user**:
 ![Images/AWSIAM20.png](Images/AWSIAM20.png)
 
-7. Copy the link provided, and logout by clicking on your username in the top right, and selecting **Sign Out**::
+7 - Copy the link provided, and logout by clicking on your username in the top right, and selecting **Sign Out**::
 ![Images/AWSIAM21.png](Images/AWSIAM21.png)
 
-8. Log back in as the username you just created, with the link you copied for the remainder of the Lab.
+8 - Log back in as the username you just created, with the link you copied for the remainder of the Lab.
 
 
 You have successfully create a user, placed them in the cost optimization group and have applied policies.

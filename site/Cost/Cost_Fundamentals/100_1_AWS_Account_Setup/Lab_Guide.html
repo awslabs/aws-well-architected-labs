@@ -2176,28 +2176,16 @@ This team will then be able to manage the organizations cost and usage, and star
 - <a href="Code/IAM_policy.html">./Code/IAM_policy</a> IAM policy required for this lab</p>
 <h3 id="71-create-an-iam-policy-for-the-team">7.1 Create an IAM policy for the team</h3>
 <p>This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.</p>
-<ol>
-<li>
-<p>Log in and go to the <strong>IAM</strong> Service page:
+<p>1 - Log in and go to the <strong>IAM</strong> Service page:
 <img alt="Images/AWSIAM1.png" src="Images/AWSIAM1.png" /></p>
-</li>
-<li>
-<p>Select <strong>Policies</strong> from the left menu:
+<p>2 - Select <strong>Policies</strong> from the left menu:
 <img alt="Images/AWSIAM2.png" src="Images/AWSIAM2.png" /></p>
-</li>
-<li>
-<p>Select <strong>Create Policy</strong>:
+<p>3 - Select <strong>Create Policy</strong>:
 <img alt="Images/AWSIAM3.png" src="Images/AWSIAM3.png" /></p>
-</li>
-<li>
-<p>Select the <strong>JSON</strong> tab:
+<p>4 - Select the <strong>JSON</strong> tab:
 <img alt="Images/AWSIAM4.png" src="Images/AWSIAM4.png" /></p>
-</li>
-<li>
-<p>Copy &amp; paste the following policy into the the field:
+<p>5 - Copy &amp; paste the following policy into the the field:
 <strong>NOTE</strong>: Ensure you copy the entire policy, everything including the first '{' and last '}'</p>
-</li>
-</ol>
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
@@ -2217,81 +2205,43 @@ This team will then be able to manage the organizations cost and usage, and star
 }
 </code></pre>
 
-<ol>
-<li>
-<p>Click <strong>Review policy</strong>: 
+<p>6 - Click <strong>Review policy</strong>: 
 <img alt="Images/AWSIAM5.png" src="Images/AWSIAM5.png" /></p>
-</li>
-<li>
-<p>Enter a <strong>Name</strong> and <strong>Description</strong> for the policy and click <strong>Create policy</strong>:
+<p>7 - Enter a <strong>Name</strong> and <strong>Description</strong> for the policy and click <strong>Create policy</strong>:
 <img alt="Images/AWSIAM6.png" src="Images/AWSIAM6.png" /></p>
-</li>
-</ol>
 <p>You have successfully created the cost optimization teams policy.</p>
 <h3 id="72-create-an-iam-group">7.2 Create an IAM Group</h3>
 <p>This group will bring together IAM users and apply the required policies.</p>
-<ol>
-<li>
-<p>While in the IAM console, select <strong>Groups</strong> from the left menu:
+<p>1 - While in the IAM console, select <strong>Groups</strong> from the left menu:
 <img alt="Images/AWSIAM7.png" src="Images/AWSIAM7.png" /></p>
-</li>
-<li>
-<p>Click on <strong>Create New Group</strong>:
+<p>2 - Click on <strong>Create New Group</strong>:
 <img alt="Images/AWSIAM8.png" src="Images/AWSIAM8.png" /></p>
-</li>
-<li>
-<p>Enter a <strong>Group Name</strong> and click <strong>Next Step</strong>:
+<p>3 - Enter a <strong>Group Name</strong> and click <strong>Next Step</strong>:
 <img alt="Images/AWSIAM9.png" src="Images/AWSIAM9.png" /></p>
-</li>
-<li>
-<p>Click <strong>Policy Type</strong> and select <strong>Customer Managed</strong>:
+<p>4 - Click <strong>Policy Type</strong> and select <strong>Customer Managed</strong>:
 <img alt="Images/AWSIAM10.png" src="Images/AWSIAM10.png" /></p>
-</li>
-<li>
-<p>Select the <strong>CostOptimization_Summit</strong> policy (created previously):
+<p>5 - Select the <strong>CostOptimization_Summit</strong> policy (created previously):
 <img alt="Images/AWSIAM11.png" src="Images/AWSIAM11.png" /></p>
-</li>
-<li>
-<p>Click <strong>Create Group</strong>:
+<p>6 - Click <strong>Create Group</strong>:
 <img alt="Images/AWSIAM14.png" src="Images/AWSIAM14.png" /></p>
-</li>
-</ol>
 <p>You have now successfully created the cost optimization group, and attached the required policies.</p>
 <h3 id="73-create-an-iam-user">7.3 Create an IAM User</h3>
 <p>For this lab we will create a user and join them to the group above.</p>
-<ol>
-<li>
-<p>In the IAM console, select <strong>Users</strong> from the left menu:
+<p>1 - In the IAM console, select <strong>Users</strong> from the left menu:
 <img alt="Images/AWSIAM15.png" src="Images/AWSIAM15.png" /></p>
-</li>
-<li>
-<p>Click <strong>Add user</strong>:
+<p>2 - Click <strong>Add user</strong>:
 <img alt="Images/AWSIAM16.png" src="Images/AWSIAM16.png" /></p>
-</li>
-<li>
-<p>Enter a <strong>User name</strong>, select <strong>AWS Management Console access</strong>, choose <strong>Custom Password</strong>, type a suitable password, deselect <strong>Require password reset</strong>, and click <strong>Next: Permissions</strong>:
+<p>3 - Enter a <strong>User name</strong>, select <strong>AWS Management Console access</strong>, choose <strong>Custom Password</strong>, type a suitable password, deselect <strong>Require password reset</strong>, and click <strong>Next: Permissions</strong>:
 <img alt="Images/AWSIAM17.png" src="Images/AWSIAM17.png" /></p>
-</li>
-<li>
-<p>Select the <strong>CostOptimization</strong> group (created previously), and click <strong>Next: Tags</strong>:
+<p>4 - Select the <strong>CostOptimization</strong> group (created previously), and click <strong>Next: Tags</strong>:
 <img alt="Images/AWSIAM18.png" src="Images/AWSIAM18.png" /></p>
-</li>
-<li>
-<p>Click <strong>Next Review</strong>:
+<p>5 - Click <strong>Next Review</strong>:
 <img alt="Images/AWSIAM19.png" src="Images/AWSIAM19.png" /></p>
-</li>
-<li>
-<p>Click <strong>Create user</strong>:
+<p>6 - Click <strong>Create user</strong>:
 <img alt="Images/AWSIAM20.png" src="Images/AWSIAM20.png" /></p>
-</li>
-<li>
-<p>Copy the link provided, and logout by clicking on your username in the top right, and selecting <strong>Sign Out</strong>::
+<p>7 - Copy the link provided, and logout by clicking on your username in the top right, and selecting <strong>Sign Out</strong>::
 <img alt="Images/AWSIAM21.png" src="Images/AWSIAM21.png" /></p>
-</li>
-<li>
-<p>Log back in as the username you just created, with the link you copied for the remainder of the Lab.</p>
-</li>
-</ol>
+<p>8 - Log back in as the username you just created, with the link you copied for the remainder of the Lab.</p>
 <p>You have successfully create a user, placed them in the cost optimization group and have applied policies.
 You can continue to expand this group by adding additional users from your organization.</p>
 <h2 id="8-tear-down">8. Tear down<a name="tear_down"></a></h2>

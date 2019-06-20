@@ -9,7 +9,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 # Table of Contents
-1. [Create a cost optimization team](#create_team)
+1. [Modify the cost optimization team](#create_team)
 2. [Create an IAM Policy to restrict EC2 usage by region](#EC2_restrict_region)
 3. [Create an IAM Policy to restirct EC2 usage by family](#EC2_restrict_family)
 4. [Extend an IAM Policy to restrict EC2 usage by instance size](#EC2_restrict_size)
@@ -21,27 +21,31 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 
-## 1. Create a cost optimization team <a name="create_team"></a>
-We are going to create a cost optimization team. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
-This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
+## 1. Modify the cost optimization team <a name="create_team"></a>
+We are going to modify the cost optimization team created previously, as this lab has additional access requirements to implementing IAM policies.
 
       
-### 1.1 Create an IAM policy for the team
-This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.
+### 1.1 Modify the IAM policy for the team
 
-1. Log into the console as an IAM user with the required permissions and go to the **IAM** Service page:
+1 - Log into the console as an IAM user with the required permissions and go to the **IAM** Service page:
 ![Images/AWSIAM1.png](Images/AWSIAM1.png)
 
-2. Select **Policies** from the left menu:
+2 - Select **Policies** from the left menu:
 ![Images/AWSIAM2.png](Images/AWSIAM2.png)
 
-3. Select **Create Policy**:
+3 - Click **Filter policies**, and select **Customer managed**:
 ![Images/AWSIAM3.png](Images/AWSIAM3.png)
-  
-4. Select the **JSON** tab:
+
+4 - Click the existing **Cost Optimization** Policy:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
-  
-5. Modify the policy below, replace **-billing bucket-** (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy & paste the policy into the the field:
+
+5 - Click **Edit policy**:
+![Images/AWSIAM5.png](Images/AWSIAM5.png)
+
+6 - Click **JSON**:
+![Images/AWSIAM7.png](Images/AWSIAM7.png)
+
+7 -  Modify the policy below, replace **-billing bucket-** (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy & paste the policy into the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
@@ -113,77 +117,14 @@ This provides access to allow the cost optimization team to perform their work, 
 }
 ```
 5. Click **Review policy**: 
-![Images/AWSIAM5.png](Images/AWSIAM5.png)
-
-6. Enter a **Name** and **Description** for the policy and click **Create policy**:
-![Images/AWSIAM6.png](Images/AWSIAM6.png)
-
-You have successfully created the cost optimization teams policy.
-  
-    
-### 1.2 Create an IAM Group
-This group will bring together IAM users and apply the required policies.
-
-1. While in the IAM console, select **Groups** from the left menu:
-![Images/AWSIAM7.png](Images/AWSIAM7.png)
-
-2. Click on **Create New Group**:
 ![Images/AWSIAM8.png](Images/AWSIAM8.png)
 
-3. Enter a **Group Name** and click **Next Step**:
+6. Enter a **Name** and **Description** for the policy and click **Create policy**:
 ![Images/AWSIAM9.png](Images/AWSIAM9.png)
 
-4. Click **Policy Type** and select **Customer Managed**:
-![Images/AWSIAM10.png](Images/AWSIAM10.png)
-
-5. Select the **CostOptimization_Summit** policy (created previously):
-![Images/AWSIAM11.png](Images/AWSIAM11.png)
-
-6. We will now add more policies, click on **Customer Managed** and select **AWS Managed**:
-![Images/AWSIAM12.png](Images/AWSIAM12.png)
-
-7. Type **Athena** into the filter box, select **both** policies, and click **Next Step**:
-![Images/AWSIAM13.png](Images/AWSIAM13.png)
-
-8. Click **Create Group**:
-![Images/AWSIAM14.png](Images/AWSIAM14.png)
-
-
-You have now successfully created the cost optimization group, and attached the required policies.
-
-
-### 1.3 Create an IAM User
-For this lab we will create a user and join them to the group above.
-
-NOTE: it is best practice to have Multi Factor Authentication (MFA) enabled for all users. We omit this step here for brevity and simplicity, and should only be implemented as a demonstration before being removed/rectified.
-
-1. In the IAM console, select **Users** from the left menu:
-![Images/AWSIAM15.png](Images/AWSIAM15.png)
-
-2. Click **Add user**:
-![Images/AWSIAM16.png](Images/AWSIAM16.png)
-
-3. Enter a **User name**, select **AWS Management Console access**, choose **Custom Password**, type a suitable password, deselect **Require password reset**, and click **Next: Permissions**:
-![Images/AWSIAM17.png](Images/AWSIAM17.png)
-
-4. Select the **CostOptimization** group (created previously), and click **Next: Tags**:
-![Images/AWSIAM18.png](Images/AWSIAM18.png)
-
-5. Click **Next Review**:
-![Images/AWSIAM19.png](Images/AWSIAM19.png)
-
-6. Click **Create user**:
-![Images/AWSIAM20.png](Images/AWSIAM20.png)
-
-7. Copy the link provided, and logout by clicking on your username in the top right, and selecting **Sign Out**::
-![Images/AWSIAM21.png](Images/AWSIAM21.png)
-
-8. Log back in as the username you just created, with the link you copied for the remainder of the Lab.
-![Images/AWSIAM21.png](Images/AWSIAM22.png)
-
-You have successfully create a user, placed them in the cost optimization group and have applied policies.
-You can continue to expand this group by adding additional users from your organization.
-
+You have successfully modified the cost optimization teams policy, you can complete the rest of the lab using the cost optimization group.
+  
+    
 
 
 ## 2. Create an IAM Policy to restrict service usage by region <a name="EC2_restrict_region"></a>
@@ -565,57 +506,7 @@ We will create an IAM policy that denies operations that contain provisioned IOP
 
 
 ## 6. Tear down <a name="tear_down"></a>
-NOTE: The cost optimization user, group and policies are required for the completion of the fundamental labs. If you remove these resources you will not be able to complete the labs. There is no tear down for this component as it is best practices to have this group created in all organizations.
-
-### Delete a security group
-When you attempted to, and successfully launched instances above it created a **launch-wizard** security group automatically, which you will need to delete.
-
-1. Go to the EC2 Dashboard:
-![Images/AWSTeardown1.png](Images/AWSTeardown1.png)
-
-2. Confirm the instances launched as part of this exercise are terminated. Click on **Instances** on the left and view the instances. You can use the **Launch Time** column to verify this.
-![Images/AWSTeardown15.png](Images/AWSTeardown15.png)
-
-3. Select **Security Groups** under **NETWORK AND SECURITY** on the left:
-![Images/AWSTeardown2.png](Images/AWSTeardown2.png)
-
-4. Click the checkbox next to the security group you need to delete:
-NOTE: you took note of the specific group in the exercise above, you can also use the **Description** column which will show when it was created.
-![Images/AWSTeardown3.png](Images/AWSTeardown3.png)
-
-5. Click **Actions**, then select **Delete Security Group**:
-![Images/AWSTeardown4.png](Images/AWSTeardown4.png)
-
-6. Click **Yes, Delete**:
-![Images/AWSTeardown5.png](Images/AWSTeardown5.png)
-
-
-### Remove a policy from a group
-We will remove the IAM policies from our cost optimization group.
-
-1. Go to the IAM Console:
-![Images/AWSPolicy1.png](Images/AWSPolicy1.png)
-
-2. Select **Groups** from the left menu:
-![Images/AWSTeardown6.png](Images/AWSTeardown6.png)
-
-3. Click on the **CostOptimization** group (that was created previously):
-![Images/AWSTeardown7.png](Images/AWSTeardown7.png) 
-
-4. Click on **Permissions**:
-![Images/AWSTeardown8.png](Images/AWSTeardown8.png)
-
-5. Click on **Detach Policy** next to the **EC2_FamilyRestrict** and also **EC2EBS_Restrict** Policy Names:
-![Images/AWSTeardown9.png](Images/AWSTeardown9.png)
-
-6. Click **Detach**:
-![Images/AWSTeardown10.png](Images/AWSTeardown10.png)
-
-7. Repeat the steps above for **EC2EBS_Restrict**:
-![Images/AWSTeardown9.5.png](Images/AWSTeardown9.5.png)
-
-8. Click **Detach**:
-![Images/AWSTeardown10.5.png](Images/AWSTeardown10.5.png)
+NOTE: To replace the cost optimization group IAM policy, follow the same process and implement the original policy contained in the Account Setup lab.
 
 
 ### Delete a policy
