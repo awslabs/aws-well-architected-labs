@@ -15,8 +15,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 4. [Configure Cost and Usage reports](#CUR)
 5. [Enable AWS Cost Explorer](#cost_explorer)
 6. [Enable AWS-Generated Cost Allocation Tags](#cost_tags)
-7. [Tear down](#tear_down)
-8. [Rate this Lab](#rate_lab) 
+7. [Create a cost optimization team](#create_team)
+8. [Tear down](#tear_down)
+9. [Rate this Lab](#rate_lab) 
 
 
 
@@ -215,12 +216,121 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 ![Images/AWSBillTag3.png](Images/AWSBillTag3.png)
 
 
+## 7. Create a cost optimization team <a name="create_team"></a>
+We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
+This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
 
-## 7. Tear down<a name="tear_down"></a>  
+Log into the console as an IAM user with the required permissions, as per:
+- [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
+      
+### 7.1 Create an IAM policy for the team
+This provides access to allow the cost optimization team to perform their work, namely the Labs in the 100 level fundamental series. This is the minimum access the team requires.
+
+1 - Log in and go to the **IAM** Service page:
+![Images/AWSIAM1.png](Images/AWSIAM1.png)
+
+2 - Select **Policies** from the left menu:
+![Images/AWSIAM2.png](Images/AWSIAM2.png)
+
+3 - Select **Create Policy**:
+![Images/AWSIAM3.png](Images/AWSIAM3.png)
+  
+4 - Select the **JSON** tab:
+![Images/AWSIAM4.png](Images/AWSIAM4.png)
+  
+5 - Copy & paste the following policy into the the field:
+**NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "aws-portal:ViewUsage",
+                "aws-portal:ModifyBilling",
+                "aws-portal:ViewBilling",
+                "aws-portal:ViewAccount",
+                "budgets:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+6 - Click **Review policy**: 
+![Images/AWSIAM5.png](Images/AWSIAM5.png)
+
+7 - Enter a **Name** and **Description** for the policy and click **Create policy**:
+![Images/AWSIAM6.png](Images/AWSIAM6.png)
+
+You have successfully created the cost optimization teams policy.
+  
+    
+### 7.2 Create an IAM Group
+This group will bring together IAM users and apply the required policies.
+
+1 - While in the IAM console, select **Groups** from the left menu:
+![Images/AWSIAM7.png](Images/AWSIAM7.png)
+
+2 - Click on **Create New Group**:
+![Images/AWSIAM8.png](Images/AWSIAM8.png)
+
+3 - Enter a **Group Name** and click **Next Step**:
+![Images/AWSIAM9.png](Images/AWSIAM9.png)
+
+4 - Click **Policy Type** and select **Customer Managed**:
+![Images/AWSIAM10.png](Images/AWSIAM10.png)
+
+5 - Select the **CostOptimization_Summit** policy (created previously):
+![Images/AWSIAM11.png](Images/AWSIAM11.png)
+
+6 - Click **Create Group**:
+![Images/AWSIAM14.png](Images/AWSIAM14.png)
+
+
+You have now successfully created the cost optimization group, and attached the required policies.
+
+
+### 7.3 Create an IAM User
+For this lab we will create a user and join them to the group above.
+
+1 - In the IAM console, select **Users** from the left menu:
+![Images/AWSIAM15.png](Images/AWSIAM15.png)
+
+2 - Click **Add user**:
+![Images/AWSIAM16.png](Images/AWSIAM16.png)
+
+3 - Enter a **User name**, select **AWS Management Console access**, choose **Custom Password**, type a suitable password, deselect **Require password reset**, and click **Next: Permissions**:
+![Images/AWSIAM17.png](Images/AWSIAM17.png)
+
+4 - Select the **CostOptimization** group (created previously), and click **Next: Tags**:
+![Images/AWSIAM18.png](Images/AWSIAM18.png)
+
+5 - Click **Next Review**:
+![Images/AWSIAM19.png](Images/AWSIAM19.png)
+
+6 - Click **Create user**:
+![Images/AWSIAM20.png](Images/AWSIAM20.png)
+
+7 - Copy the link provided, and logout by clicking on your username in the top right, and selecting **Sign Out**::
+![Images/AWSIAM21.png](Images/AWSIAM21.png)
+
+8 - Log back in as the username you just created, with the link you copied for the remainder of the Lab.
+
+
+You have successfully create a user, placed them in the cost optimization group and have applied policies.
+You can continue to expand this group by adding additional users from your organization.
+
+
+
+
+## 8. Tear down<a name="tear_down"></a>  
 This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. 
 
 
-## 8. Rate this lab<a name="rate_lab"></a>  
+## 9. Rate this lab<a name="rate_lab"></a>  
 [![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_5star) 
 

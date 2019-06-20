@@ -17,7 +17,7 @@ http://wellarchitectedlabs.com
 
 
 ## Permissions required
-- [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
+- Access to the Cost Optimization team created in [AWS Account Setup](../100_1_AWS_Account_Setup/README.md)
 
 
 <BR>
@@ -28,7 +28,6 @@ http://wellarchitectedlabs.com
 <BR> 
 
 ## Best Practice Checklist 
-- [ ] Create a cost optimizaion team, to manage cost optimization across your organization
 - [ ] Create an AWS budget to notify on forecasted account cost
 - [ ] Create an AWS budget to notify on actual cost of EC2
 - [ ] Create an AWS budget to notify on RI Coverage

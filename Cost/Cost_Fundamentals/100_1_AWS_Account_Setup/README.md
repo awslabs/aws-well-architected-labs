@@ -19,6 +19,7 @@ http://wellarchitectedlabs.com
 - Root user access to the master account
 - [./Code/master_policy](./Code/master_policy.md) IAM policy required for Master account user
 - [./Code/member_policy](./Code/member_policy.md) IAM policy required for Member account user 
+- [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required to create the cost optimization team
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 
@@ -37,6 +38,7 @@ http://wellarchitectedlabs.com
 - [ ] Configure a Cost and Usage Report (CUR)
 - [ ] Enable AWS Cost Explorer
 - [ ] Enable AWS-Generated Cost Allocation Tags
+- [ ] Create a cost optimization team, to manage cost optimization across your organization
 
 ***
 
