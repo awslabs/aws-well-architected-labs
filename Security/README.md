@@ -17,6 +17,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md)
 * [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC/README.md)
 * [Level 200: Automated Deployment of Web Application Firewall](200_Automated_Deployment_of_Web_Application_Firewall/README.md)
+* [Level 200: Automated IAM User Cleanup](https://github.com/awslabs/aws-well-architected-labs/tree/master/Security/200_Automated_IAM_User_Cleanup)
 * [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection/README.md)
 * [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection/README.md)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md)
