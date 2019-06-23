@@ -3,7 +3,7 @@
 ## Introduction
 This repository contains documentation and code in the format of hands-on labs to help you learn, measure, and build using architectural best practices. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
 
-For more information about security on AWS visit [AWS Security](https://aws.amazon.com/security/) and read the [AWS Well-Architected Security whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf).  
+For more information about security on AWS visit [AWS Security](https://aws.amazon.com/security/) and read the [AWS Well-Architected Security whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf) or online [https://wa.aws.amazon.com/](https://wa.aws.amazon.com/). Also check out [https://awssecworkshops.com/](https://awssecworkshops.com/) for hands-on workshops, [AWS Training and Certification Learning Library](https://www.aws.training/LearningLibrary?filters=classification%3A27&search=&tab=digital_courses%3Ftc%3Dicon) for official security training options.  
 
 ![Images/aws_security_areas.png](Images/aws_security_areas.png)  
 
@@ -17,6 +17,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: Automated Deployment of IAM Groups and Roles](200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md)
 * [Level 200: Automated Deployment of VPC](200_Automated_Deployment_of_VPC/README.md)
 * [Level 200: Automated Deployment of Web Application Firewall](200_Automated_Deployment_of_Web_Application_Firewall/README.md)
+* [Level 200: Automated IAM User Cleanup](200_Automated_IAM_User_Cleanup/README.md)
 * [Level 200: Basic EC2 with WAF Protection](200_Basic_EC2_with_WAF_Protection/README.md)
 * [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection/README.md)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md)

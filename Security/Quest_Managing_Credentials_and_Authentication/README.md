@@ -28,6 +28,12 @@ You will use the AWS Management Console to guide you through how to configure yo
 ### [Basic Identity and Access Management User, Group, Role](../100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)  
 <br>
 
+## Automated IAM User Cleanup:
+### Walkthrough
+This hands-on lab will guide you through the steps to deploy an AWS Lambda function with [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/) to provide regular insights on IAM User/s and AWS Access Key usage within your account.
+### [IAM Tag Based Access Control for EC2](../200_Automated_IAM_User_Cleanup/README.md)
+<br>
+
 ## IAM Permission Boundaries Delegating Role Creation:
 ### Walkthrough
 This hands-on lab will guide you through the steps to configure an example AWS Identity and Access Management (IAM) permission boundary. AWS supports permissions boundaries for IAM entities (users or roles). A permissions boundary is an advanced feature in which you use a managed policy to set the maximum permissions that an identity-based policy can grant to an IAM entity. When you set a permissions boundary for an entity, the entity can perform only the actions that are allowed by the policy. 
@@ -42,7 +48,6 @@ This hands-on lab will guide you through the steps to configure example AWS Iden
 In this lab you will create a series of policies attached to a role that can be assumed by an individual such as an EC2 administrator. This allows the EC2 administrator to create tags when creating resources only if they match the requirements, and control which existing resources and values they can tag.  
 ### [IAM Tag Based Access Control for EC2](../300_IAM_Tag_Based_Access_Control_for_EC2/README.md)
 <br>
-
 
 ***
 

@@ -1,8 +1,12 @@
-﻿# Quest: Classifying Data
+﻿# Quest: Classify Data
 
 ***
 
 ## Labs coming soon!
+
+Check out:
+
+* [Amazon Macie User Guide](https://docs.aws.amazon.com/macie/latest/userguide/what-is-macie.html)
 
 ***
 

@@ -44,12 +44,15 @@ nav:
             - Account and Root User: 'Security/100_AWS_Account_and_Root_User/README.md' 
             - Basic Identity & Access Management User, Group, Role: 'Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.md' 
             - CloudFront with S3 Bucket Origin: 'Security/100_CloudFront_with_S3_Bucket_Origin/README.md'  
+            - Create a Data Bunker: 'Security/100_Create_a_Data_Bunker/README.md'
+            - Enable Security Hub: 'Security/100_Enable_Security_Hub/README.md'
         - Security 200 Labs: 
             - Automated Deployment of Detective Controls: 'Security/200_Automated_Deployment_of_Detective_Controls/README.md' 
             - Automated Deployment of EC2 Web Application: 'Security/200_Automated_Deployment_of_EC2_Web_Application/README.md' 
             - Automated Deployment of IAM Groups and Roles: 'Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md' 
             - Automated Deployment of VPC: 'Security/200_Automated_Deployment_of_VPC/README.md' 
             - Automated Deployment of Web Application Firewall: 'Security/200_Automated_Deployment_of_Web_Application_Firewall/README.md'
+            - Automated IAM User Cleanup: 'Security/200_Automated_IAM_User_Cleanup/README.md'
             - Basic EC2 with WAF Protection: 'Security/200_Basic_EC2_with_WAF_Protection/README.md' 
             - CloudFront with WAF Protection: 'Security/200_CloudFront_with_WAF_Protection/README.md' 
         - Security 300 Labs: 
