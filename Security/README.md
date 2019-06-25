@@ -7,7 +7,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 
 ![Images/aws_security_areas.png](Images/aws_security_areas.png)  
 
-## Labs:
+## Labs
 * [Level 100: AWS Account and Root User](100_AWS_Account_and_Root_User/README.md)
 * [Level 100: Basic Identity and Access Management User, Group, Role](100_Basic_Identity_and_Access_Management_User_Group_Role/README.md)
 * [Level 100: CloudFront with S3 Bucket Origin](100_CloudFront_with_S3_Bucket_Origin/README.md)
@@ -24,7 +24,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 300: IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2/README.md)
 * [Level 300: Incident Response with AWS Console and CLI](300_Incident_Response_with_AWS_Console_and_CLI/README.md)
 
-## Quests:
+## Quests
 Quests are designed to collate a group of relevant labs and other resources together into a common theme for you to follow and learn.  
 
 * [Level 100: Introduction to Security](Quest_100_Loft_Introduction_to_Security/README.md)
