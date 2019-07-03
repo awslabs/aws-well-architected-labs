@@ -1,5 +1,5 @@
 # AWS Well-Architected Cost Optimization Labs
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Cost and Usage Analysis
 Critical to Cost Optimization is cost and usage analysis. The first step in being able to optimize is understanding your usage, and therefore costs. After analysis is performed, you will gain insights and be able to modify your usage, leading to increasing optimization of your workloads. 

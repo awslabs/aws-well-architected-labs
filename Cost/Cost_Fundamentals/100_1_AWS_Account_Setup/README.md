@@ -1,5 +1,5 @@
 # Level 100: AWS Account Setup
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Introduction
  This hands-on lab will guide you through the steps to create and setup an initial account structure, and enable access to billing reports. This will ensure that you can complete the Well-Architected Cost workshops, and enable you to optimize your workloads inline with the Well-Architected Framework.
@@ -49,6 +49,6 @@ Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
-http://aws.amazon.com/apache2.0/
+https://aws.amazon.com/apache2.0/
 
 or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

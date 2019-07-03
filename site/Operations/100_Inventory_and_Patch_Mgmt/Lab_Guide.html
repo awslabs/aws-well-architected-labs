@@ -24,10 +24,10 @@ You will be billed for any applicable AWS resources used in this lab that are no
 * An available region within your account with capacity to add 2 additional VPCs</p>
 <h2 id="user-and-group-management">User and Group Management</h2>
 <p>When you create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user. It is accessed by signing in with the email address and password that you used to create the account.</p>
-<p>We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Securely store the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">AWS Tasks That Require Root User</a>.</p>
+<p>We strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user. Securely store the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">AWS Tasks That Require Root User</a>.</p>
 <h2 id="iam-users-groups">IAM Users &amp; Groups</h2>
 <p>As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then grant administrator access by placing the users into an "Administrators" group to which the <strong>AdministratorAccess</strong> managed policy is attached.</p>
-<p>Use administrators group members to manage permissions and policy for the AWS account. Limit use of the root user to only those <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">actions that require it</a>.</p>
+<p>Use administrators group members to manage permissions and policy for the AWS account. Limit use of the root user to only those <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html">actions that require it</a>.</p>
 <h3 id="11-create-administrator-iam-user-and-group">1.1 Create Administrator IAM User and Group</h3>
 <p>To create an administrator user for yourself and add the user to an administrators group:</p>
 <ol>
@@ -100,14 +100,14 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>Leave <strong>InstanceProfile</strong> blank as we have not yet defined an instance profile.</li>
 <li>Leave <strong>InstanceTypeApp</strong> and <strong>InstanceTypeWeb</strong> as the default free-tier-eligible t2.micro value.</li>
 <li>Select the EC2 <strong>KeyName</strong> you defined earlier from the list.</li>
-<li>In a browser window, go to <a href="http://checkip.amazonaws.com/">http://checkip.amazonaws.com/</a> to get your IP. Enter your IP address in <strong>SSHLocation</strong> in CIDR notation (i.e., ending in /32).</li>
+<li>In a browser window, go to <a href="https://checkip.amazonaws.com/">https://checkip.amazonaws.com/</a> to get your IP. Enter your IP address in <strong>SSHLocation</strong> in CIDR notation (i.e., ending in /32).</li>
 <li>Define the <strong>Workload Name</strong> as <code>Test</code>.</li>
 <li>Choose <strong>Next</strong>.</li>
 <li>On the <strong>Options</strong> page under <strong>Tags</strong>, define a <strong>Key</strong> of <strong>Owner</strong>, with <strong>Value</strong> set to the username you choose for your administrator. You may define additional keys as needed. The CloudFormation template creates all the example tags given in the discussion on tagging above.</li>
 <li>Leave all other sections unmodified. Scroll to the bottom of the page and choose <strong>Next</strong>.</li>
 <li>On the <strong>Review</strong> page, review your choices and then choose <strong>Create</strong>.</li>
 <li>On the CloudFormation console page<ol>
-<li><strong>Check the box next to your Stack Name</strong> to see its details. </li>
+<li><strong>Check the box next to your Stack Name</strong> to see its details.</li>
 <li>If your <strong>Stack Name</strong> is not displayed, click the <strong>refresh</strong> button (circular arrow) in the top right until it appears.</li>
 <li>If the details are not displayed, choose the refresh button until details appear.</li>
 </ol>
@@ -130,7 +130,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <h1 id="3-inventory-management-using-operations-as-code">3. Inventory Management using Operations as Code</h1>
 <h2 id="management-tools-systems-manager">Management Tools: Systems Manager</h2>
 <p><a href="https://aws.amazon.com/systems-manager/features/">AWS Systems Manager</a> is a collection of features that enable IT Operations that we will explore throughout this lab.</p>
-<p>There are <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html">set up tasks</a> and <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html">pre-requisites</a> that must be satisfied prior to using Systems Manager to manage your EC2 instances or on-premises systems in <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">hybrid environments</a>. 
+<p>There are <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html">set up tasks</a> and <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-prereqs.html">pre-requisites</a> that must be satisfied prior to using Systems Manager to manage your EC2 instances or on-premises systems in <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">hybrid environments</a>.
 * You must use a supported operating system
     * Supported operating systems include versions of Windows, Amazon Linux, Ubuntu Server, RHEL, and CentOS
 * The SSM Agent must be installed
@@ -187,14 +187,14 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <p>You can use <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-inventory.html">AWS Systems Manager Inventory</a> to collect operating system (OS), application, and instance metadata from your Amazon EC2 instances and your on-premises servers or virtual machines (VMs) in your hybrid environment. You can query the metadata to quickly understand which instances are running the software and configurations required by your software policy, and which instances need to be updated.</p>
 <h3 id="33-using-systems-manager-inventory-to-track-your-instances">3.3 Using Systems Manager Inventory to Track Your Instances</h3>
 <ol>
-<li>Under <strong>Insights</strong> in the AWS Systems Manager navigation bar, choose <strong>Inventory</strong>. </li>
+<li>Under <strong>Instances &amp; Nodes</strong> in the AWS Systems Manager navigation bar, choose <strong>Inventory</strong>.</li>
 <li>Scroll down in the window to the <strong>Corresponding managed instances</strong> section. Inventory currently contains only the instance data available from the EC2</li>
 <li>Choose the <strong>InstanceID</strong> of one of your systems.</li>
 <li>Examine each of the available tabs of data under the <strong>Instance ID</strong> heading.</li>
 <li>Inventory collection must be specifically configured and the data types to be collected must be specified</li>
 <li>Choose <strong>Inventory</strong> in the navigation bar.</li>
-<li>Choose <strong>Setup Inventory</strong> in the top left corner of the window</li>
-<li>In the <strong>Setup Inventory</strong> screen, define targets for inventory:  </li>
+<li>Choose <strong>Setup Inventory</strong> in the top right corner of the window</li>
+<li>In the <strong>Setup Inventory</strong> screen, define targets for inventory:</li>
 <li>Under <strong>Specify targets by</strong>, select <strong>Specifying a tag</strong></li>
 <li>
 <p>Under <strong>Tags</strong> specify <code>Environment</code> for the key and <code>OELabIPM</code> for the value</p>
@@ -214,7 +214,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>Check the box next to <strong>Sync inventory execution logs to an S3 bucket</strong> under the <strong>Advanced</strong> options.</li>
 <li>Provide an S3 bucket name.</li>
 <li>(Optional) Provide an S3 bucket prefix.</li>
-<li>Choose <strong>Setup Inventory</strong> at the bottom of the page (it can take up to 10 minutes to deploy a new inventory policy to an instance). </li>
+<li>Choose <strong>Setup Inventory</strong> at the bottom of the page (it can take up to 10 minutes to deploy a new inventory policy to an instance).</li>
 <li>To create a new inventory policy, from <strong>Inventory</strong>, choose <strong>Setup inventory</strong>.</li>
 <li>To edit an existing policy, from <strong>State Manager</strong> in the left navigation menu, select the association and choose <strong>Edit</strong>.</li>
 </ol>
@@ -243,14 +243,14 @@ You will be billed for any applicable AWS resources used in this lab that are no
    * The targets are defined in the <strong>Targets</strong> section.</p>
 <blockquote>
 <p><strong>Important</strong><br>In this example there is a single target, the wildcard. The wildcard matches <em>all</em> instances making them <em>all</em> targets.
-   * The schedule for this activity is defined under <strong>Specify schedule</strong> and <strong>Specify with</strong> to use a CRON/Rate expression on a 30 minute interval. 
+   * The schedule for this activity is defined under <strong>Specify schedule</strong> and <strong>Specify with</strong> to use a CRON/Rate expression on a 30 minute interval.
    * There is the option to specify <strong>Output options</strong>.
 <strong>Note</strong><br>If you change the command document, the <strong>Parameters</strong> section will change to be appropriate to the new command document.</p>
 </blockquote>
 <ol>
-<li>Navigate to <strong>Managed Instances</strong> under <strong>Shared Resources</strong> in the navigation bar. An <strong>Association Status</strong> has been established for the inventoried instances under management.</li>
+<li>Navigate to <strong>Managed Instances</strong> under <strong>Instances and Nodes</strong> in the navigation bar. An <strong>Association Status</strong> has been established for the inventoried instances under management.</li>
 <li>Choose one of the <strong>Instance ID</strong> links to go to the inventory of the instance. The Inventory tab is now populated and you can track associations and their last activity under the Associations tab.</li>
-<li>Navigate to <strong>Compliance</strong> under <strong>Insights</strong> in the navigation bar. Here you can view the overall compliance status of your managed instances in the <strong>Compliance Summary</strong> and the individual compliance status of systems in the <strong>Corresponding managed instances</strong> section below.</li>
+<li>Navigate to <strong>Compliance</strong> under <strong>Instances &amp; Nodes</strong> in the navigation bar. Here you can view the overall compliance status of your managed instances in the <strong>Compliance Summary</strong> and the individual compliance status of systems in the <strong>Corresponding managed instances</strong> section below.</li>
 </ol>
 <blockquote>
 <p><strong>Note</strong><br>The inventory activity can take up to 10 minutes to complete. While waiting for the inventory activity to complete, you can proceed with the next section.</p>
@@ -260,7 +260,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <p>By default, Configuration Compliance displays compliance data about Systems Manager Patch Manager patching and <strong>Systems Manager State Manager</strong> associations. You can also customize the service and create your own compliance types based on your IT or business requirements. You can also port data to <strong>Amazon Athena</strong> and <strong>Amazon QuickSight</strong> to generate fleet-wide reports.</p>
 <h1 id="4-patch-management">4. Patch Management</h1>
 <h2 id="systems-manager-patch-manager">Systems Manager: Patch Manager</h2>
-<p>AWS Systems Manager <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html">Patch Manager</a> automates the process of patching managed instances with security related updates. </p>
+<p>AWS Systems Manager <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html">Patch Manager</a> automates the process of patching managed instances with security related updates.</p>
 <blockquote>
 <p><strong>Note</strong><br>For Linux-based instances, you can also install patches for non-security updates.</p>
 </blockquote>
@@ -278,21 +278,22 @@ You will be billed for any applicable AWS resources used in this lab that are no
 </blockquote>
 <h3 id="41-create-a-patch-baseline">4.1 Create a Patch Baseline</h3>
 <ol>
-<li>Under <strong>Actions</strong> in the <strong>AWS Systems Manager</strong> navigation bar, choose <strong>Patch Manager</strong>.</li>
+<li>Under <strong>Instances and Nodes</strong> in the <strong>AWS Systems Manager</strong> navigation bar, choose <strong>Patch Manager</strong>.</li>
+<li>Click the <strong>View predefined patch baselines</strong> link under the <strong>Configure patching</strong> button on the upper right.</li>
 <li>Choose <strong>Create patch baseline</strong>.</li>
 <li>On the <strong>Create patch baseline</strong> page in the <strong>Provide patch baseline details</strong> section:</li>
 <li>Enter a <strong>Name</strong> for your custom patch baseline, such as <code>AmazonLinuxSecAndNonSecBaseline</code>.</li>
 <li>Optionally enter a description, such as <code>Amazon Linux patch baseline including security and non-security patches</code>.</li>
 <li>Select <strong>Amazon Linux</strong> from the list.</li>
 <li>In the <strong>Approval rules</strong> section:</li>
-<li>Examine the options in the lists but leave <strong>Product</strong>, <strong>Classification</strong>, and <strong>Severity</strong> at their default of <strong>All</strong>.</li>
+<li>Examine the options in the lists and ensure that <strong>Product</strong>, <strong>Classification</strong>, and <strong>Severity</strong> have values of <strong>All</strong>.</li>
 <li>Leave the <strong>Auto approval delay</strong> at its default of <strong>0 days</strong>.</li>
-<li>Change the value of <strong>Compliance level - optional</strong> to <strong>Critical</strong>.</li>
+<li>Change the value of <strong>Compliance reporting - optional</strong> to <strong>Critical</strong>.</li>
 <li>Choose <strong>Add another rule</strong>.</li>
-<li>In the new rule, change the value of <strong>Compliance level - optional</strong> to <strong>Medium</strong>.</li>
+<li>In the new rule, change the value of <strong>Compliance reporting - optional</strong> to <strong>Medium</strong>.</li>
 <li>Check the box under <strong>Include non-security updates</strong> to include all Amazon Linux updates when patching.</li>
 </ol>
-<p>If an approved patch is reported as missing, the option you choose in <strong>Compliance level</strong>, such as <code>Critical</code> or <code>Medium</code>, determines the severity of the compliance violation reported in System Manager <strong>Compliance</strong>.</p>
+<p>If an approved patch is reported as missing, the option you choose in <strong>Compliance reporting</strong>, such as <code>Critical</code> or <code>Medium</code>, determines the severity of the compliance violation reported in System Manager <strong>Compliance</strong>.</p>
 <ol>
 <li>In the <strong>Patch exceptions</strong> section in the <strong>Rejected patches - optional</strong> text box, enter <code>system-release.*</code> This will <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">reject patches</a> to new Amazon Linux releases that may advance you beyond the <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html">Patch Manager supported operating systems</a> prior to your testing new releases.</li>
 <li>For Linux operating systems, you can optionally define an <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-how-it-works-alt-source-repository.html">alternative patch source repository</a>. Choose the <strong>X</strong> in the <strong>Patch sources</strong> area to remove the empty patch source definition.</li>
@@ -304,9 +305,9 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <blockquote>
 <p><strong>Note</strong><br>An instance can only be in one patch group.</p>
 </blockquote>
-<p>After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance. 
+<p>After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance.
 * If the instance is assigned to a patch group, the system checks to see which patch baseline is registered to that group.
-* If a patch baseline is found for that group, the system applies that patch baseline. 
+* If a patch baseline is found for that group, the system applies that patch baseline.
 * If an instance isn't assigned to a patch group, the system automatically uses the currently configured default patch baseline.</p>
 <h3 id="42-assign-a-patch-group">4.2 Assign a Patch Group</h3>
 <ol>
@@ -315,10 +316,10 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>In the <strong>Modify patch groups</strong> window under <strong>Patch groups</strong>, enter <code>Critical</code>, choose <strong>Add</strong>, and then choose <strong>Close</strong> to be returned to the <strong>Patch Baseline</strong> details screen.</li>
 </ol>
 <h2 id="aws-runpatchbaseline">AWS-RunPatchBaseline</h2>
-<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-ssm-documents.html#patch-manager-ssm-documents-recommended-AWS-RunPatchBaseline">AWS-RunPatchBaseline</a> is a command document that enables you to control patch approvals using patch baselines. It reports patch compliance information that you can view using the Systems Manager <strong>Compliance</strong> tools. For example,you can view which instances are missing patches and what those patches are. </p>
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-ssm-documents.html#patch-manager-ssm-documents-recommended-AWS-RunPatchBaseline">AWS-RunPatchBaseline</a> is a command document that enables you to control patch approvals using patch baselines. It reports patch compliance information that you can view using the Systems Manager <strong>Compliance</strong> tools. For example,you can view which instances are missing patches and what those patches are.</p>
 <p>For Linux operating systems, compliance information is provided for patches from both the default source repository configured on an instance and from any alternative source repositories you specify in a custom patch baseline. AWS-RunPatchBaseline supports both Windows and Linux operating systems.</p>
 <h2 id="aws-systems-manager-document">AWS Systems Manager: Document</h2>
-<p>An <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager document</a> defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JavaScript Object Notation (JSON) or YAML, and they include steps and parameters that you specify. </p>
+<p>An <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager document</a> defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JavaScript Object Notation (JSON) or YAML, and they include steps and parameters that you specify.</p>
 <p>All AWS provided Automation and Run Command documents can be viewed in AWS Systems Manager <strong>Documents</strong>. You can <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-doc.html">create your own documents</a> or launch existing scripts using provided documents to implement custom operations as code activities.</p>
 <h3 id="43-examine-aws-runpatchbaseline-in-documents">4.3 <strong>Examine AWS-RunPatchBaseline in Documents</strong></h3>
 <p>To examine AWS-RunPatchBaseline in Documents:</p>
@@ -333,18 +334,18 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html">AWS Systems Manager Run Command</a> lets you remotely and securely manage the configuration of your managed instances.  Run Command enables you to automate common administrative tasks and perform ad hoc configuration changes at scale. You can use Run Command from the AWS Management Console, the AWS Command Line Interface, AWS Tools for Windows PowerShell, or the AWS SDKs.</p>
 <h3 id="44-scan-your-instances-with-aws-runpatchbaseline-via-run-command">4.4 Scan Your Instances with AWS-RunPatchBaseline via Run Command</h3>
 <ol>
-<li>Under <strong>Actions</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>. In the Run Command dashboard, you will see previously executed commands including the execution of AWS-RefreshAssociation, which was performed when you set up inventory.</li>
+<li>Under <strong>Instances and Nodes</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>. In the Run Command dashboard, you will see previously executed commands including the execution of AWS-RefreshAssociation, which was performed when you set up inventory.</li>
 <li>(Optional) choose a Command ID from the list and examine the record of the command execution.</li>
 <li>Choose <strong>Run Command</strong> in the top right of the window.</li>
 <li>In the <strong>Run a command</strong> window, under <strong>Command document</strong>:<ul>
-<li>Choose the search icon and select <code>Platform</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
+<li>Choose the search icon and select <code>Platform types</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
 <li>Choose <strong>AWS-RunPatchBaseline</strong> in the list.</li>
 </ul>
 </li>
+<li>In the <strong>Command parameters</strong> section, leave the <strong>Operation</strong> value as the default <strong>Scan</strong>.</li>
 <li>In the <strong>Targets</strong> section:</li>
 <li>Under <strong>Specify targets by</strong>, choose <strong>Specifying a tag</strong> to reveal the <strong>Tags</strong> sub-section.</li>
-<li>Under <strong>Enter a tag key</strong>, enter <code>Workload</code>, and under <strong>Enter a tag value</strong>, enter <code>Test</code>.</li>
-<li>In the <strong>Command parameters</strong> section, leave the <strong>Operation</strong> value as the default <strong>Scan</strong>.</li>
+<li>Under <strong>Enter a tag key</strong>, enter <code>Workload</code>, and under <strong>Enter a tag value</strong>, enter <code>Test</code> and click <strong>Add</strong>.</li>
 </ol>
 <p>The remaining Run Command features enable you to:
 * Specify <strong>Rate control</strong>, limiting <strong>Concurrency</strong> to a specific number of targets or a calculated percentage of systems, or to specify an <strong>Error threshold</strong> by count or percentage of systems after which the command execution will end.
@@ -359,20 +360,20 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>Scroll down to <strong>Targets and outputs</strong> to view the status of the individual targets that were selected through your tag key and value pair. Refresh your page to update the status.</li>
 <li>Choose an <strong>Instance ID</strong> from the targets list to view the <strong>Output</strong> from command execution on that instance.</li>
 <li>Choose <strong>Step 1 - Output</strong> to view the first 2500 characters of the command output from Step 1 of the command, and choose <strong>Step 1 - Output</strong> again to conceal it.</li>
-<li>Choose <strong>Step 2 - Output</strong> to view the first 2500 characters of the command output from Step 2 of the command.  The execution step for <strong>PatchWindows</strong> was skipped as it did not apply to your Amazon Linux instance. </li>
+<li>Choose <strong>Step 2 - Output</strong> to view the first 2500 characters of the command output from Step 2 of the command.  The execution step for <strong>PatchWindows</strong> was skipped as it did not apply to your Amazon Linux instance.</li>
 <li>Choose <strong>Step 1 - Output</strong> again to conceal it.</li>
 </ol>
 <h3 id="45-review-initial-patch-compliance">4.5 Review Initial Patch Compliance</h3>
 <ol>
-<li>Under <strong>Insights</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
-<li>On the <strong>Compliance</strong> page in the <strong>Compliance Summary</strong>, you will now see that there are 4 systems that have critical severity compliance issues. In the <strong>Corresponding managed instances</strong> list, you will see the individual compliance status and details.</li>
+<li>Under <strong>Instances &amp; Nodes</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
+<li>On the <strong>Compliance</strong> page in the <strong>Compliance resources summary</strong>, you will now see that there are 4 systems that have critical severity compliance issues. In the <strong>Resources</strong> list, you will see the individual compliance status and details.</li>
 </ol>
 <h3 id="46-patch-your-instances-with-aws-runpatchbaseline-via-run-command">4.6 Patch Your Instances with AWS-RunPatchBaseline via Run Command</h3>
 <ol>
-<li>Under <strong>Actions</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>.</li>
+<li>Under <strong>Instances and Nodes</strong> in the AWS Systems Manager navigation bar, choose <strong>Run Command</strong>.</li>
 <li>Choose <strong>Run Command</strong> in the top right of the window.</li>
 <li>In the <strong>Run a command</strong> window, under <strong>Command document</strong>:</li>
-<li>Choose the search icon, select <code>Platform</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
+<li>Choose the search icon, select <code>Platform types</code>, and then choose <code>Linux</code> to display all the available commands that can be applied to Linux instances.</li>
 <li>Choose <strong>AWS-RunPatchBaseline</strong> in the list.</li>
 <li>In the <strong>Targets</strong> section:</li>
 <li>Under <strong>Specify targets by</strong>, choose <strong>Specifying a tag</strong> to reveal the <strong>Tags</strong> sub-section.</li>
@@ -388,21 +389,21 @@ You will be billed for any applicable AWS resources used in this lab that are no
 </blockquote>
 <ol>
 <li>In the <strong>Rate control</strong> section:</li>
-<li>For <strong>Concurrency</strong>, leave the default <strong>targets</strong> selected and specify <code>1</code>.<blockquote>
-<p><strong>Tip</strong><br>Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.  </p>
+<li>For <strong>Concurrency</strong>, ensure that <strong>targets</strong> is selected and specify the value as <code>1</code>.<blockquote>
+<p><strong>Tip</strong><br>Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.</p>
 </blockquote>
 </li>
-<li>For <strong>Error threshold</strong>, leave the default <strong>errors</strong> selected and specify <code>1</code>.</li>
+<li>For <strong>Error threshold</strong>, ensure that <strong>error</strong> is selected and specify the value as <code>1</code>.</li>
 <li>Choose <strong>Run</strong> to execute the command and to go to its details page.</li>
 <li>Refresh the page to view updated status and proceed when the execution is successful.</li>
 </ol>
 <blockquote>
-<p><strong>Warning</strong><br>Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.  </p>
+<p><strong>Warning</strong><br>Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.</p>
 </blockquote>
 <h3 id="47-review-patch-compliance-after-patching">4.7 Review Patch Compliance After Patching</h3>
 <ol>
-<li>Under <strong>Insights</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
-<li>On the <strong>Compliance</strong> page, change the <strong>Compliance Type:</strong> to <code>Patch</code>. The <strong>Compliance Summary</strong> will now show that there are 4 systems that have satisfied critical severity patch compliance.</li>
+<li>Under <strong>Instances &amp; Nodes</strong> in the the AWS Systems Manager navigation bar, choose <strong>Compliance</strong>.</li>
+<li>The <strong>Compliance resources summary</strong> will now show that there are 4 systems that have satisfied critical severity patch compliance.</li>
 </ol>
 <p>In the optional Scheduling Automated Operations Activities section of this lab you can set up Systems Manager Maintenance Windows and schedule the automated application of patches.</p>
 <h3 id="the-impact-of-operations-as-code"><strong>The Impact of Operations as Code</strong></h3>
@@ -415,7 +416,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>Installing applications, updating patches, installing or updating SSM Agent, or executing PowerShell commands and Linux shell scripts by using a Systems Manager Run Command task</li>
 <li>Building Amazon Machine Images (AMIs), boot-strapping software, and configuring instances by using Systems Manager Automation</li>
 <li>Executing AWS Lambda functions that trigger additional actions such as scanning your instances for patch updates</li>
-<li>Running AWS Step Function state machines to perform tasks such as removing an instance from an Elastic Load Balancing environment, patching the instance, and then adding the instance back to the Elastic Load Balancing environment  <blockquote>
+<li>Running AWS Step Function state machines to perform tasks such as removing an instance from an Elastic Load Balancing environment, patching the instance, and then adding the instance back to the Elastic Load Balancing environment<blockquote>
 <p><strong>Note</strong><br>To register Step Function tasks you must use the AWS CLI.</p>
 </blockquote>
 </li>
@@ -521,7 +522,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>On the <strong>Register target</strong> page under <strong>Maintenance window target details</strong>:</li>
 <li>In the <strong>Target Name</strong> field, enter a name for the targets, such as <code>TestWebServers</code>.</li>
 <li>(Optional) Enter a description in the <strong>Description</strong> field.</li>
-<li>(Optional) Specify a name or work alias in the <strong>Owner information</strong> field.  <blockquote>
+<li>(Optional) Specify a name or work alias in the <strong>Owner information</strong> field.<blockquote>
 <p><strong>Note</strong>: Owner information is included in any CloudWatch Events that are raised while running tasks for these targets in this Maintenance Window.</p>
 </blockquote>
 </li>
@@ -531,7 +532,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>Add a second key/value pair using <code>InstanceRole</code> as the key and <code>WebServer</code> as the value.</li>
 <li>Choose <strong>Register target</strong> at the bottom of the page to return to the maintenance window details page.</li>
 </ol>
-<p>If you want to assign more targets to this window, choose the <strong>Targets</strong> tab, and then choose <strong>Register target</strong>to register new targets. With this option, you can choose a different means of targeting. For example, if you previously targeted instances by instance ID, you can register new targets and target instances by specifying Amazon EC2 tags. </p>
+<p>If you want to assign more targets to this window, choose the <strong>Targets</strong> tab, and then choose <strong>Register target</strong>to register new targets. With this option, you can choose a different means of targeting. For example, if you previously targeted instances by instance ID, you can register new targets and target instances by specifying Amazon EC2 tags.</p>
 <h3 id="54-assigning-tasks-to-your-patch-maintenance-window">5.4 Assigning Tasks to Your Patch Maintenance Window</h3>
 <p>After you assign targets, you <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-assign-tasks.html">assign tasks</a> to perform during the window:</p>
 <ol>
@@ -552,7 +553,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 <li>For <strong>Error threshold</strong>, leave the default <strong>errors</strong> selected and specify <code>1</code>.</li>
 <li>In the <strong>Role</strong> section, specify the role you defined with the AmazonSSMMaintenanceWindowRole. It will be <code>SSMMaintenanceWindowRole</code> if you followed the suggestion in the instructions above.</li>
 <li>In <strong>Output options</strong>, leave <strong>Enable writing to S3</strong> clear.</li>
-<li>(Optionally) Specify <strong>Output options</strong> to record the entire output to a preconfigured <strong>S3 bucket</strong> and optional <strong>S3 key prefix</strong>  <blockquote>
+<li>(Optionally) Specify <strong>Output options</strong> to record the entire output to a preconfigured <strong>S3 bucket</strong> and optional <strong>S3 key prefix</strong><blockquote>
 <p><strong>Note</strong><br>Only the last 2500 characters of a command document's output are displayed in the console. To capture the complete output define and S3 bucket to receive the logs.</p>
 </blockquote>
 </li>
@@ -574,7 +575,7 @@ You will be billed for any applicable AWS resources used in this lab that are no
 </ol>
 <p>You have now configured a maintenance window, assigned targets, assigned tasks, and validated successful execution. The same procedures can be used to schedule the execution of any <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager Document</a>.</p>
 <h1 id="bonus-content-creating-a-simple-notification-service-topic">Bonus Content: Creating a Simple Notification Service Topic</h1>
-<p><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon Simple Notification Service</a> (Amazon SNS) coordinates and manages the delivery or sending of messages to subscribing endpoints or clients. In Amazon SNS, there are two types of clients: publishers and subscribers. These are also referred to as producers and consumers. Publishers communicate asynchronously with subscribers by producing and sending a message to a topic, which is a logical access point and communication channel. Subscribers (i.e., web servers, email addresses, Amazon SQS queues, AWS Lambda functions) consume or receive the message or notification over one of the supported protocols (i.e., Amazon SQS, HTTP/S, email, SMS, Lambda) when they are subscribed to the topic. </p>
+<p><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon Simple Notification Service</a> (Amazon SNS) coordinates and manages the delivery or sending of messages to subscribing endpoints or clients. In Amazon SNS, there are two types of clients: publishers and subscribers. These are also referred to as producers and consumers. Publishers communicate asynchronously with subscribers by producing and sending a message to a topic, which is a logical access point and communication channel. Subscribers (i.e., web servers, email addresses, Amazon SQS queues, AWS Lambda functions) consume or receive the message or notification over one of the supported protocols (i.e., Amazon SQS, HTTP/S, email, SMS, Lambda) when they are subscribed to the topic.</p>
 <h3 id="61-create-and-subscribe-to-an-sns-topic">6.1 Create and Subscribe to an SNS Topic</h3>
 <p>To create and subscribe to an SNS topic:</p>
 <ol>

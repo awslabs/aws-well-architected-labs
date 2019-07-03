@@ -1,5 +1,5 @@
 # AWS Well-Architected Cost Optimization Labs
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Introduction
 

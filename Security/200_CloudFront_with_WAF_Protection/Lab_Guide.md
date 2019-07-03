@@ -10,7 +10,7 @@
 4. [Tear Down](#tear_down)
 
 ## 1. Launch Instance <a name="launch_instance"></a>
-You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see [Launching an Instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html).
+You can launch a Linux instance using the AWS Management Console. This tutorial is intended to help you launch your first instance quickly, so it doesn't cover all possible options. For more information about the advanced options, see [Launching an Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/launching-instance.html).
 Launch an instance:
 
 1. Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
@@ -98,7 +98,7 @@ AWS WAF configuration for use with CloudFront.
   The remainder of the parameters can be left as defaults.
   ![waf-create-stack](Images/waf-create-stack.png)  
 5. At the bottom of the page click **Next**.
-6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 7. Review the information for the stack. When you're satisfied with the configuration, click **Create stack**.  
 8. After a few minutes the stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
 10. You have now set up a basic AWS WAF configuration ready for CloudFront to use!
@@ -169,7 +169,7 @@ Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
-    http://aws.amazon.com/apache2.0/
+    https://aws.amazon.com/apache2.0/
 
 or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 

@@ -1,5 +1,5 @@
 # Level 300: Splitting the CUR and Sharing Access
-http://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com 
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
