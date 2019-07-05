@@ -1,13 +1,14 @@
 # Level 100: AWS Account and Root User: Lab Guide
 
 ## 1. Account Settings & Root User Security
-When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account.  
+
+When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account.
 It is strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user, groups and roles. Then securely lock away the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
 
-
 ### 1.1 Generate and Review the AWS Account Credential Report
+
 Its good to get an idea of what you have configured already in your AWS account especially if you have had it for a while. You should audit your security configuration in the following situations:
- 
+
 * On a periodic basis. You should perform the steps described here at regular intervals as a best practice for security.
 * If there are changes in your organization, such as people leaving.
 * If you have stopped using one or more individual AWS services. This is important for removing permissions that users in your account no longer need.
@@ -26,11 +27,13 @@ To download a credential report using the AWS Management Console:
 1. Sign in to the AWS Management Console and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click Credential report.
 3. Click Download Report.
+
 ![iam-credential-report](Images/iam-credential-report.png)
+
 *Further information about the report can be found at [https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)*
 
-
 ### 1.2 Enable a Virtual MFA Device for Your AWS Account Root User
+
 You can use IAM in the AWS Management Console to configure and enable a virtual MFA device for your root user. To manage MFA devices for the AWS account, you must be signed in to AWS using your root user credentials. You cannot manage MFA devices for the root user using other credentials.
 
 If your MFA device is lost, stolen, or not working, you can still sign in using alternative factors of authentication. To do this, you must verify your identity using the email and phone that are registered with your account. This means that if you can't sign in with your MFA device, you can sign in by verifying your identity using the email and phone that are registered with your account. Before you enable MFA for your root user, review your account settings and contact information to make sure that you have access to the email and phone number. To learn about signing in using alternative factors of authentication, see [What If an MFA Device Is Lost or Stops Working](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_lost-or-broken.html)?. To disable this feature, contact [AWS Support](https://console.aws.amazon.com/support/home#/).
@@ -43,7 +46,7 @@ If your MFA device is lost, stolen, or not working, you can still sign in using 
    * **Option 2**: On the right side of the navigation bar, click your account name, and click Security Credentials. If necessary, click Continue to Security Credentials. Then expand the Multi-Factor Authentication (MFA) section on the page.
 
      ![Security Credentials in the navigation menu](Images/security-credentials-root.shared.console.png)
-     
+
      ![MFA section in root credentials screen](Images/security-credentials-root-mfa.png)
 
 3. Click Manage MFA or Activate MFA, depending on which option you chose in the preceding step.
@@ -75,29 +78,33 @@ If your MFA device is lost, stolen, or not working, you can still sign in using 
 
 The device is ready for use with AWS. For information about using MFA with the AWS Management Console, see [Using MFA Devices With Your IAM Sign-in Page](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_sign-in-mfa.html).
 
-
 ### 1.3 Configure Account Security Challenge Questions
+
 Configure account security challenge questions because they are used to verify that you own an AWS account.
 
 1. Use your AWS account email address and password to sign in as the AWS account root user and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to security challenge questions configuration section.
-![account-challenge-questions](Images/account-challenge-questions.png)  
+
+![account-challenge-questions](Images/account-challenge-questions.png)
+
 3. Select three challenge questions and enter answers for each.
 4. Securely store the questions and answers as you would passwords or other credentials.
 5. Click update.
 
-
 ### 1.4 Configure Account Alternate Contacts
-Alternate contacts enable AWS to contact another person about issues with the account, even if you are unavailable. 
+
+Alternate contacts enable AWS to contact another person about issues with the account, even if you are unavailable.
 
 1. Use your AWS account email address and password to sign in as the AWS account root user and open the AWS account settings page at [https://console.aws.amazon.com/billing/home?#/account/](https://console.aws.amazon.com/billing/home?#/account/).
 2. Navigate to alternate contacts configuration section.
-![account-alternate-contacts](Images/account-alternate-contacts.png)  
+
+![account-alternate-contacts](Images/account-alternate-contacts.png)
+
 3. Enter contact details for billing, operations and security.
 4. Click update.
 
-
 ### 1.5 Remove Your AWS Account Root User Access Keys
+
 You use an access key (an access key ID and secret access key) to make programmatic requests to AWS. However, **do not** use your AWS account root user access key. The access key for your AWS account gives full access to all your resources for all AWS services, including your billing information. You cannot restrict the permissions associated with your AWS account access key.
 
 * Check in the credential report; if you don't already have an access key for your AWS account, don't
@@ -105,11 +112,13 @@ create one unless you absolutely need to. Instead, use your account email addres
 in to the AWS Management Console and create an IAM user for yourself that has administrative privileges.
 This will be explained in a later section.
 * If you do have an access key for your AWS account, delete it unless you have a specific requirement. To delete or rotate your AWS account access keys, go to the [Security Credentials](https://console.aws.amazon.com/iam/home?#security_credential) page in the AWS Management Console and sign in with your account's email address and password. You can manage your access keys in the Access keys section.
-![account-root-keys](Images/account-root-keys.png)  
+
+![account-root-keys](Images/account-root-keys.png)
+
 * Never share your AWS account password or access keys with anyone.
 
-
 ### 1.6 Periodically Change the AWS Account Root User Password
+
 You must be signed in as the AWS account root user in order to change the password. To learn how to reset a forgotten root user password, see [Resetting Your Lost or Forgotten Passwords or Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys_retrieve.html).
 
 To change the password for the root user:
@@ -123,7 +132,9 @@ To change the password for the root user:
 2. In the upper right corner of the console, click your account name or number and then click My Account.
 3. On the right side of the page, next to the Account Settings section, click Edit.
 4. On the Password line choose Click here to change your password.
-![account-root-password](Images/account-root-password.png)  
+
+![account-root-password](Images/account-root-password.png)
+
 5. Choose a strong password. Although you can set an account password policy for IAM users, that policy does not apply to your AWS account root user.
 
    AWS requires that your password meet these conditions:
@@ -143,8 +154,8 @@ To change the password for the root user:
    * Use a different password on AWS than you use on other sites.
    * Avoid passwords that are easy to guess. These include passwords such as secret, password, amazon, or 123456. They also include things like a dictionary word, your name, email address, or other personal information that can easily be obtained.
 
-
 ### 1.7 Configure a Strong Password Policy for Your Users
+
 You can set a password policy on your AWS account to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. The IAM password policy does not apply to the AWS root account password.
 
 To create or change a password policy:
@@ -152,35 +163,33 @@ To create or change a password policy:
 1. Sign in to the AWS Management Console and open the IAM console at https://console.aws.amazon.com/iam/.
 2. In the navigation pane, click Account Settings.
 3. In the Password Policy section, select the options you want to apply to your password policy.
-4. Click Apply Password Policy.  
+4. Click Apply Password Policy.
+
 ![iam-password-policy](Images/iam-password-policy.png)
 
-
 ***
-
 
 ### 2. Tear down this lab
+
 Please note that the changes you made to the account and root user have no charges associated with them.
 
-
 ***
 
+## References & useful resources
 
-## References & useful resources:
-[AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html)
-[https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
-[AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)  
-[IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)  
-[Resetting Your Lost or Forgotten Passwords or Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys_retrieve.html)
-[Using MFA Devices With Your IAM Sign-in Page](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_sign-in-mfa.html)
-[What If an MFA Device Is Lost or Stops Working](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_lost-or-broken.html)
-
+* [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html)
+* [https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
+* [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
+* [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)
+* [Resetting Your Lost or Forgotten Passwords or Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys_retrieve.html)
+* [Using MFA Devices With Your IAM Sign-in Page](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_sign-in-mfa.html)
+* [What If an MFA Device Is Lost or Stops Working](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_lost-or-broken.html)
 
 ***
-
 
 ## License
-Licensed under the Apache 2.0 and MITnoAttr License. 
+
+Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 

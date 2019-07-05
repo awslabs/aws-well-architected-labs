@@ -1,27 +1,27 @@
 # Level 100: AWS Account and Root User
 
 ## Introduction
+
 This hands-on lab will guide you through the introductory steps to configure a new AWS account and secure the root user. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
-## Goals:
+## Goals
+
 * Protecting AWS credentials
 * Fine-grained authorization
 
-## Prerequisites:
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
+## Prerequisites
+
+* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
+
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
-<BR>
-
 ## [Start the Lab!](Lab_Guide.md)
-
-<BR>
-<BR>
 
 ***
 
 ## License
-Licensed under the Apache 2.0 and MITnoAttr License. 
+
+Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 

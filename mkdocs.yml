@@ -38,28 +38,59 @@ nav:
         - 100 Inventory Patch Mgt:
             - Lab Overview: 'Operations/100_Inventory_and_Patch_Mgmt/README.md' 
             - Lab Guide: 'Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.md'  
-    - Security: 
-        - Overview: 'Security/README.md' 
-        - Security 100 Labs: 
-            - Account and Root User: 'Security/100_AWS_Account_and_Root_User/README.md' 
-            - Basic Identity & Access Management User, Group, Role: 'Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.md' 
-            - CloudFront with S3 Bucket Origin: 'Security/100_CloudFront_with_S3_Bucket_Origin/README.md'  
-            - Create a Data Bunker: 'Security/100_Create_a_Data_Bunker/README.md'
-            - Enable Security Hub: 'Security/100_Enable_Security_Hub/README.md'
+    - Security:
+        - Overview: 'Security/README.md'
+        - Security 100 Labs:
+            - Account and Root User:
+                - Lab Overview: 'Security/100_AWS_Account_and_Root_User/README.md'
+                - Lab Guide: 'Security/100_AWS_Account_and_Root_User/Lab_Guide.md'
+            - Basic Identity & Access Management User, Group, Role:
+                - Lab Overview: 'Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.md'
+                - Lab Guide: 'Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.md'
+            - CloudFront with S3 Bucket Origin:
+                - Lab Overview: 'Security/100_CloudFront_with_S3_Bucket_Origin/README.md'
+                - Lab Guide: 'Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.md'
+            - Create a Data Bunker:
+                - Lab Guide: 'Security/100_Create_a_Data_Bunker/README.md'
+            - Enable Security Hub:
+                - Lab Overview: 'Security/100_Enable_Security_Hub/README.md'
+                - Lab Guide: 'Security/100_Enable_Security_Hub/Lab_Guide.md'
         - Security 200 Labs: 
-            - Automated Deployment of Detective Controls: 'Security/200_Automated_Deployment_of_Detective_Controls/README.md' 
-            - Automated Deployment of EC2 Web Application: 'Security/200_Automated_Deployment_of_EC2_Web_Application/README.md' 
-            - Automated Deployment of IAM Groups and Roles: 'Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md' 
-            - Automated Deployment of VPC: 'Security/200_Automated_Deployment_of_VPC/README.md' 
-            - Automated Deployment of Web Application Firewall: 'Security/200_Automated_Deployment_of_Web_Application_Firewall/README.md'
-            - Automated IAM User Cleanup: 'Security/200_Automated_IAM_User_Cleanup/README.md'
-            - Basic EC2 with WAF Protection: 'Security/200_Basic_EC2_with_WAF_Protection/README.md' 
-            - CloudFront with WAF Protection: 'Security/200_CloudFront_with_WAF_Protection/README.md' 
-        - Security 300 Labs: 
-            - IAM Permission Boundaries Delegating Role Creation: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md' 
-            - IAM Tag Based Access Control for EC2: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.md' 
-            - Incident Response with AWS Console and CLI: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/README.md' 
-        - Security Quests: 
+            - Automated Deployment of Detective Controls:
+                - Lab Overview: 'Security/200_Automated_Deployment_of_Detective_Controls/README.md'
+                - Lab Guide: 'Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.md'
+            - Automated Deployment of EC2 Web Application:
+                - Lab Overview: 'Security/200_Automated_Deployment_of_EC2_Web_Application/README.md'
+                - Lab Guide: 'Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.md'
+            - Automated Deployment of IAM Groups and Roles:
+                - Lab Overview: 'Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.md'
+                - Lab Guide: 'Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.md'
+            - Automated Deployment of VPC:
+                - Lab Overview: 'Security/200_Automated_Deployment_of_VPC/README.md'
+                - Lab Guide: 'Security/200_Automated_Deployment_of_VPC/Lab_Guide.md'
+            - Automated Deployment of Web Application Firewall:
+                - Lab Overview: 'Security/200_Automated_Deployment_of_Web_Application_Firewall/README.md'
+                - Lab Guide: 'Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.md'
+            - Automated IAM User Cleanup:
+                - Lab Overview: 'Security/200_Automated_IAM_User_Cleanup/README.md'
+                - Lab Guide: 'Security/200_Automated_IAM_User_Cleanup/Lab_Guide.md'
+            - Basic EC2 with WAF Protection:
+                - Lab Overview: 'Security/200_Basic_EC2_with_WAF_Protection/README.md'
+                - Lab Guide: 'Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.md'
+            - CloudFront with WAF Protection:
+                - Lab Overview: 'Security/200_CloudFront_with_WAF_Protection/README.md'
+                - Lab Guide: 'Security/200_CloudFront_with_WAF_Protection/Lab_Guide.md'
+        - Security 300 Labs:
+            - IAM Permission Boundaries Delegating Role Creation:
+                - Lab Overview: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md'
+                - Lab Guide: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.md'
+            - IAM Tag Based Access Control for EC2: 
+                - Lab Overview: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.md'
+                - Lab Guide: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.md'
+            - Incident Response with AWS Console and CLI:
+                - Lab Overview: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/README.md'
+                - Lab Guide: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md'
+        - Security Quests:
             - Introduction to Security: 'Security/Quest_100_Loft_Introduction_to_Security/README.md'
             - Quick Steps to Security Success: 'Security/Quest_100_Quick_Steps_to_Security_Success/README.md'
             - Security Best Practices Workshop: 'Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.md'
@@ -85,7 +116,8 @@ nav:
                 - Lab Overview: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md'
                 - Lab Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.md'  
     - Performance Efficiency: 
-        - Coming Soon: 'Performance/README.md' 
+        - Overview: 'Performance/README.md'
+        - Monitoring with CloudWatch Dashboards: 'Performance/100_Monitoring_with_CloudWatch_Dashboards/README.md' 
     - Cost Optimization: 
         - Overview: 'Cost/README.md' 
         - Cost Optimization Fundamentals:
