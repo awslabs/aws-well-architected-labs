@@ -16,11 +16,13 @@
 </ul>
 <h3 id="walkthrough">Walkthrough</h3>
 <ol>
-<li><a href="https://d0.awsstatic.com/aws-answers/AWS_Multi_Account_Security_Strategy.pdf">Define your multi-account strategy</a>. A suggested structure is shown below. If you do not current have AWS Organizations setup it is recommended that you use your existing account as a sandbox
-<img alt="Suggested account structure" src="Images/multi-account-suggestion.png" /></li>
+<li><a href="https://d0.awsstatic.com/aws-answers/AWS_Multi_Account_Security_Strategy.pdf">Define your multi-account strategy</a>. A suggested structure is shown below. If you do not current have AWS Organizations setup it is recommended that you use your existing account as a sandbox</li>
+</ol>
+<p><img alt="Suggested account structure" src="Images/multi-account-suggestion.png" /></p>
+<ol>
 <li>(If required) <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sign-up-for-aws.html">Sign up a new root account</a></li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_create.html">Create an AWS Organization</a> in the root account</li>
-<li>Invite any existing accounts </li>
+<li>Invite any existing accounts</li>
 <li>For each AWS account required</li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html">Create a new account in organizations</a>. Make note of the organizations account access role.</li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html">Create a new IAM role in the root account</a> that has permission to assume that role to access the new AWS account</li>
@@ -95,7 +97,7 @@
 <p><strong>Note:</strong> The steps below apply at an individual account level. It is important to consider turning this on as you create additional accounts for your organization. At a minimum you should apply this to any account which hosts production data.</p>
 <h2 id="walkthrough_3">Walkthrough</h2>
 <ol>
-<li>For each account that you want to block public access to data stored in S3 - use a cross-account access role to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">block S3 public access</a> </li>
+<li>For each account that you want to block public access to data stored in S3 - use a cross-account access role to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">block S3 public access</a></li>
 <li>Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to shit to the root, apply this specifically to the accounts where you have blocked public access.</li>
 </ol>
 <h3 id="policy-to-block-public">Policy to block public</h3>
@@ -130,7 +132,7 @@
 </ul>
 <hr />
 <h2 id="license">License</h2>
-<p>Licensed under the Apache 2.0 and MITnoAttr License. </p>
+<p>Licensed under the Apache 2.0 and MITnoAttr License.</p>
 <p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
 <p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
 <pre><code>https://aws.amazon.com/apache2.0/

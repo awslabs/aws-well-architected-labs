@@ -1,20 +1,23 @@
 ﻿# Level 100: CloudFront with S3 Bucket Origin
 
 ## Introduction
-This hands-on lab will guide you through the steps to host static web content in an [Amazon S3 bucket](https://aws.amazon.com/s3/), protected and accelerated by [Amazon CloudFront](https://aws.amazon.com/cloudfront). Skills learned will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).  
+
+This hands-on lab will guide you through the steps to host static web content in an [Amazon S3 bucket](https://aws.amazon.com/s3/), protected and accelerated by [Amazon CloudFront](https://aws.amazon.com/cloudfront). Skills learned will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ![s3-cloudfront-diagram](Images/s3-cloudfront-diagram.png)
 
-## Goals:
+## Goals
+
 * Protecting S3 bucket from direct public access
 * Improving access time with caching
 
+## Prerequisites
 
-## Prerequisites:
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
+* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 
 ## Permissions required
+
 * IAM User with *AdministratorAccess* AWS managed policy
 
 <BR>
@@ -27,7 +30,8 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 ***
 
 ## License
-Licensed under the Apache 2.0 and MITnoAttr License. 
+
+Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 

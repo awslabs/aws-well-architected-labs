@@ -1,11 +1,13 @@
 # Level 100: Create a Data Bunker Account
 
 ## Overview
+
 In this lab we will create a secure data bunker. A data bunker is a secure account which will hold important security data in a secure location. Ensure that only members of your security team have access to this account. In this lab we will create a new security account, create a secure S3 bucket in that account and then turn on CloudTrail for our organisation tp send these logs to th bucket in the secure data account. You may want to also think about what other data you need in there such as secure backups.
 
 ![Data bunker account structure](Images/data-bunker-architecture.png)
 
 ## Prerequisites
+
 * An AWS account that you have administrative access which is the root account for an AWS Organization.
 
 NOTE: You will be billed for the AWS CloudTrail logs and Amazon S3 storage setup as part of this lab. See [AWS CloudTrail Pricing](https://aws.amazon.com/cloudtrail/pricing/) and [Amazon S3 Pricing](https://aws.amazon.com/s3/pricing/) for further details.
@@ -13,6 +15,7 @@ NOTE: You will be billed for the AWS CloudTrail logs and Amazon S3 storage setup
 ## Detailed Instructions
 
 ### 1. Create a Security account from the master account
+
 1. Login to your master account
 2. Navigate to AWS Organizations and select **Create Account**. Include a cross account access role - we will modify this later to remove unnecessary access.
 3. Navigate to **Settings** and take a note of your Organization ID
@@ -89,6 +92,7 @@ NOTE: You will be billed for the AWS CloudTrail logs and Amazon S3 storage setup
 6. Under *Storage location*, select *No* for *Create new S3 bucket* and instead select the bucket created in the security account created previously
 
 ### Verification
+
 1. Switch back to the Security account
 2. Navigate to the S3 bucket previously created
 3. (Optional) You can start to [explore the logs using CloudTrail](https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html)
@@ -96,7 +100,8 @@ NOTE: You will be billed for the AWS CloudTrail logs and Amazon S3 storage setup
 ***
 
 ## License
-Licensed under the Apache 2.0 and MITnoAttr License. 
+
+Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 

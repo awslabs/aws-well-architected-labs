@@ -14,7 +14,9 @@ Its good to get an idea of what you have configured already in your AWS account 
 * If you have stopped using one or more individual AWS services. This is important for removing permissions that users in your account no longer need.
 * If you've added or removed software in your accounts, such as applications on Amazon EC2 instances, AWS OpsWorks stacks, AWS CloudFormation templates, etc.
 * If you ever suspect that an unauthorized person might have accessed your account.
+
 As you review your account's security configuration, follow these guidelines:
+
 * **Be thorough**. Look at all aspects of your security configuration, including those you might not use regularly.
 * **Don't assume**. If you are unfamiliar with some aspect of your security configuration (for example, the reasoning behind a particular policy or the existence of a role), investigate the business need until you are satisfied.
 * **Keep things simple**. To make auditing (and management) easier, use IAM groups, consistent naming schemes, and straightforward policies.
