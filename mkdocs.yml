@@ -90,9 +90,13 @@ nav:
             - Incident Response with AWS Console and CLI:
                 - Lab Overview: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/README.md'
                 - Lab Guide: 'Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.md'
+            - Lambda Cross Account IAM Role Assumption:
+                - Lab Overview: 'Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.md'
+                - Lab Guide: 'Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.md'
         - Security Quests:
             - Introduction to Security: 'Security/Quest_100_Loft_Introduction_to_Security/README.md'
             - Quick Steps to Security Success: 'Security/Quest_100_Quick_Steps_to_Security_Success/README.md'
+            - Incident Response Day: 'Security/Quest_200_Incident_Response_Day/README.md'
             - Security Best Practices Workshop: 'Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.md'
             - Security Best Practices Day: 'Security/Quest_300_Security_Best_Practices_Day/README.md'
             - Managing Credentials and Authentication: 'Security/Quest_Managing_Credentials_and_Authentication/README.md'

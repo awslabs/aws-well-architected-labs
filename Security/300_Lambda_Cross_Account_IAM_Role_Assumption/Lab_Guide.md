@@ -18,7 +18,7 @@
 3. Click Another AWS account, enter the account id for account 1 (the origin), then click Next: Permissions.
 4. Do not select any managed policies, click Next: Tags.
 5. Click Next: Review.
-6. Enter LambdaS3ListBuckets for the Role name then click Crete role.
+6. Enter LambdaS3ListBuckets for the Role name then click Create role.
 7. From the list of roles click the name of LambdaS3ListBuckets.
 8. Copy the Role ARN and store for use later in this lab.
 9. Click Add inline policy, then click JSON tab.
@@ -47,7 +47,7 @@
 3. AWS service will be pre-selected, select Lambda, then click Next: Permissions.
 4. Do not select any managed policies, click Next: Tags.
 5. Click Next: Review.
-6. Enter Lambda-Assume-Roles for the Role name then click Crete role.
+6. Enter Lambda-Assume-Roles for the Role name then click Create role.
 7. From the list of roles click the name of Lambda-Assume-Roles.
 8. Copy the Role ARN and store for use later in this lab.
 9. Click Add inline policy, then click JSON tab.
@@ -130,7 +130,7 @@ How could the example policies be improved?
 
 ## 4. Tear down this lab <a name="tear_down"></a>
 
-Remove the lambda function,then roles.
+Remove the lambda function, then roles.
 
 ***
 

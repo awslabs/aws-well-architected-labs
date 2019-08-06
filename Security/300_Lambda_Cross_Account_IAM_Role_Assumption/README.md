@@ -23,12 +23,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 * IAM User with AdministratorAccess AWS managed policy
 
-<BR>
-
 ## [Start the Lab!](Lab_Guide.md)
-
-<BR>
-<BR>
 
 ***
 

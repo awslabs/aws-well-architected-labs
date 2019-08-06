@@ -22,10 +22,12 @@ The policies are split into five different functions for demonstration purposes,
 
 This policy allows read only permissions with a region condition. The only service actions we are going to allow are EC2, note that you typically require additional supporting actions such as Elastic Load Balancing if you were to re-use this policy after this lab, depending on your requirements.
 
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).  
+1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
-2. In the navigation pane, click **Policies** and then click **Create policy**.  
-![Images/iam-role-policy-1.png](Images/iam-policy-create-1.png)  
+2. In the navigation pane, click **Policies** and then click **Create policy**.
+
+![Images/iam-role-policy-1.png](Images/iam-policy-create-1.png)
+
 3. On the Create policy page click the **JSON** tab.
 
 ![Images/iam-role-policy-2.png](Images/iam-policy-create-2.png)
