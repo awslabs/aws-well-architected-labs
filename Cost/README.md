@@ -1,43 +1,68 @@
 # AWS Well-Architected Cost Optimization Labs
-https://wellarchitectedlabs.com 
+http://wellarchitectedlabs.com 
 
 ## Introduction
 
-This repository contains documentation and code in the format of hands-on labs to help you learn, measure, and build using architectural best practices.
+Cost optimization is a continual process of refinement and improvement of a system over its entire lifecycle. By using these labs, you gain practical experience on how to implement the Cost Optimization best practices and ensure your workloads are Well-Architected.
 
-For more information about cost optimization on AWS visit the Well-Architected tool in the AWS console, and read the AWS Well-Architected cost optimization whitepaper.
+For more information about cost optimization best practices in the cloud, visit the Well-Architected tool in the AWS console, and read the AWS Well-Architected cost optimization whitepaper.
 
-## Labs:
+---
 
-### Cost Fundamentals
-These labs must be done in order from 1 to 5, starting at the 100 level labs.
+## Getting Started - Cost Optimization Fundamentals
+The first step in your Cost Optimization journey is to setup your account correctly, and get to know the tools and data available for Cost Optimization. These are a collection of labs that are accessible to anyone that will be working with the cloud, including non-technical roles.
 
-These labs are designed to start you on your Cost Optimization journey. They cover the required steps to enable your account and the features within it for Cost Optimization. They also focus on addressing the core areas of the Well-Architected Cost Optimization pillar, with simple but effective exercises. 
+Fundamentals covers the following: Account setup, AWS billing console, AWS Budgets, AWS Cost Explorer, Reserved Instances (RIs), Cost and Usage Report (CUR), cost and usage analysis, and cost and usage visualization.
 
+[![Go to labs](../common/images/gotolabs.png)](Fundamentals.md)
 
-#### 100 Level
-- [100 #1 AWS Account Setup](./Cost_Fundamentals/100_1_AWS_Account_Setup/README.md)
-- [100 #2 Cost and Usage Governance](./Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md)
-- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)
-- [100 #5 Cost Visualization](./Cost_Fundamentals/100_5_Cost_Visualization/README.md)
+---
 
-#### 200 Level
-- [200 #2 Governance](./Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md)
-- [200 #3 Pricing Models](./Cost_Fundamentals/200_3_Pricing_Models/README.md) 
-- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
-- [200 #5 Cost Visualization](./Cost_Fundamentals/200_5_Cost_Visualization/README.md) 
+## Expenditure Awareness
+The capability to attribute resource costs to the individual organization or product owners drives efficient usage behavior and helps reduce waste. Awareness broken into three areas: 
 
+ - Usage Governance
+ - Monitoring Cost and Usage
+ - Decommissioning Resources
 
-### Cost and Usage Analysis
-These labs focus on analysis of your cost and usage. The 100 and 200 level are from the fundamentals series and should be done before any other labs. The 300 cover specific areas of analysis and can be done independently at any time.
+It covers the following topics: Organizational policies, account structure, groups and roles, cost controls, tracking project lifecycle, cost and usage report, cost attribution categories, organization metrics, tagging, billing and cost management tools, reporting and notification, proactive monitoring, allocating cost, decommissioning process.
 
-#### 100 and 200 Level
-- [100 #4 Cost and Usage Analysis](./Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md)
-- [200 #4 Cost and Usage Analysis](./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
+[![Go to labs](../common/images/gotolabs.png)](ExpenditureAwareness.md)
 
+---
 
-#### 300
-- [300 Billing Analysis - Automated CUR Updates and Ingestion](./Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md) 
-- [300 Billing Analysis - Multi Account CUR Access](./Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md) 
-- [300 Billing Analysis - Splitting and Sharing CUR Access](./Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md)
+## Cost Effective Resources
+Using the appropriate resources for your workload is key to cost savings, this is not only the size and type of resource but may include managed or application level services. Using the best pricing models for the resources/services will also ensure the lowest costs. Cost effective resources consists of:
+
+ - Selection of Services
+ - Resource Type and Size
+ - Pricing Models
+ - Data Transfer Charges
+
+It covers the following topics: Organization cost requirements, analyze workload components, cost modeling, resource type and size, pricing models (Reserved Instances, Spot, OnDemand), region cost, data transfer modeling, data transfer services.
+
+[![Go to labs](../common/images/gotolabs.png)](CostEffectiveResources.md)
+
+---
+
+## Manage Demand and Supply Resources
+Demand on your systems may or may not be predictable, it can also be static or dynamic. By analyzing and understanding your system demand you can supply resources as required to achieve minimal costs:
+
+ - Manage Demand and Supply Resources
+
+It covers the following topics: demand analysis, reactive resource provisioning, dynamic resource provisioning (Auto Scaling, buffers).
+
+![Coming soon](../common/images/comingsoon.png)
+
+---
+
+## Optimizing Over Time
+As AWS releases new services and features, it is a best practice to review your existing architectural decisions to ensure they continue to be the most cost-effective:
+
+ - Evaluate new Services
+
+It covers the following topics: evaluating new services.
+
+![Coming soon](../common/images/comingsoon.png)
+
 
