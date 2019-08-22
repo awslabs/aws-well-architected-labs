@@ -8,7 +8,7 @@ The first step in your Cost Optimization journey is to setup your account correc
 ---
 
 ## Step 1 - Account Setup
-This first step will help you to you build a basic account structure, and make sure your account is configured correctly. This will ensure you are collecting data for cost optimization, and this data is accessible to the right people withing your organization.
+This first step will help you to you build a basic account structure, and make sure your account is configured correctly. This will ensure you are collecting data for cost optimization, and this data is accessible to the right people within your organization.
 
 
 | | |
