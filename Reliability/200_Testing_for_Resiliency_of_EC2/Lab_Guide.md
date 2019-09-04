@@ -37,7 +37,7 @@ $ aws configure
 AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
 AWS Secret Access Key [**************xxxx]: <Your AWS Secret Access Key>
 Default region name: [us-east-2]: <The AWS Region you have deployed the web app>
-Default output format [None]:<return>
+Default output format [None]: json
 ```
 6. Download the zip file of the resiliency bash scripts at the following URL:  
 [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip)
@@ -59,12 +59,17 @@ Powershell
 ```
 cd ~\.aws
 ```
-3. Use a text editor (vim, emacs, notepad, wordpad) to create a text file (no extension named “credentials.” In this file you should have the following text.  
+3. Use a text editor (vim, emacs, notepad, wordpad) to create a text file (no extension) named “credentials”. In this file you should have the following text:
 ```
 [default]
 aws_access_key_id = <Your access key>
 aws_secret_access_key = <Your secret key>
+```
+4. Create a text file (no extension) named "config". In this file you should have the following text:
+```
+[default]
 region = us-east-2
+output = json
 ```
 ### 1.3 Setting Up the Python Environment
 1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: [https://github.com/boto/boto3](https://github.com/boto/boto3)
