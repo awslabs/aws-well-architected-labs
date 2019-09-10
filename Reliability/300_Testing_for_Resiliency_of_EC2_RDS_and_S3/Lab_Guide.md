@@ -165,7 +165,7 @@ Default output format [None]: json
 6. Download the zip file of the resiliency bash scripts at the following URL:  
 [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip)
 7. Unzip the folder in a location convenient for you to execute the scripts.  
-8. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/Bash/) directory.
+8. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/bash/) directory.
 
 ### 2.2 Setting up a Programming Language Based Environment
 You will need the same files that the AWS command line uses for credentials. You can either install the command line and use the ‘aws configure’ command as outlined in the bash set up, or you can manually create the configuration files. To create the files manually, create a .aws folder/directory in your home directory.  
@@ -222,16 +222,22 @@ $ sudo yum remove java-1.7.0-openjdk
 ### 3.1 EC2 Failure Mode
 1. The first failure mode will be to fail a web server. To prepare for this, you should have two consoles open: VPC and EC2. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “EC2” in the search box and press the enter key.  
 ![EnteringEC2](Images/EnteringEC2.png)  
-2. You also need the VPC Console. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “VPC” in the search box, then right click on the “VPC Isolate Cloud Resources” text and open the link in a new tab or window. You can then click the upward facing icon to the right of the word “Services” to make the menu of services disappear.  
+2. You also need the VPC Console. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “VPC” in the search box, then right click on the “VPC Isolated Cloud Resources” text and open the link in a new tab or window. You can then click the upward facing icon to the right of the word “Services” to make the menu of services disappear.  
 ![EnteringVPC](Images/EnteringVPC.png)  
 3. On the EC2 Console, click “Instances” on the left side to bring up the list of instances.  
-![SelectingInstances](Images/SelectingInstances.png)  
-4. Use this as the command line argument to the scripts/programs below.  
+![SelectingInstances](Images/SelectingInstances.png)
+4. On the VPC console, copy the VPC ID by first selecting the VPC named
+   "ResiliencyVPC", and then clicking the icon to copy the VPC ID 
+![GetVpcId](Images/GetVpcId.png)
+5. Use this VPC ID as the command line argument (vpc-id) to the scripts/programs below.  
   * Instance Failure in bash
 Execute the failure mode script for failing an instance:
 ```
 $./fail_instance.sh <vpc-id>
 ```
+If you get an error `command not found` or `permission denied`, you may need to
+setup your scripts to enable execution.  From the same directory as the scripts,
+      execute the command `chmod u+x *.sh`
   * Instance Failure in Python: Execute the failure mode script for failing an instance:
 ```
 $ python fail_instance.py <vpc-id>
@@ -248,13 +254,15 @@ $ .\AppResiliency EC2 <vpc-id>
 ```
 $ .\fail_instance.ps1 <vpc-id>
 ```
-5. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
+6. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
 ![TargetGroups](Images/TargetGroups.png)  
 
 ### 3.2 RDS Failure Mode
 1. From the AWS EC2 Console (you will still need the VPC ID from the VPC Console), click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “RDS” in the search box and press the enter key.  
-![SelectingRDS](Images/SelectingRDS.png)  
-2. Use this as the command line argument to the scripts/programs below.  
+![SelectingRDS](Images/SelectingRDS.png) 
+2. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
+   identifier for your database. Note the value of the "Info" field
+2. Continue to use the same VPC ID as the command line argument to the scripts/programs below.  
   * RDS Instance Failure in bash: Execute the failure mode script for failing over an RDS instance:
 ```
 $./failover_rds.sh <vpc-id>
@@ -275,8 +283,10 @@ $ .\AppResiliency RDS <vpc-id>
 ```
 $ .\failover_rds.ps1 <vpc-id>
 ```
-Watch the behavior of the website. What happens? 
-Watch the EC2 Load Balancer Target Group and its Targets’ health. Do the instances recover?
+Watch the behavior of the website. What happens?
+On the database console how does the "Info" field change? Click on the "Logs &
+events" sub-tab and look at "Recent events".  Be sure to click through to the
+latest page of events. Be sure to re-check the behavior of the website.
 
 ### 3.3 AZ Failure
 1. Availability zone failure.
@@ -336,7 +346,7 @@ In order to take down the lab environment, you will need to remove the associati
 ![DeletingNACL](Images/DeletingNACL.png)  
 5. If you have deployed into 2 regions, you have to delete the Database Migration Service and RDS Read Replicas before you can delete the RDS instances.  You can delete the DMS (in Oregon) and read replica at the same time, but the console only allows you to select one of the stacks at a time. Select the “DMSforResiliencyTesting” stack, then click the “Actions” button, and click “DeleteStack:”.  
 ![DeletingDMS](Images/DeletingDMS.png)  
-6. You can then select the “ MySQLReadReplicaResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS Read Replica instance.  
+6. You can then select the “MySQLReadReplicaResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS Read Replica instance.  
 ![DeletingRDSReadReplica](Images/DeletingRDSReadReplica.png)  
 7. If you have deployed in 2 regions, Navigate to the other region (Ohio, if you started in Oregon, and Oregon, if you started in Ohio), and perform the same deletion steps above for the RDS read replica and DMS, if in Oregon. Wait for the read replicas to be deleted. You can delete the web servers and RDS at the same time, but the console only allows you to select one of the stacks at a time. Select the “WebServersforResiliencyTesting” stack, then click the “Actions” button, and click “Delete Stack:”.  
 ![DeletingWebServers](Images/DeletingWebServers.png)  
