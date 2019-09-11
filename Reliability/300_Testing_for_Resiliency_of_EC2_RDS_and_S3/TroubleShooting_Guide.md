@@ -9,8 +9,7 @@ The purpose of this guide is to prepare for the expected questions and problems.
 Common AWS Account Problems
 ---------------------------
 
-If running these labs on your own, you will need to use an AWS account that
-meets the following qualifications. If you are at a live workshop, you may have beensupplied with an AWS account for the lab. If not, and you cannot remedy your account issues, please see a proctor who can help pair you with another student who does have these permissions and you can “pair lab”.
+If running these labs on your own, you will need to use an AWS account that meets the following qualifications. If you are at a live workshop, you may have been supplied with an AWS account for the lab. If not, and you cannot remedy your account issues, please see a proctor who can help pair you with another student who does have these permissions and you can “pair lab”.
 
 You will need to be able to log into the console as a user with permissions to run CloudFormation. If you do not have permission to run CloudFormation, please create a new IAM User with these permissions or use a different AWS account.
 
