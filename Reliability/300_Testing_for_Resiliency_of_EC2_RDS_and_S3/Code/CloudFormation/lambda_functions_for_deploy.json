@@ -107,7 +107,10 @@
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeVpcs",
-                "ec2:ModifyVpcAttribute"
+                "ec2:ModifyVpcAttribute",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
               ],
               "Resource" : "*"
             } ]
@@ -153,7 +156,17 @@
                 "cloudformation:DescribeStacks"
               ],
               "Resource" : "*"
-            } ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+          }
+          ]
           }
         } ]
       }
@@ -180,26 +193,26 @@
       "Type" : "AWS::IAM::ServiceLinkedRole",
       "Condition" : "CreateRDSServiceRole",
       "Properties" : {
-        "AWSServiceName" : "rds.amazonaws.com",
-        "Description"    : "This should allow an RDS instance to be created by this account"
+        "AWSServiceName": "rds.amazonaws.com",
+        "Description": "This should allow an RDS instance to be created by this account"
       }
     },
 
     "ELBServiceRole" : {
-      "Type" : "AWS::IAM::ServiceLinkedRole",
-      "Condition" : "CreateELBServiceRole",
-      "Properties" : {
-        "AWSServiceName" : "elasticloadbalancing.amazonaws.com",
-        "Description"    : "This should allow an ELB to be created by this account"
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateELBServiceRole",
+      "Properties": {
+        "AWSServiceName": "elasticloadbalancing.amazonaws.com",
+        "Description": "This should allow an ELB to be created by this account"
       }
     },
 
     "AutoScalingServiceRole" : {
-      "Type" : "AWS::IAM::ServiceLinkedRole",
-      "Condition" : "CreateAutoScalingServiceRole",
-      "Properties" : {
-        "AWSServiceName" : "autoscaling.amazonaws.com",
-        "Description"    : "This should allow Auto Scaling to be created by this account"
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateAutoScalingServiceRole",
+      "Properties": {
+        "AWSServiceName": "autoscaling.amazonaws.com",
+        "Description": "This should allow Auto Scaling to be created by this account"
       }
     },
     "RDSLambdaRole" : {
@@ -230,7 +243,10 @@
                   "rds:CreateDBInstance",
                   "rds:CreateDBSubnetGroup",
                   "rds:DescribeDBInstances",
-                  "rds:DescribeDBSubnetGroups"
+                  "rds:DescribeDBSubnetGroups",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
                 ],
                 "Resource" : "*"
               },
@@ -317,7 +333,10 @@
                 "elasticloadbalancing:DescribeListeners",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeTargetGroups",
-                "elasticloadbalancing:RegisterTargets"
+                "elasticloadbalancing:RegisterTargets",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
               ],
               "Resource" : "*"
             } ]
@@ -357,11 +376,16 @@
           } ]
         },
         "Policies" : [ {
-          "PolicyName" : "CreateVPC",
+          "PolicyName" : "StateMachineRole",
           "PolicyDocument" : {
             "Statement" : [ {
               "Effect" : "Allow",
-              "Action" :  "*",
+              "Action" :  [
+                "lambda:InvokeFunction",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
               "Resource" : "*"
             } ]
           }
