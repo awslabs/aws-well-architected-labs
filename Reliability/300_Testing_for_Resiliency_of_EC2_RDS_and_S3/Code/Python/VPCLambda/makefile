@@ -15,7 +15,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../VPCLambda.zip: boto3 logging deploy_vpc_lambda.py
+../VPCLambda.zip: boto3 deploy_vpc_lambda.py
 	zip -r ../VPCLambda.zip .
 
 botocore: 
@@ -23,6 +23,3 @@ botocore:
 
 boto3: botocore
 	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging

@@ -15,7 +15,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../RDSLambda.zip: boto3 logging deploy_rds_lambda.py
+../RDSLambda.zip: boto3 deploy_rds_lambda.py
 	zip -r ../RDSLambda.zip .
 
 botocore: 
@@ -23,6 +23,3 @@ botocore:
 
 boto3: botocore
 	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging

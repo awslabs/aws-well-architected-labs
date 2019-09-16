@@ -15,7 +15,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../WaitForStack.zip: boto3 logging wait_for_stack_lambda.py
+../WaitForStack.zip: boto3 wait_for_stack_lambda.py
 	zip -r ../WaitForStack.zip .
 
 botocore: 
@@ -23,6 +23,3 @@ botocore:
 
 boto3: botocore
 	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging

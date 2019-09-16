@@ -15,7 +15,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../WebAppLambda.zip: boto3 logging deploy_web_lambda.py
+../WebAppLambda.zip: boto3 deploy_web_lambda.py
 	zip -r ../WebAppLambda.zip .
 
 botocore: 
@@ -23,6 +23,3 @@ botocore:
 
 boto3: botocore
 	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging
