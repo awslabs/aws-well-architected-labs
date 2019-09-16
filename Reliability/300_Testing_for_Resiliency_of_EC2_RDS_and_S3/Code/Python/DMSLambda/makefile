@@ -16,10 +16,11 @@
 #
 
 ../DMSLambda.zip: boto3 deploy_dms_lambda.py
-	zip -r ../DMSLambda.zip .
+	cd dist && zip -r ../../DMSLambda.zip .
+	zip -r ../DMSLambda.zip deploy_dms_lambda.py
 
-botocore: 
-	pip install --target=. botocore
+botocore:
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
+	pip install --target=./dist boto3

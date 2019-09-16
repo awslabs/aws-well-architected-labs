@@ -16,10 +16,11 @@
 #
 
 ../WaitForStack.zip: boto3 wait_for_stack_lambda.py
-	zip -r ../WaitForStack.zip .
+	cd dist && zip -r ../../WaitForStack.zip .
+	zip -r ../WaitForStack.zip wait_for_stack_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=dist/ botocore
 
 boto3: botocore
-	pip install --target=. boto3
+	pip install --target=dist/ boto3

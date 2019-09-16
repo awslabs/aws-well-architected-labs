@@ -16,10 +16,11 @@
 #
 
 ../RDSLambda.zip: boto3 deploy_rds_lambda.py
-	zip -r ../RDSLambda.zip .
+	cd dist && zip -r ../../RDSLambda.zip .
+	zip -r ../RDSLambda.zip deploy_rds_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
+	pip install --target=./dist boto3

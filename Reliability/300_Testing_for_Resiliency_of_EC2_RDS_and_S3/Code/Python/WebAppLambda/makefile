@@ -16,10 +16,11 @@
 #
 
 ../WebAppLambda.zip: boto3 deploy_web_lambda.py
-	zip -r ../WebAppLambda.zip .
+	cd dist && zip -r ../../WebAppLambda.zip .
+	zip -r ../WebAppLambda.zip deploy_web_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
+	pip install --target=./dist boto3

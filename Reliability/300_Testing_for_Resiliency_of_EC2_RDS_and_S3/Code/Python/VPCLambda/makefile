@@ -16,10 +16,11 @@
 #
 
 ../VPCLambda.zip: boto3 deploy_vpc_lambda.py
-	zip -r ../VPCLambda.zip .
+	cd dist && zip -r ../../VPCLambda.zip .
+	zip -r ../VPCLambda.zip deploy_vpc_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
+	pip install --target=./dist boto3
