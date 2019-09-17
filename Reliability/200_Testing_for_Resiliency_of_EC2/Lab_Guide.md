@@ -31,7 +31,7 @@ $ chmod 755 ~/bin/jq
 ```
 4. Install the AWS Command Line Interface (CLI) if you do not have it installed (it is installed by default on Amazon Linux).  
 [https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
-5. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to the region you have deployed your web app into and leave the default output format as “None.”.  
+5. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to the region you have deployed your web app into and set the default output format as “json”.  
 ```
 $ aws configure
 AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
