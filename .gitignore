@@ -5,3 +5,4 @@ docs/
 *.zip
 .pyc
 dist/
+.vscode/

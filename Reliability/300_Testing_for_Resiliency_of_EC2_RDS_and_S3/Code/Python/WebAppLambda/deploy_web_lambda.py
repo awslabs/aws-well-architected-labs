@@ -31,6 +31,14 @@ stackname = 'WebServersforResiliencyTesting'
 AWS_REGION = 'us-east-2'
 
 
+ARCH_TO_AMI_NAME_PATTERN = {
+    # Architecture: (pattern, owner)
+    "PV64": ("amzn2-ami-pv*.x86_64-ebs", "amazon"),
+    "HVM64": ("amzn2-ami-hvm-*-x86_64-gp2", "amazon"),
+    "HVMG2": ("amzn2-ami-graphics-hvm-*x86_64-ebs*", "679593333241")
+}
+
+
 def init_logging():
     # Setup loggin because debugging with print can get ugly.
     logger = logging.getLogger()
@@ -38,7 +46,6 @@ def init_logging():
     logging.getLogger("boto3").setLevel(logging.WARNING)
     logging.getLogger('botocore').setLevel(logging.WARNING)
     logging.getLogger('nose').setLevel(logging.WARNING)
-
     return logger
 
 
@@ -54,7 +61,6 @@ def setup_local_logging(logger, log_level='INFO'):
         logger.setLevel(LOG_LEVELS[log_level])
     else:
         logger.setLevel(LOG_LEVELS['INFO'])
-
     return logger
 
 
@@ -64,7 +70,6 @@ def set_log_level(logger, log_level='INFO'):
         logger.setLevel(LOG_LEVELS[log_level])
     else:
         logger.setLevel(LOG_LEVELS['INFO'])
-
     return logger
 
 
@@ -77,6 +82,31 @@ def process_global_vars():
         sys.exit(1)
     except Exception:
         logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
+
+
+def find_latest_ami_name(region, arch):
+    assert region, "Region is not defined"
+    assert arch, "Architecture is not defined"
+    assert arch in ARCH_TO_AMI_NAME_PATTERN, \
+        "Architecture must be one of {}".format(
+            ARCH_TO_AMI_NAME_PATTERN.keys())
+    pattern, owner = ARCH_TO_AMI_NAME_PATTERN[arch]
+    ec2 = boto3.client("ec2", region_name=region)
+    images = ec2.describe_images(
+        Filters=[dict(
+            Name="name",
+            Values=[pattern]
+        )],
+        Owners=[owner]
+    ).get("Images", [])
+    assert images, "No images were found"
+    sorted_images = sorted(
+        images,
+        key=lambda image: image["CreationDate"],
+        reverse=True
+    )
+    latest_image = sorted_images[0]
+    return latest_image["ImageId"]
 
 
 def find_in_outputs(outputs, key_to_find):
@@ -138,6 +168,9 @@ def deploy_web_servers(event):
     # Run in zones a, b, and c
     azs = region + "a," + region + "b," + region + "c"
 
+    # Get the latest AMI
+    latest_ami = find_latest_ami_name(region, "HVM64")
+
     # Get the outputs of the RDS stack
     rds_stack = event['rds']['stackname']
     try:
@@ -166,6 +199,7 @@ def deploy_web_servers(event):
     webserver_parameters.append({'ParameterKey': 'WebLoadBalancerSubnets', 'ParameterValue': igw_subnets, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerSubnets', 'ParameterValue': private_subnets, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerInstanceType', 'ParameterValue': 't2.micro', 'UsePreviousValue': True})
+    webserver_parameters.append({'ParameterKey': 'WebServerAMI', 'ParameterValue': latest_ami, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'AvailabilityZones', 'ParameterValue': azs, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucketRegion', 'ParameterValue': cfn_region, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucket', 'ParameterValue': boot_bucket, 'UsePreviousValue': True})
