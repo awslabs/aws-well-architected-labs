@@ -199,7 +199,7 @@ def deploy_web_servers(event):
     webserver_parameters.append({'ParameterKey': 'WebLoadBalancerSubnets', 'ParameterValue': igw_subnets, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerSubnets', 'ParameterValue': private_subnets, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerInstanceType', 'ParameterValue': 't2.micro', 'UsePreviousValue': True})
-    webserver_parameters.append({'ParameterKey': 'WebServerAMI', 'ParameterValue': latest_ami, 'UsePreviousValue': True})
+    webserver_parameters.append({'ParameterKey': 'WebServerAMI', 'ParameterValue': latest_ami, 'UsePreviousValue': False})
     webserver_parameters.append({'ParameterKey': 'AvailabilityZones', 'ParameterValue': azs, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucketRegion', 'ParameterValue': cfn_region, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucket', 'ParameterValue': boot_bucket, 'UsePreviousValue': True})
