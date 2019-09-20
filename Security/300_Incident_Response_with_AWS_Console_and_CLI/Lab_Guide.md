@@ -53,27 +53,44 @@ The AWS console provides a visual way of querying Amazon CloudWatch Logs, using 
 4. Copy the following example queries below into the query input, then click **Run query**.
 
 **IAM access denied attempts:**
-To list all IAM access denied attempts you can use the following example. Each of the line item results allows you to drill down to reveal further details.
+
+To list all IAM access denied attempts you can use the following example. Each of the line item results allows you to drill down to reveal further details:
+
 `filter errorCode like /Unauthorized|Denied|Forbidden/
 | fields awsRegion, userIdentity.arn, eventSource, eventName, sourceIPAddress, userAgent`
+
 **IAM access key:**
+
 If you need to search for what actions an access key has performed you can search for it e.g. `AKIAIOSFODNN7EXAMPLE`:
+
 `filter userIdentity.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`
+
 **IAM source ip address:**
+
 If you suspect a particular IP address as an adversary you can search such as `192.0.2.1`:
+
 `filter sourceIPAddress = "192.0.2.1"
 | fields awsRegion, userIdentity.arn, eventSource, eventName, sourceIPAddress, userAgent`
+
 **IAM access key created**
+
 An access key id will be part of the responseElements when its created so you can query that:
+
 `filter responseElements.credentials.accessKeyId ="AKIAIOSFODNN7EXAMPLE"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`
+
 **IAM users and roles created**
+
 Listing users and roles created can help identify unauthorized activity:
+
 `filter eventName="CreateUser" or eventName = "CreateRole"
 | fields requestParameters.userName, requestParameters.roleName, responseElements.user.arn, responseElements.role.arn, sourceIPAddress, eventTime, errorCode`
+
 **S3 List Buckets**
+
 Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details:
+
 `filter eventName ="ListBuckets"
 | fields awsRegion, eventSource, eventName, sourceIPAddress, userAgent`
 
@@ -82,16 +99,27 @@ Listing buckets may indicate someone trying to gain access to your buckets. Note
 Remember you might need to update the *--log-group-name*, *--region* and/or *--start-time* parameter to a millisecond epoch start time of how far back you wish to search. You can use a web conversion tool such as [www.epochconverter.com](https://www.epochconverter.com/).
 
 **IAM access denied attempts:**
-To list all IAM access denied attempts you can use CloudWatch Logs with *--filter-pattern* parameter of `AccessDenied` for roles and `Client.UnauthorizedOperation` for users.
+
+To list all IAM access denied attempts you can use CloudWatch Logs with *--filter-pattern* parameter of `AccessDenied` for roles and `Client.UnauthorizedOperation` for users:
+
 `aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern AccessDenied --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`
+
 **IAM access key:**
+
 If you need to search for what actions an access key has performed you can modify the *--filter-pattern* parameter to be the access key to search such as `AKIAIOSFODNN7EXAMPLE`:
+
 `aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern AKIAIOSFODNN7EXAMPLE --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`
+
 **IAM source ip address:**
+
 If you suspect a particular IP address as an adversary you can modify the *--filter-pattern* parameter to be the IP address to search such as `192.0.2.1`:
+
 `aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern 192.0.2.1 --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`
+
 **S3 List Buckets**
-Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details.
+
+Listing buckets may indicate someone trying to gain access to your buckets. Note that [Amazon S3 server access logging](https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html) needs to be enabled on each bucket to gain further S3 access details:
+
 `aws logs filter-log-events --region us-east-1 --start-time 1551402000000 --log-group-name CloudTrail/DefaultLogGroup --filter-pattern ListBuckets --output json --query 'events[*].message'| jq -r '.[] | fromjson | .userIdentity, .sourceIPAddress, .responseElements'`
 
 ### 2.2 Block access in AWS IAM
@@ -111,10 +139,13 @@ If you need to confirm the name of a role, user or group you can list:
 
 `aws iam list-roles`
 This provides a full json formatted list of all roles, if you only want to display the *RoleName* use an output of table and query:
+
 `aws iam list-roles --output table --query 'Roles[*].RoleName'`
 List all users:
+
 `aws iam list-users --output table --query 'Users[*].UserName'`
 List all groups:
+
 `aws iam list-groups --output table --query 'Groups[*].GroupName'`
 
 ### 2.4 Attach inline deny policy
@@ -135,10 +166,13 @@ Attaching an explicit deny policy to an AWS IAM role, user or group will quickly
 #### 2.4.2 AWS CLI
 
 Block a role, modify *ROLENAME* to match your role name:
+
 `aws iam put-role-policy --role-name ROLENAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'`
 Block a user, modify *USERNAME* to match your user name:
+
 `aws iam put-user-policy --user-name USERNAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'`
 Block a group, modify *GROUPNAME* to match your user name:
+
 `aws iam put-group-policy --group-name GROUPNAME --policy-name DenyAll --policy-document '{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }'`
 
 ### 2.5 Delete inline deny policy
@@ -178,20 +212,27 @@ The AWS Management console provides a visual way of querying CloudWatch Logs, us
 4. Copy the following example queries below into the query input, then click **Run query**.
 
 **Rejected requests by IP address:**
+
 Rejected requests indicate attempts to gain access to your VPC, however there can often be noise from internet scanners. To count the rejected requests by source IP address:
 `filter action="REJECT"
 | stats count(*) as numRejections by srcAddr
 | sort numRejections desc`
+
 **Reject requests originating from inside your VPC**
+
 Rejected requests that originate from inside your VPC may indicate your infrastructure in your VPC is attempting to connect to something it is not allowed to, e.g. a database instance is trying to connect to the internet and is blocked. This example uses regex to match the start of your VPC as *10.*:
 `filter action="REJECT" and srcAddr like /^10\./
 | stats count(*) as numRejections by srcAddr
 | sort numRejections desc`
+
 **Requests from an IP address**
+
 If you suspect an IP address and want to list all requests that originate, replace *192.0.2.1* with the IP you suspect:
 `filter srcAddr = "192.0.2.1"
 | fields @timestamp, interfaceId, dstAddr, dstPort, action`
+
 **Request count from a private IP address by destination address**
+
 If you want to list and count all connections by a private IP address, replace *10.1.1.1* with your private IP:
 `filter srcAddr = "10.1.1.1"
 | stats count(*) as numConnections by dstAddr
