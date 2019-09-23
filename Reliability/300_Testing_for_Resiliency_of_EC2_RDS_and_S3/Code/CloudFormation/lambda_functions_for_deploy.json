@@ -319,6 +319,7 @@
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeVpcs",
                 "ec2:RunInstances",
+                "ec2:DescribeImages",
                 "iam:AddRoleToInstanceProfile",
                 "iam:AttachRolePolicy",
                 "iam:CreateInstanceProfile",

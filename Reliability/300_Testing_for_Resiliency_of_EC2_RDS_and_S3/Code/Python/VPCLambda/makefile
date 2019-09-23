@@ -15,14 +15,12 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../VPCLambda.zip: boto3 logging deploy_vpc_lambda.py
-	zip -r ../VPCLambda.zip .
+../VPCLambda.zip: boto3 deploy_vpc_lambda.py
+	cd dist && zip -r ../../VPCLambda.zip .
+	zip -r ../VPCLambda.zip deploy_vpc_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging
+	pip install --target=./dist boto3

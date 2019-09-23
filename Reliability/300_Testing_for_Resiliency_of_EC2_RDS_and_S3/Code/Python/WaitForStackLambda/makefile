@@ -15,14 +15,12 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../WaitForStack.zip: boto3 logging wait_for_stack_lambda.py
-	zip -r ../WaitForStack.zip .
+../WaitForStack.zip: boto3 wait_for_stack_lambda.py
+	cd dist && zip -r ../../WaitForStack.zip .
+	zip -r ../WaitForStack.zip wait_for_stack_lambda.py
 
 botocore: 
-	pip install --target=. botocore
+	pip install --target=dist/ botocore
 
 boto3: botocore
-	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging
+	pip install --target=dist/ boto3
