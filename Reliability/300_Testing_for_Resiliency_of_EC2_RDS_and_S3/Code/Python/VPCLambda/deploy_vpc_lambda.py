@@ -92,8 +92,13 @@ def deploy_vpc(event):
         cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
         bucket = "arc327-well-architected-for-reliability",
         key_prefix = "/"
-    # Create CloudFormation client
-    client = boto3.client('cloudformation', region)
+
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+
     vpc_parameters = []
     vpc_parameters.append({'ParameterKey': 'BastionCidrIp', 'ParameterValue': '0.0.0.0/0', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'VPCCidrBlock', 'ParameterValue': '10.0.0.0/16', 'UsePreviousValue': True})
@@ -106,22 +111,27 @@ def deploy_vpc(event):
     vpc_parameters.append({'ParameterKey': 'AvailabilityZone1', 'ParameterValue': region + 'a', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'AvailabilityZone2', 'ParameterValue': region + 'b', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'AvailabilityZone3', 'ParameterValue': region + 'c', 'UsePreviousValue': True})
+    vpc_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
+    print(vpc_parameters)
     stack_tags = []
-    try:
-        workshop_name = event['workshop']
-    except Exception:
-        logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
 
-        workshop_name = 'UnknownWorkshop'
     vpc_template_s3_url = "https://s3." + cfn_region + ".amazonaws.com/" + bucket + "/" + key_prefix + "three_az_vpc_sg_nat.json"
+    print(vpc_template_s3_url)
+    stack_tags = []
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
-    client.create_stack(
+
+    # Create CloudFormation client
+    cf_client = boto3.client('cloudformation', region_name=region)
+    cf_client.create_stack(
         StackName=stackname,
         TemplateURL=vpc_template_s3_url,
         Parameters=vpc_parameters,
         DisableRollback=False,
         TimeoutInMinutes=10,
-        Tags=stack_tags
+        Tags=stack_tags,
+        Capabilities=[
+            'CAPABILITY_NAMED_IAM'
+        ]
     )
 
     return_dict = {'stackname': stackname}
@@ -158,38 +168,38 @@ def check_stack(region, stack_name):
 
 
 def lambda_handler(event, context):
-    try:
-        global logger
-        logger = init_logging()
-        logger = set_log_level(logger, os.environ.get('log_level', event['log_level']))
+    # try:
+    global logger
+    logger = init_logging()
+    logger = set_log_level(logger, os.environ.get('log_level', event['log_level']))
 
-        logger.debug("Running function lambda_handler")
-        logger.info('event:')
-        logger.info(json.dumps(event))
-        if (context != 0):
-            logger.info('context.log_stream_name:' + context.log_stream_name)
-            logger.info('context.log_group_name:' + context.log_group_name)
-            logger.info('context.aws_request_id:' + context.aws_request_id)
-        else:
-            logger.info("No Context Object!")
-        process_global_vars()
+    logger.debug("Running function lambda_handler")
+    logger.info('event:')
+    logger.info(json.dumps(event))
+    if (context != 0):
+        logger.info('context.log_stream_name:' + context.log_stream_name)
+        logger.info('context.log_group_name:' + context.log_group_name)
+        logger.info('context.aws_request_id:' + context.aws_request_id)
+    else:
+        logger.info("No Context Object!")
+    process_global_vars()
 
-        if not check_stack(event['region_name'], stackname):
-            logger.debug("Stack " + stackname + " doesn't exist; creating")
-            return deploy_vpc(event)
-        else:
-            logger.debug("Stack " + stackname + " exists")
-            return_dict = {'stackname': stackname}
-            return return_dict
+    if not check_stack(event['region_name'], stackname):
+        logger.debug("Stack " + stackname + " doesn't exist; creating")
+        return deploy_vpc(event)
+    else:
+        logger.debug("Stack " + stackname + " exists")
+        return_dict = {'stackname': stackname}
+        return return_dict
 
-    except SystemExit:
-        logger.error("Exiting")
-        sys.exit(1)
-    except ValueError:
-        exit(1)
-    except Exception:
-        logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
-    exit(0)
+    # except SystemExit:
+    #     logger.error("Exiting")
+    #     sys.exit(1)
+    # except ValueError:
+    #     exit(1)
+    # except Exception:
+    #     logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
+    # exit(0)
 
 
 if __name__ == "__main__":

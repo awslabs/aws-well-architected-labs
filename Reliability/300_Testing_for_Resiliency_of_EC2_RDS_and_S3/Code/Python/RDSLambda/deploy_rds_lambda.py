@@ -24,6 +24,7 @@ import traceback
 import boto3
 import json
 
+
 LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
 
 AWS_REGION = 'us-east-2'
@@ -129,19 +130,21 @@ def deploy_rds(event):
     # Create the list of security groups to pass
     rds_sg = find_in_outputs(vpc_outputs, 'MySQLSecurityGroup')
 
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+
     # Prepare the stack parameters
     rds_parameters = []
     rds_parameters.append({'ParameterKey': 'DBSubnetIds', 'ParameterValue': rds_subnet_list, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBSecurityGroups', 'ParameterValue': rds_sg, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBInstanceClass', 'ParameterValue': 'db.t2.xlarge', 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
-    rds_parameters.append({'ParameterKey': 'DBPassword', 'ParameterValue': 'foobar123', 'UsePreviousValue': True})
+    rds_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
     stack_tags = []
-    try:
-        workshop_name = event['workshop']
-    except Exception:
-        logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
-        workshop_name = 'UnknownWorkshop'
+
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
     rds_template_s3_url = "https://s3." + cfn_region + ".amazonaws.com/" + bucket + "/" + key_prefix + "mySQL_rds.json"
     client.create_stack(
@@ -187,45 +190,37 @@ def check_stack(region, stack_name):
 
 
 def lambda_handler(event, context):
-    try:
-        global logger
-        logger = init_logging()
-        logger = set_log_level(logger, os.environ.get('log_level', event['log_level']))
 
-        logger.debug("Running function lambda_handler")
-        logger.info('event:')
-        logger.info(json.dumps(event))
-        if (context != 0):
-            logger.info('context.log_stream_name:' + context.log_stream_name)
-            logger.info('context.log_group_name:' + context.log_group_name)
-            logger.info('context.aws_request_id:' + context.aws_request_id)
+    global logger
+    logger = init_logging()
+    logger = set_log_level(logger, os.environ.get('log_level', event['log_level']))
+
+    logger.debug("Running function lambda_handler")
+    logger.info('event:')
+    logger.info(json.dumps(event))
+    if (context != 0):
+        logger.info('context.log_stream_name:' + context.log_stream_name)
+        logger.info('context.log_group_name:' + context.log_group_name)
+        logger.info('context.aws_request_id:' + context.aws_request_id)
+    else:
+        logger.info("No Context Object!")
+    process_global_vars()
+
+    # Check to see if the previous stack was actually created
+    vpc_stack_status = event['vpc']['status']
+    if (vpc_stack_status == 'CREATE_COMPLETE'):
+
+        if not check_stack(event['region_name'], stackname):
+            logger.debug("Stack " + stackname + " doesn't exist; creating")
+            return deploy_rds(event)
         else:
-            logger.info("No Context Object!")
-        process_global_vars()
-
-        # Check to see if the previous stack was actually created
-        vpc_stack_status = event['vpc']['status']
-        if (vpc_stack_status == 'CREATE_COMPLETE'):
-
-            if not check_stack(event['region_name'], stackname):
-                logger.debug("Stack " + stackname + " doesn't exist; creating")
-                return deploy_rds(event)
-            else:
-                logger.debug("Stack " + stackname + " exists")
-                return_dict = {'stackname': stackname}
-                return return_dict
-        else:
-            logger.debug("Stack " + stackname + " was not completely created: status = " + vpc_stack_status)
-            sys.exit(1)
-
-    except SystemExit:
-        logger.error("Exiting")
+            logger.debug("Stack " + stackname + " exists")
+            return_dict = {'stackname': stackname}
+            return return_dict
+    else:
+        logger.debug("Stack " + stackname + " was not completely created: status = " + vpc_stack_status)
         sys.exit(1)
-    except ValueError:
-        exit(1)
-    except Exception:
-        logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
-    exit(0)
+    return
 
 
 if __name__ == "__main__":

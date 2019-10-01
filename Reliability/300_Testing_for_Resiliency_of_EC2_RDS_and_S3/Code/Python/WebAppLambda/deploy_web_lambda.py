@@ -118,6 +118,16 @@ def find_in_outputs(outputs, key_to_find):
     return output_string
 
 
+def get_password_from_ssm(parameter_name, region):
+    client = boto3.client('ssm', region_name=region)
+    logger.debug("Getting pwd from SSM parameter store.")
+    value = client.get_parameter(
+        Name=parameter_name,
+        WithDecryption=True
+    )
+    return value['Parameter']['Value']
+
+
 def deploy_web_servers(event):
     logger.debug("Running function deploy_web_servers")
     try:
@@ -152,6 +162,12 @@ def deploy_web_servers(event):
         sys.exit(1)
     vpc_outputs = stack_list[0]['Outputs']
 
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+
     # Create the list of subnets to pass
     igw_subnets = find_in_outputs(vpc_outputs, 'IGWSubnets')
     private_subnets = find_in_outputs(vpc_outputs, 'PrivateSubnets')
@@ -182,14 +198,17 @@ def deploy_web_servers(event):
     except Exception:
         logger.debug("Cannot find stack named " + rds_stack + ", so cannot parse outputs as inputs")
         sys.exit(1)
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        workshop_name = 'UnknownWorkshop'
+
     rds_outputs = stack_list[0]['Outputs']
 
     # Get the hostname of the RDS host
     rds_host = find_in_outputs(rds_outputs, 'DBAddress')
 
-    # Set the username and password
-    rds_user = 'admin'
-    rds_password = 'foobar123'
+    rds_password = get_password_from_ssm(workshop_name, region)
 
     # Prepare the stack parameters
     webserver_parameters = []
@@ -207,13 +226,10 @@ def deploy_web_servers(event):
     webserver_parameters.append({'ParameterKey': 'BootObject', 'ParameterValue': boot_object, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebSiteImage', 'ParameterValue': websiteimage, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'RDSHostName', 'ParameterValue': rds_host, 'UsePreviousValue': True})
-    webserver_parameters.append({'ParameterKey': 'RDSUser', 'ParameterValue': rds_user, 'UsePreviousValue': True})
-    webserver_parameters.append({'ParameterKey': 'RDSPassword', 'ParameterValue': rds_password, 'UsePreviousValue': True})
+    webserver_parameters.append({'ParameterKey': 'RDSUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
+    webserver_parameters.append({'ParameterKey': 'RDSPassword', 'ParameterValue': rds_password, 'UsePreviousValue': False})
     stack_tags = []
-    try:
-        workshop_name = event['workshop']
-    except Exception:
-        workshop_name = 'UnknownWorkshop'
+
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
     capabilities = []
     capabilities.append('CAPABILITY_NAMED_IAM')

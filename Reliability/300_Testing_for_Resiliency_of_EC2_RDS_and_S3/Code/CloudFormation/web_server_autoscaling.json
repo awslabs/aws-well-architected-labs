@@ -85,11 +85,11 @@
       "Description" : "User in RDS host to connect to",
       "Type" : "String"
     },
-
+  
     "RDSPassword" : {
-      "Description" : "Password of user in RDS host to connect to",
-      "NoEcho" : "true",
-      "Type" : "String"
+      "Description" : "User in RDS host to connect to",
+      "Type" : "String",
+      "NoEcho" : "true"
     }
 
   },
@@ -131,15 +131,13 @@
         "IamInstanceProfile" : { "Ref" : "WebServerInstanceProfile" },
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
               "#!/bin/bash\n",
-              "yum -y install mysql\n",
-              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/", { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, { "Ref" : "BootObject" }, "\n",
-              "echo \"[client]\" >> ~/.my.cnf\n",
-              "echo \"password=\"", { "Ref" : "RDSPassword" }, "\"\" >> ~/.my.cnf\n",
-              "chown root ", { "Ref" : "BootObject" }, "\n",
-              "chgrp root ", { "Ref" : "BootObject" }, "\n",
-              "chmod +x ", { "Ref" : "BootObject" }, "\n",
               "yum -y update\n",
-              "./", { "Ref" : "BootObject"}, " ", { "Ref" : "RDSHostName" }, " ", { "Ref" : "RDSUser"}, " ", { "Ref" : "BootBucket" }, " ", { "Ref" : "BootPrefix" }, " ", { "Ref" : "BootBucketRegion" }, " ", { "Ref" : "WebSiteImage" }, "\n"
+              "yum -y install mysql\n",
+              "yum -y install python3\n",
+              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "createIPTable.sql\n",
+              "mysql -h ", { "Ref" : "RDSHostName"}, " -u ", { "Ref" : "RDSUser"}, " -p", { "Ref" : "RDSPassword"}, " <createIPTable.sql --silent --force -b 2>stderr.txt\n",
+              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "server.py\n",
+              "python3 server.py\n"
             ]]
             }
         }
@@ -194,7 +192,7 @@
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
       "Properties" : {
         "AvailabilityZones" : {"Ref" : "AvailabilityZones"},
-        "MinSize" : "3",
+        "MinSize" : "2",
         "MaxSize" : "3",
         "HealthCheckType" : "ELB",
         "HealthCheckGracePeriod" : "60",
