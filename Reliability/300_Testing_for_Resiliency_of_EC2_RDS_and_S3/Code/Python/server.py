@@ -71,7 +71,7 @@ def run(argv):
         if opt == '-h':
             print('test.py -u <imageurl>')
             sys.exit()
-        elif opt in ("-u", "--bfile"):
+        elif opt in ("-u", "--ufile"):
             imageurl = arg
 
     print('Image url: ', imageurl)
