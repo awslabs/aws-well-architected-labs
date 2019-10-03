@@ -133,11 +133,14 @@
               "#!/bin/bash\n",
               "yum -y update\n",
               "yum -y install mysql\n",
-              "yum -y install python3\n",
               "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "createIPTable.sql\n",
-              "mysql -h ", { "Ref" : "RDSHostName"}, " -u ", { "Ref" : "RDSUser"}, " -p", { "Ref" : "RDSPassword"}, " <createIPTable.sql --silent --force -b 2>stderr.txt\n",
+              "mysql -h ", { "Ref" : "RDSHostName"}, " -u ", { "Ref" : "RDSUser"}, " -p", { "Ref" : "RDSPassword"}, " <createIPTable.sql --silent --force -b 2>stderr.txt\n",  
+              "yum install python3 python-virtualenv python-pip -y\n",
+              "python3 -m venv /home/ec2-user/venv\n",
+              "source /home/ec2-user/venv/bin/activate\n",
+              "pip install ec2_metadata\n",
               "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "server.py\n",
-              "python3 server.py\n"
+              "python3 server.py -u ", { "Ref" : "WebSiteImage" }, "\n"
             ]]
             }
         }
