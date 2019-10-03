@@ -132,6 +132,9 @@
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
               "#!/bin/bash\n",
               "yum -y update\n",
+              "amazon-linux-extras install epel\n",
+              "yum -y install stress-ng\n",
+              "yum -y install tc\n",
               "yum -y install mysql\n",
               "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "createIPTable.sql\n",
               "mysql -h ", { "Ref" : "RDSHostName"}, " -u ", { "Ref" : "RDSUser"}, " -p", { "Ref" : "RDSPassword"}, " <createIPTable.sql --silent --force -b 2>stderr.txt\n",  
