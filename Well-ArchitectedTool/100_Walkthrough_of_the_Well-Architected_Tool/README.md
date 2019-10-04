@@ -16,7 +16,7 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 ## Prequisites:
 
 * An 
-[AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for tesintg, that is not used for production or other purposes.
+[AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to usee Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
 
 
