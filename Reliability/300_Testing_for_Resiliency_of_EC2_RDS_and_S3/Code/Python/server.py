@@ -1,8 +1,9 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import sys
-import getopt
 from functools import partial
 from ec2_metadata import ec2_metadata
+import sys
+import getopt
+import pymysql
 
 
 html = """
@@ -10,76 +11,133 @@ html = """
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Hello world!</title>
+        <title>Resiliency Workshop!</title>
     </head>
     <body>
         <h1>Welcome to the Resiliency Workshop!</h1>
-        <p>Data from the metadata API</p>
+        <p>{Message}</p>
         <p>{Content}<p>
-        <img src="{WebSiteImage}" alt="alternative text" scale="0">
+        <img src="{WebSiteImage}" alt="" scale="0">
     </body>
 </html>"""
 
 
 class RequestHandler(BaseHTTPRequestHandler):
-    def __init__(self, url_image, *args, **kwargs):
+    def __init__(self, url_image, db, *args, **kwargs):
         self.url_image = url_image
+        self.db = db
         super().__init__(*args, **kwargs)
 
     def do_GET(self):
-        message_parts = [
-            'account_id: %s' % ec2_metadata.account_id,
-            'ami_id: %s' % ec2_metadata.ami_id,
-            'availability_zone: %s' % ec2_metadata.availability_zone,
-            'instance_id: %s' % ec2_metadata.instance_id,
-            'instance_type: %s' % ec2_metadata.instance_type,
-            'private_hostname: %s' % ec2_metadata.private_hostname,
-            'private_ipv4: %s' % ec2_metadata.private_ipv4
-        ]
-        message = '<br>'.join(message_parts)
+        print("path: ", self.path)
 
-        # Send response status code
-        self.send_response(200)
+        if self.path == '/':
+            try:
+                message_parts = [
+                    'account_id: %s' % ec2_metadata.account_id,
+                    'ami_id: %s' % ec2_metadata.ami_id,
+                    'availability_zone: %s' % ec2_metadata.availability_zone,
+                    'instance_id: %s' % ec2_metadata.instance_id,
+                    'instance_type: %s' % ec2_metadata.instance_type,
+                    'private_hostname: %s' % ec2_metadata.private_hostname,
+                    'private_ipv4: %s' % ec2_metadata.private_ipv4
+                ]
+                message = '<br>'.join(message_parts)
+            except Exception:
+                message = "Running outside AWS"
 
-        # Send headers
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        self.wfile.write(
-            bytes(
-                html.format(Content=message, WebSiteImage=self.url_image),
-                "utf-8"
+            # Write data into the Database
+            self.cursor = self.db.cursor()
+            sql = "INSERT INTO hits(ip) VALUES ('{IPAddress}')".format(IPAddress=self.client_address[0])
+            self.cursor.execute(sql)
+            self.db.commit()
+
+            # Send response status code
+            self.send_response(200)
+
+            # Send headers
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(
+                bytes(
+                    html.format(Content=message, WebSiteImage=self.url_image, Message="Data from the metadata API"),
+                    "utf-8"
+                )
             )
-        )
+        elif self.path == '/data':
 
+            self.cursor = self.db.cursor()
+            sql = "SELECT * from hits order by time desc limit 10"
+            self.cursor.execute(sql)
+
+            results = self.cursor.fetchall()
+            message = []
+            for row in results:
+                ip = row[0]
+                time = row[1]
+                message.append("ip = %s   time = %s" % (ip, time))
+
+            msg = '<br>'.join(message)
+
+            self.send_response(200)
+
+            # Send headers
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(
+                bytes(
+                    html.format(Content=msg, WebSiteImage="", Message="Data from the Database"),
+                    "utf-8"
+                )
+            )
         return
 
 
 def run(argv):
-    imageurl = ''
+    image_url = "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
     try:
         opts, args = getopt.getopt(
             argv,
-            "hu:",
+            "h:u:p:s:w:d:o:",
             [
-                "ibucket="
+                "help"
+                "image_url=",
+                "server_port=",
+                "db_user=",
+                "db_pswd=",
+                "db_name=",
+                "db_host=",
             ]
         )
     except getopt.GetoptError:
-        print('server.py -u <imageurl>')
+        print('server.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
         sys.exit(2)
+    print(opts)
     for opt, arg in opts:
         if opt == '-h':
-            print('test.py -u <imageurl>')
+            print('test.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
             sys.exit()
-        elif opt in ("-u", "--ufile"):
-            imageurl = arg
+        elif opt in ("-u", "--image_url"):
+            image_url = arg
+        elif opt in ("-p", "--server_port"):
+            server_port = int(arg)
+        elif opt in ("-s", "--db_user"):
+            db_user = arg
+        elif opt in ("-w", "--db_pswd"):
+            db_pswd = arg
+        elif opt in ("-d", "--db_name"):
+            db_name = arg
+        elif opt in ("-o", "--db_host"):
+            db_host = arg
 
-    print('Image url: ', imageurl)
-    # image = "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+    # Setup DB
+    print(db_host, db_user, db_pswd, db_name)
+    db = pymysql.connect(db_host, db_user, db_pswd, db_name)
+
     print('starting server...')
-    server_address = ('0.0.0.0', 80)
+    server_address = ('0.0.0.0', server_port)
 
-    handler = partial(RequestHandler, imageurl)
+    handler = partial(RequestHandler, image_url, db)
     httpd = HTTPServer(server_address, handler)
     print('running server...')
     httpd.serve_forever()
