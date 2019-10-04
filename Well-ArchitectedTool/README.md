@@ -8,7 +8,7 @@ This repository contains documentation and code in the format of hands-on-labs t
 For more information about the Well-Architected tool, read the 
 [AWS Well-Architected Tool documentation](https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html).
 
-## Labs:
+## Labs
 
 - [Level 100: Walkthrough of the AWS Well-Architected Tool](100_Walkthrough_of_the_Well-Architected_Tool/README.md) 
 
