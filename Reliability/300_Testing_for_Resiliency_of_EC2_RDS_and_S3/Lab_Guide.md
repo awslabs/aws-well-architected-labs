@@ -169,7 +169,6 @@ All the command line scripts use a utility called jq. You can download it from t
         AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
         AWS Secret Access Key [**************xxxx]: <Your AWS Secret Access Key>
         Default region name: [us-east-2]: us-east-2
-        Default output format [None]:<return>
         Default output format [None]: json
 
 6. Download the zip file of the resiliency bash scripts at the following URL:  
