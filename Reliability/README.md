@@ -8,7 +8,7 @@ This repository contains documentation and code in the format of hands-on-labs t
 For more information about Reliability, read the 
 [AWS Well-Architected Reliability whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Reliability-Pillar.pdf).
 
-## Labs:
+## Labs
 - [Level 200: Testing for Resiliency of EC2](200_Testing_for_Resiliency_of_EC2/README.md) 
 - [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md) 
 

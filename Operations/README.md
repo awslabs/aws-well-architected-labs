@@ -7,7 +7,7 @@ This repository contains documentation and code in the format of hands-on labs t
 
 For more information about Operational Excellence on AWS visit the Well-Architected tool in the AWS console, and read the AWS [Well-Architected Operational Excellence](https://d1.awsstatic.com/whitepapers/architecture/AWS-Operational-Excellence-Pillar.pdf) whitepaper.
 
-## Labs:
+## Labs
 
 ### Operations Fundamentals
 - [Level 100: Introduction to Inventory and Patch Management](100_Inventory_and_Patch_Mgmt/README.md)
