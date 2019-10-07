@@ -87,7 +87,7 @@
     },
   
     "RDSPassword" : {
-      "Description" : "User in RDS host to connect to",
+      "Description" : "Password in RDS host to connect to",
       "Type" : "String",
       "NoEcho" : "true"
     }
