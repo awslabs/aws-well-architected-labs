@@ -326,6 +326,7 @@ latest page of events. Be sure to re-check the behavior of the website.
 * AZ Failure in C#: Execute the failure mode script for failing an instance:
 
         $ .\AppResiliency AZ <vpc-id> <az>
+        # <az> is a value like us-east-2b
 
 * AZ Failure in Powershell: Execute the failure mode script for failing an instance:
 
