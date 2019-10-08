@@ -165,7 +165,7 @@ ACL we previously created and test.
 
 ![alb-create-load-balancer-7](Images/alb-create-load-balancer-7.png)
 
-10. A successfull message should appear, click Close.
+10. A successful message should appear, click Close.
 11. Take not of the DNS name under the Description tab, you will need this for testing.
 
 ### 3.2 Configure Application Load Balancer with WAF
