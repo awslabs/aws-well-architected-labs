@@ -6,24 +6,33 @@
 
 ## Table of Contents
 
-1. [Deploying the infrastructure](#deploy_infra)
-2. [Discussion and Example Failure Scenarios](#failure_scenarios)
+1. [Deploy the infrastructure](#deploy_infra)
+2. [Discussion and example failure scenarios](#failure_scenarios)
 3. [Failure modes](#failure_modes)
-4. [Tear Down](#tear_down)
+4. [Tear down](#tear_down)
 
-## 1. Deploying the infrastructure <a name="deploy_infra"></a>
+## 1. Deploy the infrastructure <a name="deploy_infra"></a>
 
-AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balancing, and Amazon RDS to create the services and metrics they manage. In the past, these Roles may have been created automatically for you, or we may need to create them. Here is how to find which roles you need to create.  
+You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
-### 1.1 Checking for Existing Service-Linked Roles
+### 1.1 Log into the AWS console
 
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled or in a federated Role, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
-2. In the navigation pane, click **Roles**.  
-![SelectIAMRoles](Images/SelectIAMRoles.png)  
-3. In the filter box, type “Service” to find the service linked roles that exist in your account and look for “AutoScaling,” “ELB” or “ElasticLoadBalancing,” and “RDS.” In this screenshot, the service linked role for AutoScaling exists, but the roles for ELB and RDS do not. Note which roles will need to be created as you will use this information when performing the next step.  
-![LookingForServiceLinkedRoles](Images/LookingForServiceLinkedRoles.png)  
-4. In the AWS Services Search Box, type “CloudFormation” and click enter.  
-5. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
+If you are attending an in-person workshop and were provided with an AWS account by the instructor, then follow the directions you are given by the instructor.
+
+If you are using your own AWS account then sign in to the AWS Management Console as an IAM user with MFA enabled or in a federated role.
+
+### 1.2 Checking for existing service-linked roles
+
+If you are attending an in-person workshop and were provided with an AWS account by the instructor, you can skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
+
+If you are using your own AWS account then [follow these steps](documentation/Service_Linked_Roles.md), and then return here and resume with the following instructions.
+
+### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
+
+Here you will build a state machine using AWS Step Functions that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastricture. *__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work togetgher to deploy your infrastructure*
+
+1. In the AWS Services Search Box, type “CloudFormation” and click enter.  
+2. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
 ![SelectOhio](Images/SelectOhio.png)  
 6. On the CloudFormation console, click “Create Stack:”.  
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
@@ -44,7 +53,7 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
          8. WaitForStackLambdaKey: “Reliability/WaitForStack.zip” <-Case sensitive!
          9. WebAppLambdaKey: “Reliability/WebAppLambda.zip” <-Case sensitive!
         ![CFNParameters-ohio](Images/CFNParameters-ohio.png)
-    2. For the two region deployment:
+    1. For the two region deployment:
 
          1. Stack name: “DeployResiliencyWorkshop” <-No spaces!
          2. DMSLambdaKey: “Reliability/DMSLambda.zip” <-Case sensitive!
@@ -61,11 +70,15 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
 
 9. Click the “Next” button. On the “Options” page, click the “Next” button at the bottom of the page. On the “Review” page, scroll to the bottom and select the option “I acknowledge that AWS CloudFormation might create IAM resources.” Click the “Create” button. This will take you to the summary with the stack creation in progress.  
 ![StackCreationStarted](Images/StackCreationStarted.png)  
-10. This will take approximately a minute to deploy. You now need to navigate to the Step Functions console. At the top of the window, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “Step Functions” in the search box and press the enter key.  
+This will take approximately a minute to deploy. 
+
+### 1.4 Deploy infrastructure and run the service
+
+1. You now need to navigate to the Step Functions console. At the top of the window, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “Step Functions” in the search box and press the enter key.  
 ![EnteringStepFunctions](Images/EnteringStepFunctions.png)  
-11. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-<random characters>.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.  
+1.  On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-<random characters>.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.  
 ![DeploymentMachine](Images/DeploymentMachine.png)  
-12. For input to the execution name, use “BuildResiliency.”
+1. For input to the execution name, use “BuildResiliency.”
     1. **One Region Deployment:** For Input, use the following: **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
 
             {
@@ -78,7 +91,6 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
               "workshop": "300-ResiliencyofEC2RDSandS3",
               "boot_bucket": "aws-well-architected-labs-ohio",
               "boot_prefix": "Reliability/",
-              "boot_object": "bootstrap300Resiliency.sh",
               "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
             }
 
@@ -99,7 +111,6 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
                 "workshop": "300-ResiliencyofEC2RDSandS3",
                 "boot_bucket": "aws-well-architected-labs-ohio",
                 "boot_prefix": "Reliability/",
-                "boot_object": "bootstrap300Resiliency.sh",
                 "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
               },
               "region2": {
@@ -112,8 +123,7 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
                 "workshop": "300-ResiliencyofEC2RDSandS3",
                 "boot_bucket": "aws-well-architected-labs-ohio",
                 "boot_prefix": "Reliability/",
-                "boot_object": "bootstrap300Resiliency.sh",
-                "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+                 "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
               }
             }
 
