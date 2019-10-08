@@ -73,7 +73,7 @@ Launch an instance:
    	```
 6. Accept defaults and click **Next: Add tags**.
 7. Click **Next: Configure Security Group**.
-	7.1 Accept default opton **Create a new security group**.
+	7.1 Accept default option **Create a new security group**.
   7.2 On the line of the first default entry *SSH*, select **Source** as *My IP*.
 	7.3 Click **Add Rule**, select Type as *HTTP* and **Source** as *Anywhere*.
 	Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly

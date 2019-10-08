@@ -222,7 +222,7 @@ This Lambda function ties everything together, it will remove all objects in the
 
 6 - Name the role **LambdaSubAcctSplit**
 
-7 - Go into the Lambda service dashaboard
+7 - Go into the Lambda service dashboard
 
 8 - Create a function named **SubAcctSplit**, **Author from scratch** using the **Python 3.7** Runtime:  
 ![Images/splitsharecur9.png](Images/splitsharecur9.png)

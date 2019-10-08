@@ -35,7 +35,7 @@ It provides:
  * S3: Read access to the bucket containing the Cost and Usage reports; 
  * S3: List, Read, Write access to the bucket containing Athena query results.
 
-NOTE: You must modify this policy in line with security best practices (least privliege) before implementation.
+NOTE: You must modify this policy in line with security best practices (least privilege) before implementation.
 
 Next we will create a role **Sub_Acct_Athena** and attach the newly created policy.
 
@@ -301,7 +301,7 @@ Execute either of these steps depending on the implementation you chose above.
 
 1 - Go to the **CloudFormation Dashboard**
 
-2 - Update the stack and implement the **original yml** file. If you didnt save this, it will be in the S3 bucket that contains the CUR files.
+2 - Update the stack and implement the **original yml** file. If you didn't save this, it will be in the S3 bucket that contains the CUR files.
 
 3 - If you change the permissions ACL on the old CUR files, follow the same process - but remove the member/linked account from the ACL. 
 
