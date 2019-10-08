@@ -149,7 +149,7 @@ Look for the comments: ### New line
 6. Go to the CloudFormation dashboard and execute the template you just created
 ![Images/AWSMultiCUR1.png](Images/AWSMultiCUR1.png)
 
-7. Go to the Glue dashbaord and verify that there is a single database, containing multilpe tables:
+7. Go to the Glue dashboard and verify that there is a single database, containing multiple tables:
 ![Images/AWSMultiCUR2.png](Images/AWSMultiCUR2.png)
 
 

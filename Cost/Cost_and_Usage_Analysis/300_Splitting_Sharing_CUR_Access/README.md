@@ -36,7 +36,7 @@ The lab has been designed to configure a system that can expand easily, for any 
 - Create IAM policies and roles
 - Create and modify S3 Buckets, including policies and events
 - Create and modify Lambda functions
-- Modify CloudFormation teamplates
+- Modify CloudFormation templates
 - Create, save and execute Athena queries
 - Create and run a Glue crawler
 

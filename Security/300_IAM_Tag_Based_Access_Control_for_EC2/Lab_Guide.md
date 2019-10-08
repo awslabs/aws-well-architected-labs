@@ -242,7 +242,7 @@ Create a role for EC2 administrators, and attach the managed policies previously
 Now you will use an existing IAM user with MFA enabled to assume the new *ec2-admin-team-alpha* role.
 
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled. [https://console.aws.amazon.com](https://console.aws.amazon.com).
-2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias`then click **Switch Role**. Alternatively you can paste the link in your browser that you recorded earlier.
+2. In the console, click your user name on the navigation bar in the upper right. It typically looks like this: `username@account_ID_number_or_alias` then click **Switch Role**. Alternatively you can paste the link in your browser that you recorded earlier.
 3. On the Switch Role page, type you account ID number in the **Account** field,  and the name of the role *ec2-admin-team-alpha* that you created in the previous step in the **Role** field. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
 4. Click **Switch Role**. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
 
