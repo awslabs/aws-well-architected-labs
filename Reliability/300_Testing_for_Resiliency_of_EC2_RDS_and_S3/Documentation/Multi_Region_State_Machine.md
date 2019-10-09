@@ -1,3 +1,3 @@
 # Multi Region State Machine
 
-TBD
+TBD soon
