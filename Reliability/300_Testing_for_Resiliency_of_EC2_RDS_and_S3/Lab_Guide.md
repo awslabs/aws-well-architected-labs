@@ -17,133 +17,103 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 ### 1.1 Log into the AWS console
 
-If you are attending an in-person workshop and were provided with an AWS account by the instructor, then follow the directions you are given by the instructor.
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Follow the directions you are given by the instructor.
 
-If you are using your own AWS account then sign in to the AWS Management Console as an IAM user with MFA enabled or in a federated role.
+**If you are using your own AWS account**: Sign in to the AWS Management Console as an IAM user (preferably with MFA enabled) or using a federated role.
 
 ### 1.2 Checking for existing service-linked roles
 
-If you are attending an in-person workshop and were provided with an AWS account by the instructor, you can skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
 
-If you are using your own AWS account then [follow these steps](documentation/Service_Linked_Roles.md), and then return here and resume with the following instructions.
+**If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md), and then return here and resume with the following instructions.
 
 ### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
 
-Here you will build a state machine using AWS Step Functions that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastricture. *__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work togetgher to deploy your infrastructure*
+Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure. 
 
-1. In the AWS Services Search Box, type “CloudFormation” and click enter.  
-2. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
+*__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work together to deploy your infrastructure*
+
+1. Choose a deployment option. This lab can be run as **single region** *or* **multi region** (two region) deployment.
+    * **single region** is faster to get up and running
+    * **multi region** enables you to test some additional aspects of cross-regional resilience. Choose one of these options and follows the instructions for that option. If you are attending an in-person workshop, your instructor will specify which to use.
+1. Ensure you have selected the **Ohio** region.  This region is also known as `us-east-2`, which you will see referenced throughout this lab.
 ![SelectOhio](Images/SelectOhio.png)  
-6. On the CloudFormation console, click “Create Stack:”.  
+1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”.  
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
-7. There are two versions that can be deployed. You can deploy in one AWS region, which will allow you start testing sooner, or you can deploy into 2 AWS regions, which will enable you to test some additional aspects of S3, as well as as simulation a regional failure of your application
-    1. For a single region deployment, select the option to “Specify an Amazon S3 template" and enter **<https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>**  
-![LambdaCFNEntered-ohio](Images/LambdaCFNEntered-ohio.png)
-    2. For a two region deployment, select the option to “Specify an Amazon S3 template" and enter **<https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>**  
-![LambdaCFNEntered-tworegion](Images/LambdaCFNEntered-tworegion.png)
-8. Click the “Next” button. On this page you will enter the following information:
-    1. For the single region deployment:
-         1. Stack name: “DeployResiliencyWorkshop” <-No spaces!
-         2. EnableAutoScalingServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be false since it already exists.
-         3. EnableELBServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         4. EnableRDSServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         5. LambdaFunctionsBucket: “aws-well-architected-labs-ohio” <-Case sensitive!
-         6. RDSLambdaKey: “Reliability/RDSLambda.zip” <-Case sensitive!
-         7. VPCLambdaKey: “Reliability/VPCLambda.zip” <-Case sensitive!
-         8. WaitForStackLambdaKey: “Reliability/WaitForStack.zip” <-Case sensitive!
-         9. WebAppLambdaKey: “Reliability/WebAppLambda.zip” <-Case sensitive!
-        ![CFNParameters-ohio](Images/CFNParameters-ohio.png)
-    1. For the two region deployment:
+1. Leave "Prepare template" and "Template source" settings as-is, and for "Amazon S3 URL" enter:
+    * **single region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>
+    * **multi region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>        
+    ![CFNS3Url](Images/CFNS3Url.png)
+1. Click the “Next” button. For "Stack name" enter `DeployResiliencyWorkshop`
+![CFNStackName-ohio](Images/CFNStackName-ohio.png)
+1. On the same screen, for "Parameters" enter the appropriate values:
+    * **single region** leave all the parameters at their default values
+    * **multi region** Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles#cfn_service_linked_roles) and leave all other parameters at their default values.
+    * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
 
-         1. Stack name: “DeployResiliencyWorkshop” <-No spaces!
-         2. DMSLambdaKey: “Reliability/DMSLambda.zip” <-Case sensitive!
-         3. EnableAutoScalingServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be false since it already exists.
-         4. EnableELBServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         5. EnableRDSServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         6. LambdaFunctionsBucket: “aws-well-architected-labs-ohio” <-Case sensitive!
-         7. RDSLambdaKey: “Reliability/RDSLambda.zip” <-Case sensitive!
-         8. RDSRRLambdaKey: "Reliability/RDSReadReplicaLambda.zip" <-Case sensitive!
-         9. VPCLambdaKey: “Reliability/VPCLambda.zip” <-Case sensitive!
-         10. WaitForStackLambdaKey: “Reliability/WaitForStack.zip” <-Case sensitive!
-         11. WebAppLambdaKey: “Reliability/WebAppLambda.zip” <-Case sensitive!
-      ![CFNParameters-2Region](Images/CFNParameters-2Region.png)  
-
-9. Click the “Next” button. On the “Options” page, click the “Next” button at the bottom of the page. On the “Review” page, scroll to the bottom and select the option “I acknowledge that AWS CloudFormation might create IAM resources.” Click the “Create” button. This will take you to the summary with the stack creation in progress.  
-![StackCreationStarted](Images/StackCreationStarted.png)  
-This will take approximately a minute to deploy. 
+1. Click the “Next” button. 
+   * On the "Configure stack options" page, click the “Next” again
+   * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
+   * Click the “Create stack” button.
+   * This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
+  ![StackCreationStarted](Images/StackCreationStarted.png)  
+  This will take approximately a minute to deploy and show status `CREATE_COMPLETE`
 
 ### 1.4 Deploy infrastructure and run the service
 
-1. You now need to navigate to the Step Functions console. At the top of the window, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “Step Functions” in the search box and press the enter key.  
-![EnteringStepFunctions](Images/EnteringStepFunctions.png)  
-1.  On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-<random characters>.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.  
-![DeploymentMachine](Images/DeploymentMachine.png)  
-1. For input to the execution name, use “BuildResiliency.”
-    1. **One Region Deployment:** For Input, use the following: **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
+1. Go to the AWS Step Function console at <https://console.aws.amazon.com/states>
+![EnteringStepFunctions](Images/EnteringStepFunctions.png)
 
-            {
-              "log_level": "DEBUG",
-              "region_name": "us-east-2",
-              "secondary_region_name": "us-west-2",
-              "cfn_region": "us-east-2",
-              "cfn_bucket": "aws-well-architected-labs-ohio",
-              "folder": "Reliability/",
-              "workshop": "300-ResiliencyofEC2RDSandS3",
-              "boot_bucket": "aws-well-architected-labs-ohio",
-              "boot_prefix": "Reliability/",
-              "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-            }
+1. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-*random characters*.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.
+![ExecutionStart-ohio](Images/ExecutionStart-ohio.png)
 
-        Then click the “Start Execution” button.  
+1. On the "New execution" dialog, for "Enter an execution name" enter `BuildResiliency`
 
-        ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
+1. Then for "Input" enter JSON that will be used to supply parameter values to the Lambdas in the workflow.
+   * **single region** uses the following values:
 
-    1. **Two Region Deployment:** For Input, use the following: **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
+          {
+            "log_level": "DEBUG",
+            "region_name": "us-east-2",
+            "secondary_region_name": "us-west-2",
+            "cfn_region": "us-east-2",
+            "cfn_bucket": "aws-well-architected-labs-ohio",
+            "folder": "Reliability/",
+            "workshop": "300-ResiliencyofEC2RDSandS3",
+            "boot_bucket": "aws-well-architected-labs-ohio",
+            "boot_prefix": "Reliability/",
+            "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+          }
 
-            {
-              "region1": {
-                "log_level": "DEBUG",
-                "region_name": "us-east-2",
-                "secondary_region_name": "us-west-2",
-                "cfn_region": "us-east-2",
-                "cfn_bucket": "aws-well-architected-labs-ohio",
-                "folder": "Reliability/",
-                "workshop": "300-ResiliencyofEC2RDSandS3",
-                "boot_bucket": "aws-well-architected-labs-ohio",
-                "boot_prefix": "Reliability/",
-                "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-              },
-              "region2": {
-                "log_level": "DEBUG",
-                "region_name": "us-west-2",
-                "secondary_region_name": "us-east-2",
-                "cfn_region": "us-east-2",
-                "cfn_bucket": "aws-well-architected-labs-ohio",
-                "folder": "Reliability/",
-                "workshop": "300-ResiliencyofEC2RDSandS3",
-                "boot_bucket": "aws-well-architected-labs-ohio",
-                "boot_prefix": "Reliability/",
-                 "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-              }
-            }
+   * **multi region** uses the [values here](Documentation/Multi_Region_Event_Data.md)
+   * **Note**: for `websiteimage` you can supply an alternate link to a public-read-only image in an S3 bucket you control. This will allow you to run S3 resiliency tests as part of the lab
+   * Then click the “Start Execution” button.
 
-        Then click the “Start Execution” button.  
+      ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
 
-        ![ExecutionInput-2Regions](Images/ExecutionInput-2Regions.png)  
+1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
+     *  **single region**: approximately 20-25 minutes to deploy
+     *  **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutesyou can start executing lab exercises.
 
-13.  This will take approximately 20-25 minutes for one region to deploy and approximately 45-50 minutes for two regions to deploy. You will have enough to start executing the lab exercises for the two region in 25-30 minutes. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
-    1. One Region:
+1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
-    1. Two Regions:
-![StateMachineExecuting-2Regions](Images/StateMachineExecuting-2Regions.png)  
-16. You can also watch the CloudFormation stacks as they are created. If you are in a workshop, the instructor will have some background information to share while this is created. You can resume testing when the web tier has been deployed in the Ohio region. This will look something like this on the visual workflow.  
-![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)  
-17. You can start testing:
-    1. When the WaitForWebApp step for a single region deployment is completed, return to the CloudFormation console and select the “WebServersforResiliencyTesting” stack and then the Outputs tab at bottom.  
-![CFNComplete](Images/CFNComplete.png)
-    1. When the WaitForWebApp1 step for a two region deployment is completed, return to the CloudFormation console and select the “WebServersforResiliencyTesting” stack and then the Outputs tab at bottom.
-![CFNReadyForTesting](Images/CFNReadyForTesting.png)
-16. Click the value and it will bring up the website:  
+
+1. You can also watch the CloudFormation stacks as they are created and transition from `CREATE_IN_PROGRESS` to `CREATE_COMPLETE`.
+![DeploymentStacksInProgress](Images/DeploymentStacksInProgress.png)
+
+1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
+
+1. You can resume testing when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
+![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
+   * Screen shot is for **single region**. for **multi region** see [Multi_Region_State_Machine](Documentation/Multi_Region_State_Machine.md)
+
+1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>.
+   * click on the `WebServersforResiliencyTesting` stack
+   * click on the "Outputs" tab
+   * For the Key `WebSiteURL` copy the value.  This is the URL of your test web service.
+   ![CFNComplete](Images/CFNComplete.png)
+
+1. Click the value and it will bring up the website:  
 ![DemoWebsite](Images/DemoWebsite.png)
 
 ## 2. Discussion and Example Failure Scenarios <a name="failure_scenarios"></a>
@@ -204,7 +174,7 @@ You will need the same files that the AWS command line uses for credentials. You
 
         cd ~\.aws
 
-3. Use a text editor (vim, emacs, notepad, wordpad) to create a text file (no extension) named “credentials”. In this file you should have the following text.  
+3. Use a text editor (vim, emacs, notepad) to create a text file (no extension) named “credentials”. In this file you should have the following text.  
 
         [default]
         aws_access_key_id = <Your access key>
