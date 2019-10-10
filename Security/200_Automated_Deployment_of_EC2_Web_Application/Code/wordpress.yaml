@@ -486,7 +486,7 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbsubnet-group.html
     Properties: 
       DBSubnetGroupDescription: !Sub '${NamingPrefix}-SubnetGroup'
-      DBSubnetGroupName: dbsubnetgroupwp
+      DBSubnetGroupName: !Sub '${NamingPrefix}-dbsubnetgroupwp'
       SubnetIds:
         - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportDB1Subnet1}'
         - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportDB1Subnet2}'
