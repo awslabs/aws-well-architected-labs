@@ -207,7 +207,7 @@
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
         "Runtime" : "python3.6",
-        "Timeout" : "300"
+        "Timeout" : "600"
       }
     },
 
