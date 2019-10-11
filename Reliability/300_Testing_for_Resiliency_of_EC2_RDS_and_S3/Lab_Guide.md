@@ -29,7 +29,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 ### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
 
-Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure. 
+Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure.
 
 *__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work together to deploy your infrastructure*
 
@@ -42,7 +42,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
 1. Leave "Prepare template" and "Template source" settings as-is, and for "Amazon S3 URL" enter:
     * **single region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>
-    * **multi region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>        
+    * **multi region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>
     ![CFNS3Url](Images/CFNS3Url.png)
 1. Click the “Next” button. For "Stack name" enter `DeployResiliencyWorkshop`
 ![CFNStackName-ohio](Images/CFNStackName-ohio.png)
@@ -51,7 +51,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * **multi region** Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles#cfn_service_linked_roles) and leave all other parameters at their default values.
     * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
 
-1. Click the “Next” button. 
+1. Click the “Next” button.
    * On the "Configure stack options" page, click the “Next” again
    * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
    * Click the “Create stack” button.
@@ -92,8 +92,8 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
       ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
 
 1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
-     *  **single region**: approximately 20-25 minutes to deploy
-     *  **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutesyou can start executing lab exercises.
+     * **single region**: approximately 20-25 minutes to deploy
+     * **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutesyou can start executing lab exercises.
 
 1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
@@ -115,6 +115,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 1. Click the value and it will bring up the website:  
 ![DemoWebsite](Images/DemoWebsite.png)
+(image will vary depending on what you supplied for `websiteimage`)
 
 ## 2. Discussion and Example Failure Scenarios <a name="failure_scenarios"></a>
 
@@ -135,15 +136,15 @@ All the command line scripts use a utility called jq. You can download it from t
         $ sudo cp jq-linux64 /usr/local/bin/jq
         $ sudo chmod 755 /usr/local/bin/jq
 
-2. If you do not have sudo rights, then copy it into your home directory under a /bin directory. In Amazon linux, this is typically /home/ec2-user/bin.  
+1. If you do not have sudo rights, then copy it into your home directory under a /bin directory. In Amazon linux, this is typically /home/ec2-user/bin.  
 
         $ cp jq-linux64 ~/bin/jq
         $ chmod 755 ~/bin/jq
 
-4. Install the AWS Command Line Interface (CLI) if you do not have it installed (it is installed by default on Amazon Linux).  
+1. Install the AWS Command Line Interface (CLI) if you do not have it installed (it is installed by default on Amazon Linux).  
 [https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
 
-5. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
+1. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
 
         $ aws configure
         AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
@@ -151,10 +152,10 @@ All the command line scripts use a utility called jq. You can download it from t
         Default region name: [us-east-2]: us-east-2
         Default output format [None]: json
 
-6. Download the zip file of the resiliency bash scripts at the following URL:  
+1. Download the zip file of the resiliency bash scripts at the following URL:  
 [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip)
-7. Unzip the folder in a location convenient for you to execute the scripts.  
-8. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/bash/) directory.
+1. Unzip the folder in a location convenient for you to execute the scripts.  
+1. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/bash/) directory.
 
 ### 2.2 Setting up a Programming Language Based Environment
 
@@ -189,7 +190,7 @@ You will need the same files that the AWS command line uses for credentials. You
 ### 2.3 Setting Up the Python Environment
 
 1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: [https://github.com/boto/boto3](https://github.com/boto/boto3)
-2. Download the zip file of the resiliency scripts at the following URL.[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip)   
+2. Download the zip file of the resiliency scripts at the following URL.[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip)
 3. Unzip the folder in a location convenient for you to execute the scripts.  
 
 ### 2.4 Setting Up the Java Environment
@@ -199,7 +200,7 @@ You will need the same files that the AWS command line uses for credentials. You
         $ sudo yum install java-1.8.0-openjdk
         $ sudo yum remove java-1.7.0-openjdk
 
-2. Download the zipfile of the executables at the following URL [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip).   
+2. Download the zipfile of the executables at the following URL [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip).
 3. Unzip the folder in a location convenient for you to execute the command line programs.  
 
 ### 2.5 Setting Up the C# Environment
@@ -225,7 +226,7 @@ You will need the same files that the AWS command line uses for credentials. You
 3. On the EC2 Console, click “Instances” on the left side to bring up the list of instances.  
 ![SelectingInstances](Images/SelectingInstances.png)
 4. On the VPC console, copy the VPC ID by first selecting the VPC named
-   "ResiliencyVPC", and then clicking the icon to copy the VPC ID 
+   "ResiliencyVPC", and then clicking the icon to copy the VPC ID
 ![GetVpcId](Images/GetVpcId.png)
 5. Use this VPC ID as the command line argument (vpc-id) to the scripts/programs below.  
    * Instance Failure in bash: Execute the failure mode script for failing an instance:
@@ -252,13 +253,13 @@ setup your scripts to enable execution.  From the same directory as the scripts,
 
         $ .\fail_instance.ps1 <vpc-id>
 
-6. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
+1. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
 ![TargetGroups](Images/TargetGroups.png)  
 
 ### 3.2 RDS Failure Mode
 
 1. From the AWS EC2 Console (you will still need the VPC ID from the VPC Console), click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “RDS” in the search box and press the enter key.  
-![SelectingRDS](Images/SelectingRDS.png) 
+![SelectingRDS](Images/SelectingRDS.png)
 
 2. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
    identifier for your database. Note the value of the "Info" field
@@ -320,14 +321,14 @@ What would you do if the ASG was only in one AZ? You could call the AutoScaling 
 1. Failure of S3 means that the image will not be available.
 
 * Failure in bash: The bash commands available do not allow for modification of the access permissions, so you'll have to do the work in the console.
-  1. Navigate to the S3 console: [https://s3.console.aws.amazon.com/s3/home](https://s3.console.aws.amazon.com/s3/home]
+  1. Navigate to the S3 console: <https://s3.console.aws.amazon.com/s3/home>
   1. Select the bucket where the image is located. In my example, this is the bucket "arc327-well-architected-for-reliability"
   1. Select the object, then select the "Permissions" tab:
   1. Select the "Public Access" radio button, and deselect the "Read object" box:
 
 What is the expected effect? How long does it take to take effect? How would you diagnose if this is a larger problem than permissions?
 
-### 3.5 Looking for more to do?
+### 3.5 More testing you can do
 
 You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal their failure modes.  
 
@@ -364,7 +365,7 @@ In order to take down the lab environment, you will need to remove the associati
 
 ***
 
-## References & useful resources:
+## References & useful resources
 
 ***
 
@@ -376,7 +377,7 @@ Licensed under the [Creative Commons Share Alike 4.0](https://creativecommons.or
 
 ### Code License
 
-Licensed under the Apache 2.0 and MITnoAttr License. 
+Licensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
