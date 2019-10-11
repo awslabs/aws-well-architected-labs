@@ -26,7 +26,7 @@ import json
 
 LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
 
-stackname = 'WebServersforResiliencyTesting'
+stackname = 'WebServersForResiliencyTesting'
 
 AWS_REGION = 'us-east-2'
 
@@ -77,7 +77,7 @@ def process_global_vars():
     logger.info("Processing variables from environment.")
     try:
         global stackname
-        stackname = 'WebServersforResiliencyTesting'
+        stackname = 'WebServersForResiliencyTesting'
     except SystemExit:
         sys.exit(1)
     except Exception:
