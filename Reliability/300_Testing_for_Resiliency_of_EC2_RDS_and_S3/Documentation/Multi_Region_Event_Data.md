@@ -28,6 +28,9 @@
               "workshop": "300-ResiliencyofEC2RDSandS3",
               "boot_bucket": "aws-well-architected-labs-ohio",
               "boot_prefix": "Reliability/",
-                "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+              "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
             }
           }
+
+---
+**[Click here to return to Lab Instructions](../Lab_Guide.md)**

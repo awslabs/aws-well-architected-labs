@@ -40,4 +40,4 @@ AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balan
 
 * Leave all the other parameter values at their default values
 
-**STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
+**[Click here to return to Lab Instructions](../Lab_Guide.md)**
