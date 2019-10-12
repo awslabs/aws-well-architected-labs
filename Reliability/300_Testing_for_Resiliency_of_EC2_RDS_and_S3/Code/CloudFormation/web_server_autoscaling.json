@@ -199,7 +199,7 @@
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
       "Properties" : {
         "AvailabilityZones" : {"Ref" : "AvailabilityZones"},
-        "MinSize" : "2",
+        "MinSize" : "3",
         "MaxSize" : "3",
         "HealthCheckType" : "ELB",
         "HealthCheckGracePeriod" : "60",
