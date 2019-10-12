@@ -24,12 +24,13 @@
               "db.t3.xlarge",
               "db.t3.2xlarge",
               "db.m5.large",
+              "db.m5.xlarge",
               "db.m5.2xlarge",
               "db.m5.4xlarge",
-              "db.m5.8xlarge",
-              "db.m5.16xlarge"
+              "db.m5.12xlarge",
+              "db.m5.24xlarge"
           ],
-          "Default": "db.m5.16xlarge",
+          "Default": "db.t3.large",
           "ConstraintDescription": "must select a valid database instance type."
       },
       "DBUser": {
