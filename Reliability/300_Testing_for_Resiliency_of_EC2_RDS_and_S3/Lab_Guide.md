@@ -51,8 +51,10 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * **single region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>
     * **multi region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>
     ![CFNS3Url](Images/CFNS3Url.png)
-1. Click the “Next” button. For "Stack name" enter `DeployResiliencyWorkshop`
-![CFNStackName-ohio](Images/CFNStackName-ohio.png)
+1. Click the “Next” button. For "Stack name" enter:
+
+        DeployResiliencyWorkshop
+    ![CFNStackName-ohio](Images/CFNStackName-ohio.png)
 1. On the same screen, for "Parameters" enter the appropriate values:
     * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Leave all the parameters at their default values
     * **If you are using your own AWS account**: Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles.md#cfn_service_linked_roles) and leave all other parameters at their default values.
@@ -62,19 +64,20 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
    * On the "Configure stack options" page, click the “Next” again
    * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
    * Click the “Create stack” button.
-   * This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
+  ![CFNIamCapabilities](Images/CFNIamCapabilities.png)
+
+1. This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
   ![StackCreationStarted](Images/StackCreationStarted.png)  
-  This will take approximately a minute to deploy and show status `CREATE_COMPLETE`
+  This will take approximately a minute to deploy.  When it shows status `CREATE_COMPLETE`, then you are finished with this step.
 
 ### 1.4 Deploy infrastructure and run the service
 
 1. Go to the AWS Step Function console at <https://console.aws.amazon.com/states>
-![EnteringStepFunctions](Images/EnteringStepFunctions.png)
 
 1. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-*random characters*.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.
 ![ExecutionStart-ohio](Images/ExecutionStart-ohio.png)
 
-1. On the "New execution" dialog, for "Enter an execution name" enter `BuildResiliency`
+1. On the "New execution" dialog, for "Enter an execution name" delete the auto-generated name and replace it with:  `BuildResiliency`
 
 1. Then for "Input" enter JSON that will be used to supply parameter values to the Lambdas in the workflow.
    * **single region** uses the following values:
