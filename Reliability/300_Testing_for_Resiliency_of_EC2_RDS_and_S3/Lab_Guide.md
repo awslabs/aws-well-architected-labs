@@ -6,26 +6,32 @@
 
 ## Table of Contents
 
-1. [Deploy the infrastructure](#deploy_infra)
-2. [Discussion and example failure scenarios](#failure_scenarios)
-3. [Failure modes](#failure_modes)
-4. [Tear down](#tear_down)
+1. [Deploy the Infrastructure](#deploy_infra)
+1. [Configure Execution Environment](#configure_env)
+1. [Test Resiliency Using Failure Injection](#failure_injection)
+1. [Tear down](#tear_down)
 
-## 1. Deploy the infrastructure <a name="deploy_infra"></a>
+## 1. Deploy the Infrastructure <a name="deploy_infra"></a>
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
 ### 1.1 Log into the AWS console
 
-**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Follow the directions you are given by the instructor.
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-**If you are using your own AWS account**: Sign in to the AWS Management Console as an IAM user (preferably with MFA enabled) or using a federated role.
+* Follow the directions you are given by the instructor
+* Note: As part of these instructions you are directed to copy and save AWS credentials for your account. Please do so as you will need them later
+
+**If you are using your own AWS account**:
+
+* Sign in to the AWS Management Console as an IAM user or using a federated role
+* You will need AWS credentials with which you can access your account. For example you can use an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from an IAM User you control
 
 ### 1.2 Checking for existing service-linked roles
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
 
-**If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md), and then return here and resume with the following instructions.
+**If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md#exist_service_linked_roles), and then return here and resume with the following instructions.
 
 ### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
 
@@ -35,8 +41,9 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 1. Choose a deployment option. This lab can be run as **single region** *or* **multi region** (two region) deployment.
     * **single region** is faster to get up and running
-    * **multi region** enables you to test some additional aspects of cross-regional resilience. Choose one of these options and follows the instructions for that option. If you are attending an in-person workshop, your instructor will specify which to use.
-1. Ensure you have selected the **Ohio** region.  This region is also known as `us-east-2`, which you will see referenced throughout this lab.
+    * **multi region** enables you to test some additional aspects of cross-regional resilience.
+    * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
+1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
 ![SelectOhio](Images/SelectOhio.png)  
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”.  
 ![Images/CreateStackButton](Images/CreateStackButton.png)  
@@ -47,8 +54,8 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 1. Click the “Next” button. For "Stack name" enter `DeployResiliencyWorkshop`
 ![CFNStackName-ohio](Images/CFNStackName-ohio.png)
 1. On the same screen, for "Parameters" enter the appropriate values:
-    * **single region** leave all the parameters at their default values
-    * **multi region** Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles#cfn_service_linked_roles) and leave all other parameters at their default values.
+    * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Leave all the parameters at their default values
+    * **If you are using your own AWS account**: Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles.md#cfn_service_linked_roles) and leave all other parameters at their default values.
     * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
 
 1. Click the “Next” button.
@@ -93,7 +100,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
      * **single region**: approximately 20-25 minutes to deploy
-     * **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutesyou can start executing lab exercises.
+     * **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutes you can start executing lab exercises.
 
 1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
@@ -104,8 +111,9 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
 
 1. You can resume testing when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
-![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
-   * Screen shot is for **single region**. for **multi region** see [Multi_Region_State_Machine](Documentation/Multi_Region_State_Machine.md)
+
+    ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
+   * Above screen shot is for **single region**. for **multi region** see [Multi_Region_State_Machine](Documentation/Multi_Region_State_Machine.md)
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>.
    * click on the `WebServersforResiliencyTesting` stack
@@ -115,36 +123,37 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 1. Click the value and it will bring up the website:  
 ![DemoWebsite](Images/DemoWebsite.png)
+
 (image will vary depending on what you supplied for `websiteimage`)
 
-## 2. Discussion and Example Failure Scenarios <a name="failure_scenarios"></a>
+## 2. Configure Execution Environment <a name="configure_env"></a>
 
-There is a choice of environments to execute the failure simulations in. Linux command line (bash), Python, Java, and C#.  The instructions for each environment are in separate sections.
+Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.
 
-### 2.1 Setting Up the bash Environment
+There is a choice of environments to execute these failure injections. From a Linux command line bash scripts are provided you can execute. If you prefer Python, Java, Powershell, or C# instructions for these will also be provided.
 
-All the command line scripts use a utility called jq. You can download it from the site and leave it in your local directory, as long as that is in your execution path:  
-[https://stedolan.github.io/jq/](https://stedolan.github.io/jq/)  
+### 2.1 Setting Up the bash environment
 
-1. You can find out what your execution path is with the following command.
+1. Prerequisites
+   * `awscli` AWS CLI installed
 
-        $ echo $PATH
-        /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:/home/ec2-user/.local/bin:/home/ec2-user/bin
+          $ aws --version
+          aws-cli/1.16.249 Python/3.6.8...
+        * AWS CLI version 1.0 or higher is fine
+        * If you instead got `command not found` then [see instructions here to install `awscli`](Documentation/Software_Install.md#awscli)
+   * `jq` command-line JSON processor installed.
 
-1. If you have sudo rights, then copy the executable to /usr/local/bin/jq and make it executable.  
+          $ jq --version
+          jq-1.5-1-a5b5cbe
+        * Any version is fine.
+        * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-        $ sudo cp jq-linux64 /usr/local/bin/jq
-        $ sudo chmod 755 /usr/local/bin/jq
+1. Run the `aws configure` command to provide the AWS CLI with configuration and credentials information it needs to access the AWS account you are using for the workshop.
+    * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**
+    * **If you are using your own AWS account**: 
 
-1. If you do not have sudo rights, then copy it into your home directory under a /bin directory. In Amazon linux, this is typically /home/ec2-user/bin.  
 
-        $ cp jq-linux64 ~/bin/jq
-        $ chmod 755 ~/bin/jq
-
-1. Install the AWS Command Line Interface (CLI) if you do not have it installed (it is installed by default on Amazon Linux).  
-[https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
-
-1. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
+configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
 
         $ aws configure
         AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
@@ -215,7 +224,7 @@ You will need the same files that the AWS command line uses for credentials. You
 3. Download the zipfile of the scripts at the following URL. [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip)  
 4. Unzip the folder in a location convenient for you to execute the scripts.
 
-## 3. Failure modes <a name="failure_modes"></a>
+## 3. Test Resiliency Using Failure Injection <a name="failure_injection"></a>
 
 ### 3.1 EC2 Failure Mode
 
@@ -353,7 +362,7 @@ In order to take down the lab environment, you will need to remove the associati
 ![DeletingDMS](Images/DeletingDMS.png)  
 6. You can then select the “MySQLReadReplicaResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS Read Replica instance.  
 ![DeletingRDSReadReplica](Images/DeletingRDSReadReplica.png)  
-7. If you have deployed in 2 regions, Navigate to the other region (Ohio, if you started in Oregon, and Oregon, if you started in Ohio), and perform the same deletion steps above for the RDS read replica and DMS, if in Oregon. Wait for the read replicas to be deleted. You can delete the web servers and RDS at the same time, but the console only allows you to select one of the stacks at a time. Select the “WebServersforResiliencyTesting” stack, then click the “Actions” button, and click “Delete Stack:”.  
+7. If you have deployed in 2 regions, Navigate to the other region (Ohio, if you started in Oregon, and Oregon, if you started in Ohio), and perform the same deletion steps above for the RDS read replica and DMS, if in Oregon. Wait for the read replicas to be deleted. You can delete the web servers and RDS at the same time, but the console only allows you to select one of the stacks at a time. Select the “WebServersForResiliencyTesting” stack, then click the “Actions” button, and click “Delete Stack:”.  
 ![DeletingWebServers](Images/DeletingWebServers.png)  
 8. You can then select the “ MySQLforResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS instance.  
 ![DeleteRDS](Images/DeleteRDS.png)  

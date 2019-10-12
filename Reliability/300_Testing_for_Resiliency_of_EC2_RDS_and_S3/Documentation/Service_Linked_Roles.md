@@ -1,6 +1,6 @@
 # Service-Linked Roles
 
-## Does AWS account already have service-linked roles
+## Does AWS account already have service-linked roles <a name="exist_service_linked_roles"></a>
 
 AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balancing, and Amazon RDS to create the services and metrics they manage. If your AWS account has been previously been used, then these roles may already exist as they would have been automatically created for you. You will determine if any of the following three IAM service-linked roles already exists in the AWS account you are using for this workshop:
 
@@ -10,11 +10,11 @@ AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balan
 
 1. Open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/)
 
-2. In the navigation pane, click **Roles**.  
+1. In the navigation pane, click **Roles**.  
 ![SelectIAMRoles](../Images/SelectIAMRoles.png)  
 
 1. In the filter box, type “Service” to find the service linked roles that exist in your account and look for the three roles. In this screenshot, the service linked role for AutoScaling exists (`AWSServiceRoleForAutoScaling`), but the roles for Elastic Load Balancing and RDS do not. Note which roles already exist as you will use this information when performing the next step.  
-![LookingForServiceLinkedRoles](../Images/LookingForServiceLinkedRoles.png) 
+![LookingForServiceLinkedRoles](../Images/LookingForServiceLinkedRoles.png)
 
 **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
 
@@ -22,6 +22,7 @@ AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balan
 *__Learn more__: After the lab see [the AWS documentation on Service-Linked Roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html)*
 
 ---
+
 ## Setup CloudFormation for service-linked roles <a name="cfn_service_linked_roles"></a>
 
 **If you are using your own AWS account**: Then use these instructions when entering CloudFormation parameters
@@ -38,6 +39,6 @@ AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balan
 
 ![CFNParameters-service-linked-ohio](../Images/CFNParameters-service-linked-ohio.png)
 
-* Leave all the other parameter values at their default values
+* Leave all the other parameter values at their [default values](CFN_Parameters.md)
 
-**[Click here to return to Lab Instructions](../Lab_Guide.md)**
+**[Click here to return to Lab Guide](../Lab_Guide.md)**
