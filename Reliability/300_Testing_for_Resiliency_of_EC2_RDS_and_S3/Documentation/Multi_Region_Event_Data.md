@@ -35,4 +35,4 @@
    * **Note**: for `websiteimage` you can supply an alternate link to a public-read-only image in an S3 bucket you control. This will allow you to run S3 resiliency tests as part of the lab
 
 ---
-**[Click here to return to Lab Guide](../Lab_Guide.md)**
+**[Click here to return to the Lab Guide](../Lab_Guide.md)**

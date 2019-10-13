@@ -72,4 +72,4 @@ If that does not work, then do the following
         $ cp jq-linux64 ~/bin/jq
         $ chmod 755 ~/bin/jq
 
-**[Click here to return to Lab Guide](../Lab_Guide.md)**
+**[Click here to return to the Lab Guide](../Lab_Guide.md)**

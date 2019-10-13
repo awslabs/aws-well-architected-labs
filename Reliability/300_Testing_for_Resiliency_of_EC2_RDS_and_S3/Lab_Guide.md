@@ -19,13 +19,14 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-* Follow the directions you are given by the instructor
-* Note: As part of these instructions you are directed to copy and save AWS credentials for your account. Please do so as you will need them later
+* Follow the instructions [here for accessing your AWS account](Documentation/Workshop_AWS_Account.md)
+* **Note**: As part of these instructions you are directed to copy and save **AWS credentials** for your account. Please do so as you will need them later
 
 **If you are using your own AWS account**:
 
 * Sign in to the AWS Management Console as an IAM user or using a federated role
-* You will need AWS credentials with which you can access your account. For example you can use an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from an IAM User you control
+* You will need AWS credentials with which you can access your account. For example you can use an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from an IAM User you control.
+  * If you do not have these credentials, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
 
 ### 1.2 Checking for existing service-linked roles
 
@@ -151,12 +152,13 @@ There is a choice of environments to execute these failure injections. From a Li
         * Any version is fine.
         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-1. Run the `aws configure` command to provide the AWS CLI with configuration and credentials information it needs to access the AWS account you are using for the workshop.
-    * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**
-    * **If you are using your own AWS account**: 
+1. Run the `aws configure` command to provide the AWS CLI with configuration and credentials information it needs to access the AWS account you are using for the workshop. You will AWS credentials in the form of an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for this step
+   * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**
+     * See the instructions [here for obtaining your AWS credentials](Documentation/Workshop_AWS_Account.md)
+   * **If you are using your own AWS account**
+     * If you do not have these credentials, follow the [instructions here to create obtain your AWS credentials](Documentation/Self_AWS_Account.md)
 
-
-configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
+1. Run `aws configure` and provide the following values: 
 
         $ aws configure
         AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
@@ -164,10 +166,27 @@ configure your command line options. This will prompt you for the AWS Access Key
         Default region name: [us-east-2]: us-east-2
         Default output format [None]: json
 
-1. Download the zip file of the resiliency bash scripts at the following URL:  
-[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip)
-1. Unzip the folder in a location convenient for you to execute the scripts.  
-1. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/bash/) directory.
+1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) and set them up to be executable.  You may use the following commands to do this, or any other means.
+
+        $ # The wget commands have a lot of output, which is omitted here
+
+        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_instance.sh
+        ...
+        2019-10-12 19:38:47 (77.2 MB/s) - ‘fail_instance.sh’ saved [1611/1611]
+
+        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/failover_rds.sh
+        ...
+        2019-10-12 19:39:36 (56.8 MB/s) - ‘failover_rds.sh’ saved [1633/1633]
+
+        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_az.sh
+        ...
+        2019-10-12 19:32:32 (28.4 MB/s) - ‘fail_az.sh’ saved [6140/6140]
+
+        $ # Now make these executable
+
+        $ chmod u+x fail_instance.sh
+        $ chmod u+x failover_rds.sh
+        $ chmod u+x fail_az.sh
 
 ### 2.2 Setting up a Programming Language Based Environment
 
