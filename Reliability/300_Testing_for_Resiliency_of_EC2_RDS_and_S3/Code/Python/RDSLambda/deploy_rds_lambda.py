@@ -147,7 +147,7 @@ def deploy_rds(event):
     rds_parameters.append({'ParameterKey': 'DBSecurityGroups', 'ParameterValue': rds_sg, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
-    # If DB instance class supplied then use it, otherwise CloudFormatin template will use Parameter default
+    # If DB instance class supplied then use it, otherwise CloudFormation template will use Parameter default
     if (db_instance_class is not None):
       rds_parameters.append({'ParameterKey': 'DBInstanceClass', 'ParameterValue': db_instance_class, 'UsePreviousValue': True})
     stack_tags = []
