@@ -3,6 +3,8 @@
 ## Authors
 
 * Rodney Lester, Reliability Lead, Well-Architected, AWS
+* Adrian Hornsby, Tech Evangelist, AWS
+* Seth Eliot, Resiliency Lead, Well-Architected, AWS
 
 ## Table of Contents
 
@@ -15,7 +17,7 @@
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
-### 1.1 Log into the AWS console
+### 1.1 Log into the AWS console <a name="awslogin"></a>
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
@@ -136,7 +138,9 @@ Failure injection is a means of testing resiliency by which a specific failure t
 
 There is a choice of environments to execute these failure injections. From a Linux command line bash scripts are provided you can execute. If you prefer Python, Java, Powershell, or C# instructions for these will also be provided.
 
-### 2.1 Setting Up the bash environment
+### 2.1 Set up the bash environment <a name="notbash"></a>
+
+Using bash is an effective way to execute the failure injection tests for this workshop. The bash scripts make use of the AWS CLI. If you will be using bash, then follow the directions in this section. If you cannot use bash, then [skip to the next section](#notbash).
 
 1. Prerequisites
    * `awscli` AWS CLI installed
@@ -152,13 +156,9 @@ There is a choice of environments to execute these failure injections. From a Li
         * Any version is fine.
         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-1. Run the `aws configure` command to provide the AWS CLI with configuration and credentials information it needs to access the AWS account you are using for the workshop. You will AWS credentials in the form of an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for this step
-   * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**
-     * See the instructions [here for obtaining your AWS credentials](Documentation/Workshop_AWS_Account.md)
-   * **If you are using your own AWS account**
-     * If you do not have these credentials, follow the [instructions here to create obtain your AWS credentials](Documentation/Self_AWS_Account.md)
+1.You will run the `aws configure` command, providing configuration and credentials used by the AWS CLI to access your AWS account. You identified these credentials [back in step 1](#awslogin)
 
-1. Run `aws configure` and provide the following values: 
+1. Run `aws configure` and provide the following values:
 
         $ aws configure
         AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
@@ -188,63 +188,11 @@ There is a choice of environments to execute these failure injections. From a Li
         $ chmod u+x failover_rds.sh
         $ chmod u+x fail_az.sh
 
-### 2.2 Setting up a Programming Language Based Environment
+### 2.2 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
-You will need the same files that the AWS command line uses for credentials. You can either install the command line and use the ‘aws configure’ command as outlined in the bash set up, or you can manually create the configuration files. To create the files manually, create a .aws folder/directory in your home directory.  
+If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
-1. Bash and powershell use the same command.  
-
-        mkdir ~/.aws
-
-2. Change directory to that directory to create the configuration file.  
-
-    Bash
-
-        cd ~/.aws
-
-    Powershell
-
-        cd ~\.aws
-
-3. Use a text editor (vim, emacs, notepad) to create a text file (no extension) named “credentials”. In this file you should have the following text.  
-
-        [default]
-        aws_access_key_id = <Your access key>
-        aws_secret_access_key = <Your secret key>
-
-4. Create a text file (no extension) named "config". In this file you should have the following text:
-
-        [default]
-        region = us-east-2
-        output = json
-
-### 2.3 Setting Up the Python Environment
-
-1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: [https://github.com/boto/boto3](https://github.com/boto/boto3)
-2. Download the zip file of the resiliency scripts at the following URL.[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip)
-3. Unzip the folder in a location convenient for you to execute the scripts.  
-
-### 2.4 Setting Up the Java Environment
-
-1. The command line utility in Java requires Java 8 SE. In Amazon Linux, you need to install Java 8 and remove Java 7.  
-
-        $ sudo yum install java-1.8.0-openjdk
-        $ sudo yum remove java-1.7.0-openjdk
-
-2. Download the zipfile of the executables at the following URL [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip).
-3. Unzip the folder in a location convenient for you to execute the command line programs.  
-
-### 2.5 Setting Up the C# Environment
-
-1. Download the zipfile of the executables at the following URL. [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/csharpresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/csharpresiliency.zip)  
-2. Unzip the folder in a location convenient for you to execute the command line programs.  
-
-### 2.6 Setting up the Powershell Environment
-
-1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. [https://aws.amazon.com/powershell/](https://aws.amazon.com/powershell/)  
-2. Follow the “Getting Started” instructions for configuring credentials. [https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html)
-3. Download the zipfile of the scripts at the following URL. [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip)  
-4. Unzip the folder in a location convenient for you to execute the scripts.
+* If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
 
 ## 3. Test Resiliency Using Failure Injection <a name="failure_injection"></a>
 
