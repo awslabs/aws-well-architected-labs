@@ -10,6 +10,7 @@ This reference will help you install software necessary to setup your workshop e
 The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consistent interface for interacting with all parts of AWS.
 
 ### Linux
+
 * This includes:
   * All native Linux installs
   * MacOS
@@ -27,16 +28,19 @@ The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consi
 * If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
 
 If that does not work, then do the following:
+
 * See the [detailed installation instructions here](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html)
 
 **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
 
 ---
+
 ## jq
 
 `jq` is a command-line JSON processor. is like `sed` for JSON data. It is used in the workshop `bash` scripts to parse AWS CLI output.
 
 ### Linux
+
 * Run the following command
 
       $ jq --version
@@ -54,7 +58,7 @@ If that does not work, then do the following
 
 1. Download the `jq` executable
 
-      $ wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+      $ wget <https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64>
       2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]
 
 1. You can find out what your execution path is with the following command.

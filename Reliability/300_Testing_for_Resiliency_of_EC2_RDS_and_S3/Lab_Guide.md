@@ -17,6 +17,8 @@
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
+@TODO insert architecture diagram here
+
 ### 1.1 Log into the AWS console <a name="awslogin"></a>
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
@@ -121,6 +123,8 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
    * Above screen shot is for **single region**. for **multi region** see [Multi_Region_State_Machine](Documentation/Multi_Region_State_Machine.md)
 
+### 1.5 View website for test web service <a name="website"></a>
+
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>.
    * click on the `WebServersforResiliencyTesting` stack
    * click on the "Outputs" tab
@@ -136,9 +140,24 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.
 
-There is a choice of environments to execute these failure injections. From a Linux command line bash scripts are provided you can execute. If you prefer Python, Java, Powershell, or C# instructions for these will also be provided.
+You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C# instructions for these are also provided.
 
-### 2.1 Set up the bash environment <a name="notbash"></a>
+### 2.1 Setup AWS credentials and configuration
+
+Your execution environment needs to be configured to enable access to the AWS account you are using for the workshop. This includes
+
+* Credentials - You identified these credentials [back in step 1](#awslogin)
+  * AWS access key
+  * AWS secret access key
+  * AWS session token (used in some cases)
+
+* Configuration
+  * Region: Ohio (us-east-2)
+  * Default output: JSON
+
+If you already know how to configure these, please do so now. If you need help then [follow these instructions](Documentation/AWS_Credentials.md)
+
+### 2.2 Set up the bash environment <a name="bash"></a>
 
 Using bash is an effective way to execute the failure injection tests for this workshop. The bash scripts make use of the AWS CLI. If you will be using bash, then follow the directions in this section. If you cannot use bash, then [skip to the next section](#notbash).
 
@@ -147,26 +166,16 @@ Using bash is an effective way to execute the failure injection tests for this w
 
           $ aws --version
           aws-cli/1.16.249 Python/3.6.8...
-        * AWS CLI version 1.0 or higher is fine
+        * Version 1.1 or higher is fine
         * If you instead got `command not found` then [see instructions here to install `awscli`](Documentation/Software_Install.md#awscli)
    * `jq` command-line JSON processor installed.
 
           $ jq --version
           jq-1.5-1-a5b5cbe
-        * Any version is fine.
+        * Version 1.4 or higher is fine
         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-1.You will run the `aws configure` command, providing configuration and credentials used by the AWS CLI to access your AWS account. You identified these credentials [back in step 1](#awslogin)
-
-1. Run `aws configure` and provide the following values:
-
-        $ aws configure
-        AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
-        AWS Secret Access Key [**************xxxx]: <Your AWS Secret Access Key>
-        Default region name: [us-east-2]: us-east-2
-        Default output format [None]: json
-
-1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) and set them up to be executable.  You may use the following commands to do this, or any other means.
+1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash). You may use the following commands to do this, or any other means.
 
         $ # The wget commands have a lot of output, which is omitted here
 
@@ -182,13 +191,13 @@ Using bash is an effective way to execute the failure injection tests for this w
         ...
         2019-10-12 19:32:32 (28.4 MB/s) - ‘fail_az.sh’ saved [6140/6140]
 
-        $ # Now make these executable
+1. Set the scripts to be executable.  
 
         $ chmod u+x fail_instance.sh
         $ chmod u+x failover_rds.sh
         $ chmod u+x fail_az.sh
 
-### 2.2 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
+### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
 If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
@@ -196,111 +205,203 @@ If you will be using bash and executed the the steps in the _previous_ section, 
 
 ## 3. Test Resiliency Using Failure Injection <a name="failure_injection"></a>
 
-### 3.1 EC2 Failure Mode
+**Failure injection** (also known as **chaos testing**) is an effective and essential method to validate and understand the resiliency of your workload and is a recommended practice of the [AWS Well-Architected Reliability Pillar](https://aws.amazon.com/architecture/well-architected/). Here you will initiate various failure scenarios and assess how your system reacts.
 
-1. The first failure mode will be to fail a web server. To prepare for this, you should have two consoles open: VPC and EC2. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “EC2” in the search box and press the enter key.  
-![EnteringEC2](Images/EnteringEC2.png)  
-2. You also need the VPC Console. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “VPC” in the search box, then right click on the “VPC Isolated Cloud Resources” text and open the link in a new tab or window. You can then click the upward facing icon to the right of the word “Services” to make the menu of services disappear.  
-![EnteringVPC](Images/EnteringVPC.png)  
-3. On the EC2 Console, click “Instances” on the left side to bring up the list of instances.  
-![SelectingInstances](Images/SelectingInstances.png)
-4. On the VPC console, copy the VPC ID by first selecting the VPC named
-   "ResiliencyVPC", and then clicking the icon to copy the VPC ID
-![GetVpcId](Images/GetVpcId.png)
-5. Use this VPC ID as the command line argument (vpc-id) to the scripts/programs below.  
-   * Instance Failure in bash: Execute the failure mode script for failing an instance:
+### Preparation
 
-          $./fail_instance.sh <vpc-id>
+Before testing, please prepare the following:
 
-If you get an error `command not found` or `permission denied`, you may need to
-setup your scripts to enable execution.  From the same directory as the scripts,
-      execute the command `chmod u+x *.sh`
+1. Region must be **Ohio**
+   * We will be using the AWS Console to assess the impact of our testing
+   * Throughout this lab, make sure you are in the **Ohio** region
 
-* Instance Failure in Python: Execute the failure mode script for failing an instance:
+      ![SelectOhio](Images/SelectOhio.png)
 
-        $ python fail_instance.py <vpc-id>
+1. Get VPC ID
+   * A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service
+   * For these tests you will need to know the **VPC ID** of the VPC you created as part of deploying the service
+   * Navigate to the VPC management console: <https://console.aws.amazon.com/vpc>
+   * In the left pane, click **Your VPCs**
+   * 1 - Tick the checkbox next to **ResiliencyVPC**
+   * 2 - Copy the **VPC ID**
 
-* Instance Failure in Java: Execute the failure mode program for failing an instance:
+    ![GetVpcId](Images/GetVpcId.png)
+   * Save the VPC ID - you will use later whenever `<vpc-id>` is indicated in a command
 
-        $ java -jar app-resiliency-1.0.jar EC2 <vpc-id>
+1. Get familiar with the test website
+   1. Point a web browser at the URL you saved from earlier. (If you do not recall this, then [see these instructions](#website))
+   1. Note the **availability_zone** and **instance_id**
+   1. Refresh the website several times watching these values
+   1. Note the values change. You have deployed one web server per each of three Availability Zones.
+      * The AWS Elastic Load Balancer (ELB) sends your request to any of these three healthy instances.
+      * Refer to the diagram at the start of this Lab Guide to review your deployed system architecture.
 
-* Instance Failure in C#: Execute the failure mode program for failing an instance:
+    | |
+    |:---:|
+    |**Availability Zones** (**AZ**s) are isolated sets of resources within a region, each with redundant power, networking, and connectivity, housed in separate facilities. Each Availability Zone is isolated, but the Availability Zones in a Region are connected through low-latency links. AWS provides you with the flexibility to place instances and store data within across multiple Availability Zones within each AWS Region for high resiliency.|
+    |*__Learn more__: After the lab [see this whitepaper](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html) on regions and availability zones*|
 
-        $ .\AppResiliency EC2 <vpc-id>
+### 3.1 EC2 failure injection
 
-* Instance Failure in Powershell: Execute the failure mode script for failing an instance:
+1. The first failure mode will be to fail one of the three web servers used by your service.
 
-        $ .\fail_instance.ps1 <vpc-id>
+1. Navigate to the EC2 console at <http://console.aws.amazon.com/ec2> and click **Instances** in the left pane.
 
-1. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
-![TargetGroups](Images/TargetGroups.png)  
+1. There are three EC2 instances with a name beginning with **WebServerforResiliency**. For these EC2 instances note:
+   1. Each has a unique *Instance ID*
+   1. There is one instance per each Availability Zone
+   1. All instances are healthy
 
-### 3.2 RDS Failure Mode
+    ![EC2InitialCheck](Images/EC2InitialCheck.png)
 
-1. From the AWS EC2 Console (you will still need the VPC ID from the VPC Console), click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “RDS” in the search box and press the enter key.  
-![SelectingRDS](Images/SelectingRDS.png)
+1. Open up two more console in separate tabs/windows. From the left pane, open **Target Groups** and **Auto Scaling Groups** in separate tabs. You now have three console views open
 
-2. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
-   identifier for your database. Note the value of the "Info" field
-3. Continue to use the same VPC ID as the command line argument to the scripts/programs below.  
+    ![NavToTargetGroupAndScalingGroup](Images/NavToTargetGroupAndScalingGroup.png)
 
-* RDS Instance Failure in bash: Execute the failure mode script for failing over an RDS instance:
+1. To fail one of the EC2 instances, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
 
-        $./failover_rds.sh <vpc-id>
+    | Language   | Command |
+    |:-------    |:------- |
+    | Bash       | `./fail_instance.sh <vpc-id>`|
+    | Python     | `python fail_instance.py <vpc-id>`|
+    | Java       | `java -jar app-resiliency-1.0.jar EC2 <vpc-id>`|
+    | C#         | `.\AppResiliency EC2 <vpc-id>`|
+    | PowerShell | `.\fail_instance.ps1 <vpc-id>`|
 
-* RDS Instance Failure in Python: Execute the failure mode script for failing an instance:
+1. The specific output will vary based on the command used, but will include a reference to the ID of the EC2 instance and an indicator of success.  Here is the output for the Bash command. Note the `CurrentState` is `shutting-down`
 
-        $ python fail_rds.py <vpc-id>
+        $ ./fail_instance.sh vpc-04f8541d10ed81c80
+        Terminating i-0710435abc631eab3
+        {
+            "TerminatingInstances": [
+                {
+                    "CurrentState": {
+                        "Code": 32,
+                        "Name": "shutting-down"
+                    },
+                    "InstanceId": "i-0710435abc631eab3",
+                    "PreviousState": {
+                        "Code": 16,
+                        "Name": "running"
+                    }
+                }
+            ]
+        }
 
-* RDS Instance Failure in Java: Execute the failure mode program for failing an instance:
+1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:)) 
 
-        $ java -jar app-resiliency-1.0.jar RDS <vpc-id>
+   * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
+    ![RefreshButton](Images/RefreshButton.png)
+   * Observe the status of the instance reported by the script. In the screen cap below it is _shutting down_ as reported by the script and will ultimately transition to _terminated_.
+    ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
 
-* RDS Instance Failure in C#: Execute the failure mode program for failing an instance:
+### 3.2 System response to EC2 instance failure
 
-        $ .\AppResiliency RDS <vpc-id>
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-* RDS Instance Failure in Powershell: Execute the failure mode script for failing an instance:
+#### 3.2.1 System availability
 
-        $ .\failover_rds.ps1 <vpc-id>
+Refresh the service website several times. Note the following:
 
-Watch the behavior of the website. What happens?  On the database console how does the "Info" field change? Click on the "Logs & events" sub-tab and look at "Recent events".  Be sure to click through to the
-latest page of events. Be sure to re-check the behavior of the website.
+* Website remains available
+* The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
 
-### 3.3 AZ Failure
+#### 3.2.2 Load balancing
 
-1. Availability zone failure.
+Load balancing ensures service requests are not routed to unhealthy resources, such as the failed EC2 instance.
 
-* AZ Failure in bash: Execute the following script for failing over an Availability Zone:
+1. Go to the **Target Groups** console you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:))
 
-        $./fail_az.sh <az> <vpc-id>
+     * If there is more than one target group, select the one with the **Load Balancer** named **ResiliencyTestLoadBalancer**
 
-* AZ Failure in Python: Execute the failure mode script for failing an instance:
+1. Click on the **Targets** tab and observe:
+   * Status of the instances in the group. The load balancer will only send traffic to healthy instances.
+   * When the auto scaling launches a new instance, it is automatically added to the load balancer target group.
+   * In the screen cap below the _unhealthy_ instance is the newly added one.  The load balancer will not send traffic to it until it is completed initializing. It will ultimately transition to _healthy_ and then start receiving traffic.
 
-        $ python fail_az.py <vpc-id> <az>
+   ![TargetGroups](Images/TargetGroups.png)  
 
-* AZ Failure in Java: Execute the failure mode script for failing an instance:
+1. From the same console, now click on the **Monitoring** tab and view metrics such as **Unhealthy hosts** and **Healthy hosts**
 
-        $ java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>
+   ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
 
-* AZ Failure in C#: Execute the failure mode script for failing an instance:
+#### 3.2.2 Auto scaling
 
-        $ .\AppResiliency AZ <vpc-id> <az>
-        # <az> is a value like us-east-2b
+Autos scaling ensures we have the capacity necessary to meet customer demand. The auto scaling for this service is a simple configuration that ensures at least three EC2 instances are running. More complex configurations in response to CPU or network load are also possible using AWS.
 
-* AZ Failure in Powershell: Execute the failure mode script for failing an instance:
+1. Go to the **Auto Scaling Groups** console you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:))
 
-        $ .\fail_az.ps1 <az> <vpc-id>
+     * If there is more than one auto scaling group, select the one with the name that starts with **WebServersforResiliencyTesting**
+
+1. Click on the **Activity History** tab and observe:
+   * The screen cap below shows that all three instances were successfully started at 17:25
+   * At 19:29 the instance targeted by the script was put in _draining_ state and a new instance ending in _...62640_ was started, but was still initializing. The new instance will ultimately transition to _Successful_ status
+
+   ![AutoScalingGroup](Images/AutoScalingGroup.png)  
+
+_Draining_ allow existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
+
+*__Learn more__: After the lab see [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
+
+### 3.2 RDS failure injection
+
+1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
+
+1. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
+   identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop). Note that the value of the **Info** field is _Available_
+
+@TODO screencap here
+
+1. To failover of the RDS instance, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
+
+    | Language   | Command |
+    |:-------    |:------- |
+    | Bash       | `./failover_rds.sh <vpc-id>`|
+    | Python     | `python fail_rds.py <vpc-id>`|
+    | Java       | `java -jar app-resiliency-1.0.jar RDS <vpc-id>`|
+    | C#         | `.\AppResiliency RDS <vpc-id>`|
+    | PowerShell | `.\failover_rds.ps1 <vpc-id>`|
+
+1. The specific output will vary based on the command used, but will include....
+
+@TODO complete this
+
+### 3.3 System response to RDS instance failure
+
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
+
+#### 3.2.1 System availability
+
+Refresh the service website several times. Note the following:
+
+add `/data` to the end of the URL
+
+#### 3.2.2 Failover to standby
+
+On the database console how does the "Info" field change? Click on the "Logs & events" sub-tab and look at "Recent events".  Be sure to click through to the
+latest page of events
+
+### 3.3 AZ failure injection
+
+1. To simulate failure of an AZ, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for). `<az>` is one of the availability zones the service uses. It is a value like `us-east-2a`, `us-east-2b`, or `us-east-2c`
+
+    | Language   | Command |
+    |:-------    |:------- |
+    | Bash       | `./fail_az.sh <az> <vpc-id>`|
+    | Python     | `python fail_az.py <vpc-id> <az>`|
+    | Java       | `java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>`|
+    | C#         | `.\AppResiliency AZ <vpc-id> <az>`|
+    | PowerShell | `.\fail_az.ps1 <az> <vpc-id>`|
 
 What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
 What would you do if the ASG was only in one AZ? You could call the AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances. How would you undo all these changes?
 
-### 3.4 Failure of S3
+### 3.4 S3 failure injection
 
 1. Failure of S3 means that the image will not be available.
 
 * Failure in bash: The bash commands available do not allow for modification of the access permissions, so you'll have to do the work in the console.
-  1. Navigate to the S3 console: <https://s3.console.aws.amazon.com/s3/home>
+  1. Navigate to the S3 console: <https://console.aws.amazon.com/s3>
   1. Select the bucket where the image is located. In my example, this is the bucket "arc327-well-architected-for-reliability"
   1. Select the object, then select the "Permissions" tab:
   1. Select the "Public Access" radio button, and deselect the "Read object" box:

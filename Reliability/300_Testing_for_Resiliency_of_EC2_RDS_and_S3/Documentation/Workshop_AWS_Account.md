@@ -16,6 +16,8 @@
 * **IMPORTANT** Copy the provided credentials and save them.  You wil need these to complete the workshop
   ![AWSAccountCredsAndConsole](../Images/AWSAccountCredsAndConsole.png)
 
+* Copy the _whole_ code block corresponding to the system you are using. 
+
 ## Access the AWS console
 
 * Click "AWS Console". The AWS Console will open.

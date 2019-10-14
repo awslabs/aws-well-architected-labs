@@ -6,42 +6,7 @@ If you will not be using bash and prefer to use Python, Java, C#, or PowerShell 
 
 ## 1. Set up AWS credentials
 
-* Follow these steps no matter which language you will be using
-* You will supply configuration and credentials used by the AWS SDK to access your AWS account. You identified these credentials [back in step 1 of the Lab Guide](../Lab_Guide.md#awslogin)
-* Choose ONLY ONE option, either Option 1.1 or Option 1.2
-
-### Option 1.1 AWS CLI
-
-1. If `aws --version` succeeds, then you have the AWS CLI installed and can use it.  If not, then go to Option 1.2.
-1. Run `aws configure` and provide the following values:
-
-        $ aws configure
-        AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
-        AWS Secret Access Key [**************xxxx]: <Your AWS Secret Access Key>
-        Default region name: [us-east-2]: us-east-2
-        Default output format [None]: json
-
-### Option 1.2 Manually creating credential files
-
-1. create a `.aws` directory under your home directory 
-
-        mkdir ~/.aws
-
-1. Change directory to there
-
-        cd ~/.aws
-
-1. Use a text editor (vim, emacs, notepad) to create a text file (no extension) named `credentials`. In this file you should have the following text.  
-
-        [default]
-        aws_access_key_id = <Your access key>
-        aws_secret_access_key = <Your secret key>
-
-1. Create a text file (no extension) named `config`. In this file you should have the following text:
-
-        [default]
-        region = us-east-2
-        output = json
+If you have not yet setup your AWS credentials, then [follow this guide](AWS_Credentials.md)
 
 ## 2. Language specific setup
 
