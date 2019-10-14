@@ -146,7 +146,10 @@ def deploy_web_servers(event):
     # Get the S3 bucket the boot script is in, and the object to retrieve and the image to display
     boot_bucket = event['boot_bucket']
     boot_prefix = event['boot_prefix']
-    boot_object = event['boot_object']
+    if 'boot_object' in event:
+      boot_object = event['boot_object']
+    else:
+      boot_object = None
     websiteimage = event['websiteimage']
 
     # Get the outputs of the VPC stack
@@ -223,11 +226,15 @@ def deploy_web_servers(event):
     webserver_parameters.append({'ParameterKey': 'BootBucketRegion', 'ParameterValue': cfn_region, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucket', 'ParameterValue': boot_bucket, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootPrefix', 'ParameterValue': boot_prefix, 'UsePreviousValue': True})
-    webserver_parameters.append({'ParameterKey': 'BootObject', 'ParameterValue': boot_object, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebSiteImage', 'ParameterValue': websiteimage, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'RDSHostName', 'ParameterValue': rds_host, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'RDSUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'RDSPassword', 'ParameterValue': rds_password, 'UsePreviousValue': False})
+    
+    # If Boot Object is supplied then use it, otherwise CloudFormation template will use Parameter default
+    if boot_object is not None: 
+      webserver_parameters.append({'ParameterKey': 'BootObject', 'ParameterValue': boot_object, 'UsePreviousValue': True})
+    
     stack_tags = []
 
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
