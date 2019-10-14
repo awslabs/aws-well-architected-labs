@@ -193,9 +193,9 @@ Using bash is an effective way to execute the failure injection tests for this w
 
 1. Set the scripts to be executable.  
 
-        $ chmod u+x fail_instance.sh
-        $ chmod u+x failover_rds.sh
-        $ chmod u+x fail_az.sh
+        chmod u+x fail_instance.sh
+        chmod u+x failover_rds.sh
+        chmod u+x fail_az.sh
 
 ### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
@@ -288,7 +288,7 @@ Before testing, please prepare the following:
             ]
         }
 
-1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:)) 
+1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
 
    * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
     ![RefreshButton](Images/RefreshButton.png)

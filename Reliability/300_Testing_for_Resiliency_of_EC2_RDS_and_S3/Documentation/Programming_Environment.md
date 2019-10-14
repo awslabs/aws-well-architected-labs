@@ -1,8 +1,8 @@
 # Setting up an environment to run the workshop using a programming language
 
-If you If you will be using bash for this workshop, STOP and return to the [Lab Guide instructions for setting up bash](../Lab_Guide.md#bash)
+If you will be using Bash for this workshop, STOP and return to the [Lab Guide instructions for setting up Bash](../Lab_Guide.md#bash)
 
-If you will not be using bash and prefer to use Python, Java, C#, or PowerShell for this workshop, then follow these steps
+If you will not be using Bash and prefer to use Python, Java, C#, or PowerShell for this workshop, then follow these steps
 
 ## 1. Set up AWS credentials
 
