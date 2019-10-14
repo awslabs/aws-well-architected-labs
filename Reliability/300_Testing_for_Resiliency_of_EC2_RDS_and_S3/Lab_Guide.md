@@ -48,14 +48,22 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * **single region** is faster to get up and running
     * **multi region** enables you to test some additional aspects of cross-regional resilience.
     * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
+
+1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
+    * **single region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json)
+    * **multi region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy_two_regions.json)
+
 1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
-![SelectOhio](Images/SelectOhio.png)  
-1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”.  
-![Images/CreateStackButton](Images/CreateStackButton.png)  
-1. Leave "Prepare template" and "Template source" settings as-is, and for "Amazon S3 URL" enter:
-    * **single region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>
-    * **multi region**: <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>
-    ![CFNS3Url](Images/CFNS3Url.png)
+![SelectOhio](Images/SelectOhio.png)
+
+1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”
+![Images/CreateStackButton](Images/CreateStackButton.png)
+
+1. Leave "Prepare template" setting as-is
+    * 1 - For "Template source" select "Upload a template file"
+    * 2 - Specify the CloudFormation template you downloaded
+    ![CFNSFromDownloadedFile](Images/CFNSFromDownloadedFile.png)
+
 1. Click the “Next” button. For "Stack name" enter:
 
         DeployResiliencyWorkshop
@@ -228,7 +236,7 @@ Before testing, please prepare the following:
     ![GetVpcId](Images/GetVpcId.png)
    * Save the VPC ID - you will use later whenever `<vpc-id>` is indicated in a command
 
-1. Get familiar with the test website
+1. Get familiar with the service website
    1. Point a web browser at the URL you saved from earlier. (If you do not recall this, then [see these instructions](#website))
    1. Note the **availability_zone** and **instance_id**
    1. Refresh the website several times watching these values
@@ -243,7 +251,7 @@ Before testing, please prepare the following:
 
 ### 3.1 EC2 failure injection
 
-1. The first failure mode will be to fail one of the three web servers used by your service.
+This failure injection will simulate a critical problem with one of the three web servers used by your service.
 
 1. Navigate to the EC2 console at <http://console.aws.amazon.com/ec2> and click **Instances** in the left pane.
 
@@ -260,13 +268,13 @@ Before testing, please prepare the following:
 
 1. To fail one of the EC2 instances, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
 
-    | Language   | Command |
-    |:-------    |:------- |
-    | Bash       | `./fail_instance.sh <vpc-id>`|
-    | Python     | `python fail_instance.py <vpc-id>`|
-    | Java       | `java -jar app-resiliency-1.0.jar EC2 <vpc-id>`|
-    | C#         | `.\AppResiliency EC2 <vpc-id>`|
-    | PowerShell | `.\fail_instance.ps1 <vpc-id>`|
+    | Language   | Command                                         |
+    | :--------- | :---------------------------------------------- |
+    | Bash       | `./fail_instance.sh <vpc-id>`                   |
+    | Python     | `python fail_instance.py <vpc-id>`              |
+    | Java       | `java -jar app-resiliency-1.0.jar EC2 <vpc-id>` |
+    | C#         | `.\AppResiliency EC2 <vpc-id>`                  |
+    | PowerShell | `.\fail_instance.ps1 <vpc-id>`                  |
 
 1. The specific output will vary based on the command used, but will include a reference to the ID of the EC2 instance and an indicator of success.  Here is the output for the Bash command. Note the `CurrentState` is `shutting-down`
 
@@ -318,6 +326,7 @@ Load balancing ensures service requests are not routed to unhealthy resources, s
    * Status of the instances in the group. The load balancer will only send traffic to healthy instances.
    * When the auto scaling launches a new instance, it is automatically added to the load balancer target group.
    * In the screen cap below the _unhealthy_ instance is the newly added one.  The load balancer will not send traffic to it until it is completed initializing. It will ultimately transition to _healthy_ and then start receiving traffic.
+   * Note the new instance was started in the same Availability Zone as the failed one. Amazon EC2 Auto Scaling automatically maintains balance across all of the Availability Zones that you specify.
 
    ![TargetGroups](Images/TargetGroups.png)  
 
@@ -325,7 +334,7 @@ Load balancing ensures service requests are not routed to unhealthy resources, s
 
    ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
 
-#### 3.2.2 Auto scaling
+#### 3.2.3 Auto scaling
 
 Autos scaling ensures we have the capacity necessary to meet customer demand. The auto scaling for this service is a simple configuration that ensures at least three EC2 instances are running. More complex configurations in response to CPU or network load are also possible using AWS.
 
@@ -341,62 +350,109 @@ Autos scaling ensures we have the capacity necessary to meet customer demand. Th
 
 _Draining_ allow existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
 
-*__Learn more__: After the lab see [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
+*__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
 
-### 3.2 RDS failure injection
+#### 3.2.4 EC2 failure injection - conclusion
+
+Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
+
+### 3.3 RDS failure injection
+
+This failure injection will simulate a critical failure of the Amazon RDS DB instance.
+
+1. Before you initiate the failure simulation, refresh the service website several times. Every time the image is loaded, the website writes a record to the Amazon RDS database
+
+1. Click on **Click here to go to other page** and it will show the latest ten entries in the Amazon RDS DB. Click again to return to the image page.
 
 1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
 
-1. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
-   identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop). Note that the value of the **Info** field is _Available_
+1. From the RDS dashboard
+      * Click on "DB Instances (1/40)"
+      * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
+      * Select the **Configuration** tab
 
-@TODO screencap here
+1. Look at the configured values. Note the following:
+      * Value of the **Info** field is **Available**
+      * RDS DB is configured to be **Multi-AZ**.  The _primary_ DB instance is in AZ **us-east-2a** and the _standby_ DB instance is in AZ **us-east-2b**
+        ![DBInitialConfiguration](Images/DBInitialConfiguration.png)
 
 1. To failover of the RDS instance, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
 
-    | Language   | Command |
-    |:-------    |:------- |
-    | Bash       | `./failover_rds.sh <vpc-id>`|
-    | Python     | `python fail_rds.py <vpc-id>`|
-    | Java       | `java -jar app-resiliency-1.0.jar RDS <vpc-id>`|
-    | C#         | `.\AppResiliency RDS <vpc-id>`|
-    | PowerShell | `.\failover_rds.ps1 <vpc-id>`|
+    | Language   | Command                                         |
+    | :--------- | :---------------------------------------------- |
+    | Bash       | `./failover_rds.sh <vpc-id>`                    |
+    | Python     | `python fail_rds.py <vpc-id>`                   |
+    | Java       | `java -jar app-resiliency-1.0.jar RDS <vpc-id>` |
+    | C#         | `.\AppResiliency RDS <vpc-id>`                  |
+    | PowerShell | `.\failover_rds.ps1 <vpc-id>`                   |
 
-1. The specific output will vary based on the command used, but will include....
+1. The specific output will vary based on the command used, but will include some indication that the your Amazon RDS Database is being failedover: `Failing over mdk29lg78789zt`
 
-@TODO complete this
-
-### 3.3 System response to RDS instance failure
+### 3.4 System response to RDS instance failure
 
 Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-#### 3.2.1 System availability
+#### 3.4.1 System availability
 
-Refresh the service website several times. Note the following:
+1. The website is _not_ available. Some errors you might see reported:
+   * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
+   * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request.
 
-add `/data` to the end of the URL
+1. Continue on to the next steps, periodically returning to attempt to refresh the website.
 
-#### 3.2.2 Failover to standby
+#### 3.4.2 Failover to standby
 
-On the database console how does the "Info" field change? Click on the "Logs & events" sub-tab and look at "Recent events".  Be sure to click through to the
-latest page of events
+1. On the database console **Configuration** tab 
+   1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** then the failover is complete
+   1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted.
 
-### 3.3 AZ failure injection
+      ![DBPostFailConfiguration](Images/DBPostFailConfiguration.png)
+
+   1. From the AWS RDS console, click on the **Logs & events** tab and scroll down to **Recent events**. You should see entries like those below. In this case failover took less than a minute.
+
+          Mon, 14 Oct 2019 19:53:37 GMT	Multi-AZ instance failover started.
+          Mon, 14 Oct 2019 19:53:45 GMT	DB instance restarted
+          Mon, 14 Oct 2019 19:54:21 GMT	Multi-AZ instance failover completed
+
+### 3.4.3 EC2 server replacement
+
+1. From the AWS RDS console, click on the **Monitoring** tab and look at **DB connections**. 
+    * As the failover happens the existing three servers all cannot connect to the DB
+    * AWS Auto Scaling detects this, and replaces the three EC2 instances with new ones that establish new connections to the new RDS _primary_ instance
+    * The graph shows an unavailability period of about four minutes until at least one DB connection is re-established
+
+      ![RDSDbConnections](Images/RDSDbConnections.png)
+
+1. [optional] Go to the [Auto scaling group](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:) and AWS Elastic Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:) consoles to see how EC2 instance and traffic routing was handled
+
+#### 3.4.3 RDS failure injection - conclusion
+
+* AWS RDS Database failover took less than a minute
+* Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
+
+*__Learn more__: After the lab see [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html) for more details on high availability and failover support for DB instances using Multi-AZ deployments.*
+
+
+
+
+### 3.5 AZ failure injection
 
 1. To simulate failure of an AZ, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for). `<az>` is one of the availability zones the service uses. It is a value like `us-east-2a`, `us-east-2b`, or `us-east-2c`
 
-    | Language   | Command |
-    |:-------    |:------- |
-    | Bash       | `./fail_az.sh <az> <vpc-id>`|
-    | Python     | `python fail_az.py <vpc-id> <az>`|
-    | Java       | `java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>`|
-    | C#         | `.\AppResiliency AZ <vpc-id> <az>`|
-    | PowerShell | `.\fail_az.ps1 <az> <vpc-id>`|
+    | Language   | Command                                             |
+    | :--------- | :-------------------------------------------------- |
+    | Bash       | `./fail_az.sh <az> <vpc-id>`                        |
+    | Python     | `python fail_az.py <vpc-id> <az>`                   |
+    | Java       | `java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>` |
+    | C#         | `.\AppResiliency AZ <vpc-id> <az>`                  |
+    | PowerShell | `.\fail_az.ps1 <az> <vpc-id>`                       |
 
 What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
 What would you do if the ASG was only in one AZ? You could call the AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances. How would you undo all these changes?
 
-### 3.4 S3 failure injection
+### 3.6 System response to AZ failure
+
+### 3.7 S3 failure injection
 
 1. Failure of S3 means that the image will not be available.
 
