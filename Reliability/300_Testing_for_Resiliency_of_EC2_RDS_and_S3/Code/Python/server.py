@@ -18,6 +18,7 @@ html = """
         <p>{Message}</p>
         <p>{Content}<p>
         <img src="{WebSiteImage}" alt="" scale="0">
+        <p><a href="{Link}">Click here to go to other page</a></p>
     </body>
 </html>"""
 
@@ -32,6 +33,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("path: ", self.path)
 
         if self.path == '/':
+            link = "data"
             try:
                 message_parts = [
                     'account_id: %s' % ec2_metadata.account_id,
@@ -60,11 +62,13 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(
                 bytes(
-                    html.format(Content=message, WebSiteImage=self.url_image, Message="Data from the metadata API"),
+                    html.format(Content=message, WebSiteImage=self.url_image, Message="Data from the metadata API", Link=link),
                     "utf-8"
                 )
             )
         elif self.path == '/data':
+
+            link = ".."
 
             self.cursor = self.db.cursor()
             sql = "SELECT * from hits order by time desc limit 10"
@@ -86,7 +90,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(
                 bytes(
-                    html.format(Content=msg, WebSiteImage="", Message="Data from the Database"),
+                    html.format(Content=msg, WebSiteImage="", Message="Data from the Database", Link=link),
                     "utf-8"
                 )
             )
