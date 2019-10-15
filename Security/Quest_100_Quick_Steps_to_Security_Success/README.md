@@ -1,4 +1,4 @@
-﻿# Quest: One Day to Better Security
+﻿# Quest: Quick Steps to Security Success
 
 ## About this Guide
 
@@ -114,7 +114,7 @@ Amazon Simple Storage Service (S3) allows you to upload objects to a "bucket" wh
 ## Walkthrough
 
 1. For each account that you want to block public access to data stored in S3 - use a cross-account access role to [block S3 public access](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html)
-2. Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to shit to the root, apply this specifically to the accounts where you have blocked public access.
+2. Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to the root, apply this specifically to the accounts where you have blocked public access.
 
 ### Policy to block public
 
