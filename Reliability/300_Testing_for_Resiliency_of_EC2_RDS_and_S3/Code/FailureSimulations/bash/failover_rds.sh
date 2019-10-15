@@ -15,14 +15,14 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# No arguments to this function, so if they pass them, tell them not to
+# One argument required: VPC of deployed service
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <vpc-id>"
   exit 1
 fi
 
 #Find the first running rds instance in the list that is in the VPC and return it's instance ID.
-#Note: This is making a lot of assumptions. A lot more error checking could be done, and in my opinion, it would be easier to do in a programming language than in a shell script.
+#Note: This is making a lot of assumptions. A lot more error checking could be done
 rds_instance_id=`aws rds describe-db-instances | jq -r --arg vpc $1 '.DBInstances | map(select(.DBSubnetGroup.VpcId==$vpc))[0].DBInstanceIdentifier'`
 echo "Failing over $rds_instance_id"
 

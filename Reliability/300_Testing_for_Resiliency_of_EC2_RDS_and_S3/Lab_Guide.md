@@ -246,7 +246,7 @@ Before testing, please prepare the following:
 
     | |
     |:---:|
-    |**Availability Zones** (**AZ**s) are isolated sets of resources within a region, each with redundant power, networking, and connectivity, housed in separate facilities. Each Availability Zone is isolated, but the Availability Zones in a Region are connected through low-latency links. AWS provides you with the flexibility to place instances and store data within across multiple Availability Zones within each AWS Region for high resiliency.|
+    |**Availability Zones** (**AZ**s) are isolated sets of resources within a region, each with redundant power, networking, and connectivity, housed in separate facilities. Each Availability Zone is isolated, but the Availability Zones in a Region are connected through low-latency links. AWS provides you with the flexibility to place instances and store data across multiple Availability Zones within each AWS Region for high resiliency.|
     |*__Learn more__: After the lab [see this whitepaper](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html) on regions and availability zones*|
 
 ### 3.1 EC2 failure injection
@@ -396,13 +396,14 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. The website is _not_ available. Some errors you might see reported:
    * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
-   * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request.
+   * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
+   * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
 
 1. Continue on to the next steps, periodically returning to attempt to refresh the website.
 
 #### 3.4.2 Failover to standby
 
-1. On the database console **Configuration** tab 
+1. On the database console **Configuration** tab
    1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** then the failover is complete
    1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted.
 
@@ -410,34 +411,47 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
    1. From the AWS RDS console, click on the **Logs & events** tab and scroll down to **Recent events**. You should see entries like those below. In this case failover took less than a minute.
 
-          Mon, 14 Oct 2019 19:53:37 GMT	Multi-AZ instance failover started.
-          Mon, 14 Oct 2019 19:53:45 GMT	DB instance restarted
-          Mon, 14 Oct 2019 19:54:21 GMT	Multi-AZ instance failover completed
+          Mon, 14 Oct 2019 19:53:37 GMT - Multi-AZ instance failover started.
+          Mon, 14 Oct 2019 19:53:45 GMT - DB instance restarted
+          Mon, 14 Oct 2019 19:54:21 GMT - Multi-AZ instance failover completed
 
-### 3.4.3 EC2 server replacement
+### 3.5 EC2 server replacement
 
-1. From the AWS RDS console, click on the **Monitoring** tab and look at **DB connections**. 
+1. From the AWS RDS console, click on the **Monitoring** tab and look at **DB connections**.
     * As the failover happens the existing three servers all cannot connect to the DB
-    * AWS Auto Scaling detects this, and replaces the three EC2 instances with new ones that establish new connections to the new RDS _primary_ instance
+    * AWS Auto Scaling detects this (any server not returning an http 200 status is deemed unhealthy), and replaces the three EC2 instances with new ones that establish new connections to the new RDS _primary_ instance
     * The graph shows an unavailability period of about four minutes until at least one DB connection is re-established
 
       ![RDSDbConnections](Images/RDSDbConnections.png)
 
 1. [optional] Go to the [Auto scaling group](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:) and AWS Elastic Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:) consoles to see how EC2 instance and traffic routing was handled
 
-#### 3.4.3 RDS failure injection - conclusion
+#### 3.5.1 RDS failure injection - conclusion
 
 * AWS RDS Database failover took less than a minute
 * Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
 
 *__Learn more__: After the lab see [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html) for more details on high availability and failover support for DB instances using Multi-AZ deployments.*
 
+### 3.6 AZ failure injection
 
+This failure injection will simulate a critical problem with one of the three AWS Availability Zones (AZs) used by your service. AWS Availability Zones are  powerful tools for helping build highly available applications. If an application is partitioned across AZs, companies are better isolated and protected from issues such as lightning strikes, tornadoes, earthquakes and more.
 
+1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds> and note which Availability Zone the AWS RDS _primary_ DB instance is in.
+   * A good way to run the AZ failure injection is first in an AZ _other_ than this - we'll call this **Scenario 1**
+   * Then try it again in the _same_ AZ as the AWS RDS _primary_ DB instance - we'll call this **Scenario 2**
+   * Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.
+   * And executing this way illustrates the impact and response under the two different scenarios.
 
-### 3.5 AZ failure injection
+1. To simulate failure of an AZ, select one of the AVailability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>` 
+   * For **scenario 1** select an AZ that is neither _primary_ nor _secondary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2c`
+   * For **scenario 2** select the AZ that is _primary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2b`
 
-1. To simulate failure of an AZ, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for). `<az>` is one of the availability zones the service uses. It is a value like `us-east-2a`, `us-east-2b`, or `us-east-2c`
+      ![DBConfigurationShort](Images/DBConfigurationShort.png)
+
+1. use your VPC ID as `<vpc-id>`
+
+1. Select _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for).
 
     | Language   | Command                                             |
     | :--------- | :-------------------------------------------------- |
@@ -447,24 +461,60 @@ Watch how the service responds. Note how AWS systems help maintain service avail
     | C#         | `.\AppResiliency AZ <vpc-id> <az>`                  |
     | PowerShell | `.\fail_az.ps1 <az> <vpc-id>`                       |
 
-What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
-What would you do if the ASG was only in one AZ? You could call the AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances. How would you undo all these changes?
+1. The specific output will vary based on the command used.
+    * Note whether an RDS failover was initiated.  This would be the case if you selected the AZ containing the AWS RDS _primary_ DB instance
 
-### 3.6 System response to AZ failure
+### 3.7 System response to AZ failure
 
-### 3.7 S3 failure injection
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-1. Failure of S3 means that the image will not be available.
+#### 3.7.1 System availability
 
-* Failure in bash: The bash commands available do not allow for modification of the access permissions, so you'll have to do the work in the console.
+Refresh the service website several times
+
+* **Scenario 1**: If you selected an AZ _not_ containing the AWS RDS _primary_ DB instance then you should see uninterrupted availability
+* **Scenario 2**: If you selected the AZ containing the AWS RDS _primary_ DB instance, then an availability loss similar to what you saw with RDS fault injection testing will occur.
+
+#### 3.7.2 Scenario 1 - Load balancer and web server tiers
+
+This scenario is similar to the EC2 failure injection test because there is only one EC2 server per AZ in our architecture. Look at the same screens you as for that test: EC2 Instances, Load Balancer Target Groups, Auto Scaling Groups.  One difference you wil observe is that auto scaling will bring up the replacement EC2 instance in an AZ that already has an EC2 instance as it attempts to balance the requested three EC2 instances across the remaining AZs.
+
+#### 3.7.3 Scenario 2 - Load balancer, web server, and data tiers
+
+This scenario is similar to a combination of the RDS failure injection along with EC2 failure injection. In addition to the EC2 related screens look at RDS instance monitoring, Configuration, and Logs & Events.
+
+#### 3.7.4 AZ failure injection - conclusion
+
+This is similarity between **scenario 1** and the EC2 failure test, and between **scenario 2** and the RDS failure test is illustrative of how an AZ failure impacts your system. The resources in that AZ will have no or limited availability. With the strong partitioning and isolation between Availability Zones however, resources in the other AZs continue to provide your service with needed functionality. **Scenario 1** results in loss of the load balancer and web server capabilities in one AZ, while **Scenario 2** adds to that the additional loss of the data tier. By ensuring that every tier of your system is in multiple AZs, you create a partitioned architecture resilient to failure.
+
+### 3.8 S3 failure injection
+
+1. Failure of S3 means that the image will not be available
+1. You may ONLY do this testing if you supplied your own `websiteimage` reference to an S3 bucket you control
+
+Choose to use _either_ the command line or AWS Console
+
+#### Command line
+
+* The following command will disable public read from an entire bucket. If you want to only disable public read from one object, use the **AWS Console** instructions
+* If 
+  * your `websiteimage` was `"https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"` 
+  * then `<bucket-name>` would be `arc327-well-architected-for-reliability`
+
+      aws ssm start-automation-execution --document-name AWS-DisableS3BucketPublicReadWrite --parameters "{\"S3BucketName\": [\"<bucket-name>\"]}"
+
+#### AWS Console
+
   1. Navigate to the S3 console: <https://console.aws.amazon.com/s3>
   1. Select the bucket where the image is located. In my example, this is the bucket "arc327-well-architected-for-reliability"
   1. Select the object, then select the "Permissions" tab:
-  1. Select the "Public Access" radio button, and deselect the "Read object" box:
+  1. Select the "Public Access" radio button, and deselect the "Read object" box
+
+#### System response to S3 failure
 
 What is the expected effect? How long does it take to take effect? How would you diagnose if this is a larger problem than permissions?
 
-### 3.5 More testing you can do
+### 3.9 More testing you can do
 
 You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal their failure modes.  
 

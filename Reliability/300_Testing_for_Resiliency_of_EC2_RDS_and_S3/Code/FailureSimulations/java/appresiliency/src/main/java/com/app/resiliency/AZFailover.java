@@ -150,7 +150,7 @@ public class AZFailover {
                 RDS_CLIENT.rebootDBInstance(rebootDBInstanceRequest);
             }
         } catch (Exception exception) {
-            System.out.println("Unkown exception occured " + exception.getMessage());
+            System.out.println("Unknown exception occurred " + exception.getMessage());
         }
 
     }
