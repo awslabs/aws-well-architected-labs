@@ -129,7 +129,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 1. You can resume testing when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
 
     ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
-   * Above screen shot is for **single region**. for **multi region** see [Multi_Region_State_Machine](Documentation/Multi_Region_State_Machine.md)
+   * Above screen shot is for **single region**. for **multi region** see [this diagram instead](Documentation/Multi_Region_State_Machine.md)
 
 ### 1.5 View website for test web service <a name="website"></a>
 
@@ -485,7 +485,7 @@ This scenario is similar to the EC2 failure injection test because there is only
 
 * [EC2 Instances](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:)
 * Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:)
-* [Auto Scaling Groups](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:))  
+* [Auto Scaling Groups](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:)
 
 One difference from the EC2 failure test that you will observe is that auto scaling will bring up the replacement EC2 instance in an AZ that already has an EC2 instance as it attempts to balance the requested three EC2 instances across the remaining AZs.
 
