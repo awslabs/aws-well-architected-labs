@@ -8,7 +8,7 @@ These steps will guide you to create a bucket containing some objects.
 
     * _Tip_: Name the bucket <your_first_name>_<date in yyyymmm10 format>
 
-1. Click **Next**_three_ times
+1. Click **Next** _three_ times
 1. Review screen: click **Create bucket**
 1. Click on the name of the bucket you created
 1. Drag some files into the bue upload area
