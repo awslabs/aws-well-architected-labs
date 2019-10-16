@@ -50,8 +50,8 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
 
 1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
-    * **single region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json)
-    * **multi region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy_two_regions.json)
+    * **single region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy.json?raw=1)
+    * **multi region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1)
 
 1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
 ![SelectOhio](Images/SelectOhio.png)
