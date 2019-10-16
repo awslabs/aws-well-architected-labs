@@ -16,13 +16,10 @@ Choose the appropriate section below for your language
 
 1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: <https://github.com/boto/boto3>
 
-1. Download these three resiliency scripts to a location convenient for you to execute the scripts.  
-
-        https://raw.githubusercontent.com/setheliot/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/fail_instance.py
-
-        https://raw.githubusercontent.com/setheliot/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/fail_rds.py
-
-        https://raw.githubusercontent.com/setheliot/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/fail_az.py
+1. Download the [resiliency Python scripts from GitHub](../Code/FailureSimulations/python/) to a location convenient for you to execute them. You can use the following links to download the scripts:
+   * [python/fail_instance.sh](../Code/FailureSimulations/python/fail_instance.py?raw=1)
+   * [python/fail_instance.sh](../Code/FailureSimulations/python/fail_rds.py?raw=1)
+   * [python/fail_instance.sh](../Code/FailureSimulations/python/fail_az.py?raw=1)
 
 ### 2.2 Setting Up the Java Environment
 
@@ -77,13 +74,10 @@ Choose the appropriate section below for your language
 
 1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>
 
-1. Download these three resiliency scripts to a location convenient for you to execute the scripts.  
-
-        https://github.com/setheliot/aws-well-architected-labs/blob/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/fail_instance.ps1
-
-        https://github.com/setheliot/aws-well-architected-labs/blob/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/failover_rds.ps1
-
-        https://github.com/setheliot/aws-well-architected-labs/blob/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/fail_az.ps1
+1. Download the [resiliency PowerShell scripts from GitHub](../Code/FailureSimulations/powershell/) to a location convenient for you to execute them. You can use the following links to download the scripts:
+   * [powershell/fail_instance.sh](../Code/FailureSimulations/powershell/fail_instance.ps1?raw=1)
+   * [powershell/failover_rds.sh](../Code/FailureSimulations/powershell/failover_rds.ps1?raw=1)
+   * [powershell/fail_az.sh](../Code/FailureSimulations/powershell/fail_az.ps1?raw=1)
 
 1. If your PowerShell scripts are refused authorization to access your AWS account, consult [Getting Started with the AWS Tools for Windows PowerShell](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html)
 

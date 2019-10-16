@@ -183,21 +183,10 @@ Using bash is an effective way to execute the failure injection tests for this w
         * Version 1.4 or higher is fine
         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash). You may use the following commands to do this, or any other means.
-
-        $ # The wget commands have a lot of output, which is omitted here
-
-        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_instance.sh
-        ...
-        2019-10-12 19:38:47 (77.2 MB/s) - ‘fail_instance.sh’ saved [1611/1611]
-
-        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/failover_rds.sh
-        ...
-        2019-10-12 19:39:36 (56.8 MB/s) - ‘failover_rds.sh’ saved [1633/1633]
-
-        $ wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_az.sh
-        ...
-        2019-10-12 19:32:32 (28.4 MB/s) - ‘fail_az.sh’ saved [6140/6140]
+1. Download the [resiliency bash scripts from GitHub](Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
+   * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_instance.sh?raw=1)
+   * [bash/fail_instance.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
+   * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
 
 1. Set the scripts to be executable.  
 
