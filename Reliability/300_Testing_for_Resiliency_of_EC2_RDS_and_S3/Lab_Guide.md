@@ -17,7 +17,7 @@
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
-@TODO insert architecture diagram here
+![ThreeTierArchitecture](Images/ThreeTierArchitecture.png)
 
 ### 1.1 Log into the AWS console <a name="awslogin"></a>
 
@@ -83,7 +83,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
   ![StackCreationStarted](Images/StackCreationStarted.png)  
   This will take approximately a minute to deploy.  When it shows status `CREATE_COMPLETE`, then you are finished with this step.
 
-### 1.4 Deploy infrastructure and run the service
+### 1.4 Deploy infrastructure and run the service <a name="deployinfra"></a>
 
 1. Go to the AWS Step Function console at <https://console.aws.amazon.com/states>
 
@@ -121,7 +121,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
 
-1. You can also watch the CloudFormation stacks as they are created and transition from `CREATE_IN_PROGRESS` to `CREATE_COMPLETE`.
+1. You can also watch the [CloudFormation stacks](https://console.aws.amazon.com/cloudformation) as they are created and transition from `CREATE_IN_PROGRESS` to `CREATE_COMPLETE`.
 ![DeploymentStacksInProgress](Images/DeploymentStacksInProgress.png)
 
 1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
@@ -299,9 +299,12 @@ This failure injection will simulate a critical problem with one of the three we
 1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
 
    * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
+
     ![RefreshButton](Images/RefreshButton.png)
+
    * Observe the status of the instance reported by the script. In the screen cap below it is _shutting down_ as reported by the script and will ultimately transition to _terminated_.
-    ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
+
+      ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
 
 ### 3.2 System response to EC2 instance failure
 
@@ -398,6 +401,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
    * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
    * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
    * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
+   * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.  
 
 1. Continue on to the next steps, periodically returning to attempt to refresh the website.
 
@@ -585,12 +589,13 @@ As part of lab setup you have deployed several AWS CloudFormation stacks. These 
     ![DeletingWebServers](Images/DeletingWebServers.png)
 
 1. In the confirmation dialog, click **Delete stack**
-1. The _Status_ changes to **DELETE_IN_PROGRESS** and will progress to **DELETE_COMPLETE**
+1. The _Status_ changes to **DELETE_IN_PROGRESS**
+1. Click the rfresh button to update and status will ultimately progress to **DELETE_COMPLETE**
 1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
 
     ![ShowDeletedStacks](Images/ShowDeletedStacks.png)
 
-1. To see progress suring stack deletion
+1. To see progress during stack deletion
     * Click the stack name
     * Select the Events column
     * Refresh to see new events
