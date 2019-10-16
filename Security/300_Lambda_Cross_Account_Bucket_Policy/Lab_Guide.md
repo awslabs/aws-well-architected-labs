@@ -33,9 +33,9 @@ If you only have one AWS account, then use the same AWS account number for both 
 1. AWS service will be pre-selected, select **Lambda**, then click **Next: Permissions**
 1. Do not select any managed policies, click **Next: Tags**
 1. Click **Next: Review**
-1. Enter _Lambda-List-S3-Role_ for the Role name then click Create role.
+1. Enter _Lambda-List-S3-Role_ for the Role name then click Create role
 1. From the list of roles click the name of **Lambda-List-S3-Role**
-1. Click **Add inline policy**, then click **JSON** tab.
+1. Click **Add inline policy**, then click **JSON** tab
 1. Replace the sample json with the following
     * Replace **account1** with the AWS Account number (no dashes) of account 1
     * Replace **bucketname** with the S3 bucket name from account 2
@@ -113,7 +113,7 @@ If you only have one AWS account, then use the same AWS account number for both 
 1. Click **Create a function**
 1. Accept the default **Author from scratch**
 1. Enter function name as _Lambda-List-S3_
-1. Select **Python 3.7 **runtime.
+1. Select **Python 3.7 **runtime
 1. Expand Permissions, click **Use an existing role**, then select the **Lambda-List-S3-Role**
 1. Click **Create function**
 1. Replace the example function code with the following
@@ -151,7 +151,7 @@ If you only have one AWS account, then use the same AWS account number for both 
 
 ## 5. Tear down this lab <a name="tear_down"></a>
 
-* Remove the lambda function, then roles.
+* Remove the lambda function, then roles
 * If you created a new S3 bucket, then you may remove it
 
 ***
