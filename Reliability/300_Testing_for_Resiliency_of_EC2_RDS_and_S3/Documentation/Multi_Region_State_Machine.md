@@ -1,6 +1,6 @@
 # Multi Region State Machine
 
-TBD soon
+![MultiRegionStepFunctionWebAppDeployed](../Images/MultiRegionStepFunctionWebAppDeployed.png)
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
