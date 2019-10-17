@@ -108,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#quest-one-day-to-better-security" tabindex="1" class="md-skip">
+      <a href="#quest-quick-steps-to-security-success" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -2919,7 +2919,7 @@
                   <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Security/Quest_100_Quick_Steps_to_Security_Success/README.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="quest-one-day-to-better-security">Quest: One Day to Better Security</h1>
+                <h1 id="quest-quick-steps-to-security-success">Quest: Quick Steps to Security Success</h1>
 <h2 id="about-this-guide">About this Guide</h2>
 <p>This quest is for you to improve your security posture. Every stakeholder involved in your organization and product or service is entitled to make use of a secure platform. Security is important to earn the trust with your customers and your providers. A secure environment also helps to protect your intellectual property. Each set of activities can be done in one day or split over a week in your lunch break. By the end of the quest we will have a set of accounts with security best practices applied, ready to develop your product in knowing that when you launch your workload you have secure foundations in place.</p>
 <h2 id="step-1-multi-account-strategy">Step 1 - Multi-Account Strategy</h2>
@@ -3015,7 +3015,7 @@
 <h2 id="walkthrough_3">Walkthrough</h2>
 <ol>
 <li>For each account that you want to block public access to data stored in S3 - use a cross-account access role to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">block S3 public access</a></li>
-<li>Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to shit to the root, apply this specifically to the accounts where you have blocked public access.</li>
+<li>Repeat the walkthrough in part 4 to apply the policy below. Instead of applying this policy to the root, apply this specifically to the accounts where you have blocked public access.</li>
 </ol>
 <h3 id="policy-to-block-public">Policy to block public</h3>
 <pre><code class="json">{
