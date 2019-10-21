@@ -76,66 +76,97 @@
    },
 
   "Resources" : {
-    "VPCLambdaRole" : {
-      "Metadata" : {
-        "License" : "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+    "VPCLambdaRole": {
+      "Metadata": {
+        "License": "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
       },
-      "Type" : "AWS::IAM::Role",
-      "Properties" : {
-        "AssumeRolePolicyDocument" : {
-          "Version" : "2012-10-17",
-          "Statement" : [ {
-            "Effect" : "Allow",
-            "Principal" : { "Service" : "lambda.amazonaws.com" },
-            "Action" : [ "sts:AssumeRole" ]
-      } ]
-           },
-        "Policies" : [ {
-          "PolicyName" : "CreateVPC",
-          "PolicyDocument" : {
-            "Statement" : [ {
-              "Effect" : "Allow",
-              "Action" :  [
-                "cloudformation:CreateStack",
-                "cloudformation:DescribeStacks",
-                "ec2:AllocateAddress",
-                "ec2:AttachInternetGateway",
-                "ec2:AssociateRouteTable",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:CreateInternetGateway",
-                "ec2:CreateNatGateway",
-                "ec2:CreateRoute",
-                "ec2:CreateRouteTable",
-                "ec2:CreateSecurityGroup",
-                "ec2:CreateSubnet",
-                "ec2:CreateTags",
-                "ec2:CreateVpc",
-                "ec2:DescribeAddresses",
-                "ec2:DescribeAvailabilityZones",
-                "ec2:DescribeInternetGateways",
-                "ec2:DescribeNatGateways",
-                "ec2:DescribeRoutes",
-                "ec2:DescribeRouteTables",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVpcs",
-                "ec2:ModifyVpcAttribute",
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:DescribeExportTasks",
-                "logs:DescribeLogGroups",
-                "logs:DescribeLogStreams",
-                "logs:DescribeMetricFilters",
-                "logs:ListTagsLogGroup",
-                "logs:PutDestinationPolicy",
-                "logs:PutLogEvents",
-                "logs:PutRetentionPolicy",
-                "logs:TagLogGroup"
-              ],
-              "Resource" : "*"
-            } ]
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "VPCWorkshopRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "CreateVPC",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cloudformation:CreateStack",
+                    "cloudformation:DescribeStacks",
+                    "ec2:AllocateAddress",
+                    "ec2:AttachInternetGateway",
+                    "ec2:AssociateRouteTable",
+                    "ec2:AuthorizeSecurityGroupIngress",
+                    "ec2:CreateInternetGateway",
+                    "ec2:CreateNatGateway",
+                    "ec2:CreateRoute",
+                    "ec2:CreateRouteTable",
+                    "ec2:CreateSecurityGroup",
+                    "ec2:CreateSubnet",
+                    "ec2:CreateTags",
+                    "ec2:CreateVpc",
+                    "ec2:DescribeAddresses",
+                    "ec2:DescribeAvailabilityZones",
+                    "ec2:DescribeInternetGateways",
+                    "ec2:DescribeNatGateways",
+                    "ec2:DescribeRoutes",
+                    "ec2:DescribeRouteTables",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeVpcs",
+                    "ec2:ModifyVpcAttribute",
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeExportTasks",
+                    "logs:DescribeLogGroups",
+                    "logs:DescribeLogStreams",
+                    "logs:DescribeMetricFilters",
+                    "logs:ListTagsLogGroup",
+                    "logs:PutDestinationPolicy",
+                    "logs:PutLogEvents",
+                    "logs:PutRetentionPolicy",
+                    "logs:TagLogGroup",
+                    "ssm:PutParameter",
+                    "ssm:GetParameters",
+                    "kms:CreateAlias",
+                    "kms:CreateKey",
+                    "kms:ListKeys",
+                    "kms:ListAliases",
+                    "kms:Encrypt",
+                    "iam:AddRoleToInstanceProfile",
+                    "iam:AttachRolePolicy",
+                    "iam:CreateInstanceProfile",
+                    "iam:CreateRole",
+                    "iam:DescribeInstanceProfiles",
+                    "iam:DescribeRoles",
+                    "iam:PassRole",
+                    "iam:GetRole",
+                    "iam:PutRolePolicy",
+                    "iam:GetRolePolicy",
+                    "lambda:CreateFunction",
+                    "lambda:InvokeFunction",
+                    "lambda:GetFunctionConfiguration"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
           }
-        } ]
+        ]
       }
     },
 
@@ -206,7 +237,7 @@
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
         "Runtime" : "python3.6",
-        "Timeout" : "300"
+        "Timeout" : "600"
       }
     },
 
@@ -240,6 +271,7 @@
     "RDSLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName": "RDSWorkshopRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -277,7 +309,8 @@
                   "logs:PutDestinationPolicy",
                   "logs:PutLogEvents",
                   "logs:PutRetentionPolicy",
-                  "logs:TagLogGroup"
+                  "logs:TagLogGroup",
+                  "ssm:GetParameters"
                 ],
                 "Resource" : "*"
               },
@@ -326,6 +359,7 @@
           } ]
         },
         "Policies" : [ {
+          "RoleName" : "WebAppLambdaRole",
           "PolicyName" : "CreateWebApp",
           "PolicyDocument" : {
             "Statement" : [ {
@@ -350,6 +384,7 @@
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeVpcs",
                 "ec2:RunInstances",
+                "ec2:DescribeImages",
                 "iam:AddRoleToInstanceProfile",
                 "iam:AttachRolePolicy",
                 "iam:CreateInstanceProfile",
@@ -375,12 +410,69 @@
                 "logs:PutDestinationPolicy",
                 "logs:PutLogEvents",
                 "logs:PutRetentionPolicy",
-                "logs:TagLogGroup"
+                "logs:TagLogGroup",
+                "ssm:GetParameter"
               ],
               "Resource" : "*"
             } ]
           }
-        } ]
+        },
+        {
+          "PolicyName" : "Chaos-SSM",
+          "PolicyDocument" : {
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssm:DescribeAssociation",
+                      "ssm:GetDeployablePatchSnapshotForInstance",
+                      "ssm:GetDocument",
+                      "ssm:DescribeDocument",
+                      "ssm:GetManifest",
+                      "ssm:GetParameter",
+                      "ssm:GetParameters",
+                      "ssm:ListAssociations",
+                      "ssm:ListInstanceAssociations",
+                      "ssm:PutInventory",
+                      "ssm:PutComplianceItems",
+                      "ssm:PutConfigurePackageResult",
+                      "ssm:UpdateAssociationStatus",
+                      "ssm:UpdateInstanceAssociationStatus",
+                      "ssm:UpdateInstanceInformation"
+                  ],
+                  "Resource": "*",
+                  "Condition": {
+                      "StringLike": {
+                          "ssm:resourceTag/SSMTag": "chaos-ready"
+                      }
+                  }
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssmmessages:CreateControlChannel",
+                      "ssmmessages:CreateDataChannel",
+                      "ssmmessages:OpenControlChannel",
+                      "ssmmessages:OpenDataChannel"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2messages:AcknowledgeMessage",
+                      "ec2messages:DeleteMessage",
+                      "ec2messages:FailMessage",
+                      "ec2messages:GetEndpoint",
+                      "ec2messages:GetMessages",
+                      "ec2messages:SendReply"
+                  ],
+                  "Resource": "*"
+              }
+          ]
+        }
+        }
+      ]
       }
     },
 
@@ -581,6 +673,7 @@
     "StateExecutionRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "StateExecutionRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -592,11 +685,16 @@
           } ]
         },
         "Policies" : [ {
-          "PolicyName" : "CreateVPC",
+          "PolicyName" : "StateMachineRole",
           "PolicyDocument" : {
             "Statement" : [ {
               "Effect" : "Allow",
-              "Action" :  "*",
+              "Action" :  [
+                "lambda:InvokeFunction",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
               "Resource" : "*"
             } ]
           }
