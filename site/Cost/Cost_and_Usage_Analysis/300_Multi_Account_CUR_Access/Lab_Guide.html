@@ -2653,7 +2653,7 @@
 <li>S3: Read access to the bucket containing the Cost and Usage reports; </li>
 <li>S3: List, Read, Write access to the bucket containing Athena query results.</li>
 </ul>
-<p>NOTE: You must modify this policy in line with security best practices (least privliege) before implementation.</p>
+<p>NOTE: You must modify this policy in line with security best practices (least privilege) before implementation.</p>
 <p>Next we will create a role <strong>Sub_Acct_Athena</strong> and attach the newly created policy.</p>
 <p>3 - From the IAM dashboard, create a role for <strong>Another AWS Account</strong>, enter in the Sub-Accounts <strong>Account ID</strong>:
 <img alt="Images/Role0.png" src="Images/Role0.png" /></p>
@@ -2844,7 +2844,7 @@
 <p>2 - Delete the policy <strong>Athena_List_Read</strong></p>
 <h3 id="43-use-athena-to-access-a-cur-in-masterpayer">4.3 Use Athena to access a CUR in Master/Payer</h3>
 <p>1 - Go to the <strong>CloudFormation Dashboard</strong></p>
-<p>2 - Update the stack and implement the <strong>original yml</strong> file. If you didnt save this, it will be in the S3 bucket that contains the CUR files.</p>
+<p>2 - Update the stack and implement the <strong>original yml</strong> file. If you didn't save this, it will be in the S3 bucket that contains the CUR files.</p>
 <p>3 - If you change the permissions ACL on the old CUR files, follow the same process - but remove the member/linked account from the ACL. </p>
 <p>4 - Login to the member/linked account, go to the <strong>Glue Dashboard</strong> </p>
 <p>5 - Delete the database that was created</p>
