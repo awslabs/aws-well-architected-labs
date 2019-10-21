@@ -1,13 +1,10 @@
-Troubleshooting Guide for 300 - Testing for Resiliency of EC2, RDS, and S3
-==========================================================================
+# Troubleshooting Guide for 300 - Testing for Resiliency of EC2, RDS, and S3
 
-Introduction
-------------
+## Introduction
 
 The purpose of this guide is to prepare for the expected questions and problems.
 
-Common AWS Account Problems
----------------------------
+## Common AWS Account Problems
 
 If running these labs on your own, you will need to use an AWS account that meets the following qualifications. If you are at a live workshop, you may have been supplied with an AWS account for the lab. If not, and you cannot remedy your account issues, please see a proctor who can help pair you with another student who does have these permissions and you can “pair lab”.
 
@@ -17,13 +14,11 @@ The next most common problem in deploying the test application is exceeding the 
 
 The service linked roles may exist already in an account. If they do, you will see a failure to deploy the first CFN stack for `lambda_functions_for_deploy.json`. You should delete the stack and redeploy it, but please make sure you are appropriately setting the Boolean parameters of the deployment machine stack. If at a live workshop, please see a proctor if you need more help with this.
 
-Problems with Service Linked Roles
-----------------------------------
+## Problems with Service Linked Roles
 
 If you don’t see the existing service linked IAM Role and try to create it in the deployment machine, it will not deploy. It will fail back with an error that the Role already exists under another name. Simply set the parameter to **false** and redeploy.
 
-Problems with the Step Functions State Machine and/or Lambda Functions
-----------------------------------------------------------------------
+## Problems with the Step Functions State Machine and/or Lambda Functions
 
 The state machine is idempotent and can be re-run if something times out.
 
@@ -58,8 +53,50 @@ After execution, you can click on the “Details” and see the log of the funct
 
 You can also go to the CloudWatch logs to see details of the execution.
 
-Problems Executing the Scripts
-------------------------------
+## DeployRDS step fails
+
+If you get the following error for **DeployRDS** then there is an obsolete DB password stored in SSM Parameter store. This can happen if you had a problem with deployment, stopped it, and then restarted it.
+
+`The ciphertext refers to a customer master key that does not exist, does not exist in this region, or you are not allowed to access.`
+
+Solution:
+
+1. In the AWS console [go to SSM Parameter store](https://us-east-2.console.aws.amazon.com/systems-manager/parameters)
+1. Delete the parameters stored there
+1. Go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation) and delete (roll back) the **ResiliencyVPC** stack
+1. Resume by [re-starting deployment of the infrastructure](Lab_Guide.md#deployinfra)
+   * Note you will need to use a new name, such as _BuildResiliency2_
+
+## RDSStackCompleteChoice -> DeployFailedStatus
+
+If your deployment machine fails and looks like this
+
+![RDSDeployTimedOut](Images/RDSDeployTimedOut.png)
+
+And if the following is true:
+
+* click on the **RDSStackCompleteChoice** stage of your workflow
+* select **Output**
+* RDS stack shows status as **CREATE_IN_PROGRESS**
+
+      "rds": {
+        "stackname": "MySQLforResiliencyTesting",
+        "status": "CREATE_IN_PROGRESS"
+      }
+
+Then it is likley that your RDS deployment timed out before the workflow could complete. Do the following to continue:
+
+1. Go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
+1. Verify the status for **MySQLforResiliencyTesting** is **CREATE_COMPLETE**
+1. Go back to your state machine
+1. Click **New Execution**
+1. Give your execution a new name, unique from previous ones (such as "BuildResiliency3")
+
+    ![RDSDbConnections-full](Images/RDSDbConnections-full.png)
+
+* The workflow will quickly determine which stacks have already been deployed, and start immediately on the final (web server) stack.
+
+## Problems Executing the Scripts
 
 If you are not using Amazon Linux, you will need to install the AWS CLI.
 
@@ -68,8 +105,7 @@ where the PATH will see it.
 
 Older versions of bash and the windows bash implementation complain about the `{` and `}` characters in the sed commands. They can be deleted in older version of bash (but note that they are required in newer versions of bash).
 
-Assisting with the Failure Tests
---------------------------------
+## Assisting with the Failure Tests
 
 ### Failure modes individual
 
@@ -79,47 +115,43 @@ If you see `null`s in output messages, it is possible that you are not specifyin
 
 Installing `boto3` via `pip` on an Amazon Linux instance will cause you to have errors on the command line:
 
-```
-$ aws help
+      $ aws help
 
-Traceback (most recent call last):
+      Traceback (most recent call last):
 
-File "/usr/local/bin/aws", line 19, in \<module\>
+      File "/usr/local/bin/aws", line 19, in \<module\>
 
-import awscli.clidriver
+      import awscli.clidriver
 
-File "/usr/local/lib/python2.7/dist-packages/awscli/clidriver.py", line 19, in
-\<module\>
+      File "/usr/local/lib/python2.7/dist-packages/awscli/clidriver.py", line 19, in
+      \<module\>
 
-from botocore.hooks import AliasedEventEmitter
+      from botocore.hooks import AliasedEventEmitter
 
-ImportError: cannot import name AliasedEventEmitter
-```
+      ImportError: cannot import name AliasedEventEmitter
 
 To fix this, you need to remove the `aws-cli`, downgrade `boto`, and install an older version of the `aws-cli`:
 
-```
-$ sudo yum remove aws-cli
+      $ sudo yum remove aws-cli
 
-$ sudo yum downgrade python27-botocore 1.8
+      $ sudo yum downgrade python27-botocore 1.8
 
-$ sudo yum install aws-cli-1.14.9
-```
+      $ sudo yum install aws-cli-1.14.9
 
 #### EC2 Instance Failure
 
 Some additional questions to ask yourself:
 
-1.  Open  `fail_instance.sh/fail_instance.py/InstanceFailover.java/InstanceFailover.cs` in an editor. How could you make this randomly select an instance?
+1. Open  `fail_instance.sh/fail_instance.py/InstanceFailover.java/InstanceFailover.cs` in an editor. How could you make this randomly select an instance?
 
-2.  What are the concerns if you have hundreds or thousands of instances?
+1. What are the concerns if you have hundreds or thousands of instances?
 
-3.  What if you don’t have an Auto Scaling group? How could you recover?
+1. What if you don’t have an Auto Scaling group? How could you recover?
 
-4.  How do they test EC2 AutoRecovery? The answer is to open a support ticket.
+1. How do they test EC2 AutoRecovery? The answer is to open a support ticket.
     This requires extra effort on our side.
 
-5.  How would you “undo” this failure mode?
+1. How would you “undo” this failure mode?
 
 #### RDS Failover
 
@@ -129,13 +161,13 @@ If you see nulls in output messages, it is possible that you are not specifying 
 
 Some additional questions to ask yourself:
 
-1.  Why didn’t the Auto Scaling Group terminate them and replace the instances? Or why did it?
+1. Why didn’t the Auto Scaling Group terminate them and replace the instances? Or why did it?
 
-2.  How could you make the application resilient to the transient failure?
+1. How could you make the application resilient to the transient failure?
 
-3.  What if this was a single AZ RDS?
+1. What if this was a single AZ RDS?
 
-4.  How would you fail the S3 portion of the application?
+1. How would you fail the S3 portion of the application?
 
 #### AZ Failure
 
@@ -143,30 +175,30 @@ The Java and C# implementations have some improved error checking over the bash 
 
 This is what the failure simulation does:
 
-1.  Loop through all the Auto Scaling Groups by calling Auto Scaling’s
+1. Loop through all the Auto Scaling Groups by calling Auto Scaling’s
     `DescribeAutoScalingGroups`; for each group, look at the AZs it is
     configured for. If the desired AZ in in the list, we can reconfigure the
     group by calling `UpdateAutoScalingGroup` to update the AZs to the list
     without this AZ in it.
 
-2.  Call EC2’s `DescribeSubnets` to identify the subnets in the AZ desired
+1. Call EC2’s `DescribeSubnets` to identify the subnets in the AZ desired
     within the VPC. It then creates a NACL, adds entries to block ingress and
     egress of all ports and protocols, then calls EC2’s
     `ReplaceNetworkAclAssociation` to associate the subnets with the NACL.
     This will cause the ELB to route traffic to the other AZs since it has Cross
     AZ enabled.
 
-3.  Loop through all the RDS Instances by calling RDS `DescribeInstances`. If this instance’s `AvailabilityZone` is this AZ, then if it is an RDS
+1. Loop through all the RDS Instances by calling RDS `DescribeInstances`. If this instance’s `AvailabilityZone` is this AZ, then if it is an RDS
     Multi-AZ, call RDS `RebootDBInstance` with `ForceFailover` set to
     `True`.
 
 Some additional questions to ask yourself:
 
-1.  What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
+1. What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
 
-2.  What would you do if the ASG was only in one AZ? You could call the    AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances
+1. What would you do if the ASG was only in one AZ? You could call the    AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances
 
-3.  How would you undo all these changes?
+1. How would you undo all these changes?
 
 #### Region Failure
 
