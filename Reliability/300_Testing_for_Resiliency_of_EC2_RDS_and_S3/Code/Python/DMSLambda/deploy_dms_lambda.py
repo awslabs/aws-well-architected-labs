@@ -27,6 +27,7 @@ import json
 LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
 
 AWS_REGION = 'us-east-2'
+AWS_REGION_DEST = 'us-west-2'
 
 stackname = 'DMSforResiliencyTesting'
 
@@ -92,11 +93,15 @@ def deploy_dms(event):
     logger.debug("Running function deploy_dms")
     try:
         region = event['secondary_region_name']
+        source_region = region
+        dest_region = event['region_name']
         cfn_region = event['cfn_region']
         bucket = event['cfn_bucket']
         key_prefix = event['folder']
     except Exception:
         region = os.environ.get('AWS_REGION', AWS_REGION)
+        source_region = region
+        dest_region = AWS_REGION_DEST
         cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
         bucket = "arc403-well-architected-for-reliability",
         key_prefix = "Reliability/"
@@ -165,24 +170,42 @@ def deploy_dms(event):
         sys.exit(1)
     dest_server_name = address_parsed[0]
 
+    # Get workshop name
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        logger.debug("Unexpected error! (when parsing workshop name)\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+
+    # Get DB instance type only if it was specified (it is optional)
+    try:
+        if 'db_instance_class' in event:
+          db_instance_class = event['db_instance_class']
+        else:
+          db_instance_class = None
+    except Exception:
+        logger.debug("Unexpected error! (when parsing DB instance class)\n Stack Trace:", traceback.format_exc())
+        db_instance_class = None
+
     # Prepare the stack parameters
     dms_parameters = []
     dms_parameters.append({'ParameterKey': 'SourceDatabaseName', 'ParameterValue': source_server_name, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DestDatabaseName', 'ParameterValue': dest_server_name, 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'SourceDatabaseRegion', 'ParameterValue': source_region, 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'DestDatabaseRegion', 'ParameterValue': dest_region, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DatabaseName', 'ParameterValue': 'iptracker', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'MigrationSubnetIds', 'ParameterValue': dms_subnet_list, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'MigrationSecurityGroups', 'ParameterValue': dms_sg, 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'MigrationInstanceClass', 'ParameterValue': 'dms.t2.micro', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'SourceDBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'SourceDBPassword', 'ParameterValue': 'foobar123', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DestDBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DestDBPassword', 'ParameterValue': 'foobar123', 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
+    # If DB instance class supplied then use it, otherwise CloudFormation template will use Parameter default
+    if (db_instance_class is not None):
+      rds_parameters.append({'ParameterKey': 'MigrationInstanceClass', 'ParameterValue': db_instance_class, 'UsePreviousValue': True})
 
     stack_tags = []
-    try:
-        workshop_name = event['workshop']
-    except Exception:
-        workshop_name = 'UnknownWorkshop'
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
     capabilities = []
     capabilities.append('CAPABILITY_NAMED_IAM')
@@ -248,6 +271,12 @@ def lambda_handler(event, context):
         process_global_vars()
 
         # Make sure there is not already a DMS Stack in the secondary region
+
+        # Temporary logic to disable DMS stack until we have a solution for cross region SSM secure paramters (to get dest DB password)
+        logger.debug("Stack " + stackname + " SKIPPED")
+        return_dict = {'stackname': stackname}
+        return return_dict
+
         if not check_stack(event['secondary_region_name'], stackname):
             logger.debug("Stack " + stackname + " doesn't exist; creating")
             return deploy_dms(event)

@@ -19,6 +19,16 @@
       "Type" : "String"
     },
 
+    "SourceDatabaseRegion" : {
+      "Description" : "region for source DB",
+      "Type" : "String"
+    },
+
+    "DestDatabaseRegion" : {
+      "Description" : "region for dest  DB",
+      "Type" : "String"
+    },
+
     "DatabaseName" : {
       "Description" : "Name of database to be migrated",
       "Type" : "String"
@@ -35,6 +45,7 @@
     },
 
     "MigrationInstanceClass" : {
+      "Description" : "DB Instance Class",
       "Type": "String",
       "AllowedValues": [
           "db.t3.micro",
@@ -64,16 +75,6 @@
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
     },
 
-    "SourceDBPassword" : {
-      "NoEcho" : "true",
-      "Description" : "DB admin account password",
-      "Type": "String",
-      "MinLength" : "1",
-      "MaxLength" : "41",
-      "AllowedPattern" : "[a-zA-Z0-9-_]*",
-      "ConstraintDescription" : "must contain only alphanumeric characters."
-    },
-
     "DestDBUser": {
       "Description" : "DB admin account username",
       "Type" : "String",
@@ -82,16 +83,6 @@
       "AllowedPattern" : "[a-zA-Z][a-zA-Z0-9]*",
       "Default" : "admin",
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
-    },
-
-    "DestDBPassword" : {
-      "NoEcho" : "true",
-      "Description" : "DB admin account password",
-      "Type": "String",
-      "MinLength" : "1",
-      "MaxLength" : "41",
-      "AllowedPattern" : "[a-zA-Z0-9-_]*",
-      "ConstraintDescription" : "must contain only alphanumeric characters."
     }
   },
 
@@ -137,8 +128,12 @@
         "Port" : "3306",
         "EndpointType" : "source",
         "EngineName" : "MYSQL",
-        "Password" : { "Ref" : "SourceDBPassword" },
-        "Username" : { "Ref" : "SourceDBUser" },
+        "MasterUsername": {
+          "Ref": "SourceDBUser"
+        },
+        "MasterUserPassword": {
+            "Fn::Sub": "{{resolve:ssm-secure:${WorkshopName}:1}}"
+        },
         "Tags" : [
           {
             "Key" : "Name",
@@ -156,8 +151,12 @@
         "Port" : "3306",
         "EndpointType" : "target",
         "EngineName" : "MYSQL",
-        "Password" : { "Ref" : "DestDBPassword" },
-        "Username" : { "Ref" : "DestDBUser" },
+        "MasterUsername": {
+          "Ref": "DestDBUser"
+        },
+        "MasterUserPassword": {
+            "Fn::Sub": "{{resolve:ssm-secure:${WorkshopName}:1}}"
+        },
         "Tags" : [
           {
             "Key" : "Name",
