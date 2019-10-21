@@ -22,6 +22,7 @@ _All entries are **Case-Sensitive**_
 |`CreateTheAutoScalingServiceRole`|`true`|
 |`CreateTheELBServiceRole`|`true`|
 |`CreateTheRDSServiceRole`|`true`|
+|`DMSLambdaKey`|`Reliability/DMSLambda.zip`|
 |`LambdaFunctionsBucket`|`aws-well-architected-labs-ohio`|
 |`RDSLambdaKey`|`Reliability/RDSLambda.zip`|
 |`RDSRRLambdaKey`|`Reliability/RDSReadReplicaLambda.zip`|
