@@ -189,8 +189,8 @@ Using bash is an effective way to execute the failure injection tests for this w
 
 1. Download the [resiliency bash scripts from GitHub](Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
       * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_instance.sh?raw=1)
-      * [bash/fail_instance.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
-      * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
+      * [bash/failover_rds.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
+      * [bash/fail_az.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
 
 1. Set the scripts to be executable.  
 
