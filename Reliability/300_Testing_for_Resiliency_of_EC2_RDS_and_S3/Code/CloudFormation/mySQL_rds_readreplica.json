@@ -31,6 +31,7 @@
     },
 
     "DBInstanceClass" : {
+      "Description" : "DB Instance Class",
       "Type": "String",
       "AllowedValues": [
           "db.t3.micro",
@@ -82,7 +83,7 @@
                                                       { "Ref" : "SourceDatabaseID" }
 						      ]] },
         "AllocatedStorage" :  "100",
-	"CopyTagsToSnapshot" : "True",
+	      "CopyTagsToSnapshot" : "True",
         "DBInstanceClass" : { "Ref" : "DBInstanceClass" },
         "Engine" : "mysql",
         "EngineVersion" : "5.7",
@@ -92,8 +93,8 @@
         "Tags" : [
           {
             "Key" : "Name",
-	    "Value" : "ResiliencyVPC-MySQLDB"
-	  }
+	          "Value" : "ResiliencyVPC-MySQLDB"
+	        }
         ]
       }
     }  
