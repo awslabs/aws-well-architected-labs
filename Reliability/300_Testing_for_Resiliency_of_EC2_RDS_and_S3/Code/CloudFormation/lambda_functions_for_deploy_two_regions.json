@@ -350,6 +350,7 @@
     "WebAppLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "WebAppLambdaRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -359,7 +360,6 @@
           } ]
         },
         "Policies" : [ {
-          "RoleName" : "WebAppLambdaRole",
           "PolicyName" : "CreateWebApp",
           "PolicyDocument" : {
             "Statement" : [ {
