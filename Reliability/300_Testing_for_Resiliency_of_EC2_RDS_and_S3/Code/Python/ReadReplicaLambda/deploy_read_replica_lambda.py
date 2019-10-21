@@ -262,7 +262,7 @@ if __name__ == "__main__":
             'status': 'CREATE_COMPLETE'
         },
         'web': {
-            'stackname': 'WebServersforResiliencyTesting',
+            'stackname': 'WebServersForResiliencyTesting',
             'status': 'CREATE_COMPLETE'
         }
     }

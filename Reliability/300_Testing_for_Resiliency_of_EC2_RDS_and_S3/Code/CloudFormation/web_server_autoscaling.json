@@ -63,7 +63,7 @@
     "BootObject" : {
       "Description" : "Object in Boot Bucket to download and bootstrap from",
       "Type" : "String",
-      "Default" : "install_simple_server.sh"
+      "Default" : "server.py"
     },
 
     "WebSiteImage" : {
@@ -143,8 +143,8 @@
               "source /home/ec2-user/venv/bin/activate\n",
               "pip install ec2_metadata\n",
               "pip install pymysql\n",
-              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "server.py\n",
-              "python3 server.py -u ", { "Ref" : "WebSiteImage" }, " -p 80 -s ", { "Ref" : "RDSUser" }, " -w ", { "Ref" : "RDSPassword"}, " -d iptracker -o ", { "Ref" : "RDSHostName"}, "\n"
+              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, { "Ref" : "BootObject" }, "\n",
+              "python3 ", { "Ref" : "BootObject" }, " -u ", { "Ref" : "WebSiteImage" }, " -p 80 -s ", { "Ref" : "RDSUser" }, " -w ", { "Ref" : "RDSPassword"}, " -d iptracker -o ", { "Ref" : "RDSHostName"}, "\n"
             ]]
             }
         }
@@ -199,7 +199,7 @@
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
       "Properties" : {
         "AvailabilityZones" : {"Ref" : "AvailabilityZones"},
-        "MinSize" : "2",
+        "MinSize" : "3",
         "MaxSize" : "3",
         "HealthCheckType" : "ELB",
         "HealthCheckGracePeriod" : "60",
