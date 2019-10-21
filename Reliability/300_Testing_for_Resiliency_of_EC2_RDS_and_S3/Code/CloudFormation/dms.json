@@ -5,6 +5,10 @@
 
   "Parameters" : {
 
+    "WorkshopName": {
+      "Type": "String"
+    },
+
     "SourceDatabaseName" : {
       "Description" : "Name of the source RDS server",
       "Type" : "String"
@@ -31,12 +35,23 @@
     },
 
     "MigrationInstanceClass" : {
-      "Description" : "DB Instance Class",
-      "Type" : "String", 
-      "AllowedValues" : [ "dms.t2.micro", "dms.t2.small", "dms.t2.medium", "dms.t2.large", 
-        "dms.c4.large", "dms.c4.xlarge", "dms.c4.2xlarge", "dms.c4.4xlarge" ],
-      "Default" : "dms.t2.micro",
-      "ConstraintDescription" : "must select a valid database instance type."
+      "Type": "String",
+      "AllowedValues": [
+          "db.t3.micro",
+          "db.t3.small",
+          "db.t3.medium",
+          "db.t3.large",
+          "db.t3.xlarge",
+          "db.t3.2xlarge",
+          "db.m5.large",
+          "db.m5.xlarge",
+          "db.m5.2xlarge",
+          "db.m5.4xlarge",
+          "db.m5.12xlarge",
+          "db.m5.24xlarge"
+      ],
+      "Default": "db.t3.large",
+      "ConstraintDescription": "must select a valid database instance type."
     },
 
     "SourceDBUser": {
