@@ -3,70 +3,102 @@
 ## Authors
 
 * Rodney Lester, Reliability Lead, Well-Architected, AWS
+* Adrian Hornsby, Tech Evangelist, AWS
+* Seth Eliot, Resiliency Lead, Well-Architected, AWS
 
 ## Table of Contents
 
-1. [Deploying the infrastructure](#deploy_infra)
-2. [Discussion and Example Failure Scenarios](#failure_scenarios)
-3. [Failure modes](#failure_modes)
-4. [Tear Down](#tear_down)
+1. [Deploy the Infrastructure](#deploy_infra)
+1. [Configure Execution Environment](#configure_env)
+1. [Test Resiliency Using Failure Injection](#failure_injection)
+1. [Tear down this lab](#tear_down)
 
-## 1. Deploying the infrastructure <a name="deploy_infra"></a>
+## 1. Deploy the Infrastructure <a name="deploy_infra"></a>
 
-AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balancing, and Amazon RDS to create the services and metrics they manage. In the past, these Roles may have been created automatically for you, or we may need to create them. Here is how to find which roles you need to create.  
+You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a data store on Amazon Relational Database Service (RDS).
 
-### 1.1 Checking for Existing Service-Linked Roles
+![ThreeTierArchitecture](Images/ThreeTierArchitecture.png)
 
-1. Sign in to the AWS Management Console as an IAM user with MFA enabled or in a federated Role, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
-2. In the navigation pane, click **Roles**.  
-![SelectIAMRoles](Images/SelectIAMRoles.png)  
-3. In the filter box, type “Service” to find the service linked roles that exist in your account and look for “AutoScaling,” “ELB” or “ElasticLoadBalancing,” and “RDS.” In this screenshot, the service linked role for AutoScaling exists, but the roles for ELB and RDS do not. Note which roles will need to be created as you will use this information when performing the next step.  
-![LookingForServiceLinkedRoles](Images/LookingForServiceLinkedRoles.png)  
-4. In the AWS Services Search Box, type “CloudFormation” and click enter.  
-5. You will need to download the CloudFormation template that will deploy the lambda functions and step functions state machine. Change the region to **Ohio** and navigate to the CloudFormation console.  
-![SelectOhio](Images/SelectOhio.png)  
-6. On the CloudFormation console, click “Create Stack:”.  
-![Images/CreateStackButton](Images/CreateStackButton.png)  
-7. There are two versions that can be deployed. You can deploy in one AWS region, which will allow you start testing sooner, or you can deploy into 2 AWS regions, which will enable you to test some additional aspects of S3, as well as as simulation a regional failure of your application
-    1. For a single region deployment, select the option to “Specify an Amazon S3 template" and enter **<https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy.json>**  
-![LambdaCFNEntered-ohio](Images/LambdaCFNEntered-ohio.png)
-    2. For a two region deployment, select the option to “Specify an Amazon S3 template" and enter **<https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/lambda_functions_for_deploy_two_regions.json>**  
-![LambdaCFNEntered-tworegion](Images/LambdaCFNEntered-tworegion.png)
-8. Click the “Next” button. On this page you will enter the following information:
-    1. For the single region deployment:
-         1. Stack name: “DeployResiliencyWorkshop” <-No spaces!
-         2. EnableAutoScalingServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be false since it already exists.
-         3. EnableELBServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         4. EnableRDSServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         5. LambdaFunctionsBucket: “aws-well-architected-labs-ohio” <-Case sensitive!
-         6. RDSLambdaKey: “Reliability/RDSLambda.zip” <-Case sensitive!
-         7. VPCLambdaKey: “Reliability/VPCLambda.zip” <-Case sensitive!
-         8. WaitForStackLambdaKey: “Reliability/WaitForStack.zip” <-Case sensitive!
-         9. WebAppLambdaKey: “Reliability/WebAppLambda.zip” <-Case sensitive!
-        ![CFNParameters-ohio](Images/CFNParameters-ohio.png)
-    2. For the two region deployment:
+### 1.1 Log into the AWS console <a name="awslogin"></a>
 
-         1. Stack name: “DeployResiliencyWorkshop” <-No spaces!
-         2. DMSLambdaKey: “Reliability/DMSLambda.zip” <-Case sensitive!
-         3. EnableAutoScalingServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be false since it already exists.
-         4. EnableELBServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         5. EnableRDSServiceRole: “false” or “true,” depending on whether it exists. In the example, this will be true because it does not exist.
-         6. LambdaFunctionsBucket: “aws-well-architected-labs-ohio” <-Case sensitive!
-         7. RDSLambdaKey: “Reliability/RDSLambda.zip” <-Case sensitive!
-         8. RDSRRLambdaKey: "Reliability/RDSReadReplicaLambda.zip" <-Case sensitive!
-         9. VPCLambdaKey: “Reliability/VPCLambda.zip” <-Case sensitive!
-         10. WaitForStackLambdaKey: “Reliability/WaitForStack.zip” <-Case sensitive!
-         11. WebAppLambdaKey: “Reliability/WebAppLambda.zip” <-Case sensitive!
-      ![CFNParameters-2Region](Images/CFNParameters-2Region.png)  
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-9. Click the “Next” button. On the “Options” page, click the “Next” button at the bottom of the page. On the “Review” page, scroll to the bottom and select the option “I acknowledge that AWS CloudFormation might create IAM resources.” Click the “Create” button. This will take you to the summary with the stack creation in progress.  
-![StackCreationStarted](Images/StackCreationStarted.png)  
-10. This will take approximately a minute to deploy. You now need to navigate to the Step Functions console. At the top of the window, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “Step Functions” in the search box and press the enter key.  
-![EnteringStepFunctions](Images/EnteringStepFunctions.png)  
-11. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-<random characters>.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.  
-![DeploymentMachine](Images/DeploymentMachine.png)  
-12. For input to the execution name, use “BuildResiliency.”
-    1. **One Region Deployment:** For Input, use the following: **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
+* Follow the instructions [here for accessing your AWS account](Documentation/Workshop_AWS_Account.md)
+* **Note**: As part of these instructions you are directed to copy and save **AWS credentials** for your account. Please do so as you will need them later
+
+**If you are using your own AWS account**:
+
+* Sign in to the AWS Management Console as an IAM user or using a federated role
+* You will need AWS credentials with which you can access your account. For example you can use an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from an IAM User you control.
+    * If you do not have these credentials, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
+
+### 1.2 Checking for existing service-linked roles
+
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
+
+**If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md#exist_service_linked_roles), and then return here and resume with the following instructions.
+
+### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
+
+Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure.
+
+*__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work together to deploy your infrastructure*
+
+1. Choose a deployment option. This lab can be run as **single region** *or* **multi region** (two region) deployment.
+    * **single region** is faster to get up and running
+    * **multi region** enables you to test some additional aspects of cross-regional resilience.
+    * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
+
+        |Please execute only the _single region_ labs at this time|
+        |:---:|
+        |Recent updates have made the multi-region approach non-functional. Updates are coming soon to restore this option.|
+
+1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
+    * **single region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy.json?raw=1)
+    * **multi region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1)
+
+1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
+![SelectOhio](Images/SelectOhio.png)
+
+1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”
+![Images/CreateStackButton](Images/CreateStackButton.png)
+
+1. Leave "Prepare template" setting as-is
+      * 1 - For "Template source" select "Upload a template file"
+      * 2 - Specify the CloudFormation template you downloaded
+       ![CFNSFromDownloadedFile](Images/CFNSFromDownloadedFile.png)
+
+1. Click the “Next” button. For "Stack name" enter:
+
+        DeployResiliencyWorkshop
+    ![CFNStackName-ohio](Images/CFNStackName-ohio.png)
+
+1. On the same screen, for "Parameters" enter the appropriate values:
+    * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Leave all the parameters at their default values
+    * **If you are using your own AWS account**: Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles.md#cfn_service_linked_roles) and leave all other parameters at their default values.
+    * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
+
+1. Click the “Next” button.
+      * On the "Configure stack options" page, click the “Next” again
+      * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
+      * Click the “Create stack” button.
+     ![CFNIamCapabilities](Images/CFNIamCapabilities.png)
+
+1. This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
+  ![StackCreationStarted](Images/StackCreationStarted.png)  
+  This will take approximately a minute to deploy.  When it shows status `CREATE_COMPLETE`, then you are finished with this step.
+
+### 1.4 Deploy infrastructure and run the service <a name="deployinfra"></a>
+
+1. Go to the AWS Step Function console at <https://console.aws.amazon.com/states>
+
+1. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-*random characters*.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.
+![ExecutionStart-ohio](Images/ExecutionStart-ohio.png)
+
+1. On the "New execution" dialog, for "Enter an execution name" delete the auto-generated name and replace it with:  `BuildResiliency`
+
+1. Then for "Input" enter JSON that will be used to supply parameter values to the Lambdas in the workflow.
+      * **single region** uses the following values:
 
             {
               "log_level": "DEBUG",
@@ -78,315 +110,526 @@ AWS requires “Service-Linked” Roles for AWS Auto Scaling, Elastic Load Balan
               "workshop": "300-ResiliencyofEC2RDSandS3",
               "boot_bucket": "aws-well-architected-labs-ohio",
               "boot_prefix": "Reliability/",
-              "boot_object": "bootstrap300Resiliency.sh",
               "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
             }
 
-        Then click the “Start Execution” button.  
+      * **multi region** uses the [values here](Documentation/Multi_Region_Event_Data.md)
+      * **Note**: for `websiteimage` you can supply an alternate link to a public-read-only image in an S3 bucket you control. This will allow you to run S3 resiliency tests as part of the lab
+      * Then click the “Start Execution” button.
 
         ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
 
-    1. **Two Region Deployment:** For Input, use the following: **Note:** If you want to test failure of S3, then you should use an image in S3 that you control, and it should have public read access only.
+1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
+      * **single region**: approximately 20-25 minutes to deploy
+      * **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutes you can start executing lab exercises.
 
-            {
-              "region1": {
-                "log_level": "DEBUG",
-                "region_name": "us-east-2",
-                "secondary_region_name": "us-west-2",
-                "cfn_region": "us-east-2",
-                "cfn_bucket": "aws-well-architected-labs-ohio",
-                "folder": "Reliability/",
-                "workshop": "300-ResiliencyofEC2RDSandS3",
-                "boot_bucket": "aws-well-architected-labs-ohio",
-                "boot_prefix": "Reliability/",
-                "boot_object": "bootstrap300Resiliency.sh",
-                "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-              },
-              "region2": {
-                "log_level": "DEBUG",
-                "region_name": "us-west-2",
-                "secondary_region_name": "us-east-2",
-                "cfn_region": "us-east-2",
-                "cfn_bucket": "aws-well-architected-labs-ohio",
-                "folder": "Reliability/",
-                "workshop": "300-ResiliencyofEC2RDSandS3",
-                "boot_bucket": "aws-well-architected-labs-ohio",
-                "boot_prefix": "Reliability/",
-                "boot_object": "bootstrap300Resiliency.sh",
-                "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-              }
-            }
-
-        Then click the “Start Execution” button.  
-
-        ![ExecutionInput-2Regions](Images/ExecutionInput-2Regions.png)  
-
-13.  This will take approximately 20-25 minutes for one region to deploy and approximately 45-50 minutes for two regions to deploy. You will have enough to start executing the lab exercises for the two region in 25-30 minutes. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
-    1. One Region:
+1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
-    1. Two Regions:
-![StateMachineExecuting-2Regions](Images/StateMachineExecuting-2Regions.png)  
-16. You can also watch the CloudFormation stacks as they are created. If you are in a workshop, the instructor will have some background information to share while this is created. You can resume testing when the web tier has been deployed in the Ohio region. This will look something like this on the visual workflow.  
-![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)  
-17. You can start testing:
-    1. When the WaitForWebApp step for a single region deployment is completed, return to the CloudFormation console and select the “WebServersforResiliencyTesting” stack and then the Outputs tab at bottom.  
-![CFNComplete](Images/CFNComplete.png)
-    1. When the WaitForWebApp1 step for a two region deployment is completed, return to the CloudFormation console and select the “WebServersforResiliencyTesting” stack and then the Outputs tab at bottom.
-![CFNReadyForTesting](Images/CFNReadyForTesting.png)
-16. Click the value and it will bring up the website:  
+
+1. You can also watch the [CloudFormation stacks](https://console.aws.amazon.com/cloudformation) as they are created and transition from `CREATE_IN_PROGRESS` to `CREATE_COMPLETE`.
+![DeploymentStacksInProgress](Images/DeploymentStacksInProgress.png)
+
+1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
+
+1. You can resume testing when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
+
+    ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
+
+     * Above screen shot is for **single region**. for **multi region** see [this diagram instead](Documentation/Multi_Region_State_Machine.md)
+
+### 1.5 View website for test web service <a name="website"></a>
+
+1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>.
+      * click on the `WebServersforResiliencyTesting` stack
+      * click on the "Outputs" tab
+      * For the Key `WebSiteURL` copy the value.  This is the URL of your test web service.
+      ![CFNComplete](Images/CFNComplete.png)
+
+1. Click the value and it will bring up the website:  
 ![DemoWebsite](Images/DemoWebsite.png)
 
-## 2. Discussion and Example Failure Scenarios <a name="failure_scenarios"></a>
+(image will vary depending on what you supplied for `websiteimage`)
 
-There is a choice of environments to execute the failure simulations in. Linux command line (bash), Python, Java, and C#.  The instructions for each environment are in separate sections.
+## 2. Configure Execution Environment <a name="configure_env"></a>
 
-### 2.1 Setting Up the bash Environment
+Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.
 
-All the command line scripts use a utility called jq. You can download it from the site and leave it in your local directory, as long as that is in your execution path:  
-[https://stedolan.github.io/jq/](https://stedolan.github.io/jq/)  
+You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C# instructions for these are also provided.
 
-1. You can find out what your execution path is with the following command.
+### 2.1 Setup AWS credentials and configuration
 
-        $ echo $PATH
-        /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:/home/ec2-user/.local/bin:/home/ec2-user/bin
+Your execution environment needs to be configured to enable access to the AWS account you are using for the workshop. This includes
 
-1. If you have sudo rights, then copy the executable to /usr/local/bin/jq and make it executable.  
+* Credentials - You identified these credentials [back in step 1](#awslogin)
+    * AWS access key
+    * AWS secret access key
+    * AWS session token (used in some cases)
 
-        $ sudo cp jq-linux64 /usr/local/bin/jq
-        $ sudo chmod 755 /usr/local/bin/jq
+* Configuration
+    * Region: us-east-2
+    * Default output: JSON
 
-2. If you do not have sudo rights, then copy it into your home directory under a /bin directory. In Amazon linux, this is typically /home/ec2-user/bin.  
+Note: **us-east-2** is the **Ohio** region
 
-        $ cp jq-linux64 ~/bin/jq
-        $ chmod 755 ~/bin/jq
+If you already know how to configure these, please do so now. If you need help then [follow these instructions](Documentation/AWS_Credentials.md)
 
-4. Install the AWS Command Line Interface (CLI) if you do not have it installed (it is installed by default on Amazon Linux).  
-[https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
+### 2.2 Set up the bash environment <a name="bash"></a>
 
-5. Run the aws configure command to configure your command line options. This will prompt you for the AWS Access Key ID, AWS Secret Access Key, and default region name. Enter the key information if you do not already have them installed, and set the default region to “us-east-2” and set the default output format as “json”.  
+Using bash is an effective way to execute the failure injection tests for this workshop. The bash scripts make use of the AWS CLI. If you will be using bash, then follow the directions in this section. If you cannot use bash, then [skip to the next section](#notbash).
 
-        $ aws configure
-        AWS Access Key ID [*************xxxx]: <Your AWS Access Key ID>
-        AWS Secret Access Key [**************xxxx]: <Your AWS Secret Access Key>
-        Default region name: [us-east-2]: us-east-2
-        Default output format [None]: json
+1. Prerequisites
 
-6. Download the zip file of the resiliency bash scripts at the following URL:  
-[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/bashresiliency.zip)
-7. Unzip the folder in a location convenient for you to execute the scripts.  
-8. They are also available in the [Code/FailureSimulations/bash/](Code/FailureSimulations/bash/) directory.
+     * `awscli` AWS CLI installed
 
-### 2.2 Setting up a Programming Language Based Environment
+            $ aws --version
+            aws-cli/1.16.249 Python/3.6.8...
+         * Version 1.1 or higher is fine
+         * If you instead got `command not found` then [see instructions here to install `awscli`](Documentation/Software_Install.md#awscli)
 
-You will need the same files that the AWS command line uses for credentials. You can either install the command line and use the ‘aws configure’ command as outlined in the bash set up, or you can manually create the configuration files. To create the files manually, create a .aws folder/directory in your home directory.  
+     * `jq` command-line JSON processor installed.
 
-1. Bash and powershell use the same command.  
+            $ jq --version
+            jq-1.5-1-a5b5cbe
+         * Version 1.4 or higher is fine
+         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-        mkdir ~/.aws
+1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
+      * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_instance.sh?raw=1)
+      * [bash/failover_rds.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
+      * [bash/fail_az.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
 
-2. Change directory to that directory to create the configuration file.  
+1. Set the scripts to be executable.  
 
-    Bash
+        chmod u+x fail_instance.sh
+        chmod u+x failover_rds.sh
+        chmod u+x fail_az.sh
 
-        cd ~/.aws
+### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
-    Powershell
+If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
-        cd ~\.aws
+* If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
 
-3. Use a text editor (vim, emacs, notepad, wordpad) to create a text file (no extension) named “credentials”. In this file you should have the following text.  
+## 3. Test Resiliency Using Failure Injection <a name="failure_injection"></a>
 
-        [default]
-        aws_access_key_id = <Your access key>
-        aws_secret_access_key = <Your secret key>
+**Failure injection** (also known as **chaos testing**) is an effective and essential method to validate and understand the resiliency of your workload and is a recommended practice of the [AWS Well-Architected Reliability Pillar](https://aws.amazon.com/architecture/well-architected/). Here you will initiate various failure scenarios and assess how your system reacts.
 
-4. Create a text file (no extension) named "config". In this file you should have the following text:
+### Preparation
 
-        [default]
-        region = us-east-2
-        output = json
+Before testing, please prepare the following:
 
-### 2.3 Setting Up the Python Environment
+1. Region must be **Ohio**
+      * We will be using the AWS Console to assess the impact of our testing
+      * Throughout this lab, make sure you are in the **Ohio** region
 
-1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: [https://github.com/boto/boto3](https://github.com/boto/boto3)
-2. Download the zip file of the resiliency scripts at the following URL.[https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/pythonresiliency.zip)   
-3. Unzip the folder in a location convenient for you to execute the scripts.  
+        ![SelectOhio](Images/SelectOhio.png)
 
-### 2.4 Setting Up the Java Environment
+1. Get VPC ID
+      * A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service
+      * For these tests you will need to know the **VPC ID** of the VPC you created as part of deploying the service
+      * Navigate to the VPC management console: <https://console.aws.amazon.com/vpc>
+      * In the left pane, click **Your VPCs**
+      * 1 - Tick the checkbox next to **ResiliencyVPC**
+      * 2 - Copy the **VPC ID**
 
-1. The command line utility in Java requires Java 8 SE. In Amazon Linux, you need to install Java 8 and remove Java 7.  
+    ![GetVpcId](Images/GetVpcId.png)
 
-        $ sudo yum install java-1.8.0-openjdk
-        $ sudo yum remove java-1.7.0-openjdk
+     * Save the VPC ID - you will use later whenever `<vpc-id>` is indicated in a command
 
-2. Download the zipfile of the executables at the following URL [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip).   
-3. Unzip the folder in a location convenient for you to execute the command line programs.  
+1. Get familiar with the service website
+      1. Point a web browser at the URL you saved from earlier. (If you do not recall this, then [see these instructions](#website))
+      1. Note the **availability_zone** and **instance_id**
+      1. Refresh the website several times watching these values
+      1. Note the values change. You have deployed one web server per each of three Availability Zones.
+         * The AWS Elastic Load Balancer (ELB) sends your request to any of these three healthy instances.
+         * Refer to the diagram at the start of this Lab Guide to review your deployed system architecture.
 
-### 2.5 Setting Up the C# Environment
+    | |
+    |:---:|
+    |**Availability Zones** (**AZ**s) are isolated sets of resources within a region, each with redundant power, networking, and connectivity, housed in separate facilities. Each Availability Zone is isolated, but the Availability Zones in a Region are connected through low-latency links. AWS provides you with the flexibility to place instances and store data across multiple Availability Zones within each AWS Region for high resiliency.|
+    |*__Learn more__: After the lab [see this whitepaper](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html) on regions and availability zones*|
 
-1. Download the zipfile of the executables at the following URL. [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/csharpresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/csharpresiliency.zip)  
-2. Unzip the folder in a location convenient for you to execute the command line programs.  
+### 3.1 EC2 failure injection
 
-### 2.6 Setting up the Powershell Environment
+This failure injection will simulate a critical problem with one of the three web servers used by your service.
 
-1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. [https://aws.amazon.com/powershell/](https://aws.amazon.com/powershell/)  
-2. Follow the “Getting Started” instructions for configuring credentials. [https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html)
-3. Download the zipfile of the scripts at the following URL. [https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip](https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/powershellresiliency.zip)  
-4. Unzip the folder in a location convenient for you to execute the scripts.
+1. Navigate to the EC2 console at <http://console.aws.amazon.com/ec2> and click **Instances** in the left pane.
 
-## 3. Failure modes <a name="failure_modes"></a>
+1. There are three EC2 instances with a name beginning with **WebServerforResiliency**. For these EC2 instances note:
+      1. Each has a unique *Instance ID*
+      1. There is one instance per each Availability Zone
+      1. All instances are healthy
 
-### 3.1 EC2 Failure Mode
+    ![EC2InitialCheck](Images/EC2InitialCheck.png)
 
-1. The first failure mode will be to fail a web server. To prepare for this, you should have two consoles open: VPC and EC2. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “EC2” in the search box and press the enter key.  
-![EnteringEC2](Images/EnteringEC2.png)  
-2. You also need the VPC Console. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “VPC” in the search box, then right click on the “VPC Isolated Cloud Resources” text and open the link in a new tab or window. You can then click the upward facing icon to the right of the word “Services” to make the menu of services disappear.  
-![EnteringVPC](Images/EnteringVPC.png)  
-3. On the EC2 Console, click “Instances” on the left side to bring up the list of instances.  
-![SelectingInstances](Images/SelectingInstances.png)
-4. On the VPC console, copy the VPC ID by first selecting the VPC named
-   "ResiliencyVPC", and then clicking the icon to copy the VPC ID 
-![GetVpcId](Images/GetVpcId.png)
-5. Use this VPC ID as the command line argument (vpc-id) to the scripts/programs below.  
-   * Instance Failure in bash: Execute the failure mode script for failing an instance:
+1. Open up two more console in separate tabs/windows. From the left pane, open **Target Groups** and **Auto Scaling Groups** in separate tabs. You now have three console views open
 
-          $./fail_instance.sh <vpc-id>
+    ![NavToTargetGroupAndScalingGroup](Images/NavToTargetGroupAndScalingGroup.png)
 
-If you get an error `command not found` or `permission denied`, you may need to
-setup your scripts to enable execution.  From the same directory as the scripts,
-      execute the command `chmod u+x *.sh`
+1. To fail one of the EC2 instances, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
 
-* Instance Failure in Python: Execute the failure mode script for failing an instance:
+    | Language   | Command                                         |
+    | :--------- | :---------------------------------------------- |
+    | Bash       | `./fail_instance.sh <vpc-id>`                   |
+    | Python     | `python fail_instance.py <vpc-id>`              |
+    | Java       | `java -jar app-resiliency-1.0.jar EC2 <vpc-id>` |
+    | C#         | `.\AppResiliency EC2 <vpc-id>`                  |
+    | PowerShell | `.\fail_instance.ps1 <vpc-id>`                  |
 
-        $ python fail_instance.py <vpc-id>
+1. The specific output will vary based on the command used, but will include a reference to the ID of the EC2 instance and an indicator of success.  Here is the output for the Bash command. Note the `CurrentState` is `shutting-down`
 
-* Instance Failure in Java: Execute the failure mode program for failing an instance:
+        $ ./fail_instance.sh vpc-04f8541d10ed81c80
+        Terminating i-0710435abc631eab3
+        {
+            "TerminatingInstances": [
+                {
+                    "CurrentState": {
+                        "Code": 32,
+                        "Name": "shutting-down"
+                    },
+                    "InstanceId": "i-0710435abc631eab3",
+                    "PreviousState": {
+                        "Code": 16,
+                        "Name": "running"
+                    }
+                }
+            ]
+        }
 
-        $ java -jar app-resiliency-1.0.jar EC2 <vpc-id>
+1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
 
-* Instance Failure in C#: Execute the failure mode program for failing an instance:
+      * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
+       ![RefreshButton](Images/RefreshButton.png)
+      * Observe the status of the instance reported by the script. In the screen cap below it is _shutting down_ as reported by the script and will ultimately transition to _terminated_.
 
-        $ .\AppResiliency EC2 <vpc-id>
+        ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
 
-* Instance Failure in Powershell: Execute the failure mode script for failing an instance:
+### 3.2 System response to EC2 instance failure
 
-        $ .\fail_instance.ps1 <vpc-id>
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-6. Watch the behavior of the Load Balancer Target Group and its Targets in the EC2 Console. See it get marked unhealthy and replaced by the Auto Scaling Group.  
-![TargetGroups](Images/TargetGroups.png)  
+#### 3.2.1 System availability
 
-### 3.2 RDS Failure Mode
+Refresh the service website several times. Note the following:
 
-1. From the AWS EC2 Console (you will still need the VPC ID from the VPC Console), click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “RDS” in the search box and press the enter key.  
-![SelectingRDS](Images/SelectingRDS.png) 
+* Website remains available
+* The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
 
-2. From the RDS dashboard click on "DB Instances (1/40)" and then on the DB
-   identifier for your database. Note the value of the "Info" field
-3. Continue to use the same VPC ID as the command line argument to the scripts/programs below.  
+#### 3.2.2 Load balancing
 
-* RDS Instance Failure in bash: Execute the failure mode script for failing over an RDS instance:
+Load balancing ensures service requests are not routed to unhealthy resources, such as the failed EC2 instance.
 
-        $./failover_rds.sh <vpc-id>
+1. Go to the **Target Groups** console you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:))
+     * If there is more than one target group, select the one with the **Load Balancer** named **ResiliencyTestLoadBalancer**
 
-* RDS Instance Failure in Python: Execute the failure mode script for failing an instance:
+1. Click on the **Targets** tab and observe:
+      * Status of the instances in the group. The load balancer will only send traffic to healthy instances.
+      * When the auto scaling launches a new instance, it is automatically added to the load balancer target group.
+      * In the screen cap below the _unhealthy_ instance is the newly added one.  The load balancer will not send traffic to it until it is completed initializing. It will ultimately transition to _healthy_ and then start receiving traffic.
+      * Note the new instance was started in the same Availability Zone as the failed one. Amazon EC2 Auto Scaling automatically maintains balance across all of the Availability Zones that you specify.
 
-        $ python fail_rds.py <vpc-id>
+        ![TargetGroups](Images/TargetGroups.png)  
 
-* RDS Instance Failure in Java: Execute the failure mode program for failing an instance:
+1. From the same console, now click on the **Monitoring** tab and view metrics such as **Unhealthy hosts** and **Healthy hosts**
 
-        $ java -jar app-resiliency-1.0.jar RDS <vpc-id>
+   ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
 
-* RDS Instance Failure in C#: Execute the failure mode program for failing an instance:
+#### 3.2.3 Auto scaling
 
-        $ .\AppResiliency RDS <vpc-id>
+Autos scaling ensures we have the capacity necessary to meet customer demand. The auto scaling for this service is a simple configuration that ensures at least three EC2 instances are running. More complex configurations in response to CPU or network load are also possible using AWS.
 
-* RDS Instance Failure in Powershell: Execute the failure mode script for failing an instance:
+1. Go to the **Auto Scaling Groups** console you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:))
+      * If there is more than one auto scaling group, select the one with the name that starts with **WebServersforResiliencyTesting**
 
-        $ .\failover_rds.ps1 <vpc-id>
+1. Click on the **Activity History** tab and observe:
+      * The screen cap below shows that all three instances were successfully started at 17:25
+      * At 19:29 the instance targeted by the script was put in _draining_ state and a new instance ending in _...62640_ was started, but was still initializing. The new instance will ultimately transition to _Successful_ status
 
-Watch the behavior of the website. What happens?  On the database console how does the "Info" field change? Click on the "Logs & events" sub-tab and look at "Recent events".  Be sure to click through to the
-latest page of events. Be sure to re-check the behavior of the website.
+        ![AutoScalingGroup](Images/AutoScalingGroup.png)  
 
-### 3.3 AZ Failure
+_Draining_ allow existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
 
-1. Availability zone failure.
+*__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
 
-* AZ Failure in bash: Execute the following script for failing over an Availability Zone:
+#### 3.2.4 EC2 failure injection - conclusion
 
-        $./fail_az.sh <az> <vpc-id>
+Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
 
-* AZ Failure in Python: Execute the failure mode script for failing an instance:
+### 3.3 RDS failure injection
 
-        $ python fail_az.py <vpc-id> <az>
+This failure injection will simulate a critical failure of the Amazon RDS DB instance.
 
-* AZ Failure in Java: Execute the failure mode script for failing an instance:
+1. Before you initiate the failure simulation, refresh the service website several times. Every time the image is loaded, the website writes a record to the Amazon RDS database
 
-        $ java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>
+1. Click on **Click here to go to other page** and it will show the latest ten entries in the Amazon RDS DB. Click again to return to the image page.
 
-* AZ Failure in C#: Execute the failure mode script for failing an instance:
+1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
 
-        $ .\AppResiliency AZ <vpc-id> <az>
-        # <az> is a value like us-east-2b
+1. From the RDS dashboard
+      * Click on "DB Instances (1/40)"
+      * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
+      * Select the **Configuration** tab
 
-* AZ Failure in Powershell: Execute the failure mode script for failing an instance:
+1. Look at the configured values. Note the following:
+      * Value of the **Info** field is **Available**
+      * RDS DB is configured to be **Multi-AZ**.  The _primary_ DB instance is in AZ **us-east-2a** and the _standby_ DB instance is in AZ **us-east-2b**
+        ![DBInitialConfiguration](Images/DBInitialConfiguration.png)
 
-        $ .\fail_az.ps1 <az> <vpc-id>
+1. To failover of the RDS instance, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
 
-What is the expected effect? How long does it take to take effect? Look at the Target Group Targets to see them go unhealthy, also watch the EC2 instances to see the one in the target AZ shutdown and be restarted in one of the other AZs.
-What would you do if the ASG was only in one AZ? You could call the AutoScaling SuspendProcesses and then get the list of instances in the group and call EC2 StopInstances or TerminateInstances. How would you undo all these changes?
+    | Language   | Command                                         |
+    | :--------- | :---------------------------------------------- |
+    | Bash       | `./failover_rds.sh <vpc-id>`                    |
+    | Python     | `python fail_rds.py <vpc-id>`                   |
+    | Java       | `java -jar app-resiliency-1.0.jar RDS <vpc-id>` |
+    | C#         | `.\AppResiliency RDS <vpc-id>`                  |
+    | PowerShell | `.\failover_rds.ps1 <vpc-id>`                   |
 
-### 3.4 Failure of S3
+1. The specific output will vary based on the command used, but will include some indication that the your Amazon RDS Database is being failedover: `Failing over mdk29lg78789zt`
 
-1. Failure of S3 means that the image will not be available.
+### 3.4 System response to RDS instance failure
 
-* Failure in bash: The bash commands available do not allow for modification of the access permissions, so you'll have to do the work in the console.
-  1. Navigate to the S3 console: [https://s3.console.aws.amazon.com/s3/home](https://s3.console.aws.amazon.com/s3/home]
-  1. Select the bucket where the image is located. In my example, this is the bucket "arc327-well-architected-for-reliability"
-  1. Select the object, then select the "Permissions" tab:
-  1. Select the "Public Access" radio button, and deselect the "Read object" box:
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-What is the expected effect? How long does it take to take effect? How would you diagnose if this is a larger problem than permissions?
+#### 3.4.1 System availability
 
-### 3.5 Looking for more to do?
+1. The website is _not_ available. Some errors you might see reported:
+      * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
+      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
+      * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
+      * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.
 
-You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal their failure modes.  
+1. Continue on to the next steps, periodically returning to attempt to refresh the website.
 
-1. Remove the network ACLs they added  
-2. Reconfigure the AutoScaling Groups to use the AZ  
+#### 3.4.2 Failover to standby
 
-***
+1. On the database console **Configuration** tab
+      1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** then the failover is complete
+      1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted.
+
+         ![DBPostFailConfiguration](Images/DBPostFailConfiguration.png)
+
+   1. From the AWS RDS console, click on the **Logs & events** tab and scroll down to **Recent events**. You should see entries like those below. In this case failover took less than a minute.
+
+          Mon, 14 Oct 2019 19:53:37 GMT - Multi-AZ instance failover started.
+          Mon, 14 Oct 2019 19:53:45 GMT - DB instance restarted
+          Mon, 14 Oct 2019 19:54:21 GMT - Multi-AZ instance failover completed
+
+#### 3.4.2 EC2 server replacement
+
+1. From the AWS RDS console, click on the **Monitoring** tab and look at **DB connections**
+      * As the failover happens the existing three servers all cannot connect to the DB
+      * AWS Auto Scaling detects this (any server not returning an http 200 status is deemed unhealthy), and replaces the three EC2 instances with new ones that establish new connections to the new RDS _primary_ instance
+      * The graph shows an unavailability period of about four minutes until at least one DB connection is re-established
+
+        ![RDSDbConnections](Images/RDSDbConnections.png)
+
+1. [optional] Go to the [Auto scaling group](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:) and AWS Elastic Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:) consoles to see how EC2 instance and traffic routing was handled
+
+#### 3.4.3 RDS failure injection - conclusion
+
+* AWS RDS Database failover took less than a minute
+* Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
+
+*__Learn more__: After the lab see [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html) for more details on high availability and failover support for DB instances using Multi-AZ deployments.*
+
+### 3.6 AZ failure injection
+
+This failure injection will simulate a critical problem with one of the three AWS Availability Zones (AZs) used by your service. AWS Availability Zones are  powerful tools for helping build highly available applications. If an application is partitioned across AZs, companies are better isolated and protected from issues such as lightning strikes, tornadoes, earthquakes and more.
+
+1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds> and note which Availability Zone the AWS RDS _primary_ DB instance is in.
+      * A good way to run the AZ failure injection is first in an AZ _other_ than this - we'll call this **Scenario 1**
+      * Then try it again in the _same_ AZ as the AWS RDS _primary_ DB instance - we'll call this **Scenario 2**
+      * Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.
+      * And executing this way illustrates the impact and response under the two different scenarios.
+
+1. To simulate failure of an AZ, select one of the AVailability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>`
+      * For **scenario 1** select an AZ that is neither _primary_ nor _secondary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2c`
+      * For **scenario 2** select the AZ that is _primary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2b`
+
+      ![DBConfigurationShort](Images/DBConfigurationShort.png)
+
+1. use your VPC ID as `<vpc-id>`
+
+1. Select _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for).
+
+    | Language   | Command                                             |
+    | :--------- | :-------------------------------------------------- |
+    | Bash       | `./fail_az.sh <az> <vpc-id>`                        |
+    | Python     | `python fail_az.py <vpc-id> <az>`                   |
+    | Java       | `java -jar app-resiliency-1.0.jar AZ <vpc-id> <az>` |
+    | C#         | `.\AppResiliency AZ <vpc-id> <az>`                  |
+    | PowerShell | `.\fail_az.ps1 <az> <vpc-id>`                       |
+
+1. The specific output will vary based on the command used.
+      * Note whether an RDS failover was initiated.  This would be the case if you selected the AZ containing the AWS RDS _primary_ DB instance
+
+### 3.7 System response to AZ failure
+
+Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
+
+#### 3.7.1 System availability
+
+Refresh the service website several times
+
+* **Scenario 1**: If you selected an AZ _not_ containing the AWS RDS _primary_ DB instance then you should see uninterrupted availability
+* **Scenario 2**: If you selected the AZ containing the AWS RDS _primary_ DB instance, then an availability loss similar to what you saw with RDS fault injection testing will occur.
+
+#### 3.7.2 Scenario 1 - Load balancer and web server tiers
+
+This scenario is similar to the EC2 failure injection test because there is only one EC2 server per AZ in our architecture. Look at the same screens you as for that test:
+
+* [EC2 Instances](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:)
+* Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:)
+* [Auto Scaling Groups](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:)
+
+One difference from the EC2 failure test that you will observe is that auto scaling will bring up the replacement EC2 instance in an AZ that already has an EC2 instance as it attempts to balance the requested three EC2 instances across the remaining AZs.
+
+#### 3.7.3 Scenario 2 - Load balancer, web server, and data tiers
+
+This scenario is similar to a combination of the RDS failure injection along with EC2 failure injection. In addition to the EC2 related screens look at the [Amazon RDS console](http://console.aws.amazon.com/rds), navigate to your DB screen and observe the following tabs:
+
+* Configuration
+* Monitoring
+* Logs & Events
+
+#### 3.7.4 AZ failure injection - conclusion
+
+This similarity between **scenario 1** and the EC2 failure test, and between **scenario 2** and the RDS failure test is illustrative of how an AZ failure impacts your system. The resources in that AZ will have no or limited availability. With the strong partitioning and isolation between Availability Zones however, resources in the other AZs continue to provide your service with needed functionality. **Scenario 1** results in loss of the load balancer and web server capabilities in one AZ, while **Scenario 2** adds to that the additional loss of the data tier. By ensuring that every tier of your system is in multiple AZs, you create a partitioned architecture resilient to failure.
+
+#### 3.7.4 AZ failure recovery
+
+This step is optional. To simulate the AZ returning to health do the following:
+
+1. Go to the [Auto Scaling Group console](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:)
+1. Select the **WebServersforResiliencyTesting** auto scaling group
+1. Actions >> Edit
+1. In the **Subnet** field add the two **ResiliencyVPC-PrivateSubnet**s that are missing and **Save**
+1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
+1. Look at the NACL entries for the VPC called **ResiliencyVPC**
+1. For any of these NACLs that are _not_ _Default_ do the following
+      1. Select the NACL
+      1. **Actions** >> **Edit subnet associations**
+      1. Uncheck all boxes and click **Edit**
+      1. **Actions** >> **Delete network ACL**
+
+* Note how the auto scaling redistributes the EC2 serves across the availability zones
+
+### 3.8 S3 failure injection
+
+1. Failure of S3 means that the image will not be available
+1. You may ONLY do this testing if you supplied your own `websiteimage` reference to an S3 bucket you control
+
+#### 3.8.1 Bucket name
+
+You will need to know the bucket name where your image is. For example if the `websiteimage` value you supplied was `"https://s3.us-east-2.amazonaws.com/my-awesome-bucketname/my_image.jpg"`, then the bucket name is `my-awesome-bucketname`
+
+For this failure simulation it is most straightforward to use the AWS Console as follows.  (If you are interested in doing this [using the AWS CLI then see here](Documentation/S3_with_AWS_CLI.md) - choose _either_ AWS Console or AWS CLI)
+
+##### AWS Console
+
+  1. Navigate to the S3 console: <https://console.aws.amazon.com/s3>
+  1. Select the bucket name where the image is located
+  1. Select the object, then select the "Permissions" tab
+  1. Select the "Public Access" radio button, and deselect the "Read object" checkbox and Save
+  1. To re-enable access (after testing), do the same steps, tick the "Read object" checkbox and Save
+
+#### 3.8.3 System response to S3 failure <a name="s3response"></a>
+
+What is the expected effect? How long does it take to take effect?
+
+* Note that due to browser caching you may still see the image on refreshing the site. On most systems Shift-F5 does a clean refresh with no cache
+
+How would you diagnose if this is a larger problem than permissions?
+
+### 3.9 More testing you can do
+
+You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal the failure modes.
+
+---
 
 ## 4. Tear down this lab <a name="tear_down"></a>
 
-In order to take down the lab environment, you will need to remove the association of the Network ACL that was added to fail the AZ, and delete the Network ACL in the console. You can then delete the CloudFormation stacks (in both AWS regions) that were created. Here are the instructions for how to do that.
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-1. Navigate to the VPC Console. From the AWS Console, click the downward facing icon to the right of the word “Services.” This will bring up the list of services. Type “VPC” in the search box, then press enter.  
-![EnteringVPC](Images/EnteringVPC.png)  
-2. On the VPC Console, click on Network ACLs and select the Network ACL that is associated with 4 subnets in the ResiliencyVPC. Click the “Subnet Associations” tab and then Click the “Edit button.  
-![SelectingNACL](Images/SelectingNACL.png)  
-3. You need to associate the 2 subnets that were changed to the blocking Network ACL back to this default Network ACL. Select the 2 subnets available, then click the “Save” button.  
-![AssociatingNACL](Images/AssociatingNACL.png)  
-4. Now select the Network ACL that is associated with 0 Subnets and click the “Delete” button to delete this Network ACL.  
-![DeletingNACL](Images/DeletingNACL.png)  
-5. If you have deployed into 2 regions, you have to delete the Database Migration Service and RDS Read Replicas before you can delete the RDS instances.  You can delete the DMS (in Oregon) and read replica at the same time, but the console only allows you to select one of the stacks at a time. Select the “DMSforResiliencyTesting” stack, then click the “Actions” button, and click “DeleteStack:”.  
-![DeletingDMS](Images/DeletingDMS.png)  
-6. You can then select the “MySQLReadReplicaResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS Read Replica instance.  
-![DeletingRDSReadReplica](Images/DeletingRDSReadReplica.png)  
-7. If you have deployed in 2 regions, Navigate to the other region (Ohio, if you started in Oregon, and Oregon, if you started in Ohio), and perform the same deletion steps above for the RDS read replica and DMS, if in Oregon. Wait for the read replicas to be deleted. You can delete the web servers and RDS at the same time, but the console only allows you to select one of the stacks at a time. Select the “WebServersforResiliencyTesting” stack, then click the “Actions” button, and click “Delete Stack:”.  
-![DeletingWebServers](Images/DeletingWebServers.png)  
-8. You can then select the “ MySQLforResiliencyTesting” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the RDS instance.  
-![DeleteRDS](Images/DeleteRDS.png)  
-9. You can then select the “DeployResiliencyWorkshop” stack, click the “Actions” button, and click “Delete Stack” to simultaneously delete the deployment machine and Lambda functions.  
-![DeletingLambdaandStepFunctions](Images/DeletingLambdaandStepFunctions.png)  
-10. Once all these stacks have deleted, you can then select the “ResiliencyVPC” stack, click the “Actions” button, and click “Delete Stack” to delete the VPC and remove the last piece of infrastructure.  
-![DeletingVPC](Images/DeletingVPC.png)  
-11. When it is delete complete, you are done.  
+* There is no need to tear down the lab. Feel free to continue exploring. Log out of your AWS account when done.
 
-***
+**If you are using your own AWS account**:
 
-## References & useful resources:
+* You may leave these resources deployed for as long as you want. When you are ready to delete these resources, see the following instructions
 
-***
+### Remove manually provisioned resources
+
+Some resources were created by the failure simulation scripts. You need ot remove these first
+
+1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
+1. Look at the NACL entries for the VPC called **ResiliencyVPC**
+1. For any of these NACLs that are _not_ _Default_ do the following
+      1. Select the NACL
+      1. **Actions** >> **Edit subnet associations**
+      1. Uncheck all boxes and click **Edit**
+      1. **Actions** >> **Delete network ACL**
+
+### Remove AWS CloudFormation provisioned resources
+
+As part of lab setup you have deployed several AWS CloudFormation stacks. These directions will show you:
+
+* How to delete an AWS CloudFormation stack
+* In what specific order the stacks must be deleted
+
+#### How to delete an AWS CloudFormation stack
+
+1. Go to the AWS CloudFormation console: <https://console.aws.amazon.com/cloudformation>
+1. Select the CloudFormation stack to delete and click **Delete**
+
+    ![DeletingWebServers](Images/DeletingWebServers.png)
+
+1. In the confirmation dialog, click **Delete stack**
+1. The _Status_ changes to **DELETE_IN_PROGRESS**
+1. Click the rfresh button to update and status will ultimately progress to **DELETE_COMPLETE**
+1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
+
+    ![ShowDeletedStacks](Images/ShowDeletedStacks.png)
+
+1. To see progress during stack deletion
+      * Click the stack name
+      * Select the Events column
+      * Refresh to see new events
+
+### Delete workshop CloudFormation stacks
+
+* Since AWS resources deployed by AWS CloudFormation stacks may have dependencies on the stacks that were created before, then deletion must occur in the opposite order they were created
+* Stacks with the same ordinal can be deleted at the same time. _All_ stacks for a given ordinal must be **DELETE_COMPLETE** before moving on to the next ordinal
+
+#### Single region
+
+If you deployed the **single region** option, then delete your stacks in the following order
+
+|Order|CloudFormation stack|
+|:---:|:---|
+|1|WebServersforResiliencyTesting|
+|1|MySQLforResiliencyTesting|
+|  |  |
+|2|ResiliencyVPC|
+|2|DeployResiliencyWorkshop|
+
+#### Multi region
+
+If you deployed the **multi region** option, then [see these instructions for the order in which to delete the CloudFormation stacks](Documentation/Multi_Region_Stack_Deletion.md)
+
+---
+
+## References & useful resources
+
+* EC2 [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html)
+* [What Is an Application Load Balancer?](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)
+* [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html)
+* [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/blogs/database/amazon-rds-under-the-hood-multi-az/)
+* [Regions and Availability Zones](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html)
+* [Injecting Chaos to Amazon EC2 using AWS System Manager](https://medium.com/@adhorn/injecting-chaos-to-amazon-ec2-using-amazon-system-manager-ca95ee7878f5)
+* [Build a serverless multi-region, active-active backend solution in an hour](https://read.acloud.guru/building-a-serverless-multi-region-active-active-backend-36f28bed4ecf)
+
+---
 
 ## License
 
@@ -396,12 +639,12 @@ Licensed under the [Creative Commons Share Alike 4.0](https://creativecommons.or
 
 ### Code License
 
-Licensed under the Apache 2.0 and MITnoAttr License. 
+Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
 <https://aws.amazon.com/apache2.0/>
 
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+or in the ["license" file](../../LICENSE-Apache) accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

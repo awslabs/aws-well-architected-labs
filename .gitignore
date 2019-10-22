@@ -2,3 +2,7 @@ PublicWorkshops.xpr
 docs/Template/
 docs/
 .DS_Store
+*.zip
+.pyc
+dist/
+.vscode/

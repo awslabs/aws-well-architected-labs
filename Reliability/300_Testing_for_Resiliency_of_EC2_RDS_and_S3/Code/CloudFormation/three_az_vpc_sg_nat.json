@@ -5,6 +5,9 @@
 
   "Parameters" : {
 
+    "WorkshopName": {
+      "Type": "String"
+    },
     "BastionCidrIp" : {
       "Description" : "Access CidrIp, default Everyone",
       "Type" : "String",
@@ -449,6 +452,210 @@
         "SubnetId" : { "Ref" : "PrivateSubnet3" },
         "RouteTableId" : { "Ref" : "PrivateRouteTable3" }
       }
+    },
+
+    "KmsKeyAlias": {
+      "Type": "AWS::KMS::Alias",
+      "Properties": {
+          "AliasName": {
+              "Fn::Sub": "alias/${WorkshopName}"
+          },
+          "TargetKeyId": {
+              "Ref": "KmsKey"
+          }
+      }
+    },
+    "KmsKey": {
+      "DependsOn": "LambdaExecutionRole",
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+          "Description": {
+              "Fn::Sub": "Manages secrets in the ${WorkshopName} workshop"
+          },
+          "Enabled": true,
+          "EnableKeyRotation": true,
+          "KeyPolicy": {
+              "Version": "2012-10-17",
+              "Id": "KeyPolicyForKMS",
+              "Statement": [
+                  {
+                      "Sid": "Enable IAM User/Role Permissions",
+                      "Effect": "Allow",
+                      "Principal": {
+                            "AWS": [
+                                {
+                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                                },
+                                {
+                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomKMS"
+                                },
+                                {
+                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/VPCWorkshopRole"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/RDSWorkshopRole"
+                                 }
+                              ]
+                      },
+                      "Action": "kms:*",
+                      "Resource": "*"
+                  }
+              ]
+          }
+      }
+    },
+    "CustomResource" : {
+        "Type" : "Custom::LambdaSSMSecureString",
+        "Properties" : {
+          "ServiceToken": { 
+              "Fn::GetAtt": [
+                    "LambdaCustomResource",
+                    "Arn"
+        ] },
+          "KmsKeyID": {
+            "Ref": "KmsKey"
+          },
+          "KmsKeyName": {
+            "Ref": "WorkshopName"
+          }
+        }
+      },
+    "LambdaCustomResource": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+            "Handler": "index.handler",
+            "Runtime": "python3.6",
+            "Timeout": 30,
+            "Role": {
+                "Fn::GetAtt": [
+                    "LambdaExecutionRole",
+                    "Arn"
+                ]
+            },
+            "Code": {
+                "ZipFile": {
+                    "Fn::Join": [
+                        "\n",
+                        [
+                            "import boto3",
+                            "import random",
+                            "import string",
+                            "import cfnresponse",
+                            "import logging",
+                            "import signal",
+                            "",
+                            "LOGGER = logging.getLogger()",
+                            "LOGGER.setLevel(logging.INFO)",
+                            "",
+                            "def generate_password(password_length):",
+                            "    return ''.join(",
+                            "    random.SystemRandom().choice(",
+                            "       string.ascii_lowercase + string.digits) for _ in range(password_length))",
+                            "",
+                            "def write_password_to_ssm(parameter_name, value, kms_key):",
+                            "    client = boto3.client('ssm')",
+                            "    LOGGER.info('Writing password to SSM parameter store.')",
+                            "    client.put_parameter(",
+                            "       Name=parameter_name,",
+                            "       Value=value,",
+                            "       Type='SecureString',",
+                            "       KeyId=kms_key,",
+                            "       Overwrite=True",
+                            "    )",
+                            "    return",
+                            "",
+                            "def handler(event, context):",
+                            "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
+                            "    # Setup alarm for remaining runtime minus a second",
+                            "    try:",
+                            "        LOGGER.info('REQUEST RECEIVED: %s', event)",
+                            "        LOGGER.info('REQUEST RECEIVED: %s', context)",
+                            "        if event['RequestType'] == 'Create':",
+                            "            LOGGER.info('CREATE!')",
+                            "            kms_key = event['ResourceProperties']['KmsKeyID']",
+                            "            key_name = event['ResourceProperties']['KmsKeyName']",
+                            "            write_password_to_ssm(key_name, generate_password(10), kms_key)",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource creation successful!'})",
+                            "        elif event['RequestType'] == 'Update':",
+                            "            LOGGER.info('UPDATE!')",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource update successful!'})",
+                            "        elif event['RequestType'] == 'Delete':",
+                            "            LOGGER.info('DELETE!')",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource deletion successful!'})",
+                            "        else:",
+                            "            LOGGER.info('FAILED!')",
+                            "            cfnresponse.send(event, context, cfnresponse.FAILED,",
+                            "                {'Message': 'Unexpected event received from CloudFormation'})",
+                            "    except:",
+                            "        LOGGER.info('FAILED!')",
+                            "        cfnresponse.send(event, context, cfnresponse.FAILED, {",
+                            "            'Message': 'Exception during processing'})",
+                            "",
+                            "def timeout_handler(_signal, _frame):",
+                            "    raise Exception('Time exceeded')",
+                            "",
+                            "",
+                            "signal.signal(signal.SIGALRM, timeout_handler)"
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "LambdaExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+            "RoleName": "LambdaCustomKMS",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "lambda.amazonaws.com"
+                            ]
+                        },
+                        "Action": [
+                            "sts:AssumeRole"
+                        ]
+                    }
+                ]
+            },
+            "Path": "/",
+            "Policies": [
+                {
+                    "PolicyName": "root",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                ],
+                                "Resource": "arn:aws:logs:*:*:*"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "ssm:PutParameter"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     }
   },
 

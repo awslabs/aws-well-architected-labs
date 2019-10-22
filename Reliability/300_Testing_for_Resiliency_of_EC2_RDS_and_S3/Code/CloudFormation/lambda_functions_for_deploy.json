@@ -70,6 +70,7 @@
       },
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "VPCWorkshopRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -107,10 +108,34 @@
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeVpcs",
-                "ec2:ModifyVpcAttribute"
+                "ec2:ModifyVpcAttribute",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ssm:PutParameter",
+                "ssm:GetParameters",
+                "kms:CreateAlias",
+                "kms:CreateKey",
+                "kms:ListKeys",
+                "kms:ListAliases",
+                "kms:Encrypt",
+                "iam:AddRoleToInstanceProfile",
+                "iam:AttachRolePolicy",
+                "iam:CreateInstanceProfile",
+                "iam:CreateRole",
+                "iam:DescribeInstanceProfiles",
+                "iam:DescribeRoles",
+                "iam:PassRole",
+                "iam:GetRole",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
+                "lambda:CreateFunction",
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
               ],
               "Resource" : "*"
-            } ]
+            }
+          ]
           }
         } ]
       }
@@ -153,7 +178,17 @@
                 "cloudformation:DescribeStacks"
               ],
               "Resource" : "*"
-            } ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+          }
+          ]
           }
         } ]
       }
@@ -172,7 +207,7 @@
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
         "Runtime" : "python3.6",
-        "Timeout" : "300"
+        "Timeout" : "600"
       }
     },
 
@@ -180,31 +215,32 @@
       "Type" : "AWS::IAM::ServiceLinkedRole",
       "Condition" : "CreateRDSServiceRole",
       "Properties" : {
-        "AWSServiceName" : "rds.amazonaws.com",
-        "Description"    : "This should allow an RDS instance to be created by this account"
+        "AWSServiceName": "rds.amazonaws.com",
+        "Description": "This should allow an RDS instance to be created by this account"
       }
     },
 
     "ELBServiceRole" : {
-      "Type" : "AWS::IAM::ServiceLinkedRole",
-      "Condition" : "CreateELBServiceRole",
-      "Properties" : {
-        "AWSServiceName" : "elasticloadbalancing.amazonaws.com",
-        "Description"    : "This should allow an ELB to be created by this account"
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateELBServiceRole",
+      "Properties": {
+        "AWSServiceName": "elasticloadbalancing.amazonaws.com",
+        "Description": "This should allow an ELB to be created by this account"
       }
     },
 
     "AutoScalingServiceRole" : {
-      "Type" : "AWS::IAM::ServiceLinkedRole",
-      "Condition" : "CreateAutoScalingServiceRole",
-      "Properties" : {
-        "AWSServiceName" : "autoscaling.amazonaws.com",
-        "Description"    : "This should allow Auto Scaling to be created by this account"
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateAutoScalingServiceRole",
+      "Properties": {
+        "AWSServiceName": "autoscaling.amazonaws.com",
+        "Description": "This should allow Auto Scaling to be created by this account"
       }
     },
     "RDSLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName": "RDSWorkshopRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -230,7 +266,11 @@
                   "rds:CreateDBInstance",
                   "rds:CreateDBSubnetGroup",
                   "rds:DescribeDBInstances",
-                  "rds:DescribeDBSubnetGroups"
+                  "rds:DescribeDBSubnetGroups",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents",
+                  "ssm:GetParameters"
                 ],
                 "Resource" : "*"
               },
@@ -270,6 +310,7 @@
     "WebAppLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "WebAppLambdaRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -303,6 +344,7 @@
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeVpcs",
                 "ec2:RunInstances",
+                "ec2:DescribeImages",
                 "iam:AddRoleToInstanceProfile",
                 "iam:AttachRolePolicy",
                 "iam:CreateInstanceProfile",
@@ -317,12 +359,72 @@
                 "elasticloadbalancing:DescribeListeners",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeTargetGroups",
-                "elasticloadbalancing:RegisterTargets"
+                "elasticloadbalancing:RegisterTargets",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ssm:GetParameter"
               ],
               "Resource" : "*"
             } ]
           }
-        } ]
+        },
+        {
+          "PolicyName" : "Chaos-SSM",
+          "PolicyDocument" : {
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssm:DescribeAssociation",
+                      "ssm:GetDeployablePatchSnapshotForInstance",
+                      "ssm:GetDocument",
+                      "ssm:DescribeDocument",
+                      "ssm:GetManifest",
+                      "ssm:GetParameter",
+                      "ssm:GetParameters",
+                      "ssm:ListAssociations",
+                      "ssm:ListInstanceAssociations",
+                      "ssm:PutInventory",
+                      "ssm:PutComplianceItems",
+                      "ssm:PutConfigurePackageResult",
+                      "ssm:UpdateAssociationStatus",
+                      "ssm:UpdateInstanceAssociationStatus",
+                      "ssm:UpdateInstanceInformation"
+                  ],
+                  "Resource": "*",
+                  "Condition": {
+                      "StringLike": {
+                          "ssm:resourceTag/SSMTag": "chaos-ready"
+                      }
+                  }
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssmmessages:CreateControlChannel",
+                      "ssmmessages:CreateDataChannel",
+                      "ssmmessages:OpenControlChannel",
+                      "ssmmessages:OpenDataChannel"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2messages:AcknowledgeMessage",
+                      "ec2messages:DeleteMessage",
+                      "ec2messages:FailMessage",
+                      "ec2messages:GetEndpoint",
+                      "ec2messages:GetMessages",
+                      "ec2messages:SendReply"
+                  ],
+                  "Resource": "*"
+              }
+          ]
+        }
+        }
+      ]
       }
     },
 
@@ -357,11 +459,16 @@
           } ]
         },
         "Policies" : [ {
-          "PolicyName" : "CreateVPC",
+          "PolicyName" : "StateMachineRole",
           "PolicyDocument" : {
             "Statement" : [ {
               "Effect" : "Allow",
-              "Action" :  "*",
+              "Action" :  [
+                "lambda:InvokeFunction",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
               "Resource" : "*"
             } ]
           }
