@@ -166,8 +166,10 @@ Your execution environment needs to be configured to enable access to the AWS ac
     * AWS session token (used in some cases)
 
 * Configuration
-    * Region: Ohio (us-east-2)
+    * Region: us-east-2
     * Default output: JSON
+
+Note: **us-east-2** is the **Ohio** region
 
 If you already know how to configure these, please do so now. If you need help then [follow these instructions](Documentation/AWS_Credentials.md)
 
@@ -191,7 +193,7 @@ Using bash is an effective way to execute the failure injection tests for this w
          * Version 1.4 or higher is fine
          * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
-1. Download the [resiliency bash scripts from GitHub](Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
+1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
       * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_instance.sh?raw=1)
       * [bash/failover_rds.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
       * [bash/fail_az.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
