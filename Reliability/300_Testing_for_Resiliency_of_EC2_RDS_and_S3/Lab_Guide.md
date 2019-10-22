@@ -49,6 +49,10 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * **multi region** enables you to test some additional aspects of cross-regional resilience.
     * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
 
+        |Please execute only the _single region_ labs at this time|
+        |:---:|
+        |Recent updates have made the multi-region approach non-functional. Updates are coming soon to restore this option.|
+
 1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
     * **single region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy.json?raw=1)
     * **multi region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1)

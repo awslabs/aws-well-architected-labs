@@ -130,15 +130,21 @@ def deploy_rds(event):
     # Create the list of security groups to pass
     rds_sg = find_in_outputs(vpc_outputs, 'MySQLSecurityGroup')
 
+    # Get workshop name
     try:
         workshop_name = event['workshop']
+    except Exception:
+        logger.debug("Unexpected error! (when parsing workshop name)\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+
+    # Get DB instance type only if it was specified (it is optional)
+    try:
         if 'db_instance_class' in event:
           db_instance_class = event['db_instance_class']
         else:
           db_instance_class = None
     except Exception:
-        logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
-        workshop_name = 'UnknownWorkshop'
+        logger.debug("Unexpected error! (when parsing DB instance class)\n Stack Trace:", traceback.format_exc())
         db_instance_class = None
 
     # Prepare the stack parameters
