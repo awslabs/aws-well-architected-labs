@@ -1,0 +1,968 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Creates the state machine to deploy the environment for the reliability lab",
+
+  "Parameters" : {
+
+    "LambdaFunctionsBucket" : {
+      "Description" : "Bucket that the lambda source is contained in (case sensitive)",
+      "Type" : "String"
+    },
+
+    "VPCLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy the VPC (case sensitive)",
+      "Type" : "String"
+    },
+
+    "WaitForStackLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will wait for a stack for up to 5 min (case sensitive)",
+      "Type" : "String"
+    },
+
+    "RDSLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy a Multi-AZ RDS in the VPC (case sensitive)",
+      "Type" : "String"
+    },
+
+    "WebAppLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy an auto scaling group of the web application in the VPC (case sensitive)",
+      "Type" : "String"
+    },
+
+    "RDSRRLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy a RDS Read Replica in a VPC (case sensitive)",
+      "Type" : "String"
+    },
+
+    "DMSLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy a Database Migration Service in a VPC (case sensitive)",
+      "Type" : "String"
+    },
+
+    "CreateTheRDSServiceRole" : {
+      "Description" : "Should the automation create the RDS ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    },
+
+    "CreateTheELBServiceRole" : {
+      "Description" : "Should the automation create the ELB ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    },
+
+    "CreateTheAutoScalingServiceRole" : {
+      "Description" : "Should the automation create the Auto Scaling ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    }
+  },
+
+  "Conditions" : {
+     "CreateRDSServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheRDSServiceRole"}, "true"]},
+     "CreateELBServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheELBServiceRole"}, "true"]},
+     "CreateAutoScalingServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheAutoScalingServiceRole"}, "true"]}
+   },
+
+  "Resources" : {
+    "VPCLambdaRole" : {
+      "Metadata" : {
+        "License" : "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+      },
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+      } ]
+           },
+        "Policies" : [ {
+          "PolicyName" : "CreateVPC",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "cloudformation:CreateStack",
+                "cloudformation:DescribeStacks",
+                "ec2:AllocateAddress",
+                "ec2:AttachInternetGateway",
+                "ec2:AssociateRouteTable",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:CreateInternetGateway",
+                "ec2:CreateNatGateway",
+                "ec2:CreateRoute",
+                "ec2:CreateRouteTable",
+                "ec2:CreateSecurityGroup",
+                "ec2:CreateSubnet",
+                "ec2:CreateTags",
+                "ec2:CreateVpc",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeNatGateways",
+                "ec2:DescribeRoutes",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ec2:ModifyVpcAttribute",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:DescribeExportTasks",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:DescribeMetricFilters",
+                "logs:ListTagsLogGroup",
+                "logs:PutDestinationPolicy",
+                "logs:PutLogEvents",
+                "logs:PutRetentionPolicy",
+                "logs:TagLogGroup"
+              ],
+              "Resource" : "*"
+            } ]
+          }
+        } ]
+      }
+    },
+
+    "VPCLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "VPCLambdaKey" }
+        },
+        "FunctionName" : "DeployVPC",
+        "Handler" : "deploy_vpc_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "VPCLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "WaitForStackLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+           } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "WaitForStack",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "cloudformation:DescribeStacks",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:DescribeExportTasks",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:DescribeMetricFilters",
+                "logs:ListTagsLogGroup",
+                "logs:PutDestinationPolicy",
+                "logs:PutLogEvents",
+                "logs:PutRetentionPolicy",
+                "logs:TagLogGroup"
+              ],
+              "Resource" : "*"
+            } ]
+          }
+        } ]
+      }
+    },
+
+    "WaitForStackLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will check the status of the stack and wait for up to 5 min; will return current status if time is about to expire",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "WaitForStackLambdaKey" }
+        },
+        "FunctionName" : "WaitForStack",
+        "Handler" : "wait_for_stack_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "600"
+      }
+    },
+
+    "RDSServiceRole" : {
+      "Type" : "AWS::IAM::ServiceLinkedRole",
+      "Condition" : "CreateRDSServiceRole",
+      "Properties" : {
+        "AWSServiceName" : "rds.amazonaws.com",
+        "Description"    : "This should allow an RDS instance to be created by this account"
+      }
+    },
+
+    "ELBServiceRole" : {
+      "Type" : "AWS::IAM::ServiceLinkedRole",
+      "Condition" : "CreateELBServiceRole",
+      "Properties" : {
+        "AWSServiceName" : "elasticloadbalancing.amazonaws.com",
+        "Description"    : "This should allow an ELB to be created by this account"
+      }
+    },
+
+    "AutoScalingServiceRole" : {
+      "Type" : "AWS::IAM::ServiceLinkedRole",
+      "Condition" : "CreateAutoScalingServiceRole",
+      "Properties" : {
+        "AWSServiceName" : "autoscaling.amazonaws.com",
+        "Description"    : "This should allow Auto Scaling to be created by this account"
+      }
+    },
+
+    "RDSLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateRDS",
+          "PolicyDocument" : {
+            "Statement" : [
+              {
+                "Effect" : "Allow",
+                "Action" :  [
+                  "cloudformation:CreateStack",
+                  "cloudformation:DescribeStacks",
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DescribeAccountAttributes",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSubnets",
+                  "rds:CreateDBInstance",
+                  "rds:CreateDBSubnetGroup",
+                  "rds:DescribeDBInstances",
+                  "rds:DescribeDBSubnetGroups",
+                  "rds:ListTagsForResource",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:DescribeExportTasks",
+                  "logs:DescribeLogGroups",
+                  "logs:DescribeLogStreams",
+                  "logs:DescribeMetricFilters",
+                  "logs:ListTagsLogGroup",
+                  "logs:PutDestinationPolicy",
+                  "logs:PutLogEvents",
+                  "logs:PutRetentionPolicy",
+                  "logs:TagLogGroup"
+                ],
+                "Resource" : "*"
+              },
+              {
+                "Effect" : "Allow",
+                "Action" : "iam:CreateServiceLinkedRole",
+                "Resource" : "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
+                "Condition" : {
+                  "StringLike" : {
+                    "iam:AWSServiceName" : "rds.amazonaws.com"
+                  }
+                }
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "RDSLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy an RDS Multi-AZ in a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "RDSLambdaKey" }
+        },
+        "FunctionName" : "DeployRDS",
+        "Handler" : "deploy_rds_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "WebAppLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateWebApp",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "autoscaling:CreateAutoScalingGroup",
+                "autoscaling:CreateLaunchConfiguration",
+                "autoscaling:CreateOrUpdateTags",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:UpdateAutoScalingGroup",
+                "cloudformation:CreateStack",
+                "cloudformation:DescribeStacks",
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateTags",
+                "ec2:DescribeAccountAttributes",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeVpcs",
+                "ec2:RunInstances",
+                "iam:AddRoleToInstanceProfile",
+                "iam:AttachRolePolicy",
+                "iam:CreateInstanceProfile",
+                "iam:CreateRole",
+                "iam:DescribeInstanceProfiles",
+                "iam:DescribeRoles",
+                "iam:PassRole",
+                "elasticloadbalancing:AddTags",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:CreateTargetGroup",
+                "elasticloadbalancing:DescribeListeners",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:RegisterTargets",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:DescribeExportTasks",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:DescribeMetricFilters",
+                "logs:ListTagsLogGroup",
+                "logs:PutDestinationPolicy",
+                "logs:PutLogEvents",
+                "logs:PutRetentionPolicy",
+                "logs:TagLogGroup"
+              ],
+              "Resource" : "*"
+            } ]
+          }
+        } ]
+      }
+    },
+
+    "WebAppLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy an auto scaled web application in 2 AZs in a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "WebAppLambdaKey" }
+        },
+        "FunctionName" : "DeployWebApp",
+        "Handler" : "deploy_web_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "WebAppLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "RDSRRLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateRDSRR",
+          "PolicyDocument" : {
+            "Statement" : [
+              {
+                "Effect" : "Allow",
+                "Action" :  [
+                  "cloudformation:CreateStack",
+                  "cloudformation:DescribeStacks",
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DescribeAccountAttributes",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSubnets",
+                  "rds:CreateDBInstanceReadReplica",
+                  "rds:CreateDBSubnetGroup",
+                  "rds:DescribeDBInstances",
+                  "rds:DescribeDBSubnetGroups",
+                  "rds:ListTagsForResource",
+                  "rds:ModifyDBInstance",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:DescribeExportTasks",
+                  "logs:DescribeLogGroups",
+                  "logs:DescribeLogStreams",
+                  "logs:DescribeMetricFilters",
+                  "logs:ListTagsLogGroup",
+                  "logs:PutDestinationPolicy",
+                  "logs:PutLogEvents",
+                  "logs:PutRetentionPolicy",
+                  "logs:TagLogGroup"
+                ],
+                "Resource" : "*"
+              },
+              {
+                "Effect" : "Allow",
+                "Action" : "iam:CreateServiceLinkedRole",
+                "Resource" : "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
+                "Condition" : {
+                  "StringLike" : {
+                    "iam:AWSServiceName" : "rds.amazonaws.com"
+                  }
+                }
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "RDSRRLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy an RDS Read Replica in a VPC in a region with the source in a second region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "RDSRRLambdaKey" }
+        },
+        "FunctionName" : "DeployReadReplica",
+        "Handler" : "deploy_read_replica_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "RDSRRLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "DMSLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateDMS",
+          "PolicyDocument" : {
+            "Statement" : [
+              {
+                "Effect" : "Allow",
+                "Action" :  [
+                  "cloudformation:CreateStack",
+                  "cloudformation:DescribeStacks",
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DescribeAccountAttributes",
+                  "ec2:DescribeAvailabilityZones",
+                  "ec2:DescribeInternetGateways",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSubnets",
+                  "ec2:DescribeVPCs",
+                  "ec2:DeleteNetworkInterface",
+                  "ec2:ModifyNetworkInterfaceAttribute",
+                  "dms:AddTagsToResource",
+                  "dms:CreateEndpoint",
+                  "dms:CreateReplicationInstance",
+                  "dms:CreateReplicationSubnetGroup",
+                  "dms:CreateReplicationTask",
+                  "dms:DescribeAttributes",
+                  "dms:DescribeEndpointTypes",
+                  "dms:DescribeEndpoints",
+                  "dms:DescribeEventCategories",
+                  "dms:DescribeEventSubscriptions",
+                  "dms:DescribeEvents",
+                  "dms:DescribeOrderableReplicationInstances",
+                  "dms:DescribeRefreshSchemaStatus",
+                  "dms:DescribeReplicationInstances",
+                  "dms:DescribeReplicationSubnetGroups",
+                  "dms:DescribeReplicationTasks",
+                  "dms:DescribeSchemas",
+                  "dms:DescribeTableStatistics",
+                  "dms:ModifyEndpoint",
+                  "dms:ModifyReplicationInstance",
+		  "dms:ModifyReplicationTask",
+		  "dms:StartReplicationTask",
+		  "dms:TestConnection",
+                  "iam:AttachRolePolicy",
+                  "iam:CreateRole",
+                  "iam:GetRole",
+                  "iam:ListAttachedRolePolicies",
+                  "iam:ListRolePolicies",
+                  "rds:DescribeDBInstances",
+                  "rds:DescribeDBSubnetGroups",
+                  "rds:ListTagsForResource",
+                  "rds:ModifyDBInstance",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:DescribeExportTasks",
+                  "logs:DescribeLogGroups",
+                  "logs:DescribeLogStreams",
+                  "logs:DescribeMetricFilters",
+                  "logs:ListTagsLogGroup",
+                  "logs:PutDestinationPolicy",
+                  "logs:PutLogEvents",
+                  "logs:PutRetentionPolicy",
+                  "logs:TagLogGroup"
+                ],
+                "Resource" : "*"
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "DMSLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy a DMS Multi-AZ in a VPC in a region with the source a read replica and the destination an RDS instance",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "DMSLambdaKey" }
+        },
+        "FunctionName" : "DeployDMS",
+        "Handler" : "deploy_dms_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "DMSLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "StateExecutionRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : { "Fn::Sub" :
+              "states.${AWS::Region}.amazonaws.com"
+            } },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateVPC",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  "*",
+              "Resource" : "*"
+            } ]
+          }
+        } ]
+      }
+    },
+
+    "DeploymentMachine" : {
+      "Type" : "AWS::StepFunctions::StateMachine",
+      "Properties" : {
+        "DefinitionString" : { "Fn::Join" : ["", [
+          "{\n",
+          "\"Comment\": \"This will deploy the infrastructure for the workshop\",\n",
+          "\"StartAt\": \"DeployBothVPCs\",\n",
+          "\"States\": {\n",
+              "\"DeployBothVPCs\": {\n",
+                "\"Type\": \"Parallel\",\n",
+                "\"End\": true,\n",
+                "\"Branches\": [\n",
+                  "{\n",
+                    "\"Comment\": \"This will deploy the infrastructure for the workshop in region 1\",\n",
+                    "\"StartAt\": \"DeployVPC1\",\n",
+                    "\"States\": {\n",
+                        "\"DeployVPC1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "VPCLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.vpc\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"WaitForVPCStack1\"\n",
+                        "},\n",
+                        "\"WaitForVPCStack1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.vpc\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"VPCStackCompleteChoice1\"\n",
+                        "},\n",
+                        "\"VPCStackCompleteChoice1\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.vpc.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                              "\"Next\": \"DeployRDS1\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState1\"\n",
+                        "},\n",
+                        "\"DeployRDS1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "RDSLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"CheckIfRDSAlreadyDeployed1\"\n",
+                        "},\n",
+                        "\"DeployFailedState1\": {\n",
+                          "\"Type\": \"Fail\",\n",
+                          "\"Cause\" : \"DeploymentFailed\",\n",
+                          "\"Error\": \"Something failed to deploy\"\n",
+                        "},\n",
+                        "\"CheckIfRDSAlreadyDeployed1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSStackCheckChoice1\"\n",
+                        "},\n",
+                        "\"RDSStackCheckChoice1\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                          "\"Next\": \"DeployWebApp1\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSBeforeChecking1\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rds.status\",\n",
+                              "\"StringEquals\": \"UPDATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSStack1\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState1\"\n",
+                        "},\n",
+                        "\"WaitForRDSBeforeChecking1\": {\n",
+                          "\"Type\": \"Wait\",\n",
+                          "\"Seconds\" : 450,\n",
+                          "\"Next\": \"WaitForRDSStack1\"\n",
+                        "},\n",
+                        "\"WaitForRDSStack1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSStackCompleteChoice1\"\n",
+                        "},\n",
+                        "\"RDSStackCompleteChoice1\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                              "\"Next\": \"DeployWebApp1\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState1\"\n",
+                        "},\n",
+                        "\"DeployWebApp1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WebAppLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.web\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"WaitForWebApp1\"\n",
+                        "},\n",
+                        "\"WaitForWebApp1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.web\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"DeployRDSReadReplica1\"\n",
+                        "},\n",
+                        "\"DeployRDSReadReplica1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "RDSRRLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"CheckIfRDSRRAlreadyDeployed1\"\n",
+                        "},\n",
+                        "\"CheckIfRDSRRAlreadyDeployed1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSRRStackCheckChoice1\"\n",
+                        "},\n",
+                        "\"RDSRRStackCheckChoice1\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rr.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                              "\"Next\": \"WaitForRDSRRStack1\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rr.status\",\n",
+                              "\"StringEquals\": \"CREATE_IN_PROGRESS\",\n",
+                              "\"Next\": \"WaitForRDSRRBeforeChecking1\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region1.rr.status\",\n",
+                              "\"StringEquals\": \"UPDATE_IN_PROGRESS\",\n",
+                              "\"Next\": \"WaitForRDSRRStack1\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState1\"\n",
+                        "},\n",
+                        "\"WaitForRDSRRBeforeChecking1\": {\n",
+                          "\"Type\": \"Wait\",\n",
+                          "\"Seconds\" : 450,\n",
+                          "\"Next\": \"WaitForRDSRRStack1\"\n",
+                        "},\n",
+                        "\"WaitForRDSRRStack1\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"DeployDMS\"\n",
+                        "},\n",
+                        "\"DeployDMS\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "DMSLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.dms\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"WaitForDMS\"\n",
+                        "},\n",
+                        "\"WaitForDMS\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region1\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region1.dms\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"End\": true\n",
+                        "}\n",
+                    "}\n",
+                  "},\n",
+                  "{\n",
+                    "\"Comment\": \"This will deploy the infrastructure for the workshop in region 2\",\n",
+                    "\"StartAt\": \"DeployVPC2\",\n",
+                    "\"States\": {\n",
+                        "\"DeployVPC2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "VPCLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.vpc\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"WaitForVPCStack2\"\n",
+                        "},\n",
+                        "\"WaitForVPCStack2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.vpc\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"VPCStackCompleteChoice2\"\n",
+                        "},\n",
+                        "\"VPCStackCompleteChoice2\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.vpc.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                              "\"Next\": \"DeployRDS2\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState2\"\n",
+                        "},\n",
+                        "\"DeployRDS2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "RDSLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"CheckIfRDSAlreadyDeployed2\"\n",
+                        "},\n",
+                        "\"DeployFailedState2\": {\n",
+                          "\"Type\": \"Fail\",\n",
+                          "\"Cause\" : \"DeploymentFailed\",\n",
+                          "\"Error\": \"Something failed to deploy\"\n",
+                        "},\n",
+                        "\"CheckIfRDSAlreadyDeployed2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSStackCheckChoice2\"\n",
+                        "},\n",
+                        "\"RDSStackCheckChoice2\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                          "\"Next\": \"DeployWebApp2\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSBeforeChecking2\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rds.status\",\n",
+                              "\"StringEquals\": \"UPDATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSStack2\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState2\"\n",
+                        "},\n",
+                        "\"WaitForRDSBeforeChecking2\": {\n",
+                          "\"Type\": \"Wait\",\n",
+                          "\"Seconds\" : 450,\n",
+                          "\"Next\": \"WaitForRDSStack2\"\n",
+                        "},\n",
+                        "\"WaitForRDSStack2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rds\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSStackCompleteChoice2\"\n",
+                        "},\n",
+                        "\"RDSStackCompleteChoice2\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rds.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                              "\"Next\": \"DeployWebApp2\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState2\"\n",
+                        "},\n",
+                        "\"DeployWebApp2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WebAppLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.web\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"WaitForWebApp2\"\n",
+                        "},\n",
+                        "\"WaitForWebApp2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.web\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"DeployRDSReadReplica2\"\n",
+                        "},\n",
+                        "\"DeployRDSReadReplica2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "RDSRRLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"CheckIfRDSRRAlreadyDeployed2\"\n",
+                        "},\n",
+                        "\"CheckIfRDSRRAlreadyDeployed2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"Next\": \"RDSRRStackCheckChoice2\"\n",
+                        "},\n",
+                        "\"RDSRRStackCheckChoice2\": {\n",
+                          "\"Type\": \"Choice\",\n",
+                          "\"Choices\" : [\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rr.status\",\n",
+                              "\"StringEquals\": \"CREATE_COMPLETE\",\n",
+                          "\"Next\": \"WaitForRDSRRStack2\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rr.status\",\n",
+                              "\"StringEquals\": \"CREATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSRRBeforeChecking2\"\n",
+                            "},\n",
+                            "{\n",
+                              "\"Variable\": \"$.region2.rr.status\",\n",
+                              "\"StringEquals\": \"UPDATE_IN_PROGRESS\",\n",
+                          "\"Next\": \"WaitForRDSRRStack2\"\n",
+                            "}\n",
+                          "],\n",
+                          "\"Default\": \"DeployFailedState2\"\n",
+                        "},\n",
+                        "\"WaitForRDSRRBeforeChecking2\": {\n",
+                          "\"Type\": \"Wait\",\n",
+                          "\"Seconds\" : 450,\n",
+                          "\"Next\": \"WaitForRDSRRStack2\"\n",
+                        "},\n",
+                        "\"WaitForRDSRRStack2\": {\n",
+                          "\"Type\": \"Task\",\n",
+                          "\"InputPath\" : \"$.region2\",\n",
+                          "\"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+                          "\"ResultPath\" : \"$.region2.rr\",\n",
+                          "\"OutputPath\" : \"$\",\n",
+                          "\"End\": true\n",
+                        "}\n",
+                      "}\n",
+                    "}\n",
+                  "]\n",
+                "}\n",
+              "}\n",
+          "}"
+          ]]
+        },
+        "RoleArn" : { "Fn::GetAtt" : [ "StateExecutionRole", "Arn" ] }
+      }
+    }
+  }
+}
