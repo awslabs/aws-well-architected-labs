@@ -40,7 +40,7 @@
     
     
       
-        <title>TroubleShooting Guide - AWS Well-Architected Labs</title>
+        <title>Trouble Shooting Guide - AWS Well-Architected Labs</title>
       
     
     
@@ -133,7 +133,7 @@
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              TroubleShooting Guide
+              Trouble Shooting Guide
             </span>
           
         </div>
@@ -200,14 +200,16 @@
       
         
 
-<nav class="md-tabs" data-md-component="tabs">
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
       
         
   <li class="md-tabs__item">
     
-      <a href="../../README.html" title="Home" class="md-tabs__link md-tabs__link--active">
+      <a href="../../README.html" title="Home" class="md-tabs__link">
         Home
       </a>
     
@@ -245,7 +247,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../README.html" title="Reliability" class="md-tabs__link">
+        <a href="../README.html" title="Reliability" class="md-tabs__link md-tabs__link--active">
           Reliability
         </a>
       
@@ -1563,10 +1565,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
     <label class="md-nav__link" for="nav-4">
       Reliability
@@ -1594,10 +1598,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2" checked>
     
     <label class="md-nav__link" for="nav-4-2">
       Testing Resiliency
@@ -1661,10 +1667,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2-2" type="checkbox" id="nav-4-2-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2-2" type="checkbox" id="nav-4-2-2" checked>
     
     <label class="md-nav__link" for="nav-4-2-2">
       300 EC2, RDS S3 Resiliency
@@ -1697,6 +1705,152 @@
     <a href="Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Trouble Shooting Guide
+      </label>
+    
+    <a href="TroubleShooting_Guide.html" title="Trouble Shooting Guide" class="md-nav__link md-nav__link--active">
+      Trouble Shooting Guide
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-aws-account-problems" title="Common AWS Account Problems" class="md-nav__link">
+    Common AWS Account Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-with-service-linked-roles" title="Problems with Service Linked Roles" class="md-nav__link">
+    Problems with Service Linked Roles
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-with-the-step-functions-state-machine-andor-lambda-functions" title="Problems with the Step Functions State Machine and/or Lambda Functions" class="md-nav__link">
+    Problems with the Step Functions State Machine and/or Lambda Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployrds-step-fails" title="DeployRDS step fails" class="md-nav__link">
+    DeployRDS step fails
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdsstackcompletechoice-deployfailedstatus" title="RDSStackCompleteChoice -&gt; DeployFailedStatus" class="md-nav__link">
+    RDSStackCompleteChoice -&gt; DeployFailedStatus
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-executing-the-scripts" title="Problems Executing the Scripts" class="md-nav__link">
+    Problems Executing the Scripts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assisting-with-the-failure-tests" title="Assisting with the Failure Tests" class="md-nav__link">
+    Assisting with the Failure Tests
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#failure-modes-individual" title="Failure modes individual" class="md-nav__link">
+    Failure modes individual
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ec2-instance-failure" title="EC2 Instance Failure" class="md-nav__link">
+    EC2 Instance Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rds-failover" title="RDS Failover" class="md-nav__link">
+    RDS Failover
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#az-failure" title="AZ Failure" class="md-nav__link">
+    AZ Failure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#region-failure" title="Region Failure" class="md-nav__link">
+    Region Failure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -2568,6 +2722,20 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#deployrds-step-fails" title="DeployRDS step fails" class="md-nav__link">
+    DeployRDS step fails
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdsstackcompletechoice-deployfailedstatus" title="RDSStackCompleteChoice -&gt; DeployFailedStatus" class="md-nav__link">
+    RDSStackCompleteChoice -&gt; DeployFailedStatus
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#problems-executing-the-scripts" title="Problems Executing the Scripts" class="md-nav__link">
     Problems Executing the Scripts
   </a>
@@ -2676,6 +2844,46 @@ function, then click “Create:”</p>
 <p>After execution, you can click on the “Details” and see the log of the function to determine what went wrong:
 <img alt="ViewLambdaDetails" src="Images/ViewLambdaDetails.png" /></p>
 <p>You can also go to the CloudWatch logs to see details of the execution.</p>
+<h2 id="deployrds-step-fails">DeployRDS step fails</h2>
+<p>If you get the following error for <strong>DeployRDS</strong> then there is an obsolete DB password stored in SSM Parameter store. This can happen if you had a problem with deployment, stopped it, and then restarted it.</p>
+<p><code>The ciphertext refers to a customer master key that does not exist, does not exist in this region, or you are not allowed to access.</code></p>
+<p>Solution:</p>
+<ol>
+<li>In the AWS console <a href="https://us-east-2.console.aws.amazon.com/systems-manager/parameters">go to SSM Parameter store</a></li>
+<li>Delete the parameters stored there</li>
+<li>Go to the <a href="https://console.aws.amazon.com/cloudformation">CloudFormation console</a> and delete (roll back) the <strong>ResiliencyVPC</strong> stack</li>
+<li>Resume by <a href="Lab_Guide.html#deployinfra">re-starting deployment of the infrastructure</a></li>
+<li>Note you will need to use a new name, such as <em>BuildResiliency2</em></li>
+</ol>
+<h2 id="rdsstackcompletechoice-deployfailedstatus">RDSStackCompleteChoice -&gt; DeployFailedStatus</h2>
+<p>If your deployment machine fails and looks like this</p>
+<p><img alt="RDSDeployTimedOut" src="Images/RDSDeployTimedOut.png" /></p>
+<p>And if the following is true:</p>
+<ul>
+<li>click on the <strong>RDSStackCompleteChoice</strong> stage of your workflow</li>
+<li>select <strong>Output</strong></li>
+<li>
+<p>RDS stack shows status as <strong>CREATE_IN_PROGRESS</strong></p>
+<p>"rds": {
+    "stackname": "MySQLforResiliencyTesting",
+    "status": "CREATE_IN_PROGRESS"
+  }</p>
+</li>
+</ul>
+<p>Then it is likley that your RDS deployment timed out before the workflow could complete. Do the following to continue:</p>
+<ol>
+<li>Go to the <a href="https://console.aws.amazon.com/cloudformation">CloudFormation console</a></li>
+<li>Verify the status for <strong>MySQLforResiliencyTesting</strong> is <strong>CREATE_COMPLETE</strong></li>
+<li>Go back to your state machine</li>
+<li>Click <strong>New Execution</strong></li>
+<li>
+<p>Give your execution a new name, unique from previous ones (such as "BuildResiliency3")</p>
+<p><img alt="RDSDbConnections-full" src="Images/RDSDbConnections-full.png" /></p>
+</li>
+<li>
+<p>The workflow will quickly determine which stacks have already been deployed, and start immediately on the final (web server) stack.</p>
+</li>
+</ol>
 <h2 id="problems-executing-the-scripts">Problems Executing the Scripts</h2>
 <p>If you are not using Amazon Linux, you will need to install the AWS CLI.</p>
 <p>Installing <code>jq</code> is pretty easy, just download the executable and install it
@@ -2686,30 +2894,28 @@ where the PATH will see it.</p>
 <p>The shell script will delete the first instance it finds running the VPC. There shouldn’t be a problem with the jq parser of the JSON returned from the <code>ec2 describe-instances</code> but it is theoretically possible. If you get a <code>jq</code> error, it is more likely the web layer has not actually been created correctly.</p>
 <p>If you see <code>null</code>s in output messages, it is possible that you are not specifying the correct VPC ID.</p>
 <p>Installing <code>boto3</code> via <code>pip</code> on an Amazon Linux instance will cause you to have errors on the command line:</p>
-<pre><code>$ aws help
+<pre><code>  $ aws help
 
-Traceback (most recent call last):
+  Traceback (most recent call last):
 
-File &quot;/usr/local/bin/aws&quot;, line 19, in \&lt;module\&gt;
+  File "/usr/local/bin/aws", line 19, in \&lt;module\&gt;
 
-import awscli.clidriver
+  import awscli.clidriver
 
-File &quot;/usr/local/lib/python2.7/dist-packages/awscli/clidriver.py&quot;, line 19, in
-\&lt;module\&gt;
+  File "/usr/local/lib/python2.7/dist-packages/awscli/clidriver.py", line 19, in
+  \&lt;module\&gt;
 
-from botocore.hooks import AliasedEventEmitter
+  from botocore.hooks import AliasedEventEmitter
 
-ImportError: cannot import name AliasedEventEmitter
+  ImportError: cannot import name AliasedEventEmitter
 </code></pre>
-
 <p>To fix this, you need to remove the <code>aws-cli</code>, downgrade <code>boto</code>, and install an older version of the <code>aws-cli</code>:</p>
-<pre><code>$ sudo yum remove aws-cli
+<pre><code>  $ sudo yum remove aws-cli
 
-$ sudo yum downgrade python27-botocore 1.8
+  $ sudo yum downgrade python27-botocore 1.8
 
-$ sudo yum install aws-cli-1.14.9
+  $ sudo yum install aws-cli-1.14.9
 </code></pre>
-
 <h4 id="ec2-instance-failure">EC2 Instance Failure</h4>
 <p>Some additional questions to ask yourself:</p>
 <ol>
@@ -2806,6 +3012,41 @@ $ sudo yum install aws-cli-1.14.9
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="Lab_Guide.html" title="Lab Guide" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Lab Guide
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../Performance/README.html" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

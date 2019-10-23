@@ -15,7 +15,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# No arguments to this function, so if they pass them, tell them not to
+# Two arguments required: target AZ and VPC of deployed service
 if [ $# -ne 2 ]; then
   echo "Usage: $0 <az to fail> <vpc-id>"
   exit 1
@@ -25,7 +25,7 @@ fi
 # Modify the autoscaling group to remove the AZ affected
 #
 # Find the autoscaling group that this is deployed into
-#Note: This is making a lot of assumptions. A lot more error checking could be done, and in my opinion, it would be easier to do in a programming language than in a shell script.
+#Note: This is making a lot of assumptions. A lot more error checking could be done
 result=`aws autoscaling describe-auto-scaling-groups`
 as_group=`echo $result | jq -r '.AutoScalingGroups[0].AutoScalingGroupName'`
 
@@ -113,7 +113,7 @@ done
 rds_instance_id=`aws rds describe-db-instances | jq -r --arg az $1 --arg vpc $2 '.DBInstances | map(select(.DBSubnetGroup.VpcId==$vpc))[0] | select(.AvailabilityZone==$az).DBInstanceIdentifier'`
 if test -z "$rds_instance_id"
 then
-    echo "No RDS instance is master in $1"
+    echo "No RDS primary instance in $1"
 else
     echo "Failing over $rds_instance_id"
 # Reboot with failover that instance

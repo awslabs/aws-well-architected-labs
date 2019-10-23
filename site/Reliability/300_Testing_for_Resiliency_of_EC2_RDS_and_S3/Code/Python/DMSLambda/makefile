@@ -15,14 +15,12 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../DMSLambda.zip: boto3 logging deploy_dms_lambda.py
-	zip -r ../DMSLambda.zip .
+../DMSLambda.zip: boto3 deploy_dms_lambda.py
+	cd dist && zip -r ../../DMSLambda.zip .
+	zip -r ../DMSLambda.zip deploy_dms_lambda.py
 
-botocore: 
-	pip install --target=. botocore
+botocore:
+	pip install --target=./dist botocore
 
 boto3: botocore
-	pip install --target=. boto3
-
-logging:
-	pip install --target=. logging
+	pip install --target=./dist boto3

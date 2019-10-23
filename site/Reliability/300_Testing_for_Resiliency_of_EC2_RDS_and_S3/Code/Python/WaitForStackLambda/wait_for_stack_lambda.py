@@ -1,12 +1,12 @@
 #
 # MIT No Attribution
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
 # software and associated documentation files (the "Software"), to deal in the Software
 # without restriction, including without limitation the rights to use, copy, modify,
 # merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 # permit persons to whom the Software is furnished to do so.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 # PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
@@ -26,6 +26,7 @@ import json
 
 LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
 
+
 def init_logging():
     # Setup loggin because debugging with print can get ugly.
     logger = logging.getLogger()
@@ -37,7 +38,7 @@ def init_logging():
     return logger
 
 
-def setup_local_logging(logger, log_level = 'INFO'):
+def setup_local_logging(logger, log_level='INFO'):
     # Set the Logger so if running locally, it will print out to the main screen.
     handler = logging.StreamHandler()
     formatter = logging.Formatter(
@@ -53,7 +54,7 @@ def setup_local_logging(logger, log_level = 'INFO'):
     return logger
 
 
-def set_log_level(logger, log_level = 'INFO'):
+def set_log_level(logger, log_level='INFO'):
     # There is some stuff that needs to go here.
     if log_level in LOG_LEVELS:
         logger.setLevel(LOG_LEVELS[log_level])
@@ -81,9 +82,8 @@ def wait_for_stack(region, stack_id, context):
     client = boto3.client('cloudformation', region)
 
     stack_building = True
-    stack = None
     stack_status = 'CREATE_FAILED'
-    while stack_building == True:
+    while stack_building is True:
         try:
             stack_response = client.describe_stacks(StackName=stack_id)
             stack_list = stack_response['Stacks']
@@ -97,19 +97,19 @@ def wait_for_stack(region, stack_id, context):
                 stack_building = False
                 break
             if (context != 0):
-               time_remaining = context.get_remaining_time_in_millis()
+                time_remaining = context.get_remaining_time_in_millis()
             else:
-               time_remaining = 50000
+                time_remaining = 50000
             if (time_remaining > 40000):
                 logger.debug("still waiting: time (MS) left to execute: {}".format(time_remaining))
                 sleep(30)
             else:
                 break
         except:
+            logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
             logger.debug("Exception when checking for stack named " + stack_id)
-            print ("Stack Trace:", traceback.format_exc())
 
-    return_dict = { 'stackname' : stack_id, 'status' : stack_status }
+    return_dict = {'stackname': stack_id, 'status': stack_status}
     return return_dict
 
 
@@ -147,38 +147,36 @@ def lambda_handler(event, context):
                     except:
                         stack_to_check = event['vpc']['stackname']
                         return wait_for_stack(event['region_name'], stack_to_check, context)
-
-
     except SystemExit:
         logger.error("Exiting")
         sys.exit(1)
     except ValueError:
         exit(1)
     except:
-        print ("Unexpected error!\n Stack Trace:", traceback.format_exc())
+        print("Unexpected error!\n Stack Trace:", traceback.format_exc())
         exit(0)
 
 
 if __name__ == "__main__":
     event = {
-    "log_level": "DEBUG",
-    "region_name": "us-east-2",
-    "secondary_region_name": "us-west-2",
-    "cfn_region": "us-east-2",
-    "cfn_bucket": "aws-well-architected-labs-ohio",
-    "folder": "Reliability/",
-    "workshop": "AWSLoft",
-    "boot_bucket": "aws-well-architected-labs-ohio",
-    "boot_prefix": "Reliability/",
-    "boot_object": "bootstrapARC327.sh",
-    "vpc": {
-      "stackname": "ResiliencyVPC",
-      "status": "CREATE_COMPLETE"
-    },
-    "rds": {
-      "stackname": "MySQLforResiliencyTesting"
+        "log_level": "DEBUG",
+        "region_name": "us-east-2",
+        "secondary_region_name": "us-west-2",
+        "cfn_region": "us-east-2",
+        "cfn_bucket": "aws-well-architected-labs-ohio",
+        "folder": "Reliability/",
+        "workshop": "AWSLoft",
+        "boot_bucket": "aws-well-architected-labs-ohio",
+        "boot_prefix": "Reliability/",
+        "boot_object": "bootstrapARC327.sh",
+        "vpc": {
+            "stackname": "ResiliencyVPC",
+            "status": "CREATE_COMPLETE"
+        },
+        "rds": {
+            "stackname": "MySQLforResiliencyTesting"
+        }
     }
-  }
     logger = init_logging()
     os.environ['log_level'] = os.environ.get('log_level', event['log_level'])
 

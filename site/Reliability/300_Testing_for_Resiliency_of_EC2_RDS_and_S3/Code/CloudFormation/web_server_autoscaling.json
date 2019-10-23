@@ -63,11 +63,16 @@
     "BootObject" : {
       "Description" : "Object in Boot Bucket to download and bootstrap from",
       "Type" : "String",
-      "Default" : "install_simple_server.sh"
+      "Default" : "server.py"
     },
 
     "WebSiteImage" : {
       "Description" : "URL of the image that will be displayed in the website (from S3 if you wish to test failure of it)",
+      "Type" : "String"
+    },
+
+    "WebServerAMI" : {
+      "Description" : "Latest Amazon AMI available in the region ",
       "Type" : "String"
     },
 
@@ -80,20 +85,13 @@
       "Description" : "User in RDS host to connect to",
       "Type" : "String"
     },
-
+  
     "RDSPassword" : {
-      "Description" : "Password of user in RDS host to connect to",
-      "NoEcho" : "true",
-      "Type" : "String"
+      "Description" : "Password in RDS host to connect to",
+      "Type" : "String",
+      "NoEcho" : "true"
     }
 
-  },
-
-  "Mappings" : {
-    "AMIRegionMap" : {
-      "us-east-2"      : { "WebServerAMI" : "ami-0ebbf2179e615c338" },
-      "us-west-2"      : { "WebServerAMI" : "ami-0cb72367e98845d43" }
-    }
   },
 
   "Resources" : {
@@ -129,19 +127,24 @@
       "Properties" : {
         "SecurityGroups" : { "Ref" : "WebServerSecurityGroups" },
         "InstanceType" : { "Ref" : "WebServerInstanceType" },
-        "ImageId" : { "Fn::FindInMap" : [ "AMIRegionMap", { "Ref" : "AWS::Region" }, "WebServerAMI" ] },
+        "ImageId" : { "Ref" : "WebServerAMI" },
         "IamInstanceProfile" : { "Ref" : "WebServerInstanceProfile" },
-	"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-               "#!/bin/bash\n",
-               "yum -y install mysql\n",
-               "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/", { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, { "Ref" : "BootObject" }, "\n",
-	       "echo \"[client]\" >> ~/.my.cnf\n",
-	       "echo \"password=\"", { "Ref" : "RDSPassword" }, "\"\" >> ~/.my.cnf\n",
-	       "chown root ", { "Ref" : "BootObject" }, "\n",
-	       "chgrp root ", { "Ref" : "BootObject" }, "\n",
-	       "chmod +x ", { "Ref" : "BootObject" }, "\n",
-               "yum -y update\n",
-               "./", { "Ref" : "BootObject"}, " ", { "Ref" : "RDSHostName" }, " ", { "Ref" : "RDSUser"}, " ", { "Ref" : "BootBucket" }, " ", { "Ref" : "BootPrefix" }, " ", { "Ref" : "BootBucketRegion" }, " ", { "Ref" : "WebSiteImage" }, "\n"
+        "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+              "#!/bin/bash\n",
+              "yum -y update\n",
+              "amazon-linux-extras install epel\n",
+              "yum -y install stress-ng\n",
+              "yum -y install tc\n",
+              "yum -y install mysql\n",
+              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, "createIPTable.sql\n",
+              "mysql -h ", { "Ref" : "RDSHostName"}, " -u ", { "Ref" : "RDSUser"}, " -p", { "Ref" : "RDSPassword"}, " <createIPTable.sql --silent --force -b 2>stderr.txt\n",  
+              "yum install python3 python-virtualenv python-pip -y\n",
+              "python3 -m venv /home/ec2-user/venv\n",
+              "source /home/ec2-user/venv/bin/activate\n",
+              "pip install ec2_metadata\n",
+              "pip install pymysql\n",
+              "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, { "Ref" : "BootObject" }, "\n",
+              "python3 ", { "Ref" : "BootObject" }, " -u ", { "Ref" : "WebSiteImage" }, " -p 80 -s ", { "Ref" : "RDSUser" }, " -w ", { "Ref" : "RDSPassword"}, " -d iptracker -o ", { "Ref" : "RDSHostName"}, "\n"
             ]]
             }
         }
@@ -152,43 +155,43 @@
       "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties" : {
         "HealthCheckIntervalSeconds" : "15",
-	"HealthCheckPath" : "/",
-	"HealthCheckPort" : "80",
-	"HealthCheckProtocol" : "HTTP",
-	"HealthCheckTimeoutSeconds" : "2",
-	"HealthyThresholdCount" : "2",
-	"Matcher" : { "HttpCode" : "200" },
-        "Port" : "80",
-	"Protocol" : "HTTP",
-	"TargetType" : "instance",
-	"UnhealthyThresholdCount" : "2",
-	"VpcId" : { "Ref" : "VPCID" }
-      }
-    },
+        "HealthCheckPath" : "/",
+        "HealthCheckPort" : "80",
+        "HealthCheckProtocol" : "HTTP",
+        "HealthCheckTimeoutSeconds" : "2",
+        "HealthyThresholdCount" : "2",
+        "Matcher" : { "HttpCode" : "200" },
+              "Port" : "80",
+        "Protocol" : "HTTP",
+        "TargetType" : "instance",
+        "UnhealthyThresholdCount" : "2",
+        "VpcId" : { "Ref" : "VPCID" }
+            }
+          },
 
     "WebLoadBalancer" : {
       "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties" : {
-	"Name" : "ResiliencyTestLoadBalancer",
-	"Scheme" : "internet-facing",
-        "SecurityGroups" : [ {"Ref" : "WebLoadBalancerSG" } ],
-        "Subnets" : { "Ref": "WebLoadBalancerSubnets" },
-        "Type" : "application"
+        "Name" : "ResiliencyTestLoadBalancer",
+        "Scheme" : "internet-facing",
+          "SecurityGroups" : [ {"Ref" : "WebLoadBalancerSG" } ],
+          "Subnets" : { "Ref": "WebLoadBalancerSubnets" },
+          "Type" : "application"
       }
     },
 
     "WebLoadBalancerListener" : {
       "Type" : "AWS::ElasticLoadBalancingV2::Listener",
       "Properties" : {
-	"LoadBalancerArn" : { "Ref" : "WebLoadBalancer" },
-	"Port" : "80",
-	"Protocol" : "HTTP",
-	"DefaultActions" : [
-	  {
-	    "TargetGroupArn" : { "Ref" : "WebLoadBalancerTargetGroup" },
-	    "Type" : "forward"
-	  }
-	]
+        "LoadBalancerArn" : { "Ref" : "WebLoadBalancer" },
+        "Port" : "80",
+        "Protocol" : "HTTP",
+        "DefaultActions" : [
+          {
+            "TargetGroupArn" : { "Ref" : "WebLoadBalancerTargetGroup" },
+            "Type" : "forward"
+          }
+        ]
       }
     },
 
@@ -198,8 +201,8 @@
         "AvailabilityZones" : {"Ref" : "AvailabilityZones"},
         "MinSize" : "3",
         "MaxSize" : "3",
-	"HealthCheckType" : "ELB",
-	"HealthCheckGracePeriod" : "60",
+        "HealthCheckType" : "ELB",
+        "HealthCheckGracePeriod" : "60",
         "LaunchConfigurationName" : {"Ref" : "WebServerLaunchConfiguration" },
         "VPCZoneIdentifier" :  { "Ref" : "WebServerSubnets" },
         "TargetGroupARNs" : [ {"Ref" : "WebLoadBalancerTargetGroup" } ],
