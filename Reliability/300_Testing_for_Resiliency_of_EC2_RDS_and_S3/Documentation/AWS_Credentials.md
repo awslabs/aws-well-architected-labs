@@ -13,7 +13,7 @@ If BOTH of the following are true then you may use **Option 1**
 * **If you are attending an in-person workshop and were provided with an AWS account by the instructor** then you should use this option
 * You are running the workshop on system where environment variables are set using the `export` command, such as Bash on Amazon Linux
 
-Otherwise you should choose **Option 1** or **Option 2**
+Otherwise you should choose **Option 2** or **Option 3**
 
 1. You should have already copied the credentials for your account. If not then [follow the directions here](Workshop_AWS_Account.md)
 
