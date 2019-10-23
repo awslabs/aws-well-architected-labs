@@ -22,15 +22,13 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1. View an RI report<a name="ri_report"></a>
 We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.
 
-**NOTE**: Analysis can ONLY be done on **All Up Front** recommendations, as this allows the break even to show when the entire RI term (12 or 36 months) is paid off. After the analysis is performed, you can proceed to purchase the required RI type.
-
 1. Log into the console as an IAM user with the required permissions, go to the **AWS Cost Explorer** service page:
 ![Images/AWSRI1.png](Images/AWSRI1.png)
 
 2. In the left menu select **Recommendations**: 
 ![Images/AWSRI2.png](Images/AWSRI2.png)
 
-3. On the right select the filters: **RI term** 1 year, **Payment Option** All upfront, **Based on the past** 7 days:
+3. On the right select the filters: **RI term** 1 year, **Payment Option** (your preference), **Based on the past** 7 days:
 ![Images/AWSRI3.png](Images/AWSRI3.png)
 
 The top section will show the estimated savings and number of recommendations, take note of the **Purchase Recommendations**
@@ -54,21 +52,32 @@ Ctrl-click to open them in a new tab, then copy the text and paste it into a spr
 - [30_day_EC2_R_Rec.csv](./Code/30_day_EC2_RI_Rec.csv)
 
 
-3 - Create a new column called **RI ID** to the left of the **Recommendation** column on **both** 30Day and 7Day sheets, which is a unique identifier of the RI Type, the formula for this cell will concatenate the columns: **Instance Type**, **Location**,**OS** and **Tenancy**:
+3 - Create a new column called **RI ID** to the left of the **Recommendation** column on **both** 30Day and 7Day sheets, which is a unique identifier of the RI Type, the formula for this cell will concatenate the columns: **Instance Type**, **Location**,**OS** and **Tenancy**. On **row 5** of the sample files, paste the formula below. If using your own files modify the row numbers.
 ```
 =CONCATENATE(C5,L5,M5,N5)
 ```
 ![Images/RI_Proc0.png](Images/RI_Proc0.png)
 
 
-4 - Add a column in the **30Day** worksheet to the right of the Recommendation column. This will be for the 7Day recommendations.  Add a VLOOKUP formula to get the values from the **7Day** worksheet, modify this formula for the number of rows you require (U column):
+4 - Add a column in the **30Day** worksheet to the right of the Recommendation column. This will be for the 7Day recommendations.  Add a VLOOKUP formula to get the values from the **7Day** worksheet, modify this formula for the number of rows you require (U column). Paste this on **row 5** of the sample files, or modify if using your own:
 ```
 =VLOOKUP(T5,'7Day Rec'!T$4:U$48,2,FALSE)
 ```
 ![Images/RI_Proc1.png](Images/RI_Proc1.png)
 
-5 - Delete the following columns as they are not necessary: **Recommendation Date**, **Owner Account**, **Size Flexible Recommendation**, **Max hourly normalized unit usage in Historical Period**, **Min hourly normalized unit usage in Historical Period**, **Average hourly normalized unit usage in Historical Period**, **Offering Class**, **Term**, **Payment Option**, **Upfront Cost**, **Recurring Monthly Cost**. You should be left with the following columns:
-![Images/RI_Proc2.png](Images/RI_Proc2.png)
+5 - We will now create a **Fully Paid Day** column. This shows us how long it will take to pay off the full term of the RI, and will help to measure risk. The closer to 12months the fully paid day is, the higher the risk. This is because it takes longer to pay off the investment/commitment. The break even is the wrong measure, as it only shows how quickly you pay off the upfront component, and not the full amount.
+Paste the following formula into the last column **z**:
+```
+=(R5+S5*12)/(R5/12+S5+W5)
+```
+
+The formula is:
+```
+(yearly RI cost) / (monthly on-demand cost)
+(Upfront cost + recurring monthly cost x 12) / (upfront cost/12 + recurring monthly cost + estimated monthly savings)
+```
+
+6 - Delete the following columns as they are not necessary: **Recommendation Date**, **Size Flexible Recommendation**, **Max hourly normalized unit usage in Historical Period**, **Min hourly normalized unit usage in Historical Period**, **Average hourly normalized unit usage in Historical Period**, **Payment Option**, **Break Even Months**. 
 
 
 We now have the required data required to be able to analyze, and filter out the high risk and low return RIs.
@@ -78,11 +87,11 @@ We now have the required data required to be able to analyze, and filter out the
 RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: **low risk** and **high return** purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimizing the risk of unused RIs.
 
 ### 3.1 Filter out low risk, and high return RIs
-1 - To get the lowest risk, we sort by **Break Even Months** smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that some of the RI's below are fully paid off in less than 6months - so if they are used for 6 months - they have paid themselves off completely.
+1 - To get the lowest risk, we sort by **Fully Paid Day** smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that some of the RI's below are fully paid off in around 7months - so if they are used for 7 months - they have paid themselves off completely.
 ![Images/RI_Proc3.png](Images/RI_Proc3.png)
 
 
-2 - We will separate the very low, low, and medium risk recommendations. Add in some empty lines between **Break Even Months** of 7, 10, and copy the header line across: 
+2 - We will separate the very low, low, and medium risk recommendations. Add in some empty lines between **Fully Paid Day** of 8, 10, and copy the header line across: 
 ![Images/RI_Proc4.png](Images/RI_Proc4.png)
 
 
@@ -102,7 +111,7 @@ It would be a large amount of effort to view the daily usage patterns over the m
 2 - If the **Average hourly usage** is close to the **Max hourly usage**, then the minimum was only a small duration, so highlight anything green where the **Average** is roughly within 75-100% of the **Max**:
 ![Images/RI_Proc8.png](Images/RI_Proc8.png)
 
-3 - Minimum utilization required varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum utilization of >80%. While this is reflected through the Break even (if utilization is low, break even would be very late), we'll double check & filter out only the very high utilization. Highlight anything above **90%** in green:
+3 - Minimum utilization required for an RI varies by the discount level.  The lowest discount level is approximately 20%, so we would look for a minimum utilization of >80%. While this is reflected through the Fully Paid Day (if utilization is low, Fully Paid would be very late), we'll double check & filter out only the very high utilization. Highlight anything above **90%** in green:
 ![Images/RI_Proc9.png](Images/RI_Proc9.png)
 
 4 - Now we look for a declining usage pattern. If the recommendation for the last 7 days is less than the 30 days, usage is declining - and you should consult your business to determine if usage will continue to fall. If the **7day Recommended Instance Quantity** is equal or more than the **30day Recommended Instance Quantity** then highlight the cell green:
