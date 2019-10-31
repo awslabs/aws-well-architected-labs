@@ -47,8 +47,7 @@ If you _have not_ already deployed the necessary infrastructure, then follow the
 1. Download the [staticwebapp.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml) CloudFormation template
 1. In your chosen region, create a CloudFormation stack uploading this CloudFormation Template
 1. Name the stack _WebApp1-Static_ (case sensitive)
-1. For ALBSGSource use your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.
-1. Leave all other CloudFormation Parameters at their default values
+1. Leave all  CloudFormation Parameters at their default values
 1. click **Next** until the last page
 1. check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**
 

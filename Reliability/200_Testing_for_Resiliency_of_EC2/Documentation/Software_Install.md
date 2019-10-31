@@ -22,7 +22,7 @@ The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consi
 * AWS CLI version 1.0 or higher is fine
 * If you instead got `command not found` then you need to install `awscli`:
 
-       $ pip3 install awscli --upgrade --user`
+       $ pip3 install awscli --upgrade --user
        ...(lots of output)...
        Successfully installed...
 * If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
