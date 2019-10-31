@@ -11,7 +11,7 @@ These steps will guide you to create a bucket containing some objects.
 1. Click **Next** _three_ times
 1. Review screen: click **Create bucket**
 1. Click on the name of the bucket you created
-1. Drag some files into the bue upload area
+1. Drag some files into the object upload area
 1. Click **Next** _three_ times
 1. Click **Upload**
 
