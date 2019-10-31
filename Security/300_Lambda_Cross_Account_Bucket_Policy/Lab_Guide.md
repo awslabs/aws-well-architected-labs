@@ -41,34 +41,34 @@ If you only have one AWS account, then use the same AWS account number for both 
     * Replace **bucketname** with the S3 bucket name from account 2
     * Then click **Review Policy**
 
-          {
-              "Version": "2012-10-17",
-              "Statement": [
-                  {
-                      "Sid": "S3ListBucket",
-                      "Effect": "Allow",
-                      "Action": [
-                          "s3:ListBucket"
-                      ],
-                      "Resource": "arn:aws:s3:::bucketname"
-                  },
-                  {
-                      "Sid": "logsstreamevent",
-                      "Effect": "Allow",
-                      "Action": [
-                          "logs:CreateLogStream",
-                          "logs:PutLogEvents"
-                      ],
-                      "Resource": "arn:aws:logs:us-east-1:account1:log-group:/aws/lambda/Lambda-List-S3*/*"
-                  },
-                  {
-                      "Sid": "logsgroup",
-                      "Effect": "Allow",
-                      "Action": "logs:CreateLogGroup",
-                      "Resource": "*"
-                  }
-              ]
-          }
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "S3ListBucket",
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:ListBucket"
+                        ],
+                        "Resource": "arn:aws:s3:::bucketname"
+                    },
+                    {
+                        "Sid": "logsstreamevent",
+                        "Effect": "Allow",
+                        "Action": [
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ],
+                        "Resource": "arn:aws:logs:us-east-1:account1:log-group:/aws/lambda/Lambda-List-S3*/*"
+                    },
+                    {
+                        "Sid": "logsgroup",
+                        "Effect": "Allow",
+                        "Action": "logs:CreateLogGroup",
+                        "Resource": "*"
+                    }
+                ]
+            }
 
 1. Name this policy _Lambda-List-S3-Policy_, then click Create policy
 

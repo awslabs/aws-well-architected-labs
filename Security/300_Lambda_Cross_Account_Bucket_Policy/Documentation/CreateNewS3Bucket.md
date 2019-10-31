@@ -2,11 +2,11 @@
 
 These steps will guide you to create a bucket containing some objects.
 
-1. Go to te S3 console at <https://console.aws.amazon.com/s3>
+1. Go to the S3 console at <https://console.aws.amazon.com/s3>
 1. Click **Create bucket**
-1. For **Bucket name** supply a name. This must be unique across all buckets across AWS
+1. For **Bucket name** supply a name. This must be unique across all buckets in AWS
 
-    * _Tip_: Name the bucket <your_first_name>_<date in yyyymmm10 format>
+    * _Tip_: Name the bucket `<your_first_name>_<date in yyyymmm10 format>`
 
 1. Click **Next** _three_ times
 1. Review screen: click **Create bucket**
