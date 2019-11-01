@@ -2137,6 +2137,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#delete-remaining-resources" class="md-nav__link">
+    Delete remaining resources
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3414,6 +3421,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#delete-remaining-resources" class="md-nav__link">
+    Delete remaining resources
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3504,7 +3518,7 @@
 </li>
 </ul>
 <h3 id="12-checking-for-existing-service-linked-roles">1.2 Checking for existing service-linked roles</h3>
-<p><strong>If you are attending an in-person workshop and were provided with an AWS account by the instructor</strong>: Skip this step and go to directly to step <a href="#create_statemachine">Create the "deployment machine"</a>.</p>
+<p><strong>If you are attending an in-person workshop and were provided with an AWS account by the instructor</strong>: Skip this step and go directly to step <a href="#create_statemachine">Create the "deployment machine"</a>.</p>
 <p><strong>If you are using your own AWS account</strong>: <a href="Documentation/Service_Linked_Roles.html#exist_service_linked_roles">Follow these steps</a>, and then return here and resume with the following instructions.</p>
 <h3 id="13-create-the-deployment-machine">1.3 Create the "deployment machine" <a name="create_statemachine"></a></h3>
 <p>Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure.</p>
@@ -3737,7 +3751,7 @@ chmod u+x fail_az.sh
 </li>
 </ol>
 <h3 id="23-set-up-the-programming-language-environment-for-python-java-c-or-powershell">2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a></h3>
-<p>If you will be using bash and executed the the steps in the <em>previous</em> section, then you can <a href="#failure_injection">skip this and go to the section: <strong>Test Resiliency Using Failure Injection</strong></a></p>
+<p>If you will be using bash and executed the steps in the <em>previous</em> section, then you can <a href="#failure_injection">skip this and go to the section: <strong>Test Resiliency Using Failure Injection</strong></a></p>
 <ul>
 <li>If you will be using Python, Java, C#, or PowerShell for this workshop, <a href="Documentation/Programming_Environment.html">click here for instructions on setting up your environment</a></li>
 </ul>
@@ -3759,7 +3773,7 @@ chmod u+x fail_az.sh
 <li>
 <p>Get VPC ID</p>
 <ul>
-<li>A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service</li>
+<li>A VPC (Amazon Virtual Private Cloud) is a logically isolated section of the AWS Cloud where you have deployed the resources for your service</li>
 <li>For these tests you will need to know the <strong>VPC ID</strong> of the VPC you created as part of deploying the service</li>
 <li>Navigate to the VPC management console: <a href="https://console.aws.amazon.com/vpc">https://console.aws.amazon.com/vpc</a></li>
 <li>In the left pane, click <strong>Your VPCs</strong></li>
@@ -4016,7 +4030,7 @@ Terminating i-0710435abc631eab3
 <p>The website is <em>not</em> available. Some errors you might see reported:</p>
 <ul>
 <li><strong>No Response / Timeout</strong>: Request was successfully sent to EC2 server, but server no longer has connection to an active database</li>
-<li><strong>504 Gateway Time-out</strong>: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request</li>
+<li><strong>504 Gateway Time-out</strong>: Amazon Elastic Load Balancer has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request</li>
 <li><strong>502 Bad Gateway</strong>: The Amazon Elastic Load Balancer got a bad request from the server</li>
 <li>An error you will <em>not</em> see is <strong>This site can’t be reached</strong>. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.</li>
 </ul>
@@ -4081,7 +4095,7 @@ Terminating i-0710435abc631eab3
 </ul>
 </li>
 <li>
-<p>To simulate failure of an AZ, select one of the AVailability Zones used by your service (<code>us-east-2a</code>, <code>us-east-2b</code>, or <code>us-east-2c</code>) as <code>&lt;az&gt;</code></p>
+<p>To simulate failure of an AZ, select one of the Availability Zones used by your service (<code>us-east-2a</code>, <code>us-east-2b</code>, or <code>us-east-2c</code>) as <code>&lt;az&gt;</code></p>
 <ul>
 <li>For <strong>scenario 1</strong> select an AZ that is neither <em>primary</em> nor <em>secondary</em> for your RDS DB instance. Given the following RDS console you would choose <code>us-east-2c</code></li>
 <li>For <strong>scenario 2</strong> select the AZ that is <em>primary</em> for your RDS DB instance. Given the following RDS console you would choose <code>us-east-2b</code></li>
@@ -4213,7 +4227,7 @@ Terminating i-0710435abc631eab3
 <li>You may leave these resources deployed for as long as you want. When you are ready to delete these resources, see the following instructions</li>
 </ul>
 <h3 id="remove-manually-provisioned-resources">Remove manually provisioned resources</h3>
-<p>Some resources were created by the failure simulation scripts. You need ot remove these first</p>
+<p>Some resources were created by the failure simulation scripts. You need to remove these first</p>
 <ol>
 <li>Go to the <a href="https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:">Network ACL console</a></li>
 <li>Look at the NACL entries for the VPC called <strong>ResiliencyVPC</strong></li>
@@ -4242,7 +4256,7 @@ Terminating i-0710435abc631eab3
 <p>In the confirmation dialog, click <strong>Delete stack</strong></p>
 </li>
 <li>The <em>Status</em> changes to <strong>DELETE_IN_PROGRESS</strong></li>
-<li>Click the rfresh button to update and status will ultimately progress to <strong>DELETE_COMPLETE</strong></li>
+<li>Click the refresh button to update and status will ultimately progress to <strong>DELETE_COMPLETE</strong></li>
 <li>
 <p>When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.</p>
 <p><img alt="ShowDeletedStacks" src="Images/ShowDeletedStacks.png" /></p>
@@ -4295,6 +4309,27 @@ Terminating i-0710435abc631eab3
 </table>
 <h4 id="multi-region">Multi region</h4>
 <p>If you deployed the <strong>multi region</strong> option, then <a href="Documentation/Multi_Region_Stack_Deletion.html">see these instructions for the order in which to delete the CloudFormation stacks</a></p>
+<h3 id="delete-remaining-resources">Delete remaining resources</h3>
+<p>The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them.</p>
+<ul>
+<li><strong>single region</strong> You only need to do the following steps in <strong>us-east-2</strong></li>
+<li>
+<p><strong>multi region</strong> Do the following steps for both <strong>us-east-2</strong> and <strong>us-west-</strong>2</p>
+</li>
+<li>
+<p>Select the region</p>
+</li>
+<li>Wait until <strong>ResiliencyVPC</strong> CloudFormation stack is <strong>DELETE_COMPLETE</strong> in the region</li>
+<li>Go to the <a href="https://console.aws.amazon.com/systems-manager/parameters/">AWS Console for AWS Systems Manager parameter store</a></li>
+<li>Look for the parameter created for your infrastructure. If you used our default values, this will be named <strong>300-ResiliencyofEC2RDSandS3</strong></li>
+<li>If it is not present (check all regions you deployed to) then you are finished</li>
+<li>If it is present then<ol>
+<li>Click on the parameter name</li>
+<li>Click the <strong>Delete</strong> button</li>
+<li>Click <strong>Delete</strong> again</li>
+</ol>
+</li>
+</ul>
 <hr />
 <h2 id="references-useful-resources">References &amp; useful resources</h2>
 <ul>
