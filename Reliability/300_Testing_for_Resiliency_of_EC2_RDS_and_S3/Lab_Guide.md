@@ -395,7 +395,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. The website is _not_ available. Some errors you might see reported:
       * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
-      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
+      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
       * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
       * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.
 
@@ -586,7 +586,7 @@ As part of lab setup you have deployed several AWS CloudFormation stacks. These 
 
 1. In the confirmation dialog, click **Delete stack**
 1. The _Status_ changes to **DELETE_IN_PROGRESS**
-1. Click the rfresh button to update and status will ultimately progress to **DELETE_COMPLETE**
+1. Click the refresh button to update and status will ultimately progress to **DELETE_COMPLETE**
 1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
 
     ![ShowDeletedStacks](Images/ShowDeletedStacks.png)
@@ -616,6 +616,23 @@ If you deployed the **single region** option, then delete your stacks in the fol
 #### Multi region
 
 If you deployed the **multi region** option, then [see these instructions for the order in which to delete the CloudFormation stacks](Documentation/Multi_Region_Stack_Deletion.md)
+
+### Delete remaining resources
+
+The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them.
+
+* **single region** You only need to do the following steps in **us-east-2**
+* **multi region** Do the following steps for both **us-east-2** and **us-west-**2
+
+1. Select the region
+1. Wait until **ResiliencyVPC** CloudFormation stack is **DELETE_COMPLETE** in the region
+1. Go to the [AWS Console for AWS Systems Manager parameter store](https://console.aws.amazon.com/systems-manager/parameters/)
+1. Look for the parameter created for your infrastructure. If you used our default values, this will be named **300-ResiliencyofEC2RDSandS3**
+1. If it is not present (check all regions you deployed to) then you are finished
+1. If it is present then
+      1. Click on the parameter name
+      1. Click the **Delete** button
+      1. Click **Delete** again
 
 ---
 
