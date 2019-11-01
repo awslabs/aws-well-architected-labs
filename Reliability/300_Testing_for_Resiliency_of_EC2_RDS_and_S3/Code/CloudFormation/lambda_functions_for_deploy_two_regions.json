@@ -725,7 +725,7 @@
           "Path": "/",
           "Policies": [
               {
-                  "PolicyName": "root",
+                  "PolicyName": "LambdaCustomResourcePolicy",
                   "PolicyDocument": {
                       "Version": "2012-10-17",
                       "Statement": [

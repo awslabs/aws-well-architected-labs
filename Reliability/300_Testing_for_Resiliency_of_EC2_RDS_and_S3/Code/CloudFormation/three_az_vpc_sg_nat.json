@@ -73,7 +73,7 @@
       "Description" : "Availability Zone within the region to place a third of the subnets",
       "Type" : "AWS::EC2::AvailabilityZone::Name",
       "Default" :  "us-east-1c"
-    },
+    }
 
   },
 
