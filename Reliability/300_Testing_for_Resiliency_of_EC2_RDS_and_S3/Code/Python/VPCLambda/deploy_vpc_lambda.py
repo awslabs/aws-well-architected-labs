@@ -79,6 +79,15 @@ def process_global_vars():
         logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
 
 
+def find_in_outputs(outputs, key_to_find):
+    output_string = None
+    for output in outputs:
+        if (output['OutputKey'] == key_to_find):
+            output_string = output['OutputValue']
+            break
+    return output_string
+
+
 def deploy_vpc(event):
     logger.debug("Running function deploy_vpc")
     try:
@@ -99,6 +108,27 @@ def deploy_vpc(event):
         logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
         workshop_name = 'UnknownWorkshop'
 
+    # Create a client to read and write CloudFormation stacks
+    cf_client = boto3.client('cloudformation', region_name=region)
+
+    # Get the outputs of the VPC stack
+    vpc_stack = event['vpc']['stackname']
+    try:
+        stack_response = cf_client.describe_stacks(StackName=vpc_stack)
+        stack_list = stack_response['Stacks']
+        if (len(stack_list) < 1):
+            logger.debug("Cannot find stack named " + vpc_stack + ", so cannot parse outputs as inputs")
+            return 1
+    except Exception:
+        logger.debug("Cannot find stack named " + vpc_stack + ", so cannot parse outputs as inputs")
+        sys.exit(1)
+    vpc_outputs = stack_list[0]['Outputs']
+
+    # Geth the ARN of the IAM Role used to create custom resources 
+    # This is used to create the SSM stored paramter for DB password
+    lambda_custom_resource_role_arn = find_in_outputs(vpc_outputs, 'LambdaCustomResourceRoleArn')
+
+
     vpc_parameters = []
     vpc_parameters.append({'ParameterKey': 'BastionCidrIp', 'ParameterValue': '0.0.0.0/0', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'VPCCidrBlock', 'ParameterValue': '10.0.0.0/16', 'UsePreviousValue': True})
@@ -112,6 +142,7 @@ def deploy_vpc(event):
     vpc_parameters.append({'ParameterKey': 'AvailabilityZone2', 'ParameterValue': region + 'b', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'AvailabilityZone3', 'ParameterValue': region + 'c', 'UsePreviousValue': True})
     vpc_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
+    vpc_parameters.append({'ParameterKey': 'LambdaCustomResourceRoleArn', 'ParameterValue': lambda_custom_resource_role_arn, 'UsePreviousValue': True})
     print(vpc_parameters)
     stack_tags = []
 
@@ -121,7 +152,6 @@ def deploy_vpc(event):
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
 
     # Create CloudFormation client
-    cf_client = boto3.client('cloudformation', region_name=region)
     cf_client.create_stack(
         StackName=stackname,
         TemplateURL=vpc_template_s3_url,

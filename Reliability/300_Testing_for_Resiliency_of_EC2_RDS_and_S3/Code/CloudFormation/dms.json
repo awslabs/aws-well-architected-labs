@@ -9,23 +9,13 @@
       "Type": "String"
     },
 
-    "SourceDatabaseName" : {
+    "SourceDatabaseServer" : {
       "Description" : "Name of the source RDS server",
       "Type" : "String"
     },
 
-    "DestDatabaseName" : {
+    "DestDatabaseServer" : {
       "Description" : "Name of the dest RDS server",
-      "Type" : "String"
-    },
-
-    "SourceDatabaseRegion" : {
-      "Description" : "region for source DB",
-      "Type" : "String"
-    },
-
-    "DestDatabaseRegion" : {
-      "Description" : "region for dest  DB",
       "Type" : "String"
     },
 
@@ -124,7 +114,7 @@
       "Type" : "AWS::DMS::Endpoint",
       "Properties" : {
         "DatabaseName" : { "Ref" : "DatabaseName" },
-        "ServerName" : { "Ref" : "SourceDatabaseName" },
+        "ServerName" : { "Ref" : "SourceDatabaseServer" },
         "Port" : "3306",
         "EndpointType" : "source",
         "EngineName" : "MYSQL",
@@ -147,7 +137,7 @@
       "Type" : "AWS::DMS::Endpoint",
       "Properties" : {
         "DatabaseName" : { "Ref" : "DatabaseName" },
-        "ServerName" : { "Ref" : "DestDatabaseName" },
+        "ServerName" : { "Ref" : "DestDatabaseServer" },
         "Port" : "3306",
         "EndpointType" : "target",
         "EngineName" : "MYSQL",

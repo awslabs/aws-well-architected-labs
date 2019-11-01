@@ -8,6 +8,7 @@
     "WorkshopName": {
       "Type": "String"
     },
+
     "BastionCidrIp" : {
       "Description" : "Access CidrIp, default Everyone",
       "Type" : "String",
@@ -72,7 +73,13 @@
       "Description" : "Availability Zone within the region to place a third of the subnets",
       "Type" : "AWS::EC2::AvailabilityZone::Name",
       "Default" :  "us-east-1c"
+    },
+
+    "LambdaCustomResourceRoleArn" : {
+      "Description" : "ARN of IAM execution role used by Lambda creating custom resources",
+      "Type" : "String"
     }
+
   },
 
   "Resources" : {
@@ -466,7 +473,6 @@
       }
     },
     "KmsKey": {
-      "DependsOn": "LambdaExecutionRole",
       "Type": "AWS::KMS::Key",
       "Properties": {
           "Description": {
@@ -487,7 +493,7 @@
                                     "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomKMS"
+                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRoleArn"
                                 },
                                 {
                                     "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
@@ -529,12 +535,7 @@
             "Handler": "index.handler",
             "Runtime": "python3.6",
             "Timeout": 30,
-            "Role": {
-                "Fn::GetAtt": [
-                    "LambdaExecutionRole",
-                    "Arn"
-                ]
-            },
+            "Role": {"Fn::Sub": "${LambdaCustomResourceRoleArn}"},
             "Code": {
                 "ZipFile": {
                     "Fn::Join": [
@@ -567,6 +568,14 @@
                             "    )",
                             "    return",
                             "",
+                            "def delete_password_from_ssm(parameter_name):",
+                            "    client = boto3.client('ssm')",
+                            "    LOGGER.info('Deleting password from SSM parameter store.')",
+                            "    client.delete_parameter(",
+                            "       Name=parameter_name",
+                            "    )",
+                            "    return",
+                            "",  
                             "def handler(event, context):",
                             "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
                             "    # Setup alarm for remaining runtime minus a second",
@@ -586,6 +595,8 @@
                             "                {'Message': 'Resource update successful!'})",
                             "        elif event['RequestType'] == 'Delete':",
                             "            LOGGER.info('DELETE!')",
+                            "            key_name = event['ResourceProperties']['KmsKeyName']",
+                            "            delete_password_from_ssm(key_name)",
                             "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
                             "                {'Message': 'Resource deletion successful!'})",
                             "        else:",
@@ -607,55 +618,6 @@
                 }
             }
         }
-    },
-    "LambdaExecutionRole": {
-        "Type": "AWS::IAM::Role",
-        "Properties": {
-            "RoleName": "LambdaCustomKMS",
-            "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": [
-                                "lambda.amazonaws.com"
-                            ]
-                        },
-                        "Action": [
-                            "sts:AssumeRole"
-                        ]
-                    }
-                ]
-            },
-            "Path": "/",
-            "Policies": [
-                {
-                    "PolicyName": "root",
-                    "PolicyDocument": {
-                        "Version": "2012-10-17",
-                        "Statement": [
-                            {
-                                "Effect": "Allow",
-                                "Action": [
-                                    "logs:CreateLogGroup",
-                                    "logs:CreateLogStream",
-                                    "logs:PutLogEvents"
-                                ],
-                                "Resource": "arn:aws:logs:*:*:*"
-                            },
-                            {
-                                "Effect": "Allow",
-                                "Action": [
-                                    "ssm:PutParameter"
-                                ],
-                                "Resource": "*"
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
     }
   },
 
@@ -672,7 +634,7 @@
     },
 
     "IGWSubnets" : {
-      "Description" : "IGW rotued subnets for use in other templates",
+      "Description" : "IGW routed subnets for use in other templates",
       "Value" : { "Fn::Join" : ["", [
         { "Ref" : "IGWSubnet1" }, ",", { "Ref" : "IGWSubnet2" }, ",", { "Ref" : "IGWSubnet3" }
         ]]

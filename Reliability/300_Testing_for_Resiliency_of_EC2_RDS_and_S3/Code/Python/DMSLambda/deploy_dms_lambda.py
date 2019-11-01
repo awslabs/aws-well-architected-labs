@@ -26,14 +26,17 @@ import json
 
 LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 10}
 
-AWS_REGION = 'us-east-2'
-AWS_REGION_DEST = 'us-west-2'
+# This Lambda (and the Step Function that invokes it) runs in one region.
+# The CloudFormation stack for the DMS is deployed to another region
+# Data flow Master (Ohio) --replication--> RR (Oregon) --DMS--> Master (Oregon)
+AWS_REGION_LAMBDA = 'us-east-2' #Ohio
+AWS_REGION_CFN_STACK = 'us-west-2' #Oregon
 
 stackname = 'DMSforResiliencyTesting'
 
 
 def init_logging():
-    # Setup loggin because debugging with print can get ugly.
+    # Setup logging
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logging.getLogger("boto3").setLevel(logging.WARNING)
@@ -92,21 +95,17 @@ def find_in_outputs(outputs, key_to_find):
 def deploy_dms(event):
     logger.debug("Running function deploy_dms")
     try:
-        region = event['secondary_region_name']
-        source_region = region
-        dest_region = event['region_name']
-        cfn_region = event['cfn_region']
+        dms_deploy_region = event['secondary_region_name']
+        cfn_s3_source_region = event['cfn_region']
         bucket = event['cfn_bucket']
         key_prefix = event['folder']
     except Exception:
-        region = os.environ.get('AWS_REGION', AWS_REGION)
-        source_region = region
-        dest_region = AWS_REGION_DEST
-        cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
+        dms_deploy_region = AWS_REGION_CFN_STACK
+        cfn_s3_source_region = os.environ.get('AWS_REGION', AWS_REGION_LAMBDA)
         bucket = "arc403-well-architected-for-reliability",
         key_prefix = "Reliability/"
     # Create CloudFormation client
-    client = boto3.client('cloudformation', region)
+    client = boto3.client('cloudformation', dms_deploy_region)
 
     # Get the outputs of the VPC stack
     vpc_stack = event['vpc']['stackname']
@@ -147,9 +146,8 @@ def deploy_dms(event):
     source_db_address = find_in_outputs(rds_replica_outputs, 'DBAddress')
     address_parsed = source_db_address.split('.')
     if (len(address_parsed) < 1):
-        logger.debug("Cannot get the mname of the read replica from " + source_db_address)
+        logger.debug("Cannot get the read replica (source) server from " + source_db_address)
         sys.exit(1)
-    source_server_name = address_parsed[0]
 
     # Find the dest DB id
     rds_stack = event['rds']['stackname']
@@ -166,9 +164,8 @@ def deploy_dms(event):
     dest_db_address = find_in_outputs(rds_outputs, 'DBAddress')
     address_parsed = dest_db_address.split('.')
     if (len(address_parsed) < 1):
-        logger.debug("Cannot get the mname of the RDS from " + dest_db_address)
+        logger.debug("Cannot get the destination RDS server from " + dest_db_address)
         sys.exit(1)
-    dest_server_name = address_parsed[0]
 
     # Get workshop name
     try:
@@ -189,10 +186,8 @@ def deploy_dms(event):
 
     # Prepare the stack parameters
     dms_parameters = []
-    dms_parameters.append({'ParameterKey': 'SourceDatabaseName', 'ParameterValue': source_server_name, 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'DestDatabaseName', 'ParameterValue': dest_server_name, 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'SourceDatabaseRegion', 'ParameterValue': source_region, 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'DestDatabaseRegion', 'ParameterValue': dest_region, 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'SourceDatabaseServer', 'ParameterValue': source_db_address, 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'DestDatabaseServer', 'ParameterValue': dest_db_address, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DatabaseName', 'ParameterValue': 'iptracker', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'MigrationSubnetIds', 'ParameterValue': dms_subnet_list, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'MigrationSecurityGroups', 'ParameterValue': dms_sg, 'UsePreviousValue': True})
@@ -209,7 +204,7 @@ def deploy_dms(event):
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
     capabilities = []
     capabilities.append('CAPABILITY_NAMED_IAM')
-    dms_template_s3_url = "https://s3." + cfn_region + ".amazonaws.com/" + bucket + "/" + key_prefix + "dms.json"
+    dms_template_s3_url = "https://s3." + cfn_s3_source_region + ".amazonaws.com/" + bucket + "/" + key_prefix + "dms.json"
     client.create_stack(
         StackName=stackname,
         TemplateURL=dms_template_s3_url,
@@ -223,10 +218,10 @@ def deploy_dms(event):
     return return_dict
 
 
-def check_stack(region, stack_name):
+def check_stack(dms_deploy_region, stack_name):
     # Create CloudFormation client
-    logger.debug("Running function check_stack in region " + region)
-    client = boto3.client('cloudformation', region)
+    logger.debug("Running function check_stack in region " + dms_deploy_region)
+    client = boto3.client('cloudformation', dms_deploy_region)
 
     # See if you can retrieve the stack
     try:
@@ -277,7 +272,8 @@ def lambda_handler(event, context):
         return_dict = {'stackname': stackname}
         return return_dict
 
-        if not check_stack(event['secondary_region_name'], stackname):
+        dms_deploy_region = event['secondary_region_name']
+        if not check_stack(dms_deploy_region, stackname):
             logger.debug("Stack " + stackname + " doesn't exist; creating")
             return deploy_dms(event)
         else:
