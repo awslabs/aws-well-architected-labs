@@ -17,7 +17,7 @@ Choose the appropriate section below for your language
 1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: <https://github.com/boto/boto3>
 
 1. Download the **fail_instance.py** from the [resiliency Python scripts on GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/) to a location convenient for you to execute it. You can use the following link to download the script:
-   * [python/fail_instance.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/fail_instance.py)
+      * [python/fail_instance.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/fail_instance.py)
 
 ### 2.2 Setting Up the Java Environment
 
@@ -30,33 +30,33 @@ Choose the appropriate section below for your language
 
 1. If you have java 1.7 installed (as will be the case for In Amazon Linux), you need to install Java 8 and remove Java 7.
 
-   * For Amazon Linux and RedHat
+      * For Amazon Linux and RedHat
 
-         $ sudo yum install java-1.8.0-openjdk
-         $ sudo yum remove java-1.7.0-openjdk
+            $ sudo yum install java-1.8.0-openjdk
+            $ sudo yum remove java-1.7.0-openjdk
 
-   * For Debian, Ubuntu
+      * For Debian, Ubuntu
 
-         $ sudo apt install openjdk-8-jdk
-         $ sudo apt install openjdk-7-jdk
+            $ sudo apt install openjdk-8-jdk
+            $ sudo apt install openjdk-7-jdk
 
-   * Next choose one of the following options.
+      * Next choose one of the following options: **Option A** or **Option B**
 
-1. Option A: If you are comfortable with git
-   1. Clone the aws-well-architected-labs repo
+1. **Option A**: If you are comfortable with git
+      1. Clone the aws-well-architected-labs repo
 
-          $ git clone https://github.com/awslabs/aws-well-architected-labs.git
-          Cloning into 'aws-well-architected-labs'...
-          ...
-          Checking out files: 100% (1935/1935), done.
+              $ git clone https://github.com/awslabs/aws-well-architected-labs.git
+              Cloning into 'aws-well-architected-labs'...
+              ...
+              Checking out files: 100% (1935/1935), done.
 
-   1. go to the build directory
+      1. go to the build directory
 
-          cd aws-well-architected-labs/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency
+              cd aws-well-architected-labs/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency
 
-1. Option B:
-   1. Download the zipfile of the executables at the following URL <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip>
-   1. go to the build directory: `cd java/appresiliency`
+1. **Option B**:
+      1. Download the zipfile of the executables at the following URL <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip>
+      1. go to the build directory: `cd java/appresiliency`
 
 1. Build: `mvn clean package shade:shade`
 
@@ -73,7 +73,7 @@ Choose the appropriate section below for your language
 1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>
 
 1. Download the **fail_instance.sh** script from the [resiliency PowerShell scripts on GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/) to a location convenient for you to execute it. You can use the following link to download the script:
-   * [powershell/fail_instance.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/fail_instance.ps1)
+      * [powershell/fail_instance.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/fail_instance.ps1)
 
 1. If your PowerShell script is refused authorization to access your AWS account, consult [Getting Started with the AWS Tools for Windows PowerShell](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html)
 
