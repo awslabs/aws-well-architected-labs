@@ -79,7 +79,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
 
 1. Click the “Next” button.
-      * On the "Configure stack options" page, click the “Next” again
+      * On the "Configure stack options" page, click “Next” again
       * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
       * Click the “Create stack” button.
      ![CFNIamCapabilities](Images/CFNIamCapabilities.png)
@@ -299,7 +299,9 @@ This failure injection will simulate a critical problem with one of the three we
 1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
 
       * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
-       ![RefreshButton](Images/RefreshButton.png)
+
+           ![RefreshButton](Images/RefreshButton.png)
+
       * Observe the status of the instance reported by the script. In the screen cap below it is _shutting down_ as reported by the script and will ultimately transition to _terminated_.
 
         ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
@@ -332,7 +334,7 @@ Load balancing ensures service requests are not routed to unhealthy resources, s
 
 1. From the same console, now click on the **Monitoring** tab and view metrics such as **Unhealthy hosts** and **Healthy hosts**
 
-   ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
+      ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
 
 #### 3.2.3 Auto scaling
 
