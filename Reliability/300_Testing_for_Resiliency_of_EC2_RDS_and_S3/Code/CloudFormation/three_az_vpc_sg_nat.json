@@ -493,7 +493,7 @@
                                     "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRoleArn"
+                                    "Fn::Sub": "LambdaCustomResourceRoleArn"
                                 },
                                 {
                                     "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"

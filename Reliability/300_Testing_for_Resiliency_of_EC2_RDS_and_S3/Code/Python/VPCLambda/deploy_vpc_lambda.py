@@ -29,6 +29,7 @@ LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 1
 stackname = 'ResiliencyVPC'
 
 AWS_REGION = 'us-east-2'
+DEPLOYMACHINE_STACK = 'DeployResiliencyWorkshop'
 
 
 def init_logging():
@@ -108,26 +109,26 @@ def deploy_vpc(event):
         logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
         workshop_name = 'UnknownWorkshop'
 
-    # Create a client to read and write CloudFormation stacks
-    cf_client = boto3.client('cloudformation', region_name=region)
+    # Create a client to read CloudFormation stacks from same region as the deployment machine
+    deploymachine_region = event['deploy_machine']['region']
+    deploymachine_client = boto3.client('cloudformation', region_name=deploymachine_region)
 
     # Get the outputs of the VPC stack
-    vpc_stack = event['vpc']['stackname']
+    deploymachine_stack = DEPLOYMACHINE_STACK
     try:
-        stack_response = cf_client.describe_stacks(StackName=vpc_stack)
+        stack_response = deploymachine_client.describe_stacks(StackName=deploymachine_stack)
         stack_list = stack_response['Stacks']
         if (len(stack_list) < 1):
-            logger.debug("Cannot find stack named " + vpc_stack + ", so cannot parse outputs as inputs")
+            logger.debug("Cannot find stack named " + deploymachine_stack + ", so cannot parse outputs as inputs")
             return 1
     except Exception:
-        logger.debug("Cannot find stack named " + vpc_stack + ", so cannot parse outputs as inputs")
+        logger.debug("Cannot find stack named " + deploymachine_stack + ", so cannot parse outputs as inputs")
         sys.exit(1)
-    vpc_outputs = stack_list[0]['Outputs']
+    deploymachine_outputs = stack_list[0]['Outputs']
 
     # Geth the ARN of the IAM Role used to create custom resources 
-    # This is used to create the SSM stored paramter for DB password
-    lambda_custom_resource_role_arn = find_in_outputs(vpc_outputs, 'LambdaCustomResourceRoleArn')
-
+    # This is used to create the SSM stored parameter for DB password
+    lambda_custom_resource_role_arn = find_in_outputs(deploymachine_outputs, 'LambdaCustomResourceRoleArn')
 
     vpc_parameters = []
     vpc_parameters.append({'ParameterKey': 'BastionCidrIp', 'ParameterValue': '0.0.0.0/0', 'UsePreviousValue': True})
@@ -152,6 +153,7 @@ def deploy_vpc(event):
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
 
     # Create CloudFormation client
+    cf_client = boto3.client('cloudformation', region_name=region)
     cf_client.create_stack(
         StackName=stackname,
         TemplateURL=vpc_template_s3_url,
