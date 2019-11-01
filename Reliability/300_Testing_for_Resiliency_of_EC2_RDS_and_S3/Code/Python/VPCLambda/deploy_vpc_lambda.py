@@ -32,7 +32,7 @@ AWS_REGION = 'us-east-2'
 
 
 def init_logging():
-    # Setup loggin because debugging with print can get ugly.
+    # Setup logging because debugging with print can get ugly.
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logging.getLogger("boto3").setLevel(logging.WARNING)
@@ -77,16 +77,6 @@ def process_global_vars():
         sys.exit(1)
     except Exception:
         logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
-
-
-def find_in_outputs(outputs, key_to_find):
-    output_string = None
-    for output in outputs:
-        if (output['OutputKey'] == key_to_find):
-            output_string = output['OutputValue']
-            break
-    return output_string
-
 
 def deploy_vpc(event):
     logger.debug("Running function deploy_vpc")

@@ -32,7 +32,7 @@ AWS_REGION = 'us-east-2'
 
 
 def init_logging():
-    # Setup loggin because debugging with print can get ugly.
+    # Setup logging because debugging with print can get ugly.
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logging.getLogger("boto3").setLevel(logging.WARNING)
