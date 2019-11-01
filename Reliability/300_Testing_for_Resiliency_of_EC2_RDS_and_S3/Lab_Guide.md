@@ -34,7 +34,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 ### 1.2 Checking for existing service-linked roles
 
-**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go directly to step [Create the "deployment machine"](#create_statemachine).
 
 **If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md#exist_service_linked_roles), and then return here and resume with the following instructions.
 
@@ -206,7 +206,7 @@ Using bash is an effective way to execute the failure injection tests for this w
 
 ### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
-If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
+If you will be using bash and executed the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
 * If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
 
@@ -225,7 +225,7 @@ Before testing, please prepare the following:
         ![SelectOhio](Images/SelectOhio.png)
 
 1. Get VPC ID
-      * A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service
+      * A VPC (Amazon Virtual Private Cloud) is a logically isolated section of the AWS Cloud where you have deployed the resources for your service
       * For these tests you will need to know the **VPC ID** of the VPC you created as part of deploying the service
       * Navigate to the VPC management console: <https://console.aws.amazon.com/vpc>
       * In the left pane, click **Your VPCs**
@@ -443,7 +443,7 @@ This failure injection will simulate a critical problem with one of the three AW
       * Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.
       * And executing this way illustrates the impact and response under the two different scenarios.
 
-1. To simulate failure of an AZ, select one of the AVailability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>`
+1. To simulate failure of an AZ, select one of the Availability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>`
       * For **scenario 1** select an AZ that is neither _primary_ nor _secondary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2c`
       * For **scenario 2** select the AZ that is _primary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2b`
 
@@ -560,7 +560,7 @@ You can use drift detection in the CloudFormation console to see what had change
 
 ### Remove manually provisioned resources
 
-Some resources were created by the failure simulation scripts. You need ot remove these first
+Some resources were created by the failure simulation scripts. You need to remove these first
 
 1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
 1. Look at the NACL entries for the VPC called **ResiliencyVPC**

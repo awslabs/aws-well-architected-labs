@@ -23,7 +23,7 @@ If you _have not_ already deployed the necessary infrastructure, then follow the
 ### 1.1 Deploy the VPC infrastructure
 
 * If you are comfortable deploying a CloudFormation stack, then use the _express steps_ listed here.
-* If you need guidance in how to deploy a CloudFormation stack, then follow the directions for the [Automated Deployment of VPC](../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.md) lab, and then return here for the next step: **1.2 Deploy the EC2s and Static WebApp insfrastructure**
+* If you need guidance in how to deploy a CloudFormation stack, then follow the directions for the [Automated Deployment of VPC](../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.md) lab, and then return here for the next step: **1.2 Deploy the EC2s and Static WebApp infrastructure**
 
 #### Express Steps (Deploy the VPC infrastructure)
 
@@ -35,14 +35,14 @@ If you _have not_ already deployed the necessary infrastructure, then follow the
 1. click **Next** until the last page
 1. check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**
 
-### 1.2 Deploy the EC2s and Static WebApp insfrastructure
+### 1.2 Deploy the EC2s and Static WebApp infrastructure
 
 * If you are comfortable deploying a CloudFormation stack, then use the _express steps_ listed here.
 * If you need guidance in how to deploy a CloudFormation stack, then follow the directions for the [Automated Deployment of EC2 Web Application](../../Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.md#create_web_stack)
     * Follow directions for the **create a static web application** option
     * Then return here for the next step: **Website URL**
 
-#### Express Steps (Deploy the EC2s and Static WebApp insfrastructure)
+#### Express Steps (Deploy the EC2s and Static WebApp infrastructure)
 
 1. Download the [staticwebapp.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml) CloudFormation template
 1. In your chosen region, create a CloudFormation stack uploading this CloudFormation Template
@@ -153,7 +153,7 @@ Using bash is an effective way to execute the failure injection tests for this w
 
 ### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
-If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
+If you will be using bash and executed the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
 * If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
 
@@ -172,7 +172,7 @@ Before testing, please prepare the following:
         ![SelectOhio](Images/SelectOhio.png)
 
 1. Get VPC ID
-      * A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service
+      * A VPC (Amazon Virtual Private Cloud) is a logically isolated section of the AWS Cloud where you have deployed the resources for your service
       * For these tests you will need to know the **VPC ID** of the VPC you created as part of deploying the service
       * Navigate to the VPC management console: <https://console.aws.amazon.com/vpc>
       * In the left pane, click **Your VPCs**
@@ -310,7 +310,7 @@ The following instructions will remove the resources that you have created in th
 
 If you deployed the CloudFormation stacks as part of the prerequisites for this lab, then delete these stacks to remove all the AWS resources. If you need help with how to delete CloudFormation stacks then follow these instructions to tear down those resources:
 
-* [Delete the WebbApp resources](https://github.com/awslabs/aws-well-architected-labs/blob/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.md#tear_down)
+* [Delete the WebApp resources](https://github.com/awslabs/aws-well-architected-labs/blob/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.md#tear_down)
 * Wait for this stack deletion to complete
 * [Delete the VPC resources](https://github.com/awslabs/aws-well-architected-labs/blob/master/Security/200_Automated_Deployment_of_VPC/Lab_Guide.md#tear_down)
 
