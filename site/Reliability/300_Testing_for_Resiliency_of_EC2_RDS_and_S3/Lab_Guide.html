@@ -3586,7 +3586,7 @@
 <li>
 <p>Click the “Next” button.</p>
 <ul>
-<li>On the "Configure stack options" page, click the “Next” again</li>
+<li>On the "Configure stack options" page, click “Next” again</li>
 <li>On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”</li>
 <li>Click the “Create stack” button.
  <img alt="CFNIamCapabilities" src="Images/CFNIamCapabilities.png" /></li>
@@ -3890,8 +3890,10 @@ Terminating i-0710435abc631eab3
 <li>
 <p>Go to the <em>EC2 Instances</em> console which you already have open (or <a href="http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:">click here to open a new one</a>)</p>
 <ul>
-<li>Refresh it. (<em>Note</em>: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
-   <img alt="RefreshButton" src="Images/RefreshButton.png" /></li>
+<li>
+<p>Refresh it. (<em>Note</em>: it is usually more efficient to use the refresh button in the console, than to refresh the browser)</p>
+<p><img alt="RefreshButton" src="Images/RefreshButton.png" /></p>
+</li>
 <li>
 <p>Observe the status of the instance reported by the script. In the screen cap below it is <em>shutting down</em> as reported by the script and will ultimately transition to <em>terminated</em>.</p>
 <p><img alt="EC2ShuttingDown" src="Images/EC2ShuttingDown.png" /></p>
@@ -3930,9 +3932,9 @@ Terminating i-0710435abc631eab3
 </li>
 <li>
 <p>From the same console, now click on the <strong>Monitoring</strong> tab and view metrics such as <strong>Unhealthy hosts</strong> and <strong>Healthy hosts</strong></p>
+<p><img alt="TargetGroupsMonitoring" src="Images/TargetGroupsMonitoring.png" /></p>
 </li>
 </ol>
-<p><img alt="TargetGroupsMonitoring" src="Images/TargetGroupsMonitoring.png" /></p>
 <h4 id="323-auto-scaling">3.2.3 Auto scaling</h4>
 <p>Autos scaling ensures we have the capacity necessary to meet customer demand. The auto scaling for this service is a simple configuration that ensures at least three EC2 instances are running. More complex configurations in response to CPU or network load are also possible using AWS.</p>
 <ol>

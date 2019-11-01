@@ -2665,10 +2665,12 @@
 </li>
 <li>
 <p>Download the <a href="https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/">resiliency Python scripts from GitHub</a> to a location convenient for you to execute them. You can use the following links to download the scripts:</p>
-</li>
+<ul>
 <li><a href="../Code/FailureSimulations/python/fail_instance.py?raw=1">python/fail_instance.py</a></li>
 <li><a href="../Code/FailureSimulations/python/fail_rds.py?raw=1">python/fail_rds.py</a></li>
 <li><a href="../Code/FailureSimulations/python/fail_az.py?raw=1">python/fail_az.py</a></li>
+</ul>
+</li>
 </ol>
 <h3 id="22-setting-up-the-java-environment">2.2 Setting Up the Java Environment</h3>
 <ol>
@@ -2682,25 +2684,27 @@ OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
 </li>
 <li>
 <p>If you have java 1.7 installed (as will be the case for In Amazon Linux), you need to install Java 8 and remove Java 7.</p>
-</li>
+<ul>
 <li>
 <p>For Amazon Linux and RedHat</p>
-<pre><code> $ sudo yum install java-1.8.0-openjdk
- $ sudo yum remove java-1.7.0-openjdk
+<pre><code>$ sudo yum install java-1.8.0-openjdk
+$ sudo yum remove java-1.7.0-openjdk
 </code></pre>
 </li>
 <li>
 <p>For Debian, Ubuntu</p>
-<pre><code> $ sudo apt install openjdk-8-jdk
- $ sudo apt install openjdk-7-jdk
+<pre><code>$ sudo apt install openjdk-8-jdk
+$ sudo apt install openjdk-7-jdk
 </code></pre>
 </li>
 <li>
-<p>Next choose one of the following options.</p>
+<p>Next choose one of the following options: <strong>Option A</strong> or <strong>Option B</strong>.</p>
+</li>
+</ul>
 </li>
 <li>
 <p>Option A: If you are comfortable with git</p>
-</li>
+<ol>
 <li>
 <p>Clone the aws-well-architected-labs repo</p>
 <pre><code>  $ git clone https://github.com/awslabs/aws-well-architected-labs.git
@@ -2714,12 +2718,14 @@ OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
 <pre><code>  cd aws-well-architected-labs/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency
 </code></pre>
 </li>
+</ol>
+</li>
 <li>
 <p>Option B:</p>
-</li>
+<ol>
 <li>Download the zipfile of the executables at the following URL <a href="https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip">https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip</a></li>
-<li>
-<p>go to the build directory: <code>cd java/appresiliency</code></p>
+<li>go to the build directory: <code>cd java/appresiliency</code></li>
+</ol>
 </li>
 <li>
 <p>Build: <code>mvn clean package shade:shade</code></p>
@@ -2744,11 +2750,11 @@ OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
 </li>
 <li>
 <p>Download the <a href="https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/powershell/">resiliency PowerShell scripts from GitHub</a> to a location convenient for you to execute them. You can use the following links to download the scripts:</p>
-</li>
+<ul>
 <li><a href="../Code/FailureSimulations/powershell/fail_instance.ps1?raw=1">powershell/fail_instance.sh</a></li>
 <li><a href="../Code/FailureSimulations/powershell/failover_rds.ps1?raw=1">powershell/failover_rds.sh</a></li>
-<li>
-<p><a href="../Code/FailureSimulations/powershell/fail_az.ps1?raw=1">powershell/fail_az.sh</a></p>
+<li><a href="../Code/FailureSimulations/powershell/fail_az.ps1?raw=1">powershell/fail_az.sh</a></li>
+</ul>
 </li>
 <li>
 <p>If your PowerShell scripts are refused authorization to access your AWS account, consult <a href="https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html">Getting Started with the AWS Tools for Windows PowerShell</a></p>

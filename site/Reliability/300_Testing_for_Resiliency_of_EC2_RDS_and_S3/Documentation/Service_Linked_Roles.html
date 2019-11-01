@@ -2589,6 +2589,19 @@
     Does AWS account already have service-linked roles 
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-determine-if-service-linked-roles-already-exist" class="md-nav__link">
+    Steps to determine if service-linked roles already exist
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2623,9 +2636,10 @@
 <ul>
 <li><code>AWSServiceRoleForElasticLoadBalancing</code></li>
 <li><code>AWSServiceRoleForAutoScaling</code></li>
-<li>
-<p><code>AWSServiceRoleForRDS</code></p>
-</li>
+<li><code>AWSServiceRoleForRDS</code></li>
+</ul>
+<h3 id="steps-to-determine-if-service-linked-roles-already-exist">Steps to determine if service-linked roles already exist</h3>
+<ol>
 <li>
 <p>Open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a></p>
 </li>
@@ -2637,7 +2651,7 @@
 <p>In the filter box, type “Service” to find the service linked roles that exist in your account and look for the three roles. In this screenshot, the service linked role for AutoScaling exists (<code>AWSServiceRoleForAutoScaling</code>), but the roles for Elastic Load Balancing and RDS do not. Note which roles already exist as you will use this information when performing the next step.<br />
 <img alt="LookingForServiceLinkedRoles" src="../Images/LookingForServiceLinkedRoles.png" /></p>
 </li>
-</ul>
+</ol>
 <p><strong>STOP HERE and return to the <a href="../Lab_Guide.html">Lab Guide</a></strong></p>
 <hr />
 <p><em><strong>Learn more</strong>: After the lab see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">the AWS documentation on Service-Linked Roles</a></em></p>
