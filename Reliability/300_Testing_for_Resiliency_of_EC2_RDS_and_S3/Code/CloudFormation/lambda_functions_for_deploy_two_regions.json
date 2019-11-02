@@ -496,6 +496,7 @@
     "RDSRRLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "RDSRRLambdaRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -574,6 +575,7 @@
     "DMSLambdaRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
+        "RoleName" : "DMSLambdaRole",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -621,9 +623,11 @@
                   "dms:DescribeTableStatistics",
                   "dms:ModifyEndpoint",
                   "dms:ModifyReplicationInstance",
-		  "dms:ModifyReplicationTask",
-		  "dms:StartReplicationTask",
-		  "dms:TestConnection",
+                  "dms:ModifyReplicationTask",
+                  "dms:StartReplicationTask",
+                  "dms:TestConnection",
+                  "ssm:GetParameter",
+                  "kms:Decrypt",
                   "iam:AttachRolePolicy",
                   "iam:CreateRole",
                   "iam:GetRole",

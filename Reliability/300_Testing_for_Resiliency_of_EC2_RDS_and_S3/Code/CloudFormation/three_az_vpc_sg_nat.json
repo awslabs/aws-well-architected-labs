@@ -498,6 +498,9 @@
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/RDSWorkshopRole"
+                                 },
+                                 {
+                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/DMSLambdaRole"
                                  }
                               ]
                       },

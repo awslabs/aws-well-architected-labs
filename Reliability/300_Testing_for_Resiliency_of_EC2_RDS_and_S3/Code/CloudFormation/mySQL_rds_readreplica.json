@@ -3,10 +3,9 @@
 
   "Description" : "Creates an RDS MySQL 5.7 Read Replica instance",
 
-  "Parameters" : {
+  "Parameters": {
 
-    "Parameters": {
-      "WorkshopName": {
+    "WorkshopName": {
       "Type": "String"
     },
 

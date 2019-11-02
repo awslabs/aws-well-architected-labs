@@ -21,7 +21,8 @@
 
     "DatabaseName" : {
       "Description" : "Name of database to be migrated",
-      "Type" : "String"
+      "Type" : "String",
+      "Default" : "iptracker"
     },
 
     "MigrationSubnetIds" : {
@@ -38,20 +39,21 @@
       "Description" : "DB Instance Class",
       "Type": "String",
       "AllowedValues": [
-          "db.t3.micro",
-          "db.t3.small",
-          "db.t3.medium",
-          "db.t3.large",
-          "db.t3.xlarge",
-          "db.t3.2xlarge",
-          "db.m5.large",
-          "db.m5.xlarge",
-          "db.m5.2xlarge",
-          "db.m5.4xlarge",
-          "db.m5.12xlarge",
-          "db.m5.24xlarge"
+          "dms.t2.micro",
+          "dms.t3.micro",
+          "dms.t3.small",
+          "dms.t3.medium",
+          "dms.t3.large",
+          "dms.t3.xlarge",
+          "dms.t3.2xlarge",
+          "dms.m5.large",
+          "dms.m5.xlarge",
+          "dms.m5.2xlarge",
+          "dms.m5.4xlarge",
+          "dms.m5.12xlarge",
+          "dms.m5.24xlarge"
       ],
-      "Default": "db.t3.large",
+      "Default": "dms.t2.micro",
       "ConstraintDescription": "must select a valid database instance type."
     },
 
@@ -65,6 +67,16 @@
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
     },
 
+    "SourceDBPassword": {
+      "Description" : "password for Read Replica in this region",
+      "Type" : "String",
+      "NoEcho" : "true",
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
+      "ConstraintDescription" : "must contain only alphanumeric characters."
+    },
+
     "DestDBUser": {
       "Description" : "DB admin account username",
       "Type" : "String",
@@ -73,6 +85,16 @@
       "AllowedPattern" : "[a-zA-Z][a-zA-Z0-9]*",
       "Default" : "admin",
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
+    },
+
+    "DestDBPassword": {
+      "Description" : "password for primary DB in this region",
+      "Type" : "String",
+      "NoEcho" : "true",      
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
+      "ConstraintDescription" : "must contain only alphanumeric characters."
     }
   },
 
@@ -118,12 +140,8 @@
         "Port" : "3306",
         "EndpointType" : "source",
         "EngineName" : "MYSQL",
-        "MasterUsername": {
-          "Ref": "SourceDBUser"
-        },
-        "MasterUserPassword": {
-            "Fn::Sub": "{{resolve:ssm-secure:${WorkshopName}:1}}"
-        },
+        "Username": { "Ref": "SourceDBUser" },
+        "Password": { "Ref" : "SourceDBPassword" },
         "Tags" : [
           {
             "Key" : "Name",
@@ -141,12 +159,8 @@
         "Port" : "3306",
         "EndpointType" : "target",
         "EngineName" : "MYSQL",
-        "MasterUsername": {
-          "Ref": "DestDBUser"
-        },
-        "MasterUserPassword": {
-            "Fn::Sub": "{{resolve:ssm-secure:${WorkshopName}:1}}"
-        },
+        "Username": { "Ref": "DestDBUser" },
+        "Password": { "Ref" : "DestDBPassword"},
         "Tags" : [
           {
             "Key" : "Name",

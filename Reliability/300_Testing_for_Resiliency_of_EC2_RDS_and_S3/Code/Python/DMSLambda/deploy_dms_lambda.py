@@ -29,8 +29,9 @@ LOG_LEVELS = {'CRITICAL': 50, 'ERROR': 40, 'WARNING': 30, 'INFO': 20, 'DEBUG': 1
 # This Lambda (and the Step Function that invokes it) runs in one region.
 # The CloudFormation stack for the DMS is deployed to another region
 # Data flow Master (Ohio) --replication--> RR (Oregon) --DMS--> Master (Oregon)
-AWS_REGION_LAMBDA = 'us-east-2' #Ohio
-AWS_REGION_CFN_STACK = 'us-west-2' #Oregon
+AWS_REGION_SOURCE_DB = 'us-east-2' #Ohio
+AWS_REGION_CFN_TEMPLATE = 'us-east-2' #Ohio
+AWS_REGION_DMS_DEPLOY = 'us-west-2' #Oregon
 
 stackname = 'DMSforResiliencyTesting'
 
@@ -92,17 +93,29 @@ def find_in_outputs(outputs, key_to_find):
     return output_string
 
 
+def get_db_password(db_region, parameter_name):
+    db_region_client = boto3.client('ssm', db_region)
+    parameter = db_region_client.get_parameter(
+        Name=parameter_name,
+        WithDecryption=True
+    )
+    return parameter['Parameter']['Value']
+
+
+
 def deploy_dms(event):
     logger.debug("Running function deploy_dms")
     try:
         dms_deploy_region = event['secondary_region_name']
+        source_db_region = event['region_name']
         cfn_s3_source_region = event['cfn_region']
         bucket = event['cfn_bucket']
         key_prefix = event['folder']
     except Exception:
-        dms_deploy_region = AWS_REGION_CFN_STACK
-        cfn_s3_source_region = os.environ.get('AWS_REGION', AWS_REGION_LAMBDA)
-        bucket = "arc403-well-architected-for-reliability",
+        dms_deploy_region = AWS_REGION_DMS_DEPLOY
+        source_db_region = os.environ.get('AWS_REGION', AWS_REGION_SOURCE_DB)
+        cfn_s3_source_region = os.environ.get('AWS_REGION', AWS_REGION_CFN_TEMPLATE)
+        bucket = "aws-well-architected-labs-ohio",
         key_prefix = "Reliability/"
     # Create CloudFormation client
     client = boto3.client('cloudformation', dms_deploy_region)
@@ -174,6 +187,17 @@ def deploy_dms(event):
         logger.debug("Unexpected error! (when parsing workshop name)\n Stack Trace:", traceback.format_exc())
         workshop_name = 'UnknownWorkshop'
 
+    # Get password for source database
+    # Password for Read Replica in region2 is same as that for Primary in region 1
+    source_db_password = get_db_password(source_db_region, workshop_name)
+
+    # Get password for destination database
+    # (would prefer to use dynamic parameter patterns directly from CloudFormation
+    # but this is not supported for AWS::DMS::Endpoint 
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html)
+    dest_db_password = get_db_password(dms_deploy_region, workshop_name)
+
+
     # Get DB instance type only if it was specified (it is optional)
     try:
         if 'db_instance_class' in event:
@@ -192,13 +216,13 @@ def deploy_dms(event):
     dms_parameters.append({'ParameterKey': 'MigrationSubnetIds', 'ParameterValue': dms_subnet_list, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'MigrationSecurityGroups', 'ParameterValue': dms_sg, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'SourceDBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'SourceDBPassword', 'ParameterValue': 'foobar123', 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'DestDBPassword', 'ParameterValue': dest_db_password, 'UsePreviousValue': True})
+    dms_parameters.append({'ParameterKey': 'SourceDBPassword', 'ParameterValue': source_db_password, 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'DestDBUser', 'ParameterValue': 'admin', 'UsePreviousValue': True})
-    dms_parameters.append({'ParameterKey': 'DestDBPassword', 'ParameterValue': 'foobar123', 'UsePreviousValue': True})
     dms_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
     # If DB instance class supplied then use it, otherwise CloudFormation template will use Parameter default
     if (db_instance_class is not None):
-      rds_parameters.append({'ParameterKey': 'MigrationInstanceClass', 'ParameterValue': db_instance_class, 'UsePreviousValue': True})
+      dms_parameters.append({'ParameterKey': 'MigrationInstanceClass', 'ParameterValue': db_instance_class, 'UsePreviousValue': True})
 
     stack_tags = []
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
@@ -268,9 +292,9 @@ def lambda_handler(event, context):
         # Make sure there is not already a DMS Stack in the secondary region
 
         # Temporary logic to disable DMS stack until we have a solution for cross region SSM secure paramters (to get dest DB password)
-        logger.debug("Stack " + stackname + " SKIPPED")
-        return_dict = {'stackname': stackname}
-        return return_dict
+        # logger.debug("Stack " + stackname + " SKIPPED")
+        # return_dict = {'stackname': stackname}
+        # return return_dict
 
         dms_deploy_region = event['secondary_region_name']
         if not check_stack(dms_deploy_region, stackname):
@@ -300,10 +324,10 @@ if __name__ == "__main__":
         "cfn_region": "us-east-2",
         "cfn_bucket": "aws-well-architected-labs-ohio",
         "folder": "Reliability/",
-        "workshop": "AWSLoft",
+        "workshop": "300-ResiliencyofEC2RDSandS3",
         "boot_bucket": "aws-well-architected-labs-ohio",
         "boot_prefix": "Reliability/",
-        "boot_object": "bootstrapARC327.sh",
+        "websiteimage": "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg",
         "vpc": {
             "stackname": "ResiliencyVPC",
             "status": "CREATE_COMPLETE"

@@ -156,6 +156,9 @@ def deploy_read_replica(event):
     except Exception:
         logger.debug("Unexpected error! (when parsing workshop name)\n Stack Trace:", traceback.format_exc())
         workshop_name = 'UnknownWorkshop'
+    
+    logger.debug("Workshop Name: " + workshop_name)
+
 
     # Get DB instance type only if it was specified (it is optional)
     try:
