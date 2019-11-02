@@ -476,6 +476,57 @@
       }
     },
 
+    "LambdaCustomResourceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+          "RoleName": "LambdaCustomResourceRole",
+          "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                  {
+                      "Effect": "Allow",
+                      "Principal": {
+                          "Service": [
+                              "lambda.amazonaws.com"
+                          ]
+                      },
+                      "Action": [
+                          "sts:AssumeRole"
+                      ]
+                  }
+              ]
+          },
+          "Path": "/",
+          "Policies": [
+              {
+                  "PolicyName": "LambdaCustomResourcePolicy",
+                  "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                          {
+                              "Effect": "Allow",
+                              "Action": [
+                                  "logs:CreateLogGroup",
+                                  "logs:CreateLogStream",
+                                  "logs:PutLogEvents"
+                              ],
+                              "Resource": "arn:aws:logs:*:*:*"
+                          },
+                          {
+                              "Effect": "Allow",
+                              "Action": [
+                                  "ssm:PutParameter",
+                                  "ssm:DeleteParameter"
+                              ],
+                              "Resource": "*"
+                          }
+                      ]
+                  }
+              }
+          ]
+      }
+    },
+
     "DeploymentMachine" : {
       "Type" : "AWS::StepFunctions::StateMachine",
       "Properties" : {
@@ -600,5 +651,18 @@
         "RoleArn" : { "Fn::GetAtt" : [ "StateExecutionRole", "Arn" ] }
       }
     }
+  },
+
+  "Outputs" : {
+    "LambdaCustomResourceRoleArn" : {
+      "Description" : "ARN of LambdaCustomResourceRole used to create custom resources in VPC stack",
+      "Value" : {
+        "Fn::GetAtt": [
+          "LambdaCustomResourceRole",
+          "Arn"
+        ]
+      }
+    }  
   }
+
 }
