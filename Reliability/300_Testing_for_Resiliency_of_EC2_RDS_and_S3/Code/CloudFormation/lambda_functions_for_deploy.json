@@ -445,6 +445,22 @@
       }
     },
 
+    "DMSLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "DMSLambdaRole",
+        "Description" : "For multi-region this role is needed. Dummy role here for single-region so that VPC CFN template works"
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        }
+      }
+    },
+
     "StateExecutionRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
