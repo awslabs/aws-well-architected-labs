@@ -12,7 +12,7 @@
 1. [Create Lambda in account 1](#create_lambda_1)
 1. [Tear Down](#tear_down)
 
-This lab is best runusing two AWS accounts
+This lab is best run using two AWS accounts
 
 * Identify the AWS account number for account 1 (no dashes)
 * Identify the AWS account number for account 2 (no dashes)
