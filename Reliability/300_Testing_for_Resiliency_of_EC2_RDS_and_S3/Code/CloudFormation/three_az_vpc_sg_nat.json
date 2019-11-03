@@ -573,7 +573,7 @@
                             "       Name=parameter_name",
                             "    )",
                             "    return",
-                            "",  
+                            "",
                             "def handler(event, context):",
                             "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
                             "    # Setup alarm for remaining runtime minus a second",
