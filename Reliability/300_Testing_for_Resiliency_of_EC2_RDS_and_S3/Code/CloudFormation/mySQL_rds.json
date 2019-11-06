@@ -2,9 +2,10 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Creates an RDS MySQL 5.7 instance",
   "Parameters": {
-    "WorkshopName": {
-        "Type": "String"
-      },
+      "WorkshopName": {
+          "Type": "String"
+        },
+
       "DBSubnetIds": {
           "Description": "Comma separated list of private subnet ids",
           "Type": "List<AWS::EC2::Subnet::Id>"
@@ -42,7 +43,19 @@
           "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
           "Default": "admin",
           "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
-      }
+      },
+
+      "DBMultiRegion" : {
+        "Description" : "whether this is multi-region or not",
+        "Type" : "String",
+        "AllowedValues": [
+          "true",
+          "false"
+        ],
+        "Default": "false"
+
+    }
+
   },
   "Resources": {
     "DBSubnetGroup": {
@@ -63,7 +76,9 @@
     "DB": {
         "Type": "AWS::RDS::DBInstance",
         "Properties": {
-            "MultiAZ": "true",
+            "MultiAZ": { 
+                "Ref" : "DBMultiRegion"
+            },
             "AllocatedStorage": "100",
             "BackupRetentionPeriod": "1",
             "CopyTagsToSnapshot": "True",
