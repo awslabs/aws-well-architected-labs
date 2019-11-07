@@ -29,9 +29,9 @@
       "Type" : "String"
     },
 
-    "MultiRegionDBLambdaKey" : {
+    "MultiAZDBLambdaKey" : {
       "Description" : "Object Key of the Lambda Function that will update the RDS to Multi-AZ (case sensitive)",
-      "Default" : "Reliability/MultiRegionDBLambda.zip",
+      "Default" : "Reliability/MultiAZDBLambda.zip",
       "Type" : "String"
     },
 
@@ -316,16 +316,16 @@
       }
     },
 
-    "MultiRegionDBLambdaFunction" : {
+    "MultiAZDBLambdaFunction" : {
       "Type" : "AWS::Lambda::Function",
       "Properties" : {
         "Description" : "Function that will update the RDS to Multi-AZ",
         "Code" : {
           "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
-          "S3Key"    : { "Ref" : "MultiRegionDBLambdaKey" }
+          "S3Key"    : { "Ref" : "MultiAZDBLambdaKey" }
         },
-        "FunctionName" : "UpdateMultiRegionDB",
-        "Handler" : "update_multiregion_lambda.lambda_handler",
+        "FunctionName" : "UpdateMultiAZDB",
+        "Handler" : "update_multi_az_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
         "Runtime" : "python3.6",
@@ -702,18 +702,18 @@
           "          }\n",
           "        },\n",
           "        {\n",
-          "          \"Comment\": \"This update the RDS to multi-region\",\n",
-          "          \"StartAt\": \"UpdateMultiRegionDB\",\n",
+          "          \"Comment\": \"This update the RDS to multi-az\",\n",
+          "          \"StartAt\": \"UpdateMultiAZDB\",\n",
           "          \"States\": {\n",
-          "            \"UpdateMultiRegionDB\" : {\n",
+          "            \"UpdateMultiAZDB\" : {\n",
           "              \"Type\": \"Task\",\n",
           "              \"InputPath\": \"$\",\n",
-          "              \"Resource\": \"", { "Fn::GetAtt" : [ "MultiRegionDBLambdaFunction", "Arn" ] }, "\",\n",
+          "              \"Resource\": \"", { "Fn::GetAtt" : [ "MultiAZDBLambdaFunction", "Arn" ] }, "\",\n",
           "              \"ResultPath\": \"$.rds_update\",\n",
           "              \"OutputPath\": \"$\",\n",
-          "              \"Next\": \"WaitForMultiRegionDB\"\n",
+          "              \"Next\": \"WaitForMultiAZDB\"\n",
           "            },\n",
-          "            \"WaitForMultiRegionDB\": {\n",
+          "            \"WaitForMultiAZDB\": {\n",
           "              \"Type\": \"Task\",\n",
           "              \"InputPath\": \"$\",\n",
           "              \"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",

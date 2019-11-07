@@ -530,6 +530,7 @@
     "LambdaCustomResource": {
         "Type": "AWS::Lambda::Function",
         "Properties": {
+            "FunctionName": "ResiliencyVPC-SecureSSMParameter",
             "Handler": "index.handler",
             "Runtime": "python3.6",
             "Timeout": 30,

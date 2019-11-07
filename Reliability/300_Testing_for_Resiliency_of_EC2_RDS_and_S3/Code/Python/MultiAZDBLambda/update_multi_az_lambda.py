@@ -35,7 +35,7 @@ stackname = 'MySQLforResiliencyTesting'
 
 
 def init_logging():
-    # Setup loggin because debugging with print can get ugly.
+    # Setup logging
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logging.getLogger("boto3").setLevel(logging.WARNING)
@@ -104,8 +104,8 @@ def update_rds(event):
     # Prepare the stack parameters
     rds_parameters = []
 
-    # We are no setting DBMultiRegion to update the stack
-    rds_parameters.append({'ParameterKey': 'DBMultiRegion', 'ParameterValue': "true"})
+    # We are now setting DBMultiAZ = "true" to update the stack
+    rds_parameters.append({'ParameterKey': 'DBMultiAZ', 'ParameterValue': "true"})
 
     # Every other parameter will use its previous value
     rds_parameters.append({'ParameterKey': 'DBSubnetIds', 'UsePreviousValue': True})
@@ -161,7 +161,7 @@ def wait_for_stack_complete(client, stack_name):
     if status_complete(status):
         return stack
     else:
-        logger.error ("Cannot update RDS stack to multi-region because status is: " + status)
+        logger.error ("Cannot update RDS stack to multi-AZ because status is: " + status)
         sys.exit(1)
 
 
@@ -169,11 +169,11 @@ def status_complete(status):
     return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE'
 
 # This function checks the CloudFormation Parameter to determine if 
-# single or multi region RDS has been deployed.
+# single or multi AZ RDS has been deployed.
 # It may be more precise to check RDS itself, but this saves the round-trip
-def is_singleregion(region, stack_name):
+def is_single_az(region, stack_name):
     # Create CloudFormation client
-    logger.debug("Running function is_singleregion in region " + region)
+    logger.debug("Running function is_single_az in region " + region)
     client = boto3.client('cloudformation', region)
 
     # See if we can retrieve the stack
@@ -189,13 +189,13 @@ def is_singleregion(region, stack_name):
         rds_parameters = stack['Parameters']
         logger.debug("rds_parameters: \n" + str(rds_parameters))
 
-        is_multiregion = find_in_parameters(rds_parameters, 'DBMultiRegion')
+        is_multi_az = find_in_parameters(rds_parameters, 'DBMultiAZ')
 
         logger.debug("Found stack named " + stack_name)
-        logger.debug("is_multiregion: " + is_multiregion)
+        logger.debug("is_multi_az: " + is_multi_az)
 
-        # Single region is boolean opposite if multi region
-        return is_multiregion == "false"
+        # Single AZ is boolean opposite if multi AZ
+        return is_multi_az == "false"
 
     except ClientError as e:
         logger.debug("Stack will not be updated: Unexpected exception found looking for stack named " + stack_name)
@@ -204,7 +204,7 @@ def is_singleregion(region, stack_name):
 
     except Exception:
         logger.debug("Stack will not be updated: Unexpected exception found looking for stack named " + stack_name)
-        logger.debug("Stack Trace:", traceback.format_exc())
+        logger.debug("Stack Trace: " + traceback.format_exc())
         return False
 
 
@@ -231,12 +231,12 @@ def lambda_handler(event, context):
 
         rds_stack_status = event['rds']['status']
         if (status_complete(rds_stack_status)):
-            # If RDS is single-region, this update will make it multi-region
-            if is_singleregion(event['region_name'], stackname):
-                logger.debug("Stack " + stackname + " is single-region; updating to multi-region")
+            # If RDS is single-AZ, this update will make it multi-AZ
+            if is_single_az(event['region_name'], stackname):
+                logger.debug("Stack " + stackname + " is single-AZ; updating to multi-AZ")
                 return update_rds(event)
             else:
-                logger.debug("Stack " + stackname + " already multi-region")
+                logger.debug("Stack " + stackname + " already multi-AZ")
                 return_dict = {'stackname': stackname}
                 return return_dict
         else:

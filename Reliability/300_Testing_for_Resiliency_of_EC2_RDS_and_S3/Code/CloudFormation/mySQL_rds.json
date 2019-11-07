@@ -45,8 +45,8 @@
           "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
       },
 
-      "DBMultiRegion" : {
-        "Description" : "whether this is multi-region or not",
+      "DBMultiAZ" : {
+        "Description" : "whether this RDS DB is multi-AZ or not",
         "Type" : "String",
         "AllowedValues": [
           "true",
@@ -77,7 +77,7 @@
         "Type": "AWS::RDS::DBInstance",
         "Properties": {
             "MultiAZ": { 
-                "Ref" : "DBMultiRegion"
+                "Ref" : "DBMultiAZ"
             },
             "AllocatedStorage": "100",
             "BackupRetentionPeriod": "1",

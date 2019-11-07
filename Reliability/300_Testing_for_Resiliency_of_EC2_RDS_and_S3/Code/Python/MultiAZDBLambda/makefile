@@ -15,9 +15,9 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-../MultiRegionDBLambda.zip: boto3 update_multiregion_lambda.py
-	cd dist && zip -r ../../MultiRegionDBLambda.zip .
-	zip -r ../MultiRegionDBLambda.zip update_multiregion_lambda.py
+../MultiAZDBLambda.zip: boto3 update_multi_az_lambda.py
+	cd dist && zip -r ../../MultiAZDBLambda.zip .
+	zip -r ../MultiAZDBLambda.zip update_multi_az_lambda.py
 
 botocore: 
 	pip install --target=./dist botocore
