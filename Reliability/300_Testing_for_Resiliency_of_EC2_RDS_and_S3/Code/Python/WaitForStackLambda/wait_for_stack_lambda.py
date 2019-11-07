@@ -93,7 +93,8 @@ def wait_for_stack(region, stack_id, context):
             logger.debug("Found stack named " + stack_id)
             stack_status = stack_list[0]['StackStatus']
             logger.debug("Status: " + stack_status)
-            if (stack_status == 'CREATE_COMPLETE') | (stack_status == 'CREATE_FAILED') | (stack_status == 'ROLLBACK_COMPLETE'):
+            if (stack_status == 'CREATE_COMPLETE') | (stack_status == 'CREATE_FAILED') | (stack_status == 'ROLLBACK_COMPLETE') | \
+              (stack_status == 'ROLLBACK_FAILED') | (stack_status == 'UPDATE_COMPLETE')  :
                 stack_building = False
                 break
             if (context != 0):
@@ -165,10 +166,9 @@ if __name__ == "__main__":
         "cfn_region": "us-east-2",
         "cfn_bucket": "aws-well-architected-labs-ohio",
         "folder": "Reliability/",
-        "workshop": "AWSLoft",
+        "workshop": "300-ResiliencyofEC2RDSandS3",
         "boot_bucket": "aws-well-architected-labs-ohio",
         "boot_prefix": "Reliability/",
-        "boot_object": "bootstrapARC327.sh",
         "vpc": {
             "stackname": "ResiliencyVPC",
             "status": "CREATE_COMPLETE"

@@ -283,6 +283,8 @@ def check_stack(region, stack_name):
         print("Stack Trace:", traceback.format_exc())
         return True
 
+def status_complete(status):
+    return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE'
 
 def lambda_handler(event, context):
     try:
@@ -303,10 +305,10 @@ def lambda_handler(event, context):
 
         # Check to see if the previous stack was actually created
         vpc_stack_status = event['vpc']['status']
-        if (vpc_stack_status == 'CREATE_COMPLETE'):
+        if (status_complete(vpc_stack_status)):
 
             rds_stack_status = event['rds']['status']
-            if (rds_stack_status == 'CREATE_COMPLETE'):
+            if (status_complete(rds_stack_status)):
                 if not check_stack(event['region_name'], stackname):
                     logger.debug("Stack " + stackname + " doesn't exist; creating")
                     return deploy_web_servers(event)
