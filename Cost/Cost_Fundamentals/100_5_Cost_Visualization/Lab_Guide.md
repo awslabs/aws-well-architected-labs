@@ -62,12 +62,12 @@ AWS Cost Explorer is a free built in tool to that lets you dive deeper into your
 ![Images/AWSCostService12.png](Images/AWSCostService12.png)
 
 
-You have now viewed the costs by service and applied multilpe filters. You can continue to modify the report by timeframe and apply other filters.
+You have now viewed the costs by service and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.
 
 
 
 ## 2. View your cost and usage by account <a name="cost_usage_account"></a>
-We will now view usage by account. This helps to highlight where the costs and usage are by linked account. NOTE: you will need one or more multilpe accounts for this exercise to be effective.
+We will now view usage by account. This helps to highlight where the costs and usage are by linked account. NOTE: you will need one or more multiple accounts for this exercise to be effective.
 
 1. Select **Saved reports** from the left menu:
 ![Images/AWSCostAccount0.png](Images/AWSCostAccount0.png)
@@ -103,7 +103,7 @@ We will now view usage by account. This helps to highlight where the costs and u
 ![Images/AWSCostAccount11.png](Images/AWSCostAccount11.png)
 
 
-You have now viewed the costs by account and applied multilpe filters. You can continue to modify the report by timeframe and apply other filters.
+You have now viewed the costs by account and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.
 
 
 ## 3. View your Reserved Instance coverage <a name="RI_coverage"></a>
