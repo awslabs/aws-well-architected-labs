@@ -218,7 +218,7 @@ def check_stack(region, stack_name):
             return False
         else:
             logger.debug("Stack will not be created: Unexpected exception found looking for stack named " + stack_name)
-            logger.debug(e.response)
+            logger.debug("Client error:" + str(e.response))
             return True
 
     except Exception:

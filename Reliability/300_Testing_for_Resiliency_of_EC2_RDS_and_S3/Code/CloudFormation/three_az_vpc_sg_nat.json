@@ -485,23 +485,23 @@
                       "Principal": {
                             "AWS": [
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole"                                    
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/VPCWorkshopRole"
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/RDSWorkshopRole"
-                                 },
-                                 {
-                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/DMSLambdaRole"
-                                 }
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/DMSLambdaRole"
+                                }
                               ]
                       },
                       "Action": "kms:*",

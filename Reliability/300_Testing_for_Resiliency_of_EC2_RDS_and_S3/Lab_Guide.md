@@ -103,7 +103,6 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
             {
               "log_level": "DEBUG",
               "region_name": "us-east-2",
-              "secondary_region_name": "us-west-2",
               "cfn_region": "us-east-2",
               "cfn_bucket": "aws-well-architected-labs-ohio",
               "folder": "Reliability/",
@@ -506,7 +505,7 @@ This step is optional. To simulate the AZ returning to health do the following:
 1. Go to the [Auto Scaling Group console](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:)
 1. Select the **WebServersforResiliencyTesting** auto scaling group
 1. Actions >> Edit
-1. In the **Subnet** field add the two **ResiliencyVPC-PrivateSubnet**s that are missing and **Save**
+1. In the **Subnet** field add any **ResiliencyVPC-PrivateSubnet**s that are missing (there should be three total) and **Save**
 1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
 1. Look at the NACL entries for the VPC called **ResiliencyVPC**
 1. For any of these NACLs that are _not_ _Default_ do the following
@@ -613,7 +612,9 @@ If you deployed the **single region** option, then delete your stacks in the fol
 |1|MySQLforResiliencyTesting|
 |  |  |
 |2|ResiliencyVPC|
-|2|DeployResiliencyWorkshop|
+|  |  |
+|  |VPC stack **must** be **DELETE_COMPLETE** before proceeding|  |
+|3|DeployResiliencyWorkshop|
 
 #### Multi region
 

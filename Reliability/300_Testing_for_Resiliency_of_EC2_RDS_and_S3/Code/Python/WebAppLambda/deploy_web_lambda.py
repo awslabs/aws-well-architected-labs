@@ -257,6 +257,7 @@ def deploy_web_servers(event):
 def check_stack(region, stack_name):
     # Create CloudFormation client
     logger.debug("Running function check_stack in region " + region)
+    logger.debug("Running function check_stack on stack " + stack_name)
     client = boto3.client('cloudformation', region)
 
     # See if you can retrieve the stack
@@ -275,7 +276,7 @@ def check_stack(region, stack_name):
             return False
         else:
             logger.debug("Stack will not be created: Unexpected exception found looking for stack named " + stack_name)
-            logger.debug(e.response)
+            logger.debug("Client error:" + str(e.response))
             return True
 
     except Exception:
@@ -284,7 +285,7 @@ def check_stack(region, stack_name):
         return True
 
 def status_complete(status):
-    return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE'
+    return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE' or status == 'UPDATE_ROLLBACK_COMPLETE'
 
 def lambda_handler(event, context):
     try:

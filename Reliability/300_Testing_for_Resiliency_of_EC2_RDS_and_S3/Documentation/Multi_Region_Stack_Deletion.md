@@ -21,6 +21,7 @@
 |3|ResiliencyVPC|Ohio|
 |3|ResiliencyVPC|Oregon|
 |  |  |
+|  |VPC stacks **must** be **DELETE_COMPLETE** before proceeding|  |
 |4|DeployResiliencyWorkshop|Ohio|
 
 ---

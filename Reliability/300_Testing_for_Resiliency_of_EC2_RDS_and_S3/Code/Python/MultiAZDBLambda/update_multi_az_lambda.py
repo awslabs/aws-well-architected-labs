@@ -166,7 +166,7 @@ def wait_for_stack_complete(client, stack_name):
 
 
 def status_complete(status):
-    return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE'
+    return status == 'UPDATE_COMPLETE' or status == 'CREATE_COMPLETE' or status == 'UPDATE_ROLLBACK_COMPLETE'
 
 # This function checks the CloudFormation Parameter to determine if 
 # single or multi AZ RDS has been deployed.
@@ -180,8 +180,9 @@ def is_single_az(region, stack_name):
     try:
 
         stack = get_stack(client, stack_name)
-
-        logger.debug("Status: " + stack['StackStatus'])
+        
+        logger.debug("Stack Name: " + stack_name)
+        logger.debug("Stack Status: " + stack['StackStatus'])
 
         if not status_complete(stack['StackStatus']):
             stack = wait_for_stack_complete(client, stack_name)
@@ -191,7 +192,10 @@ def is_single_az(region, stack_name):
 
         is_multi_az = find_in_parameters(rds_parameters, 'DBMultiAZ')
 
-        logger.debug("Found stack named " + stack_name)
+        if is_multi_az is None:
+          logger.error("Unable to find parameter DBMultiAZ in stack " + stack_name)
+          return False
+
         logger.debug("is_multi_az: " + is_multi_az)
 
         # Single AZ is boolean opposite if multi AZ
@@ -199,7 +203,7 @@ def is_single_az(region, stack_name):
 
     except ClientError as e:
         logger.debug("Stack will not be updated: Unexpected exception found looking for stack named " + stack_name)
-        logger.debug(e.response)
+        logger.debug("Client error:" + str(e.response))
         return False
 
     except Exception:
