@@ -141,8 +141,8 @@ Lastly, we will setup our foundations for monitoring the security status of our 
 
 ### Walkthrough
 
-1. [Enable Security Hub](../100_Enable_Security_Hub/README.md)
-2. [Enable Amazon GuardDuty and implement basic detective controls](../200_Automated_Deployment_of_Detective_Controls/README.md)
+1. Enable [AWS Security Hub](https://aws.amazon.com/security-hub/). Leverage the [AWS Security Hub Multiaccount Scripts](https://github.com/awslabs/aws-securityhub-multiaccount-scripts) to enable it across accounts.
+2. Enable [Amazon GuardDuty](https://aws.amazon.com/guardduty/). Leverage [Amazon ](https://github.com/aws-samples/amazon-guardduty-multiaccount-scripts) to enable it across accounts.
 
 ## Additional Resources and next steps
 
