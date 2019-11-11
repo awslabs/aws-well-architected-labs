@@ -734,6 +734,7 @@
 
     "LambdaCustomResourceRole": {
       "Type": "AWS::IAM::Role",
+      "DeletionPolicy" : "Retain",
       "Properties": {
           "RoleName": "LambdaCustomResourceRole",
           "AssumeRolePolicyDocument": {

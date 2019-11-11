@@ -72,6 +72,7 @@
 
     "ReadReplicaDB" : {
       "Type" : "AWS::RDS::DBInstance",
+      "DeletionPolicy" : "Delete",
       "Properties" : {
         "MultiAZ" : "false",
         "SourceDBInstanceIdentifier" : { "Fn::Join" : ["", [ 

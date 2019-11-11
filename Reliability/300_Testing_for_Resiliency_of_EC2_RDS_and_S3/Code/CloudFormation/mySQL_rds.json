@@ -75,6 +75,7 @@
     },
     "DB": {
         "Type": "AWS::RDS::DBInstance",
+        "DeletionPolicy" : "Delete",
         "Properties": {
             "MultiAZ": { 
                 "Ref" : "DBMultiAZ"

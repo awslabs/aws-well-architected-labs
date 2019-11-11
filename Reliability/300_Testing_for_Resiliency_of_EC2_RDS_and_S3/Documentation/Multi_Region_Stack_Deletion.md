@@ -20,9 +20,7 @@
 |  |  |
 |3|ResiliencyVPC|Ohio|
 |3|ResiliencyVPC|Oregon|
-|  |  |
-|  |VPC stacks **must** be **DELETE_COMPLETE** before proceeding|  |
-|4|DeployResiliencyWorkshop|Ohio|
+|3|DeployResiliencyWorkshop|Ohio|
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
