@@ -66,7 +66,7 @@ def s3_clear_folders():
     # Get S3 client/object
     client = boto3.client('s3')
 
-    # For each subfolder - in case you have multilpe subfolders, i.e. multilpe accounts/business units to split data out to
+    # For each subfolder - in case you have multiple subfolders, i.e. multiple accounts/business units to split data out to
     for subfolder in subfolders:
 
         # List all objects in the current months bucket    

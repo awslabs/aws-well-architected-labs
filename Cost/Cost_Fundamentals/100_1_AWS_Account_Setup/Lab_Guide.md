@@ -47,7 +47,7 @@ You will now be able to provide access to non-root users to billing information 
 ## 2. Create an account structure<a name="account_structure"></a>
 **NOTE**: Do NOT do this step if you already have an organization and consolidated billing setup.
 
-You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multilpe AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
+You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
 
 ### 2.1 Create an AWS Organization
 You will create an AWS Organization with the master account. 
@@ -126,7 +126,7 @@ Cost and Usage Reports provide the most detailed information on your usage and b
 
 
 ### 4.1 Configure a Cost and Usage Report
-If you configure multilpe Cost and Usage Reports (CURs), then it is recommended to have 1 CUR per bucket. If you **must** have multilpe CURs in a single bucket, ensure you use a different **report path prefix** so it is clear they are different reports.
+If you configure multiple Cost and Usage Reports (CURs), then it is recommended to have 1 CUR per bucket. If you **must** have multiple CURs in a single bucket, ensure you use a different **report path prefix** so it is clear they are different reports.
 
 1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](Images/AWSCUR1.png) 
