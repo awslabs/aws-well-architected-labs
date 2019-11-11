@@ -13,7 +13,7 @@
 ## 1. Architecture Overview <a name="overview"></a>
 
 The AWS Lambda function is triggered by a regular scheduled event in Amazon CloudWatch Events.
-Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent the designated email contact via Amazon SNS.
+Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent the designated email contact via Amazon SNS. A check is also performed for unused roles.
 The logs from the AWS Lambda function are captured in Amazon CloudWatch Logs for review and trouble shooting purposes.
 
 ![architecture](architecture.png)
