@@ -8,6 +8,8 @@ AWS requires “service-linked” roles for AWS Auto Scaling, Elastic Load Balan
 * `AWSServiceRoleForAutoScaling`
 * `AWSServiceRoleForRDS`
 
+### Steps to determine if service-linked roles already exist
+
 1. Open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/)
 
 1. In the navigation pane, click **Roles**.  

@@ -8,7 +8,7 @@ https://wellarchitectedlabs.com
 
 ## Goals
 - Automatically update the CUR table in Athena/Glue when a new report arrives
-- Automatically update the CUR table for multilpe Cost and Usage Reports in the same bucket
+- Automatically update the CUR table for multiple Cost and Usage Reports in the same bucket
 
 
 
@@ -27,7 +27,7 @@ https://wellarchitectedlabs.com
 
 ## Best Practice Checklist 
 - [ ] Run the CloudFormation template to update a single CUR in AWS Glue/Athena
-- [ ] Modify and run a CloudFormation template to update multilpe CURs in AWS Glue/Athena
+- [ ] Modify and run a CloudFormation template to update multiple CURs in AWS Glue/Athena
 
 ***
 

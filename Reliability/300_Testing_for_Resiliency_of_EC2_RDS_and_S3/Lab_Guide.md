@@ -34,7 +34,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 ### 1.2 Checking for existing service-linked roles
 
-**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go to directly to step [Create the "deployment machine"](#create_statemachine).
+**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go directly to step [Create the "deployment machine"](#create_statemachine).
 
 **If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md#exist_service_linked_roles), and then return here and resume with the following instructions.
 
@@ -79,7 +79,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
 
 1. Click the “Next” button.
-      * On the "Configure stack options" page, click the “Next” again
+      * On the "Configure stack options" page, click “Next” again
       * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
       * Click the “Create stack” button.
      ![CFNIamCapabilities](Images/CFNIamCapabilities.png)
@@ -206,7 +206,7 @@ Using bash is an effective way to execute the failure injection tests for this w
 
 ### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
 
-If you will be using bash and executed the the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
+If you will be using bash and executed the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
 
 * If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
 
@@ -225,7 +225,7 @@ Before testing, please prepare the following:
         ![SelectOhio](Images/SelectOhio.png)
 
 1. Get VPC ID
-      * A VPC (Amazon Virtual Private Cloud) is a a logically isolated section of the AWS Cloud where you have deployed the resources for your service
+      * A VPC (Amazon Virtual Private Cloud) is a logically isolated section of the AWS Cloud where you have deployed the resources for your service
       * For these tests you will need to know the **VPC ID** of the VPC you created as part of deploying the service
       * Navigate to the VPC management console: <https://console.aws.amazon.com/vpc>
       * In the left pane, click **Your VPCs**
@@ -299,7 +299,9 @@ This failure injection will simulate a critical problem with one of the three we
 1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
 
       * Refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
-       ![RefreshButton](Images/RefreshButton.png)
+
+           ![RefreshButton](Images/RefreshButton.png)
+
       * Observe the status of the instance reported by the script. In the screen cap below it is _shutting down_ as reported by the script and will ultimately transition to _terminated_.
 
         ![EC2ShuttingDown](Images/EC2ShuttingDown.png)
@@ -332,7 +334,7 @@ Load balancing ensures service requests are not routed to unhealthy resources, s
 
 1. From the same console, now click on the **Monitoring** tab and view metrics such as **Unhealthy hosts** and **Healthy hosts**
 
-   ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
+      ![TargetGroupsMonitoring](Images/TargetGroupsMonitoring.png)
 
 #### 3.2.3 Auto scaling
 
@@ -347,7 +349,7 @@ Autos scaling ensures we have the capacity necessary to meet customer demand. Th
 
         ![AutoScalingGroup](Images/AutoScalingGroup.png)  
 
-_Draining_ allow existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
+_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
 
 *__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
 
@@ -395,7 +397,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. The website is _not_ available. Some errors you might see reported:
       * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
-      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to repsond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
+      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
       * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
       * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.
 
@@ -443,7 +445,7 @@ This failure injection will simulate a critical problem with one of the three AW
       * Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.
       * And executing this way illustrates the impact and response under the two different scenarios.
 
-1. To simulate failure of an AZ, select one of the AVailability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>`
+1. To simulate failure of an AZ, select one of the Availability Zones used by your service (`us-east-2a`, `us-east-2b`, or `us-east-2c`) as `<az>`
       * For **scenario 1** select an AZ that is neither _primary_ nor _secondary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2c`
       * For **scenario 2** select the AZ that is _primary_ for your RDS DB instance. Given the following RDS console you would choose `us-east-2b`
 
@@ -560,7 +562,7 @@ You can use drift detection in the CloudFormation console to see what had change
 
 ### Remove manually provisioned resources
 
-Some resources were created by the failure simulation scripts. You need ot remove these first
+Some resources were created by the failure simulation scripts. You need to remove these first
 
 1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
 1. Look at the NACL entries for the VPC called **ResiliencyVPC**
@@ -586,7 +588,7 @@ As part of lab setup you have deployed several AWS CloudFormation stacks. These 
 
 1. In the confirmation dialog, click **Delete stack**
 1. The _Status_ changes to **DELETE_IN_PROGRESS**
-1. Click the rfresh button to update and status will ultimately progress to **DELETE_COMPLETE**
+1. Click the refresh button to update and status will ultimately progress to **DELETE_COMPLETE**
 1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
 
     ![ShowDeletedStacks](Images/ShowDeletedStacks.png)
@@ -616,6 +618,23 @@ If you deployed the **single region** option, then delete your stacks in the fol
 #### Multi region
 
 If you deployed the **multi region** option, then [see these instructions for the order in which to delete the CloudFormation stacks](Documentation/Multi_Region_Stack_Deletion.md)
+
+### Delete remaining resources
+
+The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them.
+
+* **single region** You only need to do the following steps in **us-east-2**
+* **multi region** Do the following steps for both **us-east-2** and **us-west-**2
+
+1. Select the region
+1. Wait until **ResiliencyVPC** CloudFormation stack is **DELETE_COMPLETE** in the region
+1. Go to the [AWS Console for AWS Systems Manager parameter store](https://console.aws.amazon.com/systems-manager/parameters/)
+1. Look for the parameter created for your infrastructure. If you used our default values, this will be named **300-ResiliencyofEC2RDSandS3**
+1. If it is not present (check all regions you deployed to) then you are finished
+1. If it is present then
+      1. Click on the parameter name
+      1. Click the **Delete** button
+      1. Click **Delete** again
 
 ---
 

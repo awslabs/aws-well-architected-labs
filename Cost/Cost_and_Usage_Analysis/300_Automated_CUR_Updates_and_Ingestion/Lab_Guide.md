@@ -73,7 +73,7 @@ You will see that the table is populated, the **recordCount** should be greater 
 
 
 ## 2. Multiple CURs<a name="multiple_CURs"></a>
-This step is used when there are multilpe CURs being delivered into the same bucket - for example a CUR with hourly granularity and one with daily granularity. This will automatically update Athena/Glue when there are new versions and new months data for both reports.
+This step is used when there are multiple CURs being delivered into the same bucket - for example a CUR with hourly granularity and one with daily granularity. This will automatically update Athena/Glue when there are new versions and new months data for both reports.
 
 The easiest way to work with multiple CURs is to deliver each CUR to a different S3 bucket, and follow the previous process. If you **must** deliver to a single bucket, configure your CURs with different prefixes or folders and follow this process.
 

@@ -567,6 +567,14 @@
                             "    )",
                             "    return",
                             "",
+                            "def delete_password_from_ssm(parameter_name):",
+                            "    client = boto3.client('ssm')",
+                            "    LOGGER.info('Deleting password from SSM parameter store.')",
+                            "    client.delete_parameter(",
+                            "       Name=parameter_name",
+                            "    )",
+                            "    return",
+                            "",                            
                             "def handler(event, context):",
                             "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
                             "    # Setup alarm for remaining runtime minus a second",
@@ -586,6 +594,8 @@
                             "                {'Message': 'Resource update successful!'})",
                             "        elif event['RequestType'] == 'Delete':",
                             "            LOGGER.info('DELETE!')",
+                            "            key_name = event['ResourceProperties']['KmsKeyName']",
+                            "            delete_password_from_ssm(key_name)",
                             "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
                             "                {'Message': 'Resource deletion successful!'})",
                             "        else:",
@@ -647,7 +657,8 @@
                             {
                                 "Effect": "Allow",
                                 "Action": [
-                                    "ssm:PutParameter"
+                                    "ssm:PutParameter",
+                                    "ssm:DeleteParameter"
                                 ],
                                 "Resource": "*"
                             }
