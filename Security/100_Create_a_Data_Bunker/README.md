@@ -83,8 +83,8 @@ Best practice is to have a seperate security account for your data bunker. This 
 11. (Optional) Add a lifecycle rule named *Delete old logs*, press **Next**
 12. (Optional) Add a transition rule for both the current and previous versions to move to Glacier after 32 days. Press **Next**
 13. (Optional) Select the current and previous versions and set them to delete after *365* days
-### 3. (Highly reccomended) Ensure cross account access is read-only
-These instructions outline how to modify the cross account access created in step 1 is read-only. As with step 1, this will depend on how your organization's policies. The key is that our security team are not able to modify data in our data bunker. Human access should only be in a breal-glass emergency situation.
+### 3. (Highly recommended) Ensure cross account access is read-only
+These instructions outline how to modify the cross account access created in step 1 is read-only. As with step 1, this will depend on how your organization's policies. The key is that our security team are not able to modify data in our data bunker. Human access should only be in a break-glass emergency situation.
 
 1. Navigate to **IAM** and select **Roles**
 2. Select the organizations account access role for your orgainzation: Note: the default is *OrganizationAccountAccessRole*
