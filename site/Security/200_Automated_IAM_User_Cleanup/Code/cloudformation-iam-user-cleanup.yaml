@@ -78,14 +78,11 @@ Resources:
           - PolicyDocument:
               Statement:
                 - Action:
-                    - 'iam:CreateLogGroup'
+                    - 'logs:CreateLogGroup'
                     - 'logs:CreateLogStream'
-                  Effect: Allow
-                  Resource: 'arn:aws:logs:*:*:*'
-                - Action:
                     - 'logs:PutLogEvents'
                   Effect: Allow
-                  Resource: '*'
+                  Resource: 'arn:aws:logs:*:*:*'
                 - Action:
                     - 'iam:DeleteAccessKey'
                     - 'iam:DeleteUser'
@@ -96,11 +93,11 @@ Resources:
                     - 'iam:UpdateAccessKey'
                     - 'iam:UpdateUser'
                   Effect: Allow
-                  Resource: '*'
+                  Resource: '*' # Explicit that this includes all users
                 - Action:
                   - 'sns:Publish'
                   Effect: Allow
-                  Resource: '*'
+                  Resource: !Ref UserCleanupTopic
               Version: 2012-10-17
             PolicyName: sec-UserCleanupRole
   # Lambda function to audit the credentials
