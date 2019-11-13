@@ -28,6 +28,7 @@ By the end of this step you will have a separate AWS account for:
 4. For each AWS account required
    * [Create a new account in organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html). Make note of the organizations account access role.
    * [Create a new IAM role in the root account]( https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html) that has permission to assume that role to access the new AWS account
+   * Consider applying best practices as a baseline such as [lock away your AWS account root user access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#lock-away-credentials) and [using multi-factor authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html)
 
 ## Step 2 - Identity
 
@@ -79,24 +80,33 @@ Now we will create a data bunker account to store secure read only security logs
 
 This policy specifically enables only _us-east-1_ and _us-west-1_. Replace with the list of [region codes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) you wish to allow access to.
 
+**Note:** Not all AWS global services are shown in this example policy. Replace the list of services in red italicized text with the global services used by accounts in your organization.
+
+**Note:** This example policy blocks access to the AWS Security Token Service global endpoint (sts.amazonaws.com). To use AWS STS with this policy, use regional endpoints or add "sts:*" to the NotAction element. For more information on AWS STS endpoints, see Activating and Deactivating AWS STS in an AWS Region in the IAM User Guide.
 ```json
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "Statement1",
+            "Sid": "DenyAllOutsideEU",
             "Effect": "Deny",
-            "Action": [
-                "*"
+            "NotAction": [
+               "iam:*",
+               "organizations:*",
+               "route53:*",
+               "budgets:*",
+               "waf:*",
+               "cloudfront:*",
+               "globalaccelerator:*",
+               "importexport:*",
+               "support:*"
             ],
-            "Resource": [
-                "*"
-            ],
+            "Resource": "*",
             "Condition": {
-                "ForAnyValue:StringNotEquals": {
+                "StringNotEquals": {
                     "aws:RequestedRegion": [
-                        "us-east-1",
-                        "us-west-1"
+                        "eu-central-1",
+                        "eu-west-1"
                     ]
                 }
             }
