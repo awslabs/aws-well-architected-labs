@@ -2695,7 +2695,7 @@
 <p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol>
-<li><a href="#create_team">Modify the cost optimization team</a></li>
+<li><a href="#Create_test_group">Create a group of users for testing</a></li>
 <li><a href="#EC2_restrict_region">Create an IAM Policy to restrict EC2 usage by region</a></li>
 <li><a href="#EC2_restrict_family">Create an IAM Policy to restirct EC2 usage by family</a></li>
 <li><a href="#EC2_restrict_size">Extend an IAM Policy to restrict EC2 usage by instance size</a></li>
@@ -2703,103 +2703,65 @@
 <li><a href="#tear_down">Tear down</a></li>
 <li><a href="#rate_lab">Rate this Lab</a>  </li>
 </ol>
-<h2 id="1-modify-the-cost-optimization-team">1. Modify the cost optimization team <a name="create_team"></a></h2>
-<p>We are going to modify the cost optimization team created previously, as this lab has additional access requirements to implementing IAM policies.</p>
-<h3 id="11-modify-the-iam-policy-for-the-team">1.1 Modify the IAM policy for the team</h3>
-<p>1 - Log into the console as an IAM user with the required permissions and go to the <strong>IAM</strong> Service page:
-<img alt="Images/AWSIAM1.png" src="Images/AWSIAM1.png" /></p>
-<p>2 - Select <strong>Policies</strong> from the left menu:
-<img alt="Images/AWSIAM2.png" src="Images/AWSIAM2.png" /></p>
-<p>3 - Click <strong>Filter policies</strong>, and select <strong>Customer managed</strong>:
-<img alt="Images/AWSIAM3.png" src="Images/AWSIAM3.png" /></p>
-<p>4 - Click the existing <strong>Cost Optimization</strong> Policy:
-<img alt="Images/AWSIAM4.png" src="Images/AWSIAM4.png" /></p>
-<p>5 - Click <strong>Edit policy</strong>:
-<img alt="Images/AWSIAM5.png" src="Images/AWSIAM5.png" /></p>
-<p>6 - Click <strong>JSON</strong>:
-<img alt="Images/AWSIAM7.png" src="Images/AWSIAM7.png" /></p>
-<p>7 -  Modify the policy below, replace <strong>-billing bucket-</strong> (2 replacements) with the name of the bucket your CUR files are delivered to. Then copy &amp; paste the policy into the field:
-<strong>NOTE</strong>: Ensure you copy the entire policy, everything including the first '{' and last '}'</p>
-<pre><code>{
-  &quot;Version&quot;: &quot;2012-10-17&quot;,
-  &quot;Statement&quot;: [
-    {
-      &quot;Sid&quot;: &quot;VisualEditor0&quot;,
-      &quot;Effect&quot;: &quot;Allow&quot;,
-      &quot;Action&quot;: [
-        &quot;s3:GetObject&quot;,
-        &quot;s3:ListBucket&quot;
-      ],
-      &quot;Resource&quot;: [
-        &quot;arn:aws:s3:::-billing bucket-&quot;,
-        &quot;arn:aws:s3:::-billing bucket-/*&quot;
-      ]
-    },
-    {
-      &quot;Sid&quot;: &quot;VisualEditor1&quot;,
-      &quot;Effect&quot;: &quot;Allow&quot;,
-      &quot;Action&quot;: [
-        &quot;iam:GetPolicyVersion&quot;,
-        &quot;quicksight:CreateAdmin&quot;,
-        &quot;iam:DeletePolicy&quot;,
-        &quot;iam:CreateRole&quot;,
-        &quot;iam:AttachRolePolicy&quot;,
-        &quot;aws-portal:ViewUsage&quot;,
-        &quot;iam:GetGroup&quot;,
-        &quot;aws-portal:ModifyBilling&quot;,
-        &quot;iam:DetachRolePolicy&quot;,
-        &quot;iam:ListAttachedRolePolicies&quot;,
-        &quot;ds:UnauthorizeApplication&quot;,
-        &quot;aws-portal:ViewBilling&quot;,
-        &quot;iam:DetachGroupPolicy&quot;,
-        &quot;iam:ListAttachedGroupPolicies&quot;,
-        &quot;iam:CreatePolicyVersion&quot;,
-        &quot;ds:CheckAlias&quot;,
-        &quot;quicksight:Subscribe&quot;,
-        &quot;ds:DeleteDirectory&quot;,
-        &quot;iam:ListPolicies&quot;,
-        &quot;iam:GetRole&quot;,
-        &quot;ds:CreateIdentityPoolDirectory&quot;,
-        &quot;ds:DescribeTrusts&quot;,
-        &quot;iam:GetPolicy&quot;,
-        &quot;iam:ListGroupPolicies&quot;,
-        &quot;aws-portal:ViewAccount&quot;,
-        &quot;iam:ListEntitiesForPolicy&quot;,
-        &quot;iam:AttachUserPolicy&quot;,
-        &quot;iam:ListRoles&quot;,
-        &quot;iam:DeleteRole&quot;,
-        &quot;budgets:*&quot;,
-        &quot;iam:CreatePolicy&quot;,
-        &quot;quicksight:CreateUser&quot;,
-        &quot;s3:ListAllMyBuckets&quot;,
-        &quot;iam:ListPolicyVersions&quot;,
-        &quot;iam:AttachGroupPolicy&quot;,
-        &quot;quicksight:Unsubscribe&quot;,
-        &quot;iam:ListAccountAliases&quot;,
-        &quot;ds:DescribeDirectories&quot;,
-        &quot;iam:ListGroups&quot;,
-        &quot;iam:GetGroupPolicy&quot;,
-        &quot;ds:CreateAlias&quot;,
-        &quot;ds:AuthorizeApplication&quot;,
-        &quot;iam:DeletePolicyVersion&quot;
-      ],
-      &quot;Resource&quot;: &quot;*&quot;
-    }
-  ]
-}
-</code></pre>
-
+<h2 id="1-create-a-group-of-users-for-testing">1. Create a group of users for testing <a name="Create_test_group"></a></h2>
+<p>This lab requires you to apply an IAM policy to a group of users, then login as a user in that group and verify the policy. We will create this test group.</p>
 <ol>
 <li>
-<p>Click <strong>Review policy</strong>: 
-<img alt="Images/AWSIAM8.png" src="Images/AWSIAM8.png" /></p>
+<p>Go to the <strong>IAM</strong> service page: 
+<img alt="Images/AWSPolicy1.png" src="Images/AWSPolicy1.png" /></p>
 </li>
 <li>
-<p>Enter a <strong>Name</strong> and <strong>Description</strong> for the policy and click <strong>Create policy</strong>:
-<img alt="Images/AWSIAM9.png" src="Images/AWSIAM9.png" /></p>
+<p>Click on <strong>Groups</strong>, click <strong>Create New Group</strong>:
+<img alt="Images/AWSCreateTest2.png" src="Images/AWSCreateTest2.png" /></p>
+</li>
+<li>
+<p>Set the group name to <strong>CostTest</strong> and click <strong>Next Step</strong>:
+<img alt="Images/AWSCreateTest3.png" src="Images/AWSCreateTest3.png" /></p>
+</li>
+<li>
+<p>Click <strong>Next Step</strong>:
+<img alt="Images/AWSCreateTest4.png" src="Images/AWSCreateTest4.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create Group</strong>:
+<img alt="Images/AWSCreateTest5.png" src="Images/AWSCreateTest5.png" /></p>
+</li>
+<li>
+<p>Click <strong>Users</strong>:
+<img alt="Images/AWSCreateTest6.png" src="Images/AWSCreateTest6.png" /></p>
+</li>
+<li>
+<p>Click <strong>Add user</strong>:
+<img alt="Images/AWSCreateTest7.png" src="Images/AWSCreateTest7.png" /></p>
+</li>
+<li>
+<p>Configure the user as follows:</p>
+<ul>
+<li><strong>Username</strong>: TestUser1</li>
+<li><strong>Access type</strong>: AWS Management Console access</li>
+<li><strong>Console password</strong>: Autogenerated password</li>
+<li>Un-select <strong>Require password reset</strong></li>
+<li>Click <strong>Next: Permissions</strong>
+<img alt="Images/AWSCreateTest8.png" src="Images/AWSCreateTest8.png" /></li>
+</ul>
+</li>
+<li>
+<p>Select the <strong>CostTest</strong> group, and click <strong>Next: Tags</strong>:
+<img alt="Images/AWSCreateTest9.png" src="Images/AWSCreateTest9.png" /></p>
+</li>
+<li>
+<p>Click <strong>Next: Review</strong>:
+<img alt="Images/AWSCreateTest10.png" src="Images/AWSCreateTest10.png" /></p>
+</li>
+<li>
+<p>Review the details and click <strong>Create user</strong>:
+<img alt="Images/AWSCreateTest11.png" src="Images/AWSCreateTest11.png" /></p>
+</li>
+<li>
+<p>Record the <strong>logon link</strong>, the <strong>User</strong> and the <strong>Password</strong> for later use, click <strong>Close</strong>:
+<img alt="Images/AWSCreateTest12.png" src="Images/AWSCreateTest12.png" /></p>
 </li>
 </ol>
-<p>You have successfully modified the cost optimization teams policy, you can complete the rest of the lab using the cost optimization group.</p>
 <h2 id="2-create-an-iam-policy-to-restrict-service-usage-by-region">2. Create an IAM Policy to restrict service usage by region <a name="EC2_restrict_region"></a></h2>
 <p>To manage costs you need to manage and control your usage. AWS offers multilpe regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.</p>
 <p>We will create a policy that allows all EC2, RDS and S3 access in a single region only. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.</p>
@@ -2823,17 +2785,22 @@
 </li>
 <li>
 <p>Open the following text file, copy and paste the policy into the console:
-<strong>NOTE</strong> Ensure you copy the entire policy, including the start '{' and end '}' 
+<strong>NOTE</strong> Ensure you copy the entire policy, including the start '{' and end '}'
+<BR>
 <a href="Code/Region_Restrict.html">./Code/Region_Restrict</a> </p>
 </li>
 <li>
 <p>Click <strong>Review policy</strong>:
-<img alt="Images/AWSPolicy5.png" src="Images/AWSPolicy5.png" />
-NOTE: the policy may be different from the image above</p>
+<img alt="Images/AWSPolicy5.png" src="Images/AWSPolicy5.png" /></p>
 </li>
 <li>
-<p>Enter a <strong>Name</strong> and <strong>Description</strong>, and click <strong>Create policy</strong>: 
-<img alt="Images/AWSPolicy6.png" src="Images/AWSPolicy6.png" /></p>
+<p>Create the policy with the following details:</p>
+<ul>
+<li><strong>Name</strong>: RegionRestrict</li>
+<li><strong>Description</strong>: EC2, RDS, S3 access in us-east-1 only</li>
+<li>Click <strong>Create policy</strong>: 
+<img alt="Images/AWSPolicy6.png" src="Images/AWSPolicy6.png" /></li>
+</ul>
 </li>
 </ol>
 <p>You have successfully created the Policy.</p>
@@ -2844,7 +2811,7 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSPolicy7.png" src="Images/AWSPolicy7.png" /></p>
 </li>
 <li>
-<p>Click on the <strong>CostOptimization</strong> group (created previously):
+<p>Click on the <strong>CostTest</strong> group (created previously):
 <img alt="Images/AWSPolicy8.png" src="Images/AWSPolicy8.png" /></p>
 </li>
 <li>
@@ -2864,11 +2831,11 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSPolicy13.png" src="Images/AWSPolicy13.png" /></p>
 </li>
 </ol>
-<p>You have successfully attached the policy to the Cost Optimizaiton group. </p>
+<p>You have successfully attached the policy to the CostTest group. </p>
 <h3 id="23-verify-the-policy-is-in-effect">2.3 Verify the policy is in effect</h3>
 <ol>
 <li>
-<p>Go to the EC2 Service dashboard: 
+<p>Logon to the console as the <strong>TestUser1</strong> user, go to the <strong>EC2</strong> Service dashboard: 
 <img alt="Images/AWSPolicy14.png" src="Images/AWSPolicy14.png" /></p>
 </li>
 <li>
@@ -2924,13 +2891,14 @@ NOTE: the policy may be different from the image above</p>
 </li>
 </ol>
 <p>You have successfully implemented an IAM policy that restricts all EC2, RDS and S3 operations to a single region.</p>
-<h2 id="3-create-an-iam-policy-to-restirct-ec2-usage-by-family">3. Create an IAM Policy to restirct EC2 usage by family <a name="EC2_restrict_family"></a></h2>
+<p>Log out of the console as TestUser1.</p>
+<h2 id="3-create-an-iam-policy-to-restrict-ec2-usage-by-family">3. Create an IAM Policy to restrict EC2 usage by family <a name="EC2_restrict_family"></a></h2>
 <p>AWS offers different instance families within EC2. Depending on your workload requirements - different types will be most cost effective. For non-specific environments such as testing or development, you can restrict the instance families in those accounts to the most cost effective generic types. It is also an effective way to increase RI utilization, by ensuring these accounts will consume any available Reserved Instances. </p>
 <p>We will create a policy that allows operations on specific instance families only. This will not only restrict launching an instance, but all other activities. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.</p>
 <h3 id="31-create-the-iam-policy">3.1 Create the IAM Policy</h3>
 <ol>
 <li>
-<p>Go to the <strong>IAM</strong> service page: 
+<p>Log on to the console as your regular user with the required permissions, Go to the <strong>IAM</strong> service page: 
 <img alt="Images/AWSFamilyRestrict0.png" src="Images/AWSFamilyRestrict0.png" /></p>
 </li>
 <li>
@@ -2955,8 +2923,13 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSFamilyRestrict4.png" src="Images/AWSFamilyRestrict4.png" /></p>
 </li>
 <li>
-<p>Enter a <strong>Name</strong>, a <strong>Description</strong>, and click on <strong>Create Policy</strong>:
-<img alt="Images/AWSFamilyRestrict5.png" src="Images/AWSFamilyRestrict5.png" /></p>
+<p>Enter the details:</p>
+<ul>
+<li><strong>Name</strong>: EC2_FamilyRestrict</li>
+<li><strong>Description</strong>: Restrict to t3, a1 and m5 families</li>
+<li>Click on <strong>Create Policy</strong>:
+<img alt="Images/AWSFamilyRestrict5.png" src="Images/AWSFamilyRestrict5.png" /></li>
+</ul>
 </li>
 </ol>
 <h3 id="32-attach-the-policy-to-the-group">3.2 Attach the policy to the group</h3>
@@ -2966,7 +2939,7 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSFamilyRestrict6.png" src="Images/AWSFamilyRestrict6.png" /></p>
 </li>
 <li>
-<p>Click on the <strong>CostOptimization</strong> group (created previously):
+<p>Click on the <strong>CostTest</strong> group (created previously):
 <img alt="Images/AWSFamilyRestrict7.png" src="Images/AWSFamilyRestrict7.png" /></p>
 </li>
 <li>
@@ -2993,7 +2966,7 @@ NOTE: the policy may be different from the image above</p>
 <h3 id="33-verify-the-policy-is-in-effect">3.3 Verify the policy is in effect</h3>
 <ol>
 <li>
-<p>Click on <strong>Services</strong> and click <strong>EC2</strong>:
+<p>Logon to the console as the <strong>TestUser1</strong> user, go to the EC2 Service dashboard:
 <img alt="Images/AWSFamilyRestrict13.png" src="Images/AWSFamilyRestrict13.png" /></p>
 </li>
 <li>
@@ -3041,16 +3014,18 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSFamilyRestrict24.png" src="Images/AWSFamilyRestrict24.png" /></p>
 </li>
 <li>
-<p>You will receive a success message.  Click on the <strong>Instance ID</strong> and terminate the instance as above:
+<p>You will receive a success message.  Click on the <strong>Instance ID</strong> and <strong>terminate the instance</strong> as above:
 <img alt="Images/AWSFamilyRestrict25.png" src="Images/AWSFamilyRestrict25.png" /></p>
 </li>
 </ol>
+<p>You have successfully implemented an IAM policy that restricts all EC2 actions to T3, A1 and M5 instance types.</p>
+<p>Log out of the console as TestUser1.</p>
 <h2 id="4-extend-an-iam-policy-to-restrict-ec2-usage-by-instance-size">4. Extend an IAM Policy to restrict EC2 usage by instance size <a name="EC2_restrict_size"></a></h2>
 <p>We can also restrict the size of instance that can be launched. This can be used to ensure only low cost instances can be created within an account. This is ideal for testing and development, where high capacity instances may not be required. We will extend the EC2 family policy above, and add restrictions by adding the sizes of instances allowed.</p>
 <h3 id="41-extend-the-ec2family_restrict-iam-policy">4.1 Extend the EC2Family_Restrict IAM Policy</h3>
 <ol>
 <li>
-<p>Go to the <strong>IAM</strong> service page: 
+<p>Log on to the console as your regular user with the required permissions, go to the <strong>IAM</strong> service page: 
 <img alt="Images/AWSFamilyUpdate0.png" src="Images/AWSFamilyUpdate0.png" /></p>
 </li>
 <li>
@@ -3085,7 +3060,7 @@ NOTE: the policy may be different from the image above</p>
 <h3 id="42-verify-the-policy-is-in-effect">4.2 Verify the policy is in effect</h3>
 <ol>
 <li>
-<p>Click on <strong>Services</strong> and go to the <strong>EC2</strong> dashboard:
+<p>Logon to the console as the <strong>TestUser1</strong> user, click on <strong>Services</strong> and go to the <strong>EC2</strong> dashboard:
 <img alt="Images/AWSFamilyUpdate8.png" src="Images/AWSFamilyUpdate8.png" /></p>
 </li>
 <li>
@@ -3133,18 +3108,19 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSFamilyUpdate19.png" src="Images/AWSFamilyUpdate19.png" /></p>
 </li>
 <li>
-<p>It will succeed. Click on the <strong>Instance ID</strong> and terminate the instance as above:
+<p>It will succeed. Click on the <strong>Instance ID</strong> and <strong>terminate</strong> the instance as above:
 <img alt="Images/AWSFamilyUpdate20.png" src="Images/AWSFamilyUpdate20.png" /></p>
 </li>
 </ol>
 <p>You have successfully implemented an IAM policy that restricts all EC2 instance operations by family and size.</p>
+<p>Log out of the console as TestUser1.</p>
 <h2 id="5-create-an-iam-policy-to-restrict-ebs-volume-creation-by-volume-type">5. Create an IAM policy to restrict EBS Volume creation by volume type <a name="EC2_volume_type"></a></h2>
-<p>Extending cost optimization governance beyond compute instances will ensure overall higher levels of cost optimization. Similar to EC2 instances, there are different storage types. Governing the type of storage that can be created in an account can be effective to minimise cost. </p>
+<p>Extending cost optimization governance beyond compute instances will ensure overall higher levels of cost optimization. Similar to EC2 instances, there are different storage types. Governing the type of storage that can be created in an account can be effective to minimize cost. </p>
 <p>We will create an IAM policy that denies operations that contain provisioned IOPS (io1) EBS volume types. This will not only restrict creating a volume, but all other actions that attempt to use this volume type. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.</p>
 <h3 id="51-create-the-iam-policy">5.1 Create the IAM Policy</h3>
 <ol>
 <li>
-<p>Go to the <strong>IAM</strong> service page: 
+<p>Log on to the console as your regular user with the required permissions, go to the <strong>IAM</strong> service page: 
 <img alt="Images/AWSEBSPolicy0.png" src="Images/AWSEBSPolicy0.png" /></p>
 </li>
 <li>
@@ -3169,8 +3145,13 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSEBSPolicy4.png" src="Images/AWSEBSPolicy4.png" /></p>
 </li>
 <li>
-<p>Enter a <strong>Name</strong> and a <strong>Description</strong>, and click <strong>Create policy</strong>:
-<img alt="Images/AWSEBSPolicy5.png" src="Images/AWSEBSPolicy5.png" /></p>
+<p>Configure the following details:</p>
+<ul>
+<li><strong>Name</strong>: EC2EBS_Restrict</li>
+<li><strong>Description</strong>: Dont allow EBS io1 volumes</li>
+<li>Click <strong>Create policy</strong>:
+<img alt="Images/AWSEBSPolicy5.png" src="Images/AWSEBSPolicy5.png" /></li>
+</ul>
 </li>
 </ol>
 <h3 id="52-attach-the-policy-to-the-cost-optimization-group">5.2 Attach the policy to the Cost Optimization group</h3>
@@ -3180,7 +3161,7 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSEBSPolicy6.png" src="Images/AWSEBSPolicy6.png" /></p>
 </li>
 <li>
-<p>Click on the <strong>CostOptimization</strong> group:
+<p>Click on the <strong>CostTest</strong> group:
 <img alt="Images/AWSEBSPolicy7.png" src="Images/AWSEBSPolicy7.png" /></p>
 </li>
 <li>
@@ -3199,7 +3180,7 @@ NOTE: the policy may be different from the image above</p>
 <h3 id="53-verify-the-policy-is-in-effect">5.3 Verify the policy is in effect</h3>
 <ol>
 <li>
-<p>Click on <strong>Services</strong> then click <strong>EC2</strong>:
+<p>Logon to the console as the <strong>TestUser1</strong> user, click on <strong>Services</strong> then click <strong>EC2</strong>:
 <img alt="Images/AWSEBSPolicy11.png" src="Images/AWSEBSPolicy11.png" /></p>
 </li>
 <li>
@@ -3239,7 +3220,7 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSEBSPolicy20.png" src="Images/AWSEBSPolicy20.png" /></p>
 </li>
 <li>
-<p>Click <strong>Edit storage</strong>:
+<p>Scroll down and click <strong>Edit storage</strong>:
 <img alt="Images/AWSEBSPolicy21.png" src="Images/AWSEBSPolicy21.png" /></p>
 </li>
 <li>
@@ -3247,16 +3228,22 @@ NOTE: the policy may be different from the image above</p>
 <img alt="Images/AWSEBSPolicy22.png" src="Images/AWSEBSPolicy22.png" /></p>
 </li>
 <li>
+<p>Click <strong>Launch</strong>:
+<img alt="Images/AWSEBSPolicy18.png" src="Images/AWSEBSPolicy18.png" /></p>
+</li>
+<li>
 <p>Select <strong>Proceed without a key pair</strong>, and click <strong>I acknowledge that i will not be able to...</strong>, then click <strong>Launch Instances</strong>:
 <img alt="Images/AWSEBSPolicy23.png" src="Images/AWSEBSPolicy23.png" /></p>
 </li>
 <li>
-<p>It will now succeed, as it doesnt contain an io1 volume type.  Click on the <strong>instance ID</strong> and terminate the instance as above:
+<p>It will now succeed, as it doesnt contain an io1 volume type.  Click on the <strong>instance ID</strong> and <strong>terminate</strong> the instance as above:
 <img alt="Images/AWSEBSPolicy24.png" src="Images/AWSEBSPolicy24.png" /></p>
 </li>
 </ol>
+<p>You have successfully implemented an IAM policy that denies operations if there is an EBS volume of type io1.</p>
+<p>Log out of the console as TestUser1.</p>
 <h2 id="6-tear-down">6. Tear down <a name="tear_down"></a></h2>
-<p>NOTE: To replace the cost optimization group IAM policy, follow the same process and implement the original policy contained in the Account Setup lab.</p>
+<p>Log onto the console as your regular user with the required permissions.</p>
 <h3 id="delete-a-policy">Delete a policy</h3>
 <p>We will delete the IAM policies created above, as they are no longer applied to any groups.</p>
 <ol>
@@ -3287,9 +3274,49 @@ NOTE: the policy may be different from the image above</p>
 <li>
 <p>Perform the same steps above to delete the <strong>Ec2_FamilyRestrict</strong> and <strong>EC2EBS_Restrict</strong> policies.</p>
 </li>
+<li>
+<p>Click on <strong>Groups</strong>:
+<img alt="Images/AWSTeardown15.png" src="Images/AWSTeardown15.png" /></p>
+</li>
+<li>
+<p>Select the <strong>CostTest</strong> group, click <strong>Group Actions</strong>, click <strong>Delete Group</strong>:
+<img alt="Images/AWSTeardown16.png" src="Images/AWSTeardown16.png" /></p>
+</li>
+<li>
+<p>Click <strong>Yes, Delete</strong>:
+<img alt="Images/AWSTeardown17.png" src="Images/AWSTeardown17.png" /></p>
+</li>
+<li>
+<p>Click <strong>Users</strong>:
+<img alt="Images/AWSTeardown18.png" src="Images/AWSTeardown18.png" /></p>
+</li>
+<li>
+<p>Select <strong>TestUser1</strong>, and click <strong>Delete user</strong>:
+<img alt="Images/AWSTeardown19.png" src="Images/AWSTeardown19.png" /></p>
+</li>
+<li>
+<p>Click <strong>Yes, delete</strong>: 
+<img alt="Images/AWSTeardown20.png" src="Images/AWSTeardown20.png" /></p>
+</li>
+<li>
+<p>Go to the <strong>EC2</strong> dashboard:
+<img alt="Images/AWSTeardown21.png" src="Images/AWSTeardown21.png" /></p>
+</li>
+<li>
+<p>Click <strong>Security Groups</strong> on the left:
+<img alt="Images/AWSTeardown22.png" src="Images/AWSTeardown22.png" /></p>
+</li>
+<li>
+<p>Select the security groups <strong>you took note of</strong>, ensure you have the correct groups that were created. Click <strong>Actions</strong>, select <strong>Delete Security Groups</strong>:
+<img alt="Images/AWSTeardown23.png" src="Images/AWSTeardown23.png" /></p>
+</li>
+<li>
+<p><strong>Triple check</strong> they are the groups you wrote down, and click <strong>Yes, Delete</strong>:
+<img alt="Images/AWSTeardown24.png" src="Images/AWSTeardown24.png" /></p>
+</li>
 </ol>
 <h2 id="7-rate-this-lab">7. Rate this lab<a name="rate_lab"></a></h2>
-<p><a href="https://wellarchitectedlabs.com/Cost_200_2_1star"><img alt="1 Star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_2star"><img alt="2 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_3star"><img alt="3 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_4star"><img alt="4 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_5star"><img alt="5 star" src="Images/star.png" /></a></p>
+<p><a href="https://wellarchitectedlabs.com/Cost_200_2_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_2_5star"><img alt="5 star" src="../../../common/images/star.png" /></a></p>
                 
                   
                 

@@ -3003,6 +3003,7 @@
 <li>For each AWS account required</li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html">Create a new account in organizations</a>. Make note of the organizations account access role.</li>
 <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html">Create a new IAM role in the root account</a> that has permission to assume that role to access the new AWS account</li>
+<li>Consider applying best practices as a baseline such as <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#lock-away-credentials">lock away your AWS account root user access keys</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html">using multi-factor authentication</a></li>
 </ol>
 <h2 id="step-2-identity">Step 2 - Identity</h2>
 <p>Every user must leverage unique credentials so we can trace actions within our accounts. Setup your identity structure in the master account and use cross account access to access the child accounts. As you create roles for your users ensure that you are implementing least privilege access by ensuring that users only have access to perform actions required for their role. Be careful who you give IAM permissions to as they can create their own permissions.</p>
@@ -3044,23 +3045,31 @@
 
 <h3 id="optional-disable-unused-regions">(Optional) Disable unused regions</h3>
 <p>This policy specifically enables only <em>us-east-1</em> and <em>us-west-1</em>. Replace with the list of <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions">region codes</a> you wish to allow access to.</p>
+<p><strong>Note:</strong> Not all AWS global services are shown in this example policy. Replace the list of services in red italicized text with the global services used by accounts in your organization.</p>
+<p><strong>Note:</strong> This example policy blocks access to the AWS Security Token Service global endpoint (sts.amazonaws.com). To use AWS STS with this policy, use regional endpoints or add "sts:*" to the NotAction element. For more information on AWS STS endpoints, see Activating and Deactivating AWS STS in an AWS Region in the IAM User Guide.</p>
 <pre><code class="json">{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
         {
-            &quot;Sid&quot;: &quot;Statement1&quot;,
+            &quot;Sid&quot;: &quot;DenyAllOutsideEU&quot;,
             &quot;Effect&quot;: &quot;Deny&quot;,
-            &quot;Action&quot;: [
-                &quot;*&quot;
+            &quot;NotAction&quot;: [
+               &quot;iam:*&quot;,
+               &quot;organizations:*&quot;,
+               &quot;route53:*&quot;,
+               &quot;budgets:*&quot;,
+               &quot;waf:*&quot;,
+               &quot;cloudfront:*&quot;,
+               &quot;globalaccelerator:*&quot;,
+               &quot;importexport:*&quot;,
+               &quot;support:*&quot;
             ],
-            &quot;Resource&quot;: [
-                &quot;*&quot;
-            ],
+            &quot;Resource&quot;: &quot;*&quot;,
             &quot;Condition&quot;: {
-                &quot;ForAnyValue:StringNotEquals&quot;: {
+                &quot;StringNotEquals&quot;: {
                     &quot;aws:RequestedRegion&quot;: [
-                        &quot;us-east-1&quot;,
-                        &quot;us-west-1&quot;
+                        &quot;eu-central-1&quot;,
+                        &quot;eu-west-1&quot;
                     ]
                 }
             }

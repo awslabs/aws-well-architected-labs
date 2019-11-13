@@ -149,7 +149,7 @@ We will create a monthly savings plan coverage budget which will notify if the c
 ![Images/AWSLab12.png](Images/AWSLab12.png)
      
 8. You will receive an email similar to this within a few minutes:
-![Images/AWSLab13.png](Images/AWSLab1.png)
+![Images/AWSLab13.png](Images/AWSLab13.png)
 
   
 ## 4. Create and implement an AWS Budget Report <a name="budget_report"></a>
@@ -191,7 +191,7 @@ AWS Budgets Reports allow you to create and send daily, weekly, or monthly repor
 ### Delete a budget report
 We will delete the bugdet report we created in section 4.
 
-1. From the **Budgets Reports** dashboard, click on the three dots next to the **Weekly Budgets** budget report: 
+1. From the **Budgets Reports** dashboard, click on the three dots next to the **Weekly Budgets** budget report, and click **Delete**: 
 ![Images/AWSTeardown1.png](Images/AWSTeardown1.png)
 
 2. You can see there are no budget reports:
@@ -200,7 +200,7 @@ We will delete the bugdet report we created in section 4.
 ### Delete a budget
 We will delete all three budgets that were configured in sections 1,2 and 3.
 
-1. From the budgets homepage, click on the budget name **CostBudget1**:
+1. From the **Budgets** dashboard, click on the budget name **CostBudget1**:
 ![Images/AWSTeardown15.png](Images/AWSTeardown15.png)
 
 2. Click on the **3 dot menu** in the top right, select **Delete**:

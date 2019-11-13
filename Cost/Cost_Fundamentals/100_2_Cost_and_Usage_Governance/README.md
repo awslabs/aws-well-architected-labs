@@ -7,9 +7,8 @@ https://wellarchitectedlabs.com
 ![Images/AWSCostReadme.png](Images/AWSCostReadme.png)
 
 ## Goals
-- Create a Cost Optimization team to monitor usage and cost
 - Implement AWS Budgets to notify on usage and spend
-
+- Create an AWS Budget report to notice users every week on budget status
 
 ## Prerequisites
 - An AWS Account

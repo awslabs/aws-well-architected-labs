@@ -2940,6 +2940,7 @@
 <h2 id="7-create-a-cost-optimization-team">7. Create a cost optimization team <a name="create_team"></a></h2>
 <p>We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.</p>
+<p><strong>NOTE</strong>: Review the IAM policy below with your security team, the permissions below are required for completion of the Fundamentals series of labs. Verify if they need to be changed for your organization.</p>
 <p>Log into the console as an IAM user with the required permissions, as per:
 - <a href="Code/IAM_policy.html">./Code/IAM_policy</a> IAM policy required for this lab</p>
 <h3 id="71-create-an-iam-policy-for-the-team">7.1 Create an IAM policy for the team</h3>
@@ -2952,24 +2953,74 @@ This team will then be able to manage the organizations cost and usage, and star
 <img alt="Images/AWSIAM3.png" src="Images/AWSIAM3.png" /></p>
 <p>4 - Select the <strong>JSON</strong> tab:
 <img alt="Images/AWSIAM4.png" src="Images/AWSIAM4.png" /></p>
-<p>5 - Copy &amp; paste the following policy into the the field:
+<p>5 - <strong>Edit</strong> the policy below, replacing the billing bucket with what you previously configured. Then Copy &amp; paste the following policy into the field:
 <strong>NOTE</strong>: Ensure you copy the entire policy, everything including the first '{' and last '}'</p>
 <pre><code>{
-    &quot;Version&quot;: &quot;2012-10-17&quot;,
-    &quot;Statement&quot;: [
-        {
-            &quot;Sid&quot;: &quot;VisualEditor0&quot;,
-            &quot;Effect&quot;: &quot;Allow&quot;,
-            &quot;Action&quot;: [
-                &quot;aws-portal:ViewUsage&quot;,
-                &quot;aws-portal:ModifyBilling&quot;,
-                &quot;aws-portal:ViewBilling&quot;,
-                &quot;aws-portal:ViewAccount&quot;,
-                &quot;budgets:*&quot;
-            ],
-            &quot;Resource&quot;: &quot;*&quot;
-        }
-    ]
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;VisualEditor0&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;s3:GetObject&quot;,
+        &quot;s3:ListBucket&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:s3:::-billing bucket-&quot;,
+        &quot;arn:aws:s3:::-billing bucket-/*&quot;
+      ]
+    },
+    {
+      &quot;Sid&quot;: &quot;VisualEditor1&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iam:GetPolicyVersion&quot;,
+        &quot;quicksight:CreateAdmin&quot;,
+        &quot;iam:DeletePolicy&quot;,
+        &quot;iam:CreateRole&quot;,
+        &quot;iam:AttachRolePolicy&quot;,
+        &quot;aws-portal:ViewUsage&quot;,
+        &quot;iam:GetGroup&quot;,
+        &quot;aws-portal:ModifyBilling&quot;,
+        &quot;iam:DetachRolePolicy&quot;,
+        &quot;iam:ListAttachedRolePolicies&quot;,
+        &quot;ds:UnauthorizeApplication&quot;,
+        &quot;aws-portal:ViewBilling&quot;,
+        &quot;iam:DetachGroupPolicy&quot;,
+        &quot;iam:ListAttachedGroupPolicies&quot;,
+        &quot;iam:CreatePolicyVersion&quot;,
+        &quot;ds:CheckAlias&quot;,
+        &quot;quicksight:Subscribe&quot;,
+        &quot;ds:DeleteDirectory&quot;,
+        &quot;iam:ListPolicies&quot;,
+        &quot;iam:GetRole&quot;,
+        &quot;ds:CreateIdentityPoolDirectory&quot;,
+        &quot;ds:DescribeTrusts&quot;,
+        &quot;iam:GetPolicy&quot;,
+        &quot;iam:ListGroupPolicies&quot;,
+        &quot;aws-portal:ViewAccount&quot;,
+        &quot;iam:ListEntitiesForPolicy&quot;,
+        &quot;iam:AttachUserPolicy&quot;,
+        &quot;iam:ListRoles&quot;,
+        &quot;iam:DeleteRole&quot;,
+        &quot;budgets:*&quot;,
+        &quot;iam:CreatePolicy&quot;,
+        &quot;quicksight:CreateUser&quot;,
+        &quot;s3:ListAllMyBuckets&quot;,
+        &quot;iam:ListPolicyVersions&quot;,
+        &quot;iam:AttachGroupPolicy&quot;,
+        &quot;quicksight:Unsubscribe&quot;,
+        &quot;iam:ListAccountAliases&quot;,
+        &quot;ds:DescribeDirectories&quot;,
+        &quot;iam:ListGroups&quot;,
+        &quot;iam:GetGroupPolicy&quot;,
+        &quot;ds:CreateAlias&quot;,
+        &quot;ds:AuthorizeApplication&quot;,
+        &quot;iam:DeletePolicyVersion&quot;
+      ],
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
 }
 </code></pre>
 

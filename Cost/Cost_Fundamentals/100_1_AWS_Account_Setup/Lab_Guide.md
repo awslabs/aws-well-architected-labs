@@ -220,6 +220,8 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
 
+**NOTE**: Review the IAM policy below with your security team, the permissions below are required for completion of the Fundamentals series of labs. Verify if they need to be changed for your organization.
+
 Log into the console as an IAM user with the required permissions, as per:
 - [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
       
@@ -238,27 +240,78 @@ This provides access to allow the cost optimization team to perform their work, 
 4 - Select the **JSON** tab:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
   
-5 - Copy & paste the following policy into the the field:
+5 - **Edit** the policy below, replacing the billing bucket with what you previously configured. Then Copy & paste the following policy into the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "aws-portal:ViewUsage",
-                "aws-portal:ModifyBilling",
-                "aws-portal:ViewBilling",
-                "aws-portal:ViewAccount",
-                "budgets:*"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::-billing bucket-",
+        "arn:aws:s3:::-billing bucket-/*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetPolicyVersion",
+        "quicksight:CreateAdmin",
+        "iam:DeletePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "aws-portal:ViewUsage",
+        "iam:GetGroup",
+        "aws-portal:ModifyBilling",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "ds:UnauthorizeApplication",
+        "aws-portal:ViewBilling",
+        "iam:DetachGroupPolicy",
+        "iam:ListAttachedGroupPolicies",
+        "iam:CreatePolicyVersion",
+        "ds:CheckAlias",
+        "quicksight:Subscribe",
+        "ds:DeleteDirectory",
+        "iam:ListPolicies",
+        "iam:GetRole",
+        "ds:CreateIdentityPoolDirectory",
+        "ds:DescribeTrusts",
+        "iam:GetPolicy",
+        "iam:ListGroupPolicies",
+        "aws-portal:ViewAccount",
+        "iam:ListEntitiesForPolicy",
+        "iam:AttachUserPolicy",
+        "iam:ListRoles",
+        "iam:DeleteRole",
+        "budgets:*",
+        "iam:CreatePolicy",
+        "quicksight:CreateUser",
+        "s3:ListAllMyBuckets",
+        "iam:ListPolicyVersions",
+        "iam:AttachGroupPolicy",
+        "quicksight:Unsubscribe",
+        "iam:ListAccountAliases",
+        "ds:DescribeDirectories",
+        "iam:ListGroups",
+        "iam:GetGroupPolicy",
+        "ds:CreateAlias",
+        "ds:AuthorizeApplication",
+        "iam:DeletePolicyVersion"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
 ```
+
 6 - Click **Review policy**: 
 ![Images/AWSIAM5.png](Images/AWSIAM5.png)
 
