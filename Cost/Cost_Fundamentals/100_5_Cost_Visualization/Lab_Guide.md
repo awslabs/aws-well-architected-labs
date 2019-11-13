@@ -11,12 +11,12 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 # Table of Contents
 1. [View your cost and usage by service](#cost_usage_service)
 2. [View your cost and usage by account](#cost_usage_account)
-3. [View your Reserved Instance coverage](#RI_coverage)
-4. [Create a custom EC2 report](#custom_ec2)
-5. [Tear down](#tear_down)
-6. [Rate this Lab](#rate_lab) 
-
-
+3. [View your Savings Plan coverage](#SP_coverage)
+4. [View your Elasticity](#Elasticity) 
+5. [View your Reserved Instance coverage](#RI_coverage)
+6. [Create a custom EC2 report](#custom_ec2)
+7. [Tear down](#tear_down)
+8. [Rate this Lab](#rate_lab) 
 
 
 ## 1. View your cost and usage by service <a name="cost_usage_service"></a>
@@ -46,19 +46,19 @@ AWS Cost Explorer is a free built in tool to that lets you dive deeper into your
 8. The bar graph is difficult to read, so we will switch to a line graph. Click on the **Bar** dropdown, then select **Line**:
 ![Images/AWSCostService7.png](Images/AWSCostService7.png)
 
-9. This is the same data with daily granularity and shows trends much more clearly. There are monthly peaks - these are monthly recurring reservation fees from Reserved Instances (Green line):
+9. This is the same data with daily granularity and shows trends much more clearly. There are monthly peaks - these are monthly recurring reservation fees from Reserved Instances (Purple line):
 ![Images/AWSCostService8.png](Images/AWSCostService8.png)
 
 10. We will remove the RI recurring fees. Click on the **Charge Type** filter on the right, click the checkbox next to **Recurring reservation fee**, select **Exlude only** to remove the data. Then click **Apply filters**:
 ![Images/AWSCostService9.png](Images/AWSCostService9.png)
 
-11. We have now excluded the monthly recurring fees and the peaks have been removed. We can see the largest cost for our usage during this period is Glue:
+11. We have now excluded the monthly recurring fees and the peaks have been removed. We can see the largest cost for our usage during this period is EC2-Instances:
 ![Images/AWSCostService10.png](Images/AWSCostService10.png)
 
-12. We will remove the Glue service to show the other services with better clarity. Click on the **Service** filter from the right, click the checkbox next to **Glue**, select **Exclude only**, and click **Apply filters**:
+12. We will remove the EC2 service to show the other services with better clarity. Click on the **Service** filter from the right, click the checkbox next to **EC2-Instances**, select **Exclude only**, and click **Apply filters**:
 ![Images/AWSCostService11.png](Images/AWSCostService11.png)
 
-13. Glue has now been excluded, and all the other services can been seen easily:
+13. EC2-Instances has now been excluded, and all the other services can been seen easily:
 ![Images/AWSCostService12.png](Images/AWSCostService12.png)
 
 
@@ -85,28 +85,68 @@ We will now view usage by account. This helps to highlight where the costs and u
 ![Images/AWSCostAccount4.png](Images/AWSCostAccount4.png)
 
 6. On the right click on **Linked Account**, select the checkbox next to the account we want to focus on, then click **Include only** and **Apply filters**:
-![Images/AWSCostAccount6.png](Images/AWSCostAccount6.png)
+![Images/AWSCostAccount5.png](Images/AWSCostAccount5.png)
 
 7. You can now see this one accounts usage: 
-![Images/AWSCostAccount7.png](Images/AWSCostAccount7.png)
+![Images/AWSCostAccount6.png](Images/AWSCostAccount6.png)
 
-8. Lets see the services breakdown for this account, click on **Service** to group by services:
- ![Images/AWSCostAccount8.png](Images/AWSCostAccount8.png)
+8. Lets see the services breakdown for this account, click on **Service** to group by services and change it to a **line** graph:
+ ![Images/AWSCostAccount7.png](Images/AWSCostAccount7.png)
 
-8. You can see the service breakdown for this account. Lets see the instance type breakdown for this account, click on **Instance Type**:
+9. You can see the service breakdown for this account. Lets see the instance type breakdown for this account, click on **Instance Type** and change it to a **line** graph:
+![Images/AWSCostAccount8.png](Images/AWSCostAccount8.png)
+
+10. You can see the instance type breakdown for this account. Lets see the usage type breakdown for this account, click on **Usage Type** and change it to a **line** graph:
 ![Images/AWSCostAccount9.png](Images/AWSCostAccount9.png)
 
-9. You can see the instance type breakdown for this account. Lets see the usage type breakdown for this account, click on **Usage Type**:
-![Images/AWSCostAccount10.png](Images/AWSCostAccount10.png)
-
-10. Here is the usage type breakdown:
+11. Here is the usage type breakdown:
 ![Images/AWSCostAccount11.png](Images/AWSCostAccount11.png)
 
 
 You have now viewed the costs by account and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.
 
 
-## 3. View your Reserved Instance coverage <a name="RI_coverage"></a>
+
+## 3. View your Savings Plan coverage <a name="SP_coverage"></a>
+To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of running instances covered by RI's, here is how you can check your coverage.
+
+1. In Cost Explorer, click on **Saved reports** on the left:
+![Images/AWSSP_coverage1.png](Images/AWSSP_coverage1.png)
+
+2. Click on **Coverage report**:
+![Images/AWSSP_coverage2.png](Images/AWSSP_coverage2.png)
+
+3. You can see the coverage is 0%:
+![Images/AWSSP_coverage3.png](Images/AWSSP_coverage3.png)
+
+4. Scroll down to the table, click on the arrow next to **On-demand spend** to sort from the largest spend to the lowest. This helps show your opportunity for cost savings:
+![Images/AWSSP_coverage4.png](Images/AWSSP_coverage4.png)
+
+
+## 4. View your Elasticity <a name="Elasticity"></a>
+**NOTE**: This exercise requires you have enabled hourly granularity within Cost Explorer, this can be done by following the instructions here - [AWS Account Setup](../100_1_AWS_Account_Setup/Lab_Guide.md), Step5 - Enable Cost Explorer.
+There are additional costs to enable this granularity.
+
+A key part of cost optimization is ensuring that your systems scale with your usage. This visualization will show how your systems operate over time.
+
+1. Click on **Cost Explorer** to go back to the default view:
+![Images/AWSElasticity1.png](Images/AWSElasticity1.png)
+
+2. Click the **down arrow** to change the period, select **14D** and click **Apply**:
+![Images/AWSElasticity2.png](Images/AWSElasticity2.png)
+
+3. Click on **Monthly** and change the granularity to **Hourly**:
+![Images/AWSElasticity3.png](Images/AWSElasticity3.png)
+
+4. Click on **Bar**, then select **Line**:
+![Images/AWSElasticity4.png](Images/AWSElasticity4.png)
+
+5. You will now have in depth insight to how your environment is operating. You can see in this example the EC2 Instances scaling every day, you can see a period of large ELB usage, and EC2-Other, which is data transfer.
+![Images/AWSElasticity5.png](Images/AWSElasticity5.png)
+
+
+
+## 5. View your Reserved Instance coverage <a name="RI_coverage"></a>
 To ensure you are paying the lowest prices for your resources, a high coverage of Reserved Instances (RI's) is required. A typical goal is to aim for approximately 80% of running instances covered by RI's, here is how you can check your coverage.
 
 1. In Cost Explorer, click on **Saved reports** on the left:
@@ -128,7 +168,7 @@ To ensure you are paying the lowest prices for your resources, a high coverage o
 You have now viewed your RI coverage, and have insight on where to increase your coverage.
 
 
-## 4. Create custom EC2 reports <a name="custom_ec2"></a>
+## 6. Create custom EC2 reports <a name="custom_ec2"></a>
 We will now create some custom EC2 reports, which will help to show ongoing costs related to EC2 instances and their associated usage. 
 
 1. From the left menu click **Explore**, and click **Cost & Usage**:
@@ -171,9 +211,7 @@ We will now create some custom EC2 reports, which will help to show ongoing cost
 ![Images/AWSCustomEC213.png](Images/AWSCustomEC213.png)
 
 
-
-
-## 5. Tear down <a name="tear_down"></a>
+## 7. Tear down <a name="tear_down"></a>
 We will delete both custom reports that were created.
 
 1. Click on **Saved reports** on the left menu:
@@ -189,8 +227,8 @@ We will delete both custom reports that were created.
 ![Images/AWSTearDown3.png](Images/AWSTearDown3.png)
 
 
-## 6. Rate this lab<a name="rate_lab"></a> 
-[![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_5star) 
+## 8. Rate this lab<a name="rate_lab"></a> 
+[![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_1star) [![2 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_2star) [![3 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_3star) [![4 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_4star) [![5 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_5star) 
 
 
 
