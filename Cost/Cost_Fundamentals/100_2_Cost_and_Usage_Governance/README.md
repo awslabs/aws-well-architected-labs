@@ -19,10 +19,17 @@ https://wellarchitectedlabs.com
 ## Permissions required
 - Access to the Cost Optimization team created in [AWS Account Setup](../100_1_AWS_Account_Setup/README.md)
 
+## Costs
+- https://aws.amazon.com/aws-cost-management/pricing/
+- Less than $1 per month if the tear down is not performed
+
+## Time to complete
+- The lab should take approximately 15 minutes to complete
 
 <BR>
 
-## [Start the Lab!](Lab_Guide.md)
+[![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
+
 
 <BR>
 <BR> 
@@ -31,13 +38,18 @@ https://wellarchitectedlabs.com
 - [ ] Create an AWS budget to notify on forecasted account cost
 - [ ] Create an AWS budget to notify on actual cost of EC2
 - [ ] Create an AWS budget to notify on RI Coverage
+- [ ] Create a weekly AWS budget report
 
 ***
+
+----------
+
+
 
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
