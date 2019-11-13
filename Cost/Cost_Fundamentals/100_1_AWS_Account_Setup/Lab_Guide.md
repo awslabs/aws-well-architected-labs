@@ -199,6 +199,17 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, understa
 4. You will receive notification that Cost Explorer has been enabled, and data will be populated:
 ![Images/AWSExplorer3.png](Images/AWSExplorer3.png)
 
+5. Go into **Cost Explorer**:
+![Images/AWSExplorer4.png](Images/AWSExplorer4.png)
+
+6. Click **Settings** in the top right:
+![Images/AWSExplorer5.png](Images/AWSExplorer5.png)
+
+7. Select **Hourly and Resource Level Data**, and click **Save**:
+![Images/AWSExplorer6.png](Images/AWSExplorer6.png)
+
+**NOTE**: This will incur costs depending on the number of EC2 resources you are running. 
+
 
 ## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 

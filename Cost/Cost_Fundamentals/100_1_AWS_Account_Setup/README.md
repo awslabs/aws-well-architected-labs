@@ -23,12 +23,23 @@ https://wellarchitectedlabs.com
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 
+## Costs
+- https://aws.amazon.com/aws-cost-management/pricing/
+- Variable costs will be incurred
+- Cost Explorer: $0.01 per 1,000 usage records
+- S3: Storage of CUR file, refer to S3 pricing https://aws.amazon.com/s3/pricing/ 
+
+
+## Time to complete
+- The lab should take approximately 15 minutes to complete
+
 <BR>
 
 [![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
 
 <BR>
 <BR> 
+
 
 
 ## Best Practice Checklist
