@@ -86,6 +86,8 @@ Best practice is to have a seperate security account for your data bunker. This 
 ### 3. (Highly reccomended) Ensure cross account access is read-only
 These instructions outline how to modify the cross account access created in step 1 is read-only. As with step 1, this will depend on how your organization's policies. The key is that our security team are not able to modify data in our data bunker. Human access should only be in a breal-glass emergency situation.
 
+**Note:** Following these steps will prevent *OrganizationAccountAccessRole* from making further changes to this account. Ensure other services such as Amazon Guard Duty and AWS Security Hub are configured before proceeding. If further changes are needed you will have to reset the root credentials for the securtity account.
+
 1. Navigate to **IAM** and select **Roles**
 2. Select the organizations account access role for your orgainzation: Note: the default is *OrganizationAccountAccessRole*
 3. Press **Attach Policy** and attach the AWS managed *ReadOnlyAccess* Policy
