@@ -2696,6 +2696,8 @@
 <ol>
 <li><a href="#cost_usage_service">View your cost and usage by service</a></li>
 <li><a href="#cost_usage_account">View your cost and usage by account</a></li>
+<li><a href="#SP_coverage">View your Savings Plan coverage</a></li>
+<li><a href="#Elasticity">View your Elasticity</a> </li>
 <li><a href="#RI_coverage">View your Reserved Instance coverage</a></li>
 <li><a href="#custom_ec2">Create a custom EC2 report</a></li>
 <li><a href="#tear_down">Tear down</a></li>
@@ -2737,7 +2739,7 @@
 <img alt="Images/AWSCostService7.png" src="Images/AWSCostService7.png" /></p>
 </li>
 <li>
-<p>This is the same data with daily granularity and shows trends much more clearly. There are monthly peaks - these are monthly recurring reservation fees from Reserved Instances (Green line):
+<p>This is the same data with daily granularity and shows trends much more clearly. There are monthly peaks - these are monthly recurring reservation fees from Reserved Instances (Purple line):
 <img alt="Images/AWSCostService8.png" src="Images/AWSCostService8.png" /></p>
 </li>
 <li>
@@ -2745,15 +2747,15 @@
 <img alt="Images/AWSCostService9.png" src="Images/AWSCostService9.png" /></p>
 </li>
 <li>
-<p>We have now excluded the monthly recurring fees and the peaks have been removed. We can see the largest cost for our usage during this period is Glue:
+<p>We have now excluded the monthly recurring fees and the peaks have been removed. We can see the largest cost for our usage during this period is EC2-Instances:
 <img alt="Images/AWSCostService10.png" src="Images/AWSCostService10.png" /></p>
 </li>
 <li>
-<p>We will remove the Glue service to show the other services with better clarity. Click on the <strong>Service</strong> filter from the right, click the checkbox next to <strong>Glue</strong>, select <strong>Exclude only</strong>, and click <strong>Apply filters</strong>:
+<p>We will remove the EC2 service to show the other services with better clarity. Click on the <strong>Service</strong> filter from the right, click the checkbox next to <strong>EC2-Instances</strong>, select <strong>Exclude only</strong>, and click <strong>Apply filters</strong>:
 <img alt="Images/AWSCostService11.png" src="Images/AWSCostService11.png" /></p>
 </li>
 <li>
-<p>Glue has now been excluded, and all the other services can been seen easily:
+<p>EC2-Instances has now been excluded, and all the other services can been seen easily:
 <img alt="Images/AWSCostService12.png" src="Images/AWSCostService12.png" /></p>
 </li>
 </ol>
@@ -2783,23 +2785,23 @@
 </li>
 <li>
 <p>On the right click on <strong>Linked Account</strong>, select the checkbox next to the account we want to focus on, then click <strong>Include only</strong> and <strong>Apply filters</strong>:
-<img alt="Images/AWSCostAccount6.png" src="Images/AWSCostAccount6.png" /></p>
+<img alt="Images/AWSCostAccount5.png" src="Images/AWSCostAccount5.png" /></p>
 </li>
 <li>
 <p>You can now see this one accounts usage: 
-<img alt="Images/AWSCostAccount7.png" src="Images/AWSCostAccount7.png" /></p>
+<img alt="Images/AWSCostAccount6.png" src="Images/AWSCostAccount6.png" /></p>
 </li>
 <li>
-<p>Lets see the services breakdown for this account, click on <strong>Service</strong> to group by services:
- <img alt="Images/AWSCostAccount8.png" src="Images/AWSCostAccount8.png" /></p>
+<p>Lets see the services breakdown for this account, click on <strong>Service</strong> to group by services and change it to a <strong>line</strong> graph:
+ <img alt="Images/AWSCostAccount7.png" src="Images/AWSCostAccount7.png" /></p>
 </li>
 <li>
-<p>You can see the service breakdown for this account. Lets see the instance type breakdown for this account, click on <strong>Instance Type</strong>:
+<p>You can see the service breakdown for this account. Lets see the instance type breakdown for this account, click on <strong>Instance Type</strong> and change it to a <strong>line</strong> graph:
+<img alt="Images/AWSCostAccount8.png" src="Images/AWSCostAccount8.png" /></p>
+</li>
+<li>
+<p>You can see the instance type breakdown for this account. Lets see the usage type breakdown for this account, click on <strong>Usage Type</strong> and change it to a <strong>line</strong> graph:
 <img alt="Images/AWSCostAccount9.png" src="Images/AWSCostAccount9.png" /></p>
-</li>
-<li>
-<p>You can see the instance type breakdown for this account. Lets see the usage type breakdown for this account, click on <strong>Usage Type</strong>:
-<img alt="Images/AWSCostAccount10.png" src="Images/AWSCostAccount10.png" /></p>
 </li>
 <li>
 <p>Here is the usage type breakdown:
@@ -2807,7 +2809,53 @@
 </li>
 </ol>
 <p>You have now viewed the costs by account and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.</p>
-<h2 id="3-view-your-reserved-instance-coverage">3. View your Reserved Instance coverage <a name="RI_coverage"></a></h2>
+<h2 id="3-view-your-savings-plan-coverage">3. View your Savings Plan coverage <a name="SP_coverage"></a></h2>
+<p>To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of running instances covered by RI's, here is how you can check your coverage.</p>
+<ol>
+<li>
+<p>In Cost Explorer, click on <strong>Saved reports</strong> on the left:
+<img alt="Images/AWSSP_coverage1.png" src="Images/AWSSP_coverage1.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Coverage report</strong>:
+<img alt="Images/AWSSP_coverage2.png" src="Images/AWSSP_coverage2.png" /></p>
+</li>
+<li>
+<p>You can see the coverage is 0%:
+<img alt="Images/AWSSP_coverage3.png" src="Images/AWSSP_coverage3.png" /></p>
+</li>
+<li>
+<p>Scroll down to the table, click on the arrow next to <strong>On-demand spend</strong> to sort from the largest spend to the lowest. This helps show your opportunity for cost savings:
+<img alt="Images/AWSSP_coverage4.png" src="Images/AWSSP_coverage4.png" /></p>
+</li>
+</ol>
+<h2 id="4-view-your-elasticity">4. View your Elasticity <a name="Elasticity"></a></h2>
+<p><strong>NOTE</strong>: This exercise requires you have enabled hourly granularity within Cost Explorer, this can be done by following the instructions here - <a href="../100_1_AWS_Account_Setup/Lab_Guide.html">AWS Account Setup</a>, Step5 - Enable Cost Explorer.
+There are additional costs to enable this granularity.</p>
+<p>A key part of cost optimization is ensuring that your systems scale with your usage. This visualization will show how your systems operate over time.</p>
+<ol>
+<li>
+<p>Click on <strong>Cost Explorer</strong> to go back to the default view:
+<img alt="Images/AWSElasticity1.png" src="Images/AWSElasticity1.png" /></p>
+</li>
+<li>
+<p>Click the <strong>down arrow</strong> to change the period, select <strong>14D</strong> and click <strong>Apply</strong>:
+<img alt="Images/AWSElasticity2.png" src="Images/AWSElasticity2.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Monthly</strong> and change the granularity to <strong>Hourly</strong>:
+<img alt="Images/AWSElasticity3.png" src="Images/AWSElasticity3.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Bar</strong>, then select <strong>Line</strong>:
+<img alt="Images/AWSElasticity4.png" src="Images/AWSElasticity4.png" /></p>
+</li>
+<li>
+<p>You will now have in depth insight to how your environment is operating. You can see in this example the EC2 Instances scaling every day, you can see a period of large ELB usage, and EC2-Other, which is data transfer.
+<img alt="Images/AWSElasticity5.png" src="Images/AWSElasticity5.png" /></p>
+</li>
+</ol>
+<h2 id="5-view-your-reserved-instance-coverage">5. View your Reserved Instance coverage <a name="RI_coverage"></a></h2>
 <p>To ensure you are paying the lowest prices for your resources, a high coverage of Reserved Instances (RI's) is required. A typical goal is to aim for approximately 80% of running instances covered by RI's, here is how you can check your coverage.</p>
 <ol>
 <li>
@@ -2832,7 +2880,7 @@
 </li>
 </ol>
 <p>You have now viewed your RI coverage, and have insight on where to increase your coverage.</p>
-<h2 id="4-create-custom-ec2-reports">4. Create custom EC2 reports <a name="custom_ec2"></a></h2>
+<h2 id="6-create-custom-ec2-reports">6. Create custom EC2 reports <a name="custom_ec2"></a></h2>
 <p>We will now create some custom EC2 reports, which will help to show ongoing costs related to EC2 instances and their associated usage. </p>
 <ol>
 <li>
@@ -2888,7 +2936,7 @@
 <img alt="Images/AWSCustomEC213.png" src="Images/AWSCustomEC213.png" /></p>
 </li>
 </ol>
-<h2 id="5-tear-down">5. Tear down <a name="tear_down"></a></h2>
+<h2 id="7-tear-down">7. Tear down <a name="tear_down"></a></h2>
 <p>We will delete both custom reports that were created.</p>
 <ol>
 <li>
@@ -2908,8 +2956,8 @@
 <img alt="Images/AWSTearDown3.png" src="Images/AWSTearDown3.png" /></p>
 </li>
 </ol>
-<h2 id="6-rate-this-lab">6. Rate this lab<a name="rate_lab"></a></h2>
-<p><a href="https://wellarchitectedlabs.com/Cost_100_5_1star"><img alt="1 Star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_2star"><img alt="2 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_3star"><img alt="3 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_4star"><img alt="4 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_5star"><img alt="5 star" src="Images/star.png" /></a> </p>
+<h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
+<p><a href="https://wellarchitectedlabs.com/Cost_100_5_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_5_5star"><img alt="5 star" src="../../../common/images/star.png" /></a> </p>
                 
                   
                 

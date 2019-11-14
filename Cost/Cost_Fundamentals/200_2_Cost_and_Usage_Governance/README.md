@@ -7,7 +7,6 @@ https://wellarchitectedlabs.com
 ![Images/AWSCostReadme.png](Images/AWSCostReadme.png)
 
 ## Goals
-- Create a Cost Optimization team to monitor usage, cost, and enforce policies
 - Implement IAM Policies to control usage
 
 
@@ -19,16 +18,24 @@ https://wellarchitectedlabs.com
 ## Permissions required
 - [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
- 
+
+
+## Costs
+- https://aws.amazon.com/iam/faqs/?nc=sn&loc=5
+- Costs will be less than $1 if all steps including the teardown are performed
+
+
+## Time to complete
+- The lab should take approximately 15 minutes to complete
+
 <BR>
 
-## [Start the Lab!](Lab_Guide.md)
+[![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
 
 <BR>
 <BR> 
 
 ## Best Practice Checklist 
-- [ ] Create a cost optimizaion team, to manage cost optimization across your organization
 - [ ] Create an IAM Policy to restrict EC2 usage by region
 - [ ] Create an IAM Policy to restirct EC2 usage by family
 - [ ] Extend an IAM Policy to restrict EC2 usage by instance size
@@ -39,7 +46,7 @@ https://wellarchitectedlabs.com
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 

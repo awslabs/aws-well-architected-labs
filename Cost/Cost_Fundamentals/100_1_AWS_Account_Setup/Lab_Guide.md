@@ -199,6 +199,17 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, understa
 4. You will receive notification that Cost Explorer has been enabled, and data will be populated:
 ![Images/AWSExplorer3.png](Images/AWSExplorer3.png)
 
+5. Go into **Cost Explorer**:
+![Images/AWSExplorer4.png](Images/AWSExplorer4.png)
+
+6. Click **Settings** in the top right:
+![Images/AWSExplorer5.png](Images/AWSExplorer5.png)
+
+7. Select **Hourly and Resource Level Data**, and click **Save**:
+![Images/AWSExplorer6.png](Images/AWSExplorer6.png)
+
+**NOTE**: This will incur costs depending on the number of EC2 resources you are running. 
+
 
 ## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 
@@ -220,6 +231,8 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
 
+**NOTE**: Review the IAM policy below with your security team, the permissions below are required for completion of the Fundamentals series of labs. Verify if they need to be changed for your organization.
+
 Log into the console as an IAM user with the required permissions, as per:
 - [./Code/IAM_policy](./Code/IAM_policy.md) IAM policy required for this lab
       
@@ -238,27 +251,78 @@ This provides access to allow the cost optimization team to perform their work, 
 4 - Select the **JSON** tab:
 ![Images/AWSIAM4.png](Images/AWSIAM4.png)
   
-5 - Copy & paste the following policy into the the field:
+5 - **Edit** the policy below, replacing the billing bucket with what you previously configured. Then Copy & paste the following policy into the field:
 **NOTE**: Ensure you copy the entire policy, everything including the first '{' and last '}'
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "aws-portal:ViewUsage",
-                "aws-portal:ModifyBilling",
-                "aws-portal:ViewBilling",
-                "aws-portal:ViewAccount",
-                "budgets:*"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::-billing bucket-",
+        "arn:aws:s3:::-billing bucket-/*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetPolicyVersion",
+        "quicksight:CreateAdmin",
+        "iam:DeletePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "aws-portal:ViewUsage",
+        "iam:GetGroup",
+        "aws-portal:ModifyBilling",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "ds:UnauthorizeApplication",
+        "aws-portal:ViewBilling",
+        "iam:DetachGroupPolicy",
+        "iam:ListAttachedGroupPolicies",
+        "iam:CreatePolicyVersion",
+        "ds:CheckAlias",
+        "quicksight:Subscribe",
+        "ds:DeleteDirectory",
+        "iam:ListPolicies",
+        "iam:GetRole",
+        "ds:CreateIdentityPoolDirectory",
+        "ds:DescribeTrusts",
+        "iam:GetPolicy",
+        "iam:ListGroupPolicies",
+        "aws-portal:ViewAccount",
+        "iam:ListEntitiesForPolicy",
+        "iam:AttachUserPolicy",
+        "iam:ListRoles",
+        "iam:DeleteRole",
+        "budgets:*",
+        "iam:CreatePolicy",
+        "quicksight:CreateUser",
+        "s3:ListAllMyBuckets",
+        "iam:ListPolicyVersions",
+        "iam:AttachGroupPolicy",
+        "quicksight:Unsubscribe",
+        "iam:ListAccountAliases",
+        "ds:DescribeDirectories",
+        "iam:ListGroups",
+        "iam:GetGroupPolicy",
+        "ds:CreateAlias",
+        "ds:AuthorizeApplication",
+        "iam:DeletePolicyVersion"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
 ```
+
 6 - Click **Review policy**: 
 ![Images/AWSIAM5.png](Images/AWSIAM5.png)
 
