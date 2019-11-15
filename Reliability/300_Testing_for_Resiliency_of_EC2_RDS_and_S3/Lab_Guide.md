@@ -119,7 +119,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
       |Time until you can start...|Single region|Multi region|
       |---|---|---|
       |EC2 failure injection test|15-20 min|15-20 min|
-      |RDS and AZ failure injection tests|15-20 min|40-45 min|
+      |RDS and AZ failure injection tests|20-25 min|40-45 min|
       |Multi-region failure injection tests |NA|50-55 min|
       |Total deployment time|20-25 min|50-55 min|
 
@@ -154,7 +154,7 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.
 
-You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C# instructions for these are also provided.
+You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C#, then instructions for these are also provided.
 
 ### 2.1 Setup AWS credentials and configuration
 
@@ -376,8 +376,9 @@ This failure injection will simulate a critical failure of the Amazon RDS DB ins
 1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
 
 1. From the RDS dashboard
-      * Click on "DB Instances (1/40)"
+      * Click on "DB Instances (_n_/40)"
       * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
+      * If running the **multi-region** deployment, select the DB instance with Role=**Master**
       * Select the **Configuration** tab
 
 1. Look at the configured values. Note the following:
