@@ -116,6 +116,10 @@
                 "ec2:DescribeSubnets",
                 "ec2:DescribeVpcs",
                 "ec2:ModifyVpcAttribute",
+                "ec2:DeleteInternetGateway",
+                "ec2:releaseAddress",
+                "ec2:DeleteVpc",
+                "ec2:DeleteNetworkInterface",
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
@@ -523,7 +527,7 @@
       "Type": "AWS::IAM::Role",
       "DeletionPolicy" : "Retain",
       "Properties": {
-          "RoleName": "LambdaCustomResourceRole",
+          "RoleName": { "Fn::Sub" : "${AWS::AccountId}-LambdaCustomResourceRole"},
           "AssumeRolePolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [

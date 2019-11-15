@@ -488,7 +488,7 @@
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
                                 },
                                 {
-                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-LambdaCustomResourceRole"
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
@@ -534,7 +534,7 @@
             "Handler": "index.handler",
             "Runtime": "python3.6",
             "Timeout": 30,
-            "Role": {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole"}, 
+            "Role": {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-LambdaCustomResourceRole"}, 
             "Code": {
                 "ZipFile": {
                     "Fn::Join": [
