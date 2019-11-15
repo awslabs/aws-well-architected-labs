@@ -2,9 +2,10 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Creates an RDS MySQL 5.7 instance",
   "Parameters": {
-    "WorkshopName": {
-        "Type": "String"
-      },
+      "WorkshopName": {
+          "Type": "String"
+        },
+
       "DBSubnetIds": {
           "Description": "Comma separated list of private subnet ids",
           "Type": "List<AWS::EC2::Subnet::Id>"
@@ -17,6 +18,7 @@
           "Description": "DB Instance Class",
           "Type": "String",
           "AllowedValues": [
+              "db.t2.micro",
               "db.t3.micro",
               "db.t3.small",
               "db.t3.medium",
@@ -30,7 +32,7 @@
               "db.m5.12xlarge",
               "db.m5.24xlarge"
           ],
-          "Default": "db.t3.large",
+          "Default": "db.t2.micro",
           "ConstraintDescription": "must select a valid database instance type."
       },
       "DBUser": {
@@ -41,7 +43,19 @@
           "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
           "Default": "admin",
           "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
-      }
+      },
+
+      "DBMultiAZ" : {
+        "Description" : "whether this RDS DB is multi-AZ or not",
+        "Type" : "String",
+        "AllowedValues": [
+          "true",
+          "false"
+        ],
+        "Default": "false"
+
+    }
+
   },
   "Resources": {
     "DBSubnetGroup": {
@@ -61,8 +75,11 @@
     },
     "DB": {
         "Type": "AWS::RDS::DBInstance",
+        "DeletionPolicy" : "Delete",
         "Properties": {
-            "MultiAZ": "true",
+            "MultiAZ": { 
+                "Ref" : "DBMultiAZ"
+            },
             "AllocatedStorage": "100",
             "BackupRetentionPeriod": "1",
             "CopyTagsToSnapshot": "True",

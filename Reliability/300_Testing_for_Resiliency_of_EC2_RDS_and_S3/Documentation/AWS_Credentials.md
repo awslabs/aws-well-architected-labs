@@ -94,10 +94,10 @@ If you used **Option 2** or **Option 3**, please follow these steps:
      * Edit the file `~/.aws/credentials`
      * The `default` profile will already be present.  Under it add an entry for `aws_session_token`
 
-           [default]
-           aws_access_key_id = <Your access key>
-           aws_secret_access_key = <Your secret key>
-           aws_session_token = <your session token> 
+            [default]
+            aws_access_key_id = <Your access key>
+            aws_secret_access_key = <Your secret key>
+            aws_session_token = <your session token> 
 
 ### Clear environment variables
 
