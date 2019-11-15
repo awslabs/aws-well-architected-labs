@@ -2880,6 +2880,7 @@
 </ol>
 <h3 id="3-highly-reccomended-ensure-cross-account-access-is-read-only">3. (Highly reccomended) Ensure cross account access is read-only</h3>
 <p>These instructions outline how to modify the cross account access created in step 1 is read-only. As with step 1, this will depend on how your organization's policies. The key is that our security team are not able to modify data in our data bunker. Human access should only be in a breal-glass emergency situation.</p>
+<p><strong>Note:</strong> Following these steps will prevent <em>OrganizationAccountAccessRole</em> from making further changes to this account. Ensure other services such as Amazon Guard Duty and AWS Security Hub are configured before proceeding. If further changes are needed you will have to reset the root credentials for the securtity account.</p>
 <ol>
 <li>Navigate to <strong>IAM</strong> and select <strong>Roles</strong></li>
 <li>Select the organizations account access role for your orgainzation: Note: the default is <em>OrganizationAccountAccessRole</em></li>

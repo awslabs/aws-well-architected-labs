@@ -76,7 +76,7 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 4 - Enter a **Crawler name** and click **Next**: 
 ![Images/Glue2.png](Images/Glue2.png)
 
-5 - Select **Select data stores**, and click **Next**:
+5 - Select **Data stores**, and click **Next**:
 ![Images/Glue3.png](Images/Glue3.png)
 
 6 - Ensure you select **Specified path in my account**, and click the **Folder icon**:
@@ -121,13 +121,28 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 18 - You will see the Crawler was successful and created a table:
 ![Images/Glue16.png](Images/Glue16.png)
 
-19 - Go to the **Athena** Console:
+19 - Click **Databases**
+![Images/Glue20.png](Images/Glue20.png)
+
+20 - Select the **CUR** database that Glue created:
+![Images/Glue21.png](Images/Glue21.png)
+
+21 - Click **Tables in cur**:
+![Images/Glue22.png](Images/Glue22.png)
+
+22 - Click the database name:
+![Images/Glue23.png](Images/Glue23.png)
+
+24 - Verify the **recordCount** is not zero, if it is - go back and verify the steps above: 
+![Images/Glue24.png](Images/Glue24.png)
+
+25 - Go to the **Athena** Console:
 ![Images/Glue17.png](Images/Glue17.png)
 
-20 - Select the drop down arrow, and click on the new database:
+26 - Select the drop down arrow, and click on the new database:
 ![Images/Glue18.png](Images/Glue18.png)
 
-21 - A new table called **workshop_c_u_r** will have been created, we will now load the partitions. Click on the **3 dot menu** and select **Load partitions**:
+27 - A new table called **workshop_c_u_r** will have been created, we will now load the partitions. Click on the **3 dot menu** and select **Load partitions**:
 ![Images/AWSBillingAnalysis_14.png](Images/AWSBillingAnalysis_14.png)
 
 22 - You will see it execute the command **MSCK REPAIR TABLE**, and in the results it will add partitions to the metastore for each month that has a billing file:

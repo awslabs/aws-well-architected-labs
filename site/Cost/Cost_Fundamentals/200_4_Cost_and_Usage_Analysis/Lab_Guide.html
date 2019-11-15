@@ -2754,7 +2754,7 @@ You may not have substantial or interesting usage, in this case there are sample
 <img alt="Images/Glue1.png" src="Images/Glue1.png" /></p>
 <p>4 - Enter a <strong>Crawler name</strong> and click <strong>Next</strong>: 
 <img alt="Images/Glue2.png" src="Images/Glue2.png" /></p>
-<p>5 - Select <strong>Select data stores</strong>, and click <strong>Next</strong>:
+<p>5 - Select <strong>Data stores</strong>, and click <strong>Next</strong>:
 <img alt="Images/Glue3.png" src="Images/Glue3.png" /></p>
 <p>6 - Ensure you select <strong>Specified path in my account</strong>, and click the <strong>Folder icon</strong>:
 <img alt="Images/Glue4.png" src="Images/Glue4.png" /></p>
@@ -2785,11 +2785,21 @@ You may not have substantial or interesting usage, in this case there are sample
 <img alt="Images/Glue15.png" src="Images/Glue15.png" /></p>
 <p>18 - You will see the Crawler was successful and created a table:
 <img alt="Images/Glue16.png" src="Images/Glue16.png" /></p>
-<p>19 - Go to the <strong>Athena</strong> Console:
+<p>19 - Click <strong>Databases</strong>
+<img alt="Images/Glue20.png" src="Images/Glue20.png" /></p>
+<p>20 - Select the <strong>CUR</strong> database that Glue created:
+<img alt="Images/Glue21.png" src="Images/Glue21.png" /></p>
+<p>21 - Click <strong>Tables in cur</strong>:
+<img alt="Images/Glue22.png" src="Images/Glue22.png" /></p>
+<p>22 - Click the database name:
+<img alt="Images/Glue23.png" src="Images/Glue23.png" /></p>
+<p>24 - Verify the <strong>recordCount</strong> is not zero, if it is - go back and verify the steps above: 
+<img alt="Images/Glue24.png" src="Images/Glue24.png" /></p>
+<p>25 - Go to the <strong>Athena</strong> Console:
 <img alt="Images/Glue17.png" src="Images/Glue17.png" /></p>
-<p>20 - Select the drop down arrow, and click on the new database:
+<p>26 - Select the drop down arrow, and click on the new database:
 <img alt="Images/Glue18.png" src="Images/Glue18.png" /></p>
-<p>21 - A new table called <strong>workshop_c_u_r</strong> will have been created, we will now load the partitions. Click on the <strong>3 dot menu</strong> and select <strong>Load partitions</strong>:
+<p>27 - A new table called <strong>workshop_c_u_r</strong> will have been created, we will now load the partitions. Click on the <strong>3 dot menu</strong> and select <strong>Load partitions</strong>:
 <img alt="Images/AWSBillingAnalysis_14.png" src="Images/AWSBillingAnalysis_14.png" /></p>
 <p>22 - You will see it execute the command <strong>MSCK REPAIR TABLE</strong>, and in the results it will add partitions to the metastore for each month that has a billing file:
 <img alt="Images/AWSBillingAnalysis_15.png" src="Images/AWSBillingAnalysis_15.png" />

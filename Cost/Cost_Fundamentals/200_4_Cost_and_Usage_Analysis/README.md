@@ -17,12 +17,23 @@ https://wellarchitectedlabs.com
 - Have your Cost and Usage Report (CUR) enabled [as per 100_1_Account Setup](../100_1_AWS_Account_Setup/README.md)
 - [AWS Account Setup](../100_1_AWS_Account_Setup/README.md) has been completed
 - Have usage that is tagged (preferred, not mandatory)
-- [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md) has been completed
+
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [AWS Account Setup](../100_1_AWS_Account_Setup/README.md) and modified in - [Cost_and_Usage_Governance](../200_2_Cost_and_Usage_Governance/README.md)
+- Log in as the Cost Optimization team, created in [AWS Account Setup](../100_1_AWS_Account_Setup/README.md)
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
+
+## Costs
+- Variable depending on bill size and analysis performed
+
+
+## Time to complete
+- The lab should take approximately 20 minutes to complete
+
+<BR>
+
+[![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
 
 <BR>
 
