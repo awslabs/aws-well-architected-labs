@@ -49,10 +49,6 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * **multi region** enables you to test some additional aspects of cross-regional resilience.
     * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
 
-        |Please execute only the _single region_ labs at this time|
-        |:---:|
-        |Recent updates have made the multi-region approach non-functional. Updates are coming soon to restore this option.|
-
 1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
     * **single region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy.json?raw=1)
     * **multi region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1)
@@ -103,7 +99,6 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
             {
               "log_level": "DEBUG",
               "region_name": "us-east-2",
-              "secondary_region_name": "us-west-2",
               "cfn_region": "us-east-2",
               "cfn_bucket": "aws-well-architected-labs-ohio",
               "folder": "Reliability/",
@@ -120,8 +115,13 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
         ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
 
 1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
-      * **single region**: approximately 20-25 minutes to deploy
-      * **multi region**: approximately 45-50 minutes to deploy. In about 25-30 minutes you can start executing lab exercises.
+
+      |Time until you can start...|Single region|Multi region|
+      |---|---|---|
+      |EC2 failure injection test|15-20 min|15-20 min|
+      |RDS and AZ failure injection tests|15-20 min|40-45 min|
+      |Multi-region failure injection tests |NA|50-55 min|
+      |Total deployment time|20-25 min|50-55 min|
 
 1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
 ![StateMachineExecuting](Images/StateMachineExecuting.png)
@@ -131,9 +131,9 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
 
-1. You can resume testing when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
+1. You can start the first test (EC2 failure injection testing)  when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
 
-    ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployed.png)
+    ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployedSingleRegion.png)
 
      * Above screen shot is for **single region**. for **multi region** see [this diagram instead](Documentation/Multi_Region_State_Machine.md)
 
@@ -253,6 +253,10 @@ Before testing, please prepare the following:
 
 This failure injection will simulate a critical problem with one of the three web servers used by your service.
 
+1. Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+    * **single region**: `WaitForWebApp` shows completed (green)
+    * **multi region**: `WaitForWebApp1` shows completed (green)
+
 1. Navigate to the EC2 console at <http://console.aws.amazon.com/ec2> and click **Instances** in the left pane.
 
 1. There are three EC2 instances with a name beginning with **WebServerforResiliency**. For these EC2 instances note:
@@ -360,6 +364,10 @@ Deploying multiple servers and Elastic Load Balancing enables a service suffer t
 ### 3.3 RDS failure injection
 
 This failure injection will simulate a critical failure of the Amazon RDS DB instance.
+
+1. Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+    * **single region**: `WaitForMultiAZDB` shows completed (green)
+    * **multi region**: both `WaitForRDSRRStack1` and `CheckRDSRRStatus1` show completed (green)
 
 1. Before you initiate the failure simulation, refresh the service website several times. Every time the image is loaded, the website writes a record to the Amazon RDS database
 
@@ -506,7 +514,7 @@ This step is optional. To simulate the AZ returning to health do the following:
 1. Go to the [Auto Scaling Group console](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:)
 1. Select the **WebServersforResiliencyTesting** auto scaling group
 1. Actions >> Edit
-1. In the **Subnet** field add the two **ResiliencyVPC-PrivateSubnet**s that are missing and **Save**
+1. In the **Subnet** field add any **ResiliencyVPC-PrivateSubnet**s that are missing (there should be three total) and **Save**
 1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
 1. Look at the NACL entries for the VPC called **ResiliencyVPC**
 1. For any of these NACLs that are _not_ _Default_ do the following
@@ -621,10 +629,42 @@ If you deployed the **multi region** option, then [see these instructions for th
 
 ### Delete remaining resources
 
-The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them.
+#### Delete Lambda execution role used to create custom resource
+
+This role was purposely not deleted by the CloudFormation stack, because CloudFormation needs it to delete the custom resource it was used to create.  _Choose ONE_: AWS CLI **or** AWS Console.
+
+* Do this step only after ALL CloudFormation stacks are **DELETE_COMPLETE**
+
+Using AWS CLI:
+
+    aws iam delete-role-policy --role-name LambdaCustomResourceRole --policy-name LambdaCustomResourcePolicy
+
+    aws iam delete-role --role-name LambdaCustomResourceRole
+
+Using AWS Console:
+
+1. Go to the IAM Roles Console: <https://console.aws.amazon.com/iam/home#/roles>
+1. Search for `LambdaCustomResourceRole`
+1. Check the box next to `LambdaCustomResourceRole`
+1. Click **Delete role** button
+1. Click **Yes, delete** button
+
+#### Delete Systems Manager parameter
+
+The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them. _Choose ONE_: AWS CLI **or** AWS Console.
 
 * **single region** You only need to do the following steps in **us-east-2**
 * **multi region** Do the following steps for both **us-east-2** and **us-west-**2
+
+Using AWS CLI:
+
+* In the following command use the [workshop name supplied in step 1.4.4.](#deployinfra) when you ran the step function state machine. If you kept the defaults, the command will work as-is:
+
+        aws ssm delete-parameter --name 300-ResiliencyofEC2RDSandS3
+
+If you get `ParameterNotFound` then the password was already deleted by the CloudFormation stack (as expected).
+
+Using AWS Console:
 
 1. Select the region
 1. Wait until **ResiliencyVPC** CloudFormation stack is **DELETE_COMPLETE** in the region

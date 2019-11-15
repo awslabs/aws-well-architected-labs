@@ -74,6 +74,9 @@ def process_global_vars():
 #    except:
 #        logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
 
+# CloudFormation status: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html
+def stack_status_in_progress(status):
+  return status.endswith('IN_PROGRESS') and not (status == 'UPDATE_COMPLETE_CLEANUP_IN_PROGRESS')
 
 def wait_for_stack(region, stack_id, context):
 
@@ -93,8 +96,8 @@ def wait_for_stack(region, stack_id, context):
             logger.debug("Found stack named " + stack_id)
             stack_status = stack_list[0]['StackStatus']
             logger.debug("Status: " + stack_status)
-            if (stack_status == 'CREATE_COMPLETE') | (stack_status == 'CREATE_FAILED') | (stack_status == 'ROLLBACK_COMPLETE'):
-                stack_building = False
+            stack_building = stack_status_in_progress(stack_status)
+            if not stack_building:
                 break
             if (context != 0):
                 time_remaining = context.get_remaining_time_in_millis()
@@ -103,7 +106,11 @@ def wait_for_stack(region, stack_id, context):
             if (time_remaining > 40000):
                 logger.debug("still waiting: time (MS) left to execute: {}".format(time_remaining))
                 sleep(30)
+            # timeout and return stack status to state machine for it to deal with it.
             else:
+                logger.debug("TIMED OUT waiting on stack: " + stack_id)
+                logger.debug("status: " + stack_status)
+                logger.debug("region: " + region)
                 break
         except:
             logger.debug("Unexpected error!\n Stack Trace:", traceback.format_exc())
@@ -165,10 +172,9 @@ if __name__ == "__main__":
         "cfn_region": "us-east-2",
         "cfn_bucket": "aws-well-architected-labs-ohio",
         "folder": "Reliability/",
-        "workshop": "AWSLoft",
+        "workshop": "300-ResiliencyofEC2RDSandS3",
         "boot_bucket": "aws-well-architected-labs-ohio",
         "boot_prefix": "Reliability/",
-        "boot_object": "bootstrapARC327.sh",
         "vpc": {
             "stackname": "ResiliencyVPC",
             "status": "CREATE_COMPLETE"

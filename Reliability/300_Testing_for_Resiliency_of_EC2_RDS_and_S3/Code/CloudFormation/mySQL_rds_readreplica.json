@@ -3,7 +3,11 @@
 
   "Description" : "Creates an RDS MySQL 5.7 Read Replica instance",
 
-  "Parameters" : {
+  "Parameters": {
+
+    "WorkshopName": {
+      "Type": "String"
+    },
 
     "SourceDatabaseRegion" : {
       "Description" : "Region where the source DB is located",
@@ -27,12 +31,24 @@
 
     "DBInstanceClass" : {
       "Description" : "DB Instance Class",
-      "Type" : "String", 
-      "AllowedValues" : [ "db.t2.micro", "db.t2.small", "db.t2.medium", "db.t2.large", 
-        "db.t2.xlarge", "db.t2.2xlarge", "db.m4.large", "db.m4.2xlarge", "db.m4.4xlarge",
-       	"db.m4.10xlarge", "db.m4.16xlarge"  ],
-      "Default" : "db.t2.micro",
-      "ConstraintDescription" : "must select a valid database instance type."
+      "Type": "String",
+      "AllowedValues": [
+          "db.t2.micro",
+          "db.t3.micro",
+          "db.t3.small",
+          "db.t3.medium",
+          "db.t3.large",
+          "db.t3.xlarge",
+          "db.t3.2xlarge",
+          "db.m5.large",
+          "db.m5.xlarge",
+          "db.m5.2xlarge",
+          "db.m5.4xlarge",
+          "db.m5.12xlarge",
+          "db.m5.24xlarge"
+      ],
+      "Default": "db.t2.micro",
+      "ConstraintDescription": "must select a valid database instance type."
     }
   },
 
@@ -56,6 +72,7 @@
 
     "ReadReplicaDB" : {
       "Type" : "AWS::RDS::DBInstance",
+      "DeletionPolicy" : "Delete",
       "Properties" : {
         "MultiAZ" : "false",
         "SourceDBInstanceIdentifier" : { "Fn::Join" : ["", [ 
@@ -67,7 +84,7 @@
                                                       { "Ref" : "SourceDatabaseID" }
 						      ]] },
         "AllocatedStorage" :  "100",
-	"CopyTagsToSnapshot" : "True",
+	      "CopyTagsToSnapshot" : "True",
         "DBInstanceClass" : { "Ref" : "DBInstanceClass" },
         "Engine" : "mysql",
         "EngineVersion" : "5.7",
@@ -77,8 +94,8 @@
         "Tags" : [
           {
             "Key" : "Name",
-	    "Value" : "ResiliencyVPC-MySQLDB"
-	  }
+	          "Value" : "ResiliencyVPC-MySQLDB"
+	        }
         ]
       }
     }  

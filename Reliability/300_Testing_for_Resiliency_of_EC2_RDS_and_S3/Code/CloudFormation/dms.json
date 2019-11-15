@@ -5,19 +5,24 @@
 
   "Parameters" : {
 
-    "SourceDatabaseName" : {
+    "WorkshopName": {
+      "Type": "String"
+    },
+
+    "SourceDatabaseServer" : {
       "Description" : "Name of the source RDS server",
       "Type" : "String"
     },
 
-    "DestDatabaseName" : {
+    "DestDatabaseServer" : {
       "Description" : "Name of the dest RDS server",
       "Type" : "String"
     },
 
     "DatabaseName" : {
       "Description" : "Name of database to be migrated",
-      "Type" : "String"
+      "Type" : "String",
+      "Default" : "iptracker"
     },
 
     "MigrationSubnetIds" : {
@@ -32,11 +37,24 @@
 
     "MigrationInstanceClass" : {
       "Description" : "DB Instance Class",
-      "Type" : "String", 
-      "AllowedValues" : [ "dms.t2.micro", "dms.t2.small", "dms.t2.medium", "dms.t2.large", 
-        "dms.c4.large", "dms.c4.xlarge", "dms.c4.2xlarge", "dms.c4.4xlarge" ],
-      "Default" : "dms.t2.micro",
-      "ConstraintDescription" : "must select a valid database instance type."
+      "Type": "String",
+      "AllowedValues": [
+          "dms.t2.micro",
+          "dms.t3.micro",
+          "dms.t3.small",
+          "dms.t3.medium",
+          "dms.t3.large",
+          "dms.t3.xlarge",
+          "dms.t3.2xlarge",
+          "dms.m5.large",
+          "dms.m5.xlarge",
+          "dms.m5.2xlarge",
+          "dms.m5.4xlarge",
+          "dms.m5.12xlarge",
+          "dms.m5.24xlarge"
+      ],
+      "Default": "dms.t2.micro",
+      "ConstraintDescription": "must select a valid database instance type."
     },
 
     "SourceDBUser": {
@@ -49,13 +67,13 @@
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
     },
 
-    "SourceDBPassword" : {
+    "SourceDBPassword": {
+      "Description" : "password for Read Replica in this region",
+      "Type" : "String",
       "NoEcho" : "true",
-      "Description" : "DB admin account password",
-      "Type": "String",
       "MinLength" : "1",
-      "MaxLength" : "41",
-      "AllowedPattern" : "[a-zA-Z0-9-_]*",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
       "ConstraintDescription" : "must contain only alphanumeric characters."
     },
 
@@ -69,13 +87,13 @@
       "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
     },
 
-    "DestDBPassword" : {
-      "NoEcho" : "true",
-      "Description" : "DB admin account password",
-      "Type": "String",
+    "DestDBPassword": {
+      "Description" : "password for primary DB in this region",
+      "Type" : "String",
+      "NoEcho" : "true",      
       "MinLength" : "1",
-      "MaxLength" : "41",
-      "AllowedPattern" : "[a-zA-Z0-9-_]*",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
       "ConstraintDescription" : "must contain only alphanumeric characters."
     }
   },
@@ -118,12 +136,12 @@
       "Type" : "AWS::DMS::Endpoint",
       "Properties" : {
         "DatabaseName" : { "Ref" : "DatabaseName" },
-        "ServerName" : { "Ref" : "SourceDatabaseName" },
+        "ServerName" : { "Ref" : "SourceDatabaseServer" },
         "Port" : "3306",
         "EndpointType" : "source",
         "EngineName" : "MYSQL",
-        "Password" : { "Ref" : "SourceDBPassword" },
-        "Username" : { "Ref" : "SourceDBUser" },
+        "Username": { "Ref": "SourceDBUser" },
+        "Password": { "Ref" : "SourceDBPassword" },
         "Tags" : [
           {
             "Key" : "Name",
@@ -137,12 +155,12 @@
       "Type" : "AWS::DMS::Endpoint",
       "Properties" : {
         "DatabaseName" : { "Ref" : "DatabaseName" },
-        "ServerName" : { "Ref" : "DestDatabaseName" },
+        "ServerName" : { "Ref" : "DestDatabaseServer" },
         "Port" : "3306",
         "EndpointType" : "target",
         "EngineName" : "MYSQL",
-        "Password" : { "Ref" : "DestDBPassword" },
-        "Username" : { "Ref" : "DestDBUser" },
+        "Username": { "Ref": "DestDBUser" },
+        "Password": { "Ref" : "DestDBPassword"},
         "Tags" : [
           {
             "Key" : "Name",

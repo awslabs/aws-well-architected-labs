@@ -8,6 +8,7 @@
     "WorkshopName": {
       "Type": "String"
     },
+
     "BastionCidrIp" : {
       "Description" : "Access CidrIp, default Everyone",
       "Type" : "String",
@@ -73,6 +74,7 @@
       "Type" : "AWS::EC2::AvailabilityZone::Name",
       "Default" :  "us-east-1c"
     }
+
   },
 
   "Resources" : {
@@ -466,7 +468,6 @@
       }
     },
     "KmsKey": {
-      "DependsOn": "LambdaExecutionRole",
       "Type": "AWS::KMS::Key",
       "Properties": {
           "Description": {
@@ -484,20 +485,23 @@
                       "Principal": {
                             "AWS": [
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomKMS"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-LambdaCustomResourceRole"
                                 },
                                 {
-                                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/VPCWorkshopRole"
                                 },
                                 {
                                   "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/RDSWorkshopRole"
-                                 }
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/DMSLambdaRole"
+                                }
                               ]
                       },
                       "Action": "kms:*",
@@ -526,15 +530,11 @@
     "LambdaCustomResource": {
         "Type": "AWS::Lambda::Function",
         "Properties": {
+            "FunctionName": "ResiliencyVPC-SecureSSMParameter",
             "Handler": "index.handler",
             "Runtime": "python3.6",
             "Timeout": 30,
-            "Role": {
-                "Fn::GetAtt": [
-                    "LambdaExecutionRole",
-                    "Arn"
-                ]
-            },
+            "Role": {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/${AWS::AccountId}-LambdaCustomResourceRole"}, 
             "Code": {
                 "ZipFile": {
                     "Fn::Join": [
@@ -574,7 +574,7 @@
                             "       Name=parameter_name",
                             "    )",
                             "    return",
-                            "",                            
+                            "",
                             "def handler(event, context):",
                             "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
                             "    # Setup alarm for remaining runtime minus a second",
@@ -617,56 +617,6 @@
                 }
             }
         }
-    },
-    "LambdaExecutionRole": {
-        "Type": "AWS::IAM::Role",
-        "Properties": {
-            "RoleName": "LambdaCustomKMS",
-            "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": [
-                                "lambda.amazonaws.com"
-                            ]
-                        },
-                        "Action": [
-                            "sts:AssumeRole"
-                        ]
-                    }
-                ]
-            },
-            "Path": "/",
-            "Policies": [
-                {
-                    "PolicyName": "root",
-                    "PolicyDocument": {
-                        "Version": "2012-10-17",
-                        "Statement": [
-                            {
-                                "Effect": "Allow",
-                                "Action": [
-                                    "logs:CreateLogGroup",
-                                    "logs:CreateLogStream",
-                                    "logs:PutLogEvents"
-                                ],
-                                "Resource": "arn:aws:logs:*:*:*"
-                            },
-                            {
-                                "Effect": "Allow",
-                                "Action": [
-                                    "ssm:PutParameter",
-                                    "ssm:DeleteParameter"
-                                ],
-                                "Resource": "*"
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
     }
   },
 
@@ -683,7 +633,7 @@
     },
 
     "IGWSubnets" : {
-      "Description" : "IGW rotued subnets for use in other templates",
+      "Description" : "IGW routed subnets for use in other templates",
       "Value" : { "Fn::Join" : ["", [
         { "Ref" : "IGWSubnet1" }, ",", { "Ref" : "IGWSubnet2" }, ",", { "Ref" : "IGWSubnet3" }
         ]]

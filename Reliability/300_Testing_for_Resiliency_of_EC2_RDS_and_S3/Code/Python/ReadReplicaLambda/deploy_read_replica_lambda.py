@@ -32,7 +32,7 @@ AWS_REGION = 'us-east-2'
 
 
 def init_logging():
-    # Setup loggin because debugging with print can get ugly.
+    # Setup logging because debugging with print can get ugly.
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logging.getLogger("boto3").setLevel(logging.WARNING)
@@ -150,19 +150,38 @@ def deploy_read_replica(event):
         return 1
     rds_id = rds_parsed[0]
 
+    # Get workshop name
+    try:
+        workshop_name = event['workshop']
+    except Exception:
+        logger.debug("Unexpected error! (when parsing workshop name)\n Stack Trace:", traceback.format_exc())
+        workshop_name = 'UnknownWorkshop'
+    
+    logger.debug("Workshop Name: " + workshop_name)
+
+
+    # Get DB instance type only if it was specified (it is optional)
+    try:
+        if 'db_instance_class' in event:
+          db_instance_class = event['db_instance_class']
+        else:
+          db_instance_class = None
+    except Exception:
+        logger.debug("Unexpected error! (when parsing DB instance class)\n Stack Trace:", traceback.format_exc())
+        db_instance_class = None
+
     # Prepare the stack parameters
     rds_parameters = []
     rds_parameters.append({'ParameterKey': 'SourceDatabaseRegion', 'ParameterValue': region, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'SourceDatabaseID', 'ParameterValue': rds_id, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBSubnetIds', 'ParameterValue': rds_subnet_list, 'UsePreviousValue': True})
     rds_parameters.append({'ParameterKey': 'DBSecurityGroups', 'ParameterValue': rds_sg, 'UsePreviousValue': True})
-    rds_parameters.append({'ParameterKey': 'DBInstanceClass', 'ParameterValue': 'db.t2.xlarge', 'UsePreviousValue': True})
-
+    rds_parameters.append({'ParameterKey': 'WorkshopName', 'ParameterValue': workshop_name, 'UsePreviousValue': True})
+    # If DB instance class supplied then use it, otherwise CloudFormation template will use Parameter default
+    if (db_instance_class is not None):
+      rds_parameters.append({'ParameterKey': 'DBInstanceClass', 'ParameterValue': db_instance_class, 'UsePreviousValue': True})
     stack_tags = []
-    try:
-        workshop_name = event['workshop']
-    except Exception:
-        workshop_name = 'UnknownWorkshop'
+
     rr_template_s3_url = "https://s3." + cfn_region + ".amazonaws.com/" + bucket + "/" + key_prefix + "mySQL_rds_readreplica.json"
     stack_tags.append({'Key': 'Workshop', 'Value': 'AWSWellArchitectedReliability' + workshop_name})
     client.create_stack(
@@ -199,7 +218,7 @@ def check_stack(region, stack_name):
             return False
         else:
             logger.debug("Stack will not be created: Unexpected exception found looking for stack named " + stack_name)
-            logger.debug(e.response)
+            logger.debug("Client error:" + str(e.response))
             return True
 
     except Exception:
