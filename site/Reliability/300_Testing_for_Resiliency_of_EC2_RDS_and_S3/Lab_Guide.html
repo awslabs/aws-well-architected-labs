@@ -3678,7 +3678,7 @@
 <tr>
 <td>EC2 failure injection test</td>
 <td>15-20 min</td>
-<td>15-20 min</td>
+<td>20-25 min</td>
 </tr>
 <tr>
 <td>RDS and AZ failure injection tests</td>
@@ -3736,7 +3736,7 @@
 <p>(image will vary depending on what you supplied for <code>websiteimage</code>)</p>
 <h2 id="2-configure-execution-environment">2. Configure Execution Environment <a name="configure_env"></a></h2>
 <p>Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.</p>
-<p>You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C# instructions for these are also provided.</p>
+<p>You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C#, then instructions for these are also provided.</p>
 <h3 id="21-setup-aws-credentials-and-configuration">2.1 Setup AWS credentials and configuration</h3>
 <p>Your execution environment needs to be configured to enable access to the AWS account you are using for the workshop. This includes</p>
 <ul>
@@ -4040,8 +4040,9 @@ Terminating i-0710435abc631eab3
 <li>
 <p>From the RDS dashboard</p>
 <ul>
-<li>Click on "DB Instances (1/40)"</li>
+<li>Click on "DB Instances (<i>n</i>/40)"</li>
 <li>Click on the DB identifier for your database (if you have more than one database, refer to the <strong>VPC ID</strong> to find the one for this workshop)</li>
+<li>If running the <b>multi-region</b> deployment, select the DB instance with Role=<b>Master</b></li>
 <li>Select the <strong>Configuration</strong> tab</li>
 </ul>
 </li>
