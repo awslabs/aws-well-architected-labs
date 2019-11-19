@@ -638,15 +638,15 @@ This role was purposely not deleted by the CloudFormation stack, because CloudFo
 
 Using AWS CLI:
 
-    aws iam delete-role-policy --role-name LambdaCustomResourceRole --policy-name LambdaCustomResourcePolicy
+    aws iam delete-role-policy --role-name LambdaCustomResourceRole-SecureSsmForRds --policy-name LambdaCustomResourcePolicy
 
-    aws iam delete-role --role-name LambdaCustomResourceRole
+    aws iam delete-role --role-name LambdaCustomResourceRole-SecureSsmForRds
 
 Using AWS Console:
 
 1. Go to the IAM Roles Console: <https://console.aws.amazon.com/iam/home#/roles>
-1. Search for `LambdaCustomResourceRole`
-1. Check the box next to `LambdaCustomResourceRole`
+1. Search for `SecureSsmForRds`
+1. Check the box next to `LambdaCustomResourceRole-SecureSsmForRds`
 1. Click **Delete role** button
 1. Click **Yes, delete** button
 
