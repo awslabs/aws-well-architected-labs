@@ -2015,10 +2015,58 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-3" type="checkbox" id="nav-6-5-3">
     
     <label class="md-nav__link" for="nav-6-5-3">
-      Cost and Usage Analysis
+      Pricing Models
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-6-5-3">
+        Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="Cost_Fundamentals/100_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-4" type="checkbox" id="nav-6-5-4">
+    
+    <label class="md-nav__link" for="nav-6-5-4">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-4">
         Cost and Usage Analysis
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -2060,13 +2108,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-4" type="checkbox" id="nav-6-5-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-5" type="checkbox" id="nav-6-5-5">
     
-    <label class="md-nav__link" for="nav-6-5-4">
+    <label class="md-nav__link" for="nav-6-5-5">
       Cost and Usage Visualization
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
-      <label class="md-nav__title" for="nav-6-5-4">
+      <label class="md-nav__title" for="nav-6-5-5">
         Cost and Usage Visualization
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -2607,8 +2655,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#analysis" title="Analysis" class="md-nav__link">
-    Analysis
+  <a href="#visualization-and-analysis" title="Visualization and Analysis" class="md-nav__link">
+    Visualization and Analysis
   </a>
   
 </li>
@@ -2621,15 +2669,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tba" title="TBA" class="md-nav__link">
-    TBA
+  <a href="#right-sizing" title="Right Sizing" class="md-nav__link">
+    Right Sizing
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#monitoring" title="Monitoring" class="md-nav__link">
-    Monitoring
+  <a href="#pricing-models" title="Pricing Models" class="md-nav__link">
+    Pricing Models
   </a>
   
 </li>
@@ -2664,9 +2712,6 @@
 <p>http://wellarchitectedlabs.com </p>
 <hr />
 <h2 id="governance">Governance</h2>
-<p>This first step will help you to you build a basic account structure, and make sure your account is 
-configured correctly. This will ensure you are collecting data for cost optimization,
-and this data is accessible to the right people within your organization.</p>
 <table>
 <thead>
 <tr>
@@ -2676,14 +2721,17 @@ and this data is accessible to the right people within your organization.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="Cost_Fundamentals/100_1_AWS_Account_Setup/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td>This is a 100 level lab which requires root access. It must be completed for each AWS account in your organization.</td>
+<td><a href="./Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>You will implement <strong>AWS Budgets</strong> to provide notifications on cost and usage, and weekly reports on budget performance.</td>
+</tr>
+<tr>
+<td><a href="./Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html"><img alt="Go to lab" src="../common/images/200lab.png" /></a></td>
+<td>You will use <strong>IAM Policies</strong> to manage costs and usage.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="analysis">Analysis</h2>
-<p>Configuring notifications allows you to receive an email when usage or cost is above a defined amount.</p>
+<h2 id="visualization-and-analysis">Visualization and Analysis</h2>
 <table>
 <thead>
 <tr>
@@ -2693,14 +2741,28 @@ and this data is accessible to the right people within your organization.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td><strong>100 Level Lab</strong>: This lab will show you how to implement AWS Budgets to provide notifications on usage and spend.</td>
+<td><a href="./Cost_Fundamentals/100_5_Cost_Visualization/README.html"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>You will use <strong>Cost Explorer</strong> to visualize your cost and usage.</td>
+</tr>
+<tr>
+<td><a href="./Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html#CUR"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>In this additional step you will configure the <strong>Cost and Usage Report</strong>, the most detailed source of your Cost and Usage information.</td>
+</tr>
+<tr>
+<td><a href="./Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html"><img alt="Go to lab" src="../common/images/200lab.png" /></a></td>
+<td>You will utilize <strong>Glue</strong> and <strong>Athena</strong> to analyze your <strong>Cost and Usage Report</strong>.</td>
+</tr>
+<tr>
+<td><a href="./Cost_Fundamentals/200_5_Cost_Visualization/README.html"><img alt="Go to lab" src="../common/images/200lab.png" /></a></td>
+<td>You will use <strong>QuickSight</strong> to create Cost and Usage dashboards and visualizations of your usage.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="licensing">Licensing</h2>
-<p>By using the right pricing model for your workload resources, you pay the lowest price for that resource.</p>
+<p>There are no labs for licensing.</p>
+<hr />
+<h2 id="right-sizing">Right Sizing</h2>
 <table>
 <thead>
 <tr>
@@ -2710,14 +2772,17 @@ and this data is accessible to the right people within your organization.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="Cost_Fundamentals/200_3_Pricing_Models/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td><strong>200 Level Lab</strong>:  This lab will introduce you to working with Reserved Instances (RI's), utilizing AWS Cost Explorer to make low risk, high return RI purchases for your business.</td>
+<td><a href="./Cost_Fundamentals/link/README.md"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>This lab will show you how to use Cost Explorer to perform right sizing recommendations on your resources.</td>
+</tr>
+<tr>
+<td><a href="./Cost_Fundamentals/link/README.md"><img alt="Go to lab" src="../common/images/200lab.png" /></a></td>
+<td>This lab will show you how to install the memory agent.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="tba">TBA</h2>
-<p>Cost and Usage Analysis will enable you to understand how you consumed the cloud, and what your costs are for that consumption.</p>
+<h2 id="pricing-models">Pricing Models</h2>
 <table>
 <thead>
 <tr>
@@ -2727,31 +2792,17 @@ and this data is accessible to the right people within your organization.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td><strong>100 Level Lab</strong>: This lab introduces you to the billing console, allowing you to view your current and past bills, and also inspect your usage across services and accounts.</td>
+<td><a href="./Cost_Fundamentals/link/README.md"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>This lab will show you how to view and analyze your Savings Plan recommendations.</td>
 </tr>
-</tbody>
-</table>
-<hr />
-<h2 id="monitoring">Monitoring</h2>
-<p>Visualizing cost and usage highlights trends and allows you to gain further insights.</p>
-<table>
-<thead>
 <tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="Cost_Fundamentals/100_5_Cost_Visualization/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td><strong>100 Level Lab</strong>: This lab will introduce AWS Cost Explorer, and demonstrate how to use its features to provide insights.</td>
+<td><a href="./Cost_Fundamentals/200_3_Pricing_Models/README.html"><img alt="Go to lab" src="../common/images/200lab.png" /></a></td>
+<td>This lab will show you how to perform a Reserved Instance (RI) Analysis, and select low risk, high return RI's for your accounts.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="well-architected-tool">Well-Architected Tool</h2>
-<p>Implementing usage controls will ensure excess usage and accompanying costs does not occur.</p>
 <table>
 <thead>
 <tr>
@@ -2761,8 +2812,8 @@ and this data is accessible to the right people within your organization.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="../Well-ArchitectedTool/README.html"><img alt="Go to lab" src="../common/images/gotolab.png" /></a></td>
-<td><strong>100 Level Lab</strong>: This lab will walk you through the Well-Architected Tool.</td>
+<td><a href="../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html"><img alt="Go to lab" src="../common/images/100lab.png" /></a></td>
+<td>This lab will walk you through the Well-Architected Tool.</td>
 </tr>
 </tbody>
 </table>
