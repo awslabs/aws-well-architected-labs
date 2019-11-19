@@ -20,7 +20,7 @@
 
 ## Access the AWS console
 
-* Click "AWS Console". The AWS Console will open.
+* Click "Open Console". The AWS Console will open.
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
