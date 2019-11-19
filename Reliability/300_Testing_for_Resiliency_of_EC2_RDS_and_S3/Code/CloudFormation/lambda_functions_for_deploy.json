@@ -527,7 +527,7 @@
       "Type": "AWS::IAM::Role",
       "DeletionPolicy" : "Retain",
       "Properties": {
-          "RoleName": { "Fn::Sub" : "${AWS::AccountId}-LambdaCustomResourceRole"},
+          "RoleName": "LambdaCustomResourceRole-SecureSsmForRds",
           "AssumeRolePolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
