@@ -17,8 +17,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 5. [Rate this Lab](#rate_lab)  
 
 
-
-## 1. Verify your CUR files are being delivered <a name="Verify_CUR"></a>
+<a name="Verify_CUR"></a>
+## 1. Verify your CUR files are being delivered 
 We will verify the CUR files are being delivered, they are in the correct format and the region they are in.
 
 1. Log into the console as an IAM user with the required permissions, go to the **Billing** console, and view the CUR report you created in [AWS Account Setup](../100_1_AWS_Account_Setup/Lab_Guide.md), confirm the **S3 bucket**, and **Report path prefix**:
@@ -50,15 +50,14 @@ You may not have substantial or interesting usage, in this case there are sample
 
 **NOTE**: Do not save the links below, open them in a new window and download the files. They should be approximately 1Mb in size each, if you have files that are 65kb - then you have downloaded the web page and not the parquet files.
 
-Create a folder structure, such as -bucket name-/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder. You will need to edit the SQL file with the correct name.
+Create a folder structure, such as -bucket name-/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder.
 
-- [Workshop.sql](Code/WorkshopCUR-create-table.sql)
 - [October 2018 Usage](Code/Oct2018-WorkshopCUR-00001.snappy.parquet)
 - [November 2018 Usage](Code/Nov2018-WorkshopCUR-00001.snappy.parquet)
 - [December 2018 Usage](Code/Dec2018-WorkshopCUR-00001.snappy.parquet)
 
-
-## 2. Use AWS Glue to enable access to CUR files via Amazon Athena <a name="Setup_Athena"></a>
+<a name="Setup_Athena"></a>
+## 2. Use AWS Glue to enable access to CUR files via Amazon Athena 
 We will use AWS Glue and setup a scheduled Crawler, which will run each day. This crawler will scan the CUR files and create a database and tables for the delivered files. If there are new versions of a CUR, or new months delivered - they will be automatically included.
 
 We will use Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.
@@ -106,7 +105,7 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 13 - Click **Add database**:
 ![Images/Glue11.png](Images/Glue11.png)
 
-14 - Enter a **Database name**, and click **Create**:
+14 - Enter a **Database name**, and click **Create**, do NOT use a hyphen character '-':
 ![Images/Glue12.png](Images/Glue12.png)
 
 15 - Click **Next**:
@@ -149,7 +148,6 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 ![Images/AWSBillingAnalysis_15.png](Images/AWSBillingAnalysis_15.png)
 NOTE: If it did not add partitions, then there is an error and there will be no data. 
 Check
-- The database name is correct & the same as the SQL file
 - The folder names **year** and **month** are in S3 and the case matches
 - There are parquet files in each of the month folders
 
@@ -178,8 +176,8 @@ NOTE: You can restrict and grant access to this specific member account table th
 You have successfully setup your CUR file to be analyzed. You can now query your usage and costs via SQL.
 
 
-
-## 3. Cost and Usage analysis <a name="CUR_Analysis"></a>
+<a name="CUR_Analysis"></a>
+## 3. Cost and Usage analysis 
 We will now perform some common analysis of your usage through SQL queries. You will be charged for Athena usage by the amount of data that is scanned - the source files are monthly, and in parquet format - which is compressed and partitioned to minimise cost. Be careful to include **limit 10** or similar at the end of your queries to limit the amount of data that comes back.
 
 For each of the queries below, copy and paste each query into the query window, click **Run query** and view the results.
@@ -334,11 +332,12 @@ order by bill_billing_period_start_date, reservation_unused_recurring_fee desc
 ```
 
 
-
-## 4. Tear down <a name="tear_down"></a>
+<a name="tear_down"></a>
+## 4. Tear down 
 Amazon Athena only charges when it is being used, i.e. data is being scanned - so if it is not being actively queried, there are no charges. It is also best practice to regularly analyze your usage and cost, so there is no teardown for this lab.
 
-## 5. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 5. Rate this lab 
 [![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_4_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_4_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_4_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_4_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_4_5star)
 
 

@@ -2753,7 +2753,8 @@
 <li><a href="#tear_down">Tear down</a></li>
 <li><a href="#rate_lab">Rate this Lab</a> </li>
 </ol>
-<h2 id="1-configure-iam-access-to-your-billing">1. Configure IAM access to your billing<a name="IAM_access"></a></h2>
+<p><a name="IAM_access"></a></p>
+<h2 id="1-configure-iam-access-to-your-billing">1. Configure IAM access to your billing</h2>
 <p><strong>NOTE</strong>: You will need to sign into the account with root account credentials to perform this action. You need to enter in the account email and password for root access.</p>
 <p>You need to enable IAM access to your billing so the correct IAM users can access the information. This allows other users (non-root) to access billing information in the master account. It is also required if you wish for member accounts to see their usage and billing information. This step will not provide access to the information, that is configured through IAM policies.</p>
 <ol>
@@ -2776,7 +2777,8 @@
 </ol>
 <p>You will now be able to provide access to non-root users to billing information via IAM policies.</p>
 <p><strong>NOTE:</strong> Logout as the root user before continuing.</p>
-<h2 id="2-create-an-account-structure">2. Create an account structure<a name="account_structure"></a></h2>
+<p><a name="account_structure"></a></p>
+<h2 id="2-create-an-account-structure">2. Create an account structure</h2>
 <p><strong>NOTE</strong>: Do NOT do this step if you already have an organization and consolidated billing setup.</p>
 <p>You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  </p>
 <h3 id="21-create-an-aws-organization">2.1 Create an AWS Organization</h3>
@@ -2853,7 +2855,8 @@
 </li>
 </ol>
 <p>Repeat the steps above (exercise 1.2) for each additional account in your organization. </p>
-<h2 id="3-configure-billing-account-settings">3. Configure billing account settings<a name="account_settings"></a></h2>
+<p><a name="account_settings"></a></p>
+<h2 id="3-configure-billing-account-settings">3. Configure billing account settings</h2>
 <p>It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by muptile team members for redudancy. Ensure the email accounts are actively monitored.</p>
 <ol>
 <li>
@@ -2869,7 +2872,8 @@
 <img alt="Images/AWSAcct3.png" src="Images/AWSAcct3.png" /></p>
 </li>
 </ol>
-<h2 id="4-configure-cost-and-usage-reports">4. Configure Cost and Usage Reports<a name="CUR"></a></h2>
+<p><a name="CUR"></a></p>
+<h2 id="4-configure-cost-and-usage-reports">4. Configure Cost and Usage Reports</h2>
 <p>Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information. This will allow you to make modifications to your usage, and make your applications more efficient.</p>
 <h3 id="41-configure-a-cost-and-usage-report">4.1 Configure a Cost and Usage Report</h3>
 <p>If you configure multiple Cost and Usage Reports (CURs), then it is recommended to have 1 CUR per bucket. If you <strong>must</strong> have multiple CURs in a single bucket, ensure you use a different <strong>report path prefix</strong> so it is clear they are different reports.</p>
@@ -2945,7 +2949,8 @@
 <img alt="Images/AWSMonthlyUsage6.png" src="Images/AWSMonthlyUsage6.png" /></p>
 </li>
 </ol>
-<h2 id="5-enable-aws-cost-explorer">5. Enable AWS Cost Explorer<a name="cost_explorer"></a></h2>
+<p><a name="cost_explorer"></a></p>
+<h2 id="5-enable-aws-cost-explorer">5. Enable AWS Cost Explorer</h2>
 <p>AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.</p>
 <ol>
 <li>
@@ -2978,7 +2983,8 @@
 </li>
 </ol>
 <p><strong>NOTE</strong>: This will incur costs depending on the number of EC2 resources you are running. </p>
-<h2 id="6-enable-aws-generated-cost-allocation-tags">6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a></h2>
+<p><a name="cost_tags"></a></p>
+<h2 id="6-enable-aws-generated-cost-allocation-tags">6. Enable AWS-Generated Cost Allocation Tags</h2>
 <p>Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. </p>
 <ol>
 <li>
@@ -2998,7 +3004,8 @@
 <img alt="Images/AWSBillTag3.png" src="Images/AWSBillTag3.png" /></p>
 </li>
 </ol>
-<h2 id="7-create-a-cost-optimization-team">7. Create a cost optimization team <a name="create_team"></a></h2>
+<p><a name="create_team"></a></p>
+<h2 id="7-create-a-cost-optimization-team">7. Create a cost optimization team</h2>
 <p>We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.</p>
 <p><strong>NOTE</strong>: Review the IAM policy below with your security team, the permissions below are required for completion of the Fundamentals series of labs. Verify if they need to be changed for your organization.</p>
@@ -3124,10 +3131,12 @@ This team will then be able to manage the organizations cost and usage, and star
 <p>8 - Log back in as the username you just created, with the link you copied for the remainder of the Lab.</p>
 <p>You have successfully create a user, placed them in the cost optimization group and have applied policies.
 You can continue to expand this group by adding additional users from your organization.</p>
-<h2 id="8-tear-down">8. Tear down<a name="tear_down"></a></h2>
+<p><a name="tear_down"></a></p>
+<h2 id="8-tear-down">8. Tear down</h2>
 <p>This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. </p>
-<h2 id="9-rate-this-lab">9. Rate this lab<a name="rate_lab"></a></h2>
+<p><a name="rate_lab"></a></p>
+<h2 id="9-rate-this-lab">9. Rate this lab</h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_100_1_1star"><img alt="1 Star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_1_2star"><img alt="2 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_1_3star"><img alt="3 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_1_4star"><img alt="4 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_100_1_5star"><img alt="5 star" src="Images/star.png" /></a> </p>
                 
                   

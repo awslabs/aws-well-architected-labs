@@ -18,8 +18,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 6. [Rate this Lab](#rate_lab) 
 
 
-
-## 1. Setup Amazon QuickSight <a name="setup_quicksight"></a>
+<a name="setup_quicksight"></a>
+## 1. Setup Amazon QuickSight 
 The first step is to setup Amazon QuickSight, so that you can use the service in your account, and it has access to all the resources in your account.
 
 1. Log into the console as an IAM user with the required permissions, go to the **Amazon QuickSight** console:
@@ -58,8 +58,8 @@ The first step is to setup Amazon QuickSight, so that you can use the service in
 
 
 
-
-## 2. Create a data set <a name="data_set"></a>
+<a name="data_set"></a>
+## 2. Create a data set 
 We will create a data set so that QuickSight can access our Athena data set, and visualize our CUR data.
 
 1. Click **Manage data** in the top right:
@@ -82,8 +82,8 @@ We will create a data set so that QuickSight can access our Athena data set, and
 
 You have now configured QuickSight to access your Athena data set, and have access to your CUR data.
 
-
-## 3. Create visualizations <a name="create_visualizations"></a>
+<a name="create_visualizations"></a>
+## 3. Create visualizations 
 We will now start to visualize our costs and usage, and create a dashboard.
 
 ### 3.1 Cost by account and product
@@ -270,8 +270,8 @@ To use this graph, observe the top costs, then exclude them and continue to dril
 Your dashboard is now complete, you should have a similar dashboard to below:
 ![Images/AWSQuicksight64.png](Images/AWSQuicksight64.png)
 
-
-## 4. Share your Analysis and Dashboard <a name="share_analysis"></a>
+<a name="share_analysis"></a>
+## 4. Share your Analysis and Dashboard 
 Now that your QuickSight Analysis is complete, it is time to share the Analysis or publish a Dashboard. An Analysis is a read and write copy of the Visuals and Data Set that you created. A dashboard is a read-only version, allowing the user to apply filters but not make any changes to the Visuals or Data Set.
 
 ### 4.1 Share an analysis
@@ -303,7 +303,8 @@ Now that your QuickSight Analysis is complete, it is time to share the Analysis 
 6. All users will receive an email:
 ![Images/AWSQuicksight73.png](Images/AWSQuicksight73.png)
 
-## 5. Tear down <a name="tear_down"></a>
+<a name="tear_down"></a>
+## 5. Tear down 
 It is best practice to regularly analyze your usage and cost, so you should not tear down this lab unless you have an alternative visualization solution.
 
 
@@ -320,8 +321,8 @@ It is best practice to regularly analyze your usage and cost, so you should not 
 4. Review the notifications, click **Unsubscribe**:
 ![Images/AWSQuicksight78.png](Images/AWSQuicksight78.png) 
 
-
-## 6. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 6. Rate this lab 
 [![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_5_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_5_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_5_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_5_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_5_5star) 
 
 
