@@ -18,7 +18,11 @@ Use these instructions to get a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` 
 
 1. In the navigation pane, choose **Users**.
 
-1. Choose the name of the user whose access keys you want to manage, and then choose the **Security credentials** tab.
+1. Choose the name of the user whose access keys you want to manage.
+
+1. Select the **Permissions** tab of this user and confirm that they have either PowerUserAccess or AdministratorAccess policy attached. If not, attach the PowerUserAccess policy using the **Add permissions** button.
+
+1. Select the **Security credentials** tab.
 
 1. Choose **Create access key**. Then choose **Download .csv file** to save the access key ID and secret access key to a CSV file on your computer. Store the file in a secure location. You will not have access to the secret access key again after this dialog box closes. After you download the CSV file, choose Close.
 
