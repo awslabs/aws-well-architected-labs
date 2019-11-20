@@ -2750,7 +2750,8 @@
 <li><a href="#tear_down">Teardown</a></li>
 <li><a href="#rate_lab">Rate this Lab</a> </li>
 </ol>
-<h2 id="1-view-an-ri-report">1. View an RI report<a name="ri_report"></a></h2>
+<p><a name="ri_report"></a></p>
+<h2 id="1-view-an-ri-report">1. View an RI report</h2>
 <p>We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.</p>
 <ol>
 <li>
@@ -2772,7 +2773,8 @@
 <img alt="Images/AWSRI4.png" src="Images/AWSRI4.png" /></li>
 </ol>
 <p>View the <strong>Purcahse Recommendations</strong>, if the 30 day recommendation is less than 7 days recommendation - your usage is <strong>increasing</strong> and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is <strong>decreasing</strong> and you need to look further into your usage patterns to see which RI's would be suitable.</p>
-<h2 id="2-download-and-prepare-the-ri-csv-files">2. Download and prepare the RI CSV files<a name="prepare_csv"></a></h2>
+<p><a name="prepare_csv"></a></p>
+<h2 id="2-download-and-prepare-the-ri-csv-files">2. Download and prepare the RI CSV files</h2>
 <p>1 - Download the CSV for <strong>both</strong> the 7 day and 30 day recommendation files, by selecting the filter <strong>7 days</strong> or <strong>30 days</strong>, and clicking on <strong>Download CSV</strong>:
 <img alt="Images/AWSRI5.png" src="Images/AWSRI5.png" /></p>
 <p>2 - If you do not have sufficient usage, you can download the two sample files:</p>
@@ -2803,7 +2805,8 @@ Paste the following formula into the last column <strong>z</strong>:</p>
 
 <p>6 - Delete the following columns as they are not necessary: <strong>Recommendation Date</strong>, <strong>Size Flexible Recommendation</strong>, <strong>Max hourly normalized unit usage in Historical Period</strong>, <strong>Min hourly normalized unit usage in Historical Period</strong>, <strong>Average hourly normalized unit usage in Historical Period</strong>, <strong>Payment Option</strong>, <strong>Break Even Months</strong>. </p>
 <p>We now have the required data required to be able to analyze, and filter out the high risk and low return RIs.</p>
-<h2 id="3-sort-and-filter-the-ri-csv-files">3. Sort and filter the RI CSV files<a name="filter_csv"></a></h2>
+<p><a name="filter_csv"></a></p>
+<h2 id="3-sort-and-filter-the-ri-csv-files">3. Sort and filter the RI CSV files</h2>
 <p>RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: <strong>low risk</strong> and <strong>high return</strong> purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimizing the risk of unused RIs.</p>
 <h3 id="31-filter-out-low-risk-and-high-return-ris">3.1 Filter out low risk, and high return RIs</h3>
 <p>1 - To get the lowest risk, we sort by <strong>Fully Paid Day</strong> smallest to largest, as these will be fully paid off in the shortest amount of time. You can see that some of the RI's below are fully paid off in around 7months - so if they are used for 7 months - they have paid themselves off completely.
@@ -2847,9 +2850,11 @@ Paste the following formula into the last column <strong>z</strong>:</p>
 </ul>
 <p>You have successfully filtered and processed all the recommendations. You can now make low risk and high return recommendations that are suitable based on your ongoing usage patterns with high confidence.
 You can then take those recommendations, and purchase the quantity in the required accounts, with the required payment option (All upfront, Partial upfront, No upfront), and class (standard or convertible).</p>
-<h2 id="4-teardown">4. Teardown<a name="tear_down"></a></h2>
+<p><a name="tear_down"></a></p>
+<h2 id="4-teardown">4. Teardown</h2>
 <p>There are no resources or configuration items that are created during this workshop. </p>
-<h2 id="5-rate-this-lab">5. Rate this lab<a name="rate_lab"></a></h2>
+<p><a name="rate_lab"></a></p>
+<h2 id="5-rate-this-lab">5. Rate this lab</h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_200_3_1star"><img alt="1 Star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_3_2star"><img alt="2 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_3_3star"><img alt="3 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_3_4star"><img alt="4 star" src="Images/star.png" /></a> <a href="https://wellarchitectedlabs.com/Cost_200_3_5star"><img alt="5 star" src="Images/star.png" /></a> </p>
                 
                   

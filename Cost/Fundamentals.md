@@ -31,8 +31,8 @@ By using the right pricing model for your workload resources, you pay the lowest
 
 | | |
 |---|---|
-| [![Go to lab](../../common/images/gotolab.png)](./Cost_Fundamentals/100_3_Pricing_Models/README.md) | **100 Level Lab**:  This lab will introduce you to working with Savings Plans (SP's), utilizing AWS Cost Explorer to make low risk, high return SP purchases for your business. |
-| [![Go to lab](../../common/images/gotolab.png)](./Cost_Fundamentals/200_3_Pricing_Models/README.md) | **200 Level Lab**:  This lab will introduce you to working with Reserved Instances (RI's), utilizing AWS Cost Explorer to make low risk, high return RI purchases for your business. |
+| [![Go to lab](../common/images/gotolab.png)](./Cost_Fundamentals/100_3_Pricing_Models/README.md) | **100 Level Lab**:  This lab will introduce you to working with Savings Plans (SP's), utilizing AWS Cost Explorer to make low risk, high return SP purchases for your business. |
+| [![Go to lab](../common/images/gotolab.png)](./Cost_Fundamentals/200_3_Pricing_Models/README.md) | **200 Level Lab**:  This lab will introduce you to working with Reserved Instances (RI's), utilizing AWS Cost Explorer to make low risk, high return RI purchases for your business. |
 
 ---
 

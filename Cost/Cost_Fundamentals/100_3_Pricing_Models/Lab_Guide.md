@@ -109,7 +109,7 @@ We will analyze our Savings Plan to further refine our initial commitment level 
 
 4. Add the new column headings **O**, **P** and **Q**. and put in the formulas for each:
     - Monthly OnDemand Cost, **Cell O2**: **=G2*730**
-    - Montly Cost after SP, **Cell P2**: **=O2-K2**
+    - Monthly Cost after SP, **Cell P2**: **=O2-K2**
     - Fully Paid Day, **Cell Q2**: **=P2*12/O2**
 - [Updated Sample SavingsPlan](Code/SavingsPlan02.xlsx)
 ![Images/SavingsPlan20.png](Images/SavingsPlan20.png)
@@ -135,7 +135,7 @@ We will analyze our Savings Plan to further refine our initial commitment level 
 - [Updated Sample SavingsPlan](Code/SavingsPlan05.xlsx)
 ![Images/SavingsPlan24.png](Images/SavingsPlan24.png)
 
-10. Take this commitment level, apply the findigs from the previous exercises (type of Savings Plan and Usage Trend) to make your initial purchase. 
+10. Take this commitment level, apply the findings from the previous exercises (type of Savings Plan and Usage Trend) to make your initial purchase. 
 
 
 <a name="visualize_recommendations"></a>

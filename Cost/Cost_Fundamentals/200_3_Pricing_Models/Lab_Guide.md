@@ -18,8 +18,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 5. [Rate this Lab](#rate_lab) 
 
 
-
-## 1. View an RI report<a name="ri_report"></a>
+<a name="ri_report"></a>
+## 1. View an RI report
 We are going to view the RI reports within AWS Cost Explorer, to understand the recommendations and possible purchases we should make.
 
 1. Log into the console as an IAM user with the required permissions, go to the **AWS Cost Explorer** service page:
@@ -39,8 +39,8 @@ The top section will show the estimated savings and number of recommendations, t
 View the **Purcahse Recommendations**, if the 30 day recommendation is less than 7 days recommendation - your usage is **increasing** and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is **decreasing** and you need to look further into your usage patterns to see which RI's would be suitable.
 
 
-
-## 2. Download and prepare the RI CSV files<a name="prepare_csv"></a>
+<a name="prepare_csv"></a>
+## 2. Download and prepare the RI CSV files
 1 - Download the CSV for **both** the 7 day and 30 day recommendation files, by selecting the filter **7 days** or **30 days**, and clicking on **Download CSV**:
 ![Images/AWSRI5.png](Images/AWSRI5.png)
 
@@ -82,8 +82,8 @@ The formula is:
 
 We now have the required data required to be able to analyze, and filter out the high risk and low return RIs.
 
-
-## 3. Sort and filter the RI CSV files<a name="filter_csv"></a>
+<a name="filter_csv"></a>
+## 3. Sort and filter the RI CSV files
 RI purchases should be done frequently (bi-weekly or monthly), so for each cycle we want: **low risk** and **high return** purchases, and purchase the top 50-75% of recommendations. This will ensure you have sufficiently high coverage, while minimizing the risk of unused RIs.
 
 ### 3.1 Filter out low risk, and high return RIs
@@ -150,11 +150,12 @@ Other suggestions for recommendations that do not fall into the categories above
 You have successfully filtered and processed all the recommendations. You can now make low risk and high return recommendations that are suitable based on your ongoing usage patterns with high confidence.
 You can then take those recommendations, and purchase the quantity in the required accounts, with the required payment option (All upfront, Partial upfront, No upfront), and class (standard or convertible).
 
-
-## 4. Teardown<a name="tear_down"></a>
+<a name="tear_down"></a>
+## 4. Teardown
 There are no resources or configuration items that are created during this workshop. 
 
-## 5. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 5. Rate this lab 
 [![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_3_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_3_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_3_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_3_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_200_3_5star) 
 
 

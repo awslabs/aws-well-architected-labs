@@ -15,8 +15,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 5. [Tear down](#tear_down)
 6. [Rate this Lab](#rate_lab)  
 
-
-## 1. Create and implement an AWS Budget for monthly forecasted cost<a name="budget_forecast"></a> 
+<a name="budget_forecast"></a>
+## 1. Create and implement an AWS Budget for monthly forecasted cost 
 Budgets allow you to manage cost and usage by providing notifications when cost or usage are outside of configured amounts. They cannot be used to restrict actions, only notify on usage after it has occurred.
 
 Budgets and notifications are updated when your billing data is updated, which is at least once per day.
@@ -71,8 +71,8 @@ We will create a monthly cost budget which will notify if the forecasted amount 
 You have created a forecasted budget, when your forecasted costs for the entire account are predicted to exceed the forecast, you will receive a notification. You can also create an actual budget, for when your current costs actually exceed a defined amount.
 
 
-
-## 2. Create and implement an AWS Budget for EC2 actual cost<a name="budget_ec2actual"></a>
+<a name="budget_ec2actual"></a>
+## 2. Create and implement an AWS Budget for EC2 actual cost
 We will create a monthly EC2 actual cost budget, which will notify if the actual costs of EC2 instances exceeds the specified amount.
 
 1. Click **Create budget**:
@@ -116,8 +116,8 @@ We will create a monthly EC2 actual cost budget, which will notify if the actual
 
 You have created an actual cost budget for EC2 usage. You can extend this budget by adding specific filters such as linked accounts, tags or instance types. You can also create budgets for services other than EC2.
 
-
-## 3. Create and implement an AWS Budget for EC2 Savings Plan coverage<a name="budget_spcoverage"></a>
+<a name="budget_spcoverage"></a>
+## 3. Create and implement an AWS Budget for EC2 Savings Plan coverage
 We will create a monthly savings plan coverage budget which will notify if the coverage of Savings Plan for EC2 is below the specified amount.
 
 1. Click **Create budget**:
@@ -151,8 +151,8 @@ We will create a monthly savings plan coverage budget which will notify if the c
 8. You will receive an email similar to this within a few minutes:
 ![Images/AWSLab13.png](Images/AWSLab13.png)
 
-  
-## 4. Create and implement an AWS Budget Report <a name="budget_report"></a>
+<a name="budget_report"></a>
+## 4. Create and implement an AWS Budget Report 
 AWS Budgets Reports allow you to create and send daily, weekly, or monthly reports to monitor the performance of your AWS Budgets.
 
 1. From the Budgets dashboard, Click on **Budgets Reports**:
@@ -185,8 +185,8 @@ AWS Budgets Reports allow you to create and send daily, weekly, or monthly repor
 9. You should receive an email similar to the one below:
 ![Images/AWSBudgetReport7.png](Images/AWSBudgetReport7.png)
 
-
-## 5. Tear down <a name="tear_down"></a>
+<a name="tear_down"></a>
+## 5. Tear down 
 
 ### Delete a budget report
 We will delete the bugdet report we created in section 4.
@@ -221,8 +221,8 @@ We will delete all three budgets that were configured in sections 1,2 and 3.
 7. All budgets should be deleted that were created in this workshop:
 ![Images/AWSTeardown21.png](Images/AWSTeardown21.png)
 
-
-## 5. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 5. Rate this lab 
 [![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_2_1star) [![2 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_2_2star) [![3 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_2_3star) [![4 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_2_4star) [![5 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_2_5star) 
 
 

@@ -4448,15 +4448,15 @@ Terminating i-0710435abc631eab3
 <li>Do this step only after ALL CloudFormation stacks are <strong>DELETE_COMPLETE</strong></li>
 </ul>
 <p>Using AWS CLI:</p>
-<pre><code>aws iam delete-role-policy --role-name LambdaCustomResourceRole --policy-name LambdaCustomResourcePolicy
+<pre><code>aws iam delete-role-policy --role-name LambdaCustomResourceRole-SecureSsmForRds --policy-name LambdaCustomResourcePolicy
 
-aws iam delete-role --role-name LambdaCustomResourceRole
+aws iam delete-role --role-name LambdaCustomResourceRole-SecureSsmForRds
 </code></pre>
 <p>Using AWS Console:</p>
 <ol>
 <li>Go to the IAM Roles Console: <a href="https://console.aws.amazon.com/iam/home#/roles">https://console.aws.amazon.com/iam/home#/roles</a></li>
-<li>Search for <code>LambdaCustomResourceRole</code></li>
-<li>Check the box next to <code>LambdaCustomResourceRole</code></li>
+<li>Search for <code>SecureSsmForRds</code></li>
+<li>Check the box next to <code>LambdaCustomResourceRole-SecureSsmForRds</code></li>
 <li>Click <strong>Delete role</strong> button</li>
 <li>Click <strong>Yes, delete</strong> button</li>
 </ol>

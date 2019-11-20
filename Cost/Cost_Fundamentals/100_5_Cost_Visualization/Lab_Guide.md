@@ -18,8 +18,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 7. [Tear down](#tear_down)
 8. [Rate this Lab](#rate_lab) 
 
-
-## 1. View your cost and usage by service <a name="cost_usage_service"></a>
+<a name="cost_usage_service"></a>
+## 1. View your cost and usage by service 
 AWS Cost Explorer is a free built in tool to that lets you dive deeper into your cost and usage data to identify trends, pinpoint cost drivers, and detect anomalies. We will examine costs by service in this exercise.
 
 1. Log into the console as an IAM user with the required permissions, go to the **billing** dashboard:
@@ -65,8 +65,8 @@ AWS Cost Explorer is a free built in tool to that lets you dive deeper into your
 You have now viewed the costs by service and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.
 
 
-
-## 2. View your cost and usage by account <a name="cost_usage_account"></a>
+<a name="cost_usage_account"></a>
+## 2. View your cost and usage by account 
 We will now view usage by account. This helps to highlight where the costs and usage are by linked account. NOTE: you will need one or more multiple accounts for this exercise to be effective.
 
 1. Select **Saved reports** from the left menu:
@@ -106,9 +106,9 @@ We will now view usage by account. This helps to highlight where the costs and u
 You have now viewed the costs by account and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.
 
 
-
-## 3. View your Savings Plan coverage <a name="SP_coverage"></a>
-To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of running instances covered by RI's, here is how you can check your coverage.
+<a name="SP_coverage"></a>
+## 3. View your Savings Plan coverage 
+To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of running resources covered by Savings Plans, here is how you can check your coverage.
 
 1. In Cost Explorer, click on **Saved reports** on the left:
 ![Images/AWSSP_coverage1.png](Images/AWSSP_coverage1.png)
@@ -122,8 +122,8 @@ To ensure you are paying the lowest prices for your resources, a high coverage o
 4. Scroll down to the table, click on the arrow next to **On-demand spend** to sort from the largest spend to the lowest. This helps show your opportunity for cost savings:
 ![Images/AWSSP_coverage4.png](Images/AWSSP_coverage4.png)
 
-
-## 4. View your Elasticity <a name="Elasticity"></a>
+<a name="Elasticity"></a>
+## 4. View your Elasticity 
 **NOTE**: This exercise requires you have enabled hourly granularity within Cost Explorer, this can be done by following the instructions here - [AWS Account Setup](../100_1_AWS_Account_Setup/Lab_Guide.md), Step5 - Enable Cost Explorer.
 There are additional costs to enable this granularity.
 
@@ -145,8 +145,8 @@ A key part of cost optimization is ensuring that your systems scale with your us
 ![Images/AWSElasticity5.png](Images/AWSElasticity5.png)
 
 
-
-## 5. View your Reserved Instance coverage <a name="RI_coverage"></a>
+<a name="RI_coverage"></a>
+## 5. View your Reserved Instance coverage 
 To ensure you are paying the lowest prices for your resources, a high coverage of Reserved Instances (RI's) is required. A typical goal is to aim for approximately 80% of running instances covered by RI's, here is how you can check your coverage.
 
 1. In Cost Explorer, click on **Saved reports** on the left:
@@ -167,8 +167,8 @@ To ensure you are paying the lowest prices for your resources, a high coverage o
 
 You have now viewed your RI coverage, and have insight on where to increase your coverage.
 
-
-## 6. Create custom EC2 reports <a name="custom_ec2"></a>
+<a name="custom_ec2"></a>
+## 6. Create custom EC2 reports 
 We will now create some custom EC2 reports, which will help to show ongoing costs related to EC2 instances and their associated usage. 
 
 1. From the left menu click **Explore**, and click **Cost & Usage**:
@@ -210,8 +210,8 @@ We will now create some custom EC2 reports, which will help to show ongoing cost
 13. Here you can see both reports that were saved, note they do not have a lock symbol - which is reserved for AWS configured reports:
 ![Images/AWSCustomEC213.png](Images/AWSCustomEC213.png)
 
-
-## 7. Tear down <a name="tear_down"></a>
+<a name="tear_down"></a>
+## 7. Tear down 
 We will delete both custom reports that were created.
 
 1. Click on **Saved reports** on the left menu:
@@ -226,8 +226,8 @@ We will delete both custom reports that were created.
 4. The reports are no longer listed in the reports available:
 ![Images/AWSTearDown3.png](Images/AWSTearDown3.png)
 
-
-## 8. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 8. Rate this lab 
 [![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_1star) [![2 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_2star) [![3 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_3star) [![4 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_4star) [![5 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_100_5_5star) 
 
 

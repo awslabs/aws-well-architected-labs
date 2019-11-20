@@ -16,8 +16,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 6. [Tear down](#tear_down)
 7. [Rate this Lab](#rate_lab)  
 
-
-## 1. Create a group of users for testing <a name="Create_test_group"></a>
+<a name="Create_test_group"></a>
+## 1. Create a group of users for testing 
 This lab requires you to apply an IAM policy to a group of users, then login as a user in that group and verify the policy. We will create this test group.
 
 1. Go to the **IAM** service page: 
@@ -61,8 +61,8 @@ This lab requires you to apply an IAM policy to a group of users, then login as 
 12. Record the **logon link**, the **User** and the **Password** for later use, click **Close**:
 ![Images/AWSCreateTest12.png](Images/AWSCreateTest12.png)
 
-
-## 2. Create an IAM Policy to restrict service usage by region <a name="EC2_restrict_region"></a>
+<a name="EC2_restrict_region"></a>
+## 2. Create an IAM Policy to restrict service usage by region 
 To manage costs you need to manage and control your usage. AWS offers multilpe regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.
 
 We will create a policy that allows all EC2, RDS and S3 access in a single region only. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.
@@ -169,8 +169,8 @@ You have successfully implemented an IAM policy that restricts all EC2, RDS and 
 
 Log out of the console as TestUser1.
 
-
-## 3. Create an IAM Policy to restrict EC2 usage by family <a name="EC2_restrict_family"></a>
+<a name="EC2_restrict_family"></a>
+## 3. Create an IAM Policy to restrict EC2 usage by family 
 AWS offers different instance families within EC2. Depending on your workload requirements - different types will be most cost effective. For non-specific environments such as testing or development, you can restrict the instance families in those accounts to the most cost effective generic types. It is also an effective way to increase RI utilization, by ensuring these accounts will consume any available Reserved Instances. 
 
 We will create a policy that allows operations on specific instance families only. This will not only restrict launching an instance, but all other activities. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.
@@ -277,8 +277,8 @@ Log out of the console as TestUser1.
 
 
 
-
-## 4. Extend an IAM Policy to restrict EC2 usage by instance size <a name="EC2_restrict_size"></a>
+<a name="EC2_restrict_size"></a>
+## 4. Extend an IAM Policy to restrict EC2 usage by instance size 
 We can also restrict the size of instance that can be launched. This can be used to ensure only low cost instances can be created within an account. This is ideal for testing and development, where high capacity instances may not be required. We will extend the EC2 family policy above, and add restrictions by adding the sizes of instances allowed.
 
 
@@ -356,8 +356,8 @@ You have successfully implemented an IAM policy that restricts all EC2 instance 
 Log out of the console as TestUser1.
 
 
-
-## 5. Create an IAM policy to restrict EBS Volume creation by volume type <a name="EC2_volume_type"></a>
+<a name="EC2_volume_type"></a>
+## 5. Create an IAM policy to restrict EBS Volume creation by volume type 
 Extending cost optimization governance beyond compute instances will ensure overall higher levels of cost optimization. Similar to EC2 instances, there are different storage types. Governing the type of storage that can be created in an account can be effective to minimize cost. 
 
 We will create an IAM policy that denies operations that contain provisioned IOPS (io1) EBS volume types. This will not only restrict creating a volume, but all other actions that attempt to use this volume type. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.
@@ -458,8 +458,8 @@ You have successfully implemented an IAM policy that denies operations if there 
 
 Log out of the console as TestUser1.
 
-
-## 6. Tear down <a name="tear_down"></a>
+<a name="tear_down"></a>
+## 6. Tear down 
 
 Log onto the console as your regular user with the required permissions.
 
@@ -516,8 +516,8 @@ We will delete the IAM policies created above, as they are no longer applied to 
 17. **Triple check** they are the groups you wrote down, and click **Yes, Delete**:
 ![Images/AWSTeardown24.png](Images/AWSTeardown24.png)
 
-
-## 7. Rate this lab<a name="rate_lab"></a> 
+<a name="rate_lab"></a>
+## 7. Rate this lab 
 [![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_200_2_1star) [![2 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_200_2_2star) [![3 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_200_2_3star) [![4 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_200_2_4star) [![5 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_200_2_5star)
 
 

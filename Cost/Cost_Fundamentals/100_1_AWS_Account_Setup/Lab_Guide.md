@@ -20,8 +20,8 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 9. [Rate this Lab](#rate_lab) 
 
 
-
-## 1. Configure IAM access to your billing<a name="IAM_access"></a>
+<a name="IAM_access"></a>
+## 1. Configure IAM access to your billing
 **NOTE**: You will need to sign into the account with root account credentials to perform this action. You need to enter in the account email and password for root access.
 
 You need to enable IAM access to your billing so the correct IAM users can access the information. This allows other users (non-root) to access billing information in the master account. It is also required if you wish for member accounts to see their usage and billing information. This step will not provide access to the information, that is configured through IAM policies.
@@ -43,8 +43,8 @@ You will now be able to provide access to non-root users to billing information 
 
 **NOTE:** Logout as the root user before continuing.
 
-
-## 2. Create an account structure<a name="account_structure"></a>
+<a name="account_structure"></a>
+## 2. Create an account structure
 **NOTE**: Do NOT do this step if you already have an organization and consolidated billing setup.
 
 You will create an AWS Organization, and join one or more accounts to the master account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a master account that is primarily used for billing and does not contain any resources, all resources and workloads will reside in the member accounts. You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you create a new master account, it will contain all billing information for member accounts, member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data.  
@@ -107,8 +107,8 @@ You will now join other accounts to your organization.
 
 Repeat the steps above (exercise 1.2) for each additional account in your organization. 
 
-
-## 3. Configure billing account settings<a name="account_settings"></a>
+<a name="account_settings"></a>
+## 3. Configure billing account settings
 It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by muptile team members for redudancy. Ensure the email accounts are actively monitored.
 
 1. Log in to your Master account as an IAM user with the required permissions, Click on the account name in the top right, and click on **My Account** from the menu:
@@ -120,8 +120,8 @@ It is important to ensure your account contacts are up to date and correct. This
 3. Enter information into each of the fields for **Billing**, **Operations** and **Security**, and click **Update**:
 ![Images/AWSAcct3.png](Images/AWSAcct3.png)
 
-
-## 4. Configure Cost and Usage Reports<a name="CUR"></a>
+<a name="CUR"></a>
+## 4. Configure Cost and Usage Reports
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information. This will allow you to make modifications to your usage, and make your applications more efficient.
 
 
@@ -183,8 +183,8 @@ The monthly billing report contains estimated AWS charges for the month. It cont
 ![Images/AWSMonthlyUsage6.png](Images/AWSMonthlyUsage6.png)
 
 
-
-## 5. Enable AWS Cost Explorer<a name="cost_explorer"></a>
+<a name="cost_explorer"></a>
+## 5. Enable AWS Cost Explorer
 AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts.
  
 1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
@@ -210,8 +210,8 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, understa
 
 **NOTE**: This will incur costs depending on the number of EC2 resources you are running. 
 
-
-## 6. Enable AWS-Generated Cost Allocation Tags<a name="cost_tags"></a>
+<a name="cost_tags"></a>
+## 6. Enable AWS-Generated Cost Allocation Tags
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information that is automatically applied to resources that are created within your account. This allows you to view and allocate costs based on who created a resource. 
 
 1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
@@ -226,8 +226,8 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 4. You will see that it is activated: 
 ![Images/AWSBillTag3.png](Images/AWSBillTag3.png)
 
-
-## 7. Create a cost optimization team <a name="create_team"></a>
+<a name="create_team"></a>
+## 7. Create a cost optimization team 
 We are going to create a cost optimization team within your master/payer account - which is where the billing information is. Within your organization there needs to be a team of people that are focused around costs and usage. This exercise will create the users and the group, then assign all the access they need.
 This team will then be able to manage the organizations cost and usage, and start to implement optimization mechanisms.
 
@@ -389,12 +389,12 @@ You can continue to expand this group by adding additional users from your organ
 
 
 
-
-## 8. Tear down<a name="tear_down"></a>  
+<a name="tear_down"></a>
+## 8. Tear down  
 This exercise covered fundamental steps that are recommended for all AWS accounts to enable Cost Optimization. There is no tear down for exercises in this lab.
 Ensure you remove the IAM policies from the users/groups if they were used. 
 
-
-## 9. Rate this lab<a name="rate_lab"></a>  
+<a name="rate_lab"></a>
+## 9. Rate this lab  
 [![1 Star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_1star) [![2 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_2star) [![3 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_3star) [![4 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_4star) [![5 star](Images/star.png)](https://wellarchitectedlabs.com/Cost_100_1_5star) 
 
