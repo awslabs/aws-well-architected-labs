@@ -50,8 +50,8 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
     * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
 
 1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
-    * **single region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy.json?raw=1)
-    * **multi region**: [download CloudFormation template here](Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1)
+    * **single region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json)
+    * **multi region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy_two_regions.json)
 
 1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
 ![SelectOhio](Images/SelectOhio.png)
@@ -194,9 +194,9 @@ Using bash is an effective way to execute the failure injection tests for this w
          * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
 
 1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
-      * [bash/fail_instance.sh](Code/FailureSimulations/bash/fail_instance.sh?raw=1)
-      * [bash/failover_rds.sh](Code/FailureSimulations/bash/failover_rds.sh?raw=1)
-      * [bash/fail_az.sh](Code/FailureSimulations/bash/fail_az.sh?raw=1)
+      * [bash/fail_instance.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_instance.sh)
+      * [bash/failover_rds.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/failover_rds.sh)
+      * [bash/fail_az.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_az.sh)
 
 1. Set the scripts to be executable.  
 
