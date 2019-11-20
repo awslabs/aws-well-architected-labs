@@ -28,9 +28,9 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 **If you are using your own AWS account**:
 
-* Sign in to the AWS Management Console as an IAM user or using a federated role
-* You will need AWS credentials with which you can access your account. For example you can use an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from an IAM User you control.
-    * If you do not have these credentials, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
+* Sign in to the AWS Management Console as an IAM user who has PowerUser Access or Adminstrator permissions, to ensure successful execution of this lab. 
+* You will need the AWS secret credentials, AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, for this IAM user for later use in this lab.
+    * If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
 
 ### 1.2 Checking for existing service-linked roles
 
