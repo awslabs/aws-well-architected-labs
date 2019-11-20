@@ -14,7 +14,7 @@ Use these instructions to get a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` 
 
 ## Create new AWS credentials for an IAM User you already control
 
-1. Sign in to the AWS Management Console and open the IAM console at <https://console.aws.amazon.com/iam/>
+1. Sign in to the AWS Management Console as a IAM user who has IAM management permissions and open the IAM console at <https://console.aws.amazon.com/iam/>
 
 1. In the navigation pane, choose **Users**.
 
