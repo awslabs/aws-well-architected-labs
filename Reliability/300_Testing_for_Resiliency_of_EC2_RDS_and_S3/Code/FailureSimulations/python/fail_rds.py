@@ -28,20 +28,20 @@ rds = boto3.client('rds')
 vpc_info = sys.argv[1]
 try:
 # get all of the RDS db instances
- dbs = rds.describe_db_instances()
+  dbs = rds.describe_db_instances()
 
 # only fail over the first instance
- for db in dbs['DBInstances']:
+  for db in dbs['DBInstances']:
 
- 	if db['DBSubnetGroup']['VpcId'] == vpc_info:
- 		    print ("Rebooting the RDS instance",db['DBInstanceIdentifier'])
- 		    rds.reboot_db_instance(
-                   DBInstanceIdentifier=db['DBInstanceIdentifier'],
-                   ForceFailover=True|False
-                 )
-	break
+    if db['DBSubnetGroup']['VpcId'] == vpc_info:
+          print ("Rebooting the RDS instance",db['DBInstanceIdentifier'])
+          rds.reboot_db_instance(
+                    DBInstanceIdentifier=db['DBInstanceIdentifier'],
+                    ForceFailover=True|False
+          )
+    break
 
 except Exception as error:
-    print error
+    print(error)
 
 
