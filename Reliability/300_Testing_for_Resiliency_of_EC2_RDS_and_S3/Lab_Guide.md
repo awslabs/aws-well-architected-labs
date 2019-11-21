@@ -415,7 +415,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 #### 3.4.2 Failover to standby
 
 1. On the database console **Configuration** tab
-      1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** then the failover is complete
+      1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** when the failover is complete.
       1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted.
 
          ![DBPostFailConfiguration](Images/DBPostFailConfiguration.png)
