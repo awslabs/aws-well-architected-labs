@@ -3004,7 +3004,7 @@
 </li>
 <li>
 <p>Find the section <strong>Query_String_List</strong>, add following new query string at the bottom of file (note the indent should be same as other query strings), save <strong>config.yml</strong>.</p>
-<pre><code>MTD_Inter_AZ_DT: SELECT
+<pre><code>  - MTD_Inter_AZ_DT: SELECT
         year
         ,month(line_item_usage_start_date) month
         ,line_item_product_code as Product_Name  

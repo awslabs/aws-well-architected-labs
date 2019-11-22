@@ -198,7 +198,7 @@ Now you have completed this auto CUR delivery solution with default CUR query. I
 
 3. Find the section **Query_String_List**, add following new query string at the bottom of file (note the indent should be same as other query strings), save **config.yml**.
 
-        MTD_Inter_AZ_DT: SELECT
+          - MTD_Inter_AZ_DT: SELECT
                 year
                 ,month(line_item_usage_start_date) month
                 ,line_item_product_code as Product_Name  
