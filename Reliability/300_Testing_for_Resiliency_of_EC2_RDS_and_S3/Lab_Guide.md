@@ -373,9 +373,8 @@ This failure injection will simulate a critical failure of the Amazon RDS DB ins
 
 1. Click on **click here to go to other page** and it will show the latest ten entries in the Amazon RDS DB
       1. The DB table shows "hits" on our _image page_
-      1. The web server adds a row to the DB for every request it receives for the _image page_
-      1. This includes the IP address of your browser with which you loaded the _image page_
-      1. Additionally it includes the IP addresses of the AWS Elastic Load Balancer health checks. For each region the AWS Elastic Load Balancer makes these health checks, so you will see three IP addresses from these
+      1. Website URL access requests are shown here for traffic against the _image page_. These include IPs of browser traffic as well as IPs of load balancer health checks
+      1. For each region the AWS Elastic Load Balancer makes these health checks, so you will see three IP addresses from these
       1. Click on **click here to go to other page** again to return to the _image page_
 
 1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
