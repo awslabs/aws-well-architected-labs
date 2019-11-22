@@ -411,7 +411,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. The website is _not_ available. Some errors you might see reported:
       * **No Response / Timeout**: Request was successfully sent to EC2 server, but server no longer has connection to an active database
-      * **504 Gateway Time-out**: Amazon Elastic Load Balancer has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
+      * **504 Gateway Time-out**: Amazon Elastic Load Balancer did not get a response from the server.  This can happen when it has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request
       * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
       * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.
 
