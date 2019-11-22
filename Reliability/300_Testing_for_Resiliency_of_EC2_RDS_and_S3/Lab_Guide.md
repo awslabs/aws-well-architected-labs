@@ -371,7 +371,12 @@ This failure injection will simulate a critical failure of the Amazon RDS DB ins
 
 1. Before you initiate the failure simulation, refresh the service website several times. Every time the image is loaded, the website writes a record to the Amazon RDS database
 
-1. Click on **Click here to go to other page** and it will show the latest ten entries in the Amazon RDS DB. Click again to return to the image page.
+1. Click on **click here to go to other page** and it will show the latest ten entries in the Amazon RDS DB
+      1. The DB table shows "hits" on our _image page_
+      1. The web server adds a row to the DB for every request it receives for the _image page_
+      1. This includes the IP address of your browser with which you loaded the _image page_
+      1. Additionally it includes the IP addresses of the AWS Elastic Load Balancer health checks. For each region the AWS Elastic Load Balancer makes these health checks, so you will see three IP addresses from these
+      1. Click on **click here to go to other page** again to return to the _image page_
 
 1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
 
@@ -449,6 +454,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 This failure injection will simulate a critical problem with one of the three AWS Availability Zones (AZs) used by your service. AWS Availability Zones are  powerful tools for helping build highly available applications. If an application is partitioned across AZs, companies are better isolated and protected from issues such as lightning strikes, tornadoes, earthquakes and more.
 
 1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds> and note which Availability Zone the AWS RDS _primary_ DB instance is in.
+      * **Note**: If you previously ran the **RDS Failure Injection test**, you must wait until the console shows the AZs for the _primary_ and _standby_ instances as swapped, before running this test
       * A good way to run the AZ failure injection is first in an AZ _other_ than this - we'll call this **Scenario 1**
       * Then try it again in the _same_ AZ as the AWS RDS _primary_ DB instance - we'll call this **Scenario 2**
       * Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.
