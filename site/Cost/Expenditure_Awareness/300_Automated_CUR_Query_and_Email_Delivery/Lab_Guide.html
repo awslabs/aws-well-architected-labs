@@ -2887,9 +2887,9 @@
 <p>This step is used to edit parameters (CUR database name and table, SES sender and recipient etc) in the Lambda function code, which is then uploaded to S3 for Lambda execution.</p>
 <ol>
 <li>
-<p>Download function code <a href="Code/AutoCURDelivery.zip">./Code/AutoCURDelivery.zip</a> to your local disk. This zip file includes:</p>
+<p>Download function code <a href="./Code/AutoCURDelivery.zip">./Code/AutoCURDelivery.zip</a> to your local disk. This zip file includes:
+        - auto_cur_delivery.py - Lambda function code </p>
 <ul>
-<li>auto_cur_delivery.py - Lambda function code </li>
 <li>config.yml - Configuration file  </li>
 <li>package/ -  All dependencies, libraries, including pandas, numpy, Xlrd, Openpyxl, Xlsxwriter, pyyaml</li>
 </ul>
@@ -2916,7 +2916,7 @@
 <p>Add the updated <strong>config.yml</strong> back to <strong>AutoCURDelivery.zip</strong>.</p>
 </li>
 <li>
-<p>Upload <strong>AutoCURDelivery.zip</strong> to your S3 bucket. Make sure this S3 path is in the same region as Lambda function created in next step.  <strong>NOTE</strong> this is a large 30+Mb file, so it may take a little time.</p>
+<p>Upload <strong>AutoCURDelivery.zip</strong> to your S3 bucket. Make sure this S3 path is in the same region as Lambda function created in next step.  <strong>NOTE</strong> this is a large 30+MB file, so it may take a little time.</p>
 </li>
 </ol>
 <p><a name="create_lambda_function"></a></p>

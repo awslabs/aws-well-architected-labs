@@ -24,7 +24,8 @@ This hands-on lab will guide you through deploying an automatic CUR query & E-ma
 
 
 ## Costs
-- TBA
+- Variable, dependent on the amount of data scanned and report frequency
+- Approximately <$5 a month for small to medium accounts
 
 
 ## Time to complete
