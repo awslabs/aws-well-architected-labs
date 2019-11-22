@@ -171,6 +171,10 @@ nav:
             - Splitting Sharing CUR: 
                 - Overview: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md' 
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.md'
+            - Auto Financial CUR Reports: 
+                - Overview: 'Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.md' 
+                - Lab Guide: 'Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.md'
+
 
     - Well Architected Tool: 
         - Overview: 'Well-ArchitectedTool/README.md' 

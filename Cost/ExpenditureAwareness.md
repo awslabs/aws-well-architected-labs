@@ -87,3 +87,9 @@ This hands-on lab will guide you on how to automatically extract part of your CU
 | [![Go to lab](../common/images/gotolab.png)](./Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md) | **300 Level Lab**: This Lab uses S3 events, Lambda and Athena to extract part of a CUR file and deliver it to an S3 bucket for another account. |
  
 
+## Step 10 (Optional) - Automated CUR Reports and email delivery
+
+| | | 
+|---|---|
+| [![Go to lab](../common/images/gotolab.png)](./Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.md) | **300 Level Lab**: This Lab uses CloudWatch events, Lambda, Athena and SES to run queries against the CUR file, and send financial reports to recipients. |
+ 

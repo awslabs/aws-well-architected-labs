@@ -2533,6 +2533,54 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-4" type="checkbox" id="nav-6-7-4">
+    
+    <label class="md-nav__link" for="nav-6-7-4">
+      Auto Financial CUR Reports
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-4">
+        Auto Financial CUR Reports
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -2694,13 +2742,19 @@
 <h2 id="create-new-aws-credentials-for-an-iam-user-you-already-control">Create new AWS credentials for an IAM User you already control</h2>
 <ol>
 <li>
-<p>Sign in to the AWS Management Console and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a></p>
+<p>Sign in to the AWS Management Console as a IAM user who has IAM management permissions and open the IAM console at <a href="https://console.aws.amazon.com/iam/">https://console.aws.amazon.com/iam/</a></p>
 </li>
 <li>
 <p>In the navigation pane, choose <strong>Users</strong>.</p>
 </li>
 <li>
-<p>Choose the name of the user whose access keys you want to manage, and then choose the <strong>Security credentials</strong> tab.</p>
+<p>Choose the name of the user whose access keys you want to manage.</p>
+</li>
+<li>
+<p>Select the <strong>Permissions</strong> tab of this user and confirm that they have either PowerUserAccess or AdministratorAccess policy attached. If not, attach the PowerUserAccess policy using the <strong>Add permissions</strong> button.</p>
+</li>
+<li>
+<p>Select the <strong>Security credentials</strong> tab.</p>
 </li>
 <li>
 <p>Choose <strong>Create access key</strong>. Then choose <strong>Download .csv file</strong> to save the access key ID and secret access key to a CSV file on your computer. Store the file in a secure location. You will not have access to the secret access key again after this dialog box closes. After you download the CSV file, choose Close.</p>

@@ -3014,6 +3014,54 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-4" type="checkbox" id="nav-6-7-4">
+    
+    <label class="md-nav__link" for="nav-6-7-4">
+      Auto Financial CUR Reports
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-4">
+        Auto Financial CUR Reports
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -3614,9 +3662,9 @@
 </ul>
 <p><strong>If you are using your own AWS account</strong>:</p>
 <ul>
-<li>Sign in to the AWS Management Console as an IAM user or using a federated role</li>
-<li>You will need AWS credentials with which you can access your account. For example you can use an <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> from an IAM User you control.<ul>
-<li>If you do not have these credentials, follow the <a href="Documentation/Self_AWS_Account.html">instructions here to create them</a></li>
+<li>Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdminstratorAccess permissions, to ensure successful execution of this lab. </li>
+<li>You will need the AWS credentials, <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>, of this IAM user for later use in this lab.<ul>
+<li>If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the <a href="Documentation/Self_AWS_Account.html">instructions here to create them</a></li>
 </ul>
 </li>
 </ul>
@@ -3638,8 +3686,8 @@
 <li>
 <p>Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with <code>wget</code>)</p>
 <ul>
-<li><strong>single region</strong>: <a href="Code/CloudFormation/lambda_functions_for_deploy.json?raw=1">download CloudFormation template here</a></li>
-<li><strong>multi region</strong>: <a href="Code/CloudFormation/lambda_functions_for_deploy_two_regions.json?raw=1">download CloudFormation template here</a></li>
+<li><strong>single region</strong>: <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json">download CloudFormation template here</a></li>
+<li><strong>multi region</strong>: <a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy_two_regions.json">download CloudFormation template here</a></li>
 </ul>
 </li>
 <li>
@@ -3852,9 +3900,9 @@ jq-1.5-1-a5b5cbe
 <li>
 <p>Download the <a href="https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash">resiliency bash scripts from GitHub</a> to a location convenient for you to execute them. You can use the following links to download the scripts:</p>
 <ul>
-<li><a href="Code/FailureSimulations/bash/fail_instance.sh?raw=1">bash/fail_instance.sh</a></li>
-<li><a href="Code/FailureSimulations/bash/failover_rds.sh?raw=1">bash/failover_rds.sh</a></li>
-<li><a href="Code/FailureSimulations/bash/fail_az.sh?raw=1">bash/fail_az.sh</a></li>
+<li><a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_instance.sh">bash/fail_instance.sh</a></li>
+<li><a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/failover_rds.sh">bash/failover_rds.sh</a></li>
+<li><a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_az.sh">bash/fail_az.sh</a></li>
 </ul>
 </li>
 <li>
@@ -4176,7 +4224,7 @@ Terminating i-0710435abc631eab3
 <li>
 <p>On the database console <strong>Configuration</strong> tab</p>
 <ol>
-<li>Refresh and note the values of the <strong>Info</strong> field. It will ultimately return to <strong>Available</strong> then the failover is complete</li>
+<li>Refresh and note the values of the <strong>Info</strong> field. It will ultimately return to <strong>Available</strong> when the failover is complete.</li>
 <li>
 <p>Note the AZs for the <em>primary</em> and <em>standby</em> instances. They have swapped as the <em>standby</em> has no taken over <em>primary</em> responsibility, and the former <em>primary</em> has been restarted.</p>
 <p><img alt="DBPostFailConfiguration" src="Images/DBPostFailConfiguration.png" /></p>

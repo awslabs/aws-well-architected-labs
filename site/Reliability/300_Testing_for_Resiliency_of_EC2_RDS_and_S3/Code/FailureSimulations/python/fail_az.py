@@ -130,7 +130,7 @@ print("Associating new network ACL to the subnets in the AZ")
 
 print("Updating NACLs on:")
 for sn in  subnets_to_change:
-    print sn
+    print (sn)
 for nacl_association_id in NetworkAclAssociationIds:    
     replace_network_acl_association = ec2client.replace_network_acl_association(
          AssociationId=nacl_association_id,
