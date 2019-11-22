@@ -23,6 +23,14 @@ This hands-on lab will guide you through deploying an automatic CUR query & E-ma
 - Verify e-mail address, send mail in SES
 
 
+## Costs
+- TBA
+
+
+## Time to complete
+- The lab should take approximately 15 minutes to complete
+
+
 <BR>
 
 [![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
