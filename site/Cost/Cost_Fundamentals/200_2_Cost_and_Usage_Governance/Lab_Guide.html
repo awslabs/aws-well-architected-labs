@@ -2861,7 +2861,7 @@
 </ol>
 <p><a name="EC2_restrict_region"></a></p>
 <h2 id="2-create-an-iam-policy-to-restrict-service-usage-by-region">2. Create an IAM Policy to restrict service usage by region</h2>
-<p>To manage costs you need to manage and control your usage. AWS offers multilpe regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.</p>
+<p>To manage costs you need to manage and control your usage. AWS offers multiple regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.</p>
 <p>We will create a policy that allows all EC2, RDS and S3 access in a single region only. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.</p>
 <h3 id="21-create-the-iam-policy">2.1 Create the IAM Policy</h3>
 <ol>
@@ -2953,7 +2953,7 @@
 <img alt="Images/AWSPolicy18.png" src="Images/AWSPolicy18.png" /></p>
 </li>
 </ol>
-<p>You have successfully verified that you can not launch any instances outside of the N.Virginia region. We will now verify we have access in us-east-1 (N.Virginia):</p>
+<p>You have successfully verified that you cannot launch any instances outside of the N.Virginia region. We will now verify we have access in us-east-1 (N.Virginia):</p>
 <ol>
 <li>
 <p>Change the region by clicking the current region, and selecting <strong>US East (N.Virginia)</strong>:
@@ -3085,7 +3085,7 @@
 <img alt="Images/AWSFamilyRestrict17.png" src="Images/AWSFamilyRestrict17.png" /></p>
 </li>
 <li>
-<p>Select <strong>Proceed without a key pair</strong>, and click <strong>I acknowledge that i will not be able to...</strong>, then click <strong>Launch Instances</strong>: 
+<p>Select <strong>Proceed without a key pair</strong>, and click <strong>I acknowledge that I will not be able to...</strong>, then click <strong>Launch Instances</strong>: 
 <img alt="Images/AWSFamilyRestrict18.png" src="Images/AWSFamilyRestrict18.png" /></p>
 </li>
 <li>
@@ -3149,7 +3149,7 @@
 <img alt="Images/AWSFamilyUpdate5.png" src="Images/AWSFamilyUpdate5.png" /></p>
 </li>
 <li>
-<p>Modify the policy by adding in the sizes, be careful not to change the syntax and only remove the * characters. Click on <strong>Review policy</strong>:
+<p>Modify the policy by adding in the sizes, add in <strong>nano</strong>, <strong>medium</strong>, <strong>large</strong>, be careful not to change the syntax and not remove the * characters. Click on <strong>Review policy</strong>:
 <img alt="Images/AWSFamilyUpdate6.png" src="Images/AWSFamilyUpdate6.png" /></p>
 </li>
 <li>
@@ -3176,7 +3176,7 @@
 <img alt="Images/AWSFamilyUpdate11.png" src="Images/AWSFamilyUpdate11.png" /></p>
 </li>
 <li>
-<p>Review the configuraion and take note of the security group created, click <strong>Launch</strong>:
+<p>Review the configuration and take note of the security group created, click <strong>Launch</strong>:
 <img alt="Images/AWSFamilyUpdate12.png" src="Images/AWSFamilyUpdate12.png" /></p>
 </li>
 <li>
@@ -3184,7 +3184,7 @@
 <img alt="Images/AWSFamilyUpdate13.png" src="Images/AWSFamilyUpdate13.png" /></p>
 </li>
 <li>
-<p>You will get a failure, as it wasnt a size we allowed in the policy. Click <strong>Back to Review Screen</strong>:
+<p>You will get a failure, as it wasn't a size we allowed in the policy. Click <strong>Back to Review Screen</strong>:
 <img alt="Images/AWSFamilyUpdate14.png" src="Images/AWSFamilyUpdate14.png" /></p>
 </li>
 <li>
@@ -3289,7 +3289,7 @@
 <img alt="Images/AWSEBSPolicy12.png" src="Images/AWSEBSPolicy12.png" /></p>
 </li>
 <li>
-<p>Click <strong>Select</strong> next to <strong>Aamzon Linux 2...</strong>:
+<p>Click <strong>Select</strong> next to <strong>Amazon Linux 2...</strong>:
 <img alt="Images/AWSEBSPolicy13.png" src="Images/AWSEBSPolicy13.png" /></p>
 </li>
 <li>
@@ -3337,7 +3337,7 @@
 <img alt="Images/AWSEBSPolicy23.png" src="Images/AWSEBSPolicy23.png" /></p>
 </li>
 <li>
-<p>It will now succeed, as it doesnt contain an io1 volume type.  Click on the <strong>instance ID</strong> and <strong>terminate</strong> the instance as above:
+<p>It will now succeed, as it doesn't contain an io1 volume type.  Click on the <strong>instance ID</strong> and <strong>terminate</strong> the instance as above:
 <img alt="Images/AWSEBSPolicy24.png" src="Images/AWSEBSPolicy24.png" /></p>
 </li>
 </ol>
@@ -3415,6 +3415,9 @@
 <li>
 <p><strong>Triple check</strong> they are the groups you wrote down, and click <strong>Yes, Delete</strong>:
 <img alt="Images/AWSTeardown24.png" src="Images/AWSTeardown24.png" /></p>
+</li>
+<li>
+<p>Confirm there are no unattached EBS volumes, go to the <strong>EC2 dashboard</strong>, click on <strong>Elastic Block Store</strong>, click <strong>Volumes</strong>. You can sort by the <strong>Created</strong> column to help identify volumes that were not terminated as part of this lab.</p>
 </li>
 </ol>
 <p><a name="rate_lab"></a></p>

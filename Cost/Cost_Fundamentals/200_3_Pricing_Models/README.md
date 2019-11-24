@@ -22,7 +22,7 @@ In a highly dynamic cloud environment it can be challenging to forecast your usa
 
 <BR>
 
-## [Start the Lab!](Lab_Guide.md)
+[![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
 
 <BR>
 <BR>

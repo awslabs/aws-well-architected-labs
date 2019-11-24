@@ -24,7 +24,7 @@ https://wellarchitectedlabs.com
 ## Costs
 - https://aws.amazon.com/aws-cost-management/pricing/
 - Variable costs will be incurred
-- Cost Explorer: $0.01 per 1,000 usage records
+- Cost Explorer: $0.01 per 1,000 usage records for hourly granularity reporting
 
 
 ## Time to complete

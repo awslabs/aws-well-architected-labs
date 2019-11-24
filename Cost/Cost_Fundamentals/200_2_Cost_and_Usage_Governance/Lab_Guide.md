@@ -63,7 +63,7 @@ This lab requires you to apply an IAM policy to a group of users, then login as 
 
 <a name="EC2_restrict_region"></a>
 ## 2. Create an IAM Policy to restrict service usage by region 
-To manage costs you need to manage and control your usage. AWS offers multilpe regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.
+To manage costs you need to manage and control your usage. AWS offers multiple regions, so depending on your business requirements you can limit access to AWS services depending on the region. This can be used to ensure usage is only allowed in specific regions which are more cost effective, and minimize associated usage and cost, such as data transfer.
 
 We will create a policy that allows all EC2, RDS and S3 access in a single region only. NOTE: it is best practice to provide only the minimum access required, the policy used here is for brevity and simplicity, and should only be implemented as a demonstration before being removed.
 
@@ -139,7 +139,7 @@ You have successfully attached the policy to the CostTest group.
 5. Click on **Select** next to the **Amazon Linux 2 AMI**, You will receive an error when you select an AMI as you do not have permissions:
 ![Images/AWSPolicy18.png](Images/AWSPolicy18.png)
 
-You have successfully verified that you can not launch any instances outside of the N.Virginia region. We will now verify we have access in us-east-1 (N.Virginia):
+You have successfully verified that you cannot launch any instances outside of the N.Virginia region. We will now verify we have access in us-east-1 (N.Virginia):
 
 6. Change the region by clicking the current region, and selecting **US East (N.Virginia)**:
 ![Images/AWSPolicy19.png](Images/AWSPolicy19.png)
@@ -245,7 +245,7 @@ We will create a policy that allows operations on specific instance families onl
 5. Make note of the security group created, click **Launch**:
 ![Images/AWSFamilyRestrict17.png](Images/AWSFamilyRestrict17.png)
 
-6. Select **Proceed without a key pair**, and click **I acknowledge that i will not be able to...**, then click **Launch Instances**: 
+6. Select **Proceed without a key pair**, and click **I acknowledge that I will not be able to...**, then click **Launch Instances**: 
 ![Images/AWSFamilyRestrict18.png](Images/AWSFamilyRestrict18.png)
 
 7. You will receive an error, notice the failed step was **Initiating launches**.  Click **Back to Review Screen**:
@@ -302,7 +302,7 @@ We can also restrict the size of instance that can be launched. This can be used
 6. Click on the **JSON** tab:
 ![Images/AWSFamilyUpdate5.png](Images/AWSFamilyUpdate5.png)
 
-7. Modify the policy by adding in the sizes, be careful not to change the syntax and only remove the * characters. Click on **Review policy**:
+7. Modify the policy by adding in the sizes, add in **nano**, **medium**, **large**, be careful not to change the syntax and not remove the * characters. Click on **Review policy**:
 ![Images/AWSFamilyUpdate6.png](Images/AWSFamilyUpdate6.png)
 
 8. Click on **Save changes**:
@@ -323,13 +323,13 @@ We can also restrict the size of instance that can be launched. This can be used
 4. We will attempt to launch a **t3.micro** which was successful before. Click on **Review and Launch**:
 ![Images/AWSFamilyUpdate11.png](Images/AWSFamilyUpdate11.png)
 
-5. Review the configuraion and take note of the security group created, click **Launch**:
+5. Review the configuration and take note of the security group created, click **Launch**:
 ![Images/AWSFamilyUpdate12.png](Images/AWSFamilyUpdate12.png)
 
 6. Select **Proceed without a key pair**, and click **I acknowledge that i will not be able to...**, then click **Launch Instances**:
 ![Images/AWSFamilyUpdate13.png](Images/AWSFamilyUpdate13.png)
 
-7. You will get a failure, as it wasnt a size we allowed in the policy. Click **Back to Review Screen**:
+7. You will get a failure, as it wasn't a size we allowed in the policy. Click **Back to Review Screen**:
 ![Images/AWSFamilyUpdate14.png](Images/AWSFamilyUpdate14.png)
 
 8. Click **Edit instance type**: 
@@ -415,7 +415,7 @@ We will create an IAM policy that denies operations that contain provisioned IOP
 2. Click **Launch Instance**:
 ![Images/AWSEBSPolicy12.png](Images/AWSEBSPolicy12.png)
 
-3. Click **Select** next to **Aamzon Linux 2...**:
+3. Click **Select** next to **Amazon Linux 2...**:
 ![Images/AWSEBSPolicy13.png](Images/AWSEBSPolicy13.png)
 
 4. Select **t3.nano** (which is allowed as per our already applied policy, which we tested in the last exercise), click **Next: Configure Instance Details**:
@@ -451,7 +451,7 @@ We will create an IAM policy that denies operations that contain provisioned IOP
 14. Select **Proceed without a key pair**, and click **I acknowledge that i will not be able to...**, then click **Launch Instances**:
 ![Images/AWSEBSPolicy23.png](Images/AWSEBSPolicy23.png)
 
-15. It will now succeed, as it doesnt contain an io1 volume type.  Click on the **instance ID** and **terminate** the instance as above:
+15. It will now succeed, as it doesn't contain an io1 volume type.  Click on the **instance ID** and **terminate** the instance as above:
 ![Images/AWSEBSPolicy24.png](Images/AWSEBSPolicy24.png)
 
 You have successfully implemented an IAM policy that denies operations if there is an EBS volume of type io1.
@@ -515,6 +515,8 @@ We will delete the IAM policies created above, as they are no longer applied to 
 
 17. **Triple check** they are the groups you wrote down, and click **Yes, Delete**:
 ![Images/AWSTeardown24.png](Images/AWSTeardown24.png)
+
+18. Confirm there are no unattached EBS volumes, go to the **EC2 dashboard**, click on **Elastic Block Store**, click **Volumes**. You can sort by the **Created** column to help identify volumes that were not terminated as part of this lab.
 
 <a name="rate_lab"></a>
 ## 7. Rate this lab 

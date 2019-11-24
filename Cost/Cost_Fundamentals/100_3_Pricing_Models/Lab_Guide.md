@@ -21,7 +21,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 <a name="SP_intro"></a>
 ## 1. Introduction
-Savings Plans are a commitment based discount model. By making a commitment of the amount of resources you will use for 1 or 3 years, you receive a discount of up to 72%. They offer the same discounts as Reserved Instances, however offer a great deal more flexibility, and do not have the management overhead.
+Savings Plans are a commitment based discount model. By making a commitment of the amount of resources you will use for 1 or 3 years, you receive a discount of up to 72%. They offer the same discounts as Reserved Instances, however offer a great deal more flexibility, and do not have the same management overhead.
 
 In this workshop we will take you through your recommendations, and help you choose the right savings plan for your future business requirements.
 
@@ -92,7 +92,7 @@ You now have an understanding of your overall usage trend, and can use this info
 ## 4. Analyze your Savings Plan recommendations
 We have an understanding of the potential savings available to us, and how we can adjust that based on our business requirements. We also know our usage trends across the business, which will help us with our initial commitment.  We will now go deeper to help you understand exactly what Savings Plan commitment is right for you.
 
-You can think of a single Savings Plan as a highly flexible group of Reserved Instances (RI's), without the management overhead.  Depending on the discount level and your usage, RI's can pay themselves off very quickly and offer large savings, or pay themselves off over a longer period with less savings. We will look into a Savings Plan to ensure our commitment pays off in the right amount of time and offers the amount of savings we need.  
+You can think of a single Savings Plan as a highly flexible group of Reserved Instances (RI's), without the same management overhead.  Depending on the discount level and your usage, RI's can pay themselves off very quickly and offer large savings, or pay themselves off over a longer period with less savings. We will look into a Savings Plan to ensure our commitment pays off in the right amount of time and offers the amount of savings we need.  
 
 We will analyze our Savings Plan to further refine our initial commitment level to purchase, this commitment will be very low risk and high return. Once that is purchased you then re-analyze every fortnight or month and "top up" your commitment levels. This ensures you maintain high levels of discounts, and you can continually adjust as your business evolves. 
 

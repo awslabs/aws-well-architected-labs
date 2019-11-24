@@ -2801,7 +2801,7 @@
 </ol>
 <p><a name="cost_usage_service"></a></p>
 <h2 id="1-view-your-cost-and-usage-by-service">1. View your cost and usage by service</h2>
-<p>AWS Cost Explorer is a free built in tool to that lets you dive deeper into your cost and usage data to identify trends, pinpoint cost drivers, and detect anomalies. We will examine costs by service in this exercise.</p>
+<p>AWS Cost Explorer is a free built in tool that lets you dive deeper into your cost and usage data to identify trends, pinpoint cost drivers, and detect anomalies. We will examine costs by service in this exercise.</p>
 <ol>
 <li>
 <p>Log into the console as an IAM user with the required permissions, go to the <strong>billing</strong> dashboard:
@@ -2840,7 +2840,7 @@
 <img alt="Images/AWSCostService8.png" src="Images/AWSCostService8.png" /></p>
 </li>
 <li>
-<p>We will remove the RI recurring fees. Click on the <strong>Charge Type</strong> filter on the right, click the checkbox next to <strong>Recurring reservation fee</strong>, select <strong>Exlude only</strong> to remove the data. Then click <strong>Apply filters</strong>:
+<p>We will remove the RI recurring fees. Click on <strong>More filters</strong> then click <strong>Charge Type</strong> filter on the right, click the checkbox next to <strong>Recurring reservation fee</strong>, select <strong>Exclude only</strong> to remove the data. Then click <strong>Apply filters</strong>:
 <img alt="Images/AWSCostService9.png" src="Images/AWSCostService9.png" /></p>
 </li>
 <li>
@@ -2909,7 +2909,7 @@
 <p>You have now viewed the costs by account and applied multiple filters. You can continue to modify the report by timeframe and apply other filters.</p>
 <p><a name="SP_coverage"></a></p>
 <h2 id="3-view-your-savings-plan-coverage">3. View your Savings Plan coverage</h2>
-<p>To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of running resources covered by Savings Plans, here is how you can check your coverage.</p>
+<p>To ensure you are paying the lowest prices for your resources, a high coverage of Savings Plan is required. A typical goal is to aim for approximately 90% of your baseload resources ("always on") covered by Savings Plans, here is how you can check your coverage.</p>
 <ol>
 <li>
 <p>In Cost Explorer, click on <strong>Saved reports</strong> on the left:
@@ -2930,7 +2930,7 @@
 </ol>
 <p><a name="Elasticity"></a></p>
 <h2 id="4-view-your-elasticity">4. View your Elasticity</h2>
-<p><strong>NOTE</strong>: This exercise requires you have enabled hourly granularity within Cost Explorer, this can be done by following the instructions here - <a href="../100_1_AWS_Account_Setup/Lab_Guide.html">AWS Account Setup</a>, Step5 - Enable Cost Explorer.
+<p><strong>NOTE</strong>: This exercise requires you have enabled hourly granularity within Cost Explorer, this can be done by following the instructions here - <a href="../100_1_AWS_Account_Setup/Lab_Guide.html">AWS Account Setup</a>, Step 5 item 5 - Enable Cost Explorer.
 There are additional costs to enable this granularity.</p>
 <p>A key part of cost optimization is ensuring that your systems scale with your usage. This visualization will show how your systems operate over time.</p>
 <ol>
@@ -2951,13 +2951,13 @@ There are additional costs to enable this granularity.</p>
 <img alt="Images/AWSElasticity4.png" src="Images/AWSElasticity4.png" /></p>
 </li>
 <li>
-<p>You will now have in depth insight to how your environment is operating. You can see in this example the EC2 Instances scaling every day, you can see a period of large ELB usage, and EC2-Other, which is data transfer.
+<p>You will now have in depth insight to how your environment is operating. You can see in this example the EC2 Instances scaling every day, you can see a period of large ELB usage, and EC2-Other, which includes charges related to EC2 such as data transfer.
 <img alt="Images/AWSElasticity5.png" src="Images/AWSElasticity5.png" /></p>
 </li>
 </ol>
 <p><a name="RI_coverage"></a></p>
 <h2 id="5-view-your-reserved-instance-coverage">5. View your Reserved Instance coverage</h2>
-<p>To ensure you are paying the lowest prices for your resources, a high coverage of Reserved Instances (RI's) is required. A typical goal is to aim for approximately 80% of running instances covered by RI's, here is how you can check your coverage.</p>
+<p>To ensure you are paying the lowest prices for your resources, a high coverage of Reserved Instances (RIs) is required. A typical goal is to aim for approximately 80% of baseload ("always on") instances covered by RI's, here is how you can check your coverage.</p>
 <ol>
 <li>
 <p>In Cost Explorer, click on <strong>Saved reports</strong> on the left:

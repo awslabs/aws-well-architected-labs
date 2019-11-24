@@ -129,7 +129,7 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 21 - Click **Tables in cur**:
 ![Images/Glue22.png](Images/Glue22.png)
 
-22 - Click the database name:
+22 - Click the table name:
 ![Images/Glue23.png](Images/Glue23.png)
 
 24 - Verify the **recordCount** is not zero, if it is - go back and verify the steps above: 
@@ -267,9 +267,9 @@ order by cost desc
 limit 10;
 ```
 
-### 3.3 Tagging and Chargeback
+### 3.3 Tagging and Cost Attribution
 Common in large organizations is the requirement to allocate costs back to specific business units. It is also critical for optimization to be able to allocate costs to workloads, to measure workload efficiency.
-**NOTE**: This will only work if you have tags enabled in your billng files, and they are the same as the examples here - **resource_tags_user_cost_center**
+**NOTE**: This will only work if you have tags enabled in your billing files, and they are the same as the examples here - **resource_tags_user_cost_center**
 
 1. Top 20 Costs by line item description and CostCenter Tag
 ```
@@ -334,7 +334,7 @@ order by bill_billing_period_start_date, reservation_unused_recurring_fee desc
 
 <a name="tear_down"></a>
 ## 4. Tear down 
-Amazon Athena only charges when it is being used, i.e. data is being scanned - so if it is not being actively queried, there are no charges. It is also best practice to regularly analyze your usage and cost, so there is no teardown for this lab.
+Amazon Athena only charges when it is being used, i.e. data is being scanned - so if it is not being actively queried, there are no charges. There may be some charges from AWS Glue if it is above the free tier limit. It is also best practice to regularly analyze your usage and cost, so there is no teardown for this lab.
 
 <a name="rate_lab"></a>
 ## 5. Rate this lab 

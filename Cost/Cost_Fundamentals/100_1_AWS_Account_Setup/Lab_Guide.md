@@ -33,7 +33,7 @@ You need to enable IAM access to your billing so the correct IAM users can acces
 2. Scroll down to **IAM User and Role Access to Billing Information**, and click **Edit**:
 ![Images/AWSAcct5.png](Images/AWSAcct5.png)
 
-3. Select **Activeate IAM Access** and click on **Update**:
+3. Select **Activate IAM Access** and click on **Update**:
 ![Images/AWSAcct6.png](Images/AWSAcct6.png)
 
 4. Confirm that **IAM user/role access to billing information is activated**:
@@ -109,7 +109,7 @@ Repeat the steps above (exercise 1.2) for each additional account in your organi
 
 <a name="account_settings"></a>
 ## 3. Configure billing account settings
-It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by muptile team members for redudancy. Ensure the email accounts are actively monitored.
+It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by multiple team members for redudancy. Ensure the email accounts are actively monitored.
 
 1. Log in to your Master account as an IAM user with the required permissions, Click on the account name in the top right, and click on **My Account** from the menu:
 ![Images/AWSAcct11.png](Images/AWSAcct1.png)
@@ -149,7 +149,7 @@ If you configure multiple Cost and Usage Reports (CURs), then it is recommended 
 7. Read and verify the policy, this will allow AWS to deliver billing reports to the bucket. Click on **I have confirmed that this policy is correct**, then click **Save**:
 ![Images/AWSCURDelivery3.png](Images/AWSCURDelivery3.png)
 
-8. Esure your bucket is a **Valid Bucket** (if not, verify the bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
+8. Ensure your bucket is a **Valid Bucket** (if not, verify the bucket policy). Enter a **Report path prefix** (it can be any word) without any '/' characters, ensure the **Time Granularity** is **Hourly**, **Report Versioning** is set to **Overwrite existing report**, under **Enable report data integration for** select **Amazon Athena**, and click **Next**:
 ![Images/AWSCURDelivery4.png](Images/AWSCURDelivery4.png)
 
 9. Review the configuration, scroll to the bottom and click on **Review and Complete**:
@@ -161,7 +161,7 @@ You have successfully configured a Cost and Usage Report to be delivered.  It ma
 The monthly billing report contains estimated AWS charges for the month. It contains line items for each unique combination of AWS product, usage type, and operation that the account uses.
 **NOTE**: Billing files will only be delivered from the current month onwards. It will not generate previous months billing files.
 
-1. Go to the billng console:
+1. Go to the billing console:
 ![Images/AWSMonthlyUsage0.png](Images/AWSMonthlyUsage0.png)
 
 2. Click on **Billing preferences** from the left menu:
@@ -384,7 +384,7 @@ For this lab we will create a user and join them to the group above.
 8 - Log back in as the username you just created, with the link you copied for the remainder of the Lab.
 
 
-You have successfully create a user, placed them in the cost optimization group and have applied policies.
+You have successfully created a user, placed them in the cost optimization group and have applied policies.
 You can continue to expand this group by adding additional users from your organization.
 
 

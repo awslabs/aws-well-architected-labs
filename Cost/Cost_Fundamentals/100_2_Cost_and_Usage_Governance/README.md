@@ -8,7 +8,7 @@ https://wellarchitectedlabs.com
 
 ## Goals
 - Implement AWS Budgets to notify on usage and spend
-- Create an AWS Budget report to notice users every week on budget status
+- Create an AWS Budget report to notify users every week on budget status
 
 ## Prerequisites
 - An AWS Account
@@ -36,7 +36,7 @@ https://wellarchitectedlabs.com
 ## Best Practice Checklist 
 - [ ] Create an AWS budget to notify on forecasted account cost
 - [ ] Create an AWS budget to notify on actual cost of EC2
-- [ ] Create an AWS budget to notify on RI Coverage
+- [ ] Create an AWS budget to notify on Savings Plan (SP) Coverage
 - [ ] Create a weekly AWS budget report
 
 ***
