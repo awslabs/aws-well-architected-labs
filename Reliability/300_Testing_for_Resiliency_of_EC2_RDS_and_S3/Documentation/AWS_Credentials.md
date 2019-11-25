@@ -135,15 +135,17 @@ For your convenience:
 
 Configuration for PowerShell requires Windows PowerShell for AWS, part of the software package [AWS Tools for Powershell](https://aws.amazon.com/powershell/).
 
-If this software is not present on your Start Menu:
+**Installation of PowerShell software**
+
+If this software is not present on your Start Menu, perform the following two steps:
 
 1. Download the software and install it from the above link.
 
 1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-D to break out of the dialog download it and start a Windows PowerShell for AWS session.
 
-Establish your AWS Credentials for this PowerShell session as follows:
+**Configuration of AWS Credentials**
 
-1. Configure your AWS Credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
+Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
  
         Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
         [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
