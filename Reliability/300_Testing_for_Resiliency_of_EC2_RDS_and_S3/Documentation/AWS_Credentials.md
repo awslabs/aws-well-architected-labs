@@ -140,8 +140,9 @@ Configuration for PowerShell requires Windows PowerShell for AWS, part of the so
 
 1. Proceed to configure AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the Session Token parameter and value as well.
 
+```
       Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \[ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
-      Initialize-AWSDefaults -ProfileName MyMainUserProfile -Region us-east-2
-
+      Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+```
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
