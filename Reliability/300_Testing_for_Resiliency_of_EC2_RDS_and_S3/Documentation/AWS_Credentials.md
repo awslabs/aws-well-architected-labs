@@ -149,7 +149,7 @@ Configure your AWS credentials with the following PowerShell commands. Note that
  
         Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
         [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
-        Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+        Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
