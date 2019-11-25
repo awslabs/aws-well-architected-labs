@@ -101,7 +101,7 @@ If you used **Option 2** or **Option 3**, please follow these steps:
 
 ### Clear environment variables
 
-If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these systems preferentially will use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set
+If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these systems preferentially will use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set:
 
 * `AWS_ACCESS_KEY_ID`
 * `AWS_SECRET_ACCESS_KEY`
@@ -110,7 +110,7 @@ If you used **option 2** or **option 3** then you have put your credentials into
 * `AWS_DEFAULT_OUTPUT`
 * `AWS_PROFILE`
 
-How to do this varies depending on system.  For Linux
+How to do this varies depending on system.  For Linux:
 
       # Use echo $varname to see if it ise set
       $ echo $AWS_ACCESS_KEY_ID
@@ -122,7 +122,7 @@ How to do this varies depending on system.  For Linux
       # This now returns no value
       $ echo $AWS_ACCESS_KEY_ID
 
-For your convenience
+For your convenience:
 
       unset AWS_ACCESS_KEY_ID
       unset AWS_SECRET_ACCESS_KEY
@@ -143,12 +143,11 @@ If this software is not present on your Start Menu:
 
 Establish your AWS Credentials for this PowerShell as follows:
 
-1. Configure your AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the Session Token parameter and value as well.
+1. Configure your AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the SessionToken parameter and its value as well.
 
-```
-Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-   [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
-Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
-```
+        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+        [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
+        Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
