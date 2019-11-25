@@ -133,16 +133,22 @@ For your convenience
 
 ### Option 4 (PowerShell only)
 
-Configuration for PowerShell requires Windows PowerShell for AWS, part of the software package [AWS Tools for Powershell](https://aws.amazon.com/powershell/). If this software is not present on your Start Menu:
+Configuration for PowerShell requires Windows PowerShell for AWS, part of the software package [AWS Tools for Powershell](https://aws.amazon.com/powershell/).
+
+If this software is not present on your Start Menu:
+
 1. Download the software and install it from the above link.
 
 1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-D to break out of the dialog download it and start a Windows PowerShell for AWS session.
 
-1. Proceed to configure AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the Session Token parameter and value as well.
+Establish your AWS Credentials for this PowerShell as follows:
+
+1. Configure your AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the Session Token parameter and value as well.
 
 ```
-      Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \[ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
-      Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+   [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
+Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
 ```
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
