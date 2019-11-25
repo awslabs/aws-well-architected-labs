@@ -141,13 +141,13 @@ If this software is not present on your Start Menu:
 
 1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-D to break out of the dialog download it and start a Windows PowerShell for AWS session.
 
-Establish your AWS Credentials for this PowerShell as follows:
+Establish your AWS Credentials for this PowerShell session as follows:
 
-1. Configure your AWS Credentials with the following PowerShell commands. If you are using an instructor provided account, include the SessionToken parameter and its value as well.
+1. Configure your AWS Credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below:
 
-        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-        [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
-        Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+            Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+            [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
+            Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
