@@ -143,11 +143,11 @@ If this software is not present on your Start Menu:
 
 Establish your AWS Credentials for this PowerShell session as follows:
 
-1. Configure your AWS Credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below:
-
-            Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-            [ -SessionToken <your session key> \] -StoreAs <SomeProfileName>
-            Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
+1. Configure your AWS Credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
+ 
+        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+        [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
+        Initialize-AWSDefaults -ProfileName SomeProfileName -Region us-east-2
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
