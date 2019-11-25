@@ -141,7 +141,7 @@ If this software is not present on your Start Menu, perform the following two st
 
 1. Download the software and install it from the above link.
 
-1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-D to break out of the dialog download it and start a Windows PowerShell for AWS session.
+1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog download it and start a Windows PowerShell for AWS session.
 
 **Configuration of AWS Credentials**
 
