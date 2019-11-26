@@ -4,7 +4,12 @@
 
 ## Choose an option
 
-Choose _ONLY ONE_ option, either **Option 1**, **Option 2**, **Option 3**, or **Option 4** (PowerShell only)
+Select the appropriate option for configuration of your AWS credentials:
+
+* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables 
+* **Option 2** - Using AWS CLI software
+* **Option 3** - Creating configuration files manually
+* **Option 4** - Using PowerShell commands for Windows
 
 ### Option 1 For instructor supplied AWS accounts
 
@@ -34,7 +39,7 @@ If you completed **Option 1** then **STOP HERE and return to the [Lab Guide](../
 
 ### Option 2 AWS CLI
 
-This option uses the AWS CLI. If you do not have this installed, or do not want to install it, then use **Option 3**
+This option uses the AWS CLI. Note that running the bash failure testing scripts requires this software. If you are using another programming environment for failure testing, you can use use **Option 3** if you do not or cannot install this software.
 
 1. To see if the AWS CLI is installed:
 
@@ -131,21 +136,14 @@ For your convenience:
       unset AWS_DEFAULT_OUTPUT
       unset AWS_PROFILE
 
-### Option 4 (PowerShell only)
+### Option 4 (PowerShell)
 
-Configuration for PowerShell requires Windows PowerShell for AWS, part of the software package [AWS Tools for Powershell](https://aws.amazon.com/powershell/).
+**Configuration of AWS credentials**
+1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
 
-**Installation of PowerShell software**
+1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog.
 
-If this software is not present on your Start Menu, perform the following two steps:
-
-1. Download the software and install it from the above link.
-
-1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog download it and start a Windows PowerShell for AWS session.
-
-**Configuration of AWS Credentials**
-
-Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
+1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
  
         Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
         [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
