@@ -4,7 +4,12 @@
 
 ## Choose an option
 
-Choose _ONLY ONE_ option, either **Option 1**, **Option 2**, or **Option 3**
+Select the appropriate option for configuration of your AWS credentials:
+
+* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables 
+* **Option 2** - Using AWS CLI software
+* **Option 3** - Creating configuration files manually
+* **Option 4** - Using PowerShell commands for Windows
 
 ### Option 1 For instructor supplied AWS accounts
 
@@ -34,7 +39,7 @@ If you completed **Option 1** then **STOP HERE and return to the [Lab Guide](../
 
 ### Option 2 AWS CLI
 
-This option uses the AWS CLI. If you do not have this installed, or do not want to install it, then use **Option 3**
+This option uses the AWS CLI. Note that running the bash failure testing scripts requires this software. If you are using another programming environment for failure testing, you can use use **Option 3** if you do not or cannot install this software.
 
 1. To see if the AWS CLI is installed:
 
@@ -101,7 +106,7 @@ If you used **Option 2** or **Option 3**, please follow these steps:
 
 ### Clear environment variables
 
-If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these systems preferentially will use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set
+If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these systems preferentially will use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set:
 
 * `AWS_ACCESS_KEY_ID`
 * `AWS_SECRET_ACCESS_KEY`
@@ -110,7 +115,7 @@ If you used **option 2** or **option 3** then you have put your credentials into
 * `AWS_DEFAULT_OUTPUT`
 * `AWS_PROFILE`
 
-How to do this varies depending on system.  For Linux
+How to do this varies depending on system.  For Linux:
 
       # Use echo $varname to see if it ise set
       $ echo $AWS_ACCESS_KEY_ID
@@ -122,7 +127,7 @@ How to do this varies depending on system.  For Linux
       # This now returns no value
       $ echo $AWS_ACCESS_KEY_ID
 
-For your convenience
+For your convenience:
 
       unset AWS_ACCESS_KEY_ID
       unset AWS_SECRET_ACCESS_KEY
@@ -130,6 +135,19 @@ For your convenience
       unset AWS_DEFAULT_REGION
       unset AWS_DEFAULT_OUTPUT
       unset AWS_PROFILE
+
+### Option 4 (PowerShell)
+
+**Configuration of AWS credentials**
+1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
+
+1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog.
+
+1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
+ 
+        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+        [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
+        Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
 
 ---
 **[Click here to return to the Lab Guide](../Lab_Guide.md)**
