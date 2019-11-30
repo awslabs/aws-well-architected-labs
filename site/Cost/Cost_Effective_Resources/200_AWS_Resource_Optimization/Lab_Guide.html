@@ -1,0 +1,3167 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="A collection of AWS Well-Architected workshops">
+      
+      
+        <link rel="canonical" href="https://wellarchitectedlabs.com/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/Lab_Guide.html">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
+    
+    
+      
+        <title>Level 200: EC2 Right Sizing: Lab Guide - AWS Well-Architected Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.982221ab.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.224b79ff.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#757575">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="grey" data-md-color-accent="grey">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#level-200-ec2-right-sizing-lab-guide" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+          
+            <img src="../../../images/wa.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              AWS Well-Architected Labs
+            </span>
+            <span class="md-header-nav__topic">
+              Level 200: EC2 Right Sizing: Lab Guide
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+<nav class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../../../README.html" title="Home" class="md-tabs__link md-tabs__link--active">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Operations/README.html" title="Operational Excellence" class="md-tabs__link">
+          Operational Excellence
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Security/README.html" title="Security" class="md-tabs__link">
+          Security
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Reliability/README.html" title="Reliability" class="md-tabs__link">
+          Reliability
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Performance/README.html" title="Performance Efficiency" class="md-tabs__link">
+          Performance Efficiency
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../README.html" title="Cost Optimization" class="md-tabs__link">
+          Cost Optimization
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Well-ArchitectedTool/README.html" title="Well Architected Tool" class="md-tabs__link">
+          Well Architected Tool
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+      
+        <img src="../../../images/wa.png" width="48" height="48">
+      
+    </a>
+    AWS Well-Architected Labs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../README.html" title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Operational Excellence
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Operational Excellence
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2">
+      100 Inventory Patch Mgt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-2">
+        100 Inventory Patch Mgt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/100_Inventory_and_Patch_Mgmt/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Security
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Security
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Security 100 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Security 100 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-1" type="checkbox" id="nav-3-2-1">
+    
+    <label class="md-nav__link" for="nav-3-2-1">
+      Account and Root User
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-1">
+        Account and Root User
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_AWS_Account_and_Root_User/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_AWS_Account_and_Root_User/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-2" type="checkbox" id="nav-3-2-2">
+    
+    <label class="md-nav__link" for="nav-3-2-2">
+      Basic Identity & Access Management User, Group, Role
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-2">
+        Basic Identity & Access Management User, Group, Role
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-3" type="checkbox" id="nav-3-2-3">
+    
+    <label class="md-nav__link" for="nav-3-2-3">
+      CloudFront with S3 Bucket Origin
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-3">
+        CloudFront with S3 Bucket Origin
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_CloudFront_with_S3_Bucket_Origin/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-4" type="checkbox" id="nav-3-2-4">
+    
+    <label class="md-nav__link" for="nav-3-2-4">
+      Create a Data Bunker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-4">
+        Create a Data Bunker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Create_a_Data_Bunker/README.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-5" type="checkbox" id="nav-3-2-5">
+    
+    <label class="md-nav__link" for="nav-3-2-5">
+      Enable Security Hub
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-5">
+        Enable Security Hub
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Enable_Security_Hub/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Enable_Security_Hub/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      Security 200 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        Security 200 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-1" type="checkbox" id="nav-3-3-1">
+    
+    <label class="md-nav__link" for="nav-3-3-1">
+      Automated Deployment of Detective Controls
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-1">
+        Automated Deployment of Detective Controls
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Detective_Controls/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-2" type="checkbox" id="nav-3-3-2">
+    
+    <label class="md-nav__link" for="nav-3-3-2">
+      Automated Deployment of EC2 Web Application
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-2">
+        Automated Deployment of EC2 Web Application
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_EC2_Web_Application/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-3" type="checkbox" id="nav-3-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3-3">
+      Automated Deployment of IAM Groups and Roles
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-3">
+        Automated Deployment of IAM Groups and Roles
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-4" type="checkbox" id="nav-3-3-4">
+    
+    <label class="md-nav__link" for="nav-3-3-4">
+      Automated Deployment of VPC
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-4">
+        Automated Deployment of VPC
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_VPC/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-5" type="checkbox" id="nav-3-3-5">
+    
+    <label class="md-nav__link" for="nav-3-3-5">
+      Automated Deployment of Web Application Firewall
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-5">
+        Automated Deployment of Web Application Firewall
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-6" type="checkbox" id="nav-3-3-6">
+    
+    <label class="md-nav__link" for="nav-3-3-6">
+      Automated IAM User Cleanup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-6">
+        Automated IAM User Cleanup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_IAM_User_Cleanup/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_IAM_User_Cleanup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-7" type="checkbox" id="nav-3-3-7">
+    
+    <label class="md-nav__link" for="nav-3-3-7">
+      Basic EC2 with WAF Protection
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-7">
+        Basic EC2 with WAF Protection
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Basic_EC2_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-8" type="checkbox" id="nav-3-3-8">
+    
+    <label class="md-nav__link" for="nav-3-3-8">
+      CloudFront with WAF Protection
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-8">
+        CloudFront with WAF Protection
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_CloudFront_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_CloudFront_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Security 300 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        Security 300 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1">
+    
+    <label class="md-nav__link" for="nav-3-4-1">
+      IAM Permission Boundaries Delegating Role Creation
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-1">
+        IAM Permission Boundaries Delegating Role Creation
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      IAM Tag Based Access Control for EC2
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        IAM Tag Based Access Control for EC2
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3">
+      Incident Response with AWS Console and CLI
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-3">
+        Incident Response with AWS Console and CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-4" type="checkbox" id="nav-3-4-4">
+    
+    <label class="md-nav__link" for="nav-3-4-4">
+      Lambda Cross Account IAM Role Assumption
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-4">
+        Lambda Cross Account IAM Role Assumption
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-5" type="checkbox" id="nav-3-4-5">
+    
+    <label class="md-nav__link" for="nav-3-4-5">
+      Lambda Cross Account Using Bucket Policy
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-5">
+        Lambda Cross Account Using Bucket Policy
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_Bucket_Policy/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-5" type="checkbox" id="nav-3-5">
+    
+    <label class="md-nav__link" for="nav-3-5">
+      Security Quests
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-5">
+        Security Quests
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_100_Loft_Introduction_to_Security/README.html" title="Introduction to Security" class="md-nav__link">
+      Introduction to Security
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_100_Quick_Steps_to_Security_Success/README.html" title="Quick Steps to Security Success" class="md-nav__link">
+      Quick Steps to Security Success
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_200_Incident_Response_Day/README.html" title="Incident Response Day" class="md-nav__link">
+      Incident Response Day
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html" title="Security Best Practices Workshop" class="md-nav__link">
+      Security Best Practices Workshop
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_300_Security_Best_Practices_Day/README.html" title="Security Best Practices Day" class="md-nav__link">
+      Security Best Practices Day
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Managing_Credentials_and_Authentication/README.html" title="Managing Credentials and Authentication" class="md-nav__link">
+      Managing Credentials and Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Control_Human_Access/README.html" title="Control Human Access" class="md-nav__link">
+      Control Human Access
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Control_Programmatic_Access/README.html" title="Control Programmatic Access" class="md-nav__link">
+      Control Programmatic Access
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Detect_and_Investigate_Events/README.html" title="Detect and Investigate Events" class="md-nav__link">
+      Detect and Investigate Events
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Defend_Against_New_Threats/README.html" title="Defend Against New Threats" class="md-nav__link">
+      Defend Against New Threats
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Networks/README.html" title="Protect Networks" class="md-nav__link">
+      Protect Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Compute/README.html" title="Protect Compute" class="md-nav__link">
+      Protect Compute
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Classify_Data/README.html" title="Classify Data" class="md-nav__link">
+      Classify Data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Data_at_Rest/README.html" title="Protect Data at Rest" class="md-nav__link">
+      Protect Data at Rest
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Data_in_Transit/README.html" title="Protect Data in Transit" class="md-nav__link">
+      Protect Data in Transit
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Incident_Response/README.html" title="Incident Response" class="md-nav__link">
+      Incident Response
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Reliability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Reliability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+    
+    <label class="md-nav__link" for="nav-4-2">
+      Testing Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-2">
+        Testing Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2-1" type="checkbox" id="nav-4-2-1">
+    
+    <label class="md-nav__link" for="nav-4-2-1">
+      200 EC2 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-4-2-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2-2" type="checkbox" id="nav-4-2-2">
+    
+    <label class="md-nav__link" for="nav-4-2-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-4-2-2">
+        300 EC2, RDS S3 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html" title="Trouble Shooting Guide" class="md-nav__link">
+      Trouble Shooting Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Performance Efficiency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Performance Efficiency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Performance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Performance/100_Monitoring_with_CloudWatch_Dashboards/README.html" title="Monitoring with CloudWatch Dashboards" class="md-nav__link">
+      Monitoring with CloudWatch Dashboards
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Cost Optimization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Cost Optimization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Fundamentals.html" title="Fundamentals" class="md-nav__link">
+      Fundamentals
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../ExpenditureAwareness.html" title="Expenditure Awareness" class="md-nav__link">
+      Expenditure Awareness
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../CostEffectiveResources.html" title="Cost Effective Resources" class="md-nav__link">
+      Cost Effective Resources
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5" type="checkbox" id="nav-6-5">
+    
+    <label class="md-nav__link" for="nav-6-5">
+      100 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-5">
+        100 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-1" type="checkbox" id="nav-6-5-1">
+    
+    <label class="md-nav__link" for="nav-6-5-1">
+      Account Setup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-1">
+        Account Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-2" type="checkbox" id="nav-6-5-2">
+    
+    <label class="md-nav__link" for="nav-6-5-2">
+      Cost and Usage Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-2">
+        Cost and Usage Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-3" type="checkbox" id="nav-6-5-3">
+    
+    <label class="md-nav__link" for="nav-6-5-3">
+      Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-3">
+        Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-4" type="checkbox" id="nav-6-5-4">
+    
+    <label class="md-nav__link" for="nav-6-5-4">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-4">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-5" type="checkbox" id="nav-6-5-5">
+    
+    <label class="md-nav__link" for="nav-6-5-5">
+      Cost and Usage Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-5">
+        Cost and Usage Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6" type="checkbox" id="nav-6-6">
+    
+    <label class="md-nav__link" for="nav-6-6">
+      200 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-6">
+        200 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-1" type="checkbox" id="nav-6-6-1">
+    
+    <label class="md-nav__link" for="nav-6-6-1">
+      Cost and Usage Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-1">
+        Cost and Usage Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-2" type="checkbox" id="nav-6-6-2">
+    
+    <label class="md-nav__link" for="nav-6-6-2">
+      Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-2">
+        Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-3" type="checkbox" id="nav-6-6-3">
+    
+    <label class="md-nav__link" for="nav-6-6-3">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-3">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-4" type="checkbox" id="nav-6-6-4">
+    
+    <label class="md-nav__link" for="nav-6-6-4">
+      Cost and Usage Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-4">
+        Cost and Usage Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7" type="checkbox" id="nav-6-7">
+    
+    <label class="md-nav__link" for="nav-6-7">
+      300 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-7">
+        300 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-1" type="checkbox" id="nav-6-7-1">
+    
+    <label class="md-nav__link" for="nav-6-7-1">
+      Automated CUR Updates and Ingestion
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-1">
+        Automated CUR Updates and Ingestion
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-2" type="checkbox" id="nav-6-7-2">
+    
+    <label class="md-nav__link" for="nav-6-7-2">
+      Multi Account CUR Access
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-2">
+        Multi Account CUR Access
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-3" type="checkbox" id="nav-6-7-3">
+    
+    <label class="md-nav__link" for="nav-6-7-3">
+      Splitting Sharing CUR
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-3">
+        Splitting Sharing CUR
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-4" type="checkbox" id="nav-6-7-4">
+    
+    <label class="md-nav__link" for="nav-6-7-4">
+      Auto Financial CUR Reports
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-4">
+        Auto Financial CUR Reports
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Well Architected Tool
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Well Architected Tool
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Walkthrough
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Walkthrough
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-200-ec2-right-sizing-lab-guide">Level 200: EC2 Right Sizing: Lab Guide</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Jeff Kassel, AWS Technical Account Manager</li>
+<li>Arthur Basbaum, AWS Cloud Economics</li>
+</ul>
+<h2 id="feedback">Feedback</h2>
+<p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li><a href="#CloudWatch_intro">Getting to know AWS CloudWatch</a></li>
+<li><a href="#create_iamrole">Create an IAM Role to use with Amazon CloudWatch Agent</a></li>
+<li><a href="#attach_iamrole">Attach CloudWatch IAM role to selected EC2 Instances</a></li>
+<li><a href="#memory_plugin">Cloudwatch Agent Manual Install</a></li>
+<li><a href="#EC2_updated_rec">Updated Resource Optimization recommendations</a></li>
+<li><a href="#EC2_RS_best_practices">EC2 Right Sizing Best Practices</a></li>
+<li><a href="#EC2_RS_ref_material">EC2 Right Sizing Reference Material</a></li>
+</ol>
+<p><strong>NOTE:</strong> In order to run this lab you will need to have at least one <strong>EC2 instance</strong> running and have <strong>AWS Cost Explorer</strong> and <strong>AWS Resource Optimization</strong> enabled.</p>
+<p>During this lab we will create a <strong>custom metric</strong> at <strong>Amazon CloudWatch</strong> and install an agent in one EC2 instance to start collecting Memory utilization and improve the recommendation accuracy of the <strong>AWS Resource Optimization</strong> report. Be aware that <em>custom metrics are not part of the Amazon CloudWatch <a href="https://aws.amazon.com/free/">free tier</a></em> usage so <strong>additional costs will incur at your bill</strong>. For more information read the <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch pricing</a> page.</p>
+<p>All custom metrics charges are prorated by the hour and metered only when you send metrics to Amazon CloudWatch. <strong>Each custom metrics costs $0.30 per metric/month for the first 10,000 metrics</strong> and can go down to $0.02 per metric/month at the lowest priced tier (<em>US Virginia prices from November 2019</em>).</p>
+<h2 id="1-getting-to-know-aws-cloudwatch">1. Getting to know AWS Cloudwatch<a name="CloudWatch_intro"></a></h2>
+<p>The first step to perform right sizing is to monitor and analyze your current use of services to gain insight into instance performance and usage patterns. To gather sufficient data, observe performance over at least a two-week period (ideally, over a one-month period) to capture the workload and business peak. The most common metrics that define instance performance are vCPU utilization, memory utilization, network utilization, and disk use.</p>
+<ol>
+<li>
+<p>Log into your AWS console, go to the <strong>Amazon CloudWatch</strong> service page:
+<img alt="Images/CloudWatch01.png" src="Images/CloudWatch01.png" /></p>
+</li>
+<li>
+<p>Select <strong>EC2</strong> under the <strong>Service Dashboard</strong>:
+<img alt="Images/CloudWatch02.png" src="Images/CloudWatch02.png" /></p>
+</li>
+<li>
+<p>Observe the <strong>Service Dashboard</strong> and all of its different metrics, but focus on <strong>CPU Utilization</strong> and <strong>Network In</strong> and <strong>Out</strong>:
+<img alt="Images/CloudWatch03.png" src="Images/CloudWatch03.png" /></p>
+</li>
+<li>
+<p>Select one of the <strong>EC2</strong> resources by clicking on the little color icon to the left of the <strong>resource-id</strong> name:
+<img alt="Images/CloudWatch04.png" src="Images/CloudWatch04.png" /></p>
+</li>
+<li>
+<p>Deselect the <strong>EC2 resource</strong> and now modify the time range on the top right, selecting the <strong>last 2 weeks</strong>:
+<img alt="Images/CloudWatch05.png" src="Images/CloudWatch05.png" /></p>
+</li>
+<li>
+<p>Navigate to the <strong>CPU Utilization Average</strong> widget and launch the <strong>View Metrics detailed</strong> page. Using the <strong>Graphed metrics</strong> session try to answer the following questions:</p>
+</li>
+<li>
+<p>a) What is the instance with the lowest CPU Average?</p>
+</li>
+<li>b) What is the instance with the lowest CPU Max?</li>
+<li>c) What is the instance with the lowest CPU Min?</li>
+</ol>
+<p><img alt="Images/CloudWatch06.png" src="Images/CloudWatch06.png" />
+<img alt="Images/CloudWatch07.png" src="Images/CloudWatch07.png" /></p>
+<h2 id="2-create-an-iam-role-to-use-with-amazon-cloudwatch-agent">2. Create an IAM Role to use with Amazon CloudWatch Agent<a name="create_iamrole"></a></h2>
+<p>Access to AWS resources requires permissions. You will now create an IAM role to grant permissions that the agent needs to write metrics to CloudWatch. Amazon created two new default policies called <em>CloudWatchAgentServerPolicy</em> and <em>CloudWatchAgentAdminPolicy</em> only for that purpose.</p>
+<ol>
+<li>
+<p>To create the IAM role first you will need to sign in to the <strong>AWS Management Console</strong> and open the <strong>IAM console</strong>
+<img alt="Images/IAMrole01.png" src="Images/IAMrole01.png" /></p>
+</li>
+<li>
+<p>In the navigation pane on the left, choose <strong>Roles</strong> and then <strong>Create role</strong>.
+<img alt="Images/IAMrole02.png" src="Images/IAMrole02.png" /></p>
+</li>
+<li>
+<p>For Choose the service that will use this role, choose <strong>EC2 Allows EC2 instances to call AWS services on your behalf.</strong> Choose <strong>Next: Permissions</strong>.
+<img alt="Images/IAMrole03.png" src="Images/IAMrole03.png" /></p>
+</li>
+<li>
+<p>In the list of policies, select the check box next to <em>CloudWatchAgentServerPolicy</em>. If necessary, use the search box to find the policy.
+<img alt="Images/IAMrole04.png" src="Images/IAMrole04.png" /></p>
+</li>
+<li>
+<p>Choose <strong>Next: Review</strong>.
+<img alt="Images/IAMrole05.png" src="Images/IAMrole05.png" /></p>
+</li>
+<li>
+<p>Confirm that <em>CloudWatchAgentServerPolicy</em> appears next to <strong>Policies</strong>. In Role name, enter a name for the role, such as <em>CloudWatchAgentServerRole</em>. Optionally give it a description. Then choose Create role.
+<img alt="Images/IAMrole06.png" src="Images/IAMrole06.png" /></p>
+</li>
+</ol>
+<p>The role is now created.</p>
+<h2 id="3-attach-cloudwatch-iam-role-to-selected-ec2-instances">3. Attach CloudWatch IAM role to selected EC2 Instances<a name="attach_iamrole"></a></h2>
+<ol>
+<li>
+<p>We are now going to attach the IAM Role created on the previous step in one of our EC2 Instances, to do that let's go to the <strong>Amazon EC2 Dashboard</strong>.
+<img alt="Images/MemInstall01.png" src="Images/MemInstall01.png" /></p>
+</li>
+<li>
+<p>On the left bar, click on <strong>Instances</strong>.
+<img alt="Images/MemInstall02.png" src="Images/MemInstall02.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Launch Instance</strong> and select <strong>Linux 2 AMI (HVM)</strong> and <strong>t2.micro</strong> (free tier eligible) on the following screens.
+<img alt="Images/MemInstall02a.png" src="Images/MemInstall02a.png" />
+<img alt="Images/MemInstall02b.png" src="Images/MemInstall02b.png" /></p>
+</li>
+<li>
+<p>Select the instance you want to start collecting Memory data, go to <strong>Actions</strong> on the top bar, select <strong>Instance Settings&gt;&gt;Attach/Replace IAM Role</strong>.
+<img alt="Images/MemInstall03.png" src="Images/MemInstall03.png" /></p>
+</li>
+<li>
+<p>Look for the created IAM role <em>CloudWatchAgentServerRole</em> under the <strong>IAM role</strong> box, select it and apply.
+<img alt="Images/MemInstall04.png" src="Images/MemInstall04.png" /></p>
+</li>
+<li>
+<p>Confirm that the <em>CloudWatchAgentServerRole</em> was sucessfully attached to your <strong>EC2 instance</strong> 
+<img alt="Images/MemInstall05.png" src="Images/MemInstall05.png" /></p>
+</li>
+<li>
+<p>Validade if the IAM role <em>CloudWatchAgentServerRole</em> is attached to the desired instance
+<img alt="Images/MemInstall06.png" src="Images/MemInstall06.png" /></p>
+</li>
+</ol>
+<h2 id="4-cloudwatch-agent-manual-install">4. Cloudwatch Agent Manual Install<a name="install_memory_plugin"></a></h2>
+<ol>
+<li>
+<p>We are now going to manually install the <strong>CloudWatch agent</strong> to start collecting memory data, to start let's go back to the <strong>Amazon EC2 Dashboard</strong>.
+<img alt="Images/MemInstall01.png" src="Images/AgentInstall01.png" /></p>
+</li>
+<li>
+<p>On the left bar, click on <strong>Instances</strong> and select the <strong>EC2 Instance</strong> with the <em>CloudWatchAgentServerRole</em> IAM role.
+<img alt="Images/MemInstall02.png" src="Images/AgentInstall02.png" /></p>
+</li>
+<li>
+<p>Connect into the EC2 Instance using the <strong>browser-based SSH connection tool</strong>
+<img alt="Images/MemInstall03.png" src="Images/AgentInstall03.png" />
+<img alt="Images/MemInstall04.png" src="Images/AgentInstall04.png" />
+<img alt="Images/MemInstall05.png" src="Images/AgentInstall05.png" /></p>
+</li>
+<li>
+<p>Download the <strong>Amazon Cloudwatch</strong> agent package, the instructions below are for Amazon Linux, for other OS please check <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html">here</a></p>
+</li>
+</ol>
+<pre><code>wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
+</code></pre>
+
+<p><img alt="Images/MemInstall06.png" src="Images/AgentInstall06.png" /></p>
+<ol>
+<li>Unzip and Install the package</li>
+</ol>
+<pre><code>unzip AmazonCloudWatchAgent.zip
+sudo ./install.sh
+</code></pre>
+
+<p><img alt="Images/MemInstall07.png" src="Images/AgentInstall07.png" /></p>
+<ol>
+<li>Configure the AmazonCloudWatchAgent profile</li>
+</ol>
+<p>Before running the CloudWatch agent on any servers, you must create a CloudWatch agent configuration file, which is a JSON file that specifies the metrics and logs that the agent is to collect, including custom metrics. You can create it by using the wizard or by writting it yourself from scratch. Any time you change the agent configuration file, you must then restart the agent to have the changes take effect.</p>
+<p>The wizard can autodetect the credentials and AWS Region to use if you have the AWS credentials and configuration files in place. For more information about these files, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html">Configuration and Credential Files</a> in the <em>AWS Systems Manager User Guide</em> and the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatch-agent-configuration-file.html">AWS documentation page</a>.</p>
+<p>For now, let's start the CloudWatch agent configuration file wizard executing the command below withing the selected EC2 instance.</p>
+<pre><code>sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+</code></pre>
+
+<p><img alt="Images/MemInstall08.png" src="Images/AgentInstall08.png" /></p>
+<p>For this lab we want to keep the following structure:</p>
+<table>
+<thead>
+<tr>
+<th>CloudWatch Agent Configutation File Wizard</th>
+<th align="center">Parameter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On which OS are you planning to use the agent?</td>
+<td align="center">1. Linux</td>
+</tr>
+<tr>
+<td>Are you using EC2 or On-Premises hosts?</td>
+<td align="center">1. EC2</td>
+</tr>
+<tr>
+<td>Which user are you planning to run the agent?</td>
+<td align="center">2. cwagent</td>
+</tr>
+<tr>
+<td>Do you want to turn on StatsD daemon?</td>
+<td align="center">2. No</td>
+</tr>
+<tr>
+<td>Do you want to monitor metrics from CollectD?</td>
+<td align="center">2. No</td>
+</tr>
+<tr>
+<td>Do you want to monitor any host metrics?</td>
+<td align="center">1. Yes</td>
+</tr>
+<tr>
+<td>Do you want to monitor cpu metrics per core?</td>
+<td align="center">2. No</td>
+</tr>
+<tr>
+<td>Do you want to add ec2 dimensions?</td>
+<td align="center">1. Yes</td>
+</tr>
+<tr>
+<td>Would you like to collect your metrics at high resolution?</td>
+<td align="center">4. 60s</td>
+</tr>
+<tr>
+<td>Which default metrics config do you want?</td>
+<td align="center">1. Basic</td>
+</tr>
+<tr>
+<td>Are you satisfied with the above config?</td>
+<td align="center">1. Yes</td>
+</tr>
+<tr>
+<td>Do you have any existing CloudWatch Log Agent?</td>
+<td align="center">2. No</td>
+</tr>
+<tr>
+<td>Do you want to monitor any log files?</td>
+<td align="center">2. No</td>
+</tr>
+<tr>
+<td>Do you want to store the config in the SSM parameter store?</td>
+<td align="center">2. No</td>
+</tr>
+</tbody>
+</table>
+<p>The CloudWatch Agent config file should look like the following:</p>
+<pre><code>{
+    &quot;agent&quot;: {
+            &quot;metrics_collection_interval&quot;: 60,
+            &quot;run_as_user&quot;: &quot;cwagent&quot;
+    },
+    &quot;metrics&quot;: {
+            &quot;append_dimensions&quot;: {
+                &quot;AutoScalingGroupName&quot;: &quot;${aws:AutoScalingGroupName}&quot;,
+                &quot;ImageId&quot;: &quot;${aws:ImageId}&quot;,
+                &quot;InstanceId&quot;: &quot;${aws:InstanceId}&quot;,
+                &quot;InstanceType&quot;: &quot;${aws:InstanceType}&quot;
+            },
+            &quot;metrics_collected&quot;: {
+                &quot;disk&quot;: {
+                    &quot;measurement&quot;: [
+                        &quot;used_percent&quot;
+                ],
+                &quot;metrics_collection_interval&quot;: 60,
+                    &quot;resources&quot;: [
+                            &quot;*&quot;
+                ]
+            },
+            &quot;mem&quot;: {
+                    &quot;measurement&quot;: [
+                        &quot;mem_used_percent&quot;
+                    ],
+                    &quot;metrics_collection_interval&quot;: 60
+            }
+        }
+    }
+}
+</code></pre>
+
+<ol>
+<li>Start the CloudWatch Agent</li>
+</ol>
+<pre><code>sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+</code></pre>
+
+<p><img alt="Images/MemInstall09.png" src="Images/AgentInstall09.png" /></p>
+<p>Now go back to the <strong>Amazon CloudWatch</strong> console page, under the <strong>Metrics</strong> session to validate that you are getting Memory information.</p>
+<p><img alt="Images/MemInstall10.png" src="Images/AgentInstall10.png" />
+<img alt="Images/MemInstall11.png" src="Images/AgentInstall11.png" />
+<img alt="Images/MemInstall12.png" src="Images/AgentInstall12.png" /></p>
+<p>You have now completed the CloudWatch agent installation and will be able to monitor on Amazon CloudWatch the memory utilization of that instance.</p>
+<p><strong>[BONUS]</strong> The next step is not mandatory to complete this lab.</p>
+<p>If you have a lot of instances manually installing the CloudWatch agent in each of them is not a scalable option, instead consider using a pre-configured AWS CloudFormation template to automatically install the CloudWatch agent by default on all your stack. As an example on how to do that check the following steps:</p>
+<ul>
+<li>
+<p>Right-click and save link as: <a href="https://raw.githubusercontent.com/awslabs/aws-cloudformation-templates/master/aws/solutions/AmazonCloudWatchAgent/inline/amazon_linux.template">here</a> to download the <strong>AWS Cloudformation</strong> template</p>
+</li>
+<li>
+<p>Go to the <strong>AWS CloudFormation</strong> console</p>
+</li>
+<li>
+<p>Click to <strong>Create Stack</strong> and select <strong>Upload a template file</strong> and point to the downloaded file</p>
+</li>
+<li>
+<p>Enter a <strong>Stack Name</strong> and select a <strong>KeyName</strong></p>
+</li>
+<li>
+<p>Enter the tag <strong>Key: Event | Value: myStackforWACostLab</strong></p>
+</li>
+<li>
+<p>Click <strong>Next</strong> and <strong>Create stack</strong></p>
+</li>
+</ul>
+<h2 id="5-updated-resource-optimization-recommendations">5. Updated Resource Optimization recommendations<a name="EC2_updated_rec"></a></h2>
+<p><strong>NOTE</strong>: In order to complete this step you need to have AWS Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
+<p><strong>Important:</strong> If you have just installed the CloudWatch agent at your instances it may take a couple of days for Amazon Resource Optimization to start to provide updated recommendations, so don't worry if you don't see the memory data during the first checks.</p>
+<p>Now that we have Memory data as a custom metric in CloudWatch let's check how that affects the Amazon Resource Optimization recommendations. </p>
+<p>Amazon Resource Optimization offers right sizing recommendations in the AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (last 14 days using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings. There are two types of recommended actions: <strong>Terminate</strong> if the instance is considered idle (<em>max CPU utilization is at or below 1%</em>) or <strong>Downsize</strong> if the instance is underutilized (<em>max CPU utilization is between 1% and 40%</em>).</p>
+<p>By default Amazon Resource Optimization doesn't need memory datapoint to provide recommendations, but if that information is available it will take that into consideration updating the <strong>Downsize</strong> recommendation for instances that now have <em>max CPU and MEM utilization between 1% and 40%</em> over the past 14 days.</p>
+<p>That said during this step we will compare how that recommendation is impacted for two instances from the same family/generation where only one has the available.</p>
+<ol>
+<li>
+<p>Navigate to the <strong>AWS Cost Explorer</strong> page
+<img alt="Images/ResourceOpt01.png" src="Images/ResourceOpt01.png" /></p>
+</li>
+<li>
+<p>Select <strong>Recommendations</strong> in the left menu bar
+<img alt="Images/ResourceOpt2.png" src="Images/ResourceOpt02.png" /></p>
+</li>
+<li>
+<p>Click on the <strong>View All</strong> link associated with the <strong>AWS Resource Optimization Recommendations</strong> section. 
+<img alt="Images/ResourceOpt3.png" src="Images/ResourceOpt03.png" /></p>
+</li>
+</ol>
+<p>In case you haven’t enabled the Amazon EC2 Resource Optimization please do so (no additional cost), it may take up to 24 hours in order to generate your first recommendations. Only regular or payer accounts can enable it and by default both linked and payer accounts will be able to access their rightsizing recommendations unless the payer account specifically prohibits it on the settings page (top right).
+<img alt="Images/ResourceOpt4.png" src="Images/ResourceOpt04.png" /></p>
+<ol>
+<li>
+<p>Assuming you had enabled the AWS Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
+<img alt="Images/ResourceOpt5.png" src="Images/ResourceOpt05.png" /></p>
+</li>
+<li>
+<p><strong>Optimization opportunities</strong> – The number of recommendations available based on your resources and usage</p>
+</li>
+<li><strong>Estimated monthly savings</strong> – The sum of the projected monthly savings associated with each of the recommendations provided</li>
+<li><strong>Estimated savings (%)</strong> – The available savings relative to the direct Amazon EC2 costs (On-Demand) associated with the instances in the recommendation list</li>
+</ol>
+<p>You can also filter your recommendations by the type of action (Idle and Underutilized), Linked Account, Region and Tag. </p>
+<ol>
+<li>Understanding the AWS Resource Optimization recommendations.</li>
+</ol>
+<p>In the example below we have a recommendation to downsize the <strong>t2.micro</strong> (1vCPU <em>for a 2h 24m burst</em> and 1GB RAM) to a <strong>t2.nano</strong> (1vCPU <em>for a 1h 12m burst</em> and 0.5 GB RAM) and save $12 USD per year.</p>
+<p><img alt="Images/ResourceOpt06.png" src="Images/ResourceOpt06.png" /></p>
+<p>Over the past 14 days the maximum CPU utilization for this instance was only 9% and this instance was running for 86 hours and all of these were On Demand hours. Observe that there is no memory information available so AWS Resource Optimization will ignore that datapoint and recommend to downsize to a t2.nano that have half of the memory available of a t2.micro. </p>
+<p>That can be risky and waste engineer time when testing if the proposed right sizing option is valid or not. That said you can improve the accuracy of this recommendation with the CloudWatch agent we just installed.</p>
+<p>In this other example we also see a recommendation to downsize a r5.8xlarge (32 vCPU and 256GB RAM) to a r5.4xlarge (16 vCPU and 128GB RAM) and save $2,412 USD per year.
+<img alt="Images/ResourceOpt07.png" src="Images/ResourceOpt07.png" /></p>
+<p>On this case we have both CPU and Memory information available: the maximum CPU utilization was 21% and Memory was only 5%. That makes the case for downsize much stronger and the recommendation will even try estimate the CPU and Memory utilization for the new instance size. Keep in mind that this is just a simple estimation based on the past utilization data from CloudWatch, before executing the modification all the required load tests must be performed to avoid any impacts on your workload.</p>
+<p>As explained above the AWS Resource Optimization logic will recommend to downsize any instances where the maximum CPU utilization was between 1% to 40% over the past 14 days. If you do have memory information available the AWS Resource Optimization will now consider to downsize instances that have <em>both CPU and Memory</em> maximum utilization between 1% and 40%.</p>
+<h2 id="6-amazon-ec2-right-sizing-best-practices">6. Amazon EC2 Right Sizing Best Practices<a name="EC2_RS_best_practices"></a></h2>
+<ul>
+<li>
+<p><strong>Start simple:</strong> idle resources, non-critical development/QA and previous generation instances will require less testing hours and provide quick wins (The Amazon EC2 Launch time statistics can be used to identify instances that have been running longer than others and is a good statistic to sort your Amazon EC2 instances by).</p>
+</li>
+<li>
+<p><strong>Right Size before performing a migration:</strong> If you skip right sizing to save time, your migration speed might increase, but you will end up with higher cloud infrastructure spend for a potentially longer period of time. Instead, leverage the test and QA cycles during a migration exercise to test several instance types and families.  Also, take that opportunity to test different sizes and burstable instances like the “t” family.</p>
+</li>
+<li>
+<p><strong>The best right sizing starts on day 1:</strong> As you perform right sizing analysis, and ultimately rightsize resources, ensure any learnings are being shared across your organization and influencing the design of new workloads.</p>
+</li>
+<li>
+<p><strong>Measure Twice, Cut Once: Test, then test some more:</strong> The last thing you want is for a new resource type to be uncapable of handling load, or functioning incorrectly.</p>
+</li>
+<li>
+<p><strong>Test once and perform multiple right sizing:</strong> Aggregate instances per autoscaling group and tags to scale right sizing activities.</p>
+</li>
+<li>
+<p><strong>Combine Reserved Instance or Savings Plans strategy with Right Sizing to maximize savings:</strong> For Standard RIs and EC2 Instance SP: Perform your pricing model purchases after rightsizing and for Convertible RIs, exchange them after rightsizing. Compute Savings plan will automatically adjust the commitment for the new environment.</p>
+</li>
+<li>
+<p><strong>Ignore burstable instance families (T types):</strong> These families are designed to typically run at low CPU percentages for significant periods of time and shouldn’t be part of the instance types being analyzed for rightsizing.</p>
+</li>
+</ul>
+<h2 id="7-reference-material">7. Reference Material<a name="EC2_RS_ref_material"></a></h2>
+<ul>
+<li>
+<p><a href="aws.amazon.com/pricing/cost-optimization/">AWS Cost Optimization</a></p>
+</li>
+<li>
+<p><a href="d1.awsstatic.com/whitepapers/architecture/AWS-Cost-Optimization-Pillar.pdf">AWS Well Architect Cost Opt Whitepaper</a></p>
+</li>
+<li>
+<p><a href="d1.awsstatic.com/whitepapers/cost-optimization-laying-the-foundation.pdf">Laying the foundation for Cost Opt Whitepaper</a></p>
+</li>
+<li>
+<p><a href="aws.amazon.com/aws-cost-management/">AWS Cost Management Products</a></p>
+</li>
+<li>
+<p><a href="aws.amazon.com/blogs/aws-cost-management/">AWS Cost Management Blog</a></p>
+</li>
+<li>
+<p><a href="aws.amazon.com/solutions/case-studies">Case Studies and Research</a></p>
+</li>
+</ul>
+<h2 id="7-tear-down">7. Tear down<a name="tear_down"></a></h2>
+<p>This exercise explained step by step how to install the CloudWatch agent in an EC2 instance in order to improve the recommendation accuracy of AWS Resource Optimization. After the lab is concluded make sure to turn of the EC2 instance that was created (t2.micro) and delete the IAM roles created to give the agent permission to write on CloudWatch.</p>
+<h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
+<p><a href="http://dx1572sre29wk.cloudfront.net/Cost_100_1_1star"><img alt="1 Star" src="Images/star.png" /></a> <a href="http://dx1572sre29wk.cloudfront.net/Cost_100_1_2star"><img alt="2 star" src="Images/star.png" /></a> <a href="http://dx1572sre29wk.cloudfront.net/Cost_100_1_3star"><img alt="3 star" src="Images/star.png" /></a> <a href="http://dx1572sre29wk.cloudfront.net/Cost_100_1_4star"><img alt="4 star" src="Images/star.png" /></a> <a href="http://dx1572sre29wk.cloudfront.net/Cost_100_1_5star"><img alt="5 star" src="Images/star.png" /></a> </p>
+<h2 id="9-survey">9. Survey <a name="survey"></a></h2>
+<p>Thanks for taking the lab, We hope that you can take this short survey (&lt;2 minutes), to share your insights and help us improve our content.</p>
+<p><a href="https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX"><img alt="Survey" src="Images/survey.png" /></a></p>
+<p>This survey is hosted by an external company (Qualtrics), so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.d9aa80ab.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

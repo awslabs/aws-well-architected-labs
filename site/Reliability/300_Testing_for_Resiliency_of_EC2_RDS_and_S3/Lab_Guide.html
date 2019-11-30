@@ -4143,7 +4143,13 @@ Terminating i-0710435abc631eab3
 <p>Before you initiate the failure simulation, refresh the service website several times. Every time the image is loaded, the website writes a record to the Amazon RDS database</p>
 </li>
 <li>
-<p>Click on <strong>Click here to go to other page</strong> and it will show the latest ten entries in the Amazon RDS DB. Click again to return to the image page.</p>
+<p>Click on <strong>click here to go to other page</strong> and it will show the latest ten entries in the Amazon RDS DB</p>
+<ol>
+<li>The DB table shows "hits" on our <em>image page</em></li>
+<li>Website URL access requests are shown here for traffic against the <em>image page</em>. These include IPs of browser traffic as well as IPs of load balancer health checks</li>
+<li>For each region the AWS Elastic Load Balancer makes these health checks, so you will see three IP addresses from these</li>
+<li>Click on <strong>click here to go to other page</strong> again to return to the <em>image page</em></li>
+</ol>
 </li>
 <li>
 <p>Go to the RDS Dashboard in the AWS Console at <a href="http://console.aws.amazon.com/rds">http://console.aws.amazon.com/rds</a></p>
@@ -4210,7 +4216,7 @@ Terminating i-0710435abc631eab3
 <p>The website is <em>not</em> available. Some errors you might see reported:</p>
 <ul>
 <li><strong>No Response / Timeout</strong>: Request was successfully sent to EC2 server, but server no longer has connection to an active database</li>
-<li><strong>504 Gateway Time-out</strong>: Amazon Elastic Load Balancer has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request</li>
+<li><strong>504 Gateway Time-out</strong>: Amazon Elastic Load Balancer did not get a response from the server.  This can happen when it has removed the servers that are unable to respond and added new ones, but the new ones have not yet finished initialization, and there are no healthy hosts to receive the request</li>
 <li><strong>502 Bad Gateway</strong>: The Amazon Elastic Load Balancer got a bad request from the server</li>
 <li>An error you will <em>not</em> see is <strong>This site can’t be reached</strong>. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.</li>
 </ul>
@@ -4268,6 +4274,7 @@ Terminating i-0710435abc631eab3
 <li>
 <p>Go to the RDS Dashboard in the AWS Console at <a href="http://console.aws.amazon.com/rds">http://console.aws.amazon.com/rds</a> and note which Availability Zone the AWS RDS <em>primary</em> DB instance is in.</p>
 <ul>
+<li><strong>Note</strong>: If you previously ran the <strong>RDS Failure Injection test</strong>, you must wait until the console shows the AZs for the <em>primary</em> and <em>standby</em> instances as swapped, before running this test</li>
 <li>A good way to run the AZ failure injection is first in an AZ <em>other</em> than this - we'll call this <strong>Scenario 1</strong></li>
 <li>Then try it again in the <em>same</em> AZ as the AWS RDS <em>primary</em> DB instance - we'll call this <strong>Scenario 2</strong></li>
 <li>Taking down two out of the three AZs this way is an unlikely use case, however it will show how AWS systems work to maintain service integrity despite extreme circumstances.</li>

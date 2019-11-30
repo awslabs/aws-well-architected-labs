@@ -26,4 +26,5 @@ $instance = Get-EC2Instance -Filter @{Name = 'vpc-id'; Values = $a}  | Select-Ob
 Write-Host "Terminating" + $instance.Instances[0].InstanceId
 
 # Terminate that instance
-Stop-EC2Instance -InstanceId $instance.Instances[0].InstanceId -Terminate
+Stop-EC2Instance -InstanceId $instance.Instances[0].InstanceId
+Remove-EC2Instance -InstanceId $instance.Instances[0].InstanceId -Force
