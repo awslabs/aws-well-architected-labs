@@ -193,16 +193,8 @@ During this lab exercise, we learned how to prioritize the right sizing recommen
 * [Case Studies and Research](aws.amazon.com/solutions/case-studies)
 
 ## 7. Tear down<a name="tear_down"></a>  
-This exercise covered the fundamental steps for right sizing on AWS. Starting from understanding which type of data/telemetry is available, granularity to the AWS Resource Optimization recommendation that automatically identify idle resources and isntances with downsizing opportunities. There is no tear down for exercises in this lab.
+This exercise covered the fundamental steps for right sizing on AWS. Starting from understanding which type of data/telemetry is available, granularity to the AWS Resource Optimization recommendation that automatically identify idle resources and instances with downsizing opportunities. There is no tear down for exercises in this lab.
 
 ## 8. Rate this lab<a name="rate_lab"></a>  
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_5star) 
+[![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_1star/Cost_100_1_1star) [![2 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_2star) [![3 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_3star) [![4 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_4star) [![5 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_5star) 
 
-
-## 9. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)
-
-This survey is hosted by an external company (Qualtrics), so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
- 

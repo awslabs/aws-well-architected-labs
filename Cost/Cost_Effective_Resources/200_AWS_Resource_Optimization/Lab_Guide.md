@@ -312,14 +312,6 @@ As explained above the AWS Resource Optimization logic will recommend to downsiz
 ## 7. Tear down<a name="tear_down"></a>  
 This exercise explained step by step how to install the CloudWatch agent in an EC2 instance in order to improve the recommendation accuracy of AWS Resource Optimization. After the lab is concluded make sure to turn of the EC2 instance that was created (t2.micro) and delete the IAM roles created to give the agent permission to write on CloudWatch.
 
+
 ## 8. Rate this lab<a name="rate_lab"></a>  
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_100_1_5star) 
-
-
-## 9. Survey <a name="survey"></a>
-Thanks for taking the lab, We hope that you can take this short survey (<2 minutes), to share your insights and help us improve our content.
-
-[![Survey](Images/survey.png)](https://amazonmr.au1.qualtrics.com/jfe/form/SV_cvavNi7IbbzCyfX)
-
-This survey is hosted by an external company (Qualtrics), so the link above does not lead to our website.  Please note that AWS will own the data gathered via this survey and will not share the information/results collected with survey respondents.  Your responses to this survey will be subject to Amazons Privacy Policy.
- 
+[![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_1star/Cost_100_1_1star) [![2 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_2star) [![3 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_3star) [![4 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_4star) [![5 star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_5star) 

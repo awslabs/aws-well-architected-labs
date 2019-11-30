@@ -18,3 +18,11 @@ By using the right pricing model for your workload resources, you pay the lowest
 
 
 
+## Step 2 - Right Sizing
+
+| | |
+| --- | --- |
+| [![Go to lab](../common/images/100lab.png)](./Cost_Effective_Resources/100_AWS_Resource_Optimization/README.md) | This lab will show you how to use Cost Explorer to perform right sizing recommendations on your resources. |
+| [![Go to lab](../common/images/200lab.png)](./Cost_Effective_Resources/200_AWS_Resource_Optimization/README.md) | This lab will show you how to install the memory agent. |
+
+---
