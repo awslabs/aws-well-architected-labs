@@ -2769,7 +2769,7 @@
 <img alt="Images/CloudWatch04.png" src="Images/CloudWatch04.png" /></p>
 </li>
 <li>
-<p>Deselect the <strong>EC2 resource</strong> and now modify the time range on the top right, selecting the <strong>last 2 weeks</strong>:
+<p>Deselect the <strong>EC2 resource</strong> and now modify the time range on the top right, click <strong>custom</strong> and select the <strong>last 2 weeks</strong>:
 <img alt="Images/CloudWatch05.png" src="Images/CloudWatch05.png" /></p>
 </li>
 <li>
@@ -2795,19 +2795,21 @@
 <img alt="Images/IAMrole02.png" src="Images/IAMrole02.png" /></p>
 </li>
 <li>
-<p>For Choose the service that will use this role, choose <strong>EC2 Allows EC2 instances to call AWS services on your behalf.</strong> Choose <strong>Next: Permissions</strong>.
+<p>Under <strong>Choose the service that will use this role</strong>, choose <strong>EC2 Allows EC2 instances to call AWS services on your behalf.</strong> Choose <strong>Next: Permissions</strong>.
 <img alt="Images/IAMrole03.png" src="Images/IAMrole03.png" /></p>
 </li>
 <li>
-<p>In the list of policies, select the check box next to <em>CloudWatchAgentServerPolicy</em>. If necessary, use the search box to find the policy.
-<img alt="Images/IAMrole04.png" src="Images/IAMrole04.png" /></p>
+<p>In the list of policies, select the check box next to <em>CloudWatchAgentServerPolicy</em>. If necessary, use the search box to find the policy, click <strong>Next: Tags</strong>:</p>
 </li>
 <li>
-<p>Select the desired tags (optional) for this policy, click <strong>Next: Review</strong>.
+<p><img alt="Images/IAMrole04.png" src="Images/IAMrole04.png" /></p>
+</li>
+<li>
+<p>Add tags (optional) for this policy, click <strong>Next: Review</strong>.
 <img alt="Images/IAMrole05.png" src="Images/IAMrole05.png" /></p>
 </li>
 <li>
-<p>Confirm that <em>CloudWatchAgentServerPolicy</em> appears next to <strong>Policies</strong>. In Role name, enter a name for the role, such as <em>CloudWatchAgentServerRole</em>. Optionally give it a description. Then choose <strong>Create role</strong>.
+<p>Confirm that <strong>CloudWatchAgentServerPolicy</strong> appears next to <strong>Policies</strong>. In Role name, enter a name for the role, such as <strong>CloudWatchAgentServerRole</strong>. Optionally give it a description. Then click <strong>Create role</strong>.
 <img alt="Images/IAMrole06.png" src="Images/IAMrole06.png" /></p>
 </li>
 </ol>
@@ -2823,9 +2825,15 @@
 <img alt="Images/MemInstall02.png" src="Images/MemInstall02.png" /></p>
 </li>
 <li>
-<p>Click on <strong>Launch Instance</strong> and select <strong>Linux 2 AMI (HVM)</strong> and <strong>t2.micro</strong> (free tier eligible) on the following screens.
+<p>Click on <strong>Launch Instance</strong> and select <strong>Linux 2 AMI (HVM)</strong> and <strong>t2.micro</strong> (free tier eligible) on the following screens. Click <strong>Review and launch</strong>:
 <img alt="Images/MemInstall02a.png" src="Images/MemInstall02a.png" />
 <img alt="Images/MemInstall02b.png" src="Images/MemInstall02b.png" /></p>
+</li>
+<li>
+<p>Click <strong>Launch</strong></p>
+</li>
+<li>
+<p>Select <strong>Proceed without a key pair</strong> </p>
 </li>
 </ol>
 <p>Complete this step by launching this testing t2.micro EC2 instance. In order to install the CloudWatch agent We will need to access this instance using the browser-based SSH native AWS connection tool so make sure that the port 22 is not blocked in the Security Group attached to this instance. </p>
@@ -2997,9 +3005,12 @@ sudo ./install.sh
 </code></pre>
 
 <p><img alt="Images/MemInstall09.png" src="Images/AgentInstall09.png" /></p>
-<p>Wait at least a minute or two, and then go back to the <strong>Amazon CloudWatch</strong> console page, under the <strong>Metrics</strong> session to validate that you are getting Memory information.</p>
-<p><img alt="Images/MemInstall10.png" src="Images/AgentInstall10.png" />
-<img alt="Images/MemInstall11.png" src="Images/AgentInstall11.png" />
+<p>It may take up to 5 minutes for the metrics to become available, go back to the <strong>Amazon CloudWatch</strong> console page, under the <strong>Metrics</strong> session to validate that you are getting Memory information.</p>
+<p>Click <strong>CWAgent</strong>: 
+<img alt="Images/MemInstall10.png" src="Images/AgentInstall10.png" /></p>
+<p>Click <strong>ImageID,InstanceID,InstanceType</strong>:
+<img alt="Images/MemInstall11.png" src="Images/AgentInstall11.png" /></p>
+<p>Select the <strong>Instance</strong> from the list below:
 <img alt="Images/MemInstall12.png" src="Images/AgentInstall12.png" /></p>
 <p>You have now completed the CloudWatch agent installation and will be able to monitor on Amazon CloudWatch the memory utilization of that instance.</p>
 <p><strong>[BONUS]</strong> The next step is not mandatory to complete this lab.</p>
@@ -3093,29 +3104,10 @@ sudo ./install.sh
 <p><strong>Ignore burstable instance families (T types):</strong> These families are designed to typically run at low CPU percentages for significant periods of time and shouldn’t be part of the instance types being analyzed for rightsizing.</p>
 </li>
 </ul>
-<h2 id="7-reference-material">7. Reference Material<a name="EC2_RS_ref_material"></a></h2>
-<ul>
-<li>
-<p><a href="aws.amazon.com/pricing/cost-optimization/">AWS Cost Optimization</a></p>
-</li>
-<li>
-<p><a href="d1.awsstatic.com/whitepapers/architecture/AWS-Cost-Optimization-Pillar.pdf">AWS Well Architect Cost Opt Whitepaper</a></p>
-</li>
-<li>
-<p><a href="d1.awsstatic.com/whitepapers/cost-optimization-laying-the-foundation.pdf">Laying the foundation for Cost Opt Whitepaper</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/aws-cost-management/">AWS Cost Management Products</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/blogs/aws-cost-management/">AWS Cost Management Blog</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/solutions/case-studies">Case Studies and Research</a></p>
-</li>
-</ul>
 <h2 id="7-tear-down">7. Tear down<a name="tear_down"></a></h2>
-<p>This exercise explained step by step how to install the CloudWatch agent in an EC2 instance in order to improve the recommendation accuracy of Amazon EC2 Resource Optimization. After the lab is concluded make sure to turn off the EC2 instance that was created (t2.micro) and delete the IAM roles.</p>
+<pre><code>- Terminate the EC2 Instance
+- Delete the IAM role **CloudWatchAgentServerRole**
+</code></pre>
 <h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_1star/Cost_100_1_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_5star"><img alt="5 star" src="../../../common/images/star.png" /></a> </p>
                 

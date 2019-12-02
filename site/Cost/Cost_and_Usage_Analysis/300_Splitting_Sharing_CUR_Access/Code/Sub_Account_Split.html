@@ -2710,10 +2710,11 @@ now = datetime.datetime.now()
 # YES! you can do multiple subfolders if you have multiple queries to run, 1 subfolder per query
 currentmonth = '/year_1=' + str(now.year) + '/month_1=' + str(now.month) + '/'
 bucketname = '(output bucket)'
+
 #List of Subfolders &amp; ACLs to apply to objects in them
 #There MUST be a 1:1 between subfolders &amp; policies
 subfolders = ['&lt;folder1&gt;']
-S3ObjectPolicies = ['ACL=\'bucket-owner-full-control\',AccessControlPolicy={\'Grants\':[{\'Grantee\': {\'DisplayName\': \'&lt;account name&gt;\',\'ID\': \'&lt;canonical ID&gt;\',\'Type\': \'CanonicalUser\'},\'Permission\': \'FULL_CONTROL\'}],\'Owner\':{\'DisplayName\':\'&lt;account name&gt;\',\'ID\':\'&lt;canonical ID&gt;\'}},Bucket=\''+bucketname+'\',Key=\'objectkey\'']
+
 # Arrays to hold the Athena delete &amp; create queries that we need to run
 delete_query_strings = []
 create_query_strings = []

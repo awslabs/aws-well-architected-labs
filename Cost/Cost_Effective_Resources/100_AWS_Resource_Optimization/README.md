@@ -19,7 +19,8 @@ http://wellarchitectedlabs.com
 
 <BR>
 
-## [Start the Lab!](Lab_Guide.md)
+[![Start the lab](../../../common/images/startthelab.png)](Lab_Guide.md)
+
 
 <BR>
 <BR> 
@@ -34,7 +35,7 @@ http://wellarchitectedlabs.com
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 

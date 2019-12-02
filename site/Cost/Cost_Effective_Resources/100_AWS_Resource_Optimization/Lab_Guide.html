@@ -2765,11 +2765,11 @@
 <img alt="Images/CloudWatch04.png" src="Images/CloudWatch04.png" /></p>
 </li>
 <li>
-<p>Deselect the <strong>EC2 resource</strong> and now modify the time range on the top right, selecting the <strong>last 2 weeks</strong>:
+<p>Deselect the <strong>EC2 resource</strong> and now modify the time range on the top right, click <strong>custom</strong> and select the <strong>last 2 weeks</strong>:
 <img alt="Images/CloudWatch05.png" src="Images/CloudWatch05.png" /></p>
 </li>
 <li>
-<p>Navigate to the <strong>CPU Utilization Average</strong> widget and launch the <strong>View in metrics</strong> page. Using the <strong>Graphed metrics</strong> section try to answer the following questions:</p>
+<p>Navigate to the <strong>CPU Utilization Average</strong> widget, click the <strong>three dots</strong> and launch the <strong>View in metrics</strong> page. Using the <strong>Graphed metrics</strong> section try to answer the following questions:</p>
 </li>
 <li>
 <p>a. What is the instance with the highest CPU Average?</p>
@@ -2780,8 +2780,8 @@
 <p><img alt="Images/CloudWatch05.png" src="Images/CloudWatch06.png" />
 <img alt="Images/CloudWatch05.png" src="Images/CloudWatch07.png" /></p>
 <h2 id="2-using-amazon-ec2-resource-optimization-recommendations">2. Using Amazon EC2 Resource Optimization Recommendations<a name="resource_opt"></a></h2>
-<p><strong>NOTE</strong>: In order to complete this step you need to have Amazon EC2 Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
-<p>Amazon EC2 Resource Optimization offers right sizing recommendations in the AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings (e.g., by terminating idle instances or downsizing active instances to lower-cost options within the same family/generation).</p>
+<p><strong>NOTE</strong>: In order to complete this step you need to have Amazon EC2 Resource Optimization enabled, you can do that by going to AWS Cost Explorer, Recommendations (left bar) section.</p>
+<p>Amazon EC2 Resource Optimization offers right sizing recommendations in AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings (e.g., by terminating idle instances or downsizing active instances to lower-cost options within the same family/generation).</p>
 <ol>
 <li>
 <p>Navigate to the <strong>AWS Cost Explorer</strong> page
@@ -2801,7 +2801,7 @@
 <p>To improve the quality of recommendations, AWS might use other utilization metrics that you might be collecting, such as disk or memory utilization. All resource utilization metrics are anonymized and aggregated before AWS uses them for model training. If you would like to opt out of this experience and request your metrics not be stored and used for model improvement, please <a href="https://docs.aws.amazon.com/awssupport/latest/user/getting-started.html">submit an AWS support ticket</a>. For more information, see <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a>.</p>
 <ol>
 <li>
-<p>Assuming you had enabled the Amazon EC2 Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
+<p>Assuming you had enabled the Amazon EC2 Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists):
 <img alt="Images/ResourceOpt5.png" src="Images/ResourceOpt05.png" /></p>
 </li>
 <li>
@@ -2812,7 +2812,7 @@
 </ol>
 <p>You can also filter your recommendations by the type of action (Idle and Underutilized), Linked Account, Region and Tag. </p>
 <ol>
-<li>Click on any single recommendation to view the details
+<li>Click on <strong>view</strong> next to a recommendation, to view the details:
 <img alt="Images/ResourceOpt6.png" src="Images/ResourceOpt06.png" /></li>
 </ol>
 <p>How are the potential savings calculated? AWS will first examine the instance running during the last 14 days to identify if it was partially or fully covered by an RI or running On-Demand. Another factor is whether the RI is instance size-flexible. The cost to run the instance is calculated based on the On-Demand hours and the hourly rate for the instance type. For each recommendation, AWS calculates the cost to operate a new instance. AWS assumes that an instance size-flexible Reserved Instance will cover the new instance in the same way as the previous instance. Savings are calculated based on the number of On-Demand running hours and the difference in On-Demand rates. If the Reserved Instance isn't instance size-flexible, the savings calculation is based on whether the instance hours during the last 14 days are operated as On-Demand. AWS will only provide recommendations with estimated savings greater than or equal to $0.</p>
@@ -2848,21 +2848,28 @@
 <li>Next, let’s flag EC2 instances that belong to previous generations (C4, M3, etc), if you are investing engineer time on right sizing let's make sure you are also leveraging the newest technology available. Newer EC2 generations have a superior performance increasing the changes of success for the right sizing exercise, they also generally cost less than previous generations providing a higher cost vs benefit.</li>
 </ol>
 <p><img alt="Images/ResourceOpt08.png" src="Images/ResourceOpt08.png" /></p>
-<p>Insert a new column to the right of the <em>Instance Type</em> field, and paste the following formula:</p>
-<pre><code>=IF(SUMPRODUCT(--(NOT(ISERR(SEARCH({&quot;c4&quot;,&quot;c3&quot;,&quot;c1&quot;,&quot;m4&quot;,&quot;m3&quot;,&quot;m2&quot;,&quot;m1&quot;,&quot;r3&quot;,”r4”,&quot;i2&quot;,&quot;cr1&quot;,&quot;hs1&quot;,&quot;g2&quot;},D2)))))&gt;0,&quot;1&quot;,&quot;0&quot;)
+<p>Insert a new column <strong>Old Gen</strong> to the right of the <em>Instance Type</em> field, and paste the following formula:</p>
+<pre><code>=IF(SUMPRODUCT(--(NOT(ISERR(SEARCH({&quot;c4&quot;,&quot;c3&quot;,&quot;c1&quot;,&quot;m4&quot;,&quot;m3&quot;,&quot;m2&quot;,&quot;m1&quot;,&quot;r3&quot;,&quot;r4&quot;,&quot;i2&quot;,&quot;cr1&quot;,&quot;hs1&quot;,&quot;g2&quot;},D2)))))&gt;0,&quot;1&quot;,&quot;0&quot;)
 </code></pre>
 
 <p><em>Column D = Instance Type</em></p>
 <ol>
 <li>Now let’s sort the recommendations by low complexity and higher savings:</li>
 </ol>
-<p><strong>Group 1:</strong> Idle EC2 resources (Filters: Recommended Actions = “Terminate”)</p>
-<p>Start filtering the idle resources or instances where CPU utilization &lt;1%, it is likely these instances were launched and forgotten so the potential savings here may represent the entire On Demand cost. </p>
+<p><strong>Minimum Effort:</strong> Set the minimum savings required</p>
+<p>First we want to only focus on savings that are worth our effort, we will define this as $100. Apply a <strong>number filter</strong> on <strong>Recommended Instance Type 1 Estimated Savings</strong> that is <strong>Greater than 100</strong></p>
+<p><strong>Group 1:</strong> Idle EC2 resources</p>
+<p>Filter the data on <strong>Recommended Action = "Terminate"</strong></p>
+<p>Sort the data by <strong>Recommended Instance Type 1 Estimated Savings = Largest to smallest</strong></p>
+<p>Start filtering the idle resources or instances where CPU utilization &lt;1%, it is likely these instances were launched and forgotten so the potential savings here may represent the entire On Demand cost.</p>
 <p><img alt="Images/ResourceOpt09.png" src="Images/ResourceOpt09.png" /></p>
 <p>The resulting filtered list should be where you start right sizing discussions with application owners; perform an investigation to understand why these instance were launched and validate their usage with the resource owner. If possible, terminate them.</p>
-<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from an original <em>2,534 recommendations to 235</em> and <em>identified $4,808 per month in potential savings</em>.</p>
-<p><strong>Group 2:</strong> Previous generation instances (Filters: Recommended Actions = “Modify” AND OldGen = “1” AND TooSmall = “0”)</p>
-<p>Now let’s focus on the underutilized resources (&lt;40% CPU) that belongs to previous generations and can either be downsized within the same family (column P below) or modernized to the newest generation. </p>
+<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from an original <em>2,534 recommendations to 16</em> and <em>identified $3,458 per month in potential savings</em>.</p>
+<p><strong>Group 2:</strong> Previous generation instances</p>
+<p>Filter the data on <strong>Recommended Actions = “Modify”</strong> AND <strong>OldGen = “1”</strong> AND <strong>TooSmall = “0”</strong></p>
+<p>Filter the data on <strong>Recommended Instance Type 1 Projected CPU &lt; 40%</strong></p>
+<p>Sort the data by <strong>Recommended Instance Type 1 Estimated Savings = Largest to smallest</strong></p>
+<p>This will focus on the underutilized resources (&lt;40% CPU) that belongs to previous generations and can either be downsized within the same family (column P below) or modernized to the newest generation. </p>
 <p><img alt="Images/ResourceOpt10.png" src="Images/ResourceOpt10.png" /></p>
 <p>Moving to a modern generation may require additional testing hours compared to instances identified on Group 1, but depending on the case it can maximize savings and performance.</p>
 <table>
@@ -2920,14 +2927,17 @@
 </tbody>
 </table>
 <p><em>prices are from US-Virginia (Nov 2019)</em></p>
-<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally <em>2,534 recommendations to 183</em> with <em>$38,464 per month in potential savings</em>.</p>
-<p><strong>Group 3:</strong> Current generation instances (Filters: Recommended Actions = “Modify” AND OldGen = “0” AND TooSmall = “0”)</p>
-<p>Finally let’s select underutilized resources from the current, most modern generation. We recommend sorting them by potential savings to make sure you are prioritizing the instances that will provide larger savings first. </p>
+<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally <em>2,534 recommendations to 22</em> with <em>$6,362 per month in potential savings</em>.</p>
+<p><strong>Group 3:</strong> Current generation instances</p>
+<p>Filter the data on <strong>Recommended Actions = “Modify”</strong> AND <strong>OldGen = “0”</strong> AND <strong>TooSmall = “0”</strong></p>
+<p>The filter on <strong>Recommended Instance Type 1 Projected CPU &lt; 40%</strong> should still be in place.</p>
+<p>Sort the data by <strong>Recommended Instance Type 1 Estimated Savings = Largest to smallest</strong></p>
+<p>This will select underutilized resources from the current, most modern generation. We recommend sorting them by potential savings to make sure you are prioritizing the instances that will provide larger savings first. </p>
 <p><img alt="Images/ResourceOpt11.png" src="Images/ResourceOpt11.png" /></p>
 <p>Also, do not forget to check the other recommended instance types (columns U to AD); Amazon EC2 Resource Optimization will recommend up to 3 instances for each resource moving from a more conservative recommendation (the first recommendation) to a more aggressive and higher savings recommendation (second and third recommendations). </p>
-<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally <em>2,534 recommendations to 305</em> with <em>$38,693 per month in potential savings</em>.</p>
-<h2 id="4-actionig-on-the-recommendations">4. Actionig on the recommendations<a name="act_resource_opt"></a></h2>
-<p>During this lab exercise, we learned how to prioritize the right sizing recommendations with the goal of identifying low complexity and high savings recommendations. <strong>We initially started with 2,534 recommendations with a potential saving of $86,627 but we managed to identify the top 723 cases (29%) with lowest complexity that together add up to $81,965 or 95% of the overall potential saving</strong>.</p>
+<p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally <em>2,534 recommendations to 22</em> with <em>$4,879.56 per month in potential savings</em>.</p>
+<h2 id="4-action-the-recommendations">4. Action the recommendations<a name="act_resource_opt"></a></h2>
+<p>During this lab exercise, we learned how to prioritize the right sizing recommendations with the goal of identifying low complexity and high savings recommendations. We initially <strong>started with 2,534 recommendations</strong> with a potential <strong>saving of $86,627</strong> but we managed to identify the <strong>top 60 cases</strong> with lowest complexity that together add up to <strong>$14,699.56</strong> of the overall potential saving.</p>
 <p><em>Group 1 (Idle)</em> and <em>Group 2 (Previous Generation)</em> are the less complex cases where you may want to start the right sizing exercises for your organization. As you gain more confidence and learn how to develop a regular process for right sizing, your organization will be able to rapidly act on <em>Group 3 (Current/modern generation)</em> and other cases.</p>
 <h2 id="5-amazon-ec2-right-sizing-best-practices">5. Amazon EC2 Right Sizing Best Practices<a name="EC2_RS_best_practices"></a></h2>
 <ul>
@@ -2953,32 +2963,8 @@
 <p><strong>Ignore burstable instance families (T types):</strong> These families are designed to typically run at low CPU percentages for significant periods of time and shouldn’t be part of the instance types being analyzed for rightsizing.</p>
 </li>
 </ul>
-<h2 id="6-reference-material">6. Reference Material<a name="EC2_RS_ref_material"></a></h2>
-<ul>
-<li>
-<p><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html">AWS Resource Optimization Documentation</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/pricing/cost-optimization/">Amazon EC2 Cost Optimization</a></p>
-</li>
-<li>
-<p><a href="d1.awsstatic.com/whitepapers/architecture/AWS-Cost-Optimization-Pillar.pdf">AWS Well Architect Cost Opt Whitepaper</a></p>
-</li>
-<li>
-<p><a href="d1.awsstatic.com/whitepapers/cost-optimization-laying-the-foundation.pdf">Laying the foundation for Cost Opt Whitepaper</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/aws-cost-management/">AWS Cost Management Products</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/blogs/aws-cost-management/">AWS Cost Management Blog</a></p>
-</li>
-<li>
-<p><a href="aws.amazon.com/solutions/case-studies">Case Studies and Research</a></p>
-</li>
-</ul>
 <h2 id="7-tear-down">7. Tear down<a name="tear_down"></a></h2>
-<p>This exercise covered the fundamental steps for right sizing on AWS. Starting from understanding which type of data/telemetry and granularity is available at Amazon CloudWatch, to understanding the Amazon EC2 Resource Optimization recommendations and how to prioritize them accordingly. No tear down is required for this lab.</p>
+<p>No tear down is required for this lab.</p>
 <h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_1star/Cost_100_1_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_5star"><img alt="5 star" src="../../../common/images/star.png" /></a> </p>
                 
