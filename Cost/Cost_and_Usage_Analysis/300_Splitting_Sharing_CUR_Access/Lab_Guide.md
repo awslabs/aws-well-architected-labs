@@ -116,6 +116,7 @@ NOTE: replace (bucket name):
 14 - Test the configuration is working correctly by uploading a file into the S3 folder. Verify that it has multiple Grantees to the required accounts:
 ![Images/splitsharecur4.png](Images/splitsharecur4.png)
 
+15 - Delete the file and ensure all folders are empty.
 The output bucket setup is now complete. Every time the Athena query runs and outputs a file into the S3 bucket, it will automatically have its permissions ACL updated to allow access to the sub account.
 
 
@@ -224,13 +225,13 @@ This Lambda function ties everything together, it will remove all objects in the
 
 7 - Go into the Lambda service dashboard
 
-8 - Create a function named **SubAcctSplit**, **Author from scratch** using the **Python 3.7** Runtime:  
+8 - Create a function named **SubAcctSplit**, **Author from scratch** using the **Python 3.7** Runtime and role **LambdaSubAcctSplit**:  
 ![Images/splitsharecur9.png](Images/splitsharecur9.png)
 
 9 - Copy the code into the editor from here:
 [./Code/Sub_Account_Split.md](./Code/Sub_Account_Split.md)
 
-10 - Edit the code as per the instructions at the top, you will need to change the arrays and Athena variable.
+10 - Edit the code as per the instructions at the top.
 
 11 - Under **Basic settings** set the **Timeout** to 30seconds, and review this after the test at the end
 

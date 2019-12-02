@@ -2738,18 +2738,18 @@
 <p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol>
-<li><a href="#CloudWatch_intro">Getting to know AWS CloudWatch</a></li>
+<li><a href="#CloudWatch_intro">Getting to know Amazon CloudWatch</a></li>
 <li><a href="#create_iamrole">Create an IAM Role to use with Amazon CloudWatch Agent</a></li>
 <li><a href="#attach_iamrole">Attach CloudWatch IAM role to selected EC2 Instances</a></li>
 <li><a href="#memory_plugin">Cloudwatch Agent Manual Install</a></li>
-<li><a href="#EC2_updated_rec">Updated Resource Optimization recommendations</a></li>
+<li><a href="#EC2_updated_rec">Updated Amazon EC2 Resource Optimization recommendations</a></li>
 <li><a href="#EC2_RS_best_practices">EC2 Right Sizing Best Practices</a></li>
 <li><a href="#EC2_RS_ref_material">EC2 Right Sizing Reference Material</a></li>
 </ol>
-<p><strong>NOTE:</strong> In order to run this lab you will need to have at least one <strong>EC2 instance</strong> running and have <strong>AWS Cost Explorer</strong> and <strong>AWS Resource Optimization</strong> enabled.</p>
-<p>During this lab we will create a <strong>custom metric</strong> at <strong>Amazon CloudWatch</strong> and install an agent in one EC2 instance to start collecting Memory utilization and improve the recommendation accuracy of the <strong>AWS Resource Optimization</strong> report. Be aware that <em>custom metrics are not part of the Amazon CloudWatch <a href="https://aws.amazon.com/free/">free tier</a></em> usage so <strong>additional costs will incur at your bill</strong>. For more information read the <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch pricing</a> page.</p>
+<p><strong>NOTE:</strong> In order to run this lab you will need to have at least one <strong>EC2 instance</strong> running and have <strong>AWS Cost Explorer</strong> and <strong>Amazon EC2 Resource Optimization</strong> enabled.</p>
+<p>During this lab we will create a <strong>custom metric</strong> at <strong>Amazon CloudWatch</strong> and install an agent in one EC2 instance to start collecting Memory utilization and improve the recommendation accuracy of the <strong>Amazon EC2 Resource Optimization</strong> report. Be aware that <em>custom metrics are not part of the Amazon CloudWatch <a href="https://aws.amazon.com/free/">free tier</a></em> usage so <strong>additional costs will incur at your bill</strong>. For more information read the <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch pricing</a> page.</p>
 <p>All custom metrics charges are prorated by the hour and metered only when you send metrics to Amazon CloudWatch. <strong>Each custom metrics costs $0.30 per metric/month for the first 10,000 metrics</strong> and can go down to $0.02 per metric/month at the lowest priced tier (<em>US Virginia prices from November 2019</em>).</p>
-<h2 id="1-getting-to-know-aws-cloudwatch">1. Getting to know AWS Cloudwatch<a name="CloudWatch_intro"></a></h2>
+<h2 id="1-getting-to-know-amazon-cloudwatch">1. Getting to know Amazon Cloudwatch<a name="CloudWatch_intro"></a></h2>
 <p>The first step to perform right sizing is to monitor and analyze your current use of services to gain insight into instance performance and usage patterns. To gather sufficient data, observe performance over at least a two-week period (ideally, over a one-month period) to capture the workload and business peak. The most common metrics that define instance performance are vCPU utilization, memory utilization, network utilization, and disk use.</p>
 <ol>
 <li>
@@ -2803,11 +2803,11 @@
 <img alt="Images/IAMrole04.png" src="Images/IAMrole04.png" /></p>
 </li>
 <li>
-<p>Choose <strong>Next: Review</strong>.
+<p>Select the desired tags (optional) for this policy, click <strong>Next: Review</strong>.
 <img alt="Images/IAMrole05.png" src="Images/IAMrole05.png" /></p>
 </li>
 <li>
-<p>Confirm that <em>CloudWatchAgentServerPolicy</em> appears next to <strong>Policies</strong>. In Role name, enter a name for the role, such as <em>CloudWatchAgentServerRole</em>. Optionally give it a description. Then choose Create role.
+<p>Confirm that <em>CloudWatchAgentServerPolicy</em> appears next to <strong>Policies</strong>. In Role name, enter a name for the role, such as <em>CloudWatchAgentServerRole</em>. Optionally give it a description. Then choose <strong>Create role</strong>.
 <img alt="Images/IAMrole06.png" src="Images/IAMrole06.png" /></p>
 </li>
 </ol>
@@ -2827,8 +2827,11 @@
 <img alt="Images/MemInstall02a.png" src="Images/MemInstall02a.png" />
 <img alt="Images/MemInstall02b.png" src="Images/MemInstall02b.png" /></p>
 </li>
+</ol>
+<p>Complete this step by launching this testing t2.micro EC2 instance. In order to install the CloudWatch agent We will need to access this instance using the browser-based SSH native AWS connection tool so make sure that the port 22 is not blocked in the Security Group attached to this instance. </p>
+<ol>
 <li>
-<p>Select the instance you want to start collecting Memory data, go to <strong>Actions</strong> on the top bar, select <strong>Instance Settings&gt;&gt;Attach/Replace IAM Role</strong>.
+<p>After the instance is launched and runnning, select the instance you want to start collecting Memory data by going to <strong>Actions</strong> on the top bar, select <strong>Instance Settings&gt;&gt;Attach/Replace IAM Role</strong>.
 <img alt="Images/MemInstall03.png" src="Images/MemInstall03.png" /></p>
 </li>
 <li>
@@ -2855,7 +2858,7 @@
 <img alt="Images/MemInstall02.png" src="Images/AgentInstall02.png" /></p>
 </li>
 <li>
-<p>Connect into the EC2 Instance using the <strong>browser-based SSH connection tool</strong>
+<p>Connect into the EC2 Instance using the <strong>browser-based SSH connection tool</strong>.
 <img alt="Images/MemInstall03.png" src="Images/AgentInstall03.png" />
 <img alt="Images/MemInstall04.png" src="Images/AgentInstall04.png" />
 <img alt="Images/MemInstall05.png" src="Images/AgentInstall05.png" /></p>
@@ -2881,7 +2884,7 @@ sudo ./install.sh
 </ol>
 <p>Before running the CloudWatch agent on any servers, you must create a CloudWatch agent configuration file, which is a JSON file that specifies the metrics and logs that the agent is to collect, including custom metrics. You can create it by using the wizard or by writting it yourself from scratch. Any time you change the agent configuration file, you must then restart the agent to have the changes take effect.</p>
 <p>The wizard can autodetect the credentials and AWS Region to use if you have the AWS credentials and configuration files in place. For more information about these files, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html">Configuration and Credential Files</a> in the <em>AWS Systems Manager User Guide</em> and the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatch-agent-configuration-file.html">AWS documentation page</a>.</p>
-<p>For now, let's start the CloudWatch agent configuration file wizard executing the command below withing the selected EC2 instance.</p>
+<p>For now, let's start the CloudWatch agent configuration file wizard executing the command below at the selected EC2 instance.</p>
 <pre><code>sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
 </code></pre>
 
@@ -2994,7 +2997,7 @@ sudo ./install.sh
 </code></pre>
 
 <p><img alt="Images/MemInstall09.png" src="Images/AgentInstall09.png" /></p>
-<p>Now go back to the <strong>Amazon CloudWatch</strong> console page, under the <strong>Metrics</strong> session to validate that you are getting Memory information.</p>
+<p>Wait at least a minute or two, and then go back to the <strong>Amazon CloudWatch</strong> console page, under the <strong>Metrics</strong> session to validate that you are getting Memory information.</p>
 <p><img alt="Images/MemInstall10.png" src="Images/AgentInstall10.png" />
 <img alt="Images/MemInstall11.png" src="Images/AgentInstall11.png" />
 <img alt="Images/MemInstall12.png" src="Images/AgentInstall12.png" /></p>
@@ -3021,13 +3024,12 @@ sudo ./install.sh
 <p>Click <strong>Next</strong> and <strong>Create stack</strong></p>
 </li>
 </ul>
-<h2 id="5-updated-resource-optimization-recommendations">5. Updated Resource Optimization recommendations<a name="EC2_updated_rec"></a></h2>
-<p><strong>NOTE</strong>: In order to complete this step you need to have AWS Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
-<p><strong>Important:</strong> If you have just installed the CloudWatch agent at your instances it may take a couple of days for Amazon Resource Optimization to start to provide updated recommendations, so don't worry if you don't see the memory data during the first checks.</p>
-<p>Now that we have Memory data as a custom metric in CloudWatch let's check how that affects the Amazon Resource Optimization recommendations. </p>
-<p>Amazon Resource Optimization offers right sizing recommendations in the AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (last 14 days using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings. There are two types of recommended actions: <strong>Terminate</strong> if the instance is considered idle (<em>max CPU utilization is at or below 1%</em>) or <strong>Downsize</strong> if the instance is underutilized (<em>max CPU utilization is between 1% and 40%</em>).</p>
-<p>By default Amazon Resource Optimization doesn't need memory datapoint to provide recommendations, but if that information is available it will take that into consideration updating the <strong>Downsize</strong> recommendation for instances that now have <em>max CPU and MEM utilization between 1% and 40%</em> over the past 14 days.</p>
-<p>That said during this step we will compare how that recommendation is impacted for two instances from the same family/generation where only one has the available.</p>
+<h2 id="5-updated-amazon-ec2-resource-optimization-recommendations">5. Updated Amazon EC2 Resource Optimization recommendations<a name="EC2_updated_rec"></a></h2>
+<p><strong>NOTE</strong>: In order to complete this step you need to have Amazon EC2 Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
+<p><strong>Important:</strong> If you have just installed the CloudWatch agent at your instances it may take a couple of days for Amazon EC2 Resource Optimization to start to provide updated recommendations, so don't worry if you don't see the memory data during the first checks.</p>
+<p>Now that we have Memory data as a custom metric in CloudWatch let's check how that affects the Amazon EC2 Resource Optimization recommendations.</p>
+<p>Amazon EC2 Resource Optimization offers right sizing recommendations in the AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (last 14 days using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings. There are two types of recommended actions: <strong>Terminate</strong> if the instance is considered idle (<em>max CPU utilization is at or below 1%</em>) or <strong>Downsize</strong> if the instance is underutilized (<em>max CPU utilization is between 1% and 40%</em>).</p>
+<p>By default Amazon EC2 Resource Optimization doesn't need memory datapoint to provide recommendations, but if that information is available it will take that into consideration updating the <strong>Downsize</strong> recommendation for instances that now have <em>max CPU and MEM utilization between 1% and 40%</em> over the past 14 days. Let's validate that with the following steps.</p>
 <ol>
 <li>
 <p>Navigate to the <strong>AWS Cost Explorer</strong> page
@@ -3038,7 +3040,7 @@ sudo ./install.sh
 <img alt="Images/ResourceOpt2.png" src="Images/ResourceOpt02.png" /></p>
 </li>
 <li>
-<p>Click on the <strong>View All</strong> link associated with the <strong>AWS Resource Optimization Recommendations</strong> section. 
+<p>Click on the <strong>View All</strong> link associated with the <strong>Amazon EC2 Resource Optimization Recommendations</strong> section. 
 <img alt="Images/ResourceOpt3.png" src="Images/ResourceOpt03.png" /></p>
 </li>
 </ol>
@@ -3046,7 +3048,7 @@ sudo ./install.sh
 <img alt="Images/ResourceOpt4.png" src="Images/ResourceOpt04.png" /></p>
 <ol>
 <li>
-<p>Assuming you had enabled the AWS Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
+<p>Assuming you had enabled the Amazon EC2 Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
 <img alt="Images/ResourceOpt5.png" src="Images/ResourceOpt05.png" /></p>
 </li>
 <li>
@@ -3057,16 +3059,16 @@ sudo ./install.sh
 </ol>
 <p>You can also filter your recommendations by the type of action (Idle and Underutilized), Linked Account, Region and Tag. </p>
 <ol>
-<li>Understanding the AWS Resource Optimization recommendations.</li>
+<li>Understanding the Amazon EC2 Resource Optimization recommendations.</li>
 </ol>
 <p>In the example below we have a recommendation to downsize the <strong>t2.micro</strong> (1vCPU <em>for a 2h 24m burst</em> and 1GB RAM) to a <strong>t2.nano</strong> (1vCPU <em>for a 1h 12m burst</em> and 0.5 GB RAM) and save $12 USD per year.</p>
 <p><img alt="Images/ResourceOpt06.png" src="Images/ResourceOpt06.png" /></p>
-<p>Over the past 14 days the maximum CPU utilization for this instance was only 9% and this instance was running for 86 hours and all of these were On Demand hours. Observe that there is no memory information available so AWS Resource Optimization will ignore that datapoint and recommend to downsize to a t2.nano that have half of the memory available of a t2.micro. </p>
+<p>Over the past 14 days the maximum CPU utilization for this instance was only 9% and this instance was running for 86 hours and all of these were On Demand hours. Observe that there is no memory information available so Amazon EC2 Resource Optimization will ignore that datapoint and recommend to downsize to a t2.nano that have half of the memory available of a t2.micro. </p>
 <p>That can be risky and waste engineer time when testing if the proposed right sizing option is valid or not. That said you can improve the accuracy of this recommendation with the CloudWatch agent we just installed.</p>
-<p>In this other example we also see a recommendation to downsize a r5.8xlarge (32 vCPU and 256GB RAM) to a r5.4xlarge (16 vCPU and 128GB RAM) and save $2,412 USD per year.
+<p>In this other example we see a recommendation to downsize a r5.8xlarge (32 vCPU and 256GB RAM) to a r5.4xlarge (16 vCPU and 128GB RAM) and save $2,412 USD per year.
 <img alt="Images/ResourceOpt07.png" src="Images/ResourceOpt07.png" /></p>
 <p>On this case we have both CPU and Memory information available: the maximum CPU utilization was 21% and Memory was only 5%. That makes the case for downsize much stronger and the recommendation will even try estimate the CPU and Memory utilization for the new instance size. Keep in mind that this is just a simple estimation based on the past utilization data from CloudWatch, before executing the modification all the required load tests must be performed to avoid any impacts on your workload.</p>
-<p>As explained above the AWS Resource Optimization logic will recommend to downsize any instances where the maximum CPU utilization was between 1% to 40% over the past 14 days. If you do have memory information available the AWS Resource Optimization will now consider to downsize instances that have <em>both CPU and Memory</em> maximum utilization between 1% and 40%.</p>
+<p>As explained above the Amazon EC2 Resource Optimization logic will recommend to downsize any instances where the maximum CPU utilization was between 1% to 40% over the past 14 days. If you do have memory information available the Amazon EC2 Resource Optimization will now consider to downsize instances that have <em>both CPU and Memory</em> maximum utilization between 1% and 40%. Idle recommendations are not impacted if memory data is available, so any EC2 instance that during the past 14 days never passed 1% of CPU utlization will be automatically flagged as idle.</p>
 <h2 id="6-amazon-ec2-right-sizing-best-practices">6. Amazon EC2 Right Sizing Best Practices<a name="EC2_RS_best_practices"></a></h2>
 <ul>
 <li>
@@ -3113,7 +3115,7 @@ sudo ./install.sh
 </li>
 </ul>
 <h2 id="7-tear-down">7. Tear down<a name="tear_down"></a></h2>
-<p>This exercise explained step by step how to install the CloudWatch agent in an EC2 instance in order to improve the recommendation accuracy of AWS Resource Optimization. After the lab is concluded make sure to turn of the EC2 instance that was created (t2.micro) and delete the IAM roles created to give the agent permission to write on CloudWatch.</p>
+<p>This exercise explained step by step how to install the CloudWatch agent in an EC2 instance in order to improve the recommendation accuracy of Amazon EC2 Resource Optimization. After the lab is concluded make sure to turn off the EC2 instance that was created (t2.micro) and delete the IAM roles.</p>
 <h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_1star/Cost_100_1_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_200_ResourceOpt_5star"><img alt="5 star" src="../../../common/images/star.png" /></a> </p>
                 

@@ -2876,7 +2876,8 @@
 <img alt="Images/splitsharecur3.png" src="Images/splitsharecur3.png" /></p>
 <p>14 - Test the configuration is working correctly by uploading a file into the S3 folder. Verify that it has multiple Grantees to the required accounts:
 <img alt="Images/splitsharecur4.png" src="Images/splitsharecur4.png" /></p>
-<p>The output bucket setup is now complete. Every time the Athena query runs and outputs a file into the S3 bucket, it will automatically have its permissions ACL updated to allow access to the sub account.</p>
+<p>15 - Delete the file and ensure all folders are empty.
+The output bucket setup is now complete. Every time the Athena query runs and outputs a file into the S3 bucket, it will automatically have its permissions ACL updated to allow access to the sub account.</p>
 <h2 id="2-perform-one-off-fill-of-memberlinked-data">2. Perform one off Fill of Member/Linked Data <a name="backfill_data"></a></h2>
 <p>Perform this step if you want to generate data for all previous months available in your current CUR files. This is a one off step that is performed manually.  We create a temporary table in Athena, and write the output to the S3 location created above, for the member/linked account to access it. We then delete the temporary table - which does not delete the S3 output data. </p>
 <p>1 - In the master/payer account go into the Athena service dashboard</p>
@@ -2950,11 +2951,11 @@ where line_item_usage_account_id like '(some value)' and CAST(bill_billing_perio
 <p>5 - Attach the <strong>LambdaSubAcctSplit</strong> policy</p>
 <p>6 - Name the role <strong>LambdaSubAcctSplit</strong></p>
 <p>7 - Go into the Lambda service dashboard</p>
-<p>8 - Create a function named <strong>SubAcctSplit</strong>, <strong>Author from scratch</strong> using the <strong>Python 3.7</strong> Runtime:<br />
+<p>8 - Create a function named <strong>SubAcctSplit</strong>, <strong>Author from scratch</strong> using the <strong>Python 3.7</strong> Runtime and role <strong>LambdaSubAcctSplit</strong>:<br />
 <img alt="Images/splitsharecur9.png" src="Images/splitsharecur9.png" /></p>
 <p>9 - Copy the code into the editor from here:
 <a href="Code/Sub_Account_Split.html">./Code/Sub_Account_Split.md</a></p>
-<p>10 - Edit the code as per the instructions at the top, you will need to change the arrays and Athena variable.</p>
+<p>10 - Edit the code as per the instructions at the top.</p>
 <p>11 - Under <strong>Basic settings</strong> set the <strong>Timeout</strong> to 30seconds, and review this after the test at the end</p>
 <p>12 - Change the <strong>Execution role</strong> to <strong>LambdaSubAcctSplit</strong>  </p>
 <p>13 - Save the function</p>

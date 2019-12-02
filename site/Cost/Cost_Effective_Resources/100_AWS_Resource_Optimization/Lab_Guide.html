@@ -2737,15 +2737,15 @@
 <p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol>
-<li><a href="#CloudWatch_intro">Getting to know AWS CloudWatch</a></li>
-<li><a href="#resource_opt">Using AWS Resource Optimization Recommendations</a></li>
-<li><a href="#prio_resource_opt">Prioritizing EC2 Right Sizing</a></li>
+<li><a href="#CloudWatch_intro">Getting to know Amazon CloudWatch</a></li>
+<li><a href="#resource_opt">Using Amazon EC2 Resource Optimization Recommendations</a></li>
+<li><a href="#prio_resource_opt">Download the Amazon EC2 Resource Optimization CSV File and sort it to find quick wins</a></li>
 <li><a href="#act_resource_opt">Actionig on the recommendations</a></li>
 <li><a href="#EC2_RS_best_practices">EC2 Right Sizing Best Practices</a></li>
 <li><a href="#EC2_RS_ref_material">EC2 Right Sizing Reference Material</a></li>
 </ol>
-<p><strong>NOTE:</strong> In order to run this lab you will need to have at least one <strong>EC2 instance</strong> running and have <strong>AWS Cost Explorer</strong> and <strong>AWS Resource Optimization</strong> enabled.</p>
-<h2 id="1-getting-to-know-aws-cloudwatch">1. Getting to know AWS Cloudwatch<a name="CloudWatch_intro"></a></h2>
+<p><strong>NOTE:</strong> In order to run this lab you will need to have at least one <strong>EC2 instance</strong> running and have <strong>AWS Cost Explorer</strong> and <strong>Amazon EC2 Resource Optimization</strong> enabled.</p>
+<h2 id="1-getting-to-know-amazon-cloudwatch">1. Getting to know Amazon Cloudwatch<a name="CloudWatch_intro"></a></h2>
 <p>The first step to perform right sizing is to monitor and analyze your current use of services to gain insight into instance performance and usage patterns. To gather sufficient data, observe performance over at least a two-week period (ideally, over a one-month period) to capture the workload and business peak. The most common metrics that define instance performance are vCPU utilization, memory utilization, network utilization, and disk use.</p>
 <ol>
 <li>
@@ -2779,8 +2779,8 @@
 </ol>
 <p><img alt="Images/CloudWatch05.png" src="Images/CloudWatch06.png" />
 <img alt="Images/CloudWatch05.png" src="Images/CloudWatch07.png" /></p>
-<h2 id="2-using-aws-resource-optimization-recommendations">2. Using AWS Resource Optimization Recommendations<a name="resource_opt"></a></h2>
-<p><strong>NOTE</strong>: In order to complete this step you need to have AWS Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
+<h2 id="2-using-amazon-ec2-resource-optimization-recommendations">2. Using Amazon EC2 Resource Optimization Recommendations<a name="resource_opt"></a></h2>
+<p><strong>NOTE</strong>: In order to complete this step you need to have Amazon EC2 Resource Optimization enabled, you can do that going to the AWS Cost Explorer, Recommendations (left bar) section.</p>
 <p>Amazon EC2 Resource Optimization offers right sizing recommendations in the AWS Cost Explorer without any additional cost. These recommendations identify likely idle and underutilized instances across your accounts, regions and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (using Amazon CloudWatch) and your existing reservation footprint to identify opportunities for cost savings (e.g., by terminating idle instances or downsizing active instances to lower-cost options within the same family/generation).</p>
 <ol>
 <li>
@@ -2792,16 +2792,16 @@
 <img alt="Images/ResourceOpt2.png" src="Images/ResourceOpt02.png" /></p>
 </li>
 <li>
-<p>Click on the <strong>View All</strong> link associated with the <strong>AWS Resource Optimization Recommendations</strong> section. 
+<p>Click on the <strong>View All</strong> link associated with the <strong>Amazon EC2 Resource Optimization Recommendations</strong> section. 
 <img alt="Images/ResourceOpt3.png" src="Images/ResourceOpt03.png" /></p>
 </li>
 </ol>
 <p>In case you haven’t enabled the Amazon EC2 Resource Optimization please do so (no additional cost), it may take up to 24 hours in order to generate your first recommendations. Only regular or payer accounts can enable it and by default both linked and payer accounts will be able to access their rightsizing recommendations unless the payer account specifically prohibits it on the settings page (top right).
 <img alt="Images/ResourceOpt4.png" src="Images/ResourceOpt04.png" /></p>
-<p>To improve the quality of recommendations, AWS might use other utilization metrics that you might be collecting, such as disk or memory utilization. All resource utilization metrics are anonymized and aggregated before AWS uses them for model training. If you would like to opt out of this experience and request your metrics not be stored and used for model improvement, please submit an AWS support ticket. For more information, see <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a>.</p>
+<p>To improve the quality of recommendations, AWS might use other utilization metrics that you might be collecting, such as disk or memory utilization. All resource utilization metrics are anonymized and aggregated before AWS uses them for model training. If you would like to opt out of this experience and request your metrics not be stored and used for model improvement, please <a href="https://docs.aws.amazon.com/awssupport/latest/user/getting-started.html">submit an AWS support ticket</a>. For more information, see <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a>.</p>
 <ol>
 <li>
-<p>Assuming you had enabled the AWS Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
+<p>Assuming you had enabled the Amazon EC2 Resource Optimization Recommendations, you will be presented with a screen that provides recommendations (if any exists). Click to view the <strong>Resource Optimization</strong> recommendations.
 <img alt="Images/ResourceOpt5.png" src="Images/ResourceOpt05.png" /></p>
 </li>
 <li>
@@ -2816,16 +2816,16 @@
 <img alt="Images/ResourceOpt6.png" src="Images/ResourceOpt06.png" /></li>
 </ol>
 <p>How are the potential savings calculated? AWS will first examine the instance running during the last 14 days to identify if it was partially or fully covered by an RI or running On-Demand. Another factor is whether the RI is instance size-flexible. The cost to run the instance is calculated based on the On-Demand hours and the hourly rate for the instance type. For each recommendation, AWS calculates the cost to operate a new instance. AWS assumes that an instance size-flexible Reserved Instance will cover the new instance in the same way as the previous instance. Savings are calculated based on the number of On-Demand running hours and the difference in On-Demand rates. If the Reserved Instance isn't instance size-flexible, the savings calculation is based on whether the instance hours during the last 14 days are operated as On-Demand. AWS will only provide recommendations with estimated savings greater than or equal to $0.</p>
-<p>Amazon Resource Optimize recommendations already excludes Spot usage and takes into consideration the existing Reserved Instances and Savings Plan footprint to provide recommendations. There are two types of recommended actions: <strong>Terminate</strong> if the instance is considered idle (<em>max CPU utilization is at or below 1%</em>) or <strong>Downsize</strong> if the instance is underutilized (<em>max CPU utilization is between 1% and 40%</em>).</p>
-<p>You can enable Amazon CloudWatch to report memory utilization and improve the recommendation accuracy. Please check the <a href="https://github.com/awslabs/aws-well-architected-labs/blob/master/Cost/ent206.md">200 level EC2 Right Sizing lab</a> for more information on how to enable memory utilization metrics. Finally, Amazon EC2 Resource Optimization Recommendations will only ever recommend up to three, same-family instances as target instances for downsizing.</p>
+<p>Amazon EC2 Resource Optimization recommendations already excludes Spot usage and takes into consideration the existing Reserved Instances and Savings Plan footprint to provide recommendations. There are two types of recommended actions: <strong>Terminate</strong> if the instance is considered idle (<em>max CPU utilization is at or below 1%</em>) or <strong>Downsize</strong> if the instance is underutilized (<em>max CPU utilization is between 1% and 40%</em>).</p>
+<p>You can enable Amazon CloudWatch to report memory utilization and improve the recommendation accuracy. Please check the <a href="https://wellarchitectedlabs.com/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/README.html">200 level EC2 Right Sizing lab</a> for more information on how to enable memory utilization metrics. Finally, Amazon EC2 Resource Optimization recommendations will only ever recommend up to three, same-family instances as target instances for downsizing.</p>
 <h2 id="3-download-the-amazon-ec2-resource-optimization-csv-file-and-sort-it-to-find-quick-wins">3. Download the Amazon EC2 Resource Optimization CSV File and sort it to find quick wins <a name="prio_resource_opt"></a></h2>
 <ol>
 <li>
-<p>Download the <strong>AWS Resource Optimization</strong> report:
+<p>Download the <strong>Amazon EC2 Resource Optimization</strong> report:
 <img alt="Images/ResourceOpt06b.png" src="Images/ResourceOpt06b.png" /></p>
 </li>
 <li>
-<p>If you don’t have any AWS Resource Optimization recommendation use the file below as a reference.
+<p>If you don’t have any Amazon EC2 Resource Optimization recommendation use the file below as a reference.
 <a href="Code/ENT206-ec2-rightsizing-recommendations.csv">Sample Amazon EC2 Resource Optimization file (.csv)</a></p>
 </li>
 <li>
@@ -2928,17 +2928,17 @@
 <p>If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally <em>2,534 recommendations to 305</em> with <em>$38,693 per month in potential savings</em>.</p>
 <h2 id="4-actionig-on-the-recommendations">4. Actionig on the recommendations<a name="act_resource_opt"></a></h2>
 <p>During this lab exercise, we learned how to prioritize the right sizing recommendations with the goal of identifying low complexity and high savings recommendations. <strong>We initially started with 2,534 recommendations with a potential saving of $86,627 but we managed to identify the top 723 cases (29%) with lowest complexity that together add up to $81,965 or 95% of the overall potential saving</strong>.</p>
-<p><em>Group 1 (Idle)</em> and <em>Group 2 (Previous Generation)</em> are the less complex cases where you may want to start your right sizing exercises for your organization. As you gain more confidence and learn how to develop a regular process for right sizing, your organization will be able to rapidly act on <em>Group 3 (Current/modern generation)</em> and other instance types.</p>
+<p><em>Group 1 (Idle)</em> and <em>Group 2 (Previous Generation)</em> are the less complex cases where you may want to start the right sizing exercises for your organization. As you gain more confidence and learn how to develop a regular process for right sizing, your organization will be able to rapidly act on <em>Group 3 (Current/modern generation)</em> and other cases.</p>
 <h2 id="5-amazon-ec2-right-sizing-best-practices">5. Amazon EC2 Right Sizing Best Practices<a name="EC2_RS_best_practices"></a></h2>
 <ul>
 <li>
 <p><strong>Start simple:</strong> idle resources, non-critical development/QA and previous generation instances will require less testing hours and provide quick wins (The Amazon EC2 Launch time statistics can be used to identify instances that have been running longer than others and is a good statistic to sort your Amazon EC2 instances by).</p>
 </li>
 <li>
-<p><strong>Right Size before performing a migration:</strong> If you skip right sizing to save time, your migration speed might increase, but you will end up with higher cloud infrastructure spend for a potentially longer period of time. Instead, leverage the test and QA cycles during a migration exercise to test several instance types and families.  Also, take that opportunity to test different sizes and burstable instances like the “t” family.</p>
+<p><strong>Right Size before performing a migration:</strong> If you skip right sizing to save time, your migration speed might increase, but you will end up with higher cloud infrastructure spend for a potentially longer period of time. Instead, leverage the test and QA cycles during a migration exercise to test several instance types and families. Also, take that opportunity to test different sizes and burstable instances like the “t” family.</p>
 </li>
 <li>
-<p><strong>The best right sizing starts on day 1:</strong> As you perform right sizing analysis, and ultimately rightsize resources, ensure any learnings are being shared across your organization and influencing the design of new workloads.</p>
+<p><strong>The best right sizing starts on day 1:</strong> As you perform right sizing analysis, and ultimately rightsize resources, ensure any learnings are being shared across your organization and influencing the design of new workloads and upcoming migrations.</p>
 </li>
 <li>
 <p><strong>Measure Twice, Cut Once: Test, then test some more:</strong> The last thing you want is for a new resource type to be uncapable of handling load, or functioning incorrectly.</p>
@@ -2959,7 +2959,7 @@
 <p><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html">AWS Resource Optimization Documentation</a></p>
 </li>
 <li>
-<p><a href="aws.amazon.com/pricing/cost-optimization/">AWS Cost Optimization</a></p>
+<p><a href="aws.amazon.com/pricing/cost-optimization/">Amazon EC2 Cost Optimization</a></p>
 </li>
 <li>
 <p><a href="d1.awsstatic.com/whitepapers/architecture/AWS-Cost-Optimization-Pillar.pdf">AWS Well Architect Cost Opt Whitepaper</a></p>
@@ -2978,7 +2978,7 @@
 </li>
 </ul>
 <h2 id="7-tear-down">7. Tear down<a name="tear_down"></a></h2>
-<p>This exercise covered the fundamental steps for right sizing on AWS. Starting from understanding which type of data/telemetry is available, granularity to the AWS Resource Optimization recommendation that automatically identify idle resources and instances with downsizing opportunities. There is no tear down for exercises in this lab.</p>
+<p>This exercise covered the fundamental steps for right sizing on AWS. Starting from understanding which type of data/telemetry and granularity is available at Amazon CloudWatch, to understanding the Amazon EC2 Resource Optimization recommendations and how to prioritize them accordingly. No tear down is required for this lab.</p>
 <h2 id="8-rate-this-lab">8. Rate this lab<a name="rate_lab"></a></h2>
 <p><a href="https://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_1star/Cost_100_1_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http://wellarchitectedlabs.com/Cost_EffectiveResources_100_ResourceOpt_5star"><img alt="5 star" src="../../../common/images/star.png" /></a> </p>
                 

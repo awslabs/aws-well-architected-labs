@@ -11,7 +11,6 @@ http://wellarchitectedlabs.com
 
 ## Prerequisites
 - Root user access to the master account
-- Valid EC2 key for the instance where the CloudWatch agent will be installed
 - Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
 
 ## Permissions required
