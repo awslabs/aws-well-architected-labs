@@ -2793,25 +2793,30 @@ aws-cli/1.16.249 Python/3.6.8...
 <p><code>jq</code> is a command-line JSON processor. is like <code>sed</code> for JSON data. It is used in the workshop <code>bash</code> scripts to parse AWS CLI output.</p>
 <h3 id="linux_1">Linux</h3>
 <ul>
-<li>
-<p>Run the following command</p>
-<p>$ jq --version
-  jq-1.5-1-a5b5cbe
-<em> Any version is fine.
-</em> If you instead got <code>command not found</code> then you need to install <code>jq</code>:</p>
-<p>$ sudo apt-get install jq
+<li>Run the following command<pre><code>$ jq --version
+jq-1.5-1-a5b5cbe
+</code></pre>
+<ul>
+<li>Any version is fine.</li>
+<li>If you instead got <code>command not found</code> then you need to install <code>jq</code>:<pre><code>  $ sudo apt-get install jq
   ...(lots of output)...
   $ jq --version
   jq-1.5-1-a5b5cbe
-* If that succeeded, then you are finished.  Return to the <a href="../Lab_Guide.html">Lab Guide</a></p>
+</code></pre>
+<ul>
+<li>If that succeeded, then you are finished.  Return to the <a href="../Lab_Guide.html">Lab Guide</a></li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 <p>If that does not work, then do the following</p>
 <ol>
 <li>
 <p>Download the <code>jq</code> executable</p>
-<p>$ wget <a href="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64">https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64</a>
-  2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]</p>
+<pre><code>$ wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]
+</code></pre>
 </li>
 <li>
 <p>You can find out what your execution path is with the following command.</p>
