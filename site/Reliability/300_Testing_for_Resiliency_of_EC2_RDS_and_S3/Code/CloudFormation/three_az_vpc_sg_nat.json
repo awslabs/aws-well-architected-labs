@@ -1,0 +1,672 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Three AZ, Three Tier VPC with minimal Security Groups",
+
+  "Parameters" : {
+
+    "WorkshopName": {
+      "Type": "String"
+    },
+
+    "BastionCidrIp" : {
+      "Description" : "Access CidrIp, default Everyone",
+      "Type" : "String",
+      "Default" :  "0.0.0.0/0"
+    },
+
+    "VPCCidrBlock" : {
+      "Description" : "VPC CidrIp",
+      "Type" : "String",
+      "Default" :  "10.0.0.0/16"
+    },
+
+    "IGWCidrBlock1" : {
+      "Description" : "IGW Routed Subnet CIDR for AZ 1, default Range 10.0.0.1 - 10.0.15.254",
+      "Type" : "String",
+      "Default" :  "10.0.0.0/20"
+    },
+
+    "IGWCidrBlock2" : {
+      "Description" : "IGW Routed Subnet CIDR for AZ 2, default Range 10.0.16.1 - 10.0.31.254",
+      "Type" : "String",
+      "Default" :  "10.0.16.0/20"
+    },
+
+    "IGWCidrBlock3" : {
+      "Description" : "IGW Routed Subnet CIDR for AZ 3, default Range 10.0.32.1 - 10.0.47.254",
+      "Type" : "String",
+      "Default" :  "10.0.32.0/20"
+    },
+
+    "PrivateCidrBlock1" : {
+      "Description" : "Private Subnet CIDR for AZ 1, default Range 10.0.48.1 - 10.0.63.254",
+      "Type" : "String",
+      "Default" :  "10.0.48.0/20"
+    },
+
+    "PrivateCidrBlock2" : {
+      "Description" : "Private Subnet CIDR for AZ 2, default Range 10.0.64.1 - 10.0.79.254",
+      "Type" : "String",
+      "Default" :  "10.0.64.0/20"
+    },
+
+    "PrivateCidrBlock3" : {
+      "Description" : "Private Subnet CIDR for AZ 3, default Range 10.0.80.1 - 10.0.95.254",
+      "Type" : "String",
+      "Default" :  "10.0.80.0/20"
+    },
+
+    "AvailabilityZone1" : {
+      "Description" : "Availability Zone within the region to place a third of the subnets",
+      "Type" : "AWS::EC2::AvailabilityZone::Name",
+      "Default" :  "us-east-1a"
+    },
+
+    "AvailabilityZone2" : {
+      "Description" : "Availability Zone within the region to place a third of the subnets",
+      "Type" : "AWS::EC2::AvailabilityZone::Name",
+      "Default" :  "us-east-1b"
+    },
+
+    "AvailabilityZone3" : {
+      "Description" : "Availability Zone within the region to place a third of the subnets",
+      "Type" : "AWS::EC2::AvailabilityZone::Name",
+      "Default" :  "us-east-1c"
+    }
+
+  },
+
+  "Resources" : {
+
+    "VPC" : {
+      "Metadata" : {
+        "License" : "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+      },
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "CidrBlock" : { "Ref" : "VPCCidrBlock" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC"
+	  }
+        ]
+      }
+    },
+
+    "InternetGateway" : {
+      "Type" : "AWS::EC2::InternetGateway",
+      "Properties" : { 
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC"
+	  }
+        ]
+      }
+    },
+
+    "AttachGateway" : {
+       "Type" : "AWS::EC2::VPCGatewayAttachment",
+       "Properties" : {
+         "VpcId" : { "Ref" : "VPC" },
+         "InternetGatewayId" : { "Ref" : "InternetGateway" }
+       }
+    },
+
+    "IGWSubnet1" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone1" },
+        "CidrBlock" : { "Ref" : "IGWCidrBlock1" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-IGWSubnet1"
+	  }
+        ]
+      }
+    },
+
+    "IGWSubnet2" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone2" },
+        "CidrBlock" : { "Ref" : "IGWCidrBlock2" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-IGWSubnet2"
+	  }
+        ]
+      }
+    },
+
+    "IGWSubnet3" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone3" },
+        "CidrBlock" : { "Ref" : "IGWCidrBlock3" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-IGWSubnet3"
+	  }
+        ]
+      }
+    },
+
+    "IGWRouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : {"Ref" : "VPC"},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-IGWRoute"
+	  }
+        ]
+      }
+    },
+
+    "IGWRoute" : {
+      "Type" : "AWS::EC2::Route",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "IGWRouteTable" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "GatewayId" : { "Ref" : "InternetGateway" }
+      }
+    },
+
+    "IGWSubnetRouteTableAssociation1" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "IGWSubnet1" },
+        "RouteTableId" : { "Ref" : "IGWRouteTable" }
+      }
+    },
+
+    "IGWSubnetRouteTableAssociation2" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "IGWSubnet2" },
+        "RouteTableId" : { "Ref" : "IGWRouteTable" }
+      }
+    },
+
+    "IGWSubnetRouteTableAssociation3" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "IGWSubnet3" },
+        "RouteTableId" : { "Ref" : "IGWRouteTable" }
+      }
+    },
+
+    "BastionSG" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH or RDP access",
+        "VpcId" : {"Ref" : "VPC"},
+        "SecurityGroupIngress" : [ 
+          { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "BastionCidrIp" } },
+          { "IpProtocol" : "tcp", "FromPort" : "3389", "ToPort" : "3389", "CidrIp" : { "Ref" : "BastionCidrIp" } },
+          { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "CidrIp" : { "Ref" : "BastionCidrIp" } }
+        ]
+      }
+    },
+
+    "WebELBSG" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Web Server ELB Security group - open to all on 80 and 443",
+        "VpcId" : {"Ref" : "VPC"},
+        "SecurityGroupIngress" : [ 
+          { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" },
+          { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }
+        ]
+      }
+    },
+
+    "WebServerSG" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Web Server Security group - open to WebELBSG on 80 and 443 - RDP and SSH access from Bastion SG",
+        "VpcId" : {"Ref" : "VPC"},
+        "SecurityGroupIngress" : [ 
+          { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "SourceSecurityGroupId" : { "Ref" : "WebELBSG" } },
+          { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "SourceSecurityGroupId" : { "Ref" : "WebELBSG" } },
+          { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } },
+          { "IpProtocol" : "tcp", "FromPort" : "3389", "ToPort" : "3389", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } },
+          { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } }
+        ]
+      }
+    },
+
+    "MySQLSG" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "MySQL RDS Security group - open to WebServerSG on 3306",
+        "VpcId" : {"Ref" : "VPC"},
+        "SecurityGroupIngress" : [ 
+          { "IpProtocol" : "tcp", "FromPort" : "3306", "ToPort" : "3306", "SourceSecurityGroupId" : { "Ref" : "WebServerSG" } },
+          { "IpProtocol" : "icmp", "FromPort" : "-1", "ToPort" : "-1", "SourceSecurityGroupId" : { "Ref" : "BastionSG" } }
+        ]
+      }
+    },
+
+    "PrivateSubnet1" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone1" },
+        "CidrBlock" : { "Ref" : "PrivateCidrBlock1" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnet1"
+	  }
+        ]
+      }
+    },
+
+    "PrivateSubnet2" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone2" },
+        "CidrBlock" : { "Ref" : "PrivateCidrBlock2" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnet2"
+	  }
+        ]
+      }
+    },
+
+    "PrivateSubnet3" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
+        "AvailabilityZone" : { "Ref" : "AvailabilityZone3" },
+        "CidrBlock" : { "Ref" : "PrivateCidrBlock3" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnet3"
+	  }
+        ]
+      }
+    },
+
+    "NAT1EIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc"
+      }
+    },
+
+    "NAT2EIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc"
+      }
+    },
+
+    "NAT3EIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc"
+      }
+    },
+
+    "NATGW1" : {
+      "Type" : "AWS::EC2::NatGateway",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "NAT1EIP", "AllocationId" ] },
+	"SubnetId" : { "Ref" : "IGWSubnet1"  },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetNAT1"
+	  }
+        ]
+      }
+    },
+
+    "NATGW2" : {
+      "Type" : "AWS::EC2::NatGateway",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "NAT2EIP", "AllocationId" ] },
+	"SubnetId" : { "Ref" : "IGWSubnet2"  },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetNAT2"
+	  }
+        ]
+      }
+    },
+
+    "NATGW3" : {
+      "Type" : "AWS::EC2::NatGateway",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "NAT3EIP", "AllocationId" ] },
+	"SubnetId" : { "Ref" : "IGWSubnet3"  },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetNAT3"
+	  }
+        ]
+      }
+    },
+
+    "PrivateRouteTable1" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : {"Ref" : "VPC"},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetRoute1"
+	  }
+        ]
+      }
+    },
+
+    "NAT1Route" : {
+      "Type" : "AWS::EC2::Route",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "PrivateRouteTable1" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "NatGatewayId" : { "Ref" : "NATGW1" }
+      }
+    },
+
+    "PrivateRouteTable2" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : {"Ref" : "VPC"},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetRoute2"
+	  }
+        ]
+      }
+    },
+
+    "NAT2Route" : {
+      "Type" : "AWS::EC2::Route",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "PrivateRouteTable2" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "NatGatewayId" : { "Ref" : "NATGW2" }
+      }
+    },
+
+    "PrivateRouteTable3" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : {"Ref" : "VPC"},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-PrivateSubnetRoute3"
+	  }
+        ]
+      }
+    },
+
+    "NAT3Route" : {
+      "Type" : "AWS::EC2::Route",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "PrivateRouteTable3" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "NatGatewayId" : { "Ref" : "NATGW3" }
+      }
+    },
+
+    "PrivateSubnetRouteTableAssociation1" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PrivateSubnet1" },
+        "RouteTableId" : { "Ref" : "PrivateRouteTable1" }
+      }
+    },
+
+    "PrivateSubnetRouteTableAssociation2" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PrivateSubnet2" },
+        "RouteTableId" : { "Ref" : "PrivateRouteTable2" }
+      }
+    },
+
+    "PrivateSubnetRouteTableAssociation3" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PrivateSubnet3" },
+        "RouteTableId" : { "Ref" : "PrivateRouteTable3" }
+      }
+    },
+
+    "KmsKeyAlias": {
+      "Type": "AWS::KMS::Alias",
+      "Properties": {
+          "AliasName": {
+              "Fn::Sub": "alias/${WorkshopName}"
+          },
+          "TargetKeyId": {
+              "Ref": "KmsKey"
+          }
+      }
+    },
+    "KmsKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+          "Description": {
+              "Fn::Sub": "Manages secrets in the ${WorkshopName} workshop"
+          },
+          "Enabled": true,
+          "EnableKeyRotation": true,
+          "KeyPolicy": {
+              "Version": "2012-10-17",
+              "Id": "KeyPolicyForKMS",
+              "Statement": [
+                  {
+                      "Sid": "Enable IAM User/Role Permissions",
+                      "Effect": "Allow",
+                      "Principal": {
+                            "AWS": [
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole-SecureSsmForRds"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/WebAppLambdaRole"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/VPCWorkshopRole"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/RDSWorkshopRole"
+                                },
+                                {
+                                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/DMSLambdaRole"
+                                }
+                              ]
+                      },
+                      "Action": "kms:*",
+                      "Resource": "*"
+                  }
+              ]
+          }
+      }
+    },
+    "CustomResource" : {
+        "Type" : "Custom::LambdaSSMSecureString",
+        "Properties" : {
+          "ServiceToken": { 
+              "Fn::GetAtt": [
+                    "LambdaCustomResource",
+                    "Arn"
+        ] },
+          "KmsKeyID": {
+            "Ref": "KmsKey"
+          },
+          "KmsKeyName": {
+            "Ref": "WorkshopName"
+          }
+        }
+      },
+    "LambdaCustomResource": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+            "FunctionName": "ResiliencyVPC-SecureSSMParameter",
+            "Handler": "index.handler",
+            "Runtime": "python3.6",
+            "Timeout": 30,
+            "Role": {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/LambdaCustomResourceRole-SecureSsmForRds"}, 
+            "Code": {
+                "ZipFile": {
+                    "Fn::Join": [
+                        "\n",
+                        [
+                            "import boto3",
+                            "import random",
+                            "import string",
+                            "import cfnresponse",
+                            "import logging",
+                            "import signal",
+                            "",
+                            "LOGGER = logging.getLogger()",
+                            "LOGGER.setLevel(logging.INFO)",
+                            "",
+                            "def generate_password(password_length):",
+                            "    return ''.join(",
+                            "    random.SystemRandom().choice(",
+                            "       string.ascii_lowercase + string.digits) for _ in range(password_length))",
+                            "",
+                            "def write_password_to_ssm(parameter_name, value, kms_key):",
+                            "    client = boto3.client('ssm')",
+                            "    LOGGER.info('Writing password to SSM parameter store.')",
+                            "    client.put_parameter(",
+                            "       Name=parameter_name,",
+                            "       Value=value,",
+                            "       Type='SecureString',",
+                            "       KeyId=kms_key,",
+                            "       Overwrite=True",
+                            "    )",
+                            "    return",
+                            "",
+                            "def delete_password_from_ssm(parameter_name):",
+                            "    client = boto3.client('ssm')",
+                            "    LOGGER.info('Deleting password from SSM parameter store.')",
+                            "    client.delete_parameter(",
+                            "       Name=parameter_name",
+                            "    )",
+                            "    return",
+                            "",
+                            "def handler(event, context):",
+                            "    signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))",
+                            "    # Setup alarm for remaining runtime minus a second",
+                            "    try:",
+                            "        LOGGER.info('REQUEST RECEIVED: %s', event)",
+                            "        LOGGER.info('REQUEST RECEIVED: %s', context)",
+                            "        if event['RequestType'] == 'Create':",
+                            "            LOGGER.info('CREATE!')",
+                            "            kms_key = event['ResourceProperties']['KmsKeyID']",
+                            "            key_name = event['ResourceProperties']['KmsKeyName']",
+                            "            write_password_to_ssm(key_name, generate_password(10), kms_key)",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource creation successful!'})",
+                            "        elif event['RequestType'] == 'Update':",
+                            "            LOGGER.info('UPDATE!')",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource update successful!'})",
+                            "        elif event['RequestType'] == 'Delete':",
+                            "            LOGGER.info('DELETE!')",
+                            "            key_name = event['ResourceProperties']['KmsKeyName']",
+                            "            delete_password_from_ssm(key_name)",
+                            "            cfnresponse.send(event, context, cfnresponse.SUCCESS,",
+                            "                {'Message': 'Resource deletion successful!'})",
+                            "        else:",
+                            "            LOGGER.info('FAILED!')",
+                            "            cfnresponse.send(event, context, cfnresponse.FAILED,",
+                            "                {'Message': 'Unexpected event received from CloudFormation'})",
+                            "    except:",
+                            "        LOGGER.info('FAILED!')",
+                            "        cfnresponse.send(event, context, cfnresponse.FAILED, {",
+                            "            'Message': 'Exception during processing'})",
+                            "",
+                            "def timeout_handler(_signal, _frame):",
+                            "    raise Exception('Time exceeded')",
+                            "",
+                            "",
+                            "signal.signal(signal.SIGALRM, timeout_handler)"
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+  },
+
+  "Outputs" : {
+
+    "VPC" : {
+      "Description" : "VPC",
+      "Value" : {"Ref" : "VPC"}
+    },
+
+    "IGW" : {
+      "Description" : "Internet Gateway",
+      "Value" : {"Ref" : "InternetGateway"}
+    },
+
+    "IGWSubnets" : {
+      "Description" : "IGW routed subnets for use in other templates",
+      "Value" : { "Fn::Join" : ["", [
+        { "Ref" : "IGWSubnet1" }, ",", { "Ref" : "IGWSubnet2" }, ",", { "Ref" : "IGWSubnet3" }
+        ]]
+      }
+    },
+
+    "PrivateSubnets" : {
+      "Description" : "Private subnets for use in other templates",
+      "Value" : { "Fn::Join" : ["", [
+        { "Ref" : "PrivateSubnet1" }, ",", { "Ref" : "PrivateSubnet2" }, ",", { "Ref" : "PrivateSubnet3" }
+        ]]
+      }
+    },
+
+    "BastionSecurityGroup" : {
+      "Description" : "Bastion Security Groups for use in other templates",
+      "Value" : { "Ref" : "BastionSG" }
+    },
+
+    "WebELBSecurityGroup" : {
+      "Description" : "Web ELB Security Groups for use in other templates",
+      "Value" : { "Ref" : "WebELBSG" }
+    },
+
+    "WebSecurityGroup" : {
+      "Description" : "Web Server Security Groups for use in other templates",
+      "Value" : { "Ref" : "WebServerSG" }
+    },
+
+    "MySQLSecurityGroup" : {
+      "Description" : "MSQL Security Group for use in other templates",
+      "Value" : { "Ref" : "MySQLSG" }
+    }
+
+  }
+}

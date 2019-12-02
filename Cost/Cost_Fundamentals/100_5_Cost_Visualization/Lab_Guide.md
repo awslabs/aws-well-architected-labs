@@ -171,7 +171,7 @@ You have now viewed your RI coverage, and have insight on where to increase your
 ## 6. Create custom EC2 reports 
 We will now create some custom EC2 reports, which will help to show ongoing costs related to EC2 instances and their associated usage. 
 
-1. From the left menu click **Explore**, and click **Cost & Usage**:
+1. From the left menu click **Cost Explorer**, click **Reports**, and click and click **Monthly costs by service**:
 ![Images/AWSCustomEC20.png](Images/AWSCustomEC20.png)
 
 2. You will have the default breakdown by Service. Click on the **Service** filter on the right, select **EC2-Instances (Elastic Compute Cloud - Compute)** and **EC2-Other**, then click **Apply filters**:

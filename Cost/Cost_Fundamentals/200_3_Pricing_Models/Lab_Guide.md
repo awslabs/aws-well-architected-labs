@@ -28,6 +28,9 @@ We are going to view the RI reports within AWS Cost Explorer, to understand the 
 2. In the left menu select **Recommendations**: 
 ![Images/AWSRI2.png](Images/AWSRI2.png)
 
+3. Click **View all** next to **Reservation purchase recommendations**:
+![Images/AWSRI6.png](Images/AWSRI6.png)
+
 3. On the right select the filters: **RI term** 1 year, **Payment Option** (your preference), **Based on the past** 7 days:
 ![Images/AWSRI3.png](Images/AWSRI3.png)
 
@@ -52,7 +55,7 @@ Ctrl-click to open them in a new tab, then copy the text and paste it into a spr
 - [30_day_EC2_R_Rec.csv](./Code/30_day_EC2_RI_Rec.csv)
 
 
-3 - Create a new column called **RI ID** to the left of the **Recommendation** column on **both** 30Day and 7Day sheets, which is a unique identifier of the RI Type, the formula for this cell will concatenate the columns: **Instance Type**, **Location**,**OS** and **Tenancy**. On **row 5** of the sample files, paste the formula below. If using your own files modify the row numbers.
+3 - Create a new column called **RI ID** to the left of the **Recommendation** column on **both** 30Day and 7Day sheets, which is a unique identifier of the RI Type, the formula for this cell will concatenate the columns: **Instance Type**, **Location**,**OS** and **Tenancy**. On **row 5** of the sample files, paste the formula below. **NOTE** If using your own files modify the row numbers from **5** to **2**.
 ```
 =CONCATENATE(C5,L5,M5,N5)
 ```

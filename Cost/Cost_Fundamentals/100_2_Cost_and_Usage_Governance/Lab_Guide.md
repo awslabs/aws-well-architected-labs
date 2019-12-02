@@ -120,7 +120,7 @@ You have created an actual cost budget for EC2 usage. You can extend this budget
 ## 3. Create and implement an AWS Budget for EC2 Savings Plan coverage
 We will create a monthly savings plan coverage budget which will notify if the coverage of Savings Plan for EC2 is below the specified amount.
 
-1. Click **Create budget**:
+1. From the **AWS Budgets** dashboard in the console, click **Create budget**:
 ![Images/AWSLab7.png](Images/AWSLab7.png)
 
 2. Select **Savings Plans budget**, and click **Set your budget >**:

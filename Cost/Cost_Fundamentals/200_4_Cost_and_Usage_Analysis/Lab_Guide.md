@@ -144,9 +144,10 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 27 - A new table called **workshop_c_u_r** will have been created, we will now load the partitions. Click on the **3 dot menu** and select **Load partitions**:
 ![Images/AWSBillingAnalysis_14.png](Images/AWSBillingAnalysis_14.png)
 
-22 - You will see it execute the command **MSCK REPAIR TABLE**, and in the results it will add partitions to the metastore for each month that has a billing file:
+22 - You will see it execute the command **MSCK REPAIR TABLE**, and in the results it **may** add partitions to the metastore for each month that has a billing file:
 ![Images/AWSBillingAnalysis_15.png](Images/AWSBillingAnalysis_15.png)
-NOTE: If it did not add partitions, then there is an error and there will be no data. 
+NOTE: It may or may not add partitions and show teh messages as per the image above.
+
 Check
 - The folder names **year** and **month** are in S3 and the case matches
 - There are parquet files in each of the month folders
@@ -179,6 +180,8 @@ You have successfully setup your CUR file to be analyzed. You can now query your
 <a name="CUR_Analysis"></a>
 ## 3. Cost and Usage analysis 
 We will now perform some common analysis of your usage through SQL queries. You will be charged for Athena usage by the amount of data that is scanned - the source files are monthly, and in parquet format - which is compressed and partitioned to minimise cost. Be careful to include **limit 10** or similar at the end of your queries to limit the amount of data that comes back.
+
+**NOTE**: You may need to change the database and table name depending on how you configured your CUR.  Replace **workshopcur.workshop_c_u_r** with your database and table name.
 
 For each of the queries below, copy and paste each query into the query window, click **Run query** and view the results.
 ![Images/AWSBillingAnalysis_19.png](Images/AWSBillingAnalysis_19.png)

@@ -119,7 +119,9 @@ You have successfully created the Policy.
 6. Select the checkbox next to **Region_Restrict** (created above) and click **Attach Policy**:
 ![Images/AWSPolicy13.png](Images/AWSPolicy13.png)
 
-You have successfully attached the policy to the CostTest group. 
+You have successfully attached the policy to the CostTest group.
+
+**Log out from the console**
 
 
 ### 2.3 Verify the policy is in effect
@@ -130,7 +132,7 @@ You have successfully attached the policy to the CostTest group.
 2. Click the current region in the top right, and select **US West (N.California)**: 
 ![Images/AWSPolicy15.png](Images/AWSPolicy15.png)
 
-3. You will notice that there are authorization messages due to not having access in that region (the policy restricted EC2 usage to N. Virginia only):
+3. In the **Old look EC2 console** you will notice that there are authorization messages due to not having access in that region (the policy restricted EC2 usage to N. Virginia only), the new look EC2 console will not have errors:
 ![Images/AWSPolicy16.png](Images/AWSPolicy16.png)
 
 4. Try to launch an instance by clicking **Launch Instance**:
@@ -227,6 +229,7 @@ We will create a policy that allows operations on specific instance families onl
 7. Select the checkbox next to **Ec2_FamilyRestrict**, and click **Attach Policy**:
 ![Images/AWSFamilyRestrict12.png](Images/AWSFamilyRestrict12.png)
 
+**Log out of the console**
 
 ### 3.3 Verify the policy is in effect
 
@@ -302,7 +305,7 @@ We can also restrict the size of instance that can be launched. This can be used
 6. Click on the **JSON** tab:
 ![Images/AWSFamilyUpdate5.png](Images/AWSFamilyUpdate5.png)
 
-7. Modify the policy by adding in the sizes, add in **nano**, **medium**, **large**, be careful not to change the syntax and not remove the * characters. Click on **Review policy**:
+7. Modify the policy by adding in the sizes, add in **nano**, **medium**, **large**, be careful not to change the syntax and not remove the quote characters. Click on **Review policy**:
 ![Images/AWSFamilyUpdate6.png](Images/AWSFamilyUpdate6.png)
 
 8. Click on **Save changes**:
@@ -406,6 +409,8 @@ We will create an IAM policy that denies operations that contain provisioned IOP
 
 5. Select the checkbox next to **EC2EBS_Restrict**, and click **Attach Policy**:
 ![Images/AWSEBSPolicy10.png](Images/AWSEBSPolicy10.png)
+
+**Log out from the console**
 
 ### 5.3 Verify the policy is in effect
 
