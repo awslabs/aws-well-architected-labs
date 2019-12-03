@@ -2767,7 +2767,7 @@
 <img alt="Images/consolelogin_IAMUser.png" src="Images/consolelogin_IAMUser.png" /></p>
 </li>
 <li>
-<p>Create an <strong>S3 Bucket</strong> which will contain your application log files:
+<p>Create an <strong>S3 Bucket</strong> with a folder <strong>applogfiles_reinventworkshop</strong> which will contain your application log files. You MUST name the folder <strong>applogfiles_reinventworkshop</strong>, this will make pasting the code faster:
 <img alt="Images/s3-createbucket.png" src="Images/s3-createbucket.png" /></p>
 </li>
 <li>
@@ -2891,7 +2891,7 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <p><strong>Frequency</strong> will be run on demand, click <strong>Next</strong></p>
 </li>
 <li>
-<p><strong>Add a database</strong> named webserverlogs, for <strong>Grouping behaviour for S3 data</strong> create a single schema and click <strong>Next</strong>:
+<p><strong>Add a database</strong> you MUST name it <strong>webserverlogs</strong>, for <strong>Grouping behaviour for S3 data</strong> create a single schema and click <strong>Next</strong>:
 <img alt="Images/glue-crawlercreate6.png" src="Images/glue-crawlercreate6.png" /></p>
 </li>
 <li>
@@ -2933,7 +2933,7 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <p>To use the files from this lab, follow the steps below:</p>
 <ol>
 <li>
-<p>Go to the S3 Console and create a <strong>S3 Bucket</strong> which will contain your cost and usage files, we have called ours <strong>costusagefiles-reinventworkshop</strong></p>
+<p>Go to the S3 Console and create a <strong>S3 Bucket</strong> with a folder <strong>costusagefiles-reinventworkshop</strong> which will contain your cost and usage files. You MUST name the folder <strong>costusagefiles_reinventworkshop</strong>, this will make pasting the code faster.</p>
 </li>
 <li>
 <p>Copy the sample file to your bucket:</p>
@@ -2963,7 +2963,7 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <p>Set the frequency to <strong>run on demand</strong>, click <strong>Next</strong></p>
 </li>
 <li>
-<p><strong>Add database</strong> named <strong>CostUsage</strong>, click <strong>Next</strong></p>
+<p><strong>Add database</strong> it MUST be named <strong>CostUsage</strong>, click <strong>Next</strong></p>
 </li>
 <li>
 <p>Review and click <strong>Finish</strong></p>
@@ -2980,19 +2980,18 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <img alt="Images/costtablefix02.png" src="Images/costtablefix02.png" /></p>
 </li>
 <li>
-<p>Click on <strong>save</strong>, and confirm it is of the correct type.</p>
-</li>
-<li>
 <p>Also change or confirm the following columns:</p>
 <ul>
 <li>line_item_usage_start_date: timestamp</li>
 <li>line_item_usage_end_date: timestamp</li>
 <li>line_item_usage_amount: double</li>
+<li></li>
 </ul>
 </li>
+<li>Click on <strong>save</strong>, and confirm it is of the correct type.</li>
 </ol>
 <p><a name="setup_quicksight"></a></p>
-<h2 id="2-setup-quicksight">2 Setup QuickSight</h2>
+<h2 id="2-setup-quicksight-optional-for-visualization">2 Setup QuickSight - Optional for Visualization</h2>
 <p>We will use QuickSight as the analysis tool to visualize data. You could query the data in Athena and export the results to be used in a spreadsheet application for graphs, however QuickSight offers the advantages of being the specific tool for the job, and you can easily create additional data fields from existing fields for analysis.</p>
 <h3 id="21-application-files">2.1 Application files</h3>
 <p>We will create a data set from the application log files.</p>
@@ -3105,12 +3104,11 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 </ol>
 <p><a name="tear_down"></a></p>
 <h2 id="3-tear-down">3. Tear down</h2>
-<ol>
-<li>Remove the Data Sets in QuickSIght</li>
-<li>Delete cost and application log databases in Glue</li>
-<li>Delete S3 buckets containing the application and CUR files</li>
-<li>Delete the IAM roles that were created to allow Glue access to S3</li>
-</ol>
+<p>Complete the teardown only after you have finished all steps in this lab
+1. Remove the Data Sets in QuickSIght
+2. Delete cost and application log databases in Glue
+3. Delete S3 buckets containing the application and CUR files
+4. Delete the IAM roles that were created to allow Glue access to S3</p>
                 
                   
                 

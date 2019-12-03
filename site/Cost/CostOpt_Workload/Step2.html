@@ -2750,13 +2750,142 @@
 </ul>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol>
-<li><a href="#workload_demand">Workload Demand</a></li>
-<li><a href="#workload_cost">Workload Cost</a></li>
-<li><a href="#workload_efficiency">Workload Efficiency</a></li>
+<li><a href="#workload_demand_cost">Workload Demand and Cost</a></li>
+<li><a href="#workload_demand">Workload Demand Visualization</a></li>
 </ol>
-<h2 id="1-workload-demand">1. Workload Demand <a name="workload_demand"></a></h2>
-<p>We have our workload application logs ready to analyze and visualize. The first step will be to visualize the workload demand and understand how it is used.</p>
-<h3 id="12-demand-visualization-requests-per-hour">1.2 Demand visualization - Requests per hour</h3>
+<p><a name="workload_demand_cost"></a></p>
+<h2 id="1-workload-demand-and-cost">1 Workload Demand and Cost</h2>
+<p>We will now go deeper into the workload demand and cost, and discover exactly what comprises the demand and cost of the workload. For this we will use SQL queries in Athena against our cost database and a spreadsheet application.</p>
+<p><strong>NOTE</strong>: You will need to change the name of the database and table in the SQL code from <strong>webserverlogs.applogfiles_reinventworkshop</strong> to your database name and table name for all pasted code.</p>
+<h3 id="11-workload-demand-components">1.1 Workload demand components</h3>
+<ol>
+<li>
+<p>Go into the Athena console</p>
+</li>
+<li>
+<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
+</li>
+<li>
+<p>Run the following query to return all the columns, with 10 rows of data from the application logs. </p>
+<p><strong>Note</strong> you may need to change the name of the database and table below webserverlogs.applogfiles_reinventworkshop**:</p>
+<pre><code>SELECT * FROM "webserverlogs"."applogfiles_reinventworkshop" limit 10;
+</code></pre>
+</li>
+<li>
+<p>Review the data and look at the columns and sample data available in your log file.</p>
+</li>
+<li>
+<p>We will now look at the most popular requests by size, run the following query. Inside the query we convert the column <strong>bytes</strong> from a string into a number, which we then divide by 1048576 to get MBytes instead of bytes:</p>
+<pre><code>select distinct request, verb, response, (sum(cast(bytes as bigint)))/1048576 as Mbytes, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where bytes not like '-'
+group by request, verb, response
+order by Mbytes desc
+limit 100
+</code></pre>
+</li>
+<li>
+<p>Invalid requests still take resources from your systems, lets look at the number of non-successful (non 200) responses per day:</p>
+<pre><code>select date_parse(logdate, '%d/%b/%Y') as date, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response not like '200'
+group by logdate
+order by logdate
+</code></pre>
+</li>
+</ol>
+<p>For your workload, review the different types of requests - both successful and not successful, and the available fields of data. This should help identify key items within the log file to analyze and measure the true demand on your workload.</p>
+<h3 id="22-workload-cost-components">2.2 Workload cost components</h3>
+<ol>
+<li>
+<p>Select the <strong>costusage</strong> database, and run the following query to view all the columns:</p>
+<pre><code>SELECT * FROM "costusage"."costusagefiles_reinventworkshop" limit 10;
+</code></pre>
+</li>
+<li>
+<p>View the columns available (there are &gt; 100), most important are typically columns starting with <strong>line_item</strong> and <strong>resource_tags</strong>.</p>
+</li>
+<li>
+<p>For a quick listing and description of your costs, the following statement is useful as a starting point:</p>
+<pre><code>SELECT line_item_line_item_description, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_line_item_description
+order by cost desc
+</code></pre>
+</li>
+<li>
+<p>Lets add some more columns to help identify what the main components of cost are, run the following statement:</p>
+<pre><code>SELECT line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description, sum(line_item_unblended_cost) as cost  FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description
+order by cost desc
+</code></pre>
+</li>
+</ol>
+<p>For your workload, review the different columns and results to see what makes up its cost. This will also indicate where you should look for savings in your cost optimization cycles.</p>
+<h3 id="23-efficiency">2.3 Efficiency</h3>
+<p>We have looked at our workload demand, and our workload costs. Lets combine the two to create a workload efficiency metric. As we saw in the QuickSight graphs, the demand changed over time and the cost changed also. This means our efficiency may change over time also. We will start with a very high level and simple metric, and then drill down a few steps. </p>
+<ol>
+<li>
+<p>Go into the Athena console</p>
+</li>
+<li>
+<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
+</li>
+<li>
+<p>Run the following query to return the total number of lines in our log file, which is our total demand:</p>
+<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop"
+</code></pre>
+</li>
+<li>
+<p>Copy the results into a spreadsheet application and label it <strong>Total workload demand</strong></p>
+</li>
+<li>
+<p>Run the following queries to get the total successful responses, and valid successful responses, record these also:</p>
+<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response like '200' and (request like '%index%' or request like '%image_file%')
+</code></pre>
+</li>
+<li>
+<p>We will now get the successful and valid responses by hour with the query below. Note the use of <strong>date_parse</strong> to turn the string into an actual date we can work with:</p>
+<pre><code>SELECT date(date_parse(logdate, '%d/%b/%Y')) as date, hour(date_parse(logtime, '%H:%i:%s')) as hour, count(*) as requests FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response like '200' and (request like '%index%' or request like '%image_file%')
+group by date_parse(logdate, '%d/%b/%Y'), hour(date_parse(logtime, '%H:%i:%s'))
+order by date, hour
+</code></pre>
+</li>
+<li>
+<p>Copy the results into the same spreadsheet.</p>
+</li>
+<li>
+<p>Now lets get the workload cost that corresponds to the demand. Select the <strong>costusage</strong> database, which should have a table <strong>costusagefiles_...</strong></p>
+</li>
+<li>
+<p>Get the total cost for the workload with the following statement, and put it into the spreadsheet next to the demand:</p>
+<pre><code>SELECT sum(line_item_unblended_cost)  FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+</code></pre>
+</li>
+<li>
+<p>Execute the following statement to get the cost by hour and put it into the spreadsheet:</p>
+<pre><code>SELECT line_item_usage_start_date as date, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_usage_start_date
+order by date asc
+</code></pre>
+</li>
+<li>
+<p>In the spreadsheet, <strong>calculate the efficiency</strong> by <strong>dividing the requests by the cost</strong>. This will give you the number of outcomes per dollar spent. Notice the difference when you compare total vs successful vs valid. Also notice any variation of efficiency throughout the day.</p>
+</li>
+</ol>
+<p><img alt="Images/efficiency.png" src="Images/efficiency.png" />  </p>
+<p>You can see from the spreadsheet that the workload does:</p>
+<pre><code>- 4,244.23 total requests per dollar, overall
+- 1,924.57 successful customer requests per dollar, overall
+- from 491 to 2555 successful customer requests per dollar, throughout the day
+</code></pre>
+<p><a name="workload_demand"></a></p>
+<h2 id="2-workload-demand-visualization">2. Workload Demand Visualization</h2>
+<p>We have our workload application logs ready to analyze and visualize. This step will be to visualize the workload demand and understand how it is used.</p>
+<h3 id="22-demand-visualization-requests-per-hour">2.2 Demand visualization - Requests per hour</h3>
 <p>Our application log data is setup as a data source, so lets create a visualization. As our billing data is hourly, we will create an hourly demand graph showing the requests per hour of the workload.</p>
 <p>Log into QuickSight and open the <strong>applogfiles visualization</strong> you created in Step1, or create a <strong>New analysis</strong> from the Application log files data set. </p>
 <ol>
@@ -2878,7 +3007,7 @@
 </li>
 </ol>
 <p>Compare the graphs on the first, second and third sheets.  You can see that by including additional small amounts of information or focusing on certain parts of information in your analysis you can get a very different outcome. </p>
-<h3 id="32-add-the-workload-cost-visualizations">3.2 Add the workload cost visualizations</h3>
+<h3 id="25-add-the-workload-cost-visualizations">2.5 Add the workload cost visualizations</h3>
 <p>We know the requests that are being made to the workload, we will now add the cost of the workload to the analysis. This will allow us to understand the workload cost given its output.</p>
 <p>We will take a simple approach and put graphs of cost next to the graphs of the application demand. </p>
 <ol>
@@ -2925,134 +3054,6 @@
 </li>
 </ol>
 <p>Viewing the images above, you can see the correlation between the usage level, the usage types and cost. There may be a time offset of 1hr depending on how the costs and usage are grouped.</p>
-<h2 id="2-workload-demand-and-cost">2 Workload Demand and Cost</h2>
-<p>We will now go deeper into the workload demand and cost, and discover exactly what comprises the demand and cost of the workload. For this we will use SQL queries in Athena against our cost database and a spreadsheet application.</p>
-<p><strong>NOTE</strong>: You will need to change the name of the database and table in the SQL code from <strong>webserverlogs.applogfiles_reinventworkshop</strong> to your database name and table name for all pasted code.</p>
-<h3 id="21-workload-demand-components">2.1 Workload demand components</h3>
-<ol>
-<li>
-<p>Go into the Athena console</p>
-</li>
-<li>
-<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
-</li>
-<li>
-<p>Run the following query to return all the columns, with 10 rows of data from the application logs. </p>
-<p><strong>Note</strong> you may need to change the name of the database and table below webserverlogs.applogfiles_reinventworkshop**:</p>
-<pre><code>SELECT * FROM "webserverlogs"."applogfiles_reinventworkshop" limit 10;
-</code></pre>
-</li>
-<li>
-<p>Review the data and look at the columns and sample data available in your log file.</p>
-</li>
-<li>
-<p>We will now look at the most popular requests by size, run the following query. Inside the query we convert the column <strong>bytes</strong> from a string into a number, which we then divide by 1048576 to get MBytes instead of bytes:</p>
-<pre><code>select distinct request, verb, response, (sum(cast(bytes as bigint)))/1048576 as Mbytes, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
-where bytes not like '-'
-group by request, verb, response
-order by Mbytes desc
-limit 100
-</code></pre>
-</li>
-<li>
-<p>Invalid requests still take resources from your systems, lets look at the number of non-successful (non 200) responses per day:</p>
-<pre><code>select date_parse(logdate, '%d/%b/%Y') as date, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
-where response not like '200'
-group by logdate
-order by logdate
-</code></pre>
-</li>
-</ol>
-<p>For your workload, review the different types of requests - both successful and not successful, and the available fields of data. This should help identify key items within the log file to analyze.</p>
-<h3 id="22-workload-cost-components">2.2 Workload cost components</h3>
-<ol>
-<li>
-<p>Select the <strong>costusage</strong> database, and run the following query to view all the columns:</p>
-<pre><code>SELECT * FROM "costusage"."costusagefiles_reinventworkshop" limit 10;
-</code></pre>
-</li>
-<li>
-<p>View the columns available (there are &gt; 100), most important are typically columns starting with <strong>line_item</strong> and <strong>resource_tags</strong>.</p>
-</li>
-<li>
-<p>For a quick listing and description of your costs, the following statement is useful as a starting point:</p>
-<pre><code>SELECT line_item_line_item_description, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
-where resource_tags_user_application like 'ordering'
-group by line_item_line_item_description
-order by cost desc
-</code></pre>
-</li>
-<li>
-<p>Lets add some more columns to help identify what the main components of cost are, run the following statement:</p>
-<pre><code>SELECT line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description, sum(line_item_unblended_cost) as cost  FROM "costusage"."costusagefiles_reinventworkshop" 
-where resource_tags_user_application like 'ordering'
-group by line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description
-order by cost desc
-</code></pre>
-</li>
-</ol>
-<p>For your workload, review the different columns and results to see what makes up its cost.</p>
-<h3 id="23-efficiency">2.3 Efficiency</h3>
-<p>We have looked at our workload demand, and our workload costs. Lets combine the two to create a workload efficiency metric. As we saw in the QuickSight graphs, the demand changed over time and the cost changed also. This means our efficiency may change over time also. We will start with a very high level and simple metric, and then drill down a few steps. </p>
-<ol>
-<li>
-<p>Go into the Athena console</p>
-</li>
-<li>
-<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
-</li>
-<li>
-<p>Run the following query to return the total number of lines in our log file, which is our total demand:</p>
-<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop"
-</code></pre>
-</li>
-<li>
-<p>Copy the results into a spreadsheet application and label it <strong>Total workload demand</strong></p>
-</li>
-<li>
-<p>Run the following queries to get the total successful responses, and valid successful responses, record these also:</p>
-<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop" 
-where response like '200' and (request like '%index%' or request like '%image_file%')
-</code></pre>
-</li>
-<li>
-<p>We will now get the successful and valid responses by hour with the query below. Note the use of <strong>date_parse</strong> to turn the string into an actual date we can work with:</p>
-<pre><code>SELECT date(date_parse(logdate, '%d/%b/%Y')) as date, hour(date_parse(logtime, '%H:%i:%s')) as hour, count(*) as requests FROM "webserverlogs"."applogfiles_reinventworkshop" 
-where response like '200' and (request like '%index%' or request like '%image_file%')
-group by date_parse(logdate, '%d/%b/%Y'), hour(date_parse(logtime, '%H:%i:%s'))
-order by date, hour
-</code></pre>
-</li>
-<li>
-<p>Copy the results into the same spreadsheet.</p>
-</li>
-<li>
-<p>Now lets get the workload cost that corresponds to the demand. Select the <strong>costusage</strong> database, which should have a table <strong>costusagefiles_...</strong></p>
-</li>
-<li>
-<p>Get the total cost for the workload with the following statement, and put it into the spreadsheet next to the demand:</p>
-<pre><code>SELECT sum(line_item_unblended_cost)  FROM "costusage"."costusagefiles_reinventworkshop" 
-where resource_tags_user_application like 'ordering'
-</code></pre>
-</li>
-<li>
-<p>Execute the following statement to get the cost by hour and put it into the spreadsheet:</p>
-<pre><code>SELECT line_item_usage_start_date as date, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
-where resource_tags_user_application like 'ordering'
-group by line_item_usage_start_date
-order by date asc
-</code></pre>
-</li>
-<li>
-<p>In the spreadsheet, <strong>calculate the efficiency</strong> by <strong>dividing the requests by the cost</strong>. This will give you the number of outcomes per dollar spent. Notice the difference when you compare total vs successful vs valid. Also notice any variation of efficiency throughout the day.</p>
-</li>
-</ol>
-<p><img alt="Images/efficiency.png" src="Images/efficiency.png" />  </p>
-<p>You can see from the spreadsheet that the workload does:</p>
-<pre><code>- 4,244.23 total requests per dollar, overall
-- 1,924.57 successful customer requests per dollar, overall
-- from 491 to 2555 successful customer requests per dollar, throughout the day
-</code></pre>
                 
                   
                 

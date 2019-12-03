@@ -36,7 +36,7 @@ The first step is to get the application log files into Athena to be analyzed. F
 1. Log into the AWS console as an IAM user with the required permissions:
 ![Images/consolelogin_IAMUser.png](Images/consolelogin_IAMUser.png)
 
-2. Create an **S3 Bucket** which will contain your application log files:
+2. Create an **S3 Bucket** with a folder **applogfiles_reinventworkshop** which will contain your application log files. You MUST name the folder **applogfiles_reinventworkshop**, this will make pasting the code faster:
 ![Images/s3-createbucket.png](Images/s3-createbucket.png)
 
 3. To use the sample log files, copy the following file into your S3 bucket, and move onto the next section - **Crawl log files with Glue**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
@@ -142,7 +142,7 @@ We will make it build the following columns
 
 10. **Frequency** will be run on demand, click **Next**
 
-11. **Add a database** named webserverlogs, for **Grouping behaviour for S3 data** create a single schema and click **Next**:
+11. **Add a database** you MUST name it **webserverlogs**, for **Grouping behaviour for S3 data** create a single schema and click **Next**:
 ![Images/glue-crawlercreate6.png](Images/glue-crawlercreate6.png)
 
 12. Click **Finish**
@@ -176,7 +176,7 @@ If you are using your own Cost and Usage Reports, you will need to have them alr
 
 To use the files from this lab, follow the steps below:
 
-1. Go to the S3 Console and create a **S3 Bucket** which will contain your cost and usage files, we have called ours **costusagefiles-reinventworkshop**
+1. Go to the S3 Console and create a **S3 Bucket** with a folder **costusagefiles-reinventworkshop** which will contain your cost and usage files. You MUST name the folder **costusagefiles_reinventworkshop**, this will make pasting the code faster.
 
 2. Copy the sample file to your bucket:
     - [Step1CUR.gz](Code/Step1CUR.gz)
@@ -195,7 +195,7 @@ To use the files from this lab, follow the steps below:
 
 9. Set the frequency to **run on demand**, click **Next**
 
-10. **Add database** named **CostUsage**, click **Next**
+10. **Add database** it MUST be named **CostUsage**, click **Next**
 
 11. Review and click **Finish**
 
@@ -207,16 +207,16 @@ To use the files from this lab, follow the steps below:
 14. Make sure the column **line_item_unblended_cost** has a data type of **double**, you may need to change it from string:
 ![Images/costtablefix02.png](Images/costtablefix02.png)
 
-15. Click on **save**, and confirm it is of the correct type.
-
-16. Also change or confirm the following columns:
+15. Also change or confirm the following columns:
     - line_item_usage_start_date: timestamp
     - line_item_usage_end_date: timestamp
     - line_item_usage_amount: double
+    - 
+16. Click on **save**, and confirm it is of the correct type.
 
 
 <a name="setup_quicksight"></a>
-## 2 Setup QuickSight
+## 2 Setup QuickSight - Optional for Visualization
 We will use QuickSight as the analysis tool to visualize data. You could query the data in Athena and export the results to be used in a spreadsheet application for graphs, however QuickSight offers the advantages of being the specific tool for the job, and you can easily create additional data fields from existing fields for analysis.
 
 ### 2.1 Application files
@@ -306,7 +306,8 @@ We will create a data set from the application log files.
 
 
 <a name="tear_down"></a>
-## 3. Tear down  
+## 3. Tear down
+Complete the teardown only after you have finished all steps in this lab
 1. Remove the Data Sets in QuickSIght
 2. Delete cost and application log databases in Glue
 3. Delete S3 buckets containing the application and CUR files
