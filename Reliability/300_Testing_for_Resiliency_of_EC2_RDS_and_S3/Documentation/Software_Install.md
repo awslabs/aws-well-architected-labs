@@ -39,26 +39,26 @@ If that does not work, then do the following:
 
 `jq` is a command-line JSON processor. is like `sed` for JSON data. It is used in the workshop `bash` scripts to parse AWS CLI output.
 
-### Linux
-
 * Run the following command
 
         $ jq --version
         jq-1.5-1-a5b5cbe
 * Any version is fine.
-* If you instead got `command not found` then you need to install `jq`:
+* If you instead got `command not found` then you need to install `jq`. Follow the instructions at https://stedolan.github.io/jq/download/
 
-              $ sudo apt-get install jq
-              ...(lots of output)...
-              $ jq --version
-              jq-1.5-1-a5b5cbe
 * If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
 
-If that does not work, then do the following
+#### Alternate instructions for Linux
+
+If the steps above did not work, and you are running Linux, then try the following
 
 1. Download the `jq` executable
 
         $ wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+        
+        [...lots of output...]
+        jq-linux64                    100%[=================================================>]   3.77M  1.12MB/s    in 3.5s
+
         2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]
 
 1. You can find out what your execution path is with the following command.
