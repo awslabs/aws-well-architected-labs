@@ -39,7 +39,7 @@ The first step is to get the application log files into Athena to be analyzed. F
 2. Create an **S3 Bucket** with a folder **applogfiles_reinventworkshop** which will contain your application log files. You MUST name the folder **applogfiles_reinventworkshop**, this will make pasting the code faster:
 ![Images/s3-createbucket.png](Images/s3-createbucket.png)
 
-3. To use the sample log files, copy the following file into your S3 bucket into the **applogfiles** folder, and move onto the next section - **Crawl log files with Glue**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
+3. To use the sample log files, copy the following file into your S3 bucket into the **applogfiles** folder, and move onto the next section - **Crawl log files with Glue**. **NOTE**: do **NOT** copy all the files, **ONLY copy 1 file to the folder you created**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
     - [Step1_access_log.gz](Code/Step1AccessLog.gz)
 
 4. If you will be using your own application log files, systems manager can be used to run commands across your environment and copy files from multiple servers to S3. Go to **Systems Manager**, and into **Run Command**:
@@ -178,7 +178,7 @@ To use the files from this lab, follow the steps below:
 
 1. Go to the S3 Console and create a **S3 Bucket** with a folder **costusagefiles-reinventworkshop** which will contain your cost and usage files. You MUST name the folder **costusagefiles_reinventworkshop**, this will make pasting the code faster.
 
-2. Copy the sample file to your bucket:
+2. Copy the sample file to your bucket, **NOTE**: do **NOT** copy all the files, **ONLY copy 1 file to the folder you created**.:
     - [Step1CUR.gz](Code/Step1CUR.gz)
 
 3. Go into the **Glue** console and **Add crawler**

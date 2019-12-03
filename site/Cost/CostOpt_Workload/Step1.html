@@ -2771,7 +2771,7 @@
 <img alt="Images/s3-createbucket.png" src="Images/s3-createbucket.png" /></p>
 </li>
 <li>
-<p>To use the sample log files, copy the following file into your S3 bucket into the <strong>applogfiles</strong> folder, and move onto the next section - <strong>Crawl log files with Glue</strong>. It is recommended you <strong>read</strong> (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.</p>
+<p>To use the sample log files, copy the following file into your S3 bucket into the <strong>applogfiles</strong> folder, and move onto the next section - <strong>Crawl log files with Glue</strong>. <strong>NOTE</strong>: do <strong>NOT</strong> copy all the files, <strong>ONLY copy 1 file to the folder you created</strong>. It is recommended you <strong>read</strong> (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.</p>
 <ul>
 <li><a href="Code/Step1AccessLog.gz">Step1_access_log.gz</a></li>
 </ul>
@@ -2936,7 +2936,7 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <p>Go to the S3 Console and create a <strong>S3 Bucket</strong> with a folder <strong>costusagefiles-reinventworkshop</strong> which will contain your cost and usage files. You MUST name the folder <strong>costusagefiles_reinventworkshop</strong>, this will make pasting the code faster.</p>
 </li>
 <li>
-<p>Copy the sample file to your bucket:</p>
+<p>Copy the sample file to your bucket, <strong>NOTE</strong>: do <strong>NOT</strong> copy all the files, <strong>ONLY copy 1 file to the folder you created</strong>.:</p>
 <ul>
 <li><a href="Code/Step1CUR.gz">Step1CUR.gz</a></li>
 </ul>
