@@ -18,7 +18,7 @@ html = """
         <p>{Message}</p>
         <p>{Content}</p>
         <p><a href="{Link}">click here to go to other page</a></p>
-        <img src="{WebSiteImage}" alt="Resiliency Workshop" width="700">
+        <img src="{WebSiteImage}" alt="" width="700">
     </body>
 </html>"""
 
