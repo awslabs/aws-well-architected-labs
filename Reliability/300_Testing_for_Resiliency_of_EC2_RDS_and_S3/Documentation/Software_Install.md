@@ -31,6 +31,10 @@ If that does not work, then do the following:
 
 * See the [detailed installation instructions here](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html)
 
+### Other environments (not Linux)
+
+* See the instructions here https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html
+
 **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
 
 ---
@@ -55,7 +59,7 @@ If the steps above did not work, and you are running Linux, then try the followi
 1. Download the `jq` executable
 
         $ wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-        
+
         [...lots of output...]
         jq-linux64                    100%[=================================================>]   3.77M  1.12MB/s    in 3.5s
 
