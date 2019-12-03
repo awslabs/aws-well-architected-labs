@@ -24,7 +24,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## 1 Workload Demand and Cost
 We will now go deeper into the workload demand and cost, and discover exactly what comprises the demand and cost of the workload. For this we will use SQL queries in Athena against our cost database and a spreadsheet application.
 
-**NOTE**: You will need to change the name of the database and table in the SQL code from **webserverlogs.applogfiles_reinventworkshop** to your database name and table name for all pasted code.
+**NOTE**: You may need to change the name of the database and table in the SQL code from **webserverlogs.applogfiles_reinventworkshop** to your database name and table name if you didnt use the correct folder names, do this for all pasted code.
 
 
 ### 1.1 Workload demand components

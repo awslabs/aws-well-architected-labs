@@ -39,7 +39,7 @@ The first step is to get the application log files into Athena to be analyzed. F
 2. Create an **S3 Bucket** with a folder **applogfiles_reinventworkshop** which will contain your application log files. You MUST name the folder **applogfiles_reinventworkshop**, this will make pasting the code faster:
 ![Images/s3-createbucket.png](Images/s3-createbucket.png)
 
-3. To use the sample log files, copy the following file into your S3 bucket, and move onto the next section - **Crawl log files with Glue**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
+3. To use the sample log files, copy the following file into your S3 bucket into the **applogfiles** folder, and move onto the next section - **Crawl log files with Glue**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
     - [Step1_access_log.gz](Code/Step1AccessLog.gz)
 
 4. If you will be using your own application log files, systems manager can be used to run commands across your environment and copy files from multiple servers to S3. Go to **Systems Manager**, and into **Run Command**:
@@ -133,7 +133,7 @@ We will make it build the following columns
 6. **Crawler source type** is Data stores, click **Next**:
 ![Images/glue-crawlercreate2.png](Images/glue-crawlercreate2.png)
 
-7. Click the **folder icon** and select your S3 bucket with the log files, click **Select**, then click **Next**
+7. Click the **folder icon** and select your S3 bucket **and folder** with the log files, click **Select**, then click **Next**. Make sure you select the folder **applogfiles_reinventworkshop**.
 
 8. Do **Not** add another data store
 
@@ -147,9 +147,9 @@ We will make it build the following columns
 
 12. Click **Finish**
 
-13. Select and **Run crawler**, this will create a single database and table with our log files, lets confirm. We need to **wait until** the crawler has **finished**, this will take 1-2 minutes.
+13. Select and **Run crawler**, this will create a single database and table with our log files, lets confirm. We need to **wait until** the crawler has **finished**, this will take 1-2 minutes. Click refresh to check if its done.
 
-14. Go to **Databases** and click on the database **webserverlogs**:
+14. Go to **Databases** and click on the database **webserverlogs**, you may need to click **refresh**:
 ![Images/glue-databaseswebserverlogs.png](Images/glue-databaseswebserverlogs.png)
 
 15. Click **Tables in webserverlogs**, and click the table **applogfiles_...**
@@ -211,7 +211,7 @@ To use the files from this lab, follow the steps below:
     - line_item_usage_start_date: timestamp
     - line_item_usage_end_date: timestamp
     - line_item_usage_amount: double
-    - 
+
 16. Click on **save**, and confirm it is of the correct type.
 
 

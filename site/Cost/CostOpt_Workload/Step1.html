@@ -2771,7 +2771,7 @@
 <img alt="Images/s3-createbucket.png" src="Images/s3-createbucket.png" /></p>
 </li>
 <li>
-<p>To use the sample log files, copy the following file into your S3 bucket, and move onto the next section - <strong>Crawl log files with Glue</strong>. It is recommended you <strong>read</strong> (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.</p>
+<p>To use the sample log files, copy the following file into your S3 bucket into the <strong>applogfiles</strong> folder, and move onto the next section - <strong>Crawl log files with Glue</strong>. It is recommended you <strong>read</strong> (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.</p>
 <ul>
 <li><a href="Code/Step1AccessLog.gz">Step1_access_log.gz</a></li>
 </ul>
@@ -2878,7 +2878,7 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <img alt="Images/glue-crawlercreate2.png" src="Images/glue-crawlercreate2.png" /></p>
 </li>
 <li>
-<p>Click the <strong>folder icon</strong> and select your S3 bucket with the log files, click <strong>Select</strong>, then click <strong>Next</strong></p>
+<p>Click the <strong>folder icon</strong> and select your S3 bucket <strong>and folder</strong> with the log files, click <strong>Select</strong>, then click <strong>Next</strong>. Make sure you select the folder <strong>applogfiles_reinventworkshop</strong>.</p>
 </li>
 <li>
 <p>Do <strong>Not</strong> add another data store</p>
@@ -2898,10 +2898,10 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <p>Click <strong>Finish</strong></p>
 </li>
 <li>
-<p>Select and <strong>Run crawler</strong>, this will create a single database and table with our log files, lets confirm. We need to <strong>wait until</strong> the crawler has <strong>finished</strong>, this will take 1-2 minutes.</p>
+<p>Select and <strong>Run crawler</strong>, this will create a single database and table with our log files, lets confirm. We need to <strong>wait until</strong> the crawler has <strong>finished</strong>, this will take 1-2 minutes. Click refresh to check if its done.</p>
 </li>
 <li>
-<p>Go to <strong>Databases</strong> and click on the database <strong>webserverlogs</strong>:
+<p>Go to <strong>Databases</strong> and click on the database <strong>webserverlogs</strong>, you may need to click <strong>refresh</strong>:
 <img alt="Images/glue-databaseswebserverlogs.png" src="Images/glue-databaseswebserverlogs.png" /></p>
 </li>
 <li>
@@ -2985,10 +2985,11 @@ Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp
 <li>line_item_usage_start_date: timestamp</li>
 <li>line_item_usage_end_date: timestamp</li>
 <li>line_item_usage_amount: double</li>
-<li></li>
 </ul>
 </li>
-<li>Click on <strong>save</strong>, and confirm it is of the correct type.</li>
+<li>
+<p>Click on <strong>save</strong>, and confirm it is of the correct type.</p>
+</li>
 </ol>
 <p><a name="setup_quicksight"></a></p>
 <h2 id="2-setup-quicksight-optional-for-visualization">2 Setup QuickSight - Optional for Visualization</h2>
