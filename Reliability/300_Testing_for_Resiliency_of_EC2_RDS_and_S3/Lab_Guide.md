@@ -28,7 +28,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 **If you are using your own AWS account**:
 
-* Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdminstratorAccess permissions, to ensure successful execution of this lab. 
+* Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
 * You will need the AWS credentials, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, of this IAM user for later use in this lab.
     * If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
 
@@ -171,7 +171,7 @@ Your execution environment needs to be configured to enable access to the AWS ac
 
 Note: **us-east-2** is the **Ohio** region
 
-If you already know how to configure these, please do so now. If you need help then [follow these instructions](Documentation/AWS_Credentials.md)
+If you already know how to configure these, please do so now. If you need help or if you are planning to use **PowerShell** for this lab, then [follow these instructions](Documentation/AWS_Credentials.md)
 
 ### 2.2 Set up the bash environment <a name="bash"></a>
 

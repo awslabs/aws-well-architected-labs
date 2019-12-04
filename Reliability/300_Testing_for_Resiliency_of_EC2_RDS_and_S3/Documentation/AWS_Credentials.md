@@ -81,7 +81,7 @@ If you already did **Option 2**, then skip this
         region = us-east-2
         output = json
 
-## Configure a session token as part of your credentials
+### Configure a session token as part of your credentials
 
 If you used **Option 2** or **Option 3**, please follow these steps:
 

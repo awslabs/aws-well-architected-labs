@@ -33,7 +33,7 @@ If that does not work, then do the following:
 
 ### Other environments (not Linux)
 
-* See the instructions here https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html
+* See the instructions here <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
 
 **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
 
@@ -48,11 +48,11 @@ If that does not work, then do the following:
         $ jq --version
         jq-1.5-1-a5b5cbe
 * Any version is fine.
-* If you instead got `command not found` then you need to install `jq`. Follow the instructions at https://stedolan.github.io/jq/download/
+* If you instead got `command not found` then you need to install `jq`. Follow the instructions at <https://stedolan.github.io/jq/download/>
 
 * If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
 
-#### Alternate instructions for Linux
+### Alternate instructions for Linux
 
 If the steps above did not work, and you are running Linux, then try the following
 
