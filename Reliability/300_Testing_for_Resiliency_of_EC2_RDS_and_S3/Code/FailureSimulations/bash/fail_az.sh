@@ -31,7 +31,7 @@ as_group=`echo $result | jq -r '.AutoScalingGroups[0].AutoScalingGroupName'`
 
 # Find where the equivalent subnet is in the VPCIdentifier
 # Get a list of the subnets in the AZ
-az_subnets=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$2 Name=availabilityZone,Values=$1 | jq -r '.Subnets | map(. .SubnetId) | join(",")' | sed -e '{s/\[//g}' | sed -e '{s/\]//g}' | sed -e '{s/\ //g}'`
+az_subnets=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$2 Name=availabilityZone,Values=$1 | jq -r '.Subnets | map(. .SubnetId) | join(",")' | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/\ //g'`
 
 # Get a list of the subnets in the Autoscaling Group
 asg_subnets=`echo $result | jq -r '.AutoScalingGroups[0].VPCZoneIdentifier | split(",")'`
@@ -53,10 +53,10 @@ done
 echo "Going to remove " $subnet " from the autoscaling group"
 
 # Now get the list of subnets excluding that subnet
-new_subnets=`echo $result | jq -r --arg sn_excluded $subnet '.AutoScalingGroups[0].VPCZoneIdentifier | split(",") | map(select(. != $sn_excluded))' | sed -e '{s/"//g}'`
+new_subnets=`echo $result | jq -r --arg sn_excluded $subnet '.AutoScalingGroups[0].VPCZoneIdentifier | split(",") | map(select(. != $sn_excluded))' | sed -e 's/"//g'`
 
 # Change this to a simple comma delimited string from a JSON array
-desired_subnets=`echo $new_subnets | sed -e '{s/\[//g}' | sed -e '{s/\]//g}' | sed -e '{s/\ //g}'`
+desired_subnets=`echo $new_subnets | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/\ //g'`
 echo "Changing to " $desired_subnets
 
 echo "Updating the auto scaling group to remove the subnet in the AZ"
@@ -67,9 +67,9 @@ aws autoscaling update-auto-scaling-group --auto-scaling-group-name $as_group --
 # Add a network ACL on the subnets in the AZ to block all traffic
 # 
 # Get a list of the subnets in the desired AZ and put it into an array called subnet_array
-affected_subnets=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$2 Name=availabilityZone,Values=$1 | jq -r '.Subnets | map(. .SubnetId)' | sed -e '{s/"//g}'`
+affected_subnets=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$2 Name=availabilityZone,Values=$1 | jq -r '.Subnets | map(. .SubnetId)' | sed -e 's/"//g'`
 echo "Affected subnets = " $affected_subnets
-subnets_to_list=`echo $affected_subnets |  sed -e '{s/\[//g}' | sed -e '{s/\]//g}' | sed -e '{s/\ //g}'`
+subnets_to_list=`echo $affected_subnets |  sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/\ //g'`
 IFS=',' read -r -a subnet_array <<< "$subnets_to_list"
 echo "subnets being listed for ACLs = " $subnets_to_list
 # Get the current list of network ACL associations for these subnets
@@ -78,13 +78,15 @@ acl_associations=`aws ec2 describe-network-acls --filters Name=association.subne
 
 # Get the array of association IDs for the subnets
 old_acl_assoc=""
+old_sn_id=""
 for sn_id in "${subnet_array[@]}"
 do
     old_acl_assoc=$old_acl_assoc`echo $acl_associations | jq -r --arg snid $sn_id 'map(select(.SubnetId==$snid))[0].NetworkAclAssociationId'`
-    if [ $sn_id != ${subnet_array[-1]} ]
+    if [[ $sn_id != $old_sn_id ]]
     then
        old_acl_assoc=$old_acl_assoc","
     fi
+    old_sn_id=$sn_id
 done
 echo "ACL Association IDs" $old_acl_assoc
 IFS=',' read -r -a acl_assoc_array <<< "$old_acl_assoc"
