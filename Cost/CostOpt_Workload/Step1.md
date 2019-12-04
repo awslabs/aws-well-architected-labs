@@ -29,44 +29,48 @@ Sample log & CUR files are provided within this lab, we recommend using these lo
 
 **NOTE:** If you use your own log files, you will need to modify the queries in subsequent steps.
 
+**Perform all steps in us-east-1 N. Virginia**
+
 
 ### 1.1 Copy application log files into S3
 The first step is to get the application log files into Athena to be analyzed. For the provided files, you will copy the sample files to your S3 bucket. To get the files from your own workload, we will show you how to use AWS Systems Manager to do this easily at scale. 
 
+**NOTE** Please read the steps carefully, as the naming is critical and any mistakes will require you to rebuild the lab.
+
 1. Log into the AWS console as an IAM user with the required permissions:
 ![Images/consolelogin_IAMUser.png](Images/consolelogin_IAMUser.png)
 
-2. Create an **S3 Bucket** with a folder **applogfiles_reinventworkshop** which will contain your application log files. You MUST name the folder **applogfiles_reinventworkshop**, this will make pasting the code faster:
+2. Create a new **S3 Bucket** with a folder **applogfiles_reinventworkshop** which will contain your application log files. **NOTE**: You MUST name the folder **applogfiles_reinventworkshop**, this will make pasting the code faster:
 ![Images/s3-createbucket.png](Images/s3-createbucket.png)
 
-3. To use the sample log files, copy the following file into your S3 bucket into the **applogfiles** folder, and move onto the next section - **Crawl log files with Glue**. **NOTE**: do **NOT** copy all the files, **ONLY copy 1 file to the folder you created**. It is recommended you **read** (only READ - dont do) the following steps to understand how you could get your own application log files efficiently in your environment.
+3. To use the sample log files, copy the following file into your S3 bucket into the **applogfiles_reinventworkshop** folder. Then **move to section 1.2 below**.
     - [Step1_access_log.gz](Code/Step1AccessLog.gz)
 
-4. If you will be using your own application log files, systems manager can be used to run commands across your environment and copy files from multiple servers to S3. Go to **Systems Manager**, and into **Run Command**:
-![Images/systemsmanager-runcommand.png](Images/systemsmanager-runcommand.png)
+    a. If you will be using your own application log files, systems manager can be used to run commands across your environment and copy files from multiple servers to S3. Go to **Systems Manager**, and into **Run Command**:
+    ![Images/systemsmanager-runcommand.png](Images/systemsmanager-runcommand.png)
 
-5. Depending on your operating system, you can execute some CLI on your application servers to copy the **application log files** to your **S3 bucket**. The following Linux sample will copy all access logs from the httpd log directory to the s3 bucket created above using the hostname to separate each servers logs:
+    b. Depending on your operating system, you can execute some CLI on your application servers to copy the **application log files** to your **S3 bucket**. The following Linux sample will copy all access logs from the httpd log directory to the s3 bucket created above using the hostname to separate each servers logs:
 
         HOSTNAME=$(hostname)
         aws s3 cp --recursive /var/log/httpd/ s3://applogfiles-reinventworkshop/$HOSTNAME --exclude "*" --include "access_log*"
 
-6. Select **AWS-RunShellScript**:
-![Images/runcommand-runshellscript.png](Images/runcommand-runshellscript.png)
+    c. Select **AWS-RunShellScript**:
+    ![Images/runcommand-runshellscript.png](Images/runcommand-runshellscript.png)
 
-7. Paste in the required commands to be executed on your instances:
-![Images/runcommand-commandparameters.png](Images/runcommand-commandparameters.png)
+    d. Paste in the required commands to be executed on your instances:
+    ![Images/runcommand-commandparameters.png](Images/runcommand-commandparameters.png)
 
-8. You should now have files in S3 for each of your servers, separated into folders by hostname:
-![Images/s3-appfolders.png](Images/s3-appfolders.png)
+    e. You should now have files in S3 for each of your servers, separated into folders by hostname:
+    ![Images/s3-appfolders.png](Images/s3-appfolders.png)
 
-9. In each folder will be the application files:
-![Images/s3-appfiles.png](Images/s3-appfiles.png)
+    f. In each folder will be the application files:
+    ![Images/s3-appfiles.png](Images/s3-appfiles.png)
 
 
 ### 1.2 Crawl log files with Glue
-With the application log files now in S3, we need to create a database we can use to analyze them, we will use AWS Glue for this. The challenge you may have is that your application log files may have a format that is not recognized, so we will show you how to write a custom classifier, which will customize the interpreter to work with any log files.
+We will create a database with the uploaded log files with AWS Glue. The challenge you may have is that your application log files may have a format that is not recognized, so we will show you how to write a custom classifier, which allows you to take any file and extract the required columns.
 
-For our Apache web server log files, the in-bulit AWS Glue classifier **COMBINEDAPACHELOG** will recognize the timestamp (example: 30/Sep/2019:04:14:27 +0000) as a single string. We will customize the interpreter to break this up into a date column, timestamp column and timezone column. This will demonstrate how to write a customer classifier. The reference for classifiers is here: https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html
+For our sample Apache web server log files, the in-bulit AWS Glue classifier **COMBINEDAPACHELOG** will recognize the timestamp (example: 30/Sep/2019:04:14:27 +0000) as a single string. We will customize the interpreter to break this up into a date column, timestamp column and timezone column. This will demonstrate how to write a customer classifier. The reference for classifiers is here: https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html
 
 A sample log file line is:
 
@@ -127,81 +131,89 @@ We will make it build the following columns
 4. Next we will create a crawler to read the log files, and build a database. Click on **Crawlers** and click **Add crawler**:
 ![Images/glue-crawleraddcrawler.png](Images/glue-crawleraddcrawler.png)
 
-5. **Crawler name** will be **ApplicationLogs**, expand **Tags, description..** and add the **Custom classifier** we just created, click **Next**:
+5. **Crawler name** will be **ApplicationLogs**, expand **Tags, description..** next to our **Weblogs** classifier, cilck **Add**, then click **Next**:
 ![Images/glue-crawlercreate1.png](Images/glue-crawlercreate1.png)
 
 6. **Crawler source type** is Data stores, click **Next**:
 ![Images/glue-crawlercreate2.png](Images/glue-crawlercreate2.png)
 
-7. Click the **folder icon** and select your S3 bucket **and folder** with the log files, click **Select**, then click **Next**. Make sure you select the folder **applogfiles_reinventworkshop**.
+7. Click the **folder icon** and expand your bucket created above, select the radio button next to the  **applogfiles_reinventworkshop**.  Do **NOT** select the actual file or bucket, select the folder.  Click **Select**.
 
-8. Do **Not** add another data store
+8. Click **Next**
 
-9. **Create an IAM role** named **AWSGlueServiceRole-WebLogs** and click **Next**:
+10. Select **No** to not add another data store, click **Next**
+
+11. **Create an IAM role** named AWSGlueServiceRole-**WebLogs** and click **Next**:
 ![Images/glue-crawlercreate5.png](Images/glue-crawlercreate5.png)
 
-10. **Frequency** will be run on demand, click **Next**
+12. **Frequency** will be run on demand, click **Next**
 
-11. **Add a database** you MUST name it **webserverlogs**, for **Grouping behaviour for S3 data** create a single schema and click **Next**:
+13. Click **Add database**, you MUST name it **webserverlogs**, click **Create**.
+
+14. Expand **Grouping behaviour for S3 data**, cilck **Create a single schema**, click **Next**:
 ![Images/glue-crawlercreate6.png](Images/glue-crawlercreate6.png)
 
-12. Click **Finish**
+15. Click **Finish**
 
-13. Select and **Run crawler**, this will create a single database and table with our log files, lets confirm. We need to **wait until** the crawler has **finished**, this will take 1-2 minutes. Click refresh to check if its done.
+16. Select and **Run crawler**, this will create a single database and table with our log files, lets confirm. We need to **wait until** the crawler has **finished**, this will take 1-2 minutes. Click refresh to check if it has finished.
 
-14. Go to **Databases** and click on the database **webserverlogs**, you may need to click **refresh**:
+17. Click **Databases** on the left, and click on the database **webserverlogs**, you may need to click **refresh**:
 ![Images/glue-databaseswebserverlogs.png](Images/glue-databaseswebserverlogs.png)
 
-15. Click **Tables in webserverlogs**, and click the table **applogfiles_...**
+18. Click **Tables in webserverlogs**, and click the table **applogfiles_reinventworkshop**
 
-16. You can see the table is created, the **Name**, the **Location**, and the **recordCount** has a large number of records in it:
+19. You can see the table is created, the **Name**, the **Location**, and the **recordCount** has a large number of records in it (the number may be different to the image below):
 ![Images/glue-databasestablewebserverlogs.png](Images/glue-databasestablewebserverlogs.png)
 
-17. Scroll down and you can see the columns, and that they are all **string**. This will be a small hurdle for columns like bytes if you want to perform a function on it:
+20. Scroll down and you can see the columns, and that they are all **string**. This will be a small hurdle for columns like bytes if you want to perform a function on it:
 
-18. Go to the **Athena** console, and select the **webserverlogs** database:
+21. Go to the **Athena** service console, and select the **webserverlogs** database:
 ![Images/athena-dbwebserverlogs.png](Images/athena-dbwebserverlogs.png)
 
-19. Click the **three dots** and click **Preview table**:
+22. Click the **three dots** next to the table **applogfiles_reinventworkshop**, and click **Preview table**:
 ![Images/athena-dbpreview.png](Images/athena-dbpreview.png)
 
-20. View the results which will show 10 lines of your log. Note how there are separate columns **logdate** **logtime** and **tz** that we created. The default classifier would have had a single column of text for the timestamp.
+23. View the results which will show 10 lines of your log. Note how there are separate columns **logdate** **logtime** and **tz** that we created. The default classifier would have had a single column of text for the timestamp.
 ![Images/athena-dbresults.png](Images/athena-dbresults.png)
 
 
 ### 1.3 Create a database of your cost files
 To measure efficiency we need to know the cost of the workload, so we will use the Cost and Usage Report.
 
-If you are using your own Cost and Usage Reports, you will need to have them already configured and delivered as per this lab: https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html
+If you are using your own Cost and Usage Reports, you will need to have them already configured and delivered as per this lab: https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html#CUR
 
 To use the files from this lab, follow the steps below:
 
-1. Go to the S3 Console and create a **S3 Bucket** with a folder **costusagefiles-reinventworkshop** which will contain your cost and usage files. You MUST name the folder **costusagefiles_reinventworkshop**, this will make pasting the code faster.
+1. Go to the S3 Console and create a folder named **costusagefiles-reinventworkshop** inside the bucket you created above. You MUST name the folder **costusagefiles_reinventworkshop**, this will make pasting the code faster.
 
-2. Copy the sample file to your bucket, **NOTE**: do **NOT** copy all the files, **ONLY copy 1 file to the folder you created**.:
+2. Copy the sample file to your bucket:
     - [Step1CUR.gz](Code/Step1CUR.gz)
 
-3. Go into the **Glue** console and **Add crawler**
+3. Go into the **Glue** console, and click **Add crawler**
 
-4. Use the crawler name **CostUsage** and do not specify a classifier
+4. Use the crawler name **CostUsage** and click **Next**
+ 
+5. Select **Data stores** as the crawler source type, click **Next**
 
-5. Specify **Data stores** as the crawler source type, click **Next**
+6. Click the **folder icon**, Select the **S3 folder** created above **costusagefiles-reinventworkshop** as the data store, make sure you dont select the bucket or file.
 
-6. Select the S3 folder created above as the data store
+7. Click **Select**, then click **Next**
 
-7. Do **not** add another data store, click **Next**
+7. Select **No** do not another data store, click **Next**
 
-8. Create an **IAM role** named **AWSGlueServiceRole-costusage**
+8. Create an **IAM role** named AWSGlueServiceRole-**costusage**, click **Next**
 
 9. Set the frequency to **run on demand**, click **Next**
 
-10. **Add database** it MUST be named **CostUsage**, click **Next**
+10. Cilck **Add database**, it MUST be named **CostUsage**, and click **Create**
+
+11. click **Next**
 
 11. Review and click **Finish**
 
 12. Run the crawler, then check the database was created and has records in it as per the previous step.
 
-13. Go into **Databases**, select the **costusage** database,  and then select the table.  Click **Edit Schema**:
+13. Go into **Databases**, select the **costusage** database, and then select the table **costusagefiles_reinventworkshop**.  Click **Edit Schema**:
 ![Images/costtablefix01.png](Images/costtablefix01.png)
 
 14. Make sure the column **line_item_unblended_cost** has a data type of **double**, you may need to change it from string:
