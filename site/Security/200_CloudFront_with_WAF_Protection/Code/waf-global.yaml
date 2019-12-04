@@ -1,0 +1,1023 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS WAF example for CloudFront. This AWS CloudFormation
+  template provisions WAF with basic rules for proof of concept.
+  **WARNING** You will be billed for the AWS resources created if you create a 
+  stack from this template.
+
+  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+
+Parameters:
+  WAFName:
+    Type: String
+    Default: 'Lab1'
+    Description: Enter the base name to be used for resource and export names for this stack, eg WAF will create export names combined with the base name such as Lab1-ManualBlacklistIPRule1.
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MaxLength: 10
+  WAFCloudWatchPrefix:
+    Type: String
+    Default: 'Lab1'
+    Description: Enter the name of the CloudWatch prefix to use for each rule, alphanumeric characters only
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MaxLength: 10
+  WAFManualBlacklistIPRule1Name:
+    Type: String
+    Description: The CloudFormation resource name of the WAFManualBlacklistIPRule1 resource created.
+    Default: ManualBlacklistIPRule1
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MinLength: '3'
+    MaxLength: '32'
+  WAFManualBlacklistIPSet1Name:
+    Type: String
+    Description: The CloudFormation resource name of the WAFManualBlacklistIPSet1 resource created.
+    Default: ManualBlacklistIPSet1
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MinLength: '3'
+    MaxLength: '32'
+  WAFUserAgentBlacklistRule1Name:
+    Type: String
+    Description: The CloudFormation resource name of the WAFUserAgentBlacklistRule1 resource created.
+    Default: UserAgentBlacklistRule1
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MinLength: '3'
+    MaxLength: '32'
+  WAFUserAgentByteSet1Tuple1String:
+    Type: CommaDelimitedList
+    Default: '/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,'
+    Description: Enter the string that will be included in the user-agent blacklist rule, rename the example padding where necessary and ensure there is a total of 10 comma separate values. 
+  WAFUserAgentBlacklistSet1Name:
+    Type: String
+    Description: The CloudFormation resource name of the WAFUserAgentBlacklistSet1 resource created.
+    Default: UserAgentBlacklistSet1
+    AllowedPattern: ^[a-zA-z0-9]+$
+    MinLength: '3'
+    MaxLength: '32'
+  WAFManualBlacklistIPRule1Name:
+    Type: String
+    Default: 'ManualBlacklistIPRule1'
+    Description: Enter the name of the value to import, empty value will not create rule
+  WAFManualBlacklistIPRule1Action:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFManualBlacklistUserAgentRule1Name:
+    Type: String
+    Default: 'UserAgentBlacklistRule1'
+    Description: Enter the name of the value to import, empty value will not create rule
+  WAFManualBlacklistUserAgentRule1Action:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFSqlInjectionProtectionParam:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+    Description: >-
+      Choose Yes to enable the component designed to block common SQL injection
+      attacks.
+  WAFSqlInjectionExceptionByteSet1Param:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+  WAFSqlInjectionProtectionAction:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFSqlInjectionExceptionByteSet1Tuple1Type:
+    Type: String
+    Default: URI
+    Description: ''
+    AllowedValues:
+      - HEADER
+      - METHOD
+      - QUERY_STRING
+      - URI
+      - BODY
+  WAFSqlInjectionExceptionByteSet1Tuple1String:
+    Type: CommaDelimitedList
+    Default: '/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,'
+    Description: Enter the string that will be excluded from the SQL injection rule, rename the example padding where necessary and ensure there is a total of 10 comma separate values.
+  WAFSqlInjectionExceptionByteSet1Tuple1Transform:
+    Type: String
+    Default: NONE
+    Description: ''
+    AllowedValues:
+      - CMD_LINE
+      - COMPRESS_WHITE_SPACE
+      - HTML_ENTITY_DECODE
+      - LOWERCASE
+      - URL_DECODE
+      - NONE
+  WAFSqlInjectionExceptionByteSet1Tuple1Position:
+    Type: String
+    Default: CONTAINS
+    Description: ''
+    AllowedValues:
+      - CONTAINS
+      - CONTAINS_WORD
+      - EXACTLY
+      - STARTS_WITH
+      - ENDS_WITH
+  WAFSqlInjectionExceptionByteSet1Tuple1Data:
+    Type: String
+    Default: 'User-Agent'
+    Description: 'Value of byte match type if set to HEADER'
+  WAFXssProtectionParam:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+    Description: Choose Yes to enable the component designed to block common XSS attacks.
+  WAFXssExceptionByteSet1Param:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+  WAFXssProtectionAction:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFXssExceptionByteSet1Tuple1Type:
+    Type: String
+    Default: URI
+    Description: ''
+    AllowedValues:
+      - HEADER
+      - METHOD
+      - QUERY_STRING
+      - URI
+      - BODY
+  WAFXssExceptionByteSet1Tuple1String:
+    Type: CommaDelimitedList
+    Default: '/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,'
+    Description: Enter the string that will be excluded from the Xss rule, rename the example padding where necessary and ensure there is a total of 10 comma separate values.
+  WAFXssExceptionByteSet1Tuple1Transform:
+    Type: String
+    Default: NONE
+    Description: ''
+    AllowedValues:
+      - CMD_LINE
+      - COMPRESS_WHITE_SPACE
+      - HTML_ENTITY_DECODE
+      - LOWERCASE
+      - URL_DECODE
+      - NONE
+  WAFXssExceptionByteSet1Tuple1Position:
+    Type: String
+    Default: CONTAINS
+    Description: ''
+    AllowedValues:
+      - CONTAINS
+      - CONTAINS_WORD
+      - EXACTLY
+      - STARTS_WITH
+      - ENDS_WITH
+  WAFXssExceptionByteSet1Tuple1Data:
+    Type: String
+    Default: 'User-Agent'
+    Description: 'Value of byte match type if set to HEADER'
+  WAFSizeProtectionParam:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+    Description: >-
+      Choose Yes to enable the component designed to block common overflow
+      attacks in URI and Query String.
+  WAFSizeExceptionByteSet1Param:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+  WAFSizeProtectionAction:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFSizeURI1:
+    Type: String
+    Default: '512'
+    Description: Maximum size of the URI in bytes (maximum 8192).
+  WAFSizeQuery1:
+    Type: String
+    Default: '512'
+    Description: Maximum size of the query string in bytes (maximum 8192).
+  WAFSizeCookie1:
+    Type: String
+    Default: '4096'
+    Description: Maximum size of the cookie header in bytes (maximum 4096). The size is determined by the amount of information your web application stores in cookies. If you only pass a session token via cookies, set the size to no larger than the serialized size of the session token and cookie metadata.
+  WAFSizeExceptionByteSet1Tuple1Type:
+    Type: String
+    Default: URI
+    Description: ''
+    AllowedValues:
+      - HEADER
+      - METHOD
+      - QUERY_STRING
+      - URI
+      - BODY
+  WAFSizeExceptionByteSet1Tuple1String:
+    Type: CommaDelimitedList
+    Default: '/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,'
+    Description: Enter the string that will be excluded from the size limit rule, rename the example padding where necessary and ensure there is a total of 10 comma separate values.
+  WAFSizeExceptionByteSet1Tuple1Transform:
+    Type: String
+    Default: NONE
+    Description: ''
+    AllowedValues:
+      - CMD_LINE
+      - COMPRESS_WHITE_SPACE
+      - HTML_ENTITY_DECODE
+      - LOWERCASE
+      - URL_DECODE
+      - NONE
+  WAFSizeExceptionByteSet1Tuple1Position:
+    Type: String
+    Default: CONTAINS
+    Description: ''
+    AllowedValues:
+      - CONTAINS
+      - CONTAINS_WORD
+      - EXACTLY
+      - STARTS_WITH
+      - ENDS_WITH 
+  WAFSizeExceptionByteSet1Tuple1Data:
+    Type: String
+    Default: 'User-Agent'
+    Description: 'Value of byte match type if set to HEADER'
+  WAFBlacklistByteSet1ProtectionParam:
+    Type: String
+    Default: 'Yes'
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+    Description: >-
+      Choose Yes to enable the component to block generic byte match strings.
+  WAFBlacklistByteSet1ProtectionAction:
+    Type: String
+    Default: 'COUNT'
+    AllowedValues:
+      - 'COUNT'
+      - 'BLOCK'
+  WAFBlacklistByteSet1Tuple1Type:
+    Type: String
+    Default: HEADER
+    Description: ''
+    AllowedValues:
+      - HEADER
+      - METHOD
+      - QUERY_STRING
+      - URI
+      - BODY
+  WAFBlacklistByteSet1Tuple1String:
+    Type: CommaDelimitedList
+    Default: 'pingback,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,/aaabbbccc111222333,'
+    Description: Enter the string that will be denied in the byte set 1 rule, additions require updating the relevant byte set, rename the example padding where necessary and ensure there is a total of 10 comma separate values.
+  WAFBlacklistByteSet1Tuple1Transform:
+    Type: String
+    Default: LOWERCASE
+    Description: ''
+    AllowedValues:
+      - CMD_LINE
+      - COMPRESS_WHITE_SPACE
+      - HTML_ENTITY_DECODE
+      - LOWERCASE
+      - URL_DECODE
+      - NONE
+  WAFBlacklistByteSet1Tuple1Position:
+    Type: String
+    Default: CONTAINS
+    Description: ''
+    AllowedValues:
+      - CONTAINS
+      - CONTAINS_WORD
+      - EXACTLY
+      - STARTS_WITH
+      - ENDS_WITH
+  WAFBlacklistByteSet1Tuple1Data:
+    Type: String
+    Default: 'User-Agent'
+    Description: 'Value of byte match type if set to HEADER'
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "General"
+        Parameters:
+          - WAFName
+          - WAFCloudWatchPrefix
+      - Label:
+          default: "Blacklists"
+        Parameters:
+          - WAFManualBlacklistIPRule1Name
+          - WAFManualBlacklistIPRule1Action
+          - WAFManualBlacklistIPSet1Name
+          - WAFManualBlacklistUserAgentRule1Name
+          - WAFManualBlacklistUserAgentRule1Action
+          - WAFUserAgentBlacklistRule1Name
+          - WAFUserAgentBlacklistSet1Name
+          - WAFUserAgentByteSet1Tuple1String
+          - WAFBlacklistByteSet1ProtectionParam
+          - WAFBlacklistByteSet1ProtectionAction
+          - WAFBlacklistByteSet1Tuple1Type
+          - WAFBlacklistByteSet1Tuple1String
+          - WAFBlacklistByteSet1Tuple1Transform
+          - WAFBlacklistByteSet1Tuple1Position
+          - WAFBlacklistByteSet1Tuple1Data
+      - Label:
+          default: "SQL Injection Protection"
+        Parameters:
+          - WAFSqlInjectionProtectionParam
+          - WAFSqlInjectionExceptionByteSet1Param
+          - WAFSqlInjectionProtectionAction
+          - WAFSqlInjectionExceptionByteSet1Tuple1Type
+          - WAFSqlInjectionExceptionByteSet1Tuple1String
+          - WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          - WAFSqlInjectionExceptionByteSet1Tuple1Position
+          - WAFSqlInjectionExceptionByteSet1Tuple1Data
+      - Label:
+          default: "Cross-Site Scripting Protection"
+        Parameters:
+          - WAFXssProtectionParam
+          - WAFXssExceptionByteSet1Param
+          - WAFXssProtectionAction
+          - WAFXssExceptionByteSet1Tuple1Type
+          - WAFXssExceptionByteSet1Tuple1String
+          - WAFXssExceptionByteSet1Tuple1Transform
+          - WAFXssExceptionByteSet1Tuple1Position
+          - WAFXssExceptionByteSet1Tuple1Data
+      - Label:
+          default: "Size Protection"
+        Parameters:
+          - WAFSizeProtectionParam
+          - WAFSizeExceptionByteSet1Param
+          - WAFSizeProtectionAction
+          - WAFSizeURI1
+          - WAFSizeQuery1
+          - WAFSizeCookie1
+          - WAFSizeExceptionByteSet1Tuple1Type
+          - WAFSizeExceptionByteSet1Tuple1String
+          - WAFSizeExceptionByteSet1Tuple1Transform
+          - WAFSizeExceptionByteSet1Tuple1Position
+          - WAFSizeExceptionByteSet1Tuple1Data
+Conditions:
+  WAFManualBlacklistIPRule1Activated: !Not
+    - !Equals 
+      - !Ref WAFManualBlacklistIPRule1Name
+      - ''
+  WAFManualBlacklistUserAgentRule1Activated: !Not
+    - !Equals 
+      - !Ref WAFManualBlacklistUserAgentRule1Name
+      - ''
+  WAFSqlInjectionProtectionActivated: !Equals
+    - !Ref WAFSqlInjectionProtectionParam
+    - 'Yes'
+  WAFSqlInjectionExceptionByteSet1Activated: !Equals
+    - !Ref WAFSqlInjectionExceptionByteSet1Param
+    - 'Yes'
+  WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader: !Equals
+    - !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+    - 'HEADER'
+  WAFSizeProtectionActivated: !Equals
+    - !Ref WAFSizeProtectionParam
+    - 'Yes'
+  WAFSizeExceptionByteSet1Activated: !Equals
+    - !Ref WAFSizeExceptionByteSet1Param
+    - 'Yes'
+  WAFSizeExceptionByteSet1Tuple1TypeHeader: !Equals
+    - !Ref WAFSizeExceptionByteSet1Tuple1Type
+    - 'HEADER'
+  WAFXssProtectionActivated: !Equals
+    - !Ref WAFXssProtectionParam
+    - 'Yes'
+  WAFXssExceptionByteSet1Activated: !Equals
+    - !Ref WAFXssExceptionByteSet1Param
+    - 'Yes'
+  WAFXssExceptionByteSet1Tuple1TypeHeader: !Equals
+    - !Ref WAFXssExceptionByteSet1Tuple1Type
+    - 'HEADER'
+  WAFBlacklistByteSet1ProtectionActivated: !Equals
+    - !Ref WAFBlacklistByteSet1ProtectionParam
+    - 'Yes'
+  WAFBlacklistByteSet1Tuple1TypeHeader: !Equals
+    - !Ref WAFBlacklistByteSet1Tuple1Type
+    - 'HEADER'
+
+Resources:
+  WAFManualBlacklistIPSet1:
+    Type: 'AWS::WAF::IPSet'
+    Properties:
+      Name: !Sub '${WAFName}-${WAFManualBlacklistIPSet1Name}'
+  WAFUserAgentBlacklistSet1:
+    Type: 'AWS::WAF::ByteMatchSet'
+    Properties:
+      Name: !Sub '${WAFName}-${WAFUserAgentBlacklistSet1Name}'
+      ByteMatchTuples:
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['0', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['1', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['2', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['3', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['4', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['5', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['6', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['7', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['8', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+        - FieldToMatch:
+            Type: HEADER
+            Data: User-Agent
+          TargetString: !Select ['9', !Ref 'WAFUserAgentByteSet1Tuple1String']
+          TextTransformation: CMD_LINE
+          PositionalConstraint: CONTAINS
+  WAFManualBlacklistIPRule1:
+    Type: 'AWS::WAF::Rule'
+    DependsOn: WAFManualBlacklistIPSet1
+    Properties:
+      Name: !Sub '${WAFName}-${WAFManualBlacklistIPRule1Name}'
+      MetricName: !Sub '${WAFCloudWatchPrefix}WAFManualBlacklistIPRule1Name'
+      Predicates:
+        - DataId: !Ref WAFManualBlacklistIPSet1
+          Negated: false
+          Type: IPMatch      
+  WAFUserAgentBlacklistRule1:
+    Type: 'AWS::WAF::Rule'
+    DependsOn: WAFUserAgentBlacklistSet1
+    Properties:
+      Name: !Sub '${WAFName}-${WAFUserAgentBlacklistRule1Name}'
+      MetricName: !Sub '${WAFCloudWatchPrefix}WAFUserAgentBlacklistRule1Name'
+      Predicates:
+        - DataId: !Ref WAFUserAgentBlacklistSet1
+          Negated: false
+          Type: ByteMatch
+  WAFWhitelistIPSet1:
+    Type: 'AWS::WAF::IPSet'
+    Properties:
+      Name: !Sub '${WAFName}-WhitelistIPSet1'
+  WAFWhitelistIPRule1:
+    Type: 'AWS::WAF::Rule'
+    Properties:
+      Name: !Sub '${WAFName}-WhitelistRule1'
+      MetricName: !Sub '${WAFCloudWatchPrefix}WhitelistRule1'
+      Predicates:
+        - DataId: !Ref WAFWhitelistIPSet1
+          Negated: false
+          Type: IPMatch
+  WAFSqlInjectionDetectionSet1:
+    Type: 'AWS::WAF::SqlInjectionMatchSet'
+    Condition: WAFSqlInjectionProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-SqlInjectionCondition1'
+      SqlInjectionMatchTuples:
+        - FieldToMatch:
+            Type: URI
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: URI
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: QUERY_STRING
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: QUERY_STRING
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: BODY
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: BODY
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: HEADER
+            Data: cookie
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: HEADER
+            Data: cookie
+          TextTransformation: HTML_ENTITY_DECODE
+  WAFSqlInjectionExceptionByteSet1:
+    Type: 'AWS::WAF::ByteMatchSet'
+    Condition: WAFSqlInjectionExceptionByteSet1Activated
+    Properties:
+      Name: !Sub '${WAFName}-SqlInjectionExceptionByteSet1'
+      ByteMatchTuples: 
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['0', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['1', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['2', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['3', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['4', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['5', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['6', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['7', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['8', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Type
+            Data: !If [WAFSqlInjectionExceptionByteSet1Tuple1TypeHeader, !Ref WAFSqlInjectionExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['9', !Ref 'WAFSqlInjectionExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSqlInjectionExceptionByteSet1Tuple1Position
+  WAFSqlInjectionRule1:
+    Type: 'AWS::WAF::Rule'
+    Condition: WAFSqlInjectionProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-SQLiRule1'
+      MetricName: !Sub '${WAFCloudWatchPrefix}SQLInjectionRule1'
+      Predicates:
+        - DataId: !Ref WAFSqlInjectionDetectionSet1
+          Negated: false
+          Type: SqlInjectionMatch
+        - !If
+          - WAFSqlInjectionExceptionByteSet1Activated
+          - DataId: !Ref WAFSqlInjectionExceptionByteSet1
+            Negated: true
+            Type: ByteMatch
+          - !Ref 'AWS::NoValue'
+  WAFSizeDetectionSet1:
+    Type: 'AWS::WAF::SizeConstraintSet'
+    Condition: WAFSizeProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-SizeCondition1'
+      SizeConstraints:
+        - FieldToMatch:
+            Type: QUERY_STRING
+          ComparisonOperator: GT
+          Size: !Ref WAFSizeQuery1
+          TextTransformation: NONE
+        - FieldToMatch:
+            Type: URI
+          ComparisonOperator: GT
+          Size: !Ref WAFSizeURI1
+          TextTransformation: NONE
+        - FieldToMatch:
+            Type: HEADER
+            Data: cookie
+          TextTransformation: NONE
+          ComparisonOperator: GT
+          Size: !Ref WAFSizeCookie1
+  WAFSizeExceptionByteSet1:
+    Type: 'AWS::WAF::ByteMatchSet'
+    Condition: WAFSizeExceptionByteSet1Activated
+    Properties:
+      Name: !Sub '${WAFName}-SizeExceptionByteSet1'
+      ByteMatchTuples:
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['0', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['1', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['2', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['3', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['4', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['5', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['6', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['7', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['8', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFSizeExceptionByteSet1Tuple1Type
+            Data: !If [WAFSizeExceptionByteSet1Tuple1TypeHeader, !Ref WAFSizeExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['9', !Ref 'WAFSizeExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFSizeExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFSizeExceptionByteSet1Tuple1Position
+  WAFSizeRule1:
+    Type: 'AWS::WAF::Rule'
+    Condition: WAFSizeProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-SizeRule1'
+      MetricName: !Sub '${WAFCloudWatchPrefix}SizeRule1'
+      Predicates:
+        - DataId: !Ref WAFSizeDetectionSet1
+          Negated: false
+          Type: SizeConstraint
+        - !If
+          - WAFSizeExceptionByteSet1Activated
+          - DataId: !Ref WAFSizeExceptionByteSet1
+            Negated: true
+            Type: ByteMatch
+          - !Ref 'AWS::NoValue'
+  WAFXssDetectionSet1:
+    Type: 'AWS::WAF::XssMatchSet'
+    Condition: WAFXssProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-XSSCondition1'
+      XssMatchTuples:
+        - FieldToMatch:
+            Type: URI
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: URI
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: QUERY_STRING
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: QUERY_STRING
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: BODY
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: BODY
+          TextTransformation: HTML_ENTITY_DECODE
+        - FieldToMatch:
+            Type: HEADER
+            Data: cookie
+          TextTransformation: URL_DECODE
+        - FieldToMatch:
+            Type: HEADER
+            Data: cookie
+          TextTransformation: HTML_ENTITY_DECODE
+  WAFXssExceptionByteSet1:
+    Type: 'AWS::WAF::ByteMatchSet'
+    Condition: WAFXssExceptionByteSet1Activated
+    Properties:
+      Name: !Sub '${WAFName}-XssExceptionByteSet1'
+      ByteMatchTuples:
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['0', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['1', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['2', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['3', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['4', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['5', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['6', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['7', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['8', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFXssExceptionByteSet1Tuple1Type
+            Data: !If [WAFXssExceptionByteSet1Tuple1TypeHeader, !Ref WAFXssExceptionByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['9', !Ref 'WAFXssExceptionByteSet1Tuple1String']
+          TextTransformation: !Ref WAFXssExceptionByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFXssExceptionByteSet1Tuple1Position
+  WAFXssRule1:
+    Type: 'AWS::WAF::Rule'
+    Condition: WAFXssProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-XSSRule1'
+      MetricName: !Sub '${WAFCloudWatchPrefix}XssRule1'
+      Predicates:
+        - DataId: !Ref WAFXssDetectionSet1
+          Negated: false
+          Type: XssMatch
+        - !If
+          - WAFXssExceptionByteSet1Activated
+          - DataId: !Ref WAFXssExceptionByteSet1
+            Negated: true
+            Type: ByteMatch
+          - !Ref 'AWS::NoValue'
+  WAFBlacklistByteSet1:
+    Type: 'AWS::WAF::ByteMatchSet'
+    Condition: WAFBlacklistByteSet1ProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-BlacklistByteSet1'
+      ByteMatchTuples:
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['0', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['1', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['2', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['3', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['4', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['5', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['6', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['7', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['8', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+        - FieldToMatch:
+            Type: !Ref WAFBlacklistByteSet1Tuple1Type
+            Data: !If [WAFBlacklistByteSet1Tuple1TypeHeader, !Ref WAFBlacklistByteSet1Tuple1Data, !Ref 'AWS::NoValue']
+          TargetString: !Select ['9', !Ref 'WAFBlacklistByteSet1Tuple1String']
+          TextTransformation: !Ref WAFBlacklistByteSet1Tuple1Transform
+          PositionalConstraint: !Ref WAFBlacklistByteSet1Tuple1Position
+  WAFBlacklistByteRule1:
+    Type: 'AWS::WAF::Rule'
+    Condition: WAFBlacklistByteSet1ProtectionActivated
+    Properties:
+      Name: !Sub '${WAFName}-Blacklist1StringRule1'
+      MetricName: !Sub '${WAFCloudWatchPrefix}BlacklistByteRule1'
+      Predicates:
+        - DataId: !Ref WAFBlacklistByteSet1
+          Negated: false
+          Type: ByteMatch
+  WAFWebACL:
+    Type: 'AWS::WAF::WebACL'
+    Properties:
+      Name: !Sub '${WAFName}-WebACL1'
+      DefaultAction:
+        Type: ALLOW
+      MetricName: !Sub '${WAFCloudWatchPrefix}WebACL1'
+      Rules:
+        - !If
+          - WAFManualBlacklistIPRule1Activated
+          - Action:
+              Type: !Ref WAFManualBlacklistIPRule1Action
+            Priority: 1
+            RuleId: !Ref WAFManualBlacklistIPRule1
+          - !Ref 'AWS::NoValue'
+        - !If
+          - WAFManualBlacklistUserAgentRule1Activated
+          - Action:
+              Type: !Ref WAFManualBlacklistUserAgentRule1Action
+            Priority: 3
+            RuleId: !Ref WAFBlacklistByteRule1
+          - !Ref 'AWS::NoValue'
+        - !If
+          - WAFSizeProtectionActivated
+          - Action:
+              Type: !Ref WAFSizeProtectionAction
+            Priority: 4
+            RuleId: !Ref WAFSizeRule1
+          - !Ref 'AWS::NoValue'
+        - !If
+          - WAFXssProtectionActivated
+          - Action:
+              Type: !Ref WAFXssProtectionAction
+            Priority: 5
+            RuleId: !Ref WAFXssRule1
+          - !Ref 'AWS::NoValue'
+        - !If
+          - WAFSqlInjectionProtectionActivated
+          - Action:
+              Type: !Ref WAFSqlInjectionProtectionAction
+            Priority: 6
+            RuleId: !Ref WAFSqlInjectionRule1
+          - !Ref 'AWS::NoValue'
+        - !If
+          - WAFBlacklistByteSet1ProtectionActivated
+          - Action:
+              Type: !Ref WAFBlacklistByteSet1ProtectionAction
+            Priority: 7
+            RuleId: !Ref WAFBlacklistByteRule1
+          - !Ref 'AWS::NoValue'
+
+Outputs:
+  WAFWebACL1ID:
+    Description: ID of WAF Web ACL 1
+    Value: !Ref WAFWebACL
+    Export:
+      Name: !Sub '${WAFName}-WebACL1'
+  WAFManualBlacklistIPRule1ID:
+    Description: ID of WAF Manual IP Blacklist Rule 1
+    Value: !Ref WAFManualBlacklistIPRule1
+    Export:
+      Name: !Sub '${WAFName}-${WAFManualBlacklistIPRule1Name}'
+  WAFManualBlacklistIPSet1ID:
+    Description: ID of WAF Manual IP Blacklist Set 1
+    Value: !Ref WAFManualBlacklistIPSet1
+    Export:
+      Name: !Sub '${WAFName}-${WAFManualBlacklistIPSet1Name}'
+  WAFUserAgentBlacklistRule1ID:
+    Description: ID of WAF User Agent Blacklist Rule 1
+    Value: !Ref WAFUserAgentBlacklistRule1
+    Export:
+      Name: !Sub '${WAFName}-${WAFUserAgentBlacklistRule1Name}'
+  WAFUserAgentBlacklistSet1ID:
+    Description: ID of WAF User Agent Blacklist Set 1
+    Value: !Ref WAFUserAgentBlacklistSet1
+    Export:
+      Name: !Sub '${WAFName}-${WAFUserAgentBlacklistSet1Name}'
+

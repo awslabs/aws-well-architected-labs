@@ -1,0 +1,539 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Account Baseline IAM Groups, Roles and Managed Policies.
+  **WARNING** You will be billed for the AWS resources created if you create a 
+  stack from this template.
+
+  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+
+Parameters:
+  AllowRegion:
+    Type: String
+    Description: 'A single region e.g. us-east-1 that resources can be created in, where service supports this permissions including EC2'
+    Default: 'us-east-1'  
+  BaselineNamePrefix:
+    Type: String
+    Description: 'The prefix for roles, groups and policies created by this stack'
+    Default: 'Baseline'
+  BaselineExportName:
+    Type: String
+    Description: 'The CloudFormation export name prefix used with the resource name for the resources created, eg Baseline-PrivilegedAdminRole'
+    Default: 'Baseline'
+    MinLength: '3'
+    MaxLength: '32'
+  # BaselineS3TemplateBucket:
+  #   Type: String
+  #   Description: Case sensitive bucket name that contains cloudformation templates
+  #   Default: ''
+  IdentityManagementAccount:
+    Type: String
+    Description: AccountId that is trusted to assume all roles, or blank for no cross-account trust. Note that the trusted account also needs to be appropriately secured.
+    Default: ''
+  ToolingManagementAccount:
+    Type: String
+    Description: AccountId that is trusted to assume the ReadOnly and StackSet roles, or blank for no cross-account trust. Note that the trusted account also needs to be appropriately secured.
+    Default: ''
+  OrganizationsRootAccount:
+    Type: String
+    Description: AccountId that is trusted to assume Organizations role, or blank for no cross-account trust. Note that the trusted account also needs to be appropriately secured.
+    Default: ''
+Conditions:
+  LinkToIdentityManagementAccount: !Not
+    - !Equals
+      - !Ref IdentityManagementAccount
+      - ''
+  LinkToToolingManagementAccount: !Not
+    - !Equals
+      - !Ref ToolingManagementAccount
+      - ''
+  LinkToOrganizationsRootAccount: !Not
+    - !Equals
+      - !Ref OrganizationsRootAccount
+      - ''
+Resources:
+  ManageSelfIAMUserGroupPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-ManageSelfIAMUserGroupPolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} managing own IAM user'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: 'iam:GetAccountPasswordPolicy'
+            Resource: '*'
+          - Sid: AllowUsersToListMFADevicesandUsersForConsole
+            Effect: Allow
+            Action:
+              - 'iam:ListMFADevices'
+              - 'iam:ListVirtualMFADevices'
+              - 'iam:ListUsers'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'iam:ChangePassword'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:user/${!aws:username}'
+          - Sid: AllowUsersToDeactivateTheirOwnVirtualMFADevice
+            Effect: Allow
+            Action:
+              - 'iam:DeactivateMFADevice'
+              - 'iam:*LoginProfile'
+              - 'iam:*AccessKey*'
+              - 'iam:*SSHPublicKey*'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:user/${!aws:username}'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:mfa/${!aws:username}'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': true
+          - Sid: AllowUsersToCreateEnableResyncDeleteTheirOwnVirtualMFADevice
+            Effect: Allow
+            Action:
+              - 'iam:CreateVirtualMFADevice'
+              - 'iam:EnableMFADevice'
+              - 'iam:ResyncMFADevice'
+              - 'iam:DeleteVirtualMFADevice'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:user/${!aws:username}'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:mfa/${!aws:username}'
+  ManageSelfIAMUserGroup:
+    Type: 'AWS::IAM::Group'
+    DependsOn:
+      - ManageSelfIAMUserGroupPolicy
+    Properties:
+      GroupName: !Sub '${BaselineNamePrefix}-ManageSelf'
+      ManagedPolicyArns:
+        - !Ref ManageSelfIAMUserGroupPolicy
+      Path: /
+  AccountWideReadOnlyRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${BaselineNamePrefix}-AccountWideReadOnly'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - !If
+            - LinkToIdentityManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  !Sub 'arn:aws:iam::${IdentityManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+              Condition:
+                Bool:
+                  'aws:MultiFactorAuthPresent': 'true'
+            - !Ref 'AWS::NoValue'
+          - !If
+            - LinkToToolingManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  !Sub 'arn:aws:iam::${ToolingManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+            - !Ref 'AWS::NoValue'
+  AccountWideReadOnlyGroup:
+    Type: 'AWS::IAM::Group'
+    DependsOn:
+      - ManageSelfIAMUserGroupPolicy
+    Properties:
+      GroupName: !Sub '${BaselineNamePrefix}-AccountWideReadOnly'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+      Path: /
+  PrivilegedAdminGroupPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    DependsOn:
+      - PrivilegedAdminRole
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-PrivilegedAdminGroupPolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} PrivilegedAdmin Group'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+              - 'sts:GetSessionToken'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${PrivilegedAdminRole}'
+  PrivilegedAdminRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${BaselineNamePrefix}-PrivilegedAdmin'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - !If
+            - LinkToIdentityManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  !Sub 'arn:aws:iam::${IdentityManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+              Condition:
+                Bool:
+                  'aws:MultiFactorAuthPresent': 'true'
+            - !Ref 'AWS::NoValue'
+  PrivilegedAdminGroup:
+    Type: 'AWS::IAM::Group'
+    DependsOn:
+      - PrivilegedAdminGroupPolicy
+      - ManageSelfIAMUserGroupPolicy
+    Properties:
+      GroupName: !Sub '${BaselineNamePrefix}-PrivilegedAdmin'
+      ManagedPolicyArns:
+        - !Ref PrivilegedAdminGroupPolicy
+      Path: /
+  RestrictedAdminGroupPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-RestrictedAdminGroupPolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} RestrictedAdmin Group'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+              - 'sts:GetSessionToken'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${RestrictedAdminRole}'
+  RestrictedAdminGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      GroupName: !Sub '${BaselineNamePrefix}-RestrictedAdmin'
+      ManagedPolicyArns:
+        - !Ref RestrictedAdminGroupPolicy
+        - !Ref ManageSelfIAMUserGroupPolicy
+      Path: /
+  RestrictedAdminRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn:
+      - RestrictedServicesDenyRolePolicy
+    Properties:
+      RoleName: !Sub '${BaselineNamePrefix}-RestrictedAdmin'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+        - !Ref CloudFormationAdminRolePolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - !If
+            - LinkToIdentityManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  - !Sub 'arn:aws:iam::${IdentityManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+              Condition:
+                Bool:
+                  'aws:MultiFactorAuthPresent': 'true'
+            - !Ref 'AWS::NoValue'
+  RestrictedServicesDenyRolePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-RestrictedServicesDenyRolePolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} Explicitly Denying Services and Resources'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Deny
+            Action:
+              - 'aws-portal:ModifyAccount'
+              - 'aws-portal:ModifyBilling'
+              - 'aws-portal:ModifyPaymentMethods'
+              - 'budgets:ModifyBudget'
+            Resource:
+              - '*'
+          - Effect: Deny
+            Action:
+              - 'cloudhsm:*'
+            Resource:
+              - '*'
+  IdentityAdminRolePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-IdentityAdminRolePolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} IdentityAdmin Role'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: 'iam:*'
+            Resource: '*'
+  IdentityAdminGroupPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    DependsOn:
+      - IdentityAdminRole
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-IdentityAdminGroupPolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} IdentityAdmin Group'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+              - 'sts:GetSessionToken'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${IdentityAdminRole}'
+  IdentityAdminRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn:
+      - IdentityAdminRolePolicy
+      - CloudFormationAdminRolePolicy
+    Properties:
+      RoleName: !Sub '${BaselineNamePrefix}-IdentityAdmin'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+        - !Ref IdentityAdminRolePolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - !If
+            - LinkToIdentityManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  !Sub 'arn:aws:iam::${IdentityManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+              Condition:
+                Bool:
+                  'aws:MultiFactorAuthPresent': 'true'
+            - !Ref 'AWS::NoValue'
+  IdentityAdminGroup:
+    Type: 'AWS::IAM::Group'
+    DependsOn:
+      - IdentityAdminGroupPolicy
+    Properties:
+      GroupName: !Sub '${BaselineNamePrefix}-IdentityAdmin'
+      ManagedPolicyArns:
+        - !Ref IdentityAdminGroupPolicy
+      Path: /
+  CloudFormationAdminRolePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${BaselineNamePrefix}-CloudFormationAdminRolePolicy'
+      Description: !Sub 'Policy for ${BaselineNamePrefix} CloudFormation Role'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'cloudformation:EstimateTemplateCost'
+              - 'cloudformation:PreviewStackUpdate'
+              - 'cloudformation:ValidateTemplate'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'cloudformation:CancelUpdateStack'
+              - 'cloudformation:ContinueUpdateRollback'
+              - 'cloudformation:CreateChangeSet'
+              - 'cloudformation:CreateStack'
+              - 'cloudformation:DeleteStack'
+              - 'cloudformation:ExecuteChangeSet'
+              - 'cloudformation:SetStackPolicy'
+              - 'cloudformation:SignalResource'
+              - 'cloudformation:UpdateStack'
+            Resource:
+              - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*'
+              - !Sub 'arn:aws:cloudformation:${AWS::Region}:aws:transform/*'
+          - Effect: Allow
+            Action:
+              - 'iam:PassRole'
+              - 'sts:AssumeRole'
+              - 'sts:GetSessionToken'
+            Resource:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${BaselineNamePrefix}-CloudFormation'
+  CloudFormationRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${BaselineNamePrefix}-CloudFormation'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+              - Effect: Deny
+                Action:
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:UpdateStack'
+                Resource: '*'
+                Condition:
+                  StringNotEquals:
+                    'cloudformation:TemplateURL':
+                      #- !Sub 'https://s3.amazonaws.com/${BaselineS3TemplateBucket}'
+                      - !Sub 'https://s3.amazonaws.com/*'
+              - Effect: Deny
+                Action:
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:UpdateStack'
+                Resource: '*'
+                Condition:
+                  'Null':
+                    'cloudformation:TemplateURL': 'true'
+  StackSetRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWSCloudFormationStackSetExecutionRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+          - !If
+            - LinkToToolingManagementAccount
+            - Effect: Allow
+              Principal:
+                AWS:
+                  !Sub 'arn:aws:iam::${ToolingManagementAccount}:root'
+              Action: 'sts:AssumeRole'
+            - !Ref 'AWS::NoValue'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  OrganizationsRole:
+    Condition: LinkToOrganizationsRootAccount
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: OrganizationAccountAccessRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${OrganizationsRootAccount}:root'
+            Action: 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+Outputs:
+  ManageSelfRolePolicy:
+    Description: Manage Self Role Policy
+    Value: !Ref ManageSelfIAMUserGroupPolicy
+    Export:
+      Name: !Sub '${BaselineExportName}-ManageSelfRolePolicy'
+  AccountWideReadOnlyRole:
+    Description: Account Wide Read Only Role
+    Value: !GetAtt AccountWideReadOnlyRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-AccountWideReadOnlyRole'
+  AccountWideReadOnlyGroup:
+    Description: Account Wide Read Only Group
+    Value: !GetAtt AccountWideReadOnlyGroup.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-AccountWideReadOnlyGroup'
+  IdentityAdminRole:
+    Description: Identity Admin Role
+    Value: !GetAtt IdentityAdminRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-IdentityAdminRole'
+  PrivilegedAdminRole:
+    Description: Privileged Admin Role
+    Value: !GetAtt PrivilegedAdminRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-PrivilegedAdminRole'
+  RestrictedAdminGroup:
+    Description: Restricted Admin Group
+    Value: !Ref RestrictedAdminGroup
+    Export:
+      Name: !Sub '${BaselineExportName}-RestrictedAdminGroup'
+  RestrictedAdminRole:
+    Description: Restricted Admin Role
+    Value: !GetAtt RestrictedAdminRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-RestrictedAdminRole'
+  CloudFormationRole:
+    Description: Baseline CloudFormation Role
+    Value: !GetAtt CloudFormationRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-CloudFormationRole'
+  StackSetRole:
+    Description: Baseline StackSet Role
+    Value: !GetAtt StackSetRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-StackSetRole'
+  OrganizationsRole:
+    Condition: LinkToOrganizationsRootAccount
+    Description: Baseline Organizations Role
+    Value: !GetAtt OrganizationsRole.Arn
+    Export:
+      Name: !Sub '${BaselineExportName}-OrganizationsRole'
