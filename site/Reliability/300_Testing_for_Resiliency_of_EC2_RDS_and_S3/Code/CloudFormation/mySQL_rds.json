@@ -1,0 +1,124 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Creates an RDS MySQL 5.7 instance",
+  "Parameters": {
+      "WorkshopName": {
+          "Type": "String"
+        },
+
+      "DBSubnetIds": {
+          "Description": "Comma separated list of private subnet ids",
+          "Type": "List<AWS::EC2::Subnet::Id>"
+      },
+      "DBSecurityGroups": {
+          "Description": "Comma separated list of security groups ids",
+          "Type": "List<AWS::EC2::SecurityGroup::Id>"
+      },
+      "DBInstanceClass": {
+          "Description": "DB Instance Class",
+          "Type": "String",
+          "AllowedValues": [
+              "db.t2.micro",
+              "db.t3.micro",
+              "db.t3.small",
+              "db.t3.medium",
+              "db.t3.large",
+              "db.t3.xlarge",
+              "db.t3.2xlarge",
+              "db.m5.large",
+              "db.m5.xlarge",
+              "db.m5.2xlarge",
+              "db.m5.4xlarge",
+              "db.m5.12xlarge",
+              "db.m5.24xlarge"
+          ],
+          "Default": "db.t2.micro",
+          "ConstraintDescription": "must select a valid database instance type."
+      },
+      "DBUser": {
+          "Description": "DB admin account username",
+          "Type": "String",
+          "MinLength": "1",
+          "MaxLength": "16",
+          "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+          "Default": "admin",
+          "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+      },
+
+      "DBMultiAZ" : {
+        "Description" : "whether this RDS DB is multi-AZ or not",
+        "Type" : "String",
+        "AllowedValues": [
+          "true",
+          "false"
+        ],
+        "Default": "false"
+
+    }
+
+  },
+  "Resources": {
+    "DBSubnetGroup": {
+        "Type": "AWS::RDS::DBSubnetGroup",
+        "Properties": {
+            "DBSubnetGroupDescription": "RDS Subnet Group",
+            "SubnetIds": {
+                "Ref": "DBSubnetIds"
+            },
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "ResiliencyVPC-DBSubnets"
+                }
+            ]
+        }
+    },
+    "DB": {
+        "Type": "AWS::RDS::DBInstance",
+        "DeletionPolicy" : "Delete",
+        "Properties": {
+            "MultiAZ": { 
+                "Ref" : "DBMultiAZ"
+            },
+            "AllocatedStorage": "100",
+            "BackupRetentionPeriod": "1",
+            "CopyTagsToSnapshot": "True",
+            "DBInstanceClass": {
+                "Ref": "DBInstanceClass"
+            },
+            "Engine": "mysql",
+            "EngineVersion": "5.7",
+            "StorageType": "gp2",
+            "MasterUsername": {
+                "Ref": "DBUser"
+            },
+            "MasterUserPassword": {
+                "Fn::Sub": "{{resolve:ssm-secure:${WorkshopName}:1}}"
+            },
+            "VPCSecurityGroups": {
+                "Ref": "DBSecurityGroups"
+            },
+            "DBSubnetGroupName": {
+                "Ref": "DBSubnetGroup"
+            },
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "ResiliencyVPC-MySQLDB"
+                }
+            ]
+        }
+      }
+  },
+  "Outputs": {
+      "DBAddress": {
+          "Description": "DB Host Address",
+          "Value": {
+              "Fn::GetAtt": [
+                  "DB",
+                  "Endpoint.Address"
+              ]
+          }
+      }
+  }
+}

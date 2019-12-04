@@ -1,0 +1,565 @@
+﻿AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for a static web app. This template installs a highly-available, scalable web application deployment.
+  It demonstrates using the AWS CloudFormation bootstrap scripts to deploy a stateless web application.
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+Parameters:
+  #General:
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template.
+    Default: WebApp1
+  #Imports:
+  VPCImportName:
+    Type: String
+    Description: 'The CloudFormation name of the VPC stack to import'
+    Default: 'WebApp1-VPC'
+    MinLength: '3'
+    MaxLength: '32'
+  VPCImportApp1Instance1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 1'
+    Default: 'App1Subnet1'
+  VPCImportApp1Instance1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 2'
+    Default: 'App1Subnet2'
+  VPCImportApp1Instance1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 3'
+    Default: 'App1Subnet3'
+  VPCImportALB1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet1'
+  VPCImportALB1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet2'
+  VPCImportALB1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet3'
+  #Application Tier
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  ALBSGSource:
+    Description: The IP address range that can be used to access the web app
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  Web1AutoScaleDesired:
+    Default: '6'
+    Description: The desired number of web instances in auto scaling group
+    Type: Number
+    MinValue: '3'
+    MaxValue: '9'
+    ConstraintDescription: must be between 1 and 6 EC2 instances.
+Mappings:
+  AWSInstanceType2Arch:
+    t2.nano:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+    m3.medium:
+      Arch: HVM64
+    m3.large:
+      Arch: HVM64
+    m3.xlarge:
+      Arch: HVM64
+    m3.2xlarge:
+      Arch: HVM64
+    m4.large:
+      Arch: HVM64
+    m4.xlarge:
+      Arch: HVM64
+    m4.2xlarge:
+      Arch: HVM64
+    c3.large:
+      Arch: HVM64
+    c3.xlarge:
+      Arch: HVM64
+    c3.2xlarge:
+      Arch: HVM64
+    c4.large:
+      Arch: HVM64
+    c4.xlarge:
+      Arch: HVM64
+    c4.2xlarge:
+      Arch: HVM64
+    r3.large:
+      Arch: HVM64
+    r3.xlarge:
+      Arch: HVM64
+    r3.2xlarge:
+      Arch: HVM64
+    d2.xlarge:
+      Arch: HVM64
+    d2.2xlarge:
+      Arch: HVM64
+  AWSInstanceType2NATArch:
+    t2.nano:
+      Arch: NATHVM64
+    t2.micro:
+      Arch: NATHVM64
+    t2.small:
+      Arch: NATHVM64
+    t2.medium:
+      Arch: NATHVM64
+    t2.large:
+      Arch: NATHVM64
+    m3.medium:
+      Arch: NATHVM64
+    m3.large:
+      Arch: NATHVM64
+    m3.xlarge:
+      Arch: NATHVM64
+    m3.2xlarge:
+      Arch: NATHVM64
+    m4.large:
+      Arch: NATHVM64
+    m4.xlarge:
+      Arch: NATHVM64
+    m4.2xlarge:
+      Arch: NATHVM64
+    c3.large:
+      Arch: NATHVM64
+    c3.xlarge:
+      Arch: NATHVM64
+    c3.2xlarge:
+      Arch: NATHVM64
+    c4.large:
+      Arch: NATHVM64
+    c4.xlarge:
+      Arch: NATHVM64
+    c4.2xlarge:
+      Arch: NATHVM64
+    r3.large:
+      Arch: NATHVM64
+    r3.xlarge:
+      Arch: NATHVM64
+    r3.2xlarge:
+      Arch: NATHVM64
+    d2.xlarge:
+      Arch: NATHVM64
+    d2.2xlarge:
+      Arch: NATHVM64
+  AWSRegionArch2AMI:
+    us-east-1:
+      HVM64: ami-0ff8a91507f77f867
+      HVMG2: ami-0a584ac55a7631c0c
+    us-west-2:
+      HVM64: ami-01e24be29428c15b2
+      HVMG2: ami-0e09505bc235aa82d
+    us-west-1:
+      HVM64: ami-0bdb828fd58c52235
+      HVMG2: ami-066ee5fd4a9ef77f1
+    eu-west-1:
+      HVM64: ami-047bb4163c506cd98
+      HVMG2: ami-0a7c483d527806435
+    eu-west-2:
+      HVM64: ami-f976839e
+      HVMG2: NOT_SUPPORTED
+    eu-west-3:
+      HVM64: ami-0ebc281c20e89ba4b
+      HVMG2: NOT_SUPPORTED
+    eu-central-1:
+      HVM64: ami-0233214e13e500f77
+      HVMG2: ami-06223d46a6d0661c7
+    ap-northeast-1:
+      HVM64: ami-06cd52961ce9f0d85
+      HVMG2: ami-053cdd503598e4a9d
+    ap-northeast-2:
+      HVM64: ami-0a10b2721688ce9d2
+      HVMG2: NOT_SUPPORTED
+    ap-northeast-3:
+      HVM64: ami-0d98120a9fb693f07
+      HVMG2: NOT_SUPPORTED
+    ap-southeast-1:
+      HVM64: ami-08569b978cc4dfa10
+      HVMG2: ami-0be9df32ae9f92309
+    ap-southeast-2:
+      HVM64: ami-09b42976632b27e9b
+      HVMG2: ami-0a9ce9fecc3d1daf8
+    ap-south-1:
+      HVM64: ami-0912f71e06545ad88
+      HVMG2: ami-097b15e89dbdcfcf4
+    us-east-2:
+      HVM64: ami-0b59bfac6be064b78
+      HVMG2: NOT_SUPPORTED
+    ca-central-1:
+      HVM64: ami-0b18956f
+      HVMG2: NOT_SUPPORTED
+    sa-east-1:
+      HVM64: ami-07b14488da8ea02a0
+      HVMG2: NOT_SUPPORTED
+    cn-north-1:
+      HVM64: ami-0a4eaf6c4454eda75
+      HVMG2: NOT_SUPPORTED
+    cn-northwest-1:
+      HVM64: ami-6b6a7d09
+      HVMG2: NOT_SUPPORTED
+Resources:
+  ALB1SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 to the allowed CIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: !Ref ALBSGSource
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref ALBSGSource
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Load Balancer
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  ALB1LoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html
+    Properties:
+      #IpAddressType:
+      # Name: String
+      # Scheme: String
+      SecurityGroups:
+        - Ref: ALB1SecurityGroup
+      # SubnetMappings:
+      #   - SubnetMapping      
+      Subnets:
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet1}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet2}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet3}'
+      # Tags:
+      #   - Resource Tag
+  ALB1Listener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
+    Properties:
+      #  Certificates:
+        #- Certificate
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALB1TargetGroup
+      LoadBalancerArn: !Ref ALB1LoadBalancer
+      Port: '80'
+      Protocol: HTTP
+      #SslPolicy: String
+  ALB1TargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
+    Properties:
+      HealthCheckPath: /index.html
+      HealthCheckIntervalSeconds: 5
+      #HealthCheckPath: 
+      #HealthCheckPort: 
+      #HealthCheckProtocol:
+      HealthCheckTimeoutSeconds: 3
+      HealthyThresholdCount: 2
+      #Name: 
+      Port: 80
+      Protocol: HTTP
+      #Tags:
+        #-
+      #TargetGroupAttributes:
+        #- Key: stickiness.enabled
+        #  Value: 'true'
+        #- Key: stickiness.type
+        #  Value: lb_cookie
+        #- Key: stickiness.lb_cookie.duration_seconds
+        #  Value: '30'
+      # Targets:
+      #   - TargetDescription
+      # TargetType: String
+      UnhealthyThresholdCount: 3
+      VpcId: 
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  Web1InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 restricted to the load balancer
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Instance
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  Web1InstanceAutoScalingGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
+    Properties:
+      AutoScalingGroupName: !Sub '${NamingPrefix}'
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet2'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet3'
+      LaunchConfigurationName: !Ref Web1LaunchConfig
+      MinSize: '1'
+      MaxSize: '9'
+      DesiredCapacity: !Ref Web1AutoScaleDesired
+      TargetGroupARNs:
+        - !Ref ALB1TargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}'
+          PropagateAtLaunch: true
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: '3'
+        MaxBatchSize: '2'
+        PauseTime: PT5M
+  Web1LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
+    Properties:
+      ImageId: !FindInMap 
+        - AWSRegionArch2AMI
+        - !Ref 'AWS::Region'
+        - !FindInMap 
+          - AWSInstanceType2Arch
+          - !Ref InstanceType
+          - Arch
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref Web1InstanceSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          echo "Installing apache httpd"
+          yum install -y httpd
+          echo "Creating index.html"
+          echo "<html>" >> /var/www/html/index.html
+          echo "<head>" >> /var/www/html/index.html
+          echo "<title>Hello World</title>" >> /var/www/html/index.html
+          echo "</head>" >> /var/www/html/index.html
+          echo "<body>" >> /var/www/html/index.html
+          echo "<h1>Hello World from " >> /var/www/html/index.html
+          curl http://169.254.169.254/latest/meta-data/instance-id >> /var/www/html/index.html
+          echo "</h1>" >> /var/www/html/index.html
+          echo "</body>" >> /var/www/html/index.html
+          echo "</html>" >> /var/www/html/index.html
+          chmod 644 /var/www/html/index.html
+          chown root /var/www/html/index.html
+          chgrp wheel /var/www/html/index.html
+          echo "Starting httpd..."
+          service httpd start
+          chkconfig httpd on
+          echo "Updating Amazon ssm agent..."
+          yum update amazon-ssm-agent -y          
+          echo "UserData Complete"
+  Web1InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: ec2
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:DescribeInstanceStatus'
+                Resource: '*'
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogStreams'
+                Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - 'cloudwatch:PutMetricData'
+                Resource: '*'
+        - PolicyName: s3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:GetObject'
+                Resource:
+                - !Sub 'arn:aws:s3:::aws-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::aws-windows-downloads-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-packages-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::${AWS::Region}-birdwatcher-prod/*'
+                - !Sub 'arn:aws:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+        - PolicyName: ssm
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel'
+                Resource: '*'
+        - PolicyName: ec2messages
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+        #Allow secrets manager for future use
+        # - PolicyName: Web1InstanceSecretsManager
+        #   PolicyDocument:
+        #     Version: 2012-10-17
+        #     Statement:
+        #       - Effect: Allow
+        #         Action: 'secretsmanager:GetSecretValue'
+        #         Resource:
+  Web1InstanceInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /Web1InstanceEc2Role/
+      Roles:
+        - !Ref Web1InstanceRole
+Outputs:
+  WebsiteURL:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - ALB1LoadBalancer
+          - DNSName
+        - /index.html
+    Description: Static Website
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "General Configuration"
+        Parameters: 
+          - NamingPrefix
+      - 
+        Label: 
+          default: "VPC Stack Imports"
+        Parameters: 
+          - VPCImportName
+          - VPCImportApp1Instance1Subnet1
+          - VPCImportApp1Instance1Subnet2
+          - VPCImportApp1Instance1Subnet3
+          - VPCImportALB1Subnet1
+          - VPCImportALB1Subnet2
+          - VPCImportALB1Subnet3
+      - 
+        Label: 
+          default: "Application Tier Configuration"
+        Parameters: 
+          - Web1SSHKeyName
+          - InstanceType
+          - Web1AutoScaleDesired
+          - ALBSGSource

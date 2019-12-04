@@ -1,0 +1,731 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Creates the state machine to deploy the environment for the reliability lab",
+
+  "Parameters" : {
+
+    "LambdaFunctionsBucket" : {
+      "Description" : "Bucket that the lambda source is contained in (case sensitive)",
+      "Default" : "aws-well-architected-labs-ohio",
+      "Type" : "String"
+    },
+
+    "VPCLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy the VPC (case sensitive)",
+      "Default" : "Reliability/VPCLambda.zip",
+      "Type" : "String"
+    },
+
+    "WaitForStackLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will wait for a stack for up to 5 min (case sensitive)",
+      "Default" : "Reliability/WaitForStack.zip",
+      "Type" : "String"
+    },
+
+    "RDSLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy a single-AZ RDS in the VPC (case sensitive)",
+      "Default" : "Reliability/RDSLambda.zip",
+      "Type" : "String"
+    },
+
+    "MultiAZDBLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will update the RDS to Multi-AZ (case sensitive)",
+      "Default" : "Reliability/MultiAZDBLambda.zip",
+      "Type" : "String"
+    },
+
+
+    "WebAppLambdaKey" : {
+      "Description" : "Object Key of the Lambda Function that will deploy an auto scaling group of the web application in the VPC (case sensitive)",
+      "Default" : "Reliability/WebAppLambda.zip",
+      "Type" : "String"
+    },
+
+    "CreateTheRDSServiceRole" : {
+      "Description" : "Should the automation create the RDS ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    },
+
+    "CreateTheELBServiceRole" : {
+      "Description" : "Should the automation create the ELB ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    },
+
+    "CreateTheAutoScalingServiceRole" : {
+      "Description" : "Should the automation create the Auto Scaling ServiceLinkedRole?",
+      "Type" : "String",
+      "AllowedValues" : ["true", "false"],
+      "Default" : "true"
+    }
+  },
+
+  "Conditions" : {
+     "CreateRDSServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheRDSServiceRole"}, "true"]},
+     "CreateELBServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheELBServiceRole"}, "true"]},
+     "CreateAutoScalingServiceRole" : {"Fn::Equals" : [{"Ref" : "CreateTheAutoScalingServiceRole"}, "true"]}
+   },
+
+  "Resources" : {
+    "VPCLambdaRole" : {
+      "Metadata" : {
+        "License" : "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+      },
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "VPCWorkshopRole",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+      } ]
+           },
+        "Policies" : [ {
+          "PolicyName" : "CreateVPC",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "cloudformation:CreateStack",
+                "cloudformation:DescribeStacks",
+                "ec2:AllocateAddress",
+                "ec2:AttachInternetGateway",
+                "ec2:AssociateRouteTable",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:CreateInternetGateway",
+                "ec2:CreateNatGateway",
+                "ec2:CreateRoute",
+                "ec2:CreateRouteTable",
+                "ec2:CreateSecurityGroup",
+                "ec2:CreateSubnet",
+                "ec2:CreateTags",
+                "ec2:CreateVpc",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeNatGateways",
+                "ec2:DescribeRoutes",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ec2:ModifyVpcAttribute",
+                "ec2:DeleteInternetGateway",
+                "ec2:releaseAddress",
+                "ec2:DeleteVpc",
+                "ec2:DeleteNetworkInterface",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ssm:PutParameter",
+                "ssm:GetParameters",
+                "kms:CreateAlias",
+                "kms:CreateKey",
+                "kms:ListKeys",
+                "kms:ListAliases",
+                "kms:Encrypt",
+                "iam:AddRoleToInstanceProfile",
+                "iam:AttachRolePolicy",
+                "iam:CreateInstanceProfile",
+                "iam:CreateRole",
+                "iam:DescribeInstanceProfiles",
+                "iam:DescribeRoles",
+                "iam:PassRole",
+                "iam:GetRole",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
+                "lambda:CreateFunction",
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration",
+                "lambda:GetFunction"
+              ],
+              "Resource" : "*"
+            }
+          ]
+          }
+        } ]
+      }
+    },
+
+    "VPCLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "VPCLambdaKey" }
+        },
+        "FunctionName" : "DeployVPC",
+        "Handler" : "deploy_vpc_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "VPCLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "WaitForStackLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+           } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "WaitForStack",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "cloudformation:DescribeStacks"
+              ],
+              "Resource" : "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+          }
+          ]
+          }
+        } ]
+      }
+    },
+
+    "WaitForStackLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will check the status of the stack and wait for up to 5 min; will return current status if time is about to expire",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "WaitForStackLambdaKey" }
+        },
+        "FunctionName" : "WaitForStack",
+        "Handler" : "wait_for_stack_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "600"
+      }
+    },
+
+    "RDSServiceRole" : {
+      "Type" : "AWS::IAM::ServiceLinkedRole",
+      "Condition" : "CreateRDSServiceRole",
+      "Properties" : {
+        "AWSServiceName": "rds.amazonaws.com",
+        "Description": "This should allow an RDS instance to be created by this account"
+      }
+    },
+
+    "ELBServiceRole" : {
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateELBServiceRole",
+      "Properties": {
+        "AWSServiceName": "elasticloadbalancing.amazonaws.com",
+        "Description": "This should allow an ELB to be created by this account"
+      }
+    },
+
+    "AutoScalingServiceRole" : {
+      "Type": "AWS::IAM::ServiceLinkedRole",
+      "Condition": "CreateAutoScalingServiceRole",
+      "Properties": {
+        "AWSServiceName": "autoscaling.amazonaws.com",
+        "Description": "This should allow Auto Scaling to be created by this account"
+      }
+    },
+    "RDSLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName": "RDSWorkshopRole",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateRDS",
+          "PolicyDocument" : {
+            "Statement" : [
+              {
+                "Effect" : "Allow",
+                "Action" :  [
+                  "cloudformation:CreateStack",
+                  "cloudformation:DescribeStacks",
+                  "cloudformation:UpdateStack",
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DescribeAccountAttributes",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSubnets",
+                  "rds:CreateDBInstance",
+                  "rds:CreateDBSubnetGroup",
+                  "rds:DescribeDBInstances",
+                  "rds:DescribeDBSubnetGroups",
+                  "rds:ModifyDBInstance",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents",
+                  "ssm:GetParameters"
+                ],
+                "Resource" : "*"
+              },
+              {
+                "Effect" : "Allow",
+                "Action" : "iam:CreateServiceLinkedRole",
+                "Resource" : "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
+                "Condition" : {
+                  "StringLike" : {
+                    "iam:AWSServiceName" : "rds.amazonaws.com"
+                  }
+                }
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "RDSLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy an RDS single-AZ in a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "RDSLambdaKey" }
+        },
+        "FunctionName" : "DeployRDS",
+        "Handler" : "deploy_rds_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "MultiAZDBLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will update the RDS to Multi-AZ",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "MultiAZDBLambdaKey" }
+        },
+        "FunctionName" : "UpdateMultiAZDB",
+        "Handler" : "update_multi_az_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "630"
+      }
+    },
+
+    "WebAppLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "WebAppLambdaRole",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "CreateWebApp",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "autoscaling:CreateAutoScalingGroup",
+                "autoscaling:CreateLaunchConfiguration",
+                "autoscaling:CreateOrUpdateTags",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:UpdateAutoScalingGroup",
+                "cloudformation:CreateStack",
+                "cloudformation:DescribeStacks",
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateTags",
+                "ec2:DescribeAccountAttributes",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeVpcs",
+                "ec2:RunInstances",
+                "ec2:DescribeImages",
+                "iam:AddRoleToInstanceProfile",
+                "iam:AttachRolePolicy",
+                "iam:CreateInstanceProfile",
+                "iam:CreateRole",
+                "iam:DescribeInstanceProfiles",
+                "iam:DescribeRoles",
+                "iam:PassRole",
+                "elasticloadbalancing:AddTags",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:CreateTargetGroup",
+                "elasticloadbalancing:DescribeListeners",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:RegisterTargets",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ssm:GetParameter"
+              ],
+              "Resource" : "*"
+            } ]
+          }
+        },
+        {
+          "PolicyName" : "Chaos-SSM",
+          "PolicyDocument" : {
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssm:DescribeAssociation",
+                      "ssm:GetDeployablePatchSnapshotForInstance",
+                      "ssm:GetDocument",
+                      "ssm:DescribeDocument",
+                      "ssm:GetManifest",
+                      "ssm:GetParameter",
+                      "ssm:GetParameters",
+                      "ssm:ListAssociations",
+                      "ssm:ListInstanceAssociations",
+                      "ssm:PutInventory",
+                      "ssm:PutComplianceItems",
+                      "ssm:PutConfigurePackageResult",
+                      "ssm:UpdateAssociationStatus",
+                      "ssm:UpdateInstanceAssociationStatus",
+                      "ssm:UpdateInstanceInformation"
+                  ],
+                  "Resource": "*",
+                  "Condition": {
+                      "StringLike": {
+                          "ssm:resourceTag/SSMTag": "chaos-ready"
+                      }
+                  }
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssmmessages:CreateControlChannel",
+                      "ssmmessages:CreateDataChannel",
+                      "ssmmessages:OpenControlChannel",
+                      "ssmmessages:OpenDataChannel"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2messages:AcknowledgeMessage",
+                      "ec2messages:DeleteMessage",
+                      "ec2messages:FailMessage",
+                      "ec2messages:GetEndpoint",
+                      "ec2messages:GetMessages",
+                      "ec2messages:SendReply"
+                  ],
+                  "Resource": "*"
+              }
+          ]
+        }
+        }
+      ]
+      }
+    },
+
+    "WebAppLambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Description" : "Function that will deploy an auto scaled web application in 2 AZs in a VPC in a region with a workshop tag",
+        "Code" : {
+          "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+          "S3Key"    : { "Ref" : "WebAppLambdaKey" }
+        },
+        "FunctionName" : "DeployWebApp",
+        "Handler" : "deploy_web_lambda.lambda_handler",
+        "MemorySize" :  "128",
+        "Role" : { "Fn::GetAtt" : [ "WebAppLambdaRole", "Arn" ] },
+        "Runtime" : "python3.6",
+        "Timeout" : "120"
+      }
+    },
+
+    "DMSLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "DMSLambdaRole",
+        "Description" : "For multi-region this role is needed. Dummy role here for single-region so that VPC CFN template works",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        }
+      }
+    },
+
+    "StateExecutionRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : { "Fn::Sub" :
+              "states.${AWS::Region}.amazonaws.com"
+            } },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "StateMachineRole",
+          "PolicyDocument" : {
+            "Statement" : [ {
+              "Effect" : "Allow",
+              "Action" :  [
+                "lambda:InvokeFunction",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource" : "*"
+            } ]
+          }
+        } ]
+      }
+    },
+
+    "LambdaCustomResourceRole": {
+      "Type": "AWS::IAM::Role",
+      "DeletionPolicy" : "Retain",
+      "Properties": {
+          "RoleName": "LambdaCustomResourceRole-SecureSsmForRds",
+          "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                  {
+                      "Effect": "Allow",
+                      "Principal": {
+                          "Service": [
+                              "lambda.amazonaws.com"
+                          ]
+                      },
+                      "Action": [
+                          "sts:AssumeRole"
+                      ]
+                  }
+              ]
+          },
+          "Path": "/",
+          "Policies": [
+              {
+                  "PolicyName": "LambdaCustomResourcePolicy",
+                  "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                          {
+                              "Effect": "Allow",
+                              "Action": [
+                                  "logs:CreateLogGroup",
+                                  "logs:CreateLogStream",
+                                  "logs:PutLogEvents"
+                              ],
+                              "Resource": "arn:aws:logs:*:*:*"
+                          },
+                          {
+                              "Effect": "Allow",
+                              "Action": [
+                                  "ssm:PutParameter",
+                                  "ssm:DeleteParameter"
+                              ],
+                              "Resource": "*"
+                          }
+                      ]
+                  }
+              }
+          ]
+      }
+    },
+
+    "DeploymentMachine" : {
+      "Type" : "AWS::StepFunctions::StateMachine",
+      "Properties" : {
+        "DefinitionString" : { "Fn::Join" : ["", [
+          "{\n",
+          "  \"Comment\": \"This will deploy the infrastructure for the workshop\",\n",
+          "  \"StartAt\": \"DeployVPC\",\n",
+          "  \"States\": {\n",
+          "    \"DeployVPC\": {\n",
+          "      \"Type\": \"Task\",\n",
+          "      \"InputPath\": \"$\",\n",
+          "      \"Resource\": \"", { "Fn::GetAtt" : [ "VPCLambdaFunction", "Arn" ] }, "\",\n",
+          "      \"ResultPath\": \"$.vpc\",\n",
+          "      \"OutputPath\": \"$\",\n",
+          "      \"Next\": \"WaitForVPCStack\"\n",
+          "    },\n",
+          "    \"WaitForVPCStack\": {\n",
+          "      \"Type\": \"Task\",\n",
+          "      \"InputPath\": \"$\",\n",
+          "      \"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+          "      \"ResultPath\": \"$.vpc\",\n",
+          "      \"OutputPath\": \"$\",\n",
+          "      \"Next\": \"VPCStackCompleteChoice\"\n",
+          "    },\n",
+          "    \"VPCStackCompleteChoice\": {\n",
+          "      \"Type\": \"Choice\",\n",
+          "      \"Choices\": [\n",
+          "        {\n",
+          "          \"Variable\": \"$.vpc.status\",\n",
+          "          \"StringEquals\": \"CREATE_COMPLETE\",\n",
+          "          \"Next\": \"DeployRDS\"\n",
+          "        }\n",
+          "      ],\n",
+          "      \"Default\": \"DeployFailedState\"\n",
+          "    },\n",
+          "    \"DeployRDS\": {\n",
+          "      \"Type\": \"Task\",\n",
+          "      \"InputPath\": \"$\",\n",
+          "      \"Resource\": \"", { "Fn::GetAtt" : [ "RDSLambdaFunction", "Arn" ] }, "\",\n",
+          "      \"ResultPath\": \"$.rds\",\n",
+          "      \"OutputPath\": \"$\",\n",
+          "      \"Next\": \"WaitForRDSStack\"\n",
+          "    },\n",
+          "    \"WaitForRDSStack\": {\n",
+          "      \"Type\": \"Task\",\n",
+          "      \"InputPath\": \"$\",\n",
+          "      \"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+          "      \"ResultPath\": \"$.rds\",\n",
+          "      \"OutputPath\": \"$\",\n",
+          "      \"Next\": \"CheckRDSStatus\"\n",
+          "    },              \n",
+          "    \"CheckRDSStatus\" : {\n",
+          "      \"Type\": \"Choice\",\n",
+          "      \"Choices\": [\n",
+          "        {\n",
+          "          \"Variable\": \"$.rds.status\",\n",
+          "          \"StringEquals\": \"CREATE_COMPLETE\",\n",
+          "          \"Next\": \"WebAppDeployAndRDSUpdate\"\n",
+          "        },\n",
+          "        {\n",
+          "          \"Variable\": \"$.rds.status\",\n",
+          "          \"StringEquals\": \"UPDATE_COMPLETE\",\n",
+          "          \"Next\": \"WebAppDeployAndRDSUpdate\"\n",
+          "        },\n",
+          "        {\n",
+          "          \"Variable\": \"$.rds.status\",\n",
+          "          \"StringEquals\": \"CREATE_IN_PROGRESS\",\n",
+          "          \"Next\": \"WaitForRDSStack\"\n",
+          "        },\n",
+          "        {\n",
+          "          \"Variable\": \"$.rds.status\",\n",
+          "          \"StringEquals\": \"UPDATE_IN_PROGRESS\",\n",
+          "          \"Next\": \"WaitForRDSStack\"\n",
+          "        }\n",
+          "      ],\n",
+          "      \"Default\": \"DeployFailedState\"\n",
+          "    },\n",
+          "    \"DeployFailedState\": {\n",
+          "      \"Type\": \"Fail\",\n",
+          "      \"Cause\": \"DeploymentFailed\",\n",
+          "      \"Error\": \"Something failed to deploy\"\n",
+          "    },\n",
+          "    \"WebAppDeployAndRDSUpdate\": {\n",
+          "      \"Type\": \"Parallel\",\n",
+          "      \"End\": true,\n",
+          "      \"Branches\": [\n",
+          "        {\n",
+          "          \"Comment\": \"This will deploy the Web App\",\n",
+          "          \"StartAt\": \"DeployWebApp\",\n",
+          "          \"States\": {\n",
+          "            \"DeployWebApp\": {\n",
+          "              \"Type\": \"Task\",\n",
+          "              \"InputPath\": \"$\",\n",
+          "              \"Resource\": \"", { "Fn::GetAtt" : [ "WebAppLambdaFunction", "Arn" ] }, "\",\n",
+          "              \"ResultPath\": \"$.web\",\n",
+          "              \"OutputPath\": \"$\",\n",
+          "              \"Next\": \"WaitForWebApp\"\n",
+          "            },\n",
+          "            \"WaitForWebApp\": {\n",
+          "              \"Type\": \"Task\",\n",
+          "              \"InputPath\": \"$\",\n",
+          "              \"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+          "              \"ResultPath\": \"$.web\",\n",
+          "              \"OutputPath\": \"$\",\n",
+          "              \"End\": true\n",
+          "            }\n",
+          "          }\n",
+          "        },\n",
+          "        {\n",
+          "          \"Comment\": \"This update the RDS to multi-az\",\n",
+          "          \"StartAt\": \"UpdateMultiAZDB\",\n",
+          "          \"States\": {\n",
+          "            \"UpdateMultiAZDB\" : {\n",
+          "              \"Type\": \"Task\",\n",
+          "              \"InputPath\": \"$\",\n",
+          "              \"Resource\": \"", { "Fn::GetAtt" : [ "MultiAZDBLambdaFunction", "Arn" ] }, "\",\n",
+          "              \"ResultPath\": \"$.rds_update\",\n",
+          "              \"OutputPath\": \"$\",\n",
+          "              \"Next\": \"WaitForMultiAZDB\"\n",
+          "            },\n",
+          "            \"WaitForMultiAZDB\": {\n",
+          "              \"Type\": \"Task\",\n",
+          "              \"InputPath\": \"$\",\n",
+          "              \"Resource\": \"", { "Fn::GetAtt" : [ "WaitForStackLambdaFunction", "Arn" ] }, "\",\n",
+          "              \"ResultPath\": \"$.rds_update\",\n",
+          "              \"OutputPath\": \"$\",\n",
+          "              \"End\": true\n",
+          "            }\n",
+          "          }\n",
+          "        }\n",
+          "      ]\n",
+          "    }\n",
+          "  }\n",
+          "}\n"          
+          ]]
+        },
+        "RoleArn" : { "Fn::GetAtt" : [ "StateExecutionRole", "Arn" ] }
+      }
+    }
+  },
+
+  "Outputs" : {
+    "LambdaCustomResourceRoleArn" : {
+      "Description" : "ARN of LambdaCustomResourceRole used to create custom resources in VPC stack",
+      "Value" : {
+        "Fn::GetAtt": [
+          "LambdaCustomResourceRole",
+          "Arn"
+        ]
+      }
+    }  
+  }
+
+}
