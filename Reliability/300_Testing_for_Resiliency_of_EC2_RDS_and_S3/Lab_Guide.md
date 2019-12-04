@@ -44,10 +44,10 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 
 *__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work together to deploy your infrastructure*
 
-1. Choose a deployment option. This lab can be run as **single region** *or* **multi region** (two region) deployment.
+1. Decide which deployment option you will use for this lab. It can be run as **single region** *or* **multi region** (two region) deployment.
     * **single region** is faster to get up and running
     * **multi region** enables you to test some additional aspects of cross-regional resilience.
-    * Choose one of these options and follows the instructions for it. If you are attending an in-person workshop, your instructor will specify which to use.
+    * Decide on one of these options, then in later steps choose the appropriate instructions for the option you have chosen. If you are attending an in-person workshop, your instructor will specify which to use.
 
 1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
     * **single region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json)
