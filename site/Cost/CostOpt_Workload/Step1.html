@@ -2710,8 +2710,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#goals" title="Goals" class="md-nav__link">
-    Goals
+  <a href="#1-view-our-application-log-files" title="1 View our application log files" class="md-nav__link">
+    1 View our application log files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-view-our-cost-files" title="2 View our cost files" class="md-nav__link">
+    2 View our cost files
   </a>
   
 </li>
@@ -2742,376 +2749,93 @@
 </ul>
 <h2 id="feedback">Feedback</h2>
 <p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
-<h2 id="goals">Goals</h2>
-<ul>
-<li>Setup a data source for your application log files</li>
-<li>Setup a data source with your Cost and Usage Reports</li>
-</ul>
-<h1 id="table-of-contents">Table of Contents</h1>
-<ol>
-<li><a href="#setup_data">Setup Athena</a></li>
-<li><a href="#setup_quicksight">Setup QuickSight</a></li>
-<li><a href="#tear_down">Tear Down</a></li>
-<li><a href="#rate_lab">Rate Lab</a> </li>
-</ol>
-<p><a name="setup_data"></a></p>
-<h2 id="1-setup-athena-data-sources">1. Setup Athena data sources</h2>
-<p>We need to setup our data sources in Athena. This will allow us to query and analyze our application log files and Cost and Usage reports. To set up our data sources, we place our application log files into S3 and then we use Glue to crawl them and create a database. Athena can then be used to run queries against them.</p>
-<p>Sample log &amp; CUR files are provided within this lab, we recommend using these log files initially, then once you are familiar with the lab, use your own application and CUR files for your workload. The provided application log files are Apache webserver logfiles, which are automatically recognized by Glue, however we will show you the techniques to be able to use any file format.</p>
-<p><strong>NOTE:</strong> If you use your own log files, you will need to modify the queries in subsequent steps.</p>
-<p><strong>Perform all steps in us-east-1 N. Virginia</strong></p>
-<h3 id="11-copy-application-log-files-into-s3">1.1 Copy application log files into S3</h3>
-<p>The first step is to get the application log files into Athena to be analyzed. For the provided files, you will copy the sample files to your S3 bucket. To get the files from your own workload, we will show you how to use AWS Systems Manager to do this easily at scale. </p>
-<p><strong>NOTE</strong> Please read the steps carefully, as the naming is critical and any mistakes will require you to rebuild the lab.</p>
+<h2 id="1-view-our-application-log-files">1 View our application log files</h2>
+<p>Lets look at our application log files from our web servers.</p>
 <ol>
 <li>
-<p>Log into the AWS console as an IAM user with the required permissions:
-<img alt="Images/consolelogin_IAMUser.png" src="Images/consolelogin_IAMUser.png" /></p>
-</li>
-<li>
-<p>Create a new <strong>S3 Bucket</strong> with a folder <strong>applogfiles_reinventworkshop</strong> which will contain your application log files. <strong>NOTE</strong>: You MUST name the folder <strong>applogfiles_reinventworkshop</strong>, this will make pasting the code faster:
-<img alt="Images/s3-createbucket.png" src="Images/s3-createbucket.png" /></p>
-</li>
-<li>
-<p>To use the sample log files, copy the following file into your S3 bucket into the <strong>applogfiles_reinventworkshop</strong> folder. Then <strong>move to section 1.2 below</strong>.</p>
+<p>Download the sample log file to your local PC and open it in a text editor:</p>
 <ul>
-<li><a href="Code/Step1AccessLog.gz">Step1_access_log.gz</a></li>
-</ul>
-<p>a. If you will be using your own application log files, systems manager can be used to run commands across your environment and copy files from multiple servers to S3. Go to <strong>Systems Manager</strong>, and into <strong>Run Command</strong>:
-<img alt="Images/systemsmanager-runcommand.png" src="Images/systemsmanager-runcommand.png" /></p>
-<p>b. Depending on your operating system, you can execute some CLI on your application servers to copy the <strong>application log files</strong> to your <strong>S3 bucket</strong>. The following Linux sample will copy all access logs from the httpd log directory to the s3 bucket created above using the hostname to separate each servers logs:</p>
-<pre><code>HOSTNAME=$(hostname)
-aws s3 cp --recursive /var/log/httpd/ s3://applogfiles-reinventworkshop/$HOSTNAME --exclude "*" --include "access_log*"
-</code></pre>
-<p>c. Select <strong>AWS-RunShellScript</strong>:
-<img alt="Images/runcommand-runshellscript.png" src="Images/runcommand-runshellscript.png" /></p>
-<p>d. Paste in the required commands to be executed on your instances:
-<img alt="Images/runcommand-commandparameters.png" src="Images/runcommand-commandparameters.png" /></p>
-<p>e. You should now have files in S3 for each of your servers, separated into folders by hostname:
-<img alt="Images/s3-appfolders.png" src="Images/s3-appfolders.png" /></p>
-<p>f. In each folder will be the application files:
-<img alt="Images/s3-appfiles.png" src="Images/s3-appfiles.png" /></p>
-</li>
-</ol>
-<h3 id="12-crawl-log-files-with-glue">1.2 Crawl log files with Glue</h3>
-<p>We will create a database with the uploaded log files with AWS Glue. The challenge you may have is that your application log files may have a format that is not recognized, so we will show you how to write a custom classifier, which allows you to take any file and extract the required columns.</p>
-<p>For our sample Apache web server log files, the in-bulit AWS Glue classifier <strong>COMBINEDAPACHELOG</strong> will recognize the timestamp (example: 30/Sep/2019:04:14:27 +0000) as a single string. We will customize the interpreter to break this up into a date column, timestamp column and timezone column. This will demonstrate how to write a customer classifier. The reference for classifiers is here: https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html</p>
-<p>A sample log file line is:</p>
-<pre><code>    10.0.1.80 - - [26/Nov/2019:00:00:07 +0000] "GET /health.html HTTP/1.1" 200 55 "-" "ELB-HealthChecker/2.0"
-</code></pre>
-<p>The columns would usually be:</p>
-<pre><code>- Client IP
-- Ident
-- Auth
-- HTTP Timestamp*
-- Request
-- Response
-- Bytes
-- Referrer
-- Agent
-</code></pre>
-<p>We will make it build the following columns</p>
-<pre><code>- Client IP
-- Ident
-- Auth
-- Date*
-- Time*
-- Timezone*
-- Request
-- Response
-- Bytes
-- Referrer
-- Agent
-</code></pre>
-<ol>
-<li>
-<p>Go to the <strong>Glue console</strong> and click <strong>Classifiers</strong>:
-<img alt="Images/glue-classifiers.png" src="Images/glue-classifiers.png" /></p>
-</li>
-<li>
-<p>Click <strong>Add classifier</strong> and create it with the following details:</p>
-<ul>
-<li>Classifier name: WebLogs</li>
-<li>Classifier type: Grok</li>
-<li>Classification: Logs</li>
-<li>
-<p>Grok pattern: </p>
-<pre><code>%{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{DATE:logdate}\:%{TIME:logtime} %{INT:tz}\] "(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})" %{NUMBER:response} (?:%{Bytes:bytes=%{NUMBER}|-}) %{QS:referrer} %{QS:agent}
-</code></pre>
-</li>
-<li>
-<p>Custom patterns:</p>
-<pre><code>DATE %{MONTHDAY}/%{MONTH}/%{YEAR}
-</code></pre>
-</li>
+<li><a href="Code/Step1AccessLog">Step1_access_log</a></li>
 </ul>
 </li>
 <li>
-<p>Click <strong>Create</strong></p>
-<p>A classifier tells Glue how to interpret the log file lines, and how to create columns.  Each column is contained within %{}, and has the <strong>pattern</strong>, the <strong>separator ':'</strong>, and the <strong>column name</strong>.</p>
-<p>By using the custom classifier, we have separated the single column timestamp into 3 columns of logdate, logtime and tz. You can compare the custom classifier we wrote with the COMBINEDAPACHELOG classifier:</p>
-<pre><code>Custom - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{DATE:logdate}\:%{TIME:logtime} %{INT:tz}\] "(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})" %{NUMBER:response} (?:%{Bytes:bytes=%{NUMBER}|-}) %{QS:referrer} %{QS:agent}
-
-Builtin - %{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp}\] "(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})" %{NUMBER:response} (?:%{Bytes:bytes=%{NUMBER}|-}) %{QS:referrer} %{QS:agent}
-</code></pre>
+<p>You can see the various columns in the file and the many requests:
+<img alt="Images/logfile1.png" src="Images/logfile1.png" /> </p>
 </li>
 <li>
-<p>Next we will create a crawler to read the log files, and build a database. Click on <strong>Crawlers</strong> and click <strong>Add crawler</strong>:
-<img alt="Images/glue-crawleraddcrawler.png" src="Images/glue-crawleraddcrawler.png" /></p>
+<p>You can see the health checks:
+<img alt="Images/logfile2.png" src="Images/logfile2.png" /> </p>
 </li>
 <li>
-<p><strong>Crawler name</strong> will be <strong>ApplicationLogs</strong>, expand <strong>Tags, description..</strong> next to our <strong>Weblogs</strong> classifier, cilck <strong>Add</strong>, then click <strong>Next</strong>:
-<img alt="Images/glue-crawlercreate1.png" src="Images/glue-crawlercreate1.png" /></p>
+<p>Scroll through and look for application requests, there should be two different types of requests, for <strong>index</strong> and <strong>image</strong>:
+<img alt="Images/logfile3.png" src="Images/logfile3.png" /> </p>
 </li>
 <li>
-<p><strong>Crawler source type</strong> is Data stores, click <strong>Next</strong>:
-<img alt="Images/glue-crawlercreate2.png" src="Images/glue-crawlercreate2.png" /></p>
+<p>Look at the components of the log lines, there are 9 components to each line:</p>
+<ul>
+<li>Client IP</li>
+<li>Ident</li>
+<li>Auth</li>
+<li>HTTP Timestamp*</li>
+<li>Request</li>
+<li>Response</li>
+<li>Bytes</li>
+<li>Referrer</li>
+<li>Agent</li>
+</ul>
 </li>
 <li>
-<p>Click the <strong>folder icon</strong> and expand your bucket created above, select the radio button next to the  <strong>applogfiles_reinventworkshop</strong>.  Do <strong>NOT</strong> select the actual file or bucket, select the folder.  Click <strong>Select</strong>.</p>
-</li>
-<li>
-<p>Click <strong>Next</strong></p>
-</li>
-<li>
-<p>Select <strong>No</strong> to not add another data store, click <strong>Next</strong></p>
-</li>
-<li>
-<p><strong>Create an IAM role</strong> named AWSGlueServiceRole-<strong>WebLogs</strong> and click <strong>Next</strong>:
-<img alt="Images/glue-crawlercreate5.png" src="Images/glue-crawlercreate5.png" /></p>
-</li>
-<li>
-<p><strong>Frequency</strong> will be run on demand, click <strong>Next</strong></p>
-</li>
-<li>
-<p>Click <strong>Add database</strong>, you MUST name it <strong>webserverlogs</strong>, click <strong>Create</strong>.</p>
-</li>
-<li>
-<p>Expand <strong>Grouping behaviour for S3 data</strong>, cilck <strong>Create a single schema</strong>, click <strong>Next</strong>:
-<img alt="Images/glue-crawlercreate6.png" src="Images/glue-crawlercreate6.png" /></p>
-</li>
-<li>
-<p>Click <strong>Finish</strong></p>
-</li>
-<li>
-<p>Select and <strong>Run crawler</strong>, this will create a single database and table with our log files, lets confirm. We need to <strong>wait until</strong> the crawler has <strong>finished</strong>, this will take 1-2 minutes. Click refresh to check if it has finished.</p>
-</li>
-<li>
-<p>Click <strong>Databases</strong> on the left, and click on the database <strong>webserverlogs</strong>, you may need to click <strong>refresh</strong>:
-<img alt="Images/glue-databaseswebserverlogs.png" src="Images/glue-databaseswebserverlogs.png" /></p>
-</li>
-<li>
-<p>Click <strong>Tables in webserverlogs</strong>, and click the table <strong>applogfiles_reinventworkshop</strong></p>
-</li>
-<li>
-<p>You can see the table is created, the <strong>Name</strong>, the <strong>Location</strong>, and the <strong>recordCount</strong> has a large number of records in it (the number may be different to the image below):
-<img alt="Images/glue-databasestablewebserverlogs.png" src="Images/glue-databasestablewebserverlogs.png" /></p>
-</li>
-<li>
-<p>Scroll down and you can see the columns, and that they are all <strong>string</strong>. This will be a small hurdle for columns like bytes if you want to perform a function on it:</p>
-</li>
-<li>
-<p>Go to the <strong>Athena</strong> service console, and select the <strong>webserverlogs</strong> database:
-<img alt="Images/athena-dbwebserverlogs.png" src="Images/athena-dbwebserverlogs.png" /></p>
-</li>
-<li>
-<p>Click the <strong>three dots</strong> next to the table <strong>applogfiles_reinventworkshop</strong>, and click <strong>Preview table</strong>:
-<img alt="Images/athena-dbpreview.png" src="Images/athena-dbpreview.png" /></p>
-</li>
-<li>
-<p>View the results which will show 10 lines of your log. Note how there are separate columns <strong>logdate</strong> <strong>logtime</strong> and <strong>tz</strong> that we created. The default classifier would have had a single column of text for the timestamp.
-<img alt="Images/athena-dbresults.png" src="Images/athena-dbresults.png" /></p>
+<p>When it is loaded for analysis we have created 11 comonents by splitting the <strong>Timestamp</strong> into <strong>Date</strong>, <strong>Time</strong> and <strong>Timezone</strong>:</p>
+<ul>
+<li>Client IP</li>
+<li>Ident</li>
+<li>Auth</li>
+<li>Date*</li>
+<li>Time*</li>
+<li>Timezone*</li>
+<li>Request</li>
+<li>Response</li>
+<li>Bytes</li>
+<li>Referrer</li>
+<li>Agent</li>
+</ul>
 </li>
 </ol>
-<h3 id="13-create-a-database-of-your-cost-files">1.3 Create a database of your cost files</h3>
+<h2 id="2-view-our-cost-files">2 View our cost files</h2>
 <p>To measure efficiency we need to know the cost of the workload, so we will use the Cost and Usage Report.</p>
-<p>If you are using your own Cost and Usage Reports, you will need to have them already configured and delivered as per this lab: https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html#CUR</p>
-<p>To use the files from this lab, follow the steps below:</p>
 <ol>
 <li>
-<p>Go to the S3 Console and create a folder named <strong>costusagefiles-reinventworkshop</strong> inside the bucket you created above. You MUST name the folder <strong>costusagefiles_reinventworkshop</strong>, this will make pasting the code faster.</p>
-</li>
-<li>
-<p>Copy the sample file to your bucket:</p>
+<p>Download the sample log file to your local PC and open it in a text editor:</p>
 <ul>
-<li><a href="Code/Step1CUR.gz">Step1CUR.gz</a></li>
+<li><a href="Code/Step1CUR">Step1CUR</a></li>
 </ul>
 </li>
 <li>
-<p>Go into the <strong>Glue</strong> console, and click <strong>Add crawler</strong></p>
+<p>You can see the various columns in the file and the many requests:
+<img alt="Images/logfile4.png" src="Images/logfile4.png" /> </p>
 </li>
 <li>
-<p>Use the crawler name <strong>CostUsage</strong> and click <strong>Next</strong></p>
+<p>Scroll down and you can see the EC2 usage:
+<img alt="Images/logfile5.png" src="Images/logfile5.png" /> </p>
 </li>
 <li>
-<p>Select <strong>Data stores</strong> as the crawler source type, click <strong>Next</strong></p>
+<p>You can see the DataTransfer usage.
+<img alt="Images/logfile6.png" src="Images/logfile6.png" /> </p>
 </li>
 <li>
-<p>Click the <strong>folder icon</strong>, Select the <strong>S3 folder</strong> created above <strong>costusagefiles-reinventworkshop</strong> as the data store, make sure you dont select the bucket or file.</p>
+<p>Open up a spreadsheet application and copy 30 lines into a spreadsheet, it is a CSV and the columns are separated by space characters:
+<img alt="Images/spreadsheet6.png" src="Images/spreadsheet6.png" /> </p>
 </li>
 <li>
-<p>Click <strong>Select</strong>, then click <strong>Next</strong></p>
+<p>Scroll across and see the different columns available</p>
 </li>
 <li>
-<p>Select <strong>No</strong> do not another data store, click <strong>Next</strong></p>
+<p>Scroll and see some of the data available</p>
 </li>
 <li>
-<p>Create an <strong>IAM role</strong> named AWSGlueServiceRole-<strong>costusage</strong>, click <strong>Next</strong></p>
-</li>
-<li>
-<p>Set the frequency to <strong>run on demand</strong>, click <strong>Next</strong></p>
-</li>
-<li>
-<p>Cilck <strong>Add database</strong>, it MUST be named <strong>CostUsage</strong>, and click <strong>Create</strong></p>
-</li>
-<li>
-<p>click <strong>Next</strong></p>
-</li>
-<li>
-<p>Review and click <strong>Finish</strong></p>
-</li>
-<li>
-<p>Run the crawler, then check the database was created and has records in it as per the previous step.</p>
-</li>
-<li>
-<p>Go into <strong>Databases</strong>, select the <strong>costusage</strong> database, and then select the table <strong>costusagefiles_reinventworkshop</strong>.  Click <strong>Edit Schema</strong>:
-<img alt="Images/costtablefix01.png" src="Images/costtablefix01.png" /></p>
-</li>
-<li>
-<p>Make sure the column <strong>line_item_unblended_cost</strong> has a data type of <strong>double</strong>, you may need to change it from string:
-<img alt="Images/costtablefix02.png" src="Images/costtablefix02.png" /></p>
-</li>
-<li>
-<p>Also change or confirm the following columns:</p>
-<ul>
-<li>line_item_usage_start_date: timestamp</li>
-<li>line_item_usage_end_date: timestamp</li>
-<li>line_item_usage_amount: double</li>
-</ul>
-</li>
-<li>
-<p>Click on <strong>save</strong>, and confirm it is of the correct type.</p>
+<p>View the columns and some sample values here: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/enhanced-product-columns.html</p>
 </li>
 </ol>
-<p><a name="setup_quicksight"></a></p>
-<h2 id="2-setup-quicksight-optional-for-visualization">2 Setup QuickSight - Optional for Visualization</h2>
-<p>We will use QuickSight as the analysis tool to visualize data. You could query the data in Athena and export the results to be used in a spreadsheet application for graphs, however QuickSight offers the advantages of being the specific tool for the job, and you can easily create additional data fields from existing fields for analysis.</p>
-<h3 id="21-application-files">2.1 Application files</h3>
-<p>We will create a data set from the application log files.</p>
-<ol>
-<li>
-<p>Go into <strong>QuickSight</strong></p>
-</li>
-<li>
-<p>Click on your user in the top right, and click <strong>Manage QuickSight</strong>:
-<img alt="Images/quicksight-manage.png" src="Images/quicksight-manage.png" /></p>
-</li>
-<li>
-<p>Click on <strong>Security and permissions</strong> and click <strong>Add or remove</strong>:
-<img alt="Images/quicksight-manage2.png" src="Images/quicksight-manage2.png" /></p>
-</li>
-<li>
-<p>Under <strong>Amazon S3</strong> click <strong>Details</strong>:
-<img alt="Images/quicksight-manage3.png" src="Images/quicksight-manage3.png" /></p>
-</li>
-<li>
-<p>Click <strong>Select S3 buckets</strong>:
-<img alt="Images/quicksight-manage4.png" src="Images/quicksight-manage4.png" /></p>
-</li>
-<li>
-<p>Select the buckets that have the application log files and the cost and usage files, click <strong>Select buckets</strong></p>
-</li>
-<li>
-<p>Select <strong>Amazon Athena</strong> and click <strong>Update</strong>:
-<img alt="Images/quicksight-manage6.png" src="Images/quicksight-manage6.png" /></p>
-</li>
-<li>
-<p>From the <strong>QuickSight home page</strong>, click <strong>Manage data</strong>:
-<img alt="Images/quicksight-managedata.png" src="Images/quicksight-managedata.png" /></p>
-</li>
-<li>
-<p>Click <strong>New data set</strong>:
-<img alt="Images/quicksight-newdataset.png" src="Images/quicksight-newdataset.png" /></p>
-</li>
-<li>
-<p>Click <strong>Athena</strong>:
-<img alt="Images/quicksight-newdatasetathena.png" src="Images/quicksight-newdatasetathena.png" /></p>
-</li>
-<li>
-<p>Enter the <strong>Data source name</strong> AppLogs and click <strong>Create data source</strong></p>
-</li>
-<li>
-<p>Select the <strong>WebserverLogs Database</strong> and the <strong>Table</strong> and click <strong>Select</strong></p>
-</li>
-<li>
-<p>Select <strong>Directly query your data</strong> and click <strong>Edit/Preview data</strong></p>
-</li>
-<li>
-<p>Make sure there is data in the bottom pane. You can see that we have separated our date and time and they are in separate columns with a string data type. What we will now do is create a custom datetime column with the right data type, this will show how you can build custom fields and types for your log files:
-<img alt="Images/quicksight-datasourcecheck.png" src="Images/quicksight-datasourcecheck.png" /></p>
-</li>
-<li>
-<p>First we will combine the <strong>logdate</strong> and <strong>logtime</strong> columns into a single value separated by a space. Click <strong>Add calculated field</strong>: 
-<img alt="Images/quicksight-addcalcfield.png" src="Images/quicksight-addcalcfield.png" /></p>
-</li>
-<li>
-<p>To do this we will use the <strong>concat</strong> function. Lets call the field <strong>DateTime</strong>, click <strong>Create</strong>:</p>
-<pre><code>concat({logdate}, ' ', {logtime})
-</code></pre>
-</li>
-<li>
-<p>You will now see a new column with the correct text on the far right:
-<img alt="Images/quicksight-datetime2.png" src="Images/quicksight-datetime2.png" /></p>
-</li>
-<li>
-<p>Next we will convert it into the right data type so we can treat it like a timestamp in QuickSight. We will use the <strong>parseDate</strong> function, on the output of the concatenate function. So we will put the concatenate function inside the parseDate function.  Select the <strong>down arrow</strong> next to the calculated field, and select <strong>Edit DateTime</strong>:
-<img alt="Images/quicksight-datetime3.png" src="Images/quicksight-datetime3.png" /></p>
-</li>
-<li>
-<p>Change the formula to the one below. It puts the parseDate function around the concatenate and we specify the date format so that it is correctly recognized. Click <strong>Apply changes</strong>:</p>
-<pre><code>parseDate(concat({logdate}, ' ', {logtime}), 'dd/MMM/yyyy HH:mm:ss')
-</code></pre>
-<p><img alt="Images/quicksight-datetime4.png" src="Images/quicksight-datetime4.png" />       </p>
-</li>
-<li>
-<p>You should see the column on the far right is now of the <strong>Date</strong> data type.  You can do this with any field, for example converting the bytes column to a number by removing and replacing the '-' character with a '0' using the if function.
-<img alt="Images/quicksight-datetime5.png" src="Images/quicksight-datetime5.png" />  </p>
-</li>
-<li>
-<p>Click <strong>Save &amp; visualize</strong>:
-<img alt="Images/quicksight-savevisualize.png" src="Images/quicksight-savevisualize.png" />       </p>
-</li>
-</ol>
-<h3 id="21-cost-and-usage-data">2.1 Cost and Usage data</h3>
-<ol>
-<li>
-<p>From the <strong>QuickSight homepage</strong>, click <strong>Manage data</strong>:
-<img alt="Images/quicksight-homemanagedata.png" src="Images/quicksight-homemanagedata.png" />  </p>
-</li>
-<li>
-<p>Click <strong>New data set</strong></p>
-</li>
-<li>
-<p>Select <strong>Athena</strong></p>
-</li>
-<li>
-<p>Name the datasource <strong>WorkloadCost</strong>, click <strong>Create</strong></p>
-</li>
-<li>
-<p>Select the <strong>costusage database</strong> and <strong>table</strong> that contains your cost data you setup in Glue, and click <strong>Edit/Preview data</strong>:</p>
-</li>
-<li>
-<p>Verify you have cost data, click <strong>Save</strong>, and you will see your new data set next to the existing one:
-<img alt="Images/quicksight-workloadcost3.png" src="Images/quicksight-workloadcost3.png" />  </p>
-</li>
-</ol>
-<p><a name="tear_down"></a></p>
-<h2 id="3-tear-down">3. Tear down</h2>
-<p>Complete the teardown only after you have finished all steps in this lab
-1. Remove the Data Sets in QuickSIght
-2. Delete cost and application log databases in Glue
-3. Delete S3 buckets containing the application and CUR files
-4. Delete the IAM roles that were created to allow Glue access to S3</p>
                 
                   
                 

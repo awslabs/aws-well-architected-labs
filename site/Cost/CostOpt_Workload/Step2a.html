@@ -13,7 +13,7 @@
         <meta name="description" content="A collection of AWS Well-Architected workshops">
       
       
-        <link rel="canonical" href="https://wellarchitectedlabs.com/Cost/arc204.html">
+        <link rel="canonical" href="https://wellarchitectedlabs.com/Cost/CostOpt_Workload/Step2a.html">
       
       
       
@@ -35,18 +35,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.2">
     
     
       
-        <title>ARC204 Cost Optimize a Workload - AWS Well-Architected Labs</title>
+        <title>Baseline Environment - AWS Well-Architected Labs</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.982221ab.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/application-palette.224b79ff.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.224b79ff.css">
       
       
         
@@ -55,7 +55,7 @@
       
     
     
-      <script src="../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
 
 
 
@@ -66,7 +66,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
     
     
@@ -108,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#arc204-cost-optimize-a-workload" tabindex="1" class="md-skip">
+      <a href="#baseline-environment" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -119,7 +119,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
           
-            <img src="../images/wa.png" width="24" height="24">
+            <img src="../../images/wa.png" width="24" height="24">
           
         </a>
       </div>
@@ -133,7 +133,7 @@
               AWS Well-Architected Labs
             </span>
             <span class="md-header-nav__topic">
-              ARC204 Cost Optimize a Workload
+              Baseline Environment
             </span>
           
         </div>
@@ -207,7 +207,7 @@
         
   <li class="md-tabs__item">
     
-      <a href="../README.html" title="Home" class="md-tabs__link md-tabs__link--active">
+      <a href="../../README.html" title="Home" class="md-tabs__link md-tabs__link--active">
         Home
       </a>
     
@@ -219,7 +219,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../Operations/README.html" title="Operational Excellence" class="md-tabs__link">
+        <a href="../../Operations/README.html" title="Operational Excellence" class="md-tabs__link">
           Operational Excellence
         </a>
       
@@ -232,7 +232,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../Security/README.html" title="Security" class="md-tabs__link">
+        <a href="../../Security/README.html" title="Security" class="md-tabs__link">
           Security
         </a>
       
@@ -245,7 +245,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../Reliability/README.html" title="Reliability" class="md-tabs__link">
+        <a href="../../Reliability/README.html" title="Reliability" class="md-tabs__link">
           Reliability
         </a>
       
@@ -258,7 +258,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../Performance/README.html" title="Performance Efficiency" class="md-tabs__link">
+        <a href="../../Performance/README.html" title="Performance Efficiency" class="md-tabs__link">
           Performance Efficiency
         </a>
       
@@ -271,7 +271,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="README.html" title="Cost Optimization" class="md-tabs__link">
+        <a href="../README.html" title="Cost Optimization" class="md-tabs__link">
           Cost Optimization
         </a>
       
@@ -284,7 +284,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../Well-ArchitectedTool/README.html" title="Well Architected Tool" class="md-tabs__link">
+        <a href="../../Well-ArchitectedTool/README.html" title="Well Architected Tool" class="md-tabs__link">
           Well Architected Tool
         </a>
       
@@ -307,7 +307,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
       
-        <img src="../images/wa.png" width="48" height="48">
+        <img src="../../images/wa.png" width="48" height="48">
       
     </a>
     AWS Well-Architected Labs
@@ -341,7 +341,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../README.html" title="Home" class="md-nav__link">
+    <a href="../../README.html" title="Home" class="md-nav__link">
       Home
     </a>
   </li>
@@ -372,7 +372,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Operations/README.html" title="Overview" class="md-nav__link">
+    <a href="../../Operations/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -403,7 +403,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Operations/100_Inventory_and_Patch_Mgmt/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Operations/100_Inventory_and_Patch_Mgmt/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -415,7 +415,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -456,7 +456,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/README.html" title="Overview" class="md-nav__link">
+    <a href="../../Security/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -506,7 +506,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_AWS_Account_and_Root_User/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/100_AWS_Account_and_Root_User/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -518,7 +518,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_AWS_Account_and_Root_User/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/100_AWS_Account_and_Root_User/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -554,7 +554,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -566,7 +566,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -602,7 +602,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_CloudFront_with_S3_Bucket_Origin/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/100_CloudFront_with_S3_Bucket_Origin/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -614,7 +614,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -650,7 +650,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_Create_a_Data_Bunker/README.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/100_Create_a_Data_Bunker/README.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -686,7 +686,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_Enable_Security_Hub/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/100_Enable_Security_Hub/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -698,7 +698,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/100_Enable_Security_Hub/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/100_Enable_Security_Hub/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -758,7 +758,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_Detective_Controls/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_Detective_Controls/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -770,7 +770,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -806,7 +806,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_EC2_Web_Application/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_EC2_Web_Application/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -818,7 +818,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -854,7 +854,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -866,7 +866,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -902,7 +902,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_VPC/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_VPC/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -914,7 +914,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_VPC/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -950,7 +950,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -962,7 +962,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -998,7 +998,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_IAM_User_Cleanup/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Automated_IAM_User_Cleanup/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1010,7 +1010,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Automated_IAM_User_Cleanup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Automated_IAM_User_Cleanup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1046,7 +1046,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Basic_EC2_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_Basic_EC2_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1058,7 +1058,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1094,7 +1094,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_CloudFront_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/200_CloudFront_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1106,7 +1106,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/200_CloudFront_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/200_CloudFront_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1166,7 +1166,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1178,7 +1178,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1214,7 +1214,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1226,7 +1226,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1262,7 +1262,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1274,7 +1274,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1310,7 +1310,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1322,7 +1322,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1358,7 +1358,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Lambda_Cross_Account_Bucket_Policy/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Security/300_Lambda_Cross_Account_Bucket_Policy/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1370,7 +1370,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1411,7 +1411,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_100_Loft_Introduction_to_Security/README.html" title="Introduction to Security" class="md-nav__link">
+    <a href="../../Security/Quest_100_Loft_Introduction_to_Security/README.html" title="Introduction to Security" class="md-nav__link">
       Introduction to Security
     </a>
   </li>
@@ -1423,7 +1423,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_100_Quick_Steps_to_Security_Success/README.html" title="Quick Steps to Security Success" class="md-nav__link">
+    <a href="../../Security/Quest_100_Quick_Steps_to_Security_Success/README.html" title="Quick Steps to Security Success" class="md-nav__link">
       Quick Steps to Security Success
     </a>
   </li>
@@ -1435,7 +1435,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_200_Incident_Response_Day/README.html" title="Incident Response Day" class="md-nav__link">
+    <a href="../../Security/Quest_200_Incident_Response_Day/README.html" title="Incident Response Day" class="md-nav__link">
       Incident Response Day
     </a>
   </li>
@@ -1447,7 +1447,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html" title="Security Best Practices Workshop" class="md-nav__link">
+    <a href="../../Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html" title="Security Best Practices Workshop" class="md-nav__link">
       Security Best Practices Workshop
     </a>
   </li>
@@ -1459,7 +1459,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_300_Security_Best_Practices_Day/README.html" title="Security Best Practices Day" class="md-nav__link">
+    <a href="../../Security/Quest_300_Security_Best_Practices_Day/README.html" title="Security Best Practices Day" class="md-nav__link">
       Security Best Practices Day
     </a>
   </li>
@@ -1471,7 +1471,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Managing_Credentials_and_Authentication/README.html" title="Managing Credentials and Authentication" class="md-nav__link">
+    <a href="../../Security/Quest_Managing_Credentials_and_Authentication/README.html" title="Managing Credentials and Authentication" class="md-nav__link">
       Managing Credentials and Authentication
     </a>
   </li>
@@ -1483,7 +1483,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Control_Human_Access/README.html" title="Control Human Access" class="md-nav__link">
+    <a href="../../Security/Quest_Control_Human_Access/README.html" title="Control Human Access" class="md-nav__link">
       Control Human Access
     </a>
   </li>
@@ -1495,7 +1495,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Control_Programmatic_Access/README.html" title="Control Programmatic Access" class="md-nav__link">
+    <a href="../../Security/Quest_Control_Programmatic_Access/README.html" title="Control Programmatic Access" class="md-nav__link">
       Control Programmatic Access
     </a>
   </li>
@@ -1507,7 +1507,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Detect_and_Investigate_Events/README.html" title="Detect and Investigate Events" class="md-nav__link">
+    <a href="../../Security/Quest_Detect_and_Investigate_Events/README.html" title="Detect and Investigate Events" class="md-nav__link">
       Detect and Investigate Events
     </a>
   </li>
@@ -1519,7 +1519,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Defend_Against_New_Threats/README.html" title="Defend Against New Threats" class="md-nav__link">
+    <a href="../../Security/Quest_Defend_Against_New_Threats/README.html" title="Defend Against New Threats" class="md-nav__link">
       Defend Against New Threats
     </a>
   </li>
@@ -1531,7 +1531,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Protect_Networks/README.html" title="Protect Networks" class="md-nav__link">
+    <a href="../../Security/Quest_Protect_Networks/README.html" title="Protect Networks" class="md-nav__link">
       Protect Networks
     </a>
   </li>
@@ -1543,7 +1543,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Protect_Compute/README.html" title="Protect Compute" class="md-nav__link">
+    <a href="../../Security/Quest_Protect_Compute/README.html" title="Protect Compute" class="md-nav__link">
       Protect Compute
     </a>
   </li>
@@ -1555,7 +1555,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Classify_Data/README.html" title="Classify Data" class="md-nav__link">
+    <a href="../../Security/Quest_Classify_Data/README.html" title="Classify Data" class="md-nav__link">
       Classify Data
     </a>
   </li>
@@ -1567,7 +1567,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Protect_Data_at_Rest/README.html" title="Protect Data at Rest" class="md-nav__link">
+    <a href="../../Security/Quest_Protect_Data_at_Rest/README.html" title="Protect Data at Rest" class="md-nav__link">
       Protect Data at Rest
     </a>
   </li>
@@ -1579,7 +1579,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Protect_Data_in_Transit/README.html" title="Protect Data in Transit" class="md-nav__link">
+    <a href="../../Security/Quest_Protect_Data_in_Transit/README.html" title="Protect Data in Transit" class="md-nav__link">
       Protect Data in Transit
     </a>
   </li>
@@ -1591,7 +1591,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Security/Quest_Incident_Response/README.html" title="Incident Response" class="md-nav__link">
+    <a href="../../Security/Quest_Incident_Response/README.html" title="Incident Response" class="md-nav__link">
       Incident Response
     </a>
   </li>
@@ -1632,7 +1632,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/README.html" title="Overview" class="md-nav__link">
+    <a href="../../Reliability/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -1682,7 +1682,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1694,7 +1694,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1730,7 +1730,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -1742,7 +1742,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1754,7 +1754,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html" title="Trouble Shooting Guide" class="md-nav__link">
+    <a href="../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html" title="Trouble Shooting Guide" class="md-nav__link">
       Trouble Shooting Guide
     </a>
   </li>
@@ -1800,7 +1800,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Performance/README.html" title="Overview" class="md-nav__link">
+    <a href="../../Performance/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -1812,7 +1812,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Performance/100_Monitoring_with_CloudWatch_Dashboards/README.html" title="Monitoring with CloudWatch Dashboards" class="md-nav__link">
+    <a href="../../Performance/100_Monitoring_with_CloudWatch_Dashboards/README.html" title="Monitoring with CloudWatch Dashboards" class="md-nav__link">
       Monitoring with CloudWatch Dashboards
     </a>
   </li>
@@ -1848,7 +1848,7 @@
 
 
   <li class="md-nav__item">
-    <a href="README.html" title="Overview" class="md-nav__link">
+    <a href="../README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -1860,7 +1860,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Fundamentals.html" title="Fundamentals" class="md-nav__link">
+    <a href="../Fundamentals.html" title="Fundamentals" class="md-nav__link">
       Fundamentals
     </a>
   </li>
@@ -1872,7 +1872,7 @@
 
 
   <li class="md-nav__item">
-    <a href="ExpenditureAwareness.html" title="Expenditure Awareness" class="md-nav__link">
+    <a href="../ExpenditureAwareness.html" title="Expenditure Awareness" class="md-nav__link">
       Expenditure Awareness
     </a>
   </li>
@@ -1884,7 +1884,7 @@
 
 
   <li class="md-nav__item">
-    <a href="CostEffectiveResources.html" title="Cost Effective Resources" class="md-nav__link">
+    <a href="../CostEffectiveResources.html" title="Cost Effective Resources" class="md-nav__link">
       Cost Effective Resources
     </a>
   </li>
@@ -1934,7 +1934,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -1946,7 +1946,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -1982,7 +1982,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -1994,7 +1994,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2030,7 +2030,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2042,7 +2042,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2078,7 +2078,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2090,7 +2090,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2126,7 +2126,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2138,7 +2138,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2198,7 +2198,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2210,7 +2210,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2246,7 +2246,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2258,7 +2258,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2294,7 +2294,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2306,7 +2306,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2342,7 +2342,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2354,7 +2354,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2414,7 +2414,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2426,7 +2426,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2462,7 +2462,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2474,7 +2474,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2510,7 +2510,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html" title="Overview" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2522,7 +2522,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2558,7 +2558,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
+    <a href="../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2570,7 +2570,7 @@
 
 
   <li class="md-nav__item">
-    <a href="Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2616,7 +2616,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
+    <a href="../../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -2647,7 +2647,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
       Lab Overview
     </a>
   </li>
@@ -2659,7 +2659,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+    <a href="../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
       Lab Guide
     </a>
   </li>
@@ -2696,8 +2696,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" title="Introduction" class="md-nav__link">
-    Introduction
+  <a href="#authors" title="Authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" title="Feedback" class="md-nav__link">
+    Feedback
   </a>
   
 </li>
@@ -2705,62 +2712,6 @@
         <li class="md-nav__item">
   <a href="#goals" title="Goals" class="md-nav__link">
     Goals
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step1" title="Step1" class="md-nav__link">
-    Step1
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step2" title="Step2" class="md-nav__link">
-    Step2
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step3" title="Step3" class="md-nav__link">
-    Step3
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step4" title="Step4" class="md-nav__link">
-    Step4
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step5" title="Step5" class="md-nav__link">
-    Step5
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step6" title="Step6" class="md-nav__link">
-    Step6
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" title="License" class="md-nav__link">
-    License
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license_1" title="License" class="md-nav__link">
-    License
   </a>
   
 </li>
@@ -2781,44 +2732,328 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/arc204.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/CostOpt_Workload/Step2a.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="arc204-cost-optimize-a-workload">ARC204 Cost Optimize a Workload</h1>
-<p>https://wellarchitectedlabs.com </p>
-<h2 id="introduction">Introduction</h2>
-<p>This hands-on lab will guide you through the steps to perform a baseline on your workload, measure its efficiency and then perform Cost Optimization cycles on it.</p>
-<p>The first time you perform this lab it is recommended to use the sample files supplied, then you can use your own application and billing files.</p>
+                <h1 id="baseline-environment">Baseline Environment</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Nathan Besh, Cost Lead Well-Architected</li>
+</ul>
+<h2 id="feedback">Feedback</h2>
+<p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
 <h2 id="goals">Goals</h2>
 <ul>
-<li>Understand workload demand profile</li>
-<li>Understand workload resource profile</li>
-<li>Understand workload cost</li>
-<li>Measure workload efficiency in cost per outcome</li>
-<li>Learn how to find and perform Cost Optimization on a workload</li>
+<li>Understand and measure your workload demand</li>
+<li>Understand and measure your workload cost</li>
+<li>Understand and measure your workload efficiency</li>
 </ul>
-<p><BR></p>
-<h2 id="step1"><a href="CostOpt_Workload/Step1.html">Step1</a></h2>
-<h2 id="step2"><a href="CostOpt_Workload/Step2.html">Step2</a></h2>
-<h2 id="step3"><a href="CostOpt_Workload/Step3.html">Step3</a></h2>
-<h2 id="step4"><a href="CostOpt_Workload/Step4.html">Step4</a></h2>
-<h2 id="step5"><a href="CostOpt_Workload/Step5.html">Step5</a></h2>
-<h2 id="step6"><a href="CostOpt_Workload/Step6.html">Step6</a></h2>
-<p><BR>
-<BR> </p>
-<hr />
-<h2 id="license">License</h2>
-<p>Licensed under the Apache 2.0 and MITnoAttr License.</p>
-<p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
-<p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
-<p>https://aws.amazon.com/apache2.0/</p>
-<p>or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
-<h2 id="license_1">License</h2>
-<p>Licensed under the Apache 2.0 and MITnoAttr License.</p>
-<p>Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.</p>
-<p>Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at</p>
-<p>https://aws.amazon.com/apache2.0/</p>
-<p>or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li><a href="#workload_demand_cost">Workload Demand and Cost</a></li>
+<li><a href="#workload_demand">Workload Demand Visualization</a></li>
+</ol>
+<p><a name="workload_demand_cost"></a></p>
+<h2 id="1-workload-demand-and-cost">1 Workload Demand and Cost</h2>
+<p>We will now go deeper into the workload demand and cost, and discover exactly what comprises the demand and cost of the workload. For this we will use SQL queries in Athena against our cost database and a spreadsheet application.</p>
+<p><strong>NOTE</strong>: You may need to change the name of the database and table in the SQL code from <strong>webserverlogs.applogfiles_reinventworkshop</strong> to your database name and table name if you didnt use the correct folder names, do this for all pasted code.</p>
+<h3 id="11-workload-demand-components">1.1 Workload demand components</h3>
+<ol>
+<li>
+<p>Go into the Athena console</p>
+</li>
+<li>
+<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
+</li>
+<li>
+<p>Run the following query to return all the columns, with 10 rows of data from the application logs. </p>
+<p><strong>Note</strong> you may need to change the name of the database and table below webserverlogs.applogfiles_reinventworkshop**:</p>
+<pre><code>SELECT * FROM "webserverlogs"."applogfiles_reinventworkshop" limit 10;
+</code></pre>
+</li>
+<li>
+<p>Review the data and look at the columns and sample data available in your log file.</p>
+</li>
+<li>
+<p>We will now look at the most popular requests by size, run the following query. Inside the query we convert the column <strong>bytes</strong> from a string into a number, which we then divide by 1048576 to get MBytes instead of bytes:</p>
+<pre><code>select distinct request, verb, response, (sum(cast(bytes as bigint)))/1048576 as Mbytes, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where bytes not like '-'
+group by request, verb, response
+order by Mbytes desc
+limit 100
+</code></pre>
+</li>
+<li>
+<p>Invalid requests still take resources from your systems, lets look at the number of non-successful (non 200) responses per day:</p>
+<pre><code>select date_parse(logdate, '%d/%b/%Y') as date, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response not like '200'
+group by logdate
+order by logdate
+</code></pre>
+</li>
+</ol>
+<p>For your workload, review the different types of requests - both successful and not successful, and the available fields of data. This should help identify key items within the log file to analyze and measure the true demand on your workload.</p>
+<h3 id="22-workload-cost-components">2.2 Workload cost components</h3>
+<ol>
+<li>
+<p>Select the <strong>costusage</strong> database, and run the following query to view all the columns:</p>
+<pre><code>SELECT * FROM "costusage"."costusagefiles_reinventworkshop" limit 10;
+</code></pre>
+</li>
+<li>
+<p>View the columns available (there are &gt; 100), most important are typically columns starting with <strong>line_item</strong> and <strong>resource_tags</strong>.</p>
+</li>
+<li>
+<p>For a quick listing and description of your costs, the following statement is useful as a starting point:</p>
+<pre><code>SELECT line_item_line_item_description, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_line_item_description
+order by cost desc
+</code></pre>
+</li>
+<li>
+<p>Lets add some more columns to help identify what the main components of cost are, run the following statement:</p>
+<pre><code>SELECT line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description, sum(line_item_unblended_cost) as cost  FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description
+order by cost desc
+</code></pre>
+</li>
+</ol>
+<p>For your workload, review the different columns and results to see what makes up its cost. This will also indicate where you should look for savings in your cost optimization cycles.</p>
+<h3 id="23-efficiency">2.3 Efficiency</h3>
+<p>We have looked at our workload demand, and our workload costs. Lets combine the two to create a workload efficiency metric. As we saw in the QuickSight graphs, the demand changed over time and the cost changed also. This means our efficiency may change over time also. We will start with a very high level and simple metric, and then drill down a few steps. </p>
+<ol>
+<li>
+<p>Go into the Athena console</p>
+</li>
+<li>
+<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
+</li>
+<li>
+<p>Run the following query to return the total number of lines in our log file, which is our total demand:</p>
+<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop"
+</code></pre>
+</li>
+<li>
+<p>Copy the results into a spreadsheet application and label it <strong>Total workload demand</strong></p>
+</li>
+<li>
+<p>Run the following queries to get the total successful responses, and valid successful responses, record these also:</p>
+<pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response like '200' and (request like '%index%' or request like '%image_file%')
+</code></pre>
+</li>
+<li>
+<p>We will now get the successful and valid responses by hour with the query below. Note the use of <strong>date_parse</strong> to turn the string into an actual date we can work with:</p>
+<pre><code>SELECT date(date_parse(logdate, '%d/%b/%Y')) as date, hour(date_parse(logtime, '%H:%i:%s')) as hour, count(*) as requests FROM "webserverlogs"."applogfiles_reinventworkshop" 
+where response like '200' and (request like '%index%' or request like '%image_file%')
+group by date_parse(logdate, '%d/%b/%Y'), hour(date_parse(logtime, '%H:%i:%s'))
+order by date, hour
+</code></pre>
+</li>
+<li>
+<p>Copy the results into the same spreadsheet.</p>
+</li>
+<li>
+<p>Now lets get the workload cost that corresponds to the demand. Select the <strong>costusage</strong> database, which should have a table <strong>costusagefiles_...</strong></p>
+</li>
+<li>
+<p>Get the total cost for the workload with the following statement, and put it into the spreadsheet next to the demand:</p>
+<pre><code>SELECT sum(line_item_unblended_cost)  FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+</code></pre>
+</li>
+<li>
+<p>Execute the following statement to get the cost by hour and put it into the spreadsheet:</p>
+<pre><code>SELECT line_item_usage_start_date as date, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
+where resource_tags_user_application like 'ordering'
+group by line_item_usage_start_date
+order by date asc
+</code></pre>
+</li>
+<li>
+<p>In the spreadsheet, <strong>calculate the efficiency</strong> by <strong>dividing the requests by the cost</strong>. This will give you the number of outcomes per dollar spent. Notice the difference when you compare total vs successful vs valid. Also notice any variation of efficiency throughout the day.</p>
+</li>
+</ol>
+<p><img alt="Images/efficiency.png" src="Images/efficiency.png" />  </p>
+<p>You can see from the spreadsheet that the workload does:</p>
+<pre><code>- 4,244.23 total requests per dollar, overall
+- 1,924.57 successful customer requests per dollar, overall
+- from 491 to 2555 successful customer requests per dollar, throughout the day
+</code></pre>
+<p><a name="workload_demand"></a></p>
+<h2 id="2-workload-demand-visualization">2. Workload Demand Visualization</h2>
+<p>We have our workload application logs ready to analyze and visualize. This step will be to visualize the workload demand and understand how it is used.</p>
+<h3 id="22-demand-visualization-requests-per-hour">2.2 Demand visualization - Requests per hour</h3>
+<p>Our application log data is setup as a data source, so lets create a visualization. As our billing data is hourly, we will create an hourly demand graph showing the requests per hour of the workload.</p>
+<p>Log into QuickSight and open the <strong>applogfiles visualization</strong> you created in Step1, or create a <strong>New analysis</strong> from the Application log files data set. </p>
+<ol>
+<li>
+<p>In <strong>Visual types</strong>, select the <strong>vertical bar</strong> chart, and drag <strong>DateTime</strong> and <strong>request</strong> to the field wells as shown:
+<img alt="Images/quicksight-demandvisual1.png" src="Images/quicksight-demandvisual1.png" />       </p>
+</li>
+<li>
+<p>Change the aggregation to <strong>hourly</strong>:
+<img alt="Images/quicksight-demandvisual2.png" src="Images/quicksight-demandvisual2.png" />       </p>
+</li>
+<li>
+<p>You now have a graph of all the requests over time, by hour. This shows your workload demand</p>
+</li>
+<li>
+<p>Its a webserver on the internet, so there's going to be lots of invalid requests (non-200 status), there could be lots of messages in your log files that will also need to be filtered out. Lets filter them out so that we're only looking at valid requests to our workload. Click on <strong>Filter</strong>, click <strong>Create one</strong> for <strong>response</strong> and use a <strong>Filter list</strong> to select only <strong>200</strong>. Click <strong>Apply</strong>:
+<img alt="Images/quicksight-demandfilter1.png" src="Images/quicksight-demandfilter1.png" />     </p>
+</li>
+<li>
+<p>Again, there could be a lot of successful requests &amp; other log messages you want to filter out. So we'll look for a specific string, which in our case is a specific request string, as something that for this workload signifies a successful customer outcome as opposed to all the other log messages.</p>
+</li>
+<li>
+<p>We will create another filter on the <strong>request</strong> field, both a <strong>Filter type</strong> of <strong>Custom filter</strong>, that <strong>contains</strong> the word <strong>index.html</strong> or <strong>contains</strong> the word <strong>image_file</strong>. This will look for any request that has these words in it:
+<img alt="Images/quicksight-demandfilter3.png" src="Images/quicksight-demandfilter3.png" />     </p>
+</li>
+<li>
+<p>You now have the profile of the valid and successful customer outcomes of your workload:
+<img alt="Images/quicksight-validsuccessprofile.png" src="Images/quicksight-validsuccessprofile.png" />     </p>
+</li>
+</ol>
+<p>This shows you the demand that is on your workload, it shows you how many requests were made and when these requests were made.</p>
+<h3 id="23-categorize-requests">2.3 Categorize requests</h3>
+<p>Your workload may do different things, there could be different requests that consume different amounts of resources - so you would like to treat them differently. In this section we will look for specific requests and categorize them out.</p>
+<ol>
+<li>
+<p>When you use your own application log files, find something that can be used to create different categories of requests. Is it in the request string? is it the source or destination of the request?  In our sample logfile it is inside the request string. A sample request string is:</p>
+<pre><code>        /index.html?name=Isabella,user=sponsored,work=26
+</code></pre>
+<p>You can see there is <strong>user=sponsored</strong>, for this sample workload we have <strong>free</strong>, <strong>sponsored</strong> and <strong>paid</strong> user types.</p>
+</li>
+<li>
+<p>Add a new sheet, this will help to contrast the graphs and find the best visualization for your workload. Click the <strong>+</strong> next to the current sheet:
+<img alt="Images/quicksight-newsheet.png" src="Images/quicksight-newsheet.png" />     </p>
+</li>
+<li>
+<p>We will create another calculated field, this can be done in the visualization or in the data source (like we did previously). When you do it in the data source you get sample data - so you can see if the formula is correct, and its then available to all visualizations.  Click the <strong>home icon</strong> to go to the QuickSight homepage:
+<img alt="Images/quicksight-gohome.png" src="Images/quicksight-gohome.png" />     </p>
+</li>
+<li>
+<p>Click <strong>Manage data</strong> in the top right and select your Dataset.</p>
+</li>
+<li>
+<p>Choose the <strong>applogfiles</strong> data set, and click <strong>Edit data set</strong></p>
+</li>
+<li>
+<p>We will create a calculated field <strong>UserType</strong> with the formula below. It will split the <strong>request</strong> string by the delimeters and extract the <strong>UserType</strong> field. Create the custom field and click <strong>Create</strong>:</p>
+<pre><code>split(request, ',', 2)
+</code></pre>
+</li>
+<li>
+<p>Click <strong>save</strong> at the top</p>
+</li>
+<li>
+<p>Go back into the visualization on <strong>sheet2</strong> and hit your browser refresh, the new field will appear:
+<img alt="Images/quicksight-usertype2.png" src="Images/quicksight-usertype2.png" />     </p>
+</li>
+<li>
+<p>Create a line chart of requests, <strong>x-axis</strong> DateTime with <strong>hourly aggregation</strong>, <strong>Value</strong> request(count)
+<img alt="Images/quicksight-category1.png" src="Images/quicksight-category1.png" />     </p>
+</li>
+<li>
+<p>Setup the <strong>filters</strong> on <strong>response</strong> include only 200, and <strong>request</strong> containing index.html and image_file as per the previous step.</p>
+</li>
+<li>
+<p>Now drag <strong>UserType</strong> to the <strong>Color</strong> field well:
+<img alt="Images/quicksight-category2.png" src="Images/quicksight-category2.png" />     </p>
+</li>
+<li>
+<p>You now have a visual of your requests by different categories. In our example there is an "empty" usertype with a lot of usage, and the others are similar except for the middle of the middle of the day - where paid users are much more than free users:
+<img alt="Images/quicksight-category3.png" src="Images/quicksight-category3.png" />  </p>
+</li>
+</ol>
+<p>You now have more insight into your workload, as you now know the different types of requests that come into your workload, and how they vary over time. </p>
+<h3 id="24-quantify-requests">2.4 Quantify requests</h3>
+<p>In your application log files, you may be able to take a numerical value from inside the log file, or assign a numerical value depending on the log line contents. These can then be used to perform a calculation on, which can indicate the amount of work or resource consumption for the request.</p>
+<ol>
+<li>
+<p>When using your logs, you will need to find how different types or categories of requests can be measured in terms of resource consumption. Look to find what is in that request that indicates more resource consumption. In our sample log file it is inside the request string. A sample request string is:</p>
+<pre><code>/index.php?name=Isabella,user=sponsored,work=26
+</code></pre>
+<p>You can see there is text <strong>work=26</strong> which has a number, this corresponds to the amount of resources it consumes, so we will use that in this example.</p>
+</li>
+<li>
+<p>We will add a calculated field which contains the number, we can then sum the numbers together across requests to find the total work. You can also use if statements if you want to assign values to text: if a field contains text, then assign a number.</p>
+</li>
+<li>
+<p>Go back to the <strong>data source</strong> and add a calculated field <strong>Work</strong> with the formula:</p>
+<pre><code>parseInt(split(request, '=', 4))
+</code></pre>
+<p><img alt="Images/quicksight-calcfieldwork.png" src="Images/quicksight-calcfieldwork.png" />  </p>
+</li>
+<li>
+<p>Save the changes to the data source</p>
+</li>
+<li>
+<p>Go back into the visualization, refresh your browser and <strong>Add a new sheet</strong></p>
+</li>
+<li>
+<p>Create a <strong>line chart</strong> with <strong>x-axis</strong> as DateTime with <strong>hourly aggregation</strong>, the <strong>Sum of Work</strong> as the value. Make sure you create the response and request filters:
+<img alt="Images/quicksight-sumwork.png" src="Images/quicksight-sumwork.png" />  </p>
+</li>
+<li>
+<p>Now add the <strong>UserType</strong> as the <strong>Color</strong>:
+<img alt="Images/quicksight-sumwork2.png" src="Images/quicksight-sumwork2.png" />  </p>
+</li>
+<li>
+<p>You now have a much clearer picture as to how much resources are being consumed by the different categories of requests to your workload:
+<img alt="Images/quicksight-sumwork3.png" src="Images/quicksight-sumwork3.png" />  </p>
+</li>
+</ol>
+<p>Compare the graphs on the first, second and third sheets.  You can see that by including additional small amounts of information or focusing on certain parts of information in your analysis you can get a very different outcome. </p>
+<h3 id="25-add-the-workload-cost-visualizations">2.5 Add the workload cost visualizations</h3>
+<p>We know the requests that are being made to the workload, we will now add the cost of the workload to the analysis. This will allow us to understand the workload cost given its output.</p>
+<p>We will take a simple approach and put graphs of cost next to the graphs of the application demand. </p>
+<ol>
+<li>
+<p>Go back to the visualizations, select the <strong>first sheet</strong>, and click the <strong>edit icon</strong> next to <strong>Data set</strong>:
+<img alt="Images/quicksight-visualadddataset1.png" src="Images/quicksight-visualadddataset1.png" />  </p>
+</li>
+<li>
+<p>Click <strong>Add data set</strong></p>
+</li>
+<li>
+<p>Select the cost data set you just created, click <strong>Select</strong>:
+<img alt="Images/quicksight-visualadddataset3.png" src="Images/quicksight-visualadddataset3.png" />  </p>
+</li>
+<li>
+<p>Change the dataset, click the <strong>down arrow</strong> and select the <strong>CUR</strong> data set:
+<img alt="Images/quicksight-visualadddataset4.png" src="Images/quicksight-visualadddataset4.png" />  </p>
+</li>
+<li>
+<p>Click <strong>Add</strong> and select <strong>Add visual</strong>:
+<img alt="Images/quicksight-visualadd.png" src="Images/quicksight-visualadd.png" />  </p>
+</li>
+<li>
+<p>Create a <strong>Vertical Bar Chart</strong> with <strong>line_item_usage_start_date</strong> <strong>aggregated by the hour</strong> on the <strong>x-axis</strong>, and the sum of <strong>line_item_unblended_cost</strong> in the value field.
+<img alt="Images/quicksight-costvisual1.png" src="Images/quicksight-costvisual1.png" />  </p>
+</li>
+<li>
+<p>To ensure we only have costs for our workload, we filter on a tag that we've assigned to all our resources. Create a Filter for the graph, create a filter on <strong>resource_tags_user_application</strong>, a <strong>Custom filter</strong> that equals <strong>ordering</strong></p>
+</li>
+<li>
+<p>You can now see how the cost of the workload in comparison to the workload demand in the chart. We can see some correlation between request count and cost:
+<img alt="Images/GraphCompare.png" src="Images/GraphCompare.png" /></p>
+</li>
+<li>
+<p>Create the corresponding graphs on the other two sheets. On each sheet, select the <strong>data set</strong>, then <strong>Add a visual</strong>, and then populate the field wells. Make sure you create the filter for <strong>resource_tags_user_application</strong>.</p>
+</li>
+<li>
+<p>The visualization categorized by <strong>UserType</strong>, shows correlations depending on the user type:
+<img alt="Images/GraphCompare2.png" src="Images/GraphCompare2.png" /></p>
+</li>
+<li>
+<p>There is also correlation between work and cost:
+<img alt="Images/GraphCompare3.png" src="Images/GraphCompare3.png" />  </p>
+</li>
+</ol>
+<p>Viewing the images above, you can see the correlation between the usage level, the usage types and cost. There may be a time offset of 1hr depending on how the costs and usage are grouped.</p>
                 
                   
                 
@@ -2857,9 +3092,9 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.d9aa80ab.js"></script>
+      <script src="../../assets/javascripts/application.d9aa80ab.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>

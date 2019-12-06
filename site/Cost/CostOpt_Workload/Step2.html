@@ -2756,26 +2756,46 @@
 <p><a name="workload_demand_cost"></a></p>
 <h2 id="1-workload-demand-and-cost">1 Workload Demand and Cost</h2>
 <p>We will now go deeper into the workload demand and cost, and discover exactly what comprises the demand and cost of the workload. For this we will use SQL queries in Athena against our cost database and a spreadsheet application.</p>
-<p><strong>NOTE</strong>: You may need to change the name of the database and table in the SQL code from <strong>webserverlogs.applogfiles_reinventworkshop</strong> to your database name and table name if you didnt use the correct folder names, do this for all pasted code.</p>
+<p><strong>Make sure you perform all actions in US-EAST-1</strong></p>
 <h3 id="11-workload-demand-components">1.1 Workload demand components</h3>
 <ol>
 <li>
-<p>Go into the Athena console</p>
+<p>Log into the console here: https://costopt.signin.aws.amazon.com/console</p>
 </li>
 <li>
-<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
+<p>Your username is <strong>workshop</strong> followed by your unique number, so it will be <strong>workshop1</strong> or <strong>workshop99</strong>:</p>
 </li>
 <li>
-<p>Run the following query to return all the columns, with 10 rows of data from the application logs. </p>
-<p><strong>Note</strong> you may need to change the name of the database and table below webserverlogs.applogfiles_reinventworkshop**:</p>
+<p>Enter the password and click <strong>Sign In</strong>
+<img alt="Images/login1.png" src="Images/login1.png" />  </p>
+</li>
+</ol>
+<p><strong>Make sure you are in the US-EAST-1 region</strong></p>
+<ol>
+<li>
+<p>Go into the Athena console:
+ <img alt="Images/GotoAthena.png" src="Images/GotoAthena.png" /> </p>
+</li>
+<li>
+<p>Click the <strong>arrow</strong>, select the <strong>webserverlogs</strong> database:
+<img alt="Images/selectdatabase.png" src="Images/selectdatabase.png" /> </p>
+</li>
+<li>
+<p>You will see a table <strong>applogfiles_reinventworkshop</strong>:
+<img alt="Images/viewtable.png" src="Images/viewtable.png" /> </p>
+</li>
+<li>
+<p>Copy and paste the following query into the query window, and click <strong>Run query</strong>:</p>
 <pre><code>SELECT * FROM "webserverlogs"."applogfiles_reinventworkshop" limit 10;
 </code></pre>
+<p><img alt="Images/pastequery1.png" src="Images/pastequery1.png" /> </p>
 </li>
 <li>
-<p>Review the data and look at the columns and sample data available in your log file.</p>
+<p>Review the data and look at the columns and sample data available in your log file.
+<img alt="Images/pastequery2.png" src="Images/pastequery2.png" /> </p>
 </li>
 <li>
-<p>We will now look at the most popular requests by size, run the following query. Inside the query we convert the column <strong>bytes</strong> from a string into a number, which we then divide by 1048576 to get MBytes instead of bytes:</p>
+<p>We will now look at the most popular requests by size. Inside the query we convert the column <strong>bytes</strong> from a string into a number, which we then divide by 1048576 to get MBytes instead of bytes. Run the following query:</p>
 <pre><code>select distinct request, verb, response, (sum(cast(bytes as bigint)))/1048576 as Mbytes, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
 where bytes not like '-'
 group by request, verb, response
@@ -2784,7 +2804,7 @@ limit 100
 </code></pre>
 </li>
 <li>
-<p>Invalid requests still take resources from your systems, lets look at the number of non-successful (non 200) responses per day:</p>
+<p>Errors or invalid requests still take resources from your systems, lets look at the number of non-successful (non 200) responses per day:</p>
 <pre><code>select date_parse(logdate, '%d/%b/%Y') as date, count(*) as count FROM "webserverlogs"."applogfiles_reinventworkshop" 
 where response not like '200'
 group by logdate
@@ -2792,16 +2812,22 @@ order by logdate
 </code></pre>
 </li>
 </ol>
-<p>For your workload, review the different types of requests - both successful and not successful, and the available fields of data. This should help identify key items within the log file to analyze and measure the true demand on your workload.</p>
+<p>Use this technique for your workload, view the data in your columns and see what makes up the requests to your workload, and what important lines are in your application log files. This should help identify key items within the log file to analyze and measure the true demand on your workload.</p>
 <h3 id="22-workload-cost-components">2.2 Workload cost components</h3>
 <ol>
 <li>
-<p>Select the <strong>costusage</strong> database, and run the following query to view all the columns:</p>
-<pre><code>SELECT * FROM "costusage"."costusagefiles_reinventworkshop" limit 10;
-</code></pre>
+<p>Select the <strong>costusage</strong> database:
+<img alt="Images/selectcostusage.png" src="Images/selectcostusage.png" /> </p>
 </li>
 <li>
-<p>View the columns available (there are &gt; 100), most important are typically columns starting with <strong>line_item</strong> and <strong>resource_tags</strong>.</p>
+<p>Run the following query to view all the columns:</p>
+<pre><code>SELECT * FROM "costusage"."costusagefiles_reinventworkshop" limit 10;
+</code></pre>
+<p><img alt="Images/viewcostusage.png" src="Images/viewcostusage.png" /> </p>
+</li>
+<li>
+<p>View the columns available (there are &gt; 100), most important are typically columns starting with <strong>line_item</strong> and <strong>resource_tags</strong>.
+<img alt="Images/viewcostusage2.png" src="Images/viewcostusage2.png" /> </p>
 </li>
 <li>
 <p>For a quick listing and description of your costs, the following statement is useful as a starting point:</p>
@@ -2809,7 +2835,9 @@ order by logdate
 where resource_tags_user_application like 'ordering'
 group by line_item_line_item_description
 order by cost desc
+limit 10
 </code></pre>
+<p><img alt="Images/quicklist1.png" src="Images/quicklist1.png" /> </p>
 </li>
 <li>
 <p>Lets add some more columns to help identify what the main components of cost are, run the following statement:</p>
@@ -2817,32 +2845,30 @@ order by cost desc
 where resource_tags_user_application like 'ordering'
 group by line_item_product_code, line_item_usage_type, line_item_operation, line_item_line_item_description
 order by cost desc
+limit 10
 </code></pre>
+<p><img alt="Images/quicklist2.png" src="Images/quicklist2.png" /> </p>
 </li>
 </ol>
-<p>For your workload, review the different columns and results to see what makes up its cost. This will also indicate where you should look for savings in your cost optimization cycles.</p>
+<p>Using this data we can identify where we should look for savings in your cost optimization cycles.</p>
 <h3 id="23-efficiency">2.3 Efficiency</h3>
-<p>We have looked at our workload demand, and our workload costs. Lets combine the two to create a workload efficiency metric. As we saw in the QuickSight graphs, the demand changed over time and the cost changed also. This means our efficiency may change over time also. We will start with a very high level and simple metric, and then drill down a few steps. </p>
+<p>We have looked at our workload demand, and our workload costs. Lets combine the two to create a workload efficiency metric. </p>
 <ol>
 <li>
-<p>Go into the Athena console</p>
-</li>
-<li>
-<p>Select the <strong>webserverlogs</strong> database, which should have 1 table <strong>applogfiles..</strong></p>
-</li>
-<li>
-<p>Run the following query to return the total number of lines in our log file, which is our total demand:</p>
+<p>Run the following query to return the total number of lines in our log file, this is our total demand:</p>
 <pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop"
 </code></pre>
+<p><img alt="Images/totalload.png" src="Images/totalload.png" /> </p>
 </li>
 <li>
 <p>Copy the results into a spreadsheet application and label it <strong>Total workload demand</strong></p>
 </li>
 <li>
-<p>Run the following queries to get the total successful responses, and valid successful responses, record these also:</p>
+<p>Run the following query to get the <strong>total successful responses</strong>, and valid successful responses, in the spreadsheet record these also:</p>
 <pre><code>SELECT  count(*) FROM "webserverlogs"."applogfiles_reinventworkshop" 
 where response like '200' and (request like '%index%' or request like '%image_file%')
 </code></pre>
+<p><img alt="Images/spreadsheet1.png" src="Images/spreadsheet1.png" /> </p>
 </li>
 <li>
 <p>We will now get the successful and valid responses by hour with the query below. Note the use of <strong>date_parse</strong> to turn the string into an actual date we can work with:</p>
@@ -2853,24 +2879,28 @@ order by date, hour
 </code></pre>
 </li>
 <li>
-<p>Copy the results into the same spreadsheet.</p>
+<p>Click the icon in the top right to automatically open it in a spreadsheet:
+<img alt="Images/spreadsheet2.png" src="Images/spreadsheet2.png" /> </p>
 </li>
 <li>
-<p>Now lets get the workload cost that corresponds to the demand. Select the <strong>costusage</strong> database, which should have a table <strong>costusagefiles_...</strong></p>
+<p>Copy the results into your original spreadsheet:
+<img alt="Images/spreadsheet3.png" src="Images/spreadsheet3.png" /> </p>
 </li>
 <li>
-<p>Get the total cost for the workload with the following statement, and put it into the spreadsheet next to the demand:</p>
+<p>Now lets get the workload cost that corresponds to the demand, run the following statement, and put it into the spreadsheet next to the demand:</p>
 <pre><code>SELECT sum(line_item_unblended_cost)  FROM "costusage"."costusagefiles_reinventworkshop" 
 where resource_tags_user_application like 'ordering'
 </code></pre>
+<p><img alt="Images/spreadsheet4.png" src="Images/spreadsheet4.png" /> </p>
 </li>
 <li>
-<p>Execute the following statement to get the cost by hour and put it into the spreadsheet:</p>
+<p>Execute the following statement to get the cost by hour, copy the <strong>cost</strong> column into the spreadsheet:</p>
 <pre><code>SELECT line_item_usage_start_date as date, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
 where resource_tags_user_application like 'ordering'
 group by line_item_usage_start_date
 order by date asc
 </code></pre>
+<p><img alt="Images/spreadsheet5.png" src="Images/spreadsheet5.png" /> </p>
 </li>
 <li>
 <p>In the spreadsheet, <strong>calculate the efficiency</strong> by <strong>dividing the requests by the cost</strong>. This will give you the number of outcomes per dollar spent. Notice the difference when you compare total vs successful vs valid. Also notice any variation of efficiency throughout the day.</p>
@@ -2878,41 +2908,40 @@ order by date asc
 </ol>
 <p><img alt="Images/efficiency.png" src="Images/efficiency.png" />  </p>
 <p>You can see from the spreadsheet that the workload does:</p>
-<pre><code>- 4,244.23 total requests per dollar, overall
-- 1,924.57 successful customer requests per dollar, overall
-- from 491 to 2555 successful customer requests per dollar, throughout the day
+<pre><code>- 6,491.809 total requests per dollar, overall
+- 2789.539 successful customer requests per dollar, overall
+- from 945 to 3483 successful customer requests per dollar, throughout the day
 </code></pre>
 <p><a name="workload_demand"></a></p>
 <h2 id="2-workload-demand-visualization">2. Workload Demand Visualization</h2>
 <p>We have our workload application logs ready to analyze and visualize. This step will be to visualize the workload demand and understand how it is used.</p>
 <h3 id="22-demand-visualization-requests-per-hour">2.2 Demand visualization - Requests per hour</h3>
-<p>Our application log data is setup as a data source, so lets create a visualization. As our billing data is hourly, we will create an hourly demand graph showing the requests per hour of the workload.</p>
-<p>Log into QuickSight and open the <strong>applogfiles visualization</strong> you created in Step1, or create a <strong>New analysis</strong> from the Application log files data set. </p>
 <ol>
 <li>
-<p>In <strong>Visual types</strong>, select the <strong>vertical bar</strong> chart, and drag <strong>DateTime</strong> and <strong>request</strong> to the field wells as shown:
-<img alt="Images/quicksight-demandvisual1.png" src="Images/quicksight-demandvisual1.png" />       </p>
+<p>Click in the top left and go to the homepage:
+<img alt="Images/homepage.png" src="Images/homepage.png" />  </p>
 </li>
 <li>
-<p>Change the aggregation to <strong>hourly</strong>:
-<img alt="Images/quicksight-demandvisual2.png" src="Images/quicksight-demandvisual2.png" />       </p>
+<p>Go to QuickSight:
+<img alt="Images/gotoquicksight.png" src="Images/gotoquicksight.png" />  </p>
 </li>
 <li>
-<p>You now have a graph of all the requests over time, by hour. This shows your workload demand</p>
+<p>Enter in any valid email address and click <strong>continue</strong>:
+<img alt="Images/addemail.png" src="Images/addemail.png" />  </p>
 </li>
 <li>
-<p>Its a webserver on the internet, so there's going to be lots of invalid requests (non-200 status), there could be lots of messages in your log files that will also need to be filtered out. Lets filter them out so that we're only looking at valid requests to our workload. Click on <strong>Filter</strong>, click <strong>Create one</strong> for <strong>response</strong> and use a <strong>Filter list</strong> to select only <strong>200</strong>. Click <strong>Apply</strong>:
-<img alt="Images/quicksight-demandfilter1.png" src="Images/quicksight-demandfilter1.png" />     </p>
+<p>Click <strong>close</strong> on any popups</p>
 </li>
 <li>
-<p>Again, there could be a lot of successful requests &amp; other log messages you want to filter out. So we'll look for a specific string, which in our case is a specific request string, as something that for this workload signifies a successful customer outcome as opposed to all the other log messages.</p>
+<p>Click <strong>All dashboards</strong>:
+<img alt="Images/clickdashboards.png" src="Images/clickdashboards.png" />  </p>
 </li>
 <li>
-<p>We will create another filter on the <strong>request</strong> field, both a <strong>Filter type</strong> of <strong>Custom filter</strong>, that <strong>contains</strong> the word <strong>index.html</strong> or <strong>contains</strong> the word <strong>image_file</strong>. This will look for any request that has these words in it:
-<img alt="Images/quicksight-demandfilter3.png" src="Images/quicksight-demandfilter3.png" />     </p>
+<p>Click <strong>Workload</strong>: 
+<img alt="Images/clickworkload.png" src="Images/clickworkload.png" />  </p>
 </li>
 <li>
-<p>You now have the profile of the valid and successful customer outcomes of your workload:
+<p>On sheet 1 in the top image, you have the profile of the valid and successful customer outcomes of your workload:
 <img alt="Images/quicksight-validsuccessprofile.png" src="Images/quicksight-validsuccessprofile.png" />     </p>
 </li>
 </ol>
@@ -2921,51 +2950,18 @@ order by date asc
 <p>Your workload may do different things, there could be different requests that consume different amounts of resources - so you would like to treat them differently. In this section we will look for specific requests and categorize them out.</p>
 <ol>
 <li>
-<p>When you use your own application log files, find something that can be used to create different categories of requests. Is it in the request string? is it the source or destination of the request?  In our sample logfile it is inside the request string. A sample request string is:</p>
+<p>When you viewed the application log files you saw requests:</p>
 <pre><code>        /index.html?name=Isabella,user=sponsored,work=26
 </code></pre>
 <p>You can see there is <strong>user=sponsored</strong>, for this sample workload we have <strong>free</strong>, <strong>sponsored</strong> and <strong>paid</strong> user types.</p>
 </li>
 <li>
-<p>Add a new sheet, this will help to contrast the graphs and find the best visualization for your workload. Click the <strong>+</strong> next to the current sheet:
-<img alt="Images/quicksight-newsheet.png" src="Images/quicksight-newsheet.png" />     </p>
-</li>
-<li>
-<p>We will create another calculated field, this can be done in the visualization or in the data source (like we did previously). When you do it in the data source you get sample data - so you can see if the formula is correct, and its then available to all visualizations.  Click the <strong>home icon</strong> to go to the QuickSight homepage:
-<img alt="Images/quicksight-gohome.png" src="Images/quicksight-gohome.png" />     </p>
-</li>
-<li>
-<p>Click <strong>Manage data</strong> in the top right and select your Dataset.</p>
-</li>
-<li>
-<p>Choose the <strong>applogfiles</strong> data set, and click <strong>Edit data set</strong></p>
-</li>
-<li>
-<p>We will create a calculated field <strong>UserType</strong> with the formula below. It will split the <strong>request</strong> string by the delimeters and extract the <strong>UserType</strong> field. Create the custom field and click <strong>Create</strong>:</p>
-<pre><code>split(request, ',', 2)
-</code></pre>
-</li>
-<li>
-<p>Click <strong>save</strong> at the top</p>
-</li>
-<li>
-<p>Go back into the visualization on <strong>sheet2</strong> and hit your browser refresh, the new field will appear:
-<img alt="Images/quicksight-usertype2.png" src="Images/quicksight-usertype2.png" />     </p>
-</li>
-<li>
-<p>Create a line chart of requests, <strong>x-axis</strong> DateTime with <strong>hourly aggregation</strong>, <strong>Value</strong> request(count)
-<img alt="Images/quicksight-category1.png" src="Images/quicksight-category1.png" />     </p>
-</li>
-<li>
-<p>Setup the <strong>filters</strong> on <strong>response</strong> include only 200, and <strong>request</strong> containing index.html and image_file as per the previous step.</p>
-</li>
-<li>
-<p>Now drag <strong>UserType</strong> to the <strong>Color</strong> field well:
-<img alt="Images/quicksight-category2.png" src="Images/quicksight-category2.png" />     </p>
+<p>Go to <strong>sheet 2</strong>
+<img alt="Images/gotosheet2.png" src="Images/gotosheet2.png" />  </p>
 </li>
 <li>
 <p>You now have a visual of your requests by different categories. In our example there is an "empty" usertype with a lot of usage, and the others are similar except for the middle of the middle of the day - where paid users are much more than free users:
-<img alt="Images/quicksight-category3.png" src="Images/quicksight-category3.png" />  </p>
+<img alt="Images/quicksightcategory.png" src="Images/quicksightcategory.png" />  </p>
 </li>
 </ol>
 <p>You now have more insight into your workload, as you now know the different types of requests that come into your workload, and how they vary over time. </p>
@@ -2979,81 +2975,21 @@ order by date asc
 <p>You can see there is text <strong>work=26</strong> which has a number, this corresponds to the amount of resources it consumes, so we will use that in this example.</p>
 </li>
 <li>
-<p>We will add a calculated field which contains the number, we can then sum the numbers together across requests to find the total work. You can also use if statements if you want to assign values to text: if a field contains text, then assign a number.</p>
+<p>Go to <strong>sheet 3</strong>
+<img alt="Images/gotosheet3.png" src="Images/gotosheet3.png" />  </p>
 </li>
 <li>
-<p>Go back to the <strong>data source</strong> and add a calculated field <strong>Work</strong> with the formula:</p>
-<pre><code>parseInt(split(request, '=', 4))
-</code></pre>
-<p><img alt="Images/quicksight-calcfieldwork.png" src="Images/quicksight-calcfieldwork.png" />  </p>
-</li>
-<li>
-<p>Save the changes to the data source</p>
-</li>
-<li>
-<p>Go back into the visualization, refresh your browser and <strong>Add a new sheet</strong></p>
-</li>
-<li>
-<p>Create a <strong>line chart</strong> with <strong>x-axis</strong> as DateTime with <strong>hourly aggregation</strong>, the <strong>Sum of Work</strong> as the value. Make sure you create the response and request filters:
-<img alt="Images/quicksight-sumwork.png" src="Images/quicksight-sumwork.png" />  </p>
-</li>
-<li>
-<p>Now add the <strong>UserType</strong> as the <strong>Color</strong>:
-<img alt="Images/quicksight-sumwork2.png" src="Images/quicksight-sumwork2.png" />  </p>
-</li>
-<li>
-<p>You now have a much clearer picture as to how much resources are being consumed by the different categories of requests to your workload:
-<img alt="Images/quicksight-sumwork3.png" src="Images/quicksight-sumwork3.png" />  </p>
+<p>You have a visual of your requests by <strong>total work</strong>:
+<img alt="Images/totalwork.png" src="Images/totalwork.png" />  </p>
 </li>
 </ol>
+<p>You now have more insight into your workload, as you can measure overall load in a more meaningful way.</p>
 <p>Compare the graphs on the first, second and third sheets.  You can see that by including additional small amounts of information or focusing on certain parts of information in your analysis you can get a very different outcome. </p>
-<h3 id="25-add-the-workload-cost-visualizations">2.5 Add the workload cost visualizations</h3>
-<p>We know the requests that are being made to the workload, we will now add the cost of the workload to the analysis. This will allow us to understand the workload cost given its output.</p>
-<p>We will take a simple approach and put graphs of cost next to the graphs of the application demand. </p>
-<ol>
-<li>
-<p>Go back to the visualizations, select the <strong>first sheet</strong>, and click the <strong>edit icon</strong> next to <strong>Data set</strong>:
-<img alt="Images/quicksight-visualadddataset1.png" src="Images/quicksight-visualadddataset1.png" />  </p>
-</li>
-<li>
-<p>Click <strong>Add data set</strong></p>
-</li>
-<li>
-<p>Select the cost data set you just created, click <strong>Select</strong>:
-<img alt="Images/quicksight-visualadddataset3.png" src="Images/quicksight-visualadddataset3.png" />  </p>
-</li>
-<li>
-<p>Change the dataset, click the <strong>down arrow</strong> and select the <strong>CUR</strong> data set:
-<img alt="Images/quicksight-visualadddataset4.png" src="Images/quicksight-visualadddataset4.png" />  </p>
-</li>
-<li>
-<p>Click <strong>Add</strong> and select <strong>Add visual</strong>:
-<img alt="Images/quicksight-visualadd.png" src="Images/quicksight-visualadd.png" />  </p>
-</li>
-<li>
-<p>Create a <strong>Vertical Bar Chart</strong> with <strong>line_item_usage_start_date</strong> <strong>aggregated by the hour</strong> on the <strong>x-axis</strong>, and the sum of <strong>line_item_unblended_cost</strong> in the value field.
-<img alt="Images/quicksight-costvisual1.png" src="Images/quicksight-costvisual1.png" />  </p>
-</li>
-<li>
-<p>To ensure we only have costs for our workload, we filter on a tag that we've assigned to all our resources. Create a Filter for the graph, create a filter on <strong>resource_tags_user_application</strong>, a <strong>Custom filter</strong> that equals <strong>ordering</strong></p>
-</li>
-<li>
-<p>You can now see how the cost of the workload in comparison to the workload demand in the chart. We can see some correlation between request count and cost:
-<img alt="Images/GraphCompare.png" src="Images/GraphCompare.png" /></p>
-</li>
-<li>
-<p>Create the corresponding graphs on the other two sheets. On each sheet, select the <strong>data set</strong>, then <strong>Add a visual</strong>, and then populate the field wells. Make sure you create the filter for <strong>resource_tags_user_application</strong>.</p>
-</li>
-<li>
-<p>The visualization categorized by <strong>UserType</strong>, shows correlations depending on the user type:
-<img alt="Images/GraphCompare2.png" src="Images/GraphCompare2.png" /></p>
-</li>
-<li>
-<p>There is also correlation between work and cost:
-<img alt="Images/GraphCompare3.png" src="Images/GraphCompare3.png" />  </p>
-</li>
-</ol>
-<p>Viewing the images above, you can see the correlation between the usage level, the usage types and cost. There may be a time offset of 1hr depending on how the costs and usage are grouped.</p>
+<h3 id="25-compare-visualizations">2.5 Compare visualizations</h3>
+<p>Go back to each of the tabs and focus on the similarities between visualizations. The similarities should indicate if there is a strong correlation between usage and cost for the categories we chose. If the cost follows the demand, then you have a scalable and elastic workload:
+<img alt="Images/correlation1.png" src="Images/correlation1.png" />  </p>
+<p><img alt="Images/correlation2.png" src="Images/correlation2.png" />  </p>
+<p><img alt="Images/correlation3.png" src="Images/correlation3.png" />  </p>
                 
                   
                 
