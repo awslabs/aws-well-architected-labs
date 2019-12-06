@@ -13,26 +13,21 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - Understand where the data transfer costs are in your environment
 
 
-
 # Table of Contents
 1. [Understand licensing costs in your workload](#setup_data)
 2. [Create an account structure](#cost_licensed)
 3. [Simulate the change and validate](#validation)
 
-
     
 
-## 1. Understand the cost of data transfer in your workload <a name="license_costs"></a>
+## 1. Understand the cost of data transfer in your workload
 Depending on the type of workload, data transfer may be a small or significant cost of the overall workload cost. There are also different pricing rates for transferring data (just as there is for computing - i.e. instance types, lambda, containers) depending on the source and destination of the transfer, so we will look at what makes up your data transfer costs.
 
-For this exercise we start with the files that were used at the end of Step4, these should already be loaded if you just finished Step4: 
-    - [Step3CUR.gz](Code/Step3CUR.gz)
-    - [Step3access_log.gz](Code/Step3AccessLog.gz)
 
 ### 1.1 Understand data transfer types and total
 We will look for the word **transfer** in the **line_item_line_item_description** column to identify data transfer. We will look at the total amount in your workload and then the different types of data transfer.
 
-1. Logon to the Athena console, and run the following query: 
+1. From the Athena console, and run the following query: 
 
         select line_item_product_code, sum(line_item_usage_amount) as usage, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
         where resource_tags_user_application like 'ordering' and line_item_line_item_description like '%transfer%'
@@ -140,11 +135,10 @@ If data transfer is required between AZs for availability/resiliency, then the c
 ## 3. Simulate the change and validate <a name="validation"></a>
 We will simulate the change of having traffic only go between the tiers within the same AZ.
 
-1. Download the updated CUR and application log files from here: 
-    - [Step4CUR.gz](Code/Step4CUR.gz)
-    - [Step4access_log.gz](Code/Step4AccessLog.gz)
 
-2. Lets see that we've removed the Inter AZ Data transfer, run the following query:
+**Wait at this step until we tell you to proceed**
+
+1. Lets see that we've removed the Inter AZ Data transfer, run the following query:
         
         select line_item_product_code, line_item_operation, product_from_location, product_to_location, line_item_line_item_description, resource_tags_user_tier, sum(line_item_usage_amount) as usage, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
         where resource_tags_user_application like 'ordering' and line_item_line_item_description like '%regional data transfer%' and line_item_operation like '%InterZone%'

@@ -25,6 +25,7 @@ Storage costs may make up a small component of the overall cost of a workload, h
 
 
 For this exercise we start with the files that were used at the end of Step3, these should already be loaded if you just finished Step3: 
+
     - [Step2CUR.gz](Code/Step2CUR.gz)
     - [Step2access_log.gz](Code/Step2AccessLog.gz)
 
@@ -45,10 +46,8 @@ The first step is to look for any large volumes, which can singled out for deepe
 
 3. If there are any significant costs, you search for the volume by its resource ID, copy the top resource ID, in our example one of them is: **vol-0c4ceffc35e2a8d43**
 
-4. You can then go into the **EC2 console**, into **Elastic block store** and search for the volume.  You can then find the instance it is attached to:
+4. You could then see in the console what instance is attached to. We could logon to that instance and ensure there is a high level of utilization of the storage, as it is a large cost.
 ![Images/ebs_find01.png](Images/ebs_find01.png)
-
-5. You can then look into the instance and ensure there is a high level of utilization of the storage, as it is a large cost.
 
 
 ### 1.2 Large number of small volumes
@@ -76,21 +75,14 @@ The query uses **730** as the hours in the month, this will vary depending on th
 ### 1.3 Wasted space on volumes
 There are many different ways to manage your fleet of resources, but its important to do it at scale, and be able to pick patterns. In the previous example we highlighted that there may be lots of boot volumes that make up your total storage cost. You need to be able to understand if these volumes are fully utilized before making changes. 
 
-Inventory management is out of scope for this lab, so we will demonstrate a small Linux script that can be used to display volume utilization for spot checks. If you do not have inventory management setup, you could utilize this script to do quick checks to identify wasted storage.
+Inventory management is out of scope for this lab, so we will show how we ran a small Linux script that can be used to display volume utilization for spot checks.
 
-It is suggested to run this query against volumes of large size (high cost), or volumes you have a large number of - such as boot volumes.
+We used a return state within the script to trigger Systems Manager to show success or fail depending on if there is wasted storage. We program the script to **succeed** if there is the specified amount of waste, otherwise it will fail which means there is no waste.
 
-We can use a return state within the script to trigger Systems Manager to show success or fail depending on if there is wasted storage. We program the script to **succeed** if there is the specified amount of waste, otherwise it will fail which means there is no waste.
-
-Make sure you perform this operation in a test or other non-production environment.
-
-If you are using the provided log files you can read this step.
-
-1. Run an **AWS-RunShellScript** from withing **Systems Manager**:
+1. We used **AWS-RunShellScript** from within **Systems Manager**:
 ![Images/run_shellscript.png](Images/run_shellscript.png)
 
-2. The following script checks if the volume utilization is below 40% and the amount of free space is more than 5Gb.  You can modify this script to ensure the amount of waste is over a certain $ amount, and there is still enough headroom on the volume.  Paste the following script and run it against some **dev or test** instances:
-
+2. The following script checks if the volume utilization is below 40% and the amount of free space is more than 5Gb.  You can modify this script to ensure the amount of waste is over a certain $ amount, and there is still enough headroom on the volume:
         
         df | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $1 " " $5 " " $2 " " $4}' | while read output;
         do
@@ -106,7 +98,7 @@ If you are using the provided log files you can read this step.
             fi
         done
 
-3. You can see here we have 4 instances that have a lot of wasted space on their volumes, these are our middle Tier application servers:
+3. You can see here we had 4 instances that have a lot of wasted space on their volumes, these are our middle Tier application servers:
 ![Images/run_shellscript2.png](Images/run_shellscript2.png)
 
 7. If there are large numbers of success, and the volume names correspond to boot volumes or other recognizable volumes in your environment, then they could be good candidates for improvement. 
@@ -114,31 +106,20 @@ If you are using the provided log files you can read this step.
 8. In our simulated environment, it returned **success** for all c5 instances in the middle tier.  
 
 
-
-
 ### 1.4 Use of storage
 The other area for saving with storage is to find the best type of storage for your purpose. If you have large amounts of storage with high utilization/low free space, then this could potentially yield large benefits, this will be highly dependent on your workload.
 
-Like the previous step, system administration is out of scope for this lab, so we will demonstrate some commands that can be used on a Linux instance to help track down storage usage.
+We will show how we found what our storage was used for in the test environment.
 
-Make sure you perform this operation in a test or other non-production environment, if you are using the sample log files you can **just read** the following steps:
-
-1. Logon to a target instance
-
-2. Go to the root directory
-
-        sudo su
-        cd /
-        
-3. Execute the following disk usage command and view the results:
+1. We executed the following disk usage command and view the results:
 
         sudo du -h --max-depth=1 | sort -hr
         
 ![Images/storage_check1.png](Images/storage_check1.png)
 
-4. You can see there is a lot of storage used in the **ftp** and **var** directories, lets look further.
+4. You can see there was a lot of storage used in the **ftp** and **var** directories, lets look further.
 
-5. Iteratively execute disk usage statements for the large directories, here we will traverse the /var directory to find the largest usage on our front end instance:
+5. Iteratively we executed disk usage statements for the large directories, here we traversed the /var directory to find the largest usage on our front end instance:
 
         du -h --max-depth=1 /var | sort -hr
         du -h --max-depth=1 /var/www | sort -hr
@@ -146,35 +127,24 @@ Make sure you perform this operation in a test or other non-production environme
 
 ![Images/storage_check2.png](Images/storage_check2.png)
 
-5. So you have found the directory consuming the storage and can look at the contents. Understand how the storage is being used and look for alternative services. You can then use the AWS storage page to see if there are alternative services or classes of storage that would be most cost effective: https://aws.amazon.com/products/storage/
-
+5. So we found the directory consuming the storage and can look at the contents. Understand how the storage is being used and look for alternative services. You can then use the AWS storage page to see if there are alternative services or classes of storage that would be most cost effective: https://aws.amazon.com/products/storage/
 
 
  <a name="validation"></a>
 ## 2. Simulate the change and validate
 We saw earlier that our C5 middle tier instances had unused 30Gb volumes that were attached. We will simulate the change, and remove the excess storage.
 
+**Wait at this step until we tell you to proceed**
 
-1. Download the updated CUR and application log files from here: 
-    - [Step3CUR.gz](Code/Step3CUR.gz)
-    - [Step3access_log.gz](Code/Step3AccessLog.gz)
+1. In the **Athena console** execute the following query:
 
-2. We will re-run the script and verify there is no wasted storage:
+        SELECT sum(line_item_unblended_cost) as Cost, line_item_usage_amount*730 as Vol_Size, count(*)/count(distinct line_item_usage_start_date) as Num_Volumes  FROM "costusage"."costusagefiles_reinventworkshop"
+        where line_item_usage_type like '%EBS%' and resource_tags_user_application like 'ordering'
+        group by line_item_usage_amount
+        order by cost desc
+        limit 50
         
-        df | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $1 " " $5 " " $2 " " $4}' | while read output;
-        do
-            volume=$(echo $output | awk '{ print $1 }')
-            usepercent=$(echo $output | awk '{ print $2 }' | cut -d'%' -f1 )
-            free=$(echo $output | awk '{ print $4 }')
-
-            if [ $usepercent -lt 40 ] && [ $free -gt 5000000 ]
-            then
-                echo "$HOSTNAME has less than 40% utilization and greater than 5Gb free on $volume"
-            else
-                exit 1
-            fi
-        done
-
+      
 3. You can see we now have **8 x 30Gb** volumes at a cost of **$0.7667** and **13 x 8Gb volumes** at a cost of **$0.33222**. We revmoved the 4 unused 30Gb volumes from the middle tier, and deleted other unused volumes: 
 ![Images/run_shellscript4.png](Images/run_shellscript4.png)
 

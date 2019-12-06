@@ -24,16 +24,9 @@ For this exercise we start with the files that were used at the end of Step4, th
 
 <a name="pricing_models"></a>
 ## 1. Implement Pricing Models 
-We will **NOT** do a per workload analysis, or attempt to purchase and align Savings Plans or RI's to workload components, as this is not best practice.
-
-We know that we need to separate the analysis and purchasing of pricing models such as Savings Plans and Reserved Instances, from our internal accounting structures. We perform the analysis at the master or payer account level, as this will provide the lowest costs to the business, including our workload.
-
-We then use our tooling to apply and allocate the discounts that were provided, to our internal accounting structure.
-
-We will work closely with our Finance or cloud teams and perform the following lab with them:
+Perform the following lab to perform a savings plan analysis on a set of accounts:
 
 - [Pricing Models SPs](../Cost_Fundamentals/100_3_Pricing_Models/README.md)
-- [Pricng Models RIs](../Cost_Fundamentals/200_3_Pricing_Models/README.md)
 
 
 1. We will confirm the rates and prices we are paying for our resources before we apply pricing models, and also throughout the operation of our workload.  If our workload no longer has pricing model discounts applied, it may mean your pricing model coverage is too low.
@@ -66,9 +59,7 @@ We will work closely with our Finance or cloud teams and perform the following l
 ## 2. Simulate the change and validate
 We will simulate the change of purchasing pricing models.
 
-1. Download the updated CUR and application log files from here: 
-    - [Step5CUR.gz](Code/Step5CUR.gz)
-    - [Step5access_log.gz](Code/Step5AccessLog.gz)
+**Wait at this step until we tell you to proceed**
 
 2. Lets check our costs for the workload after savings plans have been applied, run the following query:
 

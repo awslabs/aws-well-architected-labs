@@ -2753,16 +2753,13 @@
 <li><a href="#cost_licensed">Create an account structure</a></li>
 <li><a href="#validation">Simulate the change and validate</a></li>
 </ol>
-<h2 id="1-understand-the-cost-of-data-transfer-in-your-workload">1. Understand the cost of data transfer in your workload <a name="license_costs"></a></h2>
+<h2 id="1-understand-the-cost-of-data-transfer-in-your-workload">1. Understand the cost of data transfer in your workload</h2>
 <p>Depending on the type of workload, data transfer may be a small or significant cost of the overall workload cost. There are also different pricing rates for transferring data (just as there is for computing - i.e. instance types, lambda, containers) depending on the source and destination of the transfer, so we will look at what makes up your data transfer costs.</p>
-<p>For this exercise we start with the files that were used at the end of Step4, these should already be loaded if you just finished Step4: 
-    - <a href="Code/Step3CUR.gz">Step3CUR.gz</a>
-    - <a href="Code/Step3AccessLog.gz">Step3access_log.gz</a></p>
 <h3 id="11-understand-data-transfer-types-and-total">1.1 Understand data transfer types and total</h3>
 <p>We will look for the word <strong>transfer</strong> in the <strong>line_item_line_item_description</strong> column to identify data transfer. We will look at the total amount in your workload and then the different types of data transfer.</p>
 <ol>
 <li>
-<p>Logon to the Athena console, and run the following query: </p>
+<p>From the Athena console, and run the following query: </p>
 <pre><code>select line_item_product_code, sum(line_item_usage_amount) as usage, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 
 where resource_tags_user_application like 'ordering' and line_item_line_item_description like '%transfer%'
 group by line_item_product_code
@@ -2878,14 +2875,8 @@ order by cost desc
 <p>If data transfer is required between AZs for availability/resiliency, then the cost of data transfer is part of the cost of availability/resiliency, the same way as additional instances and storage is.</p>
 <h2 id="3-simulate-the-change-and-validate">3. Simulate the change and validate <a name="validation"></a></h2>
 <p>We will simulate the change of having traffic only go between the tiers within the same AZ.</p>
+<p><strong>Wait at this step until we tell you to proceed</strong></p>
 <ol>
-<li>
-<p>Download the updated CUR and application log files from here: </p>
-<ul>
-<li><a href="Code/Step4CUR.gz">Step4CUR.gz</a></li>
-<li><a href="Code/Step4AccessLog.gz">Step4access_log.gz</a></li>
-</ul>
-</li>
 <li>
 <p>Lets see that we've removed the Inter AZ Data transfer, run the following query:</p>
 <pre><code>select line_item_product_code, line_item_operation, product_from_location, product_to_location, line_item_line_item_description, resource_tags_user_tier, sum(line_item_usage_amount) as usage, sum(line_item_unblended_cost) as cost FROM "costusage"."costusagefiles_reinventworkshop" 

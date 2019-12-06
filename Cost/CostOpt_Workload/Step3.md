@@ -30,10 +30,7 @@ We take this information and decide if the effort required to make the change wi
 ### 1.1 Analyze CUR columns
 The first step is to understand what information we may have that can show us costs associated with licenses.
 
-1. Log into the AWS console as an IAM user with the required permissions:
-![Images/consolelogin_IAMUser.png](Images/consolelogin_IAMUser.png)
- 
-2. Go to the **Athena** Console:
+1. Go to the **Athena** Console:
 
 3. Select the **costusage** database, you should see the **costusagefiles** table
 

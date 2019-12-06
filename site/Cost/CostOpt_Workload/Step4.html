@@ -2756,9 +2756,10 @@
 <p><a name="understand_storage"></a></p>
 <h2 id="1-understand-the-cost-of-storage-in-your-workload">1. Understand the cost of storage in your workload</h2>
 <p>Storage costs may make up a small component of the overall cost of a workload, however at an enterprise level with large numbers of workloads or a larger workload, storage costs can become significant. There may not be one single resource that contributes to a large storage cost, it could be a large number of small amounts. So we will develop a technique to find where our storage costs are and how we can minimize waste.  We will focus on EBS storage, but this technique can be applied to any storage type, and other services where there are large numbers of small resources.</p>
-<p>For this exercise we start with the files that were used at the end of Step3, these should already be loaded if you just finished Step3: 
-    - <a href="Code/Step2CUR.gz">Step2CUR.gz</a>
-    - <a href="Code/Step2AccessLog.gz">Step2access_log.gz</a></p>
+<p>For this exercise we start with the files that were used at the end of Step3, these should already be loaded if you just finished Step3: </p>
+<pre><code>- [Step2CUR.gz](Code/Step2CUR.gz)
+- [Step2access_log.gz](Code/Step2AccessLog.gz)
+</code></pre>
 <h3 id="11-discover-large-volumes">1.1 Discover large volumes</h3>
 <p>The first step is to look for any large volumes, which can singled out for deeper inspection.</p>
 <ol>
@@ -2778,11 +2779,8 @@ limit 50
 <p>If there are any significant costs, you search for the volume by its resource ID, copy the top resource ID, in our example one of them is: <strong>vol-0c4ceffc35e2a8d43</strong></p>
 </li>
 <li>
-<p>You can then go into the <strong>EC2 console</strong>, into <strong>Elastic block store</strong> and search for the volume.  You can then find the instance it is attached to:
+<p>You could then see in the console what instance is attached to. We could logon to that instance and ensure there is a high level of utilization of the storage, as it is a large cost.
 <img alt="Images/ebs_find01.png" src="Images/ebs_find01.png" /></p>
-</li>
-<li>
-<p>You can then look into the instance and ensure there is a high level of utilization of the storage, as it is a large cost.</p>
 </li>
 </ol>
 <h3 id="12-large-number-of-small-volumes">1.2 Large number of small volumes</h3>
@@ -2811,18 +2809,15 @@ limit 50
 </ol>
 <h3 id="13-wasted-space-on-volumes">1.3 Wasted space on volumes</h3>
 <p>There are many different ways to manage your fleet of resources, but its important to do it at scale, and be able to pick patterns. In the previous example we highlighted that there may be lots of boot volumes that make up your total storage cost. You need to be able to understand if these volumes are fully utilized before making changes. </p>
-<p>Inventory management is out of scope for this lab, so we will demonstrate a small Linux script that can be used to display volume utilization for spot checks. If you do not have inventory management setup, you could utilize this script to do quick checks to identify wasted storage.</p>
-<p>It is suggested to run this query against volumes of large size (high cost), or volumes you have a large number of - such as boot volumes.</p>
-<p>We can use a return state within the script to trigger Systems Manager to show success or fail depending on if there is wasted storage. We program the script to <strong>succeed</strong> if there is the specified amount of waste, otherwise it will fail which means there is no waste.</p>
-<p>Make sure you perform this operation in a test or other non-production environment.</p>
-<p>If you are using the provided log files you can read this step.</p>
+<p>Inventory management is out of scope for this lab, so we will show how we ran a small Linux script that can be used to display volume utilization for spot checks.</p>
+<p>We used a return state within the script to trigger Systems Manager to show success or fail depending on if there is wasted storage. We program the script to <strong>succeed</strong> if there is the specified amount of waste, otherwise it will fail which means there is no waste.</p>
 <ol>
 <li>
-<p>Run an <strong>AWS-RunShellScript</strong> from withing <strong>Systems Manager</strong>:
+<p>We used <strong>AWS-RunShellScript</strong> from within <strong>Systems Manager</strong>:
 <img alt="Images/run_shellscript.png" src="Images/run_shellscript.png" /></p>
 </li>
 <li>
-<p>The following script checks if the volume utilization is below 40% and the amount of free space is more than 5Gb.  You can modify this script to ensure the amount of waste is over a certain $ amount, and there is still enough headroom on the volume.  Paste the following script and run it against some <strong>dev or test</strong> instances:</p>
+<p>The following script checks if the volume utilization is below 40% and the amount of free space is more than 5Gb.  You can modify this script to ensure the amount of waste is over a certain $ amount, and there is still enough headroom on the volume:</p>
 <pre><code>df | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $1 " " $5 " " $2 " " $4}' | while read output;
 do
     volume=$(echo $output | awk '{ print $1 }')
@@ -2839,7 +2834,7 @@ done
 </code></pre>
 </li>
 <li>
-<p>You can see here we have 4 instances that have a lot of wasted space on their volumes, these are our middle Tier application servers:
+<p>You can see here we had 4 instances that have a lot of wasted space on their volumes, these are our middle Tier application servers:
 <img alt="Images/run_shellscript2.png" src="Images/run_shellscript2.png" /></p>
 </li>
 <li>
@@ -2851,31 +2846,19 @@ done
 </ol>
 <h3 id="14-use-of-storage">1.4 Use of storage</h3>
 <p>The other area for saving with storage is to find the best type of storage for your purpose. If you have large amounts of storage with high utilization/low free space, then this could potentially yield large benefits, this will be highly dependent on your workload.</p>
-<p>Like the previous step, system administration is out of scope for this lab, so we will demonstrate some commands that can be used on a Linux instance to help track down storage usage.</p>
-<p>Make sure you perform this operation in a test or other non-production environment, if you are using the sample log files you can <strong>just read</strong> the following steps:</p>
+<p>We will show how we found what our storage was used for in the test environment.</p>
 <ol>
-<li>
-<p>Logon to a target instance</p>
-</li>
-<li>
-<p>Go to the root directory</p>
-<pre><code>sudo su
-cd /
-</code></pre>
-</li>
-<li>
-<p>Execute the following disk usage command and view the results:</p>
-<pre><code>sudo du -h --max-depth=1 | sort -hr
+<li>We executed the following disk usage command and view the results:<pre><code>sudo du -h --max-depth=1 | sort -hr
 </code></pre>
 </li>
 </ol>
 <p><img alt="Images/storage_check1.png" src="Images/storage_check1.png" /></p>
 <ol>
 <li>
-<p>You can see there is a lot of storage used in the <strong>ftp</strong> and <strong>var</strong> directories, lets look further.</p>
+<p>You can see there was a lot of storage used in the <strong>ftp</strong> and <strong>var</strong> directories, lets look further.</p>
 </li>
 <li>
-<p>Iteratively execute disk usage statements for the large directories, here we will traverse the /var directory to find the largest usage on our front end instance:</p>
+<p>Iteratively we executed disk usage statements for the large directories, here we traversed the /var directory to find the largest usage on our front end instance:</p>
 <pre><code>du -h --max-depth=1 /var | sort -hr
 du -h --max-depth=1 /var/www | sort -hr
 du -h --max-depth=1 /var/www/html | sort -hr
@@ -2884,34 +2867,20 @@ du -h --max-depth=1 /var/www/html | sort -hr
 </ol>
 <p><img alt="Images/storage_check2.png" src="Images/storage_check2.png" /></p>
 <ol>
-<li>So you have found the directory consuming the storage and can look at the contents. Understand how the storage is being used and look for alternative services. You can then use the AWS storage page to see if there are alternative services or classes of storage that would be most cost effective: https://aws.amazon.com/products/storage/</li>
+<li>So we found the directory consuming the storage and can look at the contents. Understand how the storage is being used and look for alternative services. You can then use the AWS storage page to see if there are alternative services or classes of storage that would be most cost effective: https://aws.amazon.com/products/storage/</li>
 </ol>
 <p><a name="validation"></a></p>
 <h2 id="2-simulate-the-change-and-validate">2. Simulate the change and validate</h2>
 <p>We saw earlier that our C5 middle tier instances had unused 30Gb volumes that were attached. We will simulate the change, and remove the excess storage.</p>
+<p><strong>Wait at this step until we tell you to proceed</strong></p>
 <ol>
 <li>
-<p>Download the updated CUR and application log files from here: </p>
-<ul>
-<li><a href="Code/Step3CUR.gz">Step3CUR.gz</a></li>
-<li><a href="Code/Step3AccessLog.gz">Step3access_log.gz</a></li>
-</ul>
-</li>
-<li>
-<p>We will re-run the script and verify there is no wasted storage:</p>
-<pre><code>df | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $1 " " $5 " " $2 " " $4}' | while read output;
-do
-    volume=$(echo $output | awk '{ print $1 }')
-    usepercent=$(echo $output | awk '{ print $2 }' | cut -d'%' -f1 )
-    free=$(echo $output | awk '{ print $4 }')
-
-    if [ $usepercent -lt 40 ] &amp;&amp; [ $free -gt 5000000 ]
-    then
-        echo "$HOSTNAME has less than 40% utilization and greater than 5Gb free on $volume"
-    else
-        exit 1
-    fi
-done
+<p>In the <strong>Athena console</strong> execute the following query:</p>
+<pre><code>SELECT sum(line_item_unblended_cost) as Cost, line_item_usage_amount*730 as Vol_Size, count(*)/count(distinct line_item_usage_start_date) as Num_Volumes  FROM "costusage"."costusagefiles_reinventworkshop"
+where line_item_usage_type like '%EBS%' and resource_tags_user_application like 'ordering'
+group by line_item_usage_amount
+order by cost desc
+limit 50
 </code></pre>
 </li>
 <li>
