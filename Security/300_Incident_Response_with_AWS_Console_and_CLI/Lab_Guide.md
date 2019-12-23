@@ -150,7 +150,7 @@ List all groups:
 
 ### 2.4 Attach inline deny policy
 
-Attaching an explicit deny policy to an AWS IAM role, user or group will quickly block **ALL** access for that entity which is useful if it is performing unauthorized operations.
+Attaching an explicit deny policy to an AWS IAM role, user or group will quickly block **ALL** access for that entity which is useful if it is performing unauthorized operations. Please note that the role will still be able to call the sts API to obtain information on itself, e.g. using get-caller-identity will return the account ID, user ID and ARN.
 
 #### 2.4.1 AWS Console
 
@@ -161,7 +161,7 @@ Attaching an explicit deny policy to an AWS IAM role, user or group will quickly
 5. Click the **JSON** tab then replace the example with the following:
 `{ "Statement": [ { "Effect": "Deny", "Action": "*", "Resource": "*" } ] }`
 6. Click **Review policy**.
-7. Enter **Name** of *DenyAll* then click **Create policy**.
+7. Enter **Name** of *DenyAll* then click **Create policy**. Note that the console may incorrectly display the access level. 
 
 #### 2.4.2 AWS CLI
 
