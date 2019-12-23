@@ -71,15 +71,17 @@ Launch an instance:
 7. Click Next: Configure Security Group.
 
 	7.1 On type SSH, select Source as `My IP`
-	7.2 Click Add Rule, select Type as HTTP and source as `Anywhere`
+	
+  7.2 Click Add Rule, select Type as HTTP and source as `Anywhere`
 	Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
   exposed. However, for simplicity in this lab, we are opening the access to anywhere. Later modules will
   secure access with Elastic Load Balancer.
-	7.2 Select Add Rule to add both SSH and HTTP, and on source, select `My IP`.
+	
+  7.3 Select Add Rule to add both SSH and HTTP, and on source, select `My IP`.
 
 	![Security Group](Images/ec2-launch-wizard-security-group.png)
 
-	7.3 Click Review and Launch.
+	7.4 Click Review and Launch.
 
 	![ec2-launch-wizard](Images/ec2-launch-wizard-launch.png)
 
