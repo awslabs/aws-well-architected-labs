@@ -23,6 +23,7 @@ Launch an instance:
 ![ec2-launch-wizard](Images/ec2-launch-wizard-type.png)
 
 5. On the Configure Instance Details page, make the following changes:
+
   5.1 Select Create new IAM role.
 
   ![ec2-launch-wizard](Images/ec2-launch-wizard-role.png)
@@ -51,6 +52,7 @@ Launch an instance:
   ![ec2-launch-wizard](Images/ec2-launch-wizard-create-role-final.png)
 
   5.7 Scroll down and expand the Advanced Details section. Enter the following in the User Data test box to automatically install Apache web server and apply basic configuration when the instance is launched:
+  
   	```
 	#!/bin/bash
 	yum update -y
@@ -64,8 +66,10 @@ Launch an instance:
 	find /var/www -type d -exec chmod 2775 {} +
 	find /var/www -type f -exec chmod 0664 {} +
    	```
+
 6. Accept defaults and Choose Next: Add tags.
 7. Click Next: Configure Security Group.
+
 	7.1 On type SSH, select Source as `My IP`
 	7.2 Click Add Rule, select Type as HTTP and source as `Anywhere`
 	Note that best practice is to have an Elastic Load Balancer inline or the EC2 instance not directly
