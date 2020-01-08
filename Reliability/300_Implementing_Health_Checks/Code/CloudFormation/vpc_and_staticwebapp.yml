@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+#TODO: Parameterize the naming prefix and have VPCImportName read  from VPC 
+
+Resources:
+  VPCStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: "https://s3.us-west-2.amazonaws.com/well-architected-labs/Common/vpc-alb-app-db.yaml"
+      Parameters: 
+        NamingPrefix : "WebApp-VPC"
+
+  WebAppStack:
+    Type: 'AWS::CloudFormation::Stack'
+    DependsOn: VPCStack
+    Properties:
+      TemplateURL: "https://s3.us-west-2.amazonaws.com/well-architected-labs/Common/staticwebapp.yaml"
+      Parameters: 
+        NamingPrefix : "WebApp-App"
+        VPCImportName : "WebApp-VPC"
+
