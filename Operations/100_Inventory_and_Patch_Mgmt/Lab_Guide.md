@@ -114,7 +114,7 @@ To deploy the lab infrastructure:
 1. **Download the CloudFormation script** for this lab from [/Code](https://github.com/awslabs/aws-well-architected-labs/blob/master/Operations/100_Inventory_and_Patch_Mgmt/Code).
 1. Use your administrator account to access the CloudFormation console at <https://console.aws.amazon.com/cloudformation/>.
 1. Choose **Create Stack**.
-1. On the **Select Template** page, select **Specify an Amazon S3 template URL** and enter the URL for the downloaded location.
+1. On the **Select Template** page, select **Upload a template file** and select `OE_Inventory_and_Patch_Mgmt.json` file you had just downloaded.
 
 **AWS CloudFormation Designer**
 
