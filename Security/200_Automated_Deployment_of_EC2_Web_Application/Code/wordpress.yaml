@@ -22,7 +22,7 @@ Parameters:
   NamingPrefix:
     Type: String
     Description: The naming prefix for resources created by this template.
-    Default: WebApp1
+    Default: webapp1
   #Imports:
   VPCImportName:
     Type: String
