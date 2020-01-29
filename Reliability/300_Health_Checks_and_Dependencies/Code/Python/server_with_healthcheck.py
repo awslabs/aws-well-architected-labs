@@ -102,6 +102,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(bytes("<html><head><title>healthcheck</title></head>", "utf-8"))
             self.wfile.write(bytes("<body>success</body></html>", "utf-8"))
 
+            # @TODO Add check for service dependency - if not available return 503 Service Unavailable.
+
         return
 
 

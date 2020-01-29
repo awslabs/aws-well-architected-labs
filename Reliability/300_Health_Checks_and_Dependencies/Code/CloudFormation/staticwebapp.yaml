@@ -58,29 +58,25 @@ Parameters:
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
-    Default: t2.small
+    Default: t3.micro
     AllowedValues:
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
       - t2.nano
       - t2.micro
       - t2.small
       - t2.medium
       - t2.large
-      - m3.medium
-      - m3.large
-      - m3.xlarge
-      - m3.2xlarge
-      - m4.large
-      - m4.xlarge
-      - m4.2xlarge
-      - c3.large
-      - c3.xlarge
-      - c3.2xlarge
-      - c4.large
-      - c4.xlarge
-      - c4.2xlarge
-      - r3.large
-      - r3.xlarge
-      - r3.2xlarge
+      - m5.medium
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.12xlarge
+      - m5.24xlarge
     ConstraintDescription: must be a valid EC2 instance type.
   ALBSGSource:
     Description: The IP address range that can be used to access the web app
@@ -91,7 +87,7 @@ Parameters:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   Web1AutoScaleDesired:
-    Default: '6'
+    Default: '3'
     Description: The desired number of web instances in auto scaling group
     Type: Number
     MinValue: '3'
@@ -109,89 +105,30 @@ Mappings:
       Arch: HVM64
     t2.large:
       Arch: HVM64
-    m3.medium:
+    t3.nano:
       Arch: HVM64
-    m3.large:
+    t3.micro:
       Arch: HVM64
-    m3.xlarge:
+    t3.small:
       Arch: HVM64
-    m3.2xlarge:
+    t3.medium:
       Arch: HVM64
-    m4.large:
+    t3.large:
       Arch: HVM64
-    m4.xlarge:
+    m5.medium:
       Arch: HVM64
-    m4.2xlarge:
+    m5.large:
       Arch: HVM64
-    c3.large:
+    m5.xlarge:
       Arch: HVM64
-    c3.xlarge:
+    m5.2xlarge:
       Arch: HVM64
-    c3.2xlarge:
+    m5.4xlarge:
       Arch: HVM64
-    c4.large:
+    m5.12xlarge:
       Arch: HVM64
-    c4.xlarge:
+    m5.24xlarge:
       Arch: HVM64
-    c4.2xlarge:
-      Arch: HVM64
-    r3.large:
-      Arch: HVM64
-    r3.xlarge:
-      Arch: HVM64
-    r3.2xlarge:
-      Arch: HVM64
-    d2.xlarge:
-      Arch: HVM64
-    d2.2xlarge:
-      Arch: HVM64
-  AWSInstanceType2NATArch:
-    t2.nano:
-      Arch: NATHVM64
-    t2.micro:
-      Arch: NATHVM64
-    t2.small:
-      Arch: NATHVM64
-    t2.medium:
-      Arch: NATHVM64
-    t2.large:
-      Arch: NATHVM64
-    m3.medium:
-      Arch: NATHVM64
-    m3.large:
-      Arch: NATHVM64
-    m3.xlarge:
-      Arch: NATHVM64
-    m3.2xlarge:
-      Arch: NATHVM64
-    m4.large:
-      Arch: NATHVM64
-    m4.xlarge:
-      Arch: NATHVM64
-    m4.2xlarge:
-      Arch: NATHVM64
-    c3.large:
-      Arch: NATHVM64
-    c3.xlarge:
-      Arch: NATHVM64
-    c3.2xlarge:
-      Arch: NATHVM64
-    c4.large:
-      Arch: NATHVM64
-    c4.xlarge:
-      Arch: NATHVM64
-    c4.2xlarge:
-      Arch: NATHVM64
-    r3.large:
-      Arch: NATHVM64
-    r3.xlarge:
-      Arch: NATHVM64
-    r3.2xlarge:
-      Arch: NATHVM64
-    d2.xlarge:
-      Arch: NATHVM64
-    d2.2xlarge:
-      Arch: NATHVM64
   AWSRegionArch2AMI:
     us-east-1:
       HVM64: ami-0ff8a91507f77f867
@@ -369,8 +306,8 @@ Resources:
         - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet2'
         - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet3'
       LaunchConfigurationName: !Ref Web1LaunchConfig
-      MinSize: '1'
-      MaxSize: '9'
+      MinSize: '3'
+      MaxSize: !Ref Web1AutoScaleDesired
       DesiredCapacity: !Ref Web1AutoScaleDesired
       TargetGroupARNs:
         - !Ref ALB1TargetGroup
@@ -437,6 +374,9 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: /
+      # Consider replacing this with a narrower inline policy
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
       Policies:
         - PolicyName: ec2
           PolicyDocument:
@@ -526,6 +466,29 @@ Resources:
       Path: /Web1InstanceEc2Role/
       Roles:
         - !Ref Web1InstanceRole
+  DynamoDBServiceMockTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties: 
+      TableName: 'serviceCallMocks'
+      AttributeDefinitions: 
+        - 
+          AttributeName: 'ServiceAPI'
+          AttributeType: 'S'
+        - 
+          AttributeName: 'UserID'
+          AttributeType: 'N'
+      KeySchema: 
+        - 
+          AttributeName: 'ServiceAPI'
+          KeyType: 'HASH'
+        - 
+          AttributeName: 'UserID'
+          KeyType: 'RANGE'
+      ProvisionedThroughput: 
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5'
+      SSESpecification: 
+        SSEEnabled: 'true'
 Outputs:
   WebsiteURL:
     Value: !Join
