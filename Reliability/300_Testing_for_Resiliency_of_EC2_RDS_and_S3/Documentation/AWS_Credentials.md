@@ -6,8 +6,8 @@
 
 Select the appropriate option for configuration of your AWS credentials:
 
-* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables 
-* **Option 2** - Using AWS CLI software
+* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables
+* **Option 2** - Using AWS CLI
 * **Option 3** - Creating configuration files manually
 * **Option 4** - Using PowerShell commands for Windows
 
@@ -16,7 +16,7 @@ Select the appropriate option for configuration of your AWS credentials:
 If BOTH of the following are true then you may use **Option 1**
 
 * **If you are attending an in-person workshop and were provided with an AWS account by the instructor** then you should use this option
-* You are running the workshop on system where environment variables are set using the `export` command, such as Bash on Amazon Linux
+* You are running the workshop on a system where environment variables are set using the `export` command, such as Bash on Amazon Linux
 
 Otherwise you should choose **Option 2** or **Option 3**
 
@@ -33,13 +33,13 @@ Otherwise you should choose **Option 2** or **Option 3**
 
         export AWS_DEFAULT_OUTPUT=json
 
-1. Note that if you end your session, or start a new one, you will need to re-execute the `export` statements
+1. Note that if you end your bash session, or start a new one, you will need to re-execute the `export` statements
 
 If you completed **Option 1** then **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
 
 ### Option 2 AWS CLI
 
-This option uses the AWS CLI. Note that running the bash failure testing scripts requires this software. If you are using another programming environment for failure testing, you can use use **Option 3** if you do not or cannot install this software.
+This option uses the AWS CLI. Note that running the bash failure testing scripts requires this software. If you are using another programming environment for failure testing, you can use **Option 3** if you do not or cannot install the AWS CLI.
 
 1. To see if the AWS CLI is installed:
 
@@ -106,7 +106,7 @@ If you used **Option 2** or **Option 3**, please follow these steps:
 
 ### Clear environment variables
 
-If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these systems preferentially will use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set:
+If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these will preferentially use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set:
 
 * `AWS_ACCESS_KEY_ID`
 * `AWS_SECRET_ACCESS_KEY`
@@ -117,7 +117,7 @@ If you used **option 2** or **option 3** then you have put your credentials into
 
 How to do this varies depending on system.  For Linux:
 
-      # Use echo $varname to see if it ise set
+      # Use echo $varname to see if it is set
       $ echo $AWS_ACCESS_KEY_ID
       ASIATWOQ3L72RPLOP222
 
@@ -138,13 +138,12 @@ For your convenience:
 
 ### Option 4 (PowerShell)
 
-**Configuration of AWS credentials**
 1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
 
 1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog.
 
 1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
- 
+
         Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
         [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
         Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
