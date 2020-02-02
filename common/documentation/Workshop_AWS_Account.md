@@ -3,7 +3,7 @@
 1. Go to <https://dashboard.eventengine.run/login>
 
 1. Enter the 12 character _hashcode_ you were provided and click "Proceed"
-  ![AWSAccountCodeProceed](../Images/AWSAccountCodeProceed.png)
+  ![AWSAccountCodeProceed](../images/AWSAccountCodeProceed.png)
 
 1. [optional] assign a name to your account (this is referred to as "Team name")
      * click "Set Team Name"
@@ -14,7 +14,7 @@
 ## AWS credentials
 
 * **IMPORTANT** Copy the provided credentials and save them.  You wil need these to complete the workshop
-  ![AWSAccountCredsAndConsole](../Images/AWSAccountCredsAndConsole.png)
+  ![AWSAccountCredsAndConsole](../images/AWSAccountCredsAndConsole.png)
 
 * Copy the _whole_ code block corresponding to the system you are using. 
 
