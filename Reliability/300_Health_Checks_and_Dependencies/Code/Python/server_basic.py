@@ -20,9 +20,7 @@ html = """
     </head>
     <body>
         <h1>Enjoy some classic television</h1>
-        <p>{Message}</p>
         <p>{Content}</p>
-        <p><a href="{Link}"><br/><br/>click here to make a healthcheck request</a></p>
     </body>
 </html>"""
 
@@ -37,22 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Default request URL without additional path info)
         if self.path == '/':
-            link = "healthcheck"
-            try:
-                message_parts = [
-                    'account_id: %s' % ec2_metadata.account_id,
-                    'ami_id: %s' % ec2_metadata.ami_id,
-                    'availability_zone: %s' % ec2_metadata.availability_zone,
-                    'instance_id: %s' % ec2_metadata.instance_id,
-                    'instance_type: %s' % ec2_metadata.instance_type,
-                    'private_hostname: %s' % ec2_metadata.private_hostname,
-                    'private_ipv4: %s' % ec2_metadata.private_ipv4
-                ]
-                message = '<br>'.join(message_parts)
-            except Exception:
-                message = "Running outside AWS"
-
-            message += "<h1>What to watch next....</h1>"
+            message = "<h1>What to watch next....</h1>"
             # Call our service dependency
             # This currently uses a randomly generated user.
             # In the future maybe allow student to supply the user ID as input
@@ -83,8 +66,24 @@ class RequestHandler(BaseHTTPRequestHandler):
             #     'Result': {'S': 'M*A*S*H'},  ...
             tv_show = response['Item']['Result']['S']
             user_name = response['Item']['UserName']['S']
-            message += '<br>' + recommendation_message (user_name, tv_show, True)
+            message += recommendation_message (user_name, tv_show, True)
 
+            # Include Metadata which can be useful to students 
+            # For example to see which instance /  AWS AZ they are hitting
+            message += '<br/><h1>EC2 Metadata</h1>'
+            try:
+                message_parts = [
+                    'account_id: %s' % ec2_metadata.account_id,
+                    'ami_id: %s' % ec2_metadata.ami_id,
+                    'availability_zone: %s' % ec2_metadata.availability_zone,
+                    'instance_id: %s' % ec2_metadata.instance_id,
+                    'instance_type: %s' % ec2_metadata.instance_type,
+                    'private_hostname: %s' % ec2_metadata.private_hostname,
+                    'private_ipv4: %s' % ec2_metadata.private_ipv4
+                ]
+                message += '<br>'.join(message_parts)
+            except Exception:
+                message += "Running outside AWS"
 
             # Send response status code
             self.send_response(200)
@@ -94,7 +93,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(
                 bytes(
-                    html.format(Content=message, Message="Data from the metadata API", Link=link),
+                    html.format(Content=message),
                     "utf-8"
                 )
             )

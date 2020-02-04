@@ -1,3 +1,5 @@
+# This is a simple test server for use with the Well-Architected labs
+# It simulates an engine for recommending TV shows
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from functools import partial
@@ -6,7 +8,9 @@ import sys
 import getopt
 import boto3
 import traceback
+import random
 
+# html code for the default page served by this server
 html = """
 <!DOCTYPE html>
 <html>
@@ -18,11 +22,11 @@ html = """
         <h1>Enjoy some classic television</h1>
         <p>{Message}</p>
         <p>{Content}</p>
-        <p><a href="{Link}">click here to go to other page</a></p>
+        <p><a href="{Link}"><br/><br/>click here to make a healthcheck request</a></p>
     </body>
 </html>"""
 
-
+# RequestHandler: Response depends on type of request made
 class RequestHandler(BaseHTTPRequestHandler):
     def __init__(self, client, *args, **kwargs):
         self.client = client
@@ -31,8 +35,9 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         print("path: ", self.path)
 
+        # Default request URL without additional path info)
         if self.path == '/':
-            link = "data"
+            link = "healthcheck"
             try:
                 message_parts = [
                     'account_id: %s' % ec2_metadata.account_id,
@@ -49,38 +54,44 @@ class RequestHandler(BaseHTTPRequestHandler):
 
             message += "<h1>What to watch next....</h1>"
             # Call our service dependency
-            # @TODO replace userid with a randomly generated user (or maybe user input)
+            # This currently uses a randomly generated user.
+            # In the future maybe allow student to supply the user ID as input
+
+            # Generate User ID between 1 and 4
+            userId = str(random.randint(1, 4))
+
+            # Call the recommendation service 
+            # (actually just a simply lookup in a DynamoDB table, which is acting as a mock for the recommendation service)
             try:
                 response = self.client.get_item(
-                    TableName="services",
+                    TableName="serviceCallMocks",
                     Key={
-                        'servicename': {
-                            'S': 'recommendationService',
+                        'ServiceAPI': {
+                            'S': 'getRecommendation',
                         },
-                        'userId': {
-                            'N': '1',
+                        'UserID': {
+                            'N': userId,
                         }
                     }
                 )
 
-                message += '<br>' + 'Your personalized recommendation: '
-                # Parses value of recommendation from DynsmoDB JSON return value
+                # Parses value of recommendation from DynamoDB JSON return value
                 # {'Item': {
-                #     'servicename': {'S': 'recommendationService'}, 
-                #     'userId': {'N': '1'}, 
-                #     'recommendation': {'S': 'M*A*S*H'},  ...
-                tvshow = response['Item']['recommendation']['S']
-                message += '<br>' + str(tvshow)
+                #     'ServiceAPI': {'S': 'getRecommendation'}, 
+                #     'UserID': {'N': '1'}, 
+                #     'Result': {'S': 'M*A*S*H'},  ...
+                tv_show = response['Item']['Result']['S']
+                user_name = response['Item']['UserName']['S']
+                message += '<br>' + recommendation_message (user_name, tv_show, True)
 
             # If our dependency fails, and we cannot make a personalized recommendation
             # then give a pre-selected (static) recommendation
             except Exception as e:
-                message += '<br>' + 'Everyone enjoys this classic:  <b>I Love Lucy</b>'
+                message += recommendation_message ('Valued Customer', 'I Love Lucy', False)
                 message += '<br><br><br><h2>Diagnostic Info:</h2>'
                 message += '<br>We are unable to provide personalized recommendations'
                 message += '<br>If this persists, please report the following info to us:'
                 message += str(traceback.format_exception_only(e.__class__, e))
-
 
             # Send response status code
             self.send_response(200)
@@ -95,6 +106,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 )
             )
 
+        # Healthcheck request
         elif self.path == '/healthcheck':
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -106,30 +118,52 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         return
 
+# Utility function to consistently format how recommendations are displayed
+def recommendation_message (user_name, tv_show, is_custom_recco):
+    if is_custom_recco:
+        tag_line = "your recommendation is"
+    else:
+        tag_line = "everyone enjoys this classic"
+    cell1 = "<b>" + user_name + "</b>, " + tag_line + ":"
+    cell2 = "<b>" + tv_show + "</b>"
+    recco_msg = "<table border=\"5\"><tr>" + "<td>" + cell1 + "</td>" + "<td>" + cell2 + "</td>" + "</tr></table>"
+    return recco_msg
 
+# Initialize server
 def run(argv):
     try:
         opts, args = getopt.getopt(
             argv,
-            "h:p:",
+            "h:p:r:",
             [
                 "help"
                 "server_port=",
+                "region="
             ]
         )
     except getopt.GetoptError:
-        print('server.py -p <server_port>)
+        print('server.py -p <server_port> -r <AWS region>')
         sys.exit(2)
     print(opts)
+
+    # Default value - will be over-written if supplied via args
+    server_port = 80
+    try:
+        region = ec2_metadata.region
+    except:
+        region = 'us-east-2'
+
     for opt, arg in opts:
         if opt == '-h':
             print('test.py -p <server_port> ')
             sys.exit()
         elif opt in ("-p", "--server_port"):
             server_port = int(arg)
+        elif opt in ("-r", "--region"):
+            region = arg
 
-    # Setup client for DDB -- we will use this to similate a service dependency
-    client = boto3.client('dynamodb', ec2_metadata.region)
+    # Setup client for DDB -- we will use this to mock a service dependency
+    client = boto3.client('dynamodb', region)
 
     print('starting server...')
     server_address = ('0.0.0.0', server_port)

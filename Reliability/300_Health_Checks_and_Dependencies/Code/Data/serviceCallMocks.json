@@ -7,7 +7,7 @@
             "S": "Mad About You"
           },
           "ServiceAPI": {
-            "S": "getReccomendation"
+            "S": "getRecommendation"
           },
           "UserID": {
             "N": "4"
@@ -25,7 +25,7 @@
             "S": "All in the Family"
           },
           "ServiceAPI": {
-            "S": "getReccomendation"
+            "S": "getRecommendation"
           },
           "UserID": {
             "N": "2"
@@ -43,7 +43,7 @@
             "S": "Three's company"
           },
           "ServiceAPI": {
-            "S": "getReccomendation"
+            "S": "getRecommendation"
           },
           "UserID": {
             "N": "3"
@@ -61,7 +61,7 @@
             "S": "M*A*S*H"
           },
           "ServiceAPI": {
-            "S": "getReccomendation"
+            "S": "getRecommendation"
           },
           "UserID": {
             "N": "1"

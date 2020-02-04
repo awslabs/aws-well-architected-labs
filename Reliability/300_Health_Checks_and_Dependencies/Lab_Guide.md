@@ -28,7 +28,10 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-* Follow the instructions [here for accessing your AWS account](Documentation/Workshop_AWS_Account.md)
+* Follow the instructions [here for accessing your AWS account](../../common/documentation/Workshop_AWS_Account.md)
+
+@TODO: if we do not need credentials, remove the following
+
 * **Note**: As part of these instructions you are directed to copy and save **AWS credentials** for your account. Please do so as you will need them later
 
 **If you are using your own AWS account**:
@@ -37,57 +40,47 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 * You will need the AWS credentials, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, of this IAM user for later use in this lab.
     * If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
 
-### 1.2 Checking for existing service-linked roles
+### 1.3 Deploy the application using an AWS CloudFormation template
 
-**If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Skip this step and go directly to step [Create the "deployment machine"](#create_statemachine).
+You will the service infrastructure including simple service code and some sample data.
 
-**If you are using your own AWS account**: [Follow these steps](Documentation/Service_Linked_Roles.md#exist_service_linked_roles), and then return here and resume with the following instructions.
+@TODO: update raw github links to master branch after merge
 
-### 1.3 Create the "deployment machine" <a name="create_statemachine"></a>
-
-Here you will build a state machine using AWS Step Functions and AWS Lambda that orchestrates the deployment of the multi-tier infrastructure. This is not the service infrastructure itself, but meta-infrastructure we use to build the actual infrastructure.
-
-*__Learn more__: After the lab see [this blog post](https://aws.amazon.com/blogs/devops/using-aws-step-functions-state-machines-to-handle-workflow-driven-aws-codepipeline-actions/) on how AWS Step Functions and AWS CodePipelines can work together to deploy your infrastructure*
-
-1. Decide which deployment option you will use for this lab. It can be run as **single region** *or* **multi region** (two region) deployment.
-    * **single region** is faster to get up and running
-    * **multi region** enables you to test some additional aspects of cross-regional resilience.
-    * Decide on one of these options, then in later steps choose the appropriate instructions for the option you have chosen. If you are attending an in-person workshop, your instructor will specify which to use.
-
-1. Get the CloudFormation template: Download the appropriate file (You can right-click then choose download; or you can right click and copy the link to use with `wget`)
-    * **single region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy.json)
-    * **multi region**: [download CloudFormation template here](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/CloudFormation/lambda_functions_for_deploy_two_regions.json)
-
-1. Ensure you have selected the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
+1. It is recommended that you use the **Ohio** region.  This region is also known as **us-east-2**, which you will see referenced throughout this lab.
 ![SelectOhio](Images/SelectOhio.png)
+      * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 
-1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click “Create Stack:”
-![Images/CreateStackButton](Images/CreateStackButton.png)
+### 1.1 Deploy the VPC infrastructure
 
-1. Leave "Prepare template" setting as-is
-      * 1 - For "Template source" select "Upload a template file"
-      * 2 - Specify the CloudFormation template you downloaded
-       ![CFNSFromDownloadedFile](Images/CFNSFromDownloadedFile.png)
+* If you are comfortable deploying a CloudFormation stack, then use the **express steps** listed immediately below.
+* If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Automated Deployment of VPC](../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.md) lab, and then return here for the next step: **1.2 Deploy the WebApp infrastructure and service**
 
-1. Click the “Next” button. For "Stack name" enter:
+#### Express Steps (Deploy the VPC infrastructure)
 
-        DeployResiliencyWorkshop
-    ![CFNStackName-ohio](Images/CFNStackName-ohio.png)
+1. Download the [_vpc-alb-app-db.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template
+1. Create a CloudFormation stack uploading this CloudFormation Template
+1. For **Stack name** use **`WebApp1-VPC`** (case sensitive)
+1. Leave all  CloudFormation Parameters at their default values
+1. Click **Next** until the last page
+1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
+1. Click **Create stack**
 
-1. On the same screen, for "Parameters" enter the appropriate values:
-    * **If you are attending an in-person workshop and were provided with an AWS account by the instructor**: Leave all the parameters at their default values
-    * **If you are using your own AWS account**: Set the [first three parameters using these instructions](Documentation/Service_Linked_Roles.md#cfn_service_linked_roles) and leave all other parameters at their default values.
-    * You optionally may review [the default values of this CloudFormation template here](Documentation/CFN_Parameters.md)
+### 1.2 Deploy the WebApp infrastructure and service
 
-1. Click the “Next” button.
-      * On the "Configure stack options" page, click “Next” again
-      * On the "Review DeployResiliencyWorkshop" page, scroll to the bottom and tick the checkbox “I acknowledge that AWS CloudFormation might create IAM resources.”
-      * Click the “Create stack” button.
-     ![CFNIamCapabilities](Images/CFNIamCapabilities.png)
+Wait until the VPC CloudFormation stack status is **CREATE_COMPLETE**, then continue.
 
-1. This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
-  ![StackCreationStarted](Images/StackCreationStarted.png)  
-  This will take approximately a minute to deploy.  When it shows status `CREATE_COMPLETE`, then you are finished with this step.
+* If you are comfortable deploying a CloudFormation stack, then use the **express steps** listed immediately below.
+* If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Create an AWS CloudFormation Stack from a template](../Documentation/CFNCreateStack.md) lab, and then return here for the next step: **1.3 XXXXXXXXXX**
+
+#### Express Steps (Deploy the WebApp infrastructure and service)
+
+1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
+1. Create a CloudFormation stack uploading this CloudFormation Template
+1. For **Stack name** use **`WebApp1-Website`**
+1. Leave all  CloudFormation Parameters at their default values
+1. Click **Next** until the last page
+1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
+1. Click **Create stack**
 
 ### 1.4 Deploy infrastructure and run the service <a name="deployinfra"></a>
 

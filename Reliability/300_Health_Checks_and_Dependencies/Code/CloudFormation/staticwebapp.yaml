@@ -78,6 +78,9 @@ Parameters:
       - m5.12xlarge
       - m5.24xlarge
     ConstraintDescription: must be a valid EC2 instance type.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
   ALBSGSource:
     Description: The IP address range that can be used to access the web app
     Type: String
@@ -93,97 +96,6 @@ Parameters:
     MinValue: '3'
     MaxValue: '9'
     ConstraintDescription: must be between 1 and 6 EC2 instances.
-Mappings:
-  AWSInstanceType2Arch:
-    t2.nano:
-      Arch: HVM64
-    t2.micro:
-      Arch: HVM64
-    t2.small:
-      Arch: HVM64
-    t2.medium:
-      Arch: HVM64
-    t2.large:
-      Arch: HVM64
-    t3.nano:
-      Arch: HVM64
-    t3.micro:
-      Arch: HVM64
-    t3.small:
-      Arch: HVM64
-    t3.medium:
-      Arch: HVM64
-    t3.large:
-      Arch: HVM64
-    m5.medium:
-      Arch: HVM64
-    m5.large:
-      Arch: HVM64
-    m5.xlarge:
-      Arch: HVM64
-    m5.2xlarge:
-      Arch: HVM64
-    m5.4xlarge:
-      Arch: HVM64
-    m5.12xlarge:
-      Arch: HVM64
-    m5.24xlarge:
-      Arch: HVM64
-  AWSRegionArch2AMI:
-    us-east-1:
-      HVM64: ami-0ff8a91507f77f867
-      HVMG2: ami-0a584ac55a7631c0c
-    us-west-2:
-      HVM64: ami-01e24be29428c15b2
-      HVMG2: ami-0e09505bc235aa82d
-    us-west-1:
-      HVM64: ami-0bdb828fd58c52235
-      HVMG2: ami-066ee5fd4a9ef77f1
-    eu-west-1:
-      HVM64: ami-047bb4163c506cd98
-      HVMG2: ami-0a7c483d527806435
-    eu-west-2:
-      HVM64: ami-f976839e
-      HVMG2: NOT_SUPPORTED
-    eu-west-3:
-      HVM64: ami-0ebc281c20e89ba4b
-      HVMG2: NOT_SUPPORTED
-    eu-central-1:
-      HVM64: ami-0233214e13e500f77
-      HVMG2: ami-06223d46a6d0661c7
-    ap-northeast-1:
-      HVM64: ami-06cd52961ce9f0d85
-      HVMG2: ami-053cdd503598e4a9d
-    ap-northeast-2:
-      HVM64: ami-0a10b2721688ce9d2
-      HVMG2: NOT_SUPPORTED
-    ap-northeast-3:
-      HVM64: ami-0d98120a9fb693f07
-      HVMG2: NOT_SUPPORTED
-    ap-southeast-1:
-      HVM64: ami-08569b978cc4dfa10
-      HVMG2: ami-0be9df32ae9f92309
-    ap-southeast-2:
-      HVM64: ami-09b42976632b27e9b
-      HVMG2: ami-0a9ce9fecc3d1daf8
-    ap-south-1:
-      HVM64: ami-0912f71e06545ad88
-      HVMG2: ami-097b15e89dbdcfcf4
-    us-east-2:
-      HVM64: ami-0b59bfac6be064b78
-      HVMG2: NOT_SUPPORTED
-    ca-central-1:
-      HVM64: ami-0b18956f
-      HVMG2: NOT_SUPPORTED
-    sa-east-1:
-      HVM64: ami-07b14488da8ea02a0
-      HVMG2: NOT_SUPPORTED
-    cn-north-1:
-      HVM64: ami-0a4eaf6c4454eda75
-      HVMG2: NOT_SUPPORTED
-    cn-northwest-1:
-      HVM64: ami-6b6a7d09
-      HVMG2: NOT_SUPPORTED
 Resources:
   ALB1SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -241,8 +153,8 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
     Properties:
-      HealthCheckPath: /index.html
-      HealthCheckIntervalSeconds: 5
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 15
       #HealthCheckPath: 
       #HealthCheckPort: 
       #HealthCheckProtocol:
@@ -253,7 +165,9 @@ Resources:
       Protocol: HTTP
       #Tags:
         #-
-      #TargetGroupAttributes:
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 10
         #- Key: stickiness.enabled
         #  Value: 'true'
         #- Key: stickiness.type
@@ -324,42 +238,22 @@ Resources:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
     Properties:
-      ImageId: !FindInMap 
-        - AWSRegionArch2AMI
-        - !Ref 'AWS::Region'
-        - !FindInMap 
-          - AWSInstanceType2Arch
-          - !Ref InstanceType
-          - Arch
+      ImageId: !Ref LatestAmiId
       IamInstanceProfile: !Ref Web1InstanceInstanceProfile
       InstanceType: !Ref InstanceType
       SecurityGroups:
         - !Ref Web1InstanceSecurityGroup
       UserData:
         Fn::Base64: !Sub |
-          #!/bin/bash -xe
-          echo "Installing apache httpd"
-          yum install -y httpd
-          echo "Creating index.html"
-          echo "<html>" >> /var/www/html/index.html
-          echo "<head>" >> /var/www/html/index.html
-          echo "<title>Hello World</title>" >> /var/www/html/index.html
-          echo "</head>" >> /var/www/html/index.html
-          echo "<body>" >> /var/www/html/index.html
-          echo "<h1>Hello World from " >> /var/www/html/index.html
-          curl http://169.254.169.254/latest/meta-data/instance-id >> /var/www/html/index.html
-          echo "</h1>" >> /var/www/html/index.html
-          echo "</body>" >> /var/www/html/index.html
-          echo "</html>" >> /var/www/html/index.html
-          chmod 644 /var/www/html/index.html
-          chown root /var/www/html/index.html
-          chgrp wheel /var/www/html/index.html
-          echo "Starting httpd..."
-          service httpd start
-          chkconfig httpd on
-          echo "Updating Amazon ssm agent..."
-          yum update amazon-ssm-agent -y          
-          echo "UserData Complete"
+          #!/bin/bash
+          yum -y update
+          yum install python3 python-virtualenv python-pip -y
+          python3 -m venv /home/ec2-user/venv
+          source /home/ec2-user/venv/bin/activate
+          pip install boto3
+          pip install ec2_metadata
+          wget https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Code/server_basic.py
+          python3 server_basic.py -p 80 -r ${AWS::Region}
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -638,7 +532,7 @@ Outputs:
         - !GetAtt 
           - ALB1LoadBalancer
           - DNSName
-        - /index.html
+        - /
     Description: Static Website
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -665,5 +559,6 @@ Metadata:
         Parameters: 
           - Web1SSHKeyName
           - InstanceType
+          - LatestAmiId
           - Web1AutoScaleDesired
           - ALBSGSource
