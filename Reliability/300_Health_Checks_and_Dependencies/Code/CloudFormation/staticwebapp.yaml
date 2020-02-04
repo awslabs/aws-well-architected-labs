@@ -81,6 +81,11 @@ Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  ServerCodeUrl:
+    Type: String
+    Default: 'https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Code/server_basic.py'
+    AllowedPattern: '^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
+    ConstraintDescription: URL where server code can be downloaded, such as S3 or GitHub.
   ALBSGSource:
     Description: The IP address range that can be used to access the web app
     Type: String
@@ -94,8 +99,8 @@ Parameters:
     Description: The desired number of web instances in auto scaling group
     Type: Number
     MinValue: '3'
-    MaxValue: '9'
-    ConstraintDescription: must be between 1 and 6 EC2 instances.
+    MaxValue: '6'
+    ConstraintDescription: must be between 3 and 6 EC2 instances.
 Resources:
   ALB1SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -210,11 +215,14 @@ Resources:
               - Instance
       VpcId:
         Fn::ImportValue: !Sub '${VPCImportName}'
-  Web1InstanceAutoScalingGroup:
+  WebAppAutoScalingGroup:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
     Properties:
-      AutoScalingGroupName: !Sub '${NamingPrefix}'
+      # TO make it faster to update the server during the lab,
+      # we will be replacing the AutoScalingGroup. Therefore
+      # we must let CloudFormation name it
+      # AutoScalingGroupName: !Sub '${NamingPrefix}'
       VPCZoneIdentifier:
         - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
         - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet2'
@@ -230,10 +238,12 @@ Resources:
           Value: !Sub '${NamingPrefix}'
           PropagateAtLaunch: true
     UpdatePolicy:
-      AutoScalingRollingUpdate:
-        MinInstancesInService: '3'
-        MaxBatchSize: '2'
-        PauseTime: PT5M
+      AutoScalingReplacingUpdate:
+        WillReplace: 'true'
+      # AutoScalingRollingUpdate:
+      #   MinInstancesInService: '3'
+      #   MaxBatchSize: '2'
+      #   PauseTime: PT5M
   Web1LaunchConfig:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
@@ -252,8 +262,8 @@ Resources:
           source /home/ec2-user/venv/bin/activate
           pip install boto3
           pip install ec2_metadata
-          wget https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Code/server_basic.py
-          python3 server_basic.py -p 80 -r ${AWS::Region}
+          wget -O server.py ${ServerCodeUrl}
+          python3 server.py -p 80 -r ${AWS::Region}
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -445,7 +455,7 @@ Resources:
         Timeout: '30'
         Role: !GetAtt LoadDynamoDBLambdaRole.Arn
         Code:
-          ZipFile: |
+          ZipFile: !Sub |
             import boto3
             import urllib.request
             import cfnresponse
@@ -458,12 +468,11 @@ Resources:
             LOGGER.setLevel(logging.INFO)
 
             def populate_ddb_table():
-                # Get the service resource. @TODO use EC2 metadata (ec2_metadata.region)
-                LOGGER.info('creat client')
-                client = boto3.client('dynamodb', 'us-east-2')
+                # Get the service resource.
+                LOGGER.info('create client')
+                client = boto3.client('dynamodb', '${AWS::Region}')
                 
                 # @TODO, make bucket/object configurable
-                # file = open('../Data/serviceCallMocks.json')
                 LOGGER.info('open file')
                 file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/serviceCallMocks.json")
                 LOGGER.info('read file')
@@ -514,7 +523,6 @@ Resources:
             def timeout_handler(_signal, _frame):
                 raise Exception('Time exceeded')
 
-
             signal.signal(signal.SIGALRM, timeout_handler)
 
   CustomResource:
@@ -557,8 +565,9 @@ Metadata:
         Label: 
           default: "Application Tier Configuration"
         Parameters: 
-          - Web1SSHKeyName
           - InstanceType
           - LatestAmiId
+          - ServerCodeUrl
           - Web1AutoScaleDesired
           - ALBSGSource
+

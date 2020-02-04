@@ -10,8 +10,9 @@ LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
 
 def populate_ddb_table():
-    # Get the service resource. @TODO use EC2 metadata (ec2_metadata.region)
-    LOGGER.info('creat client')
+    # Get the service resource. 
+    # NOTE: when embeddded in CFN, we use ${AWS::Region}
+    LOGGER.info('create client')
     client = boto3.client('dynamodb', 'us-east-2')
     
     # @TODO, make bucket/object configurable
