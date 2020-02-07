@@ -1,6 +1,6 @@
 # Setup AWS credentials and configuration
 
-* You will supply configuration and credentials used by the AWX CLI and AWS SDK to access your AWS account.
+* You will supply configuration and credentials used by the AWS CLI and AWS SDK to access your AWS account.
 
 ## Choose an option
 
