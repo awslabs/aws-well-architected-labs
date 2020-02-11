@@ -219,7 +219,7 @@ Resources:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
     Properties:
-      # TO make it faster to update the server during the lab,
+      # To make it faster to update the server during the lab,
       # we will be replacing the AutoScalingGroup. Therefore
       # we must let CloudFormation name it
       # AutoScalingGroupName: !Sub '${NamingPrefix}'
@@ -264,10 +264,60 @@ Resources:
           pip install ec2_metadata
           wget -O server.py ${ServerCodeUrl}
           python3 server.py -p 80 -r ${AWS::Region}
+
+  WebInstancePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: 'Policy used by EC2 WebServers'
+      ManagedPolicyName: !Sub '${NamingPrefix}-EC2-Policy-${AWS::StackName}'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ec2:DescribeInstanceStatus'
+            Resource: '*'
+          - Effect: Allow
+            Action: 
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+              - 'logs:DescribeLogStreams'
+            Resource: 'arn:aws:logs:*:*:*'
+          - Effect: Allow
+            Action:
+              - 'cloudwatch:PutMetricData'
+            Resource: '*'
+          - Effect: Allow
+            Action: 's3:GetObject'
+            Resource:
+            - !Sub 'arn:aws:s3:::aws-ssm-${AWS::Region}/*'
+            - !Sub 'arn:aws:s3:::aws-windows-downloads-${AWS::Region}/*'
+            - !Sub 'arn:aws:s3:::amazon-ssm-${AWS::Region}/*'
+            - !Sub 'arn:aws:s3:::amazon-ssm-packages-${AWS::Region}/*'
+            - !Sub 'arn:aws:s3:::${AWS::Region}-birdwatcher-prod/*'
+            - !Sub 'arn:aws:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+          - Effect: Allow
+            Action: 
+              - 'ssm:GetParameter'
+            Resource: '*'
+          - Effect: Allow
+            Action: 
+              - 'ec2messages:AcknowledgeMessage'
+              - 'ec2messages:DeleteMessage'
+              - 'ec2messages:FailMessage'
+              - 'ec2messages:GetEndpoint'
+              - 'ec2messages:GetMessages'
+              - 'ec2messages:SendReply'
+            Resource: '*'
+
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
+    DependsOn: WebInstancePolicy
     Properties:
-      RoleName: !Sub '${NamingPrefix}-EC2-${AWS::StackName}'
+      RoleName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
+      Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -277,32 +327,12 @@ Resources:
                 - ec2.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-      Path: /
+      ManagedPolicyArns:
+        - !Ref WebInstancePolicy
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      # In addition to the ManagedPolicy, give it access to DDB
       Policies:
-        - PolicyName: ec2
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'ec2:DescribeInstanceStatus'
-                Resource: '*'
-        - PolicyName: cloudwatch
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action: 
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                  - 'logs:DescribeLogStreams'
-                Resource: 'arn:aws:logs:*:*:*'
-              - Effect: Allow
-                Action:
-                  - 'cloudwatch:PutMetricData'
-                Resource: '*'
-        - PolicyName: ddbReadOn
+        - PolicyName: ddbReadOnly
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -314,72 +344,43 @@ Resources:
                   - 'dynamodb:GetItem'
                   - 'dynamodb:Query'
                   - 'dynamodb:Scan'
-                Resource: 'arn:aws:dynamodb:*:*:table/serviceCallMocks'                
-        - PolicyName: s3
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action: 's3:GetObject'
-                Resource:
-                - !Sub 'arn:aws:s3:::aws-ssm-${AWS::Region}/*'
-                - !Sub 'arn:aws:s3:::aws-windows-downloads-${AWS::Region}/*'
-                - !Sub 'arn:aws:s3:::amazon-ssm-${AWS::Region}/*'
-                - !Sub 'arn:aws:s3:::amazon-ssm-packages-${AWS::Region}/*'
-                - !Sub 'arn:aws:s3:::${AWS::Region}-birdwatcher-prod/*'
-                - !Sub 'arn:aws:s3:::patch-baseline-snapshot-${AWS::Region}/*'
-        - PolicyName: ssm
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action: 
-                  - 'ssm:DescribeAssociation'
-                  - 'ssm:GetDeployablePatchSnapshotForInstance'
-                  - 'ssm:GetDocument'
-                  - 'ssm:DescribeDocument'
-                  - 'ssm:GetManifest'
-                  - 'ssm:GetParameters'
-                  - 'ssm:ListAssociations'
-                  - 'ssm:ListInstanceAssociations'
-                  - 'ssm:PutInventory'
-                  - 'ssm:PutComplianceItems'
-                  - 'ssm:PutConfigurePackageResult'
-                  - 'ssm:UpdateAssociationStatus'
-                  - 'ssm:UpdateInstanceAssociationStatus'
-                  - 'ssm:UpdateInstanceInformation'
-                  - 'ssmmessages:CreateControlChannel'
-                  - 'ssmmessages:CreateDataChannel'
-                  - 'ssmmessages:OpenControlChannel'
-                  - 'ssmmessages:OpenDataChannel'
-                Resource: '*'
-        - PolicyName: ec2messages
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action: 
-                  - 'ec2messages:AcknowledgeMessage'
-                  - 'ec2messages:DeleteMessage'
-                  - 'ec2messages:FailMessage'
-                  - 'ec2messages:GetEndpoint'
-                  - 'ec2messages:GetMessages'
-                  - 'ec2messages:SendReply'
-                Resource: '*'
-        #Allow secrets manager for future use
-        # - PolicyName: Web1InstanceSecretsManager
-        #   PolicyDocument:
-        #     Version: 2012-10-17
-        #     Statement:
-        #       - Effect: Allow
-        #         Action: 'secretsmanager:GetSecretValue'
-        #         Resource:
+                Resource: 'arn:aws:dynamodb:*:*:table/*'
+
+  Web2InstanceRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn: WebInstancePolicy
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-noDDB-Role-${AWS::StackName}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref WebInstancePolicy
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+
   Web1InstanceInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
+      InstanceProfileName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
       Path: /Web1InstanceEc2Role/
       Roles:
         - !Ref Web1InstanceRole
+
+  Web2InstanceInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      InstanceProfileName: !Sub '${NamingPrefix}-EC2-noDDB-Role-${AWS::StackName}'
+      Path: /Web2InstanceEc2Role/
+      Roles:
+        - !Ref Web2InstanceRole
+
   DynamoDBServiceMockTable:
     Type: 'AWS::DynamoDB::Table'
     Properties: 
@@ -531,6 +532,16 @@ Resources:
     Properties:
       ServiceToken: !GetAtt LoadDynamoDBLambda.Arn
       DynamoTableName: !Ref DynamoDBServiceMockTable
+
+  RecommendationServiceEnabled:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      AllowedPattern: '^(true|false)$'
+      Description: 'switch used to enable/disable the mocked RecommendationService'
+      Name: 'RecommendationServiceEnabled'
+      Tier: 'Standard'
+      Type: 'String'
+      Value: 'true'
 
 Outputs:
   WebsiteURL:

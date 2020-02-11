@@ -26,8 +26,9 @@ html = """
 
 # RequestHandler: Response depends on type of request made
 class RequestHandler(BaseHTTPRequestHandler):
-    def __init__(self, client, *args, **kwargs):
+    def __init__(self, client, ssm_client, *args, **kwargs):
         self.client = client
+        self.ssm_client = ssm_client
         super().__init__(*args, **kwargs)
 
     def do_GET(self):
@@ -36,6 +37,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         # Default request URL without additional path info)
         if self.path == '/':
             message = "<h1>What to watch next....</h1>"
+
             # Call our service dependency
             # This currently uses a randomly generated user.
             # In the future maybe allow student to supply the user ID as input
@@ -43,12 +45,17 @@ class RequestHandler(BaseHTTPRequestHandler):
             # Generate User ID between 1 and 4
             userId = str(random.randint(1, 4))
 
+            # configure if mocked recomendation service is enabled or if it should simulate
+            # disabled (unreachable)
+            value = self.ssm_client.get_parameter(Name='RecommendationServiceEnabled')
+            dependency_enabled = value['Parameter']['Value'] == "true"
+            table_name = "serviceCallMocks" if dependency_enabled else "dependencyShouldFail"
+
             # Call the recommendation service 
             # (actually just a simply lookup in a DynamoDB table, which is acting as a mock for the recommendation service)
-
             # If this call to the dependency fails, then the entire request fails
             response = self.client.get_item(
-                TableName="serviceCallMocks",
+                TableName=table_name,
                 Key={
                     'ServiceAPI': {
                         'S': 'getRecommendation',
@@ -111,6 +118,7 @@ def recommendation_message (user_name, tv_show, is_custom_recco):
     recco_msg = "<table border=\"5\"><tr>" + "<td>" + cell1 + "</td>" + "<td>" + cell2 + "</td>" + "</tr></table>"
     return recco_msg
 
+
 # Initialize server
 def run(argv):
     try:
@@ -145,12 +153,16 @@ def run(argv):
             region = arg
 
     # Setup client for DDB -- we will use this to mock a service dependency
-    client = boto3.client('dynamodb', region)
+    ddb_client = boto3.client('dynamodb', region)
+
+    # Setup client for SSM -- we use this for parameters used as switches 
+    # in the lab
+    ssm_client = boto3.client('ssm', region_name=region)
 
     print('starting server...')
     server_address = ('0.0.0.0', server_port)
 
-    handler = partial(RequestHandler, client)
+    handler = partial(RequestHandler, ddb_client, ssm_client)
     httpd = HTTPServer(server_address, handler)
     print('running server...')
     httpd.serve_forever()
