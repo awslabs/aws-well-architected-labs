@@ -312,6 +312,7 @@ Resources:
               - 'ec2messages:SendReply'
             Resource: '*'
 
+  # IAM Role for EC2 servers including access to DynamoDB (DDB)
   Web1InstanceRole:
     Type: 'AWS::IAM::Role'
     DependsOn: WebInstancePolicy
@@ -346,6 +347,7 @@ Resources:
                   - 'dynamodb:Scan'
                 Resource: 'arn:aws:dynamodb:*:*:table/*'
 
+  # IAM Role for EC2 servers WITHOUT access to DynamoDB (DDB)
   Web2InstanceRole:
     Type: 'AWS::IAM::Role'
     DependsOn: WebInstancePolicy

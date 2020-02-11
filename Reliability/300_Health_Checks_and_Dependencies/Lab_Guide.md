@@ -76,7 +76,7 @@ Wait until the VPC CloudFormation stack status is **CREATE_COMPLETE**, then cont
 
 1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
 1. Create a CloudFormation stack uploading this CloudFormation Template
-1. For **Stack name** use **`WebApp1-Website`**
+1. For **Stack name** you may use any valid name, for example **`HealthCheckLab`**
 1. Leave all  CloudFormation Parameters at their default values
 1. Click **Next** until the last page
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
