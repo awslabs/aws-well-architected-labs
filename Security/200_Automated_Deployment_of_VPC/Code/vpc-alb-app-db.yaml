@@ -228,7 +228,6 @@ Resources:
     Type: "AWS::Logs::LogGroup"
     DeletionPolicy: Delete
     Properties:
-      LogGroupName: !Sub '${NamingPrefix}-VPCFlowLog'
       RetentionInDays: !Ref VPCFlowLogRetention
   VPCFlowLog:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html
@@ -238,7 +237,7 @@ Resources:
       DeliverLogsPermissionArn: !GetAtt VPCFlowLogRole.Arn
       #LogDestination
       LogDestinationType: cloud-watch-logs
-      LogGroupName: !Sub '${NamingPrefix}-VPCFlowLog'
+      LogGroupName: !Ref VPCFlowLogGroup
       ResourceId: !Ref VPC
       ResourceType: VPC
       TrafficType: ALL

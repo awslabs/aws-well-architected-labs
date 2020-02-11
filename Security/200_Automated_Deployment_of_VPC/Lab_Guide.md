@@ -74,7 +74,7 @@ Delete the CloudWatch Logs:
 
 1. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/).
 2. Click **Logs** in the left navigation.
-3. Click the radio button on the left of the **WebApp1-VPCFlowLog**.
+3. Click the radio button on the left of the **WebApp1-VPC-VPCFlowLogGroup-\<some unique ID\>**.
 4. Click the **Actions Button** then click **Delete Log Group**.
 5. Verify the log group name then click **Yes, Delete**.
 
