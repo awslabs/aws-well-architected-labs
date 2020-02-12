@@ -1,4 +1,4 @@
-﻿# Level 300: Implementing Health Checks and Managing Dependencies to improve Reliability
+﻿# Level 300: Implementing Health Checks and Managing Dependencies to Improve Reliability
 
 ## Author
 
@@ -20,7 +20,7 @@
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a dependency on Amazon DynamoDB.
 
-**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or another service called via API. The DynamoDB dependency therefore acts as a _mock_ for a service API dependency for this lab.
+**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or another service called via API. The DynamoDB dependency therefore acts as a _mock_ for the **RecommendationService** (**getRecommendation** API) dependency in this lab.
 
 ![ThreeTierArchitecture](Images/InsertImageHere.png)
 
@@ -40,7 +40,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 * You will need the AWS credentials, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, of this IAM user for later use in this lab.
     * If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the [instructions here to create them](Documentation/Self_AWS_Account.md)
 
-### 1.3 Deploy the application using an AWS CloudFormation template
+### 1.2 Deploy the application using an AWS CloudFormation template
 
 You will the service infrastructure including simple service code and some sample data.
 
@@ -50,12 +50,12 @@ You will the service infrastructure including simple service code and some sampl
 ![SelectOhio](Images/SelectOhio.png)
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 
-### 1.1 Deploy the VPC infrastructure
+#### 1.2.1 Deploy the VPC infrastructure
 
 * If you are comfortable deploying a CloudFormation stack, then use the **express steps** listed immediately below.
 * If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Automated Deployment of VPC](../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.md) lab, and then return here for the next step: **1.2 Deploy the WebApp infrastructure and service**
 
-#### Express Steps (Deploy the VPC infrastructure)
+##### Express Steps (Deploy the VPC infrastructure)
 
 1. Download the [_vpc-alb-app-db.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template
 1. Create a CloudFormation stack uploading this CloudFormation Template
@@ -65,148 +65,164 @@ You will the service infrastructure including simple service code and some sampl
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 
-### 1.2 Deploy the WebApp infrastructure and service
+#### 1.2.2 Deploy the WebApp infrastructure and service
 
-Wait until the VPC CloudFormation stack status is **CREATE_COMPLETE**, then continue.
+Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then continue.
 
 * If you are comfortable deploying a CloudFormation stack, then use the **express steps** listed immediately below.
 * If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Create an AWS CloudFormation Stack from a template](../Documentation/CFNCreateStack.md) lab, and then return here for the next step: **1.3 XXXXXXXXXX**
 
-#### Express Steps (Deploy the WebApp infrastructure and service)
+##### Express Steps (Deploy the WebApp infrastructure and service)
 
 1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
 1. Create a CloudFormation stack uploading this CloudFormation Template
-1. For **Stack name** you may use any valid name, for example **`HealthCheckLab`**
+1. For **Stack name** use **`HealthCheckLab`**
 1. Leave all  CloudFormation Parameters at their default values
 1. Click **Next** until the last page
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 
-### 1.4 Deploy infrastructure and run the service <a name="deployinfra"></a>
-
-1. Go to the AWS Step Function console at <https://console.aws.amazon.com/states>
-
-1. On the Step Functions dashboard, you will see “State Machines” and you will have a new one named “DeploymentMachine-*random characters*.” Click on that state machine. This will bring up an execution console. Click on the “Start execution” button.
-![ExecutionStart-ohio](Images/ExecutionStart-ohio.png)
-
-1. On the "New execution" dialog, for "Enter an execution name" delete the auto-generated name and replace it with:  `BuildResiliency`
-
-1. Then for "Input" enter JSON that will be used to supply parameter values to the Lambdas in the workflow.
-      * **single region** uses the following values:
-
-            {
-              "log_level": "DEBUG",
-              "region_name": "us-east-2",
-              "cfn_region": "us-east-2",
-              "cfn_bucket": "aws-well-architected-labs-ohio",
-              "folder": "Reliability/",
-              "workshop": "300-ResiliencyofEC2RDSandS3",
-              "boot_bucket": "aws-well-architected-labs-ohio",
-              "boot_prefix": "Reliability/",
-              "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
-            }
-
-      * **multi region** uses the [values here](Documentation/Multi_Region_Event_Data.md)
-      * **Note**: for `websiteimage` you can supply an alternate link to a public-read-only image in an S3 bucket you control. This will allow you to run S3 resiliency tests as part of the lab
-      * Then click the “Start Execution” button.
-
-        ![ExecutionInput-ohio](Images/ExecutionInput-ohio.png)  
-
-1. The "deployment machine" is now deploying the infrastructure and service you will use for resiliency testing.
-
-      |Time until you can start...|Single region|Multi region|
-      |---|---|---|
-      |EC2 failure injection test|15-20 min|15-20 min|
-      |RDS and AZ failure injection tests|20-25 min|40-45 min|
-      |Multi-region failure injection tests |NA|50-55 min|
-      |Total deployment time|20-25 min|50-55 min|
-
-1. You can watch the state machine as it executes by clicking the icon to expand the visual workflow to the full screen.  
-![StateMachineExecuting](Images/StateMachineExecuting.png)
-
-1. You can also watch the [CloudFormation stacks](https://console.aws.amazon.com/cloudformation) as they are created and transition from `CREATE_IN_PROGRESS` to `CREATE_COMPLETE`.
-![DeploymentStacksInProgress](Images/DeploymentStacksInProgress.png)
-
-1. Note: If you are in a workshop, the instructor will share background and technical information while your service is deployed.
-
-1. You can start the first test (EC2 failure injection testing)  when the web tier has been deployed in the Ohio region. Look for the `WaitForWebApp` step (for **single region**) or `WaitForWebApp1` step (for **multi region**) to have completed successfully.  This will look something like this on the visual workflow.
-
-    ![StepFunctionWebAppDeployed](Images/StepFunctionWebAppDeployedSingleRegion.png)
-
-     * Above screen shot is for **single region**. for **multi region** see [this diagram instead](Documentation/Multi_Region_State_Machine.md)
-
-### 1.5 View website for test web service <a name="website"></a>
+### 1.3 View website for test web service <a name="website"></a>
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>.
-      * click on the `WebServersforResiliencyTesting` stack
-      * click on the "Outputs" tab
-      * For the Key `WebSiteURL` copy the value.  This is the URL of your test web service.
-      ![CFNComplete](Images/CFNComplete.png)
+      * Wait until **HealthCheckLab** stack **status** is _CREATE_COMPLETE_ before proceeding. This should take about four minutes
+      * Click on the **HealthCheckLab** stack
+      * Click on the "Outputs" tab
+      * For the Key **WebsiteURL** copy the value.  This is the URL of your test web service.
+          * _Hint_: it will end in _`<aws region>.elb.amazonaws.com`_
 
-1. Click the value and it will bring up the website:  
-![DemoWebsite](Images/DemoWebsite.png)
+1. Click the URL and it will bring up the website:  
+      ![DemoWebsite](Images/DemoWebsite.png)
 
-(image will vary depending on what you supplied for `websiteimage`)
+1. The website simulates a recommendation engine making personalized suggestions for classic television shows. PlYou should note:
+      * Area A shows the personalized recommendation
+          * It shows first name of the user and the show that was recommended
+          * The workshop simulation is simple. On every request it chooses a user at random, and shows a recommendation statically mapped to that user. The user names, show names, and this mapping are in a DynamoDB table, which is simulating the **RecommendationService**
+      * Area B shows metadata which is useful to you during the lab
+          * The **instance_id** and **availability_zone** enable you to see which EC2 server and Availability Zone were used for each request
+          * There is one EC2 instance deployed per Availability Zone
+          * Refresh the website several times, note that the EC2 instance and Availability Zone change from among the three available
+          * This is Elastic Load Balancing (ELB) distributing these stateless requests among the available EC2 server instances across Availability Zones
 
-## 2. Configure Execution Environment <a name="configure_env"></a>
+    |Reliability pro-tip: Elastic Load Balancing (ELB)|
+    |:---:|
+    |Provides load balancing across Availability Zones, performs Layer 7 routing, integrates with AWS WAF, and integrates with Auto Scaling to help create a self-healing infrastructure and absorb increases in traffic while releasing resources when traffic decreases.|
 
-Failure injection is a means of testing resiliency by which a specific failure type is simulated on a service and its response is assessed.
+    |Best practices|
+    |:--:|
+    |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled|
+    |**Deploy the workload to multiple locations**: Distribute workload load across multiple Availability Zones and AWS Regions. These locations can be as diverse as needed.|
 
-You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C#, then instructions for these are also provided.
+## 2. Handle Failure of Service Dependencies <a name="handle_dependency"></a>
 
-### 2.1 Setup AWS credentials and configuration
+### 2.1 System initially healthy
 
-Your execution environment needs to be configured to enable access to the AWS account you are using for the workshop. This includes
+1. You already observed that all three EC2 instances are serving requests
+1. In a new tab navigate to ELB Target Groups console
+      * By [clicking here to open the AWS Management Console](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:)
+      * _or_ navigating through the AWS Management Console: **Services** > **EC2** > **Load Balancing** > **Target Groups**
+      * Leave this tab open as you will be referring back to it multiple times
+1. Click on the **Targets** tab (bottom half of screen)
+1. Under **Registered Targets** observe the three EC2 instances serving your Web App
+1. Note that they are all _healthy_ (see **Status** and **Description**)
+      * In this state the ELB will route traffic to any of the three servers
 
-* Credentials - You identified these credentials [back in step 1](#awslogin)
-    * AWS access key
-    * AWS secret access key
-    * AWS session token (used in some cases)
+    ![TargetGroupAllHealthy](Images/TargetGroupAllHealthy.png)
 
-* Configuration
-    * Region: us-east-2
-    * Default output: JSON
+### 2.2 Dependency not available - All servers fail
 
-Note: **us-east-2** is the **Ohio** region
+#### 2.2.1 Disable RecommendationService
 
-If you already know how to configure these, please do so now. If you need help or if you are planning to use **PowerShell** for this lab, then [follow these instructions](Documentation/AWS_Credentials.md)
+You will now simulate a complete failure of the **RecommendationService**. Every request to a server makes a (simulated) call to the **getRecommendation** API. These will all fail for every request on every server.
 
-### 2.2 Set up the bash environment <a name="bash"></a>
+1. In a new tab, navigate to the Parameter Store on the AWS Systems Manager console
+      * By [clicking here to open the AWS Management Console](https://us-east-2.console.aws.amazon.com/systems-manager/parameters)
+      * _or_ navigating through the AWS Management Console: **Services** > **Systems Manager** > **Parameter Store**
+      * Leave this tab open as you will be referring back to it one additional time
+1. Click on **RecommendationServiceEnabled**
+2. Click **Edit**
+3. In the **Value** box, type **false**
+4. Click **Save Changes**
+      * A status message should say _Edit parameter request succeeded_
 
-Using bash is an effective way to execute the failure injection tests for this workshop. The bash scripts make use of the AWS CLI. If you will be using bash, then follow the directions in this section. If you cannot use bash, then [skip to the next section](#notbash).
+The **RecommendationServiceEnabled** parameter is used only for this lab. The server code reads its value, and simulates a failure in **RecommendationService** (fails to read the DynamoDB table simulating the service) when it is **false**.
 
-1. Prerequisites
+#### 2.2.2 Observe behavior when dependency not available
 
-     * `awscli` AWS CLI installed
+1. Refresh the test web service multiple times
+      * Note that it fails with _502 Bad Gateway_
+      * For each request one of the servers attempts to call the **RecommendationService** but catastrophically fails and returns the http 502 code to the load balancer
+      * You can observe this by opening a new tab and navigating to ELB Load Balancers console:
+          * By [clicking here to open the AWS Management Console](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#LoadBalancers:)
+          * _or_ navigating through the AWS Management Console: **Services** > **EC2** > **Load Balancing** > **Load Balancers**
+1. Click on the **Monitoring** tab (bottom half of screen)
+1. Observe that ELB 5XXs (Count) corresponds to the same number of HTTP 502s (Count)
 
-            $ aws --version
-            aws-cli/1.16.249 Python/3.6.8...
-         * Version 1.1 or higher is fine
-         * If you instead got `command not found` then [see instructions here to install `awscli`](Documentation/Software_Install.md#awscli)
+    ![AllUnhealthy502](Images/AllUnhealthy502.png)
 
-     * `jq` command-line JSON processor installed.
+1. Return to the tab with the ELB Target Groups console.  Note that all instances are _unhealthy_ with **Description** _Health checks failed with these codes: \[502\]_
+1. From here click on the **Health checks** tab.  The health check registers _healthy_ when it received a http 200 response on the same port and path as our browser requests.
 
-            $ jq --version
-            jq-1.5-1-a5b5cbe
-         * Version 1.4 or higher is fine
-         * If you instead got `command not found` then [see instructions here to install `jq`](Documentation/Software_Install.md#jq)
+### 2.3 Update server code to handle dependency not available
 
-1. Download the [resiliency bash scripts from GitHub](https://github.com/awslabs/aws-well-architected-labs/tree/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash) to a location convenient for you to execute them. You can use the following links to download the scripts:
-      * [bash/fail_instance.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_instance.sh)
-      * [bash/failover_rds.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/failover_rds.sh)
-      * [bash/fail_az.sh](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/bash/fail_az.sh)
+The **getRecommendation** API is actually a `get_item` call on a DynamoDB table. Examine the server code to see how errors are currently handled
 
-1. Set the scripts to be executable.  
+1. The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py) (@TODO update to master branch)
+1. Search for `get_item`. What happens if this call fails?
+1. Choose _one_ of the options below (**Expert** or **Assisted**) to improve the code and handle the failure
 
-        chmod u+x fail_instance.sh
-        chmod u+x failover_rds.sh
-        chmod u+x fail_az.sh
+#### 2.3.1 Expert option: make and deploy your changes to the code
 
-### 2.3 Set up the programming language environment (for Python, Java, C#, or PowerShell) <a name="notbash"></a>
+@TODO instructions on how to update and deploy the code to a http/https readable location
 
-If you will be using bash and executed the steps in the _previous_ section, then you can [skip this and go to the section: **Test Resiliency Using Failure Injection**](#failure_injection)
+#### 2.3.2 Assisted option: deploy workshop code
 
-* If you will be using Python, Java, C#, or PowerShell for this workshop, [click here for instructions on setting up your environment](Documentation/Programming_Environment.md)
+1. The new server code including error handling [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py) (@TODO update to master branch)
+1. Search for `Error handling` in the comments (occurs twice). Now, what happens if this call fails?
+1. Deploy the new code
+      1. Navigate to the AWS CloudFormation console
+      1. Click on the **HealthCheckLab** stack
+      1. Click **Update**
+      1. Leave **Use current template** selected and click **Next**
+      1. Find the **ServerCodeUrl** parameter and enter the following:
+
+              https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Code/server_errorhandling.py
+
+      1. Click **Next** until the last page
+      1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
+      1. Click **Update stack**
+      1. Click on **Events**, and click the refresh icon to observe the stack progress
+            * New EC2 instances running the new code are being deployed
+            * When stack **status** is _CREATE_COMPLETE_ then continue.
+      1. Refresh the test web service multiple times. Observe:
+            * It works!
+            * All three EC2 instances and Availability Zones are being used
+            * A static default recommendation for **Valued Customer** is displayed instead of a user personalized one.
+            * There is now **Diagnostic Info**. What does it say?
+            * Check health status on the ELB Target Groups console. What do those health checks say?
+      1. Refer back to the newly deployed code to understand why the website behaves this way now.
+
+The Website is working again, but in a degraded capacity, no longer serving personalized recommendations. While this is less then ideal, it is much better than when it was failing with http 502 errors.
+
+|Best practice|
+|:--:|
+|**Implement graceful degradation to transform applicable hard dependencies into soft dependencies**: When a component's dependencies are unhealthy, the component itself does not report as unhealthy. It can continue to serve requests in a degraded manner.|
+
+@TODO consider code link to read from raw github
+
+## 3. Implement Deep Healthchecks <a name="deep_healthcheck"></a>
+
+|Best practice|
+|:--:|
+|**Automate healing on all layers**: Use automated capabilities upon detection of failure to perform an action to remediate.|
+|**Monitor all layers of the workload to detect failures**: Continuously monitor the health of your system and report degradation as well as complete failure.|
+
+## 4. Fail Open when Appropriate<a name="fail_open"></a>
+
+## 5. Tear down this lab <a name="tear_down"></a>
+
+
+
 
 ## 3. Test Resiliency Using Failure Injection <a name="failure_injection"></a>
 
