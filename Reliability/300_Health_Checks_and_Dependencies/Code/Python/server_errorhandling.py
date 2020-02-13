@@ -37,6 +37,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         # Default request URL without additional path info)
         if self.path == '/':
 
+            message = "<h1>What to watch next....</h1>"
+
             # It would be more efficient to create the clients once on init
             # But in the lab we change permissions on the EC2 instance
             # and this way we are sure to pick up the new credentials
@@ -48,8 +50,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             # Setup client for SSM -- we use this for parameters used as switches 
             # in the lab
             ssm_client = session.client('ssm', region_name=self.region)
-
-            message = "<h1>What to watch next....</h1>"
 
             # Call our service dependency
             # This currently uses a randomly generated user.
