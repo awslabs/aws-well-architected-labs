@@ -160,28 +160,16 @@ Resources:
     Properties:
       HealthCheckPath: /
       HealthCheckIntervalSeconds: 15
-      #HealthCheckPath: 
       #HealthCheckPort: 
       #HealthCheckProtocol:
       HealthCheckTimeoutSeconds: 3
       HealthyThresholdCount: 2
-      #Name: 
       Port: 80
       Protocol: HTTP
-      #Tags:
-        #-
+      # A short drain time helps speed up the lab
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 10
-        #- Key: stickiness.enabled
-        #  Value: 'true'
-        #- Key: stickiness.type
-        #  Value: lb_cookie
-        #- Key: stickiness.lb_cookie.duration_seconds
-        #  Value: '30'
-      # Targets:
-      #   - TargetDescription
-      # TargetType: String
       UnhealthyThresholdCount: 3
       VpcId: 
         Fn::ImportValue: !Sub '${VPCImportName}'
@@ -386,7 +374,7 @@ Resources:
   DynamoDBServiceMockTable:
     Type: 'AWS::DynamoDB::Table'
     Properties: 
-      TableName: 'serviceCallMocks'
+      TableName: 'RecommendationService'
       AttributeDefinitions: 
         - 
           AttributeName: 'ServiceAPI'
@@ -432,7 +420,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - 'dynamodb:*'
-                Resource: 'arn:aws:dynamodb:*:*:table/serviceCallMocks'
+                Resource: 'arn:aws:dynamodb:*:*:table/RecommendationService'
         - PolicyName: cloudwatch
           PolicyDocument:
             Version: 2012-10-17
@@ -477,7 +465,7 @@ Resources:
                 
                 # @TODO, make bucket/object configurable
                 LOGGER.info('open file')
-                file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/serviceCallMocks.json")
+                file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/RecommendationService.json")
                 LOGGER.info('read file')
                 text = file.read()
                 LOGGER.info(text)

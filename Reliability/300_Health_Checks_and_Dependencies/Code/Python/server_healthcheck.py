@@ -26,16 +26,29 @@ html = """
 
 # RequestHandler: Response depends on type of request made
 class RequestHandler(BaseHTTPRequestHandler):
-    def __init__(self, client, ssm_client, *args, **kwargs):
-        self.client = client
-        self.ssm_client = ssm_client
+    def __init__(self, region, *args, **kwargs):
+        self.region = region
         super().__init__(*args, **kwargs)
 
     def do_GET(self):
         print("path: ", self.path)
 
+
         # Default request URL without additional path info)
         if self.path == '/':
+
+            # It would be more efficient to create the clients once on init
+            # But in the lab we change permissions on the EC2 instance
+            # and this way we are sure to pick up the new credentials
+            session = boto3.Session()
+
+            # Setup client for DDB -- we will use this to mock a service dependency
+            ddb_client = session.client('dynamodb', self.region)
+
+            # Setup client for SSM -- we use this for parameters used as switches 
+            # in the lab
+            ssm_client = session.client('ssm', region_name=self.region)
+
             message = "<h1>What to watch next....</h1>"
 
             # Call our service dependency
@@ -47,33 +60,46 @@ class RequestHandler(BaseHTTPRequestHandler):
 
             # configure if mocked recomendation service is enabled or if it should simulate
             # disabled (unreachable)
-            value = self.ssm_client.get_parameter(Name='RecommendationServiceEnabled')
+            value = ssm_client.get_parameter(Name='RecommendationServiceEnabled')
             dependency_enabled = value['Parameter']['Value'] == "true"
-            table_name = "serviceCallMocks" if dependency_enabled else "dependencyShouldFail"
+            table_name = "RecommendationService" if dependency_enabled else "dependencyShouldFail"
 
-            # Call the recommendation service 
-            # (actually just a simply lookup in a DynamoDB table, which is acting as a mock for the recommendation service)
-            # If this call to the dependency fails, then the entire request fails
-            response = self.client.get_item(
-                TableName=table_name,
-                Key={
-                    'ServiceAPI': {
-                        'S': 'getRecommendation',
-                    },
-                    'UserID': {
-                        'N': userId,
+            # Error handling:
+            # surround the get_item call in a try catch
+
+            try:
+                # Call the recommendation service 
+                # (actually just a simply lookup in a DynamoDB table, which is acting as a mock for the recommendation service)
+                response = ddb_client.get_item(
+                    TableName=table_name,
+                    Key={
+                        'ServiceAPI': {
+                            'S': 'getRecommendation',
+                        },
+                        'UserID': {
+                            'N': userId,
+                        }
                     }
-                }
-            )
+                )
 
-            # Parses value of recommendation from DynamoDB JSON return value
-            # {'Item': {
-            #     'ServiceAPI': {'S': 'getRecommendation'}, 
-            #     'UserID': {'N': '1'}, 
-            #     'Result': {'S': 'M*A*S*H'},  ...
-            tv_show = response['Item']['Result']['S']
-            user_name = response['Item']['UserName']['S']
-            message += recommendation_message (user_name, tv_show, True)
+                # Parses value of recommendation from DynamoDB JSON return value
+                # {'Item': {
+                #     'ServiceAPI': {'S': 'getRecommendation'}, 
+                #     'UserID': {'N': '1'}, 
+                #     'Result': {'S': 'M*A*S*H'},  ...
+                tv_show = response['Item']['Result']['S']
+                user_name = response['Item']['UserName']['S']
+                message += recommendation_message (user_name, tv_show, True)
+
+            # Error handling:
+            # If the service dependency fails, and we cannot make a personalized recommendation
+            # then give a pre-selected (static) recommendation
+            except Exception as e:
+                message += recommendation_message ('Valued Customer', 'I Love Lucy', False)
+                message += '<br><br><br><h2>Diagnostic Info:</h2>'
+                message += '<br>We are unable to provide personalized recommendations'
+                message += '<br>If this persists, please report the following info to us:'
+                message += str(traceback.format_exception_only(e.__class__, e))
 
             # Include Metadata which can be useful to students 
             # For example to see which instance /  AWS AZ they are hitting
@@ -104,6 +130,16 @@ class RequestHandler(BaseHTTPRequestHandler):
                     "utf-8"
                 )
             )
+
+        # Healthcheck request
+        elif self.path == '/healthcheck':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes("<html><head><title>healthcheck</title></head>", "utf-8"))
+            self.wfile.write(bytes("<body>success</body></html>", "utf-8"))
+
+            # @TODO Add check for service dependency - if not available return 503 Service Unavailable.
 
         return
 
@@ -152,17 +188,11 @@ def run(argv):
         elif opt in ("-r", "--region"):
             region = arg
 
-    # Setup client for DDB -- we will use this to mock a service dependency
-    ddb_client = boto3.client('dynamodb', region)
-
-    # Setup client for SSM -- we use this for parameters used as switches 
-    # in the lab
-    ssm_client = boto3.client('ssm', region_name=region)
 
     print('starting server...')
     server_address = ('0.0.0.0', server_port)
 
-    handler = partial(RequestHandler, ddb_client, ssm_client)
+    handler = partial(RequestHandler, region)
     httpd = HTTPServer(server_address, handler)
     print('running server...')
     httpd.serve_forever()

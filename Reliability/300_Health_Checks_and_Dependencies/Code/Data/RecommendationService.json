@@ -1,23 +1,41 @@
 {
-  "serviceCallMocks": [
+  "RecommendationService": [
     {
       "PutRequest": {
         "Item": {
           "Result": {
-            "S": "Mad About You"
+            "S": "test"
           },
           "ServiceAPI": {
             "S": "getRecommendation"
           },
           "UserID": {
-            "N": "4"
+            "N": "0"
           },
           "UserName": {
-            "S": "Manuel"
+            "S": "test"
           }
         }
       }
-    },
+    },    
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "M*A*S*H"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "1"
+          },
+          "UserName": {
+            "S": "Sarah"
+          }
+        }
+      }
+    },    
     {
       "PutRequest": {
         "Item": {
@@ -58,19 +76,19 @@
       "PutRequest": {
         "Item": {
           "Result": {
-            "S": "M*A*S*H"
+            "S": "Mad About You"
           },
           "ServiceAPI": {
             "S": "getRecommendation"
           },
           "UserID": {
-            "N": "1"
+            "N": "4"
           },
           "UserName": {
-            "S": "Sarah"
+            "S": "Manuel"
           }
         }
       }
-    }
+    }    
   ]
 }

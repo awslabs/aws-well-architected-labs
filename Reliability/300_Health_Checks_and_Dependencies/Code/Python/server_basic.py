@@ -62,7 +62,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             # disabled (unreachable)
             value = ssm_client.get_parameter(Name='RecommendationServiceEnabled')
             dependency_enabled = value['Parameter']['Value'] == "true"
-            table_name = "serviceCallMocks" if dependency_enabled else "dependencyShouldFail"
+            table_name = "RecommendationService" if dependency_enabled else "dependencyShouldFail"
 
             # Call the recommendation service 
             # (actually just a simply lookup in a DynamoDB table, which is acting as a mock for the recommendation service)
