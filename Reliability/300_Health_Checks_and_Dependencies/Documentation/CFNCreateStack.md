@@ -1,5 +1,7 @@
 **UNDER CONSTRUCTION**
 
+@TODO: update raw github links to master branch after merge
+
 1. Download the CloudFormation template. (You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`)
     * WebApp: [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml)
 
