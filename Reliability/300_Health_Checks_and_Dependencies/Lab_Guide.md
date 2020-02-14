@@ -430,7 +430,7 @@ This is the health check code from [server_healthcheck.py_](https://github.com/a
 
 #### 3.4.5 Observe behavior of web service with added deep health check
 
-* Continue the lab then the **HealthCheckLab** CloudFormation stack is complete.
+* Continue the lab after the **HealthCheckLab** CloudFormation stack is complete.
 
 The CloudFormation stack update reset the EC2 instance IAM roles, so the system is back to its original no-fault state. You will re-introduce the single-server fault and observe the new behavior.
 
