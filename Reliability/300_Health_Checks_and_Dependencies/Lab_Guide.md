@@ -33,8 +33,6 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 
 * Follow the instructions [here for accessing your AWS account](../../common/documentation/Workshop_AWS_Account.md)
 
-@TODO: Note to beta testers: links to relative resource like above will not work until this is part of the master branch. The above link will ultimately go [here](https://github.com/awslabs/aws-well-architected-labs/blob/master/common/documentation/Workshop_AWS_Account.md)
-
 **If you are using your own AWS account**:
 
 * Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
