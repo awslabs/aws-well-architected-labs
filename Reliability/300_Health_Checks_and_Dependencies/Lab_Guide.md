@@ -23,9 +23,9 @@ This lab illustrates best practices as explained in the following:
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a dependency on Amazon DynamoDB.
 
-**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or an external service called via API. The DynamoDB dependency here acts as a _mock_ for an external service called **RecommendationService**. The **getRecommendation** API of that service is a dependency for the web service used in this lab.
+**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or an external service called via API. The DynamoDB dependency here acts as a _mock_ for an external service called **RecommendationService**. The **getRecommendation** API on this service, which is a dependency for the web service used in this lab, is actual a `get_item` call to a DynamoDB table.
 
-![ThreeTierArchitecture](Images/InsertImageHere.png)
+![ArchitectureOverview](Images/ArchitectureOverview.png)
 
 ### 1.1 Log into the AWS console <a name="awslogin"></a>
 
@@ -107,7 +107,7 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 
     |Well-Architected for Reliability: Best practices|
     |:--:|
-    |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled|
+    |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled.|
     |**Deploy the workload to multiple locations**: Distribute workload load across multiple Availability Zones and AWS Regions. These locations can be as diverse as needed.|
 
 ## 2. Handle failure of service dependencies <a name="handle_dependency"></a>

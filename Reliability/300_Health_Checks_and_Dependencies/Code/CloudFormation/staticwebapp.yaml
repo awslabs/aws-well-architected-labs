@@ -134,7 +134,7 @@ Resources:
       SecurityGroups:
         - Ref: ALB1SecurityGroup
       # SubnetMappings:
-      #   - SubnetMapping      
+      #   - SubnetMapping
       Subnets:
         - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet1}'
         - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet2}'
