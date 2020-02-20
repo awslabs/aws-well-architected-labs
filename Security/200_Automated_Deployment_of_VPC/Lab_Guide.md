@@ -21,7 +21,7 @@ This step will create the VPC and all components using the example CloudFormatio
 
 1. Download the latest version of the [vpc-alb-app-db.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template from file from GitHub raw, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository.
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/). Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
-3. Click Create Stack.
+3. Click **Create Stack**, then **With new resources (standard)**.
 
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)
 
@@ -37,13 +37,14 @@ This step will create the VPC and all components using the example CloudFormatio
 ![cloudformation-vpc-params](Images/cloudformation-vpc-params.png)
 
 7. At the bottom of the page click **Next**.
-8. In this lab, we won't add any tags or other options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+8. In this lab, we won't add any tags, permissions or advanced options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 9. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.
 
 ![cloudformation-vpc-createstack-final](Images/cloudformation-vpc-createstack-final.png)
 
 10. After a few minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
 You have now created the VPC stack (well actually CloudFormation did it for you).
+11. Now you have a new VPC, check out [200_Automated_Deployment_of_EC2_Web_Application](../200_Automated_Deployment_of_EC2_Web_Application/README.md) to deploy a web application inside it.
 
 ## 3. Knowledge Check <a name="knowledge_check"></a>
 
@@ -91,7 +92,7 @@ Delete the CloudWatch Logs:
 
 Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 

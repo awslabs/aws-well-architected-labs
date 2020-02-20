@@ -5,7 +5,7 @@ Description: >-
 
   **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
 
-  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
   
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -64,6 +64,13 @@ Parameters:
       - true
       - false
     Default: true
+  App1SubnetsPrivateLinkEndpoints:
+    Description: VPC Endpoints can be used to access common AWS services directly within a subnet, instead of via a NAT Gateway. Note for testing purposes a NAT Gateway is more cost effective than enabling endpoint services.
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: false
   #DB #1 Tier:
   DB1CidrBlock1:
     Description: 'DB1 CidrIp for AZ 1, or blank for no DB1 resources'
@@ -195,6 +202,7 @@ Conditions:
       - ''
   #App1:
   App1SubnetsInternetRouteEnabled: !Equals [!Ref App1SubnetsInternetRoute, "true"]
+  App1SubnetsPrivateLinkEndpointsEnabled: !Equals [!Ref App1SubnetsPrivateLinkEndpoints, "true"]
   #DB1:
   DB1SubnetsInternetRouteEnabled: !Equals [!Ref DB1SubnetsInternetRoute, "true"]
   DB1Enabled: !Not
@@ -773,6 +781,7 @@ Resources:
       SubnetId: !Ref App1Subnet3
       RouteTableId: !Ref App1RouteTable3
   App1VPCEndpointec2:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -790,6 +799,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointec2messages:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -807,6 +817,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointcloudformation:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -824,6 +835,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointlogs:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -841,6 +853,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointmonitoring:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -858,6 +871,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointssm:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -875,6 +889,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointssmmessages:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -892,6 +907,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointsecretsmanager:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -909,6 +925,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1VPCEndpointkms:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: AWS::EC2::VPCEndpoint
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
     Properties: 
@@ -926,6 +943,7 @@ Resources:
       SecurityGroupIds: 
         - !Ref App1EndpointSecurityGroup
   App1EndpointSecurityGroup:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: >-
@@ -1904,6 +1922,7 @@ Metadata:
           - App1CidrBlock2
           - App1CidrBlock3
           - App1SubnetsInternetRoute
+          - App1SubnetsPrivateLinkEndpoints
       - 
         Label: 
           default: "Database Tier"
