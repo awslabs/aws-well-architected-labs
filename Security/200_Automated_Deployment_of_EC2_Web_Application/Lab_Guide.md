@@ -24,11 +24,11 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
 
 This step will create the web application and all components using the example CloudFormation template, inside the VPC you have created previously. An SSH key is not configured in this lab, instead [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html) should be used to manage the EC2 instances as a more secure and scalable method.
 
-1. Choose the version of the CloudFormation template and download to your computer or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository:
+1. Choose the version of the CloudFormation template and download to your computer, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository:
    * [wordpress.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/wordpress.yaml) to create a WordPress site, including an RDS database.
    * [staticwebapp.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml) to create a static web application that simply displays the instance ID for the instance it is running upon.
 2. Sign in to the AWS Management Console, select your preferred region, and open the CloudFormation console at [https://console.aws.amazon.com/cloudformation/](https://console.aws.amazon.com/cloudformation/). Note if your CloudFormation console does not look the same, you can enable the redesigned console by clicking **New Console** in the **CloudFormation** menu.
-3. Click Create Stack.
+3. Click **Create Stack**, then **With new resources (standard)**.
 
 ![cloudformation-createstack-1](Images/cloudformation-createstack-1.png)
 
@@ -37,25 +37,26 @@ This step will create the web application and all components using the example C
 ![cloudformation-createstack-2](Images/cloudformation-createstack-2.png)
 
 5. Choose the CloudFormation template you downloaded in step 1, return to the CloudFormation console page and click **Next**.
-5. Enter the following details:
+6. Enter the following details:
   * Stack name: The name of this stack. For this lab, for the WordPress stack use *WebApp1-WordPress* or for the static web stack use *WebApp1-Static* and match the case.
   ![cloudformation-wp-params](Images/cloudformation-wp-params.png)
   * ALBSGSource: Your current IP address in CIDR notation which will be allowed to connect to the application load balancer, this secures your web application from the public while you are configuring and testing.
   ![cloudformation-wp-params-2](Images/cloudformation-wp-params-2.png)
   The remaining parameters may be left as defaults, you can find out more in the description for each.
-6. At the bottom of the page click **Next**.
-7. In this lab, we won't add any tags or other options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
-8. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.
+7. At the bottom of the page click **Next**.
+8. In this lab, we won't add any tags, permissions or advanced options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+9. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.
 
 ![cloudformation-wp-createstack-final](Images/cloudformation-wp-createstack-final.png)
 
-9. After a number of minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
+10. After a number of minutes the final stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
 
  ![cloudformation-wp-createstack-complete](Images/cloudformation-wp-createstack-complete.png)
 
 You have now created the WordPress stack (well actually CloudFormation did it for you).
 
-10. In the stack click the **Outputs** tab, and open the *WebsiteURL* value in your web browser, this is how to access what you just created.
+11. In the stack click the **Outputs** tab, and open the *WebsiteURL* value in your web browser, this is how to access what you just created.
+12. After you have played and explored with your web application, don't forget to tear it down to save cost.
 
 ## 3. Knowledge Check <a name="knowledge_check"></a>
 
@@ -109,7 +110,7 @@ Delete the WordPress or Static Web Application CloudFormation stack:
 
 Licensed under the Apache 2.0 and MITnoAttr License.
 
-Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
