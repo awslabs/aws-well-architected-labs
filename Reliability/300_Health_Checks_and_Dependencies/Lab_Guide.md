@@ -57,12 +57,12 @@ You will deploy the service infrastructure including simple service code and som
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 
-#### 1.2.2 Deploy the web service infrastructure and service
+#### 1.2.2 Deploy the web app infrastructure and service
 
-Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then continue.
+Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then continue. This will take about four minutes.
 
 * If you are comfortable deploying a CloudFormation stack, then use the **express steps** listed immediately below.
-* If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Create an AWS CloudFormation Stack from a template](../Documentation/CFNCreateStack.md) lab, and then return here for the next step: **1.3 View the website for web service**
+* If you need additional guidance in how to deploy a CloudFormation stack, then follow the directions for the [Create an AWS CloudFormation Stack from a template](Documentation/CFNCreateStack.md) lab, and then return here for the next step: **1.3 View the website for web service**
 
 ##### Express Steps (Deploy the WebApp infrastructure and service)
 
@@ -143,26 +143,26 @@ The **RecommendationServiceEnabled** parameter is used only for this lab. The se
 
 1. Refresh the test web service multiple times
       * Note that it fails with _502 Bad Gateway_
-      * For each request one of the servers receiving the request attempts to call the **RecommendationService** but catastrophically fails and fails to return a reply (empty reply) to the load balancer, which interprets it as a http 502 failure.
+      * For each request one of the servers receiving the request attempts to call the **RecommendationService** but catastrophically fails and fails to return a reply (empty reply) to the load balancer, which in turn presents this as a http 502 failure.
 1. You can observe this by opening a new tab and navigating to ELB Load Balancers console:
       * By [clicking here to open the AWS Management Console](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#LoadBalancers:)
       * _or_ navigating through the AWS Management Console: **Services** > **EC2** > **Load Balancing** > **Load Balancers**
 1. Click on the **Monitoring** tab (bottom half of screen)
       * Observe the **ELB 5XXs (Count)** and **HTTP 502s (Count)** errors for the load balancer
-      * It will take a minute for the metrics to show up.  Make sure you refresh the web service multiple times.
-      * These are the error codes the load balancer returns on every request during this simulated outage
+      * It will take a minute for the metrics to show up.  Make sure you refresh the web service page multiple times in your browser
+      * These are the error codes the _load balancer_ returns on every request during this simulated outage
 
       ![502LoadBalancerMetrics](Images/502LoadBalancerMetrics.png)
 
-1. Compare these metrics to those for the target group (the EC2 servers)
+1. Compare these metrics to those for the target group (the EC2 servers themselves)
       * Return to the **Target Groups** console and click the **Monitoring** tab there
       * Observe **HTTP 5XXs ( Count )** errors shows no data
-      * The servers themselves are not returning actual http error codes, they are failing to return any data
+      * The servers themselves are _not_ returning actual http error codes, they are failing to return any data at all
 
       ![502TargetGroupMetrics](Images/502TargetGroupMetrics.png)
 
 1. Return to the tab with the ELB Target Groups console.  Note that all instances are _unhealthy_ with **Description** _Health checks failed with these codes: \[502\]_
-1. From here click on the **Health checks** tab.  The health check returns _healthy_ when it received a http 200 response on the same port and path as our browser requests.
+1. From here click on the **Health checks** tab.  The health check is configured to return _healthy_ when it receives a http 200 response on the same port and path as the browser requests
 
 ### 2.3 Update server code to handle dependency not available
 
@@ -220,48 +220,49 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
 
 #### 2.3.3 Error handling code
 
-This is the error handling code from [_server_errorhandling.py_](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
+This is the error handling code from [server_errorhandling.py](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
 
 <details>
 <summary>Click here to see code</summary>
 
-      # Error handling:
-      # surround the call to RecommendationService in a try catch
-      try:
+```python
+# Error handling:
+# surround the call to RecommendationService in a try catch
+try:
 
-          # Call the getRecommendation API on the RecommendationService
-          response = call_getRecommendation(self.region, user_id)
+    # Call the getRecommendation API on the RecommendationService
+    response = call_getRecommendation(self.region, user_id)
 
-          # Parses value of recommendation from DynamoDB JSON return value
-          # {'Item': {
-          #     'ServiceAPI': {'S': 'getRecommendation'}, 
-          #     'UserID': {'N': '1'}, 
-          #     'Result': {'S': 'M*A*S*H'},  ...
-          tv_show = response['Item']['Result']['S']
-          user_name = response['Item']['UserName']['S']
-          message += recommendation_message (user_name, tv_show, True)
+    # Parses value of recommendation from DynamoDB JSON return value
+    # {'Item': {
+    #     'ServiceAPI': {'S': 'getRecommendation'}, 
+    #     'UserID': {'N': '1'}, 
+    #     'Result': {'S': 'M*A*S*H'},  ...
+    tv_show = response['Item']['Result']['S']
+    user_name = response['Item']['UserName']['S']
+    message += recommendation_message (user_name, tv_show, True)
 
-      # Error handling:
-      # If the service dependency fails, and we cannot make a personalized recommendation
-      # then give a pre-selected (static) recommendation
-      # and report diagnostic information
-      except Exception as e:
-          message += recommendation_message ('Valued Customer', 'I Love Lucy', False)
-          message += '<br><br><br><h2>Diagnostic Info:</h2>'
-          message += '<br>We are unable to provide personalized recommendations'
-          message += '<br>If this persists, please report the following info to us:'
-          message += str(traceback.format_exception_only(e.__class__, e))
-
+# Error handling:
+# If the service dependency fails, and we cannot make a personalized recommendation
+# then give a pre-selected (static) recommendation
+# and report diagnostic information
+except Exception as e:
+    message += recommendation_message ('Valued Customer', 'I Love Lucy', False)
+    message += '<br><br><br><h2>Diagnostic Info:</h2>'
+    message += '<br>We are unable to provide personalized recommendations'
+    message += '<br>If this persists, please report the following info to us:'
+    message += str(traceback.format_exception_only(e.__class__, e))
+```
 </details>
 
 #### 2.3.4 Observe behavior of web service with added error handling
 
-1. After new code has successfully deployed, refresh the test web service multiple times. Observe:
+1. After the new error-handling code has successfully deployed, refresh the test web service page multiple times. Observe:
       * It works. It no longer returns an error
       * All three EC2 instances and Availability Zones are being used
-      * A default recommendation for **Valued Customer** is displayed instead of a user personalized one
+      * A default recommendation for **Valued Customer** is displayed instead of a user-personalized one
       * There is now **Diagnostic Info**. What does it mean?
-      * Check health status on the ELB Target Groups console (remember to refresh). What do those health checks now show?
+      * Check health status on the ELB Target Groups console > Targets tab (remember to refresh). What do those health checks now show?
 1. Refer back to the newly deployed code to understand why the website behaves this way now
 
 The Website is working again, but in a degraded capacity since it is no longer serving personalized recommendations. While this is less than ideal, it is much better than when it was failing with http 502 errors. The **RecommendationService** is not available, so the app instead returns a _static response_ (the default recommendation) instead of the data it would have obtained from **RecommendationService**.
@@ -297,7 +298,7 @@ Previously you simulated a failure of the service dependency. Now you will simul
 1. Click **Close**
 1. This will return you to the EC2 Instances console. Observe under **IAM Instance Profile Name** (it is one of the displayed columns) which IAM roles each EC2 instance has attached
 
-The IAM role attached to an EC2 instance determines what permissions it has to access AWS resources. You changed the role of the us-east-2c instance to one that is almost the same as the other two, except it does not have access to DynamoDB. Since DynamoDB is used to mock our service dependency the us-east-2c server no longer has access to the service dependency (**RecommendationService**). Stale credentials is an actual fault that servers might experience. Your actions above simulate stale (invalid) credentials on the us-east-2c server.
+The IAM role attached to an EC2 instance determines what permissions it has to access AWS resources. You changed the role of the us-east-2c instance to one that is almost the same as the other two, except it does not have access to DynamoDB. Since DynamoDB is used to mock our service dependency, the us-east-2c server no longer has access to the service dependency (**RecommendationService**). Stale credentials is an actual fault that servers might experience. Your actions above simulate stale (invalid) credentials on the us-east-2c server.
 
 ### 3.4 Observe application behavior and determine how to fix it
 
@@ -308,8 +309,8 @@ The IAM role attached to an EC2 instance determines what permissions it has to a
 * The service dependency (**RecommendationServiceEnabled**) is still healthy
 * It is the server in us-east-2c that is unhealthy - it has stale credentials
     * Return to the **Target Groups** and under the **Targets** tab observe the results of the ELB health checks
-    * They are all **Status** _healthy_, and are therefore all receiving traffic
-* The service would deliver a better experience if it:
+    * They are all **Status** _healthy_, and are therefore all receiving traffic. Why does the server in us-east-2c show _healthy_ for this check?
+* The service would deliver a _better experience_ if it:
     * Identified the us-east-2c server as unhealthy and did not route traffic to it
     * Replaced this server with a healthy one
 
@@ -330,7 +331,7 @@ The IAM role attached to an EC2 instance determines what permissions it has to a
     1. Update the server code
     1. Reconfigure Elastic Load Balancer (ELB) to use the new deep health check
 
-Choose _one_ of the options below (**Option 1 - Expert** or **Option 2 - Assisted**) to improve the code and add the deep health check.  Then continue to the next step [Reconfigure Elastic Load Balancer (ELB)](#reconfigure_elb).
+Choose _one_ of the options below (**Option 1 - Expert** or **Option 2 - Assisted**) to improve the code and add the deep health check.
 
 #### 3.4.1 Option 1 - Expert option: make and deploy your changes to the code
 
@@ -377,68 +378,70 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
 
 #### 3.4.3 Health check code
 
-This is the health check code from [server_healthcheck.py_](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
+This is the health check code from [server_healthcheck.py](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
 
 <details>
 <summary>Click here to see code</summary>
 
-      # Healthcheck request - will be used by the Elastic Load Balancer
-      elif self.path == '/healthcheck':
+```python
+# Healthcheck request - will be used by the Elastic Load Balancer
+elif self.path == '/healthcheck':
 
-          is_healthy = False
-          error_msg = ''
-          TEST = 'test'
+    is_healthy = False
+    error_msg = ''
+    TEST = 'test'
 
-          # Make a request to RecommendationService using a predefined 
-          # test call as part of health assessment for this server
-          try:
-              # call RecommendationService using the test user
-              user_id = str(0)
-              response = call_getRecommendation(self.region, user_id)
+    # Make a request to RecommendationService using a predefined 
+    # test call as part of health assessment for this server
+    try:
+        # call RecommendationService using the test user
+        user_id = str(0)
+        response = call_getRecommendation(self.region, user_id)
 
-              # Parses value of recommendation from DynamoDB JSON return value
-              tv_show = response['Item']['Result']['S']
-              user_name = response['Item']['UserName']['S']
-              
-              # Server is healthy of RecommendationService returned the expected response
-              is_healthy = (tv_show == TEST) and (user_name == TEST)
+        # Parses value of recommendation from DynamoDB JSON return value
+        tv_show = response['Item']['Result']['S']
+        user_name = response['Item']['UserName']['S']
+        
+        # Server is healthy of RecommendationService returned the expected response
+        is_healthy = (tv_show == TEST) and (user_name == TEST)
 
-          # If the service dependency fails, capture diagnostic info
-          except Exception as e:
-              error_msg += str(traceback.format_exception_only(e.__class__, e))
+    # If the service dependency fails, capture diagnostic info
+    except Exception as e:
+        error_msg += str(traceback.format_exception_only(e.__class__, e))
 
-          # Based on the health assessment
-          # If it succeeded return a healthy code
-          # If it failed return a server failure code            
-          message = ""
-          if (is_healthy):
-              self.send_response(200)
-              self.send_header('Content-type', 'text/html')
-              self.end_headers()
+    # Based on the health assessment
+    # If it succeeded return a healthy code
+    # If it failed return a server failure code            
+    message = ""
+    if (is_healthy):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
 
-              message += "<h1>Success</h1>"
+        message += "<h1>Success</h1>"
 
-              # Add metadata
-              message += get_metadata()
+        # Add metadata
+        message += get_metadata()
 
-          else:
-              self.send_response(503)
-              self.send_header('Content-type', 'text/html')
-              self.end_headers()
+    else:
+        self.send_response(503)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
 
-              message += "<h1>Fail</h1>"
-              message += "<h3>Error message:</h3>"
-              message += error_msg
+        message += "<h1>Fail</h1>"
+        message += "<h3>Error message:</h3>"
+        message += error_msg
 
-              # Add metadata
-              message += get_metadata()            
+        # Add metadata
+        message += get_metadata()            
 
-          self.wfile.write(
-              bytes(
-                  html.format(Title="healthcheck", Content=message),
-                  "utf-8"
-              )
-          )
+    self.wfile.write(
+        bytes(
+            html.format(Title="healthcheck", Content=message),
+            "utf-8"
+        )
+    )
+```
 
 </details>
 
@@ -458,7 +461,10 @@ The CloudFormation stack update reset the EC2 instance IAM roles, so the system 
 
 1. Refresh the web service multiple times and note it is functioning without error
 1. Copy the URL of the web service to a new tab and append `/healthcheck` to the end of the URL
-      * The new URL should look like `http://healt-alb1l-<...>.elb.amazonaws.com/healthcheck`
+      * The new URL should look like:
+
+            http://healt-alb1l-<...>.elb.amazonaws.com/healthcheck
+
       * Refresh several times and observe the health check on the three servers
       * Note the check is successful
       * Go to the **Target Groups** console click on the **Targets** tab and note the health status as per the ELB health checks.
@@ -555,23 +561,20 @@ Now, with the new deep health check in place...
 
 ### Remove AWS CloudFormation provisioned resources
 
-<details>
-<summary>Click here to see detailed instruction on how to delete a CloudFormation stack</summary>
-
 #### How to delete an AWS CloudFormation stack
+
+If you are already familiar with how to delete an AWS CloudFormation stack, then skip to the next section: **Delete workshop CloudFormation stacks**
 
 1. Go to the AWS CloudFormation console: <https://console.aws.amazon.com/cloudformation>
 1. Select the CloudFormation stack to delete and click **Delete**
 1. In the confirmation dialog, click **Delete stack**
-1. The _Status_ changes to **DELETE_IN_PROGRESS**
-1. Click the refresh button to update and status will ultimately progress to **DELETE_COMPLETE**
+1. The **Status** changes to _DELETE_IN_PROGRESS_
+1. Click the refresh button to update and status will ultimately progress to _DELETE_COMPLETE_
 1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
 1. To see progress during stack deletion
       * Click the stack name
       * Select the Events column
       * Refresh to see new events
-
-</details>
 
 #### Delete workshop CloudFormation stacks
 
