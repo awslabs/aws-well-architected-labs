@@ -35,7 +35,7 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 1. Note that if you end your bash session, or start a new one, you will need to re-execute the `export` statements
 
-If you completed **Option 1** then **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
+If you completed **Option 1** then **STOP HERE and return to the Lab Guide**
 
 ### Option 2 AWS CLI
 
