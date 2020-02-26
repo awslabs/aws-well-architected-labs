@@ -6,10 +6,7 @@
 
 ## Amazon Builders' Library and AWS Well-Architected
 
-This lab illustrates best practices as explained in the following:
-
-* Amazon Builders' Library article: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/)
-* [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) Reliability pillar
+This lab illustrates best practices for reliability as described in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) Reliability pillar. It focuses on resiliency practices described in the Amazon Builders' Library article: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/).
 
 ## Table of Contents
 
@@ -69,15 +66,13 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 
 ##### Express Steps (Deploy the WebApp infrastructure and service)
 
-1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
+1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
 1. Create a CloudFormation stack uploading this CloudFormation Template
 1. For **Stack name** use **`HealthCheckLab`**
 1. Leave all  CloudFormation Parameters at their default values
 1. Click **Next** until the last page
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
-
-@TODO: update raw github links to master branch after merge
 
 ### 1.3 View the website for web service <a name="website"></a>
 
@@ -173,19 +168,37 @@ The **RecommendationServiceEnabled** parameter is used only for this lab. The se
 
 The **getRecommendation** API is actually a `get_item` call on a DynamoDB table. Examine the server code to see how errors are currently handled
 
-1. The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py) (@TODO update to master branch)
-1. Search for `get_item`. What happens if this call fails?
+1. The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py)
+1. Search for the call to the **RecommendationService**. It looks like this:
+
+        response = call_getRecommendation(self.region, user_id)
+
+    * What happens if this call fails?
 1. Choose _one_ of the options below (**Option 1 - Expert** or **Option 2 - Assisted**) to improve the code and handle the failure
 
 #### 2.3.1 Option 1 - Expert option: make and deploy your changes to the code
 
-@TODO instructions on how to update and deploy the code to a http/https readable location. List the requirements: Return static response (use recommendation_message); show diagnostic info
+You may choose this option, or skip to **Option 2 - Assisted option**
 
-If you completed the **Expert option**, then skip the **Assisted option** section
+This option requires you have access to place a file in a location accessible via https/https via a URL. For example a public readable S3 bucket, [gist](https://gist.github.com) (use the **raw** option to get the URL), or your private webserver.
+
+1. Download the existing server code from here: [server_basic.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py)
+1. Modify the code to handle the call to the **RecommendationService**
+1. When the call to **RecommendationService** fails then instead of using the response data you requested and did not get, return a static response:
+      * Instead of user first name return **Valued Customer**
+      * Instead of a personalized recommended TV show, return **I Love Lucy**
+      * Try to also return some diagnostic information on the cause of the error
+1. Put your updated server code in a location where it can be downloaded via its URL using **wget**
+1. In the AWS Console go the **HealthCheckLab** CloudFormation stack and **Update** it:
+      * Leave **Use current template** selected and click **Next**
+      * Find the **ServerCodeUrl** parameter and enter the URL for your new code
+      * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
+
+If you completed the **Expert option**, then skip the **Assisted option** section and continue with **2.3.3 Error handling code**
 
 #### 2.3.2 Option 2 - Assisted option: deploy workshop provided code
 
-1. The new server code including error handling [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py) (@TODO update to master branch)
+1. The new server code including error handling [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py)
 1. Search for `Error handling` in the comments (occurs twice). What will this code do now if the dependency call fails?
 
 ##### Deploy the new error handling code
@@ -205,11 +218,9 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
       * New EC2 instances running the error handling code are being deployed
       * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
 
-@TODO consider server_errorhandling.py link to read from raw github instead of S3
-
 #### 2.3.3 Error handling code
 
-This is the error handling code from [_server_errorhandling.py_](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
+This is the error handling code from [_server_errorhandling.py_](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
 
 <details>
 <summary>Click here to see code</summary>
@@ -323,13 +334,28 @@ Choose _one_ of the options below (**Option 1 - Expert** or **Option 2 - Assiste
 
 #### 3.4.1 Option 1 - Expert option: make and deploy your changes to the code
 
-@TODO instructions on how to update and deploy the code to a http/https readable location on path /healthcheck - list the requirements: return 503
+You may choose this option, or skip to **Option 2 - Assisted option**
 
-If you completed the **Expert option**, then skip the **Assisted option** section
+This option requires you have access to place a file in a location accessible via https/https via a URL. For example a public readable S3 bucket, [gist](https://gist.github.com) (use the **raw** option to get the URL), or your private webserver.
+
+1. Start the existing server code that you added error handling to, or alternatively download the lab sample code from here: [server_errorhandling.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py)
+1. The current webserver returns requests for path `/`. You should modify the code to add an additional path `/healthcheck` for health check calls
+1. Calls to `/healthcheck` should in turn make a test call to **RecommendationService**  using _User ID_ **0**
+      * If the **RecommendationService** returns the string **test** for both _Result_ and _UserName_ then it is healthy
+      * If it is healthy then return http code 200 (OK)
+      * If it is not healthy then return http code 503 (Service Unavailable)
+      * Also return the same EC2 meta-data that is returned on the call to the `/` path
+1. Put your updated server code in a location where it can be downloaded via its URL using **wget**
+1. In the AWS Console go the **HealthCheckLab** CloudFormation stack and **Update** it:
+      * Leave **Use current template** selected and click **Next**
+      * Find the **ServerCodeUrl** parameter and enter the URL for your new code
+      * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
+
+If you completed the **Expert option**, then skip the **Assisted option** section and continue with **3.4.3 Health check code**
 
 #### 3.4.2 Option 2 - Assisted option: deploy workshop provided code
 
-1. The new server code including error handling [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py) (@TODO update to master branch)
+1. The new server code including error handling [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py)
 1. Search for `Healthcheck request` in the comments. What will this code do now if called on this health check URL?
 
 ##### Deploy the new health check code
@@ -348,8 +374,6 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
 1. Click on **Events**, and click the refresh icon to observe the stack progress
       * New EC2 instances running the error handling code are being deployed
       * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
-
-@TODO consider server_healthcheck.py link to read from raw github instead of S3
 
 #### 3.4.3 Health check code
 
@@ -515,7 +539,7 @@ Now, with the new deep health check in place...
           |When an individual server fails a health check, the load balancer stops sending it traffic. But when all servers fail health checks at the same time, the load balancer fails open, allowing traffic to all servers.|
           |When we rely on fail-open behavior, we make sure to test the failure modes of the dependency heath check.|
 
-The AWS Application Load Balancer here exhibits this fail-open behavior and the service continues to serve requests instead of failing.
+      A system set to _fail-open_ does not shut down when failure conditions are present. Instead, the system remains “open” and operations continue. The AWS Application Load Balancer here exhibits this fail-open behavior and the service continues to serve requests sent to it by the load balancer.
 
 * Reset the value of **RecommendationServiceEnabled**  to **true** and observe that the service resumes serving personalized recommendations.
 
@@ -573,7 +597,7 @@ After deletion of the **WebApp1-VPC** CloudFormation stack is complete then dele
 * Amazon Builders' Library: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/)
 * [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) (see the Reliability pillar)
 * [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
-* @TODO more
+* [Health Checks for Your Target Groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html) (for your Application Load Balancer)
 
 ---
 

@@ -4,13 +4,13 @@
 
 ## Introduction
 
-This hands-on lab will guide you through the steps to improve reliability of a service by decoupling service dependencies, using health checks, and applying fail-open and fail-closed behaviors.
+This hands-on lab will guide you through the steps to improve reliability of a service by decoupling service dependencies, using health checks, and demonstrating when to use fail-open and fail-closed behaviors.
 
 The skills you learn will help you build resilient workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
 ## Amazon Builders' Library
 
-This lab illustrates best practices as described in the Amazon Builders' Library article: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/)
+This lab additionally illustrates best practices as described in the Amazon Builders' Library article: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/)
 
 ## Goals
 
@@ -25,7 +25,7 @@ This lab illustrates best practices as described in the Amazon Builders' Library
 If you are running the at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. This account MUST NOT be used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create Amazon Virtual Private Cloud(s) (VPCs), including subnets, security groups, internet gateways, NAT Gateways, Elastic IP Addresses, and route tables. The credential will need permissions to create IAM Roles, instance profiles, AWS Auto Scaling launch configurations, application load balancers, auto scaling groups, DynamoDB tables, SSM Parameters, and EC2 instances.
+* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create Amazon Virtual Private Cloud(s) (VPCs), including subnets and route tables, Security Groups, Internet Gateways, NAT Gateways, Elastic IP Addresses, IAM Roles, instance profiles, AWS Auto Scaling launch configurations, Application Load Balancers, Auto Scaling Groups, DynamoDB tables, SSM Parameters, and EC2 instances.
 
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 

@@ -16,9 +16,8 @@ def populate_ddb_table():
     client = boto3.client('dynamodb', 'us-east-2')
     
     # @TODO, make bucket/object configurable
-    # file = open('../Data/serviceCallMocks.json')
     LOGGER.info('open file')
-    file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/serviceCallMocks.json")
+    file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/RecommendationService.json")
     LOGGER.info('read file')
     text = file.read()
     LOGGER.info(text)
