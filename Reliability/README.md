@@ -9,8 +9,9 @@ For more information about Reliability, read the
 [AWS Well-Architected Reliability whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Reliability-Pillar.pdf).
 
 ## Labs
-- [Level 200: Testing for Resiliency of EC2](200_Testing_for_Resiliency_of_EC2/README.md) 
-- [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md) 
+- [Level 200: Testing for Resiliency of EC2](200_Testing_for_Resiliency_of_EC2/README.md)
+- [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md)
+- [Level 300: Implementing Health Checks and Managing Dependencies to Improve Reliability](300_Health_Checks_and_Dependencies/README.md)
 
 
 ## License
