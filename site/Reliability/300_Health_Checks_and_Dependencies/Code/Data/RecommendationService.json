@@ -1,0 +1,94 @@
+{
+  "RecommendationService": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "test"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "0"
+          },
+          "UserName": {
+            "S": "test"
+          }
+        }
+      }
+    },    
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "M*A*S*H"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "1"
+          },
+          "UserName": {
+            "S": "Sarah"
+          }
+        }
+      }
+    },    
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "All in the Family"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "2"
+          },
+          "UserName": {
+            "S": "Bob"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "Three's company"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "3"
+          },
+          "UserName": {
+            "S": "Vijay"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Result": {
+            "S": "Mad About You"
+          },
+          "ServiceAPI": {
+            "S": "getRecommendation"
+          },
+          "UserID": {
+            "N": "4"
+          },
+          "UserName": {
+            "S": "Manuel"
+          }
+        }
+      }
+    }    
+  ]
+}
