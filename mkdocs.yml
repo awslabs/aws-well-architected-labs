@@ -114,7 +114,10 @@ nav:
             - Protect Data in Transit: 'Security/Quest_Protect_Data_in_Transit/README.md'
             - Incident Response: 'Security/Quest_Incident_Response/README.md'
     - Reliability: 
-        - Overview: 'Reliability/README.md'  
+        - Overview: 'Reliability/README.md'
+        - 300 Health Checks and Dependencies:
+            - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
+            - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md' 
         - Testing Resiliency: 
             - 200 EC2 Resiliency: 
                 - Lab Overview: 'Reliability/200_Testing_for_Resiliency_of_EC2/README.md' 
@@ -123,9 +126,6 @@ nav:
                 - Lab Overview: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md'
                 - Lab Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.md'
                 - Trouble Shooting Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.md'
-            - 300 Health Checks and Dependencies:
-                - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
-                - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md'
     - Performance Efficiency: 
         - Overview: 'Performance/README.md'
         - Monitoring with CloudWatch Dashboards: 'Performance/100_Monitoring_with_CloudWatch_Dashboards/README.md' 

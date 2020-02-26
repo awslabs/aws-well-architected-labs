@@ -228,6 +228,14 @@
      <lastmod>2020-02-26</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
+     <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/README.html</loc>
+     <lastmod>2020-02-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.html</loc>
+     <lastmod>2020-02-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
      <loc>https://wellarchitectedlabs.com/Reliability/200_Testing_for_Resiliency_of_EC2/README.html</loc>
      <lastmod>2020-02-26</lastmod>
      <changefreq>daily</changefreq>
@@ -245,14 +253,6 @@
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html</loc>
-     <lastmod>2020-02-26</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/README.html</loc>
-     <lastmod>2020-02-26</lastmod>
-     <changefreq>daily</changefreq>
-    </url><url>
-     <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.html</loc>
      <lastmod>2020-02-26</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
