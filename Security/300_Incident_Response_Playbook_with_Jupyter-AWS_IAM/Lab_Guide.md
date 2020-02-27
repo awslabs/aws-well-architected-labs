@@ -42,7 +42,7 @@ A best practice is to enforce the use of MFA, so if you misplace your AWS Manage
 
 ### 2.1 Download Playbook and Helper
 
-Download the latest version of the notebook [Incident_Response_Playbook_AWS_IAM.ipynb](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/Incident_Response_Playbook_AWS_IAM.ipynb) and helper [incident_response_helpers.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/incident_response_helpers.py) from file from GitHub raw, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository.
+Download the latest version of the notebook [Incident_Response_Playbook_AWS_IAM.ipynb](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/Incident_Response_Playbook_AWS_IAM.ipynb) and helper [incident_response_helpers.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/incident_response_helpers.py) from file from GitHub raw, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository.
 
 ### 2.2 Run the Playbook
 
