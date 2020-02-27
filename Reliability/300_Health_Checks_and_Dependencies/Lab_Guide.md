@@ -235,8 +235,8 @@ try:
 
     # Parses value of recommendation from DynamoDB JSON return value
     # {'Item': {
-    #     'ServiceAPI': {'S': 'getRecommendation'}, 
-    #     'UserID': {'N': '1'}, 
+    #     'ServiceAPI': {'S': 'getRecommendation'},
+    #     'UserID': {'N': '1'},
     #     'Result': {'S': 'M*A*S*H'},  ...
     tv_show = response['Item']['Result']['S']
     user_name = response['Item']['UserName']['S']
@@ -253,6 +253,7 @@ except Exception as e:
     message += '<br>If this persists, please report the following info to us:'
     message += str(traceback.format_exception_only(e.__class__, e))
 ```
+
 </details>
 
 #### 2.3.4 Observe behavior of web service with added error handling
@@ -391,7 +392,7 @@ elif self.path == '/healthcheck':
     error_msg = ''
     TEST = 'test'
 
-    # Make a request to RecommendationService using a predefined 
+    # Make a request to RecommendationService using a predefined
     # test call as part of health assessment for this server
     try:
         # call RecommendationService using the test user
@@ -401,7 +402,7 @@ elif self.path == '/healthcheck':
         # Parses value of recommendation from DynamoDB JSON return value
         tv_show = response['Item']['Result']['S']
         user_name = response['Item']['UserName']['S']
-        
+
         # Server is healthy of RecommendationService returned the expected response
         is_healthy = (tv_show == TEST) and (user_name == TEST)
 
@@ -411,7 +412,7 @@ elif self.path == '/healthcheck':
 
     # Based on the health assessment
     # If it succeeded return a healthy code
-    # If it failed return a server failure code            
+    # If it failed return a server failure code
     message = ""
     if (is_healthy):
         self.send_response(200)
@@ -433,7 +434,7 @@ elif self.path == '/healthcheck':
         message += error_msg
 
         # Add metadata
-        message += get_metadata()            
+        message += get_metadata()
 
     self.wfile.write(
         bytes(

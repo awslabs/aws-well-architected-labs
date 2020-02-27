@@ -245,6 +245,7 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           yum -y update
+          sleep 10 # prevent "Error: Rpmdb changed underneath us"
           yum install python3 python-virtualenv python-pip -y
           python3 -m venv /home/ec2-user/venv
           source /home/ec2-user/venv/bin/activate
