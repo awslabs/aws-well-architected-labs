@@ -23,6 +23,7 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 * [Level 200: CloudFront with WAF Protection](200_CloudFront_with_WAF_Protection/README.md)
 * [Level 300: IAM Permission Boundaries Delegating Role Creation](300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md)
 * [Level 300: IAM Tag Based Access Control for EC2](300_IAM_Tag_Based_Access_Control_for_EC2/README.md)
+* [Level 300: Incident Response Playbook with Jupyter - AWS IAM ](300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/README.md)
 * [Level 300: Incident Response with AWS Console and CLI](300_Incident_Response_with_AWS_Console_and_CLI/README.md)
 * [Level 300: Lambda Cross Account IAM Role Assumption](300_Lambda_Cross_Account_IAM_Role_Assumption/README.md)
 
@@ -59,7 +60,7 @@ The following quests are aligned to the security [best practice questions](https
 ## License
 Licensed under the Apache 2.0 and MITnoAttr License. 
 
-Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
 
