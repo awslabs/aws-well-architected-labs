@@ -201,6 +201,16 @@
      <changefreq>daily</changefreq>
     </url>
     <url>
+     <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/README.html</loc>
+     <lastmod>2020-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Lab_Guide.html</loc>
+     <lastmod>2020-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_100_Loft_Introduction_to_Security/README.html</loc>
      <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>

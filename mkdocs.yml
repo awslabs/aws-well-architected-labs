@@ -96,6 +96,9 @@ nav:
             - Lambda Cross Account Using Bucket Policy:
                 - Lab Overview: 'Security/300_Lambda_Cross_Account_Bucket_Policy/README.md'
                 - Lab Guide: 'Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.md'
+            - Incident Response Playbook with Jupyter:
+                - Lab Overview: 'Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/README.md'
+                - Lab Guide: 'Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Lab_Guide.md'
         - Security Quests:
             - Introduction to Security: 'Security/Quest_100_Loft_Introduction_to_Security/README.md'
             - Quick Steps to Security Success: 'Security/Quest_100_Quick_Steps_to_Security_Success/README.md'
