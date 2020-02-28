@@ -30,6 +30,9 @@ theme:
         accent: 'grey' 
     logo: 'images/wa.png' 
 
+# https://github.com/awslabs/aws-well-architected-labs/issues/92
+extra_css:
+  - 'stylesheets/extra.css'
 
 nav:
     - Home: README.md 
