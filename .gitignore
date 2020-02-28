@@ -6,3 +6,6 @@ docs/
 .pyc
 dist/
 .vscode/
+
+# https://github.com/awslabs/aws-well-architected-labs/issues/92
+!docs/stylesheets/
