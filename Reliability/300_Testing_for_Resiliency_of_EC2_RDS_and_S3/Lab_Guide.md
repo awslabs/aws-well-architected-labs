@@ -420,15 +420,15 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. On the database console **Configuration** tab
       1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** when the failover is complete.
-      1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted.
+      1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted. (After RDS failover it can take several minutes for the console to update as shown below. The failover has however completed)
 
          ![DBPostFailConfiguration](Images/DBPostFailConfiguration.png)
 
-   1. From the AWS RDS console, click on the **Logs & events** tab and scroll down to **Recent events**. You should see entries like those below. In this case failover took less than a minute.
+      1. From the AWS RDS console, click on the **Logs & events** tab and scroll down to **Recent events**. You should see entries like those below. In this case failover took less than a minute.
 
-          Mon, 14 Oct 2019 19:53:37 GMT - Multi-AZ instance failover started.
-          Mon, 14 Oct 2019 19:53:45 GMT - DB instance restarted
-          Mon, 14 Oct 2019 19:54:21 GMT - Multi-AZ instance failover completed
+              Mon, 14 Oct 2019 19:53:37 GMT - Multi-AZ instance failover started.
+              Mon, 14 Oct 2019 19:53:45 GMT - DB instance restarted
+              Mon, 14 Oct 2019 19:54:21 GMT - Multi-AZ instance failover completed
 
 #### 3.4.2 EC2 server replacement
 
@@ -447,6 +447,15 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 * Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
 
 *__Learn more__: After the lab see [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html) for more details on high availability and failover support for DB instances using Multi-AZ deployments.*
+
+  |High Availability (Multi-AZ) for Amazon RDS |
+  |:---:|
+  |The primary DB instance switches over automatically to the standby replica if any of the following conditions occur:|
+  |An Availability Zone outage|
+  |The primary DB instance fails|
+  |The DB instance's server type is changed|
+  |The operating system of the DB instance is undergoing software patching|
+  |A manual failover of the DB instance was initiated using Reboot with failover|
 
 ### 3.6 AZ failure injection
 
