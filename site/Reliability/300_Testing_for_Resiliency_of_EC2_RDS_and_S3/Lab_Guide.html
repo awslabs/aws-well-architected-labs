@@ -36,7 +36,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
@@ -44,7 +44,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -69,6 +69,8 @@
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
     
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
     
       
     
@@ -91,7 +93,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#level-300-performing-resiliency-testing-for-ec2-rds-and-s3" tabindex="1" class="md-skip">
+      <a href="#level-300-performing-resiliency-testing-for-ec2-rds-and-s3" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -100,9 +102,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" aria-label="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
           
-            <img src="../../images/wa.png" width="24" height="24">
+            <img alt="logo" src="../../images/wa.png" width="24" height="24">
           
         </a>
       </div>
@@ -131,7 +133,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -192,14 +194,6 @@
     <ul class="md-tabs__list">
       
         
-  <li class="md-tabs__item">
-    
-      <a href="../../README.html" class="md-tabs__link">
-        Home
-      </a>
-    
-  </li>
-
       
         
   
@@ -294,7 +288,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
       
-        <img src="../../images/wa.png" width="48" height="48">
+        <img alt="logo" src="../../images/wa.png" width="48" height="48">
       
     </a>
     AWS Well-Architected Labs
@@ -4313,10 +4307,8 @@ Terminating i-0710435abc631eab3
 <ol>
 <li>Refresh and note the values of the <strong>Info</strong> field. It will ultimately return to <strong>Available</strong> when the failover is complete.</li>
 <li>
-<p>Note the AZs for the <em>primary</em> and <em>standby</em> instances. They have swapped as the <em>standby</em> has no taken over <em>primary</em> responsibility, and the former <em>primary</em> has been restarted.</p>
+<p>Note the AZs for the <em>primary</em> and <em>standby</em> instances. They have swapped as the <em>standby</em> has no taken over <em>primary</em> responsibility, and the former <em>primary</em> has been restarted. (After RDS failover it can take several minutes for the console to update as shown below. The failover has however completed)</p>
 <p><img alt="DBPostFailConfiguration" src="Images/DBPostFailConfiguration.png" /></p>
-</li>
-</ol>
 </li>
 <li>
 <p>From the AWS RDS console, click on the <strong>Logs &amp; events</strong> tab and scroll down to <strong>Recent events</strong>. You should see entries like those below. In this case failover took less than a minute.</p>
@@ -4324,6 +4316,8 @@ Terminating i-0710435abc631eab3
   Mon, 14 Oct 2019 19:53:45 GMT - DB instance restarted
   Mon, 14 Oct 2019 19:54:21 GMT - Multi-AZ instance failover completed
 </code></pre>
+</li>
+</ol>
 </li>
 </ol>
 <h4 id="342-ec2-server-replacement">3.4.2 EC2 server replacement</h4>
@@ -4349,6 +4343,33 @@ Terminating i-0710435abc631eab3
 <li>Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.</li>
 </ul>
 <p><em><strong>Learn more</strong>: After the lab see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html">High Availability (Multi-AZ) for Amazon RDS</a> for more details on high availability and failover support for DB instances using Multi-AZ deployments.</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">High Availability (Multi-AZ) for Amazon RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">The primary DB instance switches over automatically to the standby replica if any of the following conditions occur:</td>
+</tr>
+<tr>
+<td align="center">An Availability Zone outage</td>
+</tr>
+<tr>
+<td align="center">The primary DB instance fails</td>
+</tr>
+<tr>
+<td align="center">The DB instance's server type is changed</td>
+</tr>
+<tr>
+<td align="center">The operating system of the DB instance is undergoing software patching</td>
+</tr>
+<tr>
+<td align="center">A manual failover of the DB instance was initiated using Reboot with failover</td>
+</tr>
+</tbody>
+</table>
 <h3 id="36-az-failure-injection">3.6 AZ failure injection</h3>
 <p>This failure injection will simulate a critical problem with one of the three AWS Availability Zones (AZs) used by your service. AWS Availability Zones are  powerful tools for helping build highly available applications. If an application is partitioned across AZs, companies are better isolated and protected from issues such as lightning strikes, tornadoes, earthquakes and more.</p>
 <ol>
@@ -4706,9 +4727,9 @@ aws iam delete-role --role-name LambdaCustomResourceRole-SecureSsmForRds
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
@@ -4718,9 +4739,9 @@ aws iam delete-role --role-name LambdaCustomResourceRole-SecureSsmForRds
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
     
   </body>
