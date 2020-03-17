@@ -29,7 +29,6 @@ The logs from the AWS Lambda function are captured in Amazon CloudWatch Logs for
 
    Run the following command to prepare your deployment package:
 
-     `aws cloudformation package --template-file cloudformation-iam-user-cleanup.yml  --output-template-file output-template.yaml --s3-bucket <bucket>`
 
 4. Once you have finished preparing the package you can deploy the CloudFormation with AWS SAM:
 
