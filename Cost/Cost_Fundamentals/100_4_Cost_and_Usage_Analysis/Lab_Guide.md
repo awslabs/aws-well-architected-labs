@@ -23,7 +23,7 @@ At the end of a billing cycle or at the time you choose to incur a one-time fee,
 1. Log into the console as an IAM user with the required permissions, go to the billing dashboard:
 ![Images/AWSInvoice0.png](Images/AWSInvoice0.png)
 
-2. Select **Payment History** from the menu on the left:
+2. Select **Orders and invoices** from the menu on the left:
 ![Images/AWSInvoice1.png](Images/AWSInvoice1.png)
 
 3. Click on an **Invoice/Receipt ID** corresponding to the month you wish to view:
@@ -68,7 +68,7 @@ It is possible to download a CSV version of your summary cost and usage informat
 4. Click on **Download CSV**:
 ![Images/AWSDownloadBill0.png](Images/AWSDownloadBill0.png)
 
-5. It will download a CSV version of the bill you can use in a spreadsheet application. It is recommended to NOT use this data source for calculations and analysis, instead you should use the Cost and Usage Report, which is covered in [200_4_Cost_and_Usage_ansalysis](../200_4_Cost_and_Usage_Analysis/Lab_Guide.md).
+5. It will download a CSV version of the bill you can use in a spreadsheet application. It is recommended to NOT use this data source for calculations and analysis, instead you should use the Cost and Usage Report, which is covered in [200_4_Cost_and_Usage_analysis](../200_4_Cost_and_Usage_Analysis/Lab_Guide.md).
 ![Images/AWSDownloadBill1.png](Images/AWSDownloadBill1.png)
 
 
