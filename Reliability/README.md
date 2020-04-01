@@ -1,15 +1,16 @@
 # AWS Well-Architected Reliability Labs
-https://wellarchitectedlabs.com 
+https://wellarchitectedlabs.com
 
 ## Introduction
 
 This repository contains documentation and code in the format of hands-on-labs to help you learn how to learn, measure, and build using architectural best practices. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
 
-For more information about Reliability, read the 
+For more information about Reliability, read the
 [AWS Well-Architected Reliability whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Reliability-Pillar.pdf).
 
 ## Labs
 - [Level 200: Testing for Resiliency of EC2](200_Testing_for_Resiliency_of_EC2/README.md)
+- [Level 200: Testing Backup and Restore of Data](200_Testing_Backup_and_Restore_of_Data/README.md)
 - [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md)
 - [Level 300: Implementing Health Checks and Managing Dependencies to Improve Reliability](300_Health_Checks_and_Dependencies/README.md)
 
@@ -20,7 +21,7 @@ For more information about Reliability, read the
 
 Licensed under the [Creative Commons Share Alike 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
-### Code LicenseLicensed under the Apache 2.0 and MITnoAttr License. 
+### Code LicenseLicensed under the Apache 2.0 and MITnoAttr License.
 
 Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
