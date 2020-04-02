@@ -1,46 +1,46 @@
-site_name: AWS Well-Architected Labs 
-site_description: 'A collection of AWS Well-Architected workshops' 
-site_url: 'https://wellarchitectedlabs.com' 
+site_name: AWS Well-Architected Labs
+site_description: 'A collection of AWS Well-Architected workshops'
+site_url: 'https://wellarchitectedlabs.com'
 
 
-# Repository 
-repo_name: 'awslabs/aws-well-architected-labs' 
-repo_url: 'https://github.com/awslabs/aws-well-architected-labs' 
+# Repository
+repo_name: 'awslabs/aws-well-architected-labs'
+repo_url: 'https://github.com/awslabs/aws-well-architected-labs'
 
 # Copyright
-copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.' 
+copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.'
 
 
 # Must use true for gh-deploy
-#use_directory_urls: true  
+#use_directory_urls: true
 
 # Must use for /site builds
-# NOTE: will break gh-deploy 
-use_directory_urls: false 
+# NOTE: will break gh-deploy
+use_directory_urls: false
 
 
 
 theme:
-    name: material 
-    feature: 
-        tabs: true 
-    custom_dir: 'theme' 
-    palette: 
-        primary: 'grey' 
-        accent: 'grey' 
-    logo: 'images/wa.png' 
+    name: material
+    feature:
+        tabs: true
+    custom_dir: 'theme'
+    palette:
+        primary: 'grey'
+        accent: 'grey'
+    logo: 'images/wa.png'
 
 # https://github.com/awslabs/aws-well-architected-labs/issues/92
 extra_css:
   - 'stylesheets/extra.css'
 
 nav:
-    - Home: README.md 
-    - Operational Excellence: 
-        - Overview: 'Operations/README.md'  
+    - Home: README.md
+    - Operational Excellence:
+        - Overview: 'Operations/README.md'
         - 100 Inventory Patch Mgt:
-            - Lab Overview: 'Operations/100_Inventory_and_Patch_Mgmt/README.md' 
-            - Lab Guide: 'Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.md'  
+            - Lab Overview: 'Operations/100_Inventory_and_Patch_Mgmt/README.md'
+            - Lab Guide: 'Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.md'
     - Security:
         - Overview: 'Security/README.md'
         - Security 100 Labs:
@@ -58,7 +58,7 @@ nav:
             - Enable Security Hub:
                 - Lab Overview: 'Security/100_Enable_Security_Hub/README.md'
                 - Lab Guide: 'Security/100_Enable_Security_Hub/Lab_Guide.md'
-        - Security 200 Labs: 
+        - Security 200 Labs:
             - Automated Deployment of Detective Controls:
                 - Lab Overview: 'Security/200_Automated_Deployment_of_Detective_Controls/README.md'
                 - Lab Guide: 'Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.md'
@@ -87,7 +87,7 @@ nav:
             - IAM Permission Boundaries Delegating Role Creation:
                 - Lab Overview: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.md'
                 - Lab Guide: 'Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.md'
-            - IAM Tag Based Access Control for EC2: 
+            - IAM Tag Based Access Control for EC2:
                 - Lab Overview: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.md'
                 - Lab Guide: 'Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.md'
             - Incident Response with AWS Console and CLI:
@@ -119,76 +119,77 @@ nav:
             - Protect Data at Rest: 'Security/Quest_Protect_Data_at_Rest/README.md'
             - Protect Data in Transit: 'Security/Quest_Protect_Data_in_Transit/README.md'
             - Incident Response: 'Security/Quest_Incident_Response/README.md'
-    - Reliability: 
+    - Reliability:
         - Overview: 'Reliability/README.md'
+        - 200 Testing Backup and Restore of Data:
+            - Lab Overview: 'Reliability/200_Testing_Backup_and_Restore_of_Data/README.md'
+            - Lab Guide: 'Reliability/200_Testing_Backup_and_Restore_of_Data/Lab_Guide.md'
         - 300 Health Checks and Dependencies:
             - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
-            - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md' 
-        - Testing Resiliency: 
-            - 200 EC2 Resiliency: 
-                - Lab Overview: 'Reliability/200_Testing_for_Resiliency_of_EC2/README.md' 
-                - Lab Guide: 'Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.md' 
-            - 300 EC2, RDS S3 Resiliency: 
+            - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md'
+        - Testing Resiliency:
+            - 200 EC2 Resiliency:
+                - Lab Overview: 'Reliability/200_Testing_for_Resiliency_of_EC2/README.md'
+                - Lab Guide: 'Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.md'
+            - 300 EC2, RDS S3 Resiliency:
                 - Lab Overview: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md'
                 - Lab Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.md'
                 - Trouble Shooting Guide: 'Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.md'
-    - Performance Efficiency: 
+    - Performance Efficiency:
         - Overview: 'Performance/README.md'
-        - Monitoring with CloudWatch Dashboards: 'Performance/100_Monitoring_with_CloudWatch_Dashboards/README.md' 
+        - Monitoring with CloudWatch Dashboards: 'Performance/100_Monitoring_with_CloudWatch_Dashboards/README.md'
 
-    - Cost Optimization: 
-        - Overview: 'Cost/README.md' 
+    - Cost Optimization:
+        - Overview: 'Cost/README.md'
         - Fundamentals: 'Cost/Fundamentals.md'
         - Expenditure Awareness: 'Cost/ExpenditureAwareness.md'
         - Cost Effective Resources: 'Cost/CostEffectiveResources.md'
         - 100 Level Labs:
             - Account Setup:
-                - Overview: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.md' 
+                - Overview: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.md'
             - Cost and Usage Governance:
                 - Overview: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.md'
-            - Pricing Models: 
-                - Overview: 'Cost/Cost_Fundamentals/100_3_Pricing_Models/README.md' 
+            - Pricing Models:
+                - Overview: 'Cost/Cost_Fundamentals/100_3_Pricing_Models/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.md'
-            - Cost and Usage Analysis: 
-                - Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md' 
+            - Cost and Usage Analysis:
+                - Overview: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.md'
             - Cost and Usage Visualization:
-                - Overview: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.md' 
+                - Overview: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.md'
         - 200 Level Labs:
             - Cost and Usage Governance:
                 - Overview:  'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md'
                 - Lab Guide:  'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.md'
-            - Pricing Models: 
-                - Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md' 
+            - Pricing Models:
+                - Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.md'
-            - Cost and Usage Analysis: 
-                - Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md' 
+            - Cost and Usage Analysis:
+                - Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md'
-            - Cost and Usage Visualization: 
-                - Overview: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.md' 
+            - Cost and Usage Visualization:
+                - Overview: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.md'
         - 300 Level Labs:
-            - Automated CUR Updates and Ingestion: 
+            - Automated CUR Updates and Ingestion:
                 - Overview: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md'
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.md'
-            - Multi Account CUR Access: 
-                - Overview: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md' 
+            - Multi Account CUR Access:
+                - Overview: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.md'
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.md'
-            - Splitting Sharing CUR: 
-                - Overview: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md' 
+            - Splitting Sharing CUR:
+                - Overview: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md'
                 - Lab Guide: 'Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.md'
-            - Auto Financial CUR Reports: 
-                - Overview: 'Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.md' 
+            - Auto Financial CUR Reports:
+                - Overview: 'Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.md'
                 - Lab Guide: 'Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.md'
 
 
-    - Well Architected Tool: 
-        - Overview: 'Well-ArchitectedTool/README.md' 
-        - Walkthrough: 
-            - Lab Overview: 'Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.md' 
-            - Lab Guide: 'Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.md'  
- 
- 
+    - Well Architected Tool:
+        - Overview: 'Well-ArchitectedTool/README.md'
+        - Walkthrough:
+            - Lab Overview: 'Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.md'
+            - Lab Guide: 'Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.md'

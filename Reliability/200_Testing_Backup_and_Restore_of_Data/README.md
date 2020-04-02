@@ -7,15 +7,15 @@ In this lab, you will become familiar with creating periodic backups of AWS reso
 
 It is not sufficient to just create backups of data sources, you must also test these backups to ensure they can be used to recover data. A backup is useless if you are unable to restore your data from it. Testing the restore process after each backup will ensure you are aware of any issues that might arise during a restore down the line.
 
-In this lab, you will create an EBS Volume, an RDS Database, a DynamoDB Table, and an EFS File System as data sources. You will then create a strategy to backup these data sources periodically using AWS Backup, and finally, automate the testing of the restore process as well as cleanup of resources using Lambda.
+In this lab, you will create an EBS Volume as a data source. You will then create a strategy to backup these data sources periodically using AWS Backup, and finally, automate the testing of the restore process as well as cleanup of resources using AWS Lambda.
 
 The skills you learn will help you define a backup and restore plan in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
 ## Goals:
 
-Create a Backup Strategy to ensure mission-critical data is being backed up regularly
-Test restoring from backups to ensure there are no data recovery issues
-Learn how to automate this process
+* Create a Backup Strategy to ensure mission-critical data is being backed up regularly
+* Test restoring from backups to ensure there are no data recovery issues
+* Learn how to automate this process
 
 ## Prerequisites:
 
