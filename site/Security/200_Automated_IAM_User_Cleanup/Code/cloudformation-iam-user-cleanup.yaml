@@ -50,6 +50,20 @@ Parameters:
     Default: 0
     MinValue: 0
     Description: The minimum age in days of unused users to delete. Set to '0' to disable this function.
+  MinAgeRolesToReport:
+    Type: Number
+    Default: 30
+    MinValue: 0
+    Description: The minimum age in days of unused users to include in the report.
+  MinAgeRolesToDisable:
+    Type: Number
+    Default: 0
+    Description: The minimum age in days of unused users to disable. Set to '0' to disable this funciton.
+  MinAgeRolesToDelete:
+    Type: Number
+    Default: 0
+    MinValue: 0
+    Description: The minimum age in days of unused users to delete. Set to '0' to disable this function.
 Resources:
   # SNS Topic
   UserCleanupTopic:
@@ -92,6 +106,11 @@ Resources:
                     - 'iam:ListUsers'
                     - 'iam:UpdateAccessKey'
                     - 'iam:UpdateUser'
+                    - 'iam:ListRoles'
+                    - 'iam:GenerateServiceLastAccessedDetails'
+                    - 'iam:GetServiceLastAccessedDetails'
+                    - 'iam:DeleteRole'
+                    - 'iam:AttachRolePolicy'
                   Effect: Allow
                   Resource: '*' # Explicit that this includes all users
                 - Action:
@@ -115,6 +134,9 @@ Resources:
           MinAgeUnusedUsersToReport: !Ref MinAgeUnusedUsersToReport
           MinAgeUnusedUsersToDisable: !Ref MinAgeUnusedUsersToDisable
           MinAgeUnusedUsersToDelete: !Ref MinAgeUnusedUsersToDelete
+          MinAgeRolesToReport: !Ref MinAgeRolesToReport
+          MinAgeRolesToDisable: !Ref MinAgeRolesToDisable
+          MinAgeRolesToDelete: !Ref MinAgeRolesToDelete
           TopicTarget: !Ref UserCleanupTopic
       CodeUri: lambda-iam-user-cleanup.py
       Timeout: 300
