@@ -133,7 +133,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
             # Based on the health assessment
             # If it succeeded return a healthy code
-            # If it failed return a server failure code            
+            # If it failed return a server failure code
             message = ""
             if (is_healthy):
                 self.send_response(200)
