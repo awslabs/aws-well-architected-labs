@@ -127,12 +127,12 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 
       * Refresh several times and observe the health check on the three servers
       * Note the check is successful
-1. The EC2 servers receive user requests (for a TV show recommendation) on the path `\` and they receive health check requests from the Elastic Load Balancer on the path `\healthcheck`
-      * The healthcheck is currently always returns and http 200 code for any request to it.
-      * The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py), or you can view the healthcheck code excerpt below:
+1. The EC2 servers receive user requests (for a TV show recommendation) on the path `/` and they receive health check requests from the Elastic Load Balancer on the path `/healthcheck`
+      * The health check always returns an http 200 code for any request to it.
+      * The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py), or you can view the health check code excerpt below:
 
 <details>
-<summary>Click here to see the healthcheck code excerpt</summary>
+<summary>Click here to see the health check code excerpt</summary>
 
 ```python
 # Healthcheck request - will be used by the Elastic Load Balancer
@@ -471,7 +471,7 @@ elif self.path == '/healthcheck':
 #### 3.4.4 Verify Elastic Load Balancer (ELB) is configured to use the new deep health check
 
 1. From the **Target Groups** console click on the the **Health checks** tab
-1. For **Path** verify the value is **/healthcheck**
+1. For **Path** verify the value is `/healthcheck`
 1. Click the **Targets** tab so you can monitor health check status
 
 #### 3.4.5 Observe behavior of web service with added deep health check
