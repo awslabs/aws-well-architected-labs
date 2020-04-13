@@ -158,7 +158,7 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
     Properties:
-      HealthCheckPath: /
+      HealthCheckPath: /healthcheck
       HealthCheckIntervalSeconds: 15
       #HealthCheckPort: 
       #HealthCheckProtocol:
@@ -245,7 +245,7 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           yum -y update
-          sleep 10 # prevent "Error: Rpmdb changed underneath us"
+          sleep 30 # prevent "Error: Rpmdb changed underneath us"
           yum install python3 python-virtualenv python-pip -y
           python3 -m venv /home/ec2-user/venv
           source /home/ec2-user/venv/bin/activate

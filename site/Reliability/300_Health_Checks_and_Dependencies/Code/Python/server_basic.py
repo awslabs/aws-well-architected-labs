@@ -91,6 +91,26 @@ class RequestHandler(BaseHTTPRequestHandler):
                 )
             )
 
+        # Healthcheck request - will be used by the Elastic Load Balancer
+        elif self.path == '/healthcheck':
+
+            # Return a success status code
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+
+            message = "<h1>Success</h1>"
+
+            # Add metadata
+            message += get_metadata()
+
+            self.wfile.write(
+                bytes(
+                    html.format(Title="healthcheck", Content=message),
+                    "utf-8"
+                )
+            )
+
         return
 
 # Utility function to consistently format how recommendations are displayed
