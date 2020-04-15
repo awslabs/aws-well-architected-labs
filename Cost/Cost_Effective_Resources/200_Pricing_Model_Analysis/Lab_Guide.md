@@ -876,5 +876,5 @@ Savings Plan analysis is a critical requirement of cost optimization, so there i
 
 <a name="rate_lab"></a>
 ## 7. Rate this lab
-[![1 Star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_1star) [![2 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_2star) [![3 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_3star) [![4 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_4star) [![5 star](Images/star.png)](http://dx1572sre29wk.cloudfront.net/Cost_200_3_5star)
+[![1 Star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_SP_Analysis_1star) [![2 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_2star) [![3 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_3star) [![4 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_4star) [![5 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_5star)
 
