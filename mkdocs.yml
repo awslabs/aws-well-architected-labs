@@ -164,9 +164,12 @@ nav:
             - Cost and Usage Governance:
                 - Overview:  'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.md'
                 - Lab Guide:  'Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.md'
-            - Pricing Models:
+            - RI Analysis:
                 - Overview: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.md'
+            - Savings Plan Analysis:
+                - Overview: 'Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/README.md'
+                - Lab Guide: 'Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/Lab_Guide.md'
             - Cost and Usage Analysis:
                 - Overview: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.md'
