@@ -4064,19 +4064,21 @@ DiscountRate DESC
 <p><a name="tear_down"></a></p>
 <h2 id="6-teardown">6. Teardown</h2>
 <p>Savings Plan analysis is a critical requirement of cost optimization, so there is no tear down for this lab. </p>
-<p>The following resources were created in this lab:
-- S3 Bucket: (custom name)
-- Lambda Functions: SPTool_ODPricing_Download and SPTool_SPPricing_Download
-- IAM Role: SPTool_Lambda
-- IAM Policy: s3_pricing_lambda
-- CloudWatch Event, Rule: SPTool-Pricing
-- Glue Crawlers: OD_Pricing and SP_Pricing
-- IAM Role: AWSGlueServiceRole-SPToolPricing
-- Glue Database: Pricing
-- Athena Views: pricing.pricing and cur.SP_USage
-- QuickSight Permissions: your pricing S3 bucket
-- QuickSight Dataset: SP_Usage
-- QuickSight Analysis: sp_usage analysis</p>
+<p>The following resources were created in this lab:</p>
+<ul>
+<li>S3 Bucket: (custom name)</li>
+<li>Lambda Functions: SPTool_ODPricing_Download and SPTool_SPPricing_Download</li>
+<li>IAM Role: SPTool_Lambda</li>
+<li>IAM Policy: s3_pricing_lambda</li>
+<li>CloudWatch Event, Rule: SPTool-Pricing</li>
+<li>Glue Crawlers: OD_Pricing and SP_Pricing</li>
+<li>IAM Role: AWSGlueServiceRole-SPToolPricing</li>
+<li>Glue Database: Pricing</li>
+<li>Athena Views: pricing.pricing and cur.SP_USage</li>
+<li>QuickSight Permissions: your pricing S3 bucket</li>
+<li>QuickSight Dataset: SP_Usage</li>
+<li>QuickSight Analysis: sp_usage analysis</li>
+</ul>
 <p><a name="rate_lab"></a></p>
 <h2 id="7-rate-this-lab">7. Rate this lab</h2>
 <p><a href="http://wellarchitectedlabs.com/Cost_SP_Analysis_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_5star"><img alt="5 star" src="../../../common/images/star.png" /></a></p>

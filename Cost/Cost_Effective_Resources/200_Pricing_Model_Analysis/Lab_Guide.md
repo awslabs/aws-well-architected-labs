@@ -902,6 +902,7 @@ Congratulations - you now have an analytics dashboard for Savings Plan recommend
 Savings Plan analysis is a critical requirement of cost optimization, so there is no tear down for this lab. 
 
 The following resources were created in this lab:
+
 - S3 Bucket: (custom name)
 - Lambda Functions: SPTool_ODPricing_Download and SPTool_SPPricing_Download
 - IAM Role: SPTool_Lambda
