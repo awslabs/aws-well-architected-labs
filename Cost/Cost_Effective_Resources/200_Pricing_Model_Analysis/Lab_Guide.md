@@ -901,6 +901,20 @@ Congratulations - you now have an analytics dashboard for Savings Plan recommend
 ## 6. Teardown
 Savings Plan analysis is a critical requirement of cost optimization, so there is no tear down for this lab. 
 
+The following resources were created in this lab:
+- S3 Bucket: (custom name)
+- Lambda Functions: SPTool_ODPricing_Download and SPTool_SPPricing_Download
+- IAM Role: SPTool_Lambda
+- IAM Policy: s3_pricing_lambda
+- CloudWatch Event, Rule: SPTool-Pricing
+- Glue Crawlers: OD_Pricing and SP_Pricing
+- IAM Role: AWSGlueServiceRole-SPToolPricing
+- Glue Database: Pricing
+- Athena Views: pricing.pricing and cur.SP_USage
+- QuickSight Permissions: your pricing S3 bucket
+- QuickSight Dataset: SP_Usage
+- QuickSight Analysis: sp_usage analysis
+
 <a name="rate_lab"></a>
 ## 7. Rate this lab
 [![1 Star](../../../common/images/star.png)](http://wellarchitectedlabs.com/Cost_SP_Analysis_1star) [![2 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_2star) [![3 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_3star) [![4 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_4star) [![5 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/Cost_SP_Analysis_5star)
