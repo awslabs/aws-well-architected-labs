@@ -131,7 +131,7 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
       * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
-1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Policy-us-east-2** from the search results box
+1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-east-2** from the search results box
       * (If you chose a different region as your _east_ region, then look for that region at the end of the IAM role name)
 1. For **Rule name** enter `east to west`
 1. Leave **Status** set to **enabled**
@@ -196,7 +196,7 @@ After setting up the second rule, you will have completed configuration of bi-di
             * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
-1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Policy-us-west-2** from the search results box
+1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-west-2** from the search results box
       * (If you chose a different region as your _west_ region, then look for that region at the end of the IAM role name)
 1. For **Rule name** enter `west to east`
 1. Leave **Status** set to **enabled**
@@ -320,8 +320,8 @@ The result is:
 
 These are _optional_. They help you to explore and understand bi-direction cross-region replication on Amazon S3.
 
-* Look at the policies on the **\<your-naming-prefix\>-S3-Replication-Policy...** IAM Roles
-     * Why do they have the permissions that they do?
+* Look at the **Permissions** on the **\<your-naming-prefix\>-S3-Replication-Role-...** IAM Roles
+     * Why do they have the policies that they do?
 
 * What happens when you rename an object in one of the buckets?
      * Hint: if you cannot figure it out consider that versioning is enabled (and must be enabled for replication to work)
@@ -331,7 +331,7 @@ These are _optional_. They help you to explore and understand bi-direction cross
 
 ### 3.5 Summary
 
-You setup bi-directional cross-region replication (CRR) for two Amazon S3 buckets. You created two S3 buckets in two different AWS regions. Putting an object in either bucket resulted in the object asynchronously being backed up to the _other_ bucket. Objects encrypted in their original bucket are also encrypted in their replication bucket. Objects are replicated once -- no replication "looping" occurred.
+You created two S3 buckets in two different AWS regions. You then setup bi-directional cross-region replication (CRR) between the two Amazon S3 buckets. Putting an object in either bucket resulted in the object asynchronously being backed up to the _other_ bucket. Objects encrypted in their original bucket are also encrypted in their replication bucket. Objects are replicated once -- replication "looping" is prevented.
 
 ## 4. Tear down this lab <a name="tear_down"></a>
 
@@ -352,7 +352,8 @@ You cannot delete an Amazon S3 bucket unless it is empty, so you need to empty t
 * Logging bucket in _east_ region: `logging-<your_naming_prefix>-us-east-2`
 * Logging bucket in _west_ region: `logging-<your_naming_prefix>-us-west-2`
 
-* Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
+Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
+
 * For each of he four buckets do the following:
 
 1. Select the radio button next to the bucket
