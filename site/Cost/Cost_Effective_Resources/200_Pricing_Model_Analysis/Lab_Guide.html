@@ -2992,11 +2992,11 @@
 <p>Click <strong>Create bucket</strong>:</p>
 </li>
 <li>
-<p>Enter a <strong>Bucket name</strong> (we have used sptool-pricingfiles, you will need to use a unique bucket name) and click <strong>Create</strong>:
+<p>Enter a <strong>Bucket name</strong> (we have used sptool-pricingfiles, you will need to use a unique bucket name) and click <strong>Create bucket</strong>:
 <img alt="Images/s3_bucketdetails-create.png" src="Images/s3_bucketdetails-create.png" /></p>
 </li>
 <li>
-<p>Click on the <strong><bucket name></strong>:
+<p>Click on the <strong>(bucket name)</strong>:
 <img alt="Images/s3_select-bucket.png" src="Images/s3_select-bucket.png" /></p>
 </li>
 <li>
@@ -3018,8 +3018,8 @@
 </ol>
 <p>You have now setup the S3 bucket with the two folders that will contain the OnDemand and Savings Plans pricing data.
 <img alt="Images/s3_bucket-complete.png" src="Images/s3_bucket-complete.png" /></p>
-<h3 id="12-setup-on-demand-pricing-lambda-function">1.2. Setup On Demand Pricing Lambda Function</h3>
-<p>Create the On Demand Lambda function to get the pricing information, and extract the required parts from it.</p>
+<h3 id="12-setup-on-demand-pricing-lambda-function">1.2. Setup On-Demand Pricing Lambda Function</h3>
+<p>Create the On-Demand Lambda function to get the pricing information, and extract the required parts from it.</p>
 <ol>
 <li>
 <p>Go to the <strong>Lambda</strong> service page:
@@ -3108,7 +3108,7 @@ def lambda_handler(event, context):
 <img alt="Images/lambda_editcode.png" src="Images/lambda_editcode.png" /></p>
 </li>
 <li>
-<p>Edit Basic settings below:</p>
+<p>Edit <strong>Basic settings</strong> below:</p>
 <ul>
 <li>Memory: <strong>2688MB</strong></li>
 <li>Timeout: <strong>5min</strong></li>
@@ -3129,7 +3129,11 @@ def lambda_handler(event, context):
 <img alt="Images/lambda_save.png" src="Images/lambda_save.png" /></p>
 </li>
 <li>
-<p>Scroll down to <strong>Execution role</strong>, and right-click(open link in new tab) <strong>View the SPTool_Lambda role</strong> to open the role in the IAM Service page:
+<p>Click on <strong>Permissions</strong>:
+<img alt="Images/lambda_permissions.png" src="Images/lambda_permissions.png" /></p>
+</li>
+<li>
+<p>Right-click(open link in new tab) <strong>View the SPTool_Lambda role</strong> to open the role in the IAM Service page:
 <img alt="Images/lambda_viewrole.png" src="Images/lambda_viewrole.png" /></p>
 </li>
 <li>
@@ -3173,7 +3177,7 @@ def lambda_handler(event, context):
 <img alt="Images/lambda_testrun.png" src="Images/lambda_testrun.png" /></p>
 </li>
 <li>
-<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click <strong>Details</strong> and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 <img alt="Images/lambda_runsuccess.png" src="Images/lambda_runsuccess.png" /></p>
 </li>
 <li>
@@ -3312,11 +3316,11 @@ def lambda_handler(event, context):
 <img alt="Images/lambda_testrun.png" src="Images/lambda_testrun.png" /></p>
 </li>
 <li>
-<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click <strong>Details</strong> and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 <img alt="Images/lambda_runsuccess2.png" src="Images/lambda_runsuccess2.png" /></p>
 </li>
 <li>
-<p>Go to your S3 bucket and into the <strong>od_pricedata</strong> folder and you should see a gz file of non-zero size is in it:
+<p>Go to your S3 bucket and into the <strong>sp_pricedata</strong> folder and you should see a gz file of non-zero size is in it:
 <img alt="Images/s3_verify2.png" src="Images/s3_verify2.png" /></p>
 </li>
 </ol>
@@ -3328,7 +3332,7 @@ def lambda_handler(event, context):
 <img alt="Images/home_cloudwatch.png" src="Images/home_cloudwatch.png" /></p>
 </li>
 <li>
-<p>Click on <strong>Events</strong>:
+<p>Click on <strong>Events</strong>, then click <strong>Rules</strong>:
 <img alt="Images/cloudwatch_events.png" src="Images/cloudwatch_events.png" /></p>
 </li>
 <li>
@@ -3354,7 +3358,7 @@ def lambda_handler(event, context):
 </ol>
 <p>You have now successfully configured a CloudWatch event, it will run the two Lambda functions and update the pricing information every 5 days.</p>
 <h3 id="15-prepare-the-pricing-data-source">1.5 Prepare the Pricing Data Source</h3>
-<p>We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront SavingsPlans rates and join them to On Deman pricing. You can modify this part to select a 3 year or Partial/Full Upfront rates.</p>
+<p>We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront Savings Plans rates and join them to On-Demand pricing. You can modify this part to select 3 year or Partial or All-Upfront rates.</p>
 <ol>
 <li>
 <p>Go to the <strong>Glue</strong> Service page:
@@ -3536,7 +3540,7 @@ AND sp.leasecontractlength = 1
 
 </li>
 <li>
-<p>Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace <strong>cur</strong> with your existing database name, and <strong>curfile</strong> with the tablename of your CUR, then run the rollowing query:</p>
+<p>Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace <strong>cur.curfile</strong> with your existing database name and tablename of your CUR, then run the rollowing query:</p>
 <p><details>
 <summary> Click here to see the Athena SQL code</summary></p>
 <pre><code>CREATE VIEW cur.SP_Usage AS SELECT
@@ -3585,7 +3589,7 @@ DiscountRate DESC
 
 <p>You now have your usage data source setup with your pricing dimensions. You can modify the queries above to add or remove any columns you want in the view, which can later be used to visualize the data, for example tags.</p>
 <p><a name="quicksight_setup"></a></p>
-<h2 id="3-setup-quicksight-dashboard">3. Setup Quicksight Dashboard</h2>
+<h2 id="3-setup-quicksight-dashboard">3. Setup QuickSight Dashboard</h2>
 <p>We will now setup the QuickSight dashboard to visualize your usage by cost, and setup the analysis to provide Savings Plan recommendations.</p>
 <ol>
 <li>
@@ -3601,7 +3605,7 @@ DiscountRate DESC
 <img alt="Images/quicksight_manage.png" src="Images/quicksight_manage.png" /></p>
 </li>
 <li>
-<p>Click <strong>Security &amp; permissions</strong>, then click <strong>Add or remove</strong> below Amazon S3:
+<p>Click <strong>Security &amp; permissions</strong>, then click <strong>Add or remove</strong>:
 <img alt="Images/quicksight_securityperms.png" src="Images/quicksight_securityperms.png" /></p>
 </li>
 <li>
@@ -3641,20 +3645,51 @@ DiscountRate DESC
 <img alt="Images/quicksight_namedatasource.png" src="Images/quicksight_namedatasource.png" /></p>
 </li>
 <li>
-<p>Select your <strong>Database</strong> and the <strong>sp_usage</strong> table, click <strong>Select</strong>:
+<p>Select the <strong>cur</strong> database, and the <strong>sp_usage</strong> table, click <strong>Select</strong>:
 <img alt="Images/quicksight_choosetable.png" src="Images/quicksight_choosetable.png" /></p>
 </li>
 <li>
 <p>Ensure SPICE is selected, click <strong>Visualize</strong>:
 <img alt="Images/quicksight_datasetfinish.png" src="Images/quicksight_datasetfinish.png" /></p>
 </li>
+<li>
+<p>Click on <strong>QuickSight</strong> to go to the home page:
+<img alt="Images/quicksight_home.png" src="Images/quicksight_home.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Manage data</strong>:
+<img alt="Images/quicksight_managedata.png" src="Images/quicksight_managedata.png" /></p>
+</li>
+<li>
+<p>Select the <strong>sp_usage</strong> Dataset:
+<img alt="Images/quicksight_refresh1.png" src="Images/quicksight_refresh1.png" /></p>
+</li>
+<li>
+<p>Click <strong>Schedule refresh</strong>:
+<img alt="Images/quicksight_refresh2.png" src="Images/quicksight_refresh2.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create</strong>:
+<img alt="Images/quicksight_refresh3.png" src="Images/quicksight_refresh3.png" /></p>
+</li>
+<li>
+<p>Enter a schedule, it needs to be refreshed daily, and click <strong>Create</strong>:
+<img alt="Images/quicksight_refresh4.png" src="Images/quicksight_refresh4.png" /></p>
+</li>
+<li>
+<p>Click <strong>Cancel</strong> to exit: 
+<img alt="Images/quicksight_refresh5.png" src="Images/quicksight_refresh5.png" /></p>
+</li>
+<li>
+<p>Click the <strong>x</strong> in the top corner:
+<img alt="Images/quicksight_refresh6.png" src="Images/quicksight_refresh6.png" /></p>
+</li>
 </ol>
-<p>==&gt; scheduled refresh</p>
 <p><a name="recommendation_dashboard"></a></p>
 <h2 id="4-create-the-recommendation-dashboard">4. Create the Recommendation Dashboard</h2>
 <ol>
 <li>
-<p>Go to the QuickSight service:
+<p>Go to the QuickSight service homepage:
 <img alt="Images/home_quicksight.png" src="Images/home_quicksight.png" /></p>
 </li>
 <li>
@@ -3755,8 +3790,8 @@ DiscountRate DESC
 <li>Name: DaysToDisplay</li>
 <li>Data type: Integer</li>
 <li>Values: Single value</li>
-<li>Static default value: 90
-Click <strong>Create</strong>:
+<li>Static default value: 90</li>
+<li>Click <strong>Create</strong>:
 <img alt="Images/quicksight_daystodisplay_create.png" src="Images/quicksight_daystodisplay_create.png" /></li>
 </ul>
 </li>
@@ -3779,10 +3814,11 @@ Click <strong>Create</strong>:
 <li>
 <p>Select a filter type of:</p>
 <ul>
+<li><strong>All visuals</strong></li>
 <li><strong>Relative dates</strong></li>
 <li><strong>Days</strong></li>
 <li><strong>Last N days</strong></li>
-<li>select <strong>Use parameters</strong>, and accept to cahnge the scope of the filter</li>
+<li>select <strong>Use parameters</strong>, and accept to change the scope of the filter</li>
 <li>select the parameter <strong>DaysToDisplay</strong></li>
 <li>click <strong>Apply</strong>:
 <img alt="Images/quicksight_add_filter3.png" src="Images/quicksight_add_filter3.png" /></li>
@@ -3807,7 +3843,7 @@ Click <strong>Create</strong>:
 <li>equals</li>
 <li>Use parameters, change the scope of this filter: yes</li>
 <li>Parameter: Region
-<img alt="Images/quicksight_os_filter.png" src="Images/quicksight_os_filter.png" /> </li>
+<img alt="Images/quicksight_os_filter.png" src="Images/quicksight_location_filter.png" /> </li>
 </ul>
 </li>
 <li>
@@ -3868,7 +3904,7 @@ Click <strong>Create</strong>:
 </li>
 <li>
 <p>Create a calculated field <strong>TrendAvg</strong>, formula:</p>
-<pre><code>        (LastQtrAvg- First3QtrAvg) / First3QtrAvg
+<pre><code>(LastQtrAvg- First3QtrAvg) / First3QtrAvg
 </code></pre>
 </li>
 <li>
@@ -3876,21 +3912,23 @@ Click <strong>Create</strong>:
 <img alt="Images/quicksight_add_visual1.png" src="Images/quicksight_add_visual1.png" /></p>
 </li>
 <li>
-<p>Select a <strong>Table</strong> visualization, label it <strong>Recommendations</strong>, Group by <strong>product_instance_type</strong>, Add the <strong>values</strong>:</p>
+<p>Select a <strong>Table</strong> visualization, Group by <strong>product_instance_type</strong>, Add the <strong>values</strong>:</p>
 <ul>
 <li>SavingsPlanReco</li>
 <li>PayOffMonth</li>
 <li>discountrate, aggregate: average</li>
-<li>HoursRun, show as percent
+<li>HoursRun, show as percent</li>
+<li>Label it <strong>Recommendations</strong>
 <img alt="Images/quicksight_add_visual2.png" src="Images/quicksight_add_visual2.png" /></li>
 </ul>
 </li>
 <li>
-<p>Add a <strong>Table</strong> visual, label it <strong>Trends</strong>, Group By: <strong>product_instance_type</strong> and <strong>line_item_usage_start_date aggreate: day</strong>, Add the <strong>values</strong>:</p>
+<p>Add a <strong>Table</strong> visual, Group By: <strong>product_instance_type</strong> and <strong>line_item_usage_start_date aggreate: day</strong>, Add the <strong>values</strong>:</p>
 <ul>
 <li>instancecount aggregate: average</li>
 <li>Trend</li>
-<li>TrendAvg (show as percent)
+<li>TrendAvg (show as percent)</li>
+<li>Label it <strong>Trends</strong>,
 <img alt="Images/quicksight_add_visual3.png" src="Images/quicksight_add_visual3.png" /></li>
 </ul>
 </li>
@@ -3903,6 +3941,9 @@ Click <strong>Create</strong>:
 <li>Value: -1</li>
 <li>Nulls: Exclude nulls</li>
 </ul>
+</li>
+<li>
+<p>Decrease the width of the date column as much as possible, its not needed</p>
 </li>
 </ol>
 <p><a name="format_dashboard"></a></p>

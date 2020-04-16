@@ -4,6 +4,8 @@ https://wellarchitectedlabs.com
 ## Introduction
  This hands-on lab will guide you through the steps to perform an analysis of Savings Plans for your AWS cost and usage. The skills you learn will help you implement the correct pricing models for your workloads, in alignment with the AWS Well-Architected Framework.
  
+**NOTE:** There is a 200 level lab on [building a Savings Plan analysis dashbord.](../../Cost_Effective_Resources/200_Pricing_Model_Analysis/README.md)
+ 
 ![Images/SavingsPlan01.png](Images/SavingsPlan01.png)
 
 

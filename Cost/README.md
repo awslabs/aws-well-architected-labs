@@ -36,7 +36,7 @@ Using the appropriate resources for your workload is key to cost savings, this i
 
  - Selection of Services
  - Resource Type and Size
- - Pricing Models
+ - Pricing Models - Savings Plans (SP) and Reserved Instances (RI)
  - Data Transfer Charges
 
 It covers the following topics: Organization cost requirements, analyze workload components, cost modeling, resource type and size, pricing models (Reserved Instances, Spot, OnDemand), region cost, data transfer modeling, data transfer services.

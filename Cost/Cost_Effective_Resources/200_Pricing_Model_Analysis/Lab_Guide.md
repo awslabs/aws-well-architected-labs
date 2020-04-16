@@ -32,10 +32,10 @@ Create a **single S3 bucket** that contains **two folders** - **od_pricedata** a
 
 2. Click **Create bucket**:
 
-3. Enter a **Bucket name** (we have used sptool-pricingfiles, you will need to use a unique bucket name) and click **Create**:
+3. Enter a **Bucket name** (we have used sptool-pricingfiles, you will need to use a unique bucket name) and click **Create bucket**:
 ![Images/s3_bucketdetails-create.png](Images/s3_bucketdetails-create.png)
 
-4. Click on the **<bucket name>**:
+4. Click on the **(bucket name)**:
 ![Images/s3_select-bucket.png](Images/s3_select-bucket.png)
 
 5. Click **Create folder**:
@@ -55,8 +55,8 @@ You have now setup the S3 bucket with the two folders that will contain the OnDe
 
 
 
-### 1.2. Setup On Demand Pricing Lambda Function
-Create the On Demand Lambda function to get the pricing information, and extract the required parts from it.
+### 1.2. Setup On-Demand Pricing Lambda Function
+Create the On-Demand Lambda function to get the pricing information, and extract the required parts from it.
 
 1. Go to the **Lambda** service page:
 ![Images/home_lambda-dashboard.png](Images/home_lambda-dashboard.png)
@@ -136,7 +136,7 @@ Create the On Demand Lambda function to get the pricing information, and extract
 6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
 ![Images/lambda_editcode.png](Images/lambda_editcode.png)
 
-7. Edit Basic settings below:
+7. Edit **Basic settings** below:
     - Memory: **2688MB**
     - Timeout: **5min**
     - Click **save**
@@ -151,43 +151,46 @@ Create the On Demand Lambda function to get the pricing information, and extract
 10. Click **Save**:
 ![Images/lambda_save.png](Images/lambda_save.png)
 
-11. Scroll down to **Execution role**, and right-click(open link in new tab) **View the SPTool_Lambda role** to open the role in the IAM Service page:
+11. Click on **Permissions**:
+![Images/lambda_permissions.png](Images/lambda_permissions.png)
+
+12. Right-click(open link in new tab) **View the SPTool_Lambda role** to open the role in the IAM Service page:
 ![Images/lambda_viewrole.png](Images/lambda_viewrole.png)
 
-12. Click on **Attach policies**:
+13. Click on **Attach policies**:
 ![Images/IAM_attach-policies.png](Images/IAM_attach-policies.png)
 
-13. Click on **Create policy**:
+14. Click on **Create policy**:
 ![Images/IAM_Createpolicy.png](Images/IAM_Createpolicy.png)
 
-14. Create a policy to allow object write to your S3 bucket created, and click **Review policy**:
+15. Create a policy to allow object write to your S3 bucket created, and click **Review policy**:
 ![Images/IAM_reviewpolicy.png](Images/IAM_reviewpolicy.png)
 
-15. Name the policy **s3_pricing_lambda**, optionally and add a description, click **Create policy**:
+16. Name the policy **s3_pricing_lambda**, optionally and add a description, click **Create policy**:
 ![Images/IAM_namecreatepolicy.png](Images/IAM_namecreatepolicy.png)
 
-16. Click on **Roles**:
+17. Click on **Roles**:
 ![Images/IAM_roles.png](Images/IAM_roles.png)
 
-17. Click on the role **SPTool_Lambda**:
+18. Click on the role **SPTool_Lambda**:
 ![Images/IAM_roleSPTool.png](Images/IAM_roleSPTool.png)
 
-18. Click **Attach policies**:
+19. Click **Attach policies**:
 ![Images/IAM_attach-policies.png](Images/IAM_attach-policies.png)
 
-19. Click **Filter Policies** and select **Customer managed**:
+20. Click **Filter Policies** and select **Customer managed**:
 ![Images/IAM_filterpolicies.png](Images/IAM_filterpolicies.png)
 
-20. Select the **S3_pricing_lambda** policy and click **Attach policy**:
+21. Select the **S3_pricing_lambda** policy and click **Attach policy**:
 ![Images/IAM_selectpolicy.png](Images/IAM_selectpolicy.png)
 
-21. Go back to the **Lambda** service page and click **Test**:
+22. Go back to the **Lambda** service page and click **Test**:
 ![Images/lambda_testrun.png](Images/lambda_testrun.png)
 
-22. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+23. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 ![Images/lambda_runsuccess.png](Images/lambda_runsuccess.png)
 
-23. Go to your S3 bucket and into the **od_pricedata** folder and you should see a gz file of non-zero size is in it:
+24. Go to your S3 bucket and into the **od_pricedata** folder and you should see a gz file of non-zero size is in it:
 ![Images/s3_verify.png](Images/s3_verify.png)
 
 
@@ -306,10 +309,10 @@ Create the Savings Plan Lambda function to get the pricing information, and extr
 11. Click **Test**:
 ![Images/lambda_testrun.png](Images/lambda_testrun.png)
 
-12. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+12. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 ![Images/lambda_runsuccess2.png](Images/lambda_runsuccess2.png)
 
-13. Go to your S3 bucket and into the **od_pricedata** folder and you should see a gz file of non-zero size is in it:
+13. Go to your S3 bucket and into the **sp_pricedata** folder and you should see a gz file of non-zero size is in it:
 ![Images/s3_verify2.png](Images/s3_verify2.png)
 
 
@@ -319,7 +322,7 @@ We will setup a CloudWatch Event to periodically run the Lambda functions, this 
 1. Go to the CloudWatch service page:
 ![Images/home_cloudwatch.png](Images/home_cloudwatch.png)
 
-2. Click on **Events**:
+2. Click on **Events**, then click **Rules**:
 ![Images/cloudwatch_events.png](Images/cloudwatch_events.png)
 
 3. Click **Create rule**
@@ -341,7 +344,7 @@ You have now successfully configured a CloudWatch event, it will run the two Lam
 
 
 ### 1.5 Prepare the Pricing Data Source
-We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront SavingsPlans rates and join them to On Deman pricing. You can modify this part to select a 3 year or Partial/Full Upfront rates.
+We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront Savings Plans rates and join them to On-Demand pricing. You can modify this part to select 3 year or Partial or All-Upfront rates.
 
 1. Go to the **Glue** Service page:
 ![Images/home_glue.png](Images/home_glue.png)
@@ -483,7 +486,7 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
         AND sp.leasecontractlength = 1
     </details>
 
-3. Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace **cur** with your existing database name, and **curfile** with the tablename of your CUR, then run the rollowing query:
+3. Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace **cur.curfile** with your existing database name and tablename of your CUR, then run the rollowing query:
 
     <details>
     <summary> Click here to see the Athena SQL code</summary>
@@ -532,7 +535,7 @@ You now have your usage data source setup with your pricing dimensions. You can 
 
 
 <a name="quicksight_setup"></a>
-## 3. Setup Quicksight Dashboard
+## 3. Setup QuickSight Dashboard
 We will now setup the QuickSight dashboard to visualize your usage by cost, and setup the analysis to provide Savings Plan recommendations.
 
 1. Go to the QuickSight service:
@@ -544,7 +547,7 @@ We will now setup the QuickSight dashboard to visualize your usage by cost, and 
 3. Click **Manage QuickSight**:
 ![Images/quicksight_manage.png](Images/quicksight_manage.png)
 
-4. Click **Security & permissions**, then click **Add or remove** below Amazon S3:
+4. Click **Security & permissions**, then click **Add or remove**:
 ![Images/quicksight_securityperms.png](Images/quicksight_securityperms.png)
 
 5. Click **Details** next to Amazon S3:
@@ -574,21 +577,41 @@ We will now setup the QuickSight dashboard to visualize your usage by cost, and 
 13. Enter a Data source name of **SP_Usage** and click **Create data source**:
 ![Images/quicksight_namedatasource.png](Images/quicksight_namedatasource.png)
 
-14. Select your **Database** and the **sp_usage** table, click **Select**:
+14. Select the **cur** database, and the **sp_usage** table, click **Select**:
 ![Images/quicksight_choosetable.png](Images/quicksight_choosetable.png)
 
 15. Ensure SPICE is selected, click **Visualize**:
 ![Images/quicksight_datasetfinish.png](Images/quicksight_datasetfinish.png)
 
+16. Click on **QuickSight** to go to the home page:
+![Images/quicksight_home.png](Images/quicksight_home.png)
 
-==> scheduled refresh
+17. Click on **Manage data**:
+![Images/quicksight_managedata.png](Images/quicksight_managedata.png)
 
+18. Select the **sp_usage** Dataset:
+![Images/quicksight_refresh1.png](Images/quicksight_refresh1.png)
+
+19. Click **Schedule refresh**:
+![Images/quicksight_refresh2.png](Images/quicksight_refresh2.png)
+
+20. Click **Create**:
+![Images/quicksight_refresh3.png](Images/quicksight_refresh3.png)
+
+21. Enter a schedule, it needs to be refreshed daily, and click **Create**:
+![Images/quicksight_refresh4.png](Images/quicksight_refresh4.png)
+
+22. Click **Cancel** to exit: 
+![Images/quicksight_refresh5.png](Images/quicksight_refresh5.png)
+
+23. Click the **x** in the top corner:
+![Images/quicksight_refresh6.png](Images/quicksight_refresh6.png)
 
 
 <a name="recommendation_dashboard"></a>
 ## 4. Create the Recommendation Dashboard
 
-1. Go to the QuickSight service:
+1. Go to the QuickSight service homepage:
 ![Images/home_quicksight.png](Images/home_quicksight.png)
 
 2. Go to the **sp_usage analysis**: 
@@ -667,7 +690,7 @@ We will now setup the QuickSight dashboard to visualize your usage by cost, and 
     - Data type: Integer
     - Values: Single value
     - Static default value: 90
-Click **Create**:
+    - Click **Create**:
 ![Images/quicksight_daystodisplay_create.png](Images/quicksight_daystodisplay_create.png)
 
 18. Click **Control**:
@@ -683,10 +706,11 @@ Click **Create**:
 ![Images/quicksight_add_filter2.png](Images/quicksight_add_filter2.png)
 
 22. Select a filter type of:
+    - **All visuals**
     - **Relative dates**
     - **Days**
     - **Last N days**
-    - select **Use parameters**, and accept to cahnge the scope of the filter
+    - select **Use parameters**, and accept to change the scope of the filter
     - select the parameter **DaysToDisplay**
     - click **Apply**:
 ![Images/quicksight_add_filter3.png](Images/quicksight_add_filter3.png)
@@ -705,7 +729,7 @@ Click **Create**:
     - equals
     - Use parameters, change the scope of this filter: yes
     - Parameter: Region
-![Images/quicksight_os_filter.png](Images/quicksight_os_filter.png) 
+![Images/quicksight_os_filter.png](Images/quicksight_location_filter.png) 
  
 24. Create a filter for **product_tenancy**:
     - **All visuals**
@@ -753,22 +777,24 @@ Click **Create**:
 
 34. Create a calculated field **TrendAvg**, formula:
 
-                (LastQtrAvg- First3QtrAvg) / First3QtrAvg
+        (LastQtrAvg- First3QtrAvg) / First3QtrAvg
 
 35. Add a Visual, click **Add**, select **Add visual**:
 ![Images/quicksight_add_visual1.png](Images/quicksight_add_visual1.png)
 
-36. Select a **Table** visualization, label it **Recommendations**, Group by **product_instance_type**, Add the **values**:
+36. Select a **Table** visualization, Group by **product_instance_type**, Add the **values**:
     - SavingsPlanReco
     - PayOffMonth
     - discountrate, aggregate: average
     - HoursRun, show as percent
+    - Label it **Recommendations**
 ![Images/quicksight_add_visual2.png](Images/quicksight_add_visual2.png)
 
-37. Add a **Table** visual, label it **Trends**, Group By: **product_instance_type** and **line_item_usage_start_date aggreate: day**, Add the **values**:
+37. Add a **Table** visual, Group By: **product_instance_type** and **line_item_usage_start_date aggreate: day**, Add the **values**:
     - instancecount aggregate: average
     - Trend
     - TrendAvg (show as percent)
+    - Label it **Trends**,
 ![Images/quicksight_add_visual3.png](Images/quicksight_add_visual3.png)
  
 38. Add a **filter** to **this visual only**:
@@ -778,6 +804,7 @@ Click **Create**:
     - Value: -1
     - Nulls: Exclude nulls
 
+40. Decrease the width of the date column as much as possible, its not needed
 
 
 <a name="format_dashboard"></a>

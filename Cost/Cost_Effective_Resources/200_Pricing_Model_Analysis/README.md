@@ -2,15 +2,15 @@
 http://wellarchitectedlabs.com 
 
 ## Introduction
-This hands-on lab will guide you through setting up pricing and usage data sources, then creating a visualization to view your Savings Plans costs over time for EC2, allowing you to make low risk, high return purchases for pricing models. The data sources will also allow you to do custom allocation of discounts for your organization.
+This hands-on lab will guide you through setting up pricing and usage data sources, then creating a visualization to view your costs over time for EC2 in Savings Plans rates, allowing you to make low risk, high return purchases for pricing models. The data sources will also allow you to do custom allocation of discounts for your organization (a separate lab).
 
 You will create two pricing data sources, by using Lambda to download the AWS price list files (On Demand EC2 pricing, and Savings Plans rates from all regions) and extract the pricing components required. You can configure CloudWatch Events to peridoically run these functions to ensure you have the most up to date pricing and the latest instances in your data.
 
-The pricing files are then combined with the CUR, to provide an hourly usage report with multiple pricing dimensions, this allows you query and analyze your usage by on demand rates, savings plan rates, or the difference between the two (discount level).
+The pricing files are then combined with your Cost and Usage Report (CUR), to provide an hourly usage report with multiple pricing dimensions, this allows you query and analyze your usage by on demand rates, savings plan rates, or the difference between the two (discount level).
 
 Finally you create a visualization with calculations in QuickSight which allows you to view your usage patterns, and also perform analysis to understand the commitment levels that are right for your business.  
 
-**NOTE**: this lab demonstrates EC2 savings plans only, but can be extended to cover other services such as Fargate.
+**NOTE**: this lab demonstrates EC2 savings plans only, but can be extended to cover other services such as Fargate or Lambda.
 
 
 ![Images/AWSCostReadme.png](Images/AWSCostReadme.png)
@@ -18,16 +18,17 @@ Finally you create a visualization with calculations in QuickSight which allows 
 ## Goals
 - Setup the pricing and usage data sources
 - Create the visualization for recommendations and analysis
-- Perform sample allocations
 
 
 ## Prerequisites
 - An AWS Account
-- A QuickSight Account
+- An Amazon QuickSight Account
 - A Cost and Usage Report (CUR)
-- AWS Athena has been setup
-- Basic knowledge of Amazon Athena and Amazon Quicksight
-- Completed Cost and usage Analysis and Cost and Usage Visualization labs
+- Amazon Athena and QuickSight have been setup
+- Completed the [Cost and Usage Analysis lab](../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
+- Completed the [Cost and Usage Visualization lab](../../Cost_Fundamentals/200_5_Cost_Visualization/README.md)
+- Basic knowledge of AWS Lambda, Amazon Athena and Amazon Quicksight
+
 
 ## Permissions required
 - Create a Lambda function, trigger it via CloudWatch
@@ -39,9 +40,8 @@ Finally you create a visualization with calculations in QuickSight which allows 
 - TBA
 
 
-
 ## Time to complete
-- The lab should take approximately 20-30 minutes to complete
+- The lab should take approximately 50-60 minutes to complete
 
 
 <BR>
