@@ -11,7 +11,7 @@ This lab illustrates best practices for reliability as described in the [AWS Wel
 * How do you back up data?
 * How do you plan for disaster recovery (DR)?
 
-When this lab is completed, you will have two S3 buckets in two regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- no replication "looping" will occur.
+When this lab is completed, you will have created two S3 buckets in two different AWS regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- no replication "looping" will occur.
 
 ![ReplicationOverview](Images/ReplicationOverview.jpg)
 
@@ -19,13 +19,13 @@ This is a useful configuration for [multi-region strategies](#multi_region_strat
 
 This is also useful for [multi-region active-active strategies](#multi_region_strategy) where both regions are actively used for read and write operations.
 
-This bi-directional replication occurs automatically. Looping is eliminated with this configuration -- an object replicated from an S3 bucket in one region to another S3 bucket in the other AWS region will _not_ be re-replicated back to the first bucket.
+This bi-directional replication occurs automatically. Looping is eliminated with this configuration -- an object replicated from an S3 bucket in one region to another S3 bucket in the other AWS region will _not_ be re-replicated back to the original bucket.
 
 ## Table of Contents
 
 1. [Deploy the infrastructure](#deploy_infra)
 1. [Configure bi-directional cross-region replication (CRR) for S3 buckets](#configure_replication)
-1. [Test replication](#test_replication)
+1. [Test bi-directional cross-region replication (CRR)](#test_replication)
 1. [Tear down this lab](#tear_down)
 
 ## 1. Deploy the infrastructure <a name="deploy_infra"></a>
@@ -51,15 +51,18 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 #### 1.2.1 Deploy _east_ S3 bucket
 
 1. It is recommended that you deploy the _east__ s3 bucket in the **Ohio** region.  This region is also known as **us-east-2**.
+      * Use the drop-down to select this region
       ![SelectOhio](Images/SelectOhio.png)
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 
+1. Download the [_s3_bucket.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Bidirectional_Replication_for_S3/Code/CloudFormation/s3_bucket.yaml) CloudFormation template
 1. On the AWS Console go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
-1. Create a CloudFormation stack (with new resources) by uploading this CloudFormation Template file
+1. Create a CloudFormation stack (with new resources) using this CloudFormation Template file and the **Upload a template file** option.
 1. For **Stack name** use **`S3-CRR-lab-east`**
 1. Under **Parameters** enter a **NamingPrefix**
       * This will be used to name your S3 buckets
-      * It must be string consisting of lowercase letters or numbers between three and 63 characters long
+      * Must be string consisting of lowercase letters, numbers, periods (.), and dashes (-) between five and 40 characters
+      * This will be part of your Amazon S3 bucket name, which must be unique across all of S3.
       * Record this value in an accessible place -- you will need it again later in the lab.
 1. Click **Next** until the last page
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
@@ -76,16 +79,15 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 #### 1.2.2 Deploy _west_ S3 bucket
 
 1. It is recommended that you deploy the _west_ s3 bucket in the **Oregon** region for this lab.  This region is also known as **us-west-2**.
+      * Use the drop-down to select this region
       ![SelectOregon](Images/SelectOregon.png)
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 
 1. On the AWS Console go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
-1. Create a CloudFormation stack (with new resources) by uploading this CloudFormation Template file
+1. Create a CloudFormation stack (with new resources) using the _same_ CloudFormation Template file as before, and the **Upload a template file** option.
 1. For **Stack name** use **`S3-CRR-lab-west`**
 1. Under **Parameters** enter a **NamingPrefix**
       * You must use the _same_ value as you did previously
-      * This will be used to name your S3 buckets
-      * It must be string consisting of lowercase letters or numbers between three and 63 characters long
 1. Click **Next** until the last page
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
@@ -94,14 +96,16 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 
 1. Go back to the **Ohio** AWS Region and wait for the CloudFormation stack you created there to complete
 1. Click on the **Outputs** tab and record the **Value** of the S3 bucket name in an accessible location as _east bucket_
-1. Got the the **Oregon** AWS Region and do the same thing, copying that S3 bucket name down as _west bucket_
+1. Go to the the **Oregon** AWS Region and do the same thing, copying that S3 bucket name down as _west bucket_
 1. Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home) and verify that both buckets were created.
       * Although S3 buckets are specific to an AWS region, the Amazon S3 console shows all buckets from all AWS Regions
+      * The two S3 buckets you will work with begin with `<your_naming_prefix>-crrlab`
       * Note the regions for the two S3 buckets your created
+      * There are also two new `logging` buckets -- you will _not_ need to do any actions with these.
 
 ## 2. Configure bi-directional cross-region replication (CRR) for S3 buckets <a name="configure_replication"></a>
 
-Amazon S3 replication enables automatic, asynchronous copying of objects across Amazon S3 buckets. Buckets that are configured for object replication can be owned by the same AWS account or by different accounts. You can copy objects between different AWS Regions or within the same Region. You will setup bi-directional replication between S3 buckets in different regions, owned by the same AWS account.
+Amazon S3 replication enables automatic, asynchronous copying of objects across Amazon S3 buckets. Buckets that are configured for object replication can be owned by the same AWS account or by different accounts. You can copy objects between different AWS Regions or within the same Region. You will setup bi-directional replication between S3 buckets in two different regions, owned by the same AWS account.
 
 Replication is configured via _rules_. There is no rule for bi-directional replication. You will however setup a rule to replicate from the S3 bucket in the east AWS region to the west bucket, and you will setup a second rule to replicate going the opposite direction. These two rules will enable bi-directional replication across AWS regions.
 
@@ -112,9 +116,12 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
 1. Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home)
 1. Click on the name of the _east_ bucket
       * if you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
-1. Click on the **Management** tab
-1. Click **Replication**
-1. Click **+ Add Rule**
+1. Click on the **Management** tab (Step A in screenshot)
+1. Click **Replication** (Step B in screenshot)
+1. Click **+ Add Rule** (Step C in screenshot)
+
+      ![AddRule](Images/AddRule.png)
+
 1. For **Set source** select **Entire bucket**
 1. For **Replication criteria** leave **Replicate objects encrypted with AWS KMS** _not_ selected
       * Our objects are encrypted using server-side encryption
@@ -124,8 +131,9 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
 1. Click **Next**
 1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _west_ bucket from the drop-down
       * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
+      * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
-1. For **IAM Role** select **/<your-naming-prefix/>-S3-Replication-Policy-us-east-2** from the search results box
+1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Policy-us-east-2** from the search results box
       * (If you chose a different region as your _east_ region, then look for that region at the end of the IAM role name)
 1. For **Rule name** enter `east to west`
 1. Leave **Status** set to **enabled**
@@ -139,13 +147,13 @@ The screen should say **Replication configuration updated successfully.** and di
 
 ### 2.2 Test replication rule #1 - replicate object from east bucket to west bucket
 
-To test this rule you will upload an object into the east bucket and observe that it is replicated into the west bucket. For this step you will need a test object:
+To test this rule you will upload an object into the east bucket and observe that it is replicated into the west bucket. For this step you will need a _test object_:
 
 * This is a file that you will upload into the east S3 bucket.
 * It should not be too big, as this will increase the time to upload it from your computer.
-* If you do not have a file to use, you can [download this file](Images/AmazonRufus.gif).
+* If you do not have a file to use, you can [download this file](Images/TestObject_AmazonRufus.gif).
 
-Right-click and **Save image as...** 🡲![AmazonRufus](Images/AmazonRufus.gif)
+Right-click and **Save image as...** 🡲![AmazonRufus](Images/TestObject_AmazonRufus.gif)
 
 1. Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
 1. Click on the name of the _east_ bucket
@@ -164,8 +172,8 @@ Right-click and **Save image as...** 🡲![AmazonRufus](Images/AmazonRufus.gif)
 
       ![ReplicatedObject](Images/ReplicatedObject.png)
 
-1. Note the following in this screenshot
-      * **Replication status**: Note the different values for the source (east) and destination (west) S3 buckets. The value **REPLICA** in the west bucket is part of the solution how the system recognizes it should now replicate this object back again to the east bucket, causing an infinite loop.
+1. Note the following in from the object details:
+      * **Replication status**: Note the different values for the source (east) and destination (west) S3 buckets. The value **REPLICA** in the west bucket is part of the solution how the system recognizes it should not replicate this object back again to the east bucket, which would cause an infinite loop.
       * **Server-side encryption**: The object was encrypted in the source (east) bucket, and remains encrypted in the destination (west) bucket.
 
 ### 2.3 Setup rule #2 to replicate objects from _west_ bucket to _east_ bucket
@@ -185,12 +193,12 @@ After setting up the second rule, you will have completed configuration of bi-di
       * SSE-S3 uses KMS keys, but these managed by Amazon S3 for the user
       * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
 1. Click **Next**
-1. For **Destination bucket**
-      * If there is **Buckets in this account** setting, leave it selected
+1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _east_ bucket from the drop-down
       * Select the name of the _east_ bucket from the drop-down
             * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
+      * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
-1. For **IAM Role** select **/<your-naming-prefix/>-S3-Replication-Policy-us-west-2** from the search results box
+1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Policy-us-west-2** from the search results box
       * (If you chose a different region as your _west_ region, then look for that region at the end of the IAM role name)
 1. For **Rule name** enter `west to east`
 1. Leave **Status** set to **enabled**
@@ -202,17 +210,17 @@ The screen should say **Replication configuration updated successfully.** and di
 
 ![RuleTwoCreated](Images/RuleTwoCreated.png)
 
-## 3 Test bi-directional replication
+## 3 Test bi-directional cross-region replication (CRR)
 
-To test these two rules you will upload another object into each of the east and west S3 buckets and observe it is replicated across to the other bucket. For this step you will need two more test objects:
+To test bi-directional replication using the two rules your created, you will upload another object into each of the east and west S3 buckets and observe it is replicated across to the other bucket. For this step you will need two more _test objects_:
 
 * These are files that you will upload into each S3 bucket.
 * They should not be too big, as this will increase the time to upload it from your computer.
-* If you do not have files to use, you can [download file #1](Images/OhioAwsEast.png) and [download file #2](OregonAwsWest.png)
+* If you do not have files to use, you can [download file #1](Images/TestObject_OhioAwsEast.png) and [download file #2](TestObject_OregonAwsWest.png)
 
 | File #1 | File #2 |
 |:---:|:---:|
-|![OhioAwsEast](Images/OhioAwsEast.png)|![OregonAwsWest](Images/OregonAwsWest.png)|
+|![OhioAwsEast](Images/TestObject_OhioAwsEast.png)|![OregonAwsWest](Images/TestObject_OregonAwsWest.png)|
 
 ### 3.1 Upload objects to their respective Amazon S3 buckets
 
@@ -228,7 +236,7 @@ To test these two rules you will upload another object into each of the east and
 
 #### 3.1.2 Upload object #2 to the _west_ S3 bucket
 
-1. Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
+1. Click on **Amazon S3** in the upper left corner of the Amazon S3 console
 1. Click on the name of the _west_ bucket
       * if you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
 1. Click on **⬆ Upload**
@@ -248,54 +256,71 @@ To test these two rules you will upload another object into each of the east and
 
 ### 3.3 Explore which Amazon S3 events trigger replication and which do not
 
+#### 3.3.1 Use CloudWatch Logs Insights to query the CloudTrail logs
+
 AWS CloudTrail is a service that provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services. You will use AWS CloudTrail to explore which Amazon S3 events trigger replication to occur.
 
+1. Change back to the _east_ AWS region
+      * If you used the directions in this lab, then this is **Ohio (us-east-2)**
 1. The CloudFormation template you deployed configured CloudTrail to deliver a trail to CloudWatch Logs. Therefore:
       * Go to the [CloudWatch console](https://console.aws.amazon.com/cloudwatch)
-      * and click on **Log groups** on the left
-1. Click on the Log Group **CloudTrail/logs/s3**
-      * You will see a Log Streams named ....
-      * This contains events for your xxxxx bucket
-1. Click on the Log Stream
-      * In the **Filter Events** box enter the following and hit _Enter_
+      * Click on **Insights** (under **Logs**) on the left
+1. Where it says **Select log group(s)** select the one named _CloudTrail/logs/\<your_prefix_name\>_
+1. Right below that is where you can enter a query
+      * Delete the query that is there
+      * and enter the following query. It returns all `PutObject` requests on S3 buckets
 
-       {($.eventSource=s3.amazonaws.com) && ($.eventName=PutObject)}
+                  fields @timestamp, requestParameters.key AS key, 
+                  | requestParameters.bucketName AS bucket, 
+                  | userIdentity.invokedBy AS invokedBy,
+                  | userIdentity.arn AS arn, 
+                  | userIdentity.sessionContext.sessionIssuer.userName AS UserName
+                  | filter eventName ='PutObject'
+                  | sort @timestamp desc
+                  | limit 20
 
-      * This will filter to just _PutObject_ API calls from Amazon S3
-1. Explore the events
-      * You can expand and collapse each event, or change from **Row** to **Text**
-      * For each event look at:
-            * _bucketName_: The Amazon S3 bucket
-            * _key_: The object that was put into the S3 bucket
-1. Identify different events based on _key_, which is also the name of the file you used for the object
-      * One event for an object that was put into this S3 bucket by you
-      * Another event for an object that was put into this S3 bucket by replication (when you uploaded it to the _other_ bucket)
-1. What is the difference between these events?
-      * Try to figure this out on your own before viewing the answer in the next section
+1. Click **Run query**
+1. Look at the results at the bottom of the screen
 
-#### 3.3.3 Difference between uploaded and replicated objects in S3 bucket
+#### 3.3.2 Difference between uploaded and replicated objects in S3 bucket <a name="putobject_events"></a>
 
-* The primary differences are under _userIdentity_, specifically see _principalId_, _arn_ and _userName_
-     * For the uploaded object this is the IAM User or IAM Role you used to log into the AWS Console
-     * For the replicated object this is the IAM Role you used when you configured the replication rule
-* For the replicated object there is also an _invokedBy_ attribute with value _AWS Internal_
-* Also note the _x-amz-server-side-encryption_ values
-     * Both the uploaded object and replica object are encrypted
+You are looking for three results, one for each of the test objects you uploaded.  See the _key_ field to see the test object names.
 
-If you were unable to find this information for yourself, you can instead view this [screenshot of the CloudTrail events](Images/S3EventsCloudTrail.png)
+If you got less or more than three results then consult this [guide to tuning your Insights query](Documentation/TuneInsightsQuery.md)
+
+* For these events looking at the tabular attributes returned by the query is sufficient
+     * However, if you want to see all the attributes, you can click to the left of each event
+* The three events correspond to each of the objects you put into the S3 buckets
+     * The object you put into the _east_ bucket testing rule #1
+     * The object you put into the _east_ bucket testing bi-directional replication
+     * The object you put into the _west_ bucket testing bi-directional replication
+          * Look at the bucket for this event. It is the _east_ bucket
+          * This event is actually the _replication_ of the object you put into the _west_ bucket
+* What is different between events where you uploaded the object into the bucket and events where the object was put into the bucket by replication?
+
+<details>
+<summary>Click here to see answers</summary>
+
+The userIdentity is different - see the arn and username
+
+Replicated objects have a userIdentity.invokedBy value of "AWS Internal"
+
+![CloudTrailForS3](Images/CloudTrailForS3.png)
+
+</details>
 
 The result is:
 
 * For an object uploaded by you
-      * Amazon S3 triggers the rule you configured to replicate it to another bucket
-      * And sets **Replication status** to **COMPLETED**
+     * Amazon S3 triggers the rule you configured to replicate it to another bucket
+     * And sets **Replication status** to **COMPLETED**
 * For an object replicated from another bucket
-      * Amazon S3 knows _not_ to re-replicate the object
-      * And sets **Replication status** to **REPLICA**
+     * Amazon S3 knows _not_ to re-replicate the object
+     * And sets **Replication status** to **REPLICA**
 
-### 3.4 Additional considerations
+### 3.4 Additional exercises
 
-These are _optional_. They help you to explore and understand multi-region bi-direction replication on Amazon S3.
+These are _optional_. They help you to explore and understand bi-direction cross-region replication on Amazon S3.
 
 * Look at the policies on the **\<your-naming-prefix\>-S3-Replication-Policy...** IAM Roles
      * Why do they have the permissions that they do?
@@ -303,9 +328,12 @@ These are _optional_. They help you to explore and understand multi-region bi-di
 * What happens when you rename an object in one of the buckets?
      * Hint: if you cannot figure it out consider that versioning is enabled (and must be enabled for replication to work)
 
+* Switch to the _west_ AWS region and run the same CloudWatch Insights Query there.
+     * What do you expect?
+
 ### 3.5 Summary
 
-You setup bi-directional cross-region replication (CRR) for two Amazon S3 buckets. Putting an object in either bucket resulted in the object asynchronously being backed up to the _other_ bucket. This replication happens within seconds. AWS ensures the objects are replicated once and "looping" is prevented.
+You setup bi-directional cross-region replication (CRR) for two Amazon S3 buckets. You created two S3 buckets in two different AWS regions. Putting an object in either bucket resulted in the object asynchronously being backed up to the _other_ bucket. Objects encrypted in their original bucket are also encrypted in their replication bucket. Objects are replicated once -- no replication "looping" occurred.
 
 ## 4. Tear down this lab <a name="tear_down"></a>
 
@@ -317,19 +345,26 @@ You setup bi-directional cross-region replication (CRR) for two Amazon S3 bucket
 
 * You may leave these resources deployed for as long as you want. When you are ready to delete these resources, see the following instructions
 
-#### Empty S3 buckets
+### Empty the S3 buckets
 
-You cannot delete an Amazon S3 bucket unless it is empty, so you need to empty the two buckets you created
+You cannot delete an Amazon S3 bucket unless it is empty, so you need to empty the buckets you created. There are a total of four buckets:
 
-1. Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
-1. Select the radio button next to the _east_ region bucket
+* Replication bucket in _east_ region: `<your_naming_prefix>-crrlab-us-east-2`
+* Replication bucket in _west_ region: `<your_naming_prefix>-crrlab-us-west-2`
+* Logging bucket in _east_ region: `logging-<your_naming_prefix>-us-east-2`
+* Logging bucket in _west_ region: `logging-<your_naming_prefix>-us-west-2`
+
+* Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
+* For each of he four buckets do the following:
+
+1. Select the radio button next to the bucket
 1. Click **Empty**
 1. Type the bucket name in the confirmation box
 1. Click **Empty**
-1. After you see the message **Succesfully emptied bucket** then click **Exit**
-1. Repeat these steps with the _west_ region bucket
-
-@TODO Empty the buckets
+1. After you see the message **Successfully emptied bucket** then click **Exit**
+1. For the logging buckets it is also recommended your delete the bucket now
+      * To prevent the logs from writing more data there
+      * Follow the same steps as above, but click the **Delete** button (instead of Empty)
 
 ### Remove AWS CloudFormation provisioned resources
 
@@ -353,16 +388,6 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 1. First delete the **S3-CRR-lab-east** CloudFormation stack in **Ohio** (**us-east-2**)
 1. Then delete the **S3-CRR-lab-west** CloudFormation stack in **Oregon** (**us-west-2**)
 
-### Remove CloudWatch logs
-
-* There are two CloudWatch Log Groups to delete, one in each region
-* Repeat the following Steps once for **Ohio** (**us-east-2**) and again for **Oregon** (**us-west-2**)
-     1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/).
-     1. Click **Logs** in the left navigation.
-     1. Click the radio button on the left of the **CloudTrail/logs/s3**.
-     1. Click the **Actions Button** then click **Delete Log Group**.
-     1. Verify the log group name then click **Yes, Delete**.
-
 ---
 
 ## References & useful resources
@@ -384,7 +409,7 @@ These terms are most often associated with Disaster Recovery (DR), which are a s
 * **Recovery time objective (RTO)** is the overall length of time that a workload’s components can be in the recovery phase, and therefore not available, before negatively impacting the organization’s mission or mission/business processes.
 * **Recovery point objective (RPO**) is the overall length of time that a workload’s data can be unavailable, before negatively impacting the organization’s mission or mission/business processes.
 
-### Use defined recovery strategies to meet the recovery objectives <a name="multi_region_strategy"></a>
+### Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a>
 
 If necessary, when architecting a multi-region strategy for your workload, you should choose one of the following strategies. They are listed in increasing order of complexity, and decreasing order of RTO and RPO. DR Region refers to an AWS Region other than the one used for your workload (or any AWS Region if your workload is on premises).
 
