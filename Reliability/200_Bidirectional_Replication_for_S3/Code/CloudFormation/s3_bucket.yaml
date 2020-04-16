@@ -64,7 +64,7 @@ Resources:
             # Source S3 Bucket
           - Effect: Allow
             Action: 
-              - 's3:Get'
+              - 's3:Get*'
               - 's3:ListBucket'
             Resource:
               - !Sub 'arn:aws:s3:::${NamingPrefix}-crrlab-${AWS::Region}'
