@@ -44,9 +44,9 @@ You will create two Amazon S3 buckets in two different AWS regions. The **Ohio**
 
 ### 1.2 Deploy the infrastructure in two AWS Regions using an AWS CloudFormation template
 
-You will deploy the infrastructure for two Amazon S3 buckets. Since these will be in two different regions, you will need to create an AWS CloudFormation stack in each region.
+You will deploy the infrastructure for two Amazon S3 buckets. Since these will be in two different regions, you will need to create an AWS CloudFormation stack in each region. You will use the same CloudFormation template for both regions.
 
-1. Download the [_s3_bucket.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability\200_Bidirectional_Replication_for_S3\Code\CloudFormation/s3_bucket.yaml) CloudFormation template
+* Download the [_s3_bucket.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Bidirectional_Replication_for_S3/Code/CloudFormation/s3_bucket.yaml) CloudFormation template
 
 #### 1.2.1 Deploy _east_ S3 bucket
 
@@ -54,10 +54,8 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
       * Use the drop-down to select this region
       ![SelectOhio](Images/SelectOhio.png)
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
-
-1. Download the [_s3_bucket.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Bidirectional_Replication_for_S3/Code/CloudFormation/s3_bucket.yaml) CloudFormation template
 1. On the AWS Console go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
-1. Create a CloudFormation stack (with new resources) using this CloudFormation Template file and the **Upload a template file** option.
+1. Create a CloudFormation stack (with new resources) using the CloudFormation Template file and the **Upload a template file** option.
 1. For **Stack name** use **`S3-CRR-lab-east`**
 1. Under **Parameters** enter a **NamingPrefix**
       * This will be used to name your S3 buckets
