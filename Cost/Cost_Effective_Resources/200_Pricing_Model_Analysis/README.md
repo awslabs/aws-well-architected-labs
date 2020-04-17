@@ -1,6 +1,12 @@
 # Level 200: Pricing Model Analysis
 http://wellarchitectedlabs.com 
 
+
+<video width="600" height="450" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/PricingModelAnalysis.mp4" type="video/mp4">
+  Your browser doesnt support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
+</video> 
+
 ## Introduction
 This hands-on lab will guide you through setting up pricing and usage data sources, then creating a visualization to view your costs over time for EC2 in Savings Plans rates, allowing you to make low risk, high return purchases for pricing models. The data sources will also allow you to do custom allocation of discounts for your organization (a separate lab).
 
