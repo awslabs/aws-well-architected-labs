@@ -11,15 +11,15 @@ This lab illustrates best practices for reliability as described in the [AWS Wel
 * How do you back up data?
 * How do you plan for disaster recovery (DR)?
 
-When this lab is completed, you will have created two S3 buckets in two different AWS regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- no replication "looping" will occur.
+When this lab is completed, you will have created two S3 buckets in two different AWS regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- replication "looping" is prevented.
 
 ![ReplicationOverview](Images/ReplicationOverview.jpg)
 
-This is a useful configuration for [multi-region strategies](#multi_region_strategy) that enable the workload to _failover_ from the primary to the secondary region (such as pilot light or warm standby). All objects that were added to the primary region S3 bucket are asynchronously replicated to the secondary region S3 bucket. After a failover, when the workload is running in what was the secondary region, new objects added to the bucket in this region are _also_ asynchronously replicated back to what was the primary region bucket.
+This is a useful configuration for [multi-region strategies](#multi_region_strategy) that enable the workload to _failover_ from the primary to the secondary region (such as _pilot light_ or _warm standby_). All objects that were added to the primary region S3 bucket are asynchronously replicated to the secondary region S3 bucket. After a failover, when the workload is running in what was the secondary region, new objects added to the bucket in this region are _also_ asynchronously replicated back to what was the primary region bucket.
 
-This is also useful for [multi-region active-active strategies](#multi_region_strategy) where both regions are actively used for read and write operations.
+This is also useful for [_multi-region active-active_](#multi_region_strategy) strategies where both regions are actively used for read and write operations.
 
-This bi-directional replication occurs automatically. Looping is eliminated with this configuration -- an object replicated from an S3 bucket in one region to another S3 bucket in the other AWS region will _not_ be re-replicated back to the original bucket.
+This bi-directional replication occurs automatically. Looping is prevented with this configuration -- an object replicated from an S3 bucket in one region to another S3 bucket in the other AWS region will _not_ be re-replicated back to the original bucket.
 
 ## Table of Contents
 
@@ -50,11 +50,12 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 
 #### 1.2.1 Deploy _east_ S3 bucket
 
-1. It is recommended that you deploy the _east__ s3 bucket in the **Ohio** region.  This region is also known as **us-east-2**.
+1. It is recommended that you deploy the _east_ s3 bucket in the **Ohio** region.  This region is also known as **us-east-2**.
       * Use the drop-down to select this region
       ![SelectOhio](Images/SelectOhio.png)
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 1. On the AWS Console go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
+1. Select **Stacks**
 1. Create a CloudFormation stack (with new resources) using the CloudFormation Template file and the **Upload a template file** option.
 1. For **Stack name** use **`S3-CRR-lab-east`**
 1. Under **Parameters** enter a **NamingPrefix**
@@ -82,6 +83,7 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
       * If you choose to use a different region, you will need to ensure future steps are consistent with your region choice.
 
 1. On the AWS Console go to the [CloudFormation console](https://console.aws.amazon.com/cloudformation)
+1. Select **Stacks**
 1. Create a CloudFormation stack (with new resources) using the _same_ CloudFormation Template file as before, and the **Upload a template file** option.
 1. For **Stack name** use **`S3-CRR-lab-west`**
 1. Under **Parameters** enter a **NamingPrefix**
@@ -110,7 +112,11 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 
 1. Versioning is Enabled: For S3 Replication, both source and destination buckets MUST have versioning enabled
 
+ ------------ 
+
 2. Default encryption is Enabled: In our exercise we are demonstrating replication of encrypted objects. It is a best practice to encrypt your data at rest.
+
+ ------------ 
 
 3. Object-level logging is Enabled: This logging will be used later in the lab so you can better understand replication operations AWS takes on your behalf.
 
@@ -143,7 +149,7 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
       * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
 1. Click **Next**
 1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _west_ bucket from the drop-down
-     * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
+      * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
 1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-east-2** from the search results box
@@ -207,8 +213,7 @@ After setting up the second rule, you will have completed configuration of bi-di
       * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
 1. Click **Next**
 1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _east_ bucket from the drop-down
-      * Select the name of the _east_ bucket from the drop-down
-           * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
+      * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
 1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-west-2** from the search results box
@@ -297,30 +302,35 @@ AWS CloudTrail is a service that provides event history of your AWS account acti
 
 #### 3.3.2 Difference between uploaded and replicated objects in S3 bucket <a name="putobject_events"></a>
 
-You are looking for three results, one for each of the test objects you uploaded.  See the _key_ field to see the test object names.
+You are looking for three results, one for each of the test objects you uploaded.  Use the _key_ field to see the test object names.
 
-If you got less or more than three results then consult this [guide to tuning your Insights query](Documentation/TuneInsightsQuery.md)
+* Troubleshooting: If your query returned less or more than three results then consult this [guide to tuning your Insights query](Documentation/TuneInsightsQuery.md)
 
-* For these events looking at the tabular attributes returned by the query is sufficient
-     * However, if you want to see all the attributes, you can click to the left of each event
+* For these events look at the _tabular_ attributes returned by the query at the bottom of the page
+     * However, if you want to see _all_ the attributes, you can click to the left of each event
 * The three events correspond to each of the objects you put into the S3 buckets
      * The object you put into the _east_ bucket testing rule #1
      * The object you put into the _east_ bucket testing bi-directional replication
      * The object you put into the _west_ bucket testing bi-directional replication
-          * Look at the bucket for this event. It is the _east_ bucket
-          * This event is actually the _replication_ of the object you put into the _west_ bucket
+          * Look at the bucket for this event. This event is for the _east_ bucket
+          * This is actually the _replication_ event for the object you put into the _west_ bucket
 * What is different between events where you uploaded the object into the bucket and events where the object was put into the bucket by replication?
 
 <details>
 <summary>Click here to see answers</summary>
 
-The userIdentity is different - see the arn and username
-
 Replicated objects have a userIdentity.invokedBy value of "AWS Internal"
 
-![CloudTrailForS3](Images/CloudTrailForS3.png)
+ ------------ 
+
+The userIdentity is different - see the arn and username
+
 
 </details>
+
+The CloudWatch Logs Insights page should look like this:
+
+![CloudTrailForS3](Images/CloudTrailForS3.png)
 
 The result is:
 
@@ -369,15 +379,14 @@ You cannot delete an Amazon S3 bucket unless it is empty, so you need to empty t
 
 Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
 
-* For each of he four buckets do the following:
+**For _each_ of he four buckets do the following:**
 
 1. Select the radio button next to the bucket
 1. Click **Empty**
 1. Type the bucket name in the confirmation box
 1. Click **Empty**
 1. After you see the message **Successfully emptied bucket** then click **Exit**
-1. For the logging buckets it is also recommended your delete the bucket now
-      * To prevent the logs from writing more data there
+1. For the logging buckets it is also recommended your delete the bucket now to prevent the logs from writing more data there after you empty it
       * Follow the same steps as above, but click the **Delete** button (instead of Empty)
 
 ### Remove AWS CloudFormation provisioned resources
@@ -414,7 +423,7 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 * [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
 * [Our Friend Rufus](https://www.amazon.com/gp/help/customer/display.html?nodeId=3711811)
 
-## Multi-region strategies for disaster recovery (DR)
+## Additional information on multi-region strategies for disaster recovery (DR)
 
 ### Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
 
@@ -425,7 +434,7 @@ These terms are most often associated with Disaster Recovery (DR), which are a s
 
 ### Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a>
 
-If necessary, when architecting a multi-region strategy for your workload, you should choose one of the following strategies. They are listed in increasing order of complexity, and decreasing order of RTO and RPO. DR Region refers to an AWS Region other than the one used for your workload (or any AWS Region if your workload is on premises).
+If necessary, when architecting a multi-region strategy for your workload, you should choose one of the following strategies. They are listed in increasing order of complexity, and decreasing order of RTO and RPO. _DR Region_ refers to an AWS Region other than the one used for your workload (or any AWS Region if your workload is on premises).
 
 ![MultiRegionStrategies](Images/MultiRegionStrategies.png)
 
@@ -433,6 +442,8 @@ If necessary, when architecting a multi-region strategy for your workload, you s
 * **Pilot light** (RPO in minutes, RTO in hours): Maintain a minimal version of an environment always running the most critical core elements of your system in the DR Region. When the time comes for recovery, you can rapidly provision a full-scale production environment around the critical core.
 * **Warm standby** (RPO in seconds, RTO in minutes):  Maintain a scaled-down version of a fully functional environment always running in the DR Region. Business-critical systems are fully duplicated and are always on, but with a scaled down fleet. When the time comes for recovery, the system is scaled up quickly to handle the production load.
 * **Multi-region active-active** (RPO is none or possibly seconds, RTO in seconds): Your workload is deployed to, and actively serving traffic from, multiple AWS Regions. This strategy requires you to synchronize users and data across the Regions that you are using. When the time comes for recovery, use services like Amazon Route 53 or AWS Global Accelerator to route your user traffic to where your workload is healthy.
+
+The bi-directional cross-region replication that you created in this lab is helpful for **Pilot light**, **Warm standby**, and **Multi-region active-active** strategies.
 
 ---
 

@@ -5,7 +5,7 @@
 You should be in the _east_ region
  * If you used the directions in this lab, then this is **Ohio (us-east-2)**
 
-## If you got zero results or less than three results:
+## If your query returned zero results or less than three results:
 
 ### Possibility #1: It was been too recent since you did the bucket operations
 
