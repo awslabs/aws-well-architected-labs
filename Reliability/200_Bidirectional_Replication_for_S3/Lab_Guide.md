@@ -100,6 +100,21 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
       * The two S3 buckets you will work with begin with `<your_naming_prefix>-crrlab`
       * Note the regions for the two S3 buckets your created
       * There are also two new `logging` buckets -- you will _not_ need to do any actions with these.
+1. Click on either the _east_ region or _west_ region bucket, and note the following
+      1. **This bucket is empty** - We will be adding objects to the bucket soon
+      1. Click on **Properties** and note what properties are _Enabled_
+      1. Why are these properties _Enabled_?
+
+<details>
+<summary>Click here to see why these properties are Enabled</summary>
+
+1. Versioning is Enabled: For S3 Replication, both source and destination buckets MUST have versioning enabled
+
+2. Default encryption is Enabled: In our exercise we are demonstrating replication of encrypted objects. It is a best practice to encrypt your data at rest.
+
+3. Object-level logging is Enabled: This logging will be used later in the lab so you can better understand replication operations AWS takes on your behalf.
+
+</details>
 
 ## 2. Configure bi-directional cross-region replication (CRR) for S3 buckets <a name="configure_replication"></a>
 
@@ -128,7 +143,7 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
       * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
 1. Click **Next**
 1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _west_ bucket from the drop-down
-      * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
+     * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
 1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-east-2** from the search results box
@@ -193,7 +208,7 @@ After setting up the second rule, you will have completed configuration of bi-di
 1. Click **Next**
 1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _east_ bucket from the drop-down
       * Select the name of the _east_ bucket from the drop-down
-            * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
+           * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
 1. Click **Next**
 1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-west-2** from the search results box
