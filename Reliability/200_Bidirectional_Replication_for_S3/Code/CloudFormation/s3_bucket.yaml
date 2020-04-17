@@ -93,8 +93,8 @@ Resources:
                 - s3.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-#      ManagedPolicyArns:
-#        - !Ref S3ReplicationPolicy
+      ManagedPolicyArns:
+        - !Ref S3ReplicationPolicy
 
   # ###########
   # Resources necessary to enable CloudTrail logging on the S3 bucket
