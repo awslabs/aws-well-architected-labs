@@ -8,17 +8,21 @@ This hands-on lab will guide you through the steps to improve reliability of a s
 
 The skills you learn will help you build resilient workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
+![ArchitectureOverview_small](Images/ArchitectureOverview_small.png)
+
 ## Amazon Builders' Library
 
 This lab additionally illustrates best practices as described in the Amazon Builders' Library article: [Implementing health checks](https://aws.amazon.com/builders-library/implementing-health-checks/)
 
 ## Goals
 
+After you have completed this lab, you will be able to:
+
 * Implement graceful degradation to transform applicable hard dependencies into soft dependencies
 * Monitor all layers of the workload to detect failures
 * Route traffic only to healthy application instances
-* Use fail-open and fail-closed behaviors as appropriate in response to detected faults
-* Learn how AWS services can reduce mean time to recovery (MTTR)
+* Configure fail-open and fail-closed behaviors as appropriate in response to detected faults
+* Use AWS services to reduce mean time to recovery (MTTR)
 
 ## Prequisites
 
