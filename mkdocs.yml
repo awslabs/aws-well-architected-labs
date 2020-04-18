@@ -121,13 +121,18 @@ nav:
             - Incident Response: 'Security/Quest_Incident_Response/README.md'
     - Reliability:
         - Overview: 'Reliability/README.md'
-        - 200 Testing Backup and Restore of Data:
-            - Lab Overview: 'Reliability/200_Testing_Backup_and_Restore_of_Data/README.md'
-            - Lab Guide: 'Reliability/200_Testing_Backup_and_Restore_of_Data/Lab_Guide.md'
-        - 300 Health Checks and Dependencies:
-            - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
-            - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md'
-        - Testing Resiliency:
+        - Mitigate or Withstand Failures:
+            - 300 Health Checks and Dependencies:
+                - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
+                - Lab Guide: 'Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.md'
+        - Data Backup and Disaster Recovery:
+            - 200 Testing Backup and Restore of Data:
+                - Lab Overview: 'Reliability/200_Testing_Backup_and_Restore_of_Data/README.md'
+                - Lab Guide: 'Reliability/200_Testing_Backup_and_Restore_of_Data/Lab_Guide.md'
+            - 200 Implementing Bi-Directional Cross-Region Replication for Amazon Simple Storage Service (Amazon S3):
+                - Lab Overview: 'Reliability/200_Bidirectional_Replication_for_S3/README.md'
+                - Lab Guide: 'Reliability/200_Bidirectional_Replication_for_S3/Lab_Guide.md'
+        - Testing Resiliency and Chaos Engineering:
             - 200 EC2 Resiliency:
                 - Lab Overview: 'Reliability/200_Testing_for_Resiliency_of_EC2/README.md'
                 - Lab Guide: 'Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.md'
