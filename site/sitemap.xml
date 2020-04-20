@@ -1,415 +1,528 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
      <loc>https://wellarchitectedlabs.com/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Operations/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_AWS_Account_and_Root_User/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_AWS_Account_and_Root_User/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_CloudFront_with_S3_Bucket_Origin/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_Create_a_Data_Bunker/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_Enable_Security_Hub/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/100_Enable_Security_Hub/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Detective_Controls/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_EC2_Web_Application/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_VPC/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_VPC/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_IAM_User_Cleanup/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Automated_IAM_User_Cleanup/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Basic_EC2_with_WAF_Protection/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_CloudFront_with_WAF_Protection/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/200_CloudFront_with_WAF_Protection/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Lambda_Cross_Account_Bucket_Policy/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_100_Loft_Introduction_to_Security/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_100_Quick_Steps_to_Security_Success/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_200_Incident_Response_Day/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_300_Security_Best_Practices_Day/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Managing_Credentials_and_Authentication/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Control_Human_Access/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Control_Programmatic_Access/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Detect_and_Investigate_Events/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Defend_Against_New_Threats/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Protect_Networks/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Protect_Compute/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Classify_Data/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Protect_Data_at_Rest/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Protect_Data_in_Transit/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Security/Quest_Incident_Response/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/200_Testing_Backup_and_Restore_of_Data/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/200_Testing_Backup_and_Restore_of_Data/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/200_Testing_for_Resiliency_of_EC2/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Performance/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Performance/100_Monitoring_with_CloudWatch_Dashboards/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Fundamentals.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/ExpenditureAwareness.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/CostEffectiveResources.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_3_Pricing_Models/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
+     <loc>https://wellarchitectedlabs.com/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/README.html</loc>
+     <lastmod>2020-04-18</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://wellarchitectedlabs.com/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/Lab_Guide.html</loc>
+     <lastmod>2020-04-18</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Well-ArchitectedTool/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
-    </url><url>
+    </url>
+    <url>
      <loc>https://wellarchitectedlabs.com/Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html</loc>
-     <lastmod>2020-04-13</lastmod>
+     <lastmod>2020-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

@@ -33,13 +33,13 @@ The first time you perform this lab it is recommended to use the sample files su
 
 ## [Step2](CostOpt_Workload/Step2a.md)
 
-## [Step3](CostOpt_Workload/Step3a.md)
+## [Step3](CostOpt_Workload/Step3.md)
 
-## [Step4](CostOpt_Workload/Step4a.md)
+## [Step4](CostOpt_Workload/Step4.md)
 
-## [Step5](CostOpt_Workload/Step5a.md)
+## [Step5](CostOpt_Workload/Step5.md)
 
-## [Step6](CostOpt_Workload/Step6a.md)
+## [Step6](CostOpt_Workload/Step6.md)
 
 
 

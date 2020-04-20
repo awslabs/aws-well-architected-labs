@@ -1,0 +1,4165 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="A collection of AWS Well-Architected workshops">
+      
+      
+        <link rel="canonical" href="https://wellarchitectedlabs.com/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/Lab_Guide.html">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>Lab Guide - AWS Well-Architected Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#757575">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+
+
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="grey" data-md-color-accent="grey">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#level-200-pricing-model-analysis" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+          
+            <img src="../../../images/wa.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              AWS Well-Architected Labs
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Lab Guide
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../../../README.html" class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Operations/README.html" class="md-tabs__link">
+          Operational Excellence
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Security/README.html" class="md-tabs__link">
+          Security
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Reliability/README.html" class="md-tabs__link">
+          Reliability
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Performance/README.html" class="md-tabs__link">
+          Performance Efficiency
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../README.html" class="md-tabs__link md-tabs__link--active">
+          Cost Optimization
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../../Well-ArchitectedTool/README.html" class="md-tabs__link">
+          Well Architected Tool
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
+      
+        <img src="../../../images/wa.png" width="48" height="48">
+      
+    </a>
+    AWS Well-Architected Labs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/awslabs/aws-well-architected-labs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    awslabs/aws-well-architected-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../README.html" title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Operational Excellence
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Operational Excellence
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-2" type="checkbox" id="nav-2-2">
+    
+    <label class="md-nav__link" for="nav-2-2">
+      100 Inventory Patch Mgt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-2">
+        100 Inventory Patch Mgt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/100_Inventory_and_Patch_Mgmt/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Operations/100_Inventory_and_Patch_Mgmt/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Security
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Security
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Security 100 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Security 100 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-1" type="checkbox" id="nav-3-2-1">
+    
+    <label class="md-nav__link" for="nav-3-2-1">
+      Account and Root User
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-1">
+        Account and Root User
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_AWS_Account_and_Root_User/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_AWS_Account_and_Root_User/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-2" type="checkbox" id="nav-3-2-2">
+    
+    <label class="md-nav__link" for="nav-3-2-2">
+      Basic Identity & Access Management User, Group, Role
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-2">
+        Basic Identity & Access Management User, Group, Role
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Basic_Identity_and_Access_Management_User_Group_Role/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-3" type="checkbox" id="nav-3-2-3">
+    
+    <label class="md-nav__link" for="nav-3-2-3">
+      CloudFront with S3 Bucket Origin
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-3">
+        CloudFront with S3 Bucket Origin
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_CloudFront_with_S3_Bucket_Origin/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_CloudFront_with_S3_Bucket_Origin/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-4" type="checkbox" id="nav-3-2-4">
+    
+    <label class="md-nav__link" for="nav-3-2-4">
+      Create a Data Bunker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-4">
+        Create a Data Bunker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Create_a_Data_Bunker/README.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2-5" type="checkbox" id="nav-3-2-5">
+    
+    <label class="md-nav__link" for="nav-3-2-5">
+      Enable Security Hub
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-2-5">
+        Enable Security Hub
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Enable_Security_Hub/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/100_Enable_Security_Hub/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      Security 200 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        Security 200 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-1" type="checkbox" id="nav-3-3-1">
+    
+    <label class="md-nav__link" for="nav-3-3-1">
+      Automated Deployment of Detective Controls
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-1">
+        Automated Deployment of Detective Controls
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Detective_Controls/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Detective_Controls/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-2" type="checkbox" id="nav-3-3-2">
+    
+    <label class="md-nav__link" for="nav-3-3-2">
+      Automated Deployment of EC2 Web Application
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-2">
+        Automated Deployment of EC2 Web Application
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_EC2_Web_Application/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_EC2_Web_Application/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-3" type="checkbox" id="nav-3-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3-3">
+      Automated Deployment of IAM Groups and Roles
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-3">
+        Automated Deployment of IAM Groups and Roles
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-4" type="checkbox" id="nav-3-3-4">
+    
+    <label class="md-nav__link" for="nav-3-3-4">
+      Automated Deployment of VPC
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-4">
+        Automated Deployment of VPC
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_VPC/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_VPC/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-5" type="checkbox" id="nav-3-3-5">
+    
+    <label class="md-nav__link" for="nav-3-3-5">
+      Automated Deployment of Web Application Firewall
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-5">
+        Automated Deployment of Web Application Firewall
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Web_Application_Firewall/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_Deployment_of_Web_Application_Firewall/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-6" type="checkbox" id="nav-3-3-6">
+    
+    <label class="md-nav__link" for="nav-3-3-6">
+      Automated IAM User Cleanup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-6">
+        Automated IAM User Cleanup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_IAM_User_Cleanup/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Automated_IAM_User_Cleanup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-7" type="checkbox" id="nav-3-3-7">
+    
+    <label class="md-nav__link" for="nav-3-3-7">
+      Basic EC2 with WAF Protection
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-7">
+        Basic EC2 with WAF Protection
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Basic_EC2_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_Basic_EC2_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-8" type="checkbox" id="nav-3-3-8">
+    
+    <label class="md-nav__link" for="nav-3-3-8">
+      CloudFront with WAF Protection
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-8">
+        CloudFront with WAF Protection
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_CloudFront_with_WAF_Protection/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/200_CloudFront_with_WAF_Protection/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Security 300 Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        Security 300 Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1">
+    
+    <label class="md-nav__link" for="nav-3-4-1">
+      IAM Permission Boundaries Delegating Role Creation
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-1">
+        IAM Permission Boundaries Delegating Role Creation
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      IAM Tag Based Access Control for EC2
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        IAM Tag Based Access Control for EC2
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_IAM_Tag_Based_Access_Control_for_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3">
+      Incident Response with AWS Console and CLI
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-3">
+        Incident Response with AWS Console and CLI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_with_AWS_Console_and_CLI/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-4" type="checkbox" id="nav-3-4-4">
+    
+    <label class="md-nav__link" for="nav-3-4-4">
+      Lambda Cross Account IAM Role Assumption
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-4">
+        Lambda Cross Account IAM Role Assumption
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_IAM_Role_Assumption/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-5" type="checkbox" id="nav-3-4-5">
+    
+    <label class="md-nav__link" for="nav-3-4-5">
+      Lambda Cross Account Using Bucket Policy
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-5">
+        Lambda Cross Account Using Bucket Policy
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_Bucket_Policy/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Lambda_Cross_Account_Bucket_Policy/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-6" type="checkbox" id="nav-3-4-6">
+    
+    <label class="md-nav__link" for="nav-3-4-6">
+      Incident Response Playbook with Jupyter
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-6">
+        Incident Response Playbook with Jupyter
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-5" type="checkbox" id="nav-3-5">
+    
+    <label class="md-nav__link" for="nav-3-5">
+      Security Quests
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-5">
+        Security Quests
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_100_Loft_Introduction_to_Security/README.html" title="Introduction to Security" class="md-nav__link">
+      Introduction to Security
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_100_Quick_Steps_to_Security_Success/README.html" title="Quick Steps to Security Success" class="md-nav__link">
+      Quick Steps to Security Success
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_200_Incident_Response_Day/README.html" title="Incident Response Day" class="md-nav__link">
+      Incident Response Day
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_300_Security_Best_Practices_Workshop_EC2/README.html" title="Security Best Practices Workshop" class="md-nav__link">
+      Security Best Practices Workshop
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_300_Security_Best_Practices_Day/README.html" title="Security Best Practices Day" class="md-nav__link">
+      Security Best Practices Day
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Managing_Credentials_and_Authentication/README.html" title="Managing Credentials and Authentication" class="md-nav__link">
+      Managing Credentials and Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Control_Human_Access/README.html" title="Control Human Access" class="md-nav__link">
+      Control Human Access
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Control_Programmatic_Access/README.html" title="Control Programmatic Access" class="md-nav__link">
+      Control Programmatic Access
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Detect_and_Investigate_Events/README.html" title="Detect and Investigate Events" class="md-nav__link">
+      Detect and Investigate Events
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Defend_Against_New_Threats/README.html" title="Defend Against New Threats" class="md-nav__link">
+      Defend Against New Threats
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Networks/README.html" title="Protect Networks" class="md-nav__link">
+      Protect Networks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Compute/README.html" title="Protect Compute" class="md-nav__link">
+      Protect Compute
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Classify_Data/README.html" title="Classify Data" class="md-nav__link">
+      Classify Data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Data_at_Rest/README.html" title="Protect Data at Rest" class="md-nav__link">
+      Protect Data at Rest
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Protect_Data_in_Transit/README.html" title="Protect Data in Transit" class="md-nav__link">
+      Protect Data in Transit
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Security/Quest_Incident_Response/README.html" title="Incident Response" class="md-nav__link">
+      Incident Response
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Reliability
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Reliability
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+    
+    <label class="md-nav__link" for="nav-4-2">
+      200 Testing Backup and Restore of Data
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-2">
+        200 Testing Backup and Restore of Data
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_Backup_and_Restore_of_Data/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_Backup_and_Restore_of_Data/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-3" type="checkbox" id="nav-4-3">
+    
+    <label class="md-nav__link" for="nav-4-3">
+      300 Health Checks and Dependencies
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-3">
+        300 Health Checks and Dependencies
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Health_Checks_and_Dependencies/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Health_Checks_and_Dependencies/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-4" type="checkbox" id="nav-4-4">
+    
+    <label class="md-nav__link" for="nav-4-4">
+      Testing Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-4">
+        Testing Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-4-1" type="checkbox" id="nav-4-4-1">
+    
+    <label class="md-nav__link" for="nav-4-4-1">
+      200 EC2 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-4-4-1">
+        200 EC2 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_for_Resiliency_of_EC2/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/200_Testing_for_Resiliency_of_EC2/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-4-2" type="checkbox" id="nav-4-4-2">
+    
+    <label class="md-nav__link" for="nav-4-4-2">
+      300 EC2, RDS S3 Resiliency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-4-4-2">
+        300 EC2, RDS S3 Resiliency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/TroubleShooting_Guide.html" title="Trouble Shooting Guide" class="md-nav__link">
+      Trouble Shooting Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Performance Efficiency
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Performance Efficiency
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Performance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Performance/100_Monitoring_with_CloudWatch_Dashboards/README.html" title="Monitoring with CloudWatch Dashboards" class="md-nav__link">
+      Monitoring with CloudWatch Dashboards
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      Cost Optimization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Cost Optimization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Fundamentals.html" title="Fundamentals" class="md-nav__link">
+      Fundamentals
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../ExpenditureAwareness.html" title="Expenditure Awareness" class="md-nav__link">
+      Expenditure Awareness
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../CostEffectiveResources.html" title="Cost Effective Resources" class="md-nav__link">
+      Cost Effective Resources
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5" type="checkbox" id="nav-6-5">
+    
+    <label class="md-nav__link" for="nav-6-5">
+      100 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-5">
+        100 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-1" type="checkbox" id="nav-6-5-1">
+    
+    <label class="md-nav__link" for="nav-6-5-1">
+      Account Setup
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-1">
+        Account Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_1_AWS_Account_Setup/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_1_AWS_Account_Setup/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-2" type="checkbox" id="nav-6-5-2">
+    
+    <label class="md-nav__link" for="nav-6-5-2">
+      Cost and Usage Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-2">
+        Cost and Usage Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-3" type="checkbox" id="nav-6-5-3">
+    
+    <label class="md-nav__link" for="nav-6-5-3">
+      Pricing Models
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-3">
+        Pricing Models
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-4" type="checkbox" id="nav-6-5-4">
+    
+    <label class="md-nav__link" for="nav-6-5-4">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-4">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-5-5" type="checkbox" id="nav-6-5-5">
+    
+    <label class="md-nav__link" for="nav-6-5-5">
+      Cost and Usage Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-5-5">
+        Cost and Usage Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/100_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6" type="checkbox" id="nav-6-6" checked>
+    
+    <label class="md-nav__link" for="nav-6-6">
+      200 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-6">
+        200 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-1" type="checkbox" id="nav-6-6-1">
+    
+    <label class="md-nav__link" for="nav-6-6-1">
+      Cost and Usage Governance
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-1">
+        Cost and Usage Governance
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_2_Cost_and_Usage_Governance/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-2" type="checkbox" id="nav-6-6-2">
+    
+    <label class="md-nav__link" for="nav-6-6-2">
+      RI Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-2">
+        RI Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_3_Pricing_Models/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_3_Pricing_Models/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-3" type="checkbox" id="nav-6-6-3" checked>
+    
+    <label class="md-nav__link" for="nav-6-6-3">
+      Savings Plan Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-3">
+        Savings Plan Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Lab Guide
+      </label>
+    
+    <a href="Lab_Guide.html" title="Lab Guide" class="md-nav__link md-nav__link--active">
+      Lab Guide
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-4" type="checkbox" id="nav-6-6-4">
+    
+    <label class="md-nav__link" for="nav-6-6-4">
+      Cost and Usage Analysis
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-4">
+        Cost and Usage Analysis
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-6-5" type="checkbox" id="nav-6-6-5">
+    
+    <label class="md-nav__link" for="nav-6-6-5">
+      Cost and Usage Visualization
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-6-5">
+        Cost and Usage Visualization
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_5_Cost_Visualization/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7" type="checkbox" id="nav-6-7">
+    
+    <label class="md-nav__link" for="nav-6-7">
+      300 Level Labs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-6-7">
+        300 Level Labs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-1" type="checkbox" id="nav-6-7-1">
+    
+    <label class="md-nav__link" for="nav-6-7-1">
+      Automated CUR Updates and Ingestion
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-1">
+        Automated CUR Updates and Ingestion
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-2" type="checkbox" id="nav-6-7-2">
+    
+    <label class="md-nav__link" for="nav-6-7-2">
+      Multi Account CUR Access
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-2">
+        Multi Account CUR Access
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-3" type="checkbox" id="nav-6-7-3">
+    
+    <label class="md-nav__link" for="nav-6-7-3">
+      Splitting Sharing CUR
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-3">
+        Splitting Sharing CUR
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6-7-4" type="checkbox" id="nav-6-7-4">
+    
+    <label class="md-nav__link" for="nav-6-7-4">
+      Auto Financial CUR Reports
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-6-7-4">
+        Auto Financial CUR Reports
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Well Architected Tool
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Well Architected Tool
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/README.html" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Walkthrough
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Walkthrough
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/README.html" title="Lab Overview" class="md-nav__link">
+      Lab Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/Lab_Guide.html" title="Lab Guide" class="md-nav__link">
+      Lab Guide
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authors" class="md-nav__link">
+    Authors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/aws-well-architected-labs/edit/master/docs/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/Lab_Guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="level-200-pricing-model-analysis">Level 200: Pricing Model Analysis</h1>
+<h2 id="authors">Authors</h2>
+<ul>
+<li>Nathan Besh, Cost Lead, Well-Architected (AWS)</li>
+<li>Nataliya Godunok, Technial Account Manager (AWS)</li>
+</ul>
+<h2 id="feedback">Feedback</h2>
+<p>If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li><a href="#pricing_sources">Create Pricing Data Sources</a></li>
+<li><a href="#usage_source">Create the Usage Data Source</a></li>
+<li><a href="#quicksight_setup">Setup QuickSight Dashboard</a></li>
+<li><a href="#recommendation_dashboard">Create the Recommendation Dashboard</a></li>
+<li><a href="#format_dashboard">Format the Recommendation Dashboard</a></li>
+<li><a href="#tear_down">Teardown</a></li>
+<li><a href="#rate_lab">Rate this Lab</a></li>
+</ol>
+<p><a name="pricing_sources"></a></p>
+<h2 id="1-create-pricing-data-sources">1. Create Pricing Data Sources</h2>
+<p>Create S3 bucket with folders, lambda functions, CloudWatch event, table in Athena</p>
+<h3 id="11-create-s3-bucket-and-folders">1.1. Create S3 Bucket and Folders</h3>
+<p>Create a <strong>single S3 bucket</strong> that contains <strong>two folders</strong> - <strong>od_pricedata</strong> and <strong>sp_pricedata</strong>, these will contain the on-demand pricing data and the Savings Plans pricing data.</p>
+<ol>
+<li>
+<p>Log into the console as an IAM user with the required permissions, go to the <strong>S3</strong> service page:
+<img alt="Images/home_s3-dashboard.png" src="Images/home_s3-dashboard.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create bucket</strong>:</p>
+</li>
+<li>
+<p>Enter a <strong>Bucket name</strong> (we have used sptool-pricingfiles, you will need to use a unique bucket name) and click <strong>Create bucket</strong>:
+<img alt="Images/s3_bucketdetails-create.png" src="Images/s3_bucketdetails-create.png" /></p>
+</li>
+<li>
+<p>Click on the <strong>(bucket name)</strong>:
+<img alt="Images/s3_select-bucket.png" src="Images/s3_select-bucket.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create folder</strong>:
+<img alt="Images/s3_createfolder.png" src="Images/s3_createfolder.png" /></p>
+</li>
+<li>
+<p>Enter a folder name of <strong>od_pricedata</strong>, click <strong>Save</strong>:
+<img alt="Images/s3_createfolder-save.png" src="Images/s3_createfolder-save.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create folder</strong>:
+<img alt="Images/s3_createfolder.png" src="Images/s3_createfolder.png" /></p>
+</li>
+<li>
+<p>Enter a folder name of <strong>sp_pricedata</strong>, click <strong>Save</strong>:
+<img alt="Images/s3_createfolder-save2.png" src="Images/s3_createfolder-save2.png" /></p>
+</li>
+</ol>
+<p>You have now setup the S3 bucket with the two folders that will contain the OnDemand and Savings Plans pricing data.
+<img alt="Images/s3_bucket-complete.png" src="Images/s3_bucket-complete.png" /></p>
+<h3 id="12-setup-on-demand-pricing-lambda-function">1.2. Setup On-Demand Pricing Lambda Function</h3>
+<p>Create the On-Demand Lambda function to get the pricing information, and extract the required parts from it.</p>
+<ol>
+<li>
+<p>Go to the <strong>Lambda</strong> service page:
+<img alt="Images/home_lambda-dashboard.png" src="Images/home_lambda-dashboard.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create function</strong>:
+<img alt="Images/lambda_createfunction.png" src="Images/lambda_createfunction.png" /></p>
+</li>
+<li>
+<p>Enter the following details:</p>
+<ul>
+<li>Select: <strong>Author from scratch</strong></li>
+<li>Function name: <strong>SPTool_ODPricing_Download</strong></li>
+<li>Runtime: <strong>Python</strong> (Latest)</li>
+<li>Execution Role: <strong>Create a new role</strong></li>
+<li>Role name: <strong>SPTool_Lambda</strong></li>
+</ul>
+</li>
+<li>
+<p>Click <strong>Create function</strong>
+<img alt="Images/lambda_createfunction-details.png" src="Images/lambda_createfunction-details.png" /></p>
+</li>
+<li>
+<p>Copy and paste the following code into the <strong>Function code</strong> section:</p>
+<p><details>
+<summary> Click here to see the function code</summary></p>
+<pre><code># Lambda Function Code - SPTool_OD_pricing_Download
+# Function to download OnDemand pricing, get out the required lines &amp; upload it to S3 as a zipped file
+# It will find 'OnDemand' and 'Compute Instance', and write to a file
+# Written by natbesh@amazon.com
+# Please reachout to costoptimization@amazon.com if there's any comments or suggestions
+import boto3
+import gzip
+import urllib3
+
+def lambda_handler(event, context):
+
+    # Create the connection
+    http = urllib3.PoolManager()
+
+    try:
+        # Get the EC2 OnDemand pricing file, its huge &gt;1GB
+        r = http.request('GET', 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv')
+
+        # Put the response data into a variable &amp; split it into an array line by line
+        plaintext_content = r.data
+        plaintext_lines = plaintext_content.splitlines()
+
+        # Varaible to hold the OnDemand pricing data
+        pricing_output = ""
+
+        # Go through each of the pricing lines to find the ones we need
+        for line in plaintext_lines:
+
+            # If the line contains 'OnDemand' or 'Compute Instance' then add it to the output string
+            if ((str(line).find('OnDemand') != -1) and (str(line).find('RunInstances') != -1)):
+                pricing_output += str(line.decode("utf-8"))
+                pricing_output += "\n"
+
+        # Add the output to a local temporary file &amp; zip it
+        with gzip.open('/tmp/od_pricedata.txt.gz', 'wb') as f:
+            f.write(pricing_output.encode())
+
+        # Upload the zipped file to S3
+        s3 = boto3.resource('s3')
+
+        # Specify the local file, the bucket, and the folder and object name - you MUST have a folder and object name
+        s3.meta.client.upload_file('/tmp/od_pricedata.txt.gz', 'bucket_name', 'od_pricedata/od_pricedata.txt.gz')
+
+    # Die if you cant get the pricing file                
+    except Exception as e:
+        print(e)
+        raise e
+
+    # Return happy
+    return {
+        'statusCode': 200
+    }
+</code></pre>
+</details>
+
+</li>
+<li>
+<p>Edit the pasted code, replacing <strong>bucket_name</strong> with the name of your bucket:
+<img alt="Images/lambda_editcode.png" src="Images/lambda_editcode.png" /></p>
+</li>
+<li>
+<p>Edit <strong>Basic settings</strong> below:</p>
+<ul>
+<li>Memory: <strong>2688MB</strong></li>
+<li>Timeout: <strong>5min</strong></li>
+<li>Click <strong>save</strong>
+<img alt="Images/lambda_basicsettings.png" src="Images/lambda_basicsettings.png" /></li>
+</ul>
+</li>
+<li>
+<p>Scroll to the top and click <strong>Test</strong>
+<img alt="Images/lambda_test.png" src="Images/lambda_test.png" /></p>
+</li>
+<li>
+<p>Enter an <strong>Event name</strong> of <strong>Test</strong>, click <strong>Create</strong>:
+<img alt="Images/lambda_testcreate.png" src="Images/lambda_testcreate.png" /></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>:
+<img alt="Images/lambda_save.png" src="Images/lambda_save.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Permissions</strong>:
+<img alt="Images/lambda_permissions.png" src="Images/lambda_permissions.png" /></p>
+</li>
+<li>
+<p>Right-click(open link in new tab) <strong>View the SPTool_Lambda role</strong> to open the role in the IAM Service page:
+<img alt="Images/lambda_viewrole.png" src="Images/lambda_viewrole.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Attach policies</strong>:
+<img alt="Images/IAM_attach-policies.png" src="Images/IAM_attach-policies.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Create policy</strong>:
+<img alt="Images/IAM_Createpolicy.png" src="Images/IAM_Createpolicy.png" /></p>
+</li>
+<li>
+<p>Create a policy to allow object write to your S3 bucket created, and click <strong>Review policy</strong>:
+<img alt="Images/IAM_reviewpolicy.png" src="Images/IAM_reviewpolicy.png" /></p>
+</li>
+<li>
+<p>Name the policy <strong>s3_pricing_lambda</strong>, optionally and add a description, click <strong>Create policy</strong>:
+<img alt="Images/IAM_namecreatepolicy.png" src="Images/IAM_namecreatepolicy.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Roles</strong>:
+<img alt="Images/IAM_roles.png" src="Images/IAM_roles.png" /></p>
+</li>
+<li>
+<p>Click on the role <strong>SPTool_Lambda</strong>:
+<img alt="Images/IAM_roleSPTool.png" src="Images/IAM_roleSPTool.png" /></p>
+</li>
+<li>
+<p>Click <strong>Attach policies</strong>:
+<img alt="Images/IAM_attach-policies.png" src="Images/IAM_attach-policies.png" /></p>
+</li>
+<li>
+<p>Click <strong>Filter Policies</strong> and select <strong>Customer managed</strong>:
+<img alt="Images/IAM_filterpolicies.png" src="Images/IAM_filterpolicies.png" /></p>
+</li>
+<li>
+<p>Select the <strong>S3_pricing_lambda</strong> policy and click <strong>Attach policy</strong>:
+<img alt="Images/IAM_selectpolicy.png" src="Images/IAM_selectpolicy.png" /></p>
+</li>
+<li>
+<p>Go back to the <strong>Lambda</strong> service page and click <strong>Test</strong>:
+<img alt="Images/lambda_testrun.png" src="Images/lambda_testrun.png" /></p>
+</li>
+<li>
+<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click <strong>Details</strong> and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+<img alt="Images/lambda_runsuccess.png" src="Images/lambda_runsuccess.png" /></p>
+</li>
+<li>
+<p>Go to your S3 bucket and into the <strong>od_pricedata</strong> folder and you should see a gz file of non-zero size is in it:
+<img alt="Images/s3_verify.png" src="Images/s3_verify.png" /></p>
+</li>
+</ol>
+<h3 id="13-setup-savings-plan-pricing-lambda-function">1.3. Setup Savings Plan Pricing Lambda Function</h3>
+<p>Create the Savings Plan Lambda function to get the pricing information, and extract the required parts from it.</p>
+<ol>
+<li>
+<p>Go to the <strong>Lambda</strong> service page:
+<img alt="Images/home_lambda-dashboard.png" src="Images/home_lambda-dashboard.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create function</strong>:
+<img alt="Images/lambda_createfunction.png" src="Images/lambda_createfunction.png" /></p>
+</li>
+<li>
+<p>Enter the following details:</p>
+<ul>
+<li>Select: <strong>Author from scratch</strong></li>
+<li>Function name: <strong>SPTool_SPPricing_Download</strong></li>
+<li>Runtime: <strong>Python</strong> (Latest)</li>
+<li>Execution Role: <strong>Use an existing role</strong></li>
+<li>Role name: <strong>SPTool_Lambda</strong></li>
+</ul>
+</li>
+<li>
+<p>Click <strong>Create function</strong>
+<img alt="Images/lambda_createfunction-details2.png" src="Images/lambda_createfunction-details2.png" /></p>
+</li>
+<li>
+<p>Copy and paste the following code into the <strong>Function code</strong> section:</p>
+<p><details>
+<summary> Click here to see the function code</summary></p>
+<pre><code># Lambda Function Code - SPTool_SP_pricing_Download
+# Function to download SavingsPlans pricing, get out the required lines &amp; upload it to S3 as a zipped file
+# It will get each regions pricing file in CSV, find 'Usage' and '1yr', and write to a file
+# Written by natbesh@amazon.com
+# Please reachout to costoptimization@amazon.com if there's any comments or suggestions
+import boto3
+import gzip
+import urllib3
+import json
+
+def lambda_handler(event, context):
+
+    # Create the connection
+    http = urllib3.PoolManager()
+
+    try:
+        # Get the SavingsPlans pricing index file, so you can get all the region files, which have the pricing in them
+        r = http.request('GET', 'https://pricing.us-east-1.amazonaws.com/savingsPlan/v1.0/aws/AWSComputeSavingsPlan/current/region_index.json')
+
+        # Load the json file into a variable, and parse it
+        sp_regions = r.data
+        sp_regions_json = (json.loads(sp_regions))
+
+        # Variable to hold all of the pricing data, its large at over 150MB
+        sp_pricing_data = ""
+
+        # Cycle through each regions pricing file, to get the data we need
+        for region in sp_regions_json['regions']:
+
+            # Get the CSV URL
+            url = "https://pricing.us-east-1.amazonaws.com" + region['versionUrl']
+            url = url.replace('.json', '.csv')
+
+            # Create a connection &amp; get the regions pricing data CSV file
+            http = urllib3.PoolManager()
+            r = http.request('GET', url)
+            spregion_content = r.data
+
+            # Split the lines into an array
+            spregion_lines = spregion_content.splitlines()
+
+            # Go through each of the pricing lines
+            for line in spregion_lines:
+
+                # If the line has 'Usage' then grab it for pricing data, exclude all others
+                if (str(line).find('Usage') != -1):
+                    sp_pricing_data += str(line.decode("utf-8"))
+                    sp_pricing_data += "\n"
+
+        # Compress the text into a local temporary file
+        with gzip.open('/tmp/sp_pricedata.txt.gz', 'wb') as f:
+            f.write(sp_pricing_data.encode())
+
+        # Upload the file to S3
+        s3 = boto3.resource('s3')
+
+        # Specify the local file, the bucket, and the folder and object name - you MUST have a folder and object name
+        s3.meta.client.upload_file('/tmp/sp_pricedata.txt.gz', 'bucket_name', 'sp_pricedata/sp_pricedata.txt.gz')
+
+    # Die if you cant get the file
+    except Exception as e:
+        print(e)
+        raise e
+
+    # Return happy
+    return {
+        'statusCode': 200
+    }
+</code></pre>
+</details>
+
+</li>
+<li>
+<p>Edit the pasted code, replacing <strong>bucket_name</strong> with the name of your bucket:
+<img alt="Images/lambda_editcode2.png" src="Images/lambda_editcode2.png" /></p>
+</li>
+<li>
+<p>Edit Basic settings below:</p>
+<ul>
+<li>Memory: <strong>2688MB</strong></li>
+<li>Timeout: <strong>5min</strong></li>
+<li>Click <strong>save</strong>
+<img alt="Images/lambda_basicsettings2.png" src="Images/lambda_basicsettings2.png" /></li>
+</ul>
+</li>
+<li>
+<p>Scroll to the top and click <strong>Test</strong>
+<img alt="Images/lambda_test.png" src="Images/lambda_test.png" /></p>
+</li>
+<li>
+<p>Enter an <strong>Event name</strong> of <strong>Test</strong>, click <strong>Create</strong>:
+<img alt="Images/lambda_testcreate.png" src="Images/lambda_testcreate.png" /></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>:
+<img alt="Images/lambda_save.png" src="Images/lambda_save.png" /></p>
+</li>
+<li>
+<p>Click <strong>Test</strong>:
+<img alt="Images/lambda_testrun.png" src="Images/lambda_testrun.png" /></p>
+</li>
+<li>
+<p>The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click <strong>Details</strong> and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+<img alt="Images/lambda_runsuccess2.png" src="Images/lambda_runsuccess2.png" /></p>
+</li>
+<li>
+<p>Go to your S3 bucket and into the <strong>sp_pricedata</strong> folder and you should see a gz file of non-zero size is in it:
+<img alt="Images/s3_verify2.png" src="Images/s3_verify2.png" /></p>
+</li>
+</ol>
+<h3 id="14-cloudwatch-events-setup">1.4 CloudWatch Events Setup</h3>
+<p>We will setup a CloudWatch Event to periodically run the Lambda functions, this will update the pricing and include any newly released instances.</p>
+<ol>
+<li>
+<p>Go to the CloudWatch service page:
+<img alt="Images/home_cloudwatch.png" src="Images/home_cloudwatch.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Events</strong>, then click <strong>Rules</strong>:
+<img alt="Images/cloudwatch_events.png" src="Images/cloudwatch_events.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create rule</strong>
+<img alt="Images/cloudwatch_createrule.png" src="Images/cloudwatch_createrule.png" /></p>
+</li>
+<li>
+<p>For the <strong>Event Source</strong> select <strong>Schedule</strong> and set the required period, we have selected <strong>5 days</strong>, click <strong>Add target</strong>:
+<img alt="Images/cloudwatch_eventsource.png" src="Images/cloudwatch_eventsource.png" /></p>
+</li>
+<li>
+<p>Add the <strong>SPTool_ODPricing_Download</strong> Lambda function, and click <strong>Add target</strong>:
+<img alt="Images/cloudwatch_addtarget.png" src="Images/cloudwatch_addtarget.png" /></p>
+</li>
+<li>
+<p>Add the <strong>SPTool_SPPricing_Download</strong> Lambda function, and click <strong>Configure details</strong>:
+<img alt="Images/cloudwatch_addtarget2.png" src="Images/cloudwatch_addtarget2.png" /></p>
+</li>
+<li>
+<p>Add the name <strong>SPTool-pricing</strong>, optionally add a description and click <strong>Create rule</strong>:
+<img alt="Images/cloudwatch_createrule2.png" src="Images/cloudwatch_createrule2.png" /></p>
+</li>
+</ol>
+<p>You have now successfully configured a CloudWatch event, it will run the two Lambda functions and update the pricing information every 5 days.</p>
+<h3 id="15-prepare-the-pricing-data-source">1.5 Prepare the Pricing Data Source</h3>
+<p>We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront Savings Plans rates and join them to On-Demand pricing. You can modify this part to select 3 year or Partial or All-Upfront rates.</p>
+<ol>
+<li>
+<p>Go to the <strong>Glue</strong> Service page:
+<img alt="Images/home_glue.png" src="Images/home_glue.png" /></p>
+</li>
+<li>
+<p>Click <strong>Crawlers</strong> from the left menu:
+<img alt="Images/glue_crawlers.png" src="Images/glue_crawlers.png" /></p>
+</li>
+<li>
+<p>Click <strong>Add crawler</strong>:
+<img alt="Images/glue_addcrawler.png" src="Images/glue_addcrawler.png" /></p>
+</li>
+<li>
+<p>Enter a crawler name of <strong>OD_Pricing</strong> and click <strong>Next</strong>:
+<img alt="Images/glue_crawlername.png" src="Images/glue_crawlername.png" /></p>
+</li>
+<li>
+<p>Ensure <strong>Data stores</strong> is the source type, click <strong>Next</strong>:
+<img alt="Images/glue_sourcetype.png" src="Images/glue_sourcetype.png" /></p>
+</li>
+<li>
+<p>Click the folder icon to list the S3 folders in your account:
+<img alt="Images/glue_includepath.png" src="Images/glue_includepath.png" /></p>
+</li>
+<li>
+<p>Expand the bucket which contains your pricing folders, and select the folder name <strong>od_pricedata</strong>, click <strong>Select</strong>:
+<img alt="Images/glue_choosepath.png" src="Images/glue_choosepath.png" /></p>
+</li>
+<li>
+<p>Click <strong>Next</strong>:
+<img alt="Images/glue_adddatastore.png" src="Images/glue_adddatastore.png" /></p>
+</li>
+<li>
+<p>Click <strong>Next</strong>:
+<img alt="Images/glue_addanother.png" src="Images/glue_addanother.png" /></p>
+</li>
+<li>
+<p><strong>Create an IAM role</strong> with a name of <strong>SPToolPricing</strong>, click <strong>Next</strong>:
+<img alt="Images/glue_addrole.png" src="Images/glue_addrole.png" /></p>
+</li>
+<li>
+<p>Leave the frequency as <strong>Run on demand</strong>, and click <strong>Next</strong>:
+<img alt="Images/glue_schedule.png" src="Images/glue_schedule.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Add database</strong>:
+<img alt="Images/glue_adddatabase.png" src="Images/glue_adddatabase.png" /></p>
+</li>
+<li>
+<p>Enter a database name of <strong>pricing</strong>, and click <strong>Create</strong>:
+<img alt="Images/glue_databasename.png" src="Images/glue_databasename.png" /></p>
+</li>
+<li>
+<p>Click <strong>Next</strong>:
+<img alt="Images/glue_dboutput.png" src="Images/glue_dboutput.png" /></p>
+</li>
+<li>
+<p>Click <strong>Finish</strong>:
+<img alt="Images/glue_finishcrawler.png" src="Images/glue_finishcrawler.png" /></p>
+</li>
+<li>
+<p>Select the crawler <strong>OD_Pricing</strong> and click <strong>Run crawler</strong>:
+<img alt="Images/glue_runcrawler.png" src="Images/glue_runcrawler.png" /></p>
+</li>
+<li>
+<p>Once its run, you should see tables created:
+<img alt="Images/glue_runsuccess.png" src="Images/glue_runsuccess.png" /></p>
+</li>
+<li>
+<p>Repeat <strong>Steps 3 through to 17</strong> with the following details:</p>
+<ul>
+<li>Crawler name: <strong>SP_Pricing</strong></li>
+<li>Include path: <strong>s3://(pricing bucket)/sp_pricedata</strong> (replace pricing bucket)</li>
+<li>IAM Role: <strong>Choose an existing IAM role</strong> and <strong>AWSGlueServiceRole-SPToolPricing</strong></li>
+<li>Database: <strong>pricing</strong></li>
+</ul>
+</li>
+<li>
+<p>Open the <strong>IAM Console</strong> in a new tab, click <strong>Policies</strong>:
+<img alt="Images/IAM_policy.png" src="Images/IAM_policy.png" /></p>
+</li>
+<li>
+<p>Click on the <strong>AWSGlueServiceRole-SPToolPricing</strong> role:
+<img alt="Images/IAM_selectrole.png" src="Images/IAM_selectrole.png" /></p>
+</li>
+<li>
+<p>Type in <strong>SPTool</strong> and click on the policy name <strong>AWSGlueServiceRole-SPTool</strong>:
+<img alt="Images/IAM_policy.png" src="Images/IAM_policy.png" /></p>
+</li>
+<li>
+<p>Click <strong>Edit policy</strong>:
+<img alt="Images/IAM_editpolicy.png" src="Images/IAM_editpolicy.png" /></p>
+</li>
+<li>
+<p>Click <strong>JSON</strong>:
+<img alt="Images/IAM_jsonpolicy.png" src="Images/IAM_jsonpolicy.png" /></p>
+</li>
+<li>
+<p>Edit the <strong>Resource</strong> line by removing the <strong>OD_Pricing</strong> folder to leave the bucket:
+<img alt="Images/IAM_editjson.png" src="Images/IAM_editjson.png" /></p>
+</li>
+<li>
+<p>Click <strong>Review policy</strong>:
+<img alt="Images/IAM_reviewjson.png" src="Images/IAM_reviewjson.png" /></p>
+</li>
+<li>
+<p>Click <strong>Save changes</strong>:
+<img alt="Images/IAM_savejson.png" src="Images/IAM_savejson.png" /></p>
+</li>
+<li>
+<p>Go back to the Glue console, select the <strong>SP_Pricing</strong> crawler, click <strong>Run crawler</strong>:
+<img alt="Images/glue_runspcrawler.png" src="Images/glue_runspcrawler.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Databases</strong>:
+<img alt="Images/glue_databases.png" src="Images/glue_databases.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Pricing</strong>:
+<img alt="Images/glue_databasepricing.png" src="Images/glue_databasepricing.png" /></p>
+</li>
+<li>
+<p>Click <strong>Tables in pricing</strong>:
+<img alt="Images/glue_pricingtables.png" src="Images/glue_pricingtables.png" /></p>
+</li>
+<li>
+<p>Click <strong>od_pricedata</strong>:
+<img alt="Images/glue_odpricing.png" src="Images/glue_odpricing.png" /></p>
+</li>
+</ol>
+<p>32.Click <strong>Edit schema</strong>:
+<img alt="Images/glue_editschema.png" src="Images/glue_editschema.png" /></p>
+<ol>
+<li>
+<p>Click <strong>double</strong> next to <strong>col9</strong>:
+<img alt="Images/glue_col9.png" src="Images/glue_col9.png" /></p>
+</li>
+<li>
+<p>Select <strong>string</strong> and click <strong>Update</strong>:
+<img alt="Images/glue_col9string.png" src="Images/glue_col9string.png" /></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>:
+<img alt="Images/glue_schemasave.png" src="Images/glue_schemasave.png" /></p>
+</li>
+</ol>
+<p><a name="usage_source"></a></p>
+<h2 id="2-create-the-usage-data-source">2. Create the Usage Data Source</h2>
+<p>We will combine the pricing information with our Cost and Usage Report (CUR). This will give us a usage data source which contains a summary of your usage at an hourly level, with multiple pricing dimensions.</p>
+<ol>
+<li>
+<p>Go to the <strong>Athena</strong> service page:
+<img alt="Images/home_athena.png" src="Images/home_athena.png" /></p>
+</li>
+<li>
+<p>Run the following query to create a single pricing data source, combining the OD and SP pricing:</p>
+<p><details>
+<summary> Click here to see the Athena SQL code</summary></p>
+<pre><code>CREATE VIEW pricing.pricing AS SELECT
+sp.location AS Region,
+sp.discountedoperation AS OS,
+REPLACE(od.col18, '"') AS InstanceType,
+REPLACE(od.col35, '"') AS Tenancy,
+REPLACE(od.col9, '"') AS ODRate,
+sp.discountedrate AS SPRate
+
+FROM pricing.sp_pricedata sp
+JOIN pricing.od_pricedata od ON
+((sp.discountedusagetype = REPLACE(od.col46, '"'))
+AND (sp.discountedoperation = REPLACE(od.col47, '"')))
+
+WHERE od.col9 IS NOT NULL
+AND sp.location NOT LIKE 'Any'
+AND sp.purchaseoption LIKE 'No Upfront'
+AND sp.leasecontractlength = 1
+</code></pre>
+</details>
+
+</li>
+<li>
+<p>Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace <strong>cur.curfile</strong> with your existing database name and tablename of your CUR, then run the rollowing query:</p>
+<p><details>
+<summary> Click here to see the Athena SQL code</summary></p>
+<pre><code>CREATE VIEW cur.SP_Usage AS SELECT
+cur.line_item_usage_account_id,
+cur.line_item_usage_start_date,
+to_unixtime(cur.line_item_usage_start_date) AS EpochTime,
+cur.product_instance_type,
+cur.product_location,
+cur.product_operating_system,
+cur.product_tenancy,
+SUM(cur.line_item_unblended_cost) AS ODPrice,
+SUM(cur.line_item_unblended_cost*(cast(pr.SPRate AS double)/cast(pr.ODRate AS double))) SPPrice,
+abs(SUM(cast(pr.SPRate AS double)) - SUM (cast(pr.ODRate AS double))) / SUM(cast(pr.ODRate AS double))*100 AS DiscountRate,
+SUM(cur.line_item_usage_amount) AS InstanceCount
+
+FROM cur.curfile cur
+JOIN pricing.pricing pr ON (cur.product_location = pr.Region)
+AND (cur.line_item_operation = pr.OS)
+AND (cur.product_instance_type = pr.InstanceType)
+AND (cur.product_tenancy = pr.Tenancy)
+
+WHERE cur.line_item_product_code LIKE '%EC2%'
+AND cur.product_instance_type NOT LIKE ''
+AND cur.product_operating_system NOT LIKE 'NA'
+AND cur.line_item_unblended_cost &gt; 0
+
+GROUP BY cur.line_item_usage_account_id,
+cur.line_item_usage_start_date,
+cur.product_instance_type,
+cur.product_location,
+cur.product_operating_system,
+cur.product_tenancy
+
+ORDER BY cur.line_item_usage_start_date ASC,
+DiscountRate DESC
+</code></pre>
+</details>
+
+</li>
+<li>
+<p>Verify the data source is setup by editing the following query, replace <strong>cur.</strong> with the name of the database and run the following query:</p>
+</li>
+</ol>
+<pre><code class="SQL">SELECT * FROM cur.sp_usage limit 10;
+</code></pre>
+
+<p>You now have your usage data source setup with your pricing dimensions. You can modify the queries above to add or remove any columns you want in the view, which can later be used to visualize the data, for example tags.</p>
+<p><a name="quicksight_setup"></a></p>
+<h2 id="3-setup-quicksight-dashboard">3. Setup QuickSight Dashboard</h2>
+<p>We will now setup the QuickSight dashboard to visualize your usage by cost, and setup the analysis to provide Savings Plan recommendations.</p>
+<ol>
+<li>
+<p>Go to the QuickSight service:
+<img alt="Images/home_quicksight.png" src="Images/home_quicksight.png" /></p>
+</li>
+<li>
+<p>Click on your username in the top right:
+<img alt="Images/quicksight_admin.png" src="Images/quicksight_admin.png" /></p>
+</li>
+<li>
+<p>Click <strong>Manage QuickSight</strong>:
+<img alt="Images/quicksight_manage.png" src="Images/quicksight_manage.png" /></p>
+</li>
+<li>
+<p>Click <strong>Security &amp; permissions</strong>, then click <strong>Add or remove</strong>:
+<img alt="Images/quicksight_securityperms.png" src="Images/quicksight_securityperms.png" /></p>
+</li>
+<li>
+<p>Click <strong>Details</strong> next to Amazon S3:
+<img alt="Images/quicksight_s3details.png" src="Images/quicksight_s3details.png" /></p>
+</li>
+<li>
+<p>Click <strong>Select S3 buckets</strong>:
+<img alt="Images/quicksight_s3selectbucket.png" src="Images/quicksight_s3selectbucket.png" /></p>
+</li>
+<li>
+<p>Select your <strong>pricing bucket</strong> and click <strong>Finish</strong>:
+<img alt="Images/quicksight_s3bucketfinish.png" src="Images/quicksight_s3bucketfinish.png" /></p>
+</li>
+<li>
+<p>Scroll down and click <strong>Update</strong>:
+<img alt="Images/quicksight_s3update.png" src="Images/quicksight_s3update.png" /></p>
+</li>
+<li>
+<p>Click on <strong>QuickSight</strong> to go to the home page:
+<img alt="Images/quicksight_home.png" src="Images/quicksight_home.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Manage data</strong>:
+<img alt="Images/quicksight_managedata.png" src="Images/quicksight_managedata.png" /></p>
+</li>
+<li>
+<p>Click on <strong>New data set</strong>:
+<img alt="Images/quicksight_newdataset.png" src="Images/quicksight_newdataset.png" /></p>
+</li>
+<li>
+<p>Click <strong>Athena</strong>:
+<img alt="Images/quicksight_athenadataset.png" src="Images/quicksight_athenadataset.png" /></p>
+</li>
+<li>
+<p>Enter a Data source name of <strong>SP_Usage</strong> and click <strong>Create data source</strong>:
+<img alt="Images/quicksight_namedatasource.png" src="Images/quicksight_namedatasource.png" /></p>
+</li>
+<li>
+<p>Select the <strong>cur</strong> database, and the <strong>sp_usage</strong> table, click <strong>Select</strong>:
+<img alt="Images/quicksight_choosetable.png" src="Images/quicksight_choosetable.png" /></p>
+</li>
+<li>
+<p>Ensure SPICE is selected, click <strong>Visualize</strong>:
+<img alt="Images/quicksight_datasetfinish.png" src="Images/quicksight_datasetfinish.png" /></p>
+</li>
+<li>
+<p>Click on <strong>QuickSight</strong> to go to the home page:
+<img alt="Images/quicksight_home.png" src="Images/quicksight_home.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Manage data</strong>:
+<img alt="Images/quicksight_managedata.png" src="Images/quicksight_managedata.png" /></p>
+</li>
+<li>
+<p>Select the <strong>sp_usage</strong> Dataset:
+<img alt="Images/quicksight_refresh1.png" src="Images/quicksight_refresh1.png" /></p>
+</li>
+<li>
+<p>Click <strong>Schedule refresh</strong>:
+<img alt="Images/quicksight_refresh2.png" src="Images/quicksight_refresh2.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create</strong>:
+<img alt="Images/quicksight_refresh3.png" src="Images/quicksight_refresh3.png" /></p>
+</li>
+<li>
+<p>Enter a schedule, it needs to be refreshed daily, and click <strong>Create</strong>:
+<img alt="Images/quicksight_refresh4.png" src="Images/quicksight_refresh4.png" /></p>
+</li>
+<li>
+<p>Click <strong>Cancel</strong> to exit: 
+<img alt="Images/quicksight_refresh5.png" src="Images/quicksight_refresh5.png" /></p>
+</li>
+<li>
+<p>Click the <strong>x</strong> in the top corner:
+<img alt="Images/quicksight_refresh6.png" src="Images/quicksight_refresh6.png" /></p>
+</li>
+</ol>
+<p><a name="recommendation_dashboard"></a></p>
+<h2 id="4-create-the-recommendation-dashboard">4. Create the Recommendation Dashboard</h2>
+<ol>
+<li>
+<p>Go to the QuickSight service homepage:
+<img alt="Images/home_quicksight.png" src="Images/home_quicksight.png" /></p>
+</li>
+<li>
+<p>Go to the <strong>sp_usage analysis</strong>: 
+<img alt="Images/quicksight_sp_analysis.png" src="Images/quicksight_sp_analysis.png" /></p>
+</li>
+<li>
+<p>Create a line chart, add <strong>line_item_usage_start_date</strong> to the <strong>X axis</strong>, aggregate <strong>day</strong>. Add <strong>spprice</strong> to the <strong>Value</strong> and set the aggregate to <strong>min</strong>. Drag the <strong>product_instance_type</strong> to <strong>Colour</strong> field well. Change the title to <strong>Usage in Savings Plan Rates</strong>:
+<img alt="Images/quicksight_sp_graph.png" src="Images/quicksight_sp_graph.png" /></p>
+</li>
+<li>
+<p>Click <strong>Parameters</strong>, and click <strong>Create one</strong>:
+<img alt="Images/quicksight_parameter_create.png" src="Images/quicksight_parameter_create.png" /></p>
+</li>
+<li>
+<p>Parameter name <strong>OperatingSystem</strong>, Data type <strong>String</strong>, click <strong>Set a dynamic default</strong>:
+<img alt="Images/quicksight_parameter_create1.png" src="Images/quicksight_parameter_create1.png" /></p>
+</li>
+<li>
+<p>Select your dataset, and select <strong>product_operating_system</strong> for the columns, click Apply:
+<img alt="Images/quicksight_parameter_create2.png" src="Images/quicksight_parameter_create2.png" /></p>
+</li>
+<li>
+<p>Click <strong>Create</strong>:
+<img alt="Images/quicksight_parameter_create3.png" src="Images/quicksight_parameter_create3.png" /></p>
+</li>
+<li>
+<p>Click <strong>Control</strong>:
+<img alt="Images/quicksight_parameter_create4.png" src="Images/quicksight_parameter_create4.png" /></p>
+</li>
+<li>
+<p>Enter <strong>OperatingSystem</strong> as the display name, style <strong>Single select drop down</strong>, values <strong>Link to a data set field</strong>, dataset <strong>your data set</strong>, column <strong>product_operating_system</strong>, click <strong>Add</strong>:
+<img alt="Images/quicksight_parameter_create5.png" src="Images/quicksight_parameter_create5.png" /></p>
+</li>
+<li>
+<p>Using the process above, Add the parameter <strong>Region</strong>:</p>
+<ul>
+<li>Name: Region</li>
+<li>Data type: String</li>
+<li>Values: Single value</li>
+<li>Dyanmic default</li>
+<li>Dataset: your dataset, product_location, product_location</li>
+<li>Add as: Control</li>
+<li>Control Display Name: Region</li>
+<li>Style: Single select drop down</li>
+<li>Values: link to data set field</li>
+<li>Data set: your data set</li>
+<li>Column: product_location</li>
+</ul>
+</li>
+<li>
+<p>Using the process above, Add the parameter <strong>Tenancy</strong>:</p>
+<ul>
+<li>Name: Tenancy</li>
+<li>Data type: String</li>
+<li>Values: Single value</li>
+<li>Dyanmic default</li>
+<li>Dataset: your dataset, product_tenancy, product_tenancy</li>
+<li>Add as: Control</li>
+<li>Control Display Name: Tenancy</li>
+<li>Style: Single select drop down</li>
+<li>Values: link to data set field</li>
+<li>Data set: your data set</li>
+<li>Column: product_tenancy</li>
+</ul>
+</li>
+<li>
+<p>Create an <strong>InstanceType</strong> parameter, datatype <strong>String</strong>, <strong>Single value</strong>, Static default value of <strong>.</strong> (a full stop):
+<img alt="Images/quicksight_parameter_create6.png" src="Images/quicksight_parameter_create6.png" /></p>
+</li>
+<li>
+<p>Click <strong>Control</strong>, 
+<img alt="Images/quicksight_parameter_create7.png" src="Images/quicksight_parameter_create7.png" /></p>
+</li>
+<li>
+<p>Display name <strong>InstanceType</strong>, style <strong>Text box</strong>, click <strong>Add</strong>:
+<img alt="Images/quicksight_parameter_create8.png" src="Images/quicksight_parameter_create8.png" /></p>
+</li>
+<li>
+<p>Click <strong>Filter</strong> and click <strong>Create one</strong>, select <strong>product_instance_type</strong>:
+<img alt="Images/quicksight_filter_create.png" src="Images/quicksight_filter_create.png" /></p>
+</li>
+<li>
+<p>Edit the filter, Filter type: </p>
+<ul>
+<li><strong>All visuals</strong></li>
+<li><strong>Custom filter</strong></li>
+<li><strong>Contains</strong></li>
+<li><strong>Use Parameters</strong></li>
+<li><strong>InstanceType</strong></li>
+<li>click <strong>Apply</strong>:
+<img alt="Images/quicksight_filter_edit.png" src="Images/quicksight_filter_edit.png" /></li>
+</ul>
+</li>
+<li>
+<p>Create a Parameter <strong>DaysToDisplay</strong>:</p>
+<ul>
+<li>Name: DaysToDisplay</li>
+<li>Data type: Integer</li>
+<li>Values: Single value</li>
+<li>Static default value: 90</li>
+<li>Click <strong>Create</strong>:
+<img alt="Images/quicksight_daystodisplay_create.png" src="Images/quicksight_daystodisplay_create.png" /></li>
+</ul>
+</li>
+<li>
+<p>Click <strong>Control</strong>:
+<img alt="Images/quicksight_daystodisplay_create2.png" src="Images/quicksight_daystodisplay_create2.png" /></p>
+</li>
+<li>
+<p>Enter a Display name <strong>DaysToDisplay</strong>, Style <strong>Text box</strong> and click <strong>Add</strong>: 
+<img alt="Images/quicksight_daystodisplay_create3.png" src="Images/quicksight_daystodisplay_create3.png" /></p>
+</li>
+<li>
+<p>Click on <strong>Filter</strong>, click <strong>+</strong>, and select <strong>line_item_usage_start_date</strong>:
+<img alt="Images/quicksight_add_filter.png" src="Images/quicksight_add_filter.png" /></p>
+</li>
+<li>
+<p>Click on the new filter:
+<img alt="Images/quicksight_add_filter2.png" src="Images/quicksight_add_filter2.png" /></p>
+</li>
+<li>
+<p>Select a filter type of:</p>
+<ul>
+<li><strong>All visuals</strong></li>
+<li><strong>Relative dates</strong></li>
+<li><strong>Days</strong></li>
+<li><strong>Last N days</strong></li>
+<li>select <strong>Use parameters</strong>, and accept to change the scope of the filter</li>
+<li>select the parameter <strong>DaysToDisplay</strong></li>
+<li>click <strong>Apply</strong>:
+<img alt="Images/quicksight_add_filter3.png" src="Images/quicksight_add_filter3.png" /></li>
+</ul>
+</li>
+<li>
+<p>Create a filter for <strong>product_operating_system</strong>:</p>
+<ul>
+<li><strong>All visuals</strong></li>
+<li>Type: Custom filter</li>
+<li>equals</li>
+<li>Use parameters, change the scope of this filter: yes</li>
+<li>Parameter: OperatingSystem
+<img alt="Images/quicksight_os_filter.png" src="Images/quicksight_os_filter.png" /> </li>
+</ul>
+</li>
+<li>
+<p>Create a filter for <strong>product_location</strong>:</p>
+<ul>
+<li><strong>All visuals</strong></li>
+<li>Type: Custom filter</li>
+<li>equals</li>
+<li>Use parameters, change the scope of this filter: yes</li>
+<li>Parameter: Region
+<img alt="Images/quicksight_os_filter.png" src="Images/quicksight_location_filter.png" /> </li>
+</ul>
+</li>
+<li>
+<p>Create a filter for <strong>product_tenancy</strong>:</p>
+<ul>
+<li><strong>All visuals</strong></li>
+<li>Type: Custom filter</li>
+<li>equals</li>
+<li>Use parameters, change the scope of this filter: yes</li>
+<li>Parameter: Tenancy
+<img alt="Images/quicksight_tenancy_filter.png" src="Images/quicksight_tenancy_filter.png" /> </li>
+</ul>
+</li>
+<li>
+<p>Click on <strong>Visualize</strong>, click <strong>Add</strong>, select <strong>Add calculated field</strong>:
+<img alt="Images/quicksight_add_calc_field1.png" src="Images/quicksight_add_calc_field1.png" /></p>
+</li>
+<li>
+<p>Field name <strong>HoursDisplayed</strong>, add the formula below and click <strong>Create</strong>:</p>
+<pre><code>distinct_count({line_item_usage_start_date})
+</code></pre>
+<p><img alt="Images/quicksight_add_calc_field2.png" src="Images/quicksight_add_calc_field2.png" />   </p>
+</li>
+<li>
+<p>Create a calculated field <strong>HoursRun</strong>, formula:</p>
+<pre><code>HoursDisplayed / (${DaysToDisplay} * 24)
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>PayOffMonth</strong>, formula:</p>
+<pre><code>ifelse(((((sum(spprice) / HoursDisplayed) * 730 * 12) / ((sum(odprice) / (${DaysToDisplay} * 24)) * 730))) &lt; 12,((((sum(spprice) / HoursDisplayed) * 730 * 12) / ((sum(odprice) / (${DaysToDisplay} * 24)) * 730))),12)
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>SavingsPlanReco</strong>, formula:</p>
+<pre><code>ifelse(PayOffMonth &lt; 12,percentile(spprice,10),0.00)
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>StartSPPrice</strong>, formula:</p>
+<pre><code>lag(min(spprice),[{line_item_usage_start_date} ASC],${DaysToDisplay} - 2,[{product_instance_type}])
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>Trend</strong>, formula:</p>
+<pre><code>(min(spprice) - {StartSPPrice}) / min(spprice)
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>First3QtrAvg</strong>, formula:</p>
+<pre><code>windowAvg(avg(spprice),[{line_item_usage_start_date} ASC],${DaysToDisplay},${DaysToDisplay} / 4,[{product_instance_type}])
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>LastQtrAvg</strong>, formula: </p>
+<pre><code>windowAvg(avg(spprice),[{line_item_usage_start_date} ASC],${DaysToDisplay} / 4,1,[{product_instance_type}])
+</code></pre>
+</li>
+<li>
+<p>Create a calculated field <strong>TrendAvg</strong>, formula:</p>
+<pre><code>(LastQtrAvg- First3QtrAvg) / First3QtrAvg
+</code></pre>
+</li>
+<li>
+<p>Add a Visual, click <strong>Add</strong>, select <strong>Add visual</strong>:
+<img alt="Images/quicksight_add_visual1.png" src="Images/quicksight_add_visual1.png" /></p>
+</li>
+<li>
+<p>Select a <strong>Table</strong> visualization, Group by <strong>product_instance_type</strong>, Add the <strong>values</strong>:</p>
+<ul>
+<li>SavingsPlanReco</li>
+<li>PayOffMonth</li>
+<li>discountrate, aggregate: average</li>
+<li>HoursRun, show as percent</li>
+<li>Label it <strong>Recommendations</strong>
+<img alt="Images/quicksight_add_visual2.png" src="Images/quicksight_add_visual2.png" /></li>
+</ul>
+</li>
+<li>
+<p>Add a <strong>Table</strong> visual, Group By: <strong>product_instance_type</strong> and <strong>line_item_usage_start_date aggreate: day</strong>, Add the <strong>values</strong>:</p>
+<ul>
+<li>instancecount aggregate: average</li>
+<li>Trend</li>
+<li>TrendAvg (show as percent)</li>
+<li>Label it <strong>Trends</strong>,
+<img alt="Images/quicksight_add_visual3.png" src="Images/quicksight_add_visual3.png" /></li>
+</ul>
+</li>
+<li>
+<p>Add a <strong>filter</strong> to <strong>this visual only</strong>:</p>
+<ul>
+<li>Filter on: StartSPPrice</li>
+<li>Type: Custom filter</li>
+<li>Operation: Greater than</li>
+<li>Value: -1</li>
+<li>Nulls: Exclude nulls</li>
+</ul>
+</li>
+<li>
+<p>Decrease the width of the date column as much as possible, its not needed</p>
+</li>
+</ol>
+<p><a name="format_dashboard"></a></p>
+<h2 id="5-format-the-recommendation-dashboard">5. Format the Recommendation Dashboard</h2>
+<p>We will format the recommendation dashboard, this will improve its appearance, and also includes some business rules.</p>
+<ol>
+<li>
+<p>Click on <strong>Themes</strong>, then click on <strong>Midnight</strong>:
+<img alt="Images/quicksight_themes.png" src="Images/quicksight_themes.png" /></p>
+</li>
+<li>
+<p>Select the <strong>Recommendations</strong> table, click the <strong>three dots</strong>, click <strong>Conditional formatting</strong>:
+<img alt="Images/quicksight_conditional_formatting1.png" src="Images/quicksight_conditional_formatting1.png" /></p>
+</li>
+<li>
+<p>Column: <strong>PayOffMonth</strong>, <strong>Add background color</strong>:
+<img alt="Images/quicksight_conditional_formatting2.png" src="Images/quicksight_conditional_formatting2.png" /></p>
+</li>
+<li>
+<p>Enter the formatting:</p>
+<ul>
+<li>Condition: Greater than</li>
+<li>Value: 9</li>
+<li>Color: red</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong>:
+<img alt="Images/quicksight_conditional_formatting3.png" src="Images/quicksight_conditional_formatting3.png" /></li>
+</ul>
+</li>
+<li>
+<p>Using the same process, add formatting for the column <strong>discountrate</strong>:</p>
+<ul>
+<li>Type: Background color</li>
+<li>Condition: Less than</li>
+<li>Value: 10 <strong>NOTE</strong> adjust this for your business rules, speak with your finance teams</li>
+<li>Color: red</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+</ul>
+</li>
+<li>
+<p>Under the <strong>discountrate</strong> formatting, Click <strong>Add text color</strong>:</p>
+<ul>
+<li>Condition: Greater than</li>
+<li>Value: 20</li>
+<li>Color: Green</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+</ul>
+</li>
+<li>
+<p>Using the same process, add formatting for the column <strong>HoursRun</strong>:</p>
+<ul>
+<li>Type: <strong>Add text color</strong></li>
+<li>Condition: Less than</li>
+<li>Value: 0.6</li>
+<li>Color: Red</li>
+<li>Click <strong>Add condition</strong></li>
+<li>Condition#2: Less than</li>
+<li>Value: 0.85</li>
+<li>Color: Orange</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+</ul>
+</li>
+<li>
+<p>Add formatting for the column <strong>SavingsPlanReco</strong>:</p>
+<ul>
+<li>Type: Add background color</li>
+<li>Format field based on: PayOffMonth</li>
+<li>Condition: Greater than</li>
+<li>Value: 9</li>
+<li>Color: Red</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+<li>Click <strong>Add text color</strong></li>
+<li>Format field based on: discountrate</li>
+<li>Aggregation: Average</li>
+<li>Condition: greater than</li>
+<li>Value: 20</li>
+<li>Color: Green</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+</ul>
+</li>
+<li>
+<p>Click <strong>SavingsPlanReco</strong>, <strong>Sort by Descending</strong>: <br />
+<img alt="Images/quicksight_conditional_formatting4.png" src="Images/quicksight_conditional_formatting4.png" /></p>
+</li>
+<li>
+<p>Select the <strong>Trends</strong> table, select conditional formatting, Column <strong>instancecount</strong>:</p>
+<ul>
+<li>Type: Add background color</li>
+<li>Condition: Less than</li>
+<li>Value: 5, speak with your team to set this at the appropriate level</li>
+<li>Color: red</li>
+<li>Click <strong>Add condition</strong></li>
+<li>Condition #2: Less than</li>
+<li>Value: 10</li>
+<li>Color: Orange</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+</ul>
+</li>
+<li>
+<p>Using the process above on the <strong>Trends</strong> table, Select the <strong>Trend</strong> column:</p>
+<ul>
+<li>Type: Add background color</li>
+<li>Condition: Less than</li>
+<li>Value 0</li>
+<li>Color: Red</li>
+<li>Click <strong>Apply</strong>, click <strong>Close</strong></li>
+<li>Click <strong>Add text color</strong></li>
+<li>Condition: Greater than</li>
+<li>Value: 0</li>
+<li>Color: Green</li>
+<li>Click <strong>Apply</strong>, Click <strong>Close</strong> </li>
+</ul>
+</li>
+<li>
+<p>Add the same formatting to the <strong>TrendAvg</strong> column as the <strong>Trend</strong> column.</p>
+</li>
+</ol>
+<p>Congratulations - you now have an analytics dashboard for Savings Plan recommendations!</p>
+<p><a name="tear_down"></a></p>
+<h2 id="6-teardown">6. Teardown</h2>
+<p>Savings Plan analysis is a critical requirement of cost optimization, so there is no tear down for this lab. </p>
+<p>The following resources were created in this lab:</p>
+<ul>
+<li>S3 Bucket: (custom name)</li>
+<li>Lambda Functions: SPTool_ODPricing_Download and SPTool_SPPricing_Download</li>
+<li>IAM Role: SPTool_Lambda</li>
+<li>IAM Policy: s3_pricing_lambda</li>
+<li>CloudWatch Event, Rule: SPTool-Pricing</li>
+<li>Glue Crawlers: OD_Pricing and SP_Pricing</li>
+<li>IAM Role: AWSGlueServiceRole-SPToolPricing</li>
+<li>Glue Database: Pricing</li>
+<li>Athena Views: pricing.pricing and cur.SP_USage</li>
+<li>QuickSight Permissions: your pricing S3 bucket</li>
+<li>QuickSight Dataset: SP_Usage</li>
+<li>QuickSight Analysis: sp_usage analysis</li>
+</ul>
+<p><a name="rate_lab"></a></p>
+<h2 id="7-rate-this-lab">7. Rate this lab</h2>
+<p><a href="http://wellarchitectedlabs.com/Cost_SP_Analysis_1star"><img alt="1 Star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_2star"><img alt="2 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_3star"><img alt="3 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_4star"><img alt="4 star" src="../../../common/images/star.png" /></a> <a href="http:///wellarchitectedlabs.com/Cost_SP_Analysis_5star"><img alt="5 star" src="../../../common/images/star.png" /></a></p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="README.html" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.html" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>
