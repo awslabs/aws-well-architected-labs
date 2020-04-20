@@ -11,7 +11,7 @@ This lab illustrates best practices for reliability as described in the [AWS Wel
 * How do you back up data?
 * How do you plan for disaster recovery (DR)?
 
-When this lab is completed, you will have created two S3 buckets in two different AWS regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- replication "looping" is prevented.
+Upon completion of this lab, you will have created two S3 buckets in two different AWS regions. When a new object is put into one of them, it will be replicated to the other. Objects will be encrypted in both buckets. Objects will be replicated once -- replication "looping" is prevented.
 
 ![ReplicationOverview](Images/ReplicationOverview.jpg)
 
@@ -238,7 +238,7 @@ To test bi-directional replication using the two rules your created, you will up
 
 * These are files that you will upload into each S3 bucket.
 * They should not be too big, as this will increase the time to upload it from your computer.
-* If you do not have files to use, you can [download file #1](Images/TestObject_OhioAwsEast.png) and [download file #2](TestObject_OregonAwsWest.png)
+* If you do not have files to use, you can [download file #1](Images/TestObject_OhioAwsEast.png) and [download file #2](Images/TestObject_OregonAwsWest.png)
 
 | File #1 | File #2 |
 |:---:|:---:|
