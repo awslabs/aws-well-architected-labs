@@ -107,18 +107,22 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
       1. Click on **Properties** and note what properties are _Enabled_
       1. Why are these properties _Enabled_?
 
+<!--- mkdocs cannot render markdown inside collapsed sections. Therefore using fenced code blocks-->
 <details>
 <summary>Click here to see why these properties are Enabled</summary>
 
-1. Versioning is Enabled: For S3 Replication, both source and destination buckets MUST have versioning enabled
+```
+1. Versioning is Enabled:
+For S3 Replication, both source and destination buckets MUST have versioning enabled
 
- ------------ 
+2. Default encryption is Enabled:
+In our exercise we are demonstrating replication of encrypted objects.
+It is a best practice to encrypt your data at rest.
 
-2. Default encryption is Enabled: In our exercise we are demonstrating replication of encrypted objects. It is a best practice to encrypt your data at rest.
-
- ------------ 
-
-3. Object-level logging is Enabled: This logging will be used later in the lab so you can better understand replication operations AWS takes on your behalf.
+3. Object-level logging is Enabled:
+This logging will be used later in the lab.
+It is used to better understand replication operations AWS takes on your behalf.
+```
 
 </details>
 
@@ -316,15 +320,15 @@ You are looking for three results, one for each of the test objects you uploaded
           * This is actually the _replication_ event for the object you put into the _west_ bucket
 * What is different between events where you uploaded the object into the bucket and events where the object was put into the bucket by replication?
 
+<!--- mkdocs cannot render markdown inside collapsed sections. Therefore using fenced code blocks-->
 <details>
 <summary>Click here to see answers</summary>
 
+```
 Replicated objects have a userIdentity.invokedBy value of "AWS Internal"
 
- ------------ 
-
 The userIdentity is different - see the arn and username
-
+```
 
 </details>
 

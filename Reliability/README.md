@@ -17,7 +17,7 @@ For more information about Reliability, read the
     * [Level 300: Implementing Health Checks and Managing Dependencies to Improve Reliability](300_Health_Checks_and_Dependencies/README.md)
 * Data Backup and Disaster Recovery:
     * [Level 200: Testing Backup and Restore of Data](200_Testing_Backup_and_Restore_of_Data/README.md)
-    * [Level 200: Implementing Bi-Directional Cross-Region Replication for Amazon Simple Storage Service (Amazon S3)](200_Bidirectional_Replication_for_S3)
+    * [Level 200: Implementing Bi-Directional Cross-Region Replication for Amazon Simple Storage Service (Amazon S3)](200_Bidirectional_Replication_for_S3/README.md)
 * Testing Resiliency and Chaos Engineering:
     * [Level 200: Testing for Resiliency of EC2](200_Testing_for_Resiliency_of_EC2/README.md)
     * [Level 300: Testing for Resiliency of EC2, RDS, and S3](300_Testing_for_Resiliency_of_EC2_RDS_and_S3/README.md)
