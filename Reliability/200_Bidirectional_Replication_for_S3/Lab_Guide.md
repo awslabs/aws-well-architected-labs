@@ -419,10 +419,11 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 
 ## References & useful resources
 
-* [What Is AWS Backup?](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html?ref=wellarchitected)
+* [What Is AWS Backup?](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html?ref=wellarchitected) - For backing up AWS resources _other_ than S3
 * [AWS re:Invent 2018: Architecture Patterns for Multi-Region Active-Active Applications (ARC209-R2)](https://youtu.be/2e29I3dA8o4?ref=wellarchitected)
 * [AWS re:Invent 2019: Backup-and-restore and disaster-recovery solutions with AWS (STG208)](https://youtu.be/7gNXfo5HZN8?ref=wellarchitected)
 * [S3: Cross-Region Replication](http://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html?ref=wellarchitected)
+* [Amazon S3 Replication Time Control for predictable replication time, backed by an SLA](https://aws.amazon.com/about-aws/whats-new/2019/11/amazon-s3-replication-time-control-for-predictable-replication-time-backed-by-sla?ref=wellarchitected)
 * [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) (see the Reliability pillar)
 * [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
 * [Our Friend Rufus](https://www.amazon.com/gp/help/customer/display.html?nodeId=3711811)
