@@ -2121,12 +2121,13 @@
       
         <li class="md-nav__item">
   <a href="#references-useful-resources" class="md-nav__link">
-    References &amp; useful resources
+    References &amp; useful resources 
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#additional-information-on-multi-region-strategies-for-disaster-recovery-dr" class="md-nav__link">
     Additional information on multi-region strategies for disaster recovery (DR)
   </a>
@@ -2145,6 +2146,11 @@
   <a href="#use-defined-recovery-strategies-to-meet-defined-recovery-objectives" class="md-nav__link">
     Use defined recovery strategies to meet defined recovery objectives 
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -3552,12 +3558,13 @@
       
         <li class="md-nav__item">
   <a href="#references-useful-resources" class="md-nav__link">
-    References &amp; useful resources
+    References &amp; useful resources 
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#additional-information-on-multi-region-strategies-for-disaster-recovery-dr" class="md-nav__link">
     Additional information on multi-region strategies for disaster recovery (DR)
   </a>
@@ -3576,6 +3583,11 @@
   <a href="#use-defined-recovery-strategies-to-meet-defined-recovery-objectives" class="md-nav__link">
     Use defined recovery strategies to meet defined recovery objectives 
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -3652,6 +3664,7 @@
 <li><a href="#configure_replication">Configure bi-directional cross-region replication (CRR) for S3 buckets</a></li>
 <li><a href="#test_replication">Test bi-directional cross-region replication (CRR)</a></li>
 <li><a href="#tear_down">Tear down this lab</a></li>
+<li><a href="#resources">References &amp; useful resources</a></li>
 </ol>
 <h2 id="1-deploy-the-infrastructure">1. Deploy the infrastructure <a name="deploy_infra"></a></h2>
 <p>You will create two Amazon S3 buckets in two different AWS regions. The <strong>Ohio</strong> region (also known as <strong>us-east-2</strong>) will be referred to throughout this lab as the <em>east</em> S3 bucket, and <strong>Oregon</strong> (also known as <strong>us-west-2</strong>) will be referred to as the <em>west</em> S3 bucket.</p>
@@ -4118,25 +4131,27 @@ The userIdentity is different - see the arn and username
 <li>First delete the <strong>S3-CRR-lab-east</strong> CloudFormation stack in <strong>Ohio</strong> (<strong>us-east-2</strong>)</li>
 <li>Then delete the <strong>S3-CRR-lab-west</strong> CloudFormation stack in <strong>Oregon</strong> (<strong>us-west-2</strong>)</li>
 </ol>
+<p><strong>Troubleshooting</strong>: if your CloudFormation stack deletion fails with status <em>DELETE_FAILED</em> and error (from the <strong>Events</strong> tab) <em>Cannot delete entity, must detach all policies first</em> then <a href="Documentation/DetachIAMPolicy.html">see these additional instructions</a></p>
 <hr />
-<h2 id="references-useful-resources">References &amp; useful resources</h2>
+<h2 id="references-useful-resources">References &amp; useful resources <a name="resources"></a></h2>
 <ul>
-<li><a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html?ref=wellarchitected">What Is AWS Backup?</a></li>
+<li><a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html?ref=wellarchitected">What Is AWS Backup?</a> - For backing up AWS resources <em>other</em> than S3</li>
 <li><a href="https://youtu.be/2e29I3dA8o4?ref=wellarchitected">AWS re:Invent 2018: Architecture Patterns for Multi-Region Active-Active Applications (ARC209-R2)</a></li>
 <li><a href="https://youtu.be/7gNXfo5HZN8?ref=wellarchitected">AWS re:Invent 2019: Backup-and-restore and disaster-recovery solutions with AWS (STG208)</a></li>
 <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html?ref=wellarchitected">S3: Cross-Region Replication</a></li>
+<li><a href="https://aws.amazon.com/about-aws/whats-new/2019/11/amazon-s3-replication-time-control-for-predictable-replication-time-backed-by-sla?ref=wellarchitected">Amazon S3 Replication Time Control for predictable replication time, backed by an SLA</a></li>
 <li><a href="https://aws.amazon.com/architecture/well-architected/">Well-Architected Framework</a> (see the Reliability pillar)</li>
 <li><a href="https://wa.aws.amazon.com/wat.pillar.reliability.en.html">Well-Architected best practices for reliability</a></li>
 <li><a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=3711811">Our Friend Rufus</a></li>
 </ul>
-<h2 id="additional-information-on-multi-region-strategies-for-disaster-recovery-dr">Additional information on multi-region strategies for disaster recovery (DR)</h2>
-<h3 id="recovery-time-objective-rto-and-recovery-point-objective-rpo">Recovery Time Objective (RTO) and Recovery Point Objective (RPO)</h3>
+<h3 id="additional-information-on-multi-region-strategies-for-disaster-recovery-dr">Additional information on multi-region strategies for disaster recovery (DR)</h3>
+<h4 id="recovery-time-objective-rto-and-recovery-point-objective-rpo">Recovery Time Objective (RTO) and Recovery Point Objective (RPO)</h4>
 <p>These terms are most often associated with Disaster Recovery (DR), which are a set of objectives and strategies to recover workload availability in the case of a disaster</p>
 <ul>
 <li><strong>Recovery time objective (RTO)</strong> is the overall length of time that a workload’s components can be in the recovery phase, and therefore not available, before negatively impacting the organization’s mission or mission/business processes.</li>
 <li><strong>Recovery point objective (RPO</strong>) is the overall length of time that a workload’s data can be unavailable, before negatively impacting the organization’s mission or mission/business processes.</li>
 </ul>
-<h3 id="use-defined-recovery-strategies-to-meet-defined-recovery-objectives">Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a></h3>
+<h4 id="use-defined-recovery-strategies-to-meet-defined-recovery-objectives">Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a></h4>
 <p>If necessary, when architecting a multi-region strategy for your workload, you should choose one of the following strategies. They are listed in increasing order of complexity, and decreasing order of RTO and RPO. <em>DR Region</em> refers to an AWS Region other than the one used for your workload (or any AWS Region if your workload is on premises).</p>
 <p><img alt="MultiRegionStrategies" src="Images/MultiRegionStrategies.png" /></p>
 <ul>
