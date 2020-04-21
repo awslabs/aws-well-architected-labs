@@ -29,7 +29,6 @@ This bi-directional replication occurs automatically. Looping is prevented with 
 1. [Tear down this lab](#tear_down)
 1. [References & useful resources](#resources)
 
-
 ## 1. Deploy the infrastructure <a name="deploy_infra"></a>
 
 You will create two Amazon S3 buckets in two different AWS regions. The **Ohio** region (also known as **us-east-2**) will be referred to throughout this lab as the _east_ S3 bucket, and **Oregon** (also known as **us-west-2**) will be referred to as the _west_ S3 bucket.
@@ -417,7 +416,8 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 1. First delete the **S3-CRR-lab-east** CloudFormation stack in **Ohio** (**us-east-2**)
 1. Then delete the **S3-CRR-lab-west** CloudFormation stack in **Oregon** (**us-west-2**)
 
-**Troubleshooting**: if your CloudFormation stack deletion fails with status _DELETE_FAILED_ and error (from the **Events** tab) _Cannot delete entity, must detach all policies first_ then [see these additional instructions](Documentation/DetachIAMPolicy.md).
+**Troubleshooting**: if your CloudFormation stack deletion fails with status _DELETE_FAILED_ and error (from the **Events** tab) _Cannot delete entity, must detach all policies first_ then [see these additional instructions](Documentation/DetachIAMPolicy.md)
+
 ---
 
 ## References & useful resources <a name="resources"></a>
