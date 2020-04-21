@@ -27,6 +27,8 @@ This bi-directional replication occurs automatically. Looping is prevented with 
 1. [Configure bi-directional cross-region replication (CRR) for S3 buckets](#configure_replication)
 1. [Test bi-directional cross-region replication (CRR)](#test_replication)
 1. [Tear down this lab](#tear_down)
+1. [References & useful resources](#resources)
+
 
 ## 1. Deploy the infrastructure <a name="deploy_infra"></a>
 
@@ -415,9 +417,10 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 1. First delete the **S3-CRR-lab-east** CloudFormation stack in **Ohio** (**us-east-2**)
 1. Then delete the **S3-CRR-lab-west** CloudFormation stack in **Oregon** (**us-west-2**)
 
+**Troubleshooting**: if your CloudFormation stack deletion fails with status _DELETE_FAILED_ and error (from the **Events** tab) _Cannot delete entity, must detach all policies first_ then [see these additional instructions](Documentation/DetachIAMPolicy.md).
 ---
 
-## References & useful resources
+## References & useful resources <a name="resources"></a>
 
 * [What Is AWS Backup?](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html?ref=wellarchitected) - For backing up AWS resources _other_ than S3
 * [AWS re:Invent 2018: Architecture Patterns for Multi-Region Active-Active Applications (ARC209-R2)](https://youtu.be/2e29I3dA8o4?ref=wellarchitected)
@@ -428,16 +431,16 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 * [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
 * [Our Friend Rufus](https://www.amazon.com/gp/help/customer/display.html?nodeId=3711811)
 
-## Additional information on multi-region strategies for disaster recovery (DR)
+### Additional information on multi-region strategies for disaster recovery (DR)
 
-### Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
+#### Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
 
 These terms are most often associated with Disaster Recovery (DR), which are a set of objectives and strategies to recover workload availability in the case of a disaster
 
 * **Recovery time objective (RTO)** is the overall length of time that a workload’s components can be in the recovery phase, and therefore not available, before negatively impacting the organization’s mission or mission/business processes.
 * **Recovery point objective (RPO**) is the overall length of time that a workload’s data can be unavailable, before negatively impacting the organization’s mission or mission/business processes.
 
-### Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a>
+#### Use defined recovery strategies to meet defined recovery objectives <a name="multi_region_strategy"></a>
 
 If necessary, when architecting a multi-region strategy for your workload, you should choose one of the following strategies. They are listed in increasing order of complexity, and decreasing order of RTO and RPO. _DR Region_ refers to an AWS Region other than the one used for your workload (or any AWS Region if your workload is on premises).
 
