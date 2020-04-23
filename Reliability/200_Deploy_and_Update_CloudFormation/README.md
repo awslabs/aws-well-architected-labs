@@ -8,11 +8,13 @@ This hands-on lab will guide you through the steps to improve reliability of a s
 
 The skills you learn will help you build resilient workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
+![StackUpdates](Images/StackUpdates.png)
+
 ## Goals
 
 By the end of this lab, you will be able to:
 
-* Automate change
+* Automate change for your workload
 * Document and track changes in code
 * Implement infrastructure as a service
 

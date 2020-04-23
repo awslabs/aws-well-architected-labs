@@ -121,6 +121,10 @@ nav:
             - Incident Response: 'Security/Quest_Incident_Response/README.md'
     - Reliability:
         - Overview: 'Reliability/README.md'
+        - Implement Change:
+            - 200 Deploy and Update CloudFormation:
+                - Lab Overview: 'Reliability/200_Deploy_and_Update_CloudFormation/README.md'
+                - Lab Guide: 'Reliability/200_Deploy_and_Update_CloudFormation/Lab_Guide.md'
         - Mitigate or Withstand Failures:
             - 300 Health Checks and Dependencies:
                 - Lab Overview: 'Reliability/300_Health_Checks_and_Dependencies/README.md'
