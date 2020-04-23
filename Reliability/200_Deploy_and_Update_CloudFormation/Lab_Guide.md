@@ -7,7 +7,7 @@ This lab illustrates best practices for reliability as described in the [AWS Wel
 * Design Principle: **Manage change in automation**: Changes to your infrastructure should be made using automation. These changes then can be tracked and reviewed.
 * Best practice: Deploy changes with automation when you need to implement change
 
-When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.
+When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance.
 
 ## Table of Contents
 
@@ -207,9 +207,10 @@ If you did _not_ see an error you may proceed
     * Note the name is `cloudformationlab-mys3bucket-<some_random_string>`.
 
 The name for the S3 bucket was auto-generated based on your CloudFormation stack name (converted to lowercase), plus the string "mys3bucket", plus a randomly generated string.
-    * The name for an S3 bucket must be unique across all S3 buckets in AWS
-    * Your bucket was assigned an auto-generated name because you did not specify a name in the S3 bucket properties in your CloudFormation template
-    * In the next exercise you will add a name property for your S3 bucket and update the deployment
+
+* The name for an S3 bucket must be unique across all S3 buckets in AWS
+* Your bucket was assigned an auto-generated name because you did not specify a name in the S3 bucket properties in your CloudFormation template
+* In the next exercise you will add a name property for your S3 bucket and update the deployment
 
 ### 3.4 Assign name property for the S3 bucket
 
@@ -220,10 +221,10 @@ For this task you are going to add a Parameter where you can specify the bucket 
 
             # S3 Bucket
             S3BucketName:
-                Type: String
-                Description: The name for the S3 bucket - must be unique across all of AWS (3-63 lowercase letters or numbers)
-                AllowedPattern: '^[a-z0-9]{5,40}$'
-                ConstraintDescription: 3-63 characters; must contain only lowercase letters or numbers
+              Type: String
+              Description: The name for the S3 bucket - must be unique across all of AWS (3-63 lowercase letters or numbers)
+              AllowedPattern: '^[a-z0-9]{5,40}$'
+              ConstraintDescription: 3-63 characters; must contain only lowercase letters or numbers
     * It is a string for which we have configured certain constraints
     * The **AllowedPattern** is a _regular expression_ specifying only lowercase letters or numbers and a string length between 3-63 characters
     * This satisfies the constraints on what is allowed in an S3 bucket name
@@ -232,9 +233,9 @@ For this task you are going to add a Parameter where you can specify the bucket 
     * Be caution to maintin the two-space indents where indicated
 
             MyS3Bucket:
-                Type: AWS::S3::Bucket
-                Properties:
-                  BucketName: !Ref S3BucketName
+              Type: AWS::S3::Bucket
+              Properties:
+                BucketName: !Ref S3BucketName
 
     * The **Properties** label defines that the items that follow (indented underneath) are preopeties of the S3 bucket
     * For the **BucketName** property you are specifying a reference to another value in the template. Specifcially you are indicating that the string entered as the **S3BucketName** parameter should be used as the name of the bucket
@@ -275,9 +276,9 @@ For this exercise we wil assume you now know how to edit your CloudFormation tem
 In the **Parameters** section of your template, look at the **LatestAmiId** parameter.
 
     LatestAmiId:
-        Description: Gets the latest AMI from Systems Manager Parameter store
-        Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-        Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+      Description: Gets the latest AMI from Systems Manager Parameter store
+      Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+      Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 This is a special parameter. This parameter uses the **AWS Systems Manager Parameter Store** to retrieve the latest AMI (specified in the *Default* parameter, which in this case is *Amazon Linux 2*) for the stack's region. This makes it easy to deploy stacks in different regions without having to manually specify an AMI ID for every region.
 
@@ -324,7 +325,9 @@ To download a sample solution, right-click and download this link:
 
 | Important |
 |:---:|
-|When you initiate the update, change the **EC2SecurityEnabledParam** value on the **Parameters** screen to `true`|
+|When you initiate the CloudFormation update|
+|Change the following **Parameter**|
+|**EC2SecurityEnabledParam** must be set to value `true`|
 |This will tell the template to create resouces your EC2 instance will need such as the Security Group and IAM Role|
 
 * This deployment of the CloudFormation stack will take about three minutes
@@ -353,6 +356,8 @@ The stack will show *DELETE_IN_PROGRESS*. After a few minutes, the stack will di
 ---
 
 ## References & useful resources
+* [What is AWS CloudFormation?](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
+* CloudFormation [AWS Resource and Property Types Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 
 ---
 
