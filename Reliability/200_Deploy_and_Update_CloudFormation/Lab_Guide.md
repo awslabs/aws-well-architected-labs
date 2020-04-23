@@ -406,7 +406,7 @@ In this task you will update your CloudFormation template to modify the deployed
     * The `!GetAtt` function can return various attributes of the resource. In this case the public DNS name of the EC2 instance.
     * NOTE: if you used a Logical ID _other_ than `MyEC2Instance` when you added your EC2 resource, then you should use that name here
     * To download a sample solution, right-click and download this link:
-    [simple_stack_plus_s3_ec2.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml)
+    [simple_stack_plus_s3_ec2_server.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml)
 
 1. Update the CloudFormation stack using the modified template
 1. After deployment is complete, click on the **Outputs** tab for the CloudFormation stack
