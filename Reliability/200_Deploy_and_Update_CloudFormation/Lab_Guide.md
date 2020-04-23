@@ -27,10 +27,10 @@ You will begin by deploying a CloudFormation stack that creates a simple VPC as 
 
 1. Download the [simple_stack.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack.yaml) CloudFormation template
 1. Open this file in a Text Editor
-      * Preferably use an editor that is [YAML](https://en.wikipedia.org/wiki/YAML) aware like vi/vim, VS Code, or Notepad++
+      * Preferably use an editor that is [YAML](https://yaml.org/) aware like vi/vim, VS Code, or Notepad++
       * Do NOT use a Word Processor
 
-The template is written in a format called [YAML](https://en.wikipedia.org/wiki/YAML), which is commonly used for configuration files. The format of the file is important, especially indents and hyphens. CloudFormation templates can also be written in JSON.
+The template is written in a format called [YAML](https://yaml.org/), which is commonly used for configuration files. The format of the file is important, especially indents and hyphens. CloudFormation templates can also be written in JSON.
 
 Look through the file. You will notice several sections:
 
@@ -231,6 +231,7 @@ For this task you are going to add a Parameter where you can specify the bucket 
     * The **AllowedPattern** is a _regular expression_ specifying only lowercase letters or numbers and a string length between 3-63 characters
     * This satisfies the constraints on what is allowed in an S3 bucket name
     * It is actually more constrictive than what is allowed.  See **Rules for Bucket Naming** under [Bucket Restrictions and Limitations](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) for more details.
+
 1. Add two more lines to your S3 bucket under in the **Resources** section of your template so it looks like this
     * Be caution to maintin the two-space indents where indicated
 
@@ -241,6 +242,7 @@ For this task you are going to add a Parameter where you can specify the bucket 
 
     * The **Properties** label defines that the items that follow (indented underneath) are properties of the S3 bucket
     * For the **BucketName** property you are specifying a reference to another value in the template. Specifically you are indicating that the string entered as the **S3BucketName** parameter should be used as the name of the bucket
+
 1. Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation)
 1. Click on **Stacks**
 1. Click on the **CloudFormationLab** stack
@@ -249,15 +251,18 @@ For this task you are going to add a Parameter where you can specify the bucket 
 1. Click **Upload a template file**
 1. Click **Choose file**
     * Select `simple_stack,yaml`, your edited CloudFormation template file
+
 1. Click **Next**  -- Look for any errors reported
 1. On the **Specify stack details** look at the Parameters
     * You must enter a value for **S3BucketName** (you must replace the deafult value)
     * Remember it must be a name that no other bucket in all of AWS is already using
+
 1. Click **Next** again, until you arrive at the **Review CloudFormationLab** screen
     1. Scroll down to **Change set preview** and note your S3 bucket will be modified
     1. Note where it says **Replacement** is **True**. This means it will actually delete the current bucket and replace it with a new one with the newly specified name
     1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
     1. Click **Create stack**
+
 1. When stack **status** is _CREATE_COMPLETE_ for your update (about one minute) then continue
 
 * Under the resources see your newly named S3 bucket
@@ -367,28 +372,28 @@ In this task you will update your CloudFormation template to modify the deployed
 
     * The final EC2 instance resource should look like this:
 
-          MyEC2Instance:
-            Type: AWS::EC2::Instance
-            Properties: 
-            IamInstanceProfile: !Ref Web1InstanceInstanceProfile
-            ImageId: !Ref LatestAmiId
-            InstanceType: !Ref InstanceType
-            Tags:
-              - Key: Name
-              Value: Simple Server
-            NetworkInterfaces:
-              - AssociatePublicIpAddress: "true"
-              DeviceIndex: "0"
-              GroupSet: 
-                - Ref: PublicSecurityGroup
-              SubnetId: 
-                Ref: PublicSubnet1
-            UserData:
-              Fn::Base64: |
-                #!/bin/bash
-                yum -y update
-                sudo yum install -y httpd
-                sudo systemctl start httpd
+            MyEC2Instance:
+              Type: AWS::EC2::Instance
+              Properties: 
+              IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+              ImageId: !Ref LatestAmiId
+              InstanceType: !Ref InstanceType
+              Tags:
+                - Key: Name
+                Value: Simple Server
+              NetworkInterfaces:
+                - AssociatePublicIpAddress: "true"
+                DeviceIndex: "0"
+                GroupSet: 
+                  - Ref: PublicSecurityGroup
+                SubnetId: 
+                  Ref: PublicSubnet1
+              UserData:
+                Fn::Base64: |
+                  #!/bin/bash
+                  yum -y update
+                  sudo yum install -y httpd
+                  sudo systemctl start httpd
 
 1. Add an output value so you can easily find the public DNS of the EC2 instance
     * Insert the following YAML under the **Outputs** section of your CloudFormation template
