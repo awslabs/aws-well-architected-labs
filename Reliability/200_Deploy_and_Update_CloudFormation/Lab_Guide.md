@@ -4,10 +4,10 @@
 
 This lab illustrates best practices for reliability as described in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) Reliability pillar.
 
-* Design Principle: **Manage change in automation**: Changes to your infrastructure should be made using automation. These changes then can be tracked and reviewed.
-* Best practice: Deploy changes with automation when you need to implement change
+* **Manage change in automation**: Changes to your infrastructure should be made using automation. These changes then can be tracked and reviewed.
+    * Best practice: Deploy changes with automation when you need to implement change
 
-When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance.
+When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@ You will begin by deploying a CloudFormation stack that creates a simple VPC as 
 
 1. Download the [simple_stack.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack.yaml) CloudFormation template
 1. Open this file in a Text Editor
-      * Preferably use an editor that is [YAML](https://en.wikipedia.org/wiki/YAML) aware liek vi/vim or Notepad++
+      * Preferably use an editor that is [YAML](https://en.wikipedia.org/wiki/YAML) aware like vi/vim, VS Code, or Notepad++
       * Do NOT use a Word Processor
 
 The template is written in a format called [YAML](https://en.wikipedia.org/wiki/YAML), which is commonly used for configuration files. The format of the file is important, especially indents and hyphens. CloudFormation templates can also be written in JSON.
@@ -36,10 +36,11 @@ Look through the file. You will notice several sections:
 
 * The [Parameters section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) is used to prompt for inputs that can be used elsewhere in the template. The template is asking for several inputs, but also provides default values for each one. Look through these and start to reason about what each one is.
 
-* The [Conditions section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html) is where you can setup "if-then"-like control of what happens during template deployment. It defines the circumstances under which entities are created or configured.
+* The [Conditions section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html) is where you can setup _if/then_-like control of what happens during template deployment. It defines the circumstances under which entities are created or configured.
 
-* The [Resources section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html) is the "heart" of the template. It is where you define the infrastructure to be deployed. Look at the first resource defined.
-    * It is the VPC itself
+* The [Resources section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html) is the "heart" of the template. It is where you define the infrastructure to be deployed. Look at the _first_ resource defined.
+    * It is the VPC (Amazon Virtual Private Cloud)
+    * It has a _logical ID_ which in this case is `SimpleVPC`. This logical ID is how we refer to the VPC resource within the CloudFormation template.
     * It has a `Type` which tells CloudFormation which type of resource to create
     * And it has `Properties` that define the values used to create the VPC
 
@@ -49,7 +50,8 @@ Look through the file. You will notice several sections:
 
 |CloudFormation tip|
 |:---:|
-|When editing CloudFormation templates written in YAML, be extra caution that you maintain the correct number of spaces for each indentation|
+|When editing CloudFormation templates written in YAML, be extra cautious that you maintain the correct number of spaces for each indentation|
+|Indents are always in increments of two spaces|
 
 You will now use this **template** to launch a **CloudFormation stack** that will deploy AWS resources in your AWS account.
 
@@ -64,7 +66,7 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
        ![CFNUploadTemplateFile](Images/CFNUploadTemplateFile.png)
 
 1. Click **Next**
-1. For **Stack name** use **CloudFormationLab**
+1. For **Stack name** use `CloudFormationLab`
 1. **Parameters**
     1. Look over the Parameters and their values. We will work with these later in the lab.
     1. Leave all Parameters with their default values and click **Next**
@@ -78,15 +80,17 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
     * Click on the **Events** tab
     * Scroll through the listing. It shows (in reverse order) the activities performed by CloudFormation, such as starting to create a resource and then completing the resource creation.
     * Any errors encountered during the creation of the stack will be listed in this tab.
-  ![StackCreationStarted](Images/CFNStackInProgress.png)  
-  Deployment will take approximately 30 seconds to deploy. When it shows **status** _CREATE_COMPLETE_, then you are finished with this step.
+
+      ![StackCreationStarted](Images/CFNStackInProgress.png)  
+
+    * Deployment will take approximately 30 seconds to deploy. When it shows **status** _CREATE_COMPLETE_, then you are finished with this step.
 
 1. Click the **Resources** tab. The listing shows all the resources that were created.
 
 ### 1.3 Understanding the deployment
 
 * How many resources were created?
-* Look at the `simple_stack.yaml` template (in your text editor). How many resources are defined here?
+* Look at the `simple_stack.yaml` template (in your text editor). How many resources are defined there?
 * Investigate:
     * Why did the deployment not create all of the resources?
     * After the horizontal rule below, this will be explained. Try to figure this out before continuing.
@@ -96,6 +100,7 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
 * The **Condition** `PublicEnabled` is set using the **Parameter** `PublicEnabledParam`
 * Similarly the **Condition** `EC2SecurityEnabled` is set using the **Parameter** `EC2SecurityEnabledParam`
 * The Default value for both of these **Parameters** is `false`
+* And therefore both conditions  `PublicEnabled` and `EC2SecurityEnabled` evaluate to `false`
 * Look in the template at how the `PublicEnabled` and `EC2SecurityEnabled` **Conditions** are used
 * The `Condition: <Condition_Name>` statement on a resource means
     * If this condition is `true`
@@ -109,7 +114,7 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
 1. Return to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation)
 1. Click the **Resources** tab for the **CloudFormationLab** stack. The listing shows all the resources that were created. In this case just the VPC
 1. Note the **Logical ID** for the VPC is _SimpleVPC_. Look at the CloudFormation template file and determine where this name came from
-1. Under the **Resources** tab click on the **Physical ID** link for_SimpleVPC_
+1. Under the **Resources** tab click on the **Physical ID** link for _SimpleVPC_
     * This takes you to the VPC console where you can see the VPC you created
     * Select the checkbox next to your VPC (if not already selected)
     * Look at the VPC attributes under the **Description** tab.  How do these compare to the CloudFormation template?
@@ -126,7 +131,7 @@ In this task, you will gain experience changing CloudFormation stack parameters 
 1. Click on **Stacks**
 1. Click on the **CloudFormationLab** stack
 1. Click **Update**
-1. Leave **Use current template** selected. You have not changed the template
+1. Leave **Use current template** selected. You have not yet changed the template
 1. Click **Next**
 1. On the **Specify stack details** screen you now have the opportunity to change the **Parameters**
     * Change **PublicEnabledParam** to `true`
@@ -143,7 +148,7 @@ In this task, you will gain experience changing CloudFormation stack parameters 
 * Changing only one parameter, you re-deployed the stack which resulted in additional resources deployed
 
 1. Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation) (if not already there)
-1. Click the **Resources** tab for the **CloudFormationLab** stack. 
+1. Click the **Resources** tab for the **CloudFormationLab** stack.
       * The listing now shows the VPC as before, plus additional resources required to enable us to deploy resources into the VPC that have access to the internet
       * Click through on several of the **Physical ID** links and explore these resources
 
@@ -159,11 +164,11 @@ In this task, you will gain experience in editing a CloudFormation template and 
 ### 3.1 Edit the CloudFormation template file
 
 1. From the [Amazon S3 Template Snippets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-s3.html) documentation page, copy the _YAML_ example for **Creating an Amazon S3 Bucket with Defaults**
-1 Edit the **simple_stack.yaml** file you downloaded earlier to include an Amazon S3 bucket
+1. Edit the `simple_stack.yaml` file you downloaded earlier to include an Amazon S3 bucket
     * Under the **Resources** section add the snippet you copied
-    * **You do not require any Properties for this bucket resource**
+    * **You do not require any Properties** for this new S3 bucket resource
     * Indents are important in YAML -- use two spaces for each indent. Look at the other resources for guidance
-    * The correct solution is actually **only needs two lines** -- one for the identifier and one for the Type
+    * The correct solution **only needs two lines** -- one for the Logical ID and one for the Type
     * Save the template
 
 Once you have edited the template, continue with the following steps to update
@@ -181,14 +186,9 @@ the stack.
     * Select `simple_stack,yaml`, your edited CloudFormation template file
 1. Click **Next**
 
-* At this point you may see an error:
-    * You remain on the **Update stack** screen
-    * A red banner across the top of the page alerts you to an error with your template 
+* At this point you may see an error where you remain on the **Update stack** screen and a red banner across the top of the page displays an error message
 * If you see **Template format error** then:
     * Check the indentation and punctuation in your `simple_stack,yaml` file
-    * Once you have corrected the error, click **Choose file** again to reload you new corrected file
-* If you see **Invalid template resource property**
-    * Check that the properties you specified for the resource you added match the properties in the documentation.
     * Once you have corrected the error, click **Choose file** again to reload you new corrected file
 
 If you did _not_ see an error you may proceed
@@ -202,19 +202,19 @@ If you did _not_ see an error you may proceed
     1. Click **Create stack**
 1. When stack **status** is _CREATE_COMPLETE_ for your update (about one minute) then continue
 1. Click the **Resources** tab
-    * Note your new S3 bucket is listed among the resources deployed 
+    * Note your new S3 bucket is listed among the resources deployed
     * Click on the **Physical ID** of the S3 bucket to view the bucket on the S3 console
     * Note the name is `cloudformationlab-mys3bucket-<some_random_string>`.
 
-The name for the S3 bucket was auto-generated based on your CloudFormation stack name (converted to lowercase), plus the string "mys3bucket", plus a randomly generated string.
+The name for the S3 bucket was auto-generated by CloudFormation based on your CloudFormation stack name (converted to lowercase), plus the string "mys3bucket", plus a randomly generated string.
 
 * The name for an S3 bucket must be unique across all S3 buckets in AWS
 * Your bucket was assigned an auto-generated name because you did not specify a name in the S3 bucket properties in your CloudFormation template
-* In the next exercise you will add a name property for your S3 bucket and update the deployment
+* In the next exercise you will add a bucket name property for your S3 bucket and update the deployment
 
 ### 3.4 Assign name property for the S3 bucket
 
-For this task you are going to add a Parameter where you can specify the bucket name, and a property on the S3 bucket resource that uses this paramter.
+For this task you are going to add a Parameter where you can specify the bucket name, and a property on the S3 bucket resource that uses this parameter.
 
 1. Under the **Parameters** section of your `simple_stack.yaml` template look at the **S3BucketName** parameter
     * It is not currently used in the template
@@ -223,8 +223,10 @@ For this task you are going to add a Parameter where you can specify the bucket 
             S3BucketName:
               Type: String
               Description: The name for the S3 bucket - must be unique across all of AWS (3-63 lowercase letters or numbers)
+              Default: replaceme
               AllowedPattern: '^[a-z0-9]{5,40}$'
               ConstraintDescription: 3-63 characters; must contain only lowercase letters or numbers
+
     * It is a string for which we have configured certain constraints
     * The **AllowedPattern** is a _regular expression_ specifying only lowercase letters or numbers and a string length between 3-63 characters
     * This satisfies the constraints on what is allowed in an S3 bucket name
@@ -237,8 +239,8 @@ For this task you are going to add a Parameter where you can specify the bucket 
               Properties:
                 BucketName: !Ref S3BucketName
 
-    * The **Properties** label defines that the items that follow (indented underneath) are preopeties of the S3 bucket
-    * For the **BucketName** property you are specifying a reference to another value in the template. Specifcially you are indicating that the string entered as the **S3BucketName** parameter should be used as the name of the bucket
+    * The **Properties** label defines that the items that follow (indented underneath) are properties of the S3 bucket
+    * For the **BucketName** property you are specifying a reference to another value in the template. Specifically you are indicating that the string entered as the **S3BucketName** parameter should be used as the name of the bucket
 1. Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation)
 1. Click on **Stacks**
 1. Click on the **CloudFormationLab** stack
@@ -249,10 +251,11 @@ For this task you are going to add a Parameter where you can specify the bucket 
     * Select `simple_stack,yaml`, your edited CloudFormation template file
 1. Click **Next**  -- Look for any errors reported
 1. On the **Specify stack details** look at the Parameters
-    * You must enter a value for **S3BucketName**
-    * Remember is must be a name that no other bucket in all of AWS already has
+    * You must enter a value for **S3BucketName** (you must replace the deafult value)
+    * Remember it must be a name that no other bucket in all of AWS is already using
 1. Click **Next** again, until you arrive at the **Review CloudFormationLab** screen
     1. Scroll down to **Change set preview** and note your S3 bucket will be modified
+    1. Note where it says **Replacement** is **True**. This means it will actually delete the current bucket and replace it with a new one with the newly specified name
     1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
     1. Click **Create stack**
 1. When stack **status** is _CREATE_COMPLETE_ for your update (about one minute) then continue
@@ -260,8 +263,12 @@ For this task you are going to add a Parameter where you can specify the bucket 
 * Under the resources see your newly named S3 bucket
 
 **Troubleshooting**
+
+* If when trying to upload your new template you see **Invalid template resource property**
+    * Check that the properties you specified for the resource you added match the properties in the documentation.
+    * Once you have corrected the error, click **Choose file** again to reload you new corrected file
 * If your CloudFormation stack fails, then click on the **Events** tab and scroll down to find the source of the error
-* If you see a message like `<your_chosen_bucket_name> already exists` then re-do the CloudFormation update steps, but specify a more unique bucket name
+    * If you see a message like `<your_chosen_bucket_name> already exists` then re-do the CloudFormation update steps, but specify a more unique bucket name
 
 ## 4. Add an Amazon EC2 Instance to the Stack <a name="add_ec2"></a>
 
@@ -287,58 +294,119 @@ This is a special parameter. This parameter uses the **AWS Systems Manager Param
     * Click on the **CloudFormationLab** stack
     * Click on the **Parameters** tab
 * Look at the **Value** and **Resolved value** for **LatestAmiId**
-    * You see here how it resolves to an AMI IS
+    * You see here how it resolves to an AMI ID
 
 For more details of this method, see: [AWS Compute Blog: Query for the latest Amazon Linux AMI IDs using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/)
 
 ### 4.2 Add the EC2 instance resource to your CloudFormation template and deploy it
 
-Use this documentation page for assistance:
-    [AWS::EC2::Instance](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html)
-* Use the YAML format
+1. Edit the CloudFormation Template, adding a new resource for an EC2 instance
 
-You _only_ need to specify these six properties:
+    Use this documentation page for assistance:
+        [AWS::EC2::Instance](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html)
 
-* **IamInstanceProfile:** Refer to `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
-* **ImageId:** Refer to `LatestAmiId`, which is the parameter discussed previously
-* **InstanceType:** Refer to `InstanceType`, another parameter
-* **SecurityGroupIds:** Refer to `PublicSecurityGroup`, which is defined elsewhere in the template
-* **SubnetId:** Refer to `PublicSubnet1`, which is defined elsewhere in the template
-* **Tags:** Use this YAML block:
+    * Use the YAML format
+    * For **Logical ID** (the line above **Type**) use `MyEC2Instance`
 
-      Tags:
-        - Key: Name
-          Value: Simple Server
+    You _only_ need to specify these six properties:
 
-Remember
+    * **IamInstanceProfile:** Refer to `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
+    * **ImageId:** Refer to `LatestAmiId`, which is the parameter discussed previously
+    * **InstanceType:** Refer to `InstanceType`, another parameter
+    * **SecurityGroupIds:** Refer to `PublicSecurityGroup`, which is defined elsewhere in the template
+    * **SubnetId:** Refer to `PublicSubnet1`, which is defined elsewhere in the template
+    * **Tags:** Use this YAML block:
 
-* When referring to other resources in the same template, use `!Ref` see the `BucketName` example you already implemented
-* When referring to **SecurityGroupIds**, the template is actually expecting a _list_ of security groups. You therefore need to list the security group like this:
+            Tags:
+              - Key: Name
+              Value: Simple Server
 
-      SecurityGroupIds: 
-        - !Ref PublicSecurityGroup
+    Remember
 
-To download a sample solution, right-click and download this link:
-[simple_stack_plus_s3_ec2.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2.yaml)
+    * When referring to other resources in the same template, use `!Ref`. See the `BucketName` example you already implemented
+    * When referring to **SecurityGroupIds**, the template is actually expecting a _list_ of security groups. You therefore need to list the security group like this:
 
-* Once you have edited the template, update the stack deployment with your revised template file.
+            SecurityGroupIds: 
+                - !Ref PublicSecurityGroup
 
-| Important |
-|:---:|
-|When you initiate the CloudFormation update|
-|Change the following **Parameter**|
-|**EC2SecurityEnabledParam** must be set to value `true`|
-|This will tell the template to create resouces your EC2 instance will need such as the Security Group and IAM Role|
+    To download a sample solution, right-click and download this link:
+    [simple_stack_plus_s3_ec2.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2.yaml)
 
-* This deployment of the CloudFormation stack will take about three minutes
+1. Once you have edited the template, update the stack deployment with your revised template file.
+    * On the **Parameters** screen of the CloudFormation update switch **EC2SecurityEnabledParam** to `true`
 
-* The instance will now be displayed in the **Resources** tab.
+        | Important |
+        |:---:|
+        |Change **EC2SecurityEnabledParam** to `true`|
+        |This will tell the template to create resources your EC2 instance will need such as the Security Group and IAM Role|
 
-* Go to the EC2 console to see the *Simple Server* that was created. Then, return to the CloudFormation console.
+    * This deployment of the CloudFormation stack will take about three minutes
+    * The instance will now be displayed in the **Resources** tab.
+
+1. Go to the EC2 console to see the *Simple Server* that was created. Explore the properties of this EC2 instance.
 
 The final deployment is now represented by this architecture diagram:
 
 ![SimpleVpcEverything](Images/SimpleVpcEverything.png)
+
+### 4.3 [Optional bonus task] Add a web server to the EC2 instance
+
+In this task you will update your CloudFormation template to modify the deployed EC2 instance so that it runs a simple web server
+
+1. Modify the EC2 resource in the template
+    * Delete the following properties form the EC2 resource
+        * `SecurityGroupIds`
+        * `SubnetId`
+    * Add the following properties using the YAML below
+        * `NetworkInterfaces`: adds an external IP addres (and DNS name) for the EC2 instance
+        * `UserData`: a simple bash script to install and run an Apache web server. This runs on EC2 instance creation only.
+
+    * Visually the diff for this looks like:
+
+         ![AddServerDiff](Images/AddServerDiff.png)
+
+    * The final EC2 instance resource should look like this:
+
+          MyEC2Instance:
+            Type: AWS::EC2::Instance
+            Properties: 
+            IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+            ImageId: !Ref LatestAmiId
+            InstanceType: !Ref InstanceType
+            Tags:
+              - Key: Name
+              Value: Simple Server
+            NetworkInterfaces:
+              - AssociatePublicIpAddress: "true"
+              DeviceIndex: "0"
+              GroupSet: 
+                - Ref: PublicSecurityGroup
+              SubnetId: 
+                Ref: PublicSubnet1
+            UserData:
+              Fn::Base64: |
+                #!/bin/bash
+                yum -y update
+                sudo yum install -y httpd
+                sudo systemctl start httpd
+
+1. Add an output value so you can easily find the public DNS of the EC2 instance
+    * Insert the following YAML under the **Outputs** section of your CloudFormation template
+
+            PublicServerDNS:
+              Value: !GetAtt MyEC2Instance.PublicDnsName
+
+    * Use the other entry under **Outputs** to ensure your new entry has the right indentation
+    * The `!GetAtt` function can return various attributes of the resource. In this case the public DNS name of the EC2 instance.
+    * NOTE: if you used a Logical ID _other_ than `MyEC2Instance` when you added your EC2 resource, then you should use that name here
+
+1. Update the CloudFormation stack using the modified template
+1. After deployment is complete, click on the **Outputs** tab for the CloudFormation stack
+    * Click on the public DNS name
+
+![ClickPublicDns](Images/ClickPublicDns.png)
+
+You should see the Apache HTTP server Test Page, indicating your EC2 instance is running the web server and is accessible from the Internet.
 
 ## 5. Tear down this lab <a name="tear_down"></a>
 
@@ -356,6 +424,7 @@ The stack will show *DELETE_IN_PROGRESS*. After a few minutes, the stack will di
 ---
 
 ## References & useful resources
+
 * [What is AWS CloudFormation?](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
 * CloudFormation [AWS Resource and Property Types Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 

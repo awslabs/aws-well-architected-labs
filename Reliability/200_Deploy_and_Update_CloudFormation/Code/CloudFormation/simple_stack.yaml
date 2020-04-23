@@ -51,6 +51,7 @@ Parameters:
   S3BucketName:
     Type: String
     Description: The name for the S3 bucket - must be unique across all of AWS (3-63 lowercase letters or numbers)
+    Default: replaceme
     AllowedPattern: '^[a-z0-9]{3,63}$'
     ConstraintDescription: 3-63 characters; must contain only lowercase letters or numbers
 
@@ -92,12 +93,6 @@ Parameters:
       - t2.micro
       - t2.small
     ConstraintDescription: must be a valid EC2 instance type.
-
-  ServerCodeUrl:
-    Type: String
-    Default: 'https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/CloudFormation/Code/server_simple.py'
-    AllowedPattern: '^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
-    ConstraintDescription: URL where server code can be downloaded, such as S3 or GitHub.
 
 ########################################################################
 
@@ -308,18 +303,9 @@ Resources:
 ########################################################################
 
 Outputs:
-#  WebsiteURL:
-#    Value: !Join
-#      - ''
-#      - - 'http://'
-#        - !GetAtt 
-#          - PublicLoadBalancer
-#          - DNSName
-#        - /
-#    Description: Static Website
 
-  LabVPCDefaultSecurityGroup:
-    Value: !Sub ${SimpleVPC.DefaultSecurityGroup}
+  SimpleVPCId:
+    Value: !Ref SimpleVPC
 
 ########################################################################
 # Metadata is used to group and order how the CloudFormation parameters are 
@@ -356,4 +342,3 @@ Metadata:
         Parameters: 
           - LatestAmiId
           - InstanceType
-          - ServerCodeUrl

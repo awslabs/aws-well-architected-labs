@@ -122,12 +122,22 @@ Resources:
       IamInstanceProfile: !Ref Web1InstanceInstanceProfile
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceType
-      SecurityGroupIds: 
-        - !Ref PublicSecurityGroup
-      SubnetId: !Ref PublicSubnet1
       Tags:
         - Key: Name
           Value: Simple Server
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: PublicSecurityGroup
+          SubnetId: 
+            Ref: PublicSubnet1
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum -y update
+          sudo yum install -y httpd
+          sudo systemctl start httpd
 
   ###########
   # VPC with Internet Gateway
@@ -329,6 +339,9 @@ Outputs:
 
   SimpleVPCId:
     Value: !Ref SimpleVPC
+
+  PublicServerDNS:
+    Value: !GetAtt MyEC2Instance.PublicDnsName
 
 ########################################################################
 # Metadata is used to group and order how the CloudFormation parameters are 
