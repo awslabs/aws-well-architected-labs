@@ -111,6 +111,29 @@ Conditions:
 ########################################################################
 
 Resources:
+
+  ###########
+  # Student added resources
+  ###########
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds: 
+        - !Ref PublicSecurityGroup
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: Simple Server
+
   ###########
   # VPC with Internet Gateway
   ###########
@@ -357,3 +380,4 @@ Metadata:
           - LatestAmiId
           - InstanceType
           - ServerCodeUrl
+

@@ -111,6 +111,16 @@ Conditions:
 ########################################################################
 
 Resources:
+
+  ###########
+  # Student added resources
+  ###########
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+
   ###########
   # VPC with Internet Gateway
   ###########
@@ -357,3 +367,4 @@ Metadata:
           - LatestAmiId
           - InstanceType
           - ServerCodeUrl
+
