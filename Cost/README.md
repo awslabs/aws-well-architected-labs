@@ -1,6 +1,12 @@
 # AWS Well-Architected Cost Optimization Labs
 http://wellarchitectedlabs.com 
 
+
+<video width="600" height="450" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/CostIntro.mp4" type="video/mp4">
+  Your browser doesnt support video, or head to https://wellarchitectedlabs.com to watch the video.
+</video> 
+
 ## Introduction
 
 Cost optimization is a continual process of refinement and improvement of a system over its entire lifecycle. By using these labs, you gain practical experience on how to implement the Cost Optimization best practices and ensure your workloads are Well-Architected.
