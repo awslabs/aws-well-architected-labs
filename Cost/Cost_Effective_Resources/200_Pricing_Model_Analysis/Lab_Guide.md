@@ -442,7 +442,7 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 31. Click **od_pricedata**:
 ![Images/glue_odpricing.png](Images/glue_odpricing.png)
 
-32.Click **Edit schema**:
+32. Click **Edit schema**:
 ![Images/glue_editschema.png](Images/glue_editschema.png)
 
 33. Click **double** next to **col9**:
