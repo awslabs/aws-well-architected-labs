@@ -36,7 +36,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
       
@@ -44,7 +44,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -93,7 +93,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#level-200-deploy-and-update-cloudformation" tabindex="0" class="md-skip">
+      <a href="#level-200-deploy-and-update-cloudformation" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -102,9 +102,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" aria-label="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
+        <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-header-nav__button md-logo">
           
-            <img alt="logo" src="../../images/wa.png" width="24" height="24">
+            <img src="../../images/wa.png" width="24" height="24">
           
         </a>
       </div>
@@ -133,7 +133,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -194,6 +194,14 @@
     <ul class="md-tabs__list">
       
         
+  <li class="md-tabs__item">
+    
+      <a href="../../README.html" class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
       
         
   
@@ -288,7 +296,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://wellarchitectedlabs.com" title="AWS Well-Architected Labs" class="md-nav__button md-logo">
       
-        <img alt="logo" src="../../images/wa.png" width="48" height="48">
+        <img src="../../images/wa.png" width="48" height="48">
       
     </a>
     AWS Well-Architected Labs
@@ -3480,9 +3488,9 @@
 <p>How do you implement change?</p>
 <ul>
 <li>Best practice: <strong>Deploy changes with automation</strong>: Deployments and patching are automated to eliminate negative impact.</li>
-<li> Design principle: <strong>Manage change in automation</strong>: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.</li>
+<li>Design principle: <strong>Manage change in automation</strong>: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.</li>
 </ul>
-    <p>When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.</p>
+<p>When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol>
 <li><a href="#deploy_infra">Deploy a CloudFormation Stack</a></li>
@@ -3953,10 +3961,9 @@ S3BucketName:
 </li>
 <li>
 <p>The final EC2 instance resource should look like this:</p>
-<pre><code>
-  MyEC2Instance:
+<pre><code>  MyEC2Instance:
     Type: AWS::EC2::Instance
-    Properties:
+    Properties: 
       IamInstanceProfile: !Ref Web1InstanceInstanceProfile
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceType
@@ -3966,9 +3973,9 @@ S3BucketName:
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
-          GroupSet:
+          GroupSet: 
             - Ref: PublicSecurityGroup
-          SubnetId:
+          SubnetId: 
             Ref: PublicSubnet1
       UserData:
         Fn::Base64: |
@@ -3995,7 +4002,7 @@ S3BucketName:
 <li>The <code>!GetAtt</code> function can return various attributes of the resource. In this case the public DNS name of the EC2 instance.</li>
 <li>NOTE: if you used a Logical ID <em>other</em> than <code>MyEC2Instance</code> when you added your EC2 resource, then you should use that name here</li>
 <li>To download a sample solution, right-click and download this link:
-<a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml">simple_stack_plus_s3_ec2.yaml</a></li>
+<a href="https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml">simple_stack_plus_s3_ec2_server.yaml</a></li>
 </ul>
 </li>
 <li>
@@ -4099,9 +4106,9 @@ the resources that it created.</p>
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        <a href="https://www.mkdocs.org">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -4111,9 +4118,9 @@ the resources that it created.</p>
       
     </div>
     
-      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      <script src="../../assets/javascripts/application.808e90bb.js"></script>
       
-      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>

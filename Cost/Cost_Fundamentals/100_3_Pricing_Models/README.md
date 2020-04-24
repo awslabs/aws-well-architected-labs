@@ -1,6 +1,14 @@
 # Level 100: Pricing Models
 https://wellarchitectedlabs.com 
 
+
+<video width="600" height="450" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/100PricingModelAnalysis.mp4" type="video/mp4">
+  Your browser doesnt support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
+</video> 
+
+
+
 ## Introduction
  This hands-on lab will guide you through the steps to perform an analysis of Savings Plans for your AWS cost and usage. The skills you learn will help you implement the correct pricing models for your workloads, in alignment with the AWS Well-Architected Framework.
  
