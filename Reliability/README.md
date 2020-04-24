@@ -1,8 +1,6 @@
 # AWS Well-Architected Reliability Labs
 
-<https://wellarchitectedlabs.com>
-
-## Introduction
+![ReliabilityIconHorizontal](Images/ReliabilityIconHorizontal.png)
 
 This repository contains documentation and code for hands-on-labs to help you learn how to learn, measure, and build using AWS Well-Architected best practices for reliability. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
 
