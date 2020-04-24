@@ -373,28 +373,28 @@ In this task you will update your CloudFormation template to modify the deployed
 
     * The final EC2 instance resource should look like this:
 
-            MyEC2Instance:
-              Type: AWS::EC2::Instance
-              Properties: 
-                IamInstanceProfile: !Ref Web1InstanceInstanceProfile
-                ImageId: !Ref LatestAmiId
-                InstanceType: !Ref InstanceType
-                Tags:
-                  - Key: Name
-                  Value: Simple Server
-                NetworkInterfaces:
-                  - AssociatePublicIpAddress: "true"
-                  DeviceIndex: "0"
-                  GroupSet: 
-                    - Ref: PublicSecurityGroup
-                  SubnetId: 
-                    Ref: PublicSubnet1
-                UserData:
-                  Fn::Base64: |
-                    #!/bin/bash
-                    yum -y update
-                    sudo yum install -y httpd
-                    sudo systemctl start httpd
+              MyEC2Instance:
+                Type: AWS::EC2::Instance
+                Properties: 
+                  IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+                  ImageId: !Ref LatestAmiId
+                  InstanceType: !Ref InstanceType
+                  Tags:
+                    - Key: Name
+                      Value: Simple Server
+                  NetworkInterfaces:
+                    - AssociatePublicIpAddress: "true"
+                      DeviceIndex: "0"
+                      GroupSet: 
+                        - Ref: PublicSecurityGroup
+                      SubnetId: 
+                        Ref: PublicSubnet1
+                  UserData:
+                    Fn::Base64: |
+                      #!/bin/bash
+                      yum -y update
+                      sudo yum install -y httpd
+                      sudo systemctl start httpd
 
 1. Add an output value so you can easily find the public DNS of the EC2 instance
     * Insert the following YAML under the **Outputs** section of your CloudFormation template

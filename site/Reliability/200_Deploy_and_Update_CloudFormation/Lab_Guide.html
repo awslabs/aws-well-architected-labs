@@ -3952,27 +3952,28 @@ S3BucketName:
 <li>
 <p>The final EC2 instance resource should look like this:</p>
 <pre><code>MyEC2Instance:
-  Type: AWS::EC2::Instance
-  Properties: 
-    IamInstanceProfile: !Ref Web1InstanceInstanceProfile
-    ImageId: !Ref LatestAmiId
-    InstanceType: !Ref InstanceType
-    Tags:
-      - Key: Name
-      Value: Simple Server
-    NetworkInterfaces:
-      - AssociatePublicIpAddress: "true"
-      DeviceIndex: "0"
-      GroupSet: 
-        - Ref: PublicSecurityGroup
-      SubnetId: 
-        Ref: PublicSubnet1
-    UserData:
-      Fn::Base64: |
-        #!/bin/bash
-        yum -y update
-        sudo yum install -y httpd
-        sudo systemctl start httpd
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      Tags:
+        - Key: Name
+          Value: Simple Server
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: PublicSecurityGroup
+          SubnetId: 
+            Ref: PublicSubnet1
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum -y update
+          sudo yum install -y httpd
+          sudo systemctl start httpd
 </code></pre>
 </li>
 </ul>
