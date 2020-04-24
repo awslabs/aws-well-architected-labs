@@ -364,7 +364,7 @@ In this task you will update your CloudFormation template to modify the deployed
         * `SecurityGroupIds`
         * `SubnetId`
     * Add the following properties using the YAML below
-        * `NetworkInterfaces`: adds an external IP addres (and DNS name) for the EC2 instance
+        * `NetworkInterfaces`: adds an external IP address (and DNS name) for the EC2 instance
         * `UserData`: a simple bash script to install and run an Apache web server. This runs on EC2 instance creation only.
 
     * Visually the diff for this looks like:
@@ -376,25 +376,25 @@ In this task you will update your CloudFormation template to modify the deployed
             MyEC2Instance:
               Type: AWS::EC2::Instance
               Properties: 
-              IamInstanceProfile: !Ref Web1InstanceInstanceProfile
-              ImageId: !Ref LatestAmiId
-              InstanceType: !Ref InstanceType
-              Tags:
-                - Key: Name
-                Value: Simple Server
-              NetworkInterfaces:
-                - AssociatePublicIpAddress: "true"
-                DeviceIndex: "0"
-                GroupSet: 
-                  - Ref: PublicSecurityGroup
-                SubnetId: 
-                  Ref: PublicSubnet1
-              UserData:
-                Fn::Base64: |
-                  #!/bin/bash
-                  yum -y update
-                  sudo yum install -y httpd
-                  sudo systemctl start httpd
+                IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+                ImageId: !Ref LatestAmiId
+                InstanceType: !Ref InstanceType
+                Tags:
+                  - Key: Name
+                  Value: Simple Server
+                NetworkInterfaces:
+                  - AssociatePublicIpAddress: "true"
+                  DeviceIndex: "0"
+                  GroupSet: 
+                    - Ref: PublicSecurityGroup
+                  SubnetId: 
+                    Ref: PublicSubnet1
+                UserData:
+                  Fn::Base64: |
+                    #!/bin/bash
+                    yum -y update
+                    sudo yum install -y httpd
+                    sudo systemctl start httpd
 
 1. Add an output value so you can easily find the public DNS of the EC2 instance
     * Insert the following YAML under the **Outputs** section of your CloudFormation template

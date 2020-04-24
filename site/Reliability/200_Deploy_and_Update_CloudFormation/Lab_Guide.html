@@ -3941,7 +3941,7 @@ S3BucketName:
 <li>
 <p>Add the following properties using the YAML below</p>
 <ul>
-<li><code>NetworkInterfaces</code>: adds an external IP addres (and DNS name) for the EC2 instance</li>
+<li><code>NetworkInterfaces</code>: adds an external IP address (and DNS name) for the EC2 instance</li>
 <li><code>UserData</code>: a simple bash script to install and run an Apache web server. This runs on EC2 instance creation only.</li>
 </ul>
 </li>
@@ -3954,25 +3954,25 @@ S3BucketName:
 <pre><code>MyEC2Instance:
   Type: AWS::EC2::Instance
   Properties: 
-  IamInstanceProfile: !Ref Web1InstanceInstanceProfile
-  ImageId: !Ref LatestAmiId
-  InstanceType: !Ref InstanceType
-  Tags:
-    - Key: Name
-    Value: Simple Server
-  NetworkInterfaces:
-    - AssociatePublicIpAddress: "true"
-    DeviceIndex: "0"
-    GroupSet: 
-      - Ref: PublicSecurityGroup
-    SubnetId: 
-      Ref: PublicSubnet1
-  UserData:
-    Fn::Base64: |
-      #!/bin/bash
-      yum -y update
-      sudo yum install -y httpd
-      sudo systemctl start httpd
+    IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+    ImageId: !Ref LatestAmiId
+    InstanceType: !Ref InstanceType
+    Tags:
+      - Key: Name
+      Value: Simple Server
+    NetworkInterfaces:
+      - AssociatePublicIpAddress: "true"
+      DeviceIndex: "0"
+      GroupSet: 
+        - Ref: PublicSecurityGroup
+      SubnetId: 
+        Ref: PublicSubnet1
+    UserData:
+      Fn::Base64: |
+        #!/bin/bash
+        yum -y update
+        sudo yum install -y httpd
+        sudo systemctl start httpd
 </code></pre>
 </li>
 </ul>
