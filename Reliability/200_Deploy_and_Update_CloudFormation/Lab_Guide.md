@@ -5,8 +5,9 @@
 This lab illustrates best practices for reliability as described in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) Reliability pillar.
 
 How do you implement change?
-    * Best practice: **Deploy changes with automation**: Deployments and patching are automated to eliminate negative impact.
-    * Design principle: **Manage change in automation**: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.
+
+* Best practice: **Deploy changes with automation**: Deployments and patching are automated to eliminate negative impact.
+* Design principle: **Manage change in automation**: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.
 
 When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.
 
@@ -325,7 +326,7 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
             Tags:
               - Key: Name
-              Value: Simple Server
+                Value: Simple Server
 
     Remember
 
@@ -333,7 +334,7 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
     * When referring to **SecurityGroupIds**, the template is actually expecting a _list_ of security groups. You therefore need to list the security group like this:
 
             SecurityGroupIds: 
-                - !Ref PublicSecurityGroup
+              - !Ref PublicSecurityGroup
 
     To download a sample solution, right-click and download this link:
     [simple_stack_plus_s3_ec2.yaml](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2.yaml)

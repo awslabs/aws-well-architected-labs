@@ -3477,10 +3477,12 @@
                 <h1 id="level-200-deploy-and-update-cloudformation">Level 200: Deploy and Update CloudFormation</h1>
 <h2 id="aws-well-architected">AWS Well-Architected</h2>
 <p>This lab illustrates best practices for reliability as described in the <a href="https://aws.amazon.com/architecture/well-architected/">AWS Well-Architected</a> Reliability pillar.</p>
-<p>How do you implement change?
-    * Best practice: <strong>Deploy changes with automation</strong>: Deployments and patching are automated to eliminate negative impact.
-    * Design principle: <strong>Manage change in automation</strong>: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.</p>
-<p>When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.</p>
+<p>How do you implement change?</p>
+<ul>
+<li>Best practice: <strong>Deploy changes with automation</strong>: Deployments and patching are automated to eliminate negative impact.</li>
+<li> Design principle: <strong>Manage change in automation</strong>: Changes to your infrastructure should be made using automation. The changes that need to be managed include changes to the automation, which then can be tracked and reviewed.</li>
+</ul>
+    <p>When this lab is completed, you will have deployed and edited a CloudFormation template. Using this template you will deploy a VPC, an S3 bucket and an EC2 instance running a simple web server.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ol>
 <li><a href="#deploy_infra">Deploy a CloudFormation Stack</a></li>
@@ -3879,7 +3881,7 @@ S3BucketName:
 <li><strong>SubnetId:</strong> Refer to <code>PublicSubnet1</code>, which is defined elsewhere in the template</li>
 <li><strong>Tags:</strong> Use this YAML block:<pre><code>Tags:
   - Key: Name
-  Value: Simple Server
+    Value: Simple Server
 </code></pre>
 </li>
 </ul>
@@ -3887,7 +3889,7 @@ S3BucketName:
 <ul>
 <li>When referring to other resources in the same template, use <code>!Ref</code>. See the <code>BucketName</code> example you already implemented</li>
 <li>When referring to <strong>SecurityGroupIds</strong>, the template is actually expecting a <em>list</em> of security groups. You therefore need to list the security group like this:<pre><code>SecurityGroupIds: 
-    - !Ref PublicSecurityGroup
+  - !Ref PublicSecurityGroup
 </code></pre>
 </li>
 </ul>
@@ -3954,7 +3956,7 @@ S3BucketName:
 <pre><code>MyEC2Instance:
   MyEC2Instance:
     Type: AWS::EC2::Instance
-    Properties: 
+    Properties:
       IamInstanceProfile: !Ref Web1InstanceInstanceProfile
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceType
@@ -3964,9 +3966,9 @@ S3BucketName:
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
-          GroupSet: 
+          GroupSet:
             - Ref: PublicSecurityGroup
-          SubnetId: 
+          SubnetId:
             Ref: PublicSubnet1
       UserData:
         Fn::Base64: |
