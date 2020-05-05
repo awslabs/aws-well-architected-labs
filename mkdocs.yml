@@ -185,6 +185,9 @@ nav:
             - Cost and Usage Visualization:
                 - Overview: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/README.md'
                 - Lab Guide: 'Cost/Cost_Fundamentals/200_5_Cost_Visualization/Lab_Guide.md'
+            - Measure Workload Efficiency:
+                - Overview: 'Cost/Expenditure_Awareness/Workload_Efficiency/README.md'
+                - Lab Guide: 'Cost/Expenditure_Awareness/Workload_Efficiency/Lab_Guide.md'
         - 300 Level Labs:
             - Automated CUR Updates and Ingestion:
                 - Overview: 'Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/README.md'
