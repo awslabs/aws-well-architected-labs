@@ -29,7 +29,7 @@ Finally you create a visualization with calculations in QuickSight which allows 
 ## Prerequisites
 - An AWS Account
 - An Amazon QuickSight Account
-- A Cost and Usage Report (CUR)
+- A Cost and Usage Report (CUR) with **hourly** granularity
 - Amazon Athena and QuickSight have been setup
 - Completed the [Cost and Usage Analysis lab](../../Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/README.md)
 - Completed the [Cost and Usage Visualization lab](../../Cost_Fundamentals/200_5_Cost_Visualization/README.md)
