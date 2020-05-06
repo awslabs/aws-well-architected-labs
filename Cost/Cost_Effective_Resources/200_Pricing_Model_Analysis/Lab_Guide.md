@@ -514,6 +514,7 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
         AND cur.product_instance_type NOT LIKE ''
         AND cur.product_operating_system NOT LIKE 'NA'
         AND cur.line_item_unblended_cost > 0
+        AND line_item_line_item_type like 'Usage'
 
         GROUP BY cur.line_item_usage_account_id,
         cur.line_item_usage_start_date,
