@@ -481,5 +481,9 @@ The follwoing resources were created during this lab and can be deleted:
 
 <a name="rate_lab"></a>
 ## 5. Rate this lab
-[![1 Star](../../../common/images/star.png)](http://wellarchitectedlabs.com/WorkloadEfficiency_1star) [![2 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/WorkloadEfficiency_2star) [![3 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/WorkloadEfficiency_3star) [![4 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/WorkloadEfficiency_4star) [![5 star](../../../common/images/star.png)](http:///wellarchitectedlabs.com/WorkloadEfficiency_5star)
+[![1 Star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_WorkloadEfficiency_1star)
+[![2 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_WorkloadEfficiency_2star)
+[![3 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_WorkloadEfficiency_3star) 
+[![4 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_WorkloadEfficiency_4star) 
+[![5 star](../../../common/images/star.png)](https://wellarchitectedlabs.com/Cost_WorkloadEfficiency_5star)
 
