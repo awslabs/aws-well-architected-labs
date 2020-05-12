@@ -1,0 +1,159 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template to create lab resources. Creates an EBS
+  Volume, an SNS Topic, and a Lambda Function.
+
+  **WARNING** You will be billed for the AWS resources created if you create a
+  stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License"). You may not
+  use this file except in compliance with the License. A copy of the License is
+  located at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  or in the "license" file accompanying this file. This file is distributed  on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied. See the License for the specific language governing
+  permissions and limitations under the License.
+Parameters:
+  TagKey:
+    Type: String
+    Description: The Tag Key used to identify the workload that these resources belong to.
+    Default: workload
+  TagValue:
+    Type: String
+    Description: >-
+      The Tag Value used to identify the workload that these resources belong
+      to.
+    Default: myapp
+  NotificationEmail:
+    Type: String
+    Description: The email address to which backup and restore notifications are published.
+Resources:
+  Volume:
+    Type: 'AWS::EC2::Volume'
+    Properties:
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Size: '1'
+      Tags:
+        - Key: !Ref TagKey
+          Value: !Ref TagValue
+  SNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: BackupNotificationTopic
+      Subscription:
+        - Endpoint: !Ref NotificationEmail
+          Protocol: email
+  LambdaFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: RestoreTestFunction
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt
+        - LambdaRole
+        - Arn
+      Runtime: python2.7
+      Timeout: '60'
+      Code:
+        S3Bucket: c3pio
+        S3Key: backup-lab/lambda_function.zip
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AWSBackupOperatorAccess'
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - 'ec2:DeleteVolume'
+                Resource: '*'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action: 'sns:Publish'
+                Resource: !Ref SNSTopic
+  LambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref LambdaFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref SNSTopic
+  SNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Endpoint: !GetAtt
+        - LambdaFunction
+        - Arn
+      Protocol: lambda
+      TopicArn: !Ref SNSTopic
+  SNSTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      Topics:
+        - !Ref SNSTopic
+      PolicyDocument:
+        Version: 2008-10-17
+        Id: __default_policy_ID
+        Statement:
+          - Sid: __default_statement_ID
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'SNS:GetTopicAttributes'
+              - 'SNS:SetTopicAttributes'
+              - 'SNS:AddPermission'
+              - 'SNS:RemovePermission'
+              - 'SNS:DeleteTopic'
+              - 'SNS:Subscribe'
+              - 'SNS:ListSubscriptionsByTopic'
+              - 'SNS:Publish'
+              - 'SNS:Receive'
+            Resource: !Ref SNSTopic
+            Condition:
+              StringEquals:
+                'AWS:SourceOwner': !Ref 'AWS::AccountId'
+          - Sid: backup
+            Effect: Allow
+            Principal:
+              Service: backup.amazonaws.com
+            Action: 'SNS:Publish'
+            Resource: !Ref SNSTopic
+          - Sid: lambda
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'SNS:Publish'
+            Resource: !Ref SNSTopic
+Outputs:
+  VolumeID:
+    Description: EBS Volume ID
+    Value: !Ref Volume
+  SNSTopicARN:
+    Description: SNS Topic ARN
+    Value: !Ref SNSTopic
+  LambdaARN:
+    Description: Lambda Function ARN
+    Value: !GetAtt
+      - LambdaFunction
+      - Arn

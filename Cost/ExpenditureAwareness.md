@@ -61,7 +61,16 @@ Utilizing the CUR data source in the previous step, you can provide more detaile
  
 ---
 
-## Step 7 (Optional) - Automated CUR Updates and Ingestion
+## Step 7 - Monitor Workload Efficiency
+This hands-on lab will guide you through the steps to measure the efficiency of a workload. It shows you how to get the overall efficiency, then look deeper for patterns in usage to be able to allocate different weights to different outputs of a system.
+
+| | | 
+|---|---|
+| [![Go to lab](../common/images/gotolab.png)](./Expenditure_Awareness/Workload_Efficiency/README.md) | **200 Level Lab**: This lab uses s3 events and Lambda to trigger a Glue crawler and update Athena when a new CUR is delivered. |
+ 
+---
+
+## Step 8 (Optional) - Automated CUR Updates and Ingestion
 This hands-on lab will guide you through the steps to enable automated updates of your CUR files into Athena, every time a new CUR file is delivered.
 
 | | | 
@@ -70,7 +79,7 @@ This hands-on lab will guide you through the steps to enable automated updates o
  
 ---
 
-## Step 8 (Optional) - Multi-Account CUR Access
+## Step 9 (Optional) - Multi-Account CUR Access
 This hands-on lab will guide you through the different methods to share and analyze cost and usage data across accounts. 
 
 | | | 
@@ -79,7 +88,7 @@ This hands-on lab will guide you through the different methods to share and anal
  
 ---
 
-## Step 9 (Optional) - Splitting and sharing the CUR
+## Step 10 (Optional) - Splitting and sharing the CUR
 This hands-on lab will guide you on how to automatically extract part of your CUR file, and then deliver it to another S3 bucket and folder to allow another account to access it. Ideal for partners to deliver a sub-account only CUR to each of its customers, or large enterprises.
 
 | | | 
@@ -87,7 +96,7 @@ This hands-on lab will guide you on how to automatically extract part of your CU
 | [![Go to lab](../common/images/gotolab.png)](./Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/README.md) | **300 Level Lab**: This Lab uses S3 events, Lambda and Athena to extract part of a CUR file and deliver it to an S3 bucket for another account. |
  
 
-## Step 10 (Optional) - Automated CUR Reports and email delivery
+## Step 11 (Optional) - Automated CUR Reports and email delivery
 
 | | | 
 |---|---|

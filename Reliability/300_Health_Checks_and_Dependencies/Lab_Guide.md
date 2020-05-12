@@ -20,7 +20,7 @@ This lab illustrates best practices for reliability as described in the [AWS Wel
 
 You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 fronted by an Elastic Load Balancer reverse-proxy, with a dependency on Amazon DynamoDB.
 
-**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or an external service called via API. The DynamoDB dependency here acts as a _mock_ for an external service called **RecommendationService**. The **getRecommendation** API on this service, which is a dependency for the web service used in this lab, is actual a `get_item` call to a DynamoDB table.
+**Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or an external service called via API. The DynamoDB dependency here acts as a _mock_ for an external service called **RecommendationService**. The **getRecommendation** API on this service is a dependency for the web service used in this lab.  **getRecommendation** is actually a `get_item` call to a DynamoDB table.
 
 ![ArchitectureOverview](Images/ArchitectureOverview.png)
 
@@ -50,7 +50,7 @@ You will deploy the service infrastructure including simple service code and som
 ##### Express Steps (Deploy the VPC infrastructure)
 
 1. Download the [_vpc-alb-app-db.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template
-1. Create a CloudFormation stack uploading this CloudFormation Template
+1. Create a CloudFormation stack (with new resources) by uploading this CloudFormation Template file
 1. For **Stack name** use **`WebApp1-VPC`** (case sensitive)
 1. Leave all  CloudFormation Parameters at their default values
 1. Click **Next** until the last page
@@ -67,7 +67,7 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 ##### Express Steps (Deploy the WebApp infrastructure and service)
 
 1. Download the [_staticwebapp.yaml_](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml) CloudFormation template
-1. Create a CloudFormation stack uploading this CloudFormation Template
+1. Create a CloudFormation stack (with new resources) by uploading this CloudFormation Template file
 1. For **Stack name** use **`HealthCheckLab`**
 1. Leave all  CloudFormation Parameters at their default values
 1. Click **Next** until the last page
@@ -89,25 +89,22 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 1. The website simulates a recommendation engine making personalized suggestions for classic television shows. You should note the following features:
       * Area A shows the personalized recommendation
           * It shows first name of the user and the show that was recommended
-          * The workshop simulation is simple. On every request it chooses a user at random, and shows a recommendation statically mapped to that user. The user names, show names, and this mapping are in a DynamoDB table, which is simulating the **RecommendationService**
+          * The workshop simulation is simple. On every request it chooses a user at random, and shows a recommendation statically mapped to that user. The user names, television show names, and this mapping are in a DynamoDB table, which is simulating the **RecommendationService**
       * Area B shows metadata which is useful to you during the lab
           * The **instance_id** and **availability_zone** enable you to see which EC2 server and Availability Zone were used for each request
           * There is one EC2 instance deployed per Availability Zone
           * Refresh the website several times, note that the EC2 instance and Availability Zone change from among the three available
           * This is Elastic Load Balancing (ELB) distributing these stateless requests among the available EC2 server instances across Availability Zones
 
-    |Well-Architected for Reliability: Elastic Load Balancing (ELB)|
-    |:---:|
-    |Provides load balancing across Availability Zones, performs Layer 7 routing, integrates with AWS WAF, and integrates with Auto Scaling to help create a self-healing infrastructure and absorb increases in traffic while releasing resources when traffic decreases.|
-
     |Well-Architected for Reliability: Best practices|
     |:--:|
-    |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled.|
-    |**Deploy the workload to multiple locations**: Distribute workload load across multiple Availability Zones and AWS Regions. These locations can be as diverse as needed.|
+    |**Use highly available network connectivity for your workload public endpoints**: Elastic Load Balancing provides load balancing across Availability Zones, performs Layer 4 (TCP) or Layer 7 (http/https) routing, integrates with AWS WAF, and integrates with AWS Auto Scaling to help create a self-healing infrastructure and absorb increases in traffic while releasing resources when traffic decreases.|
+    |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled. Loose coupling helps isolate behavior of a component from other components that depend on it, increasing resiliency and agility.|
+    |**Deploy the workload to multiple locations**: Distribute workload data and resources across multiple Availability Zones or, where necessary, across AWS Regions. These locations can be as diverse as required.|
 
 ## 2. Handle failure of service dependencies <a name="handle_dependency"></a>
 
-### 2.1 System initially healthy
+### 2.1 System dependency initially healthy
 
 1. You already observed that all three EC2 instances are successfully serving requests
 1. In a new tab navigate to ELB Target Groups console
@@ -120,6 +117,35 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
       * In this state the ELB will route traffic to any of the three servers
 
     ![TargetGroupAllHealthy](Images/TargetGroupAllHealthy.png)
+
+1. From the **Target Groups** console, now click on the the **Health checks** tab
+      * Note here that the **Path** is configured to `/healthcheck`
+1. Copy the URL of the web service to a new tab and append `/healthcheck` to the end of the URL
+      * The new URL should look like:
+
+            http://healt-alb1l-<...>.elb.amazonaws.com/healthcheck
+
+      * Refresh several times and observe the health check on the three servers
+      * Note the check is successful
+
+1. The EC2 servers receive user requests (for a TV show recommendation) on the path `/` and they receive health check requests from the Elastic Load Balancer on the path `/healthcheck`
+      * The health check always returns an http 200 code for any request to it.
+      * The server code running on each EC2 instance [can be viewed here](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_basic.py), or you can view the health check code excerpt below:
+
+<details>
+<summary>Click here to see the health check code excerpt</summary>
+
+```python
+# Healthcheck request - will be used by the Elastic Load Balancer
+elif self.path == '/healthcheck':
+
+      # Return a healthy code
+      self.send_response(200)
+      self.send_header('Content-type', 'text/html')
+      self.end_headers()
+```
+
+</details>
 
 ### 2.2 Simulate dependency not available
 
@@ -161,8 +187,7 @@ The **RecommendationServiceEnabled** parameter is used only for this lab. The se
 
       ![502TargetGroupMetrics](Images/502TargetGroupMetrics.png)
 
-1. Return to the tab with the ELB Target Groups console.  Note that all instances are _unhealthy_ with **Description** _Health checks failed with these codes: \[502\]_
-1. From here click on the **Health checks** tab.  The health check is configured to return _healthy_ when it receives a http 200 response on the same port and path as the browser requests
+      * We need to update the server code to handle when the dependency is not available
 
 ### 2.3 Update server code to handle dependency not available
 
@@ -194,7 +219,7 @@ This option requires you have access to place a file in a location accessible vi
       * Find the **ServerCodeUrl** parameter and enter the URL for your new code
       * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
 
-If you completed the **Expert option**, then skip the **Assisted option** section and continue with **2.3.3 Error handling code**
+If you completed the **Option 1 - Expert option**, then skip the **Option 2 - Assisted option** section and continue with **2.3.3 Error handling code**
 
 #### 2.3.2 Option 2 - Assisted option: deploy workshop provided code
 
@@ -220,7 +245,7 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
 
 #### 2.3.3 Error handling code
 
-This is the error handling code from [server_errorhandling.py](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
+This is the error handling code from [server_errorhandling.py](https://github.com/awslabs/aws-well-architected-labs/blob/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py). The **Option 2 - Assisted option** uses this code. If you used the **Option 1 - Expert option**, you can consult this code as a guide.
 
 <details>
 <summary>Click here to see code</summary>
@@ -263,14 +288,14 @@ except Exception as e:
       * All three EC2 instances and Availability Zones are being used
       * A default recommendation for **Valued Customer** is displayed instead of a user-personalized one
       * There is now **Diagnostic Info**. What does it mean?
-      * Check health status on the ELB Target Groups console > Targets tab (remember to refresh). What do those health checks now show?
+
 1. Refer back to the newly deployed code to understand why the website behaves this way now
 
 The Website is working again, but in a degraded capacity since it is no longer serving personalized recommendations. While this is less than ideal, it is much better than when it was failing with http 502 errors. The **RecommendationService** is not available, so the app instead returns a _static response_ (the default recommendation) instead of the data it would have obtained from **RecommendationService**.
 
 |Well-Architected for Reliability: Best practice|
 |:--:|
-|**Implement graceful degradation to transform applicable hard dependencies into soft dependencies**: When a component's dependencies are unhealthy, the component itself does not report as unhealthy. It can continue to serve requests in a degraded manner.|
+|**Implement graceful degradation to transform applicable hard dependencies into soft dependencies**: When a component's dependencies are unhealthy, the component itself can still function, although in a degraded manner. For example, when a dependency call fails, instead use a predetermined static response.|
 
 ## 3. Implement deep health checks <a name="deep_healthcheck"></a>
 
@@ -282,7 +307,7 @@ For the next part of the lab restore access to the **getRecommendation** API on 
 2. Set the value of **RecommendationServiceEnabled** back to **true** and **Save changes**
 3. Confirm the web service is now returning "personalized" recommendations again
 
-### 3.2 Inject fault on one of the servers <a name="change_role"></a>
+### 3.2 Inject fault on a single server <a name="change_role"></a>
 
 Previously you simulated a failure of the service dependency. Now you will simulate a failure on a single server (of the three servers running). You will simulate a fault on this server that prevents only it from calling the otherwise healthy service dependency.
 
@@ -307,7 +332,7 @@ The IAM role attached to an EC2 instance determines what permissions it has to a
     * Refresh the website multiple times noting which Availability Zone the serving the request
     * The servers in us-east-2a and us-east-2b continue to function normally
     * The server in us-east-2c still succeeds, but it uses the static response. Why is this?
-* The service dependency (**RecommendationServiceEnabled**) is still healthy
+* The service dependency **RecommendationServiceEnabled** is still healthy
 * It is the server in us-east-2c that is unhealthy - it has stale credentials
     * Return to the **Target Groups** and under the **Targets** tab observe the results of the ELB health checks
     * They are all **Status** _healthy_, and are therefore all receiving traffic. Why does the server in us-east-2c show _healthy_ for this check?
@@ -315,22 +340,21 @@ The IAM role attached to an EC2 instance determines what permissions it has to a
     * Identified the us-east-2c server as unhealthy and did not route traffic to it
     * Replaced this server with a healthy one
 
-    |Well-Architected for Reliability: Recovery-Oriented Computing (ROC)|
+    |Well-Architected for Reliability: Best practices|
     |:---:|
-    |In systems that apply a recovery-oriented approach, many different categories of failures are mapped to the same recovery strategy.  An instance may fail due to hardware failure, operating system bug, memory leak, or other causes. Rather than building custom remediation for each, treat any as an instance failure, terminate the instance, and replace the instance.|
+    |**Make services stateless where possible**: Services should either not require state, or should offload state such that between different client requests, there is no dependence on locally stored data on disk or in memory. This enables servers to be replaced at will without causing an availability impact. Amazon ElastiCache or Amazon DynamoDB are good destinations for offloaded state.|
+    |**Automate healing on all layers**: Upon detection of a failure, use automated capabilities to perform actions to remediate. _Ability to restart_ is an important tool to remediate failures. As discussed previously for distributed systems, a best practice is to make services stateless where possible. This prevents loss of data or availability on restart. In the cloud, you can (and generally should) replace the entire resource (for example, EC2 instance, or Lambda function) as part of the restart. The restart itself is a simple and reliable way to recover from failure. Many different types of failures occur in workloads. Failures can occur in hardware, software, communications, and operations. Rather than constructing novel mechanisms to trap, identify, and correct each of the different types of failures, map many different categories of failures to the same recovery strategy.  An instance might fail due to hardware failure, an operating system bug, memory leak, or other causes. Rather than building custom remediation for each situation, treat any of them as an instance failure. Terminate the instance, and allow AWS Auto Scaling to replace it. Later, carry out the analysis on the failed resource out of band.|
 
 * From the **Target Groups** console click on the  the **Health checks** tab
-    * The ELB health check is configured to return _healthy_ when it receives an http 200 response on the same port and path as our browser requests
-    * Since the server code handles the dependency access error, the _bad_ server still returns http 200 (with its default static response)
+    * The ELB health check is configured to return _healthy_ when it receives an http 200 response on the `/healthcheck` path
+    * Since the healthcheck code simply always returns http 200, the _bad_ server still returns http 200 and is seen as _healthy_.
 
 ### 3.4 Create a deep healthcheck to identify bad servers
 
 * Update server code to add a deep health check response
     * You will create and configure a new health check that will include a check on whether the server can access its dependency
     * This is a _deep health check_ -- it checks the actual function of the server including the ability to call service dependencies
-* This will be implemented in two steps:
-    1. Update the server code
-    1. Reconfigure Elastic Load Balancer (ELB) to use the new deep health check
+* This will be implemented by updating the server code on the `/healthcheck` path
 
 Choose _one_ of the options below (**Option 1 - Expert** or **Option 2 - Assisted**) to improve the code and add the deep health check.
 
@@ -341,7 +365,6 @@ You may choose this option, or skip to **Option 2 - Assisted option**
 This option requires you have access to place a file in a location accessible via https/https via a URL. For example a public readable S3 bucket, [gist](https://gist.github.com) (use the **raw** option to get the URL), or your private webserver.
 
 1. Start the existing server code that you added error handling to, or alternatively download the lab sample code from here: [server_errorhandling.py](https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_errorhandling.py)
-1. The current webserver returns requests for path `/`. You should modify the code to add an additional path `/healthcheck` for health check calls
 1. Calls to `/healthcheck` should in turn make a test call to **RecommendationService**  using _User ID_ **0**
       * If the **RecommendationService** returns the string **test** for both _Result_ and _UserName_ then it is healthy
       * If it is healthy then return http code 200 (OK)
@@ -353,7 +376,7 @@ This option requires you have access to place a file in a location accessible vi
       * Find the **ServerCodeUrl** parameter and enter the URL for your new code
       * When stack **status** is _CREATE_COMPLETE_ (about four minutes) then continue
 
-If you completed the **Expert option**, then skip the **Assisted option** section and continue with **3.4.3 Health check code**
+If you completed the **Option 1 - Expert option**, then skip the **Option 2 - Assisted option** section and continue with **3.4.3 Health check code**
 
 #### 3.4.2 Option 2 - Assisted option: deploy workshop provided code
 
@@ -379,7 +402,7 @@ If you completed the **Expert option**, then skip the **Assisted option** sectio
 
 #### 3.4.3 Health check code
 
-This is the health check code from [server_healthcheck.py](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py). The **Assisted option** uses this code. If you used the **Expert option**, you can consult this code as a guide.
+This is the health check code from [server_healthcheck.py](https://github.com/awslabs/aws-well-architected-labs/blob/healthchecklab/Reliability/300_Health_Checks_and_Dependencies/Code/Python/server_healthcheck.py). The **Option 2 - Assisted option** uses this code. If you used the **Option 1 - Expert option**, you can consult this code as a guide.
 
 <details>
 <summary>Click here to see code</summary>
@@ -446,12 +469,10 @@ elif self.path == '/healthcheck':
 
 </details>
 
-#### 3.4.4 Reconfigure Elastic Load Balancer (ELB) to use the new deep health check <a name="reconfigure_elb"></a>
+#### 3.4.4 Verify Elastic Load Balancer (ELB) is configured to use the new deep health check
 
 1. From the **Target Groups** console click on the the **Health checks** tab
-1. Click **Edit health check**
-1. For **Path** enter **/healthcheck** (case-sensitive; and be sure to include the **/**)
-1. Click **Save**
+1. For **Path** verify the value is `/healthcheck`
 1. Click the **Targets** tab so you can monitor health check status
 
 #### 3.4.5 Observe behavior of web service with added deep health check
@@ -460,19 +481,20 @@ elif self.path == '/healthcheck':
 
 The CloudFormation stack update reset the EC2 instance IAM roles, so the system is back to its original no-fault state. You will re-introduce the single-server fault and observe the new behavior.
 
-1. Refresh the web service multiple times and note it is functioning without error
+1. Refresh the web service multiple times and note all three servers are functioning without error
 1. Copy the URL of the web service to a new tab and append `/healthcheck` to the end of the URL
       * The new URL should look like:
 
             http://healt-alb1l-<...>.elb.amazonaws.com/healthcheck
 
       * Refresh several times and observe the health check on the three servers
-      * Note the check is successful
+      * Note the check is successful - the check now includes a call to the **RecommendationService** (the DynamoDB table)
       * Go to the **Target Groups** console click on the **Targets** tab and note the health status as per the ELB health checks.
 1. To re-introduce the stale credentials fault, again change the IAM role for the EC2 instance in us-east-2c to **WebApp1-EC2-noDDB-Role-HealthCheckLab**
       * See [3.2 Inject fault on one of the servers](#change_role) if you need a reminder of how to do this.
 1. Go to the **Target Groups** console click on the **Targets** tab and note the health status as per the ELB health checks (remember to refresh)
       * Note that the server in us-east-2c is now failing the health check with a http code 503 Service Not Available
+          * With an **Interval** of _15_ seconds, and a **Healthy threshold** of _2_, it can take up to 30 seconds to see the status update.
       * The ELB has identified the us-east-2c server as unhealthy and will not route traffic to it
       * This is known as _fail-closed_ behavior
 
@@ -484,8 +506,8 @@ The CloudFormation stack update reset the EC2 instance IAM roles, so the system 
 
     |Well-Architected for Reliability: Best practices|
     |:--:|
-    |**Automate healing on all layers**: Use automated capabilities upon detection of failure to perform an action to remediate.|
-    |**Monitor all layers of the workload to detect failures**: Continuously monitor the health of your system and report degradation as well as complete failure.|
+    |**Monitor all components of the workload to detect failures**: Continuously monitor the health of your workload so that you and your automated systems are aware of degradation or complete failure as soon as they occur.|
+    |**Failover to healthy resources**: Ensure that if a resource failure occurs, that healthy resources can continue to serve requests.|
 
     |Well-Architected for Reliability: Health Checks|
     |:---:|
@@ -521,7 +543,7 @@ What is the expected behavior? The previous time you simulated a complete failur
 * The web service failed with a http 502 error
 * Then you implemented error handling and the following were observed
     * The service returned a static response (as per the error handling code)
-    * Since the AWS Elastic Load Balancer at that time was configured to look for http 200 on the same path as the service request, it reported _healthy_ status for all servers
+    * Since the healthcheck code at that time was configured to only return http 200, it reported _healthy_ status for all servers
 
 Now, with the new deep health check in place...
 
@@ -531,12 +553,13 @@ Now, with the new deep health check in place...
 ### 4.2 Observe fail-open behavior
 
 1. Refresh the web service multiple times
+      * Look at which servers (and Availability Zones) are serving requests
       * Note that the service does not fail
-      * But as expected (without access to **RecommendationServiceEnabled**) it serves static responses
+      * But as expected (without access to **RecommendationServiceEnabled**) it always serves static responses
 1. Refresh the health check URL multiple times
       * The deep health detects that **RecommendationServiceEnabled** is not available and returns a failure code for all servers
 1. From the **Target Groups** console **Targets** tab note the health check status of all the servers (you may need ot refresh)
-      * They all report _unhealthy_ with http code 503. This is the code the deep health check is configured to return
+      * They all report _unhealthy_ with http code 503. This is the code the deep health check is configured to return when the dependency is not available
       * Note the message at the top of the tab (if you do not see a message, try refreshing the entire page using the _browser_ refresh function)
 
           ![AllUnhealthy503](Images/AllUnhealthy503.png)
@@ -549,6 +572,12 @@ Now, with the new deep health check in place...
       A system set to _fail-open_ does not shut down when failure conditions are present. Instead, the system remains “open” and operations continue. The AWS Application Load Balancer here exhibits this fail-open behavior and the service continues to serve requests sent to it by the load balancer.
 
 * Reset the value of **RecommendationServiceEnabled**  to **true** and observe that the service resumes serving personalized recommendations.
+    * The **RecommendationServiceEnabled** parameter was initially intended  to  simulate the failure of **RecommendationService** for this lab
+    * But now that we have implemented _fail-open_ behavior and _graceful degradation_ we could use the **RecommendationServiceEnabled** parameter as an _emergency lever_ to cuto-off traffic to **RecommendationService** if there was a serious problem with it.
+
+      |Well-Architected for Reliability: Best practice|
+      |:---:|
+      |**Implement emergency levers**: These are rapid processes that may mitigate availability impact on your workload. They can be operated in the absence of a root cause. An ideal emergency lever reduces the cognitive burden on the resolvers to zero by providing fully deterministic activation and deactivation criteria. Example levers include blocking all robot traffic or serving a static response. Levers are often manual, but they can also be automated.|
 
 ## 5. Tear down this lab <a name="tear_down"></a>
 

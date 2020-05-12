@@ -1,6 +1,7 @@
 import json
 import boto3
 import datetime
+import time
 import os
 
 minAgeKeysToReport = int(os.environ['MinAgeKeysToReport'])

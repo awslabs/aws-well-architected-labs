@@ -1,0 +1,380 @@
+﻿AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for a simple VPC and simple static web app. This template installs a web application that is
+  NOT highly-available and NOT scalable. It also does not follow best practices for security.
+  It is kept simple as a tool for learning.
+  This app should NOT be used for production purposes -- it is a learning tool only.
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+
+########################################################################
+
+Parameters:
+  #General:
+
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template.
+    Default: SimpleApp1
+
+  # true/false resource switches
+  PublicEnabledParam:
+    Description: 'true if resources to connect VPC to internet should be deployed'
+    Type: String
+    AllowedValues:
+      - true
+      - false    
+    Default: false
+
+  EC2SecurityEnabledParam:
+    Description: 'true if resources necessary for EC2 security should be deployed'
+    Type: String
+    AllowedValues:
+      - true
+      - false    
+    Default: false
+
+  # S3 Bucket
+  S3BucketName:
+    Type: String
+    Description: The name for the S3 bucket - must be unique across all of AWS (3-63 lowercase letters or numbers)
+    Default: replaceme
+    AllowedPattern: '^[a-z0-9]{3,63}$'
+    ConstraintDescription: 3-63 characters; must contain only lowercase letters or numbers
+
+  # IP configuration
+  VPCCidrBlock:
+    Description: 'CIDR IP for VPC'
+    Type: String
+    Default: 10.0.0.0/16
+
+  PublicCidrBlock1:
+    Description: 'CIDR IP for public subnet'
+    Type: String
+    Default: 10.0.1.0/24
+
+  PublicSGSource:
+    Description: The IP address range that can be used to access the web app
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.    
+
+  #Application Tier
+  LatestAmiId:
+    Description: Gets the latest AMI from Systems Manager Parameter store
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t3.micro
+    AllowedValues:
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t2.nano
+      - t2.micro
+      - t2.small
+    ConstraintDescription: must be a valid EC2 instance type.
+
+########################################################################
+
+Conditions:
+  # Create resources to connect VPC to the internet
+  PublicEnabled: !Equals [!Ref PublicEnabledParam, "true"]
+
+  # Create security resources needed for an EC2 instances
+  EC2SecurityEnabled: !Equals [!Ref EC2SecurityEnabledParam, "true"]
+
+########################################################################
+
+Resources:
+
+  ###########
+  # Student added resources
+  ###########
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      Tags:
+        - Key: Name
+          Value: Simple Server
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: PublicSecurityGroup
+          SubnetId: 
+            Ref: PublicSubnet1
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum -y update
+          sudo yum install -y httpd
+          sudo systemctl start httpd
+
+  ###########
+  # VPC with Internet Gateway
+  ###########
+
+  #VPC
+  SimpleVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html
+      CidrBlock: !Ref VPCCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - VPC
+
+  #Internet Gateway: Allows communication between instances in your VPC and the internet.
+  IGW:
+    Condition: PublicEnabled
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - IGW
+  IGWAttach:
+    Condition: PublicEnabled
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref SimpleVPC
+      InternetGatewayId: !Ref IGW
+      #VpnGatewayId
+
+
+  ###########
+  # Route Table to Internet
+  ###########
+
+  # Route to/from Internet
+  InternetRoute:
+    Condition: PublicEnabled
+    Type: AWS::EC2::Route
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref InternetRouteTable
+
+  InternetRouteTable:
+    Condition: PublicEnabled
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref SimpleVPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Public
+              - RTB
+
+  ###########
+  # Public Subnet
+  ###########
+
+  PublicSubnet1:
+    Condition: PublicEnabled
+    Type: AWS::EC2::Subnet
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      VpcId: !Ref SimpleVPC
+      AvailabilityZone: !Select 
+        - 0
+        - !GetAZs #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
+          Ref: 'AWS::Region'
+      CidrBlock: !Ref PublicCidrBlock1
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Public
+              - 1
+
+  PublicSubnet1RouteToInternet:
+    Condition: PublicEnabled
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    DependsOn:
+      - PublicSubnet1
+      - InternetRouteTable
+    Properties:
+      RouteTableId: !Ref InternetRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+###########
+# IAM Role for Instance
+###########
+
+  # IAM Role for EC2 servers - makes use of the IAM Policy defined below
+  Web1InstanceRole:
+    Condition: EC2SecurityEnabled
+    Type: AWS::IAM::Role
+    DependsOn: WebInstancePolicy
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref WebInstancePolicy
+
+  # IAM Policy defines what EC2 servers have permission for
+  WebInstancePolicy:
+    Condition: EC2SecurityEnabled
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: 'Policy used by EC2 WebServers'
+      ManagedPolicyName: !Sub '${NamingPrefix}-EC2-Policy-${AWS::StackName}'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ec2:DescribeInstanceStatus'
+            Resource: '*'
+          - Effect: Allow
+            Action: 's3:GetObject'
+            Resource: '*'
+          - Effect: Allow
+            Action: 'ssm:*'
+            Resource: '*'
+          - Effect: Allow
+            Action: 'ec2messages:*'
+            Resource: '*'
+
+  # InstanceProfile allows you to connect IAM roles to EC2 servers
+  Web1InstanceInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Condition: EC2SecurityEnabled
+    Properties:
+      InstanceProfileName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
+      Path: /Web1InstanceEc2Role/
+      Roles:
+        - !Ref Web1InstanceRole
+
+###########
+# App Security Group
+###########
+
+  PublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: EC2SecurityEnabled
+    Properties:
+      VpcId: !Ref SimpleVPC
+      GroupName: !Join
+        - '-'
+        - - !Ref NamingPrefix
+          - SG
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 to the allowed CIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: !Ref PublicSGSource
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref PublicSGSource
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - SG
+
+########################################################################
+
+Outputs:
+
+  SimpleVPCId:
+    Value: !Ref SimpleVPC
+
+  PublicServerDNS:
+    Value: !GetAtt MyEC2Instance.PublicDnsName
+
+########################################################################
+# Metadata is used to group and order how the CloudFormation parameters are 
+# displayed when you deploy the template using the AWS Console
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Naming"
+        Parameters: 
+          - NamingPrefix
+      - 
+        Label: 
+          default: "true/false switches"
+        Parameters: 
+          - PublicEnabledParam
+          - EC2SecurityEnabledParam
+      - 
+        Label: 
+          default: "S3 bucket"
+        Parameters: 
+          - S3BucketName
+      - 
+        Label: 
+          default: "IP configuration (CIDR)"
+        Parameters: 
+          - VPCCidrBlock
+          - PublicCidrBlock1
+          - PublicSGSource
+      - 
+        Label: 
+          default: "EC2 configuration"
+        Parameters: 
+          - LatestAmiId
+          - InstanceType
