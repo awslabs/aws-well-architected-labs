@@ -57,7 +57,6 @@ Because we had an existing CloudFront distribution, the creation of setup of thi
 1. in the repo's main directory, run: `hugo serve -D`
 1. You should get a localhost:port to connect and see changes live.
 
-
 ## How I built the base site:
 The instructions below is how I built the skeleton site.
 ### On Mac:
