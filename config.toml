@@ -15,14 +15,14 @@ ordersectionsby = "weight"
     # 4000 - Performance Efficiency
     # 5000 - Cost Optimization
     # 6000 - Well Architected Tool
-editURL = "https://github.com/ericpullen/testwalabs/blob/master/content/"
+editURL = "https://github.com/awslabs/aws-well-architected-labs/blob/master/content/"
 description = "Hands on labs and real world design scenarios for Well-Architected workloads"
 author = "Well-Architected Team"
 showVisitedLinks = true
 # Hide Next and Previous page buttons normally displayed full height beside content
 disableNextPrev = true
 #AWS custom params
-base_github_url = "https://github.com/ericpullen/testwalabs/tree/master/"
+base_github_url = "https://github.com/awslabs/aws-well-architected-labs/tree/master/"
 base_raw_github_url = "https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/"
 #{{% siteparam "base_github_url" %}}
 
