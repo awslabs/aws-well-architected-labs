@@ -6,6 +6,8 @@ theme = "learn"
 
 [params]
 themeVariant = "walabs"
+disableShortcutsTitle = true
+
 # Order sections in menu by "weight" or "title". Default to "weight"
 ordersectionsby = "weight"
     # Weights by pillar:
