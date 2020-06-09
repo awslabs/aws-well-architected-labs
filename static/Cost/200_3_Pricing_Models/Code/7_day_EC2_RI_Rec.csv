@@ -1,0 +1,45 @@
+Recommendation Date,Owner Account,Instance Type,Size Flexible Recommendation,Max hourly usage in Historical Period,Min hourly usage in Historical Period,Average hourly usage in Historical Period,Max hourly normalized unit usage in Historical Period,Min hourly normalized unit usage in Historical Period,Average hourly normalized unit usage in Historical Period,Projected RI Utilization,Location,OS,Tenancy,Offering Class,Term,Payment Option,Upfront Cost,Recurring Monthly Cost,Recommended Instance Quantity Purchase,Estimated Monthly Savings,Break Even Months
+2018-11-14T15:24:54Z,8.36E+11,m4.large,TRUE,2,0,1.994444444,,,,99.72222222,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,1014,43.07,2,61.09444449,6.964551456
+2018-11-14T15:24:54Z,8.36E+11,c5.large,TRUE,3,0,2.286103394,,,,99.86111111,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,876,37.96,2,50.92763889,7.068641087
+2018-11-14T15:24:54Z,8.36E+11,t2.nano,TRUE,55,0,36.01653088,,,,86.30408949,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,899,38.471,31,38.36090257,7.93625784
+2018-11-14T15:24:54Z,8.36E+11,m5.large,FALSE,1,0,0.997222222,,,,99.72222222,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,1307,54.75,1,27.94211114,9.549990298
+2018-11-14T15:24:54Z,8.36E+11,t2.nano,TRUE,2,2,2,,,,100,EU (London),Linux/UNIX,Shared,Standard,1,All_Upfront,76,2.92,2,3.30266673,7.887090079
+2018-11-14T15:24:54Z,8.36E+11,c3.2xlarge,TRUE,3,3,3,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,4278,387.63,3,414.38,6.207797084
+2018-11-14T15:24:54Z,8.36E+11,c3.4xlarge,TRUE,55,19,29.86666667,,,,85.07376553,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,65596,11949.67619,23,5651.211806,7.560133915
+2018-11-14T15:24:54Z,8.36E+11,c3.large,TRUE,2,2,2,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,712,64.24,2,69.14666667,6.194479037
+2018-11-14T15:24:54Z,8.36E+11,c4.2xlarge,TRUE,11,8,10.84444444,,,,98.58585859,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,15268,1268.74,11,1591.310667,5.879004468
+2018-11-14T15:24:54Z,8.36E+11,c4.4xlarge,TRUE,3,3,3,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,8331,694.23,3,893.5,5.801448742
+2018-11-14T15:24:54Z,8.36E+11,c4.xlarge,TRUE,71,15,33.66805556,,,,76.8679762,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,13148,3956.061625,19,1363.046333,7.950174487
+2018-11-14T15:24:54Z,8.36E+11,m3.large,TRUE,29,16,24.58194444,,,,84.76532567,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,13514,1249.03,29,962.53975,7.039428056
+2018-11-14T15:24:54Z,8.36E+11,m3.medium,TRUE,38,32,37.27916667,,,,98.37032144,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,8621,819.6865833,25,992.779375,5.792807188
+2018-11-14T15:24:54Z,8.36E+11,m3.xlarge,TRUE,13,5,7.472222222,,,,94.52661823,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,6524,751.2065,7,734.2835,6.157603898
+2018-11-14T15:24:54Z,8.36E+11,m4.10xlarge,TRUE,2,2,2,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,14016,1168,2,1314,6.874177858
+2018-11-14T15:24:54Z,8.36E+11,m4.2xlarge,TRUE,24,12,15.69305556,,,,91.72358195,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,21030,2244.75,15,1730.715278,8.357794377
+2018-11-14T15:24:54Z,8.36E+11,m4.large,TRUE,120,23,46.42916667,,,,77.86342609,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,8050,2809.511458,23,756.3166667,6.286953991
+2018-11-14T15:24:54Z,8.36E+11,m4.xlarge,TRUE,13,11,11.27638889,,,,98.64057113,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,7711,692.8409722,11,722.5166667,5.58109589
+2018-11-14T15:24:54Z,8.36E+11,m4.xlarge,TRUE,1,1,1,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,517,43.07,1,59.84666667,6.461187215
+2018-11-14T15:24:54Z,8.36E+11,m5.large,TRUE,6,6,6,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,2082,175.2,6,176.9,5.699698733
+2018-11-14T15:24:54Z,8.36E+11,r4.8xlarge,TRUE,2,2,2,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,13422,1118.36,2,1491.396,7.546575342
+2018-11-14T15:24:54Z,8.36E+11,t1.micro,TRUE,1,1,1,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,62,5.84,1,3.593333333,6.180908707
+2018-11-14T15:24:54Z,8.36E+11,t2.2xlarge,TRUE,1,1,1,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,1310,109.135,1,122.7543333,6.198138962
+2018-11-14T15:24:54Z,8.36E+11,t2.large,TRUE,12,10,11.04861111,,,,99.73336541,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,3597,304.5852,8,337.7135778,6.491239389
+2018-11-14T15:24:54Z,8.36E+11,t2.medium,TRUE,62,47,52.58888889,,,,96.22213733,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,8200,809.6762556,50,748.9599222,6.792941875
+2018-11-14T15:24:54Z,8.36E+11,t2.micro,TRUE,44,31,36.86666667,,,,92.96929125,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,1312,162.2086361,32,121.3829639,5.559990553
+2018-11-14T15:24:54Z,8.36E+11,t2.micro,TRUE,1,1,1,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,30,2.482,1,3.486,5.621381775
+2018-11-14T15:24:54Z,8.36E+11,t2.small,TRUE,2,2,2,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,120,9.928,2,13.652,6.1834772
+2018-11-14T15:24:54Z,8.36E+11,t2.xlarge,TRUE,4,4,4,,,,100,US East (N. Virginia),Linux/UNIX,Shared,Standard,1,All_Upfront,2620,218.416,4,245.3626667,6.386098693
+2018-11-14T15:24:54Z,8.36E+11,c3.4xlarge,FALSE,1,1,1,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,3474,624.88,1,477,6.376396427
+2018-11-14T15:24:54Z,8.36E+11,c3.xlarge,FALSE,2,2,2,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,1736,312.44,2,239.3133333,8.236183255
+2018-11-14T15:24:54Z,8.36E+11,c4.large,FALSE,9,0,1.168302945,,,,95.15251392,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,748,89.79,1,35.37108333,7.739428191
+2018-11-14T15:24:54Z,8.36E+11,c4.xlarge,FALSE,5,2,2.084722222,,,,98.73432764,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,2966,274.2620139,2,155.7933333,9.026211349
+2018-11-14T15:24:54Z,8.36E+11,c5.large,FALSE,4,0,2.007739938,,,,89.67360718,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,1396,117.8290972,2,32.78538889,5.837903199
+2018-11-14T15:24:54Z,8.36E+11,m3.2xlarge,FALSE,2,2,2,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,4656,727.08,2,708.46,10.47078401
+2018-11-14T15:24:54Z,8.36E+11,m3.large,FALSE,6,0,2.53724605,,,,61.29693691,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,585,305.943,1,0.865666667,5.82455216
+2018-11-14T15:24:54Z,8.36E+11,m3.xlarge,FALSE,1,1,1,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,1164,181.04,1,177.48,9.183037687
+2018-11-14T15:24:54Z,8.36E+11,m4.xlarge,FALSE,3,1,1.888888889,,,,89.04213201,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,1507,407.1777778,1,65.67666667,8.218099653
+2018-11-14T15:24:54Z,8.36E+11,m5.large,FALSE,8,4,4.006944444,,,,99.95923449,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,3000,252.1947222,4,117.92,7.018750685
+2018-11-14T15:24:54Z,8.36E+11,r3.2xlarge,FALSE,1,1,1,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,5049,227.03,1,264.72,10.15419222
+2018-11-14T15:24:54Z,8.36E+11,t2.large,FALSE,10,0,5.432384342,,,,73.07962076,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,900,360.2979889,2,12.91633333,9.591000421
+2018-11-14T15:24:54Z,8.36E+11,t2.medium,FALSE,62,8,33.00277778,,,,78.5123978,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,3645,1397.453194,15,139.4277278,6.962775462
+2018-11-14T15:24:54Z,8.36E+11,t2.medium,FALSE,1,1,1,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,199,16.571,1,13.85766667,6.950194487
+2018-11-14T15:24:54Z,8.36E+11,t2.micro,FALSE,1,1,1,,,,100,US East (N. Virginia),Windows (Amazon VPC),Shared,Standard,1,All_Upfront,50,4.161,1,3.498333333,8.450194487

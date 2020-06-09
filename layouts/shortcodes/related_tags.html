@@ -1,0 +1,28 @@
+{{/* Print out a list of tags and pages for each tag*/}} 
+
+{{/* On the page where you want this to appear*/}} 
+{{/* add "related_tags to the frontmatter and list the tags you want included*/}} 
+
+<ul>
+	{{/* From the frontmatter of the page for each related_tags... */}} 
+	{{ range $index, $tag := .Page.Param "related_tags" }}
+
+		{{/* Print out the tag and link to the tag page*/}} 
+		{{ with $.Site.GetPage (printf "/%s/%s" "tags" $tag) -}}
+			<li>
+				<a href="{{ .RelPermalink }}">{{ $tag }}</a>
+			</li>			
+		{{- end -}}
+
+		{{/* Print out each page on the site with that tag and link to it*/}} 
+		<ul>
+			{{$taggedPages := $.Site.Pages.RelatedTo (keyVals "tags" $tag)}}
+			{{range $taggedPages}}
+				<li>
+					<a href="{{ .RelPermalink}}">{{ .LinkTitle }}</a>
+				</li>
+			{{- end -}}
+		</ul>
+
+	{{- end -}}
+</ul>

@@ -1,0 +1,1941 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for VPC. Creates a multi-tier network appropriate for a web application including subnets for application load balancer, application, database and shared services.
+  VPC Flow Log including an IAM role will also be created. 
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+Parameters:
+  #General:
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template, and exported values.
+    Default: WebApp1
+  VPCCidrBlock:
+    Description: VPC Cidr
+    Type: String
+    Default: 10.0.0.0/16
+  VPCFlowLogRetention:
+    Description: VPC Flow Log retention time in days
+    Type: String
+    Default: 90
+  #ALB #1 Tier:
+  ALB1CidrBlock1:
+    Description: 'ALB1 CidrIp for AZ 1, or blank for no ALB1 resources'
+    Type: String
+    Default: 10.0.1.0/24
+  ALB1CidrBlock2:
+    Description: 'ALB1 CidrIp for AZ 2'
+    Type: String
+    Default: 10.0.2.0/24
+  ALB1CidrBlock3:
+    Description: 'ALB1 CidrIp for AZ 3'
+    Type: String
+    Default: 10.0.3.0/24
+  #App #1 Tier:
+  App1CidrBlock1:
+    Description: 'App1 CidrIp for AZ 1'
+    Type: String
+    Default: 10.0.11.0/24
+  App1CidrBlock2:
+    Description: 'App1 CidrIp for AZ 2'
+    Type: String
+    Default: 10.0.12.0/24
+  App1CidrBlock3:
+    Description: 'App1 CidrIp for AZ 3'
+    Type: String
+    Default: 10.0.13.0/24
+  App1SubnetsInternetRoute:
+    Description: NAT gateway route to 0.0.0.0
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: true
+  App1SubnetsPrivateLinkEndpoints:
+    Description: VPC Endpoints can be used to access common AWS services directly within a subnet, instead of via a NAT Gateway. Note for testing purposes a NAT Gateway is more cost effective than enabling endpoint services.
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: false
+  #DB #1 Tier:
+  DB1CidrBlock1:
+    Description: 'DB1 CidrIp for AZ 1, or blank for no DB1 resources'
+    Type: String
+    Default: 10.0.21.0/24
+  DB1CidrBlock2:
+    Description: 'DB1 CidrIp for AZ 2'
+    Type: String
+    Default: 10.0.22.0/24
+  DB1CidrBlock3:
+    Description: 'DB1 CidrIp for AZ 3'
+    Type: String
+    Default: 10.0.23.0/24
+  DB1SubnetsInternetRoute:
+    Description: 'NAT gateway route to 0.0.0.0, or false for no DB1 resources'
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: false
+  DB1AccessFromApp1:
+    Description: 'Allow access to DB1 from App1'
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: true
+  #Shared #1 Tier:
+  Shared1CidrBlock1:
+    Description: 'Shared1 CidrIp for AZ 1, or blank for no Shared1 resources'
+    Type: String
+    Default: 10.0.31.0/24
+  Shared1CidrBlock2:
+    Description: 'Shared1 CidrIp for AZ 2'
+    Type: String
+    Default: 10.0.32.0/24
+  Shared1CidrBlock3:
+    Description: 'Shared1 CidrIp for AZ 3'
+    Type: String
+    Default: 10.0.33.0/24
+Mappings:
+  Region2AZ:
+    #N. Virginia
+    us-east-1:
+      '1': us-east-1a
+      '2': us-east-1b
+      '3': us-east-1c
+      '4': us-east-1d
+      '5': us-east-1e
+      '6': us-east-1f
+    #Ohio
+    us-east-2:
+      '1': us-east-2a
+      '2': us-east-2b
+      '3': us-east-2c
+    #N. California
+    us-west-1:
+      '1': us-west-1a
+      '2': us-west-1b
+      '3': us-west-1c
+    #Oregon
+    us-west-2:
+      '1': us-west-2a
+      '2': us-west-2b
+      '3': us-west-2c
+    #Canada
+    ca-central-1:
+      '1': ca-central-1a
+      '2': ca-central-1b
+    #Stockholm
+    eu-north-1:
+      '1': eu-north-1a
+      '2': eu-north-1b
+      '3': eu-north-1c
+    #Ireland
+    eu-west-1:
+      '1': eu-west-1a
+      '2': eu-west-1b
+      '3': eu-west-1c
+    #London
+    eu-west-2:
+      '1': eu-west-2a
+      '2': eu-west-2b
+      '3': eu-west-2c
+    #Paris
+    eu-west-3:
+      '1': eu-west-3a
+      '2': eu-west-3b
+      '3': eu-west-3c
+    #Frankfurt
+    eu-central-1:
+      '1': eu-central-1a
+      '2': eu-central-1b
+      '3': eu-central-1a
+    #Tokyo
+    ap-northeast-1:
+      '1': ap-northeast-1a
+      '2': ap-northeast-1b
+      '3': ap-northeast-1c
+      #'3': ap-northeast-1d #new accounts cannot access
+    #Seoul
+    ap-northeast-2:
+      '1': ap-northeast-2a
+      '2': ap-northeast-2c
+    #Singapore
+    ap-southeast-1:
+      '1': ap-southeast-1a
+      '2': ap-southeast-1b
+      '3': ap-southeast-1c
+    #Sydney
+    ap-southeast-2:
+      '1': ap-southeast-2a
+      '2': ap-southeast-2b
+      '3': ap-southeast-2c
+    #Mumbai
+    ap-south-1:
+      '1': ap-south-1a
+      '2': ap-south-1b
+    #Sao Paulo
+    sa-east-1:
+      '1': sa-east-1a
+      '2': sa-east-1b
+      '3': sa-east-1c #new accounts cannot access
+Conditions:
+  #ALB1:
+  ALB1Enabled: !Not
+    - !Equals
+      - !Ref ALB1CidrBlock1
+      - ''
+  #App1:
+  App1SubnetsInternetRouteEnabled: !Equals [!Ref App1SubnetsInternetRoute, "true"]
+  App1SubnetsPrivateLinkEndpointsEnabled: !Equals [!Ref App1SubnetsPrivateLinkEndpoints, "true"]
+  #DB1:
+  DB1SubnetsInternetRouteEnabled: !Equals [!Ref DB1SubnetsInternetRoute, "true"]
+  DB1Enabled: !Not
+    - !Equals
+      - !Ref DB1CidrBlock1
+      - ''
+  DB1AccessFromApp1Enabled: !Equals [!Ref DB1AccessFromApp1, "true"]
+  #Shared1:
+  Shared1Enabled: !Not
+    - !Equals
+      - !Ref Shared1CidrBlock1
+      - ''
+Resources:
+  #VPC
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html
+      CidrBlock: !Ref VPCCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - VPC
+  VPCFlowLogGroup:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: Delete
+    Properties:
+      RetentionInDays: !Ref VPCFlowLogRetention
+  VPCFlowLog:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html
+    Type: "AWS::EC2::FlowLog"
+    DependsOn: VPCFlowLogGroup
+    Properties:
+      DeliverLogsPermissionArn: !GetAtt VPCFlowLogRole.Arn
+      #LogDestination
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: !Ref VPCFlowLogGroup
+      ResourceId: !Ref VPC
+      ResourceType: VPC
+      TrafficType: ALL
+  VPCFlowLogRole:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-VPCFlowLog-${AWS::Region}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - vpc-flow-logs.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      #PermissionsBoundary:
+      Policies:
+        - PolicyName: VPCFlowLog
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogGroups'
+                  - 'logs:DescribeLogStreams'
+                Resource: '*'
+  IGW:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - IGW
+  IGWAttach:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+      #VpnGatewayId
+  InternetRoute:
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #DestinationIpv6CidrBlock: ::/0
+      #EgressOnlyInternetGatewayId
+      GatewayId: !Ref IGW
+      #InstanceId
+      #NatGatewayId
+      #NetworkInterfaceId
+      RouteTableId: !Ref InternetRouteTable
+      #VpcPeeringConnectionId
+  InternetRouteTable:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Public
+              - RTB
+  VPCEndpoints3:
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      RouteTableIds:
+        - !Ref App1RouteTable1
+        - !Ref App1RouteTable2
+        - !Ref App1RouteTable3
+        - !Ref DB1RouteTable1
+        - !Ref DB1RouteTable2
+        - !Ref DB1RouteTable3
+        - !Ref Shared1RouteTable1
+        - !Ref Shared1RouteTable2
+        - !Ref Shared1RouteTable3
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      PolicyDocument: {
+        "Id": "VPCEndpointPolicy",
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowAllS3Buckets",
+            "Action": "s3:*",
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::*",
+            "Principal": "*"
+          }
+        ]
+      }
+      VpcEndpointType: Gateway
+  #ALB1 Tier:
+  ALB1Subnet1:
+    Condition: ALB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '1'
+      CidrBlock: !Ref ALB1CidrBlock1
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - ALB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '1'
+      VpcId: !Ref VPC
+  ALB1Subnet2:
+    Condition: ALB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '2'
+      CidrBlock: !Ref ALB1CidrBlock2
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - ALB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '2'
+      VpcId: !Ref VPC
+  ALB1Subnet3:
+    Condition: ALB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '3'
+      CidrBlock: !Ref ALB1CidrBlock3
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - ALB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '3'
+      VpcId: !Ref VPC
+  ALB1Subnet1RouteToInternet:
+    Condition: ALB1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    DependsOn:
+      - ALB1Subnet1
+      - InternetRouteTable
+    Properties:
+      RouteTableId: !Ref InternetRouteTable
+      SubnetId: !Ref ALB1Subnet1
+  ALB1Subnet2RouteToInternet:
+    Condition: ALB1Enabled
+    DependsOn:
+      - ALB1Subnet2
+      - InternetRouteTable
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      RouteTableId: !Ref InternetRouteTable
+      SubnetId: !Ref ALB1Subnet2
+  ALB1Subnet3RouteToInternet:
+    Condition: ALB1Enabled
+    DependsOn:
+      - ALB1Subnet3
+      - InternetRouteTable
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      RouteTableId: !Ref InternetRouteTable
+      SubnetId: !Ref ALB1Subnet3
+  ALB1NetworkAcl1:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}-ALB1'
+  ALB1InFromInternetHTTPAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '5'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: '0.0.0.0/0'
+      PortRange:
+        From: '80'
+        To: '80'
+  ALB1InFromInternetHTTPSAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '15'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: '0.0.0.0/0'
+      PortRange:
+        From: '443'
+        To: '443'
+  ALB1InNetworkEphemeralVPCAclEntry1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '1024'
+        To: '65535'
+  ALB1InNetworkEphemeralVPCAclEntry2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '105'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '1024'
+        To: '65535'
+  ALB1InNetworkEphemeralVPCAclEntry3:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '115'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '1024'
+        To: '65535'
+  ALB1OutNetworkEphemeralAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  ALB1OutNetworkHTTPVPCAclEntry1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '80'
+        To: '80'
+  ALB1OutNetworkHTTPVPCAclEntry2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '30'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '80'
+        To: '80'
+  ALB1OutNetworkHTTPVPCAclEntry3:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '40'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '80'
+        To: '80'
+  ALB1OutNetworkHTTPSVPCAclEntry1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '50'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '433'
+        To: '433'
+  ALB1OutNetworkHTTPSVPCAclEntry2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '60'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '433'
+        To: '433'
+  ALB1OutNetworkHTTPSVPCAclEntry3:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref ALB1NetworkAcl1
+      RuleNumber: '70'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '433'
+        To: '433'
+  ALB1SubnetNetworkAclAssocation1:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref ALB1Subnet1
+      NetworkAclId: !Ref ALB1NetworkAcl1
+  ALB1SubnetNetworkAclAssocation2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref ALB1Subnet2
+      NetworkAclId: !Ref ALB1NetworkAcl1
+  ALB1SubnetNetworkAclAssocation3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref ALB1Subnet3
+      NetworkAclId: !Ref ALB1NetworkAcl1
+  #App1 Tier:
+  App1Subnet1:
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '1'
+      CidrBlock: !Ref App1CidrBlock1
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - App1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '1'
+      VpcId: !Ref VPC
+  App1Subnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '2'
+      CidrBlock: !Ref App1CidrBlock2
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - App1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '2'
+      VpcId: !Ref VPC
+  App1Subnet3:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '3'
+      CidrBlock: !Ref App1CidrBlock3
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - App1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '3'
+      VpcId: !Ref VPC
+  App1RouteTable1:
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - App1
+                - RTB1
+  App1InternetRoute1:
+    Condition: App1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #EgressOnlyInternetGatewayId
+      #GatewayId:
+      #InstanceId
+      NatGatewayId: !Ref Shared1NATGW1
+      #NetworkInterfaceId
+      RouteTableId: !Ref App1RouteTable1
+      #VpcPeeringConnectionId
+  App1RouteTable2:
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - App1
+                - RTB2
+  App1InternetRoute2:
+    Condition: App1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #EgressOnlyInternetGatewayId
+      #GatewayId:
+      #InstanceId
+      NatGatewayId: !Ref Shared1NATGW2
+      #NetworkInterfaceId
+      RouteTableId: !Ref App1RouteTable2
+      #VpcPeeringConnectionId
+  App1RouteTable3:
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - App1
+                - RTB3
+  App1InternetRoute3:
+    Condition: App1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #EgressOnlyInternetGatewayId
+      #GatewayId:
+      #InstanceId
+      NatGatewayId: !Ref Shared1NATGW3
+      #NetworkInterfaceId
+      RouteTableId: !Ref App1RouteTable3
+      #VpcPeeringConnectionId
+  App1SubnetRouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref App1Subnet1
+      RouteTableId: !Ref App1RouteTable1
+  App1SubnetRouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref App1Subnet2
+      RouteTableId: !Ref App1RouteTable2
+  App1SubnetRouteTableAssociation3:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref App1Subnet3
+      RouteTableId: !Ref App1RouteTable3
+  App1VPCEndpointec2:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointec2messages:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2messages'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointcloudformation:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.cloudformation'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointlogs:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.logs'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointmonitoring:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.monitoring'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointssm:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssm'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointssmmessages:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssmmessages'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointsecretsmanager:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.secretsmanager'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1VPCEndpointkms:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: AWS::EC2::VPCEndpoint
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+    Properties: 
+      VpcId: !Ref VPC
+      # RouteTableIds: 
+      #   - String
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.kms'
+      # PolicyDocument: String
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds: 
+        - !Ref App1Subnet1
+        - !Ref App1Subnet2
+        - !Ref App1Subnet3
+      SecurityGroupIds: 
+        - !Ref App1EndpointSecurityGroup
+  App1EndpointSecurityGroup:
+    Condition: App1SubnetsPrivateLinkEndpointsEnabled
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable access to endpoints
+      SecurityGroupIngress:
+        - 
+          IpProtocol: "tcp"
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref App1CidrBlock1
+        - 
+          IpProtocol: "tcp"
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref App1CidrBlock2
+        - 
+          IpProtocol: "tcp"
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref App1CidrBlock3
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Endpoint
+      VpcId: !Ref VPC
+  App1NetworkAcl1:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}-App1'
+  App1InNetworkHTTPAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref VPCCidrBlock
+      PortRange:
+        From: '80'
+        To: '80'
+  App1InNetworkHTTPSAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref VPCCidrBlock
+      PortRange:
+        From: '443'
+        To: '443'
+  App1InNetworkEphemeralAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  App1OutNetworkHTTPAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '80'
+        To: '80'
+  App1OutNetworkHTTPSAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '443'
+        To: '443'
+  App1OutNetworVPCAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref App1NetworkAcl1
+      RuleNumber: '100'
+      Protocol: '-1'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref VPCCidrBlock
+      PortRange:
+        From: '1'
+        To: '65535'
+  App1SubnetNetworkAclAssocation1:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref App1Subnet1
+      NetworkAclId: !Ref App1NetworkAcl1
+  App1SubnetNetworkAclAssocation2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref App1Subnet2
+      NetworkAclId: !Ref App1NetworkAcl1
+  App1SubnetNetworkAclAssocation3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref App1Subnet3
+      NetworkAclId: !Ref App1NetworkAcl1
+  #DB1 Tier:
+  DB1Subnet1:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '1'
+      CidrBlock: !Ref DB1CidrBlock1
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - DB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '1'
+  DB1Subnet2:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '2'
+      CidrBlock: !Ref DB1CidrBlock2
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - DB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '2'
+  DB1Subnet3:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      VpcId: !Ref VPC
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '3'
+      CidrBlock: !Ref DB1CidrBlock3
+      #Ipv6CidrBlock: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - DB1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '3'
+  DB1RouteTable1:
+    Condition: DB1Enabled
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - DB1
+                - RTB1
+  DB1RouteTable2:
+    Condition: DB1Enabled
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - DB1
+                - RTB2
+  DB1RouteTable3:
+    Condition: DB1Enabled
+    #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
+    Type: 'AWS::EC2::RouteTable'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+          - Key: Name
+            Value: !Join
+              - '-'
+              - - !Ref NamingPrefix
+                - DB1
+                - RTB3
+  DB1InternetRoute1:
+    Condition: DB1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #GatewayId: !Ref IGW
+      #EgressOnlyInternetGatewayId
+      #InstanceId
+      NatGatewayId: Shared1NATGW1
+      #NetworkInterfaceId
+      RouteTableId: !Ref DB1RouteTable1
+      #VpcPeeringConnectionId
+  DB1InternetRoute2:
+    Condition: DB1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #GatewayId: !Ref IGW
+      #EgressOnlyInternetGatewayId
+      #InstanceId
+      NatGatewayId: Shared1NATGW2
+      #NetworkInterfaceId
+      RouteTableId: !Ref DB1RouteTable2
+      #VpcPeeringConnectionId
+  DB1InternetRoute3:
+    Condition: DB1SubnetsInternetRouteEnabled
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #GatewayId: !Ref IGW
+      #EgressOnlyInternetGatewayId
+      #InstanceId
+      NatGatewayId: Shared1NATGW3
+      #NetworkInterfaceId
+      RouteTableId: !Ref DB1RouteTable3
+      #VpcPeeringConnectionId
+  DB1SubnetRouteTableAssociation1:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref DB1Subnet1
+      RouteTableId: !Ref DB1RouteTable1
+  DB1SubnetRouteTableAssociation2:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref DB1Subnet2
+      RouteTableId: !Ref DB1RouteTable2
+  DB1SubnetRouteTableAssociation3:
+    Condition: DB1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    Properties:
+      SubnetId: !Ref DB1Subnet3
+      RouteTableId: !Ref DB1RouteTable3
+  DB1NetworkAcl1:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}-DB1'
+  DB1OutNetworkEphemeralAclEntry1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '1024'
+        To: '65535'
+  DB1OutNetworkEphemeralAclEntry2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '1024'
+        To: '65535'
+  DB1OutNetworkEphemeralAclEntry3:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '30'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '1024'
+        To: '65535'
+  DB1InFromApp1AclEntry1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '3306'
+        To: '3306'
+  DB1InFromApp1AclEntry2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '3306'
+        To: '3306'
+  DB1InFromApp1AclEntry3:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref DB1NetworkAcl1
+      RuleNumber: '30'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '3306'
+        To: '3306'
+  DB1SubnetNetworkAclAssocation1:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref DB1Subnet1
+      NetworkAclId: !Ref DB1NetworkAcl1
+  DB1SubnetNetworkAclAssocation2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref DB1Subnet2
+      NetworkAclId: !Ref DB1NetworkAcl1
+  DB1SubnetNetworkAclAssocation3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref DB1Subnet3
+      NetworkAclId: !Ref DB1NetworkAcl1
+  #Shared1 Tier:
+  Shared1Subnet1:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '1'
+      CidrBlock: !Ref Shared1CidrBlock1
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '1'
+      VpcId: !Ref VPC
+  Shared1Subnet2:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '2'
+      CidrBlock: !Ref Shared1CidrBlock2
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '2'
+      VpcId: !Ref VPC
+  Shared1Subnet3:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::Subnet'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Properties:
+      #AssignIpv6AddressOnCreation: true
+      AvailabilityZone: !FindInMap
+        - Region2AZ
+        - !Ref 'AWS::Region'
+        - '3'
+      CidrBlock: !Ref Shared1CidrBlock3
+      #Ipv6CidrBlock: 
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '3'
+      VpcId: !Ref VPC
+  Shared1NATGW1:
+    Type: AWS::EC2::NatGateway
+    Properties: 
+      AllocationId:
+        Fn::GetAtt:
+          - Shared1NAT1EIP
+          - AllocationId
+      SubnetId:
+        Ref: Shared1Subnet1
+      Tags: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '1'
+  Shared1NAT1EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  Shared1NATGW2:
+    Type: AWS::EC2::NatGateway
+    Properties: 
+      AllocationId:
+        Fn::GetAtt:
+          - Shared1NAT2EIP
+          - AllocationId
+      SubnetId:
+        Ref: Shared1Subnet2
+      Tags: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '2'
+  Shared1NAT2EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  Shared1NATGW3:
+    Type: AWS::EC2::NatGateway
+    Properties: 
+      AllocationId:
+        Fn::GetAtt:
+          - Shared1NAT3EIP
+          - AllocationId
+      SubnetId:
+        Ref: Shared1Subnet3
+      Tags: 
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared1
+              - !FindInMap
+                - Region2AZ
+                - !Ref 'AWS::Region'
+                - '3'
+  Shared1NAT1EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  Shared1NAT2EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  Shared1NAT3EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  Shared1Route1:
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #DestinationIpv6CidrBlock: ::/0
+      #EgressOnlyInternetGatewayId
+      GatewayId: !Ref IGW
+      #InstanceId
+      #NatGatewayId: !Ref Shared1NATGW1
+      #NetworkInterfaceId
+      RouteTableId: !Ref Shared1RouteTable1
+      #VpcPeeringConnectionId
+  Shared1RouteTable1:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared
+              - RTB1
+  Shared1SubnetRouteTableAssociation1:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    DependsOn:
+      - Shared1Subnet1
+      - Shared1RouteTable1
+    Properties:
+      RouteTableId: !Ref Shared1RouteTable1
+      SubnetId: !Ref Shared1Subnet1
+  Shared1Route2:
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #DestinationIpv6CidrBlock: ::/0
+      #EgressOnlyInternetGatewayId
+      GatewayId: !Ref IGW
+      #InstanceId
+      #NatGatewayId: !Ref Shared1NATGW2
+      #NetworkInterfaceId
+      RouteTableId: !Ref Shared1RouteTable2
+      #VpcPeeringConnectionId
+  Shared1RouteTable2:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared
+              - RTB2
+  Shared1SubnetRouteTableAssociation2:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    DependsOn:
+      - Shared1Subnet2
+      - Shared1RouteTable2
+    Properties:
+      RouteTableId: !Ref Shared1RouteTable2
+      SubnetId: !Ref Shared1Subnet2
+  Shared1Route3:
+    Type: 'AWS::EC2::Route'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      #DestinationIpv6CidrBlock: ::/0
+      #EgressOnlyInternetGatewayId
+      GatewayId: !Ref IGW
+      #InstanceId
+      #NatGatewayId: !Ref Shared1NATGW3
+      #NetworkInterfaceId
+      RouteTableId: !Ref Shared1RouteTable3
+      #VpcPeeringConnectionId
+  Shared1RouteTable3:
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Shared
+              - RTB3
+  Shared1SubnetRouteTableAssociation3:
+    Condition: Shared1Enabled
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+    DependsOn:
+      - Shared1Subnet3
+      - Shared1RouteTable3
+    Properties:
+      RouteTableId: !Ref Shared1RouteTable3
+      SubnetId: !Ref Shared1Subnet3
+  # Shared1VPCEndpointec2:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointlogs:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.logs'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointmonitoring:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.monitoring'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointssm:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssm'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointssmmessages:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssmmessages'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointsecretsmanager:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.secretsmanager'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  # Shared1VPCEndpointkms:
+  #   Type: AWS::EC2::VPCEndpoint
+  #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
+  #   Properties: 
+  #     VpcId: !Ref VPC
+  #     # RouteTableIds: 
+  #     #   - String
+  #     ServiceName: !Sub 'com.amazonaws.${AWS::Region}.kms'
+  #     # PolicyDocument: String
+  #     VpcEndpointType: Interface
+  #     PrivateDnsEnabled: true
+  #     SubnetIds: 
+  #       - !Ref Shared1Subnet1
+  #       - !Ref Shared1Subnet2
+  #       - !Ref Shared1Subnet3
+  #     # SecurityGroupIds: 
+  #     #   - String
+  Shared1NetworkAcl1:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}-Shared1'
+  Shared1InNetworkEphemeralAclEntry1:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Shared1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  Shared1InNetworkApp1Entry1:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Shared1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock1
+      PortRange:
+        From: '0'
+        To: '65535'
+  Shared1InNetworkApp1Entry2:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Shared1NetworkAcl1
+      RuleNumber: '30'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock2
+      PortRange:
+        From: '0'
+        To: '65535'
+  Shared1InNetworkApp1Entry3:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: Shared1NetworkAcl1
+      RuleNumber: '40'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: !Ref App1CidrBlock3
+      PortRange:
+        From: '0'
+        To: '65535'
+  Shared1Subnet1NetworkAclAssocation1:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref Shared1Subnet1
+      NetworkAclId: !Ref Shared1NetworkAcl1
+  Shared1Subnet1NetworkAclAssocation2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref Shared1Subnet2
+      NetworkAclId: !Ref Shared1NetworkAcl1
+  Shared1Subnet1NetworkAclAssocation3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref Shared1Subnet3
+      NetworkAclId: !Ref Shared1NetworkAcl1
+  Shared1OutNetworkEphemeralAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref Shared1NetworkAcl1
+      RuleNumber: '10'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  Shared1OutNetworkHTTPSAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref Shared1NetworkAcl1
+      RuleNumber: '20'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '443'
+        To: '443'
+  Shared1OutNetworkHTTPAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref Shared1NetworkAcl1
+      RuleNumber: '30'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '80'
+        To: '80'
+Outputs:
+  AppVPC:
+    Description: VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub '${AWS::StackName}'
+  #ALB1:
+  ALB1Subnet1:
+    Condition: ALB1Enabled
+    Description: ALB1Subnet1
+    Value: !Ref ALB1Subnet1
+    Export:
+      Name: !Sub '${AWS::StackName}-ALB1Subnet1'
+  ALB1Subnet2:
+    Condition: ALB1Enabled
+    Description: ALB1Subnet2
+    Value: !Ref ALB1Subnet2
+    Export:
+      Name: !Sub '${AWS::StackName}-ALB1Subnet2'
+  ALB1Subnet3:
+    Condition: ALB1Enabled
+    Description: ALB1Subnet3
+    Value: !Ref ALB1Subnet3
+    Export:
+      Name: !Sub '${AWS::StackName}-ALB1Subnet3'
+  #App1:
+  App1Subnet1:
+    Description: App1Subnet1
+    Value: !Ref App1Subnet1
+    Export:
+      Name: !Sub '${AWS::StackName}-App1Subnet1'
+  App1Subnet2:
+    Description: App1Subnet2
+    Value: !Ref App1Subnet2
+    Export:
+      Name: !Sub '${AWS::StackName}-App1Subnet2'
+  App1Subnet3:
+    Description: App1Subnet3
+    Value: !Ref App1Subnet3
+    Export:
+      Name: !Sub '${AWS::StackName}-App1Subnet3'
+  #DB1:
+  DB1Subnet1:
+    Condition: DB1Enabled
+    Description: DB1Subnet1
+    Value: !Ref DB1Subnet1
+    Export:
+      Name: !Sub '${AWS::StackName}-DB1Subnet1'
+  DB1Subnet2:
+    Condition: DB1Enabled
+    Description: DB1Subnet2
+    Value: !Ref DB1Subnet2
+    Export:
+      Name: !Sub '${AWS::StackName}-DB1Subnet2'
+  DB1Subnet3:
+    Condition: DB1Enabled
+    Description: DB1Subnet3
+    Value: !Ref DB1Subnet3
+    Export:
+      Name: !Sub '${AWS::StackName}-DB1Subnet3'
+  #Shared1:
+  Shared1Subnet1:
+    Condition: Shared1Enabled
+    Description: Shared1Subnet1
+    Value: !Ref Shared1Subnet1
+    Export:
+      Name: !Sub '${AWS::StackName}-Shared1Subnet1'
+  Shared1Subnet2:
+    Condition: Shared1Enabled
+    Description: Shared1Subnet2
+    Value: !Ref Shared1Subnet2
+    Export:
+      Name: !Sub '${AWS::StackName}-Shared1Subnet2'
+  Shared1Subnet3:
+    Condition: Shared1Enabled
+    Description: Shared1Subnet3
+    Value: !Ref Shared1Subnet3
+    Export:
+      Name: !Sub '${AWS::StackName}-Shared1Subnet3'
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "General Configuration"
+        Parameters: 
+          - NamingPrefix
+          - VPCCidrBlock
+          - VPCFlowLogRetention
+      - 
+        Label: 
+          default: "Application Load Balancer Tier"
+        Parameters: 
+          - ALB1CidrBlock1
+          - ALB1CidrBlock2
+          - ALB1CidrBlock3
+      - 
+        Label: 
+          default: "Application Tier"
+        Parameters: 
+          - App1CidrBlock1
+          - App1CidrBlock2
+          - App1CidrBlock3
+          - App1SubnetsInternetRoute
+          - App1SubnetsPrivateLinkEndpoints
+      - 
+        Label: 
+          default: "Database Tier"
+        Parameters: 
+          - DB1CidrBlock1
+          - DB1CidrBlock2
+          - DB1CidrBlock3
+          - DB1SubnetsInternetRoute
+          - DB1AccessFromApp1
+      - 
+        Label: 
+          default: "Shared Tier"
+        Parameters: 
+          - Shared1CidrBlock1
+          - Shared1CidrBlock2
+          - Shared1CidrBlock3

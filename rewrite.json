@@ -1,0 +1,422 @@
+[{
+    "source": "/<*>",
+    "target": "/index.html",
+    "status": "404",
+    "condition": null
+  },
+  {
+    "source": "/README.html",
+    "target": "/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Operations/README.html",
+    "target": "/operational-excellence/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Operations/100_Inventory_and_Patch_Mgmt/<*>.html",
+    "target": "/operational-excellence/100_labs/100_inventory_patch_management/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/README.html",
+    "target": "/security/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/100_AWS_Account_and_Root_User/<*>.html",
+    "target": "/security/100_labs/100_aws_account_and_root_user/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/<*>.html",
+    "target": "/security/100_labs/100_basic_identity_and_access_management_user_group_role/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/100_CloudFront_with_S3_Bucket_Origin/<*>.html",
+    "target": "/security/100_labs/100_cloudfront_with_s3_bucket_origin/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/100_Create_a_Data_Bunker/<*>.html",
+    "target": "/security/100_labs/100_create_a_data_bunker/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/100_Enable_Security_Hub/<*>.html",
+    "target": "/security/100_labs/100_enable_security_hub/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_Deployment_of_Detective_Controls/<*>.html",
+    "target": "/security/200_labs/200_automated_deployment_of_detective_controls/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_Deployment_of_EC2_Web_Application/<*>.html",
+    "target": "/security/200_labs/200_automated_deployment_of_ec2_web_application/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/<*>.html",
+    "target": "/security/200_labs/200_automated_deployment_of_iam_groups_and_roles/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_Deployment_of_VPC/<*>.html",
+    "target": "/security/200_labs/200_automated_deployment_of_vpc/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_Deployment_of_Web_Application_Firewall/<*>.html",
+    "target": "/security/200_labs/200_automated_deployment_of_web_application_firewall/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Automated_IAM_User_Cleanup/<*>.html",
+    "target": "/security/200_labs/200_automated_iam_user_cleanup/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Basic_EC2_with_WAF_Protection/<*>.html",
+    "target": "/security/200_labs/200_basic_ec2_with_waf_protection/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_Certificate_Manager_Request_Public_Certificate/<*>.html",
+    "target": "/security/200_labs/200_certificate_manager_request_public_certificate/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_CloudFront_for_Web_Application/<*>.html",
+    "target": "/security/200_labs/200_cloudfront_for_web_application/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/200_CloudFront_with_WAF_Protection/<*>.html",
+    "target": "/security/200_labs/200_cloudfront_with_waf_protection/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/<*>.html",
+    "target": "/security/300_labs/300_iam_permission_boundaries_delegating_role_creation/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_IAM_Tag_Based_Access_Control_for_EC2/<*>.html",
+    "target": "/security/300_labs/300_iam_tag_based_access_control_for_ec2/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/<*>.html",
+    "target": "/security/300_labs/300_incident_response_playbook_with_jupyter-aws_iam/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_Incident_Response_with_AWS_Console_and_CLI/<*>.html",
+    "target": "/security/300_labs/300_incident_response_with_aws_console_and_cli/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_Lambda_Cross_Account_Bucket_Policy/<*>.html",
+    "target": "/security/300_labs/300_lambda_cross_account_bucket_policy/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/300_Lambda_Cross_Account_IAM_Role_Assumption/<*>.html",
+    "target": "/security/300_labs/300_lambda_cross_account_iam_role_assumption/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_100_Loft_Introduction_to_Security/<*>.html",
+    "target": "/security/quests/quest_100_loft_introduction_to_security/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_100_Quick_Steps_to_Security_Success/<*>.html",
+    "target": "/security/quests/quest_100_quick_steps_to_security_success/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_200_Incident_Response_Day/<*>.html",
+    "target": "/security/quests/quest_200_incident_response_day/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_300_Security_Best_Practices_Day/<*>.html",
+    "target": "/security/quests/quest_300_security_best_practices_day/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_300_Security_Best_Practices_Workshop_EC/<*>.html",
+    "target": "/security/quests/quest_300_security_best_practices_workshop_ec2/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Classify_Data/<*>.html",
+    "target": "/security/quests/quest_classify_data/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Control_Human_Access/<*>.html",
+    "target": "/security/quests/quest_control_human_access/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Control_Programmatic_Access/<*>.html",
+    "target": "/security/quests/quest_control_programmatic_access/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Defend_Against_New_Threats/<*>.html",
+    "target": "/security/quests/quest_defend_against_new_threats/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Detect_and_Investigate_Events/<*>.html",
+    "target": "/security/quests/quest_detect_and_investigate_events/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Incident_Response/<*>.html",
+    "target": "/security/quests/quest_incident_response/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Managing_Credentials_and_Authentication/<*>.html",
+    "target": "/security/quests/quest_managing_credentials_and_authentication/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Protect_Compute/<*>.html",
+    "target": "/security/quests/quest_protect_compute/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Protect_Data_at_Rest/<*>.html",
+    "target": "/security/quests/quest_protect_data_at_rest/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Protect_Data_in_Transit/<*>.html",
+    "target": "/security/quests/quest_protect_data_in_transit/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Security/Quest_Protect_Networks/<*>.html",
+    "target": "/security/quests/quest_protect_networks/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/200_Bidirectional_Replication_for_S3/<*>.html",
+    "target": "/reliability/200_labs/200_bidirectional_replication_for_s3/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/200_Deploy_and_Update_CloudFormation/<*>.html",
+    "target": "/reliability/200_labs/200_deploy_and_update_cloudformation/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/200_Testing_Backup_and_Restore_of_Data/<*>.html",
+    "target": "/reliability/200_labs/200_testing_backup_and_restore_of_data/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/200_Testing_for_Resiliency_of_EC2/<*>.html",
+    "target": "/reliability/200_labs/200_testing_for_resiliency_of_ec2/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/300_Health_Checks_and_Dependencies/<*>.html",
+    "target": "/reliability/300_labs/300_health_checks_and_dependencies/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/<*>.html",
+    "target": "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Fundamentals.html",
+    "target": "/cost/fundamentals/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/ExpenditureAwareness.html",
+    "target": "/cost/expenditureawareness/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/CostEffectiveResources.html",
+    "target": "/cost/costeffectiveresources/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Effective_Resources/100_AWS_Resource_Optimization/<*>.html",
+    "target": "/cost/100_labs/100_aws_resource_optimization/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/<*>.html",
+    "target": "/cost/100_labs/100_1_aws_account_setup/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/<*>.html",
+    "target": "/cost/100_labs/100_2_cost_and_usage_governance/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/100_3_Pricing_Models/<*>.html",
+    "target": "/cost/100_labs/100_3_pricing_models/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/<*>.html",
+    "target": "/cost/100_labs/100_4_cost_and_usage_analysis/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/100_5_Cost_Visualization/<*>.html",
+    "target": "/cost/100_labs/100_5_cost_visualization/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/<*>.html",
+    "target": "/cost/200_labs/200_2_cost_and_usage_governance/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/200_3_Pricing_Models/<*>.html",
+    "target": "/cost/200_labs/200_3_pricing_models/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/<*>.html",
+    "target": "/cost/200_labs/200_4_cost_and_usage_analysis/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Fundamentals/200_5_Cost_Visualization/<*>.html",
+    "target": "/cost/200_labs/200_5_cost_visualization/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/<*>.html",
+    "target": "/cost/200_labs/200_aws_resource_optimization/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/<*>.html",
+    "target": "/cost/200_labs/200_pricing_model_analysis/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Expenditure_Awareness/Workload_Efficiency/<*>.html",
+    "target": "/cost/200_labs/200_workload_efficiency/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/<*>.html",
+    "target": "/cost/300_labs/300_automated_cur_updates_and_ingestion/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/<*>.html",
+    "target": "/cost/300_labs/300_multi_account_cur_access/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/<*>.html",
+    "target": "/cost/300_labs/300_splitting_sharing_cur_access/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/<*>.html",
+    "target": "/cost/300_labs/300_automated_cur_query_and_email_delivery/",
+    "status": "301",
+    "condition": null
+  },
+
+  {
+    "source": "Well-ArchitectedTool/README.html",
+    "target": "/well-architectedtool/",
+    "status": "301",
+    "condition": null
+  },
+  {
+    "source": "Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/<*>.html",
+    "target": "/well-architectedtool/100_labs/100_walkthrough_of_the_well-architected_tool/",
+    "status": "301",
+    "condition": null
+  }
+] 

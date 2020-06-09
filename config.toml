@@ -1,0 +1,39 @@
+baseURL = "https://wellarchitectedlabs.com/"
+languageCode = "en-us"
+title = "AWS Well-Architected Labs"
+theme = "learn"
+
+
+[params]
+themeVariant = "walabs"
+# Order sections in menu by "weight" or "title". Default to "weight"
+ordersectionsby = "weight"
+    # Weights by pillar:
+    # 1000 - Operational Excellence
+    # 2000 - Security
+    # 3000 - Reliability
+    # 4000 - Performance Efficiency
+    # 5000 - Cost Optimization
+    # 6000 - Well Architected Tool
+editURL = "https://github.com/ericpullen/testwalabs/blob/master/content/"
+description = "Hands on labs and real world design scenarios for Well-Architected workloads"
+author = "Well-Architected Team"
+showVisitedLinks = true
+# Hide Next and Previous page buttons normally displayed full height beside content
+disableNextPrev = true
+#AWS custom params
+base_github_url = "https://github.com/ericpullen/testwalabs/tree/master/"
+base_raw_github_url = "https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/"
+#{{% siteparam "base_github_url" %}}
+
+
+
+# For search functionality
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+# Menu shortcuts on left side
+[[menu.shortcuts]]
+name = "<i class='fas fa-bookmark'></i> Amazon Free Tier"
+url = "https://aws.amazon.com/free/"
+weight = 10

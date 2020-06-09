@@ -1,0 +1,295 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Time test of various EC2 instances"
+
+Parameters:
+  XenNodeInstanceType:
+    Description: Xen based EC2 instance type for test
+    Type: String
+    Default: m4.large
+    ConstraintDescription: Must be a valid Xen EC2 instance type
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+
+  KVMNodeInstanceType:
+    Description: KVM based EC2 instance type for test
+    Type: String
+    Default: m5.large
+    ConstraintDescription: Must be a valid KVM EC2 instance type
+    AllowedValues:
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2'
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+  Ec2InstanceSubnetId:
+    Description: ID of the existing subnet to use for the time test server.
+    Type: AWS::EC2::Subnet::Id
+
+Resources:
+  # IAM Role to enable Cloudwatch Logs as well as SSM access for the test.
+  TestMachineIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-TestMachineIAMRole-${AWS::Region}'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+  TestMachineInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub '${AWS::StackName}-TestMachineInstanceProfile-${AWS::Region}'
+      Path: /
+      Roles:
+        - !Ref 'TestMachineIAMRole'
+
+
+  # This will create a Xen based EC2 instances with SSM installed by default
+  XenTestInstance:
+    Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        SetupTimeTest:
+          files:
+            /tmp/time_test.py:
+              content: |
+                  #!/usr/bin/python3
+                  import time
+
+                  _gettimeofday = None
+                  def gettimeofday():
+                  	import ctypes
+                  	global _gettimeofday
+
+                  	if not _gettimeofday:
+                  		_gettimeofday = ctypes.cdll.LoadLibrary("libc.so.6").gettimeofday
+
+                  	class timeval(ctypes.Structure):
+                  		_fields_ = \
+                  		[
+                  			("tv_sec", ctypes.c_long),
+                  			("tv_usec", ctypes.c_long)
+                  		]
+
+                  	tv = timeval()
+
+                  	_gettimeofday(ctypes.byref(tv), None)
+
+                  	return float(tv.tv_sec) + (float(tv.tv_usec) / 1000000)
+
+
+                  start_time = time.time()
+
+                  for x in range(0,1000000):
+                      gettimeofday()
+
+                  print("--- %s seconds ---" % (time.time() - start_time))
+
+                  print("Done")
+
+              group: ec2-user
+              mode: '000744'
+              owner: ec2-user
+          packages:
+            yum:
+              python36:
+                - ''
+              strace:
+                - ''
+              amazon-ssm-agent:
+                - ''
+          services:
+            sysvinit:
+              amazon-ssm-agent:
+                enabled: 'true'
+                ensureRunning: 'true'
+        configSets:
+          Install:
+            - SetupTimeTest
+    Properties:
+      ImageId: !Ref 'LatestAmiId'
+      InstanceType: !Ref 'XenNodeInstanceType'
+      IamInstanceProfile: !Ref 'TestMachineInstanceProfile'
+      KeyName: !Ref 'KeyName'
+      SubnetId: !Ref 'Ec2InstanceSubnetId'
+      UserData:
+        Fn::Base64: !Sub
+              |
+                #!/bin/bash
+                set -o xtrace
+                export PATH=$PATH:/usr/local/bin
+                yum update
+                yum install -y amazon-ssm-agent
+                pip install awscli --upgrade
+                /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --configsets Install --resource XenTestInstance --region ${AWS::Region}
+                export AWS_DEFAULT_REGION=${AWS::Region}
+                /opt/aws/bin/cfn-signal --exit-code $? \
+                         --stack  ${AWS::StackName} \
+                         --resource NodeLaunchConfig  \
+                         --region ${AWS::Region}
+
+                echo "DONE"
+
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}/XenTimeInstanceTest'
+
+  # This will create a Nitro/KVM based EC2 instances with SSM installed by default
+  KVMTestInstance:
+    Type: AWS::EC2::Instance
+    Metadata:
+      AWS::CloudFormation::Init:
+        SetupTimeTest:
+          files:
+            /tmp/time_test.py:
+              content: |
+                  #!/usr/bin/python3
+                  import time
+
+                  _gettimeofday = None
+                  def gettimeofday():
+                  	import ctypes
+                  	global _gettimeofday
+
+                  	if not _gettimeofday:
+                  		_gettimeofday = ctypes.cdll.LoadLibrary("libc.so.6").gettimeofday
+
+                  	class timeval(ctypes.Structure):
+                  		_fields_ = \
+                  		[
+                  			("tv_sec", ctypes.c_long),
+                  			("tv_usec", ctypes.c_long)
+                  		]
+
+                  	tv = timeval()
+
+                  	_gettimeofday(ctypes.byref(tv), None)
+
+                  	return float(tv.tv_sec) + (float(tv.tv_usec) / 1000000)
+
+
+                  start_time = time.time()
+
+                  for x in range(0,1000000):
+                      gettimeofday()
+
+                  print("--- %s seconds ---" % (time.time() - start_time))
+
+                  print("Done")
+
+              group: ec2-user
+              mode: '000744'
+              owner: ec2-user
+          packages:
+            yum:
+              python36:
+                - ''
+              strace:
+                - ''
+              amazon-ssm-agent:
+                - ''
+          services:
+            sysvinit:
+              amazon-ssm-agent:
+                enabled: 'true'
+                ensureRunning: 'true'
+        configSets:
+          Install:
+            - SetupTimeTest
+    Properties:
+      ImageId: !Ref 'LatestAmiId'
+      InstanceType: !Ref 'KVMNodeInstanceType'
+      IamInstanceProfile: !Ref 'TestMachineInstanceProfile'
+      KeyName: !Ref 'KeyName'
+      SubnetId: !Ref 'Ec2InstanceSubnetId'
+      UserData:
+        Fn::Base64: !Sub
+              |
+                #!/bin/bash
+                set -o xtrace
+                export PATH=$PATH:/usr/local/bin
+                yum update
+                yum install -y amazon-ssm-agent
+                pip install awscli --upgrade
+                /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --configsets Install --resource XenTestInstance --region ${AWS::Region}
+                export AWS_DEFAULT_REGION=${AWS::Region}
+                /opt/aws/bin/cfn-signal --exit-code $? \
+                         --stack  ${AWS::StackName} \
+                         --resource NodeLaunchConfig  \
+                         --region ${AWS::Region}
+
+                echo "DONE"
+
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}/KVMTimeInstanceTest'
+
+  # This SSM document will set the timesource to TSC for increased performance on a Xen node
+  setTSCdocument:
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: "Command"
+      Content:
+        schemaVersion: '2.2'
+        description: "Set TimeSource to TSC SSM Document"
+        parameters: {}
+        mainSteps:
+        - action: aws:runShellScript
+          name: configureServer
+          inputs:
+            runCommand:
+            - echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
+
+  # This SSM document will run the test Python script deployed on the EC2 instance
+  runTestScriptdocument:
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: "Command"
+      Content:
+        schemaVersion: '2.2'
+        description: "Run test script Document"
+        parameters: {}
+        mainSteps:
+        - action: aws:runShellScript
+          name: runTestScript
+          inputs:
+            runCommand:
+            - strace -c python3 /tmp/time_test.py
+
+# Notes:
+# To set the timesource for the machine while it is running
+# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
+# To set the timesource for the machine during boot, you can do the following:
+#   echo "echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource" >> /etc/init.d/after.local
