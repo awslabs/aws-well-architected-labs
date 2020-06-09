@@ -34,7 +34,7 @@ You have successfully verified that you have access to the CUR files, and they a
 
 
 **Sample Files**
-You may not have substantial or interesting usage, in this case there are sample files below. Create a folder structure, such as (bucket name)/cur/WorkshopCUR/WorkshopCUR/year=2018/month=12 and copy the parquet files below into each months folder:
+You may not have substantial or interesting usage, in this case there are sample files below. Create a folder structure, such as (bucket name)/cur/WorkshopCUR/WorkshopCUR/year=2018/month=x and copy the parquet files below into each months folder:
 
 - [October 2018 Usage](/Cost/200_4_Cost_and_Usage_Analysis/Code/Oct2018-WorkshopCUR-00001.snappy.parquet)
 - [November 2018 Usage](/Cost/200_4_Cost_and_Usage_Analysis/Code/Nov2018-WorkshopCUR-00001.snappy.parquet)

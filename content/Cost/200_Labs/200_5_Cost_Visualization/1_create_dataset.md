@@ -10,11 +10,11 @@ pre: "<b>1. </b>"
 We will create a data set so that QuickSight can access our Athena data set, and visualize our CUR data.
 
 
-1. Enter your email address and click **Continue**:
+1. Log on to the console as an IAM user with the required permissions, go to the **QuickSight** service, Enter your email address and click **Continue**:
 ![Images/QuickSight_email.png](/Cost/200_5_Cost_Visualization/Images/QuickSight_email.png)
 
 2. Click **Manage data** in the top right:
-[Images/AWSQuicksight13.png](/Cost/200_5_Cost_Visualization/Images/AWSQuicksight13.png)
+![Images/AWSQuicksight13.png](/Cost/200_5_Cost_Visualization/Images/AWSQuicksight13.png)
 
 3. Click **New data set**:
 ![Images/AWSQuicksight14.png](/Cost/200_5_Cost_Visualization/Images/AWSQuicksight14.png)

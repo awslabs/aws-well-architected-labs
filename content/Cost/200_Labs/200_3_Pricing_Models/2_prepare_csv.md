@@ -41,7 +41,7 @@ If using your own data, modify the **U$48** component to the number of rows in y
 5. We will now create a **Fully Paid Day** column. This shows us how long it will take to pay off the full term of the RI, and will help to measure risk. The closer to 12months the fully paid day is, the higher the risk. The break even is the wrong measure, as it only shows how quickly you pay off the upfront component, and not the full amount.
 Paste the following formula into the last column **z**:
 
-    =(R2+S2*12)/(R2/12+S2+W2)
+       =(R2+S2*12)/(R2/12+S2+W2)
 
 
 {{% notice note %}}
@@ -50,7 +50,15 @@ The formula for the fully paid day is:
 {{% /notice %}}
 
 
-6. Delete the following columns as they are not necessary: **Recommendation Date**, **Size Flexible Recommendation**, **Max hourly normalized unit usage in Historical Period**, **Min hourly normalized unit usage in Historical Period**, **Average hourly normalized unit usage in Historical Period**, **Projected RI Utilization**, **Payment Option**, **Break Even Months**.
+6. Delete the following columns as they are not necessary: 
+ - **Recommendation Date**
+ - **Size Flexible Recommendation**
+ - **Max hourly normalized unit usage in Historical Period**
+ - **Min hourly normalized unit usage in Historical Period**
+ - **Average hourly normalized unit usage in Historical Period**
+ - **Projected RI Utilization**
+ - **Payment Option**
+ - **Break Even Months**.
 
 
 {{% notice tip %}}
