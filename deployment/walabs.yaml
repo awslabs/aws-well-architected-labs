@@ -6,17 +6,25 @@ Parameters:
     Description: Name for Amplify deploy
     Type: String
     Default: "WALabs"
+  AmplifyDescription:
+    Description: Description for Amplify deploy
+    Type: String
+    Default: "Production WA Labs Branch"
   GitHubAcccesToken:
     Description: Github Access token for repository
     Type: String
   GitHubRepoName:
     Description: Github repository URL
     Type: String
-    Default: "https://github.com/ericpullen/testwalabs"
+    Default: "https://github.com/awslabs/aws-well-architected-labs"
   HugoVersion:
     Description: Version of Hugo to deploy
     Type: String
     Default: "0.72.0"
+  GitHubBranchName:
+    Description: Branch to Deploy
+    Type: String
+    Default: "master"
 
 Resources:
   WALabSite:
@@ -303,7 +311,7 @@ Resources:
         - Source: Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/<*>.html
           Target: "/well-architectedtool/100_labs/100_walkthrough_of_the_well-architected_tool/"
           Status: '301'
-          
+
       EnvironmentVariables:
         -
           Name: "_LIVE_UPDATES"
@@ -320,12 +328,12 @@ Resources:
     Type: AWS::Amplify::Branch
     Properties:
       AppId: !GetAtt WALabSite.AppId
-      BranchName: "master"
-      Description: "Production WA Labs Branch"
+      BranchName: !Ref GitHubBranchName
+      Description: !Ref AmplifyDescription
       EnableAutoBuild: True
       EnablePullRequestPreview: False
       Stage: PRODUCTION
       Tags:
         -
           Key: "displayName"
-          Value: "master"
+          Value: !Ref GitHubBranchName
