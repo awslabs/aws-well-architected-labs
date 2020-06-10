@@ -263,3 +263,13 @@ div.cards.workshop div.content {
     padding: 0px;
     color: #333;
 }
+
+a#logo {
+    width: 200px;
+}
+
+@media all and (max-width: 480px) {
+    a#logo {
+      width: 96px;
+    }
+}
