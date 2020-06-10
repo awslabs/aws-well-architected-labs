@@ -204,6 +204,10 @@ Resources:
           Target: "/reliability/" 
           Status: '301' 
 
+        - Source: "/Reliability/README.html" 
+          Target: "/reliability/" 
+          Status: '301'
+
         - Source: "/Reliability/200_Bidirectional_Replication_for_S3/<*>.html"
           Target: "/reliability/200_labs/200_bidirectional_replication_for_s3/"
           Status: '301'
