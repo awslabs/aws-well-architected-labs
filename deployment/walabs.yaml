@@ -224,6 +224,14 @@ Resources:
           Target: "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/"
           Status: '301'
 
+        - Source: "/Cost/README.html"
+          Target: "/cost/"
+          Status: '301'
+
+        - Source: "/Cost/"
+          Target: "/cost/"
+          Status: '301'
+
         - Source: "/Cost/Fundamentals.html"
           Target: "/cost/fundamentals/"
           Status: '301'
