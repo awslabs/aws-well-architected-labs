@@ -15,7 +15,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 ## Labs:
 The labs are structured around the five pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
 
-- [Operational Excellence](http://wellarchitectedlabs.com/operations/)
+- [Operational Excellence](http://wellarchitectedlabs.com/operational-excellence/)
 - [Security](http://wellarchitectedlabs.com/security/)
 - [Reliability](http://wellarchitectedlabs.com/reliability/)
 - [Performance Efficiency](http://wellarchitectedlabs.com/performance-efficiency/)
