@@ -27,7 +27,7 @@ This Lambda function ties everything together, it will remove all objects in the
 ![Images/splitsharecur9.png](/Cost/300_Splitting_Sharing_CUR_Access/Images/splitsharecur9.png)
 
 9 - Copy the code into the editor from here:
-[./Code/Sub_Account_Split.md](./Code/Sub_Account_Split.md)
+[./Code/Sub_Account_Split.md]({{< ref "Code/Sub_Account_Split.md" >}})
 
 10 - Edit the code as per the instructions at the top.
 
