@@ -7,10 +7,14 @@ The [Well-Architected](https://aws.amazon.com/well-architected) framework has be
 
 This repository contains documentation and code in the format of hands-on labs to help you learn, measure, and build using architectural best practices. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
 
-## Prerequisites:
-An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+## Lab Website
 
+| Note |
+| :---: |
+|To run these AWS Well-Architected Labs, please go to:|
+|**https://wellarchitectedlabs.com/**|
+
+The labs _cannot_ be run from GitHub. Please continue to use GitHub to [log issues](https://github.com/awslabs/aws-well-architected-labs/issues) or make pull requests. To run the labs please use https://wellarchitectedlabs.com/
 
 ## Labs:
 The labs are structured around the five pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
@@ -34,6 +38,7 @@ Licensed under the Apache License, Version 2.0 (the "License"). You may not use 
 
 or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+---
 
 # Deploy notes for Hugo based site
 
