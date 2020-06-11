@@ -57,4 +57,4 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 1. First delete the **S3-CRR-lab-east** CloudFormation stack in **Ohio** (**us-east-2**)
 1. Then delete the **S3-CRR-lab-west** CloudFormation stack in **Oregon** (**us-west-2**)
 
-**Troubleshooting**: if your CloudFormation stack deletion fails with status _DELETE_FAILED_ and error (from the **Events** tab) _Cannot delete entity, must detach all policies first_ then [see these additional instructions](../documentation/detachiampolicy/)
+**Troubleshooting**: if your CloudFormation stack deletion fails with status _DELETE_FAILED_ and error (from the **Events** tab) _Cannot delete entity, must detach all policies first_ then [see these additional instructions]({{< ref "Documentation/DetachIAMPolicy.md" >}})

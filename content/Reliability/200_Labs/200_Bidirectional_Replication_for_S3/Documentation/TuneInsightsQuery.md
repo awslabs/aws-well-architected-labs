@@ -25,4 +25,4 @@ or
 
         filter requestParameters.bucketName like'crrlab'
 
-<!-- [Click here](../Lab_Guide.md#putobject_events) to return to the Lab Guide -->
+**[Click here]({{< ref "../3_test_replication.md#putobject_events" >}}) to return to the Lab Guide**

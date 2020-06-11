@@ -5,18 +5,18 @@ chapter: false
 hidden: true
 ---
 
-* You will supply configuration and credentials used by the AWS SDK to access your AWS account. You identified these credentials [back in step 1 of the Lab Guide](../Lab_Guide.md#awslogin)
+* You will supply configuration and credentials used by the AWS SDK to access your AWS account. You identified these credentials [back in step 1 of the Lab Guide]({{< ref "../1_deploy_infra.md#awslogin" >}})
 
 ## Choose an option
 
 Select the appropriate option for configuration of your AWS credentials:
 
-* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables
-* **Option 2** - Using AWS CLI
-* **Option 3** - Creating configuration files manually
-* **Option 4** - Using PowerShell commands for Windows
+* [**Option 1**]({{< ref "#supplied">}}) - Using AWS instructor supplied accounts with Linux-style environment variables
+* [**Option 2**]({{< ref "#cli">}}) - Using AWS CLI
+* [**Option 3**]({{< ref "#files">}}) - Creating configuration files manually
+* [**Option 4**]({{< ref "#powershell">}}) - Using PowerShell commands for Windows
 
-### Option 1 For instructor supplied AWS accounts
+### Option 1 For instructor supplied AWS accounts {#supplied}
 
 If BOTH of the following are true then you may use **Option 1**
 
@@ -25,7 +25,12 @@ If BOTH of the following are true then you may use **Option 1**
 
 Otherwise you should choose **Option 2** or **Option 3**
 
-1. You should have already copied the credentials for your account. If not then [follow the directions here](Workshop_AWS_Account.md)
+1. You should have already copied the credentials for your account. If _not_ then:
+
+    {{%expand "Click here for instructions to copy the credentiala from your assigned AWS account:" %}}
+    {{% common/Workshop_AWS_Account %}}
+**Now continue the steps to setup your AWS credentials....**
+    {{% /expand%}}
 
 1. The copied credentials are already in the form of `export` statements. Run these from your shell command line. Use _your_ values, _not_ the ones below
 
@@ -40,9 +45,9 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 1. Note that if you end your bash session, or start a new one, you will need to re-execute the `export` statements
 
-If you completed **Option 1** then **STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
+If you completed **Option 1** then **STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md" >}})**
 
-### Option 2 AWS CLI
+### Option 2 AWS CLI {#cli}
 
 This option uses the AWS CLI. Note that running the bash failure testing scripts requires this software. If you are using another programming environment for failure testing, you can use **Option 3** if you do not or cannot install the AWS CLI.
 
@@ -52,7 +57,7 @@ This option uses the AWS CLI. Note that running the bash failure testing scripts
           aws-cli/1.16.249 Python/3.6.8...
 
      * AWS CLI version 1.1 or higher is fine
-     * If you instead got `command not found` then either  [install the AWS CLI](Software_Install.md#awscli) or use **Option 3**
+     * If you instead got `command not found` then either  [install the AWS CLI]({{< ref "./Software_Install.md#awscli" >}}) or use **Option 3**
 
 1. Run `aws configure` and provide the following values:
 
@@ -62,7 +67,7 @@ This option uses the AWS CLI. Note that running the bash failure testing scripts
         Default region name: [us-east-2]: us-east-2
         Default output format [None]: json
 
-### Option 3 Manually creating credential files
+### Option 3 Manually creating credential files {#files}
 
 If you already did **Option 2**, then skip this
 
@@ -141,7 +146,7 @@ For your convenience:
       unset AWS_DEFAULT_OUTPUT
       unset AWS_PROFILE
 
-### Option 4 (PowerShell)
+### Option 4 (PowerShell) {#powershell}
 
 1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
 
@@ -149,8 +154,10 @@ For your convenience:
 
 1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
 
-        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-        [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
-        Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
+```powershell
+Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+[ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
+Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
+```
 
 ---

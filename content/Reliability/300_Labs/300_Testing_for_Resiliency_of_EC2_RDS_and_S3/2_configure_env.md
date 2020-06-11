@@ -15,7 +15,7 @@ You have a choice of environments from which to execute the failure injections f
 
 Your execution environment needs to be configured to enable access to the AWS account you are using for the workshop. This includes
 
-* Credentials - You identified these credentials [back in step 1](#awslogin)
+* Credentials - You identified these credentials [back in step 1]({{< ref "./1_deploy_infra.md#awslogin" >}})
     * AWS access key
     * AWS secret access key
     * AWS session token (used in some cases)

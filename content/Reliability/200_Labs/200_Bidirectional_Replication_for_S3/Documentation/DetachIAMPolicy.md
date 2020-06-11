@@ -39,4 +39,4 @@ Go the the [IAM console](https://console.aws.amazon.com/iam/home)
     * Do NOT check anything
     * Click **Delete stack**
 
-<!-- [Click here](../Lab_Guide.md#resources) to return to the Lab Guide -->
+**[Click here]({{< ref "../5_resources.md" >}}) to return to the Lab Guide**

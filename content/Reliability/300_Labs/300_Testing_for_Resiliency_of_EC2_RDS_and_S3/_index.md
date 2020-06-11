@@ -34,8 +34,6 @@ In this lab, you will deploy a 3-tier resource, with a reverse proxy (Applicatio
 
 The skills you learn will help you build resilient workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
-If you wish to build this code in this lab, the follow the instructions in the [Builders Guide](Builders_Guide.md) document.
-
 ## Goals:
 
 * Reduce fear of implementing resiliency testing by providing examples in common development and scripting languages

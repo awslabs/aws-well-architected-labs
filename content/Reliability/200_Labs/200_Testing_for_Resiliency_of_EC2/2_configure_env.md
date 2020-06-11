@@ -29,7 +29,7 @@ Note: **us-east-2** is the **Ohio** region
 * If you already know how to configure these, please do so now and proceed to the next step [**2.2 Set up the bash environment**](#bash)
 * If you need help then follow the instructions in either Option A or Option B below
 
-#### Option A AWS CLI
+#### Option A - AWS CLI
 
 This option uses the AWS CLI. If you do not have this installed, or do not want to install it, then use **Option B**
 
@@ -49,7 +49,7 @@ This option uses the AWS CLI. If you do not have this installed, or do not want 
         Default region name: [us-east-2]: us-east-2 (or your chosen region)
         Default output format [None]: json
 
-#### Option B Manually creating credential files
+#### Option B - Manually creating credential files
 
 If you already did **Option A**, then skip this
 

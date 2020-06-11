@@ -12,7 +12,7 @@ hidden: true
 
         aws ssm start-automation-execution --document-name AWS-DisableS3BucketPublicReadWrite --parameters "{\"S3BucketName\": [\"<bucket-name>\"]}"
 
-[Return to the Lab Guide](../Lab_Guide.md#s3response), but keep this page open if you want to re-enable public read access to the bucket after testing.
+[Return to the Lab Guide]({{< ref "../7_failure_injection_optional.md" >}}), but keep this page open if you want to re-enable public read access to the bucket after testing.
 
 ---
 
@@ -27,4 +27,4 @@ hidden: true
 1. You are asked to type "confirm" - this is a security feature to ensure you truly intend this bucket to allow public access.
 
 ---
-<!-- **[Click here to return to the Lab Guide](../Lab_Guide.md#s3response)** -->
+**[Click here to return to the Lab Guide]({{< ref "../7_failure_injection_optional.md#s3response" >}})**

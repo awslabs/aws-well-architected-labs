@@ -13,7 +13,7 @@ Use these instructions to get a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` 
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**
 
-* **STOP** -- Follow [these instructions instead](Workshop_AWS_Account.md)
+* **STOP** -- Follow the **If you are attending an in-person workshop and were provided with an AWS account by the instructor** [instructions here instead]({{< ref "../1_deploy_infra.md#awslogin" >}})
 
 ---
 
@@ -35,7 +35,7 @@ Use these instructions to get a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` 
 
 ## Create a new IAM User for use in the lab
 
-Use the instructions only if you cannot **Create new AWS credentials for an IAM User you already control**. If you have already obtained a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` using the preceding instructions then STOP and **[Click here to return to the Lab Guide](../Lab_Guide.md)**
+Use the instructions only if you cannot **Create new AWS credentials for an IAM User you already control**. If you have already obtained a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` using the preceding instructions then STOP and **[Click here to return to the Lab Guide]({{< ref "../1_deploy_infra.md#awslogin" >}})**
 
 1. Sign in to the AWS Management Console and open the IAM console at <https://console.aws.amazon.com/iam/>
 

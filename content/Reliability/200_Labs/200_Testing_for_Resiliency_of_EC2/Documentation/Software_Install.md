@@ -4,6 +4,8 @@ date: 2020-04-24T11:16:09-04:00
 chapter: false
 hidden: true
 ---
+
+
 This reference will help you install software necessary to setup your workshop environment
 
 1. [AWS CLI](#awscli)
@@ -29,13 +31,17 @@ The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consi
        $ pip3 install awscli --upgrade --user
        ...(lots of output)...
        Successfully installed...
-* If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
+* If that succeeded, then you are finished.  Return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})
 
 If that does not work, then do the following:
 
 * See the [detailed installation instructions here](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html)
 
-**STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
+### Other environments (not Linux)
+
+* See the instructions here <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
+
+**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})**
 
 ---
 
@@ -43,27 +49,27 @@ If that does not work, then do the following:
 
 `jq` is a command-line JSON processor. is like `sed` for JSON data. It is used in the workshop `bash` scripts to parse AWS CLI output.
 
-### Linux
-
 * Run the following command
 
-      $ jq --version
-      jq-1.5-1-a5b5cbe
+        $ jq --version
+        jq-1.5-1-a5b5cbe
 * Any version is fine.
-* If you instead got `command not found` then you need to install `jq`:
+* If you instead got `command not found` then you need to install `jq`. Follow the instructions at <https://stedolan.github.io/jq/download/>
 
-      $ sudo apt-get install jq
-      ...(lots of output)...
-      $ jq --version
-      jq-1.5-1-a5b5cbe
-* If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
+* If that succeeded, then you are finished.  Return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})
 
-If that does not work, then do the following
+### Alternate instructions for Linux
+
+If the steps above did not work, and you are running Linux, then try the following
 
 1. Download the `jq` executable
 
-      $ wget <https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64>
-      2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]
+        $ wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+
+        [...lots of output...]
+        jq-linux64                    100%[=================================================>]   3.77M  1.12MB/s    in 3.5s
+
+        2019-10-11 17:41:42 (1.97 MB/s) - ‘jq-linux64’ saved [3953824/3953824]
 
 1. You can find out what your execution path is with the following command.
 

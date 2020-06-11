@@ -31,7 +31,7 @@ The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consi
        $ pip3 install awscli --upgrade --user
        ...(lots of output)...
        Successfully installed...
-* If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
+* If that succeeded, then you are finished.  Return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})
 
 If that does not work, then do the following:
 
@@ -41,7 +41,7 @@ If that does not work, then do the following:
 
 * See the instructions here <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
 
-**STOP HERE and return to the [Lab Guide](../Lab_Guide.md)**
+**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})**
 
 ---
 
@@ -56,7 +56,7 @@ If that does not work, then do the following:
 * Any version is fine.
 * If you instead got `command not found` then you need to install `jq`. Follow the instructions at <https://stedolan.github.io/jq/download/>
 
-* If that succeeded, then you are finished.  Return to the [Lab Guide](../Lab_Guide.md)
+* If that succeeded, then you are finished.  Return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})
 
 ### Alternate instructions for Linux
 
