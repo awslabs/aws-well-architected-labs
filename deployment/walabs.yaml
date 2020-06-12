@@ -40,6 +40,7 @@ Resources:
           Target: "/"
           Status: '301'
 
+        # Operational Excellence
         - Source: "/Operations/README.html"
           Target: "/operational-excellence/"
           Status: '301'
@@ -48,6 +49,11 @@ Resources:
           Target: "/operational-excellence/100_labs/100_inventory_patch_management/"
           Status: '301'
 
+        - Source: "/Operations/" 
+          Target: "/operational-excellence/" 
+          Status: '301'  
+
+        # Security
         - Source: "/Security/README.html"
           Target: "/security/"
           Status: '301'
@@ -200,10 +206,11 @@ Resources:
           Target: "/security/quests/quest_protect_networks/"
           Status: '301'
 
-        - Source: "/Reliability/" 
-          Target: "/reliability/" 
-          Status: '301' 
+        - Source: "/Security/" 
+          Target: "/security/" 
+          Status: '301'  
 
+        # Reliability
         - Source: "/Reliability/README.html" 
           Target: "/reliability/" 
           Status: '301'
@@ -232,11 +239,17 @@ Resources:
           Target: "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/"
           Status: '301'
 
-        - Source: "/Cost/README.html"
-          Target: "/cost/"
-          Status: '301'
+          # saw this in the logs, so adding a special case
+        - Source: "/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.htmlSlow" 
+          Target: "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/" 
+          Status: '301' 
 
-        - Source: "/Cost/"
+        - Source: "/Reliability/" 
+          Target: "/reliability/" 
+          Status: '301'           
+
+        # Cost
+        - Source: "/Cost/README.html"
           Target: "/cost/"
           Status: '301'
 
@@ -320,6 +333,11 @@ Resources:
           Target: "/cost/300_labs/300_automated_cur_query_and_email_delivery/"
           Status: '301'
 
+        - Source: "/Cost/"
+          Target: "/cost/"
+          Status: '301'
+
+        # WAT
         - Source: Well-ArchitectedTool/README.html
           Target: "/well-architectedtool/"
           Status: '301'
