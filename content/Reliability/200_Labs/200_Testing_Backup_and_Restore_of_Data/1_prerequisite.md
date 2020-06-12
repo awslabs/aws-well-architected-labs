@@ -9,7 +9,7 @@ pre: "<b>1. </b>"
 
 For many organizations, the data that they possess is one of the most valuable assets they have. Backing up data frequently is of vital importance for the long lasting success of any organization. However, a backup of data is only valuable if data can be recovered/restored from the backup. In the cloud, backing up data and testing the restore is easier compared to on-premises datacenters. Automating this process with appropriate notification systems will ensure that an organization's data is backed up frequently, the backups are tested to ensure expected recovery, and the appropriate people are notified in case of failures.
 
-![architecture](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images//architecture.jpeg)
+![architecture](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/architecture.jpeg)
 
 You will use AWS CloudFormation to provision some resources needed for this lab. As part of this lab, the CloudFormation stack that you provision will create an EBS Volume, an SNS Topic, and a Lambda Function. **This lab will only work in us-east-1.**
 

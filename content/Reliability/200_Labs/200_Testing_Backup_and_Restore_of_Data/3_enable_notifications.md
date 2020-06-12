@@ -18,6 +18,6 @@ In the cloud, setting up notifications to be aware of events within your workloa
 
     `aws backup get-backup-vault-notifications --backup-vault-name BACKUP-LAB-VAULT --region us-east-1`
 
-    ![add-notification](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images//add-notification.png)
+    ![add-notification](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/add-notification.png)
 
 You have now successfully enabled notifications for the backup vault BACKUP-LAB-VAULT, ensuring that the Operations team is aware of all backup and restore activities involving this vault, and any failures associated with those activities.

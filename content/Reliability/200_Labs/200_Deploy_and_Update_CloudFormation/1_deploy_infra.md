@@ -31,7 +31,7 @@ When this lab is completed, you will have deployed and edited a CloudFormation t
 
 You will begin by deploying a CloudFormation stack that creates a simple VPC as shown in this diagram:
 
-![SimpleVpcOnly](/Reliability/200_Deploy_and_Update_CloudFormation/Images//SimpleVpcOnly.png)
+![SimpleVpcOnly](/Reliability/200_Deploy_and_Update_CloudFormation/Images/SimpleVpcOnly.png)
 
 1. Download the [simple_stack.yaml](/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack.yaml) CloudFormation template
 1. Open this file in a Text Editor

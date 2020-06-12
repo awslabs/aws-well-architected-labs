@@ -82,7 +82,7 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
 The final deployment is now represented by this architecture diagram:
 
-![SimpleVpcEverything](/Reliability/200_Deploy_and_Update_CloudFormation/Images//SimpleVpcEverything.png)
+![SimpleVpcEverything](/Reliability/200_Deploy_and_Update_CloudFormation/Images/SimpleVpcEverything.png)
 
 ### 4.3 [Optional bonus task] Add a web server to the EC2 instance
 
@@ -98,7 +98,7 @@ In this task you will update your CloudFormation template to modify the deployed
 
     * Visually the diff for this looks like:
 
-         ![AddServerDiff](/Reliability/200_Deploy_and_Update_CloudFormation/Images//AddServerDiff.png)
+         ![AddServerDiff](/Reliability/200_Deploy_and_Update_CloudFormation/Images/AddServerDiff.png)
 
     * The final EC2 instance resource should look like this:
 
@@ -141,6 +141,6 @@ In this task you will update your CloudFormation template to modify the deployed
 1. After deployment is complete, click on the **Outputs** tab for the CloudFormation stack
     * Click on the public DNS name
 
-![ClickPublicDns](/Reliability/200_Deploy_and_Update_CloudFormation/Images//ClickPublicDns.png)
+![ClickPublicDns](/Reliability/200_Deploy_and_Update_CloudFormation/Images/ClickPublicDns.png)
 
 You should see the Apache HTTP server Test Page, indicating your EC2 instance is running the web server and is accessible from the Internet.

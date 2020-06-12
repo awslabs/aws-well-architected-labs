@@ -39,4 +39,4 @@ In this task, you will gain experience changing CloudFormation stack parameters 
       * Click through on several of the **Physical ID** links and explore these resources
 
 The current deployment is now represented by this architecture diagram:
-![SimpleVpcPlusPublic](/Reliability/200_Deploy_and_Update_CloudFormation/Images//SimpleVpcPlusPublic.png)
+![SimpleVpcPlusPublic](/Reliability/200_Deploy_and_Update_CloudFormation/Images/SimpleVpcPlusPublic.png)
