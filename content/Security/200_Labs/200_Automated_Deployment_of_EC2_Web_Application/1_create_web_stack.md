@@ -28,7 +28,7 @@ Please note a prerequisite to this lab is that you have deployed the CloudFormat
   ![cloudformation-wp-params-2](/Security/200_Automated_Deployment_of_EC2_Web_Application/Images/cloudformation-wp-params-2.png)
   The remaining parameters may be left as defaults, you can find out more in the description for each.
 7. At the bottom of the page click **Next**.
-8. In this lab, we won't add any tags, permissions or advanced options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+8. In this lab, we won't add any tags, permissions or advanced options. Click **Next**. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html).
 9. Review the information for the stack. When you're satisfied with the configuration, check **I acknowledge that AWS CloudFormation might create IAM resources with custom names** then click **Create stack**.
 
 ![cloudformation-wp-createstack-final](/Security/200_Automated_Deployment_of_EC2_Web_Application/Images/cloudformation-wp-createstack-final.png)

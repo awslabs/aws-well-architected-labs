@@ -14,11 +14,11 @@ This policy will be used for the permission boundary when the developer role cre
 If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html). You will need to log out and back in again with MFA so your session has MFA active.
 2. In the navigation pane, click **Policies** and then click **Create policy**.
 
-![Images/iam-role-policy-1.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-policy-create-1.png)
+![Images/iam-role-policy-1.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-policy-create-1.png)
 
 3. On the Create policy page click the **JSON** tab.
 
-![Images/iam-role-policy-2.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-policy-create-2.png)
+![Images/iam-role-policy-2.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-policy-create-2.png)
 
 4. Replace the example start of the policy that is already in the editor with the policy below.
 ```
@@ -59,7 +59,7 @@ If you need to enable MFA follow the [IAM User Guide](https://docs.aws.amazon.co
 5. Click **Review policy**.
 6. Enter the name of *restrict-region-boundary* and any description to help you identify the policy, verify the summary and then click **Create policy**.
 
-![Images/iam-role-policy-3.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-policy-create-3.png)
+![Images/iam-role-policy-3.png](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-policy-create-3.png)
 
 ### 1.2 Create developer IAM restricted policy
 

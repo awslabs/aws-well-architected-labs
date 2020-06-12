@@ -13,21 +13,21 @@ Create a role for developers that will have permission to create roles and polic
 1. Sign in to the AWS Management Console as an IAM user with MFA enabled that can assume roles in your AWS account, and open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
 2. In the navigation pane, click **Roles** and then click **Create role**.
 
-![iam-role-1](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-role-create-1.png)
+![iam-role-1](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-role-create-1.png)
 
-3. Click Another AWS account, then enter your account ID and tick Require MFA, then click **Next: Permissions**. We enforce MFA here as it is a best practice.  ![iam-role-2](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-role-create-2.png)
+3. Click Another AWS account, then enter your account ID and tick Require MFA, then click **Next: Permissions**. We enforce MFA here as it is a best practice.  ![iam-role-2](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-role-create-2.png)
 4. In the search field start typing *createrole* then check the box next to the *createrole-restrict-region-boundary* policy.
 
-![iam-role-3](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-role-create-3.png)
+![iam-role-3](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-role-create-3.png)
 
 5. Erase your previous search and start typing *iam-res* then check the box next to the *iam-restricted-list-read* policy and then click **Next: Tags**.
 
-![iam-role-4](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-role-create-4.png)
+![iam-role-4](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-role-create-4.png)
 
 6. For this lab we will not use IAM tags, click **Next: Review**.
 7. Enter the name of *developer-restricted-iam* for the **Role name** and click **Create role**.
 
-![iam-role-6](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//iam-role-create-5.png)
+![iam-role-6](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/iam-role-create-5.png)
 
 8. Check the role you have created by clicking on *developer-restricted-iam* in the list. Record both the Role ARN and the link to the console.
 9. The role is now created, ready to test!
@@ -41,7 +41,7 @@ Now you will use an existing IAM user with MFA enabled to assume the new *develo
 3. On the Switch Role page, type the account ID number or the account alias and the name of the role *developer-restricted-iam* that you created in the previous step. (Optional) Type text that you want to appear on the navigation bar in place of your user name when this role is active. A name is suggested, based on the account and role information, but you can change it to whatever has meaning for you. You can also select a color to highlight the display name.
 4. Click **Switch Role**. If this is the first time choosing this option, a page appears with more information. After reading it, click Switch Role. If you clear your browser cookies, this page can appear again.
 
-![switch-role-developer](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images//switch-role-developer.png)
+![switch-role-developer](/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/Images/switch-role-developer.png)
 
 5. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you replacing the permission that you had as the IAM user.
 

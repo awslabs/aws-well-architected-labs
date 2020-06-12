@@ -28,7 +28,7 @@ AWS WAF configuration for use with CloudFront.
   ![waf-create-stack](/Security/200_Automated_Deployment_of_Web_Application_Firewall/Images/waf-create-stack.png)
 
 5. At the bottom of the page click **Next**.
-6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
+6. In this lab, we won't add any tags or other options. Click Next. Tags, which are key-value pairs, can help you identify your stacks. For more information, see [Adding Tags to Your AWS CloudFormation Stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html).
 7. Review the information for the stack. When you're satisfied with the configuration, click **Create stack**.
 8. After a few minutes the stack status should change from *CREATE_IN_PROGRESS* to *CREATE_COMPLETE*.
 10. You have now set up a basic AWS WAF configuration ready for CloudFront to use!
