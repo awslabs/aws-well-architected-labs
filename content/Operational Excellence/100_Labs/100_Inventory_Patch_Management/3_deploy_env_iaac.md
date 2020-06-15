@@ -40,13 +40,13 @@ To deploy the lab infrastructure:
 1. [**Download the CloudFormation script** for this lab from](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
 1. Use your administrator account to access the CloudFormation console at <https://console.aws.amazon.com/cloudformation/>.
 1. Choose **Create Stack**.
-1. On the **Select Template** page, select **Specify an Amazon S3 template URL** and enter the URL for the downloaded location.
+1. On the **Select Template** page, select **Upload a template file** and select the `OE_Inventory_and_Patch_Mgmt.json` file you just downloaded.
 
 **AWS CloudFormation Designer**
 
 AWS [CloudFormation Designer](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/working-with-templates-cfn-designer.html) is a graphic tool for creating, viewing, and modifying AWS CloudFormation templates. With Designer you can diagram your template resources using a drag-and-drop interface. You can edit their details using the integrated JSON and YAML editor. AWS CloudFormation Designer can help you see the relationship between template resources.
 
-5. On the **Select Template** page, next to **Specify an Amazon S3 template URL**, choose the link to **View/Edit template in Designer**.
+5. On the **Select Template** page, in the lower-right corner, click the **View in Designer** button.
 1. Briefly review the graphical representation of the environment we are about to create, including the template in the JSON and YAML formats. You can use this feature to convert between JSON and YAML formats.
 1. **Choose the Create Stack icon** (a cloud with an arrow) to return to the **Select Template page**.
 1. On the **Select Template** page, choose **Next**.
