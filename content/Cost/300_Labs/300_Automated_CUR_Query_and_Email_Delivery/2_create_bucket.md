@@ -10,5 +10,5 @@ The first step is to create an S3 bucket which will hold the lambda code and als
 
 This bucket will store the reports and Athena CUR query results. These will **not** be deleted, to enable historical reporting, so delete these periodically if you do not require them.
 
-1. Login as an IAM user with the required permissions, go to the **s3 dashboard** and create an S3 bucket in the required region:
+1. Login via SSO, go to the **s3 dashboard** and create an S3 bucket in the required region:
 ![Images/s3_setup01.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/s3_setup01.png)

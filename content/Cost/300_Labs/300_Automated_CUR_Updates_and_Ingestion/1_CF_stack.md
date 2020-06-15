@@ -21,7 +21,7 @@ NOTE: IAM roles will be created, these are used to:
 We will build the following solution:
 ![Images/Setup.png](/Cost/300_Automated_CUR_Updates_and_Ingestion/Images/Setup.png)
 
-1. Log into the console as an IAM user with the required permissions. Go to the S3 dashboard, go to the bucket and folders which contain your CUR file. Open the CloudFormation(CF) file and save it locally:
+1. Log into the console via SSO. Go to the S3 dashboard, go to the bucket and folders which contain your CUR file. Open the CloudFormation(CF) file and save it locally:
 ![Images/AWSCURAutoUpdate1.png](/Cost/300_Automated_CUR_Updates_and_Ingestion/Images/AWSCURAutoUpdate1.png)
 
 2. Here is a sample of the CF file:

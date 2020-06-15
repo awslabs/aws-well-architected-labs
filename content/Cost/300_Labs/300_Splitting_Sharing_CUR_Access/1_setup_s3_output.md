@@ -14,7 +14,7 @@ So what we'll do is as follows:
  - Create an IAM policy that will allow a Lambda function to re-write object ACLs
  - Implement the Lambda function
 
-1 - Login to the master/payer account as an IAM user with the required permissions.
+1 - Login to the consolve via SSO.
 
 2 - Go to the S3 console
 

@@ -11,7 +11,7 @@ Savings Plans are a commitment based discount model. By making a commitment of s
 
 In this workshop we will take you through your recommendations, and help you choose the right savings plan for your future business requirements.
 
-1. Log into the console as an IAM user with the required permissions, assume the CostOptimization role in the Master account and go to the **Cost Explorer** dashboard:
+1. Log into the console via SSO and go to the **Cost Explorer** dashboard:
 ![Images/SavingsPlan02.png](/Cost/100_3_Pricing_Models/Images/SavingsPlan02.png)
 
 2. Click on **Savings Plans** on the left menu:

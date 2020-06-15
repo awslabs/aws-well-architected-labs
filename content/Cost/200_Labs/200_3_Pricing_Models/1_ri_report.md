@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 We are going to view the RI reports within AWS Cost Explorer, to understand the potential savings and usage trends.
 
-1. Log into the console as an IAM user with the required permissions, assume a role in the master/payer account and go to the **AWS Cost Explorer** service page:
+1. Log into the console via SSO, go to the master/payer account and go to the **AWS Cost Explorer** service page:
 ![Images/AWSRI1.png](/Cost/200_3_Pricing_Models/Images/AWSRI1.png)
 
 2. In the left menu under **Reservations** select **Recommendations**:

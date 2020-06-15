@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 The first step to perform right sizing is to monitor and analyze your current use of services to gain insight into instance performance and usage patterns. To gather sufficient data, observe performance over at least a two-week period (ideally, over a one-month period) to capture the workload and business peak. The most common metrics that define instance performance are vCPU utilization, memory utilization, network utilization, and disk use.
 
-1. Log into your AWS console, go to the **Amazon CloudWatch** service page:
+1. Log into your AWS console via SSO, go to the **Amazon CloudWatch** service page:
 ![Images/CloudWatch01.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch01.png)
 
 2. Select **EC2** under the **Service Dashboard**:

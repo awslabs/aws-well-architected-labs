@@ -2,8 +2,8 @@
 title: "Configure Cost and Usage reports"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-pre: "<b>4. </b>"
-weight: 4
+pre: "<b>5. </b>"
+weight: 5
 ---
 
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information.

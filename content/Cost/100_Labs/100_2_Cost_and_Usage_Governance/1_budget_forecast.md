@@ -15,7 +15,7 @@ Budgets and notifications are updated when your billing data is updated, which i
 ### Create a monthly cost budget for your account
 We will create a monthly cost budget which will notify if the forecasted amount exceeds the budget.
 
-1. Log into the console as an IAM user with the required permissions, assume the CostOptimization role in the Master account and go to the **Billing console**:
+1. Log into the console via SSO, go to the **Billing console**:
 ![Images/AWSBudget1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget1.png)
 
 2. Select **Budgets** from the left menu:

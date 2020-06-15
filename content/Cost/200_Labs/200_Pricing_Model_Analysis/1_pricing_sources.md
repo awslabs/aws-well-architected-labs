@@ -9,7 +9,7 @@ pre: "<b>1. </b>"
 ### Create S3 Bucket and Folders
 Create a **single S3 bucket** that contains **two folders** - **od_pricedata** and **sp_pricedata**, these will contain the on-demand pricing data and the Savings Plans pricing data.
 
-1. Log into the console as an IAM user with the required permissions, go to the **S3** service page:
+1. Log into the console via SSO, go to the **S3** service page:
 ![Images/home_s3-dashboard.png](/Cost/200_Pricing_Model_Analysis/Images/home_s3-dashboard.png)
 
 2. Click **Create bucket**:

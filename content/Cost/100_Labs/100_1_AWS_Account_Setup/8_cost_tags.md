@@ -2,8 +2,8 @@
 title: "Enable AWS-Generated Cost Allocation Tags"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-pre: "<b>7. </b>"
-weight: 7
+pre: "<b>8. </b>"
+weight: 8
 ---
 
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information. This is automatically applied to resources that are created, and allows you to view and allocate costs based on who created a resource.

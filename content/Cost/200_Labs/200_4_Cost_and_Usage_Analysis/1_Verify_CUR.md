@@ -7,7 +7,7 @@ pre: "<b>1. </b>"
 ---
 We will verify the CUR files are being delivered, they are in the correct format and the region they are in.
 
-1. Log into the console as an IAM user with the required permissions.
+1. Log into the console via SSO.
 
 2. Get the bucket name which contains your Cost and Usage Report (CUR) files in the master/payer account. Modify the following address and replace **(bucket name)** with your bucket:
 

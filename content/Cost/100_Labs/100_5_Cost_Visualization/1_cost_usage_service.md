@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 AWS Cost Explorer is a free built in tool that lets you dive deeper into your cost and usage data to identify trends, pinpoint cost drivers, and detect anomalies. We will examine costs by service in this exercise.
 
-1. Log into the console as an IAM user with the required permissions, assume the CostOptimization role in the Master account and go to the **billing** dashboard:
+1. Log into the console via SSO and go to the **billing** dashboard:
 ![Images/AWSCostService0.png](/Cost/100_5_Cost_Visualization/Images/AWSCostService0.png)
 
 2. Select **Cost Explorer** from the menu on the left:

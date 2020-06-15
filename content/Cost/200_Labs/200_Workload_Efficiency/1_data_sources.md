@@ -14,7 +14,7 @@ We will create a bucket and folders in S3, then copy the sample application log 
 
 **NOTE** Please read the steps carefully, as the naming is critical and any mistakes will require you to rebuild the lab or make significant and repetitive changes.
 
-1. Log into the AWS console as an IAM user with the required permissions:
+1. Log into the AWS console via SSO:
 ![Images/consolelogin_IAMUser.png](/Cost/200_Workload_Efficiency/Images/consolelogin_IAMUser.png)
 
 2. Make sure you run everything in a single region

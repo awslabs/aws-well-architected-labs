@@ -2,8 +2,8 @@
 title: "Setup Amazon QuickSight"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-pre: "<b>5. </b>"
-weight: 5
+pre: "<b>6. </b>"
+weight: 6
 ---
 
 This will setup Amazon QuickSight, so that users in the Cost Optimization Account can create analysis' and dashboards.

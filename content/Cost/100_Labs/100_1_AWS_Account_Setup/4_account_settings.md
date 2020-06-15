@@ -2,8 +2,8 @@
 title: "Configure account settings"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-pre: "<b>3. </b>"
-weight: 3
+pre: "<b>4. </b>"
+weight: 4
 ---
 
 It is important to ensure your account contacts are up to date and correct. This allows AWS to be able to contact the correct people in your organization if required. It is recommended to use a mailing list or shared email that is accessible by multiple team members for redudancy. Ensure the email accounts are actively monitored.
