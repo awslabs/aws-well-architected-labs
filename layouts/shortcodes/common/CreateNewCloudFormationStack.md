@@ -3,6 +3,15 @@
      templatename: filename for the CloudFormation template to use
           (you need to have instructed them to download/create this file PRIOR to these instructions)
      stackname: the stack name to use for the CloudFormation stack
+
+     Example usage:
+
+     {{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" %}}
+
+     {{% common/CreateNewCloudFormationStack stackname="WebApp1-VPC" templatename="vpc-alb-app-db.yaml" %}}
+          * Leave all parameters as their default values unless you are experimenting.
+     {{% /common/CreateNewCloudFormationStack %}}
+
 -->
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click **Create Stack** > **With new resources**
