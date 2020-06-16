@@ -6,7 +6,7 @@ https://wellarchitectedlabs.com/common/examples/usecreatenewcloudformationstack/
 
 # Case 1 - when all parameters left as default
 
-<!-- The slash at the end (before the percent) is VERY IMPORTANT. If you do not include this, then everything following this is consodered part of the 'Inner' variable-->
+<!-- The slash at the end (before the percent) is VERY IMPORTANT. If you do not include this, then everything following this is considered part of the 'Inner' variable-->
 
 {{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" /%}}
 

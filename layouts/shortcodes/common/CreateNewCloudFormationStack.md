@@ -5,6 +5,7 @@
      stackname: the stack name to use for the CloudFormation stack
 
      For Example usage see content/common/examples/useCreateNewCloudFormationStack.md
+     If you do not use the Inner Variable, you MUST use a trailing "/"
 -->
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click **Create Stack** > **With new resources**
