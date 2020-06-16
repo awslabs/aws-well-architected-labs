@@ -108,7 +108,7 @@ You **MUST** work with your security team/specialist to ensure you create the po
 {{% /notice %}}
 
 {{%expand "Click here for Custom permissions policy" %}}
-{
+    {
         "Version": "2012-10-17",
         "Statement": [
             {
@@ -195,7 +195,7 @@ You **MUST** work with your security team/specialist to ensure you create the po
             ]
         }
     ]
-}
+    }
 {{% /expand%}}
 
 ![Images/ssopermissionset_create.png](/Cost/100_1_AWS_Account_Setup/Images/ssopermissionset_create.png)

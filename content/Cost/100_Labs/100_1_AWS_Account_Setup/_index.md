@@ -6,6 +6,13 @@ chapter: false
 weight: 1
 hidden: false
 ---
+{{< rawhtml >}}
+<video width="600" height="450" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/100AccountSetup.mp4" type="video/mp4">
+  Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
+</video>
+{{< /rawhtml >}}
+
 ## Last Updated
 May 2020
 
