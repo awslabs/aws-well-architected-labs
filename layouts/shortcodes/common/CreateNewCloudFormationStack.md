@@ -3,6 +3,8 @@
      templatename: filename for the CloudFormation template to use
           (you need to have instructed them to download/create this file PRIOR to these instructions)
      stackname: the stack name to use for the CloudFormation stack
+
+     For Example usage see content/common/examples/useCreateNewCloudFormationStack.md
 -->
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click **Create Stack** > **With new resources**

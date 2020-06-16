@@ -65,6 +65,6 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
 
 ### 1.3 Deploying an AWS CloudFormation stack to create a simple VPC
 
-{{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="simple_stack.yaml" %}}
+{{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="simple_stack.yaml" /%}}
 
 1. Deployment will take approximately 30 seconds to deploy.

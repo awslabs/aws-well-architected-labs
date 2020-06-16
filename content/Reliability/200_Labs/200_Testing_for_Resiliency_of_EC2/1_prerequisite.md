@@ -69,11 +69,10 @@ Choose either the Express Steps _or_ Guided Steps
 1. When the stack status is _CREATE_COMPLETE_, you can continue to the next step
 
 #### Guided Steps (Deploy the EC2s and Static WebApp infrastructure)
-{{%expand "Click here for detailed instructions to deploy the VPC:" %}}
+{{%expand "Click here for detailed instructions to deploy the WebApp:" %}}
 1. Download the latest version of the CloudFormation template here: [staticwebapp.yaml](/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/staticwebapp.yaml)
 1. Choose the same AWS region as you did for the VPC (if you used our recommendation, this is **us-east-2 (Ohio)**)
-{{% common/CreateNewCloudFormationStack templatename="staticwebapp.yaml" stackname="WebApp1-Static"%}}
-1. When the stack status is _CREATE_COMPLETE_, you can continue to the next step
+{{% common/CreateNewCloudFormationStack templatename="staticwebapp.yaml" stackname="WebApp1-Static"/%}}
 {{% /expand%}}
 
 #### Website URL

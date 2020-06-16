@@ -12,4 +12,5 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 * Download the CloudFormation template: [_staticwebapp.yaml_](/Reliability/Common/Code/CloudFormation/staticwebapp.yaml)
   * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
 
-{{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" %}}
+{{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" /%}}
+

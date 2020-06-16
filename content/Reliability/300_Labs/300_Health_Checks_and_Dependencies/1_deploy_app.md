@@ -74,10 +74,9 @@ Choose either the Express Steps _or_ Guided Steps
 1. When the stack status is _CREATE_COMPLETE_, you can continue to the next step
 
 #### Guided Steps (Deploy the EC2s and Static WebApp infrastructure)
-{{%expand "Click here for detailed instructions to deploy the VPC:" %}}
+{{%expand "Click here for detailed instructions to deploy the WebApp:" %}}
 1. Download the latest version of the CloudFormation template here: [staticwebapp.yaml](/Reliability/300_Health_Checks_and_Dependencies/Code/CloudFormation/staticwebapp.yaml)
-{{% common/CreateNewCloudFormationStack templatename="staticwebapp.yaml" stackname="HealthCheckLab"%}}
-1. When the stack status is _CREATE_COMPLETE_, you can continue to the next step
+{{% common/CreateNewCloudFormationStack templatename="staticwebapp.yaml" stackname="HealthCheckLab"/%}}
 {{% /expand%}}
 
 ### 1.3 View the website for web service {#website}
