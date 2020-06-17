@@ -23,7 +23,7 @@ Look through the template. You will notice several sections:
 * The [Parameters section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) is used to prompt for inputs that can be used elsewhere in the template. The template is asking for several inputs, but also provides default values for each one. 
    * Look through these and start to reason about what some are used for.
    * For example `InstanceType` is a parameter where the user can choose that Amazon EC2 instance type to deploy for the servers used in this Web App.
-   * Search the file for `!Ref InstanceType`.  `!Ref! is a built-in function that refrences the value of a parameter.  Here you can see it is used to provide a value to the Auto Scaling Launch Configuration, which is used to laucnh new EC2 instances.
+   * Search the file for `!Ref InstanceType`.  `!Ref!` is a built-in function that refrences the value of a parameter.  Here you can see it is used to provide a value to the Auto Scaling Launch Configuration, which is used to laucnh new EC2 instances.
 
 * The [Conditions section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html) is where you can setup _if/then_-like control of what happens during template deployment. It defines the circumstances under which entities are created or configured.
 
@@ -34,7 +34,7 @@ Look through the template. You will notice several sections:
    * And it has `Properties` that define the values used to create the VPC
 
 * The [Outputs section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) is used to display selective information about resources in the stack.
-   * In this case it uses the built-in function `!GetAtt` to get teh DNS Name for the Application Load Balancer.
+   * In this case it uses the built-in function `!GetAtt` to get the DNS Name for the Application Load Balancer.
    * This URL is what you used to access the WebApp
 
 * The [Metadata section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/metadata-section-structure.html) here is used to group and order how the CloudFormation parameters are displayed when you deploy the template using the AWS Console

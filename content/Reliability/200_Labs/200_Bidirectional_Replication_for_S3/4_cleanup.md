@@ -6,13 +6,7 @@ pre: "<b>4. </b>"
 weight: 4
 ---
 
-**If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
-
-* There is no need to tear down the lab. Feel free to continue exploring. Log out of your AWS account when done.
-
-**If you are using your own AWS account**:
-
-* You may leave these resources deployed for as long as you want. When you are ready to delete these resources, see the following instructions
+{{% common/EventEngineVsOwnAccountCleanup %}}
 
 ### Empty the S3 buckets
 
@@ -37,20 +31,13 @@ Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if 
 
 ### Remove AWS CloudFormation provisioned resources
 
+If you are using an AWS supplied to you as part of an in-person AWS workshop
+
 #### How to delete an AWS CloudFormation stack
 
 If you are already familiar with how to delete an AWS CloudFormation stack, then skip to the next section: **Delete workshop CloudFormation stacks**
 
-1. Go to the AWS CloudFormation console: <https://console.aws.amazon.com/cloudformation>
-1. Select the CloudFormation stack to delete and click **Delete**
-1. In the confirmation dialog, click **Delete stack**
-1. The **Status** changes to _DELETE_IN_PROGRESS_
-1. Click the refresh button to update and status will ultimately progress to _DELETE_COMPLETE_
-1. When complete, the stack will no longer be displayed. To see deleted stacks use the drop down next to the Filter text box.
-1. To see progress during stack deletion
-      * Click the stack name
-      * Select the Events column
-      * Refresh to see new events
+{{% common/DeleteCloudFormationStack %}}
 
 #### Delete workshop CloudFormation stacks
 

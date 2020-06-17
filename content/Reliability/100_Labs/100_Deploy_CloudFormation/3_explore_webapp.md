@@ -31,7 +31,7 @@ pre: "<b>3. </b>"
     * **A** - There is one EC2 instance deployed per Availability Zone
     * **B** - Refresh the website several times, note that the EC2 instance and Availability Zone change from among the three available
     * **C** - Elastic Load Balancing (ELB) is used here.  An Application Load Balancer receives each request and distributes it among the available EC2 server instances across Availability Zones.
-        * The requests are stateless, and therefore can be routed to any of teh available EC2 instances
+        * The requests are stateless, and therefore can be routed to any of the available EC2 instances
     * **D** - The EC2 instances are in an [Amazon EC2 Auto Scaling Group](http://aws.amazon.com/ec2/autoscaling). This Auto Scaling Group was configured to maintain three instances, therefore if one instance is detected as _unhealthy_ it will be replaced to maintain three _healthy_ instances.
         * AWS Auto Scaling can also be configured to scale up/down dynamically in response to workload consitions such as CPU utilization or request count.
 

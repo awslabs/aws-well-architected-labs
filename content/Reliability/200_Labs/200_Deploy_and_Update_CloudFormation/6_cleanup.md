@@ -5,17 +5,18 @@ chapter: false
 pre: "<b>6. </b>"
 weight: 6
 ---
-
 When a CloudFormation stack is deleted, CloudFormation will automatically delete
 the resources that it created.
 
-You will now delete the stack.
+{{% common/EventEngineVsOwnAccountCleanup %}}
 
-1. In the CloudFormation console, select **CloudFormationLab**.
+### Remove AWS CloudFormation provisioned resources
 
-2. Click **Delete** then click **Delete stack**
+You will now delete **CloudFormationLab** CloudFormation stack.
 
-The stack will show *DELETE_IN_PROGRESS*. After a few minutes, the stack will disappear.
+#### How to delete an AWS CloudFormation stack
+
+{{% common/DeleteCloudFormationStack %}}
 
 ---
 
