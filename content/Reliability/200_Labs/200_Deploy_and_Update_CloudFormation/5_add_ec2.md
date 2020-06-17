@@ -64,14 +64,33 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
             SecurityGroupIds:
               - !Ref PublicSecurityGroup
 
-    To download a sample solution, right-click and download this link:
+    * **Not sure what to do???**
+      * To download a sample solution, right-click and download this link:
     [simple_stack_plus_s3_ec2.yaml](/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2.yaml)
+      * _Or_ click below to see exactly what to add to your CloudFormation template.
+
+    {{% expand "Click here to see YAML for adding your EC2 instance:" %}}
+
+      MyEC2Instance:
+        Type: AWS::EC2::Instance
+        Properties:
+          IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+          ImageId: !Ref LatestAmiId
+          InstanceType: !Ref InstanceType
+          SecurityGroupIds:
+            - !Ref PublicSecurityGroup
+          SubnetId: !Ref PublicSubnet1
+          Tags:
+            - Key: Name
+              Value: Simple Server
+
+    {{% /expand %}}
 
 1. Once you have edited the template, update the stack deployment with your revised template file.
     * On the **Parameters** screen of the CloudFormation update switch **EC2SecurityEnabledParam** to `true`
 
         | Important |
-        |:---:|
+        |:---|
         |Change **EC2SecurityEnabledParam** to `true`|
         |This will tell the template to create resources your EC2 instance will need such as the Security Group and IAM Role|
 
