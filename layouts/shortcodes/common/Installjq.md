@@ -1,44 +1,3 @@
-# Software Install
-
-This reference will help you install software necessary to setup your workshop environment
-
-1. [AWS CLI](#awscli)
-1. [jq](#jq)
-
-## AWS CLI <a name="awscli"></a>
-
-The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consistent interface for interacting with all parts of AWS.
-
-### Linux
-
-* This includes:
-  * All native Linux installs
-  * MacOS
-  * Windows Subsystem for Linux (WSL)
-  * Run the following command
-
-        $ aws --version
-        aws-cli/1.16.249 Python/3.6.8...
-* AWS CLI version 1.0 or higher is fine
-* If you instead got `command not found` then you need to install `awscli`:
-
-       $ pip3 install awscli --upgrade --user
-       ...(lots of output)...
-       Successfully installed...
-* If that succeeded, then you are finished.  Return to the Lab Guide
-
-If that does not work, then do the following:
-
-* See the [detailed installation instructions here](https://docs.aws.amazon.com/cli/latest/userguide/install-bundle.html)
-
-### Other environments (not Linux)
-
-* See the instructions here <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
-
-**STOP HERE and return to the Lab Guide**
-
----
-
 ## jq
 
 `jq` is a command-line JSON processor. is like `sed` for JSON data. It is used in the workshop `bash` scripts to parse AWS CLI output.
@@ -79,5 +38,3 @@ If the steps above did not work, and you are running Linux, then try the followi
 
         $ cp jq-linux64 ~/bin/jq
         $ chmod 755 ~/bin/jq
-
-**Return to the Lab Guide to continue the lab**

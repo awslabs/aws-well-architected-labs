@@ -41,7 +41,7 @@ Using bash is an effective way to execute the failure injection tests for this w
             $ aws --version
             aws-cli/1.16.249 Python/3.6.8...
          * Version 1.1 or higher is fine
-         * If you instead got `command not found` then [see instructions here to install `awscli`]({{< ref "Documentation/Software_Install.md#awscli" >}})
+         * If you instead got `command not found` then [see instructions here to install `awscli`]({{< ref "Documentation/Software_Install.md#install-aws-cli" >}})
 
      * `jq` command-line JSON processor installed.
 

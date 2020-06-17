@@ -15,5 +15,5 @@ If you only have one AWS account, then use the same AWS account number for both 
 
 1. In account 2 sign in to the S3 Management Console as an IAM user or role in your AWS account, and open the S3 console at <https://console.aws.amazon.com/s3>
 1. Choose an S3 bucket that contains some objects. You will enable the ability to list the objects in this bucket from the other account.
-   * If you would rather create a new bucket to use, [follow these directions]({{% ref "/common/documentation/CreateNewS3Bucket.md" %}})
+   * If you would rather create a new bucket to use, [follow these directions]({{% ref "/common/documentation/CreateNewS3BucketAndAddObjects.md" %}})
    * Record the **bucketname**

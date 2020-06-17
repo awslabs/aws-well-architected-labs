@@ -1,22 +1,4 @@
----
-title: "Create new S3 bucket"
-date: 2020-04-24T11:16:08-04:00
-hidden: true
-disableToc: true
----
-
-These steps will guide you to create a bucket
-
-1. Go to the S3 console at <https://console.aws.amazon.com/s3>
-1. Click **Create bucket**
-1. For **Bucket name** supply a name. This must be unique across all buckets in AWS
-
-    * **Tip**: Name the bucket _`<first_name><last_initial>_<date in yyyymmdd format>`_ (do NOT include the angle brackets)
-
-1. Click **Next** _three_ times
-1. Review screen: click **Create bucket**
-
-# Add object(s) to an S3 bucket
+## Add object(s) to an S3 bucket
 
 Use these instructions to add one or more objects to an S3 bucket
 
@@ -35,6 +17,3 @@ Use these instructions to add one or more objects to an S3 bucket
 1. If, and only if, you want to make this object(s) _publically readable_ then under **Manage public permissions** select **Grant public read access to this object(s)**
 1. Click **Next** two more times
 1. Click **Upload**
-
----
-**Return to the Lab Guide to continue the lab**

@@ -5,7 +5,7 @@ chapter: false
 hidden: true
 ---
 
-* You will supply configuration and credentials used by the AWS SDK to access your AWS account. You identified these credentials [back in step 1 of the Lab Guide]({{< ref "../1_deploy_infra.md#awslogin" >}})
+* You will supply configuration and credentials used by the AWS CLI and AWS SDK to access your AWS account. You identified these credentials [back in step 1 of the Lab Guide]({{< ref "../1_deploy_infra.md#awslogin" >}})
 
 ## Choose an option
 
@@ -27,7 +27,7 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 1. You should have already copied the credentials for your account. If _not_ then:
 
-    {{%expand "Click here for instructions to copy the credentiala from your assigned AWS account:" %}}
+    {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
     {{% common/Workshop_AWS_Account %}}
 **Now continue the steps to setup your AWS credentials....**
     {{% /expand%}}
@@ -57,7 +57,7 @@ This option uses the AWS CLI. Note that running the bash failure testing scripts
           aws-cli/1.16.249 Python/3.6.8...
 
      * AWS CLI version 1.1 or higher is fine
-     * If you instead got `command not found` then either  [install the AWS CLI]({{< ref "./Software_Install.md#awscli" >}}) or use **Option 3**
+     * If you instead got `command not found` then either  [install the AWS CLI]({{< ref "./Software_Install.md#install-aws-cli" >}}) or use **Option 3**
 
 1. Run `aws configure` and provide the following values:
 
@@ -116,7 +116,7 @@ If you used **Option 2** or **Option 3**, please follow these steps:
 
 ### Clear environment variables
 
-If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these will preferentially use credentials and configuration in environment variables.  Therefore ensure that the following env variables are **not** set:
+If you used **option 2** or **option 3** then you have put your credentials into files that will be used by the AWS CLI or AWS SDK. However these will preferentially use credentials and configuration in environment variables. Therefore ensure that the following env variables are **not** set:
 
 * `AWS_ACCESS_KEY_ID`
 * `AWS_SECRET_ACCESS_KEY`
@@ -161,3 +161,4 @@ Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
 ```
 
 ---
+**Return to the Lab Guide to continue the lab**

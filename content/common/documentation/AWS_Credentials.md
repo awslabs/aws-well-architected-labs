@@ -5,35 +5,38 @@ hidden: true
 disableToc: true
 ---
 
-# Setup AWS credentials and configuration
-
 * You will supply configuration and credentials used by the AWS CLI and AWS SDK to access your AWS account.
 
 ## Choose an option
 
 Select the appropriate option for configuration of your AWS credentials:
 
-* **Option 1** - Using AWS instructor supplied accounts with Linux-style environment variables
-* **Option 2** - Using AWS CLI
-* **Option 3** - Creating configuration files manually
-* **Option 4** - Using PowerShell commands for Windows
+* [**Option 1**]({{< ref "#supplied">}}) - Using AWS instructor supplied accounts with Linux-style environment variables
+* [**Option 2**]({{< ref "#cli">}}) - Using AWS CLI
+* [**Option 3**]({{< ref "#files">}}) - Creating configuration files manually
+* [**Option 4**]({{< ref "#powershell">}}) - Using PowerShell commands for Windows
 
-### Option 1 For instructor supplied AWS accounts
+### Option 1 For instructor supplied AWS accounts {#supplied}
 
 If BOTH of the following are true then you may use **Option 1**
 
-* _If you are attending an in-person workshop and were provided with an AWS account by the instructor_ then you should use this option
+* **If you are attending an in-person workshop and were provided with an AWS account by the instructor** then you should use this option
 * You are running the workshop on a system where environment variables are set using the `export` command, such as Bash on Amazon Linux
 
 Otherwise you should choose **Option 2** or **Option 3**
 
-1. You should have already copied the credentials for your account. If not then [follow the directions here](Workshop_AWS_Account.md)
+1. You should have already copied the credentials for your account. If _not_ then:
 
-1. The copied credentials are already in the form of `export` statements. Run these from your shell command line. Use _your_ values, _not_ the example ones below
+    {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
+    {{% common/Workshop_AWS_Account %}}
+**Now continue the steps to setup your AWS credentials....**
+    {{% /expand%}}
 
-        export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-        export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-        export AWS_SESSION_TOKEN=FQoGZXIvYXdzEDwaIIAMFAKEn0LVImWNQHiLuAWKe+KFkLeIvpOHEruWjyCjrEdyjtW8WCbnmJGM1ES20xq1fcaS5TERHDUabZJ60Kk6nc9uHoCDb1QKHi+MerRIcKJTi3OKz0QMVPAGVqVWgvOBBSQ2lylLVjtMMSQF+yLZsP1bvehQ0ke/Bl/X6RJySOHg2TZGyESPL/INqJiZyEHi+MelAnThepVgWUKFPD5mESBVlpy2LVCE3xPpHFqOm0Q79svRSSW2jLj5NkRXL+xhkcvt+g8vNt1ODEwixwMGpFB2sBHryv6EXNeX6c88vxJ8Zyfkmsqi0xmCW1f9jWAPIXNkt/nEYWEXAMPLETOKEN=
+1. The copied credentials are already in the form of `export` statements. Run these from your shell command line. Use _your_ values, _not_ the ones below
+
+        export AWS_ACCESS_KEY_ID=ASIIAMFAKENOPZLX6J5L
+        export AWS_SECRET_ACCESS_KEY=w0pE4j5k4FlUrkIIAMFAKEdiLMKLGZlxyct+GpTam
+        export AWS_SESSION_TOKEN=FQoGZXIvYXdzEDwaIIAMFAKEn0LVImWNQHiLuAWKe+KFkLeIvpOHEruWjyCjrEdyjtW8WCbnmJGM1ES20xq1fcaS5TERHDUabZJ60Kk6nc9uHoCDb1QKHi+MerRIcKJTi3OKz0QMVPAGVqVWgvOBBSQ2lylLVjtMMSQF+yLZsP1bvehQ0ke/Bl/X6RJySOHg2TZGyESPL/INqJiZyEHi+MelAnThepVgWUKFPD5mESBVlpy2LVCE3xPpHFqOm0Q79svRSSW2jLj5NkRXL+xhkcvt+g8vNt1ODEwixwMGpFB2sBHryv6EXNeX6c88vxJ8Zyfkmsqi0xmCW1f9jWAPIXNkt/nEYW4J4coyLKP7QU=
         export AWS_DEFAULT_REGION=us-east-2
 
 1. Also run this command as written below
@@ -44,7 +47,7 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 If you completed **Option 1** then **STOP HERE and return to the Lab Guide**
 
-### Option 2 AWS CLI
+### Option 2 AWS CLI {#cli}
 
 This option uses the AWS CLI. You should use **Option 3** if you do not or cannot install the AWS CLI.
 
@@ -54,7 +57,7 @@ This option uses the AWS CLI. You should use **Option 3** if you do not or canno
           aws-cli/1.16.249 Python/3.6.8...
 
      * AWS CLI version 1.1 or higher is fine
-     * If you instead got `command not found` then either  [install the AWS CLI](Software_Install.md#awscli) or use **Option 3**
+     * If you instead got `command not found` then either  [install the AWS CLI]({{< ref "./Software_Install.md#install-aws-cli" >}}) or use **Option 3**
 
 1. Run `aws configure` and provide the following values:
 
@@ -64,7 +67,9 @@ This option uses the AWS CLI. You should use **Option 3** if you do not or canno
         Default region name: [us-east-2]: us-east-2
         Default output format [None]: json
 
-### Option 3 Manually creating credential files
+### Option 3 Manually creating credential files {#files}
+
+If you already did **Option 2**, then skip this
 
 1. create a `.aws` directory under your home directory
 
@@ -141,18 +146,19 @@ For your convenience:
       unset AWS_DEFAULT_OUTPUT
       unset AWS_PROFILE
 
-### Option 4 (PowerShell)
+### Option 4 (PowerShell) {#powershell}
 
-**Configuration of AWS credentials**
 1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
 
 1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog.
 
 1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
 
-        Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-        [ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
-        Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
+```powershell
+Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
+[ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
+Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
+```
 
 ---
 **Return to the Lab Guide to continue the lab**
