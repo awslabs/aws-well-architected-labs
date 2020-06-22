@@ -89,7 +89,8 @@ You **MUST** work with your security team/specialist to ensure you create the po
                     "cur:DeleteReportDefinition",
                     "cur:ModifyReportDefinition",
                     "pricing:DescribeServices",
-                    "wellarchitected:*"
+                    "wellarchitected:*",
+                    "savingsplans:*"
                 ],
                 "Resource": "*"
             }
@@ -121,7 +122,8 @@ You **MUST** work with your security team/specialist to ensure you create the po
                     "aws-portal:*PaymentMethods",
                     "aws-portal:*Billing",
                     "pricing:DescribeServices",
-                    "wellarchitected:*"
+                    "wellarchitected:*",
+                    "savingsplans:*"
                 ],
                 "Resource": "*"
             },
