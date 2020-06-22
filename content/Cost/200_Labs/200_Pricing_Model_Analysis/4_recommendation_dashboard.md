@@ -185,7 +185,7 @@ weight: 4
     - Label it **Recommendations**
 ![Images/quicksight_add_visual2.png](/Cost/200_Pricing_Model_Analysis/Images/quicksight_add_visual2.png)
 
-37. Add a **Table** visual, Group By: **product_instance_type** and **line_item_usage_start_date aggreate: day**, Add the **values**:
+37. Add a **Pivot Table** visual, Rows: **product_instance_type** and **line_item_usage_start_date aggreate: day**, Add the **values**:
     - instancecount aggregate: average
     - Trend
     - TrendAvg (show as percent)
