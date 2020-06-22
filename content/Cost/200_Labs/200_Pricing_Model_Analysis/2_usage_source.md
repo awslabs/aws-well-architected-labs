@@ -60,6 +60,7 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
         AND costmaster.product_instance_type NOT LIKE ''
         AND costmaster.product_operating_system NOT LIKE 'NA'
         AND costmaster.line_item_unblended_cost > 0
+        AND costmaster.line_item_line_item_type like 'Usage'
 
         GROUP BY costmaster.line_item_usage_account_id,
         costmaster.line_item_usage_start_date,
@@ -70,6 +71,12 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
 
         ORDER BY costmaster.line_item_usage_start_date ASC,
         DiscountRate DESC
+
+
+{{% notice warning %}}
+The code above will capture ONLY on-demand usage, as defined by costmaster.line_item_line_item_type like 'Usage'. You can remove this to include Savings Plan usage, to see total commitment you should have, instead of additional commitment required.
+{{% /notice %}}
+
 
 
 4. Verify the data source is setup by editing the following query, replace **costmaster.** with the name of the database and run the following query:

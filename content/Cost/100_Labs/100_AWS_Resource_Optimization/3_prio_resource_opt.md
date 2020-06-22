@@ -10,7 +10,7 @@ pre: "<b>3. </b>"
 ![Images/ResourceOpt06b.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt06b.png)
 
 2. If you don’t have any Amazon EC2 Resource Optimization recommendation use the file below as a reference.
-[Sample Amazon EC2 Resource Optimization file (.csv)](./Code/ENT206-ec2-rightsizing-recommendations.csv)
+[Sample Amazon EC2 Resource Optimization file (.csv)](/Cost/100_AWS_Resource_Optimization/Code/ENT206-ec2-rightsizing-recommendations.csv)
 
 3. First let’s exclude instances that are too small or were only running for a few hours from the analysis. By doing so, we minimize the time required to perform rightsizing modifications that would otherwise result in minimal savings.
 ![Images/ResourceOpt07.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07.png)
