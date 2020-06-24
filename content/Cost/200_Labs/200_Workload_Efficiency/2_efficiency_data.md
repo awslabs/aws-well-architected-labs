@@ -49,7 +49,7 @@ We will use Athena to analyze the application logs, and discover the relevant da
         order by count(*) desc
         limit 100;
 
-9. We have both lots of small requests (55, 91 byets) and some large sized requests also.
+9. We have both lots of small requests (55, 91 bytes) and some large sized requests also.
 
 10. We will choose the following fields for our efficiency data:
     - Request
