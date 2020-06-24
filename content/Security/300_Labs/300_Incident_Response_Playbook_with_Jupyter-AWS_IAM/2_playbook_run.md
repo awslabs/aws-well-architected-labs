@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 
 ### 2.1 Download Playbook and Helper
 
-Download the latest version of the notebook [Incident_Response_Playbook_AWS_IAM.ipynb](/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/Incident_Response_Playbook_AWS_IAM.ipynb) and helper [incident_response_helpers.py](/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/incident_response_helpers.py) from file from GitHub raw, or by [cloning](https://help.github.com/en/articles/cloning-a-repository) this repository.
+Download the example version of the notebook [Incident_Response_Playbook_AWS_IAM.ipynb](/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/Incident_Response_Playbook_AWS_IAM.ipynb) and helper [incident_response_helpers.py](/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/Code/incident_response_helpers.py), place them in the same directory.
 
 ### 2.2 Run the Playbook
 
