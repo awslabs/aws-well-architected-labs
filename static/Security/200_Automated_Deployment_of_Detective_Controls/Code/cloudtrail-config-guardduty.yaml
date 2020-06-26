@@ -4,7 +4,7 @@ Description: >-
   **WARNING** You will be billed for the AWS resources created if you create a 
   stack from this template.
 
-  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
   
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -18,13 +18,6 @@ Description: >-
   permissions and limitations under the License.
 Parameters:
   #General
-  CloudTrail:
-    Type: String
-    Description: 'Configure AWS CloudTrail. If you have previously enabled CloudTrail select No.'
-    Default: 'Yes'
-    AllowedValues:
-      - 'No'
-      - 'Yes'
   Config:
     Type: String
     Description: 'Configure AWS Config. If you have previously enabled Config select No.'
@@ -85,9 +78,6 @@ Parameters:
     Description: >-
       The name of the S3 bucket Config Service will store configuration
       snapshots in. Each label in the bucket name must start with a lowercase letter or number.
-    MinLength: '3'
-    MaxLength: '63'
-    AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
   ConfigSnapshotFrequency:
     Type: String
     Description: AWS Config configuration snapshot frequency
@@ -109,9 +99,6 @@ Parameters:
     Description: Enter the email address that will receive the alerts
 
 Conditions:
-  CloudTrailEnabled: !Equals
-    - !Ref CloudTrail
-    - 'Yes'
   ConfigEnabled: !Equals
     - !Ref Config
     - 'Yes'
@@ -166,7 +153,6 @@ Resources:
   #CloudTrail
   CloudTrailKMSKey:
     Type: 'AWS::KMS::Key'
-    Condition: CloudTrailEnabled
     DeletionPolicy: Delete
     Condition: CloudTrailEncryptS3LogsEnabled
     Properties:
@@ -257,7 +243,6 @@ Resources:
                     - ':trail/*'
   CloudTrailDestinationBucket:
     Type: 'AWS::S3::Bucket'
-    Condition: CloudTrailEnabled
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
     Properties:
       BucketName: !Ref CloudTrailBucketName
@@ -280,7 +265,6 @@ Resources:
   CloudTrailBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
-    Condition: CloudTrailEnabled
     DependsOn:
       - CloudTrailDestinationBucket
     Properties:
@@ -367,7 +351,6 @@ Resources:
   CloudTrailDestinationTrail:
     Type: 'AWS::CloudTrail::Trail'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html
-    Condition: CloudTrailEnabled
     DependsOn:
       - CloudTrailBucketPolicy
       - CloudTrailCWLogsGroup
@@ -399,16 +382,13 @@ Resources:
         - !Ref 'AWS::NoValue'
   CloudTrailCWLogsGroup:
     Type: 'AWS::Logs::LogGroup'
-    Condition: CloudTrailEnabled
     Properties:
       RetentionInDays: !Ref CloudTrailCWLogsRetentionTime
   CloudTrailCloudWatchLogsRole:
     Type: 'AWS::IAM::Role'
-    Condition: CloudTrailEnabled
     DependsOn:
       - CloudTrailCWLogsGroup
     Properties:
-      RoleName: CloudTrail_CloudWatchLogs_Role
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -435,7 +415,6 @@ Resources:
     Type: 'AWS::IAM::Role'
     Condition: ConfigEnabled
     Properties:
-      RoleName: AWSServiceRoleConfig-Custom
       AssumeRolePolicyDocument:
         Statement:
           - Action:
