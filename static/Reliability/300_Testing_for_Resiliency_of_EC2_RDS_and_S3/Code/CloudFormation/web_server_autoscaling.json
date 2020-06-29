@@ -210,6 +210,11 @@
           { "Key" : "Name", "Value" : { "Fn::Join" : ["", [
               "WebServerforResiliency-", { "Ref" : "VPCID"} ]] }, "PropagateAtLaunch" : "true" }
         ]
+      },
+      "UpdatePolicy" : {
+        "AutoScalingReplacingUpdate" : {
+          "WillReplace" : true
+        }
       }
     }
   },
