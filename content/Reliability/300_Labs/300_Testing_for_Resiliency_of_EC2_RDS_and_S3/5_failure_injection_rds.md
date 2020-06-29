@@ -131,6 +131,8 @@ Now repeat the RDS failure injection steps on this page, starting with [**5.1 RD
 * You will observe that the unavailability time is now under one minute
 * What else is different than the previous time you the RDS instance failed over?
 
+---
+
 #### Resources
 
 *__Learn more__: After the lab see [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html) for more details on high availability and failover support for DB instances using Multi-AZ deployments.*
