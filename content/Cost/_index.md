@@ -1,5 +1,5 @@
 +++
-title = "Cost"
+title = "Cost Optimization"
 date = 2020-04-20T22:31:40-04:00
 weight = 5000
 chapter = false
