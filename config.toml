@@ -29,13 +29,43 @@ base_raw_github_url = "https://raw.githubusercontent.com/awslabs/aws-well-archit
 #{{% siteparam "base_github_url" %}}
 
 
-
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = false
+  disableXML = false
+  minifyOutput = true
+  [minify.tdewolff]
+    [minify.tdewolff.css]
+      decimals = -1
+      keepCSS2 = true
+    [minify.tdewolff.html]
+      keepConditionalComments = true
+      keepDefaultAttrVals = true
+      keepDocumentTags = true
+      keepEndTags = true
+      keepWhitespace = false
+    [minify.tdewolff.js]
+    [minify.tdewolff.json]
+    [minify.tdewolff.svg]
+      decimals = -1
+    [minify.tdewolff.xml]
+      keepWhitespace = false
+      
 # For search functionality
 [outputs]
 home = [ "HTML", "RSS", "JSON"]
+section = ["HTML","RSS"]
 
 # Menu shortcuts on left side
 [[menu.shortcuts]]
+name = "<i class='fas fa-rss'></i> Labs RSS Feed"
+url = "/index.xml"
+weight = 10
+
+[[menu.shortcuts]]
 name = "<i class='fas fa-bookmark'></i> Amazon Free Tier"
 url = "https://aws.amazon.com/free/"
-weight = 10
+weight = 20
