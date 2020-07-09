@@ -1,7 +1,7 @@
 ---
 title: "Level 100: Calculating differences in Linux clock source changes to application performance"
 menutitle: "Calculating differences in clock source"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-06-09T12:00:00-04:00
 chapter: false
 weight: 2
 description: "How various linux clock sources can affect the performance of your application on EC2"

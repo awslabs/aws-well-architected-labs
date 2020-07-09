@@ -1,7 +1,7 @@
 ---
 title: "Testing Performance of both nodes before clock changes"
 menutitle: "Test performance"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-06-09T12:00:00-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
