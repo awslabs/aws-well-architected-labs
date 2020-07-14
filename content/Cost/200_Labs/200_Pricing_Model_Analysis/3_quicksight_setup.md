@@ -121,7 +121,7 @@ This section is **optional** and replaces the next two steps by creating the das
 ![Images/cli_dashboard_creating.png](/Cost/200_Pricing_Model_Analysis/Images/cli_dashboard_creating.png)
 
 6. After a few minutes the dashboard will become available in QuickSight, click on the **Dashboard name**:
-![Images/qsdashboard-analysis.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard-analysis.png)
+![Images/qsdashboard_analysis.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard_analysis.png)
 
 7. Click **Share**, click **Share dashboard**, 
 ![Images/qsdashboard_share.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard_share.png)
