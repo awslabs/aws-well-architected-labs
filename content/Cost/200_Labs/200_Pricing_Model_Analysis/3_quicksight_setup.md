@@ -56,3 +56,91 @@ We will now setup the QuickSight dashboard to visualize your usage by cost, and 
 {{% notice tip %}}
 You now have your data set setup ready to create a visualization.
 {{% /notice %}}
+
+
+
+
+### Advanced Setup
+This section is **optional** and replaces the next two steps by creating the dashboard from a template. You will require access and knowledge of the AWS CLI, and **Enterprise** edition of QuickSight. If you do not have the access, go to the next step and manually create the dashboard as per the lab.
+
+1. Go to this we page to request access to the template. Enter you AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
+
+
+2. Edit the following command, replacing **AccountID** and **region**, then using the CLI list the QuickSight datasets and copy the **Arn** for the **sp_usage** dataset:
+
+        aws quicksight list-data-sets --aws-account-id (AccountID) --region (region)
+
+![Images/quicksight_datasets.png](/Cost/200_Pricing_Model_Analysis/Images/quicksight_datasets.png)
+
+3. Edit the following command, replacing **AccountID** and **region**, then using the CLI list your QuickSight users ARNs:
+
+        aws quicksight list-users --aws-account-id (AccountID) --namespace default --region (region)
+
+![Images/quicksight_users.png](/Cost/200_Pricing_Model_Analysis/Images/quicksight_users.png)
+
+4. Create a local file **create-dashboard.json** with the text below, replace the values **(Account ID)**, **(User ARN)**, **(Dataset ARN)**:
+
+        {
+            "AwsAccountId": "(Account ID)",
+            "DashboardId": "SP_usage_analysis",
+            "Name": "sp_usage analysis",
+            "Permissions": [
+                {
+                    "Principal": "(User ARN)",
+                    "Actions": [
+                            "quicksight:DescribeDashboard",
+                            "quicksight:ListDashboardVersions",
+                            "quicksight:UpdateDashboardPermissions",
+                            "quicksight:QueryDashboard",
+                            "quicksight:UpdateDashboard",
+                            "quicksight:DeleteDashboard",
+                            "quicksight:DescribeDashboardPermissions",
+                            "quicksight:UpdateDashboardPublishedVersion"
+                    ]
+                }
+            ],
+            "SourceEntity": {
+                "SourceTemplate": {
+                    "DataSetReferences": [
+                        {
+                            "DataSetPlaceholder": "sp_usage",
+                            "DataSetArn": "(Dataset ARN)"
+
+                        }
+                    ],
+                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/SP-Analysis-template"
+                }
+            },
+            "VersionDescription": "1"
+        }
+
+5. Edit the following command, replacing **(region)**, Run the command to create the dashboard and you should get a 200 response:
+
+        aws quicksight create-dashboard --cli-input-json file://create-dashboard.json --region (region)
+
+![Images/cli_dashboard_creating.png](/Cost/200_Pricing_Model_Analysis/Images/cli_dashboard_creating.png)
+
+6. After a few minutes the dashboard will become available in QuickSight, click on the **Dashboard name**:
+![Images/qsdashboard-analysis.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard-analysis.png)
+
+7. Click **Share**, click **Share dashboard**, 
+![Images/qsdashboard_share.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard_share.png)
+
+8. Add the required users, or share with all users, ensure you check **Save as** for each user:
+![Images/qsshare_details.png](/Cost/200_Pricing_Model_Analysis/Images/qsshare_details.png)
+
+9. Click **Save as**:
+![Images/qsdashboard_saveas.png](/Cost/200_Pricing_Model_Analysis/Images/qsdashboard_saveas.png)
+
+10. Enter an **Analysis name** and click **Create**:
+![Images/qssaveas_analysis.png](/Cost/200_Pricing_Model_Analysis/Images/qssaveas_analysis.png)
+
+11. You will now have the analysis created automatically from the template:
+![Images/qs_finished.png](/Cost/200_Pricing_Model_Analysis/Images/qs_finished.png)
+
+{{% notice tip %}}
+You have successfully created the analysis from a template, this lab is complete.
+{{% /notice %}}
+
+
+

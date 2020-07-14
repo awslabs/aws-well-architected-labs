@@ -1,7 +1,7 @@
 ---
 title: "Level 200: Pricing Model Analysis"
 #menutitle: "Lab #1"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-07-14T11:16:08-04:00
 chapter: false
 weight: 7
 hidden: false
