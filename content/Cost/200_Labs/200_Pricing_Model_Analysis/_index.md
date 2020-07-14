@@ -13,6 +13,7 @@ hidden: false
 </video>
 {{< /rawhtml >}}
 
+
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected (AWS)
 - Nataliya Godunok, Technical Account Manager (AWS)
