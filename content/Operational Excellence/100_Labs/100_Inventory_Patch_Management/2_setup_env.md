@@ -57,6 +57,6 @@ You can use this same process to create more groups and users and to give your u
 [Amazon EC2 uses public-key cryptography](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) to encrypt and decrypt login information. Public-key cryptography uses a public key to encrypt a piece of data, such as a password, then the recipient uses the private key to decrypt the data. The public and private keys are known as a key pair. To [log in to the Amazon Linux instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html) we will create in this lab, you must create a key pair, specify the name of the key pair when you launch the instance, and provide the private key when you connect to the instance.
 
 1. Use your administrator account to access the Amazon EC2 console at <https://console.aws.amazon.com/ec2/>.
-1. In the IAM navigation pane under **Network & Security**, choose **Key Pairs** and then choose **Create Key Pair**.
+1. In the EC2 navigation pane under **Network & Security**, choose **Key Pairs** and then choose **Create Key Pair**.
 1. In the **Create Key Pair** dialog box, type a **Key pair name** such as `OELabIPM` and then choose **Create**.
 1. **Save the** `keyPairName.pem` **file** for optional later use [accessing the EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html) created in this lab.
