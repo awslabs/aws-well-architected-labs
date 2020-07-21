@@ -52,6 +52,7 @@ Resources:
       VersioningConfiguration: 
         Status: Enabled
 
+  # see https://docs.aws.amazon.com/AmazonS3/latest/dev/setting-repl-config-perm-overview.html for an explanation of this IAM policy
   S3ReplicationPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:

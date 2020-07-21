@@ -237,11 +237,10 @@ Resources:
 # IAM Role for Instance
 ###########
 
-  # IAM Role for EC2 servers - makes use of the IAM Policy defined below
+  # IAM Role for EC2 servers - defines permissions for EC2 instances that use this role
   Web1InstanceRole:
     Condition: EC2SecurityEnabled
     Type: AWS::IAM::Role
-    DependsOn: WebInstancePolicy
     Properties:
       RoleName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
       Path: /
@@ -255,32 +254,8 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       ManagedPolicyArns:
-        - !Ref WebInstancePolicy
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
 
-  # IAM Policy defines what EC2 servers have permission for
-  WebInstancePolicy:
-    Condition: EC2SecurityEnabled
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: 'Policy used by EC2 WebServers'
-      ManagedPolicyName: !Sub '${NamingPrefix}-EC2-Policy-${AWS::StackName}'
-      Path: /
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - 'ec2:DescribeInstanceStatus'
-            Resource: '*'
-          - Effect: Allow
-            Action: 's3:GetObject'
-            Resource: '*'
-          - Effect: Allow
-            Action: 'ssm:*'
-            Resource: '*'
-          - Effect: Allow
-            Action: 'ec2messages:*'
-            Resource: '*'
 
   # InstanceProfile allows you to connect IAM roles to EC2 servers
   Web1InstanceInstanceProfile:

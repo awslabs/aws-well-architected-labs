@@ -110,7 +110,7 @@
           } ]
         },
         "Path" : "/",
-        "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM" ]
+        "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" ]
       }
     },
 
