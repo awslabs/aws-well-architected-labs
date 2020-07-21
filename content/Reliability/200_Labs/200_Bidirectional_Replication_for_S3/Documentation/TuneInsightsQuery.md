@@ -1,3 +1,10 @@
+---
+title: "Troubleshooting Guide to Tuning your Insights Query"
+date: 2020-04-24T11:16:09-04:00
+chapter: false
+hidden: true
+---
+
 # Troubleshooting Guide to Tuning your Insights Query
 
 ## Verify you are in the correct AWS Region
