@@ -1,6 +1,6 @@
 ---
 title: "Create VPC Stack"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-07-22T01:00:09-04:00
 chapter: false
 weight: 2
 pre: "<b>1. </b>"

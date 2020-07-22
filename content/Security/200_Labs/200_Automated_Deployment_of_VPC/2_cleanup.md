@@ -1,6 +1,6 @@
 ---
 title: "Tear Down"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-07-22T01:00:09-04:00
 chapter: false
 pre: "<b>2. </b>"
 weight: 4
@@ -27,7 +27,3 @@ Delete the CloudWatch Logs:
 
 ***
 
-## References & useful resources
-
-[AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
-[Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
