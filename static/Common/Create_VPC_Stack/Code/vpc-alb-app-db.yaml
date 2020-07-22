@@ -111,89 +111,6 @@ Parameters:
     Description: 'Shared1 CidrIp for AZ 3'
     Type: String
     Default: 10.0.33.0/24
-Mappings:
-  Region2AZ:
-    #N. Virginia
-    us-east-1:
-      '1': us-east-1a
-      '2': us-east-1b
-      '3': us-east-1c
-      '4': us-east-1d
-      '5': us-east-1e
-      '6': us-east-1f
-    #Ohio
-    us-east-2:
-      '1': us-east-2a
-      '2': us-east-2b
-      '3': us-east-2c
-    #N. California
-    us-west-1:
-      '1': us-west-1a
-      '2': us-west-1b
-      '3': us-west-1c
-    #Oregon
-    us-west-2:
-      '1': us-west-2a
-      '2': us-west-2b
-      '3': us-west-2c
-    #Canada
-    ca-central-1:
-      '1': ca-central-1a
-      '2': ca-central-1b
-    #Stockholm
-    eu-north-1:
-      '1': eu-north-1a
-      '2': eu-north-1b
-      '3': eu-north-1c
-    #Ireland
-    eu-west-1:
-      '1': eu-west-1a
-      '2': eu-west-1b
-      '3': eu-west-1c
-    #London
-    eu-west-2:
-      '1': eu-west-2a
-      '2': eu-west-2b
-      '3': eu-west-2c
-    #Paris
-    eu-west-3:
-      '1': eu-west-3a
-      '2': eu-west-3b
-      '3': eu-west-3c
-    #Frankfurt
-    eu-central-1:
-      '1': eu-central-1a
-      '2': eu-central-1b
-      '3': eu-central-1a
-    #Tokyo
-    ap-northeast-1:
-      '1': ap-northeast-1a
-      '2': ap-northeast-1b
-      '3': ap-northeast-1c
-      #'3': ap-northeast-1d #new accounts cannot access
-    #Seoul
-    ap-northeast-2:
-      '1': ap-northeast-2a
-      '2': ap-northeast-2c
-    #Singapore
-    ap-southeast-1:
-      '1': ap-southeast-1a
-      '2': ap-southeast-1b
-      '3': ap-southeast-1c
-    #Sydney
-    ap-southeast-2:
-      '1': ap-southeast-2a
-      '2': ap-southeast-2b
-      '3': ap-southeast-2c
-    #Mumbai
-    ap-south-1:
-      '1': ap-south-1a
-      '2': ap-south-1b
-    #Sao Paulo
-    sa-east-1:
-      '1': sa-east-1a
-      '2': sa-east-1b
-      '3': sa-east-1c #new accounts cannot access
 Conditions:
   #ALB1:
   ALB1Enabled: !Not
@@ -236,6 +153,8 @@ Resources:
     Type: "AWS::Logs::LogGroup"
     DeletionPolicy: Delete
     Properties:
+      #We omit LogGroupName so a unique one is generated
+      #LogGroupName:
       RetentionInDays: !Ref VPCFlowLogRetention
   VPCFlowLog:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html
@@ -274,10 +193,10 @@ Resources:
                 Action:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
                   - 'logs:DescribeLogGroups'
                   - 'logs:DescribeLogStreams'
-                Resource: '*'
+                  - 'logs:PutLogEvents'
+                Resource: !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AWS::StackName}-VPCFlowLogGroup-*'
   IGW:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html
     Type: 'AWS::EC2::InternetGateway'
@@ -356,24 +275,15 @@ Resources:
     Type: 'AWS::EC2::Subnet'
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
-      #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '1'
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
       CidrBlock: !Ref ALB1CidrBlock1
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - ALB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '1'
+          Value: !Sub '${NamingPrefix}-ALB1-a'
       VpcId: !Ref VPC
   ALB1Subnet2:
     Condition: ALB1Enabled
@@ -381,23 +291,15 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '2'
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
       CidrBlock: !Ref ALB1CidrBlock2
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - ALB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '2'
+          Value: !Sub '${NamingPrefix}-ALB1-b'
       VpcId: !Ref VPC
   ALB1Subnet3:
     Condition: ALB1Enabled
@@ -405,23 +307,15 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '3'
+      AvailabilityZone: !Select
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
       CidrBlock: !Ref ALB1CidrBlock3
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - ALB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '3'
+          Value: !Sub '${NamingPrefix}-ALB1-c'
       VpcId: !Ref VPC
   ALB1Subnet1RouteToInternet:
     Condition: ALB1Enabled
@@ -625,64 +519,43 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '1'
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref App1CidrBlock1
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - App1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '1'
+          Value: !Sub '${NamingPrefix}-App1-a'
       VpcId: !Ref VPC
   App1Subnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '2'
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref App1CidrBlock2
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - App1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '2'
+          Value: !Sub '${NamingPrefix}-App1-b'
       VpcId: !Ref VPC
   App1Subnet3:
     Type: 'AWS::EC2::Subnet'
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '3'
+      AvailabilityZone: !Select
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref App1CidrBlock3
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - App1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '3'
+          Value: !Sub '${NamingPrefix}-App1-c'
       VpcId: !Ref VPC
   App1RouteTable1:
     #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
@@ -1073,22 +946,15 @@ Resources:
     Properties:
       #AssignIpv6AddressOnCreation: true
       VpcId: !Ref VPC
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '1'
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref DB1CidrBlock1
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - DB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '1'
+          Value: !Sub '${NamingPrefix}-DB1-a'
   DB1Subnet2:
     Condition: DB1Enabled
     Type: 'AWS::EC2::Subnet'
@@ -1096,22 +962,15 @@ Resources:
     Properties:
       #AssignIpv6AddressOnCreation: true
       VpcId: !Ref VPC
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '2'
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref DB1CidrBlock2
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - DB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '2'
+          Value: !Sub '${NamingPrefix}-DB1-b'
   DB1Subnet3:
     Condition: DB1Enabled
     Type: 'AWS::EC2::Subnet'
@@ -1119,22 +978,15 @@ Resources:
     Properties:
       #AssignIpv6AddressOnCreation: true
       VpcId: !Ref VPC
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '3'
+      AvailabilityZone: !Select
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref DB1CidrBlock3
       #Ipv6CidrBlock: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - DB1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '3'
+          Value: !Sub '${NamingPrefix}-DB1-c'
   DB1RouteTable1:
     Condition: DB1Enabled
     #To Do: Routes should be via a mechanism to filter traffic to prevent data exfiltration
@@ -1338,23 +1190,16 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '1'
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref Shared1CidrBlock1
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '1'
+          Value: !Sub '${NamingPrefix}-Shared1-a'
       VpcId: !Ref VPC
   Shared1Subnet2:
     Condition: Shared1Enabled
@@ -1362,23 +1207,16 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '2'
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref Shared1CidrBlock2
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '2'
+          Value: !Sub '${NamingPrefix}-Shared1-b'
       VpcId: !Ref VPC
   Shared1Subnet3:
     Condition: Shared1Enabled
@@ -1386,23 +1224,16 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Properties:
       #AssignIpv6AddressOnCreation: true
-      AvailabilityZone: !FindInMap
-        - Region2AZ
-        - !Ref 'AWS::Region'
-        - '3'
+      AvailabilityZone: !Select
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
       CidrBlock: !Ref Shared1CidrBlock3
       #Ipv6CidrBlock: 
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '3'
+          Value: !Sub '${NamingPrefix}-Shared1-c'
       VpcId: !Ref VPC
   Shared1NATGW1:
     Type: AWS::EC2::NatGateway
@@ -1416,14 +1247,7 @@ Resources:
       Tags: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '1'
+          Value: !Sub '${NamingPrefix}-Shared1-a'
   Shared1NAT1EIP:
     Type: AWS::EC2::EIP
     Properties:
@@ -1440,14 +1264,7 @@ Resources:
       Tags: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '2'
+          Value: !Sub '${NamingPrefix}-Shared1-b'
   Shared1NAT2EIP:
     Type: AWS::EC2::EIP
     Properties:
@@ -1464,14 +1281,7 @@ Resources:
       Tags: 
       Tags:
         - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref NamingPrefix
-              - Shared1
-              - !FindInMap
-                - Region2AZ
-                - !Ref 'AWS::Region'
-                - '3'
+          Value: !Sub '${NamingPrefix}-Shared1-c'
   Shared1NAT1EIP:
     Type: AWS::EC2::EIP
     Properties:
@@ -1589,6 +1399,7 @@ Resources:
     Properties:
       RouteTableId: !Ref Shared1RouteTable3
       SubnetId: !Ref Shared1Subnet3
+  # The following comments are examples of additional VPC Endpoints
   # Shared1VPCEndpointec2:
   #   Type: AWS::EC2::VPCEndpoint
   #   #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
