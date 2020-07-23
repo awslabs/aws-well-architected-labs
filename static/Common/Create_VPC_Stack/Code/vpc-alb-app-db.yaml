@@ -472,8 +472,8 @@ Resources:
       Egress: 'true'
       CidrBlock: !Ref App1CidrBlock1
       PortRange:
-        From: '433'
-        To: '433'
+        From: '443'
+        To: '443'
   ALB1OutNetworkHTTPSVPCAclEntry2:
     Type: 'AWS::EC2::NetworkAclEntry'
     Properties:
@@ -484,8 +484,8 @@ Resources:
       Egress: 'true'
       CidrBlock: !Ref App1CidrBlock2
       PortRange:
-        From: '433'
-        To: '433'
+        From: '443'
+        To: '443'
   ALB1OutNetworkHTTPSVPCAclEntry3:
     Type: 'AWS::EC2::NetworkAclEntry'
     Properties:
@@ -496,8 +496,8 @@ Resources:
       Egress: 'true'
       CidrBlock: !Ref App1CidrBlock3
       PortRange:
-        From: '433'
-        To: '433'
+        From: '443'
+        To: '443'
   ALB1SubnetNetworkAclAssocation1:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
