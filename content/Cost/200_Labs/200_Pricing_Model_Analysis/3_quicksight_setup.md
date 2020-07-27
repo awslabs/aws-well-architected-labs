@@ -63,7 +63,7 @@ You now have your data set setup ready to create a visualization.
 ### Advanced Setup
 This section is **optional** and replaces the next two steps by creating the dashboard from a template. You will require access and knowledge of the AWS CLI, and **Enterprise** edition of QuickSight. If you do not have the access, go to the next step and manually create the dashboard as per the lab.
 
-1. Go to this we page to request access to the template. Enter you AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
+1. Go to this web page to request access to the template. Enter you AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
 
 
 2. Edit the following command, replacing **AccountID** and **region**, then using the CLI list the QuickSight datasets and copy the **Arn** for the **sp_usage** dataset:
