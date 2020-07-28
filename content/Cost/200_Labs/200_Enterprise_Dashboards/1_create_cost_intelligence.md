@@ -31,7 +31,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
     Reserved Instances:
 
         select * from (database).(tablename)
-        where savings_plan_savings_plan_a_r_n not like ''
+        where reservation_reservation_a_r_n not like ''
         limit 10
 
 3. Create the **Summary view** by modifying the following code, and executing it in Athena: 
