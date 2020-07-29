@@ -20,5 +20,6 @@ This repository contains documentation and code in the format of hands-on labs t
 For more information about Cost Optimization on AWS visit the Well-Architected tool in the AWS console, and read the AWS Well-Architected Cost Optimization whitepaper.
 
 
+
 ## Labs
 {{% children depth=2 %}}
