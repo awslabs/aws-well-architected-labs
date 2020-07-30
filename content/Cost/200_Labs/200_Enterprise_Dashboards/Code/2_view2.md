@@ -7,7 +7,7 @@ hidden: FALSE
 
 
 ### View 2 - EC2 Running Costs
-This view will be used to create the **EC2 Running Costs** dashboard page.
+This view will be used to create the **EC2 Running Costs and Elasticity** portion for the RI/SP Summary dashboard page.
 Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
 
 

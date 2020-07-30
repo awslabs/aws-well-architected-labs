@@ -11,7 +11,7 @@ pre: "<b>2. </b>"
 
 
 ### Add Account Mapping Data
-This section is **optional** ahd shows how you can add your **Business Unit or Enterprise Account mapping data** to your dashboard using Account Id as the identifier.
+This section is **optional** and shows how you can add your **Business Unit or Enterprise Account mapping data** to your dashboard using Account Id as the identifier.
 
 This example will show you how to replace the AccountID, with a name that is meaningful to your organization.
 

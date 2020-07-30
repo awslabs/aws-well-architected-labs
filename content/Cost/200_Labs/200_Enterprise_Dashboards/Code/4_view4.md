@@ -6,7 +6,7 @@ hidden: FALSE
 ---
 
 ### View 4 - S3
-This view will be used to create the **S3** dashboard page.
+This view will be used to create the **S3 bucket visuals** on the Storage dashboard page.
 Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
 
 
