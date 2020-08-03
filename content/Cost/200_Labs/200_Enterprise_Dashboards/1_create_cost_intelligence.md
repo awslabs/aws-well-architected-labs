@@ -232,7 +232,7 @@ We will now use the CLI to create the dashboard from the Cost Intelligence Dashb
 
 Edit and run the following command:
 
-        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost__intelligence_dashboard --region (region)
+        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost_intelligence_dashboard --region (region)
 
 Correct the listed errors and run the **delete-dashboard** command followed by the original **create-dashboard** command:
 		
