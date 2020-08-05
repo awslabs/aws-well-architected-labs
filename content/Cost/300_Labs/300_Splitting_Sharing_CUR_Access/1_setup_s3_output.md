@@ -22,6 +22,10 @@ So what we'll do is as follows:
 
 4 - The lab has been designed to allow multiple statements to output to a single bucket, each in a different folder. Create one folder for each Athena statement you will run, a convenient name for the folders is the Account ID of the sub account.
 
+{{% notice warning %}}
+Do not put any hyphens '-' in your folder name, as it will be an Athena table and there are restrictions on naming conventions.
+{{% /notice %}}
+
 5 - Go to **Permissions**, and implement a bucket policy to allow sub accounts access, ensure you follow security best practices and allow least privilege:
 ![Images/splitsharecur0.png](/Cost/300_Splitting_Sharing_CUR_Access/Images/splitsharecur0.png)
 
