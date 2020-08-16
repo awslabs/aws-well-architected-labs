@@ -1,9 +1,9 @@
 ---
 title: "Enable Single Sign On (SSO)"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-08-16T11:16:09-04:00
 chapter: false
-weight: 3
-pre: "<b>3. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 
@@ -102,7 +102,7 @@ You **MUST** work with your security team/specialist to ensure you create the po
 
 15. Click **Create permission set**
 
-16. Select **Create a custom permission set**, enter a name of **Member_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements, replace **(Master CUR bucket)** and **(This Account ID)** and paste it in the policy field,  click **Create**.
+16. Select **Create a custom permission set**, enter a name of **Member_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements, replace **(Master CUR bucket)** and **(Cost Optimization Member Account ID)** and paste it in the policy field,  click **Create**.
 
 {{% notice warning %}}
 You **MUST** work with your security team/specialist to ensure you create the policies inline with least privileges for your organization.
@@ -167,8 +167,8 @@ You **MUST** work with your security team/specialist to ensure you create the po
             "Effect": "Allow",
             "Action": "iam:*",
             "Resource": [
-                "arn:aws:iam::(This Account ID):role/service-role/AWSGlueServiceRole-Cost*",
-                "arn:aws:iam::(This Account ID):policy/service-role/AWSGlueServiceRole-Cost*"
+                "arn:aws:iam::(Cost Optimization Member Account ID):role/service-role/AWSGlueServiceRole-Cost*",
+                "arn:aws:iam::(Cost Optimization Member Account ID):policy/service-role/AWSGlueServiceRole-Cost*"
             ]
         },
         {

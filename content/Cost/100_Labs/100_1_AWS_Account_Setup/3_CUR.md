@@ -1,9 +1,9 @@
 ---
 title: "Configure Cost and Usage reports"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-08-16T11:16:09-04:00
 chapter: false
-pre: "<b>5. </b>"
-weight: 5
+pre: "<b>3. </b>"
+weight: 3
 ---
 
 Cost and Usage Reports provide the most detailed information on your usage and bills. They can be configured to deliver 1 line per resource, for every hour of the day. They must be configured to enable you to access and analyze your usage and billing information.
@@ -60,7 +60,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
 2. Select **Bucket Policy**:
 ![Images/s3cur_bucketpolicy.png](/Cost/100_1_AWS_Account_Setup/Images/s3cur_bucketpolicy.png)
 
-3. Add S3 read access to the Cost Optimization account by adding the following statements under the current bucket policy. Edit **(sub account ID)** and **(CUR bucket)** and update the bucket policy:
+3. Add S3 read access to the Cost Optimization account by adding the following statements under the current bucket policy. Edit **(Cost Optimization Member account ID)** and **(CUR bucket)** and update the bucket policy:
 
         {
             "Effect": "Allow",
@@ -73,7 +73,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::(sub account ID):root"
+                "AWS": "arn:aws:iam::(Cost Optimization Member account ID):root"
             },
             "Action": "s3:GetObject",
             "Resource": "arn:aws:s3:::(CUR bucket)/*"
@@ -109,7 +109,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
             {
                 "Effect": "Allow",
                 "Principal": {
-                    "AWS": "arn:aws:iam::(Sub Account ID):root"
+                    "AWS": "arn:aws:iam::(Cost Optimization Member Account ID):root"
                 },
                 "Action": "s3:ListBucket",
                 "Resource": "arn:aws:s3:::(CUR Bucket)"
@@ -117,7 +117,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
             {
                 "Effect": "Allow",
                 "Principal": {
-                    "AWS": "arn:aws:iam::(Sub Account ID):root"
+                    "AWS": "arn:aws:iam::(Cost Optimization Member Account ID):root"
                 },
                 "Action": "s3:GetObject",
                 "Resource": "arn:aws:s3:::(CUR Bucket)/*"
