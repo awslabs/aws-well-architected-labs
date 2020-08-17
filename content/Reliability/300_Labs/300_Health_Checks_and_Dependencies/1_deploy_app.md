@@ -43,7 +43,7 @@ Choose either the Express Steps _or_ Guided Steps
 
 ##### Express Steps (Deploy the VPC infrastructure)
 
-1. Download the [vpc-alb-app-db.yaml](/Security/200_Automated_Deployment_of_VPC/Code/vpc-alb-app-db.yaml) CloudFormation template
+1. Download the [vpc-alb-app-db.yaml](/Common/Create_VPC_Stack/Code/vpc-alb-app-db.yaml) CloudFormation template
 1. Make sure you are in AWS region: **us-east-2 (Ohio)**
 1. Deploy the CloudFormation template
     * Name the stack **`WebApp1-VPC`** (case sensitive)
