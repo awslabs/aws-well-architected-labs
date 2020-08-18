@@ -982,15 +982,13 @@ Resources:
   App1VPCEndpointS3:
     Type: AWS::EC2::VPCEndpoint
     Properties:
-      PolicyDocument: '{
-         "Version":"2012-10-17",
-         "Statement":[{
-           "Effect":"Allow",
-           "Principal": "*",
-           "Action":["s3:*"],
-           "Resource":["arn:aws:s3:::*/*"]
-         }]
-      }'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:*'
+            Resource: !Sub 'arn:${AWS::Partition}:s3:::*'
       RouteTableIds:
         - !Ref App1RouteTable1
         - !Ref App1RouteTable2
@@ -1000,15 +998,13 @@ Resources:
   App1VPCEndpointDynamoDB:
     Type: AWS::EC2::VPCEndpoint
     Properties:
-      PolicyDocument: '{
-         "Version":"2012-10-17",
-         "Statement":[{
-           "Effect":"Allow",
-           "Principal": "*",
-           "Action":["dynamodb:*"],
-           "Resource":["arn:aws:dynamodb:::*/*"]
-         }]
-      }'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 'dynamodb:*'
+            Resource: !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:*'
       RouteTableIds:
         - !Ref App1RouteTable1
         - !Ref App1RouteTable2
