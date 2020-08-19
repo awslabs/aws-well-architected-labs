@@ -43,4 +43,4 @@ pre: "<b>1. </b>"
 
     *User John Doe has not used access key AKIAIOSFODNN7EXAMPLE in since 2018-04-22 20:08:00+00:00 and needs cleanup*
 
-    *Principal 012345678901 has permission to sts:AssumeRole against arn:aws:iam::0123456789012:role/Role AWS::IAM::Role. See finding 00000000-0000-0000-0000-000000000000 in IAM Access Analyzer for more information or to archive this finding
+    *Principal 012345678901 has permission to sts:AssumeRole against arn:aws:iam::0123456789012:role/Role AWS::IAM::Role. See finding 00000000-0000-0000-0000-000000000000 in IAM Access Analyzer for more information or to archive this finding*
