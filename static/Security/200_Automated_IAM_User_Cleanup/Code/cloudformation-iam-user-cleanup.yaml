@@ -30,7 +30,7 @@ Parameters:
     Type: Number
     Default: 0
     MinValue: 0
-    Description: The minimum age in days of access keys to disable. Set to '0' to disable this funciton.
+    Description: The minimum age in days of access keys to disable. Set to '0' to disable this function.
   MinAgeKeysToDelete:
     Type: Number
     Default: 0
@@ -44,7 +44,7 @@ Parameters:
   MinAgeUnusedUsersToDisable:
     Type: Number
     Default: 0
-    Description: The minimum age in days of unused users to disable. Set to '0' to disable this funciton.
+    Description: The minimum age in days of unused users to disable. Set to '0' to disable this function.
   MinAgeUnusedUsersToDelete:
     Type: Number
     Default: 0
@@ -58,12 +58,19 @@ Parameters:
   MinAgeRolesToDisable:
     Type: Number
     Default: 0
-    Description: The minimum age in days of unused users to disable. Set to '0' to disable this funciton.
+    Description: The minimum age in days of unused users to disable. Set to '0' to disable this function.
   MinAgeRolesToDelete:
     Type: Number
     Default: 0
     MinValue: 0
     Description: The minimum age in days of unused users to delete. Set to '0' to disable this function.
+  AnalyzerType:
+    Type: String
+    AllowedValues: ['NONE','ACCOUNT','ORGANIZATION']
+    Default: 'ACCOUNT'
+    Description: IAM Access Analyzer produces findings on the external availability of resources within your AWS account. If this account is the root account of an organization or the delegated administrator select ORGANIZATION, otherwise select ACCOUNT or NONE to skip this check.
+Conditions:
+  CreateAnalyzer: !Not [!Equals [!Ref AnalyzerType, NONE]]
 Resources:
   # SNS Topic
   UserCleanupTopic:
@@ -75,7 +82,7 @@ Resources:
       Protocol: email
       TopicArn: !Ref UserCleanupTopic
 # IAM role required for Lambda to access IAM and to send the email from SNS
-  UserCleanupLambdaxecutionRole:
+  UserCleanupLambdaExecutionRole:
       Type: 'AWS::IAM::Role'
       Properties:
         AssumeRolePolicyDocument:
@@ -111,6 +118,7 @@ Resources:
                     - 'iam:GetServiceLastAccessedDetails'
                     - 'iam:DeleteRole'
                     - 'iam:AttachRolePolicy'
+                    - 'access-analyzer:ListFindings'
                   Effect: Allow
                   Resource: '*' # Explicit that this includes all users
                 - Action:
@@ -124,8 +132,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda-iam-user-cleanup.lambda_handler
-      Runtime: python2.7
-      Role: !GetAtt UserCleanupLambdaxecutionRole.Arn
+      Runtime: python3.8
+      Role: !GetAtt UserCleanupLambdaExecutionRole.Arn
       Environment:
         Variables:
           MinAgeKeysToReport: !Ref MinAgeKeysToReport
@@ -138,9 +146,10 @@ Resources:
           MinAgeRolesToDisable: !Ref MinAgeRolesToDisable
           MinAgeRolesToDelete: !Ref MinAgeRolesToDelete
           TopicTarget: !Ref UserCleanupTopic
+          CleanupAnalyzer: !If [CreateAnalyzer, !Ref CleanupAnalyzer, '']
       CodeUri: lambda-iam-user-cleanup.py
       Timeout: 300
-  # Cloudwatch event to trigger this
+  # CloudWatch event to trigger this
   UserCleanupTrigger:
     Type: AWS::Events::Rule
     Properties:
@@ -157,3 +166,9 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: 'events.amazonaws.com'
       SourceArn: !GetAtt UserCleanupTrigger.Arn
+  # Access analyzer to look at accessability of resources external to organization or account
+  CleanupAnalyzer:
+    Condition: CreateAnalyzer
+    Type: AWS::AccessAnalyzer::Analyzer
+    Properties:
+      Type: !Ref AnalyzerType

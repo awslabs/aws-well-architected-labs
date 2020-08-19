@@ -18,7 +18,7 @@ You will use the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-applicatio
 Skills learned will help you secure your AWS account in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 The AWS Lambda function is triggered by a regular scheduled event in Amazon CloudWatch Events.
-Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent the designated email contact via Amazon SNS. A check is also performed for unused roles.
+Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent the designated email contact via Amazon SNS. A check is also performed for unused roles and unused permissions identifed by IAM Access Analyzer.
 The logs from the AWS Lambda function are captured in Amazon CloudWatch Logs for review and trouble shooting purposes.
 
 ![architecture](/Security/200_Automated_IAM_User_Cleanup/Images/architecture.png)
@@ -46,6 +46,7 @@ During deployment, SAM transforms and expands the SAM syntax into AWS CloudForma
 ## References & useful resources
 
 [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
+[What is IAM Access Analyzer?](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html)
 [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)
 [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-reference.html#serverless-sam-cli)
 [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/)

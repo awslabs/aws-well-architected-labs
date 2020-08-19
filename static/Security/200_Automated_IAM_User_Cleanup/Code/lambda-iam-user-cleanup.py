@@ -13,6 +13,7 @@ minAgeUnusedUsersToDelete = int(os.environ['MinAgeUnusedUsersToDelete'])
 minAgeRolesToReport = int(os.environ['MinAgeRolesToReport'])
 minAgeRolesToDisable = int(os.environ['MinAgeRolesToDisable'])
 minAgeRolesToDelete = int(os.environ['MinAgeRolesToDelete'])
+CleanupAnalyzerArn = os.environ['CleanupAnalyzer']
 
 def lambda_handler(event, context):
     client = boto3.client('iam')
@@ -142,6 +143,19 @@ def lambda_handler(event, context):
                     report += 'Role {0} has not been used since {1} and needs cleanup\n'.format(
                         r['Arn'],
                         roleLastUsed)
+
+    # Get all findings from access analyzer if enabled
+    if CleanupAnalyzerArn:
+        analyzerClient = boto3.client('accessanalyzer')
+        findings = analyzerClient.list_findings(analyzerArn=CleanupAnalyzerArn)
+        filteredFindings = [f for f in findings['findings'] if f['status'] == 'ACTIVE'] # filter just active ones
+        for f in filteredFindings:
+            report += 'Principal {0} has permission to {1} against {2} {3}. See finding {4} in IAM Access Analyzer for more information or to archive this finding.\n'.format(
+            f['principal'],
+            f['action'],
+            f['resourceType'],
+            f['resource'],
+            f['id'])
     
     if not report:
         report = 'IAM user cleanup successfully ran. No outstanding users found.'
