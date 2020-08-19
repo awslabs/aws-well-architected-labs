@@ -25,16 +25,16 @@ The logs from the AWS Lambda function are captured in Amazon CloudWatch Logs for
 
 ## Goals
 
-* Identify orphaned IAM Users and AWS Access Keys
-* Take action to automatically remove IAM Users and AWS Access Keys no longer needed
-* Reduce identity sprawl
+- Identify orphaned IAM Users and AWS Access Keys
+- Take action to automatically remove IAM Users and AWS Access Keys no longer needed
+- Reduce identity sprawl
 
 ## Prerequisites
 
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
+- An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
-* Select region with support for AWS Lambda from the list: [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html).
-* [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/)  installed and configured.
+- Select region with support for AWS Lambda from the list: [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html).
+- [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/)  installed and configured.
 The AWS Serverless Application Model (SAM) is an open-source framework for building serverless applications.
 It provides shorthand syntax to express functions, APIs, databases, and event source mappings.
 With just a few lines per resource, you can define the application you want and model it using YAML.
@@ -45,8 +45,8 @@ During deployment, SAM transforms and expands the SAM syntax into AWS CloudForma
 
 ## References & useful resources
 
-[AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
-[What is IAM Access Analyzer?](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html)
-[IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)
-[AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-reference.html#serverless-sam-cli)
-[AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/)
+- [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
+- [What is IAM Access Analyzer?](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html)
+- [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)
+- [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-reference.html#serverless-sam-cli)
+- [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/)
