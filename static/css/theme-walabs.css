@@ -42,6 +42,8 @@ textarea:focus, input[type="email"]:focus, input[type="number"]:focus, input[typ
     box-shadow: none;
 }
 
+table, tr, td {border: none;}
+
 h2, h3, h4, h5, h6 {
     font-family: "Lato", "Work Sans", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
     color: var(--MAIN-TITLES-TEXT-color) !important;
@@ -65,6 +67,11 @@ a:hover {
 
 #sidebar ul li.visited > a .read-icon {
 	color: var(--MENU-VISITED-color);
+}
+
+#sidebar #logo {
+  font-size: 15px;
+  color: #fd9827 !important;
 }
 
 #sidebar #footer {
@@ -264,14 +271,4 @@ div.cards.workshop div.content {
     margin: 0px;
     padding: 0px;
     color: #333;
-}
-
-a#logo {
-    width: 200px;
-}
-
-@media all and (max-width: 480px) {
-    a#logo {
-      width: 96px;
-    }
 }

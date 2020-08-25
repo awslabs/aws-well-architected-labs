@@ -8,6 +8,7 @@ pre = ""
 
 ![MainPageHeader.png](images/MainPageHeader.png)
 
+{{% finished_popup %}}
 ## Introduction
 
 The [Well-Architected](https://aws.amazon.com/well-architected) framework has been developed to help cloud architects build the most secure, high-performing, resilient, and efficient infrastructure possible for their applications. This framework provides a consistent approach for customers and partners to evaluate architectures, and provides guidance to help implement designs that will scale with your application needs over time.
