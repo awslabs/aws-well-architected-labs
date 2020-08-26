@@ -34,3 +34,5 @@ This changes the default time clock from xen to tsc (Time Stamp Counter), which 
 ![ChangeClock8](/Performance/100_Clock_Source_Performance/Images/ChangeClock8.png)
 1. You can now go back to [Step 2](2_testing_before) and re-run the tests. You should see the time for the Xen based EC2 instance has dramatically improved from 110 to 24 seconds.
 ![ChangeClock9](/Performance/100_Clock_Source_Performance/Images/ChangeClock9.png)
+
+{{< prev_next_button link_prev_url="../2_testing_before/" link_next_url="../4_cleanup/" />}}

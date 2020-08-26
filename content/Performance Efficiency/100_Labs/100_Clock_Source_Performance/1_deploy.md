@@ -23,3 +23,6 @@ The CloudFormation template that accompanies this lab requires the ability to cr
     * **LatestAmiId** – This will auto-populate with the latest version of the Amazon Linux AMI
     * **XenNodeInstanceType** – Which non-nitro Xen based node to use for the test
 {{% /common/CreateNewCloudFormationStack %}}
+
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_testing_before/" />}}

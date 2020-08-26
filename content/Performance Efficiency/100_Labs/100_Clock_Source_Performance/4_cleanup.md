@@ -5,7 +5,6 @@ chapter: false
 pre: "<b>4. </b>"
 weight: 4
 ---
-
 In this lab, you created two different EC2 instances and tested gettime system calls to each on to test the performance for each clocksource type.  You were able to set a new clocksource for a Xen based instance type and see a dramatic improvement in the time it takes for these kinds of system calls.
 
 
@@ -13,6 +12,10 @@ In this lab, you created two different EC2 instances and tested gettime system c
 In order to remove the lab, go into the CloudFormation console, select the deployed template, click the drop down next to “Create Stack” and then click “Delete Stack”.  This should remove all components created for this Lab.
 
 ![Teardown1](/Performance/100_Clock_Source_Performance/Images/Teardown1.png)
+
+{{< prev_next_button link_prev_url="../3_change_clock/" final_step="true" >}}
+You have reached the final step
+{{< /prev_next_button >}}
 
 
 ## References & useful resources

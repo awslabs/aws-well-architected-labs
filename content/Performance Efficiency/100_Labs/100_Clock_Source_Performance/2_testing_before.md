@@ -33,3 +33,6 @@ It will take longer to complete for one node to run than the other. The total ti
 ![BeforeTest10](/Performance/100_Clock_Source_Performance/Images/BeforeTest10.png)
 1.	In this second instance, we can see that it took 110 seconds and the gettimeofday call used over 99% of the time during its run.
 ![BeforeTest11](/Performance/100_Clock_Source_Performance/Images/BeforeTest11.png)
+
+
+{{< prev_next_button link_prev_url="../1_deploy/" link_next_url="../3_change_clock/" />}}
