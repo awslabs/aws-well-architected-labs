@@ -1,5 +1,5 @@
 ---
-title: "Level 100: Calculating differences in Linux clock source changes to application performance"
+title: "Level 100: Calculating differences in clock source"
 menutitle: "Calculating differences in clock source"
 date: 2020-06-09T12:00:00-04:00
 chapter: false
