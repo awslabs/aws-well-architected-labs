@@ -230,10 +230,14 @@ img[alt=spot_logo] { width: 350px; }
   display:none;
 }
 
+
+
 .popup .content {
   position:absolute;
-  top:20%;
+  /* top:20%; */
   left:50%;
+  justify-content: center;
+  align-items: center;
   transform:translate(-50%,-50%) scale(0);
   background:#fff;
   width:500px;
@@ -243,10 +247,11 @@ img[alt=spot_logo] { width: 350px; }
   padding:20px;
   box-sizing:border-box;
   font-family: AmazonEmberBold,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
+
 }
 
 .popup .close-btn {
-  cursor: pointer;
+  /* cursor: pointer;
 	background: #eee;
 	display: block;
 	line-height: 30px;
@@ -255,7 +260,23 @@ img[alt=spot_logo] { width: 350px; }
 	color: #222;
 	border-radius: 3px;
   width: 30px;
-  text-align:center;
+  text-align:center; */
+
+  color: black;
+  background-color: #aaa;
+  border-radius: 3px;
+line-height: 50px;
+font-size: 150%;
+position: absolute;
+right: 0;
+text-align: center;
+top: 0;
+width: 70px;
+text-decoration: none;
+&:hover {
+  color: black;
+}
+
 /*  cursor:pointer;
   position:absolute;
   right:10px;
@@ -287,7 +308,7 @@ button.small {
   display: inline-block;
   font-family: AmazonEmberBold,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
-      width: 20%;
+      width: 50%;
       text-align: center;
       max-width: 100%;
       min-width: 8px;
@@ -311,14 +332,19 @@ button.small {
       text-shadow: rgba(0,0,0,.05) 0 1px 0;
       background-color: #ec7211;
       background-image: linear-gradient(180deg,#f67c1b 0,#e15500);
-      box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2);
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.button.small:hover {
+  background-color: #e7e7e7;
+  color: white;
 }
 
 button.small_grey {
+  a:default:color: white;
   display: inline-block;
   font-family: Roboto,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
-      width: 20%;
+      width: 50%;
       text-align: center;
       max-width: 100%;
       min-width: 8px;
@@ -329,9 +355,7 @@ button.small_grey {
       -ms-user-select: none;
       user-select: none;
       line-height: 1.43;
-      font-size: 10px;
       font-size: 1rem;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
       -ms-touch-action: none;
       -webkit-font-smoothing: antialiased;
       border: 1px solid;
@@ -342,7 +366,13 @@ button.small_grey {
       text-shadow: rgba(0,0,0,.05) 0 1px 0;
       background-color: #ACADAD;
       background: linear-gradient(180deg, #ACADAD 0%, #DEDEDE);
-      box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2);
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+      transition-duration: 0.4s;
+      border-bottom-color: #ACADAD;
+}
+.button.small_grey:hover {
+  background-color: #555555;
+  color: white;
 }
 
 button.large {

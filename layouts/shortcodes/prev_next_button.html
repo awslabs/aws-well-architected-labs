@@ -7,7 +7,7 @@
     - button_prev_text
     - button_next_text
     - complete_button_text
-    - final_step (true/false) 
+    - final_step (true/false)
 
   You can also specify if this is the final step to complete the lab and it will show an additional popup.
 */}}
@@ -41,10 +41,14 @@
     <p>{{ if len .Inner }}{{.Inner}}{{else}}{{$.Scratch.Get "innerbackup"}}{{ end }}<br><br><a href="https://console.aws.amazon.com/wellarchitected/home" target="_blank">Click here to access the Well-Archictected Tool</a> </p>
   </div>
 
-<button class="button small_grey" onclick="prevStep()">{{ if .Get "button_prev_text"}}{{.Get "button_prev_text"}}{{else}}{{$.Scratch.Get "button_prev_backup"}}{{ end }}</button>
-{{ if .Get "final_step" }}
-<button class="button small" onclick="togglePopup()">{{ if .Get "complete_button_text"}}{{.Get "complete_button_text"}}{{else}}{{$.Scratch.Get "buttontextbackup"}}{{ end }}</button>
-{{ else }}
-<button class="button small" onclick="nextStep()">{{ if .Get "button_next_text"}}{{.Get "button_next_text"}}{{else}}{{$.Scratch.Get "button_next_backup"}}{{ end }}</button>
-{{ end }}
+<table class="popup" align="center">
+  <tr>
+    <td align="left"><button class="button small_grey" onclick="prevStep()">{{ if .Get "button_prev_text"}}{{.Get "button_prev_text"}}{{else}}{{$.Scratch.Get "button_prev_backup"}}{{ end }}</button></td>
+    <td align="right">{{ if .Get "final_step" }}
+        <button class="button small" onclick="togglePopup()">{{ if .Get "complete_button_text"}}{{.Get "complete_button_text"}}{{else}}{{$.Scratch.Get "buttontextbackup"}}{{ end }}</button>
+        {{ else }}
+        <button class="button small" onclick="nextStep()">{{ if .Get "button_next_text"}}{{.Get "button_next_text"}}{{else}}{{$.Scratch.Get "button_next_backup"}}{{ end }}</button>
+        {{ end }}</td>
+  </tr>
+</table>
 </div>

@@ -13,12 +13,14 @@ In order to remove the lab, go into the CloudFormation console, select the deplo
 
 ![Teardown1](/Performance/100_Clock_Source_Performance/Images/Teardown1.png)
 
-{{< prev_next_button link_prev_url="../3_change_clock/" final_step="true" >}}
-You have reached the final step
-{{< /prev_next_button >}}
 
 
 ## References & useful resources
 * [AWS Systems Manager](https://aws.amazon.com/systems-manager/)
 * [Nitro](https://aws.amazon.com/ec2/nitro/)
 * [How to manage the clock source for EC2 instances running Linux](https://aws.amazon.com/premiumsupport/knowledge-center/manage-ec2-linux-clock-source/)
+
+
+{{< prev_next_button link_prev_url="../3_change_clock/" final_step="true" >}}
+You have reached the final step
+{{< /prev_next_button >}}
