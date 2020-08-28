@@ -8,7 +8,7 @@ weight: 4
 In this lab, you created two different EC2 instances and tested gettime system calls to each on to test the performance for each clocksource type.  You were able to set a new clocksource for a Xen based instance type and see a dramatic improvement in the time it takes for these kinds of system calls.
 
 
-## Remove all the CFN
+## Remove all the resources via CloudFormation
 In order to remove the lab, go into the CloudFormation console, select the deployed template, click the drop down next to “Create Stack” and then click “Delete Stack”.  This should remove all components created for this Lab.
 
 ![Teardown1](/Performance/100_Clock_Source_Performance/Images/Teardown1.png)
@@ -21,6 +21,6 @@ In order to remove the lab, go into the CloudFormation console, select the deplo
 * [How to manage the clock source for EC2 instances running Linux](https://aws.amazon.com/premiumsupport/knowledge-center/manage-ec2-linux-clock-source/)
 
 
-{{< prev_next_button link_prev_url="../3_change_clock/" final_step="true" >}}
-You have reached the final step
+{{< prev_next_button link_prev_url="../3_change_clock/" title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [PERF2 - "Understand the available compute configuration options."](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-selection.html)
 {{< /prev_next_button >}}

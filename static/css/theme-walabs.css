@@ -308,7 +308,7 @@ button.small {
   display: inline-block;
   font-family: AmazonEmberBold,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
-      width: 50%;
+      width: 170px;
       text-align: center;
       max-width: 100%;
       min-width: 8px;
@@ -344,7 +344,7 @@ button.small_grey {
   display: inline-block;
   font-family: Roboto,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
-      width: 50%;
+      width: 170px;
       text-align: center;
       max-width: 100%;
       min-width: 8px;
@@ -379,7 +379,7 @@ button.large {
   display: inline-block;
   font-family: AmazonEmberBold,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
-      width: 100%;
+      width: 200px;
       text-align: center;
       max-width: 100%;
       min-width: 8px;
