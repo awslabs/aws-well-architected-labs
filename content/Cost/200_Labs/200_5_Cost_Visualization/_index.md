@@ -31,7 +31,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - A master AWS Account
 - Have your Cost and Usage Report (CUR) enabled [as per 100_1_Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
 - [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) has been completed
-
+- [Cost_and_Usage_Analysis]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}}) has been completed
 
 ## Permissions required
 - Log in as the Cost Optimization team, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
