@@ -38,7 +38,8 @@ For a list of Nitro-based instances currently available, head to https://docs.aw
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
 
-{{< openurl_button linkurl="./1_deploy/" button_text="Start Lab" >}}
+{{< prev_next_button link_next_url="./1_deploy/" button_next_text="Start Lab" first_step="true" />}}
+
 
 ## Steps:
 {{% children  %}}
