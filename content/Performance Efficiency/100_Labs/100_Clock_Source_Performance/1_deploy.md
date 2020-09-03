@@ -13,7 +13,10 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 
 1. Download the [time_test.yaml](/Performance/100_Clock_Source_Performance/Code/time_test.yaml) CloudFormation template to your machine.
-1. This lab assumes you will be deploying to the default VPC within your AWS account.  If you wish to deploy to a different VPC, just select the subnet that corresponds to your VPC.
+1. This lab assumes you will be deploying to the default VPC within your AWS account.  If you wish to deploy to a different VPC, just select the subnet that corresponds to your VPC. {{% notice warning %}}
+If you have modified the default VPC or are using a VPC you have created, ensure that the subnet you are deploying the EC2 instances into can communicate with AWS Systems Manager. One method for this is to [Create a VPC endpoint for SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html)
+{{% /notice %}}
+
 
 {{% common/CreateNewCloudFormationStack templatename="time_test.yaml" stackname="TimeTest" %}}
     * **Stack Name** – Whatever you want to call the stack for this test
@@ -23,3 +26,6 @@ The CloudFormation template that accompanies this lab requires the ability to cr
     * **LatestAmiId** – This will auto-populate with the latest version of the Amazon Linux AMI
     * **XenNodeInstanceType** – Which non-nitro Xen based node to use for the test
 {{% /common/CreateNewCloudFormationStack %}}
+
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_testing_before/" />}}

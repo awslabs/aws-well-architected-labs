@@ -1,5 +1,5 @@
 ---
-title: "Level 100: Calculating differences in Linux clock source changes to application performance"
+title: "Level 100: Calculating differences in clock source"
 menutitle: "Calculating differences in clock source"
 date: 2020-06-09T12:00:00-04:00
 chapter: false
@@ -37,6 +37,9 @@ For a list of Nitro-based instances currently available, head to https://docs.aw
 {{% notice note %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
+
+{{< prev_next_button link_next_url="./1_deploy/" button_next_text="Start Lab" first_step="true" />}}
+
 
 ## Steps:
 {{% children  %}}

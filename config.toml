@@ -53,7 +53,7 @@ base_raw_github_url = "https://raw.githubusercontent.com/awslabs/aws-well-archit
       decimals = -1
     [minify.tdewolff.xml]
       keepWhitespace = false
-      
+
 # For search functionality
 [outputs]
 home = [ "HTML", "RSS", "JSON"]
@@ -61,11 +61,16 @@ section = ["HTML","RSS"]
 
 # Menu shortcuts on left side
 [[menu.shortcuts]]
-name = "<i class='fas fa-rss'></i> Labs RSS Feed"
+name = "<BR><BR><hr> <i class='fab fa-github'></i>&nbsp;&nbsp;Contributing (GitHub)"
+url = "https://github.com/awslabs/aws-well-architected-labs/blob/master/CONTRIBUTING.md"
+weight = 2
+
+[[menu.shortcuts]]
+name = "<i class='fas fa-rss'></i>&nbsp;&nbsp;Labs RSS Feed"
 url = "/index.xml"
 weight = 10
 
 [[menu.shortcuts]]
-name = "<i class='fas fa-bookmark'></i> Amazon Free Tier"
+name = "<i class='fas fa-bookmark'></i>&nbsp;&nbsp;Amazon Free Tier"
 url = "https://aws.amazon.com/free/"
 weight = 20

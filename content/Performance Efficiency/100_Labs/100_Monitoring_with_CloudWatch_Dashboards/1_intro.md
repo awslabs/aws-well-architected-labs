@@ -38,3 +38,5 @@ Amazon CloudWatch Automatic Dashboards allow you to easily monitor all AWS Resou
     ![monitoring_5](/Performance/100_Monitoring_with_CloudWatch_Dashboards/Images/monitoring_5.png)
 
     In this example, we see both EC2 metrics as well as EBS volume metrics for the test machines that were created.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_cleanup/" />}}

@@ -1,0 +1,17 @@
+{{/*
+  Button for opening a new page link
+*/}}
+
+{{ $.Scratch.Set "linkurlbackup" "https://docs-feedback.aws.amazon.com/feedback.jsp?topic_url=http://docs.aws.amazon.com/en_us/wellarchitected/latest/framework/introduction.html" }}
+{{ $.Scratch.Set "buttontextbackup" "Provide Feedback" }}
+
+<div class="feedback" id="fbpopup-1">
+  <script>
+    function fbtogglePopup(){
+      window.open("{{ if .Get "linkurl"}}{{.Get "linkurl"}}{{else}}{{$.Scratch.Get "linkurlbackup"}}{{ end }}")
+    }
+  </script>
+
+
+<button class="button small" onclick="fbtogglePopup()">{{ if .Get "button_text"}}{{.Get "button_text"}}{{else}}{{$.Scratch.Get "buttontextbackup"}}{{ end }}</button>
+</div>

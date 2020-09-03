@@ -1,0 +1,61 @@
+{{/*
+  Buttons to show PREV/NEXT at the bottom of the page
+
+  You can override many of the parameters:
+    - link_prev_url
+    - link_next_url
+    - button_prev_text
+    - button_next_text
+    - complete_button_text
+    - final_step (true/false)
+    - first_step (true/false)
+
+
+  You can also specify if this is the final step to complete the lab and it will show an additional popup.
+*/}}
+
+
+{{ $.Scratch.Set "link_next_backup" "/cost/" }}
+
+{{ $.Scratch.Set "button_next_backup" "Next Step" }}
+{{ $.Scratch.Set "button_prev_backup" "Previous Step" }}
+
+{{ $.Scratch.Set "titlebackup" "Lab complete!" }}
+{{ $.Scratch.Set "buttontextbackup" "Complete this lab" }}
+{{ $.Scratch.Set "innerbackup" "Now that you have completed this lab, make sure to update your Well-Architected review if you have implemented these changes in your workload."}}
+
+<div class="popup" id="prevnext-1">
+  <script>
+    function prevStep(){
+      window.open("{{ if .Get "link_prev_url"}}{{.Get "link_prev_url"}}{{else}}{{$.Scratch.Get "link_previous_backup"}}{{ end }}", "_self")
+    }
+    function nextStep(){
+      window.open("{{ if .Get "link_next_url"}}{{.Get "link_next_url"}}{{else}}{{$.Scratch.Get "link_next_backup"}}{{ end }}", "_self")
+    }
+    function togglePopup(){
+      document.getElementById("prevnext-1").classList.toggle("active");
+    }
+  </script>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="close-btn" onclick="togglePopup()">X</div>
+    <h3>{{ if .Get "title"}}{{.Get "title"}}{{else}}{{$.Scratch.Get "titlebackup"}}{{ end }}</h3>
+    <p>{{ if len .Inner }}{{ .Inner | .Page.RenderString  }}{{else}}{{$.Scratch.Get "innerbackup"}}{{ end }}<br><br><a href="https://console.aws.amazon.com/wellarchitected/home" target="_blank">Click here to access the Well-Archictected Tool</a> </p>
+  </div>
+
+{{ if .Get "first_step" }}
+<button class="button small" onclick="nextStep()">{{ if .Get "button_next_text"}}{{.Get "button_next_text"}}{{else}}{{$.Scratch.Get "button_next_backup"}}{{ end }}</button>
+
+{{ else }}
+<table class="popup" align="center">
+  <tr>
+    <td align="left"><button class="button small_grey" onclick="prevStep()">{{ if .Get "button_prev_text"}}{{.Get "button_prev_text"}}{{else}}{{$.Scratch.Get "button_prev_backup"}}{{ end }}</button></td>
+    <td align="right">{{ if .Get "final_step" }}
+        <button class="button small" onclick="togglePopup()">{{ if .Get "complete_button_text"}}{{.Get "complete_button_text"}}{{else}}{{$.Scratch.Get "buttontextbackup"}}{{ end }}</button>
+        {{ else }}
+        <button class="button small" onclick="nextStep()">{{ if .Get "button_next_text"}}{{.Get "button_next_text"}}{{else}}{{$.Scratch.Get "button_next_backup"}}{{ end }}</button>
+        {{ end }}</td>
+  </tr>
+</table>
+{{ end }}
+</div>

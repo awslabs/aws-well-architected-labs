@@ -1,0 +1,27 @@
+{{/*
+  You can override the parameters below
+  Parameters:
+    title
+    button_text
+*/}}
+
+{{/*  */}}
+{{ $.Scratch.Set "titlebackup" "Lab complete!" }}
+{{ $.Scratch.Set "buttontextbackup" "Complete this lab" }}
+{{ $.Scratch.Set "innerbackup" "Now that you have completed this lab, make sure to update your Well-Architected review if you have implemented these changes in your workload."}}
+
+<div class="popup" id="popup-1">
+  <script>
+    function togglePopup(){
+      document.getElementById("popup-1").classList.toggle("active");
+    }
+  </script>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="close-btn" onclick="togglePopup()">X</div>
+    <h3>{{ if .Get "title"}}{{.Get "title"}}{{else}}{{$.Scratch.Get "titlebackup"}}{{ end }}</h3>
+    <p>{{ if len .Inner }}{{.Inner}}{{else}}{{$.Scratch.Get "innerbackup"}}{{ end }}<br><br><a href="https://console.aws.amazon.com/wellarchitected/home" target="_blank">Click here to access the Well-Archictected Tool</a> </p>
+  </div>
+</div>
+
+<button class="button large" onclick="togglePopup()">{{ if .Get "button_text"}}{{.Get "button_text"}}{{else}}{{$.Scratch.Get "buttontextbackup"}}{{ end }}</button>

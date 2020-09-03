@@ -3,7 +3,7 @@
 {{ $currentNode := . }}
 {{ $showvisitedlinks := .Site.Params.showVisitedLinks }}
   <div id="header-wrapper">
-    <div id="header">
+    <div id="header" align="left">
       {{ partial "logo.html" . }}
     </div>
     {{if not .Site.Params.disableSearch}}

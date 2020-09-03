@@ -9,6 +9,45 @@ pre: "<b>2. </b>"
 
 Now that we have two EC2 machines, one Xen based EC2 and one Nitro/KVM based EC2, we can run a simple test to see the speed in which is can return time of day. This test program was installed on each machine under /tmp/time_test.py. The program will simply request the time of day from a local c-library one million times.
 
+## The time_test.py code
+```
+#!/usr/bin/python3
+import time
+
+_gettimeofday = None
+def gettimeofday():
+  import ctypes
+  global _gettimeofday
+
+  if not _gettimeofday:
+    _gettimeofday = ctypes.cdll.LoadLibrary("libc.so.6").gettimeofday
+
+  class timeval(ctypes.Structure):
+    _fields_ = \
+    [
+      ("tv_sec", ctypes.c_long),
+      ("tv_usec", ctypes.c_long)
+    ]
+
+  tv = timeval()
+
+  _gettimeofday(ctypes.byref(tv), None)
+
+  return float(tv.tv_sec) + (float(tv.tv_usec) / 1000000)
+
+
+start_time = time.time()
+
+for x in range(0,1000000):
+    gettimeofday()
+
+print("--- %s seconds ---" % (time.time() - start_time))
+
+print("Done")
+```
+If you wish to bypass using the pre-defined AWS System Manager documents below, you can also run this script interactively on each EC2 node using [AWS Systems Manager Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html).  
+
+
 1.	Open the AWS Console (https://console.awa.amazon.com)
 1.	In the “Find Services” search bar, type “systems manager” and press enter
 ![BeforeTest1](/Performance/100_Clock_Source_Performance/Images/BeforeTest1.png)
@@ -33,3 +72,6 @@ It will take longer to complete for one node to run than the other. The total ti
 ![BeforeTest10](/Performance/100_Clock_Source_Performance/Images/BeforeTest10.png)
 1.	In this second instance, we can see that it took 110 seconds and the gettimeofday call used over 99% of the time during its run.
 ![BeforeTest11](/Performance/100_Clock_Source_Performance/Images/BeforeTest11.png)
+
+
+{{< prev_next_button link_prev_url="../1_deploy/" link_next_url="../3_change_clock/" />}}
