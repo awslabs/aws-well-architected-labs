@@ -25,5 +25,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 * An IAM user or role in your AWS account.
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
+{{< openurl_button linkurl="./1_intro/" button_text="Start Lab" >}}
+
 ## Steps:
 {{% children  %}}
