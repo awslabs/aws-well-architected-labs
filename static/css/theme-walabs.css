@@ -340,7 +340,8 @@ button.small {
 }
 
 button.small_grey {
-  a:default:color: white;
+  a: default;
+  color: white;
   display: inline-block;
   font-family: Roboto,Helvetica Neue Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
   box-sizing: border-box;
@@ -406,9 +407,113 @@ button.large {
       box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2);
 }
 
+.legal-footer-1 {
+  font-size: 14px;
+  color: #333;
+  font-family: AmazonEmber,Helvetica Neue,Helvetica,Arial,sans-serif;
+  direction: ltr;
+  background-color: #EAEDED;
+  vertical-align: middle;
+  padding: 1px;
+}
+
+.legal-footer-2 ul{
+  box-sizing:border-box;
+  color:rgb(35, 47, 62);
+  direction:ltr;
+  display:block;
+  font-family:AmazonEmber, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size:14px;
+  font-weight:400;
+  height:14px;
+  line-height:22px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-block-end:0px;
+  margin-block-start:0px;
+  margin-bottom:0px;
+  margin-inline-end:0px;
+  margin-inline-start:0px;
+  margin-left:0px;
+  margin-top:0px;
+  padding-bottom:0px;
+  padding-inline-start:0px;
+  padding-left:0px;
+  padding-right:0px;
+  padding-top:0px;
+  vertical-align: middle;
+}
+
+.legal-footer-2 li{
+  box-sizing:border-box;
+  color:rgb(35, 47, 62);
+  direction:ltr;
+  display:inline-block;
+  font-family:AmazonEmber, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size:14px;
+  font-weight:400;
+  height:22px;
+  line-height:22px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:0px;
+  margin-left:0px;
+  margin-right:6px;
+  margin-top:0px;
+  text-align:left;
+  vertical-align: middle;
+  text-size-adjust:100%;
+  display: inline-block;
+  margin-bottom: 0;
+  margin-right: 5px;
+    list-style: none
+}
+
+.legal-footer-2 li:last-child {
+  margin-right: 0
+}
+
+.legal-footer-2 a{
+  background-color:rgba(0, 0, 0, 0);
+  box-sizing:border-box;
+  color:rgb(35, 47, 62);
+  cursor:pointer;
+  direction:ltr;
+  display:inline;
+  font-family:AmazonEmber, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size:18px;
+  font-weight:400;
+  height:auto;
+  line-height:22px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  outline-color:rgb(35, 47, 62);
+  outline-style:none;
+  outline-width:0px;
+  text-align:left;
+  text-decoration-color:rgb(35, 47, 62);
+  text-decoration-line:none;
+  text-decoration-style:solid;
+  text-size-adjust:100%;
+
+}
+
+.legal-footer-2 a:hover {
+  color: #f8991d;
+  text-decoration: none
+}
 
 
 /* --------------
+Other Oranges:
+color: #ec7211;
+color: #f39c12;
+color: #ff9d00;
+color: #f8991d;
+
 button {
   position:relative;
   left:14%;
