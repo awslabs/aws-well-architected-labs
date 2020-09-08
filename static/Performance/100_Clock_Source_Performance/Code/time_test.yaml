@@ -1,4 +1,23 @@
 ---
+# This CloudFormation script constructs the lab environment for the
+# AWS Well Architected Labs Performance Efficency 
+# 100 level "Calculating differences in clock source" lab.
+
+# The lab environment here does not require public internet access,
+# and instead uses VPC endpoints for all necessary services.
+
+# TODO: 
+#   1. Restrict the regions and AZ this can run in.
+#       a. Regions: VPC endpoints for CloudFormation restrictions: https://docs.aws.amazon.com/general/latest/gr/rande.html#cfn_region
+#       b. AZs: m5.large not available in us-east-1e ??
+#   2. Review the security groups with a AWS SME.
+#      a. EC2 instances (default SG)
+#      b. VPC enpoints
+#         1. Gateway (S3) (No SG)
+#         2. Interface 
+#            i. Cloudformation (port 443 open to lab subnet)
+#            ii. SSM, SSM Messages, EC2 Messages (default SG)
+
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Time test of various EC2 instances"
 
@@ -20,7 +39,6 @@ Parameters:
       - m4.xlarge
       - m4.2xlarge
       - m4.4xlarge
-
   KVMNodeInstanceType:
     Description: KVM based EC2 instance type for test
     Type: String
@@ -38,18 +56,86 @@ Parameters:
       - m5.xlarge
       - m5.2xlarge
       - m5.4xlarge
-
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2'
   KeyName:
     Description: The EC2 Key Pair to allow SSH access to the instances
     Type: AWS::EC2::KeyPair::KeyName
-  Ec2InstanceSubnetId:
-    Description: ID of the existing subnet to use for the time test server.
-    Type: AWS::EC2::Subnet::Id
 
 Resources:
+
+
+  # VPC for the lab
+  LabVPC:
+    Type: AWS::EC2::VPC
+    Properties: 
+       CidrBlock: 172.20.0.0/16
+       EnableDnsHostnames: True
+       EnableDnsSupport: True
+       InstanceTenancy: default
+       
+  # Subnet in the above VPC to run the lab on. The EC2 instances
+  # for this lab will run here.       
+  LabSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.20.1.0/24
+      VpcId: !Ref LabVPC
+
+  # Route table to be used with the above subnet.
+  # We need this because we are going to set up a PrivateLink to S3.
+  # This PL is a gateway endpoint, and we will need to set up
+  # a route to it in the route table the subnet the lab runs on.
+  LabRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+       VpcId: !Ref LabVPC
+
+  # Associate the route table with the subnet.
+  LabRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+       RouteTableId: !Ref LabRouteTable
+       SubnetId: !Ref LabSubnet
+
+  # Security group for all VPC endpoints and both EC2 machines
+  # What ports do we need? 80, 443, and 22 open to the world?
+  # Do we need 22? How do we tighten up the Cidrs for the VPC endpoints?
+  # Would the default SG across the board + 80,443 additionally on the enpoints work? 
+  LabSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: "Lab Security Group"
+      GroupName: "All ports open"
+      SecurityGroupEgress: 
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 172.20.1.0/24
+      VpcId: !Ref LabVPC
+
+  # Set up a bucket for the lab. Random name at the end to avoid collisions
+  # with other lab users
+  LabBucket: 
+    Type: AWS::S3::Bucket
+    Properties:
+       BucketName: !Join
+         - "-"
+         - - "well-architected-lab"
+           - !Select
+             - 0
+             - !Split
+               - "-"
+               - !Select
+                 - 2
+                 - !Split
+                   - "/"
+                   - !Ref "AWS::StackId"
+
   # IAM Role to enable Cloudwatch Logs as well as SSM access for the test.
   TestMachineIAMRole:
     Type: AWS::IAM::Role
@@ -143,7 +229,9 @@ Resources:
       InstanceType: !Ref 'XenNodeInstanceType'
       IamInstanceProfile: !Ref 'TestMachineInstanceProfile'
       KeyName: !Ref 'KeyName'
-      SubnetId: !Ref 'Ec2InstanceSubnetId'
+      SubnetId: !Ref 'LabSubnet'
+      SecurityGroupIds:
+        - !GetAtt LabVPC.DefaultSecurityGroup 
       UserData:
         Fn::Base64: !Sub
               |
@@ -151,7 +239,6 @@ Resources:
                 set -o xtrace
                 export PATH=$PATH:/usr/local/bin
                 yum update
-                yum install -y amazon-ssm-agent
                 pip install awscli --upgrade
                 /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --configsets Install --resource XenTestInstance --region ${AWS::Region}
                 export AWS_DEFAULT_REGION=${AWS::Region}
@@ -233,7 +320,9 @@ Resources:
       InstanceType: !Ref 'KVMNodeInstanceType'
       IamInstanceProfile: !Ref 'TestMachineInstanceProfile'
       KeyName: !Ref 'KeyName'
-      SubnetId: !Ref 'Ec2InstanceSubnetId'
+      SubnetId: !Ref 'LabSubnet'
+      SecurityGroupIds: 
+        - !GetAtt LabVPC.DefaultSecurityGroup
       UserData:
         Fn::Base64: !Sub
               |
@@ -241,7 +330,6 @@ Resources:
                 set -o xtrace
                 export PATH=$PATH:/usr/local/bin
                 yum update
-                yum install -y amazon-ssm-agent
                 pip install awscli --upgrade
                 /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --configsets Install --resource XenTestInstance --region ${AWS::Region}
                 export AWS_DEFAULT_REGION=${AWS::Region}
@@ -287,6 +375,101 @@ Resources:
           inputs:
             runCommand:
             - strace -c python3 /tmp/time_test.py
+
+
+   # VPC Endpoint that allows the private subnet in the VPC to talk to AWS's S3 service without using the public internet
+   # Needed to get the yum packages to the EC2 instances without requiring an internet gateway              
+  LabS3Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      VpcEndpointType: 'Gateway'
+      VpcId: !Ref LabVPC
+      RouteTableIds: 
+       - !Ref LabRouteTable
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - '*'
+            Resource:
+              - '*'    
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - 's3:GetObject'
+            Resource:
+              - !Sub 'arn:aws:s3:::amazonlinux.${AWS::Region}.amazonaws.com/*'    
+              - !Sub 'arn:aws:s3:::packages.${AWS::Region}.amazonaws.com/*'
+              - !Sub 'arn:aws:s3:::repo.${AWS::Region}.amazonaws.com/*'
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - '*'
+            Resource:
+              - !Sub 'arn:aws:s3:::cloudformation-waitcondition-${AWS::Region}/*' 
+              - !Join ["", ["arn:aws:s3:::cloudformation-custom-resource-response-", !Join ["", !Split ["-", !Sub "${AWS::Region}"]], '/*']]
+
+  # VPC Endpoint that allows the private subnet in the VPC to talk to AWS's Service Manager service     
+  LabSSMEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties: 
+      PrivateDnsEnabled: True
+      SecurityGroupIds: 
+        - !GetAtt LabVPC.DefaultSecurityGroup
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssm'
+      SubnetIds: 
+        - !Ref LabSubnet
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref LabVPC
+
+  # VPC Endpoint that allows the private subnet in the VPC to talk to AWS's Service Manager message service
+  LabSSMMessagesEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties: 
+      PrivateDnsEnabled: True
+      SecurityGroupIds: 
+        - !GetAtt LabVPC.DefaultSecurityGroup
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssmmessages'
+      SubnetIds: 
+        - !Ref LabSubnet
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref LabVPC
+      
+  # VPC Endpoint that allows the private subnet in the VPC to talk to AWS's EC2 message service
+  LabEC2MessagesEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties: 
+      PrivateDnsEnabled: True
+      SecurityGroupIds: 
+        - !GetAtt LabVPC.DefaultSecurityGroup
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2messages'
+      SubnetIds: 
+        - !Ref LabSubnet
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref LabVPC
+
+  # VPC Endpoint that allows the private subnet in the VPC to talk to AWS's CloudFormation service
+  # Needed because the creation of the EC2 instances invoke AWS::CloudFormation::Init above.
+  LabCloudFormationEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties: 
+      PrivateDnsEnabled: True
+      SecurityGroupIds: 
+        - !GetAtt LabVPC.DefaultSecurityGroup
+        - !Ref 'LabSecurityGroup'
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.cloudformation'
+      SubnetIds: 
+        - !Ref LabSubnet
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref LabVPC
+
+Outputs:
+  LabS3Bucket:
+    Description: The name of the bucket set up for the lab.
+    Value: !Ref LabBucket
 
 # Notes:
 # To set the timesource for the machine while it is running
