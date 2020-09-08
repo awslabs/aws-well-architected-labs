@@ -8,14 +8,14 @@ hidden: FALSE
 
 
 ### View 3 - Compute Savings Plan Eligible Spend
-This view will be used to create the **Compute Savings Plan Eligible Spend** portion of the RI/SP Summary Dashboard.
+This view will be used to create the **Compute Savings Plan Eligible Spend** dashboard page.
 Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
 
 
 - {{%expand "Click here - if you have both Savings Plans and Reserved Instances" %}}
 
 Modify the following SQL query for View3 - Compute Savings PlaneEligible spend: 
- - Update line 22, replace (database).(tablename) with your CUR database and table name 
+ - Update line 23, replace (database).(tablename) with your CUR database and table name 
 
 		
 		CREATE OR REPLACE VIEW "compute_savings_plan_eligible_spend" AS 
@@ -30,6 +30,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 			WHEN (((("line_item_line_item_type" = 'Usage') AND (NOT ("line_item_usage_type" LIKE '%Spot%'))) AND ("product_servicecode" <> 'AWSDataTransfer')) AND ("line_item_usage_type" NOT LIKE '%DataXfer%')) THEN
 				CASE
 					WHEN (("line_item_product_code" = 'AmazonEC2') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
+					WHEN (("line_item_product_code" = 'ElasticMapReduce') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-Concurrency%')) THEN "line_item_unblended_cost"
@@ -54,7 +55,7 @@ If your usage changes you can delete and recreate the required view with Savings
 
 
 Modify the following SQL query for View3 - Compute Savings PlaneEligible spend: 
- - Update line 22, replace (database).(tablename) with your CUR database and table name 
+ - Update line 23, replace (database).(tablename) with your CUR database and table name 
 
 		CREATE OR REPLACE VIEW "compute_savings_plan_eligible_spend" AS 
 		SELECT DISTINCT
@@ -68,6 +69,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 			WHEN (((("line_item_line_item_type" = 'Usage') AND (NOT ("line_item_usage_type" LIKE '%Spot%'))) AND ("product_servicecode" <> 'AWSDataTransfer')) AND ("line_item_usage_type" NOT LIKE '%DataXfer%')) THEN
 				CASE
 					WHEN (("line_item_product_code" = 'AmazonEC2') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
+					WHEN (("line_item_product_code" = 'ElasticMapReduce') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-Concurrency%')) THEN "line_item_unblended_cost"
@@ -90,7 +92,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 If your usage changes you can delete and recreate the required view with Savings Plans or Reserved Instance usage.
 
 Modify the following SQL query for View3 - Compute Savings PlaneEligible spend: 
- - Update line 22, replace (database).(tablename) with your CUR database and table name 
+ - Update line 23, replace (database).(tablename) with your CUR database and table name 
 
 		CREATE OR REPLACE VIEW "compute_savings_plan_eligible_spend" AS 
 		SELECT DISTINCT
@@ -104,6 +106,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 			WHEN (((("line_item_line_item_type" = 'Usage') AND (NOT ("line_item_usage_type" LIKE '%Spot%'))) AND ("product_servicecode" <> 'AWSDataTransfer')) AND ("line_item_usage_type" NOT LIKE '%DataXfer%')) THEN
 				CASE
 					WHEN (("line_item_product_code" = 'AmazonEC2') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
+					WHEN (("line_item_product_code" = 'ElasticMapReduce') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-Concurrency%')) THEN "line_item_unblended_cost"
@@ -128,7 +131,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 If your usage changes you can delete and recreate the required view with Savings Plans or Reserved Instance usage.
 
 Modify the following SQL query for View3 - Compute Savings PlaneEligible spend: 
- - Update line 22, replace (database).(tablename) with your CUR database and table name 
+ - Update line 23, replace (database).(tablename) with your CUR database and table name 
 
 		CREATE OR REPLACE VIEW "compute_savings_plan_eligible_spend" AS 
 		SELECT DISTINCT
@@ -142,6 +145,7 @@ Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
 			WHEN (((("line_item_line_item_type" = 'Usage') AND (NOT ("line_item_usage_type" LIKE '%Spot%'))) AND ("product_servicecode" <> 'AWSDataTransfer')) AND ("line_item_usage_type" NOT LIKE '%DataXfer%')) THEN
 				CASE
 					WHEN (("line_item_product_code" = 'AmazonEC2') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
+					WHEN (("line_item_product_code" = 'ElasticMapReduce') AND ("line_item_operation" LIKE '%RunInstances%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-GB-Second%')) THEN "line_item_unblended_cost"
 					WHEN (("line_item_product_code" = 'AWSLambda') AND ("line_item_usage_type" LIKE '%Lambda-Provisioned-Concurrency%')) THEN "line_item_unblended_cost"

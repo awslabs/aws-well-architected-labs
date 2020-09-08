@@ -1,13 +1,13 @@
 ---
 title: "Level 200: Enterprise Dashboards"
 #menutitle: "Lab #1"
-date: 2020-07-26T11:16:08-04:00
+date: 2020-09-07T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
 ---
 ## Last Updated
-July 2020
+September 2020
 
 {{< rawhtml >}}
 <video width="600" height="450" controls>
@@ -54,7 +54,8 @@ We recommend validating your data by comparing the aggregate un-grouped Payer an
 
 
 ## Time to complete
-- **Cost Intelligence Dashboard**: The lab should take approximately 45-60 minutes to complete
+- **Cost Intelligence Dashboard**: Should take approximately 45-60 minutes to complete
+- **Data Transfer Dashboard**: Should take approximately 15-20 minutes to complete 
 
 ## Steps:
 {{% children  %}}

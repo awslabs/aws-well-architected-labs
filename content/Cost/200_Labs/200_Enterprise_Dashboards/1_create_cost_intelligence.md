@@ -15,10 +15,6 @@ The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intel
 ### Request Template Access
 Ensure you have requested access to the Cost Intelligence template [here.](http://d3ozd1vexgt67t.cloudfront.net/)
 
-{{% notice note %}}
-Access is granted immediately once requested.
-{{% /notice %}}
-
 ### Create Athena Views
 The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not - you will need to create the alternate views.
 
@@ -35,7 +31,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
     Reserved Instances:
 
         select * from (database).(tablename)
-        where reservation_reservation_a_r_n not like ''
+        where savings_plan_savings_plan_a_r_n not like ''
         limit 10
 
 3. Create the **Summary view** by modifying the following code, and executing it in Athena: 
@@ -232,7 +228,7 @@ We will now use the CLI to create the dashboard from the Cost Intelligence Dashb
 
 Edit and run the following command:
 
-        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost_intelligence_dashboard --region (region)
+        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost__intelligence_dashboard --region (region)
 
 Correct the listed errors and run the **delete-dashboard** command followed by the original **create-dashboard** command:
 		
@@ -269,4 +265,3 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 {{% notice tip %}}
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
-
