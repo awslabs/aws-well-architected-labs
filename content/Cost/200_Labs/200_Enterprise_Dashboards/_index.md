@@ -18,10 +18,15 @@ September 2020
 
 
 ## Feedback
-If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
+If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: quicksightcostdashboards@amazon.com
 
 ## Introduction
-The Cost Intelligence Dashboard is an interactive, customizable and accessible QuickSight dashboard to help customers create the foundation for their own Cost Management and Optimization reporting tool. This hands-on lab will guide you through the steps to copy and customize the QuickSight dashboard to better leverage your cost and usage report.
+The goal of the Enterprise Dashboards is to remove the complexities of cost & usage analysis, and provide enterprises with a clear understanding of something, to enable them to make the right business decisions quickly. The Enterprise Dashboard are made up of multiple templates known as modules to help you gain insight into different aspects of your cost and usage as well as enable your teams to better understand the cost of their applications and opportunities to optimize. Every dashboard complements the other modules so you can grow your reporting analytics and gain additional insight. Using separate modules provides greater flexibility, allowing you to customize existing modules and take advantage of the new templates without overwriting your existing customizations. If the dashboards were in a single report it would overwrite all customizations each time you create the latest template. This hands-on lab will guide you through the steps to copy and customize the QuickSight dashboard to better leverage your cost and usage report.
+- The Cost Intelligence Dashboard is an interactive, customizable and business accessible QuickSight dashboard to help customers create the foundation for their own Cost Management and Optimization reporting tool. 
+- The Data Transfer Dashboard allows your organization to understand their data transfer cost and usage across all AWS products so you can take action on optimization opportunities. 
+
+Interested in a detailed description of the dashboards options to get the dashboards in a single view? Download read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
+
 
 **Note**: This QuickSight dashboard is not an official AWS dashboard and should be used as a self-service tool.
 We recommend validating your data by comparing the aggregate un-grouped Payer and Linked Account spend for a prior month.
@@ -35,7 +40,7 @@ We recommend validating your data by comparing the aggregate un-grouped Payer an
 
 
 ## Prerequisites
-- An AWS Account
+- An AWS Account with Cost Optimization team permissions
 - An Amazon **Enterprise Edition** QuickSight Account
 - A Cost and Usage Report (CUR)
 - Amazon Athena and QuickSight have been setup
