@@ -350,13 +350,13 @@ Modify the following SQL query for View1:
 		, "count"(DISTINCT "Line_item_resource_id") "resource_id_count"
 		, sum(CASE 
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "line_item_usage_amount" 
-			WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "line_item_usage_amount" 
-		-- WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_usage_amount" 
+		-- WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "line_item_usage_amount" 
+		WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_usage_amount" 
 		ELSE 0 END) "usage_quantity"
 		, sum ("line_item_unblended_cost") "unblended_cost"
 		, sum(CASE
 			WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_unblended_cost"
-		--	WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "savings_plan_savings_plan_effective_cost" 
+		-- WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "savings_plan_savings_plan_effective_cost" 
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment") 
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN 0
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
