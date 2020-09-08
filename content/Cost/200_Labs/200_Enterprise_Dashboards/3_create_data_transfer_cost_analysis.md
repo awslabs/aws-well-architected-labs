@@ -6,6 +6,8 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
+![Images/quicksight_dashboard_dt_new_analysis.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt_new_analysis.png)
+
 ## Authors
 - Chaitanya Shah, Sr. Technical Account Manager (AWS)
 
