@@ -9,7 +9,7 @@ We will verify the CUR files are being delivered, they are in the correct format
 
 1. Log into the console via SSO.
 
-2. Get the bucket name which contains your Cost and Usage Report (CUR) files in the master/payer account. Modify the following address and replace **(bucket name)** with your bucket:
+2. Get the bucket name which contains your Cost and Usage Report (CUR) files in the management/payer account. Modify the following address and replace **(bucket name)** with your bucket:
 
         https://s3.console.aws.amazon.com/s3/buckets/(bucket name)/
     

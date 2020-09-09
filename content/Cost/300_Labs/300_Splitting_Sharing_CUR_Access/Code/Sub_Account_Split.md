@@ -2,13 +2,13 @@ Below is the code for the lambda function.
 
 You will need to modify the following variable:
 
- - **athena_output**: This is where Athena puts output data, this is typically the master/payer Account ID, which is the default folder for Athena output queries
+ - **athena_output**: This is where Athena puts output data, this is typically the management/payer Account ID, which is the default folder for Athena output queries
  - **bucketname**: This is the output bucket for the Athena queries
 
 You will need to modify the following arrays, the order is important - the first folder in the subfolder array, will be given the permissions of the first element of the S3ObjectPolicies array.
 
  - **subfolders**: This contains the list of folders that the queries write to 
- - **S3ObjectPolicies**: This contains the S3 Object permissions ACL that will be written to objects in the corresponding folder. You will need to add the owners details (master/payer account) and the grantee (sub account) details.
+ - **S3ObjectPolicies**: This contains the S3 Object permissions ACL that will be written to objects in the corresponding folder. You will need to add the owners details (management/payer account) and the grantee (sub account) details.
 
 
 ```

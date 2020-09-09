@@ -8,12 +8,12 @@ pre: "<b>2. </b>"
 
 **NOTE**: Do NOT do this step if you already have an organization and consolidated billing setup.
 
-You will create an AWS Organization, and join two or more accounts to the master account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a master account that is  used for security and administration, with access provided for limited billing tasks. A dedicated member account will be created for the Cost Optimization team or function, and another (or multiple) member account/s created to contain workload resources.
+You will create an AWS Organization, and join two or more accounts to the management account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a management account that is  used for security and administration, with access provided for limited billing tasks. A dedicated member account will be created for the Cost Optimization team or function, and another (or multiple) member account/s created to contain workload resources.
 
-You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you join a member account to a master account, it will contain all billing information for that member account. Member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data before joining accounts to a master account.
+You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you join a member account to a management account, it will contain all billing information for that member account. Member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data before joining accounts to a management account.
 
 ### Create an AWS Organization
-You will create an AWS Organization with the master account.
+You will create an AWS Organization with the management account.
 
 1. Login to the AWS console as an IAM user with the required permissions, start typing *AWS Organizations* into the **Find Services** box and click on **AWS Organizations**:
 ![Images/AWSOrg1.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg1.png)
@@ -65,7 +65,7 @@ You will now join other accounts to your organization. You need to create and jo
 10. The member account will receive an email showing success:
 ![Images/AWSOrg14.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg14.png)
 
-11. The master account will also receive email notification of success:
+11. The management account will also receive email notification of success:
 ![Images/AWSOrg15.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg15.png)
 
 Repeat the steps above for each additional member account in your organization.
@@ -73,7 +73,7 @@ Repeat the steps above for each additional member account in your organization.
 ### Enable Service Control Policies
 We will enable Service control policies, which offer central control over the maximum permissions available - for cost governance, and Tag policies which assist to standardize tags across your organization.
 
-1. From the AWS Organizations console in the **master account** click on **Policies**:
+1. From the AWS Organizations console in the **management account** click on **Policies**:
 ![Images/Organizations_Policies.png](/Cost/100_1_AWS_Account_Setup/Images/Organizations_Policies.png)
 
 2. By default both policies are disabled, Click on **Service control policies**:

@@ -39,7 +39,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## Permissions required
-- Root user and administrator access to the master and member accounts
+- Root user and administrator access to the management and member accounts
 
 
 ## Costs

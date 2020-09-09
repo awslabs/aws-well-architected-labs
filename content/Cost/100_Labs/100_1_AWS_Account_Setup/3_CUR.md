@@ -12,7 +12,7 @@ Cost and Usage Reports provide the most detailed information on your usage and b
 ###  Configure a Cost and Usage Report
 If you configure multiple Cost and Usage Reports (CURs), then it is recommended to have 1 CUR per bucket. If you **must** have multiple CURs in a single bucket, ensure you use a different **report path prefix** so it is clear they are different reports.
 
-1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your management account as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSCUR1.png](/Cost/100_1_AWS_Account_Setup/Images/AWSCUR1.png)
 
 2. Select **Cost & Usage Reports** from the left menu:
@@ -132,7 +132,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
 
 
 ### Configure re-write of the S3 object ACLs
-We will setup a Lambda function to re-write the ACLs on newly delivered CUR files. This is required to allow sub accounts to read the CUR files, as they are delivered with bucket owner (master account) access only.
+We will setup a Lambda function to re-write the ACLs on newly delivered CUR files. This is required to allow sub accounts to read the CUR files, as they are delivered with bucket owner (management account) access only.
 
 1. Go to the IAM Dashboard
 
@@ -182,8 +182,8 @@ We will setup a Lambda function to re-write the ACLs on newly delivered CUR file
 
 12. Paste in the following Lambda code, replace the following strings with the values of your accounts:
  
- - **Master Account Name**: The owner account name - the account email without the @companyname, they will get FULL_CONTROL permissions
- - **Master Canonical ID**: The owner canonical ID, to get the Canonical ID, refer to: https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html
+ - **management Account Name**: The owner account name - the account email without the @companyname, they will get FULL_CONTROL permissions
+ - **management Canonical ID**: The owner canonical ID, to get the Canonical ID, refer to: https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html
  - **Linked Account Name**: The cost optimization account name - the account email without the @companyname, they will get READ permissions 
  - **Linked Account Canonical ID**: The cost optimization account canonical ID
 
@@ -228,8 +228,8 @@ We will setup a Lambda function to re-write the ACLs on newly delivered CUR file
                             'Grantee': 
                             {
                                 'Type': 'CanonicalUser',
-                                'DisplayName': '(master account name)',
-                                'ID': '(master canonical id)'
+                                'DisplayName': '(management account name)',
+                                'ID': '(management canonical id)'
                             },
                             'Permission': 'FULL_CONTROL'
                         },
@@ -270,14 +270,14 @@ We will setup a Lambda function to re-write the ACLs on newly delivered CUR file
 16. Enter a name of **S3PutACL**, select **All object create events**, Send to **Lambda Function**, Lambda function **S3LinkedPutACL**, click **Save**:
 ![Images/s3_event.png](/Cost/100_1_AWS_Account_Setup/Images/s3_event.png)
 
-17. You will need to wait until the next CUR file is delivered by AWS (at most 24 hours). Navigate to the latest CUR file and check the permissions, it will have the original owner (AWS), your master account with full permissions (as per original), and your linked Cost Optimization account as read permissions:
+17. You will need to wait until the next CUR file is delivered by AWS (at most 24 hours). Navigate to the latest CUR file and check the permissions, it will have the original owner (AWS), your management account with full permissions (as per original), and your linked Cost Optimization account as read permissions:
 ![Images/s3_newCUR.png](/Cost/100_1_AWS_Account_Setup/Images/s3_newCUR.png)
 
 
 ### Update existing CURs
 If there are existing CURs from other reports that need permissions to be updated, you can use the following CLI - which will copy the objects over themselves and update the permissions as it copies.
 
-    aws s3 cp --recursive s3://(CUR bucket) s3://(CUR bucket) --grants read=id=(sub account canonical ID) full=id=(master account canonical ID) --storage-class STANDARD
+    aws s3 cp --recursive s3://(CUR bucket) s3://(CUR bucket) --grants read=id=(sub account canonical ID) full=id=(management account canonical ID) --storage-class STANDARD
 
 
 {{% notice tip %}}

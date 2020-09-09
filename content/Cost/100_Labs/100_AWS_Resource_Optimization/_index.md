@@ -20,7 +20,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - Learn how to filter AWS Resource Optimization report and focus only on the less complex high saving cases
 
 ## Prerequisites
-- Root user access to the master account
+- Root user access to the management account
 - Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
 
 ## Permissions required
