@@ -11,17 +11,17 @@
     --MENU-HEADER-BORDER-color:#161E2D; /*Color of menu header border */
 
     --MENU-SEARCH-BG-color:#202c3c; /* Search field background color (by default borders + icons) */
-    --MENU-SEARCH-BOX-color: #4d6584; /* Override search field border color */
-    --MENU-SEARCH-BOX-ICONS-color: #4d6584; /* Override search field icons color */
+    --MENU-SEARCH-BOX-color: #aaaaaa; /* Override search field border color */
+    --MENU-SEARCH-BOX-ICONS-color: #ffffff; /* Override search field icons color */
 
     --MENU-SECTIONS-ACTIVE-BG-color:#232F3E; /* Background color of the active section and its childs */
     --MENU-SECTIONS-BG-color:#161E2D; /* Background color of other sections */
     --MENU-SECTIONS-TEXT-color: #FF9900; /*Color of pre text */
-    --MENU-SECTIONS-LINK-color: #ccc; /* Color of links in menu */
+    --MENU-SECTIONS-LINK-color: #ffffff; /* Color of links in menu */
     --MENU-SECTIONS-LINK-HOVER-color: #e6e6e6;  /* Color of links in menu, when hovered */
     --MENU-SECTION-ACTIVE-CATEGORY-color: #232F3E; /* Color of active category text */
     --MENU-SECTION-ACTIVE-CATEGORY-BG-color: #FF9900; /* Color of background for the active category (only) */
-    --MENU-SECTION-ACTIVE-CATEGORY-TEXT-color: #fff; /* Color of pre text when selected */
+    --MENU-SECTION-ACTIVE-CATEGORY-TEXT-color: #ffffff; /* Color of pre text when selected */
 
     --MENU-VISITED-color: #527FFF; /* Color of 'page visited' icons in menu */
     --MENU-SECTION-HR-color: #20272b; /* Color of <hr> separator in menu */
@@ -31,6 +31,8 @@
 body {
     font-family: "Lato", "Work Sans", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
     color: var(--MAIN-TEXT-color) !important;
+    font-family: AmazonEmber,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-weight: 400;
 }
 
 #chapter h3 {
@@ -51,10 +53,25 @@ h2, h3, h4, h5, h6 {
 
 h1 {
     font-family: "Lato", "Novacento Sans Wide", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+    font-family: AmazonEmber,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-weight: 500;
 }
 
 a {
     color: var(--MAIN-LINK-color);
+}
+
+blockquote {
+  border-left: 10px solid #919191;
+}
+
+blockquote p {
+  color: #555555 !important;
+}
+
+#footer {
+  color: #aaaaaa;
+  font-size: 14px;
 }
 
 .anchor {
@@ -65,17 +82,25 @@ a:hover {
     color: var(--MAIN-LINK-HOVER-color);
 }
 
+#sidebar {
+  font-weight: 400 !important;
+}
+
 #sidebar ul li.visited > a .read-icon {
 	color: var(--MENU-VISITED-color);
 }
 
 #sidebar #logo {
   font-size: 15px;
-  color: #fd9827 !important;
+  color: #ffffff !important;
 }
 
 #sidebar #footer {
   padding-top: 20px !important;
+}
+
+#sidebar #footer a {
+  color: orange;
 }
 
 #sidebar #footer h2.github-title {
@@ -163,6 +188,31 @@ a:hover {
     color: white !important;
     margin-top:1rem;
     padding-left: 1rem;
+}
+
+#sidebar #shortcuts a:hover {
+  color: orange;
+  text-decoration: underline
+}
+
+#sidebar #prefooter a:hover {
+  color: orange;
+  text-decoration: underline;
+}
+
+#sidebar #footer a:hover {
+  text-decoration: underline;
+}
+
+
+#sidebar .topics a:hover {
+  border-left: 0.2rem solid orange;
+  padding-left: 0.4rem;
+  text-decoration: underline;
+}
+
+#sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
+  color: #cccccc !important;
 }
 
 #navigation a.nav-prev, #navigation a.nav-next {
@@ -581,4 +631,8 @@ div.cards.workshop div.content {
     margin: 0px;
     padding: 0px;
     color: #333;
+}
+
+#shortcuts {
+  margin-top: 5rem;
 }

@@ -61,7 +61,7 @@ section = ["HTML","RSS"]
 
 # Menu shortcuts on left side
 [[menu.shortcuts]]
-name = "<BR><BR><hr> <i class='fab fa-github'></i>&nbsp;&nbsp;Contributing (GitHub)"
+name = "<i class='fab fa-github'></i>&nbsp;&nbsp;Contributing (GitHub)"
 url = "https://github.com/awslabs/aws-well-architected-labs/blob/master/CONTRIBUTING.md"
 weight = 2
 
