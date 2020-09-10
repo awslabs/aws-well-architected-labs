@@ -65,7 +65,7 @@ blockquote {
   border-left: 10px solid #919191;
 }
 blockquote p {
-  color: #555
+  color: #555 !important
 }
 
 #footer {
