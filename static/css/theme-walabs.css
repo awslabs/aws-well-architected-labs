@@ -11,17 +11,17 @@
     --MENU-HEADER-BORDER-color:#161E2D; /*Color of menu header border */
 
     --MENU-SEARCH-BG-color:#202c3c; /* Search field background color (by default borders + icons) */
-    --MENU-SEARCH-BOX-color: #aaa; /* Override search field border color */
-    --MENU-SEARCH-BOX-ICONS-color: #fff; /* Override search field icons color */
+    --MENU-SEARCH-BOX-color: #aaaaaa; /* Override search field border color */
+    --MENU-SEARCH-BOX-ICONS-color: #ffffff; /* Override search field icons color */
 
     --MENU-SECTIONS-ACTIVE-BG-color:#232F3E; /* Background color of the active section and its childs */
     --MENU-SECTIONS-BG-color:#161E2D; /* Background color of other sections */
     --MENU-SECTIONS-TEXT-color: #FF9900; /*Color of pre text */
-    --MENU-SECTIONS-LINK-color: #fff; /* Color of links in menu */
+    --MENU-SECTIONS-LINK-color: #ffffff; /* Color of links in menu */
     --MENU-SECTIONS-LINK-HOVER-color: #e6e6e6;  /* Color of links in menu, when hovered */
     --MENU-SECTION-ACTIVE-CATEGORY-color: #232F3E; /* Color of active category text */
     --MENU-SECTION-ACTIVE-CATEGORY-BG-color: #FF9900; /* Color of background for the active category (only) */
-    --MENU-SECTION-ACTIVE-CATEGORY-TEXT-color: #fff; /* Color of pre text when selected */
+    --MENU-SECTION-ACTIVE-CATEGORY-TEXT-color: #ffffff; /* Color of pre text when selected */
 
     --MENU-VISITED-color: #527FFF; /* Color of 'page visited' icons in menu */
     --MENU-SECTION-HR-color: #20272b; /* Color of <hr> separator in menu */
@@ -66,11 +66,11 @@ blockquote {
 }
 
 blockquote p {
-  color: #555 !important;
+  color: #555555 !important;
 }
 
 #footer {
-  color: #aaa;
+  color: #aaaaaa;
   font-size: 14px;
 }
 
@@ -92,7 +92,7 @@ a:hover {
 
 #sidebar #logo {
   font-size: 15px;
-  color: #fff !important;
+  color: #ffffff !important;
 }
 
 #sidebar #footer {
@@ -212,7 +212,7 @@ a:hover {
 }
 
 #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
-  color: #ccc !important
+  color: #cccccc !important;
 }
 
 #navigation a.nav-prev, #navigation a.nav-next {
