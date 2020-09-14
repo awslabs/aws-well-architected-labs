@@ -11,8 +11,6 @@ hidden: false
 
 **Authors:** Ben Potter, Security Lead, Well-Architected
 
-**Time to complete:** 10-15 minutes
-
 ## Introduction
 
 This hands-on lab will guide you through the introductory steps to configure a new AWS account and secure the root user. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
