@@ -23,3 +23,8 @@ We will delete all three budgets that we configured.
 
 2. Do the same for the budgets **EC2_actual** and **SP_Coverage**
 
+{{< prev_next_button link_prev_url="../4_budget_report/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment,
+you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+[COST2 - "How do you govern usage?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
+{{< /prev_next_button >}}

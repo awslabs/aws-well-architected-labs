@@ -33,3 +33,4 @@ AWS Cost Explorer has an easy-to-use interface that lets you visualize, analyze,
 This will incur costs depending on the number of resources you are running.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../6_quicksight/" link_next_url="../8_cost_tags/" />}}

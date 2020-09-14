@@ -228,9 +228,4 @@ You **MUST** work with your security team/specialist to ensure you create the po
 You have now setup your Cost Optimization users, group and their permissions.
 {{% /notice %}}
 
-
-
-
-
-
-
+{{< prev_next_button link_prev_url="../3_cur/" link_next_url="../5_account_settings/" />}}

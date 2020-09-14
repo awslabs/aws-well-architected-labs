@@ -60,3 +60,5 @@ We will create a monthly cost budget which will notify if the forecasted amount 
 {{% notice tip %}}
 You have created a forecasted budget, when your forecasted costs for the entire account are predicted to exceed the forecast, you will receive a notification.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_budget_ec2actual/" />}}

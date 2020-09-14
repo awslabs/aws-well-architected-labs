@@ -283,3 +283,6 @@ If there are existing CURs from other reports that need permissions to be update
 {{% notice tip %}}
 Congratulations - you will now have CURs delivered and accessible by your Cost Optimization account.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../2_account_structure/" link_next_url="../4_configure_sso/" />}}
+
