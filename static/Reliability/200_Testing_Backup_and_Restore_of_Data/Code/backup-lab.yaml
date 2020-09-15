@@ -62,8 +62,8 @@ Resources:
       Runtime: python2.7
       Timeout: '60'
       Code:
-        S3Bucket: c3pio
-        S3Key: backup-lab/lambda_function.zip
+        S3Bucket: aws-well-architected-labs-virginia
+        S3Key: Reliability/200_Testing_Backup_and_Restore_of_Data/lambda_function.zip
   LambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
