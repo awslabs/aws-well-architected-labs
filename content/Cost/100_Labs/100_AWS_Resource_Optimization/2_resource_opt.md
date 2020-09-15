@@ -41,3 +41,5 @@ How are the potential savings calculated? AWS will first examine the instance ru
 Amazon EC2 Resource Optimization recommendations already excludes Spot usage and takes into consideration the existing Reserved Instances and Savings Plan footprint to provide recommendations. There are two types of recommended actions: **Terminate** if the instance is considered idle (*max CPU utilization is at or below 1%*) or **Downsize** if the instance is underutilized (*max CPU utilization is between 1% and 40%*).
 
 You can enable Amazon CloudWatch to report memory utilization and improve the recommendation accuracy. Please check the [200 level EC2 Right Sizing lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for more information on how to enable memory utilization metrics. Finally, Amazon EC2 Resource Optimization recommendations will only ever recommend up to three, same-family instances as target instances for downsizing.
+
+{{< prev_next_button link_prev_url="../1_cloudwatch_intro/" link_next_url="../3_prio_resource_opt/" />}}

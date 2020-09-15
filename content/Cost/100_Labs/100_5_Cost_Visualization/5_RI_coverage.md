@@ -25,3 +25,5 @@ You can view your Reserved Instance coverage to look for anomalies or changes in
 
 
 You have now viewed your RI coverage, and have insight on where to increase your coverage.  
+
+{{< prev_next_button link_prev_url="../4_elasticity/" link_next_url="../6_custom_ec2/" />}}
