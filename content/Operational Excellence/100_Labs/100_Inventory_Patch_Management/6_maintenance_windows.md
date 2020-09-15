@@ -159,7 +159,7 @@ After you assign targets, you [assign tasks](https://docs.aws.amazon.com/systems
 ### 6.5 Review Maintenance Window Execution
 
 1. After allowing enough time for your maintenance window to complete:
-   1. Navigte to the AWS [Systems Manager console](https://console.aws.amazon.com/systems-manager/).
+   1. Navigate to the AWS [Systems Manager console](https://console.aws.amazon.com/systems-manager/).
    1. Choose **Maintenance Windows**, and then select the **Window ID** for your new maintenance window.
 1. On the **Maintenance window ID** details page, choose **History**.
 1. Select a **Windows execution ID** and choose **View details**.
