@@ -42,7 +42,7 @@ Modify the following SQL query for View1:
 			ELSE 'OnDemand' END "purchase_option"
 		, CASE 
 			WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
-			WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"ELSE '' END "ri_sp_arn"
+			WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n" ELSE '' END "ri_sp_arn"
 		, "line_item_product_code" "product_code"
 		, "product_product_name" "product_name"
 		, CASE 
@@ -107,9 +107,9 @@ Modify the following SQL query for View1:
 The query is the same as the first query, except some of lines have been commented out. If your usage changes you can delete and recreate the required view with Savings Plans or Reserved Instance usage.
 
 Modify the following SQL query for View1: 
- - Update line 77 replace (database).(tablename) with your CUR database and table name 
+ - Update line 78 replace (database).(tablename) with your CUR database and table name 
  - Optional: Adjust the granularity to monthly, by changing 'day' to 'month' in row 6
- - Optional: Adjust the look back from '7' months to desired timeframe in row 78
+ - Optional: Adjust the look back from '7' months to desired timeframe in row 79
 
 		CREATE OR REPLACE VIEW summary_view AS
 		SELECT
@@ -132,7 +132,8 @@ Modify the following SQL query for View1:
 			ELSE 'OnDemand' END "purchase_option"
 		, CASE 
 			WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
-			-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"ELSE '' END "ri_sp_arn"
+			-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
+			ELSE '' END "ri_sp_arn"
 		, "line_item_product_code" "product_code"
 		, "product_product_name" "product_name"
 		, CASE 
@@ -225,7 +226,7 @@ Modify the following SQL query for View1:
 			ELSE 'OnDemand' END "purchase_option"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
-			WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"ELSE '' END "ri_sp_arn"
+			WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n" ELSE '' END "ri_sp_arn"
 		, "line_item_product_code" "product_code"
 		, "product_product_name" "product_name"
 		, CASE 
@@ -273,7 +274,7 @@ Modify the following SQL query for View1:
 			WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period") ELSE 0 END) "ri_sp_trueup"
 		, sum(CASE
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-			WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
+			WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost" ELSE 0 END) "ri_sp_upfront_fees"
 		, sum(CASE
 			WHEN ("line_item_line_item_type" <> 'SavingsPlanNegation') THEN "pricing_public_on_demand_cost" ELSE 0 END) "public_cost" 
 		FROM

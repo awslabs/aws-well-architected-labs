@@ -31,7 +31,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
     Reserved Instances:
 
         select * from (database).(tablename)
-        where savings_plan_savings_plan_a_r_n not like ''
+        where reservation_reservation_a_r_n not like ''
         limit 10
 
 3. Create the **Summary view** by modifying the following code, and executing it in Athena: 
@@ -228,7 +228,7 @@ We will now use the CLI to create the dashboard from the Cost Intelligence Dashb
 
 Edit and run the following command:
 
-        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost__intelligence_dashboard --region (region)
+        aws quicksight describe-dashboard --aws-account-id (YOUR ACCOUNT ID) --dashboard-id cost_intelligence_dashboard --region (region)
 
 Correct the listed errors and run the **delete-dashboard** command followed by the original **create-dashboard** command:
 		

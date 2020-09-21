@@ -226,7 +226,7 @@ If your usage changes you can delete and recreate the required view with Savings
 
 
 Modify the following SQL query for View5 - RI SP Mapping:
- - Update lines 27 and 60, replace (database).(tablename) with your CUR database and table name 
+ - Update lines 27 and 62, replace (database).(tablename) with your CUR database and table name 
 
 		CREATE OR REPLACE VIEW "ri_sp_mapping" AS 
 		SELECT DISTINCT
@@ -255,11 +255,13 @@ Modify the following SQL query for View5 - RI SP Mapping:
 			ELSE NULL END "ri_sp_end_date"
 		   FROM
 		    (ADD YOUR CUR TABLE NAME)
-		 --  WHERE (
+		WHERE (
+		 ("line_item_line_item_type" <> 'Usage') 
+		-- OR
 		--   ("line_item_line_item_type" = 'RIFee') 
 		-- OR 
 		 -- ("line_item_line_item_type" = 'SavingsPlanRecurringFee')
-		 --  )
+		)
 		
 		)  a
 		LEFT JOIN (
@@ -288,11 +290,13 @@ Modify the following SQL query for View5 - RI SP Mapping:
 			ELSE '' END "ri_sp_Payment"
 		   FROM
 		     (ADD YOUR CUR TABLE NAME)
-		-- WHERE (
+		WHERE (
+		 ("line_item_line_item_type" <> 'Usage') 
+		 -- OR
 		 -- ("line_item_line_item_type" = 'DiscountedUsage') 
 		 -- OR 
 		  -- ("line_item_line_item_type" = 'SavingsPlanCoveredUsage')
-		 --  )
+		 )
 		
 		)  b ON (("a"."ri_sp_arn_mapping" = "b"."ri_sp_arn_mapping") AND ("a"."billing_period_mapping" = "b"."billing_period_mapping") AND ("a"."payer_account_id_mapping" = "b"."payer_account_id_mapping")))
 		
