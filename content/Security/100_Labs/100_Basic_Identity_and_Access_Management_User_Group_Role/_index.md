@@ -1,10 +1,15 @@
 ---
-title: "Level 100: Basic Identity and Access Management User, Group, Role"
-menutitle: "Basic Identity and Access Management User, Group, Role"
-date: 2020-04-24T11:16:08-04:00
+title: "Creating your first Identity and Access Management User, Group, Role"
+menutitle: "Identity and Access Management User, Group, Role"
+date: 2020-09-16T11:16:08-04:00
 chapter: false
 weight: 2
 ---
+
+**Last Updated:** September 2020
+
+**Author:** Ben Potter, Security Lead, Well-Architected
+
 
 ## Introduction
 
@@ -17,9 +22,20 @@ It is strongly recommended you centralize your identities instead of using IAM U
 
 ## Prerequisites
 
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
+- An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
+- Permissions to create resources in IAM, or the root user if you are just getting started.
 
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+## Costs
 
-Steps:
+- There are no costs for this lab
+- [AWS Pricing](https://aws.amazon.com/pricing/)
+
+## Steps:
 {{% children  %}}
+
+## References & Useful Resources
+
+* [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html)
+* [https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
+* [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
+* [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)

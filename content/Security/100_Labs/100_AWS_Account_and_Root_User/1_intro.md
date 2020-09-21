@@ -1,13 +1,19 @@
 ---
 title: "Account Settings & Root User Security"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-09-16T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
 ---
 
 When you first create an Amazon Web Services (AWS) account, you begin with a single sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account.
-It is strongly recommend that you do not use the root user for your everyday tasks, even the administrative ones. Instead, adhere to the best practice of using the root user only to create your first IAM user, groups and roles. Then securely lock away the root user credentials and use them to perform only a few account and service management tasks. To view the tasks that require you to sign in as the root user, see [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
+
+It is strongly recommend that you only use the root user by exception. Instead, adhere to the best practice of using the root user only to setup identity federation using [AWS Single Sign-On](http://aws.amazon.com/single-sign-on) or an [identity provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html?ref=wellarchitected) configured in IAM. To view the tasks that require root login you to sign in as the root user, see [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html).
+
+{{% notice note %}}
+If you don’t have an existing organizational structure with [AWS Organizations](https://aws.amazon.com/organizations/), [AWS Control Tower](https://aws.amazon.com/controltower/) is the easiest way to get started. For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) and [Identity and Access Management](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/identity-and-access-management.html) in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) security whitepaper.
+{{% /notice %}}
+
 
 ### 1.1 Generate and Review the AWS Account Credential Report
 

@@ -1,5 +1,5 @@
 ---
-title: "Tear down this lab"
+title: "Tear down"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>4. </b>"
@@ -26,7 +26,3 @@ Delete the S3 bucket:
 
 ***
 
-## References & useful resources
-
-[Amazon S3 Developer Guide](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
-[Amazon CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html)
