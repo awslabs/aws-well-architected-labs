@@ -47,3 +47,5 @@ This will setup Amazon QuickSight, so that users in the Cost Optimization Accoun
 {{% notice tip %}}
 Congratulations - QuickSight is now setup for your users. The Cost Optimization team can self manage QuickSight, and access to data sets in S3 with the correct bucket name.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../5_account_settings/" link_next_url="../7_cost_explorer/" />}}

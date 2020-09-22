@@ -62,3 +62,5 @@ We will use the **Cost Explorer** hourly granularity feature to visualize Saving
 18. The savings is **41%**. We were using **$0.51**, so multiplied by **1-41% (0.59)** = **$0.30**.
 
 We can see the recommendation is accurate and valid, and see the usage pattern associated with the recommendation.  
+
+{{< prev_next_button link_prev_url="../3_analyze_recommendations/" link_next_url="../5_tear_down/" />}}

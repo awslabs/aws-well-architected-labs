@@ -32,3 +32,5 @@ You can use the **Compute Savings Plan** for this exercise if you plan on purcha
 ![Images/SavingsPlan16.png](/Cost/100_3_Pricing_Models/Images/SavingsPlan16.png)
 
 You now have an understanding of your overall usage trend, and can use this information to make a commitment that is matched to your business requirements.
+
+{{< prev_next_button link_prev_url="../1_view_recommendations/" link_next_url="../3_analyze_recommendations/" />}}

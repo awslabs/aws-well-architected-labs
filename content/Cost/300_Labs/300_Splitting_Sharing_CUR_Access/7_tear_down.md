@@ -17,8 +17,8 @@ We will tear down this lab, removing any data, resources and configuration that 
 
 4 - Delete the recurring Glue crawler
 
-### 7.2 Master/Payer Account
-1 - Log into the master/payer account as an IAM user with the required privileges
+### 7.2 Management/Payer Account
+1 - Log into the management/payer account as an IAM user with the required privileges
 
 2 - Go to the Cloudformation service dashboard, and select the CUR update stack
 

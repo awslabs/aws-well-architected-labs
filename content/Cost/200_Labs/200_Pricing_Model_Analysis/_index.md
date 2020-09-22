@@ -1,13 +1,13 @@
 ---
 title: "Level 200: Pricing Model Analysis"
 #menutitle: "Lab #1"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-09-15T11:16:08-04:00
 chapter: false
 weight: 7
 hidden: false
 ---
 ## Last Updated
-May 2020
+September 2020
 {{< rawhtml >}}
 <video width="600" height="450" controls>
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/PricingModelAnalysis.mp4" type="video/mp4">

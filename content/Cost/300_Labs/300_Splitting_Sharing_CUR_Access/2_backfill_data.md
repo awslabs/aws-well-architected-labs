@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 
 Perform this step if you want to generate data for all previous months available in your current CUR files. This is a one off step that is performed manually.  We create a temporary table in Athena, and write the output to the S3 location created above, for the member/linked account to access it. We then delete the temporary table - which does not delete the S3 output data.
 
-1 - In the master/payer account go into the Athena service dashboard
+1 - In the management/payer account go into the Athena service dashboard
 
 2 - Create your query using the template below:
 

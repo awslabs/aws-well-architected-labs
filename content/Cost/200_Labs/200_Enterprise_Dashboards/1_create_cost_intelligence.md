@@ -15,10 +15,6 @@ The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intel
 ### Request Template Access
 Ensure you have requested access to the Cost Intelligence template [here.](http://d3ozd1vexgt67t.cloudfront.net/)
 
-{{% notice note %}}
-Access is granted immediately once requested.
-{{% /notice %}}
-
 ### Create Athena Views
 The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not - you will need to create the alternate views.
 
@@ -269,4 +265,3 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 {{% notice tip %}}
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
-

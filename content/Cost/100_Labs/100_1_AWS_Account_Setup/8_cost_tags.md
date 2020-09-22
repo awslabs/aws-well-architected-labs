@@ -19,3 +19,5 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 
 4. You will see that it is activated:
 ![Images/AWSBillTag3.png](/Cost/100_1_AWS_Account_Setup/Images/AWSBillTag3.png)
+
+{{< prev_next_button link_prev_url="../7_cost_explorer/" link_next_url="../9_tear_down/" />}}

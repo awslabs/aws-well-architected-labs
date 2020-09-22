@@ -157,6 +157,7 @@
                     "kms:ListKeys",
                     "kms:ListAliases",
                     "kms:Encrypt",
+                    "kms:TagResource",
                     "iam:AddRoleToInstanceProfile",
                     "iam:AttachRolePolicy",
                     "iam:CreateInstanceProfile",

@@ -21,11 +21,11 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - Enable AWS Resource Optimization and observe how the recommendations are impacted by this new datapoint (Memory)
 
 ## Prerequisites
-- Root user access to the master account
+- Root user access to the management account
 - Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
 
 ## Permissions required
-- Root user access to the master account
+- Root user access to the management account
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 ## Steps:

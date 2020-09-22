@@ -7,7 +7,7 @@ hidden: FALSE
 
 
 ### View 5 - RI SP Mapping
-This view will be used map a consolidated view of your **RI SP Mapping** to your **Summary View**.
+This view will be used to create the **RI SP Mapping** dashboard page.
 Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
 
 
@@ -226,7 +226,7 @@ If your usage changes you can delete and recreate the required view with Savings
 
 
 Modify the following SQL query for View5 - RI SP Mapping:
- - Update lines 27 and 60, replace (database).(tablename) with your CUR database and table name 
+ - Update lines 27 and 62, replace (database).(tablename) with your CUR database and table name 
 
 		CREATE OR REPLACE VIEW "ri_sp_mapping" AS 
 		SELECT DISTINCT
@@ -244,22 +244,24 @@ Modify the following SQL query for View5 - RI SP Mapping:
 		 "bill_billing_period_start_date" "billing_period_mapping"
 		, "bill_payer_account_id" "payer_account_id_mapping"
 		, CASE 
-		WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
+		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
 			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
 			ELSE '' END "ri_sp_arn_mapping"
 		, CASE 
 		--	WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
-		WHEN ("line_item_line_item_type" = 'RIFee') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
+		--	WHEN ("reservation_reservation_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
 			WHEN ("line_item_line_item_type" = 'Usage') THEN NULL
 			ELSE NULL END "ri_sp_end_date"
 		   FROM
 		    (ADD YOUR CUR TABLE NAME)
-		 --  WHERE (
+		WHERE (
+		 ("line_item_line_item_type" <> 'Usage') 
+		-- OR
 		--   ("line_item_line_item_type" = 'RIFee') 
 		-- OR 
 		 -- ("line_item_line_item_type" = 'SavingsPlanRecurringFee')
-		 --  )
+		)
 		
 		)  a
 		LEFT JOIN (
@@ -267,32 +269,34 @@ Modify the following SQL query for View5 - RI SP Mapping:
 		 "bill_billing_period_start_date" "billing_period_mapping"
 		, "bill_payer_account_id" "payer_account_id_mapping"
 		, CASE 
-		WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
+		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
 			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
 			ELSE '' END "ri_sp_arn_mapping"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_purchase_term" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_lease_contract_length"
-			WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
+			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
 		ELSE '' END "ri_sp_term"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_offering_type" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_offering_class" 
-		 WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
+		 WHEN ("line_item_line_item_type" = 'Usage') THEN ''
 			ELSE '' END "ri_sp_offering"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_payment_option" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_purchase_option"
-		 WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
+		 WHEN ("line_item_line_item_type" = 'Usage') THEN ''
 			ELSE '' END "ri_sp_Payment"
 		   FROM
 		     (ADD YOUR CUR TABLE NAME)
-		-- WHERE (
+		WHERE (
+		 ("line_item_line_item_type" <> 'Usage') 
+		 -- OR
 		 -- ("line_item_line_item_type" = 'DiscountedUsage') 
 		 -- OR 
 		  -- ("line_item_line_item_type" = 'SavingsPlanCoveredUsage')
-		 --  )
+		 )
 		
 		)  b ON (("a"."ri_sp_arn_mapping" = "b"."ri_sp_arn_mapping") AND ("a"."billing_period_mapping" = "b"."billing_period_mapping") AND ("a"."payer_account_id_mapping" = "b"."payer_account_id_mapping")))
 		

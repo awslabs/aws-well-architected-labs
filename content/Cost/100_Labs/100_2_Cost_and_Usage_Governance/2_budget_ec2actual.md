@@ -52,3 +52,4 @@ We will create a monthly EC2 actual cost budget, which will notify if the actual
 You have created an actual cost budget for EC2 usage. You can extend this budget by adding specific filters such as linked accounts, tags or instance types. You can also create budgets for services other than EC2.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../1_budget_forecast/" link_next_url="../3_budget_spcoverage/" />}}

@@ -2,8 +2,8 @@
 title: "Teardown"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
-weight: 4
-pre: "<b>4. </b>"
+weight: 5
+pre: "<b>5. </b>"
 ---
 
 
@@ -39,6 +39,7 @@ To perform a teardown for this lab, perform the following steps:
         - **s3_view**
         - **compute_savings_plan_eligible_spend**
         - **ec2_running_cost**
+        - **data_transfer_view**
     - Click **Delete data set**
     - Click **Delete**
 
@@ -50,6 +51,7 @@ To perform a teardown for this lab, perform the following steps:
         - ```drop view costmaster.ri_sp_mapping```
         - ```drop view costmaster.s3_view```
         - ```drop view costmaster.summary_view```
+        - ```drop view costmaster.data_transfer_view```
 
 
 

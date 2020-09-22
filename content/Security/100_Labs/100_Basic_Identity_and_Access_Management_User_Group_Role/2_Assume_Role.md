@@ -5,6 +5,7 @@ chapter: false
 weight: 2
 pre: "<b>2. </b>"
 ---
+
 We will assume the role using the IAM user that we previously created in the web console. As the IAM user has full access it is a best practice not to have access keys to assume the role on the CLI, instead we should use a restricted IAM user for this so we can enforce the requirement of MFA.
 
 The following image shows what you will be doing in the next section 2.1 Use Administrator Role in Web Console.
@@ -30,9 +31,7 @@ The permissions of your IAM user and any roles that you switch to are not cumula
 6. Click Switch Role. The display name and color replace your user name on the navigation bar, and you can start using the permissions that the role grants you.
 
 {{% notice tip %}}
-
 The last several roles that you used appear on the menu. The next time you need to switch to one of those roles, you can simply click the role you want. You only need to type the account and role information manually if the role is not displayed on the Identity menu.
-
 {{% /notice %}}
 
 7. You are now using the role with the granted permissions!

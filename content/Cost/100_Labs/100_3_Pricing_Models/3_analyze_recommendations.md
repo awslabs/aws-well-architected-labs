@@ -53,3 +53,5 @@ We will analyze our Savings Plan to further refine our initial commitment level 
     ![Images/SavingsPlan24.png](/Cost/100_3_Pricing_Models/Images/SavingsPlan24.png)
 
 10. Take this commitment level, apply the findings from the previous exercises (type of Savings Plan and Usage Trend) to make your initial purchase.
+
+{{< prev_next_button link_prev_url="../2_usage_trend/" link_next_url="../4_visualize_recommendations/" />}}

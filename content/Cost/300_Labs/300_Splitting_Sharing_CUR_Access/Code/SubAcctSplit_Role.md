@@ -3,8 +3,8 @@ Review the policy below, and use it as a starting point to create your policy fo
 The following fields will need to be changed: 
 
  - Output bucket: The S3 bucket that will contain the output from the Athena queries 
- - Account ID: the master/payer account ID
- - Source bucket: the location of the original CUR files in the master/payer 
+ - Account ID: the management/payer account ID
+ - Source bucket: the location of the original CUR files in the management/payer 
 
 
 ```

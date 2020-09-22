@@ -9,7 +9,7 @@ pre: "<b>1. </b>"
 As a best practice, do not use the AWS account root user for any task where it's not required. Instead, create a new IAM user for each person that requires administrator access. Then make those users administrators (only if they absolutely need full access to everything) by placing the users into an "Administrators" group to which you attach the AdministratorAccess managed policy.
 
 {{% notice note %}}
-It is highly recommended you centralize your identities instead of using IAM Users and Groups as outlined in this lab. If you have more than a simple AWS test account, use [AWS Single Sign-On](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html).
+It is highly recommended you centralize your identities instead of using IAM Users and Groups as outlined in this lab. If you are getting started and have more than a simple AWS test account, use [AWS Single Sign-On](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html).
 {{% /notice %}}
 
 The following image shows what you will be doing in the next section 1.1 Create Administrator IAM User and Group.

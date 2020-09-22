@@ -19,7 +19,7 @@ The first step in your Cost Optimization journey is to setup your account correc
 
 | | |
 |---|---|
-| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) | This lab requires root access. It is for inital setup so completed only once. If you have a very large or diverse organization with multilpe Master/Payer accounts, you should complete it for each master account or cost optimization team that you have. |
+| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) | This lab requires root access. It is for inital setup so completed only once. If you have a very large or diverse organization with multilpe management/Payer accounts, you should complete it for each management account or cost optimization team that you have. |
 
 ---
 

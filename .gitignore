@@ -1,5 +1,7 @@
 # Hugo default output directory
 /public
+public/
+resources
 
 ## OS Files
 # Windows
@@ -11,10 +13,6 @@ $RECYCLE.BIN/
 # OSX
 .DS_Store
 
-PublicWorkshops.xpr
-docs/Template/
-docs/
-.DS_Store
 *.zip
 .pyc
 dist/

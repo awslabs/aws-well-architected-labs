@@ -61,7 +61,7 @@ SSM Agent is installed by default on:
 
 ### 4.2 Create a Second CloudFormation Stack
 
-1. Create a second CloudFormation stack using the procedure in 2.1 with the following changes:
+1. Create a second CloudFormation stack using the procedure in 3.1 with the following changes:
    * In the **Specify Details** section, define a Stack name, such as `OELabStack2`.
    * Specify the **InstanceProfile** using the `ManagedInstancesRole` you defined.
    * Define the **Workload Name** as `Prod`.

@@ -54,7 +54,7 @@ It is assumed that you have completed 300_Automated_CUR_Updates_and_Ingestion, s
 
 11 - After the stack has successfully updated, you can test the function
 
-12 - Go to the S3 service dashboard, navigate to the **source bucket** and folder containing the current months original master/payer CUR file
+12 - Go to the S3 service dashboard, navigate to the **source bucket** and folder containing the current months original management/payer CUR file
 
 13 - Download the CUR file, and delete the object from the bucket
 

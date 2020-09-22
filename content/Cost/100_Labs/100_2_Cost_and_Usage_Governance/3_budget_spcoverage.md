@@ -43,3 +43,5 @@ You should **not** set an arbitrary limit to alarm on (i.e. alarm if coverage is
 {{% notice tip %}}
 You have created a Savings Plan budget. Use this type of budget to notify you if a change in a workload has reduced coverage, a Savings Plan has expired, or additional usage has been created and a new Savings Plan purchase may be required.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../2_budget_ec2actual/" link_next_url="../4_budget_report/" />}}

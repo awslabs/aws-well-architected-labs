@@ -25,3 +25,5 @@ A key part of cost optimization is ensuring that your systems scale with your us
 
 5. You will now have in depth insight to how your environment is operating. You can see in this example the EC2 Instances scaling every day, you can see a period of large ELB usage, and EC2-Other, which includes charges related to EC2 such as data transfer.
 ![Images/AWSElasticity5.png](/Cost/100_5_Cost_Visualization/Images/AWSElasticity5.png)
+
+{{< prev_next_button link_prev_url="../3_sp_coverage/" link_next_url="../5_ri_coverage/" />}}

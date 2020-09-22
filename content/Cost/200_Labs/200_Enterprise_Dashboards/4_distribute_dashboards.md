@@ -2,8 +2,8 @@
 title: "Distribute Dashboards"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
-weight: 3
-pre: "<b>3. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 ## Authors

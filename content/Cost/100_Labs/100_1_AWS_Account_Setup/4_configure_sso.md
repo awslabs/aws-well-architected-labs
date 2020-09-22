@@ -8,12 +8,12 @@ pre: "<b>4. </b>"
 
 
 
-You will create an AWS Organization, and join two or more accounts to the master account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a master account that is  used for security and administration, with access provided for limited billing tasks. A dedicated member account will be created for the Cost Optimization team or function, and another (or multiple) member account/s created to contain workload resources.
+You will create an AWS Organization, and join two or more accounts to the management account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a management account that is  used for security and administration, with access provided for limited billing tasks. A dedicated member account will be created for the Cost Optimization team or function, and another (or multiple) member account/s created to contain workload resources.
 
-You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you join a member account to a master account, it will contain all billing information for that member account. Member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data before joining accounts to a master account.
+You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you join a member account to a management account, it will contain all billing information for that member account. Member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data before joining accounts to a management account.
 
 ### Configure SSO
-You will create an AWS Organization with the master account.
+You will create an AWS Organization with the management account.
 
 1. Login to the AWS console as an IAM user with the required permissions, start typing **SSO** into the **Find Services** box and click on **AWS Single Sign-On**:
 ![Images/home_sso.png](/Cost/100_1_AWS_Account_Setup/Images/home_sso.png)
@@ -66,7 +66,7 @@ Users will not have permissions until you complete the rest of this step.
 13. Click on **AWS accounts**, select **Permission sets**, and click **Create permission set**:
 ![Images/ssoaccount_createpermission.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_createpermission.png)
 
-14. Select **Create a custom permission set**, enter a name of **Master_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements and paste it in the policy field,  click **Create**.
+14. Select **Create a custom permission set**, enter a name of **management_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements and paste it in the policy field,  click **Create**.
 
 {{% notice warning %}}
 You **MUST** work with your security team/specialist to ensure you create the policies inline with least privileges for your organization.
@@ -102,7 +102,7 @@ You **MUST** work with your security team/specialist to ensure you create the po
 
 15. Click **Create permission set**
 
-16. Select **Create a custom permission set**, enter a name of **Member_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements, replace **(Master CUR bucket)** and **(Cost Optimization Member Account ID)** and paste it in the policy field,  click **Create**.
+16. Select **Create a custom permission set**, enter a name of **Member_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements, replace **(management CUR bucket)** and **(Cost Optimization Member Account ID)** and paste it in the policy field,  click **Create**.
 
 {{% notice warning %}}
 You **MUST** work with your security team/specialist to ensure you create the policies inline with least privileges for your organization.
@@ -128,14 +128,14 @@ You **MUST** work with your security team/specialist to ensure you create the po
                 "Resource": "*"
             },
             {
-                "Sid": "S3MasterCUR",
+                "Sid": "S3ManagementCUR",
                 "Effect": "Allow",
                 "Action": [
                     "s3:GetObject",
                     "s3:ListBucket"
                 ],
                 "Resource": [
-                    "arn:aws:s3:::(Master CUR bucket)"
+                    "arn:aws:s3:::(management CUR bucket)"
                 ]
             },
         {
@@ -202,13 +202,13 @@ You **MUST** work with your security team/specialist to ensure you create the po
 
 ![Images/ssopermissionset_create.png](/Cost/100_1_AWS_Account_Setup/Images/ssopermissionset_create.png)
 
-17. Click **AWS organization**, select the **Master account**, click **Assign users**:
+17. Click **AWS organization**, select the **management account**, click **Assign users**:
 ![Images/ssoaccount_organizationusers.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_organizationusers.png)
 
 18. Select **Groups**, select the **Cost_Optimization** group, click **Next: Permission sets**:
 ![Images/ssoaccount_groups.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_groups.png)
 
-19. Select the **Master_CostOptimization** Permission set, click **Finish**:
+19. Select the **management_CostOptimization** Permission set, click **Finish**:
 ![Images/ssoaccount_grouppermission.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_grouppermission.png)
 
 20. Click **Proceed to AWS accounts**:
@@ -228,9 +228,4 @@ You **MUST** work with your security team/specialist to ensure you create the po
 You have now setup your Cost Optimization users, group and their permissions.
 {{% /notice %}}
 
-
-
-
-
-
-
+{{< prev_next_button link_prev_url="../3_cur/" link_next_url="../5_account_settings/" />}}

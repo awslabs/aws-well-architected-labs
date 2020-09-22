@@ -1,14 +1,10 @@
 ---
 title: "Enable AWS Security Hub via AWS Console"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-09-16T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
 ---
-
-## Authors
-
-- Pierre Liddle, Principal Security Architect
 
 ## Table of Contents
 
@@ -43,6 +39,3 @@ You can review the service role permissions in the following screen. Remember to
 With AWS Security Hub now enabled in your account, you can explore the security insights AWS Security Hub offers.
 ![explore-aws-security-hub.png](/Security/100_Enable_Security_Hub/Images/explore-aws-security-hub.png)
 
-## References & useful resources
-
-[AWS Security Hub](https://aws.amazon.com/security-hub/)

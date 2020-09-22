@@ -26,7 +26,7 @@ You will use AWS CloudFormation to provision some resources needed for this lab.
 
 ### 1.2 Deploy the infrastructure using AWS CloudFormation
 
-Click [here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Fc3pio.s3.amazonaws.com%2Fbackup-lab%2Fbackup-lab.yaml&stackName=WA-BACKUP-LAB) to deploy the stack.
+Click [here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-well-architected-labs-virginia.s3.amazonaws.com%2FReliability%2F200_Testing_Backup_and_Restore_of_Data%2Fbackup-lab.yaml&stackName=WA-BACKUP-LAB) to deploy the stack.
 
 Under **PARAMETERS**, specify an email address that you have access to for **NotificationEmail.**
 
@@ -39,7 +39,7 @@ Click **CREATE** / **CREATE STACK.**
 1.  Use your administrator account to access the CloudFormation console - <https://console.aws.amazon.com/cloudformation/>.
 1.  Click on **CREATE STACK**.
 1.  Under **PREREQUISITE - PREPARE TEMPLATE**, select the option **TEMPLATE IS READY**.
-1.  Under **SPECIFY TEMPLATE**, select the option **AMAZON S3 URL**, enter the link - https://c3pio.s3.amazonaws.com/backup-lab/backup-lab.yaml and click **NEXT**.
+1.  Under **SPECIFY TEMPLATE**, select the option **AMAZON S3 URL**, enter the link - https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/200_Testing_Backup_and_Restore_of_Data/backup-lab.yaml and click **NEXT**.
 1.  Enter a **STACK NAME** such as **WA**-**BACKUP-LAB**.
 1.  For **NotificationEmail,** specify an email address that you have access to.
 1.  Leave default values for the rest of the fields and click **NEXT**.

@@ -98,3 +98,5 @@ This will select underutilized resources from the current, most modern generatio
 Also, do not forget to check the other recommended instance types (columns U to AD); Amazon EC2 Resource Optimization will recommend up to 3 instances for each resource moving from a more conservative recommendation (the first recommendation) to a more aggressive and higher savings recommendation (second and third recommendations).
 
 If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$4,879.56 per month in potential savings*.
+
+{{< prev_next_button link_prev_url="../2_resource_opt/" link_next_url="../4_act_resource_opt/" />}}

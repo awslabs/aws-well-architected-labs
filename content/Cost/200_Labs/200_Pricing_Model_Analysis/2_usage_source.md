@@ -1,6 +1,6 @@
 ---
 title: "Create the Usage Data Source"
-date: 2020-04-24T11:16:09-04:00
+date: 2020-09-15T11:16:09-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
@@ -19,15 +19,15 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
         CREATE VIEW pricing.pricing AS SELECT
         sp.location AS Region,
         sp.discountedoperation AS OS,
-        REPLACE(od.col18, '"') AS InstanceType,
-        REPLACE(od.col35, '"') AS Tenancy,
+        REPLACE(od.col19, '"') AS InstanceType,
+        REPLACE(od.col36, '"') AS Tenancy,
         REPLACE(od.col9, '"') AS ODRate,
         sp.discountedrate AS SPRate
 
         FROM pricing.sp_pricedata sp
         JOIN pricing.od_pricedata od ON
-        ((sp.discountedusagetype = REPLACE(od.col46, '"'))
-        AND (sp.discountedoperation = REPLACE(od.col47, '"')))
+        ((sp.discountedusagetype = REPLACE(od.col47, '"'))
+        AND (sp.discountedoperation = REPLACE(od.col48, '"')))
 
         WHERE od.col9 IS NOT NULL
         AND sp.location NOT LIKE 'Any'

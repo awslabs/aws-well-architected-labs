@@ -1,34 +1,30 @@
 ---
-title: "Level 100: AWS Account and Root User"
-menutitle: "AWS Account and Root User"
-date: 2020-04-24T11:16:08-04:00
+title: "AWS Account Setup and Root User"
+menutitle: "Account Setup and Root User"
+date: 2020-09-16T11:16:08-04:00
 chapter: false
 weight: 1
 hidden: false
 ---
 
-**Last Updated:** July 2019
+**Last Updated:** September 2020
 
-**Authors:** Ben Potter, Security Lead, Well-Architected
+**Author:** Ben Potter, Security Lead, Well-Architected
 
-**Time to complete:** 10-15 minutes
 
 ## Introduction
 
-This hands-on lab will guide you through the introductory steps to configure a new AWS account and secure the root user. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This hands-on lab will guide you through the introductory steps to configure contacts for your AWS account and secure the root user. This process is not required for accounts you manage with [AWS Organizations](https://aws.amazon.com/organizations/) or [AWS Control Tower](https://aws.amazon.com/controltower/) to manage your AWS accounts. For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) security whitepaper. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
-**Best Practices Covered:**
-* Secure AWS account
+## Prerequisites
 
-## Requirements
+- An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
+- Root user login.
 
-An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
+## Costs
 
-**Permissions**: Root user
-
-**Costs**: There are no costs associated with this lab
-
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+- There are no costs for this lab
+- [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps
 

@@ -38,3 +38,5 @@ In this workshop we will take you through your recommendations, and help you cho
 9. This will typically be the highest and lowest savings you can achieve on the previous usage that was analyzed. You can vary those options to achieve the discount and features that most suit your business. You can also combine the options by purchasing multiple savings plans, making some commitment for 1-year with an upfront component, and some with no upfront commitment for a 3-year term.
 
 While the commitment is a full 1 or 3 years, a Savings Plan will typically be paid off much sooner. We will analyze this in the next step.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_usage_trend/" />}}

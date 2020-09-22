@@ -46,3 +46,5 @@ We will now create some custom EC2 reports, which will help to show ongoing cost
 
 13. Here you can see both reports that were saved, note they do not have a lock symbol - which is reserved for AWS configured reports:
 ![Images/AWSCustomEC213.png](/Cost/100_5_Cost_Visualization/Images/AWSCustomEC213.png)
+
+{{< prev_next_button link_prev_url="../5_ri_coverage/" link_next_url="../7_tear_down/" />}}

@@ -8,7 +8,7 @@ weight: 4
 
 Lastly, we will setup your foundations for monitoring the security status of your AWS environment and look at how we can build some basic alerting to security incidents. AWS Security Hub gives you a comprehensive view of the security of your account including compliance checks against best practices such as the [Centre for Information Security AWS Foundational Benchmark](https://aws.amazon.com/quickstart/architecture/compliance-cis-benchmark/). We will also enable Amazon GuardDuty - a threat detection service which leverages machine learning to detect anomalies across your AWS CloudTrail, Amazon VPC Flow Logs, and DNS logs.
 
-Both Security Hub and Guard Duty have a concept of a "Master" and "Member" account. The master account will receive data for all member accounts that are enrolled in it. A best practice is to enable your security audit account to be the master where your security team has read-only access to it. In addition to enabling these tools, setup notifications to ensure that you receive alerts as they occur. Develop a process per alert to handle incident response and over time automate your responses.
+Both Security Hub and Guard Duty have a concept of a "management" and "member" account. The management account will receive data for all member accounts that are enrolled in it. A best practice is to enable your security audit account to be the management where your security team has read-only access to it. In addition to enabling these tools, setup notifications to ensure that you receive alerts as they occur. Develop a process per alert to handle incident response and over time automate your responses.
 
 ### Walk through
 

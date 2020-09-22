@@ -39,7 +39,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## Permissions required
-- Root user and administrator access to the master and member accounts
+- Root user and administrator access to the management and member accounts
 
 
 ## Costs
@@ -53,5 +53,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - The lab should take approximately 30 minutes to complete
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
 
+{{< prev_next_button link_next_url="./1_iam_access/" button_next_text="Start Lab" first_step="true" />}}
