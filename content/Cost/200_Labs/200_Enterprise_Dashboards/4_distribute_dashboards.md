@@ -44,4 +44,4 @@ An email report sends the first page of a dashboard only. You can change the fro
 You have successfully created an email report.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../3_create_data_transfer_cost_analysis/" link_next_url="../5_teardown/" />}}
+{{< prev_next_button link_prev_url="../3_create_data_transfer_cost_analysis/" link_next_url="../5_tear_down/" />}}
