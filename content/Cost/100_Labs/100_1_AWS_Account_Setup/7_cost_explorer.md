@@ -8,7 +8,7 @@ weight: 7
 
 AWS Cost Explorer has an easy-to-use interface that lets you visualize, analyze, and manage your AWS costs and usage over time. You must enable it before you can use it within your accounts, once enabled it is enabled for **ALL** accounts and controlled through IAM policies. The default configuration of Cost Explorer is free, however we will enable hourly granularity, which incurrs an additional cost - [AWS Cost Management Pricing](https://aws.amazon.com/aws-cost-management/pricing/).
 
-1. Log in to your Master account as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your Management account with administrative privileges, and go to the **Billing** console:
 ![Images/AWSExplorer0.png](/Cost/100_1_AWS_Account_Setup/Images/AWSExplorer0.png)
 
 2. Select **Cost Explorer** from the left menu:

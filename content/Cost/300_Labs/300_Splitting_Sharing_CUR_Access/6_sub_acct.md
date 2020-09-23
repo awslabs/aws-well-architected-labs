@@ -38,4 +38,4 @@ The final step is to setup the sub account to automatically scan the S3 folders 
 8 - Go into Athena and execute a preview query to verify access and the data.
 
 
-You have now given the sub account access to their specific CUR files as extracted from the Master/Payer CUR file. This will be automatically updated on any new versions delivered, or any new months delivered.
+You have now given the sub account access to their specific CUR files as extracted from the Management/Payer CUR file. This will be automatically updated on any new versions delivered, or any new months delivered.
