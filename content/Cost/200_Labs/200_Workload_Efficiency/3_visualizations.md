@@ -91,3 +91,6 @@ You can use this to increase your efficiency by removing unwanted requests, for 
 You have now calculated the efficiency of a workload, you can see how your efficiency changes over time, and look into the types of requests to understand what contributes cost to your workload.
 
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../2_efficiency_data/" link_next_url="../4_tear_down/" />}}
+

@@ -19,3 +19,5 @@ weight: 6
 * **Combine Reserved Instance or Savings Plans strategy with Right Sizing to maximize savings:** For Standard RIs and EC2 Instance SP: Perform your pricing model purchases after rightsizing and for Convertible RIs, exchange them after rightsizing. Compute Savings plan will automatically adjust the commitment for the new environment.
 
 * **Ignore burstable instance families (T types):** These families are designed to typically run at low CPU percentages for significant periods of time and shouldn’t be part of the instance types being analyzed for rightsizing.
+
+{{< prev_next_button link_prev_url="../5_ec2_updated_rec/" link_next_url="../7_tear_down/" />}}

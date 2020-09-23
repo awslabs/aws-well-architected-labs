@@ -142,5 +142,5 @@ This section is **optional** and replaces the next two steps by creating the das
 You have successfully created the analysis from a template, this lab is complete.
 {{% /notice %}}
 
-
+{{< prev_next_button link_prev_url="../2_usage_source/" link_next_url="../4_recommendation_dashboard/" />}}
 

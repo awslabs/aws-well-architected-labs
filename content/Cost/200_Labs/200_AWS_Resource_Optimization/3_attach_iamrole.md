@@ -33,3 +33,5 @@ Complete this step by launching this testing t2.micro EC2 instance. In order to 
 
 7. Validade if the IAM role *CloudWatchAgentServerRole* is attached to the desired instance
 ![Images/MemInstall06.png](/Cost/200_AWS_Resource_Optimization/Images/MemInstall06.png)
+
+{{< prev_next_button link_prev_url="../2_create_iamrole/" link_next_url="../4_memory_plugin/" />}}

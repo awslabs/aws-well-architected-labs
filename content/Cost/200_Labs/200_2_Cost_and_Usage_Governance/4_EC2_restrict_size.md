@@ -89,3 +89,5 @@ You have successfully modified the policy to restrict usage by instance size.
 You have successfully implemented an IAM policy that restricts all EC2 instance operations by family and size.
 {{% /notice %}}
 
+
+{{< prev_next_button link_prev_url="../3_ec2_restrict_family/" link_next_url="../5_ec2_volume_type/" />}}

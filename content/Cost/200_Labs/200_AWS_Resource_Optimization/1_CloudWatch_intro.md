@@ -39,3 +39,5 @@ The first step to perform right sizing is to monitor and analyze your current us
 
 ![Images/CloudWatch06.png](/Cost/200_AWS_Resource_Optimization/Images/CloudWatch06.png)
 ![Images/CloudWatch07.png](/Cost/200_AWS_Resource_Optimization/Images/CloudWatch07.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_create_iamrole/" />}}

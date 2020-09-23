@@ -106,3 +106,4 @@ If you are using the supplied files for this lab, check:
 You have successfully setup your CUR file to be analyzed. You can now query your usage and costs via SQL.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../1_verify_cur/" link_next_url="../3_cur_analysis/" />}}

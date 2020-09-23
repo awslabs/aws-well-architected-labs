@@ -37,4 +37,4 @@ You have now configured a dataset to be able to create visualizations.
 {{% /notice %}}
 
 
-
+{{< prev_next_button link_prev_url="../" link_next_url="../2_create_visualizations/" />}}

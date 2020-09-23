@@ -27,3 +27,5 @@ Access to AWS resources requires permissions. You will now create an IAM role to
 ![Images/IAMrole06.png](/Cost/200_AWS_Resource_Optimization/Images/IAMrole06.png)
 
 The role is now created.
+
+{{< prev_next_button link_prev_url="../1_cloudwatch_intro/" link_next_url="../3_attach_iamrole/" />}}

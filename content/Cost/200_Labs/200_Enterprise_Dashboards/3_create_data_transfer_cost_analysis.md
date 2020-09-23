@@ -240,3 +240,4 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../2_modify_cost_intelligence/" link_next_url="../4_distribute_dashboards/" />}}

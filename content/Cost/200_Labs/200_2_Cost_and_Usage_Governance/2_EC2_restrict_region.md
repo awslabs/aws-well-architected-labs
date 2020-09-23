@@ -136,3 +136,4 @@ You have successfully verified that you cannot launch any instances outside of t
 You have successfully implemented an IAM policy that restricts all EC2, RDS and S3 operations to a single region. You have also successfully launched a **c5 Instance Type**.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../1_create_test_group/" link_next_url="../3_ec2_restrict_family/" />}}
