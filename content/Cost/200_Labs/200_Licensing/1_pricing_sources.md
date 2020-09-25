@@ -401,3 +401,5 @@ You now have your sample usage files ready to be setup.
 {{% notice tip %}}
 You have successfully setup the cost and usage data source. We have a database of licensed and unlicensed usage to analyze and verify.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_analyze_understand/" />}}

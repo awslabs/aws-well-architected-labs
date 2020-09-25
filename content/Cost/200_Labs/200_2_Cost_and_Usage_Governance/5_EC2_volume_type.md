@@ -140,3 +140,4 @@ Log out from the console
 You have successfully implemented an IAM policy that denies operations if there is an EBS volume of type io1.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../4_ec2_restrict_size/" link_next_url="../6_tear_down/" />}}

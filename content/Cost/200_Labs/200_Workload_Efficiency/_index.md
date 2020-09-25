@@ -59,5 +59,6 @@ The first time you perform this lab it is recommended to use the sample files su
 - The lab should take approximately 50-60 minutes to complete
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
 
+{{< prev_next_button link_next_url="./1_data_sources/" button_next_text="Start Lab" first_step="true" />}}

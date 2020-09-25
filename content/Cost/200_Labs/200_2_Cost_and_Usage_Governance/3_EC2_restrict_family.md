@@ -141,4 +141,4 @@ You have successfully implemented an IAM policy that restricts all EC2 actions t
 {{% /notice %}}
  
 
-
+{{< prev_next_button link_prev_url="../2_ec2_restrict_region/" link_next_url="../4_ec2_restrict_size/" />}}

@@ -451,3 +451,5 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 {{% notice tip %}}
 You have successfully setup the pricing data source. We have a database of on demand and Savings Plans rates.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_usage_source/" />}}

@@ -139,3 +139,5 @@ If you have a lot of instances manually installing the CloudWatch agent in each 
 - Enter the tag **Key: Event | Value: myStackforWACostLab**
 
 - Click **Next** and **Create stack**
+
+{{< prev_next_button link_prev_url="../3_attach_iamrole/" link_next_url="../5_ec2_updated_rec/" />}}

@@ -87,3 +87,4 @@ The code above will capture ONLY on-demand usage, as defined by costmaster.line_
 You now have your usage data source setup with your pricing dimensions. You can modify the queries above to add or remove any columns you want in the view, which can later be used to visualize the data, for example tags.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../1_pricing_sources/" link_next_url="../3_quicksight_setup/" />}}
