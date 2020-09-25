@@ -58,3 +58,5 @@ We will build the following solution:
 ![Images/AWSCURAutoUpdate12.png](/Cost/300_Automated_CUR_Updates_and_Ingestion/Images/AWSCURAutoUpdate12.png)
 
 You will see that the table is populated, the **recordCount** should be greater than 0. You can now go to Athena and load the partitions and view the cost and usage reports.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_multiple_curs/" />}}

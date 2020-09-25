@@ -56,3 +56,5 @@ Example of performance with a source CUR of 6.3Gb:
 ```
 DROP TABLE (database).temp_table
 ```
+
+{{< prev_next_button link_prev_url="../1_setup_s3_output/" link_next_url="../3_athena_queries/" />}}

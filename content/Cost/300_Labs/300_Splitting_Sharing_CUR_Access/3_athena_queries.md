@@ -34,3 +34,5 @@ drop TABLE IF EXISTS (database).temp_table;
 ```
 
 3 - Repeat the steps above for any additional **create** and **delete** queries as required.
+
+{{< prev_next_button link_prev_url="../2_backfill_data/" link_next_url="../4_lambda_function/" />}}

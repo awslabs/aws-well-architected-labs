@@ -30,8 +30,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
 
-## Best Practice Checklist
-- [ ] Run the CloudFormation template to update a single CUR in AWS Glue/Athena
-- [ ] Modify and run a CloudFormation template to update multiple CURs in AWS Glue/Athena
+{{< prev_next_button link_next_url="./1_cf_stack/" button_next_text="Start Lab" first_step="true" />}}

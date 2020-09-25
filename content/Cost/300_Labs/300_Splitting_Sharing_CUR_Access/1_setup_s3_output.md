@@ -105,3 +105,5 @@ NOTE: replace (bucket name):
 
 15 - Delete the file and ensure all folders are empty.
 The output bucket setup is now complete. Every time the Athena query runs and outputs a file into the S3 bucket, it will automatically have its permissions ACL updated to allow access to the sub account.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_backfill_data/" />}}

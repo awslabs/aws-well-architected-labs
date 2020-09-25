@@ -28,3 +28,5 @@ This step is used to edit parameters (CUR database name and table, SES sender an
 5. Add the updated **config.yml** back to **AutoCURDelivery.zip**.
 
 6. Upload **AutoCURDelivery.zip** to your S3 bucket. Make sure this S3 path is in the same region as Lambda function created in next step.  **NOTE** this is a large 30+MB file, so it may take a little time.
+
+{{< prev_next_button link_prev_url="../3_iam_policy_and_role/" link_next_url="../5_create_lambda_function/" />}}
