@@ -1,6 +1,6 @@
 +++
-title = "100 Labs"
-date = 2020-04-22T11:02:15-04:00
+title = "100 Level Foundational Labs"
+date = 2020-09-19T11:02:15-04:00
 weight = 1
 chapter = false
 pre = ""

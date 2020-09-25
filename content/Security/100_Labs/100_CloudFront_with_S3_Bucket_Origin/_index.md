@@ -23,7 +23,7 @@ This hands-on lab will guide you through the steps to host static web content in
 
 ## Costs
 
-- Typically less than $1 per month if the account is only used for personal testing or training, and the tear down is not performed.
+- Typically less than $1 per month (depending on the number of requests) if the account is only used for personal testing or training, and the tear down is not performed.
 - [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/) [Amazon CloudFront Pricing](https://aws.amazon.com/cloudfront/pricing/)
 - [Amazon CloudFront pricing](https://aws.amazon.com/cloudfront/pricing/)
 - [AWS Pricing](https://aws.amazon.com/pricing/)
