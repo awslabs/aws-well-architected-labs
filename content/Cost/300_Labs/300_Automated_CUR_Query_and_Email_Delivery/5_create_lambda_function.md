@@ -58,3 +58,5 @@ We will now create a Lambda function which will run the code and produce the rep
 
 
 Now you have completed this auto CUR delivery solution with default CUR query. In the next step we will add an additional query, and a CloudWatch scheduled event to trigger Lambda function as required. 
+
+{{< prev_next_button link_prev_url="../4_configure_function_parameters/" link_next_url="../6_cloudwatch_event/" />}}

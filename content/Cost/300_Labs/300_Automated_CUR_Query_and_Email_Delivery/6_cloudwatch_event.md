@@ -66,3 +66,5 @@ We will now create a scheduled Cloudwatch event to trigger Lambda function perio
 ![Images/disable_rule.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/disable_rule.png)
 
 Now you have completed this lab to query CUR with customized query strings from Athena and send it via SES periodically. To explore more, you can define your own query strings in **config.yml** and configure CloudWatch event rule to the rate as required.  
+
+{{< prev_next_button link_prev_url="../5_create_lambda_function/" link_next_url="../7_tear_down/" />}}

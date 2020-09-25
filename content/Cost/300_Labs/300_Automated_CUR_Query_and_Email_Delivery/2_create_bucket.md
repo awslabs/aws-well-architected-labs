@@ -12,3 +12,5 @@ This bucket will store the reports and Athena CUR query results. These will **no
 
 1. Login via SSO, go to the **s3 dashboard** and create an S3 bucket in the required region:
 ![Images/s3_setup01.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/s3_setup01.png)
+
+{{< prev_next_button link_prev_url="../1_architecture/" link_next_url="../3_iam_policy_and_role/" />}}

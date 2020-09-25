@@ -45,3 +45,5 @@ This Lambda function ties everything together, it will remove all objects in the
 
 
 You have now setup the Lambda function which executes the queries. The final step is to trigger this Lambda function every time a new CUR file is delivered.
+
+{{< prev_next_button link_prev_url="../3_athena_queries/" link_next_url="../5_trigger_lambda/" />}}

@@ -39,3 +39,5 @@ The final step is to setup the sub account to automatically scan the S3 folders 
 
 
 You have now given the sub account access to their specific CUR files as extracted from the Management/Payer CUR file. This will be automatically updated on any new versions delivered, or any new months delivered.
+
+{{< prev_next_button link_prev_url="../5_trigger_lambda/" link_next_url="../7_tear_down/" />}}

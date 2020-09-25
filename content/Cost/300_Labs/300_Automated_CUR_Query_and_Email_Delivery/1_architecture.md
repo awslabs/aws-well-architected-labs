@@ -7,3 +7,5 @@ pre: "<b>1. </b>"
 ---
 
 ![Images/architecture.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/architecture.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_create_bucket/" />}}
