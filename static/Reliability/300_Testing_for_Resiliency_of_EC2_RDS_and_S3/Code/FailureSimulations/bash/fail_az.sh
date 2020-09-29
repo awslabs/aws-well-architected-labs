@@ -109,15 +109,16 @@ do
 done
 
 ############################################################################################
-# If the RDS master is in this AZ, then fail it over
+# If the RDS primary is in this AZ, then fail it over
 #
-# Find all the RDS Instances with this AZ as it's master:
-rds_instance_id=`aws rds describe-db-instances | jq -r --arg az $1 --arg vpc $2 '.DBInstances | map(select(.DBSubnetGroup.VpcId==$vpc))[0] | select(.AvailabilityZone==$az).DBInstanceIdentifier'`
+# Find all the RDS Instances in the specified VPC, with this AZ as it's primary:
+rds_instance_id="$(aws rds describe-db-instances --query "DBInstances[?DBSubnetGroup.VpcId=='$2' && AvailabilityZone=='$1'].DBInstanceIdentifier" --output text)"
+
 if test -z "$rds_instance_id"
 then
     echo "No RDS primary instance in $1"
 else
     echo "Failing over $rds_instance_id"
-# Reboot with failover that instance
+    # Reboot with failover that instance
     aws rds reboot-db-instance --db-instance-identifier $rds_instance_id --force-failover
 fi
