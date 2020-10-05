@@ -31,7 +31,7 @@ For a list of Nitro-based instances currently available, head to https://docs.aw
 <!-- {{< tabs name="Region" >}} {{{< tab name="Oregon" include="1_deploy.md" />}} {{{< tab name="Ireland" include="2_testing_before.md" />}} {{{< tab name="Frankfurt" include="3_change_clock.md" />}} {{< /tabs >}} -->
 
 
-
+<!--
 {{< tabs name="Test" >}}
 {{< tab name="Tab1" >}}
 This is tab1
@@ -40,7 +40,7 @@ This is tab1
 This is tab2
 {{< /tab >}}
 {{< /tabs >}}
-
+-->
 
 ## Prerequisites
 
