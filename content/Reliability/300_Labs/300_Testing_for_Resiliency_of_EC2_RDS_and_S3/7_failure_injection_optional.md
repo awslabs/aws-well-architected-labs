@@ -39,3 +39,5 @@ How would you diagnose if this is a larger problem than permissions?
 ### 7.2 More testing you can do
 
 You can use drift detection in the CloudFormation console to see what had changed, or work on code to heal the failure modes.
+
+{{< prev_next_button link_prev_url="../6_failure_injection_az" link_next_url="../8_cleanup/" />}}

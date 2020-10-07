@@ -124,3 +124,5 @@ For this task you are going to specify a Parameter where you can set the bucket 
     * Once you have corrected the error, click **Choose file** again to reload you new corrected file
 * If your CloudFormation stack fails, then click on the **Events** tab and scroll down to find the source of the error
     * If you see a message like `<your_chosen_bucket_name> already exists` then re-do the CloudFormation update steps, but specify a more unique bucket name
+
+{{< prev_next_button link_prev_url="../3_cfn_params/" link_next_url="../5_add_ec2" />}}

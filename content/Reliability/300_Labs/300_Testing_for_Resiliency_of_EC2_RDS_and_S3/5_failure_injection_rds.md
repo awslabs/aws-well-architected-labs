@@ -145,3 +145,4 @@ Now repeat the RDS failure injection steps on this page, starting with [**5.1 RD
 > * The operating system of the DB instance is undergoing software patching
 > * A manual failover of the DB instance was initiated using Reboot with failover
 
+{{< prev_next_button link_prev_url="../4_failure_injection_ec2" link_next_url="../6_failure_injection_az/" />}}

@@ -41,3 +41,7 @@ After deletion of the **WebApp1-VPC** CloudFormation stack is complete then dele
 * [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) (see the Reliability pillar)
 * [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
 * [Health Checks for Your Target Groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html) (for your Application Load Balancer)
+
+{{< prev_next_button link_prev_url="../4_fail_open/" title="Congratulations!" final_step="true" >}}
+With completion of this lab you have learned several best practices. Consider how you can implement these, and update the Well-Architected Review for your workloads: [REL 5  How do you design interactions in a distributed system to mitigate or withstand failures?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-workload-architecture.html) [REL 11  How do you design your workload to withstand component failures?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html).
+{{< /prev_next_button >}}

@@ -43,3 +43,5 @@ Before testing, please prepare the following:
     |:---:|
     |**Availability Zones** (**AZ**s) are isolated sets of resources within a region, each with redundant power, networking, and connectivity, housed in separate facilities. Each Availability Zone is isolated, but the Availability Zones in a Region are connected through low-latency links. AWS provides you with the flexibility to place instances and store data across multiple Availability Zones within each AWS Region for high resiliency.|
     |*__Learn more__: After the lab [see this whitepaper](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html) on regions and availability zones*|
+
+{{< prev_next_button link_prev_url="../2_configure_env" link_next_url="../4_failure_injection_ec2/" />}}

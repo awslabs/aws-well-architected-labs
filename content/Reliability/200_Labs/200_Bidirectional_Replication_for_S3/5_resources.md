@@ -12,8 +12,8 @@ weight: 5
 * [AWS re:Invent 2019: Backup-and-restore and disaster-recovery solutions with AWS (STG208)](https://youtu.be/7gNXfo5HZN8?ref=wellarchitected)
 * [S3: Cross-Region Replication](http://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html?ref=wellarchitected)
 * [Amazon S3 Replication Time Control for predictable replication time, backed by an SLA](https://aws.amazon.com/about-aws/whats-new/2019/11/amazon-s3-replication-time-control-for-predictable-replication-time-backed-by-sla?ref=wellarchitected)
-* [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) (see the Reliability pillar)
-* [Well-Architected best practices for reliability](https://wa.aws.amazon.com/wat.pillar.reliability.en.html)
+* [Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
+* [Well-Architected best practices for reliability](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html)
 * [Our Friend Rufus](https://www.amazon.com/gp/help/customer/display.html?nodeId=3711811)
 
 ### Additional information on multi-region strategies for disaster recovery (DR)
@@ -37,3 +37,7 @@ If necessary, when architecting a multi-region strategy for your workload, you s
 * **Multi-region active-active** (RPO is none or possibly seconds, RTO in seconds): Your workload is deployed to, and actively serving traffic from, multiple AWS Regions. This strategy requires you to synchronize users and data across the Regions that you are using. When the time comes for recovery, use services like Amazon Route 53 or AWS Global Accelerator to route your user traffic to where your workload is healthy.
 
 The bi-directional cross-region replication that you created in this lab is helpful for **Pilot light**, **Warm standby**, and **Multi-region active-active** strategies.
+
+{{< prev_next_button link_prev_url="../4_cleanup/" title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 13  How do you plan for disaster recovery (DR)?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
+{{< /prev_next_button >}}

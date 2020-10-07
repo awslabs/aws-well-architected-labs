@@ -50,3 +50,5 @@ Click **CREATE** / **CREATE STACK.**
 **Note:** Once stack creation starts, monitor the email address you entered. You should receive an email from SNS with the subject **AWS Notification - Subscription Confirmation.** Click on the link **Confirm subscription** to confirm the subscription of your email to the SNS Topic.
 
 The stack takes about 3 minutes to create all the resources. Periodically refresh the page until you see that the **STACK STATUS** is in **CREATE_COMPLETE**. Once the stack is in **CREATE_COMPLETE**, visit the **OUTPUTS** section for the stack and note down the **KEY** and **VALUE** for each of the outputs. This information will be used later in the lab.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_configure_backup_plan/" />}}

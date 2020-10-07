@@ -163,3 +163,5 @@ In this task you will update your CloudFormation template to modify the deployed
 ![ClickPublicDns](/Reliability/200_Deploy_and_Update_CloudFormation/Images/ClickPublicDns.png)
 
 You should see the Apache HTTP server Test Page, indicating your EC2 instance is running the web server and is accessible from the Internet.
+
+{{< prev_next_button link_prev_url="../4_add_s3" link_next_url="../6_cleanup/" />}}

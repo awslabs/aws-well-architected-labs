@@ -38,3 +38,5 @@ Look through the template. You will notice several sections:
    * This URL is what you used to access the WebApp
 
 * The [Metadata section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/metadata-section-structure.html) here is used to group and order how the CloudFormation parameters are displayed when you deploy the template using the AWS Console
+
+  {{< prev_next_button link_prev_url="../3_explore_webapp/" link_next_url="../5_cleanup/" />}}

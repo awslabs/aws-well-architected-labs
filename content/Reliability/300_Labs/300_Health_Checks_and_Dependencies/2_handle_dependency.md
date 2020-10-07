@@ -200,3 +200,5 @@ The Website is working again, but in a degraded capacity since it is no longer s
 |Well-Architected for Reliability: Best practice|
 |:--:|
 |**Implement graceful degradation to transform applicable hard dependencies into soft dependencies**: When a component's dependencies are unhealthy, the component itself can still function, although in a degraded manner. For example, when a dependency call fails, instead use a predetermined static response.|
+
+{{< prev_next_button link_prev_url="../1_deploy_app" link_next_url="../3_deep_healthcheck/" />}}

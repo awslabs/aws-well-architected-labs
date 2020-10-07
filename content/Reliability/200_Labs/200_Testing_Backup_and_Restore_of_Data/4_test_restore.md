@@ -75,3 +75,5 @@ For the purpose of this lab, we will simulate the action performed by AWS Backup
 **Perform data backup automatically or reproduce the data from sources automatically:** Automate backups or the reproduction from sources using AWS features (for example, snapshots of Amazon RDS and Amazon EBS, versions on Amazon S3, etc.), AWS Marketplace solutions, or third-party solutions.
 
 **Perform periodic recovery of the data to verify backup integrity and processes:** Validate that your backup process implementation meets Recovery Time Objective and Recovery Point Objective through a recovery test.
+
+{{< prev_next_button link_prev_url="../3_enable_notifications" link_next_url="../5_cleanup/" />}}

@@ -127,3 +127,5 @@ These are _optional_. They help you to explore and understand bi-direction cross
 ### 3.5 Summary
 
 You created two S3 buckets in two different AWS regions. You then setup bi-directional cross-region replication (CRR) between the two Amazon S3 buckets. Putting an object in either bucket resulted in the object asynchronously being backed up to the _other_ bucket. Objects encrypted in their original bucket are also encrypted in their replication bucket. Objects are replicated once -- replication "looping" is prevented.
+
+{{< prev_next_button link_prev_url="../2_configure_replication/" link_next_url="../4_cleanup/" />}}

@@ -141,3 +141,5 @@ Here you will build a state machine using AWS Step Functions and AWS Lambda that
 ![DemoWebsite](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/DemoWebsite.png)
 
 (image will vary depending on what you supplied for `websiteimage`)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_configure_env/" />}}

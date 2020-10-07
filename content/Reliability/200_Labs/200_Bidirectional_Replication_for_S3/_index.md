@@ -37,7 +37,11 @@ If you are running the at an AWS sponsored workshop then you may be provided wit
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. This account MUST NOT be used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create IAM Polices and Roles, create S3 buckets and bucket policies, get and put objects into S3 buckets, and create and read CloudTrail trails and CloudWatch Log Groups.
 
+{{% notice note %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+{{< prev_next_button link_next_url="./1_deploy_infra/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
 {{% children  %}}

@@ -68,3 +68,5 @@ You will now use this **template** to launch a **CloudFormation stack** that wil
 {{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="simple_stack.yaml" /%}}
 
 1. Deployment will take approximately 30 seconds to deploy.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_understand_deploy/" />}}
