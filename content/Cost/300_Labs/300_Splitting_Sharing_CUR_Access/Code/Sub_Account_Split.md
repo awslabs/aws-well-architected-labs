@@ -155,7 +155,7 @@ def run_delete_athena_queries():
         # Tables must not exist before creation
         # If the function runs for a long time ($) you should implement step functions or a cost effective wait
         # This is a low "cost of complexity" solution
-        while 'RUNNING' in response:
+        while response in ['QUEUED','RUNNING']:
             # Busy wait to make sure it finishes 
             time.sleep(1)
             # Get the current state of the query
