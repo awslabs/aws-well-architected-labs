@@ -34,6 +34,13 @@ For a list of Nitro-based instances currently available, head to https://docs.aw
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create an IAM Role, instance profiles, and EC2 instances.
 * An IAM user or federated credentials into that account that has permissions to access AWS System Manager
 
+## Costs
+- https://aws.amazon.com/ec2/pricing/on-demand/
+- This lab will create 2 EC2 instances in the default VPC
+  - The cost per hour to run this lab would be __$0.196 ($4.704/day)__ if you accept the default parameters in us-east-1
+- Refer to the link above for pricing if you deploy in a different region
+- There is no additional cost for the AWS Systems Manager run commands used during the lab.
+
 {{% notice note %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
