@@ -58,7 +58,7 @@ This 300 level lab covers multiple failure injection scenarios. If you would pre
 {{< prev_next_button link_next_url="./1_deploy_infra/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
 
 ## Costs
 {{% notice note %}}
