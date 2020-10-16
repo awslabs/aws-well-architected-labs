@@ -66,8 +66,8 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 {{% /notice %}}
 
 * This lab will cost approximately $6.50 per day when deployed
-* About half of this cost is the charge for NatGateway-Hours
-* Please follow the directions for [Tear Down](../8_cleanup.md) to avoid unwanted costs after you have concluded this lab
+* About half of this cost is the charge for _NatGateway-Hours_
+* Please follow the directions for [Tear Down](./8_cleanup.md) to avoid unwanted costs after you have concluded this lab
 
 
 ## Additional lab resources:
