@@ -12,7 +12,7 @@ the resources that it created.
 
 ### Remove AWS CloudFormation provisioned resources
 
-You will now delete **CloudFormationLab** CloudFormation stack.
+You will now delete the **CloudFormationLab** CloudFormation stack.
 
 #### How to delete an AWS CloudFormation stack
 

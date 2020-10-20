@@ -44,4 +44,13 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 {{< prev_next_button link_next_url="./1_deploy_infra/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
+
+## Costs
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+* In this lab you will do three S3 PUTs, store under 1MB of data in two S3 buckets, and transfer under 1MB of data from one region to another.
+* The total of these operations will not exceed $0.01. Under normal conditions there should be no accrued charges for this lab.
+* Please follow the directions for [Tear Down](./6_cleanup/) to remove all deployed resources when you are done with this lab.
