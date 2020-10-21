@@ -48,4 +48,14 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 {{< prev_next_button link_next_url="./1_deploy_infra/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
+
+## Costs
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+* This lab will cost approximately $1.00 per day when deployed
+* It may be less (or zero) if you have remaining [AWS Free Tier](https://aws.amazon.com/free/) usage on your account
+* The majority of this cost is the charge for _EC2 BoxUsage_ (per hour usage charge) for the single EC2 instance you deploy
+* Please follow the directions for [Tear Down](./6_cleanup/) to avoid unwanted costs after you have concluded this lab
