@@ -150,7 +150,7 @@ You now have your data set setup ready to create a visualization.
 ### Create the Dashboard
 We will now use the CLI to create the dashboard from the Cost Intelligence Dashboard template, then create an Analysis you can customize and modify in the next step.
 
-1. Go to this we page to request access to the template. Enter you AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
+1. Go to this page to request access to the template. Enter your AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
 
 2. Edit the following command, replacing **AccountID** and **region**, then using the CLI list the QuickSight datasets and copy the **Name** and **Arn** for the 4 datasets: **s3_view**, **ec2_running_cost**, **compute_savings_plan_eligible_spend**, **summary_view**:
 
