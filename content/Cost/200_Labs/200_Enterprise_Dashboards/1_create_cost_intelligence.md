@@ -51,7 +51,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
 
 {{% notice note %}}
-The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to July 26, 2020 you will want to update to the latest views.
+The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to October 26, 2020 you will want to update to the latest views.
 {{% /notice %}}
 
 
