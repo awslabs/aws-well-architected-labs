@@ -316,7 +316,7 @@ Modify the following SQL query for View1:
 			WHEN ("line_item_usage_type" LIKE '%Spot%') THEN 'Spot' 
 			ELSE 'OnDemand' END "purchase_option"
 		,CASE 
-		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
+		 WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
 		 WHEN ("line_item_line_item_type" = 'Usage') THEN '' 
 		 ELSE '' END "ri_sp_arn"
