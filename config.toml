@@ -3,7 +3,6 @@ languageCode = "en-us"
 title = "AWS Well-Architected Labs"
 theme = "learn"
 
-
 [params]
 themeVariant = "walabs"
 disableShortcutsTitle = true
