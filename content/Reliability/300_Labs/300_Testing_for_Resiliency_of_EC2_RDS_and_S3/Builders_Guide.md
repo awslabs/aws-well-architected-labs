@@ -68,7 +68,7 @@ This is an JSON string that looks like the following:
       'boot_bucket'           : 'aws-well-architected-labs-ohio',
       'boot_prefix'           : 'Reliability/',
       'boot_object'           : 'bootstrap300Reliability.sh',
-      'websiteimage'          : 'https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg'
+      'websiteimage'          : 'https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/images/Cirque_of_the_Towers.jpg'
     }
     
 There is considerable "shared knowledge" between the state machine functions that is all hard-coded, like stack names.

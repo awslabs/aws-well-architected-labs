@@ -100,7 +100,7 @@ def deploy_read_replica(event):
         region = os.environ.get('AWS_REGION', AWS_REGION)
         replica_region = os.environ.get('AWS_REGION', AWS_REGION)
         cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
-        bucket = "arc327-well-architected-for-reliability",
+        bucket = "aws-well-architected-labs-ohio",
         key_prefix = "/"
 
     # Create CloudFormation client to get the VPC in the secondary region
