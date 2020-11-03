@@ -51,13 +51,13 @@ SSM Agent is installed by default on:
    1. Choose **Create role**.
 1. Apply this role to the instances you wish to manage with Systems Manager:
    1. Navigate to the [EC2 Console](https://console.aws.amazon.com/ec2/) and choose **Instances**.
-   1. Select the first instance and then choose **Actions**, **Instance Settings**, and **Attach/Replace IAM Role**.
+   1. Select the first instance and then choose **Actions**, **Security**, and **Modify IAM role**.
    1. Under **Attach/Replace IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Apply**.
    1. After you receive confirmation of success, choose **Close**.
    1. Repeat this process, assigning **ManagedInstancesRole** to each of the 3 remaining instances.
 1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Managed Instances** from the navigation bar. Periodically choose **Managed Instances** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
 
->**Note**<br>If desired, you can use a [more restrictive permission set](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html) to grant access to Systems Manager.
+>**Note**</br>If desired, you can use a [more restrictive permission set](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html) to grant access to Systems Manager.
 
 ### 4.2 Create a Second CloudFormation Stack
 
@@ -83,7 +83,7 @@ You can use [AWS Systems Manager Inventory](https://docs.aws.amazon.com/systems-
 1. In the **Setup Inventory** screen, define targets for inventory:
    1. Under **Specify targets by**, select **Specifying a tag**
    1. Under **Tags** specify `Environment` for the key and `OELabIPM` for the value
->>**Note**<br>You can select all managed instances in this account, ensuring that all managed instances will be inventoried. You can constrain inventoried instances to those with specific tags, such as Environment or Workload. Or you can manually select specific instances for inventory.
+>>**Note**</br>You can select all managed instances in this account, ensuring that all managed instances will be inventoried. You can constrain inventoried instances to those with specific tags, such as Environment or Workload. Or you can manually select specific instances for inventory.
 
 4. Schedule the frequency with which inventory is collected. The default and minimum period is 30 minutes
    1. For **Collect inventory data every**, accept the default **30** Minute(s)
@@ -97,7 +97,7 @@ You can use [AWS Systems Manager Inventory](https://docs.aws.amazon.com/systems-
 1. To create a new inventory policy, from **Inventory**, choose **Setup inventory**.
 1. To edit an existing policy, from **State Manager** in the left navigation menu, select the association and choose **Edit**.
 
->**Note**<br>You can create multiple Inventory specifications. They will each be stored as **associations** within **Systems Manager State Manager**.
+>**Note**</br>You can create multiple Inventory specifications. They will each be stored as **associations** within **Systems Manager State Manager**.
 
 
 ## Systems Manager: State Manager
@@ -125,10 +125,10 @@ _Inventory_ is accomplished through the following:
    * The activities defined in the AWS-GatherSoftwareInventory command document.
    * The parameters provided in the **Parameters** section are passed to the document at execution.
    * The targets are defined in the **Targets** section.
-   >**Important**<br>In this example there is a single target, the wildcard. The wildcard matches _all_ instances making them _all_ targets.
+   >**Important**</br>In this example there is a single target, the wildcard. The wildcard matches _all_ instances making them _all_ targets.
    * The schedule for this activity is defined under **Specify schedule** and **Specify with** to use a CRON/Rate expression on a 30 minute interval.
    * There is the option to specify **Output options**.
-   >**Note**<br>If you change the command document, the **Parameters** section will change to be appropriate to the new command document.
+   >**Note**</br>If you change the command document, the **Parameters** section will change to be appropriate to the new command document.
 
 
 
@@ -136,7 +136,7 @@ _Inventory_ is accomplished through the following:
 1. Choose one of the **Instance ID** links to go to the inventory of the instance. The Inventory tab is now populated and you can track associations and their last activity under the Associations tab.
 1. Navigate to **Compliance** under **Instances & Nodes** in the navigation bar. Here you can view the overall compliance status of your managed instances in the **Compliance Summary** and the individual compliance status of systems in the **Corresponding managed instances** section below.
 
->**Note**<br>The inventory activity can take up to 10 minutes to complete. While waiting for the inventory activity to complete, you can proceed with the next section.
+>**Note**</br>The inventory activity can take up to 10 minutes to complete. While waiting for the inventory activity to complete, you can proceed with the next section.
 
 
 ## Systems Manager: Compliance
