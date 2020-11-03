@@ -19,12 +19,11 @@ You must write one query for the extraction of the data, which will create a tem
 
 ```
 CREATE TABLE (database).temp_table
-WITH (
-      format = 'Parquet',
-      parquet_compression = 'GZIP',
-      external_location = 's3://(bucket)/(folder)/subfolder')
-AS SELECT * FROM "(database)"."(table)"
-where line_item_usage_account_id like '(some value)' and CAST(bill_billing_period_start_date as VARCHAR) like concat(substr(CAST(current_date as VARCHAR),1,7),'-01%')
+WITH ( format = 'Parquet', parquet_compression = 'GZIP', external_location = 's3://(bucket)/(folder)/subfolder') AS
+SELECT *
+FROM "(database)"."(table)"
+WHERE line_item_usage_account_id = '(some value)' AND
+        (year=CAST(year(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR)) AND month=lpad(CAST(month(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR),2,'0')
 ```
 
 2 - Create the accompanying delete statement named **delete_linked_folder-name** to delete the temporary table:
