@@ -48,6 +48,7 @@ The following fields will need to be changed:
                 "glue:GetDatabase",
                 "glue:CreateTable",
                 "glue:GetPartitions",
+                "glue:GetPartition",
                 "glue:DeleteTable",
                 "glue:GetTable"
             ],

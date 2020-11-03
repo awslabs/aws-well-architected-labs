@@ -36,7 +36,7 @@ Modify the following SQL query for View5 - RI SP Mapping:
 			WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"ELSE '' END "ri_sp_arn_mapping"
 		, CASE 
 			WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
-			WHEN ("reservation_reservation_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) ELSE NULL END "ri_sp_end_date"
+			WHEN ("reservation_reservation_a_r_n" <> '' AND "reservation_end_time" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) ELSE NULL END "ri_sp_end_date"
 		   FROM
 		     (ADD YOUR CUR TABLE NAME)
 		   WHERE (("line_item_line_item_type" = 'RIFee') OR ("line_item_line_item_type" = 'SavingsPlanRecurringFee'))
@@ -96,9 +96,9 @@ Modify the following SQL query for View5 - RI SP Mapping:
 			WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 			-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
 			ELSE '' END "ri_sp_arn_mapping"
-		, CASE 
+		,CASE 
 			WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
-			-- WHEN ("reservation_reservation_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
+			-- WHEN ("reservation_reservation_a_r_n" <> '' AND "reservation_end_time" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
 			ELSE NULL END "ri_sp_end_date"
 		   FROM
 		    (ADD YOUR CUR TABLE NAME)
@@ -173,7 +173,7 @@ Modify the following SQL query for View5 - RI SP Mapping:
 			ELSE '' END "ri_sp_arn_mapping"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
-			WHEN ("reservation_reservation_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
+			WHEN ("reservation_reservation_a_r_n" <> '' AND "reservation_end_time" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
 			ELSE NULL END "ri_sp_end_date"
 		   FROM
 		    (ADD YOUR CUR TABLE NAME)
@@ -246,13 +246,13 @@ Modify the following SQL query for View5 - RI SP Mapping:
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
-			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
+			WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
 			ELSE '' END "ri_sp_arn_mapping"
-		, CASE 
-		--	WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
-		--	WHEN ("reservation_reservation_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
-			WHEN ("line_item_line_item_type" = 'Usage') THEN NULL
-			ELSE NULL END "ri_sp_end_date"
+		, CAST(CASE 
+		 -- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN CAST(from_iso8601_timestamp("savings_plan_end_time") AS timestamp)
+		 -- WHEN ("reservation_reservation_a_r_n" <> '' AND "reservation_end_time" <> '') THEN CAST(from_iso8601_timestamp("reservation_end_time") AS timestamp) 
+ 		    WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
+  		   ELSE NULL END AS timestamp) "ri_sp_end_date"
 		   FROM
 		    (ADD YOUR CUR TABLE NAME)
 		WHERE (
@@ -271,22 +271,22 @@ Modify the following SQL query for View5 - RI SP Mapping:
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
-			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
+			WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
 			ELSE '' END "ri_sp_arn_mapping"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_purchase_term" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_lease_contract_length"
-			WHEN ("line_item_line_item_type" = 'Usage') THEN ''
+			WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
 		ELSE '' END "ri_sp_term"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_offering_type" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_offering_class" 
-		 WHEN ("line_item_line_item_type" = 'Usage') THEN ''
+		 WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
 			ELSE '' END "ri_sp_offering"
 		, CASE 
 		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_payment_option" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "pricing_purchase_option"
-		 WHEN ("line_item_line_item_type" = 'Usage') THEN ''
+		 WHEN ("line_item_line_item_type" = 'Usage') THEN ' '
 			ELSE '' END "ri_sp_Payment"
 		   FROM
 		     (ADD YOUR CUR TABLE NAME)
@@ -295,7 +295,7 @@ Modify the following SQL query for View5 - RI SP Mapping:
 		 -- OR
 		 -- ("line_item_line_item_type" = 'DiscountedUsage') 
 		 -- OR 
-		  -- ("line_item_line_item_type" = 'SavingsPlanCoveredUsage')
+		 -- ("line_item_line_item_type" = 'SavingsPlanCoveredUsage')
 		 )
 		
 		)  b ON (("a"."ri_sp_arn_mapping" = "b"."ri_sp_arn_mapping") AND ("a"."billing_period_mapping" = "b"."billing_period_mapping") AND ("a"."payer_account_id_mapping" = "b"."payer_account_id_mapping")))
