@@ -98,7 +98,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 def run(argv):
-    image_url = "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+    image_url = "https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/images/Cirque_of_the_Towers.jpg"
     try:
         opts, args = getopt.getopt(
             argv,

@@ -21,7 +21,7 @@ hidden: true
               "workshop": "300-ResiliencyofEC2RDSandS3",
               "boot_bucket": "aws-well-architected-labs-ohio",
               "boot_prefix": "Reliability/",
-              "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+              "websiteimage" : "https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/images/Cirque_of_the_Towers.jpg"
             },
             "region2": {
               "log_level": "DEBUG",
@@ -33,7 +33,7 @@ hidden: true
               "workshop": "300-ResiliencyofEC2RDSandS3",
               "boot_bucket": "aws-well-architected-labs-ohio",
               "boot_prefix": "Reliability/",
-              "websiteimage" : "https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg"
+              "websiteimage" : "https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/images/Cirque_of_the_Towers.jpg"
             }
           }
 

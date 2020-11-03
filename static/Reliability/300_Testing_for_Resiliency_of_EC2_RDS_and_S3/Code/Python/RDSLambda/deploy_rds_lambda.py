@@ -100,7 +100,7 @@ def deploy_rds(event):
         logger.error("Unexpected error!\n Stack Trace:", traceback.format_exc())
         region = os.environ.get('AWS_REGION', AWS_REGION)
         cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
-        bucket = "arc327-well-architected-for-reliability",
+        bucket = "aws-well-architected-labs-ohio",
         key_prefix = "/"
     # Create CloudFormation client
     client = boto3.client('cloudformation', region)
