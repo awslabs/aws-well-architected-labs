@@ -16,7 +16,7 @@ These hands-on labs will teach you how to implement **reliable** workloads using
 * **Reliability** depends on multiple factors, of which **resiliency** is one the most impactful.
 
 For more information about Reliability, read the
-[AWS Well-Architected Reliability whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Reliability-Pillar.pdf).
+[AWS Well-Architected Reliability whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html).
 
 ## Reliability Labs
 
