@@ -1,3 +1,17 @@
+{{/*
+  You must use this with the tabs shortcode
+  Example:
+	{{< tabs name="Test" >}}
+	{{< tab name="Tab1" >}}
+	This is tab1
+	{{< /tab >}}
+	{{< tab name="Tab2" >}}
+	This is tab2
+	{{< /tab >}}
+	{{< /tabs >}}
+
+*/}}
+
 {{ if .Parent }}
 	{{ $name := trim (.Get "name") " " }}
 	{{ $include := trim (.Get "include") " "}}

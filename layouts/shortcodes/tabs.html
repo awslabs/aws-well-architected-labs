@@ -1,3 +1,22 @@
+{{/*
+  You must use this with the tab shortcode
+
+  Example:
+	{{< tabs name="Test" >}}
+	{{< tab name="Tab1" >}}
+	This is tab1
+	{{< /tab >}}
+	{{< tab name="Tab2" >}}
+	This is tab2
+	{{< /tab >}}
+	{{< /tabs >}}
+
+  Example with embedded includes:
+	{{< tabs name="Sub-Tasks" >}} {{{< tab name="Step 1" include="1_deploy.md" />}} {{{< tab name="Step 2" include="2_testing_before.md" />}} {{{< tab name="Step 3" include="3_change_clock.md" />}} {{< /tabs >}}
+
+*/}}
+
+
 {{ .Page.Scratch.Add "tabset-counter" 1 }}
 {{ $tab_set_id := .Get "name" | default (printf "tabset-%s-%d" (.Page.RelPermalink) (.Page.Scratch.Get "tabset-counter") ) | anchorize }}
 {{ $tabs := .Scratch.Get "tabs" }}
