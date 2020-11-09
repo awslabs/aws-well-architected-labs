@@ -214,3 +214,5 @@ If you are using your own Cost and Usage Reports, you will need to have them alr
 {{% notice tip %}}
 You now have both the application and cost data sources setup, ready to create an efficiency metric.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_efficiency_data/" />}}

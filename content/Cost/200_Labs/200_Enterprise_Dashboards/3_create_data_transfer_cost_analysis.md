@@ -75,12 +75,12 @@ If you have large data for data transfer in CUR, we do NOT recommend using SPICE
     - payer_account_id
 9. Hover over **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
 
-10. Hover over **blended_rate**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
+10. Hover over **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
 ![Images/quicksight_dashboard_dt-7.1.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt-7.1.png)
 
 11. Ensure the following fields are all **# Decimal**, repeat **step 10** if necessary for:
 
-	- belnded_cost
+	- blended_cost
     - unblended_cost
 	- public_cost
     - unblended_rate
@@ -240,3 +240,4 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../2_modify_cost_intelligence/" link_next_url="../4_distribute_dashboards/" />}}

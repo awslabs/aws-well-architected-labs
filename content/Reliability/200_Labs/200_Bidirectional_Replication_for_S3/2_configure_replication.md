@@ -110,3 +110,5 @@ After setting up the second rule, you will have completed configuration of bi-di
 The screen should say **Replication configuration updated successfully.** and display the Source, Destination, and Permissions of your replication rule
 
 ![RuleTwoCreated](/Reliability/200_Bidirectional_Replication_for_S3/Images/RuleTwoCreated.png)
+
+{{< prev_next_button link_prev_url="../1_deploy_infra/" link_next_url="../3_test_replication/" />}}

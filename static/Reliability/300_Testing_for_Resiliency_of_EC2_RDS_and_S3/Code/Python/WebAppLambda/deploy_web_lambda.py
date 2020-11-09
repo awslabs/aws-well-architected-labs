@@ -138,7 +138,7 @@ def deploy_web_servers(event):
     except Exception:
         region = os.environ.get('AWS_REGION', AWS_REGION)
         cfn_region = os.environ.get('AWS_REGION', AWS_REGION)
-        bucket = "arc327-well-architected-for-reliability",
+        bucket = "aws-well-architected-labs-ohio",
         key_prefix = "/"
     # Create CloudFormation client
     client = boto3.client('cloudformation', region)
@@ -354,7 +354,7 @@ if __name__ == "__main__":
         'boot_bucket': 'aws-well-architected-labs-ohio',
         'boot_prefix': 'Reliability/',
         'boot_object': 'bootstrapARC327.sh',
-        'websiteimage': 'https://s3.us-east-2.amazonaws.com/arc327-well-architected-for-reliability/Cirque_of_the_Towers.jpg',
+        'websiteimage': 'https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/images/Cirque_of_the_Towers.jpg',
         'workshop': 'LondonSummit'
     }
     os.environ['log_level'] = os.environ.get('log_level', event['log_level'])

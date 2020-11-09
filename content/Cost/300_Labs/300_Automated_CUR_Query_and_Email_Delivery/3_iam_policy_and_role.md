@@ -68,3 +68,5 @@ This step is used to create an IAM policy and a role that allows Lambda function
 
 8. At **Review** page, configure a name **Lambda_Auto_CUR_Delivery_Role**, click **Create role**. This role will be used for lambda function execution.
 ![Images/lambda_role_name.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/lambda_role_name.png) 
+
+{{< prev_next_button link_prev_url="../2_create_bucket/" link_next_url="../4_configure_function_parameters/" />}}

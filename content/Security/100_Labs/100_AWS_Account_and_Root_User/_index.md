@@ -14,7 +14,7 @@ hidden: false
 
 ## Introduction
 
-This hands-on lab will guide you through the introductory steps to configure contacts for your AWS account and secure the root user. This process is not required for accounts you manage with [AWS Organizations](https://aws.amazon.com/organizations/) or [AWS Control Tower](https://aws.amazon.com/controltower/) to manage your AWS accounts. For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) in the [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) security whitepaper. The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This hands-on lab will guide you through the introductory steps to configure contacts for your AWS account and secure the root user. This process is not required for accounts you manage with [AWS Organizations](https://aws.amazon.com/organizations/) or [AWS Control Tower](https://aws.amazon.com/controltower/). For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) in the AWS Well-Architected [security whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html). The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ This hands-on lab will guide you through the introductory steps to configure con
 ## References & Useful Resources
 
 * [AWS Tasks That Require Root User](https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html)
-* [https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
+* [Credential Report](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html)
 * [AWS Identity and Access Management User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
 * [IAM Best Practices and Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/IAMBestPracticesAndUseCases.html)
 * [Resetting Your Lost or Forgotten Passwords or Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys_retrieve.html)

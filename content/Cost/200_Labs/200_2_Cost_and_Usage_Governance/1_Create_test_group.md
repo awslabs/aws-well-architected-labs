@@ -48,3 +48,5 @@ This lab requires you to develop a restrictive IAM policy, then apply the polici
 
 12. Record the **logon link**, the **User** and the **Password** for later use, click **Close**:
 ![Images/AWSCreateTest12.png](/Cost/200_2_Cost_and_Usage_Governance/Images/AWSCreateTest12.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_ec2_restrict_region/" />}}

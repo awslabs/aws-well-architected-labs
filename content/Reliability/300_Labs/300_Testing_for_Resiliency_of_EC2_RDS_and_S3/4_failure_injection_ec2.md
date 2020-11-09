@@ -118,3 +118,5 @@ _Draining_ allows existing, in-flight requests made to an instance to complete, 
 #### 4.2.4 EC2 failure injection - conclusion
 
 Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
+
+{{< prev_next_button link_prev_url="../3_failure_injection_prep" link_next_url="../5_failure_injection_rds/" />}}

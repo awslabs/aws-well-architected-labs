@@ -64,4 +64,6 @@ Finally you create a visualization with calculations in QuickSight which allows 
 - The lab should take approximately 50-60 minutes to complete
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
+
+{{< prev_next_button link_next_url="./1_pricing_sources/" button_next_text="Start Lab" first_step="true" />}}

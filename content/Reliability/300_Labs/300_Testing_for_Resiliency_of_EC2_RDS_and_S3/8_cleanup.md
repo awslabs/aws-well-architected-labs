@@ -127,3 +127,7 @@ Using AWS Console:
 * [Regions and Availability Zones](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html)
 * [Injecting Chaos to Amazon EC2 using AWS System Manager](https://medium.com/@adhorn/injecting-chaos-to-amazon-ec2-using-amazon-system-manager-ca95ee7878f5)
 * [Build a serverless multi-region, active-active backend solution in an hour](https://read.acloud.guru/building-a-serverless-multi-region-active-active-backend-36f28bed4ecf)
+
+{{< prev_next_button link_prev_url="../7_failure_injection_optional/" title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 12  How do you test reliability?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
+{{< /prev_next_button >}}

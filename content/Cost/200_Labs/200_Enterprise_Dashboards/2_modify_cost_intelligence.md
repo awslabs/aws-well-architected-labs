@@ -93,3 +93,4 @@ This section is **optional** and shows how you can customize the analysis from u
 You have successfully updated your Cost value and customized the Summary View.
 {{% /notice %}}
 
+{{< prev_next_button link_prev_url="../1_create_cost_intelligence/" link_next_url="../3_create_data_transfer_cost_analysis/" />}}

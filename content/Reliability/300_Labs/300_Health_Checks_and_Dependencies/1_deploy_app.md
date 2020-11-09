@@ -106,3 +106,5 @@ Choose either the Express Steps _or_ Guided Steps
     |**Use highly available network connectivity for your workload public endpoints**: Elastic Load Balancing provides load balancing across Availability Zones, performs Layer 4 (TCP) or Layer 7 (http/https) routing, integrates with AWS WAF, and integrates with AWS Auto Scaling to help create a self-healing infrastructure and absorb increases in traffic while releasing resources when traffic decreases.|
     |**Implement loosely coupled dependencies**: Dependencies such as queuing systems, streaming systems, workflows, and load balancers are loosely coupled. Loose coupling helps isolate behavior of a component from other components that depend on it, increasing resiliency and agility.|
     |**Deploy the workload to multiple locations**: Distribute workload data and resources across multiple Availability Zones or, where necessary, across AWS Regions. These locations can be as diverse as required.|
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_handle_dependency/" />}}

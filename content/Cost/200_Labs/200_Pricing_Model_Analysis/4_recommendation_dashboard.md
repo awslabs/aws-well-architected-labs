@@ -200,3 +200,5 @@ weight: 4
     - Nulls: Exclude nulls
 
 40. Decrease the width of the date column as much as possible, its not needed
+
+{{< prev_next_button link_prev_url="../3_quicksight_setup/" link_next_url="../5_format_dashboard/" />}}

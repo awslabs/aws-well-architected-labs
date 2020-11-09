@@ -43,3 +43,15 @@ We will tear down this lab, removing any data, resources and configuration that 
 12 - Go into the S3 service dashboard
 
 13 - Delete the S3 output folder
+
+
+{{< prev_next_button link_prev_url="../6_sub_acct/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment,
+you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+[COST 3 - "How do you monitor usage and cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
+{{< /prev_next_button >}}
+
+
+
+
+

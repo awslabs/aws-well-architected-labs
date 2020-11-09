@@ -62,3 +62,5 @@ Once the backup plan and the backup rule has been created, you can specify resou
     ![assign-resources](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/assign-resources.png)
 
 You have successfully created a backup plan for your data sources, and all supported resources with the tags **WORKLOAD-MYAPP** will be backed up automatically, at the frequency specified. In case of a disaster, these backups can be used to recover data to ensure business continuity. Since the entire process is automated, it will save considerable operational overhead for your Operations teams.
+
+{{< prev_next_button link_prev_url="../1_prerequisite" link_next_url="../3_enable_notifications/" />}}

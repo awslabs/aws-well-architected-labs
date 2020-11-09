@@ -51,4 +51,6 @@ The lab has been designed to configure a system that can expand easily, for any 
 - Create and run a Glue crawler
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
+
+{{< prev_next_button link_next_url="./1_setup_s3_output/" button_next_text="Start Lab" first_step="true" />}}

@@ -41,8 +41,21 @@ If you are running the at an AWS sponsored workshop then you may be provided wit
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. This account MUST NOT be used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create IAM Roles, EC2 instances, S3 buckets, VPCs, Subnets, and Internet Gateways
 
+{{% notice note %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
 
+{{< prev_next_button link_next_url="./1_deploy_infra/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
+
+## Costs
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+* This lab will cost approximately $1.00 per day when deployed
+* It may be less (or zero) if you have remaining [AWS Free Tier](https://aws.amazon.com/free/) usage on your account
+* The majority of this cost is the charge for _EC2 BoxUsage_ (per hour usage charge) for the single EC2 instance you deploy
+* Please follow the directions for [Tear Down](./6_cleanup/) to avoid unwanted costs after you have concluded this lab

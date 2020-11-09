@@ -29,9 +29,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
 
-## Best Practice Checklist
-- [ ] Launch Amazon CloudWatch and observe the average CPU, Disk and Network consuption of your EC2 instances
-- [ ] Manually install CloudWatch Agent on an EC2 instance to track memory utilization
-- [ ] Observe the impact on the AWS Resource Optimization when you have additional datapoints (Memory utilization)
+
+{{< prev_next_button link_next_url="./1_cloudwatch_intro/" button_next_text="Start Lab" first_step="true" />}}

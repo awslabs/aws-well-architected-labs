@@ -39,12 +39,15 @@ The skills you learn will help you build resilient workloads in alignment with t
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create Amazon Virtual Private Cloud(s) (VPCs), including subnets, security groups, internet gateways, NAT Gateways, Elastic IP Addresses, and route tables. The credentials must also be able to create the database subnet group needed for a Multi-AZ RDS instance. The credential will need permissions to create IAM Role, instance profiles, AWS Auto Scaling launch configurations, application load balancers, auto scaling group, and EC2 instances.
 * An IAM user or federated credentials into that account that has permissions to deploy the deployment automation, which consists of IAM service linked roles, AWS Lambda functions, and an AWS Step Functions state machine to execute the deployment.
 
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the
-[AWS Free Tier](https://aws.amazon.com/free/).
-
 ## Note:
 
 This 200 level lab covers only EC2 failure injection. If you would prefer a more feature-rich 300 level lab that demonstrates EC2 failure, RDS failure, and AZ failure then see [Level 300: Testing for Resiliency of EC2, RDS, and AZ]({{% ref "/Reliability/300_Labs/300_Testing_for_Resiliency_of_EC2_RDS_and_S3" %}}). That 300 level lab includes everything in this 200 level lab, plus additional fault simulations.
 
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+{{< prev_next_button link_next_url="./1_prerequisite/" button_next_text="Start Lab" first_step="true" />}}
+
 ## Steps:
-{{% children  %}}
+{{% children /%}}

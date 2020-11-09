@@ -147,3 +147,5 @@ Choose the appropriate section below for your language
 1. If your PowerShell scripts are refused authorization to access your AWS account, consult [Getting Started with the AWS Tools for Windows PowerShell](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-started.html)
 
 {{% /expand %}}
+
+{{< prev_next_button link_prev_url="../1_deploy_infra" link_next_url="../3_failure_injection_prep/" />}}

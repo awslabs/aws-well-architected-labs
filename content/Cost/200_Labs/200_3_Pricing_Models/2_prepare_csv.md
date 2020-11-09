@@ -64,3 +64,5 @@ The formula for the fully paid day is:
 {{% notice tip %}}
 You have compiled a complete set of recommendations with the required data to be able to analyse and make low risk high return recommendations.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../1_ri_report/" link_next_url="../3_filter_csv/" />}}

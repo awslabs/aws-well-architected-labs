@@ -63,4 +63,6 @@ We recommend validating your data by comparing the aggregate un-grouped Payer an
 - **Data Transfer Dashboard**: Should take approximately 15-20 minutes to complete 
 
 ## Steps:
-{{% children  %}}
+{{% children  /%}}
+
+{{< prev_next_button link_next_url="./1_create_cost_intelligence/" button_next_text="Start Lab" first_step="true" />}}

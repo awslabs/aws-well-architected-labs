@@ -236,3 +236,5 @@ The CloudFormation stack update reset the EC2 instance IAM roles, so the system 
       * (The **Description** may show _Health checks failed with these codes: [502]_, before getting to a healthy state. This is expected as the server initializes)
       * From the time you terminate the EC2 instance, it will take four to five minutes to get the new EC2 instance up and in a healthy state
 1. Refresh the web service multiple times and note that personalized recommendations are once again being served from all three servers
+
+{{< prev_next_button link_prev_url="../2_handle_dependency" link_next_url="../4_fail_open/" />}}

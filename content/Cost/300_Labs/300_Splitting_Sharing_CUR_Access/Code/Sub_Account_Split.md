@@ -11,53 +11,63 @@ You will need to modify the following arrays, the order is important - the first
  - **S3ObjectPolicies**: This contains the S3 Object permissions ACL that will be written to objects in the corresponding folder. You will need to add the owners details (management/payer account) and the grantee (sub account) details.
 
 
+
 ```
 import boto3
 import json
 import datetime
 import time
-# Get the current date, so you know which months folder you're working on
-now = datetime.datetime.now()
-    
-# Variables to construct the s3 folder name
-# YES! you can do multiple subfolders if you have multiple queries to run, 1 subfolder per query
-currentmonth = '/year_1=' + str(now.year) + '/month_1=' + str(now.month) + '/'
-bucketname = '(output bucket)'
+from dateutil.relativedelta import relativedelta
 
+
+bucketname = '(output bucket)'
 #List of Subfolders & ACLs to apply to objects in them
 #There MUST be a 1:1 between subfolders & policies
 subfolders = ['<folder1>']
+
 
 # Arrays to hold the Athena delete & create queries that we need to run
 delete_query_strings = []
 create_query_strings = []
 # Athena output folder
 athena_output = 's3://aws-athena-query-results-us-east-1-<account ID>/'
+
 # Main loop
 def lambda_handler(event, context):
-    # Clear the current months S3 folder
-    s3_clear_folders() 
+    #clear the strings for every execution context - useful for troubleshooting after failures
+    create_query_strings.clear()
+    delete_query_strings.clear()
+    
+    # Get the current date, so you know which months folder you're working on
+    now = datetime.datetime.now()
+    lastmonth = now - relativedelta(months=1) 
+    
+    # Variables to construct the s3 folder name
+    # YES! you can do multiple subfolders if you have multiple queries to run, 1 subfolder per query
+    # We need current and previous month because otherwise we can miss data in the last day of the month
+    currentmonth = '/year_1=' + str(now.year) + '/month_1=' + str(now.month) + '/'
+    previousmonth = '/year_1=' + str(lastmonth.year) + '/month_1=' + str(lastmonth.month) + '/'
+    
+    
+    # Clear the current and previous months S3 folder
+    s3_clear_folders(currentmonth)
+    s3_clear_folders(previousmonth)
     
     # Get the athena queries to run
-    get_athena_queries()
+    get_athena_queries(currentmonth,'0')
+    get_athena_queries(previousmonth,'1')
     # Make sure to delete any existing temp tables, so no wobbly's are thrown
     run_delete_athena_queries()
     
     # Create the athena tables, which will actually output data to S3 folders
     run_create_athena_queries()
     # Delete the array in case of another Lambda invocation
-    create_query_strings.clear()
-    # You could make another call to delete the tables, however you need to make sure
-    # the creates are finished, which may take some time, consuming time($) in Lambda
-    # run_delete_athena_queries()
-    # Delete the array in case of another Lambda invocation
-    delete_query_strings.clear()
     return {
         'statusCode': 200,
         'body': json.dumps('Finished!')
     }
 # Clear the S3 folders for the current month
-def s3_clear_folders():
+def s3_clear_folders(month):
     # Get S3 client/object
     client = boto3.client('s3')
     # For each subfolder - in case you have multilpe subfolders, i.e. multilpe accounts/business units to split data out to
@@ -65,7 +75,7 @@ def s3_clear_folders():
         # List all objects in the current months bucket    
         response = client.list_objects_v2(
             Bucket=bucketname,
-            Prefix=subfolder + currentmonth
+            Prefix=subfolder + month
         )
     
         # Get how many objects there are to delete, if any
@@ -90,7 +100,7 @@ def s3_clear_folders():
                 )
 # Get the Athena saved queries to run
 # They need to be labelled 'create_linked' or 'delete_linked'
-def get_athena_queries():
+def get_athena_queries(month,interval):
     # Get Athena client/object
     client = boto3.client('athena')
     # Get all the saved queries in Athena
@@ -112,10 +122,10 @@ def get_athena_queries():
         # We also replace the '/subfolder' string in the query with the folder structure for the current month
         if 'create_linked_' in queryname:
             # Get a unique ID for the temp table
-            tableID = queryname.split('_')[2]
+            tableID = queryname.split('_')[2] + interval
             # String replacements to make the tablename unique, and work with the current months data
-            new_query1 = querystring.replace('/subfolder', currentmonth)
-            new_query2 = new_query1.replace('temp_table', 'temp_'+tableID)
+            new_query1 = querystring.replace('/subfolder', month).replace('__interval__',interval)
+            new_query2 = new_query1.replace('temp_table', 'temp_' + tableID)
             
             # Add the create query string to the array
             create_query_strings.append(new_query2)
@@ -123,7 +133,7 @@ def get_athena_queries():
         # If its a delete query, add it to the list of delete queries to execute later
         if 'delete_linked_' in queryname:
             # Get a unique ID for the temp table
-            tableID = queryname.split('_')[2]
+            tableID = queryname.split('_')[2] + interval
             
             # String replacements to make the tablename unique, and work with the current months data
             new_query1 = querystring.replace('temp_table', 'temp_'+tableID)
@@ -155,7 +165,7 @@ def run_delete_athena_queries():
         # Tables must not exist before creation
         # If the function runs for a long time ($) you should implement step functions or a cost effective wait
         # This is a low "cost of complexity" solution
-        while 'RUNNING' in response:
+        while response in ['QUEUED','RUNNING']:
             # Busy wait to make sure it finishes 
             time.sleep(1)
             # Get the current state of the query
@@ -181,5 +191,4 @@ def run_create_athena_queries():
                 }
             }
         )
-        
 ```

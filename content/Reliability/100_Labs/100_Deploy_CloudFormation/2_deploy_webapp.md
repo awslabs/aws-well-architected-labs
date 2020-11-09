@@ -14,3 +14,4 @@ Wait until the VPC CloudFormation stack **status** is _CREATE_COMPLETE_, then co
 
 {{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" /%}}
 
+{{< prev_next_button link_prev_url="../1_deploy_vpc/" link_next_url="../3_explore_webapp/" />}}

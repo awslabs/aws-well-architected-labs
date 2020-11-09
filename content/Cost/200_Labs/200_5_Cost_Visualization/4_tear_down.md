@@ -47,4 +47,9 @@ It is best practice to regularly analyze your usage and cost, so you should not 
 4. Confirm by clicking **Delete**:
 ![Images/quicksightdataset_confirm.png](/Cost/200_5_Cost_Visualization/Images/quicksightdataset_confirm.png)
 
+{{< prev_next_button link_prev_url="../3_share_analysis/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment,
+you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+[COST3 - "How do you monitor usage and cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
+{{< /prev_next_button >}}
 

@@ -14,7 +14,7 @@ hidden: false
 {{< /rawhtml >}}
 
 ## Last Updated
-May 2020
+October 2020
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected

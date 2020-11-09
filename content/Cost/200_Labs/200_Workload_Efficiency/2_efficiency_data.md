@@ -113,3 +113,5 @@ We will combine the application logs and the hourly cost data with a view, to ge
 ![Images/athena-efficiency_table.png](/Cost/200_Workload_Efficiency/Images/athena-efficiency_table.png)
 
 The first line is from our cost table, note the NULL values for requets, response and MBytes. The remaining lines will be from our application logs, and contain the data we need to measure efficiency.
+
+{{< prev_next_button link_prev_url="../1_data_sources/" link_next_url="../3_visualizations/" />}}

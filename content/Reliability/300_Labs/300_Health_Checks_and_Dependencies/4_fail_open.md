@@ -57,3 +57,5 @@ Now, with the new deep health check in place...
 |Well-Architected for Reliability: Best practice|
 |:---:|
 |**Implement emergency levers**: These are rapid processes that may mitigate availability impact on your workload. They can be operated in the absence of a root cause. An ideal emergency lever reduces the cognitive burden on the resolvers to zero by providing fully deterministic activation and deactivation criteria. Example levers include blocking all robot traffic or serving a static response. Levers are often manual, but they can also be automated.|
+
+{{< prev_next_button link_prev_url="../3_deep_healthcheck" link_next_url="../5_cleanup/" />}}

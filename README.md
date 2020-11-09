@@ -75,3 +75,4 @@ The instructions below is how I built the skeleton site.
 1. **Until https://github.com/matcornic/hugo-theme-learn/pull/355 gets resolved, I have implemented the fix in these 2 files:**
     1. layouts/partials/menu.html
     1. static/css/theme-walabs.css
+

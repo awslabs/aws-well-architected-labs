@@ -20,7 +20,7 @@
   <div class="content">
     <div class="close-btn" onclick="togglePopup()">X</div>
     <h3>{{ if .Get "title"}}{{.Get "title"}}{{else}}{{$.Scratch.Get "titlebackup"}}{{ end }}</h3>
-    <p>{{ if len .Inner }}{{.Inner}}{{else}}{{$.Scratch.Get "innerbackup"}}{{ end }}<br><br><a href="https://console.aws.amazon.com/wellarchitected/home" target="_blank">Click here to access the Well-Archictected Tool</a> </p>
+    <p>{{ if len .Inner }}{{.Inner}}{{else}}{{$.Scratch.Get "innerbackup"}}{{ end }}<br><br><a href="https://console.aws.amazon.com/wellarchitected/home" target="_blank">Click here to access the Well-Architected Tool</a> </p>
   </div>
 </div>
 

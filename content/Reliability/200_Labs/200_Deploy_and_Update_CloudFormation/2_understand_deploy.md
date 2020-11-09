@@ -57,3 +57,5 @@ The deployed stack only has one resource, the VPC. But the CloudFormation Templa
     * Look at the VPC attributes under the **Description** tab.  How do these compare to the CloudFormation template?
 
 * For more information see the [syntax and properties for a VPC in Cloudformation here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html).
+
+{{< prev_next_button link_prev_url="../1_deploy_infra" link_next_url="../3_cfn_params/" />}}

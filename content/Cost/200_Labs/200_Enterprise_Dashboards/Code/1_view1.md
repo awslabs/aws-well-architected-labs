@@ -316,7 +316,7 @@ Modify the following SQL query for View1:
 			WHEN ("line_item_usage_type" LIKE '%Spot%') THEN 'Spot' 
 			ELSE 'OnDemand' END "purchase_option"
 		,CASE 
-		-- WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
+		 WHEN ("savings_plan_savings_plan_a_r_n" <> '') THEN "savings_plan_savings_plan_a_r_n" 
 		-- WHEN ("reservation_reservation_a_r_n" <> '') THEN "reservation_reservation_a_r_n"
 		 WHEN ("line_item_line_item_type" = 'Usage') THEN '' 
 		 ELSE '' END "ri_sp_arn"
@@ -365,16 +365,16 @@ Modify the following SQL query for View1:
 		-- WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
 		-- WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 
 		ELSE "line_item_unblended_cost" END) "amortized_cost"
-		, sum(CASE
-			WHEN (line_item_line_item_type = 'Usage') THEN 0
+		, CAST(sum(CASE
+		WHEN (line_item_line_item_type = 'Usage') THEN 0
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN (-"savings_plan_amortized_upfront_commitment_for_billing_period") 
 		-- WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period") 
-		ELSE 0 END) "ri_sp_trueup"
-		, sum(CASE
+		ELSE 0 END) AS double) "ri_sp_trueup"
+		, CAST(sum(CASE
 		WHEN ("line_item_line_item_type" = 'Usage') THEN 0
 		-- WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
 		-- WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"
-		ELSE 0 END) "ri_sp_upfront_fees"
+		ELSE 0 END) AS Double) "ri_sp_upfront_fees"
 		, sum(CASE
 			WHEN ("line_item_line_item_type" <> 'SavingsPlanNegation') THEN "pricing_public_on_demand_cost" ELSE 0 END) "public_cost" 
 		FROM

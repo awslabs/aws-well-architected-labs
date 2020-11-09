@@ -51,7 +51,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
 
 {{% notice note %}}
-The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to July 26, 2020 you will want to update to the latest views.
+The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to October 26, 2020 you will want to update to the latest views.
 {{% /notice %}}
 
 
@@ -150,7 +150,7 @@ You now have your data set setup ready to create a visualization.
 ### Create the Dashboard
 We will now use the CLI to create the dashboard from the Cost Intelligence Dashboard template, then create an Analysis you can customize and modify in the next step.
 
-1. Go to this we page to request access to the template. Enter you AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
+1. Go to this page to request access to the template. Enter your AWS AccountID and click Submit: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
 
 2. Edit the following command, replacing **AccountID** and **region**, then using the CLI list the QuickSight datasets and copy the **Name** and **Arn** for the 4 datasets: **s3_view**, **ec2_running_cost**, **compute_savings_plan_eligible_spend**, **summary_view**:
 
@@ -265,3 +265,5 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 {{% notice tip %}}
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_modify_cost_intelligence/" />}}

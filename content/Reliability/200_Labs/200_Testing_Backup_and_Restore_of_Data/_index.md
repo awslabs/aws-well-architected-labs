@@ -34,7 +34,11 @@ The skills you learn will help you define a backup and restore plan in alignment
 * An IAM user or role in your AWS account that has Administrator privileges.
 Launch the CloudFormation Stack to provision resources that will act as data sources.
 
-**NOTE**: You will be billed for any applicable AWS resources used as part of this lab, that are not covered in the AWS Free Tier.
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+{{< prev_next_button link_next_url="./1_prerequisite/" button_next_text="Start Lab" first_step="true" />}}
 
 
 ## Steps:

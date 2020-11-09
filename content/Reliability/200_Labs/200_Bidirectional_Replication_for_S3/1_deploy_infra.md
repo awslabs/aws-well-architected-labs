@@ -95,4 +95,6 @@ It is a best practice to encrypt your data at rest.
 3. Object-level logging is Enabled:
 This logging will be used later in the lab.
 It is used to better understand replication operations AWS takes on your behalf.
-      {{% /expand%}}
+{{% /expand%}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_configure_replication/" />}}

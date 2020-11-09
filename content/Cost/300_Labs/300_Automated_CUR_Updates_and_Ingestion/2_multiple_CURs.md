@@ -84,3 +84,5 @@ Look for the comments: ### New line
 
 7. Go to the Glue dashboard and verify that there is a single database, containing multiple tables:
 ![Images/AWSMultiCUR2.png](/Cost/300_Automated_CUR_Updates_and_Ingestion/Images/AWSMultiCUR2.png)
+
+{{< prev_next_button link_prev_url="../1_cf_stack/" link_next_url="../3_cleanup/" />}}

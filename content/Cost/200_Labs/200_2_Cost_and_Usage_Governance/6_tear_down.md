@@ -62,3 +62,10 @@ We will delete the IAM policies created, as they are no longer applied to any gr
 ![Images/AWSTeardown24.png](/Cost/200_2_Cost_and_Usage_Governance/Images/AWSTeardown24.png)
 
 18. Confirm there are no io1 unattached EBS volumes, go to the **EC2 dashboard**, click on **Elastic Block Store**, click **Volumes**. You can sort by the **Created** column to help identify volumes that were not terminated as part of this lab.
+
+{{< prev_next_button link_prev_url="../5_ec2_volume_type/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment,
+you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+[COST2 - "How do you govern usage?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
+{{< /prev_next_button >}}
+

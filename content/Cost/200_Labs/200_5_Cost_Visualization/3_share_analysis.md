@@ -36,3 +36,5 @@ Now that your QuickSight Analysis is complete, it is time to share the Analysis 
 
 6. All users will receive an email:
 ![Images/AWSQuicksight73.png](/Cost/200_5_Cost_Visualization/Images/AWSQuicksight73.png)
+
+{{< prev_next_button link_prev_url="../2_create_visualizations/" link_next_url="../4_tear_down/" />}}

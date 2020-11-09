@@ -65,3 +65,5 @@ It is assumed that you have completed 300_Automated_CUR_Updates_and_Ingestion, s
 16 - Check the **Last modified** time stamp on the object/s is/are the current time, and check that it has the correct **Grantees** in the permissions
 
 Setup is now complete for the payer account. When new CUR files are delivered, it will execute the Athena queries and extract the required data for the current month, and output it to the required S3 folder with the required permissions.  
+
+{{< prev_next_button link_prev_url="../4_lambda_function/" link_next_url="../6_sub_acct/" />}}

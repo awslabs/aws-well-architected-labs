@@ -40,3 +40,5 @@ In this task, you will gain experience changing CloudFormation stack parameters 
 
 The current deployment is now represented by this architecture diagram:
 ![SimpleVpcPlusPublic](/Reliability/200_Deploy_and_Update_CloudFormation/Images/SimpleVpcPlusPublic.png)
+
+{{< prev_next_button link_prev_url="../2_understand_deploy" link_next_url="../4_add_s3/" />}}

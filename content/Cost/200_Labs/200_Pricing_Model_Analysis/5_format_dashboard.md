@@ -95,3 +95,5 @@ We will format the recommendation dashboard, this will improve its appearance, a
 {{% notice tip %}}
 Congratulations - you now have an analytics dashboard for Savings Plan recommendations!
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../4_recommendation_dashboard/" link_next_url="../6_tear_down/" />}}

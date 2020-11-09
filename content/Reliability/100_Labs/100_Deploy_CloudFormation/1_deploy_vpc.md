@@ -31,3 +31,5 @@ pre: "<b>1. </b>"
 {{% common/Create_VPC_Stack stackname="WebApp1-VPC" %}}
 
 1. When the stack status is _CREATE_COMPLETE_, you can continue to the next step.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_deploy_webapp/" />}}
