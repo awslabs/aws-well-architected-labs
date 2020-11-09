@@ -28,19 +28,6 @@ For a list of Nitro-based instances currently available, head to https://docs.aw
 * Learn how to use SSM session manager to gain shell access to run your own test against the various instance types
 
 
- <!-- {{< tabs name="Region" >}} {{{< tab name="Oregon" include="1_deploy.md" />}} {{{< tab name="Ireland" include="2_testing_before.md" />}} {{{< tab name="Frankfurt" include="3_change_clock.md" />}} {{< /tabs >}} -->
-
-
-{{< tabs name="Test" >}}
-{{< tab name="Tab1" >}}
-This is tab1
-{{< /tab >}}
-{{< tab name="Tab2" >}}
-This is tab2
-{{< /tab >}}
-{{< /tabs >}}
-
-
 ## Prerequisites
 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
@@ -62,4 +49,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 
 ## Steps:
-{{% children  /%}}
+{{% children  %}}
