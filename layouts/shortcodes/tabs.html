@@ -1,0 +1,62 @@
+{{/*
+  You must use this with the tab shortcode
+
+  Example:
+	{{< tabs name="Test" >}}
+	{{< tab name="Tab1" >}}
+	This is tab1
+	{{< /tab >}}
+	{{< tab name="Tab2" >}}
+	This is tab2
+	{{< /tab >}}
+	{{< /tabs >}}
+
+  Example with embedded includes:
+	{{< tabs name="Sub-Tasks" >}} {{{< tab name="Step 1" include="1_deploy.md" />}} {{{< tab name="Step 2" include="2_testing_before.md" />}} {{{< tab name="Step 3" include="3_change_clock.md" />}} {{< /tabs >}}
+
+*/}}
+
+
+{{ .Page.Scratch.Add "tabset-counter" 1 }}
+{{ $tab_set_id := .Get "name" | default (printf "tabset-%s-%d" (.Page.RelPermalink) (.Page.Scratch.Get "tabset-counter") ) | anchorize }}
+{{ $tabs := .Scratch.Get "tabs" }}
+{{ if .Inner }}{{/* We don't use the inner content, but Hugo will complain if we don't reference it. */}}{{ end }}
+<div id="{{ $tab_set_id }}">
+<ul>
+	{{ range $i, $e := $tabs }}
+	  {{ $id := printf "%s-%d" $tab_set_id $i }}
+  <li><a href="#{{ $id }}">{{ trim .name " " }}</a></li>
+{{ end }}
+</ul>
+{{ range $i, $e := $tabs }}
+{{ $id := printf "%s-%d" $tab_set_id $i }}
+<div id="{{ $id }}">
+	{{ with .content }}
+		{{ . }}
+	{{ else }}
+		{{ if eq $.Page.BundleType "leaf" }}
+			{{/* find the file somewhere inside the bundle. Note the use of double asterisk */}}
+			{{ with $.Page.Resources.GetMatch (printf "**%s*" .include)  }}
+				{{ if ne .ResourceType "page" }}
+				{{/* Assume it is a file that needs code highlighting. */}}
+				{{ $codelang := $e.codelang | default ( path.Ext .Name | strings.TrimPrefix ".") }}
+				{{ highlight .Content $codelang "" }}
+				{{ else}}
+					{{ .Content }}
+				{{ end }}
+			{{ end }}
+		{{ else}}
+		{{ $path := path.Join $.Page.Dir .include }}
+		{{ $page := $.Page.Site.GetPage "page" $path }}
+		{{ with $page }}
+			{{ .Content }}
+		{{ else }}
+		{{ errorf "[%s] tabs include not found for path %q" $.Page.Site.Language.Lang $path}}
+		{{ end }}
+		{{ end }}
+	{{ end }}
+</div>
+{{ end }}
+</div>
+{{ $elem :=  $tab_set_id | safeJS }}
+<script>$(function(){$("#{{ $elem }}").tabs();});</script>
