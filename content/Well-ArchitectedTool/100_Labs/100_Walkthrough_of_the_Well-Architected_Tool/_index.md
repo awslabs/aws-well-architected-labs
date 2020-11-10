@@ -7,7 +7,7 @@ weight: 1
 hidden: false
 ---
 ## Authors
-- Rodney Lester, Reliability Lead, Well-Architected, AWS
+- Rodney Lester, Principal Solutions Architect, Well-Architected, AWS
 
 ## Introduction
 
@@ -27,6 +27,9 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to usee Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
 
+## Costs:
+* There are no costs for this lab
+* [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
 {{% children  %}}
