@@ -18,10 +18,12 @@ Well-Architected Reviews are conducted per [workload](https://wa.aws.amazon.com/
 ![EnterWorkloadDetails](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT3.png)
 - Name: Workload for AWS Workshop  
 - Description: This is an example for the AWS Workshop  
-- Industry Type: InfoTech  
-- Industry: Internet  
+- Review owner: Your name
 - Environment: Select "Pre-production"  
 - Regions: Select AWS Regions, and choose US West (Oregon)/us-west-2  
 
-4. Click on the **Define workload** button:
-![DefineWorkload](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT4.png)
+4. Click on the **Next** button:
+![ClickNext](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT4.png)
+
+5. This will land you at the Apply lenses page. In this interface, the "AWS Well-Architected Framework" is always selected as it is not technically a Lens. We are not using any lens, so click on the **Define Workload** button:
+![DefineWorkload](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT4.5.png)
