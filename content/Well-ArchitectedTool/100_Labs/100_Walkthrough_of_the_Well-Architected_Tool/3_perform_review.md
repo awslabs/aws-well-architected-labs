@@ -18,7 +18,7 @@ weight: 3
 4. Select the first question: **REL 1. How do you manage service quotas and constraints?**
 ![SelectREL1](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT8.png)
 
-5. Answer the REL 1 to REL 9 questions as you understand your current ability. You can use the **Info** links to help you understand what the answers mean and to get more context on the questions.
+5. Answer the REL 1 to REL 13 questions as you understand your current ability. You can use the **Info** links to help you understand what the answers mean and to get more context on the questions.
 ![InfoAndVideo](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT9.png)
 
 6. As you complete the question, select the **Next** Button at the bottom of the answers:
