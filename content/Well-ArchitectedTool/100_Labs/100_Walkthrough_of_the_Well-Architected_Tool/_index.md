@@ -31,5 +31,10 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 * There are no costs for this lab
 * [AWS Pricing](https://aws.amazon.com/pricing/)
 
+## Time to complete
+- The lab should take approximately 30 minutes to complete
+
 ## Steps:
-{{% children  %}}
+{{% children /%}}
+
+{{< prev_next_button link_next_url="./1_nav_console/" button_next_text="Start Lab" first_step="true" />}}

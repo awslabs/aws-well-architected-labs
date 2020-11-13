@@ -26,3 +26,5 @@ weight: 3
 
 7. When you get to the last Reliability question, or the first Performance Pillar question, select **Save and Exit:**
 ![SelectSave](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT11.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../4_save_milestone/" />}}

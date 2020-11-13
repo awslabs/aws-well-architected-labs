@@ -11,3 +11,5 @@ The AWS Well-Architected Tool is in the AWS Console. You simply need to login to
 
 2. If you are already in the console, click **Services** on the tool bar along the top of the console to bring up the service search. Start typing **Well Architected** into the search box and select the **AWS Well-Architected Tool**:  
 ![Select WAT](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT0.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_create_workload/" />}}

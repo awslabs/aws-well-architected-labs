@@ -31,3 +31,5 @@ weight: 5
 ![SelectGenerateReport](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT22.png)
 
 9. You can either open the file or save it to view it.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../6_tear_down/" />}}
