@@ -27,3 +27,5 @@ Well-Architected Reviews are conducted per [workload](https://wa.aws.amazon.com/
 
 5. This will land you at the Apply lenses page. In this interface, the "AWS Well-Architected Framework" is always selected as it is not technically a Lens. We are not using any lens, so click on the **Define Workload** button:
 ![DefineWorkload](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT4.5.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../3_perform_review/" />}}

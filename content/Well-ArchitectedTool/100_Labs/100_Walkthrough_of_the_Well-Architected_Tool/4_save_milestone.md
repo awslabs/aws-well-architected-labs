@@ -17,3 +17,5 @@ weight: 4
 
 4. This will display the milestone and data about it:
 ![ListMilestones](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT15.png)
+
+{{< prev_next_button link_prev_url="../" link_next_url="../5_view_report/" />}}
