@@ -5,6 +5,12 @@ date: 2020-11-19T12:00:00-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
+tags:
+ - Windows Server
+ - Windows
+ - EC2
+ - CloudWatch
+ - CloudWatch Dashboard
 ---
 
 Now that we have a dashboard for our Windows EC2 instance, we can add an additional metric for available memory.

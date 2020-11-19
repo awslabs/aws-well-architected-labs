@@ -5,6 +5,12 @@ date: 2020-11-19T12:00:00-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
+tags:
+ - Windows Server
+ - Windows
+ - EC2
+ - CloudWatch
+ - CloudWatch Dashboard
 ---
 
 We have deployed a single Windows EC2 instance and we will now connect via SSM to run a pair of scripts to consume memory and CPU resources so we can see our AWS CloudWatch Dashboard update.

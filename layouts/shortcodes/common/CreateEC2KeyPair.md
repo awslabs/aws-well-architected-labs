@@ -1,8 +1,6 @@
 <!--
      keypairname: What you want the user to name the keypair
 -->
-
-# Create EC2 KeyPair
 1. Login to your AWS Console
 1. In the upper right portion of the console, select the region you wish to deploy the lab into. For this example we will be using us-west-2
 1. Go to this link: https://console.aws.amazon.com/ec2/v2/home?#KeyPairs

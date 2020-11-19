@@ -7,7 +7,7 @@ weight: 3
 hidden: false
 description: "How to configure an Amazon CloudWatch Dashboard to get aggregated views of the health and performance of a Windows EC2 instance."
 tags:
- - Windows_Server
+ - Windows Server
  - Windows
  - EC2
  - CloudWatch
@@ -19,7 +19,7 @@ tags:
 
 ## Introduction
 
-This hands-on lab will guide you through creating an Amazon EC2 instance for Windows and then configuring a Amazon CloudWatch Dashboard to get aggregated views of the health and performance information for that instance. This lab should enables you to quickly get started with monitoring, explore account and resource-based view of metrics and alarms. You can find more best practices by reading the [Performance Efficiency Pillar of the AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html).
+This hands-on lab will guide you through creating an Amazon EC2 instance for Windows and then configuring a Amazon CloudWatch Dashboard to get aggregated views of the health and performance information for that instance. This lab should enables you to quickly get started with CloudWatch monitoring and explore account and resource-based views of metrics. You can find more best practices by reading the [Performance Efficiency Pillar of the AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html).
 The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Goals
@@ -30,13 +30,11 @@ The skills you learn will help you secure your workloads in alignment with the [
 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes
 * An IAM role in your AWS account
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
 ## Costs
 - https://aws.amazon.com/cloudwatch/pricing/
-  - You can create 3 dashboards for up to 50 metrics per month on the free tier
-  - Outside of the free tier, it is $3.00 per dashboard per month
-- This lab creates one dashboard, so the maximum cost would be $3.00 per month if you have already consumed the free tier.
+  - You can create 3 dashboards for up to 50 metrics per month on the free tier and then it is $3.00 per dashboard per month
+  - This lab creates one dashboard, so the maximum cost would be $3.00 per month if you have already consumed the free tier.
 - The default lab uses a t3.large EC2 instance which will consume approximately $3 for every day the lab is running
 
 

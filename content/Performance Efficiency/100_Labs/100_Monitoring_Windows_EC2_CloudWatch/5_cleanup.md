@@ -4,6 +4,12 @@ date: 2020-11-19T12:00:00-04:00
 chapter: false
 weight: 5
 pre: "<b>5. </b>"
+tags:
+ - Windows Server
+ - Windows
+ - EC2
+ - CloudWatch
+ - CloudWatch Dashboard
 ---
 
 ## Summary

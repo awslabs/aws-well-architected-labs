@@ -5,6 +5,12 @@ date: 2020-11-19T12:00:00-04:00
 chapter: false
 weight: 4
 pre: "<b>4. </b>"
+tags:
+ - Windows Server
+ - Windows
+ - EC2
+ - CloudWatch
+ - CloudWatch Dashboard
 ---
 
 We have a CloudWatch dashboard to show us CPU and Memory statistics for the deployed EC2 instance. In order to showcase the dashboards, lets add a synthetic load to the machine.  We have 2 PowerShell scripts that have already been deployed to the instance to facilitate this.

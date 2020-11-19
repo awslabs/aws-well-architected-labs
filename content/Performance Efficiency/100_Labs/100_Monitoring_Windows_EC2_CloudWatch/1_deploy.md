@@ -5,16 +5,23 @@ date: 2020-11-19T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
+tags:
+ - Windows Server
+ - Windows
+ - EC2
+ - CloudWatch
+ - CloudWatch Dashboard
 ---
 
 {{% notice warning %}}
 The CloudFormation template that accompanies this lab requires the ability to create IAM Roles and IAM Instance Profiles.  If the account you are using does not have these capabilities, you will not be able to complete this lab.
 {{% /notice %}}
 
+## Create EC2 KeyPair
 <!-- Make sure they have a EC2 KeyPair first, then run the CFN -->
 {{% common/CreateEC2KeyPair keypairname="wapetestlab" %}}
 
-# Deploy CloudFormation Template
+## Deploy CloudFormation Template
 
 1. Download the [WindowsMachineDeploy.yaml](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Code/WindowsMachineDeploy.yaml) CloudFormation template to your machine.
 1. This lab assumes you will be deploying to the default VPC within your AWS account.  If you wish to deploy to a different VPC, just select the subnet that corresponds to your VPC. {{% notice warning %}}
