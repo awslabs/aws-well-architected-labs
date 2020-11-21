@@ -24,7 +24,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 
 ## Goals
 
-* Monitor a Windows EC2 machine to identify cpu and memory bottlenecks
+* Monitor a Windows EC2 machine to identify CPU and memory bottlenecks
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 - https://aws.amazon.com/cloudwatch/pricing/
   - You can create 3 dashboards for up to 50 metrics per month on the free tier and then it is $3.00 per dashboard per month
   - This lab creates one dashboard, so the maximum cost would be $3.00 per month if you have already consumed the free tier.
-- The default lab uses a t3.large EC2 instance which will consume approximately $3 for every day the lab is running
+- The default lab uses a t3.large EC2 instance which will consume approximately $3.00 for every day the lab is running
 
 
 {{% notice note %}}
