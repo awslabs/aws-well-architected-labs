@@ -19,7 +19,8 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 ## Create EC2 KeyPair
 <!-- Make sure they have a EC2 KeyPair first, then run the CFN -->
-{{% common/CreateEC2KeyPair keypairname="wapetestlab" %}}
+1. Login to your AWS Console
+{{% common/CreateEC2KeyPair keypairname="wapetestlab" region="us-west-2" fileformat="pem" %}}
 
 ## Deploy CloudFormation Template
 
