@@ -167,7 +167,8 @@ Write-Output "RAM HAS BEEN CLEARED: $ram / $maxRAM"
 
 1. Open a new tab for the AWS console with this link:
 https://console.aws.amazon.com/ec2/v2/home?r#Instances:instanceState=running;tag:Name=WindowsMachineDeploy
-1. Assuming you did not change the CloudFormation stack name, you should see the EC2 instance we have deployed.
+1. You should see the EC2 instance we have deployed.
+    * _Troubleshooting_: If you do not see the instance, and you changed the CloudFormation stack name when deploying, then delete the **Name: WindowsMachineDeploy** filter and search for the instance with the same name as you used for your stack
 ![GenerateLoad1](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad1.png?width=50pc)
 1. Click the checkbox next to the machine, and then click "Connect"
 ![GenerateLoad2](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad2.png?width=50pc)
@@ -183,6 +184,8 @@ https://console.aws.amazon.com/ec2/v2/home?r#Instances:instanceState=running;tag
 1. Type C:\cpu_stress.ps1 at the console and it will start to consume CPU resources
 ![GenerateLoad7](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad7.png?width=50pc)
 1. Go back to your browser tab that contains the CloudWatch Dashboard. You should see the CPU and Memory graphs change within 10-15 seconds.
+    * **Processor % User Time** goes up as the test script consumes CPU
+    * **Memory Available** goes down, as the script consumes all of it except for a small reserve
 ![GenerateLoad8](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad8.png?width=50pc)
 1. As time goes on, it will continue to update the graph. In order to remove the load, go back to each of the console windows and simply press any key.  This will cause the script to reclaim all resources it has consumed.
 1. Go back to your browser tab that contains the CloudWatch Dashboard to watch as the CPU load goes down and the amount of free RAM increases.

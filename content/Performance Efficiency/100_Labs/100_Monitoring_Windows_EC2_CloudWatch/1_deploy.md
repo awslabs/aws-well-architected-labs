@@ -31,7 +31,7 @@ If you have modified the default VPC or are using a VPC you have created, ensure
 
 
 {{% common/CreateNewCloudFormationStack templatename="WindowsMachineDeploy.yaml" stackname="WindowsMachineDeploy" %}}
-    * **Stack Name** – Whatever you want to call the stack. For this test we used WindowsMachineDeploy
+    * **Stack name** – Use **WindowsMachineDeploy** (case sensitive)
 
     * **DeploySubnet** - The subnet you wish to deploy the EC2 instance into for testing. For this lab, we use a default VPC subnet within the account.
     * **DeployVPC** - The VPC you wish to deploy the EC2 instance into for testing. For this lab, we use the default VPC within the account.
