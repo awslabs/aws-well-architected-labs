@@ -68,3 +68,5 @@ As previously mentioned, the development team is aware of this bug within the ap
     * http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot
 
     ![RegularAlpha](/Reliability/300_Minimize_Blast_Radius_with_Shuffle_Sharding/Images/RegularAlpha.png)
+
+{{< prev_next_button link_prev_url="../1_deploy_workload" link_next_url="../3_implement_sharding/" />}}

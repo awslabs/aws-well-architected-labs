@@ -7,11 +7,11 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-Traditionally most workloads are designed to withstand infrastructure failure such as - deploying workload components across multiple Availability Zones/Regions, implementing self-healing capabilities such as AutoScaling, etc. While such techniques are effective in ensuring uptime of workload resources, they do not address issues introduced at the application level i.e. a software bug. Leveraging bulkhead architectures and shuffle-sharding techniques will provide additional reliability to workloads by limiting the blast radius of failures so that only a subset of users are impacted by such failures.
+Traditionally most workloads are designed to withstand infrastructure failure by deploying workload components across multiple Availability Zones/Regions, implementing self-healing capabilities such as AutoScaling, etc. While such techniques are effective in ensuring uptime of workload resources, they do not address issues introduced at the workload application level (i.e. a software bug). Leveraging bulkhead architectures and shuffle-sharding techniques will provide additional reliability to workloads by limiting the blast radius of failures so that only a subset of users are impacted by such failures.
 
 ![ArchitectureRegular](/Reliability/300_Minimize_Blast_Radius_with_Shuffle_Sharding/Images/Architecture-regular.png)
 
-You will use AWS CloudFormation to provision some resources needed for this lab. The CloudFormation stack that you provision will create an Application Load Balancer, Target Groups, and some EC2 instances in a new VPC.
+You will use AWS CloudFormation to provision the resources needed for this lab. The CloudFormation stack that you provision will create an Application Load Balancer, Target Groups, and EC2 instances in a new VPC.
 
 ### 1.1 Log into the AWS console {#awslogin}
 
@@ -85,6 +85,7 @@ Now that the application has been deployed, it is time to test it to understand 
     ![CFNOutputs](/Reliability/300_Minimize_Blast_Radius_with_Shuffle_Sharding/Images/CFNOutputs.png)
 
 1. Refresh the web browser a few times to see that responses are being returned from different EC2 instances on the back-end
+    * The list of EC2 instances in your workload can be viewed in the [AWS Console here](https://console.aws.amazon.com/ec2/v2/home?#Instances:tag:Name=Node)
 
     ![RegularAlpha](/Reliability/300_Minimize_Blast_Radius_with_Shuffle_Sharding/Images/RegularAlpha.png)
 
@@ -97,4 +98,6 @@ Now that the application has been deployed, it is time to test it to understand 
     * http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo
     * http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot
 
-1. Refresh the web browser multiple times to verify that all customers are able to receive responses from all EC2 instances in the back-end
+1. Refresh the web browser multiple times to verify that _all_ customers are able to receive responses from _all_ EC2 instances in the back-end
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_measure_blast_radius/" />}}

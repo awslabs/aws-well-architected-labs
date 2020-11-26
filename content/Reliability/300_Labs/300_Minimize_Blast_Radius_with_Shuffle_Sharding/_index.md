@@ -1,6 +1,6 @@
 ---
-title: "Level 300: Minimize Blast Radius with Shuffle Sharding"
-menutitle: "Minimize Blast Radius with Shuffle Sharding"
+title: "Level 300: Scope of Impact with Shuffle Sharding"
+menutitle: "Limit risk with shuffle-sharding"
 description: "Implement shuffle-sharding to minimize blast radius of failures"
 date: 2020-18-11T11:16:08-04:00
 chapter: false
@@ -10,21 +10,22 @@ tags:
 ---
 ## Authors
 
-* Mahanth Jayadeva, Solutions Architect, Well-Architected
+* Mahanth Jayadeva, Solutions Architect, AWS Well-Architected
 
 ## Introduction
 
-In this lab, you will become familiar with the concept of shuffle-sharding and how it can help reduce blast radius during failures. You will learn how to distribute traffic in a combinatorial way so that any failures affect only a small subset of users.
+In this lab, you will become familiar with the concept of shuffle-sharding and how it can help reduce blast radius during failures. You will learn how to distribute user requests to resources in a combinatorial way so that any failures affect only a small subset of users. "Users" in this case refers to any source of requests to your workload.  This can be other services that call your workload, in addition to actual human users.
 
-While most workloads are designed to withstand infrastructure failures, issues introduced by the application could propagate through the workload and take down the entire fleet of services. It is important to have a strategy to minimize disruption to users that could be caused by such application issues.
+Without any sharding, any worker (such as servers, queues, or databases) in your workload can handle any request. With this architecture a a poisonous request or a flood of requests from one user will spread unabated through the entire fleet. Sharding is the practice of providing logical isolation of capacity (one ore more workers) for each set of users, limiting the propagation of such failures. Shuffle-sharding further limits the impact of any one "bad actor" among your users.
 
 In this lab, you will create a workload with a sample application running on EC2 instances. You will then create a strategy to distribute traffic using shuffle-sharding and reduce the blast radius when a failure occurs.
 
-The skills you learn will help you create bulkhead architectures in alignment with Reliability best practices of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+The skills you learn will help you [use bulkhead architectures](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/use-fault-isolation-to-protect-your-workload.html) in alignment with Reliability best practices of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
 ## Goals:
 
-* Deploy a workload with a bulkhead architecture
+* Deploy a workload with a bulkhead architecture to limit propagation of failures.
+* Apply shuffle-sharding to further limit failure propagation
 * Test failure within the workload and ensure the blast radius is minimized
 
 ## Prerequisites:
@@ -34,6 +35,7 @@ The skills you learn will help you create bulkhead architectures in alignment wi
 
 **NOTE**: You will be billed for any applicable AWS resources used as part of this lab, that are not covered in the AWS Free Tier.
 
+{{< prev_next_button link_next_url="./1_deploy_workload/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
 {{% children  %}}
