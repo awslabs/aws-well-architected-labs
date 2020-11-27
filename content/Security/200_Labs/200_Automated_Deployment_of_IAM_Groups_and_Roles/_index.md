@@ -1,10 +1,14 @@
 ---
-title: "Level 200: Automated Deployment of IAM Groups and Roles"
+title: "Automated Deployment of IAM Groups and Roles"
 menutitle: "Automated Deployment of IAM Groups and Roles"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-09-19T11:16:08-04:00
 chapter: false
 weight: 3
 ---
+
+**Last Updated:** September 2020
+
+**Author:** Ben Potter, Security Lead, Well-Architected
 
 ## Introduction
 
@@ -18,8 +22,13 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 
 ## Prerequisites
 
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+- An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
+- Permissions to create resources in IAM.
+
+## Costs
+
+- There are no costs for this lab
+- [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
 {{% children  %}}
