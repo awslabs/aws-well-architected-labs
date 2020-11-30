@@ -3,8 +3,8 @@ title: "Generate CPU and Memory load"
 menutitle: "Generate machine load"
 date: 2020-11-19T12:00:00-04:00
 chapter: false
-weight: 4
-pre: "<b>4. </b>"
+weight: 5
+pre: "<b>5. </b>"
 tags:
  - Windows Server
  - Windows
@@ -168,27 +168,27 @@ Write-Output "RAM HAS BEEN CLEARED: $ram / $maxRAM"
 1. Open a new tab for the AWS console with this link:
 https://console.aws.amazon.com/ec2/v2/home?r#Instances:instanceState=running;tag:Name=WindowsMachineDeploy
 1. Assuming you did not change the CloudFormation stack name, you should see the EC2 instance we have deployed.
-![GenerateLoad1](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad1.png?width=50pc)
+![GenerateLoad1](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad1.png?classes=lab_picture_small)
 1. Click the checkbox next to the machine, and then click "Connect"
-![GenerateLoad2](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad2.png?width=50pc)
+![GenerateLoad2](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad2.png?classes=lab_picture_small)
 1. Select "Session Manager" and then click Connect. This will open a new tab with a PowerShell console for the instance.
-![GenerateLoad3](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad3.png?width=50pc)
-![GenerateLoad4](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad4.png?width=50pc)
+![GenerateLoad3](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad3.png?classes=lab_picture_small)
+![GenerateLoad4](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad4.png?classes=lab_picture_small)
 
 1. Type C:\mem_stress.ps1 at the console and it will start to consume memory resources
-![GenerateLoad5](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad5.png?width=50pc)
-![GenerateLoad6](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad6.png?width=50pc)
+![GenerateLoad5](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad5.png?classes=lab_picture_small)
+![GenerateLoad6](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad6.png?classes=lab_picture_small)
 1. Go back to the previous broswer tab that has the EC2 console connect screen and click Connect again. This will open another PowerShell console.
-![GenerateLoad4](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad4.png?width=50pc)
+![GenerateLoad4](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad4.png?classes=lab_picture_small)
 1. Type C:\cpu_stress.ps1 at the console and it will start to consume CPU resources
-![GenerateLoad7](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad7.png?width=50pc)
+![GenerateLoad7](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad7.png?classes=lab_picture_small)
 1. Go back to your browser tab that contains the CloudWatch Dashboard. You should see the CPU and Memory graphs change within 10-15 seconds.
-![GenerateLoad8](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad8.png?width=50pc)
+![GenerateLoad8](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad8.png?classes=lab_picture_small)
 1. As time goes on, it will continue to update the graph. In order to remove the load, go back to each of the console windows and simply press any key.  This will cause the script to reclaim all resources it has consumed.
 1. Go back to your browser tab that contains the CloudWatch Dashboard to watch as the CPU load goes down and the amount of free RAM increases.
-![GenerateLoad9](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad9.png?width=50pc)
+![GenerateLoad9](/Performance/100_Monitoring_Windows_EC2_CloudWatch/Images/4/GenerateLoad9.png?classes=lab_picture_small)
 
 
 
 
-{{< prev_next_button link_prev_url="../3_adding_metrics_to_dashboard/" link_next_url="../5_cleanup/" />}}
+{{< prev_next_button link_prev_url="../4_adding_metrics_to_dashboard/" link_next_url="../6_cleanup/" />}}

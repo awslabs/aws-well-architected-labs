@@ -9,10 +9,6 @@ Parameters:
     Type: String
     Default: t3.large
     ConstraintDescription: must be a valid EC2 instance type.
-  DeployVPC:
-    Type: AWS::EC2::VPC::Id
-  DeploySubnet:
-    Type: AWS::EC2::Subnet::Id
   InstanceAMI:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     # Default: '/aws/service/ami-windows-latest/Windows_Server-2016-English-Full-Base' #2016
@@ -20,10 +16,7 @@ Parameters:
   PrimaryNodeLabel:
     Type: String
     Default: "walabs-primary"
-  KeyPair:
-    Description: Name of an existing EC2 KeyPair to enable RDP access to the instances
-    Type: AWS::EC2::KeyPair::KeyName
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
   MetricAggregationInterval:
     Description: How often we should collect agent data from the machine
     Type: Number
@@ -32,27 +25,39 @@ Parameters:
     Description: How often we should collect agent data from the machine
     Type: Number
     Default: 5
-  RDPLocation:
-    Description: The IP address range that can be used to RDP to the EC2 instances
+# If you wanted to run this lab without using SSM, you could enable these two parameters and un-remark them below as well
+  # KeyPair:
+  #   Description: Name of an existing EC2 KeyPair to enable RDP access to the instances
+  #   Type: AWS::EC2::KeyPair::KeyName
+  #   ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  # RDPLocation:
+  #   Description: The IP address range that can be used to RDP to the EC2 instances
+  #   Type: String
+  #   MinLength: '9'
+  #   MaxLength: '18'
+  #   Default:  0.0.0.0/0
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+  #   ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  #Imports:
+  VPCImportName:
     Type: String
-    MinLength: '9'
-    MaxLength: '18'
-    Default:  0.0.0.0/0
-    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
-    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
-
+    Description: 'The CloudFormation name of the VPC stack to import'
+    Default: 'PerfLab-VPC'
+    MinLength: '3'
+    MaxLength: '32'
 
 Resources:
   ServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref DeployVPC
-      GroupDescription: Enable RDP access via port 3389
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 3389
-        ToPort: 3389
-        CidrIp: !Ref 'RDPLocation'
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+      GroupDescription: Allow outbound for instance
+      # SecurityGroupIngress:
+      # - IpProtocol: tcp
+      #   FromPort: 3389
+      #   ToPort: 3389
+      #   CidrIp: !Ref 'RDPLocation'
 
   ServerRole:
     Type: AWS::IAM::Role
@@ -434,7 +439,7 @@ Resources:
                   Write-Output "FINAL $ram / $maxRAM"
 
                   # Ask the user if they want to clear out RAM, if so we will continue
-                  Read-Host -Prompt "Press any key to clear out RAM or CTRL+C to quit"
+                  Read-Host -Prompt "Press ENTER to clear out RAM"
 
                   Write-Output "Clearing RAM"
                   #####################
@@ -483,15 +488,15 @@ Resources:
                   foreach ($loopnumber in 1..$cpus){
                     Start-Job -ScriptBlock{
                     $result = 1
-                        foreach ($number in 1..2147483647){
+                        foreach ($number in 1..0x7FFFFFFF){
                             $result = $result * $number
                         }# end foreach
                     }# end Start-Job
                   }# end foreach
 
                   Write-Output "Created sub-jobs to consume the CPU"
-                  # Ask the user if they want to clear out RAM, if so we will continue
-                  Read-Host -Prompt "Press any key to stop the JOBs CTRL+C to quit"
+                  # Ask the user if they want to clear out the jobs, if so we will continue
+                  Read-Host -Prompt "Press ENTER to stop the JOBs"
 
                   Write-Output "Clearing CPU Jobs"
                   Receive-Job *
@@ -512,14 +517,15 @@ Resources:
           Value: !Sub '${AWS::StackName}-PrimaryStressMachine-${AWS::Region}'
         - Key: LabNodeLabel
           Value: !Ref PrimaryNodeLabel
-      KeyName: !Ref 'KeyPair'
+      # KeyName: !Ref 'KeyPair'
       ImageId: !Ref InstanceAMI
       InstanceType: !Ref InstanceType
       SecurityGroupIds:
          - !Ref 'ServerSecurityGroup'
       IamInstanceProfile: !Ref 'ServerRoleInstanceProfile'
       Monitoring: True
-      SubnetId: !Ref DeploySubnet
+      SubnetId:
+        Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
       UserData:
         Fn::Base64:
          !Sub |

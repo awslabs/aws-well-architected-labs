@@ -36,13 +36,14 @@ The skills you learn will help you secure your workloads in alignment with the [
   - You can create 3 dashboards for up to 50 metrics per month on the free tier and then it is $3.00 per dashboard per month
   - This lab creates one dashboard, so the maximum cost would be $3.00 per month if you have already consumed the free tier.
 - The default lab uses a t3.large EC2 instance which will consume approximately $3 for every day the lab is running
-
+- The VPC that is created for this lab will build a Nat Gateway, and will consume $5.50 per day when deployed.
+- Using defaults, the total cost of the lab would be at least $8.50 per day
 
 {{% notice note %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
 
-{{< prev_next_button link_next_url="./1_deploy/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_deploy_vpc/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
 {{% children  /%}}
