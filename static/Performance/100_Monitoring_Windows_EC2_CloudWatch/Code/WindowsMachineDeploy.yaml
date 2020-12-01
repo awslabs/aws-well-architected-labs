@@ -1,0 +1,560 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Cloudwatch Windows Test platform'
+
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t3.large
+    ConstraintDescription: must be a valid EC2 instance type.
+  InstanceAMI:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    # Default: '/aws/service/ami-windows-latest/Windows_Server-2016-English-Full-Base' #2016
+    Default: '/aws/service/ami-windows-latest/Windows_Server-2019-English-Full-Base'
+  PrimaryNodeLabel:
+    Type: String
+    Default: "walabs-primary"
+
+  MetricAggregationInterval:
+    Description: How often we should collect agent data from the machine
+    Type: Number
+    Default: 10
+  MetricCollectionInterval:
+    Description: How often we should collect agent data from the machine
+    Type: Number
+    Default: 5
+# If you wanted to run this lab without using SSM, you could enable these two parameters and un-remark them below as well
+  # KeyPair:
+  #   Description: Name of an existing EC2 KeyPair to enable RDP access to the instances
+  #   Type: AWS::EC2::KeyPair::KeyName
+  #   ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  # RDPLocation:
+  #   Description: The IP address range that can be used to RDP to the EC2 instances
+  #   Type: String
+  #   MinLength: '9'
+  #   MaxLength: '18'
+  #   Default:  0.0.0.0/0
+  #   AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+  #   ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  #Imports:
+  VPCImportName:
+    Type: String
+    Description: 'The CloudFormation name of the VPC stack to import'
+    Default: 'PerfLab-VPC'
+    MinLength: '3'
+    MaxLength: '32'
+
+Resources:
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+      GroupDescription: Allow outbound for instance
+      # SecurityGroupIngress:
+      # - IpProtocol: tcp
+      #   FromPort: 3389
+      #   ToPort: 3389
+      #   CidrIp: !Ref 'RDPLocation'
+
+  ServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+
+  ServerRoleInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - !Ref 'ServerRole'
+
+  TestServerHost:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT25M
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          config:
+          - 00-ConfigureCWLogs
+          - 01a-ConfigureCWAgentMetrics
+          - 01b-RestartCWAgent
+          - 02-ConfigureLoadTest
+          - 03-Finalize
+        00-ConfigureCWLogs:
+          files:
+            C:\Program Files\Amazon\SSM\Plugins\awsCloudWatch\AWS.EC2.Windows.CloudWatch.json:
+              content: !Sub |
+                {
+                  "EngineConfiguration": {
+                      "Components": [
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "ApplicationEventLog",
+                              "Parameters": {
+                                  "Levels": "7",
+                                  "LogName": "Application"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "SystemEventLog",
+                              "Parameters": {
+                                  "Levels": "7",
+                                  "LogName": "System"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "SecurityEventLog",
+                              "Parameters": {
+                                  "Levels": "7",
+                                  "LogName": "Security"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CustomLog.CustomLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "EC2ConfigLog",
+                              "Parameters": {
+                                  "CultureName": "en-US",
+                                  "Encoding": "ASCII",
+                                  "Filter": "EC2ConfigLog.txt",
+                                  "LogDirectoryPath": "C:\\Program Files\\Amazon\\Ec2ConfigService\\Logs",
+                                  "TimeZoneKind": "UTC",
+                                  "TimestampFormat": "yyyy-MM-ddTHH:mm:ss.fffZ:"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CustomLog.CustomLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CfnInitLog",
+                              "Parameters": {
+                                  "CultureName": "en-US",
+                                  "Encoding": "ASCII",
+                                  "Filter": "cfn-init.log",
+                                  "LogDirectoryPath": "C:\\cfn\\log",
+                                  "TimeZoneKind": "Local",
+                                  "TimestampFormat": "yyyy-MM-dd HH:mm:ss,fff"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CustomLog.CustomLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "IISLogs",
+                              "Parameters": {
+                                  "CultureName": "en-US",
+                                  "Encoding": "UTF-8",
+                                  "Filter": "",
+                                  "LineCount": "3",
+                                  "LogDirectoryPath": "C:\\inetpub\\logs\\LogFiles\\W3SVC1",
+                                  "TimeZoneKind": "UTC",
+                                  "TimestampFormat": "yyyy-MM-dd HH:mm:ss"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.PerformanceCounterComponent.PerformanceCounterInputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "MemoryPerformanceCounter",
+                              "Parameters": {
+                                  "CategoryName": "Memory",
+                                  "CounterName": "Available MBytes",
+                                  "DimensionName": "",
+                                  "DimensionValue": "",
+                                  "InstanceName": "",
+                                  "MetricName": "Memory",
+                                  "Unit": "Megabytes"
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchApplicationEventLog",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/ApplicationEventLog",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchSystemEventLog",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/SystemEventLog",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchSecurityEventLog",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/SecurityEventLog",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchEC2ConfigLog",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/EC2ConfigLog",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchCfnInitLog",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/CfnInitLog",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatchIISLogs",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "LogGroup": "${LogGroup}",
+                                  "LogStream": "{instance_id}/IISLogs",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          },
+                          {
+                              "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatch.CloudWatchOutputComponent,AWS.EC2.Windows.CloudWatch",
+                              "Id": "CloudWatch",
+                              "Parameters": {
+                                  "AccessKey": "",
+                                  "NameSpace": "Windows/Default",
+                                  "Region": "${AWS::Region}",
+                                  "SecretKey": ""
+                              }
+                          }
+                      ],
+                      "Flows": {
+                          "Flows": [
+                              "ApplicationEventLog,CloudWatchApplicationEventLog",
+                              "SystemEventLog,CloudWatchSystemEventLog",
+                              "SecurityEventLog,CloudWatchSecurityEventLog",
+                              "EC2ConfigLog,CloudWatchEC2ConfigLog",
+                              "CfnInitLog,CloudWatchCfnInitLog",
+                              "IISLogs,CloudWatchIISLogs",
+                              "MemoryPerformanceCounter,CloudWatch"
+                          ]
+                      },
+                      "PollInterval": "00:00:05"
+                  },
+                  "IsEnabled": true
+                }
+          commands:
+            0-enableSSM:
+              command: 'powershell.exe -Command "Set-Service -Name AmazonSSMAgent -StartupType Automatic" '
+              waitAfterCompletion: '0'
+        01a-ConfigureCWAgentMetrics:
+          files:
+            "C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent.json":
+              content: !Sub |
+                {
+                        "metrics": {
+                                "append_dimensions": {
+                                        "AutoScalingGroupName": "${!aws:AutoScalingGroupName}",
+                                        "ImageId": "${!aws:ImageId}",
+                                        "InstanceId": "${!aws:InstanceId}",
+                                        "InstanceType": "${!aws:InstanceType}"
+                                },
+                                "aggregation_dimensions" : [["AutoScalingGroupName"],["ImageId"], ["InstanceId", "InstanceType"]],
+                                "metrics_collected": {
+                                        "LogicalDisk": {
+                                                "measurement": [
+                                                        "% Free Space"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "Memory": {
+                                                "measurement": [
+                                                        "% Committed Bytes In Use",
+                                                        "Available Mbytes"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "Paging File": {
+                                                "measurement": [
+                                                        "% Usage"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "PhysicalDisk": {
+                                                "measurement": [
+                                                        "% Disk Time",
+                                                        "Disk Write Bytes/sec",
+                                                        "Disk Read Bytes/sec",
+                                                        "Disk Writes/sec",
+                                                        "Disk Reads/sec"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "Processor": {
+                                                "measurement": [
+                                                        "% User Time",
+                                                        "% Idle Time",
+                                                        "% Interrupt Time"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "TCPv4": {
+                                                "measurement": [
+                                                        "Connections Established"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "TCPv6": {
+                                                "measurement": [
+                                                        "Connections Established"
+                                                ],
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "resources": [
+                                                        "*"
+                                                ]
+                                        },
+                                        "statsd": {
+                                                "metrics_aggregation_interval": ${MetricAggregationInterval},
+                                                "metrics_collection_interval": ${MetricCollectionInterval},
+                                                "service_address": ":8125"
+                                        }
+                                }
+                        }
+                }
+        01b-RestartCWAgent:
+          commands:
+            01_stop_service:
+              command: powershell -Command "C:\\'Program Files'\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent-ctl.ps1 -a stop"
+            02_start_service:
+              command: powershell -Command "C:\\'Program Files'\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent-ctl.ps1 -a fetch-config -m ec2 -c file:C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent.json -s"
+        02-ConfigureLoadTest:
+          files:
+            "c:\\mem_stress.ps1":
+              content: |
+                  <#
+                  .EXAMPLE
+                  .\mem_stress.ps1
+
+                  This will execute the script to consume all of the memory (less 512 for the OS to survive)
+
+                  .DESCRIPTION
+                  #>
+
+                  # RAM in box
+                  $box=get-WMIobject Win32_ComputerSystem
+                  $Global:physMB=$box.TotalPhysicalMemory / 1024 /1024
+
+                  # Create object to get current memory available
+                  $Global:psPerfMEM = new-object System.Diagnostics.PerformanceCounter("Memory","Available Mbytes")
+                  $psPerfMEM.NextValue() | Out-Null
+
+                  # leave 512Mb for the OS to survive.
+                  $HEADROOM=512
+
+                  $ram = $physMB - $psPerfMEM.NextValue()
+                  $maxRAM=$physMB - $HEADROOM
+
+                  $progress = ($ram / $maxRAM) * 100
+                  $completed  = [int]$progress
+                  $StartDate = Get-Date
+
+                  Write-Output "=-=-=-=-=-=-=-=-=-=  Memory Stress Started: $StartDate =-=-=-=-=-=-=-=-=-="
+                  Write-Output "mem_stress - This script will consume all but 512MB of RAM available on the machine"
+                  Write-Output "Starting consumed RAM: $ram out of $maxRAM ($completed% Full)"
+                  Write-Output "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                  # If you increase the size of the array the GC seems to do quicker cleanups
+                  # Not sure why, but 200MB seems to be the suite spot
+                  $a = "a" * 200MB
+
+                  # These are the arrays we will create to consume all of the RAM
+                  $growArray = @()
+                  $growArray += $a
+                  $bigArray = @()
+                  $k=0
+                  $lastCompleted = 900
+
+                  # This loop will continue until we have consumed all of the RAM minus the headroom
+                  while ($ram -lt $maxRAM) {
+                   $bigArray += ,@($k,$growArray)
+                   $k += 1
+                   $growArray += $a
+                   # Find out how much RAM we are now consuming
+                   $ram = $physMB - $psPerfMEM.NextValue()
+                   $progress = ($ram / $maxRAM) * 100
+                   $completed  = [int]$progress
+                   $status_string = -join([int]$ram," of ",[int]$maxRAM, "MB ($completed% Complete)")
+                   # Only show the message when we have a change in percentage
+                   if ($completed -ne $lastCompleted) {
+                      Write-Output "$status_string"
+                      $lastCompleted = $completed
+                      }
+                  }
+                  Write-Output "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                  # Do a final check of RAM after consuming it all
+                  $ram = $physMB - $psPerfMEM.NextValue()
+                  Write-Output "FINAL $ram / $maxRAM"
+
+                  # Ask the user if they want to clear out RAM, if so we will continue
+                  Read-Host -Prompt "Press ENTER to clear out RAM"
+
+                  Write-Output "Clearing RAM"
+                  #####################
+                  # and now release it all.
+                  $bigArray.clear()
+                  #remove-variable bigArray
+                  $growArray.clear()
+                  #remove-variable growArray
+                  [System.GC]::Collect()
+                  #####################
+
+                  $ram = $physMB - $psPerfMEM.NextValue()
+                  Write-Output "RAM HAS BEEN CLEARED: $ram / $maxRAM"
+            "c:\\cpu_stress.ps1":
+               content: |
+                  <#
+                  .EXAMPLE
+                  .\cpu_stress.ps1
+
+                  This will execute the script against all cores
+
+                  .DESCRIPTION
+                  #>
+
+                  # CPUs in the machine
+                  $cpus=$env:NUMBER_OF_PROCESSORS
+                  # Lower the thread so it won't overwhelm the system for other things
+                  [System.Threading.Thread]::CurrentThread.Priority = 'Lowest'
+
+
+                  #####################
+                  # perfmon counters for CPU
+                  $Global:psPerfCPU = new-object System.Diagnostics.PerformanceCounter("Processor","% Processor Time","_Total")
+                  $psPerfCPU.NextValue() | Out-Null
+
+
+                  $StartDate = Get-Date
+                  Write-Output "=-=-=-=-=-=-=-=-=-=  Stress Machine Started: $StartDate =-=-=-=-=-=-=-=-=-="
+                  Write-Warning "This script will saturate all available CPUs in the machine"
+                  Write-Warning "To cancel execution of all jobs, close the PowerShell Host Window (or terminate the remote session)"
+                  Write-Output "=-=-=-=-=-=-=-=-=-=  CPUs in box: $cpus =-=-=-=-=-=-=-=-=-= "
+
+
+
+                  # This will stress the CPU
+                  foreach ($loopnumber in 1..$cpus){
+                    Start-Job -ScriptBlock{
+                    $result = 1
+                        foreach ($number in 1..0x7FFFFFFF){
+                            $result = $result * $number
+                        }# end foreach
+                    }# end Start-Job
+                  }# end foreach
+
+                  Write-Output "Created sub-jobs to consume the CPU"
+                  # Ask the user if they want to clear out the jobs, if so we will continue
+                  Read-Host -Prompt "Press ENTER to stop the JOBs"
+
+                  Write-Output "Clearing CPU Jobs"
+                  Receive-Job *
+                  Stop-Job *
+                  Remove-Job *
+
+                  $EndDate = Get-Date
+                  Write-Output "=-=-=-=-=-=-=-=-=-= Stress Machine Complete: $EndDate =-=-=-=-=-=-=-=-=-="
+
+        03-Finalize:
+          commands:
+            00_signal_success:
+              command: !Sub 'cfn-signal.exe -e 0 --resource TestServerHost --stack ${AWS::StackName} --region ${AWS::Region}'
+              waitAfterCompletion: '0'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-PrimaryStressMachine-${AWS::Region}'
+        - Key: LabNodeLabel
+          Value: !Ref PrimaryNodeLabel
+      # KeyName: !Ref 'KeyPair'
+      ImageId: !Ref InstanceAMI
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds:
+         - !Ref 'ServerSecurityGroup'
+      IamInstanceProfile: !Ref 'ServerRoleInstanceProfile'
+      Monitoring: True
+      SubnetId:
+        Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
+      UserData:
+        Fn::Base64:
+         !Sub |
+          <script>
+          wmic product where "description='Amazon SSM Agent' " uninstall
+          wmic product where "description='aws-cfn-bootstrap' " uninstall
+          powershell -Command "Invoke-WebRequest -Uri 'https://live.sysinternals.com/Testlimit.exe' -OutFile c:\Testlimit.exe"
+          powershell -Command "Invoke-WebRequest -Uri 'https://live.sysinternals.com/cpustres.exe' -OutFile c:\cpustres.exe"
+          powershell -Command "(New-Object Net.WebClient).DownloadFile('https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi','C:\amazon-cloudwatch-agent.msi')"
+          C:\amazon-cloudwatch-agent.msi
+          start /wait c:\\Windows\\system32\\msiexec /passive /qn /i https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-win64-latest.msi
+          powershell.exe -Command "iwr https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe  -UseBasicParsing -OutFile C:\\AmazonSSMAgentSetup.exe"
+          start /wait C:\\AmazonSSMAgentSetup.exe /install /quiet
+          cfn-init.exe -v -c config -s ${AWS::StackName} --resource TestServerHost --region ${AWS::Region}
+          powershell -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"
+          c:\ProgramData\chocolatey\bin\choco install python -y
+          c:\ProgramData\chocolatey\bin\choco install vim nano -y
+          c:\ProgramData\chocolatey\bin\RefreshEnv.cmd
+          </script>
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 7
+
+Outputs:
+  InstanceId:
+    Description: The instance ID of the web server
+    Value: !Ref 'TestServerHost'
+  CloudWatchLogGroupName:
+    Description: The name of the CloudWatch log group
+    Value: !Ref 'LogGroup'

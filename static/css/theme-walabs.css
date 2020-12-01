@@ -61,6 +61,8 @@ a {
     color: var(--MAIN-LINK-color);
 }
 
+
+
 blockquote {
   border-left: 10px solid #919191;
 }
@@ -635,4 +637,16 @@ div.cards.workshop div.content {
 
 #shortcuts {
   margin-top: 5rem;
+}
+
+.lab_picture_auto {
+  border-radius: 8px;
+  border: 2px solid BLACK;
+}
+
+.lab_picture_small {
+  border-radius: 8px;
+  border: 2px solid BLACK;
+  width: 75% !important;
+  height: auto !important;
 }
