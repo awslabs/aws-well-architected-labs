@@ -76,3 +76,4 @@ The instructions below is how I built the skeleton site.
     1. layouts/partials/menu.html
     1. static/css/theme-walabs.css
 
+

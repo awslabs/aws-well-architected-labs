@@ -10,8 +10,6 @@ weight: 4
 
 **Authors:** Ben Potter, Security Lead, Well-Architected
 
-**Time to complete:** 5-10 minutes
-
 ## Introduction
 
 This hands-on lab will use [AWS CloudFormation](https://aws.amazon.com/cloudformation/) to create an [Amazon VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html) to outline some of the AWS security features available. Using CloudFormation to automate the deployment provides a repeatable way to create and update, and you can re-use the template after this lab.

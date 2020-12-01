@@ -35,7 +35,7 @@
 
 1. This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
     * Click on the **Events** tab
-    * Scroll through the listing. It shows (in reverse order) the activities performed by CloudFormation, such as starting to create a resource and then completing the resource creation.
+    * Scroll through the listing. It shows the activities performed by CloudFormation (newest events at top), such as starting to create a resource and then completing the resource creation.
     * Any errors encountered during the creation of the stack will be listed in this tab.
       ![StackCreationStarted](/Common/images/CreateNewCloudFormationStack/CFNStackInProgress.png)  
 

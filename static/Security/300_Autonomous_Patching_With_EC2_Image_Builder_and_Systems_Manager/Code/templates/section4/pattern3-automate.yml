@@ -1,0 +1,97 @@
+Parameters:
+  ImageBuilderPipelineStack:
+    Type: String
+  ApplicationStack:
+    Type: String
+Outputs:
+  Pattern3CreateImageOutput:
+    Description: Image Creation SSM Document 
+    Value: !Ref Pattern3CreateImage
+Resources:
+  Pattern3CreateImage: 
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Content: 
+        description: CreateImage
+        schemaVersion: '0.3'
+        parameters:
+          ImageBuilderPipeline:
+            default: 
+              Fn::ImportValue:
+                !Sub "${ImageBuilderPipelineStack}-ImageBuilderPipeline"
+            description: (Required) Corresponding EC2 Image Builder Pipeline to execute.
+            type: String
+          ApplicationStack:
+            default: !Ref ApplicationStack
+            description: (Required) Corresponding Application Stack to Deploy the Image to.
+            type: String
+        mainSteps:
+          - name: ExecuteImageCreation
+            action: aws:executeAwsApi
+            maxAttempts: 10
+            timeoutSeconds: 3600
+            onFailure: Abort
+            inputs:
+              Service: imagebuilder
+              Api: StartImagePipelineExecution
+              imagePipelineArn: '{{ ImageBuilderPipeline }}'
+            outputs:
+            - Name: imageBuildVersionArn
+              Selector: $.imageBuildVersionArn
+              Type: String
+          - name: WaitImageComplete
+            action: aws:waitForAwsResourceProperty
+            maxAttempts: 10
+            timeoutSeconds: 3600
+            onFailure: Abort
+            inputs:
+              Service: imagebuilder
+              Api: GetImage
+              imageBuildVersionArn: '{{ ExecuteImageCreation.imageBuildVersionArn }}'
+              PropertySelector: image.state.status
+              DesiredValues: 
+                - AVAILABLE
+          - name: GetBuiltImage
+            action: aws:executeAwsApi
+            maxAttempts: 10
+            timeoutSeconds: 3600
+            onFailure: Abort
+            inputs:
+              Service: imagebuilder
+              Api: GetImage         
+              imageBuildVersionArn: '{{ ExecuteImageCreation.imageBuildVersionArn }}'
+            outputs:
+            - Name: image
+              Selector: $.image.outputResources.amis[0].image
+              Type: String
+          - name: UpdateCluster
+            action: aws:executeAwsApi
+            maxAttempts: 10
+            timeoutSeconds: 3600
+            onFailure: Abort
+            inputs:
+              Service: cloudformation
+              Api: UpdateStack
+              StackName: '{{ ApplicationStack }}'
+              UsePreviousTemplate: true
+              Parameters:
+                - ParameterKey: BaselineVpcStack
+                  UsePreviousValue: true
+                - ParameterKey: AmazonMachineImage
+                  ParameterValue: '{{ GetBuiltImage.image }}'
+              Capabilities:
+                - CAPABILITY_IAM
+          - name: WaitDeploymentComplete
+            action: aws:waitForAwsResourceProperty
+            maxAttempts: 10
+            timeoutSeconds: 3600
+            onFailure: Abort
+            inputs:
+              Service: cloudformation
+              Api: DescribeStacks
+              StackName: '{{ ApplicationStack }}'
+              PropertySelector: Stacks[0].StackStatus
+              DesiredValues: 
+                - UPDATE_COMPLETE
+

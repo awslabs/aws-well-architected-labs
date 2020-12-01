@@ -53,7 +53,7 @@ Write-Output "=-=-=-=-=-=-=-=-=-=  CPUs in box: $cpus =-=-=-=-=-=-=-=-=-= "
 foreach ($loopnumber in 1..$cpus){
   Start-Job -ScriptBlock{
   $result = 1
-      foreach ($number in 1..2147483647){
+      foreach ($number in 1..0x7FFFFFFF){
           $result = $result * $number
       }# end foreach
   }# end Start-Job

@@ -1,0 +1,345 @@
+Parameters:
+  BaselineVpcStack:
+    Type: String
+  ECRImageURI:
+    Type: String
+
+
+Outputs:
+  OutputPattern1ALB:
+    Description: Elastic Load Balancer
+    Value: !Ref Pattern1ALB
+    Export:
+      Name: !Sub "${AWS::StackName}-ALB"
+  OutputPattern1KMSKey:
+    Description: KMS Key used by app to encrypt / decrypt data
+    Value: !Ref Pattern1KMSKey
+  OutputPattern1ELBSecurityGroup:
+    Description: Elastic Load Balancer Security Group
+    Value: !Ref Pattern1ELBSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-ELBSecurityGroup"
+  OutputPattern1ApplicationEndpoint:
+    Description: Application Endpoint
+    Value: !GetAtt Pattern1ALB.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-ApplicationEndpoint"
+  OutputPattern1ECSTaskRole:
+    Description: App Task Role ARN
+    Value: !GetAtt Pattern1ECSTaskRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-ApplicationTaskRole"
+
+
+Resources:
+#----------------------------------------------------------------------------------------
+# Build load balancer.
+#----------------------------------------------------------------------------------------
+  Pattern1ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      SecurityGroups:
+        - !Ref Pattern1ELBSecurityGroup
+      Subnets:
+        -
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PublicSubnet1"
+        -
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PublicSubnet2"
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalALB"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern1"
+
+  Pattern1ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      TargetType: ip
+      HealthCheckEnabled: True
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: 80
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 5
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 60
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalALBTargetGroup"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern1"
+
+  Pattern1ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref Pattern1ALB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref Pattern1ALBTargetGroup
+
+#----------------------------------------------------------------------------------------
+# Build load balancer security group.
+#----------------------------------------------------------------------------------------
+  Pattern1ELBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP from the Internet
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalELBSecurityGroup"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern1"
+
+#----------------------------------------------------------------------------------------
+# Build ECS Resources.
+#----------------------------------------------------------------------------------------
+
+  Pattern1ContainerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Join ['', [!Ref 'AWS::StackName', -Pattern1ContainerSecGroup]]
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref Pattern1ELBSecurityGroup
+
+  Pattern1ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      CapacityProviders:
+        - FARGATE
+          # FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+
+  Pattern1ECSService:
+    DependsOn: Pattern1ALB
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref Pattern1ECSCluster
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: 1
+      HealthCheckGracePeriodSeconds: 60
+      LoadBalancers:
+        - ContainerName: simple-app
+          ContainerPort: 80
+          TargetGroupArn: !Ref Pattern1ALBTargetGroup
+      TaskDefinition: !Ref Pattern1TaskDefinition
+      ServiceName: !Join ['', [!Ref 'AWS::StackName', -pattern1-app-api]]
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - Fn::ImportValue:
+                !Sub "${BaselineVpcStack}-PrivateSubnet1"
+            - Fn::ImportValue:
+                !Sub "${BaselineVpcStack}-PrivateSubnet2"
+          SecurityGroups:
+            - !Ref Pattern1ContainerSecGroup
+
+
+  Pattern1TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Join ['', [!Ref 'AWS::StackName', -pattern1-app]]
+      TaskRoleArn: !Ref Pattern1ECSTaskRole
+      ExecutionRoleArn: !Ref Pattern1ECSTaskExecutionRole
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 256
+      Memory: 0.5GB
+      ContainerDefinitions:
+      - Name: simple-app
+        Essential: 'true'
+        Image: !Ref ECRImageURI 
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'Pattern1ECSCloudWatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: !Join ['', [!Ref 'AWS::StackName', -pattern1-app]]
+        Environment:
+          - Name: DBHOST
+            Value: !GetAtt Pattern1RDS.Endpoint.Address
+          - Name: KeyId
+            Value: !Ref Pattern1KMSKey
+          - NAME: DBSecret
+            Value: !Ref Pattern1RDSSecret
+        PortMappings:
+        - ContainerPort: 80
+
+
+  Pattern1ECSCloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AWS::StackName
+      RetentionInDays: 365
+
+  #----------------------------------------------------------------------------------------
+  # Build ECS IAM Roles.
+  #----------------------------------------------------------------------------------------
+
+  Pattern1ECSServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2008-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole'
+
+  Pattern1ECSTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ['', [!Ref 'AWS::StackName', -Pattern1ECSTaskRole]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      Policies:            
+        - PolicyName: KMSAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: !GetAtt Pattern1KMSKey.Arn
+        - PolicyName: SMAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'secretsmanager:GetSecretValue'
+                Resource: !Ref Pattern1RDSSecret                
+        - PolicyName: CloudWatchLogs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'logs:*'
+                Resource: !GetAtt Pattern1ECSCloudWatchLogsGroup.Arn        
+        ### This needs to be restricted 
+
+  Pattern1ECSTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ['', [!Ref 'AWS::StackName', -Pattern1ECSTaskExecutionRole]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
+
+  #----------------------------------------------------------------------------------------
+  # Build RDS Instance.
+  #----------------------------------------------------------------------------------------
+
+  Pattern1RDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 5
+      DBInstanceClass: db.t2.small
+      Engine: MySQL
+      MasterUsername: !Join ['', ['{{resolve:secretsmanager:', !Ref Pattern1RDSSecret, ':SecretString:username}}' ]]
+      MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref Pattern1RDSSecret, ':SecretString:password}}' ]]
+      DBSubnetGroupName: !Ref Pattern1RDSSubnetGroup
+      VPCSecurityGroups: 
+        - !Ref Pattern1RDSSecGroup
+
+
+  Pattern1RDSSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Join ['', [!Ref 'AWS::StackName', -Pattern1RDSSecGroup]]
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 
+            Fn::ImportValue:
+              !Sub "${BaselineVpcStack}-VpcCidrBlock"
+
+  Pattern1RDSSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: "Subnet Group"
+      SubnetIds:
+        - Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PrivateSubnet1"
+        - Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PrivateSubnet2"
+
+  Pattern1RDSSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: 'This is the secret for my RDS instance'
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "masteradmin"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 16
+        ExcludeCharacters: '"@/\'
+
+  #----------------------------------------------------------------------------------------
+  # Build Parameter KMS Key
+  #----------------------------------------------------------------------------------------
+
+  Pattern1KMSKey:
+    Type: "AWS::KMS::Key"
+    Properties:
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: key-pattern1-1
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Join
+                - ""
+                - - "arn:aws:iam::"
+                  - !Ref "AWS::AccountId"
+                  - ":root"
+            Action: "kms:*"
+            Resource: "*"

@@ -1,0 +1,296 @@
+Parameters:
+  BaselineVpcStack:
+    Type: String
+  NumberOfInstanceCluster:
+    Type: String
+    Default: "2"
+  MaxNumberOfInstanceCluster:
+    Type: String
+    Default: "2"
+  AmazonMachineImage:
+    Type: String
+
+Resources:
+#----------------------------------------------------------------------------------------
+# Build load balancer.
+#----------------------------------------------------------------------------------------
+  Pattern3ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      SecurityGroups: 
+        - !Ref Pattern3ELBSecurityGroup
+      Subnets: 
+        - 
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PublicSubnet1"
+        - 
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PublicSubnet2"
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalALB"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: True
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: 80
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 5
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 60
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalALBTargetGroup"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref Pattern3ALB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref Pattern3ALBTargetGroup
+
+#----------------------------------------------------------------------------------------
+# Build load balancer security group.
+#----------------------------------------------------------------------------------------
+  Pattern3ELBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP from the Internet
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref AWS::StackName, "ExternalELBSecurityGroup"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"    
+
+  #----------------------------------------------------------------------------------------
+  # Build instance security group.
+  #----------------------------------------------------------------------------------------
+  Pattern3InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access and HTTP from the load balancer only
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref Pattern3ELBSecurityGroup
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref AWS::StackName, "InstanceSecurityGroup"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"  
+  #----------------------------------------------------------------------------------------
+  # Auto Scaling launch Configuration
+  #----------------------------------------------------------------------------------------
+  Pattern3ASGLaunchConfig: 
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties: 
+      ImageId: !Ref AmazonMachineImage
+      SecurityGroups: 
+        - !Ref Pattern3InstanceSecurityGroup
+      InstanceType: "m1.large"
+      IamInstanceProfile: !Ref Pattern3Ec2InstanceProfile
+      UserData: 
+        Fn::Base64:
+          !Sub 
+            - |
+                #!/bin/bash -x
+                yum install -y aws-cfn-bootstrap
+                /opt/aws/bin/cfn-init -v --stack=${sub_stackname} --resource=${sub_resource} --configsets=${sub_configsets} --region=${sub_region}
+                /opt/aws/bin/cfn-signal -e $? --stack=${sub_stackname} --resource=${sub_asgresource} --region=${sub_region}
+            - 
+              sub_resource: Pattern3ASGLaunchConfig
+              sub_stackname: !Ref AWS::StackId
+              sub_configsets: provision
+              sub_region: !Ref AWS::Region
+              sub_asgresource: Pattern3ASG
+
+      EbsOptimized: "true"
+    Metadata: 
+      AWS::CloudFormation::Init:
+        configSets: 
+          provision:
+            - "prepare"
+            - "webserver"
+            - "application"
+            - "cfn-hup"
+        prepare:
+          packages:
+            yum: 
+              amazon-linux-extras: []
+        webserver: 
+          packages:
+            yum: 
+              httpd: []
+          commands:
+            enablehttpd:
+              command : "systemctl enable httpd"
+        application: 
+          files: 
+            /var/www/html/index.html: 
+              content: !Sub | 
+                <html> Welcome to Re:Invent 2020 The Well Architected Way <html>
+              mode: "000755"
+              owner: "root"
+              group: "root"
+            /var/www/html/details.php: 
+              content: !Sub | 
+                          <?php
+                            $ami = shell_exec('curl http://169.254.169.254/1.0/meta-data/ami-id');
+                            $installed = shell_exec('yum list installed | sed 1,2d | tr "\n" "#" | sed -e \'s/# / /g\' | tr "#" "\n" | awk \'{print "["$1"] -  {"$2"} -  ("$3")"}\'');
+                            print "<br>";
+                            print "<b>Amazon Image Id: </b> " . $ami . "<br>";
+                            print "<hr>";
+                            print "<br><b>Installed Packages:</b>";
+                            print "<br>";
+                            $ainstalled = explode("\n", $installed);
+                            foreach($ainstalled AS $output)
+                            {
+                                  print "<br>" . $output;
+                            }
+                          ?>
+              mode: "000755"
+              owner: "root"
+              group: "root"
+          commands:
+            load_php_modules:
+              command : "amazon-linux-extras install -y php7.2"
+            starthttpd:
+              command : "systemctl start httpd"
+        cfn-hup:
+          files:
+            /etc/cfn/cfn-hup.conf:
+              content: !Sub |
+                [main]
+                stack=${AWS::StackId}
+                region=${AWS::Region}
+                interval=5
+                verbose=true
+              mode: "000400"
+              owner: "root"
+              group: "root"
+            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.Pattern3ASGLaunchConfig.Metadata.AWS::CloudFormation::Init
+                action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackId} --resource Instance --configsets provision --region ${AWS::Region}
+                runas=root
+              mode: "000400"
+              owner: "root"
+              group: "root"
+          services:
+            sysvinit:
+              cfn-hup: 
+                enabled: "true"
+                ensureRunning: "true"
+                files:
+                  - /etc/cfn/cfn-hup.conf
+                  - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+
+  #----------------------------------------------------------------------------------------
+  # Auto Scaling Group
+  #----------------------------------------------------------------------------------------
+  Pattern3ASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      # LoadBalancerNames: 
+      #   - !Ref Pattern3ELB
+      TargetGroupARNs:
+        - !Ref Pattern3ALBTargetGroup
+      MinSize: '0'
+      MaxSize: !Ref MaxNumberOfInstanceCluster
+      DesiredCapacity: !Ref NumberOfInstanceCluster
+      LaunchConfigurationName: !Ref Pattern3ASGLaunchConfig
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 60
+      VPCZoneIdentifier: 
+        - 
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PrivateSubnet1"
+        - 
+          Fn::ImportValue:
+            !Sub "${BaselineVpcStack}-PrivateSubnet2"
+      Tags:
+      - Key: Name
+        PropagateAtLaunch: True
+        Value: !Join [ "-", [ !Ref AWS::StackName, "AutoScalingGroupInstance"]]
+      - Key: ResourceType
+        PropagateAtLaunch: True
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: True
+    CreationPolicy:
+      ResourceSignal:
+        Count: !Ref NumberOfInstanceCluster
+        Timeout: PT5M
+
+  Pattern3Ec2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: [ !Ref Pattern3Ec2InstanceRole ]
+
+  Pattern3Ec2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ ec2.amazonaws.com ]
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+Outputs:
+  OutputPattern3ALBDNSName:
+    Description: The DNSName of the application load balancer
+    Value: !GetAtt Pattern3ALB.DNSName
+  OutputPattern3ALB:
+    Description: Application Load Balancer
+    Value: !Ref Pattern3ALB
+    Export:
+      Name: !Sub "${AWS::StackName}-ALB"
+  OutputPattern3ELBSecurityGroup:
+    Description: Elastic Load Balancer Security Group
+    Value: !Ref Pattern3ELBSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-ELBSecurityGroup"
+  OutputPattern3InstanceSecurityGroup:
+    Description: Instance Security Group
+    Value: !Ref Pattern3InstanceSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-InstanceSecurityGroup"
