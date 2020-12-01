@@ -20,7 +20,7 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 <!-- ## Create EC2 KeyPair -->
 <!-- Make sure they have a EC2 KeyPair first, then run the CFN -->
-<!-- {{% common/CreateEC2KeyPair keypairname="wapetestlab" %}} -->
+<!-- {{% common/CreateEC2KeyPair keypairname="wapetestlab" region="us-west-2" fileformat="pem" %}} -->
 
 ## Deploy CloudFormation Template
 
@@ -28,7 +28,7 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 
 {{% common/CreateNewCloudFormationStack templatename="WindowsMachineDeploy.yaml" stackname="WindowsMachineDeploy" %}}
-    * **Stack Name** – Whatever you want to call the stack. For this test we used **WindowsMachineDeploy**
+    * **Stack name** – Use **WindowsMachineDeploy** (case sensitive)
 
     * **VPCImportName** - The subnet you wish to deploy the EC2 instance into for testing. For this lab, we use a default VPC subnet within the account.
     * **InstanceAMI** – This will auto-populate with the latest version of the Windows 2019 Base AMI
