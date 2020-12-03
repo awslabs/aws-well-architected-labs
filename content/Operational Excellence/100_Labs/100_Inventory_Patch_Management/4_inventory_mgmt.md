@@ -51,9 +51,8 @@ SSM Agent is installed by default on:
    1. Choose **Create role**.
 1. Apply this role to the instances you wish to manage with Systems Manager:
    1. Navigate to the [EC2 Console](https://console.aws.amazon.com/ec2/) and choose **Instances**.
-   1. Select the first instance and then choose **Actions**, **Instance Settings**, and **Attach/Replace IAM Role**.
-   1. Under **Attach/Replace IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Apply**.
-   1. After you receive confirmation of success, choose **Close**.
+   1. Select the first instance and then choose **Actions**, **Security**, and **Modify IAM Role**.
+   1. Under **Modify IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Save**.
    1. Repeat this process, assigning **ManagedInstancesRole** to each of the 3 remaining instances.
 1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Managed Instances** from the navigation bar. Periodically choose **Managed Instances** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
 
