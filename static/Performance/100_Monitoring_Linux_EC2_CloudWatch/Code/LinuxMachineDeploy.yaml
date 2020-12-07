@@ -7,9 +7,6 @@ Parameters:
   #   Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
   #   Type: AWS::EC2::KeyPair::KeyName
   #   ConstraintDescription: must be the name of an existing EC2 KeyPair.
-  #   Default: eric_test
-  # DeploySubnet:
-  #   Type: AWS::EC2::Subnet::Id
   InstanceType:
     Description: EC2 instance type
     Type: String
@@ -67,33 +64,6 @@ Resources:
       Path: /
       Roles:
       - !Ref 'ServerRole'
-
-  # PrimaryStressEC2:
-  #   Type: AWS::EC2::Instance
-  #   Properties:
-  #     Tags:
-  #       - Key: Name
-  #         Value: !Sub '${AWS::StackName}-PrimaryStressMachine-${AWS::Region}'
-  #       - Key: LabNodeLabel
-  #         Value: !Ref PrimaryNodeLabel
-  #     InstanceType: !Ref InstanceType
-  #     IamInstanceProfile: !Ref ServerRoleInstanceProfile
-  #     # KeyName: !Ref KeyName
-  #     ImageId: !Ref InstanceAMI
-  #     Monitoring: True
-  #     SubnetId:
-  #       Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
-  #     # SecurityGroupIds:
-  #     #   - !Ref InstanceSecurityGroup
-  #     UserData:
-  #       # This script below is to install AmazonCloudWatchAgent, restart AmazonCloudWatchAgent and tell the result to cloudformation.
-  #       Fn::Base64: !Sub |
-  #          #!/bin/bash
-  #          set -o xtrace
-  #          amazon-linux-extras install epel -y
-  #          yum update -y
-  #          yum install stress amazon-cloudwatch-agent -y
-
 
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -243,10 +213,6 @@ Resources:
                     "force_flush_interval": ${MetricAggregationInterval}
                   }
                 }
-
-
-
-
         # Invoke amazon-cloudwatch-agent-ctl to restart the AmazonCloudWatchAgent.
         03_restart_amazon-cloudwatch-agent:
           commands:
@@ -314,11 +280,13 @@ Resources:
         Fn::Base64: !Sub |
            #!/bin/bash
            set -o xtrace
-           # rpm -Uvh https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+           # Add amazon-linux-extras to our repo list
            amazon-linux-extras install epel -y
+           # Update to latest versions from the repos
            yum update -y
+           # Install stress utility and the amazon cloudwatch agent
            yum install stress amazon-cloudwatch-agent -y
-
+           # Trigger the cfn-init section above under metadata
            /opt/aws/bin/cfn-init -v --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region} --configsets default
            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region}
 
@@ -326,42 +294,3 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       RetentionInDays: 7
-
-
-
-  # InstanceSecurityGroup:
-  #   Type: AWS::EC2::SecurityGroup
-  #   Properties:
-  #     VpcId: !Ref DeployVPC
-  #     GroupDescription: All outbound internet access and inbound ssh from Instance Connect web client only
-  #
-  # USEAST1InstanceSecurityGroupSSH:
-  #    Type: AWS::EC2::SecurityGroupIngress
-  #    Properties:
-  #       GroupId: !Ref 'InstanceSecurityGroup'
-  #       IpProtocol: tcp
-  #       FromPort: 22
-  #       ToPort: 22
-  #       CidrIp: 18.206.107.24/29
-  # USEAST2InstanceSecurityGroupSSH:
-  #    Type: AWS::EC2::SecurityGroupIngress
-  #    Properties:
-  #       GroupId: !Ref 'InstanceSecurityGroup'
-  #       IpProtocol: tcp
-  #       FromPort: 22
-  #       ToPort: 22
-  #       CidrIp: 3.16.146.0/29
-
-  # InstanceSecurtyGroupiperfIngress:
-  #    Type: AWS::EC2::SecurityGroupIngress
-  #    Properties:
-  #       GroupId: !Ref 'InstanceSecurityGroup'
-  #       IpProtocol: tcp
-  #       FromPort: 5001
-  #       ToPort: 5001
-  #       SourceSecurityGroupId: !Ref 'InstanceSecurityGroup'
-
-
-# stress --cpu 2 --io 2 --vm 1 --vm-bytes 1G --hdd 1 --timeout 6000
-# sudo stress --cpu 8
-# sudo stress --vm-bytes $(awk '/MemAvailable/{printf "%d\n", $2 * 0.9;}' < /proc/meminfo)k --vm-keep -m 1
