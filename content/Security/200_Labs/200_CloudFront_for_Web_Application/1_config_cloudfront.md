@@ -23,7 +23,7 @@ ACL we previously created.
 
   ![cloudfront-create-distribution](/Security/200_CloudFront_for_Web_Application/Images/cloudfront-create-distribution.png)
 
-  * Click Create Distrubution.
+  * Click Create Distribution.
   * For more information on the other configuration options, see [Values That You Specify When You Create or Update a Web Distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html) in the CloudFront documentation.
 5. After CloudFront creates your distribution, the value of the Status column for your distribution will change from In Progress to Deployed.
 
