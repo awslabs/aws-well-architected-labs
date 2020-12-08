@@ -1,0 +1,421 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template to create lab resources. Creates an
+  Application Load Balancer, Target Groups, and EC2 instances in a new VPC.
+
+  **WARNING** You will be billed for the AWS resources created if you create a
+  stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License"). You may not
+  use this file except in compliance with the License. A copy of the License is
+  located at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  or in the "license" file accompanying this file. This file is distributed  on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+  or implied. See the License for the specific language governing permissions
+  and limitations under the License.
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: WA-Lab-VPC
+  Subnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs ''
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Subnet-1
+  Subnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select
+        - '1'
+        - !GetAZs ''
+      CidrBlock: 10.0.1.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Subnet-2
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: WA-Lab-InternetGateway
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: WA-Lab-RouteTable
+  Route:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet1
+  RouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet2
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Inbound HTTP for WA Lab
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp: 0.0.0.0/0
+  Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet1
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-1
+  Instance2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet1
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-2
+  Instance3:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet2
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-3
+  Instance4:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet2
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-4
+  InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - !Ref InstanceRole
+  InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      Policies:
+        - PolicyName: readtag
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'ec2:DescribeTags'
+                Resource: '*'
+  TargetGroupAllTargets:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: '5'
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '2'
+      HealthyThresholdCount: '2'
+      Port: '80'
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '1'
+      Targets:
+        - Id: !Ref Instance1
+          Port: '80'
+        - Id: !Ref Instance2
+          Port: '80'
+        - Id: !Ref Instance3
+          Port: '80'
+        - Id: !Ref Instance4
+          Port: '80'
+      TargetType: instance
+      UnhealthyThresholdCount: '2'
+      VpcId: !Ref VPC
+  TargetGroup1:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: '5'
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '2'
+      HealthyThresholdCount: '2'
+      Port: '80'
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '1'
+      Targets:
+        - Id: !Ref Instance1
+          Port: '80'
+        - Id: !Ref Instance2
+          Port: '80'
+      TargetType: instance
+      UnhealthyThresholdCount: '2'
+      VpcId: !Ref VPC
+  TargetGroup2:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: '5'
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '2'
+      HealthyThresholdCount: '2'
+      Port: '80'
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '1'
+      Targets:
+        - Id: !Ref Instance3
+          Port: '80'
+        - Id: !Ref Instance4
+          Port: '80'
+      TargetType: instance
+      UnhealthyThresholdCount: '2'
+      VpcId: !Ref VPC
+  ALB:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Properties:
+      SecurityGroups:
+        - !Ref SecurityGroup
+      Subnets:
+        - !Ref Subnet1
+        - !Ref Subnet2
+  ALBListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    Properties:
+      DefaultActions:
+        - FixedResponseConfig:
+            MessageBody: Invalid Request. Please include customer name in the request.
+            StatusCode: '400'
+          Type: fixed-response
+      LoadBalancerArn: !Ref ALB
+      Port: '80'
+      Protocol: HTTP
+  ALBListenerRule1:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup1
+          Type: forward
+      Conditions:
+        - Field: query-string
+          QueryStringConfig:
+            Values:
+              - Key: name
+                Value: Alpha
+              - Key: name
+                Value: Bravo
+              - Key: name
+                Value: Charlie
+      ListenerArn: !Ref ALBListener
+      Priority: '1'
+  ALBListenerRule2:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup2
+          Type: forward
+      Conditions:
+        - Field: query-string
+          QueryStringConfig:
+            Values:
+              - Key: name
+                Value: Delta
+              - Key: name
+                Value: Echo
+              - Key: name
+                Value: Foxtrot
+      ListenerArn: !Ref ALBListener
+      Priority: '2'
+  SSMDocument:
+    Type: 'AWS::SSM::Document'
+    Properties:
+      Content:
+        schemaVersion: '2.2'
+        description: State Manager Bootstrap Example
+        parameters: {}
+        mainSteps:
+          - action: 'aws:runShellScript'
+            name: configureServer
+            inputs:
+              runCommand:
+                - >-
+                  sudo nohup python /home/ec2-user/buggy-webserver.py >>
+                  /var/log/webserver.log 2>&1 &
+      DocumentType: Command
+Outputs:
+  URL:
+    Value: !GetAtt
+      - ALB
+      - DNSName
+  SSMDocument:
+    Value: !Join
+      - ''
+      - - 'https://console.aws.amazon.com/systems-manager/documents/'
+        - !Ref SSMDocument
+        - /description?region=
+        - !Ref 'AWS::Region'
+  Worker1:
+    Value: !Ref Instance1
+  Worker2:
+    Value: !Ref Instance2
+  Worker3:
+    Value: !Ref Instance3
+  Worker4:
+    Value: !Ref Instance4
