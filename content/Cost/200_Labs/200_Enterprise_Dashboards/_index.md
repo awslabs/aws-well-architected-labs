@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-September 2020
+December 2020
 
 {{< rawhtml >}}
 <video width="600" height="450" controls>
@@ -60,6 +60,7 @@ We recommend validating your data by comparing the aggregate un-grouped Payer an
 
 ## Time to complete
 - **Cost Intelligence Dashboard**: Should take approximately 45-60 minutes to complete
+	- **Optional Advanced Setup**: Should take approximately 15-30 minutes to complete  
 - **Data Transfer Dashboard**: Should take approximately 15-20 minutes to complete 
 
 ## Steps:

@@ -7,7 +7,11 @@ pre: "<b>1. </b>"
 ---
 
 ## Authors
-- Alee Whitman, Commercial Architect (AWS)
+- Alee Whitman, Commercial Architect (AWS OPTICS)
+
+## Contributors 
+- Arun Santhosh, Specialist SA (Amazon QuickSight)
+- Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 
 ### FAQ
 The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
@@ -15,8 +19,93 @@ The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intel
 ### Request Template Access
 Ensure you have requested access to the Cost Intelligence template [here.](http://d3ozd1vexgt67t.cloudfront.net/)
 
+### Optional: Advanced Setup using a CloudFormation Template
+This section is **optional** and automates the creation of the Cost Intelligence Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates, create an IAM role, create an S3 Bucket, and create an Athena Database. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
+
+{{%expand "Click here to continue with the CloudFormation Advanced Setup" %}}
+
+{{% notice note %}}
+NOTE: An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
+{{% /notice %}}
+
+### Create the Cost Intelligence Dashboard using a CloudFormation Template
+
+1. Login via SSO in your Cost Optimization account
+
+2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
+
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https%3A%2F%2Fee-assets-prod-us-east-1.s3.amazonaws.com%2Fmodules%2F8cf0b70c5c7a489ebe4e957c2f32bb67%2Fv1%2FQuickSightCurReportAutomation.yml)
+	
+![Images/cf_dash_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_2.png)
+
+3. Enter a **Stack name** for your template such as **Cost-Intelligence-Dashboard-QuickSight**
+![Images/cf_dash_3.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_3.png)
+
+4. Review **1stReadMe** parameter to confirm prerequisites before specifying the other parameters
+![Images/cf_dash_4.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_4.png)
+
+5. Validate your Athena primary workgroup has an output location 
+	- Open a new tab or window and navigate to the **Athena** console
+	- Select **Workgroup: primary**
+![Images/cf_dash_athena_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_athena_2.png)
+	- Click the bubble next to **primary** and then select view **detail**
+![Images/cf_dash_athena_3.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_athena_3.png)
+	- Confirm your **Query result location** is configured with an S3 bucket path. 
+		- If configured, **continue to step 6**. 
+		- If not configured, continue to setting up by clicking **Edit workgroup**
+![Images/cf_dash_athena_4.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_athena_4.png)
+	- Add the **S3 bucket path** you have selected for your Query result location and click save
+![Images/cf_dash_athena_5.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_athena_5.png)
+
+6. Update your **BucketFolderPath** with the S3 path where your **year partitions of CUR data** are stored
+![Images/cf_dash_6.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_6.png)
+To validate the correct path for your year partitions of the CUR data follow the tasks below:
+	- Open a new tab or window and navigate to the **S3** console
+	- Select the S3 Bucket your CUR is located in
+![Images/cf_dash_s3_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_s3_2.png)	
+	- Navigate your folders until you find the folder with the **year partitions of the CUR**
+![Images/cf_dash_s3_3.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_s3_3.png)	
+		- Tip: Your yearly partitions folder is located in the folder with your .yml file, monthly folders, and status report
+	- Add the identified BucketFolderPath to the CloudFormation parameter making sure to **not add trailing /**  (eg - BucketName/FolderName/.../FolderName)	
+		- Tip: copy and paste the **S3 URI** then **remove the leading 's3://' and the ending '/'**
+
+7. Update your **QuickSightUser** with your **QuickSight username** 
+![Images/cf_dash_7.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_7.png)
+To validate your QuickSight complete the tasks below:
+	- Open a new tab or window and navigate to the **QuickSight** console
+	- Click on the **profile icon** in the top right side of the navigation bar, then select **Manage QuickSight**
+![Images/cf_dash_qs_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_qs_2.png)
+	- Locate your username in the **manage users** section 
+![Images/cf_dash_qs_3.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_qs_3.png)
+
+8. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+
+9. Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+![Images/cf_dash_9.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_9.png)
+
+10. You will see the stack will start in **CREATE_IN_PROGRESS**
+![Images/cf_dash_10.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_10.png)
+
+11. Once complete, the stack will show **CREATE_COMPLETE**
+![Images/cf_dash_11.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_11.png)
+
+12. Navigate to **Dashboards** page in your QuickSight console, click on your **Dashboard name**
+![Images/cf_dash_12.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_12.png)
+
+13. Skip to the bottom of the page to **step 8 of the Create the Dashboard** section to finish setting up your dashboard
+
+
+{{% notice note %}}
+NOTE: You have successfully completed all CloudFormation specific steps. All remaining setup and future customizations will follow the same process as the manual steps.
+{{% /notice %}}
+
+{{% /expand%}}
+
+To create the dashboard using the **standard setup** move to the **Create Athena Views** section
+
+
 ### Create Athena Views
-The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not - you will need to create the alternate views.
+The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not you will need to create the alternate views.
 
 1. Login via SSO in your Cost Optimization account, go into the **Athena** console:
 
