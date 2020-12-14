@@ -1,6 +1,6 @@
 ---
 title: "Generate CPU and Memory load"
-menutitle: "Generate machine load"
+menutitle: "Generate load"
 date: 2020-11-19T12:00:00-04:00
 chapter: false
 weight: 5
@@ -163,7 +163,7 @@ Write-Output "RAM HAS BEEN CLEARED: $ram / $maxRAM"
 ```
 {{% /expand%}}
 
-## Generate a Load
+## Generate Load
 
 1. Open a new tab for the AWS console with this link:
 https://console.aws.amazon.com/ec2/v2/home?r#Instances:instanceState=running;tag:Name=WindowsMachineDeploy

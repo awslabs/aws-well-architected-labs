@@ -28,15 +28,17 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 
 {{% common/CreateNewCloudFormationStack templatename="LinuxMachineDeploy.yaml" stackname="LinuxMachineDeploy" %}}
+    * **None of these parameters need to be changed, but are available if you wish to try different settings**
     * **Stack name** – Use **LinuxMachineDeploy** (case sensitive)
+
     * **CloudWatchNameSpace** - The CloudWatch NameSpace to use instead of the default
-    * **VPCImportName** - The name of the stack you created in the previous step that will be used to place the machine into.
     * **InstanceAMI** – This will auto-populate with the latest version of the Amazon Linux 2 AMI
-    * **InstanceType** - Instance Type, defaults to t3.large but can use any size supported by Windows in the region you have chosen
+    * **InstanceType** - Instance Type, defaults to t3.large but can use any size supported by Linux in the region you have chosen
     <!-- * **KeyPair** – keyname to use for the test (in case you want to RDP into the box to run additional tests). Select the one you created above or another one if you had a pre-existing keypair from the drop-down. -->
-    * **MetricAggregationInterval** - How often should the CloudWatch Agent send data into CloudWatch. No need to change this.
-    * **MetricCollectionInterval** - How often should the CloudWatch Agent collect information from the Operating System. No need to change this.
-    * **PrimaryNodeLabel** - The additional label assigned to the EC2 instance to use for searching within CloudWatch Explorer
+    * **MetricAggregationInterval** - How often should the CloudWatch Agent send data into CloudWatch.
+    * **MetricCollectionInterval** - How often should the CloudWatch Agent collect information from the Operating System.
+    * **PrimaryNodeLabel** - The additional label assigned to the EC2 instance to use for searching within CloudWatch Explorer. This is done by adding an extra Tag to the EC2 instance.
+    * **VPCImportName** - The name of the stack you created in the previous step that will be used to launch the instance into.
 
 {{% /common/CreateNewCloudFormationStack %}}
 
