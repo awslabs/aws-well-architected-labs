@@ -13,7 +13,7 @@ tags:
  - CloudWatch Dashboard
 ---
 
-We have deployed a single Windows EC2 instance and we will now connect via SSM to run a pair of scripts to consume memory and CPU resources so we can see our AWS CloudWatch Dashboard update.
+We have deployed a single Windows 2 EC2 instance and we will now create a CloudWatch Dashboard to monitor the memory and CPU resources consumed by the instance.
 
 
 1. From the AWS Console, click the search box and type in CloudWatch (or you can open this link directly https://console.aws.amazon.com/cloudwatch/home)
