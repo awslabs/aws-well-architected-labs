@@ -1,7 +1,7 @@
 ---
 title: "Level 200: EC2 Right Sizing"
 #menutitle: "Lab #3"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-12-17T11:16:08-04:00
 chapter: false
 weight: 6
 ---
