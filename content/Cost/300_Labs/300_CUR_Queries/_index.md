@@ -22,10 +22,7 @@ CUR queries are provided as is. We recommend validating your data by comparing i
 {{% /notice %}}
 
 
-## Getting Started and Query Help
-
-[CUR Library Query Help]({{< ref "query_help/" >}} "CUR Library Query Help")
-
+## Query Help
 {{< rawhtml >}}
 <video width="500" height="308" controls>
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/HelperIntroductionVideoFinal.mp4" type="video/mp4">
@@ -33,6 +30,7 @@ CUR queries are provided as is. We recommend validating your data by comparing i
 </video>
 {{< /rawhtml >}}
 
+[CUR Library Query Help]({{< ref "query_help/" >}} "CUR Library Query Help")
 
 ## Queries
 [Analytics]({{< ref "Queries/analytics.md" >}} "Analytics")
@@ -74,13 +72,11 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Library Authors
 - Chris Strzelczyk, Sr. TAM, AWS Enterprise Support
 - Bill Pfeiffer, Sr. TAM, AWS Enterprise Support
-
-## Query Authors
 - Stephanie Gooch, Cost Optimization Lead, AWS OPTICS
 - Matthew Brend, Enterprise Support Lead, AWS Enterprise Support
 - Jonathan Banas, Sr. TAM, AWS Enterprise Support
-- Alee Whitman, Commercial Architect, Optics
-- Justin Marks, Technical Account Manager, AWS Enterprise Support
-- Chris Strzelczyk, Sr. TAM, AWS Enterprise Support
-- Bill Pfeiffer, Sr. TAM, AWS Enterprise Support
+- Alee Whitman, Commercial Architect, AWS Optics
+- Justin Marks, TAM, AWS Enterprise Support
 
+## Query Contributors
+Please refer to the [CUR Query Library Contributors section]({{< ref "/Cost/300_labs/300_CUR_Queries/contributors.md" >}}).
