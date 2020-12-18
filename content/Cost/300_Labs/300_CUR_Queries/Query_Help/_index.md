@@ -2,7 +2,7 @@
 title: "CUR Query Library Helpers"
 date: 2020-08-28T11:16:09-04:00
 chapter: false
-weight: 0
+weight: 4
 pre: "<b> </b>"
 ---
 
