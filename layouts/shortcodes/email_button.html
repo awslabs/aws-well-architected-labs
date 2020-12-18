@@ -1,0 +1,31 @@
+{{/*
+  Buttons to show Help/Feedback for CUR queries
+
+  You can override many of the parameters:
+    - category_text
+    - service_text
+    - query text
+
+*/}}
+
+
+{{ $.Scratch.Set "category_backup" "General" }}
+{{ $.Scratch.Set "service_backup" "None" }}
+{{ $.Scratch.Set "query_backup" "None" }}
+{{ $.Scratch.Set "button_text_backup" "Query Support" }}
+
+<div>
+  <script>
+    function prevStep(){
+      window.open("{{ if .Get "link_prev_url"}}{{.Get "link_prev_url"}}{{else}}{{$.Scratch.Get "link_previous_backup"}}{{ end }}", "_self")
+    }
+  </script>
+
+  <table align="center">
+    <tr>
+      <td align="middle">
+        <button class="button small" title="Get Help" href="#" onclick="javascript:window.location='mailto:curquery@amazon.com?subject=W-A Labs CUR Query Help&body=Hi CUR Query, %0D%0A %0D%0AI need help with the following CUR Query:%0D%0A%0D%0ACategory = ' + {{ if .Get "category_text" }}{{.Get "category_text" }}{{else}}{{$.Scratch.Get "category_backup" }}{{ end }} + '%0D%0AService = ' + {{ if .Get "service_text" }}{{.Get "service_text" }}{{else}}{{$.Scratch.Get "service_backup" }}{{ end }} + '%0D%0AQuery = ' + {{ if .Get "query_text" }}{{.Get "query_text" }}{{else}}{{$.Scratch.Get "query_backup" }}{{ end }} + '%0D%0AFrom: ' + window.location;">{{ if .Get "button_text" }}{{.Get "button_text" }}{{else}}{{$.Scratch.Get "button_text_backup" }}{{ end }}</button>
+      </td>
+    </tr>
+  </table>
+</div>
