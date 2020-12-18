@@ -1,28 +1,30 @@
 ---
 title: "Level 200: EC2 Right Sizing"
 #menutitle: "Lab #3"
-date: 2020-04-24T11:16:08-04:00
+date: 2020-12-17T11:16:08-04:00
 chapter: false
 weight: 6
 ---
 ## Authors
 - Jeff Kassel, AWS Technical Account Manager
 - Arthur Basbaum, AWS Cloud Economics
+- Travis Ketcherside, AWS Technical Account Manager
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
- This hands-on lab will guide you through the steps to install the CloudWatch agent to collect memory utilization (% GB consumption) and analyze how that new datapoint can help during EC2 right sizing exercises with the AWS Resource Optimization tool.
+This hands-on lab will guide you through the steps to install the CloudWatch agent to collect memory utilization (% GB consumption) and use AWS Compute Optimizer to right-size EC2 Instances, EBS volumes, and auto-scaling groups.
 
 ## Goals
-- Learn how to check metrics like CPU, Network and Disk usage on Amazon CloudWatch
-- Learn how to install and collect Memory data through a custom metric at Amazon CloudWatch
-- Enable AWS Resource Optimization and observe how the recommendations are impacted by this new datapoint (Memory)
+- Learn how to attach IAM roles to an EC2 instance for CloudWatch custom metric collection
+- Learn how to install and collect memory data through a custom metric at Amazon CloudWatch
+- Use AWS Compute Optimizer to gain insights into EC2 right-sizing
 
 ## Prerequisites
 - Root user access to the management account
-- Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
+- Completion of [Level 100: EC2 Right Sizing](https://wellarchitectedlabs.com/cost/100_labs/100_aws_resource_optimization/)
+- Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) at no additional cost.
 
 ## Permissions required
 - Root user access to the management account
@@ -32,4 +34,4 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 {{% children  /%}}
 
 
-{{< prev_next_button link_next_url="./1_cloudwatch_intro/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./2_create_iamrole/" button_next_text="Start Lab" first_step="true" />}}
