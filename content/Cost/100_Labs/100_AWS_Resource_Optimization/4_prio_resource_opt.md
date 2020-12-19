@@ -2,8 +2,8 @@
 title: "Download the Amazon EC2 Resource Optimization CSV File and sort it to find quick wins"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-weight: 3
-pre: "<b>3. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 1. Download the **Amazon EC2 Resource Optimization** report:
@@ -99,4 +99,4 @@ Also, do not forget to check the other recommended instance types (columns U to 
 
 If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$4,879.56 per month in potential savings*.
 
-{{< prev_next_button link_prev_url="../2_resource_opt/" link_next_url="../4_act_resource_opt/" />}}
+{{< prev_next_button link_prev_url="../3_resource_opt/" link_next_url="../5_act_resource_opt/" />}}

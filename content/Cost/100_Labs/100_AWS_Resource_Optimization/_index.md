@@ -33,12 +33,12 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Costs
 - https://aws.amazon.com/aws-cost-management/pricing/
-- There are no costs for this lab
+- There are no costs for this lab but you need to have at least 1 Amazon EC2 instance running. If you don't have any instance running please check the [AWS Free Tier page](https://aws.amazon.com/free/) for more information.
 
 ## Time to complete
-- The lab should take approximately 30 minutes to complete
+- The lab should take approximately 25 minutes to complete
 
 ## Steps:
 {{% children  /%}}
 
-{{< prev_next_button link_next_url="./1_cloudwatch_intro/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_intro_right_sizing/" button_next_text="Start Lab" first_step="true" />}}
