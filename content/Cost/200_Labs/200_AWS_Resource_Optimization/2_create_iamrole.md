@@ -28,4 +28,4 @@ Access to AWS resources requires permissions. You will now create an IAM role to
 
 The role is now created.
 
-{{< prev_next_button link_prev_url="../1_cloudwatch_intro/" link_next_url="../3_attach_iamrole/" />}}
+{{< prev_next_button link_prev_url="../1_intro_right_sizing/" link_next_url="../3_attach_iamrole/" />}}

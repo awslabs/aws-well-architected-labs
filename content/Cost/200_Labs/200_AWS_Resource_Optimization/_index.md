@@ -34,4 +34,4 @@ This hands-on lab will guide you through the steps to install the CloudWatch age
 {{% children  /%}}
 
 
-{{< prev_next_button link_next_url="./2_create_iamrole/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_intro_right_sizing/" button_next_text="Start Lab" first_step="true" />}}

@@ -28,7 +28,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
+- Log in as the Cost Optimization team, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup/4_configure_sso.html" >}})
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 ## Costs
