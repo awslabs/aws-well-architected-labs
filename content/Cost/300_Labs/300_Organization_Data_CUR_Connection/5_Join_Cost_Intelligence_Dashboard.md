@@ -21,22 +21,22 @@ This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_
 3. Select **Edit data set**
 
 4. Select **Add data**:
-![Images/dashboard_mapping_3.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
+![Images/dashboard_mapping_3.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
 
 5. Select your Athena **organization_data** table and click **Select**
-![Images/Org_Data.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Org_Data.png)
+![Images/Org_Data.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_Data.png)
 
 6. Select the **two circles** to open the join configuration then select **Left** to change your join type:
-![Images/dashboard_mapping_6.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_6.png)
+![Images/dashboard_mapping_6.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_6.png)
 
 7. Create following **join clause** :
 	- **linked_account_id** = **account_number**
 Click **Apply**
 
-![Images/dashboard_mapping_7.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_7.png)
+![Images/dashboard_mapping_7.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_7.png)
 
 8. Scroll down in the field list, and confirm the **Account ID** must be **Int**:
-![Images/dashboard_mapping_8.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_8.png)
+![Images/dashboard_mapping_8.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_8.png)
 
 9. Select **Save**
 
@@ -53,13 +53,13 @@ You now have new fields that can be used on the visuals in the Cost Intelligence
 11. Go to the **Cost Intelligence Analysis**
 
 12. Edit the calculated field **Account**:
-![Images/dashboard_mapping_12.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_12.png)
+![Images/dashboard_mapping_12.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_12.png)
 
 13. Change the formula from **toString({linked_account_id})** to **{account_name}**
-![Images/dashboard_mapping_13.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_13.png)
+![Images/dashboard_mapping_13.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_13.png)
 
 14. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
-![Images/dashboard_mapping_14.png](/Cost/300_Orginization_Data_CUR_Connection/Images/dashboard_mapping_14.png)
+![Images/dashboard_mapping_14.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_14.png)
 
 
 {{% notice tip %}}

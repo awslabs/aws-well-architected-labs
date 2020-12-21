@@ -11,7 +11,7 @@ In this section we will create the Organization table in Athena. This can then b
 
 1.	Go to the **Athena** service page
 
-![Images/Athena.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Athena.png)
+![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
 2.	We are going to create the orgonisation table. This can be done in any of your the databases that holds your Cost and Usage data. Copy and paste the below query replacing the **( bucket-name)** with your chosen bucket name from before, into the query box. Click **Run query**.
 
@@ -28,7 +28,7 @@ In this section we will create the Organization table in Athena. This can then b
 		) LOCATION 's3://(bucket-name)/organisation-data/'
 		TBLPROPERTIES ('has_encrypted_data'='false'); 
 
-![Images/Athena_Table.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Athena_Table.png)
+![Images/Athena_Table.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Table.png)
 
 3.	Athena should report ‘Query Successful’. Run the below query, to view your data in s3. As you can see we have the account number, the name, when it was created and the current Status of that account.
 
@@ -61,11 +61,11 @@ We will be running an example query on how you can connect your CUR to this orga
 		GROUP BY  line_item_usage_account_id,  account_name, line_item_product_code
 		limit 10;
 
-![Images/Join.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Join.png)
+![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
 
 2. The important part of this query is the join. The **line_item_usage_account_id** from your cost and usage report should match a **account_number** from the organization data. You can now see the account name in your data.
 
-![Images/Athena_Example.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Athena_Example.png)
+![Images/Athena_Example.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Example.png)
 
 ### Create a View with Cost and Usage Report
 

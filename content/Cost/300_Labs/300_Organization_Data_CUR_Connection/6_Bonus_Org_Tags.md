@@ -13,11 +13,11 @@ To get the Organization Tags we need to update the Lambda function to pull this 
 
 1.	Go to the **Lambda** service page:
 
-![Images/Lambda.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Lambda.png)
+![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
 
 2. Search for the function **Lambda_Org_Data** and click on the name
 
-![Images/Edit_Lambda.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Edit_Lambda.png)
+![Images/Edit_Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Edit_Lambda.png)
 
 3. Scroll down to the **Function Code** section and replace the code with the one below, change (account id) to your **Managment Account ID**:
 
@@ -101,7 +101,7 @@ To get the Organization Tags we need to update the Lambda function to pull this 
 
 5. Click Add Environment variables. In the new empty box write **TAGS** under key and a list of tags from your Organisation you would like to include **seporated by a commer**. Click **Save**.
 
-![Images/Env_Tags.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Env_Tags.png)
+![Images/Env_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Env_Tags.png)
 
 6. Scroll to Function code section and Click **Deploy**.
 
@@ -116,7 +116,7 @@ If you tested the csv version then you need to go to your S3 but and delete the 
 In this section we will update the Organization table in Athena to include the tags specified above.
 1.	Go to the **Athena** service page
 
-![Images/Athena.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Athena.png)
+![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
 2.	We are going to update the table we created earlier with the tags your chose in the lambda section. Copy and paste the below query replacing:
 
@@ -143,7 +143,7 @@ In this section we will update the Organization table in Athena to include the t
 		  LOCATION 's3://(bucket-name)/organisation-data/' 
 		  TBLPROPERTIES ('has_encrypted_data'='false');
 
-![Images/Update_Athena_Tags.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Update_Athena_Tags.png)
+![Images/Update_Athena_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Update_Athena_Tags.png)
 
 3. There will now be additional coloumns with your tags in them.
 

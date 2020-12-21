@@ -12,11 +12,11 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
 1.	Return to your Sub account for the rest of this lab. Go to the **Lambda** service page :
 
-![Images/Lambda.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Lambda.png)
+![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
 
 2.	Click **Create function**:
 
-![Images/Create_Function.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Create_Function.png)
+![Images/Create_Function.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Function.png)
 
 3.	Enter the following details:
     1.	Select: **Author from scratch**
@@ -28,7 +28,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
 4.	Click **Create function**
 
-![Images/Create_Function_Name.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Create_Function_Name.png)
+![Images/Create_Function_Name.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Function_Name.png)
 
 5.	Copy and paste the following code into the **Function code** section and change (account id) to your **Managment Account ID**:
 
@@ -100,11 +100,11 @@ Create the On-Demand Lambda function to get the organisation information, and ex
     -	Click **save**
 
 
-![Images/Lambda_Edit_Settings.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Lambda_Edit_Settings.png)
+![Images/Lambda_Edit_Settings.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Edit_Settings.png)
 
 7.	Scroll down to **Environment variable** and click **Edit**
 
-![Images/Manage_Env_Vars.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Manage_Env_Vars.png)
+![Images/Manage_Env_Vars.png](/Cost/300_Organization_Data_CUR_Connection/Images/Manage_Env_Vars.png)
 
 8.	Add environment variable:
     - In **Key** paste ‘BUCKET_NAME’ 
@@ -112,25 +112,25 @@ Create the On-Demand Lambda function to get the organisation information, and ex
  
     Click **Save**
 
-![Images/Env_Bucket_Name.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Env_Bucket_Name.png)
+![Images/Env_Bucket_Name.png](/Cost/300_Organization_Data_CUR_Connection/Images/Env_Bucket_Name.png)
 
 9.	Scroll to the **function code**  and click **Deploy**. Then Click **Test**.
 
-![Images/Deploy_Function.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Deploy_Function.png)
+![Images/Deploy_Function.png](/Cost/300_Organization_Data_CUR_Connection/Images/Deploy_Function.png)
 
 10.	Enter an **Event name** of **Test**, click **Create**:
 
-![Images/Configure_Test.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Configure_Test.png)
+![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
 
 11.	Click **Test**
 
 12.	The function will run, it will take a minute or two given the size of the organisation files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in organisation file size over time:
 
-![Images/Lambda_Success.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Lambda_Success.png)
+![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
 
 13.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
 
-![Images/Org_in_S3.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Org_in_S3.png)
+![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
 
 
 ### CloudWatch Events Setup
@@ -139,15 +139,15 @@ We will setup a CloudWatch Event to periodically run the Lambda functions, this 
 
 1.	Go to the CloudWatch service page:
 
-![Images/CloudWatch.png](/Cost/300_Orginization_Data_CUR_Connection/Images/CloudWatch.png)
+![Images/CloudWatch.png](/Cost/300_Organization_Data_CUR_Connection/Images/CloudWatch.png)
 
 2.	Click on **Events**, then click **Rules**:
 
-![Images/CloudWaCW_Events_and_Rules.png](/Cost/300_Orginization_Data_CUR_Connection/Images/CW_Events_and_Rules.png)
+![Images/CloudWaCW_Events_and_Rules.png](/Cost/300_Organization_Data_CUR_Connection/Images/CW_Events_and_Rules.png)
 
 3.	Click **Create rule**
 
-![Images/CW_Create_Rule.png](/Cost/300_Orginization_Data_CUR_Connection/Images/CW_Create_Rule.png)
+![Images/CW_Create_Rule.png](/Cost/300_Organization_Data_CUR_Connection/Images/CW_Create_Rule.png)
 
 4.	For the Event Source
     - Select **Schedule** and set the required period
@@ -156,11 +156,11 @@ We will setup a CloudWatch Event to periodically run the Lambda functions, this 
 
     Click **Configure details**
 
-![Images/CW_Schedule.png](/Cost/300_Orginization_Data_CUR_Connection/Images/CW_Schedule.png)
+![Images/CW_Schedule.png](/Cost/300_Organization_Data_CUR_Connection/Images/CW_Schedule.png)
 
 5.	Add the name Lambda_Org_Data, optionally add a description and click **Create rule**:
 
-![Images/CW_Rule_Detail.png](/Cost/300_Orginization_Data_CUR_Connection/Images/CW_Rule_Detail.png)
+![Images/CW_Rule_Detail.png](/Cost/300_Organization_Data_CUR_Connection/Images/CW_Rule_Detail.png)
 
 {{% notice tip %}}
 You have now created your lambda function  to gather your organization data and place it into the S3 Bucket we made earlier. Using Cloudwatch this will now run every 7 days updating  the data. 
