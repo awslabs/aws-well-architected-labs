@@ -6,7 +6,7 @@ weight: 4
 pre: "<b> </b>"
 ---
 
-The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and getting product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
+The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and retrieving product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
 
 {{% notice tip %}}
 Use the clipboard in the top right of the text boxes below to copy all of the text to be pasted.  
