@@ -1,12 +1,12 @@
 ---
-title: "CUR Query Library Helpers"
+title: "CUR Query Library Help"
 date: 2020-08-28T11:16:09-04:00
 chapter: false
 weight: 4
 pre: "<b> </b>"
 ---
 
-These are queries to help navigate the CUR dataset.  
+The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and getting product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
 
 {{% notice tip %}}
 Use the clipboard in the top right of the text boxes below to copy all of the text to be pasted.  
