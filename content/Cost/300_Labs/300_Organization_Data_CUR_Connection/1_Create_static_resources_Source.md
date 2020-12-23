@@ -7,10 +7,10 @@ pre: "<b>1. </b>"
 ---
 
 
-### Create S3 Bucket and Folders
+### Create Amazon S3 Bucket and Folders
 We’ll create an S3 bucket to store the organizations data to be combined with your cost and usage report. This will hold your organisation data so we can connect it to Athena.
 
-1. Login via SSO in your Cost Optimization account, go into the **S3** console:
+1. Login via SSO to your Cost Optimization account, go into the **S3** console:
 
 ![Images/home_s3-dashboard.png](/Cost/300_Organization_Data_CUR_Connection/Images/home_s3-dashboard.png)
 
@@ -19,7 +19,7 @@ We’ll create an S3 bucket to store the organizations data to be combined with 
 
 
 ### Create IAM Role and Policies
-We’ll create an IAM role and policy for the Lambda function to access the organizations data & write it to S3. This role will be used to get the list of accounts in the organization and the meta data attached to them such as name and email. This is then placed in our S3 folder.
+We’ll create an IAM role and policy for the AWS Lambda function to access the organizations data & write it to S3. This role will be used to get the list of accounts in the Organization and the meta data attached to them such as name and email. This is then placed in our S3 bucket.
 
 1.	Go to the **IAM Console**
 
@@ -27,7 +27,7 @@ We’ll create an IAM role and policy for the Lambda function to access the orga
 
 ![Images/create_policy.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_policy.png)
 
-3.	On the **JSON** tab the following policy and replace **(bucket name)** with your bucket name from before and replace **(account id)** with your **Managment Account id** which manages your orginization. Enter the following policy, click **Review policy**:
+3.	On the **JSON** tab the following policy and replace **(bucket name)** with your bucket name from before and replace **(account id)** with your **Management Account id** which manages your Organization. Enter the following policy, click **Review policy**:
 
         {
             "Version":"2012-10-17",
@@ -110,22 +110,22 @@ As we need to pull the data from the **Management account** we need to allow our
 
 ![Images/create_policy.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_policy.png)
 
-        {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Sid": "OrgData",
-                    "Effect": "Allow",
-                    "Action": [
-                        "organizations:ListAccounts",
-                        "organizations:ListCreateAccountStatus",
-                        "organizations:DescribeOrganization",
-                        "organizations:ListTagsForResource"
-                    ],
-                    "Resource": "*"
-                }
-            ]
-        }
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "OrgData",
+                "Effect": "Allow",
+                "Action": [
+                    "organizations:ListAccounts",
+                    "organizations:ListCreateAccountStatus",
+                    "organizations:DescribeOrganization",
+                    "organizations:ListTagsForResource"
+                ],
+                "Resource": "*"
+            }
+        ]
+    }
 
 
 4.	Select **Roles**, click **Create role**
@@ -145,7 +145,7 @@ As we need to pull the data from the **Management account** we need to allow our
 8. Search for your new role in the roles page and click on the role name. Click on **Trusted relationships** tab then **Edit trusted relationship**
 ![Images/Trusted_Relationship.png](/Cost/300_Organization_Data_CUR_Connection/Images/Trusted_Relationship.png)
 
-9. On the **JSON** tab the replace the current json with the following policy and replace **(sub account id)** with your sub account id from before, click **Upadate Trust policy**:
+9. On the **JSON** tab the replace the current json with the following policy and replace **(sub account id)** with your sub account id from before, click **Update Trust policy**:
 
         {
             "Version": "2012-10-17",
@@ -162,7 +162,7 @@ As we need to pull the data from the **Management account** we need to allow our
 
 
 {{% notice tip %}}
-Now you have completed this section you have setup the resources that will enable you to collect your organisation data. We will use these resources in the next section when creating our lambda function. Please return to the sub account you created your S3 bucket in.
+Now you have completed this section you have setup the resources that will enable you to collect your Organizations data. We will use these resources in the next section when creating our Lambda function. Please return to the sub account you created your S3 bucket in.
 {{% /notice %}}
 
 
