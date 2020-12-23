@@ -6,9 +6,9 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-### Setup Organisation Lambda Function
+### Setup an AWS Lambda function to retrieve AWS Organizations information
 
-Create the On-Demand Lambda function to get the organisation information, and extract the required parts from it then write to our folder in S3. 
+Create the On-Demand AWS Lambda function to get the AWS Organizations information, and extract the required parts from it then write to our bucket in Amazon S3. 
 
 1.	Return to your Sub account for the rest of this lab. Go to the **Lambda** service page :
 
@@ -30,7 +30,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
 ![Images/Create_Function_Name.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Function_Name.png)
 
-5.	Copy and paste the following code into the **Function code** section and change (account id) to your **Managment Account ID**:
+5.	Copy and paste the following code into the **Function code** section and change (account id) to your **Management Account ID** and (Region) to the **Region** you are deploying in:
 
     <details>
     <summary> Click here to see the function code</summary>
@@ -44,7 +44,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
         import os
         
         def list_accounts():
-            bucket = os.environ["BUCKET_NAME"] #Using enviroment varibles below the lambda will use your S3 bucket
+            bucket = os.environ["BUCKET_NAME"] #Using environment variables below the Lambda will use your S3 bucket
 
             sts_connection = boto3.client('sts')
             acct_b = sts_connection.assume_role(
@@ -58,7 +58,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
             # create service client using the assumed role credentials
             client = boto3.client(
-                "organizations", region_name="us-east-1", #Using the Organization client to get the data. This MUST be us-east-1 regardless of region you have the lamda in
+                "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
                 aws_access_key_id=ACCESS_KEY,
                 aws_secret_access_key=SECRET_KEY,
                 aws_session_token=SESSION_TOKEN,
@@ -80,7 +80,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
             print("respose gathered")
 
             try:
-                s3 = boto3.client('s3', 'eu-west-1',
+                s3 = boto3.client('s3', '(Region)',
                                 config=Config(s3={'addressing_style': 'path'}))
                 s3.upload_file(
                     '/tmp/org.csv', bucket, "organisation-data/org.csv") #uploading the file with the data to s3
@@ -97,7 +97,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 6.	Edit **Basic settings** below:
     -	Memory: **512MB**
     -	Timeout: **2min**
-    -	Click **save**
+    -	Click **Save**
 
 
 ![Images/Lambda_Edit_Settings.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Edit_Settings.png)
@@ -108,7 +108,7 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
 8.	Add environment variable:
     - In **Key** paste ‘BUCKET_NAME’ 
-    - In **Value** paste your bucket name. 
+    - In **Value** paste your S3 Bucket name where the Organizations data should be saved. 
  
     Click **Save**
 
@@ -124,18 +124,18 @@ Create the On-Demand Lambda function to get the organisation information, and ex
 
 11.	Click **Test**
 
-12.	The function will run, it will take a minute or two given the size of the organisation files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in organisation file size over time:
+12.	The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in Organizations file size over time:
 
 ![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
 
-13.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
+13.	Go to your S3 bucket and into the 0rganizations-data folder and you should see a file of non-zero size is in it:
 
 ![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
 
 
-### CloudWatch Events Setup
+### Amazon CloudWatch Events Setup
 
-We will setup a CloudWatch Event to periodically run the Lambda functions, this will update the organisation and include any newly created accounts.
+We will setup a Amazon CloudWatch Event to periodically run the Lambda functions, this will update the Organizations and include any newly created accounts.
 
 1.	Go to the CloudWatch service page:
 
