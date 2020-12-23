@@ -30,6 +30,8 @@ CUR queries are provided as is. We recommend validating your data by comparing i
 </video>
 {{< /rawhtml >}}
 
+The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and retrieving product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
+
 [CUR Library Query Help]({{< ref "query_help/" >}} "CUR Library Query Help")
 
 ## Queries
