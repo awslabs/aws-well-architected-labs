@@ -21,7 +21,7 @@ This lab will show you how to combine your organizations information with your C
 
 ## Architecture 
 
-![Images/create_role.png](/Cost/300_Orginization_Data_CUR_Connection/Images/Arch.png)
+![Images/create_role.png](/Cost/300_Organization_Data_CUR_Connection/Images/Arch.png)
 
 
 ## Goals
