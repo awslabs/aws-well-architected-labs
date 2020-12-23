@@ -7,9 +7,9 @@ pre: "<b>6. </b>"
 ---
 
 
-### Update Organisation Lambda Function
+### Update the Amazon Lambda Function to retrieve AWS Organizations tags
 
-To get the Organization Tags we need to update the Lambda function to pull this information too. We will be swapping from csv to json as this will allow us to have accounts that do and don’t hold the required tags and give some flexibility with Athena. 
+To get the Organizations tags, we need to update the Lambda function to pull this information too. We will be swapping from csv to json as this will allow us to have flexibility with Amazon Athena as different accounts might have different tags. 
 
 1.	Go to the **Lambda** service page:
 
@@ -19,7 +19,7 @@ To get the Organization Tags we need to update the Lambda function to pull this 
 
 ![Images/Edit_Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Edit_Lambda.png)
 
-3. Scroll down to the **Function Code** section and replace the code with the one below, change (account id) to your **Managment Account ID**:
+3. Scroll down to the **Function Code** section and replace the code with the one below, change (account id) to your **Management Account ID** and (Region) to the **Region** you are deploying in:
 
     <details>
     <summary> Click here to see the function code</summary>
@@ -83,7 +83,7 @@ To get the Organization Tags we need to update the Lambda function to pull this 
           print("respose gathered")
 
           try:
-                s3 = boto3.client('s3', 'eu-west-1',
+                s3 = boto3.client('s3', '(Region)',
                                config=Config(s3={'addressing_style': 'path'}))
                 s3.upload_file(
                    '/tmp/org.json', bucket, "organisation-data/org.json") #uploading the file with the data to s3
@@ -99,7 +99,7 @@ To get the Organization Tags we need to update the Lambda function to pull this 
 
 4. Scroll down to **Environment variables** and click **Edit**
 
-5. Click Add Environment variables. In the new empty box write **TAGS** under key and a list of tags from your Organisation you would like to include **seporated by a commer**. Click **Save**.
+5. Click Add Environment variables. In the new empty box write **TAGS** under key and a list of tags from your Organisation you would like to include **separated by a comma**. Click **Save**.
 
 ![Images/Env_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Env_Tags.png)
 
@@ -112,16 +112,16 @@ To get the Organization Tags we need to update the Lambda function to pull this 
 If you tested the csv version then you need to go to your S3 but and delete the **csv file** that is there as you will now be using json.
 {{% /notice %}}
 
-### Update the Organisation Data Table
+### Update the Organizations Data Table
 In this section we will update the Organization table in Athena to include the tags specified above.
 1.	Go to the **Athena** service page
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-2.	We are going to update the table we created earlier with the tags your chose in the lambda section. Copy and paste the below query replacing:
+2.	We are going to update the table we created earlier with the tags your chose in the Lambda section. Copy and paste the below query replacing:
 
 * Change **(bucket-name)** with your chosen bucket name from before
-* Add the Tags name as they appear in the Organisation page into the query in replace of the **(Tag1)**  that you chose in your lambda function etc
+* Add the Tags name as they appear in the Organizations  page into the query in replace of the **(Tag1)**  that you chose in your lambda function etc
 * Remove the **...**
 * Click **Run Query**
 
@@ -145,7 +145,7 @@ In this section we will update the Organization table in Athena to include the t
 
 ![Images/Update_Athena_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Update_Athena_Tags.png)
 
-3. There will now be additional coloumns with your tags in them.
+3. There will now be additional columns with your tags in them.
 
 
 {{% notice tip %}}
