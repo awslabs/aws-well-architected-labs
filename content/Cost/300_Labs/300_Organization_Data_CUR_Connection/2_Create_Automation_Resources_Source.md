@@ -128,7 +128,7 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
 ![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
 
-13.	Go to your S3 bucket and into the 0rganizations-data folder and you should see a file of non-zero size is in it:
+13.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
 
 ![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
 
