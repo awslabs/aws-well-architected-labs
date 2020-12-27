@@ -8,7 +8,7 @@ weight: 5
 
 ## Systems Manager: Patch Manager
 
-AWS Systems Manager [Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html) automates the process of patching managed instances with security related updates.
+AWS Systems Manager [Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html) automates the process of patching managed instances with security-related updates.
 
 >**Note**<br>For Linux-based instances, you can also install patches for non-security updates.
 
@@ -24,7 +24,7 @@ You can patch fleets of Amazon EC2 instances or your on-premises servers and vir
 
 Patch Manager uses **patch baselines**, which include rules for auto-approving patches within days of their release, as well as a list of approved and rejected patches. Later in this lab we will schedule patching to occur on a regular basis using a Systems Manager **Maintenance Window** task. Patch Manager integrates with AWS Identity and Access Management (IAM), AWS CloudTrail, and Amazon CloudWatch Events to provide a secure patching experience that includes event notifications and the ability to audit usage.
 
->**Warning**<br>The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
+>**Warning** The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
 
 
 ### 5.1 Create a Patch Baseline
@@ -46,7 +46,7 @@ Patch Manager uses **patch baselines**, which include rules for auto-approving p
 
 If an approved patch is reported as missing, the option you choose in **Compliance reporting**, such as `Critical` or `Medium`, determines the severity of the compliance violation reported in System Manager **Compliance**.
 
-5. In the **Patch exceptions** section in the **Rejected patches - optional** text box, enter `system-release.*` This will [reject patches](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html) to new Amazon Linux releases that may advance you beyond the [Patch Manager supported operating systems](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) prior to your testing new releases.
+6. In the **Patch exceptions** section in the **Rejected patches - optional** text box, enter `system-release.*` This will [reject patches](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html) to new Amazon Linux releases that may advance you beyond the [Patch Manager supported operating systems](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) prior to your testing new releases.
 1. For Linux operating systems, you can optionally define an [alternative patch source repository]( https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-how-it-works-alt-source-repository.html). Choose the **X** in the **Patch sources** area to remove the empty patch source definition.
 1. Choose **Create patch baseline** and you will go to the **Patch Baselines** page where the AWS provided default patch baselines, and your custom baseline, are displayed.
 
@@ -57,7 +57,7 @@ A [patch group](https://docs.aws.amazon.com/systems-manager/latest/userguide/sys
 
 You create a patch group by using Amazon EC2 tags. Unlike other tagging scenarios across Systems Manager, a patch group must be defined with the tag key: `Patch Group` (tag keys are case sensitive). You can specify any value (for example, `web servers`) but the key must be `Patch Group`.
 
->**Note**<br>An instance can only be in one patch group.
+>**Note** An instance can only be in one patch group.
 
 After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance.
 * If the instance is assigned to a patch group, the system checks to see which patch baseline is registered to that group.
@@ -81,7 +81,7 @@ For Linux operating systems, compliance information is provided for patches from
 
 ## AWS Systems Manager: Document
 
-An [AWS Systems Manager document](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html) defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JavaScript Object Notation (JSON) or YAML, and they include steps and parameters that you specify.
+An [AWS Systems Manager document](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html) defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JSON or YAML, and they include steps and parameters that you specify.
 
 All AWS provided Automation and Run Command documents can be viewed in AWS Systems Manager **Documents**. You can [create your own documents](https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-doc.html) or launch existing scripts using provided documents to implement custom operations as code activities.
 
@@ -118,7 +118,7 @@ To examine AWS-RunPatchBaseline in Documents:
 The remaining Run Command features enable you to:
 * Specify **Rate control**, limiting **Concurrency** to a specific number of targets or a calculated percentage of systems, or to specify an **Error threshold** by count or percentage of systems after which the command execution will end.
 * Specify **Output options** to record the entire output to a preconfigured **S3 bucket** and optional **S3 key prefix**.
->**Note**<br>Only the last 2500 characters of a command document's output are displayed in the console.
+>**Note** Only the last 2500 characters of a command document's output are displayed in the console.
 * Specify **SNS notifications** to a specified **SNS Topic** on all events or on a specific event type for either the entire command or on a per-instance basis. This requires Amazon SNS to be preconfigured.
 * View the command as it would appear if executed within the AWS Command Line Interface.
 
@@ -150,16 +150,16 @@ The remaining Run Command features enable you to:
 1. In the **Targets** section, choose **Specify a tag** using `Workload` and `Test`.
 >**Note** You could have choosen **Manually selecting instances** and used the check box at the top of the list to select all instances displayed, or selected them individually.
 
->**Note** there are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
+>**Note** There are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
 
 1. In the **Rate control** section:
    1. For **Concurrency**, ensure that **targets** is selected and specify the value as `1`.
-   >**Tip**<br>Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.
+   >**Tip** Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.
    2. For **Error threshold**, ensure that **error** is selected and specify the value as `1`.
 1. Choose **Run** to execute the command and to go to its details page.
 1. Refresh the page to view updated status and proceed when the execution is successful.
 
->**Warning**<br>Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
+>**Warning** Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
 
 ### 5.7 Review Patch Compliance After Patching
 
