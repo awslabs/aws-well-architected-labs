@@ -23,9 +23,9 @@ Apply the following best practices when using tags:
 * Err on the side of using too many tags rather than too few tags.
 * [Develop a tagging strategy](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
 
->**Note**<br>It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
+>**Note** It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
 
->**Important**<br>**Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
+>**Important** **Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case-sensitive with a space between the two words.
 
 ## Management Tools: CloudFormation
 
@@ -37,7 +37,7 @@ Apply the following best practices when using tags:
 
 To deploy the lab infrastructure:
 
-1. [**Download the CloudFormation script** for this lab from](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
+1. [**Download the CloudFormation script** for this lab from this link](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
 1. Use your administrator account to access the CloudFormation console at <https://console.aws.amazon.com/cloudformation/>.
 1. Choose **Create Stack**.
 1. On the **Select Template** page, select **Upload a template file** and select the `OE_Inventory_and_Patch_Mgmt.json` file you just downloaded.
@@ -47,7 +47,7 @@ To deploy the lab infrastructure:
 AWS [CloudFormation Designer](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/working-with-templates-cfn-designer.html) is a graphic tool for creating, viewing, and modifying AWS CloudFormation templates. With Designer you can diagram your template resources using a drag-and-drop interface. You can edit their details using the integrated JSON and YAML editor. AWS CloudFormation Designer can help you see the relationship between template resources.
 
 5. On the **Select Template** page, in the lower-right corner, click the **View in Designer** button.
-1. Briefly review the graphical representation of the environment we are about to create, including the template in the JSON and YAML formats. You can use this feature to convert between JSON and YAML formats.
+1. Briefly review the graphical representation of the environment you are about to create, including the template in the JSON and YAML formats. You can use this feature to convert between JSON and YAML formats.
 1. **Choose the Create Stack icon** (a cloud with an arrow) to return to the **Select Template page**.
 1. On the **Select Template** page, choose **Next**.
 
@@ -56,7 +56,7 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
 9. In the **Specify Details** section, define a **Stack name**, such as `OELabStack1`.
 1. In the **Parameters** section:
    1. Leave **InstanceProfile** blank as we have not yet defined an instance profile.
-   1. Leave **InstanceTypeApp** and **InstanceTypeWeb** as the default free-tier-eligible t2.micro value.
+   1. Leave **InstanceTypeApp** and **InstanceTypeWeb** as the default free-tier-eligible **t2.micro** value.
    1. Select the EC2 **KeyName** you defined earlier from the list.
    * In a browser window, go to <https://checkip.amazonaws.com/> to get your IP. Enter your IP address in **SSHLocation** in CIDR notation (i.e., ending in /32).
    * Define the **Workload Name** as `Test`.
@@ -70,7 +70,7 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
     1. If the details are not displayed, choose the refresh button until details appear.
 1. Choose the **Events** tab for your selected workload to see the activity log from the creation of your CloudFormation stack.
 
-When the **Status** of your stack displays **CREATE_COMPLETE** in the filter list, you have just created a representation of a typical lift and shift 2-tier application migrated to the cloud.
+When the **Status** of your stack displays **CREATE_COMPLETE** in the filter list, you have just created a representation of a typical lift-and-shift 2-tier application migrated to the cloud.
 
 13. Navigate to the [EC2 console](https://console.aws.amazon.com/ec2/) to view the deployed systems:
  	1. Choose **Instances**.
