@@ -1,5 +1,5 @@
 ---
-title: "Level 100: EC2 Right Sizing"
+title: "Level 100: EC2 Rightsizing"
 #menutitle: "Lab #3"
 date: 2020-04-24T11:16:08-04:00
 chapter: false
@@ -12,7 +12,7 @@ weight: 6
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
- This hands-on lab will give you an overview on **Amazon CloudWatch** and **AWS Resource Optimization** and how to prioritize your EC2 Right Sizing efforts.
+ This hands-on lab will give you an overview on **Amazon CloudWatch** and **AWS Resource Optimization** and how to prioritize your EC2 Rightsizing efforts.
 
 ## Goals
 - Learn how to check metrics like CPU, Network and Disk usage on Amazon CloudWatch
