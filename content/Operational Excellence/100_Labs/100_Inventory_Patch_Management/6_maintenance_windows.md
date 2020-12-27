@@ -10,10 +10,10 @@ weight: 6
 [AWS Systems Manager Maintenance Windows](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html) let you define a schedule for when to perform potentially disruptive actions on your instances such as patching an operating system (OS), updating drivers, or installing software. Each Maintenance Window has a schedule, a duration, a set of registered targets, and a set of registered tasks. With Maintenance Windows, you can perform tasks like the following:
 
 * Installing applications, updating patches, installing or updating SSM Agent, or executing PowerShell commands and Linux shell scripts by using a Systems Manager Run Command task
-* Building Amazon Machine Images (AMIs), boot-strapping software, and configuring instances by using Systems Manager Automation
+* Building Amazon Machine Images (AMIs), bootstrapping software, and configuring instances by using Systems Manager Automation
 * Executing AWS Lambda functions that trigger additional actions such as scanning your instances for patch updates
 * Running AWS Step Function state machines to perform tasks such as removing an instance from an Elastic Load Balancing environment, patching the instance, and then adding the instance back to the Elastic Load Balancing environment
->**Note**<br>To register Step Function tasks you must use the AWS CLI.
+>**Note** To register Step Function tasks you must use the AWS CLI.
 
 
 ### 6.1 Setting up Maintenance Windows
@@ -96,7 +96,7 @@ First, you must [create the window](https://docs.aws.amazon.com/systems-manager/
    1. In the **Name** field, type a descriptive name to help you identify this Maintenance Window, such as `PatchTestWorkloadWebServers`.
    1. (Optional) you may enter a description in the **Description** field.
    1. Choose **Allow unregistered targets** if you want to allow a Maintenance Window task to run on managed instances, even if you have not registered those instances as targets.
-   >**Note**<br>If you choose **Allow unregistered targets**, then you can choose the unregistered instances (by instance ID) when you register a task with the Maintenance Window. If you don't, then you must choose previously registered targets when you register a task with the Maintenance Window.
+   >**Note** If you choose **Allow unregistered targets**, then you can choose the unregistered instances (by instance ID) when you register a task with the Maintenance Window. If you don't, then you must choose previously registered targets when you register a task with the Maintenance Window.
    1. Specify a schedule for the Maintenance Window by using one of the scheduling options:
       1. Under **Specify with**, accept the default **Cron schedule builder**.
       1. Under **Window starts**, choose the third option, specify **Every Day at**, and select a time, such as `02:00`.
@@ -150,7 +150,7 @@ After you assign targets, you [assign tasks](https://docs.aws.amazon.com/systems
 1. In the **Role** section, specify the role you defined with the AmazonSSMMaintenanceWindowRole. It will be `SSMMaintenanceWindowRole` if you followed the suggestion in the instructions above.
 1. In **Output options**, leave **Enable writing to S3** clear.
    1. (Optionally) Specify **Output options** to record the entire output to a preconfigured **S3 bucket** and optional **S3 key prefix**
-   >**Note**<br>Only the last 2500 characters of a command document's output are displayed in the console. To capture the complete output define and S3 bucket to receive the logs.
+   >**Note** Only the last 2500 characters of a command document's output are displayed in the console. To capture the complete output define an S3 bucket to receive the logs.
 1. In **SNS notifications**, leave **Enable SNS notifications** clear.
    1. (Optional) Specify **SNS notifications** to a preconfigured **SNS Topic** on all events or a specific event type for either the entire command or on a per-instance basis.
 1. In the **Parameters** section, under **Operation**, select **Install**.
