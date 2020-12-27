@@ -8,7 +8,7 @@ weight: 8
 
 > **Note**<br> When the lab is complete, remove the resources you created. Otherwise you will be charged for any resources that are not covered in the AWS Free Tier.
 
-### 7.1 Remove resources created with CloudFormation
+### 8.1 Remove Resources Created with CloudFormation
 1. Navigate to the **CloudFormation** dashboard at <https://console.aws.amazon.com/cloudformation/>:
    1. Select your first stack.
    1. Choose **Actions** and choose **delete stack**.
