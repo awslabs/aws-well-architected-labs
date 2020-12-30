@@ -129,7 +129,7 @@ Use _either_ the **Express Steps** or **Detailed Steps** below:
 Now repeat the RDS failure injection steps on this page, starting with [**5.1 RDS failure injection**]({{< ref "#rdsfailureinjection" >}}).
 
 * You will observe that the unavailability time is now under one minute
-* What else is different than the previous time you the RDS instance failed over?
+* What else is different compared to the previous time the RDS instance failed over?
 
 ---
 
