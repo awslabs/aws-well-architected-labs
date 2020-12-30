@@ -11,7 +11,7 @@ hidden: false
 
 ## Introduction
 
-The purpose if this lab is to walk you through the features of the AWS Well-Architected Tool. You will create a workload, review the Reliability Pillar questions, save the workload, take a milestone, and examine and download the Well-Architected Review report.
+The purpose of this lab is to walk you through the features of the AWS Well-Architected Tool. You will create a workload, review the Reliability Pillar questions, save the workload, take a milestone, and examine and download the Well-Architected Review report.
 
 The knowledge you acquire will help you build Well-Architected workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
