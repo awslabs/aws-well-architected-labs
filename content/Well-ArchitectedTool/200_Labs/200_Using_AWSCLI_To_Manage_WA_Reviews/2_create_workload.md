@@ -27,7 +27,7 @@ Well-Architected Reviews are conducted per workload . A workload identifies a se
 1. Once the command is run, you should get a response that contains the workload json structure. This will include the following items:
     ![CreateWorkload1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/2/CreateWorkload1.png)
     * **WorkloadId** - The ID assigned to the workload. This ID is unique within an AWS Region.
-    * **WorkloadArn** - The ARN for the workload.
+    * **WorkloadArn** - The [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) for the workload.
 
 ## Finding your WorkloadId
 1. Assume you created a new workload, but you did not write down the WorkloadId to use in subsequent API calls.
@@ -49,6 +49,9 @@ Well-Architected Reviews are conducted per workload . A workload identifies a se
 1. You should see serverless listed as a lens.
 1. Using the [disassociate-lenses API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/disassociate-lenses.html) we will remove the serverless lens.
     `aws wellarchitected disassociate-lenses --workload-id "<WorkloadId>" --lens-aliases "serverless"`
+{{% notice warning %}}
+When you use disassociate-lenses, it will be destructive and irreversible to any questions you have answered if you have not saved a milestone. Saving a milestone is recommended before you use the disassociate-lenses API call.
+{{% /notice %}}
 1. You will not get a response to this command, but using the [get-workload API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/get-workload.html) you can verify that the lens was removed.
     `aws wellarchitected get-workload --workload-id "<WorkloadId>"`
 1. You should see a response such as this, showing that you no longer have serverless listed.

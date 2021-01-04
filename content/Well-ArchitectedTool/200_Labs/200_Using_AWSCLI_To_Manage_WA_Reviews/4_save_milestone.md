@@ -11,8 +11,7 @@ A milestone records the state of a workload at a particular point in time.
 
 Save a milestone after you initially complete all the questions associated with a workload. As you change your workload based on items in your improvement plan, you can save additional milestones to measure progress.
 
-A best practice is to save a milestone every time you make improvements to a workload.
-
+A best practice is to save a milestone when you first do a new W-A review, or every time you make improvements to a workload.
 
 ### 1. Create a Milestone
 1. Using the [create-milestone API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/create-milestone.html) we will save our current progress as our first milestone
@@ -32,11 +31,11 @@ A best practice is to save a milestone every time you make improvements to a wor
     ![Milestone2](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone2.png)
 
 ### 3. Retrieve the results from a milestone
-1. Using the [get-milestone API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/get-milestone.html), you can see all of the metadata for the milestone:
+1. Using the [get-milestone API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/get-milestone.html), you can see all of the metadata for a specific milestone:
     ```
     aws wellarchitected get-milestone --workload-id "<WorkloadId>" --milestone-number 1
     ```
-1. This will return a summary of the workload milestone (such as when it was created and what lenses were included)
+1. This will return the complete workload information for the workload milestone (such as when it was created and what lenses were included)
     ![Milestone3](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone3.png)
 
 ### 4. List all question answers based from a milestone

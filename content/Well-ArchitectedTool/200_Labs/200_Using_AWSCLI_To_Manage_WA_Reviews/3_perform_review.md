@@ -7,15 +7,13 @@ weight: 3
 ---
 
 ## Overview
-Now that we have created a workload, we must answer questions within this workload. For this lab, we are going to assume that the following questions have already been satisfied by a centralized IT team with the AWS environment that has been provided to all business units.
+Now that we have created a workload, we will answer the question **OPS 5. How do you reduce defects, ease remediation, and improve flow into production**. For this question, we will select a subset of the best practices, affirming them as true (turning them from unchecked to checked):
+  * Use version control
+  * Use configuration management systems
+  * Use build and deployment management systems
+  * Perform patch management
+  * Use multiple environments
 
-For the first step, we will answer the following question with this list of best practices:
-  1. OPS 5. How do you reduce defects, ease remediation, and improve flow into production?
-      * Use version control
-      * Use configuration management systems
-      * Use build and deployment management systems
-      * Perform patch management
-      * Use multiple environments
 
 ### Step 1 - Find the QuestionId and ChoiceID for a particular pillar question and best practice
 1. Make sure you have the WorkloadId from the previous step and replace **WorkloadId** with it
@@ -48,23 +46,27 @@ For the first step, we will answer the following question with this list of best
     ```
     aws wellarchitected get-answer --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --question-id "dev-integ" --query 'Answer.Choices[?starts_with(Title, `Use multiple environments`) == `true`].ChoiceId'
     ```  
-1. This will return the rest of the values we need for ChoiceID: **ops_dev_integ_conf_mgmt_sys ops_dev_integ_build_mgmt_sys ops_dev_integ_patch_mgmt ops_dev_integ_multi_env**
-    ![FindQid3](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid3.png)
+1. This will return the rest of the values we need for ChoiceID:
+    ```
+    ops_dev_integ_conf_mgmt_sys
+    ops_dev_integ_build_mgmt_sys
+    ops_dev_integ_patch_mgmt
+    ops_dev_integ_multi_env
+    ```
+    <!-- ![FindQid3](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid3.png) -->
 
 
 
 ### Step 2 - Use the QuestionID and ChoiceID to update the answer in well-architected review
+1. After finding the ChoiceID's in the previous step, we can "check" each of those items off as achieved using the CLI as well. The next step will set the choiceID's to true, but leave the rest of the best practices as false (unchecked).
 1. Using the [update-answer API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/update-answer.html) we can update the well-architected workload using the the QuestionId and the ChoiceId's we gathered above.
     ```
     aws wellarchitected update-answer --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --question-id "dev-integ" --selected-choices ops_dev_integ_version_control ops_dev_integ_conf_mgmt_sys ops_dev_integ_build_mgmt_sys ops_dev_integ_patch_mgmt ops_dev_integ_multi_env
     ```
-1. This will return the JSON object for the question, and at the bottom you will see SelectedChoices is now populated with the answers we have provided.
-![FindQid4](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid4.png)
-
-1. Because we still have have not checked all critical best practices, it has been identified as a High risk item.
+1. This will return the JSON object for the question, and at the bottom you will see SelectedChoices is now populated with the answers we have provided. Because we still have have not checked all critical best practices, this question has still been identified as a high risk item (HRI).
 ![FindQid5](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid5.png)
 
-### Repeat steps 1 and 2 but for the other pillar questions and best practices listed below
+### OPTIONAL: Repeat steps 1 and 2 but for the other pillar questions and best practices listed below
 1. SEC 1. How do you securely operate your workload?
     * Separate workloads using accounts
     * Secure AWS account
