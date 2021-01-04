@@ -13,7 +13,7 @@ hidden: false
 
 The purpose if this lab is to walk you through using the AWS Command Line Interface (AWS CLI) to access the features of the AWS Well-Architected Tool. You will create a workload, review an Operational Excellence question, save the workload, create a milestone, and examine and download the Well-Architected Review report.
 
-The knowledge you acquire will help you learn how to programmatically access content in the Well-Architected tool in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+The knowledge you acquire will help you learn how to programmatically access content in the Well-Architected tool in alignment with the [AWS Well-Architected Framework.](https://aws.amazon.com/architecture/well-architected/)
 
 ## Goals:
 

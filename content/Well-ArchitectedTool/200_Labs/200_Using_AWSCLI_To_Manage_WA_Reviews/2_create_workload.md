@@ -7,7 +7,7 @@ pre: "<b>2. </b>"
 ---
 
 ## Overview
-Well-Architected Reviews are conducted per workload . A workload identifies a set of components that deliver business value. The workload is usually the level of detail that business and technology leaders communicate about.
+Well-Architected Reviews are conducted per workload. A workload identifies a set of components that deliver business value. The workload is usually the level of detail that business and technology leaders communicate about. Workloads vary in levels of architectural complexity, from static websites to architectures with multiple data stores and many components.
 
 ## Creating a workload
 1. We will start with creating a Well-Architected workload to use throughout this lab.

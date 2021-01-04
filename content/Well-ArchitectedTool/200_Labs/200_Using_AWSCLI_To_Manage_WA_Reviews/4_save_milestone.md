@@ -18,7 +18,7 @@ A best practice is to save a milestone when you first do a new W-A review, or ev
     ```
     aws wellarchitected create-milestone --workload-id "<WorkloadId>" --milestone-name Rev1
     ```
-1. The return value will be the workloadId and the Milestone number assigned.
+1. The return value will be the WorkloadId and the Milestone number assigned.
     ![Milestone1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone1.png)
 
 ### 2. List all milestones
