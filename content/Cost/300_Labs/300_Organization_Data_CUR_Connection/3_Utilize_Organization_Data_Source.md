@@ -6,14 +6,14 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-### Create the Organisation Data Table
-In this section we will create the Organization table in Athena. This can then be used to connect to the CUR or other data sets you have, to show you the names and emails of your accounts.
+### Create the Organisations Data Table
+In this section we will create the AWS Organizations table in Amazon Athena. This can then be used to connect to the AWS Cost & Usage Report (CUR) or other data sets you have, to show you the names and emails of your accounts.
 
 1.	Go to the **Athena** service page
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-2.	We are going to create the orgonisation table. This can be done in any of your the databases that holds your Cost and Usage data. Copy and paste the below query replacing the **( bucket-name)** with your chosen bucket name from before, into the query box. Click **Run query**.
+2.  We are going to create the Organizations table. This can be done in any of the databases that holds your Cost & Usage Report. Copy and paste the below query replacing the **( bucket-name)** with the S3 bucket name which holds the Organizations data, into the query box. Click **Run query**.
 
 		CREATE EXTERNAL TABLE IF NOT EXISTS managementcur.organisation_data (
 		`account_number` string,
@@ -30,7 +30,7 @@ In this section we will create the Organization table in Athena. This can then b
 
 ![Images/Athena_Table.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Table.png)
 
-3.	Athena should report ‘Query Successful’. Run the below query, to view your data in s3. As you can see we have the account number, the name, when it was created and the current Status of that account.
+3.	Athena should report ‘Query Successful’. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
 
 		SELECT * FROM "managementcur"."organisation_data" limit 10;
 
@@ -41,11 +41,11 @@ You have now created your Athena table that will query the organization data in 
 
 ### Join with Cost and Usage Report
 
-We will be running an example query on how you can connect your CUR to this organisation data as a one off. In this query you will see the service costs split by account names. 
+We will be running an example query on how you can connect your CUR to this Organizations data as a one off. In this query you will see the service costs split by account names. 
 
-1.	In the **Athena** service page run the below query to join the organisation data with the CUR table. Make the below changes as needed:
+1.	In the **Athena** service page run the below query to join the Organizations data with the CUR table. Make the below changes as needed:
 
-- Change managementcur or cur if you database name or CUR table is called something else
+- Change managementcur if your named your database differently
 - month = **Chosen Month**
 - year = **Chosen Year**
 
@@ -63,15 +63,15 @@ We will be running an example query on how you can connect your CUR to this orga
 
 ![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
 
-2. The important part of this query is the join. The **line_item_usage_account_id** from your cost and usage report should match a **account_number** from the organization data. You can now see the account name in your data.
+2. The important part of this query is the join. The **line_item_usage_account_id** from your Cost & Usage Report should match a **account_number** from the Organizations data. You can now see the account name in your data.
 
 ![Images/Athena_Example.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Example.png)
 
 ### Create a View with Cost and Usage Report
 
-If you would like to always have your organization data connected to your CUR then we can create a view. 
+If you would like to always have your Organizations data connected to your CUR then we can create a view. 
 
-1.	In the Athena service page run the below query to join the organisation data with the CUR table as a view. 
+1.	In the Athena service page run the below query to join the Organizations data with the CUR table as a view. 
 
 		CREATE OR REPLACE VIEW org_cur AS
 		SELECT *
@@ -81,7 +81,7 @@ If you would like to always have your organization data connected to your CUR th
 			
 
 
-2. Going forward you will now be able to run your queries from this view and have the data connected to your organization data. Too see a preview where your org data will be on the end of the returned data, run the below query.
+2. Going forward you will now be able to run your queries from this view and have the data connected to your Organizations data. To see a preview where your org data is, which is at the end of the returned data, run the below query.
 
 		SELECT * FROM "managementcur"."org_cur" limit 10;
 

@@ -8,12 +8,14 @@ pre: "<b>7. </b>"
 
 The following resources were created in this lab:
 
-- QuickSight Dataset: organisation_data
-- Athena Table: organisation_data
-- CloudWatch Event, Rule: Lambda_Org_Data
-- Lambda Functions: Lambda_Org_Data
+- Amazon QuickSight Dataset: organisation_data
+- Amazon Athena Table: organisation_data
+- Amazon CloudWatch Event, Rule: Lambda_Org_Data
+- AWS Lambda Functions: Lambda_Org_Data
 - IAM Policy: LambdaOrgPolicy
 - IAM Role: LambdaOrgRole
+- IAM Policy: ListOrganizations
+- IAM Role: OrganizationLambdaAccessRole
 - S3 Bucket: (custom name)
 
 

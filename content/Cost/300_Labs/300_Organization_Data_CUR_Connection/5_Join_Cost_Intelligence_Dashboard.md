@@ -9,12 +9,12 @@ pre: "<b>5. </b>"
 ### Join with the Enterprise Cost Intelligence Dashboard
 
 
-This section is **optional** and shows how you can add your Organization Data to your **Enterprise Dashboards** - [200_Enterprise_Dashboards]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}}).
+This section is **optional** and shows how you can add your AWS Organization Datas to your **Enterprise Dashboards** - [200_Enterprise_Dashboards]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}}).
 
-This example will show you how to map your Enterprise Dashboard linked_account_id to your Organization account_number to add account information that is meaningful to your organization.
+This example will show you how to map your Enterprise Dashboard linked_account_id to your Organizations account_number to add account information that is meaningful to your organization.
 This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/2_modify_cost_intelligence/. 
 
-1. Go to the **QuickSight** service homepage
+1. Go to the **Amazon QuickSight** service homepage
 
 2. In **QuickSight**, select the **summary_view** Data Set
 
@@ -23,7 +23,7 @@ This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_
 4. Select **Add data**:
 ![Images/dashboard_mapping_3.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
 
-5. Select your Athena **organization_data** table and click **Select**
+5. Select your Amazon Athena **organization_data** table and click **Select**
 ![Images/Org_Data.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_Data.png)
 
 6. Select the **two circles** to open the join configuration then select **Left** to change your join type:
