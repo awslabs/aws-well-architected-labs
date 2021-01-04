@@ -22,6 +22,8 @@ You have learned how to use the various AWS CLI commands to work with the AWS We
 ## References & useful resources
 * [AWS CLI - wellarchitected](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/index.html)
 * [AWS Well-Architected Tool Documentation](https://docs.aws.amazon.com/wellarchitected/)
+* [AWS Well-Architected Boto3 Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/wellarchitected.html)
+* [AWS Well-Architected API Reference](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/Welcome.html)
 
 
 {{< prev_next_button link_prev_url="../5_view_report/"  title="Congratulations!" final_step="true" >}}
