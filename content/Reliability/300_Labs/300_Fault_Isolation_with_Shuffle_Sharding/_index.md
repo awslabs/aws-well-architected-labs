@@ -6,7 +6,7 @@ date: 2020-18-11T11:16:08-04:00
 chapter: false
 weight: 3
 tags:
-  - shuffle_sharding
+  - mitigate_failure
 ---
 ## Authors
 
