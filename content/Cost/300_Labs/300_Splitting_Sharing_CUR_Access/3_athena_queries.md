@@ -23,7 +23,7 @@ WITH ( format = 'Parquet', parquet_compression = 'GZIP', external_location = 's3
 SELECT *
 FROM "(database)"."(table)"
 WHERE line_item_usage_account_id = '(some value)' AND
-        (year=CAST(year(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR)) AND month=lpad(CAST(month(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR),2,'0')
+        (year=CAST(year(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR)) AND month=CAST(month(current_date- INTERVAL '__interval__' MONTH) AS VARCHAR)
 ```
 
 2 - Create the accompanying delete statement named **delete_linked_folder-name** to delete the temporary table:
