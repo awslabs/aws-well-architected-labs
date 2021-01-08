@@ -8,17 +8,15 @@ pre: "<b>2. </b>"
 
 1. Create a simple index.html file, you can create by coping the following text into your favourite text editor.
 ```
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
-<title>Example</title>
-</head>
-<body>
-
-<h1>Example Heading</h1>
-<p>Example paragraph.</p>
-
-</body>
+  <head>
+    <title>Example</title>
+  </head>
+  <body>
+    <h1>Example Heading</h1>
+    <p>Example paragraph.</p>
+  </body>
 </html>
 ```
 2. Open the Amazon S3 console at [https://console.aws.amazon.com/s3/](https://console.aws.amazon.com/s3/).

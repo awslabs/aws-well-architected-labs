@@ -32,7 +32,7 @@ By the end of this lab, you will be able to:
 
 ## Prequisites
 
-If you are running the at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
+If you are running this at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. This account MUST NOT be used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create IAM Polices and Roles, create S3 buckets and bucket policies, get and put objects into S3 buckets, and create and read CloudTrail trails and CloudWatch Log Groups.
@@ -53,4 +53,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 * In this lab you will do three S3 PUTs, store under 1MB of data in two S3 buckets, and transfer under 1MB of data from one region to another.
 * The total of these operations will not exceed $0.01. Under normal conditions there should be no accrued charges for this lab.
-* Please follow the directions for [Tear Down](./6_cleanup/) to remove all deployed resources when you are done with this lab.
+* Please follow the directions for [Tear Down](./4_cleanup/) to remove all deployed resources when you are done with this lab.
