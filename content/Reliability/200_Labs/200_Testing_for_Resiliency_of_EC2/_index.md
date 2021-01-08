@@ -32,7 +32,7 @@ The skills you learn will help you build resilient workloads in alignment with t
 * Learn how to think about what a failure will cause within your infrastructure
 * Learn how common AWS services can reduce mean time to recovery (MTTR)
 
-## Prequisites:
+## Prerequisites:
 
 * An
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.

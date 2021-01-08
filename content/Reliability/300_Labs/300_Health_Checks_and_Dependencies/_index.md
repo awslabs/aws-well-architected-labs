@@ -36,7 +36,7 @@ After you have completed this lab, you will be able to:
 * Configure fail-open and fail-closed behaviors as appropriate in response to detected faults
 * Use AWS services to reduce mean time to recovery (MTTR)
 
-## Prequisites
+## Prerequisites
 
 If you are running this at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 

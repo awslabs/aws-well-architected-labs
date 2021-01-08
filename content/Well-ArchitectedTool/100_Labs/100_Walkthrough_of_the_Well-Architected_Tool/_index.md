@@ -21,7 +21,7 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 * Learn how to use milestones to track your progress again high and medium risks over time.
 * Learn how to generate a report or view the results of the review in the Well-Architected Tool.
 
-## Prequisites:
+## Prerequisites:
 
 * An
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
