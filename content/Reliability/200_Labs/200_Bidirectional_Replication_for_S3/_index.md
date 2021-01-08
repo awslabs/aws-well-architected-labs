@@ -30,7 +30,7 @@ By the end of this lab, you will be able to:
 * Automate disaster recovery (DR) of your objects in Amazon S3
 * Query CloudTrail logs to improve your understanding of how cross-region replication works for Amazon S3
 
-## Prequisites
+## Prerequisites
 
 If you are running this at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 

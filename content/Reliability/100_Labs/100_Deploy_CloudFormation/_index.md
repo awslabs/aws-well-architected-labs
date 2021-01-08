@@ -34,7 +34,7 @@ By the end of this lab, you will be able to:
 * Automate infrastructure deployment for a workload
 * Understand how the deployed workload infrastructure contributes to reliability of the workload
 
-## Prequisites
+## Prerequisites
 
 If you are running this at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 
