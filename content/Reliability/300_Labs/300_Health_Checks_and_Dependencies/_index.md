@@ -38,7 +38,7 @@ After you have completed this lab, you will be able to:
 
 ## Prequisites
 
-If you are running the at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
+If you are running this at an AWS sponsored workshop then you may be provided with an AWS Account to use, in which case the following pre-requisites will be satisfied by the provided AWS account.  If you are running this using your own AWS Account, then please note the following prerequisites:
 
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. This account MUST NOT be used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create Amazon Virtual Private Cloud(s) (VPCs), including subnets and route tables, Security Groups, Internet Gateways, NAT Gateways, Elastic IP Addresses, IAM Roles, instance profiles, AWS Auto Scaling launch configurations, Application Load Balancers, Auto Scaling Groups, DynamoDB tables, SSM Parameters, and EC2 instances.
