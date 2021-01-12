@@ -18,6 +18,8 @@ Amazon EC2 provides [a wide selection of instance types optimized to fit differe
 
 The first step to perform right sizing on EC2 is to monitor your current use and gain insight into instance performance and usage patterns. To gather sufficient data, **observe performance over at least a two-week period (ideally, over a one-month period)** to capture the workload and business peaks. The most common metrics that define instance performance are: vCPU utilization, memory utilization, network utilization, and disk use.
 
+This 200 LVL hands-on lab will guide you through the steps to install the CloudWatch agent to collect memory utilization (% GB consumption) and use AWS Compute Optimizer to right-size EC2 Instances. By the end of this lab you should: 1) Learn how to attach IAM roles to an EC2 instance for CloudWatch custom metric collection; 2) Learn how to install and collect memory data through a custom metric at Amazon CloudWatch; and 3) Use AWS Compute Optimizer to gain insights into EC2 right-sizing.
+
 #### EC2 Right Sizing Best Practices
 
 * **Start simple:** idle resources, non-critical development/QA and previous generation instances will require less testing hours and provide quick wins (The Amazon EC2 Launch time statistics can be used to identify instances that have been running longer than others and is a good statistic to sort your Amazon EC2 instances by).

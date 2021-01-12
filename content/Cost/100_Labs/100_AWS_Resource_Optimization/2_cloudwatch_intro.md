@@ -20,7 +20,7 @@ You can [check here a complete list the available CloudWatch metrics for your EC
 #### 2. Select **EC2** under the **Service Dashboard**:
 ![Images/CloudWatch02.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch02.png)
 
-#### 3. Observe the **Service Dashboard** and all of its different metrics, but focus on **CPU Utilization** and **Network In Average** and **Network Out Average**:
+#### 3. Observe the **Service Dashboard** and all its different metrics, focus on **CPU Utilization** and **Network In Average** and **Network Out Average**:
 ![Images/CloudWatch03.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch03.png)
 
 #### 4. Select one of the **EC2** resources by clicking either on the chart line or on the icons to the left of the **resource-id** name:
@@ -29,11 +29,15 @@ You can [check here a complete list the available CloudWatch metrics for your EC
 #### 5. Deselect the **EC2 resource** and now modify the time range on the top right, click **custom** and select the **last 2 weeks**:
 ![Images/CloudWatch05.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch05.png)
 
-#### 6. Navigate to the **CPU Utilization Average** widget, click on the **three dots** on the top right and launch the **View in metrics** page. Using the **Graphed metrics** section try to answer the following questions:
+#### 6. Navigate to the **CPU Utilization Average** widget, click on the **three dots** on the top right and launch the **View in metrics** page. 
+
+Using the **Graphed metrics** section try to answer the following questions:
 
 - a. What is the instance with the highest CPU Average?
 - b. What is the instance with the highest CPU Max?
 - c. What is the instance with the lowest CPU Min?
+
+Amazon CloudWatch offer multiple view types. For example, try selecting "number" on the top right box to see which instances had the maximum and minimum CPU utilization over the past 12 hours. You can later click on the *Action* buttom on the top right and export the view to a custom dashboard or share it with the rest of your organization.
 
 ![Images/CloudWatch06.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch06.png)
 ![Images/CloudWatch07.png](/Cost/100_AWS_Resource_Optimization/Images/CloudWatch07.png)
