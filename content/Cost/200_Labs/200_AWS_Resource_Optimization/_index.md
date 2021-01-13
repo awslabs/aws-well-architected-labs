@@ -1,10 +1,13 @@
 ---
 title: "Level 200: EC2 Right Sizing"
 #menutitle: "Lab #3"
-date: 2020-12-17T11:16:08-04:00
+date: 2021-01-13T11:16:08-04:00
 chapter: false
 weight: 6
 ---
+## Last Updated
+December 2020
+
 ## Authors
 - Jeff Kassel, AWS Technical Account Manager
 - Arthur Basbaum, AWS Cloud Economics
@@ -29,6 +32,13 @@ This hands-on lab will guide you through the steps to install the CloudWatch age
 ## Permissions required
 - Root user access to the management account
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
+
+## Costs
+- https://aws.amazon.com/aws-cost-management/pricing/
+- There are no costs for this lab but you need to have at least 1 Amazon EC2 instance running. If you don't have any instance running please check the [AWS Free Tier page](https://aws.amazon.com/free/) for more information.
+
+## Time to complete
+- The lab should take approximately 35 minutes to complete
 
 ## Steps:
 {{% children  /%}}

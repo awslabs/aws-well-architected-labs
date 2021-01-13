@@ -1,7 +1,7 @@
 ---
 title: "Level 100: EC2 Right Sizing"
 #menutitle: "Lab #3"
-date: 2020-04-24T11:16:08-04:00
+date: 2021-01-13T11:16:08-04:00
 chapter: false
 weight: 6
 ---
@@ -36,7 +36,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - There are no costs for this lab but you need to have at least 1 Amazon EC2 instance running. If you don't have any instance running please check the [AWS Free Tier page](https://aws.amazon.com/free/) for more information.
 
 ## Time to complete
-- The lab should take approximately 25 minutes to complete
+- The lab should take approximately 30 minutes to complete
 
 ## Steps:
 {{% children  /%}}

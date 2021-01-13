@@ -6,18 +6,18 @@ pre: "<b>4. </b>"
 weight: 4
 ---
 
-1. We are now going to manually install the **CloudWatch agent** to start collecting memory data, to start let's go back to the **Amazon EC2 Dashboard**.
+#### 1. We are now going to manually install the **CloudWatch agent** to start collecting memory data, to start let's go back to the **Amazon EC2 Dashboard**.
 ![Images/MemInstall01.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall01.png)
 
-2. On the left bar, click on **Instances** and select the **EC2 Instance** with the *CloudWatchAgentServerRole* IAM role.
+#### 2. On the left bar, click on **Instances** and select the **EC2 Instance** with the *CloudWatchAgentServerRole* IAM role.
 ![Images/MemInstall02.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall02.png)
 
-3. Connect into the EC2 Instance using the **browser-based SSH connection tool** or the connection type of your choice.
+#### 3. Connect into the EC2 Instance using the **browser-based SSH connection tool** or the connection type of your choice.
 ![Images/MemInstall03.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall03.png)
 ![Images/MemInstall04.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall04.png)
 ![Images/MemInstall05.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall05.png)
 
-4. Download the **Amazon CloudWatch** agent package, the instructions below are for Amazon Linux and Amazon Linux 2, for other OS's please check [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html)
+#### 4. Download the **Amazon CloudWatch** agent package, the instructions below are for Amazon Linux and Amazon Linux 2, for other OS's please check [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html)
 
 ```
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
@@ -25,7 +25,7 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCl
 
 ![Images/MemInstall06.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall06.png)
 
-5. Unzip and Install the package.
+#### 5. Unzip and Install the package.
 
 ```
 unzip AmazonCloudWatchAgent.zip
@@ -34,7 +34,7 @@ sudo ./install.sh
 
 ![Images/MemInstall07.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall07.png)
 
-6. Configure the AmazonCloudWatchAgent profile.
+#### 6. Configure the AmazonCloudWatchAgent profile.
 
 Before running the CloudWatch agent on any servers, you must create a CloudWatch agent configuration file, which is a JSON file that specifies the metrics and logs that the agent is to collect, including custom metrics. You can create it by using the wizard or by writting it yourself from scratch. Any time you change the agent configuration file, you must then restart the agent to have the changes take effect.
 
@@ -103,7 +103,7 @@ The CloudWatch Agent config file should look like the following:
 }
 ```
 
-7. Start the CloudWatch Agent
+#### 7. Start the CloudWatch Agent
 
 ```
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
@@ -124,7 +124,7 @@ Select the **Instance** from the list below:
 
 You have now completed the CloudWatch agent installation and will be able to monitor on Amazon CloudWatch the memory utilization of that instance.
 
-**[BONUS]** The next step is not mandatory to complete this lab.
+#### **[BONUS]** The next step is not mandatory to complete this lab.
 
 If you have a lot of instances manually installing the CloudWatch agent on each of them is not a scalable option. Consider using AWS Systems Manager or a pre-configured AWS CloudFormation template to automatically install the CloudWatch agent by default on all your stacks.
 
@@ -144,4 +144,4 @@ CloudFormation Steps:
 - Enter the tag **Key: Event | Value: myStackforWACostLab**
 - Click **Next** and **Create stack**
 
-{{< prev_next_button link_prev_url="../3_attach_iamrole/" link_next_url="../5_ec2_updated_rec/" />}}
+{{< prev_next_button link_prev_url="../3_attach_iamrole/" link_next_url="../5_ec2_computer_opt/" />}}

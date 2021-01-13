@@ -36,6 +36,6 @@ This 200 LVL hands-on lab will guide you through the steps to install the CloudW
 - [Amazon CloudWatch FAQ](https://aws.amazon.com/cloudwatch/faqs/)
 - [AWS Cost Management - Right Sizing](https://aws.amazon.com/aws-cost-management/aws-cost-optimization/right-sizing/)
 - [List of available CloudWatch metrics for EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html)
-- [WA Lab LVL 200 EC2 Right Sizing with Computer Optimizer]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}})
+- [WA Lab LVL 100 EC2 Right Sizing]({{< ref "/Cost/100_Labs/100_AWS_Resource_Optimization" >}})
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_create_iamrole/" />}}
