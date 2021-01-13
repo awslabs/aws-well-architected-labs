@@ -9,8 +9,7 @@ pre: "<b>6. </b>"
 No tear down is required for this lab.
 
 
-
-{{< prev_next_button link_prev_url="../5_ec2_rs_best_practices/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_other_rs_tools/"  title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST6 - "How do you meet cost targets when you select resource type, size and number?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-cost-effective-resources.html)
