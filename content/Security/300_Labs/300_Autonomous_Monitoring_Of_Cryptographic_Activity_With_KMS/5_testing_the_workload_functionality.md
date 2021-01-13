@@ -10,7 +10,7 @@ Following the completion of **section 4**, we can complete the lab by testing th
 
 Complete the following steps to test the system functionality:
 
-### 4.1. Initiate a successful decryption operation
+### 5.1. Initiate a successful decryption operation
 
 Run the command shown below within your **Cloud9 IDE**, replacing the < encrypt key > with the key value that you took note of in section **2.4** as well as the < Application endpoint URL > with the **OutputPattern1ApplicationEndpoint** url you took note on section **2.3.3**
 
@@ -25,7 +25,7 @@ Once that is successful, you should see out put like below:
 {"Text":"Welcome to ReInvent 2020!"}
 ```
 
-### 4.2. Initiate an unsuccessful decryption operation
+### 5.2. Initiate an unsuccessful decryption operation
 
 Now that we have confirmed that the decrypt API is operational, let's trigger a deliberate **decryption failure** to invoke our alerting.
 
@@ -50,23 +50,23 @@ Make sure that you repeat this several times in a row, to ensure you we are trig
 * For more information about this, please visit Cloudtrail [FAQ](https://aws.amazon.com/cloudtrail/faqs/) page 
 
 
-### 4.3. Observing the alarm.
+### 5.3. Observing the alarm.
 
 If all the components are configured correctly, you should receive an email notification triggered by the CloudWatch alarm similar to this:
 
-![Section5 Cloudwatch Alarm Email](Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section5/section5-cloudwatch-alarm1.png)
+![Section5 Cloudwatch Alarm Email](/Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section5/section5-cloudwatch-alarm1.png)
 
 
-#### 4.3.1. 
+#### 5.3.1. 
 
 Click on the URL included in the email that will take you to the **CloudWatch Alarm** resource in AWS console.
 
 
-#### 4.3.2. 
+#### 5.3.2. 
 
 Observe the state changes under the **History** section, and notice each activity change as follows:
 
-![Section3 Cloudwatch Alarm ](Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section5/section5-cloudwatch-alarm2.png)
+![Section5 Cloudwatch Alarm ](/Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section5/section5-cloudwatch-alarm2.png)
 
 
 Congratulations! you have completed the Pattern1 lab.

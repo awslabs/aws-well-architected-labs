@@ -104,7 +104,7 @@ cd app/
 ./build-container.sh pattern1-base
 ```
 
-Once your command runs successfully, you should be seeing the Image being pushed to ECR and URI marked as shown here:
+Once your command runs successfully, you should be seeing the image being pushed to ECR and URI marked as shown here:
 
 ![Section 2 Cloud9 IDE Application Build](/Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section2/section2-pattern1-cloud9-application-build.png)
 
@@ -137,7 +137,11 @@ Our sample application is configured as follows:
 * The encrypted value of **Text** key will then be stored in an [RDS](https://aws.amazon.com/rds/) database, and the app will return a **Encryption Key** value that the user will have to pass on to decrypt the Text later
 * The **decrypt** API will do the reverse, taking the **Encryption Key** you pass to decrypt the text `{"Text":"Welcome To ReInvent 2020!"}`
 
+{{% notice note %}}
+**Note:** In this section we will be deploying a CloudFormation Stack which will launch an ECS cluster. If this is the first time you are working with the ECS service, you will need to deploy a service linked role which will be able to assume the IAM role to perform the required activities within your account. To do this, run the following from the command line using appropriate profile flags:
+`aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com `
 
+{{% /notice %}}
 
 Download the application template from [here](/Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Code/templates/section2/pattern1-app.yml "Section2 Application template") and deploy according to your preference below.
 
@@ -239,10 +243,12 @@ The following diagram shows the output from the cloudformation stack:
 
 In this part of the Lab, we will be testing the encrypt API of the sample application we just deployed. Our application will basically take a JSON payload with `Name` and `Text` key, and it will encrypt the value under text key with a designated KMS key. Once the text is encrypted, it will store the encrypted text in the RDS database with the `Name` as the primary key.
 
-###### Note:
-For simplicity our sample application is not generating individual KMS keys for each record generated. Should you wish to deploy this pattern to production, we recommend that you use a separate KMS key for each record.
 
-Please replace the < Application Endpoint URL > with the **OutputPattern1ApplicationEndpoint** from previous step.
+{{% notice note %}}
+**Note:** For simplicity our sample application is not generating individual KMS keys for each record generated. Should you wish to deploy this pattern to production, we recommend that you use a separate KMS key for each record.
+{{% /notice %}}
+
+From your **Cloud9** terminal, replace the < Application Endpoint URL > with the **OutputPattern1ApplicationEndpoint** from previous step.
 
 ```
 ALBURL="< Application Endpoint URL >"

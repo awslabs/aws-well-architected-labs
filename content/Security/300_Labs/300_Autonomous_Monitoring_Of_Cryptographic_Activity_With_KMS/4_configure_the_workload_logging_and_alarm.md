@@ -122,7 +122,6 @@ Change the name of the metric to `KMSsecurityError` and set the **Period** to **
 
 ![Section2 Cloudwatch Console ](/Security/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/Images/section4/section4-create-metricalarm2.png)
 
-When you are ready, click **Next**
 
 #### 4.2.3. 
 
