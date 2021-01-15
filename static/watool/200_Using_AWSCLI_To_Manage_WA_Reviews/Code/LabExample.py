@@ -22,6 +22,9 @@ import json
 import datetime
 import logging
 import jmespath
+import base64
+from pkg_resources import packaging
+
 
 __author__    = "Eric Pullen"
 __email__     = "eppullen@amazon.com"
@@ -41,8 +44,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger()
-# logger.addHandler(logging.StreamHandler()) # Writes to console
-# logger.setLevel(logging.DEBUG)
 logging.getLogger('boto3').setLevel(logging.CRITICAL)
 logging.getLogger('botocore').setLevel(logging.CRITICAL)
 logging.getLogger('s3transfer').setLevel(logging.CRITICAL)
@@ -67,6 +68,7 @@ def CreateNewWorkload(
     lenses
     ):
 
+    # Create your workload
     try:
         waclient.create_workload(
         WorkloadName=workloadName,
@@ -229,7 +231,7 @@ def findChoiceId(
     choiceTitle,
     ):
 
-    # Find a questionID using the questionTitle
+    # Find a choiceId using the choiceTitle
     try:
         response=waclient.get_answer(
         WorkloadId=workloadId,
@@ -253,7 +255,7 @@ def getAnswersForQuestion(
     questionId
     ):
 
-    # Find a questionID using the questionTitle
+    # Find a answer for a questionId
     try:
         response=waclient.get_answer(
         WorkloadId=workloadId,
@@ -280,7 +282,7 @@ def updateAnswersForQuestion(
     notes
     ):
 
-    # Find a questionID using the questionTitle
+    # Update a answer to a question
     try:
         response=waclient.update_answer(
         WorkloadId=workloadId,
@@ -297,12 +299,194 @@ def updateAnswersForQuestion(
     # print(json.dumps(response))
     jmesquery = "Answer.SelectedChoices"
     answers = jmespath.search(jmesquery, response)
-    print(answers)
     return answers
+
+def listMilestones(
+    waclient,
+    workloadId
+    ):
+
+    # Find a milestone for a workloadId
+    try:
+        response=waclient.list_milestones(
+        WorkloadId=workloadId,
+        MaxResults=50 # Need to check why I am having to pass this parameter
+        )
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+    # print("Full JSON:",json.dumps(response['MilestoneSummaries'], cls=DateTimeEncoder))
+    milestoneNumber = response['MilestoneSummaries']
+    return milestoneNumber
+
+def createMilestone(
+    waclient,
+    workloadId,
+    milestoneName
+    ):
+
+    # Create a new milestone with milestoneName
+    try:
+        response=waclient.create_milestone(
+        WorkloadId=workloadId,
+        MilestoneName=milestoneName
+        )
+    except waclient.exceptions.ConflictException as e:
+        milestones = listMilestones(waclient,workloadId)
+        jmesquery = "[?starts_with(MilestoneName,`"+milestoneName+"`) == `true`].MilestoneNumber"
+        milestoneNumber = jmespath.search(jmesquery,milestones)
+        logger.error("ERROR - The milestone name %s already exists as milestone %s" % (milestoneName, milestoneNumber))
+        return milestoneNumber[0]
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+
+    # print("Full JSON:",json.dumps(response['MilestoneSummaries'], cls=DateTimeEncoder))
+    milestoneNumber = response['MilestoneNumber']
+    return milestoneNumber
+
+def getMilestone(
+    waclient,
+    workloadId,
+    milestoneNumber
+    ):
+
+    # Use get_milestone to return the milestone structure
+    try:
+        response=waclient.get_milestone(
+        WorkloadId=workloadId,
+        MilestoneNumber=milestoneNumber
+        )
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+
+    # print("Full JSON:",json.dumps(response['Milestone'], cls=DateTimeEncoder))
+    milestoneResponse = response['Milestone']
+    return milestoneResponse
+
+def getMilestoneRiskCounts(
+    waclient,
+    workloadId,
+    milestoneNumber
+    ):
+
+    # Return just the RiskCount for a particular milestoneNumber
+
+    milestone = getMilestone(waclient,workloadId,milestoneNumber)
+    # print("Full JSON:",json.dumps(milestone['Workload']['RiskCounts'], cls=DateTimeEncoder))
+    milestoneRiskCounts = milestone['Workload']['RiskCounts']
+    return milestoneRiskCounts
+
+def listAllAnswers(
+    waclient,
+    workloadId,
+    lensAlias,
+    milestoneNumber=""
+    ):
+
+    # Get a list of all answers
+    try:
+        if milestoneNumber:
+            response=waclient.list_answers(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias,
+            MilestoneNumber=milestoneNumber
+            )
+        else:
+            response=waclient.list_answers(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias
+            )
+
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+
+    answers = response['AnswerSummaries']
+    while "NextToken" in response:
+        if milestoneNumber:
+            response = waclient.list_answers(WorkloadId=workloadId,LensAlias=lensAlias,MilestoneNumber=milestoneNumber,NextToken=response["NextToken"])
+        else:
+            response = waclient.list_answers(WorkloadId=workloadId,LensAlias=lensAlias,NextToken=response["NextToken"])
+        answers.extend(response["AnswerSummaries"])
+
+    # print("Full JSON:",json.dumps(answers, cls=DateTimeEncoder))
+    return answers
+
+def getLensReview(
+    waclient,
+    workloadId,
+    lensAlias,
+    milestoneNumber=""
+    ):
+
+    # Use get_lens_review to return the lens review structure
+    try:
+        if milestoneNumber:
+            response=waclient.get_lens_review(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias,
+            MilestoneNumber=milestoneNumber
+            )
+        else:
+            response=waclient.get_lens_review(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias
+            )
+
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+
+    # print("Full JSON:",json.dumps(response['LensReview'], cls=DateTimeEncoder))
+    lensReview = response['LensReview']
+    return lensReview
+
+def getLensReviewPDFReport(
+    waclient,
+    workloadId,
+    lensAlias,
+    milestoneNumber=""
+    ):
+
+    # Use get_lens_review_report to return the lens review PDF in base64 structure
+    try:
+        if milestoneNumber:
+            response=waclient.get_lens_review_report(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias,
+            MilestoneNumber=milestoneNumber
+            )
+        else:
+            response=waclient.get_lens_review_report(
+            WorkloadId=workloadId,
+            LensAlias=lensAlias
+            )
+
+    except botocore.exceptions.ParamValidationError as e:
+        logger.error("ERROR - Parameter validation error: %s" % e)
+    except botocore.exceptions.ClientError as e:
+        logger.error("ERROR - Unexpected error: %s" % e)
+
+    # print("Full JSON:",json.dumps(response['LensReviewReport']['Base64String'], cls=DateTimeEncoder))
+    lensReviewPDF = response['LensReviewReport']['Base64String']
+    return lensReviewPDF
 
 
 def main():
-    logger.info("Starting Boto Session")
+    boto3_min_version = "1.16.38"
+    # Verfiy if the version of Boto3 we are running has the wellarchitected APIs included
+    if (packaging.version.parse(boto3.__version__) < packaging.version.parse(boto3_min_version)):
+        logger.error("Your Boto3 version (%s) is less than %s. You must ugprade to run this script (pip3 upgrade boto3)" % (boto3.__version__, boto3_min_version))
+        exit()
+
+    logger.info("Starting Boto %s Session" % boto3.__version__)
     # Create a new boto3 session
     SESSION = boto3.session.Session()
     # Inititate the well-architected session using the region defined above
@@ -371,31 +555,56 @@ def main():
     answers = getAnswersForQuestion(WACLIENT,workloadId,'wellarchitected',questionId)
     logger.info("Now the answer for questionId '%s' is '%s'" % (questionId, answers))
 
-    exit()
-
 
     # STEP 4 - Saving a milestone
     # https://wellarchitectedlabs.com/well-architectedtool/200_labs/200_using_awscli_to_manage_wa_reviews/4_save_milestone/
     logger.info("4 - Saving a Milestone")
 
     logger.info("4 - STEP1 - Create a Milestone")
+
+    milestones = listMilestones(WACLIENT,workloadId)
+    milestoneCount = jmespath.search("length([*].MilestoneNumber)",milestones)
+    logger.info("Workload %s has %s milestones" % (workloadId, milestoneCount))
+
+    milestoneNumber = createMilestone(WACLIENT,workloadId,'Rev1')
+    logger.info("Created Milestone #%s called Rev1" % milestoneNumber)
+
     logger.info("4 - STEP2 - List all Milestones")
+
+    milestones = listMilestones(WACLIENT,workloadId)
+    milestoneCount = jmespath.search("length([*].MilestoneNumber)",milestones)
+    logger.info("Now workload %s has %s milestones" % (workloadId, milestoneCount))
+
     logger.info("4 - STEP3 - Retrieve the results from a milestone")
-    logger.info("4 - STEP4 - List all question answers based from a milestone")
+
+    riskCounts = getMilestoneRiskCounts(WACLIENT,workloadId,milestoneNumber)
+    logger.info("Risk counts for all lenses for milestone %s are: %s " % (milestoneNumber,riskCounts))
+
+    logger.info("4 - STEP4 - List all question and answers based from a milestone")
+    answers = listAllAnswers(WACLIENT,workloadId,'wellarchitected',milestoneNumber)
 
     # STEP 5 - Viewing and downloading the report
     # https://wellarchitectedlabs.com/well-architectedtool/200_labs/200_using_awscli_to_manage_wa_reviews/5_view_report/
     logger.info("5 - Viewing and downloading the report")
-
     logger.info("5 - STEP1 - Gather pillar and risk data for a workload")
+
+    lensReview = getLensReview(WACLIENT,workloadId,'wellarchitected')
+    logger.info("The Well-Architected base framework has the following RiskCounts %s " % lensReview['RiskCounts'])
+
+
     logger.info("5 - STEP2 - Generate and download workload PDF")
+    lensReviewBase64PDF = getLensReviewPDFReport(WACLIENT,workloadId,'wellarchitected')
+    # lensReviewPDF = base64.b64decode(lensReviewBase64PDF)
+    # We will write the PDF to a file in the same directory
+    with open("WAReviewOutput.pdf", "wb") as fh:
+        fh.write(base64.b64decode(lensReviewBase64PDF))
 
     # STEP 6 - Teardown
     # https://wellarchitectedlabs.com/well-architectedtool/200_labs/200_using_awscli_to_manage_wa_reviews/6_cleanup/
     logger.info("6 - Teardown")
 
     logger.info("6 - STEP1 - Delete Workload")
-    # DeleteWorkload(WACLIENT, workloadId)
+    DeleteWorkload(WACLIENT, workloadId)
 
 
 
