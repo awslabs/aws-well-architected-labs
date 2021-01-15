@@ -1,7 +1,7 @@
 ---
 title: "Level 200: Using AWSCLI to Manage WA Reviews"
 #menutitle: "Lab #1"
-date: 2020-12-17T11:16:08-04:00
+date: 2021-01-15T11:16:09-04:00
 chapter: false
 weight: 1
 hidden: false
