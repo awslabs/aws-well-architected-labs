@@ -28,4 +28,4 @@ You can generate a workload report for a lens. The report contains your response
 
 
 
-{{< prev_next_button link_prev_url="../4_save_milestone/" link_next_url="../6_cleanup/" />}}
+{{< prev_next_button link_prev_url="../4_save_milestone/" link_next_url="../6_programmatic/" />}}
