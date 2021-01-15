@@ -12,8 +12,10 @@ The lab uses AWS CLI to perform all of the tasks, but you can also use the Boto3
 ### Python code
 {{< readfile file="/static/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Code/LabExample.py" code="true" lang="python" >}}
 
+
+<!-- 
 ## Powershell version using AWS SDK for Powershell
-**Coming soon**
+**Coming soon** -->
 
 
 {{< prev_next_button link_prev_url="../5_view_report/" link_next_url="../7_cleanup/" />}}
