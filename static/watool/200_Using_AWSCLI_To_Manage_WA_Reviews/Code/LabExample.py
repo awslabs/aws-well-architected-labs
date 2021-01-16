@@ -481,15 +481,16 @@ def getLensReviewPDFReport(
 
 def main():
     boto3_min_version = "1.16.38"
-    # Verfiy if the version of Boto3 we are running has the wellarchitected APIs included
+    # Verify if the version of Boto3 we are running has the wellarchitected APIs included
     if (packaging.version.parse(boto3.__version__) < packaging.version.parse(boto3_min_version)):
         logger.error("Your Boto3 version (%s) is less than %s. You must ugprade to run this script (pip3 upgrade boto3)" % (boto3.__version__, boto3_min_version))
         exit()
 
-    logger.info("Starting Boto %s Session" % boto3.__version__)
+    # STEP 1 - Configure environment
+    logger.info("1 - Starting Boto %s Session" % boto3.__version__)
     # Create a new boto3 session
     SESSION = boto3.session.Session()
-    # Inititate the well-architected session using the region defined above
+    # Initiate the well-architected session using the region defined above
     WACLIENT = SESSION.client(
         service_name='wellarchitected',
         region_name=REGION_NAME,
@@ -499,7 +500,7 @@ def main():
     DESCRIPTION = 'Test Workload for WA Lab'
     REVIEWOWNER = 'WA Python Script'
     ENVIRONMENT= 'PRODUCTION'
-    AWSREGIONS = ['us-east-1']
+    AWSREGIONS = [REGION_NAME]
     LENSES = ['wellarchitected', 'serverless']
 
     # STEP 2 - Creating a workload
@@ -602,6 +603,9 @@ def main():
     # STEP 6 - Teardown
     # https://wellarchitectedlabs.com/well-architectedtool/200_labs/200_using_awscli_to_manage_wa_reviews/6_cleanup/
     logger.info("6 - Teardown")
+
+    # Allow user to keep the workload
+    input("\n*** Press Enter to delete the workload or use ctrl-c to abort the script and keep the workload")
 
     logger.info("6 - STEP1 - Delete Workload")
     DeleteWorkload(WACLIENT, workloadId)
