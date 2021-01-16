@@ -102,7 +102,7 @@ def run(argv):
     try:
         opts, args = getopt.getopt(
             argv,
-            "h:u:p:s:w:d:o:",
+            "hu:p:s:w:d:o:",
             [
                 "help"
                 "image_url=",
@@ -118,8 +118,8 @@ def run(argv):
         sys.exit(2)
     print(opts)
     for opt, arg in opts:
-        if opt == '-h':
-            print('test.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
+        if opt in ("-h", "--help"):
+            print('server.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
             sys.exit()
         elif opt in ("-u", "--image_url"):
             image_url = arg
@@ -136,7 +136,7 @@ def run(argv):
 
     # Setup DB
     print(db_host, db_user, db_pswd, db_name)
-    db = pymysql.connect(db_host, db_user, db_pswd, db_name)
+    db = pymysql.connect(host=db_host, user=db_user, password=db_pswd, database=db_name)
 
     print('starting server...')
     server_address = ('0.0.0.0', server_port)
