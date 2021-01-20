@@ -2,11 +2,11 @@
 title: "CUR Query Library Help"
 date: 2020-08-28T11:16:09-04:00
 chapter: false
-weight: 4
+weight: 19
 pre: "<b> </b>"
 ---
 
-The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and retrieving product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
+The CUR Query Library Help section is intended to provide tips and information about navigating the CUR dataset.  We will cover beginner topics like getting started with querying the CUR, filtering query results, common query format, links to public documentation, and getting product information.  We will also cover advanced topics like understanding your AWS Cost Datasets while working with the CUR data.  
 
 {{% notice tip %}}
 Use the clipboard in the top right of the text boxes below to copy all of the text to be pasted.  
@@ -16,7 +16,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
 {{% /notice %}}
 
-### Table of Contents
+## Table of Contents
 {{< expand "Cost and Usage Report Documentation Links" >}}
 
 {{% markdown_wrapper %}}
@@ -452,7 +452,12 @@ You should now be able to align the unblended cost for AWS Glue using both CUR a
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
 {{% /notice %}}
 
+## Contributing
 
+Community contributions are encouraged and welcome.  Please follow the [Contribution Guide]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help/contribution-guide.md" >}}). The goal is to pull together useful CUR queries in to a single library that is open, standardized, and maintained.
+
+## Contributors
+Please refer to the [CUR Query Library Contributors section]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help/contributors.md" >}}).
 
 
 
