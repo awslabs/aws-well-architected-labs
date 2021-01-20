@@ -153,7 +153,7 @@ Log-Message ("WorkloadId "+$workloadId+" has lenses '"+$workload.Lenses+"'")
 # https://wellarchitectedlabs.com/well-architectedtool/200_labs/200_using_awscli_to_manage_wa_reviews/3_perform_review/
 Log-Message ("3 - Performing a review")
 Log-Message ("3 - STEP1 - Find the QuestionId and ChoiceID for a particular pillar question and best practice")
-#$workloadId = "3e067bc3245a40a8ec1bbd462b449024"
+
 $questionSearch = "How do you reduce defects, ease remediation, and improve flow into production"
 
 $questionReturn = Get-WATAnswerList -WorkloadId $workloadId -LensAlias "wellarchitected" -PillarId "operationalExcellence"
@@ -226,11 +226,7 @@ Log-Message ("The Well-Architected base framework has the following RiskCounts "
 Log-Message ("5 - STEP2 - Generate and download workload PDF")
 
 $LensPDFReviewReturn = Get-WATLensReviewReport -WorkloadId $workloadId -LensAlias "wellarchitected"
-
-# $LensPDFReviewReturn.LensReviewReport.Base64String
-# $b64      = 'AAAAAA...'
 $filename = 'WAReviewOutput.pdf'
-
 $bytes = [Convert]::FromBase64String($LensPDFReviewReturn.LensReviewReport.Base64String)
 [IO.File]::WriteAllBytes($filename, $bytes)
 
@@ -241,6 +237,4 @@ Log-Message ("6 - Teardown")
 # Allow user to keep the workload
 Read-Host -Prompt "Press any key to continue or CTRL+C to quit"
 Log-Message ("6 - STEP1 - Delete Workload")
-
-#
 Remove-WATWorkload -WorkloadId $workloadId -Force
