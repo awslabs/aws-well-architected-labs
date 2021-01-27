@@ -59,7 +59,7 @@ Resources:
       Role: !GetAtt
         - LambdaRole
         - Arn
-      Runtime: python2.7
+      Runtime: python3.8
       Timeout: '60'
       Code:
         S3Bucket: aws-well-architected-labs-virginia
