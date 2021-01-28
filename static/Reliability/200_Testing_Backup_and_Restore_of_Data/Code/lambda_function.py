@@ -5,7 +5,6 @@ import boto3
 backup = boto3.client('backup')
 
 def lambda_handler(event, context):
-    print(event)
     print('Incoming Event:' + json.dumps(event))
 
     try:
