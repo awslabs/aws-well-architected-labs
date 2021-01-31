@@ -17,7 +17,7 @@ AWS Cost Explorer is a free built in tool that lets you dive deeper into your co
 3. Click on **Launch Cost Explorer**:
 ![Images/AWSCostService2.png](/Cost/100_5_Cost_Visualization/Images/AWSCostService2.png)
 
-4. Click on **Saved reports** from the left menu:
+4. Click on **Reports** from the left menu:
 ![Images/AWSCostService3.png](/Cost/100_5_Cost_Visualization/Images/AWSCostService3.png)
 
 5. You will be presented a list of pre-configured and saved reports. Click on **Monthly costs by service**:
