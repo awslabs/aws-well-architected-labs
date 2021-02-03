@@ -50,6 +50,8 @@ The CUR Query Library Help section is intended to provide tips and information a
 
 [Compute]({{< ref "Queries/compute.md" >}} "Compute")
 
+[Container]({{< ref "Queries/container.md" >}} "Container")
+
 [Customer Engagement]({{< ref "Queries/customer_engagement.md" >}} "Customer Engagement")
 
 [Database]({{< ref "Queries/database.md" >}} "Database")

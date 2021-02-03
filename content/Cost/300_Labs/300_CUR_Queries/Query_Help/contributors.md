@@ -29,3 +29,4 @@ The CUR Library is intended to be an open source library of Cost & Usage Reports
 - Luis Osses, Sr. Edge Specialist Solutions Architect
 - Alee Whitman, Commercial Architect, Optics
 - Arabinda Pani, Sr. Partner Solutions Architect, Database
+- Yuriy Prykhodko, Sr. TAM, AWS Enterprise Support

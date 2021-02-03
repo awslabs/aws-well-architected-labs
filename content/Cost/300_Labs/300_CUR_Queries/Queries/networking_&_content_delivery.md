@@ -67,7 +67,7 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="Amazon API Gateway" query_text="Amazon API Gateway Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon API Gateway" query_text="Amazon API Gateway Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -119,7 +119,7 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="Amazon CloudFront" query_text="Amazon CloudFront Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon CloudFront" query_text="Amazon CloudFront Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -134,7 +134,7 @@ This query provides daily unblended cost and usage information about Data Transf
 Please refer to each individual service pricing page for more details on how data transfer charges are handled for that service.
 
 #### Sample Output
-![Images/data-transfer.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer.png)
+![Images/data-transfer.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer.sql)
@@ -171,7 +171,7 @@ Please refer to each individual service pricing page for more details on how dat
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="Data Transfer" query_text="Data Transfer Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer" query_text="Data Transfer Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -223,7 +223,7 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -238,7 +238,7 @@ The query will output AWS Direct Connect charges split by Direct Connect port ch
 Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/directconnect/pricing/) for more details.
 
 #### Sample Output:
-![Images/direct-connect.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/direct-connect.png)
+![Images/direct-connect.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/direct-connect.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/direct-connect.sql)
@@ -285,7 +285,7 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -302,7 +302,7 @@ This query provides monthly unblended cost and usage information about NAT Gatew
 Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for more details.
 
 #### Sample Output:
-![Images/natgatewaywrid.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgatewaywrid.png)
+![Images/natgatewaywrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgatewaywrid.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgatewaywrid.sql)
@@ -339,10 +339,75 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
+{{< expand "NAT Gateway Idle" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query shows cost and usage of NAT Gateways which didn't receive any traffic last month and ran for more than 336 hrs. Resources returned by this query could be considered for deletion.
+
+#### Pricing
+Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for more details.
+
+#### Sample Output:
+![Images/natgateway_idle_wrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgateway_idle_wrid.png)
+
+#### Download SQL File:
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgateway_idle_wrid.sql)
+
+#### Query Preview:
+    SELECT
+        bill_payer_account_id,
+        line_item_usage_account_id,
+        SPLIT_PART(line_item_resource_id, ':', 6) split_line_item_resource_id,
+        product_region,
+        pricing_unit,
+        sum_line_item_usage_amount,
+        CAST(cost_per_resource AS decimal(16, 8)) AS "sum_line_item_unblended_cost"
+    FROM
+        (
+            SELECT
+                line_item_resource_id,
+                product_region,
+                pricing_unit,
+                line_item_usage_account_id,
+                bill_payer_account_id,
+                SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+                SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
+                SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
+                COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
+            FROM
+                ${table_name}
+            WHERE
+                line_item_product_code = 'AmazonEC2'
+                AND line_item_usage_type like '%Nat%'
+                -- get previous month
+                AND month = cast(month(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+                -- get year for previous month
+                AND year = cast(year(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+                AND line_item_line_item_type = 'Usage'
+            GROUP BY
+                line_item_resource_id,
+                product_region,
+                pricing_unit,
+                line_item_usage_account_id,
+                bill_payer_account_id
+        )
+    WHERE
+        -- filter only resources which ran more than half month (336 hrs)
+        usage_per_resource_and_pricing_unit > 336
+        AND pricing_unit_per_resource = 1
+    ORDER BY
+        cost_per_resource DESC
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query2" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
 
 
 {{< expand "AWS Transit Gateway" >}}
@@ -350,13 +415,13 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 {{% markdown_wrapper %}}
 
 #### Query Description
-This query provides monthly unblended cost and usage information about AWS Trasit Gateway Usage including attachment type, and resource id. The usage amount and cost will be summed and the cost will be in descending order.
+This query provides monthly unblended cost and usage information about AWS Transit Gateway Usage including attachment type, and resource id. The usage amount and cost will be summed and the cost will be in descending order.
 
 #### Pricing
 Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pricing/) for more details.
 
 #### Sample Output:
-![Images/tgwwrid.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/tgwwrid.png)
+![Images/tgwwrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/tgwwrid.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/tgwwrid.sql)
@@ -401,7 +466,7 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="AWS Transit Gateway" query_text="AWS Transit Gateway Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Transit Gateway" query_text="AWS Transit Gateway Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
@@ -460,7 +525,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Networking & Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
