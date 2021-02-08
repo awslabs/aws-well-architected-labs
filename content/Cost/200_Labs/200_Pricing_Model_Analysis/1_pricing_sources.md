@@ -1,6 +1,6 @@
 ---
 title: "Create Pricing Data Sources"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-02-07T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
@@ -135,7 +135,7 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 
                    # If the line contains 'OnDemand' or 'Compute Instance' then add it to the output string
                    if ((str(line).find('OnDemand') != -1) and (str(line).find('RunInstances') != -1)):
-                       pricing_output += str(line.decode("utf-8"))
+					   pricing_output += str(line.decode("utf-8")).replace('"', '')
                        pricing_output += "\n"
 
                # Add the output to a local temporary file & zip it
@@ -162,27 +162,29 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
 ![Images/lambda_editcode.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcode.png)
 
-7. Edit **Basic settings** below:
-    - Memory: **2688MB**
+7. Click **Deploy** above the code
+
+8. Scroll down and edit **Basic settings**:
+    - Memory: **4096MB**
     - Timeout: **2min**
     - Click **save**
 ![Images/lambda_basicsettings.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_basicsettings.png)
 
-8. Scroll to the top and click **Test**
+9. Scroll to the top and click **Test**
 ![Images/lambda_test.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_test.png)
 
-9. Enter an **Event name** of **Test**, click **Create**:
+10. Enter an **Event name** of **Test**, click **Create**:
 ![Images/lambda_testcreate.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testcreate.png)
-
-10. Click **Save**:
-![Images/lambda_save.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_save.png)
-
 
 11. Click **Test**:
 ![Images/lambda_testrun.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testrun.png)
 
 12. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 ![Images/lambda_runsuccess.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_runsuccess.png)
+
+{{% notice note %}}
+One of the most common reasons for this lab failing is the pricing files growing in size & Lambda times out. We have configured a balance between cost/performance with 4Gb memory, if the lab fails at some point - ensure the lambda has enough memory and passes this test.
+{{% /notice %}}
 
 13. Go to your S3 bucket and into the **od_pricedata** folder and you should see a gz file of non-zero size is in it:
 ![Images/s3_verify.png](/Cost/200_Pricing_Model_Analysis/Images/s3_verify.png)
@@ -282,26 +284,30 @@ Create the Savings Plan Lambda function to get the pricing information, and extr
 6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
 ![Images/lambda_editcode2.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcode2.png)
 
-7. Edit Basic settings below:
-    - Memory: **1280MB**
+7. Click **Deploy** above the code
+
+8. Edit Basic settings below:
+   - Memory: **2048MB**
     - Timeout: **2min**
     - Click **save**
 ![Images/lambda_basicsettings2.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_basicsettings2.png)
 
-8. Scroll to the top and click **Test**
+9. Scroll to the top and click **Test**
 ![Images/lambda_test.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_test.png)
 
-9. Enter an **Event name** of **Test**, click **Create**:
+10. Enter an **Event name** of **Test**, click **Create**:
 ![Images/lambda_testcreate.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testcreate.png)
-
-10. Click **Save**:
-![Images/lambda_save.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_save.png)
 
 11. Click **Test**:
 ![Images/lambda_testrun.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testrun.png)
 
 12. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
 ![Images/lambda_runsuccess2.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_runsuccess2.png)
+
+{{% notice note %}}
+One of the most common reasons for this lab failing is the pricing files growing in size & Lambda times out. We have configured a balance between cost/performance with 4Gb memory, if the lab fails at some point - ensure the lambda has enough memory and passes this test.
+{{% /notice %}}
+
 
 13. Go to your S3 bucket and into the **sp_pricedata** folder and you should see a gz file of non-zero size is in it:
 ![Images/s3_verify2.png](/Cost/200_Pricing_Model_Analysis/Images/s3_verify2.png)
@@ -412,7 +418,7 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 23. Click **JSON**:
 ![Images/IAM_jsonpolicy.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_jsonpolicy.png)
 
-24. Edit the **Resource** line by removing the **OD_Pricing** folder to leave the bucket:
+24. Edit the **Resource** line by removing the **od_pricedata** folder to leave the bucket:
 ![Images/IAM_editjson.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_editjson.png)
 
 25. Click **Review policy**:
