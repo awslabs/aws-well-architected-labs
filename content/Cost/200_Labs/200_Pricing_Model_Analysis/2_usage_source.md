@@ -1,6 +1,6 @@
 ---
 title: "Create the Usage Data Source"
-date: 2020-09-15T11:16:09-04:00
+date: 2021-02-07T11:16:09-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
@@ -16,23 +16,23 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
     <details>
     <summary> Click here to see the Athena SQL code</summary>
 
-        CREATE VIEW pricing.pricing AS SELECT
-        sp.location AS Region,
-        sp.discountedoperation AS OS,
-        REPLACE(od.col19, '"') AS InstanceType,
-        REPLACE(od.col36, '"') AS Tenancy,
-        REPLACE(od.col9, '"') AS ODRate,
-        sp.discountedrate AS SPRate
-
-        FROM pricing.sp_pricedata sp
-        JOIN pricing.od_pricedata od ON
-        ((sp.discountedusagetype = REPLACE(od.col47, '"'))
-        AND (sp.discountedoperation = REPLACE(od.col48, '"')))
-
-        WHERE od.col9 IS NOT NULL
-        AND sp.location NOT LIKE 'Any'
-        AND sp.purchaseoption LIKE 'No Upfront'
-        AND sp.leasecontractlength = 1
+		CREATE VIEW pricing.pricing AS SELECT
+		sp.col18 AS Region,
+		sp.col9 AS OS,
+		REPLACE(od.col19, '"') AS InstanceType,
+		REPLACE(od.col36, '"') AS Tenancy,
+		REPLACE(od.col9, '"') AS ODRate,
+		sp.col4 AS SPRate
+ 
+		FROM pricing.sp_pricedata sp
+		JOIN pricing.od_pricedata od ON
+		((sp.col8 = REPLACE(od.col47, '"'))
+		AND (sp.col9 = REPLACE(od.col48, '"')))
+ 
+		WHERE od.col9 IS NOT NULL
+		AND sp.col18 NOT LIKE 'Any'
+		AND sp.col10 LIKE 'No Upfront'
+		AND sp.col11 like '1'
     </details>
 
 3. Next we'll join the CUR file with that pricing source as a view. Edit the following query, replace **costmaster.costmasterfile** with your existing database name and tablename of your CUR, then run the rollowing query:
