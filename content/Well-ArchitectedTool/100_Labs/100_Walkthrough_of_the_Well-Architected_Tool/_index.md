@@ -25,7 +25,7 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 
 * An
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to usee Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
+* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
 
 ## Costs:
 * There are no costs for this lab
