@@ -1,6 +1,6 @@
 ---
 title: "Teardown"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-02-21T11:16:08-04:00
 chapter: false
 pre: "<b>5. </b>"
 weight: 5
@@ -21,7 +21,7 @@ The following instructions will remove the resources that you have created in th
 #### Cleaning up the CloudFormation Stack
 
 1.  Sign in to the AWS Management Console and navigate to the AWS CloudFormation console - <https://console.aws.amazon.com/cloudformation/>
-1.  Select the stack **WA-BACKUP-LAB**, and delete the stack.
+1.  Select the stack **WA-Backup-Lab**, and delete the stack.
 
 #### Cleaning up the CloudWatch Logs
 
