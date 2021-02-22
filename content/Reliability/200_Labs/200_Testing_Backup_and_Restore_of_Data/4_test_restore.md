@@ -49,7 +49,7 @@ For the purpose of this lab, we will simulate the action performed by AWS Backup
     ![backup-job-notification](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/backup-job-notification.png)
 
 1.  The SNS Topic that was created as part of the CloudFormation stack has been configured as a trigger for the Lambda function. When AWS Backup publishes a new message when a backup or restore job is completed, the Lambda function gets invoked.
-1.  Let's take a look at the relevant section of the Lambda function code to understand what will happen once the backup job is completed and a notification has been received. You can view the full Lambda function code [here](Code/lambda_function.py).
+1.  Let's take a look at the relevant section of the Lambda function code to understand what will happen once the backup job is completed and a notification has been received. You can view the full Lambda function code [here](/Reliability/200_Testing_Backup_and_Restore_of_Data/Code/lambda_function.py).
 
     The Lambda function first obtains the [recovery point restore metadata](https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-metadata.html) for the recovery point that was created when the on-demand backup job was initiated.
 
@@ -84,11 +84,11 @@ For the purpose of this lab, we will simulate the action performed by AWS Backup
 
     ![restore-job-notification](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/restore-job-notification.png)
 
-1. While waiting for the notification, let's take a look at the relevant sections of the Lambda function code to see what happens when a restore job is completed. You can view the full Lambda function code [here](Code/lambda_function.py).
+1. While waiting for the notification, let's take a look at the relevant sections of the Lambda function code to see what happens when a restore job is completed. You can view the full Lambda function code [here](/Reliability/200_Testing_Backup_and_Restore_of_Data/Code/lambda_function.py).
 
     After receiving confirmation from AWS Backup that the restore job has completed successfully, the Lambda function will verify data recovery. To do this, an API call is made to retrieve the public IP address of the new EC2 Instance. It makes an HTTP GET request to the new EC2 Instance to check if the application is running. If a valid response (200 in this case) is received, it is ascertained that data recovery was successful as per the recovery success criteria that was established earlier in this section. The Lambda function will then make an API call to EC2 to terminate the new EC2 Instance to save on cost. You can manually verify this as well by visiting the following URL:
 
-    http://<PUBLIC_IP_OF_THE_NEW_INSTANCE>/
+    `http://<PUBLIC_IP_OF_THE_NEW_INSTANCE>/`
 
     ```
     instance_details = ec2.describe_instances(

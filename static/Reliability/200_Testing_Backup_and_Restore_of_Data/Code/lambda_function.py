@@ -133,7 +133,7 @@ def lambda_handler(event, context):
                                     ]
                                 )
                     else:
-                        print('Invalid response. Data recovery is questionable.')
+                        print('Invalid response. Validation FAILED.')
             elif resource_type == 'rds':
                 rds = boto3.client('rds')
                 database_identifier = restore_info['CreatedResourceArn'].split(':')[6]
@@ -162,7 +162,7 @@ def lambda_handler(event, context):
             #send a final notification confirming deletion of the newly restored resource
             notify = sns.publish(
                 TopicArn=topic_arn,
-                Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
+                Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
                 Subject='Restore Test Status'
             )
 

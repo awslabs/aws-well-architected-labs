@@ -26,9 +26,13 @@ You will use AWS CloudFormation to provision some resources needed for this lab.
 
 ### 1.2 Deploy the infrastructure using AWS CloudFormation
 
-Click [here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-well-architected-labs-virginia.s3.amazonaws.com%2FReliability%2F200_Testing_Backup_and_Restore_of_Data%2Fbackup-lab.yaml&stackName=WA-BACKUP-LAB) to deploy the stack.
+Click [here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateUrl=https%3A%2F%2Faws-well-architected-labs-virginia.s3.amazonaws.com%2FReliability%2F200_Testing_Backup_and_Restore_of_Data%2Fbackup-lab.yaml&stackName=WA-Backup-Lab) to deploy the stack.
 
-Under **PARAMETERS**, specify an email address that you have access to for **NotificationEmail.**
+Under **PARAMETERS**:
+
+1.  Select an **AvailabilityZone** to launch the resources in.
+1.  For **LatestAmiId** leave the default value. This will automatically retrieve the latest AMI ID for Amazon Linux 2.
+1.  Specify an email address that you have access to for **NotificationEmail.**
 
 Check the box **I acknowledge that AWS CloudFormation might create IAM resources.**
 
@@ -39,9 +43,9 @@ Click **CREATE** / **CREATE STACK.**
 1.  Use your administrator account to access the CloudFormation console - <https://console.aws.amazon.com/cloudformation/>.
 1.  Click on **CREATE STACK**.
 1.  Under **PREREQUISITE - PREPARE TEMPLATE**, select the option **TEMPLATE IS READY**.
-1.  Under **SPECIFY TEMPLATE**, select the option **AMAZON S3 URL**, enter the link - https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/200_Testing_Backup_and_Restore_of_Data/backup-lab.yaml and click **NEXT**.
+1.  Under **SPECIFY TEMPLATE**, select the option **AMAZON S3 URL**, enter the link - `https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/200_Testing_Backup_and_Restore_of_Data/backup-lab.yaml` and click **NEXT**.
 1.  Enter a **STACK NAME** such as **WA-Backup-Lab**.
-1.  Select an **AvailabilityZone** tto launch the resources in.
+1.  Select an **AvailabilityZone** to launch the resources in.
 1.  For **LatestAmiId** leave the default value. This will automatically retrieve the latest AMI ID for Amazon Linux 2.
 1.  For **NotificationEmail,** specify an email address that you have access to.
 1.  Leave default values for the rest of the fields and click **NEXT**.
@@ -49,7 +53,7 @@ Click **CREATE** / **CREATE STACK.**
 1.  Review the details of the stack, scroll down to **CAPABILITIES,** and check the box next to **I acknowledge that AWS CloudFormation might create IAM resources.**
 1. Click **CREATE STACK**.
 
-**Note:** Once stack creation starts, monitor the email address you entered. You should receive an email from SNS with the subject **AWS Notification - Subscription Confirmation.** Click on the link **Confirm subscription** to confirm the subscription of your email to the SNS Topic.
+>**Note:** Once stack creation starts, monitor the email address you entered. You should receive an email from SNS with the subject **AWS Notification - Subscription Confirmation.** Click on the link **Confirm subscription** to confirm the subscription of your email to the SNS Topic.
 
 The stack takes about 2 minutes to create all the resources. Periodically refresh the page until you see that the **STACK STATUS** is in **CREATE_COMPLETE**. Once the stack is in **CREATE_COMPLETE**, visit the **OUTPUTS** section for the stack and note down the **KEY** and **VALUE** for each of the outputs. This information will be used later in the lab.
 

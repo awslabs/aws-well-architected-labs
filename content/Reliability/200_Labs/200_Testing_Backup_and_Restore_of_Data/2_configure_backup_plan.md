@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 
 A well thought out backup strategy is key to an organization's success and is determined by a variety of factors. The biggest factors influencing a backup strategy is the Recovery Time Objective (RTO) and Recovery Point Objective (RPO) set for the workload. RTO and RPO are determined based on the criticality of the workload to the business, the SLAs that have been agreed upon, and the cost associated with achieving the RTO and RPO. RTO and RPO should be specific to each workload and not set for the entire organization/infrastructure.
 
-In this lab, you will create a backup strategy by leveraging AWS Backup, a fully managed backup service that can automatically backup data.
+In this lab, you will create a backup strategy by leveraging AWS Backup, a fully managed backup service that can automatically backup data from various data sources such as EC2 Instances, EBS Volumes, RDS Databases, and more. You can view a complete list of supported services [here](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#supported-resources).
 
 1.  Sign in to the AWS Backup console - <https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#backupplan>.
 1.  Choose **CREATE BACKUP PLAN**.
@@ -61,6 +61,6 @@ Once the backup plan and the backup rule has been created, you can specify resou
 
     ![assign-resources](/Reliability/200_Testing_Backup_and_Restore_of_Data/Images/assign-resources.png)
 
-You have successfully created a backup plan for your data sources, and all supported resources with the tags **workload-myapp** will be backed up automatically, at the frequency specified. In case of a disaster, these backups can be used to recover data to ensure business continuity. Since the entire process is automated, it will save considerable operational overhead for your Operations teams.
+You have successfully created a backup plan for your data sources, and all supported resources with the tags **workload=myapp** will be backed up automatically, at the frequency specified. In case of a disaster, these backups can be used to recover data to ensure business continuity. Since the entire process is automated, it will save considerable operational overhead for your Operations teams.
 
 {{< prev_next_button link_prev_url="../1_prerequisite" link_next_url="../3_enable_notifications/" />}}
