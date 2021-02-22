@@ -14,7 +14,9 @@ hidden: false
 
 ## Introduction
 
-This hands-on lab will guide you through the introductory steps to configure contacts for your AWS account and secure the root user. This process is not required for accounts you manage with [AWS Organizations](https://aws.amazon.com/organizations/) or [AWS Control Tower](https://aws.amazon.com/controltower/). For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) in the AWS Well-Architected [security whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html). The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
+This hands-on lab will guide you through the introductory steps to configure contacts for your AWS account and secure the root user. This process is not required for accounts you manage with [AWS Organizations](https://aws.amazon.com/organizations/) or [AWS Control Tower](https://aws.amazon.com/controltower/). For more information see [Security Foundations](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/security.html) in the AWS Well-Architected [security whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html). For accounts used for business purposes it is recommended to start with AWS Control Tower. For personal or invidual accounts you can follow the steps in this unofficial video from the author of this lab.
+
+{{< youtube id="0jLy0LlU6F8" autoplay="false" >}}
 
 ## Prerequisites
 
