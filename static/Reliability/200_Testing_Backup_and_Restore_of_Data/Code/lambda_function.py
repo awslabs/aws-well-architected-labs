@@ -136,7 +136,7 @@ def lambda_handler(event, context):
                             message = 'Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.'
                         else:
                             print('Invalid response. Validation FAILED.')
-                            message = 'Invalid response received: HTTP ' + str(resp.status) + '. Data Validation FAILED.'
+                            message = 'Invalid response received: HTTP ' + str(resp.status) + '. Data Validation FAILED. New resource ' + restore_info['CreatedResourceArn'] + ' has NOT been cleaned up.'
                     except Exception as e:
                         print(str(e))
                         message = 'Error connecting to the application: ' + str(e)
@@ -164,8 +164,8 @@ def lambda_handler(event, context):
 
             sns = boto3.client('sns')
 
-            print('Sending deletion confirmation')
-            #send a final notification confirming deletion of the newly restored resource
+            print('Sending final confirmation')
+            #send a final notification
             notify = sns.publish(
                 TopicArn=topic_arn,
                 Message=message,
