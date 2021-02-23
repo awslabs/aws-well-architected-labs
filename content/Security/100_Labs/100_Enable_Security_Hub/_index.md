@@ -7,7 +7,7 @@ weight: 4
 hidden: false
 ---
 
-**Last Updated:** September 2020
+**Last Updated:** February 2021
 
 **Author:** Pierre Liddle, Principal Security Architect
 
@@ -17,12 +17,16 @@ hidden: false
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 
 ## Costs
-- Typically less than $1 per month if the account is only used for personal testing or training, and the tear down is not performed.
-- [AWS Security Hub pricing](https://aws.amazon.com/security-hub/pricing/) 
-- [AWS Pricing](https://aws.amazon.com/pricing/)
+* Typically less than $1 per month if the account is only used for personal testing or training, and the tear down is not performed.
+* [AWS Config Pricing](https://aws.amazon.com/config/pricing/)
+* [AWS Security Hub pricing](https://aws.amazon.com/security-hub/pricing/) 
+* [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
 {{% children  %}}
 
 ## References & useful resources
-[AWS Security Hub](https://aws.amazon.com/security-hub/)
+* [AWS Security Hub](https://aws.amazon.com/security-hub/)
+* [AWS Security Hub Documentation](https://docs.aws.amazon.com/securityhub/index.html)
+* [AWS Config](https://aws.amazon.com/config/)
+* [AWS Config Documentation](https://docs.aws.amazon.com/config/index.html)
