@@ -1,6 +1,7 @@
 import json
-import botocore
 import boto3
+import base64
+import urllib3
 
 backup = boto3.client('backup')
 
@@ -57,6 +58,9 @@ def lambda_handler(event, context):
                 metadata['RestoreMetadata']['newFileSystem'] = 'true'
                 metadata['RestoreMetadata']['Encrypted'] = 'false'
                 metadata['RestoreMetadata']['CreationToken'] = metadata['RestoreMetadata']['file-system-id'] + '-restore-test'
+            elif resource_type == 'EC2':
+                metadata['RestoreMetadata']['CpuOptions'] = '{}'
+                metadata['RestoreMetadata']['NetworkInterfaces'] = '[]'
 
             #API call to start the restore job
             print('Starting the restore job')
@@ -83,20 +87,65 @@ def lambda_handler(event, context):
             if resource_type == 'dynamodb':
                 dynamo = boto3.client('dynamodb')
                 table_name = restore_info['CreatedResourceArn'].split(':')[5].split('/')[1]
+
+                # Include recovery validation checks for DynamoDB here
+
                 print('Deleting: ' + table_name)
                 delete_request = dynamo.delete_table(
                                     TableName=table_name
                                 )
             elif resource_type == 'ec2':
                 ec2 = boto3.client('ec2')
-                volume_id = restore_info['CreatedResourceArn'].split(':')[5].split('/')[1]
-                print('Deleting: ' + volume_id)
-                delete_request = ec2.delete_volume(
-                            VolumeId=volume_id
-                        )
+                ec2_resource_type = restore_info['CreatedResourceArn'].split(':')[5].split('/')[0]
+                if ec2_resource_type == 'volume':
+                    volume_id = restore_info['CreatedResourceArn'].split(':')[5].split('/')[1]
+
+                    # Include recovery validation checks for EBS here
+
+                    print('Deleting: ' + volume_id)
+                    delete_request = ec2.delete_volume(
+                                VolumeId=volume_id
+                            )
+                elif ec2_resource_type == 'instance':
+                    instance_id = restore_info['CreatedResourceArn'].split(':')[5].split('/')[1]
+                    print('Validating data recovery before deletion.')
+
+                    #validating data recovery
+                    instance_details = ec2.describe_instances(
+                                InstanceIds=[
+                                    instance_id
+                                ]
+                            )
+                    public_ip = instance_details['Reservations'][0]['Instances'][0]['PublicIpAddress']
+
+                    http = urllib3.PoolManager()
+                    url = public_ip
+                    try:
+                        resp = http.request('GET', url)
+                        print("Received response:")
+                        print(resp.status)
+
+                        if resp.status == 200:
+                            print('Valid response received. Data recovery validated. Proceeding with deletion.')
+                            print('Deleting: ' + instance_id)
+                            delete_request = ec2.terminate_instances(
+                                        InstanceIds=[
+                                            instance_id
+                                        ]
+                                    )
+                            message = 'Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.'
+                        else:
+                            print('Invalid response. Validation FAILED.')
+                            message = 'Invalid response received: HTTP ' + str(resp.status) + '. Data Validation FAILED. New resource ' + restore_info['CreatedResourceArn'] + ' has NOT been cleaned up.'
+                    except Exception as e:
+                        print(str(e))
+                        message = 'Error connecting to the application: ' + str(e)
             elif resource_type == 'rds':
                 rds = boto3.client('rds')
                 database_identifier = restore_info['CreatedResourceArn'].split(':')[6]
+
+                # Include recovery validation checks for RDS here
+
                 print('Deleting: ' + database_identifier)
                 delete_request = rds.delete_db_instance(
                             DBInstanceIdentifier=database_identifier,
@@ -105,6 +154,9 @@ def lambda_handler(event, context):
             elif resource_type == 'elasticfilesystem':
                 efs = boto3.client('efs')
                 elastic_file_system = restore_info['CreatedResourceArn'].split(':')[5].split('/')[1]
+
+                # Include recovery validation checks for EFS here
+
                 print('Deleting: ' + elastic_file_system)
                 delete_request = efs.delete_file_system(
                             FileSystemId=elastic_file_system
@@ -112,17 +164,16 @@ def lambda_handler(event, context):
 
             sns = boto3.client('sns')
 
-            print('Sending deletion confirmation')
-            #send a final notification confirming deletion of the newly restored resource
+            print('Sending final confirmation')
+            #send a final notification
             notify = sns.publish(
                 TopicArn=topic_arn,
-                Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
+                Message=message,
                 Subject='Restore Test Status'
             )
 
             print(json.dumps(notify))
 
-            print(json.dumps(delete_request))
             return
     except Exception as e:
         print(str(e))

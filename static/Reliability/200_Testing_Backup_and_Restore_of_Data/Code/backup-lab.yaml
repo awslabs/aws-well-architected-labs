@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation Sample Template to create lab resources. Creates an EBS
-  Volume, an SNS Topic, and a Lambda Function.
+  AWS CloudFormation Sample Template to create lab resources. Creates an EC2
+  Instance, an SNS Topic, and a Lambda Function in a new VPC.
 
   **WARNING** You will be billed for the AWS resources created if you create a
   stack from this template.
@@ -15,46 +15,123 @@ Description: >-
       https://www.apache.org/licenses/LICENSE-2.0
 
   or in the "license" file accompanying this file. This file is distributed  on
-  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-  express or implied. See the License for the specific language governing
-  permissions and limitations under the License.
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+  or implied. See the License for the specific language governing permissions
+  and limitations under the License.
 Parameters:
-  TagKey:
-    Type: String
-    Description: The Tag Key used to identify the workload that these resources belong to.
-    Default: workload
-  TagValue:
-    Type: String
-    Description: >-
-      The Tag Value used to identify the workload that these resources belong
-      to.
-    Default: myapp
   NotificationEmail:
     Type: String
     Description: The email address to which backup and restore notifications are published.
+  AvailabilityZone:
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: The Availability Zone in which resources are launched.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
 Resources:
-  Volume:
-    Type: 'AWS::EC2::Volume'
+  VPC:
+    Type: 'AWS::EC2::VPC'
     Properties:
-      AvailabilityZone: !Select
-        - '0'
-        - !GetAZs
-          Ref: 'AWS::Region'
-      Size: '1'
+      CidrBlock: 10.0.0.0/16
       Tags:
-        - Key: !Ref TagKey
-          Value: !Ref TagValue
+        - Key: Name
+          Value: WA-Lab-VPC
+  Subnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Subnet
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: WA-Lab-InternetGateway
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: WA-Lab-RouteTable
+  Route:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Inbound HTTP access
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          IpProtocol: tcp
+          ToPort: '80'
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: '-1'
+      VpcId: !Ref VPC
+  Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      SubnetId: !Ref Subnet
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum install httpd -y
+            - >
+              echo '<h1>AWS Backup is Awesome!!</h1>' >>
+              /var/www/html/index.html
+            - |
+              systemctl start httpd.service
+            - systemctl enable httpd.service
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Instance
+        - Key: workload
+          Value: myapp
   SNSTopic:
     Type: 'AWS::SNS::Topic'
     Properties:
-      TopicName: BackupNotificationTopic
+      TopicName: !Join
+        - '-'
+        - - BackupNotificationTopic
+          - !Ref 'AWS::StackName'
       Subscription:
         - Endpoint: !Ref NotificationEmail
           Protocol: email
   LambdaFunction:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName: RestoreTestFunction
+      FunctionName: !Join
+        - '-'
+        - - RestoreTestFunction
+          - !Ref 'AWS::StackName'
       Handler: lambda_function.lambda_handler
       Role: !GetAtt
         - LambdaRole
@@ -78,14 +155,18 @@ Resources:
         - 'arn:aws:iam::aws:policy/AWSBackupOperatorAccess'
         - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
       Policies:
-        - PolicyName: LambdaPolicy
+        - PolicyName: !Join
+            - '-'
+            - - LambdaPolicy
+              - !Ref 'AWS::StackName'
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Sid: VisualEditor0
                 Effect: Allow
                 Action:
-                  - 'ec2:DeleteVolume'
+                  - 'ec2:DescribeInstances'
+                  - 'ec2:TerminateInstances'
                 Resource: '*'
               - Sid: VisualEditor1
                 Effect: Allow
@@ -146,14 +227,17 @@ Resources:
             Action: 'SNS:Publish'
             Resource: !Ref SNSTopic
 Outputs:
-  VolumeID:
-    Description: EBS Volume ID
-    Value: !Ref Volume
+  InstanceID:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+  ApplicationURL:
+    Description: URL for the application running on the EC2 Instance
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt
+          - Instance
+          - PublicIp
   SNSTopicARN:
     Description: SNS Topic ARN
     Value: !Ref SNSTopic
-  LambdaARN:
-    Description: Lambda Function ARN
-    Value: !GetAtt
-      - LambdaFunction
-      - Arn
