@@ -120,32 +120,26 @@ def lambda_handler(event, context):
 
                     http = urllib3.PoolManager()
                     url = public_ip
-                    resp = http.request('GET', url)
-                    print("Received response:")
-                    print(resp.status)
+                    try:
+                        resp = http.request('GET', url)
+                        print("Received response:")
+                        print(resp.status)
 
-                    if resp.status == 200:
-                        print('Valid response received. Data recovery validated. Proceeding with deletion.')
-                        print('Deleting: ' + instance_id)
-                        delete_request = ec2.terminate_instances(
-                                    InstanceIds=[
-                                        instance_id
-                                    ]
-                                )
-
-                        sns = boto3.client('sns')
-
-                        print('Sending deletion confirmation')
-                        #send a final notification confirming deletion of the newly restored resource
-                        notify = sns.publish(
-                            TopicArn=topic_arn,
-                            Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
-                            Subject='Restore Test Status'
-                        )
-
-                        print(json.dumps(notify))
-                    else:
-                        print('Invalid response. Validation FAILED.')
+                        if resp.status == 200:
+                            print('Valid response received. Data recovery validated. Proceeding with deletion.')
+                            print('Deleting: ' + instance_id)
+                            delete_request = ec2.terminate_instances(
+                                        InstanceIds=[
+                                            instance_id
+                                        ]
+                                    )
+                            message = 'Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.'
+                        else:
+                            print('Invalid response. Validation FAILED.')
+                            message = 'Invalid response received: HTTP ' + str(resp.status) + '. Data Validation FAILED.'
+                    except Exception as e:
+                        print(str(e))
+                        message = 'Error connecting to the application: ' + str(e)
             elif resource_type == 'rds':
                 rds = boto3.client('rds')
                 database_identifier = restore_info['CreatedResourceArn'].split(':')[6]
@@ -167,6 +161,18 @@ def lambda_handler(event, context):
                 delete_request = efs.delete_file_system(
                             FileSystemId=elastic_file_system
                         )
+
+            sns = boto3.client('sns')
+
+            print('Sending deletion confirmation')
+            #send a final notification confirming deletion of the newly restored resource
+            notify = sns.publish(
+                TopicArn=topic_arn,
+                Message=message,
+                Subject='Restore Test Status'
+            )
+
+            print(json.dumps(notify))
 
             return
     except Exception as e:
