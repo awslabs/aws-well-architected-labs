@@ -132,6 +132,18 @@ def lambda_handler(event, context):
                                         instance_id
                                     ]
                                 )
+
+                        sns = boto3.client('sns')
+
+                        print('Sending deletion confirmation')
+                        #send a final notification confirming deletion of the newly restored resource
+                        notify = sns.publish(
+                            TopicArn=topic_arn,
+                            Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
+                            Subject='Restore Test Status'
+                        )
+
+                        print(json.dumps(notify))
                     else:
                         print('Invalid response. Validation FAILED.')
             elif resource_type == 'rds':
@@ -155,18 +167,6 @@ def lambda_handler(event, context):
                 delete_request = efs.delete_file_system(
                             FileSystemId=elastic_file_system
                         )
-
-            sns = boto3.client('sns')
-
-            print('Sending deletion confirmation')
-            #send a final notification confirming deletion of the newly restored resource
-            notify = sns.publish(
-                TopicArn=topic_arn,
-                Message='Restore from ' + restore_info['RecoveryPointArn'] + ' was successful. Data recovery validation succeeded with HTTP ' + str(resp.status) + ' returned by the application. ' + 'The newly created resource ' + restore_info['CreatedResourceArn'] + ' has been cleaned up.' ,
-                Subject='Restore Test Status'
-            )
-
-            print(json.dumps(notify))
 
             return
     except Exception as e:
