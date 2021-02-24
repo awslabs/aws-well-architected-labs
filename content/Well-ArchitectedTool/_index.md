@@ -8,7 +8,10 @@ pre = ""
 
 {{< rawhtml >}}
 <center>
-<video width="696" height="392" controls>
+<video
+  width="696"
+  height="392" controls
+  poster="https://d3h9zoi3eqyz7s.cloudfront.net/well-architectedtool/videos/WAToolsLabsIntro.png">
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/well-architectedtool/videos/WAToolLabsIntro.mp4" type="video/mp4">
   Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
 </video>
