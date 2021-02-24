@@ -6,6 +6,14 @@ chapter: false
 weight: 1
 hidden: false
 ---
+
+{{< rawhtml >}}
+<video width="696" height="392" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/well-architectedtool/videos/200/WATool200APILab.mp4" type="video/mp4">
+  Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
+</video>
+{{< /rawhtml >}}
+
 ## Authors
 - Eric Pullen, Performance Efficiency Lead Well-Architected
 
