@@ -14,7 +14,7 @@ You have learned how to use the various AWS CLI commands to work with the AWS We
     ```
     aws wellarchitected delete-workload --workload-id "<WorkloadId>"
     ```
-    ![Remove1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/6/Remove1.png)
+    ![Remove1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/6/Remove1.png?classes=lab_picture_auto)
 
 
 ## References & useful resources

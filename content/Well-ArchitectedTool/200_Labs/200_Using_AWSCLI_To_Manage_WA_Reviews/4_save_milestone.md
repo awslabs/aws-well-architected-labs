@@ -19,7 +19,7 @@ A best practice is to save a milestone when you first do a new W-A review, or ev
     aws wellarchitected create-milestone --workload-id "<WorkloadId>" --milestone-name Rev1
     ```
 1. The return value will be the WorkloadId and the Milestone number assigned.
-    ![Milestone1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone1.png)
+    ![Milestone1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone1.png?classes=lab_picture_auto)
 
 ### 2. List all milestones
 1. If we want to see all milestones associated with a workload
@@ -28,7 +28,7 @@ A best practice is to save a milestone when you first do a new W-A review, or ev
     aws wellarchitected list-milestones --workload-id "<WorkloadId>" --max-results 50
     ```
 1. This will return a summary of the milestones you have created for the workload.
-    ![Milestone2](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone2.png)
+    ![Milestone2](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone2.png?classes=lab_picture_auto)
 
 ### 3. Retrieve the results from a milestone
 1. Using the [get-milestone API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/get-milestone.html), you can see all of the metadata for a specific milestone:
@@ -36,7 +36,7 @@ A best practice is to save a milestone when you first do a new W-A review, or ev
     aws wellarchitected get-milestone --workload-id "<WorkloadId>" --milestone-number 1
     ```
 1. This will return the complete workload information for the workload milestone (such as when it was created and what lenses were included)
-    ![Milestone3](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone3.png)
+    ![Milestone3](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone3.png?classes=lab_picture_auto)
 
 ### 4. List all question answers based from a milestone
 1. If you want to see all of the best practices for when the milestone was created, you can use
@@ -45,6 +45,6 @@ A best practice is to save a milestone when you first do a new W-A review, or ev
     aws wellarchitected list-answers --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --milestone-number 1
     ```
 1. This will return a large json structure with all of the questions and best practices for each pillar.
-    ![Milestone4](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone4.png)
+    ![Milestone4](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/4/Milestone4.png?classes=lab_picture_auto)
 
 {{< prev_next_button link_prev_url="../3_perform_review/" link_next_url="../5_view_report/" />}}

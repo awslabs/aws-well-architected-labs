@@ -24,13 +24,13 @@ Now that we have created a workload, we will answer the question **OPS 5. How do
     aws wellarchitected list-answers --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --pillar-id "operationalExcellence" --query 'AnswerSummaries[?starts_with(QuestionTitle, `How do you reduce defects, ease remediation, and improve flow into production`) == `true`].QuestionId'
     ```
 1. This will return the value of the QuestionId, in this case **dev-integ**
-    ![FindQid1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid1.png)
+    ![FindQid1](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid1.png?classes=lab_picture_auto)
 1. Next, using the [get-answer API](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/wellarchitected/get-answer.html) we can find the ChoiceId values of each answer. For this first command, we will get the ChoiceId for "Use version control"
     ```
     aws wellarchitected get-answer --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --question-id "dev-integ" --query 'Answer.Choices[?starts_with(Title, `Use version control`) == `true`].ChoiceId'
     ```
 1. This will return the value of the ChoiceId, in this case **ops_dev_integ_version_control**
-    ![FindQid2](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid2.png)
+    ![FindQid2](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid2.png?classes=lab_picture_auto)
 1. Now we need to get the rest of the ChoiceID's for each of the best practices we want to select for the question
     ```
     aws wellarchitected get-answer --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --question-id "dev-integ" --query 'Answer.Choices[?starts_with(Title, `Use configuration management systems`) == `true`].ChoiceId'
@@ -64,7 +64,7 @@ Now that we have created a workload, we will answer the question **OPS 5. How do
     aws wellarchitected update-answer --workload-id "<WorkloadId>" --lens-alias "wellarchitected" --question-id "dev-integ" --selected-choices ops_dev_integ_version_control ops_dev_integ_conf_mgmt_sys ops_dev_integ_build_mgmt_sys ops_dev_integ_patch_mgmt ops_dev_integ_multi_env
     ```
 1. This will return the JSON object for the question, and at the bottom you will see SelectedChoices is now populated with the answers we have provided. Because we still have have not checked all critical best practices, this question has still been identified as a high risk item (HRI).
-![FindQid5](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid5.png)
+![FindQid5](/watool/200_Using_AWSCLI_To_Manage_WA_Reviews/Images/3/FindQid5.png?classes=lab_picture_auto)
 
 ### OPTIONAL: Repeat steps 1 and 2 but for the other pillar questions and best practices listed below
 1. SEC 1. How do you securely operate your workload?
