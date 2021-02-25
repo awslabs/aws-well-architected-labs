@@ -302,7 +302,7 @@ Accounts have both RI and SP usage during the billing period
         WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN (-"line_item_unblended_cost" ) ELSE 0 END) "ri_sp_trueup"
     , sum(CASE
         WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-        WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
+        WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost" ELSE 0 END) "ri_sp_upfront_fees"
 
 Accounts have SP usage but no RI usage during the billing period
 
@@ -316,16 +316,16 @@ Accounts have SP usage but no RI usage during the billing period
         WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
     --    WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost"
     --    WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-    --    WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> ''))
-      THEN 0 ELSE "line_item_unblended_cost" END) "amortized_cost"
+    --    WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 
+      ELSE "line_item_unblended_cost" END) "amortized_cost"
     , sum(CASE
         WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN (-"savings_plan_amortized_upfront_commitment_for_billing_period")
     --    WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period")
         WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN (-"line_item_unblended_cost" ) ELSE 0 END) "ri_sp_trueup"
     , sum(CASE
         WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-    --    WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> ''))
-       THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
+    --    WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"
+    ELSE 0 END) "ri_sp_upfront_fees"
 
 [1] https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/con-bill-blended-rates.html
 

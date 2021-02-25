@@ -194,15 +194,15 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
 
 
 
-{{< expand "AWS EFS" >}}
+{{< expand "Amazon EFS" >}}
 
 {{% markdown_wrapper %}}
 
 #### Query Description
-This query will provide daily unblended cost and usage information per linked account for AWS EFS.  The output will include detailed information about the resource id (File System), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order. 
+This query will provide daily unblended cost and usage information per linked account for Amazon EFS.  The output will include detailed information about the resource id (File System), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order. 
 
 #### Pricing
-Please refer to the [EFS pricing page](https://aws.amazon.com/efs/pricing/).
+Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing/).
 
 #### Sample Output
 ![Images/efswrid.png](/Cost/300_CUR_Queries/Images/Storage/efswrid.png)
@@ -247,7 +247,114 @@ Please refer to the [EFS pricing page](https://aws.amazon.com/efs/pricing/).
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Storage" service_text="Amazon EFS" query_text="AWS EFS Query1" button_text="Help & Feedback" %}}
+{{% email_button category_text="Storage" service_text="Amazon EFS" query_text="Amazon EFS Query1" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+{{< expand "Amazon FSx" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will provide daily unblended cost and usage information per linked account for Amazon FSx.  The output will include detailed information about the resource id (FSx file system), usage type, and Storage type. The usage amount and cost will be summed and the cost will be in descending order. 
+
+#### Pricing
+Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing/).
+
+#### Sample Output
+![Images/fsxwrid.png](/Cost/300_CUR_Queries/Images/Storage/fsxwrid.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Storage/fsxwrid.sql)
+
+#### Copy Query
+    SELECT
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      SPLIT_PART(line_item_resource_id, ':', 6) as split_line_item_resource_id,
+      product_deployment_option,
+      line_item_usage_type,
+      product_product_family,
+      pricing_unit,
+      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    FROM
+      ${table_name}
+    WHERE
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND product_product_name = 'Amazon FSx'
+      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      SPLIT_PART(line_item_resource_id, ':', 6),
+      product_deployment_option,
+      line_item_usage_type,
+      product_product_family,
+      pricing_unit
+    ORDER BY
+      day_line_item_usage_start_date,
+      sum_line_item_usage_amount,
+      sum_line_item_unblended_cost;
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Storage" service_text="Amazon FSx" query_text="Amazon FSx Query" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+{{< expand "AWS Backup" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will provide daily unblended cost and usage information per linked account for AWS Backup.  The output will include detailed information about the usage type, product family, pricing unit and others. The usage amount and cost will be summed and the cost will be in descending order. 
+
+#### Pricing
+Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pricing/).
+
+#### Sample Output
+![Images/backup_spend.png](/Cost/300_CUR_Queries/Images/Storage/backup_spend.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Storage/backup_spend.sql)
+
+#### Copy Query
+    SELECT
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date), '%Y-%m-%d') AS day_line_item_usage_start_date,
+      pricing_unit,
+      product_product_family,
+      line_item_usage_type,
+      line_item_operation,
+      SPLIT_PART(line_item_usage_type, '-', 4) as split_line_item_usage_type,
+      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    FROM
+      ${table_name}
+    WHERE
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND product_product_name like '%Backup%'
+      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      line_item_usage_type,
+      product_product_family,
+      pricing_unit,
+      line_item_operation
+    ORDER BY
+      day_line_item_usage_start_date,
+      sum_line_item_usage_amount,
+      sum_line_item_unblended_cost,
+      line_item_usage_type;
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Storage" service_text="AWS Backup" query_text="AWS Backup Query" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 
