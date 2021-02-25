@@ -1,5 +1,6 @@
 ---
 title: "Removing Lab Resources"
+menutitle: "Teardown"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>8. </b>"
