@@ -1,5 +1,6 @@
 ---
 title: "Creating a Simple Notification Service Topic"
+menutitle: "Creating SNS topic"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>7. </b>"
