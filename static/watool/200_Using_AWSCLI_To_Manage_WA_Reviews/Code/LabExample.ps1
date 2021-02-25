@@ -237,4 +237,5 @@ Log-Message ("6 - Teardown")
 # Allow user to keep the workload
 Read-Host -Prompt "Press any key to continue or CTRL+C to quit"
 Log-Message ("6 - STEP1 - Delete Workload")
-Remove-WATWorkload -WorkloadId $workloadId -Force
+Remove-WATWorkload -WorkloadId $workloadId -ClientRequestToken "ClientRequestToken1" -Force
+# ClientRequestToken is required at this time, but we are investigating if we can remove this in the future.
