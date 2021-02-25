@@ -28,3 +28,8 @@ The following instructions will remove the resources that you have created in th
 1.  Click on **Delete** and then **Delete stack**
 
 Thank you for using this lab.
+{{< prev_next_button link_prev_url="../5_bonus_content/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment or workload,
+you should complete a milestone in the Well-Architected tool. This lab specifically helps you with
+[OPS4 - "How do you design your workload so that you can understand its state?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-prepare.html)
+{{< /prev_next_button >}}

@@ -47,3 +47,5 @@ The SLA with the external service expects new files to be written at 50 second i
     ![CWSelectPeriod](/Operations/100_Dependency_Monitoring/Images/CWSelectPeriod.png)
 
 You should now see a graph that has a data point at 1 minute intervals representing a Lambda function invocation. Each invocation represents a write to the S3 bucket. By monitoring the number and frequency of lambda invocations, you are monitoring the availability of the external service. If the number of invocations drops below the expected value, there may be an issue with the external service.
+
+{{< prev_next_button link_prev_url="../1_deploy_infrastructure/" link_next_url="../3_create_alarm/" />}}

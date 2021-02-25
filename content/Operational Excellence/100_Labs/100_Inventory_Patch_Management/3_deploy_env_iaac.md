@@ -83,3 +83,5 @@ When the **Status** of your stack displays **CREATE_COMPLETE** in the filter lis
 With infrastructure as code, if you can deploy one environment, you can deploy any number of copies of that environment. In this example we have created a `Test` environment. Later, we will repeat these steps to deploy a `Prod` environment.
 
 The ability to dynamically deploy temporary environments on-demand enables parallel experimentation, development, and testing efforts. It allows duplication of environments to recreate and analyze errors, as well as cut-over deployment of production systems using blue-green methodologies. These practices contribute to reduced risk, increased operations effectiveness, and efficiency.
+
+{{< prev_next_button link_prev_url="../2_setup_env/" link_next_url="../4_inventory_mgmt/" />}}

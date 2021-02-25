@@ -21,3 +21,5 @@ Included in the lab guide are bonus sections that can be completed if you have t
 >**Important**
 You will be billed for any applicable AWS resources used in this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). At the end of the lab guide there is an additional section on how to remove all the resources you have created.
 * Removing Lab Resources
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_setup_env/" />}}

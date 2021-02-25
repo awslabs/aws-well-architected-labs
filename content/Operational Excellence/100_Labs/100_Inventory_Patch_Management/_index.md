@@ -24,13 +24,12 @@ In this lab you will apply the concepts of _Infrastructure as Code_ and _Operati
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.  
 * An IAM user or role in your AWS account with full access to CloudFormation, EC2, VPC, IAM.  
 
->**Important**
-You will be billed for any applicable AWS resources used in this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). At the end of the lab guide there is an additional section on how to remove all the resources you have created.
+## Costs
+{{% notice note %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
 
-
-## Permissions required
-* IAM User with *AdministratorAccess* AWS managed policy
-
+{{< prev_next_button link_next_url="./1_intro/" button_next_text="Start Lab" first_step="true" />}}
 
 Steps:
-{{% children  %}}
+{{% children  /%}}
