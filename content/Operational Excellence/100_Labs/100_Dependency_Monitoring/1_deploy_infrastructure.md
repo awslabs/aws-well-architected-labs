@@ -78,3 +78,5 @@ The stack takes about 3 mins to create all the resources. Periodically refresh t
 * An SNS Topic for notifications
 
 Once the stack is in **CREATE_COMPLETE**, visit the **Outputs** section for the stack and note down the **Key** and **Value** for each of the outputs. This information will be used later in the lab.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_understand_metrics/" />}}

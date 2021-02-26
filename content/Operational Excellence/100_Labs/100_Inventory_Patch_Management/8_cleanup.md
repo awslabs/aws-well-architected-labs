@@ -1,5 +1,6 @@
 ---
 title: "Removing Lab Resources"
+menutitle: "Teardown"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>8. </b>"
@@ -43,3 +44,9 @@ weight: 8
 1. If you **do** intend to continue to use the Administrator account you created, we strongly suggest you [**enable MFA**](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable.html).
 
 Thank you for using this lab.
+
+{{< prev_next_button link_prev_url="../7_create_sns_topic/"  title="Congratulations!" final_step="true" >}}
+Now that you have completed the lab, if you have implemented this knowledge in your environment or workload,
+you should complete a milestone in the Well-Architected tool. This lab specifically helps you with
+[OPS5 - "How do you reduce defects, ease remediation, and improve flow into production?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-prepare.html)
+{{< /prev_next_button >}}

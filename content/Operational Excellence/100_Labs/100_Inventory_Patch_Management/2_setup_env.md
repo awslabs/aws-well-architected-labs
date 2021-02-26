@@ -60,3 +60,5 @@ You can use this same process to create more groups and users and to give your u
 1. In the EC2 navigation pane under **Network & Security**, choose **Key Pairs** and then choose **Create Key Pair**.
 1. In the **Create Key Pair** dialog box, type a **Key pair name** such as `OELabIPM` and then choose **Create**.
 1. **Save the** `keyPairName.pem` **file** for optional later use [accessing the EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html) created in this lab.
+
+{{< prev_next_button link_prev_url="../1_intro/" link_next_url="../3_deploy_env_iaac/" />}}

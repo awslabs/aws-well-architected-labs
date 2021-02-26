@@ -174,3 +174,5 @@ In the optional Scheduling Automated Operations Activities section of this lab y
 In a traditional environment, you would have had to set up the systems and software to perform these activities. You would require a server to execute your scripts. You would need to manage authentication credentials across all of your systems.
 
 _Operations as code_ reduces the resources, time, risk, and complexity of performing operations tasks and ensures consistent execution. You can take operations as code and automate operations activities by using scheduling and event triggers. Through integration at the infrastructure level you avoid "swivel chair" processes that require multiple interfaces and systems to complete a single operations activity.
+
+{{< prev_next_button link_prev_url="../4_inventory_mgmt/" link_next_url="../6_maintenance_windows/" />}}

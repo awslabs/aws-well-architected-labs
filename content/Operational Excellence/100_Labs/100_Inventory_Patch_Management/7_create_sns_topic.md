@@ -1,5 +1,6 @@
 ---
 title: "Creating a Simple Notification Service Topic"
+menutitle: "Creating SNS topic"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>7. </b>"
@@ -26,3 +27,5 @@ To create and subscribe to an SNS topic:
 1. Refresh the page after confirming your subscription to view the populated **Subscription ARN**.
 
 You can now use this SNS topic to send notifications to your Administrator user.
+
+{{< prev_next_button link_prev_url="../6_maintenance_windows/" link_next_url="../8_cleanup/" />}}
