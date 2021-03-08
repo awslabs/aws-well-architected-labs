@@ -10,7 +10,7 @@ weight: 5
 
 AWS Systems Manager [Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html) automates the process of patching managed instances with security related updates.
 
->**Note** For Linux-based instances, you can also install patches for non-security updates.
+>**Note**  For Linux-based instances, you can also install patches for non-security updates.
 
 You can patch fleets of Amazon EC2 instances or your on-premises servers and virtual machines (VMs) by operating system type. This includes supported versions of Windows, Ubuntu Server, Red Hat Enterprise Linux (RHEL), SUSE Linux Enterprise Server (SLES), and Amazon Linux. You can scan instances to see only a report of missing patches, or you can scan and automatically install all missing patches. You can target instances individually or in large groups by using Amazon EC2 tags.
 
@@ -24,7 +24,7 @@ You can patch fleets of Amazon EC2 instances or your on-premises servers and vir
 
 Patch Manager uses **patch baselines**, which include rules for auto-approving patches within days of their release, as well as a list of approved and rejected patches. Later in this lab we will schedule patching to occur on a regular basis using a Systems Manager **Maintenance Window** task. Patch Manager integrates with AWS Identity and Access Management (IAM), AWS CloudTrail, and Amazon CloudWatch Events to provide a secure patching experience that includes event notifications and the ability to audit usage.
 
->**Warning** The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
+>**Warning**  The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
 
 
 ### 5.1 Create a Patch Baseline
@@ -57,7 +57,7 @@ A [patch group](https://docs.aws.amazon.com/systems-manager/latest/userguide/sys
 
 You create a patch group by using Amazon EC2 tags. Unlike other tagging scenarios across Systems Manager, a patch group must be defined with the tag key: `Patch Group` (tag keys are case sensitive). You can specify any value (for example, `web servers`) but the key must be `Patch Group`.
 
->**Note** An instance can only be in one patch group.
+>**Note**  An instance can only be in one patch group.
 
 After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance.
 * If the instance is assigned to a patch group, the system checks to see which patch baseline is registered to that group.
@@ -118,7 +118,7 @@ To examine AWS-RunPatchBaseline in Documents:
 The remaining Run Command features enable you to:
 * Specify **Rate control**, limiting **Concurrency** to a specific number of targets or a calculated percentage of systems, or to specify an **Error threshold** by count or percentage of systems after which the command execution will end.
 * Specify **Output options** to record the entire output to a preconfigured **S3 bucket** and optional **S3 key prefix**.
->**Note** Only the last 2500 characters of a command document's output are displayed in the console.
+>**Note**  Only the last 2500 characters of a command document's output are displayed in the console.
 * Specify **SNS notifications** to a specified **SNS Topic** on all events or on a specific event type for either the entire command or on a per-instance basis. This requires Amazon SNS to be preconfigured.
 * View the command as it would appear if executed within the AWS Command Line Interface.
 
@@ -149,18 +149,18 @@ The remaining Run Command features enable you to:
 1. In the **Command parameters** section, change the **Operation** value to **Install**.
 1. In the **Targets** section, choose **Specify a tag** using `Workload` and `Test`.
 
->**Note** You could have choosen **Manually selecting instances** and used the check box at the top of the list to select all instances displayed, or selected them individually.
+>**Note**  You could have choosen **Manually selecting instances** and used the check box at the top of the list to select all instances displayed, or selected them individually.
 
->**Note** There are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
+>**Note**  There are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
 
 1. In the **Rate control** section:
    1. For **Concurrency**, ensure that **targets** is selected and specify the value as `1`.
-   >**Tip**<br>Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.
+   >**Tip**  Limiting concurrency will stagger the application of patches and the reboot cycle, however, to ensure that your instances are not rebooting at the same time, create separate tags to define target groups and schedule the application of patches at separate times.
    2. For **Error threshold**, ensure that **error** is selected and specify the value as `1`.
 1. Choose **Run** to execute the command and to go to its details page.
 1. Refresh the page to view updated status and proceed when the execution is successful.
 
->**Warning** Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
+>**Warning**  Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
 
 ### 5.7 Review Patch Compliance After Patching
 
