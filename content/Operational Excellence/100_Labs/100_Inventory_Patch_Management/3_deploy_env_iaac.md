@@ -38,7 +38,7 @@ Apply the following best practices when using tags:
 
 To deploy the lab infrastructure:
 
-1. [**Download the CloudFormation script** for this lab from](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
+1. [**Download the CloudFormation script** for this lab through this link](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
 1. Use your administrator account to access the CloudFormation console at <https://console.aws.amazon.com/cloudformation/>.
 1. Choose **Create Stack**.
 1. On the **Select Template** page, select **Upload a template file** and select the `OE_Inventory_and_Patch_Mgmt.json` file you just downloaded.
