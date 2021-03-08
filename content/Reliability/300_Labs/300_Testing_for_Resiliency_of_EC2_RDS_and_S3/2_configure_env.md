@@ -71,7 +71,7 @@ Choose the appropriate section below for your language
 
 {{% expand "Click here for instructions if using Python:" %}}
 
-1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: <https://github.com/boto/boto3>
+1. The scripts are written in python with boto3. On Amazon Linux, this is already installed. Use your local operating system instructions to install boto3: <https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#installation>
 
 
 1. Download the {{% githublink link_name="resiliency Python scripts from GitHub" path="static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/python/" %}} to a location convenient for you to execute them. You can use the following links to download the scripts:

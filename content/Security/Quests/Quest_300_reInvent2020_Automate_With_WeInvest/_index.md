@@ -35,7 +35,8 @@ In this lab we will walk you through an example scenario of monitoring our KMS s
 * [Amazon Simple Notification Service](https://aws.amazon.com/sns/) to allow us to send email notification when an event occurs.
 
 
-### [Start now!](/Security/300_Labs/300_Autonomous_Monitoring_Of_Cryptographic_Activity_With_KMS/_index.md)
+### [Start now!](/security/300_labs/300_autonomous_monitoring_of_cryptographic_activity_with_kms/)
+
 
 ### Lab 2 - Autonomous Patching With EC2 Image Builder and Systems Manager.
 
@@ -45,7 +46,7 @@ In this lab we will walk you through a blue/green deployment methodology to buil
 * [Systems Manager Automated Document](https://aws.amazon.com/systems-manager/) to orchestrate the execution.
 * [CloudFormation](https://aws.amazon.com/cloudformation/) with [AutoScalingReplacingUpdate](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html) update policy, to gracefully deploy the newly created AMI into the workload with minimal interruption to the application availability.
 
-### [Start now!](/Security/300_labs/300_Autonomous_Patching_With_EC2_Image_Builder_and_Systems_Manager/)
+### [Start now!](/security/300_labs/300_autonomous_patching_with_ec2_image_builder_and_systems_manager/)
 
 ***
 

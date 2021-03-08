@@ -1,5 +1,6 @@
 ---
 title: "Creating Maintenance Windows and Scheduling Automated Operations Activities"
+menutitle: "Maintenance Windows"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 pre: "<b>6. </b>"
@@ -168,3 +169,5 @@ After you assign targets, you [assign tasks](https://docs.aws.amazon.com/systems
 1. Choose **Step 2 - Output** and review the output.
 
 You have now configured a maintenance window, assigned targets, assigned tasks, and validated successful execution. The same procedures can be used to schedule the execution of any [AWS Systems Manager Document](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html).
+
+{{< prev_next_button link_prev_url="../5_patch_mgmt/" link_next_url="../7_create_sns_topic/" />}}

@@ -23,7 +23,7 @@ fi
 
 #Find the only running rds instance in the list that is in the VPC and return it's instance ID.
 #Note: This is assuming there is only one RDS instance in the VPC.  Otherwise this script fails
-rds_instance_id="$(aws rds describe-db-instances --query "DBInstances[?DBSubnetGroup.VpcId=='$1'].DBInstanceIdentifier" --output text)"
+rds_instance_id="$(aws rds describe-db-instances --query "DBInstances[?DBSubnetGroup.VpcId=='$1' && MultiAZ].DBInstanceIdentifier" --output text)"
 
 if [ -z $rds_instance_id ]; then
     echo "No RDS instance found in $0 vpc"

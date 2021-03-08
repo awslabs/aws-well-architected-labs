@@ -19,6 +19,9 @@ Description: >-
   express or implied. See the License for the specific language governing
   permissions and limitations under the License.
 Parameters:
+  AvailabilityZone: 
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: The Availability Zone in which resources are launched.
   BucketName:
     Type: String
     Description: >-
@@ -42,6 +45,7 @@ Resources:
   Subnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
+      AvailabilityZone: !Ref AvailabilityZone
       CidrBlock: 10.0.0.0/24
       VpcId: !Ref VPC
       MapPublicIpOnLaunch: 'true'

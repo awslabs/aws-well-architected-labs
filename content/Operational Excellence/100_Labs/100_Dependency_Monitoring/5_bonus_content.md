@@ -48,3 +48,5 @@ To test this, follow the instructions in the previous section on testing a fail 
     ![SSMOpsItem](/Operations/100_Dependency_Monitoring/Images/SSMOpsItem.png)
 
 The event can now be efficiently tracked using the OpsItem, and remediation work can be better co-ordinated. Additionally, you can choose to execute pre-created [Runbooks](https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-remediating.html) which are listed under the **Runbooks** section and automate the remediation. You can create custom runbooks depending on the type of event.
+
+{{< prev_next_button link_prev_url="../4_test_fail_condition/" link_next_url="../6_cleanup/" />}}

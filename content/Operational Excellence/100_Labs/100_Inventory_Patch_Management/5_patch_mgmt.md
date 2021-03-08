@@ -10,7 +10,8 @@ weight: 5
 
 AWS Systems Manager [Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html) automates the process of patching managed instances with security-related updates.
 
->**Note**<br>For Linux-based instances, you can also install patches for non-security updates.
+>**Note** 
+>* For Linux-based instances, you can also install patches for non-security updates.
 
 You can patch fleets of Amazon EC2 instances or your on-premises servers and virtual machines (VMs) by operating system type. This includes supported versions of Windows, Ubuntu Server, Red Hat Enterprise Linux (RHEL), SUSE Linux Enterprise Server (SLES), and Amazon Linux. You can scan instances to see only a report of missing patches, or you can scan and automatically install all missing patches. You can target instances individually or in large groups by using Amazon EC2 tags.
 
@@ -24,7 +25,8 @@ You can patch fleets of Amazon EC2 instances or your on-premises servers and vir
 
 Patch Manager uses **patch baselines**, which include rules for auto-approving patches within days of their release, as well as a list of approved and rejected patches. Later in this lab we will schedule patching to occur on a regular basis using a Systems Manager **Maintenance Window** task. Patch Manager integrates with AWS Identity and Access Management (IAM), AWS CloudTrail, and Amazon CloudWatch Events to provide a secure patching experience that includes event notifications and the ability to audit usage.
 
->**Warning** The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
+>**Warning** 
+>* The [operating systems supported by Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) may vary from those supported by the SSM Agent.
 
 
 ### 5.1 Create a Patch Baseline
@@ -57,7 +59,8 @@ A [patch group](https://docs.aws.amazon.com/systems-manager/latest/userguide/sys
 
 You create a patch group by using Amazon EC2 tags. Unlike other tagging scenarios across Systems Manager, a patch group must be defined with the tag key: `Patch Group` (tag keys are case sensitive). You can specify any value (for example, `web servers`) but the key must be `Patch Group`.
 
->**Note** An instance can only be in one patch group.
+>**Note** 
+>* An instance can only be in one patch group.
 
 After you create a patch group and tag instances, you can register the patch group with a patch baseline. By registering the patch group with a patch baseline, you ensure that the correct patches are installed during the patching execution. When the system applies a patch baseline to an instance, the service checks if a patch group is defined for the instance.
 * If the instance is assigned to a patch group, the system checks to see which patch baseline is registered to that group.
@@ -81,7 +84,7 @@ For Linux operating systems, compliance information is provided for patches from
 
 ## AWS Systems Manager: Document
 
-An [AWS Systems Manager document](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html) defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JSON or YAML, and they include steps and parameters that you specify.
+An [AWS Systems Manager document](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html) defines the actions that Systems Manager performs on your managed instances. Systems Manager includes many pre-configured documents that you can use by specifying parameters at runtime, including 'AWS-RunPatchBaseline'. These documents use JavaScript Object Notation (JSON) or YAML (a recursive acronym for "YAML Ain't Markup Language"), and they include steps and parameters that you specify.
 
 All AWS provided Automation and Run Command documents can be viewed in AWS Systems Manager **Documents**. You can [create your own documents](https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-doc.html) or launch existing scripts using provided documents to implement custom operations as code activities.
 
@@ -148,9 +151,11 @@ The remaining Run Command features enable you to:
    1. Under **Enter a tag key**, enter `Workload` and under **Enter a tag value** enter `Test`.
 1. In the **Command parameters** section, change the **Operation** value to **Install**.
 1. In the **Targets** section, choose **Specify a tag** using `Workload` and `Test`.
->**Note** You could have choosen **Manually selecting instances** and used the check box at the top of the list to select all instances displayed, or selected them individually.
+>**Note** 
+>* You could have choosen **Manually selecting instances** and used the check box at the top of the list to select all instances displayed, or selected them individually.
 
->**Note** There are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
+>**Note** 
+>* There are multiple pages of instances. If manually selecting instances, individual selections must be made on each page.
 
 1. In the **Rate control** section:
    1. For **Concurrency**, ensure that **targets** is selected and specify the value as `1`.
@@ -159,7 +164,8 @@ The remaining Run Command features enable you to:
 1. Choose **Run** to execute the command and to go to its details page.
 1. Refresh the page to view updated status and proceed when the execution is successful.
 
->**Warning** Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
+>**Warning** 
+>* Remember, if any updates are installed by Patch Manager, the patched instance is rebooted.
 
 ### 5.7 Review Patch Compliance After Patching
 
@@ -174,3 +180,5 @@ In the optional Scheduling Automated Operations Activities section of this lab y
 In a traditional environment, you would have had to set up the systems and software to perform these activities. You would require a server to execute your scripts. You would need to manage authentication credentials across all of your systems.
 
 _Operations as code_ reduces the resources, time, risk, and complexity of performing operations tasks and ensures consistent execution. You can take operations as code and automate operations activities by using scheduling and event triggers. Through integration at the infrastructure level you avoid "swivel chair" processes that require multiple interfaces and systems to complete a single operations activity.
+
+{{< prev_next_button link_prev_url="../4_inventory_mgmt/" link_next_url="../6_maintenance_windows/" />}}

@@ -18,6 +18,293 @@ You may need to change variables used as placeholders in your query. **${table_N
 
 ### Table of Contents
 
+{{< expand "EC2 Total Spend" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will display the top costs for all spend with the product code of 'AmazonEC2'.  This will include all pricing categories (i.e. OnDemand, Reserved etc..) as well as charges for storage on EC2 (i.e. gp2).  The query will output the product code as well as the product description to provide context.  It is ordered by largest to smallest spend.
+
+#### Pricing
+Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
+
+#### Cost Explorer Links
+
+These links are provided as an example to compare CUR report output to Cost Explorer output.
+
+Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=None&hasBlended=false&hasAmortized=false&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Custom&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&filter=%5B%7B%22dimension%22:%22Service%22,%22values%22:%5B%22Amazon%20Elastic%20Compute%20Cloud%20-%20Compute%22,%22Amazon%20Elastic%20Block%20Store%22%5D,%22include%22:true,%22children%22:null%7D%5D&chartStyle=Group&forecastTimeRangeOption=None&usageAs=usageQuantity&startDate=2020-12-01&endDate=2020-12-31)
+#### Sample Output
+![Images/lambda_sp.png](/Cost/300_CUR_Queries/Images/Compute/ec2_total_spend.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2_total_spend.sql)
+
+#### Copy Query
+    SELECT line_item_product_code, 
+    line_item_line_item_description, 
+    round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost 
+    FROM ${table_name}
+    WHERE
+    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+    AND line_item_product_code like '%AmazonEC2%'
+    AND line_item_line_item_type NOT IN ('Tax','Refund')
+    AND line_item_product_code like '%AmazonEC2%'
+    GROUP BY line_item_product_code, 
+    line_item_line_item_description
+    ORDER BY sum_line_item_unblended_cost desc
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Total Spend" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+{{< expand "EC2 Hours a Day" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will provide the EC2 usage quantity measured in hours for each purchase option and each instance type.  The output will include detailed information about the instance type, amortized cost, purchase option, and usage quantity.  The output will be ordered by usage quantity in descending order. 
+
+{{% notice note %}}
+This query will **not** run against CUR data from accounts which have purchased EC2 Reserved Instances or Savings Plans.  
+{{% /notice%}}
+
+#### Pricing Page
+Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
+
+#### Sample Output
+![Images/ec2runninghours.png](/Cost/300_CUR_Queries/Images/Compute/ec2runninghours.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2runninghours.sql)
+
+#### Copy Query
+    SELECT 
+      year,
+      month,
+      bill_billing_period_start_date,
+      product_instance_type,
+      date_trunc('hour', line_item_usage_start_date) as hour_line_item_usage_start_date, 
+      bill_payer_account_id, 
+      line_item_usage_account_id, 
+      (CASE
+        WHEN (savings_plan_savings_plan_a_r_n <> '') THEN
+          'SavingsPlan'
+        WHEN (reservation_reservation_a_r_n <> '') THEN
+          'Reserved'
+        WHEN (line_item_usage_type LIKE '%Spot%') THEN
+          'Spot'
+        ELSE 'OnDemand' END) as purchase_option, 
+        sum(CASE
+          WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN
+            savings_plan_savings_plan_effective_cost
+          WHEN line_item_line_item_type = 'DiscountedUsage' THEN
+            reservation_effective_cost
+          WHEN line_item_line_item_type = 'Usage' THEN
+            line_item_unblended_cost
+          ELSE 0 END) as amortized_cost, 
+      round(sum(line_item_usage_amount), 2) usage_quantity
+    FROM ${table_name}
+    WHERE 
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND ( (line_item_product_code = 'AmazonEC2')
+            AND (product_servicecode <> 'AWSDataTransfer')
+            AND (line_item_operation LIKE '%RunInstances%')
+            AND (line_item_usage_type NOT LIKE '%DataXfer%') 
+          )
+      AND (
+            (line_item_line_item_type = 'Usage')
+            OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
+            OR (line_item_line_item_type = 'DiscountedUsage')
+          )
+    GROUP BY  
+      year, 
+      month, 
+      bill_billing_period_start_date,  
+      product_instance_type,
+      date_trunc('hour', line_item_usage_start_date),
+      bill_payer_account_id,
+      7,
+      8
+    ORDER BY 
+      usage_quantity DESC
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+
+{{< expand "EC2 Effective Savings Plans" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will provide EC2 consumption of Savings Plans across Compute resources by linked accounts. It also provides you with the savings received from these Savings Plans and which Savings Plans its connected to. The output is ordered by date. 
+
+#### Pricing
+Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
+
+#### Sample Output
+![Images/ec2speffective.png](/Cost/300_CUR_Queries/Images/Compute/ec2speffective.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2speffective.sql)
+
+#### Copy Query
+        SELECT
+        bill_payer_account_id,
+        line_item_usage_account_id,
+        DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+        SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS savings_plan_savings_plan_a_r_n,
+        CASE
+          savings_plan_offering_type
+          WHEN 'EC2InstanceSavingsPlans' THEN 'EC2 Instance Savings Plans'
+          WHEN 'ComputeSavingsPlans' THEN 'Compute Savings Plans'
+          ELSE savings_plan_offering_type
+        END AS "Type",
+        savings_plan_region,
+        CASE 
+          WHEN product_product_name = 'Amazon EC2 Container Service' THEN 'Fargate'
+          WHEN product_product_name = 'AWS Lambda' THEN 'Lambda'
+          ELSE product_instance_type_family 
+        END AS "Instance Type Family",
+        SUM (TRY_CAST(line_item_unblended_cost as decimal(16, 8))) as "On Demand Cost",
+        SUM(TRY_CAST(savings_plan_savings_plan_effective_cost AS decimal(16, 8))) as "Effective Cost",
+        SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost, 
+        savings_plan_end_time
+        FROM
+        ${table_name}
+      WHERE
+        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        AND savings_plan_savings_plan_a_r_n <> ''
+        AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
+      GROUP by
+              bill_payer_account_id,
+            line_item_usage_account_id,
+            DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'),
+        savings_plan_savings_plan_a_r_n,
+        savings_plan_offering_type,
+        savings_plan_region,
+        product_instance_type_family,
+        product_product_name, 
+        savings_plan_end_time
+      ORDER BY
+        day_line_item_usage_start_date;
+
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Effective Savings Plans" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+{{< expand "Compute with Savings Plans" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query will provide details about Compute usage that is covered by Savings Plans.  The output will include detailed information about the usage type, usage amount, Savings Plans ARN, line item description, and Savings Plans effective savings as compared to On-Demand pricing.  The public pricing on-demand cost will be summed and in descending order.
+
+#### Pricing
+Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsplans/pricing/).
+
+#### Sample Output
+![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/compute_sp.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/compute_sp.sql)
+
+#### Copy Query
+    SELECT  
+      bill_payer_account_id,
+      bill_billing_period_start_date,
+      line_item_usage_account_id,
+      DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+      savings_plan_savings_plan_a_r_n,
+      line_item_product_code,
+      line_item_usage_type,
+      sum(line_item_usage_amount) sum_line_item_usage_amount,
+      line_item_line_item_description,
+      pricing_public_on_demand_rate,
+      sum(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
+      savings_plan_savings_plan_rate,
+      sum(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
+    FROM ${table_name}
+    WHERE
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
+    GROUP BY  
+      bill_payer_account_id, 
+      bill_billing_period_start_date, 
+      line_item_usage_account_id, 
+      DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+      savings_plan_savings_plan_a_r_n, 
+      line_item_product_code, 
+      line_item_usage_type, 
+      line_item_unblended_rate, 
+      line_item_line_item_description, 
+      pricing_public_on_demand_rate, 
+      savings_plan_savings_plan_rate
+    ORDER BY
+      sum_pricing_public_on_demand_cost DESC
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Compute" service_text="Compute" query_text="Compute with Savings Plans" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
+{{< expand "Account Spend of Shared Savings Plan" >}}
+
+{{% markdown_wrapper %}}
+
+#### Query Description
+This query focuses on surfacing accounts which have utilized AWS Savings Plans for which they are not a buyer.  
+
+#### Pricing
+Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsplans/pricing/).
+
+#### Sample Output
+![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/account_spend_of_shared_sp.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/account_spend_of_shared_sp.sql)
+
+#### Copy Query
+    SELECT year,
+    month,
+    bill_payer_account_id,
+    line_item_usage_account_id,
+    savings_plan_offering_type,
+    line_item_resource_id,
+    SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost,
+    SUM(CAST(savings_plan_savings_plan_effective_cost AS decimal(16, 8))) AS sum_savings_plan_savings_plan_effective_cost
+    FROM ${table_name}
+    WHERE
+    year = '2020'
+    AND (month BETWEEN '9' AND '12' OR month BETWEEN '09' AND '12')
+    AND (bill_payer_account_id = '111122223333'
+    AND line_item_usage_account_id = '444455556666'
+    AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
+    AND savings_plan_savings_plan_a_r_n NOT LIKE '%444455556666%')
+    GROUP BY
+    year,
+    month,
+    line_item_resource_id,
+    line_item_usage_account_id,
+    bill_payer_account_id,
+    savings_plan_offering_type
+    ORDER BY sum_savings_plan_savings_plan_effective_cost DESC;
+
+{{% /markdown_wrapper %}}
+
+{{% email_button category_text="Compute" service_text="Compute" query_text="Account Spend of Shared Savings Plan" button_text="Help & Feedback" %}}
+
+{{< /expand >}}
+
 {{< expand "Lambda" >}}
 
 {{% markdown_wrapper %}}
@@ -172,202 +459,69 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
 
 {{< /expand >}}
 
-{{< expand "Compute with Savings Plans" >}}
+{{< expand "Elastic Load Balancing" >}}
 
 {{% markdown_wrapper %}}
 
 #### Query Description
-This query will provide details about Compute usage that is covered by Savings Plans.  The output will include detailed information about the usage type, usage amount, Savings Plans ARN, line item description, and Savings Plans effective savings as compared to On-Demand pricing.  The public pricing on-demand cost will be summed and in descending order.
+This query will display cost and usage of Elastic Load Balancers which didn't receive any traffic last month and ran for more than 336 hours (14 days). Resources returned by this query could be considered for deletion.
 
 #### Pricing
-Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsplans/pricing/).
+Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com/elasticloadbalancing/pricing/).
 
 #### Sample Output
-![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/compute_sp.png)
+![Images/elb_unused_wrid.png](/Cost/300_CUR_Queries/Images/Compute/elb_unused_wrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/compute_sp.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elb_unsused_wrid.sql)
 
 #### Copy Query
-    SELECT  
+    SELECT
       bill_payer_account_id,
-      bill_billing_period_start_date,
       line_item_usage_account_id,
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
-      savings_plan_savings_plan_a_r_n,
-      line_item_product_code,
-      line_item_usage_type,
-      sum(line_item_usage_amount) sum_line_item_usage_amount,
-      line_item_line_item_description,
-      pricing_public_on_demand_rate,
-      sum(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
-      savings_plan_savings_plan_rate,
-      sum(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
-    FROM ${table_name}
-    WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
-    GROUP BY  
-      bill_payer_account_id, 
-      bill_billing_period_start_date, 
-      line_item_usage_account_id, 
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
-      savings_plan_savings_plan_a_r_n, 
-      line_item_product_code, 
-      line_item_usage_type, 
-      line_item_unblended_rate, 
-      line_item_line_item_description, 
-      pricing_public_on_demand_rate, 
-      savings_plan_savings_plan_rate
-    ORDER BY
-      sum_pricing_public_on_demand_cost DESC
-
-{{% /markdown_wrapper %}}
-
-{{% email_button category_text="Compute" service_text="Compute" query_text="Compute with Savings Plans" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
-
-
-{{< expand "EC2 Hours a Day" >}}
-
-{{% markdown_wrapper %}}
-
-#### Query Description
-This query will provide the EC2 usage quantity measured in hours for each purchase option and each instance type.  The output will include detailed information about the instance type, amortized cost, purchase option, and usage quantity.  The output will be ordered by usage quantity in descending order. 
-
-{{% notice note %}}
-This query will **not** run against CUR data from accounts which have purchased EC2 Reserved Instances or Savings Plans.  
-{{% /notice%}}
-
-#### Pricing Page
-Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
-
-#### Sample Output
-![Images/ec2runninghours.png](/Cost/300_CUR_Queries/Images/Compute/ec2runninghours.png)
-
-#### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2runninghours.sql)
-
-#### Copy Query
-    SELECT 
-      year,
-      month,
-      bill_billing_period_start_date,
-      product_instance_type,
-      date_trunc('hour', line_item_usage_start_date) as hour_line_item_usage_start_date, 
-      bill_payer_account_id, 
-      line_item_usage_account_id, 
-      (CASE
-        WHEN (savings_plan_savings_plan_a_r_n <> '') THEN
-          'SavingsPlan'
-        WHEN (reservation_reservation_a_r_n <> '') THEN
-          'Reserved'
-        WHEN (line_item_usage_type LIKE '%Spot%') THEN
-          'Spot'
-        ELSE 'OnDemand' END) as purchase_option, 
-        sum(CASE
-          WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN
-            savings_plan_savings_plan_effective_cost
-          WHEN line_item_line_item_type = 'DiscountedUsage' THEN
-            reservation_effective_cost
-          WHEN line_item_line_item_type = 'Usage' THEN
-            line_item_unblended_cost
-          ELSE 0 END) as amortized_cost, 
-      round(sum(line_item_usage_amount), 2) usage_quantity
-    FROM ${table_name}
-    WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND ( (line_item_product_code = 'AmazonEC2')
-            AND (product_servicecode <> 'AWSDataTransfer')
-            AND (line_item_operation LIKE '%RunInstances%')
-            AND (line_item_usage_type NOT LIKE '%DataXfer%') 
-          )
-      AND (
-            (line_item_line_item_type = 'Usage')
-            OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
-            OR (line_item_line_item_type = 'DiscountedUsage')
-          )
-    GROUP BY  
-      year, 
-      month, 
-      bill_billing_period_start_date,  
-      product_instance_type,
-      date_trunc('hour', line_item_usage_start_date),
-      bill_payer_account_id,
-      7,
-      8
-    ORDER BY 
-      usage_quantity DESC
-
-{{% /markdown_wrapper %}}
-
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
-
-
-{{< expand "EC2 Effective Savings Plans" >}}
-
-{{% markdown_wrapper %}}
-
-#### Query Description
-This query will provide EC2 consumption of Savings Plans across Compute resources by linked accounts. It also provides you with the savings received from these Savings Plans and which Savings Plans its connected to. The output is ordered by date. 
-
-#### Pricing
-Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
-
-#### Sample Output
-![Images/ec2speffective.png](/Cost/300_CUR_Queries/Images/Compute/ec2speffective.png)
-
-#### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2speffective.sql)
-
-#### Copy Query
+      SPLIT_PART(line_item_resource_id, ':', 6) split_line_item_resource_id,
+      product_region,
+      pricing_unit,
+      sum_line_item_usage_amount,
+      CAST(cost_per_resource AS decimal(16, 8)) AS "sum_line_item_unblended_cost"
+    FROM
+      (
         SELECT
-        bill_payer_account_id,
-        line_item_usage_account_id,
-        DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d') AS day_line_item_usage_start_date, 
-        SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS savings_plan_savings_plan_a_r_n,
-        CASE
-          savings_plan_offering_type
-          WHEN 'EC2InstanceSavingsPlans' THEN 'EC2 Instance Savings Plans'
-          WHEN 'ComputeSavingsPlans' THEN 'Compute Savings Plans'
-          ELSE savings_plan_offering_type
-        END AS "Type",
-        savings_plan_region,
-        CASE 
-          WHEN product_product_name = 'Amazon EC2 Container Service' THEN 'Fargate'
-          WHEN product_product_name = 'AWS Lambda' THEN 'Lambda'
-          ELSE product_instance_type_family 
-        END AS "Instance Type Family",
-        SUM (TRY_CAST(line_item_unblended_cost as decimal(16, 8))) as "On Demand Cost",
-        SUM(TRY_CAST(savings_plan_savings_plan_effective_cost AS decimal(16, 8))) as "Effective Cost",
-        SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost, 
-        savings_plan_end_time
+          line_item_resource_id,
+          product_region,
+          pricing_unit,
+          line_item_usage_account_id,
+          bill_payer_account_id,
+          SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+          SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
+          SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
+          COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
         FROM
-        ${table_name}
-      WHERE
-        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-        AND savings_plan_savings_plan_a_r_n <> ''
-        AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
-      GROUP by
-              bill_payer_account_id,
-            line_item_usage_account_id,
-            DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'),
-        savings_plan_savings_plan_a_r_n,
-        savings_plan_offering_type,
-        savings_plan_region,
-        product_instance_type_family,
-        product_product_name, 
-        savings_plan_end_time
-      ORDER BY
-        day_line_item_usage_start_date;
-
+          ${table_name}
+        WHERE
+          line_item_product_code = 'AWSELB'
+          -- get previous month
+          AND month = cast(month(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+          -- get year for previous month
+          AND year = cast(year(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+          AND line_item_line_item_type = 'Usage'
+        GROUP BY
+          line_item_resource_id,
+          product_region,
+          pricing_unit,
+          line_item_usage_account_id,
+          bill_payer_account_id
+      )
+    WHERE
+      -- filter only resources which ran more than half month (336 hrs)
+      usage_per_resource_and_pricing_unit > 336
+      AND pricing_unit_per_resource = 1
+    ORDER BY
+      cost_per_resource DESC
 
 {{% /markdown_wrapper %}}
 
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Effective Savings Plans" button_text="Help & Feedback" %}}
+{{% email_button category_text="Compute" service_text="ELB" query_text="Elastic Load Balancing" button_text="Help & Feedback" %}}
 
 {{< /expand >}}
 

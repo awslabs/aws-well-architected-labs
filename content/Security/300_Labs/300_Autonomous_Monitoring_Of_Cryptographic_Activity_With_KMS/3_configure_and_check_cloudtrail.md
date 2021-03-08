@@ -48,10 +48,10 @@ Firstly, download the logging template from [here.](/Security/300_Autonomous_Mon
 To deploy the template from the console, please follow this [guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html) for information on how to deploy the cloudformation template, noting the following points before starting your deployment:
 
 * Use `pattern1-logging` as the **Stack Name**.
-* Provide the name of the VPC CloudFormation stack you created in **section 1** ( we used `pattern1-base` as default ). If you are unsure, refer to the output of the infrastructure stack, the stack name corresponds to the parameter value **BaselineVpcStack**. 
-* Use the ECS Task Role Arn value you took note from section **1.3** for **AppECSTaskRoleArn** parameter.
+* Use the ECS Task Role Arn value you took note from section **2.3** for **AppECSTaskRoleArn** parameter.
 * Use email address you would like to use to be notified with under **EmailAddress** parameter. 
 
+**Note**: Dont forget to acknowledge the capabilities checkbox at the bottom of the screen.
 {{% /expand%}}
 
 {{%expand "Click here for manual console deployment"%}}

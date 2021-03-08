@@ -67,3 +67,5 @@ Now that internet connectivity has been re-established, the external service sho
 1. The alarm should be in an **OK** state confirming that the fix worked and the external service is functioning normally again
 
 You have now configured an alarm and tested it to ensure dependency monitoring has been established and notifications will be sent out in the event of an outage. While it is important to be notified of events affecting dependent resources, responses to these events are just as important. Once a notification has been received, the event has to be effectively tracked to ensure the right resources are assigned to it and to avoid duplication of effort. The Bonus Content in the next section talks about how this can be achieved and how it can be automated. With this approach responses to events will be manual. If there is a known and codified procedure (runbook) for the event, SNS can be used to trigger the execution of the runbook in response to the event.
+
+{{< prev_next_button link_prev_url="../3_create_alarm/" link_next_url="../5_bonus_content/" />}}

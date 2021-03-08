@@ -75,3 +75,5 @@ Under the **History** section, you will be able to view all state changes with r
 An alarm has now been created on a suitable metric to identify if the external service that the workload is dependent on is experiencing outage. Additionally, notifications have been configured to alert relevant stakeholders when the workload outcome is at risk due to failure/unavailability of the external service.
 
 ![ArchitectureLast](/Operations/100_Dependency_Monitoring/Images/ArchitectureLast.png)
+
+{{< prev_next_button link_prev_url="../2_understand_metrics/" link_next_url="../4_test_fail_condition/" />}}

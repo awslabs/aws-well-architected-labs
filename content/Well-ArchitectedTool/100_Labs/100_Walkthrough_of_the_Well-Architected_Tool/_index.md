@@ -11,7 +11,7 @@ hidden: false
 
 ## Introduction
 
-The purpose if this lab is to walk you through the features of the AWS Well-Architected Tool. You will create a workload, review the Reliability Pillar questions, save the workload, take a milestone, and examine and download the Well-Architected Review report.
+The purpose of this lab is to walk you through the features of the AWS Well-Architected Tool. You will create a workload, review the Reliability Pillar questions, save the workload, take a milestone, and examine and download the Well-Architected Review report.
 
 The knowledge you acquire will help you build Well-Architected workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
@@ -21,11 +21,11 @@ The knowledge you acquire will help you build Well-Architected workloads in alig
 * Learn how to use milestones to track your progress again high and medium risks over time.
 * Learn how to generate a report or view the results of the review in the Well-Architected Tool.
 
-## Prequisites:
+## Prerequisites:
 
 * An
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to usee Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
+* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
 
 ## Costs:
 * There are no costs for this lab

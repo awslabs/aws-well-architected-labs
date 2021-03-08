@@ -7,9 +7,16 @@ weight: 3
 hidden: false
 ---
 
+## Last Updated
+
+January 2021
+
+## Feedback
+If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
+
 ## Introduction
 {{< rawhtml >}}
-<video width="500" height="308" controls>
+<video width="500" height="308" controls poster="/Cost/300_CUR_Queries/Images/cost-300-cql-intro.png">
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/CURQueryLibraryIntroduction.mp4" type="video/mp4">
   Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
 </video>
@@ -24,7 +31,7 @@ CUR queries are provided as is. We recommend validating your data by comparing i
 
 ## Query Help
 {{< rawhtml >}}
-<video width="500" height="308" controls>
+<video width="500" height="308" controls poster="/Cost/300_CUR_Queries/Images/cost-300-cql-helper-intro.png">
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/HelperIntroductionVideoFinal.mp4" type="video/mp4">
   Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
 </video>
@@ -42,6 +49,8 @@ The CUR Query Library Help section is intended to provide tips and information a
 [AWS Cost Management]({{< ref "Queries/aws_cost_management.md" >}} "AWS Cost Management")
 
 [Compute]({{< ref "Queries/compute.md" >}} "Compute")
+
+[Container]({{< ref "Queries/container.md" >}} "Container")
 
 [Customer Engagement]({{< ref "Queries/customer_engagement.md" >}} "Customer Engagement")
 
@@ -62,23 +71,15 @@ The CUR Query Library Help section is intended to provide tips and information a
 [Storage]({{< ref "Queries/storage.md" >}} "Storage")
 
 
-## Feedback
-If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
-
 ## Prerequisites
 - An AWS Account
 - Completed the [AWS Account Setup lab]({{< ref "/Cost/100_labs/100_1_aws_account_setup">}})
 - Completed the [Cost and Usage Analysis lab]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
 - Usage in your AWS account
 
-## Library Authors
-- Chris Strzelczyk, Sr. TAM, AWS Enterprise Support
-- Bill Pfeiffer, Sr. TAM, AWS Enterprise Support
-- Stephanie Gooch, Cost Optimization Lead, AWS OPTICS
-- Matthew Brend, Enterprise Support Lead, AWS Enterprise Support
-- Jonathan Banas, Sr. TAM, AWS Enterprise Support
-- Alee Whitman, Commercial Architect, AWS Optics
-- Justin Marks, TAM, AWS Enterprise Support
+## Contributing
 
-## Query Contributors
-Please refer to the [CUR Query Library Contributors section]({{< ref "/Cost/300_labs/300_CUR_Queries/contributors.md" >}}).
+Community contributions are encouraged and welcome.  Please follow the [Contribution Guide]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help/contribution-guide.md" >}}). The goal is to pull together useful CUR queries in to a single library that is open, standardized, and maintained.
+
+## Contributors
+Please refer to the [CUR Query Library Contributors section]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help/contributors.md" >}}).

@@ -29,7 +29,7 @@ That formula will flag all EC2 instances with a “1” any instance that will f
 ```
 Where *Column N = Recommended Action* and *Column D = Instance Type*
 
-4. Next, let’s flag EC2 instances that belong to previous generations (C4, M3, etc), if you are investing engineer time on right sizing let's make sure you are also leveraging the newest technology available. Newer EC2 generations have a superior performance increasing the changes of success for the right sizing exercise, they also generally cost less than previous generations providing a higher cost vs benefit.
+4. Next, let’s flag EC2 instances that belong to previous generations (C4, M3, etc), if you are investing engineer time on rightsizing let's make sure you are also leveraging the newest technology available. Newer EC2 generations have a superior performance increasing the changes of success for the rightsizing exercise, they also generally cost less than previous generations providing a higher cost vs benefit.
 
 ![Images/ResourceOpt08.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt08.png)
 
@@ -55,9 +55,9 @@ Start filtering the idle resources or instances where CPU utilization <1%, it is
 
 ![Images/ResourceOpt09.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt09.png)
 
-The resulting filtered list should be where you start right sizing discussions with application owners; perform an investigation to understand why these instance were launched and validate their usage with the resource owner. If possible, terminate them.
+The resulting filtered list should be where you start rightsizing discussions with application owners; perform an investigation to understand why these instance were launched and validate their usage with the resource owner. If possible, terminate them.
 
-If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from an original *2,534 recommendations to 16* and *identified $3,458 per month in potential savings*.
+If you are using the Rightsizing CSV file provided in this lab exercise, you will notice that we filtered down from an original *2,534 recommendations to 16* and *identified $3,458 per month in potential savings*.
 
 **Group 2:** Previous generation instances
 
@@ -81,7 +81,7 @@ Moving to a modern generation may require additional testing hours compared to i
 
 *prices are from US-Virginia (Nov 2019)*
 
-If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$6,362 per month in potential savings*.
+If you are using the Rightsizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$6,362 per month in potential savings*.
 
 **Group 3:** Current generation instances
 
@@ -97,6 +97,6 @@ This will select underutilized resources from the current, most modern generatio
 
 Also, do not forget to check the other recommended instance types (columns U to AD); Amazon EC2 Resource Optimization will recommend up to 3 instances for each resource moving from a more conservative recommendation (the first recommendation) to a more aggressive and higher savings recommendation (second and third recommendations).
 
-If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$4,879.56 per month in potential savings*.
+If you are using the Rightsizing CSV file provided in this lab exercise, you will notice that we filtered down from originally *2,534 recommendations to 22* with *$4,879.56 per month in potential savings*.
 
 {{< prev_next_button link_prev_url="../2_resource_opt/" link_next_url="../4_act_resource_opt/" />}}

@@ -241,10 +241,10 @@ def run(argv):
     try:
         opts, args = getopt.getopt(
             argv,
-            "h:s:p:r:",
+            "hs:p:r:",
             [
-                "help"
-                "server_ip="
+                "help",
+                "server_ip=",
                 "server_port=",
                 "region="
             ]
@@ -264,8 +264,8 @@ def run(argv):
 
     # Get commandline arguments
     for opt, arg in opts:
-        if opt == '-h':
-            print('test.py -p <server_port> ')
+        if opt in ("-h", "--help"):
+            print('server.py -s <server_ip> -p <server_port> -r <AWS region>')
             sys.exit()
         elif opt in ("-s", "--server_ip"):
             server_ip = arg

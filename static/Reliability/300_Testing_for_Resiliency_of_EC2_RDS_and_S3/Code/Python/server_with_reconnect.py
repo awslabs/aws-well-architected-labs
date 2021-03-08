@@ -29,7 +29,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         super().__init__(*args, **kwargs)
 
     def _execute_db_sql(self, sql, return_results=False):
-        db = pymysql.connect(self.db_host, self.db_user, self.db_pswd, self.db_name)
+        db = pymysql.connect(host=self.db_host, user=self.db_user, password=self.db_pswd, database=self.db_name)
         try:
             with db.cursor() as cursor:
               cursor.execute(sql)
@@ -96,7 +96,7 @@ def run(argv):
     try:
         opts, args = getopt.getopt(
             argv,
-            "h:u:p:s:w:d:o:",
+            "hu:p:s:w:d:o:",
             [
                 "help"
                 "image_url=",
@@ -112,8 +112,8 @@ def run(argv):
         sys.exit(2)
     print(opts)
     for opt, arg in opts:
-        if opt == '-h':
-            print('test.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
+        if opt in ("-h", "--help"):
+            print('server.py -u <image_url> -p <server_port> -s <db_user> -w <db_pswd> -d <db_name> -o <db_host>')
             sys.exit()
         elif opt in ("-u", "--image_url"):
             image_url = arg
