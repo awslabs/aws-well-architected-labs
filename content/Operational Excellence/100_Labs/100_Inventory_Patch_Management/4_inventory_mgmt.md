@@ -125,7 +125,7 @@ _Inventory_ is accomplished through the following:
    * The activities defined in the AWS-GatherSoftwareInventory command document.
    * The parameters provided in the **Parameters** section are passed to the document at execution.
    * The targets are defined in the **Targets** section.
-   >**Important**<br>In this example there is a single target, the wildcard. The wildcard matches _all_ instances making them _all_ targets.
+   >**Important** In this example there is a single target, the wildcard. The wildcard matches _all_ instances making them _all_ targets.
    * The schedule for this activity is defined under **Specify schedule** and **Specify with** to use a CRON/Rate expression on a 30 minute interval.
    * There is the option to specify **Output options**.
    >**Note** If you change the command document, the **Parameters** section will change to be appropriate to the new command document.
