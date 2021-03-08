@@ -118,7 +118,7 @@ To examine AWS-RunPatchBaseline in Documents:
 The remaining Run Command features enable you to:
 * Specify **Rate control**, limiting **Concurrency** to a specific number of targets or a calculated percentage of systems, or to specify an **Error threshold** by count or percentage of systems after which the command execution will end.
 * Specify **Output options** to record the entire output to a preconfigured **S3 bucket** and optional **S3 key prefix**.
->**Note**<br>Only the last 2500 characters of a command document's output are displayed in the console.
+>**Note** Only the last 2500 characters of a command document's output are displayed in the console.
 * Specify **SNS notifications** to a specified **SNS Topic** on all events or on a specific event type for either the entire command or on a per-instance basis. This requires Amazon SNS to be preconfigured.
 * View the command as it would appear if executed within the AWS Command Line Interface.
 
