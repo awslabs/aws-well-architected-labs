@@ -29,5 +29,5 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 {{% /common/CreateNewCloudFormationStack %}}
 
 {{% notice warning %}}
-This template will take between **2-5 minutes** to fully deploy using a t3.large. A smaller instance size may take longer.
+This template will take between **2-5 minutes** to fully deploy.
 {{% /notice %}}
