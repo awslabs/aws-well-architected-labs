@@ -1,0 +1,281 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This template creates an Lambda/APIGW simple app with tagging
+  and then creates a Well-Architected workload review and pre-fills in some responses.
+  (c) 2021 Amazon Web Services, Inc. or its affiliates. All Rights Reserved. This
+  AWS Content is provided subject to the terms of the AWS Customer Agreement available
+  at http://aws.amazon.com/agreement or other written agreement between Customer and
+  Amazon Web Services, Inc.
+# Transform: AWS::Serverless-2016-10-31
+
+
+Parameters:
+  # Name of the CFN Stack that was deployed with the Well-Architected Lambda Handlers
+  LambdaStackName:
+    Description: Name of the Role Stack to reference outputs
+    Type: String
+    Default: WALambdaHelpers
+
+  # Well-Architected Variables
+  WAWorkloadType:
+    # This is just an example of how you could organize the tags and make it easier
+    #  to reference the Well-Architected Workload against the actual application
+    #  for reporting.
+    Description: Example list of Workload types that could be used in your environment
+    Type: String
+    Default: "APIGWLambda"
+    AllowedValues:
+      - APIGWLambda
+      - EC2WebApp
+      - EKSWebApp
+      - ECSWebApp
+  WAWorkloadDescription:
+    Description: Description for WA Workload field
+    Type: String
+    Default: "Test Lambda WA Workload"
+  WAWorkloadOwner:
+    Description: Who owns the WA workload
+    Type: String
+    Default: "ExampleCorp AI Team"
+  WAEnvironment:
+    Description: The environment in which your workload runs.
+    Type: String
+    Default: "PRODUCTION"
+    AllowedValues:
+      - PRODUCTION
+      - PREPRODUCTION
+    ConstraintDescription: "This must either be PRODUCTION or PREPRODUCTION"
+
+  # Super Simple Lambda/API variables
+  APIGWName:
+    Type: String
+    Default: walabs-api
+  apiGatewayStageName:
+    Type: String
+    AllowedPattern: "[a-z0-9]+"
+    Default: production
+  APIGWHTTPMethod:
+    Type: String
+    Default: GET
+  SampleLambdaFunctionName:
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9]+[a-zA-Z0-9-]+[a-zA-Z0-9]+"
+    Default: WALabsSampleLambdaFunction
+
+
+Resources:
+  CreateWAWorkload:
+    Type: Custom::createWAWorkloadHelperFunction
+    Properties:
+      ServiceToken:
+        Fn::ImportValue:
+          !Sub "${LambdaStackName}::CreateWAARN"
+      WorkloadName: !Sub "${WAWorkloadType} - ${APIGWName} - ${SampleLambdaFunctionName}"
+      WorkloadDesc: !Sub "${WAWorkloadDescription} for ${WAWorkloadType} - ${APIGWName} - ${SampleLambdaFunctionName}"
+      WorkloadOwner: !Ref WAWorkloadOwner
+      WorkloadEnv: !Ref WAEnvironment
+      WorkloadRegion: !Ref AWS::Region
+      WorkloadLenses:
+        - "wellarchitected"
+        - "serverless"
+      Tags:
+        WorkloadType: !Ref WAWorkloadType
+        APIGWName: !Ref APIGWName
+        WorkloadName: !Sub "${APIGWName}::${SampleLambdaFunctionName}"
+
+
+  OEWAWorkloadQuestions:
+    # DependsOn: CreateWAWorkload
+    Type: Custom::AnswerOEWAWorkloadQuestionsHelperFunction
+    Properties:
+      ServiceToken:
+        Fn::ImportValue:
+          !Sub "${LambdaStackName}::UpdateWAQARN"
+      Pillar: "operationalExcellence"
+      Lens: "wellarchitected"
+      WorkloadId: !GetAtt CreateWAWorkload.WorkloadId
+      QuestionAnswers:
+        - "How do you determine what your priorities are": # OPS1
+          - "Evaluate governance requirements"
+          - "Evaluate compliance requirements"
+        - "How do you reduce defects, ease remediation, and improve flow into production": #OPS5
+          - "Use version control"
+          - "Perform patch management"
+          - "Use multiple environments"
+
+  SECWAWorkloadQuestions:
+    # DependsOn: CreateWAWorkload
+    Type: Custom::AnswerSECWAWorkloadQuestionsHelperFunction
+    Properties:
+      ServiceToken:
+        Fn::ImportValue:
+          !Sub "${LambdaStackName}::UpdateWAQARN"
+      Pillar: "security"
+      Lens: "wellarchitected"
+      WorkloadId: !GetAtt CreateWAWorkload.WorkloadId
+      QuestionAnswers:
+        - "How do you securely operate your workload": # SEC1
+          - "Separate workloads using accounts"
+          - "Secure AWS account"
+          - "Keep up to date with security threats"
+
+  RELWAWorkloadQuestions:
+    # DependsOn: CreateWAWorkload
+    Type: Custom::AnswerRELWAWorkloadQuestionsHelperFunction
+    Properties:
+      ServiceToken:
+        Fn::ImportValue:
+          !Sub "${LambdaStackName}::UpdateWAQARN"
+      Pillar: "reliability"
+      Lens: "wellarchitected"
+      WorkloadId: !GetAtt CreateWAWorkload.WorkloadId
+      QuestionAnswers:
+        - "How do you plan your network topology": # REL2
+          - "Use highly available network connectivity for your workload public endpoints"
+          - "Provision redundant connectivity between private networks in the cloud and on-premises environments"
+          - "Ensure IP subnet allocation accounts for expansion and availability"
+          - "Prefer hub-and-spoke topologies over many-to-many mesh"
+          - "Enforce non-overlapping private IP address ranges in all private address spaces where they are connected"
+
+  apiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: Example API Gateway
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: !Ref APIGWName
+      Tags:
+        - Key: WorkloadType
+          Value: !Ref WAWorkloadType
+        - Key: APIGWName
+          Value: !Ref APIGWName
+        - Key: WorkloadName
+          Value: !Sub "${APIGWName}::${SampleLambdaFunctionName}"
+
+  apiGatewayRootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: !Ref APIGWHTTPMethod
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub
+          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
+          - lambdaArn: !GetAtt lambdaFunction.Arn
+      ResourceId: !GetAtt apiGateway.RootResourceId
+      RestApiId: !Ref apiGateway
+
+  apiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - apiGatewayRootMethod
+    Properties:
+      RestApiId: !Ref apiGateway
+      StageName: !Ref apiGatewayStageName
+
+  lambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import json
+          def handler(event,context):
+            print(json.dumps(event))
+            body = '<html><head></head> '
+            body += "<h1> Hello {0}".format(event['requestContext']['identity']['sourceIp']) + "</h1><br>"
+            body += 'Welcome to <a href="https://wellarchitectedlabs.com">Well-Architected Labs</a>!'
+            body += '</html>'
+            return {
+              'body': body,
+              'headers': {
+                'Content-Type': 'text/html'
+              },
+              'statusCode': 200
+            }
+      Description: Example Lambda function that will return the callers IP address and welcome them.
+      FunctionName: !Ref SampleLambdaFunctionName
+      Handler: index.handler
+      MemorySize: 128
+      Role: !GetAtt lambdaIAMRole.Arn
+      Runtime: python3.8
+      Tags:
+        - Key: WorkloadType
+          Value: !Ref WAWorkloadType
+        - Key: APIGWName
+          Value: !Ref APIGWName
+        - Key: WorkloadName
+          Value: !Sub "${APIGWName}::${SampleLambdaFunctionName}"
+
+  lambdaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt lambdaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/${apiGatewayStageName}/${APIGWHTTPMethod}/
+
+  lambdaIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Policies:
+        - PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource:
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${SampleLambdaFunctionName}:*
+          PolicyName: lambda
+      Tags:
+        - Key: WorkloadType
+          Value: !Ref WAWorkloadType
+        - Key: APIGWName
+          Value: !Ref APIGWName
+        - Key: WorkloadName
+          Value: !Sub "${APIGWName}::${SampleLambdaFunctionName}"
+
+  lambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${SampleLambdaFunctionName}
+      RetentionInDays: 90
+
+
+Outputs:
+  WAWorkloadArn:
+    Description: WorkloadArn
+    Value: !GetAtt CreateWAWorkload.WorkloadARN
+
+  WAWorkloadId:
+    Description: WorkloadId
+    Value: !GetAtt CreateWAWorkload.WorkloadId
+
+  apiGatewayInvokeURL:
+    Value: !Sub https://${apiGateway}.execute-api.${AWS::Region}.amazonaws.com/${apiGatewayStageName}
+
+  lambdaArn:
+    Value: !GetAtt lambdaFunction.Arn
+      # WorkloadName: "Lambda WA Workload Test"
+      # WorkloadDesc: "Test Lambda WA Workload"
+      # WorkloadOwner: "Lambda Script"
+      # WorkloadEnv: "PRODUCTION"
+      # WorkloadRegion: "us-east-1"
+      # WorkloadLenses:
+      #   - "wellarchitected"
+      #   - "serverless"
+      # Tags:
+      #   TestTag: "TestTagValue"
+      #   TestTag3: "TestTagValue3"
