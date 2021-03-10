@@ -155,36 +155,3 @@ def lambda_handler(event, context):
             updateAnswersForQuestion(WACLIENT,WORKLOADID,LENS,questionId,choiceSet,'Added by Python')
     # exit()
     cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'createWAWorkloadHelperFunction')
-
-
-# SAMPLE JSON OBJECT TO PASS IN:
-# {
-#   "RequestType": "Create",
-#   "ServiceToken": "arn:aws:lambda:us-east-1:299160763759:function:createNewWAWorkload",
-#   "ResponseURL": "https://cloudformation-custom-resource-response-useast1.s3.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-east-1%3A299160763759%3Astack/test3/ad07a470-7d35-11eb-b059-125dcdb1e0b5%7CAnswerWAWorkloadQuestions%7C16728d5e-3a23-4a1d-b9fd-16c100f8532d?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210305T022416Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA6L7Q4OWT3UXBW442%2F20210305%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9a9d8f0a36de0608cc0b3e32266d405981831afe9ee2d155609a4ffc11571f31",
-#   "StackId": "arn:aws:cloudformation:us-east-1:299160763759:stack/test3/ad07a470-7d35-11eb-b059-125dcdb1e0b5",
-#   "RequestId": "16728d5e-3a23-4a1d-b9fd-16c100f8532d",
-#   "LogicalResourceId": "AnswerWAWorkloadQuestions",
-#   "ResourceType": "Custom::AnswerWAWorkloadQuestionsHelperFunction",
-#   "ResourceProperties": {
-#     "ServiceToken": "arn:aws:lambda:us-east-1:299160763759:function:createNewWAWorkload",
-#     "QuestionAnswers": [
-#       {
-#         "How do you determine what your priorities are": [
-#           "Evaluate governance requirements",
-#           "Evaluate compliance requirements"
-#         ]
-#       },
-#       {
-#         "How do you reduce defects, ease remediation, and improve flow into production": [
-#           "Use version control",
-#           "Perform patch management",
-#           "Use multiple environments"
-#         ]
-#       }
-#     ],
-#     "Pillar": "operationalExcellence",
-#     "Lens": "wellarchitected",
-#     "WorkloadId": "d7ab8fbfac8a8c85bb08e985cb67f906"
-#   }
-# }
