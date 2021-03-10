@@ -11,6 +11,8 @@ pre: "<b>3. </b>"
 In order to utilize the two Lambda-backed custom resources in CloudFormation, you will need the pass the Lambda ARN along with expected parameters to the Lambda. Below are examples for creating a new workload as well as updating two questions in the [Operational Excellence pillar](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html).
 
 ## Example Workload Creation
+When you use this custom function, it will either create the WA Workload (if it doesn't exist) or update the given parameters if it already does exist.
+
 ### Expected passed parameters
 The AWS Lambda function expects the following parameters to be passed from CloudFormation:
 * **WorkloadName** - Name of the Workload
@@ -22,7 +24,7 @@ The AWS Lambda function expects the following parameters to be passed from Cloud
 * **Tags** - This can be any tag pair you wish to pass along
 
 ### Example AWS CloudFormation YAML
-```yaml
+```yaml {linenos=table}
 CreateWAWorkload:
   Type: Custom::createWAWorkloadHelperFunction
   Properties:
@@ -40,7 +42,9 @@ CreateWAWorkload:
       WorkloadName: "ACMECustomerPortal"
 ```
 
-### Example Workload Creation
+### Update specific questions in a given pillar
+Once you have a given Workload created, you can specify a set of questions and best practices you wish to select. This function requires the WorkloadId to be passed along, but it can be returned from the CreateWAWorkload function above.
+
 ### Expected passed parameters
 The AWS Lambda function expects the following parameters to be passed from CloudFormation:
 * **WorkloadId** - WorkloadId number that you wish to answer the question
@@ -50,7 +54,7 @@ The AWS Lambda function expects the following parameters to be passed from Cloud
   * **You can answer multiple questions within one pillar and lens with one call**
 
 ### Example AWS CloudFormation YAML
-```yaml
+```yaml {linenos=table}
 SECWAWorkloadQuestions:
   Type: Custom::AnswerSECWAWorkloadQuestionsHelperFunction
   Properties:
@@ -68,4 +72,4 @@ SECWAWorkloadQuestions:
         - "Use multiple environments"
 ```
 
-Now that you understand the various parameters, let's deploy a sample application to show how this works. 
+## Now that you understand the various parameters, let's deploy a sample application to show how this works.
