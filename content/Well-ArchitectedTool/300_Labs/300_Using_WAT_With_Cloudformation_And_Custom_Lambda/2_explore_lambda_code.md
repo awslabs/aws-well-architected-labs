@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 ---
 
 ## Overview
-There are two AWS Lambda functions that you deployed in the previous step. Both of them utilize the [AWS SDK for Python (Boto3)](https://aws.amazon.com/sdk-for-python/) library along with the [Lambda Powertools Python](https://awslabs.github.io/aws-lambda-powertools-python/) via a Lambda layer to perform the [Well-Architected Tool](https://aws.amazon.com/well-architected-tool/) API access.
+There are two AWS Lambda functions that you deployed in the previous step. Both of them utilize the [AWS SDK for Python (Boto3)](https://aws.amazon.com/sdk-for-python/) library along with the [Lambda Powertools Python](https://awslabs.github.io/aws-lambda-powertools-python/) via a Lambda layer to perform the [Well-Architected Tool API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/Welcome.html) access.
 
 ## Deployed AWS Lambda functions
 Click on each link to understand how each Lambda function works.
@@ -199,3 +199,4 @@ UpdateWAQlambdaIAMRole:
               Resource: '*'
         PolicyName: watool
 ```
+{{< prev_next_button link_prev_url="../1_deploy_cfn/" link_next_url="../3_how_to_use_in_cfn/" />}}

@@ -13,7 +13,7 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 ## Deploy Sample Application CloudFormation Template
 
 1. Download the [SampleLambdaAPIGWDeploy.yaml](/watool/300_Using_WAT_With_Cloudformation_And_Custom_Lambda/Code/CFN/SampleLambdaAPIGWDeploy.yaml) CloudFormation template to your machine.
-
+1. For this lab, you will need to use **us-east-2**
 
 {{% common/CreateNewCloudFormationStack templatename="SampleLambdaAPIGWDeploy.yaml" stackname="WALabDemoApp" %}}
     * **None of these parameters need to be changed, but are available if you wish to try different settings**
@@ -45,3 +45,5 @@ Once deployed, you can click on the Outputs tab and find the various outputs fro
 The link next to apiGatewayInvokeURL will show you the sample Lambda function responding via Amazon API Gateway. If you click on the link, it will show your IP address as reported by API Gateway headers as well as a link to the Well-Architected labs website.
 
 ![CFNOutputs](/watool/300_Using_WAT_With_Cloudformation_And_Custom_Lambda/Images/4/CFNOutputs2.png?classes=lab_picture_auto)
+
+{{< prev_next_button link_prev_url="../3_how_to_use_in_cfn/" link_next_url="../5_explore_wareview/" />}}

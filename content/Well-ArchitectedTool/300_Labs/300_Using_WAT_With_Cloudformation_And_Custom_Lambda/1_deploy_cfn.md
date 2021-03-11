@@ -15,6 +15,7 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 ## Deploy CloudFormation Template
 
 1. Download the [DeployWACustomLambda.yaml](/watool/300_Using_WAT_With_Cloudformation_And_Custom_Lambda/Code/CFN/DeployWACustomLambda.yaml) CloudFormation template to your machine.
+1. For this lab, you will need to use **us-east-2**  
 
 
 {{% common/CreateNewCloudFormationStack templatename="DeployWACustomLambda.yaml" stackname="WALambdaHelpers" SAMDeploy="TRUE"%}}
@@ -29,3 +30,5 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 {{% notice warning %}}
 This template will take between **1-5 minutes** to fully deploy.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../2_explore_lambda_code/" />}}

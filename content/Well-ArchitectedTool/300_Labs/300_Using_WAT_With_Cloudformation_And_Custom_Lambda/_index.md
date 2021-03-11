@@ -34,5 +34,7 @@ The knowledge you acquire will help you learn how to programmatically access con
 ## Time to complete
 - The lab should take approximately 30 minutes to complete
 
+{{< prev_next_button link_next_url="./1_deploy_cfn/" button_next_text="Start Lab" first_step="true" />}}
+
 ## Steps:
 {{% children /%}}
