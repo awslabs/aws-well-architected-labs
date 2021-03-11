@@ -19,15 +19,13 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 
 {{% common/CreateNewCloudFormationStack templatename="DeployWACustomLambda.yaml" stackname="WALambdaHelpers" SAMDeploy="TRUE"%}}
     * **None of these parameters need to be changed, but are available if you wish to try different settings**
-    * **Stack name** – Use **WALambdaHelpers** (case sensitive)
-
-    * **CreateWALambdaFunctionName** -
-    * **UpdateWAQLambdaFunctionName** -
+    * **CreateWALambdaFunctionName** - The name for the new CreateWA lambda function.
+    * **UpdateWAQLambdaFunctionName** - The name for the new UpdateWA lambda function.
     * **LambdaFunctionsBucket** – S3 Bucket name that holds the [WAToolCFNAPILambda.zip](/watool/300_Using_WAT_With_Cloudformation_And_Custom_Lambda/Code/WAToolCFNAPILambda.zip) file
     * **WAToolCFNAPIKey** - The filename for the Lambda file, [WAToolCFNAPILambda.zip](/watool/300_Using_WAT_With_Cloudformation_And_Custom_Lambda/Code/WAToolCFNAPILambda.zip)
 
 {{% /common/CreateNewCloudFormationStack %}}
 
 {{% notice warning %}}
-This template will take between **2-5 minutes** to fully deploy.
+This template will take between **1-5 minutes** to fully deploy.
 {{% /notice %}}

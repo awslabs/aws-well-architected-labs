@@ -8,7 +8,7 @@ pre: "<b>3. </b>"
 ---
 
 ## Overview
-In order to utilize the two Lambda-backed custom resources in CloudFormation, you will need the pass the Lambda ARN along with expected parameters to the Lambda. Below are examples for creating a new workload as well as updating two questions in the [Operational Excellence pillar](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html).
+In order to utilize the two Lambda-backed custom resources in CloudFormation, you will need the pass the Lambda ARN along with expected parameters to the Lambda. Below are examples for creating a new workload as well as updating two questions in the [Operational Excellence pillar.](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html)
 
 ## Example Workload Creation
 When you use this custom function, it will either create the WA Workload (if it doesn't exist) or update the given parameters if it already does exist.

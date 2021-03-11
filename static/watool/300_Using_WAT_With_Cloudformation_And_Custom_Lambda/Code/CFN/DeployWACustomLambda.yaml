@@ -20,8 +20,8 @@ Parameters:
 
   LambdaFunctionsBucket:
     Description: "Bucket that the lambda source is contained in (case sensitive)"
-    #Default: "aws-well-architected-labs-ohio"
-    Default: "aws-well-architected-labs-virginia"
+    Default: "aws-well-architected-labs-ohio"
+    # Default: "aws-well-architected-labs-virginia"
     Type: String
   WAToolCFNAPIKey:
     Description: "Object Key of the Lambda Function that will create the WA review"
