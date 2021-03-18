@@ -1,6 +1,6 @@
 ---
 title: "Create Data Transfer Cost Analysis Dashboard"
-date: 2020-09-07T11:16:08-04:00
+date: 2021-03-15T10:00:02-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
@@ -67,22 +67,23 @@ If you have large data for data transfer in CUR, we do NOT recommend using SPICE
 6. Select **SPICE** to change your Query mode:
 ![Images/quicksight_dataset_6.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt-6.png)
 
-7. Hover over **linked_account_id**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Int**:
+7. Click on **linked_account_id**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Int/Integer**:
 ![Images/quicksight_dashboard_dt-7.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt-7.png)
 
 8. Repeat **step 7** for:
 
     - payer_account_id
-9. Hover over **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
+9. Click on **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
 
-10. Hover over **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
+10. Click on **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
 ![Images/quicksight_dashboard_dt-7.1.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt-7.1.png)
 
 11. Ensure the following fields are all **# Decimal**, repeat **step 10** if necessary for:
 
-	- blended_cost
+	- usage_quantity
     - unblended_cost
 	- public_cost
+    - belnded_rate
     - unblended_rate
     - public_ondemand_rate
 
@@ -150,12 +151,12 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
 
  <!-- ![Images/quicksight_dashboard_3.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_3.png) -->
 
-4. Create a local file **create-data-transfer-dashboard.json** with the text below, replace the values **(Account ID)** with your account ID on line 2 and line 25, **(User ARN)** with your user ARN on line 7, and **(DataTransfer view Dataset ARN)** with your dataset ARN on line 25:
+4. Create a local file **create-data-transfer-dashboard.json** with the text below, replace the values **(Account ID)** with your account ID on line 2 and line 25, **(User ARN)** with your user ARN on line 7, and **(DataTransfer view Dataset ID)** with your dataset ARN on line 25:
 
         {
             "AwsAccountId": "(Account ID)",
-            "DashboardId": "data_transfer_cost_analysis_dashboard",
-            "Name": "DataTransfer Cost Analysis Dashboard",
+            "DashboardId": "data_transfer_cost_analysis_dashboard_enhanced",
+            "Name": "DataTransfer Cost Analysis Dashboard Enhanced",
             "Permissions": [
                 {
                     "Principal": "(User ARN)",
@@ -176,11 +177,11 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
                     "DataSetReferences": [
                         {
                             "DataSetPlaceholder": "data_transfer_view",
-                            "DataSetArn": "arn:aws:quicksight:us-east-1:(Account ID):dataset/(DataTransfer view Dataset ARN)"
+                            "DataSetArn": "arn:aws:quicksight:us-east-1:(Account ID):dataset/(DataTransfer view Dataset ID)"
 
                         }
                     ],
-                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-cost-analysis-template"
+                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-cost-analysis-template-enhanced"
                 }
             },
             "VersionDescription": "1"
@@ -240,4 +241,3 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../2_modify_cost_intelligence/" link_next_url="../4_distribute_dashboards/" />}}
