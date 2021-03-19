@@ -11,9 +11,9 @@ In this task, your objective is to add an Amazon EC2 instance to the template, t
 
 Whereas the bucket definition was rather simple (just two to four lines), defining an Amazon EC2 instance is more complex because it needs to use associated resources, such as an AMI, security group and subnet.
 
-For this exercise we wil assume you now know how to edit your CloudFormation template and update your CloudFormation stack with the updated template
+For this exercise we will assume you now know how to edit your CloudFormation template and update your CloudFormation stack with the updated template.
 
-### 4.1 Get the latest AMI to use for your EC2 instance
+### 5.1 Get the latest AMI to use for your EC2 instance
 
 In the **Parameters** section of your template, look at the **LatestAmiId** parameter.
 
@@ -33,7 +33,7 @@ This is a special parameter. This parameter uses the **AWS Systems Manager Param
 
 For more details of this method, see: [AWS Compute Blog: Query for the latest Amazon Linux AMI IDs using AWS Systems Manager Parameter Store](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/)
 
-### 4.2 Add the EC2 instance resource to your CloudFormation template and deploy it
+### 5.2 Add the EC2 instance resource to your CloudFormation template and deploy it
 
 1. Edit the CloudFormation Template, adding a new resource for an EC2 instance
 
@@ -45,11 +45,11 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
     You _only_ need to specify these six properties:
 
-    * **IamInstanceProfile:** Refer to `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
-    * **ImageId:** Refer to `LatestAmiId`, which is the parameter discussed previously
-    * **InstanceType:** Refer to `InstanceType`, another parameter
-    * **SecurityGroupIds:** Refer to `PublicSecurityGroup`, which is defined elsewhere in the template
-    * **SubnetId:** Refer to `PublicSubnet1`, which is defined elsewhere in the template
+    * **IamInstanceProfile:** Reference `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
+    * **ImageId:** Reference `LatestAmiId`, which is the parameter discussed previously
+    * **InstanceType:** Reference `InstanceType`, another parameter
+    * **SecurityGroupIds:** Refer `PublicSecurityGroup`, which is defined elsewhere in the template
+    * **SubnetId:** Reference `PublicSubnet1`, which is defined elsewhere in the template
     * **Tags:** Use this YAML block:
 
             Tags:
@@ -58,8 +58,8 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
     Remember
 
-    * When referring to other resources in the same template, use `!Ref`. See the `BucketName` example you already implemented
-    * When referring to **SecurityGroupIds**, the template is actually expecting a _list_ of security groups. You therefore need to list the security group like this:
+    * When referencing other resources in the same template, use `!Ref`. See the `BucketName` example you already implemented
+    * When referencing **SecurityGroupIds**, CloudFormation is expecting a _list_ of security groups. You therefore need to list the security group like this:
 
             SecurityGroupIds:
               - !Ref PublicSecurityGroup
@@ -95,7 +95,7 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
         |This will tell the template to create resources your EC2 instance will need such as the Security Group and IAM Role|
 
     * This deployment of the CloudFormation stack will take about three minutes
-    * The instance will now be displayed in the **Resources** tab.
+    * After the stack **status** is _UPDATE_COMPLETE_, the instance will be displayed in the **Resources** tab.
 
 1. Go to the EC2 console to see the *Simple Server* that was created. Explore the properties of this EC2 instance.
 
@@ -103,12 +103,12 @@ The final deployment is now represented by this architecture diagram:
 
 ![SimpleVpcEverything](/Reliability/200_Deploy_and_Update_CloudFormation/Images/SimpleVpcEverything.png)
 
-### 4.3 [Optional bonus task] Add a web server to the EC2 instance
+### 5.3 [Optional bonus task] Add a web server to the EC2 instance
 
 In this task you will update your CloudFormation template to modify the deployed EC2 instance so that it runs a simple web server
 
 1. Modify the EC2 resource in the template
-    * Delete the following properties form the EC2 resource
+    * Delete the following properties from the EC2 resource
         * `SecurityGroupIds`
         * `SubnetId`
     * Add the following properties using the YAML below
@@ -151,13 +151,13 @@ In this task you will update your CloudFormation template to modify the deployed
               Value: !GetAtt MyEC2Instance.PublicDnsName
 
     * Use the other entry under **Outputs** to ensure your new entry has the right indentation
-    * The `!GetAtt` function can return various attributes of the resource. In this case the public DNS name of the EC2 instance.
+    * The [!GetAtt function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html) can return various attributes of the resource. In this case the public DNS name of the EC2 instance.
     * NOTE: if you used a Logical ID _other_ than `MyEC2Instance` when you added your EC2 resource, then you should use that name here
     * To download a sample solution, right-click and download this link:
     [simple_stack_plus_s3_ec2_server.yaml](/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml)
 
 1. Update the CloudFormation stack using the modified template
-1. After deployment is complete, click on the **Outputs** tab for the CloudFormation stack
+1. After deployment is complete and stack **status** is _UPDATE_COMPLETE_, click on the **Outputs** tab for the CloudFormation stack
     * Click on the public DNS name
 
 ![ClickPublicDns](/Reliability/200_Deploy_and_Update_CloudFormation/Images/ClickPublicDns.png)

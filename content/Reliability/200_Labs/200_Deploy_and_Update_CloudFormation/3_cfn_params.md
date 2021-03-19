@@ -11,7 +11,7 @@ In this task, you will gain experience changing CloudFormation stack parameters 
 
 * Your objective is to deploy additional resources used by the VPC to enable connection to the internet
 
-### 2.1 Update Parameters
+### 3.1 Update Parameters
 
 1. Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation) (if not already there)
 1. Click on **Stacks**
@@ -26,9 +26,9 @@ In this task, you will gain experience changing CloudFormation stack parameters 
     1. Scroll down to **Change set preview** and note several resources are being added
     1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
     1. Click **Create stack**
-1. When stack **status** is _CREATE_COMPLETE_ for your update (about one minute) then continue
+1. It takes about a minute for the stack update to finish and the stack **status** is _UPDATE_COMPLETE_
 
-## 2.2 Understanding the deployment
+## 3.2 Understanding the deployment
 
 * You did not change any contents of the the CloudFormation Template
 * Changing only one parameter, you re-deployed the stack which resulted in additional resources deployed
