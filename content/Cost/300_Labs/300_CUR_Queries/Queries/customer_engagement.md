@@ -17,10 +17,9 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-
-{{< expand "Amazon Connect" >}}
-
-{{% markdown_wrapper %}}
+  * [Amazon Connect](#amazon-connect)
+  
+### Amazon Connect
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for Amazon Connect. The output will include specific details about the usage type, usage description, and product usage region.  The cost will be summed and in descending order.
@@ -105,11 +104,9 @@ Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricin
       day_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Customer Engagement" service_text="Amazon Connect" query_text="Amazon Connect Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

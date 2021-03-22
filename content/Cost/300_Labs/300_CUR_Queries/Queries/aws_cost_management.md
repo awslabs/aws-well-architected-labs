@@ -17,10 +17,9 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-
-{{< expand "AWS Marketplace" >}}
-
-{{% markdown_wrapper %}}
+  * [AWS Marketplace](#aws-marketplace)
+  
+### AWS Marketplace
 
 #### Query Description
 This query provides AWS Marketplace subscription costs including subscription product name, associated linked account, and monthly total unblended cost.  This query includes tax, however this can be filtered out in the WHERE clause.  Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
@@ -56,11 +55,9 @@ Please refer to the [AWS Marketplace FAQ](https://aws.amazon.com/marketplace/hel
       month_line_item_usage_start_time ASC,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="AWS Marketplace Total Monthly Spend Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

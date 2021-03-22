@@ -17,10 +17,11 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon WorkSpaces](#amazon-workspaces)
+  * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)
+  * [Amazon AppStream 2.0](#amazon-appstream-20)
 
-{{< expand "Amazon WorkSpaces" >}}
-
-{{% markdown_wrapper %}}
+### Amazon WorkSpaces
 
 #### Query Description
 This query will provide unblended cost and usage information per linked account for Amazon WorkSpaces.  The output will include detailed information about the resource id (WorkSpace ID), usage type, running mode, product bundle, and API operation. The cost will be summed and in descending order.
@@ -60,7 +61,7 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon WorkSpaces'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -79,15 +80,11 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon WorkSpaces - Auto Stop" >}}
-
-{{% markdown_wrapper %}}
+### Amazon WorkSpaces - Auto Stop
 
 #### Query Description
 AutoStop Workspaces are cost effective when used for several hours per day. If AutoStop Workspaces run for more than 80 hrs per month it is more cost effective to switch to AlwaysOn mode. This query shows AutoStop Workspaces which ran more that 80 hrs in previous month. If usage pattern for these Workspaces is the same month over month it's possible to optimize cost with switching to AlwaysOn mode. For example: Windows PowerPro (8 vCPU, 32GB RAM) bundle in eu-west-1 runs for 400 hrs per month. In AutoStop mode it costs $612/month ($8.00/month + 400 * $1.53/hour) while if used in AlwaysOn mode it would cost $141/month
@@ -170,15 +167,11 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
       product_operating_system,
       pricing_unit
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query2" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon AppStream 2.0" >}}
-
-{{% markdown_wrapper %}}
+### Amazon AppStream 2.0
 
 #### Query Description
 This query will provide unblended cost and usage information per linked account for Amazon AppStream 2.0.  The output will include detailed information about the product family, product instance type, pricing unit, region along with usage amount. The cost will be summed and in descending order.
@@ -212,7 +205,7 @@ Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/a
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon AppStream'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -228,11 +221,9 @@ Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/a
       sum_line_item_unblended_cost_reservation_effective_cost,
       product_product_family;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="End User Computing" service_text="Amazon AppStream 2.0" query_text="Amazon AppStream Query" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

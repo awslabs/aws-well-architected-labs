@@ -18,9 +18,17 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-{{< expand "Amazon API Gateway" >}}
-
-{{% markdown_wrapper %}}
+  * [Amazon API Gateway](#amazon-api-gateway)
+  * [Amazon CloudFront](#amazon-cloudfront)
+  * [Data Transfer](#data-transfer)
+  * [Data Transfer - MSK](#data-transfer---msk)
+  * [AWS Direct Connect](#aws-direct-connect)
+  * [NAT Gateway](#nat-gateway)
+  * [NAT Gateway Idle](#nat-gateway-idle)
+  * [AWS Transit Gateway](#aws-transit-gateway)
+  * [Network Usage](#network-usage)
+  
+### Amazon API Gateway
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon API Gateway usage including the resource id. The usage amount and cost will be summed and the cost will be in descending order.
@@ -55,7 +63,7 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon API Gateway'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -65,17 +73,13 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
     ORDER BY
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon API Gateway" query_text="Amazon API Gateway Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "Amazon CloudFront" >}}
-
-{{% markdown_wrapper %}}
+### Amazon CloudFront
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon CloudFront usage including the distribution name, region, and operation. The usage amount and cost will be summed and the cost will be in descending order.
@@ -105,7 +109,7 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND line_item_product_code = 'AmazonCloudFront'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -117,15 +121,11 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
     ORDER BY
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon CloudFront" query_text="Amazon CloudFront Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Data Transfer" >}}
-
-{{% markdown_wrapper %}}
+### Data Transfer
 
 #### Query Description
 This query provides daily unblended cost and usage information about Data Transfer usage including resource id that sourced the traffic, the product code corresponding to the source traffic, and the to/from locations of the usage. The usage amount and cost will be summed and the cost will be in descending order.
@@ -156,7 +156,7 @@ Please refer to each individual service pricing page for more details on how dat
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_family = 'Data Transfer'
       AND line_item_line_item_type = 'Usage'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       line_item_product_code,
       line_item_usage_account_id,
@@ -169,17 +169,13 @@ Please refer to each individual service pricing page for more details on how dat
     ORDER BY 
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer" query_text="Data Transfer Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "Data Transfer - MSK" >}}
-
-{{% markdown_wrapper %}}
+### Data Transfer - MSK
 
 #### Query Description
 This query provides monthly unblended cost and usage information about Data Transfer related to Amazon MSK including resource id. The usage amount and cost will be summed and the cost will be in descending order.
@@ -209,7 +205,7 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') 
       AND line_item_product_code = 'AmazonMSK'
       AND line_item_usage_type LIKE '%DataTransfer%'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY  
       line_item_product_code,
       line_item_usage_account_id,
@@ -221,15 +217,11 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
     ORDER BY  
       sum_line_item_unblended_cost desc
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "AWS Direct Connect" >}}
-
-{{% markdown_wrapper %}}
+### AWS Direct Connect
 
 #### Query Description:
 The query will output AWS Direct Connect charges split by Direct Connect port charges and Data Transfer charges for a specific resource using Direct Connect.  They query will output port speed metrics and transfer source and destination locations. 
@@ -266,7 +258,7 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
       year = '2020' AND (month = BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09' )
       AND product_product_name = 'AWS Direct Connect' 
       AND product_transfer_type NOT IN ('IntraRegion Inbound','InterRegion Inbound')
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -283,17 +275,13 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
     ORDER BY
       sum_line_item_unblended_cost Desc
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "NAT Gateway" >}}
-
-{{% markdown_wrapper %}}
+### NAT Gateway
 
 #### Query Description
 This query provides monthly unblended cost and usage information about NAT Gateway Usage including resource id. The usage amount and cost will be summed and the cost will be in descending order.
@@ -326,7 +314,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_family = 'NAT Gateway'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -337,15 +325,11 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
       sum_line_item_unblended_cost DESC,
       sum_line_item_usage_amount;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "NAT Gateway Idle" >}}
-
-{{% markdown_wrapper %}}
+### NAT Gateway Idle
 
 #### Query Description
 This query shows cost and usage of NAT Gateways which didn't receive any traffic last month and ran for more than 336 hrs. Resources returned by this query could be considered for deletion.
@@ -403,16 +387,12 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
         AND pricing_unit_per_resource = 1
     ORDER BY
         cost_per_resource DESC
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query2" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
-{{< expand "AWS Transit Gateway" >}}
-
-{{% markdown_wrapper %}}
+### AWS Transit Gateway
 
 #### Query Description
 This query provides monthly unblended cost and usage information about AWS Transit Gateway Usage including attachment type, and resource id. The usage amount and cost will be summed and the cost will be in descending order.
@@ -449,7 +429,7 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_group = 'AWSTransitGateway' 
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -464,17 +444,13 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
       sum_line_item_usage_amount,
       product_attachment_type;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Transit Gateway" query_text="AWS Transit Gateway Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "Network Usage" >}}
-
-{{% markdown_wrapper %}}
+### Network Usage
 
 #### Query Description
 This query provides daily unblended cost and usage information about AWS Network Usage including VPCPeering, PublicIP, InterZone, LoadBalancing, and resource id. Usage will be in ascending order and cost will be in descending order.
@@ -511,7 +487,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
         'VPCPeering-In',
         'VPCPeering-Out'
       )
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -523,11 +499,9 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
       sum_line_item_usage_amount DESC,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

@@ -17,10 +17,12 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-
-{{< expand "Amazon MQ" >}}
-
-{{% markdown_wrapper %}}
+  * [Amazon MQ](#amazon-mq)
+  * [Amazon SES](#amazon-ses)
+  * [Amazon SNS](#amazon-sns)
+  * [Amazon SQS](#amazon-sqs)
+  
+### Amazon MQ
 
 #### Query Description
 This query will provide daily unblended and amortized cost as well as usage information per linked account for Amazon MQ.  The output will include detailed information about the resource id (broker), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order.
@@ -58,7 +60,7 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon MQ'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -75,15 +77,11 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
       sum_line_item_unblended_cost DESC,
       split_line_item_usage_type;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Application Integration" service_text="Amazon MQ" query_text="Amazon MQ Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon SES" >}}
-
-{{% markdown_wrapper %}}
+### Amazon SES
 
 #### Query Description
 This query will provide daily unblended and usage information per linked account for Amazon SES.  The output will include detailed information about the product family (Sending Attachments, Data Transfer, etc...) and usage type.  The usage amount and cost will be summed and the cost will be in descending order.
@@ -121,7 +119,7 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon Simple Email Service'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -133,15 +131,11 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Application Integration" service_text="Amazon SES" query_text="Amazon SES Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon SNS" >}}
-
-{{% markdown_wrapper %}}
+### Amazon SNS
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for Amazon SNS.  The output will include detailed information about the product family, API Operation, and usage type.  The usage amount and cost will be summed and the cost will be in descending order.
@@ -168,7 +162,7 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon Simple Notification Service'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -178,11 +172,49 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Application Integration" service_text="Amazon SNS" query_text="Amazon SNS Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon SQS
+
+#### Query Description
+This query will provide the top 20 daily unblended costs as well as usage information for a specified linked account for Amazon SQS.  The output will include detailed information about the resource id (queue), usage type, and API operation.  The cost will be summed and in descending order.  This is helpful for tracking down spikes in cost for SQS usage.  Cost Explorer will provide you all of this information except the resource ID.  This allows your investigation to be targeted to a time range, linked account, API operation, and resource that is generating the usage.
+
+#### Pricing
+Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/).  Please refer to the [Reducing Amazon SQS costs page](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/reducing-costs.html) and [Enabling client-side buffering and request batching](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-client-side-buffering-request-batching.html) for Cost Optimization suggestions.
+
+#### Sample Output
+![Images/sqs.png](/Cost/300_CUR_Queries/Images/Application_Integration/sqs.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sqs.sql)
+
+#### Copy Query
+    SELECT 
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      line_item_usage_type,
+      line_item_operation,
+      line_item_resource_id,
+      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    FROM 
+      ${table_Name}
+    WHERE
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND line_item_usage_account_id = '444455556666'
+      AND line_item_product_code = 'AWSQueueService'
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    GROUP BY
+      1,2,3,4,5
+    ORDER BY
+      sum_line_item_unblended_cost DESC
+    LIMIT 20;
+
+{{% email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Query1" button_text="Help & Feedback" %}}
+
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

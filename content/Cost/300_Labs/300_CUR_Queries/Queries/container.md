@@ -17,10 +17,10 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-
-{{< expand "Amazon Elastic Container Services" >}}
-
-{{% markdown_wrapper %}}
+  * [Amazon Elastic Container Services](#amazon-elastic-container-services)
+  * [Amazon ECS - Daily Usage Hours and Cost by Usage Type and Purchase Option](#amazon-ecs---daily-usage-hours-and-cost-by-usage-type-and-purchase-option)
+  
+### Amazon Elastic Container Services
 
 #### Query Description
 This query will output the daily cost and usage per resource, by operation and service, for Elastic Consainer Services, ECS and EKS, both unblended and amortized costs are shown.  To provide you with a complete picture of the data, to match totals in cost explorer, if you are using Savings Plans you will likely see results with *blank* resource IDs, these represent the Savings Plans Negation values for compute cost already covered by Savings Plans.
@@ -57,7 +57,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       and line_item_product_code in ('AmazonECS','AmazonEKS')
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -71,15 +71,11 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
       sum_line_item_usage_amount,
       line_item_operation;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS/EKS Query" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon ECS - Daily Usage Hours and Cost by Usage Type and Purchase Option" >}}
-
-{{% markdown_wrapper %}}
+### Amazon ECS - Daily Usage Hours and Cost by Usage Type and Purchase Option
 
 #### Query Description
 This query will output the daily ECS cost and usage per resource, by usage type and purchase option, both unblended and amortized costs are shown.  To provide you with a complete picture of the data, to match totals in cost explorer, if you are using Savings Plans you will likely see results with *blank* resource IDs, these represent the Savings Plans Negation values for compute cost already covered by Savings Plans.
@@ -141,7 +137,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
         AND line_item_product_code in ('AmazonECS')
         AND line_item_operation != 'ECSTask-EC2'
         AND product_product_family != 'Data Transfer'
-        AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
+        AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
       GROUP BY
         bill_payer_account_id,
         line_item_usage_account_id,
@@ -154,11 +150,9 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
         case_pricing_term,
         sum_line_item_usage_amount DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS Daily Usage Hours and Cost by Usage Type and Purchase Option" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
