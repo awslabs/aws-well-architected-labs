@@ -18,9 +18,12 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-{{< expand "Account" >}}
-
-{{% markdown_wrapper %}}
+  * [Account](#account)
+  * [Region](#region)
+  * [Service](#service)
+  * [Bill Details by Service](#bill-details-by-service)
+  
+### Account
 
 #### Query Description
 This query will provide monthly unblended and amortized costs per linked account for all services.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
@@ -69,11 +72,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND line_item_usage_type != 'Route53-Domains'
-      AND line_item_line_item_type != 'Tax'
-      AND line_item_line_item_type != 'EdpDiscount' 
-      AND line_item_line_item_type != 'Credit' 
-      AND line_item_line_item_type != 'Refund'
-      AND line_item_line_item_type != 'BundledDiscount'
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -82,16 +81,12 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       month_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Global" service_text="AWS Account" query_text="Global - Account" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
-{{< expand "Region" >}}
-
-{{% markdown_wrapper %}}
+### Region
 
 #### Query Description
 This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
@@ -147,11 +142,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND line_item_usage_type != 'Route53-Domains'
-      AND line_item_line_item_type != 'Tax'
-      AND line_item_line_item_type != 'EdpDiscount' 
-      AND line_item_line_item_type != 'Credit' 
-      AND line_item_line_item_type != 'Refund'
-      AND line_item_line_item_type != 'BundledDiscount'
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -159,15 +150,11 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       4;
 
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Global" service_text="AWS Region" query_text="Global - Region" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Service" >}}
-
-{{% markdown_wrapper %}}
+### Service
 
 #### Query Description
 This query will provide monthly unblended and amortized costs per linked account for all services by service.  We have additionally broken out Data Transfer for each service.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
@@ -218,11 +205,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND line_item_usage_type != 'Route53-Domains' 
-      AND line_item_line_item_type != 'Tax'
-      AND line_item_line_item_type != 'EdpDiscount' 
-      AND line_item_line_item_type != 'Credit' 
-      AND line_item_line_item_type != 'Refund'
-      AND line_item_line_item_type != 'BundledDiscount'
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -233,15 +216,11 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       sum_line_item_unblended_cost DESC;
 
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Global" service_text="AWS Service" query_text="Global - Service" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Bill Details by Service" >}}
-
-{{% markdown_wrapper %}}
+### Bill Details by Service
 
 #### Query Description
 This query will provide a monthly cost summary by AWS Service Charge which is an approximation to the monthly bill in the billing console.
@@ -281,12 +260,6 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
              product_location,
              line_item_line_item_description;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Global" service_text="AWS Bill" query_text="Global - Bill" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
-
-{{% notice note %}}
-CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
-{{% /notice %}}
+[Back to Table of Contents](#table-of-contents)

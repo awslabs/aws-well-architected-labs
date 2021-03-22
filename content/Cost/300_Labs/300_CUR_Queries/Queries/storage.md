@@ -17,22 +17,27 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon S3](#amazon-s3)
+  * [Amazon EBS Snapshots](#amazon-ebs-snapshots)
+  * [Amazon EBS Volumes vs Snapshots ratio](#amazon-ebs-volumes-vs-snapshots-ratio)
+  * [Amazon EFS](#amazon-efs)
+  * [Amazon FSx](#amazon-fsx)
+  * [AWS Backup](#aws-backup)
+  * [Amazon EBS Volumes Upgrade gp2 to gp3](#amazon-ebs-volumes-upgrade-gp2-to-gp3)
 
-{{< expand "Amazon S3" >}}
-
-{{% markdown_wrapper %}}
+### Amazon S3
 
 #### Query Description
-This query provides daily unblended cost and usage information for Amazon S3.  The output will include detailed information about the resource id (bucket name) and usage type.  The usage amount and cost will be summed and the cost will be in descending order. 
+This query provides daily unblended cost and usage information for Amazon S3.  The output will include detailed information about the resource id (bucket name), operation, and usage type.  The usage amount and cost will be summed, and rows will be sorted by day (ascending), then cost (descending). 
 
 #### Pricing
 Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Please refer to [understanding your AWS billing and usage reports for Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/aws-usage-report-understand.html) to understand of of the usage types populated for S3 use. 
 
 #### Sample Output
-![Images/s3costusagetypegroupwrid.png](/Cost/300_CUR_Queries/Images/Storage/s3costusagetypegroupwrid.png)
+![Images/s3costusagetypewrid.png](/Cost/300_CUR_Queries/Images/Storage/s3costusagetypewrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Storage/s3costusagetypegroupwrid.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Storage/s3costusagetypewrid.sql)
 
 #### Copy Query
     SELECT
@@ -40,56 +45,94 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
       line_item_resource_id,
-      product_product_name,
-      line_item_usage_type,
+      line_item_operation,
       CASE
-        WHEN line_item_usage_type LIKE '%%EarlyDelete-ByteHrs' THEN 'S3: Early Delete - Glacier'
-        WHEN line_item_usage_type LIKE '%%EarlyDelete-SIA' THEN 'S3: Early Delete - Standard Infrequent Access'
-        WHEN line_item_usage_type LIKE '%%Requests-Tier3' THEN 'S3: API Requests - Glacier'
-        WHEN (line_item_usage_type LIKE '%%Requests-Tier4' OR line_item_usage_type LIKE '%%Requests-SIA') THEN 'S3: API Requests - Standard Infrequent Access'
-        WHEN (line_item_usage_type LIKE '%%Requests-Tier1' OR line_item_usage_type LIKE '%%Requests-Tier2') THEN 'S3: API Requests - Standard'
-        WHEN line_item_usage_type LIKE '%%Retrieval-SIA' THEN 'S3: Data Retrieval - Standard Infrequent Access'
-        WHEN line_item_usage_type LIKE '%%Peak-Restore-Bytes-Delta' THEN 'S3: Data Retrieval - Glacier'
-        WHEN (line_item_usage_type LIKE '%%AWS-In-Bytes' OR line_item_usage_type LIKE '%%AWS-In-ABytes') THEN 'S3: Data Transfer - Region to Region (In)'
-        WHEN (line_item_usage_type LIKE '%%AWS-Out-Bytes' OR line_item_usage_type LIKE '%%AWS-Out-ABytes') THEN 'S3: Data Transfer - Region to Region (Out)'
-        WHEN line_item_usage_type LIKE '%%CloudFront-In-Bytes' THEN 'S3: Data Transfer - CloudFront (In)'
-        WHEN line_item_usage_type LIKE '%%CloudFront-Out-Bytes' THEN 'S3: Data Transfer - CloudFront (Out)'
-        WHEN line_item_usage_type LIKE '%%DataTransfer-Regional-Bytes' THEN 'S3: Data Transfer - Inter AZ'
-        WHEN (line_item_usage_type LIKE '%%DataTransfer-In-aBytes' OR line_item_usage_type LIKE '%%DataTransfer-In-Bytes') THEN 'S3: Data Transfer - Internet (In)'
-        WHEN (line_item_usage_type LIKE '%%DataTransfer-Out-aBytes' OR line_item_usage_type LIKE '%%DataTransfer-Out-Bytes') THEN 'S3: Data Transfer - Internet (Out)'
-        WHEN line_item_usage_type LIKE '%%TimedStorage-GlacierByteHrs' THEN 'S3: Storage - Glacier'
-        WHEN line_item_usage_type LIKE '%%TimedStorage-RRS-ByteHrs' THEN 'S3: Storage - Reduced Redundancy'
-        WHEN (line_item_usage_type LIKE '%%TimedStorage-SIA-ByteHrs' OR line_item_usage_type LIKE '%%TimedStorage-SIA-SmObjects') THEN 'S3: Storage - Standard Infrequent Access'
-        WHEN line_item_usage_type LIKE '%%TimedStorage-ByteHrs' THEN 'S3: Storage - Standard'
-        ELSE 'Other Requests'
-      END as line_item_usage_type_group,
+        --S3 Early Delete
+        WHEN line_item_usage_type LIKE '%EarlyDelete-ByteHrs' THEN 'Early Delete Glacier'
+        WHEN line_item_usage_type LIKE '%EarlyDelete%' THEN 'Early Delete ' || SPLIT_PART(line_item_usage_type,'EarlyDelete-',2)
+        
+        --S3 Requests
+        WHEN line_item_usage_type LIKE '%Requests-INT%' THEN 'Requests INT'
+        WHEN (line_item_usage_type LIKE '%Requests-Tier1' OR line_item_usage_type LIKE '%Requests-Tier2') THEN 'Requests Standard'
+        WHEN (line_item_usage_type LIKE '%Requests-GLACIER%' OR line_item_usage_type LIKE '%Requests-Tier3' OR line_item_usage_type LIKE '%Requests-Tier5' OR line_item_usage_type LIKE '%Requests-Tier6') THEN 'Requests Glacier'
+        WHEN line_item_usage_type LIKE '%Requests-GDA%' THEN 'Requests GDA'
+        WHEN (line_item_usage_type LIKE '%Requests-Tier4' OR line_item_usage_type LIKE '%Requests-SIA%') THEN 'Requests SIA'
+        WHEN line_item_usage_type LIKE '%Requests-ZIA%' THEN 'Requests ZIA'
+        
+        --S3 Retrieval
+        WHEN (line_item_usage_type LIKE '%Retrieval-Bytes' AND line_item_operation = 'RestoreObject') THEN 'Retrieval Glacier'
+        WHEN (line_item_usage_type LIKE '%Retrieval-Bytes' AND line_item_operation = 'DeepArchiveRestoreObject') THEN 'Retrieval GDA'
+        WHEN line_item_usage_type LIKE '%Retrieval%' THEN 'Retrieval ' || SPLIT_PART(line_item_usage_type,'Retrieval-',2)
+     
+        --S3 Storage
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'StandardStorage') THEN 'Storage Standard'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'StandardIAStorage') THEN 'Storage SIA'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'StandardIASizeOverhead') THEN 'Storage SIA-Overhead'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIAStorage') THEN 'Storage ZIA'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIASizeOverhead') THEN 'Storage ZIA-Overhead'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStorage') THEN 'Storage Glacier'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStagingStorage') THEN 'Storage Glacier-Staging'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND (line_item_operation = 'GlacierObjectOverhead' or line_item_operation = 'GlacierS3ObjectOverhead')) THEN 'Storage Glacier-Overhead'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'RestoreObject') THEN 'Storage Glacier-Restored'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'DeepArchiveStorage') THEN 'Storage GDA'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'DeepArchiveStagingStorage') THEN 'Storage GDA-Staging'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND (line_item_operation = 'DeepArchiveObjectOverhead' or line_item_operation = 'DeepArchiveS3ObjectOverhead')) THEN 'Storage GDA-Overhead'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'DeepArchiveRestoreObject') THEN 'Storage GDA-Restored'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'ReducedRedundancyStorage') THEN 'Storage RRS'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation LIKE 'IntelligentTieringFA%') THEN 'Storage INT-FA'
+        WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation LIKE 'IntelligentTieringIA%') THEN 'Storage INT-IA'
+    
+        --Data Transfer
+        WHEN line_item_usage_type LIKE '%AWS-In-Bytes%' THEN 'Data Transfer Region to Region (In)'
+        WHEN line_item_usage_type LIKE '%AWS-In-ABytes%'THEN 'Data Transfer Accelerated Region to Region (In)'
+        WHEN line_item_usage_type LIKE '%AWS-Out-Bytes%' THEN 'Data Transfer Region to Region (Out)'
+        WHEN line_item_usage_type LIKE '%AWS-Out-ABytes%' THEN 'Data Transfer Accelerated Region to Region (Out)'
+        WHEN line_item_usage_type LIKE '%CloudFront-In-Bytes%' THEN 'Data Transfer CloudFront (In)'
+        WHEN line_item_usage_type LIKE '%CloudFront-Out-Bytes%' THEN 'Data Transfer CloudFront (Out)'
+        WHEN line_item_usage_type LIKE '%DataTransfer-Regional-Bytes%' THEN 'Data Transfer Inter AZ'
+        WHEN line_item_usage_type LIKE '%DataTransfer-In-Bytes%' THEN 'Data Transfer Internet (In)'
+        WHEN line_item_usage_type LIKE '%DataTransfer-Out-Bytes%' THEN 'Data Transfer Internet (Out)'
+        WHEN line_item_usage_type LIKE '%DataTransfer-In-ABytes%' THEN 'Data Transfer Accelerated Internet (In)'
+        WHEN line_item_usage_type LIKE '%DataTransfer-Out-ABytes%' THEN 'Data Transfer Accelerated Internet (Out)'
+        WHEN line_item_usage_type LIKE '%S3RTC-In-Bytes%' THEN 'Data Transfer Replication Time Control (In)'
+        WHEN line_item_usage_type LIKE '%S3RTC-Out-Bytes%' THEN 'Data Transfer Replication Time Control (Out)'
+    
+        --S3 Fees & Misc
+        WHEN line_item_usage_type LIKE '%Monitoring-Automation-INT' THEN 'S3 INT Monitoring Fee'
+        WHEN line_item_usage_type LIKE '%StorageAnalytics%' THEN 'S3 Storage Analytics'
+        WHEN line_item_usage_type LIKE '%BatchOperations-Jobs%' THEN 'S3 Batch Operations-Jobs'
+        WHEN line_item_usage_type LIKE '%BatchOperations-Objects%' THEN 'S3 Batch Operations-Objects'
+        WHEN line_item_usage_type LIKE '%TagStorage%' THEN 'S3 Tag Storage'
+        WHEN (line_item_usage_type LIKE '%Select-Returned%' OR line_item_usage_type LIKE '%Select-Scanned%') THEN 'S3 Select'
+        WHEN line_item_usage_type LIKE '%Inventory%' THEN 'S3 Inventory'
+        WHEN line_item_operation LIKE '%StorageLens%' THEN 'Storage Lens'
+    
+        ELSE 'Other ' || line_item_usage_type
+      END as case_line_item_usage_type,
       SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
       SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       (year = '2020' AND month IN ('7','9') OR year = '2020' AND month IN ('07','09'))
-      AND (("line_item_product_code" LIKE '%AmazonGlacier%') OR ("line_item_product_code" LIKE '%AmazonS3%'))
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_product_code = 'AmazonS3'
+      AND line_item_line_item_type  in ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
-      1,2,3,4,5,6
-    ORDER By
-      day_line_item_usage_start_date ASC,
+      bill_payer_account_id,
       line_item_usage_account_id,
-      line_item_usage_type_group DESC,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      line_item_resource_id,
+      line_item_operation,
+      6 --refers to case_line_item_usage_type
+    ORDER BY
+      day_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
-
-{{% /markdown_wrapper %}}
 
 {{% email_button category_text="Storage" service_text="Amazon S3" query_text="Amazon S3 Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-
-
-{{< expand "Amazon EBS Snapshots" >}}
-
-{{% markdown_wrapper %}}
+### Amazon EBS Snapshots
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon EBS Snapshot Usage per account including region. The usage amount and cost will be summed and the cost will be in descending order.
@@ -118,7 +161,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Snapshot%%'
       AND product_product_family LIKE 'Storage Snapshot'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -129,17 +172,11 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       sum_line_item_usage_amount DESC,
       date_line_item_usage_start_date ASC; 
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Snapshot Spend" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-
-
-{{< expand "Amazon EBS Volumes" >}}
-
-{{% markdown_wrapper %}}
+### Amazon EBS Volumes
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon EBS Volume Usage per account. The usage amount and cost will be summed and the cost will be in descending order.
@@ -160,12 +197,19 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
     CASE SPLIT_PART(line_item_usage_type,':',2)
         WHEN 'VolumeUsage' THEN 'EBS - Magnetic'
-        WHEN 'VolumeUsage.gp2' THEN 'EBS - SSD(gp2)'
-        WHEN 'VolumeUsage.piops' THEN 'EBS - SSD(io1)'
-        WHEN 'VolumeUsage.st1' THEN 'EBS - HDD(st1)'
-        WHEN 'VolumeUsage.sc1' THEN 'EBS - HDD(sc1)'
-        WHEN 'VolumeIOUsage' THEN 'EBS - I/O Requests'
-        WHEN 'VolumeP-IOPS.piops' THEN 'EBS - Provisioned IOPS'
+        WHEN 'VolumeIOUsage' THEN 'EBS Magnetic IO'
+        WHEN 'VolumeUsage.gp2' THEN 'EBS GP2'
+        WHEN 'VolumeUsage.gp3' THEN 'EBS GP3'
+        WHEN 'VolumeP-IOPS.gp3' THEN 'EBS GP3 IOPS'
+        WHEN 'VolumeP-Throughput.gp3' THEN 'EBS GP3 Throughput'
+        WHEN 'VolumeUsage.piops' THEN 'EBS io1'
+        WHEN 'VolumeP-IOPS.piops' THEN 'EBS io1 IOPS'
+        WHEN 'VolumeUsage.io2' THEN 'EBS io2'
+        WHEN 'VolumeP-IOPS.io2' THEN 'EBS io2 IOPS'
+        WHEN 'VolumeUsage.st1' THEN 'EBS st1'
+        WHEN 'VolumeUsage.sc1' THEN 'EBS sc1'
+        WHEN 'directAPI' THEN 'EBS Direct API Requests'
+        WHEN 'FastSnapshotRestore' THEN 'EBS Fast Snapshot Restore'        
         ELSE SPLIT_PART(line_item_usage_type,':',2)
     END as line_item_usage_type,
       SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
@@ -177,7 +221,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Volume%%'
       AND product_product_family  IN ('Storage','System Operation')
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -186,17 +230,62 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
     ORDER BY
       sum_line_item_unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Usage Spend" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
+### Amazon EBS Volumes vs Snapshots ratio
 
+#### Query Description
+This query provides monthly ratio of unblended cost and usage information between Amazon EBS Volume vs Amazon EBS Snapshots Usage per account and region. The usage amount and cost will be summed and the cost will be in descending order.
 
-{{< expand "Amazon EFS" >}}
+#### Pricing
+Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing/).  Please refer to the [Amazon EBS Volume Charges](https://aws.amazon.com/premiumsupport/knowledge-center/ebs-volume-charges/) page for more info on the calculations used on your bill. 
 
-{{% markdown_wrapper %}}
+#### Sample Output
+![Images/ebssnapshotratio.png](/Cost/300_CUR_Queries/Images/Storage/ebssnapshotratio.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshotratio.sql)
+
+#### Copy Query
+    SELECT
+      bill_payer_account_id ,
+      line_item_usage_account_id,
+      DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+      CASE 
+        WHEN product_product_family = 'Storage' THEN 'EBS Volume'
+        WHEN product_product_family = 'Storage Snapshot' THEN 'EBS Snapshot'
+      END AS usage_type_product_product_family,
+      product_region,
+      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    FROM
+      ${tableName}
+    WHERE
+      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      AND product_product_name = 'Amazon Elastic Compute Cloud'
+      AND (product_product_family = 'Storage Snapshot' OR product_product_family = 'Storage')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m'),
+      CASE 
+      WHEN product_product_family = 'Storage' THEN 'EBS Volume'
+      WHEN product_product_family = 'Storage Snapshot' THEN 'EBS Snapshot'
+      END,
+      product_region
+    ORDER BY
+      month_line_item_usage_start_date ASC, 
+      sum_line_item_unblended_cost DESC,
+      sum_line_item_usage_amount DESC;
+
+{{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Volume vs Snapshot Ratio, Usage Spend" button_text="Help & Feedback" %}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon EFS
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for Amazon EFS.  The output will include detailed information about the resource id (File System), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order. 
@@ -228,7 +317,7 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon Elastic File System'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -245,15 +334,11 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
       sum_line_item_unblended_cost DESC,
       line_item_usage_type;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Storage" service_text="Amazon EFS" query_text="Amazon EFS Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon FSx" >}}
-
-{{% markdown_wrapper %}}
+### Amazon FSx
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for Amazon FSx.  The output will include detailed information about the resource id (FSx file system), usage type, and Storage type. The usage amount and cost will be summed and the cost will be in descending order. 
@@ -284,7 +369,7 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon FSx'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -299,15 +384,11 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Storage" service_text="Amazon FSx" query_text="Amazon FSx Query" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "AWS Backup" >}}
-
-{{% markdown_wrapper %}}
+### AWS Backup
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for AWS Backup.  The output will include detailed information about the usage type, product family, pricing unit and others. The usage amount and cost will be summed and the cost will be in descending order. 
@@ -338,7 +419,7 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name like '%Backup%'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -352,18 +433,60 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       line_item_usage_type;
-{{% /markdown_wrapper %}}
 
 {{% email_button category_text="Storage" service_text="AWS Backup" query_text="AWS Backup Query" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon EBS Volumes Upgrade gp2 to gp3
+
+#### Query Description
+This query will display cost and usage of Elastic Block Stoarge Volumes that are type gp3. These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query uses 0.088 gp3 pricing please check the pricing page to confirm you are using the correct pricing for your applicable region. For Additional information checkout this [AWS Blog Post.](https://aws.amazon.com/blogs/aws-cost-management/finding-savings-from-2020-reinvent-announcements/)
+
+#### Pricing
+Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/ebs/pricing/).
+
+#### Sample Output
+![Images/ebs_gp2_to_gp3.png](/Cost/300_CUR_Queries/Images/Storage/ebs_gp2_to_gp3.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebs_gp2_to_gp3.sql)
+
+#### Copy Query
+    SELECT * FROM 
+        (SELECT bill_payer_account_id,
+        line_item_usage_account_id,
+        product_location,
+        product_region,
+        month,
+        pricing_public_on_demand_rate,
+        line_item_resource_id,
+        line_item_usage_type,
+        SPLIT_PART(SPLIT_PART(line_item_usage_type ,
+        ':',2),'.',2) AS ebs_type,
+
+        sum(line_item_usage_amount) AS gb_charged,
+        sum(line_item_unblended_cost) AS sum_line_item_unblended_cost,
+        sum(line_item_usage_amount)*.088 AS gp3_price -- 0.088 eu-west-1 pricing
+        , (sum(line_item_unblended_cost)-(sum(line_item_usage_amount)*.088)) AS gp3_savings -- 0.088 eu-west-1 pricing
+
+        FROM ${table}
+        WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        AND product_product_name = 'Amazon Elastic Compute Cloud'
+        AND line_item_usage_type LIKE '%%EBS%%Volume%%'
+        AND product_product_family IN ('Storage','System Operation')
+        AND line_item_line_item_type = ('Usage')
+        AND product_region = 'eu-west-1'
+        AND SPLIT_PART(SPLIT_PART(line_item_usage_type,':',2),'.',2) = 'gp2'
+
+        GROUP BY bill_payer_account_id, line_item_usage_account_id, month, line_item_usage_type, product_location, product_region, line_item_resource_id, pricing_public_on_demand_rate, month
+        ORDER BY sum_line_item_unblended_cost DESC)
+        WHERE gb_charged < 1000;
+
+{{% email_button category_text="Compute" service_text="ELB" query_text="Elastic Block Storage gp2 upgrade to up3" button_text="Help & Feedback" %}}
+
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
 {{% /notice %}}
-
-
-
-
-
-

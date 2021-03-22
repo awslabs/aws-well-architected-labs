@@ -17,10 +17,13 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
-
-{{< expand "Amazon RDS" >}}
-
-{{% markdown_wrapper %}}
+  * [Amazon RDS](#amazon-rds)
+  * [Amazon RDS - Monthly Cost grouped by Usage Type and Resource Tag](#amazon-rds---monthly-cost-grouped-by-usage-type-and-resource-tag)
+  * [Amazon DynamoDB](#amazon-dynamodb)
+  * [Amazon Redshift](#amazon-redshift)
+  * [Amazon ElastiCache](#amazon-elasticache)
+  
+### Amazon RDS
 
 #### Query Description
 This query will output the daily sum per resource for all RDS purchase options across all RDS usage types. 
@@ -86,19 +89,15 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
           BETWEEN '07'
               AND '09')
               AND product_product_name = 'Amazon Relational Database Service'
-              AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+              AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
       GROUP BY  bill_payer_account_id, line_item_usage_account_id, DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'), product_instance_type, line_item_operation, line_item_usage_type, line_item_line_item_type, pricing_term, product_product_family, product_database_engine, line_item_line_item_type, line_item_resource_id
       ORDER BY  day_line_item_usage_start_date, usage_quantity, unblended_cost; 
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon RDS - Monthly Cost grouped by Usage Type and Resource Tag" >}}
-
-{{% markdown_wrapper %}}
+### Amazon RDS - Monthly Cost grouped by Usage Type and Resource Tag
 
 #### Query Description
 This query will output the total monthly blended costs for RDS grouped by usage type and a specified tag (e.g. Environment:Test,Dev,Prod).  The query can be modified to adjust the Cost dataset from [Blended to Unblended](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/con-bill-blended-rates.html#Blended_CB) by adjusting the specified cost column (line_item_blended_cost -> line_item_unblended_cost).  This query would be helpful to visualize a quick monthly breakdown of cost components for RDS usage with a specific tag (Environment:Test,Dev,Prod).  
@@ -131,15 +130,11 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
         month,
         resource_tags_user_environment;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Monthly Cost grouped by Usage Type and User Tag" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon DynamoDB" >}}
-
-{{% markdown_wrapper %}}
+### Amazon DynamoDB
 
 #### Query Description
 This query will output the total monthly sum per resource for all DynamoDB purchase options (including reserved capacity) across all DynamoDB usage types (including data transfer and storage costs). The unblended cost will be summed and in descending order. 
@@ -178,7 +173,7 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
       ${table_name}
       WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND line_item_product_code = 'AmazonDynamoDB'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -191,16 +186,12 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
     ORDER BY
       sum_line_item_unblended_cost DESC
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Database" service_text="Amazon DynamoDB" query_text="Amazon DynamoDB Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
-{{< expand "Amazon Redshift" >}}
-
-{{% markdown_wrapper %}}
+### Amazon Redshift
 
 #### Query Description
 This query will provide daily unblended and amortized cost as well as usage information per linked account for Amazon Redshift.  The output will include detailed information about the resource id (cluster name), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order. This query includes RI and SP true up which will show any upfront fees to the account that purchased the pricing model.
@@ -251,7 +242,7 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
     WHERE
       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
       AND product_product_name = 'Amazon Redshift'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       1,2,3,4,5,6,7,8,9,10,11
     ORDER BY
@@ -259,15 +250,11 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
       product_product_family,
       unblended_cost DESC;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Database" service_text="Amazon Redshift" query_text="Amazon Redshift Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "Amazon ElastiCache" >}}
-
-{{% markdown_wrapper %}}
+### Amazon ElastiCache
 
 #### Query Description
 This query will output the total monthly sum per resource for all Amazon ElastiCache purchase options (including reserved instances) across all ElastiCache instances types. The unblended and amortized cost will be summed and in descending order. 
@@ -318,7 +305,7 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
         year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
         AND product_product_name = 'Amazon ElastiCache'
         AND product_product_family = 'Cache Instance'
-        AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+        AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY  
         DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01'), 
         bill_payer_account_id, 
@@ -331,11 +318,9 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
         sum_line_item_usage_amount desc, 
         sum_line_item_unblended_cost 
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Database" service_text="Amazon ElastiCache" query_text="Amazon ElastiCache Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

@@ -387,8 +387,7 @@ This is a helpful technique when searching for a particular Charge Type. Take no
 
 This query shows the available services within your CUR. The SELECT DISTINCT statement is helpful when looking for unique values in a specific column. 
 
-The column product_product_name contains similar information and would be a better choice for querying if you are looking for third party marketplace products since line_item_product_code provides a unique id. Be advised that when using the column product_product_name certain line_item_line_item_type's (EdpDiscount,
-PrivateRateDiscount) do not populate this column.
+The column product_product_name contains similar information and would be a better choice for querying if you are looking for third party marketplace products since line_item_product_code provides a unique id. Be advised that when using the column product_product_name certain line_item_line_item_type's (such as discounts) do not populate this column.
 
 #### Example 4 - Answers the question "What billing periods are available?"
         SELECT distinct bill_billing_period_start_date 
