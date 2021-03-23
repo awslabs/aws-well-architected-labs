@@ -40,7 +40,7 @@ This example will show you how to replace the AccountID, with a name that is mea
 	- **linked_account_id** = **(Your linked Account Id field name)**
 ![Images/quicksight_mapping_8.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_8.png)
 
-10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **Int**:
+10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **String**:
 ![Images/quicksight_mapping_9.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_9.png)
 
 11. Select **Save**
