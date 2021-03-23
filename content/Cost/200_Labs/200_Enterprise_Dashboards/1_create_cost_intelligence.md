@@ -168,33 +168,28 @@ We will now create the data sets in QuickSight from the Athena views.
 7. Select **SPICE** to change your Query mode:
 ![Images/quicksight_dataset_7.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_7.png)
 
-8. Hover over **payer_account_id**  to get the drop down arrow and click on it the then hover over **Change data type** then select **# Int**:
-![Images/quicksight_dataset_8.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_8.png)
-
-9. Repeat **step 8** for **linked_account_id** to change it to **Int**
-
-10. Select **Save**:
+8. Select **Save**:
 ![Images/quicksight_dataset_10.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_10.png)
 
-11. Select the **summary_view** Data Set:
+9. Select the **summary_view** Data Set:
 ![Images/quicksight_dataset_11.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_11.png)
 
-12. Click **Schedule refresh**:
+10. Click **Schedule refresh**:
 ![Images/quicksight_dataset_12.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_12.png)
 
-13. Click **Create**:
+11. Click **Create**:
 ![Images/quicksight_dataset_13.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_13.png)
 
-14. Enter a schedule, it needs to be refreshed daily, and click **Create**:
+12. Enter a schedule, it needs to be refreshed daily, and click **Create**:
 ![Images/quicksight_dataset_14.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_14.png)
 
-15. Click **Cancel** to exit:
+13. Click **Cancel** to exit:
 ![Images/quicksight_dataset_15.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_15.png)
 
-16. Click the **x** in the top corner:
+14. Click the **x** in the top corner:
 ![Images/quicksight_dataset_16.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_16.png)
 
-17. Repeat **steps 3-16**, creating data sets with the remaining Athena views. The data source name will be **Cost_Dashboard**, and select the following views as the table:
+15. Repeat **steps 3-14**, creating data sets with the remaining Athena views. The data source name will be **Cost_Dashboard**, and select the following views as the table:
 
  - s3_view
  - ec2_running_cost
@@ -202,33 +197,30 @@ We will now create the data sets in QuickSight from the Athena views.
 
 
 
-18. Select **summary_view** Data Set:
+16. Select **summary_view** Data Set:
 ![Images/quicksight_dataset_18.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_18.png)
 
-19. Select **Edit data set**
+17. Select **Edit data set**
 
-20. Select **Add Data**:
+18. Select **Add Data**:
 ![Images/quicksight_dataset_20.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_20.png)
 
-21. Select your **ri_sp_mapping** view and click **Select**:
+19. Select your **ri_sp_mapping** view and click **Select**:
 ![Images/quicksight_dataset_21.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_21.png)
 
-22. Select the **two circles** to open the Join configuration then select **Left** to change your join type:
+20. Select the **two circles** to open the Join configuration then select **Left** to change your join type:
 ![Images/quicksight_dataset_22.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_22.png)
 
-23. Select **Add a new join clause** two times so you have **3** join clauses:
+21. Select **Add a new join clause** two times so you have **3** join clauses:
 ![Images/quicksight_dataset_23.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_23.png)
 
-24. Create following **3 join clauses** then click **Apply**:
+22. Create following **3 join clauses** then click **Apply**:
 	- **ri_sp_arn** = **ri_sp_arn_mapping**
 	- **payer_account_id** = **payer_account_id_mapping**
 	- **billing_period** = **billing_period_mapping**
 ![Images/quicksight_dataset_24.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_24.png)
 
-25. Change the **payer_account_id_mapping** field to **Int**:
-![Images/quicksight_dataset_25.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_25.png)
-
-26. Select **Save** 
+23. Select **Save** 
 ![Images/quicksight_dataset_26.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dataset_26.png)
 
 {{% notice tip %}}
@@ -298,7 +290,7 @@ We will now use the CLI to create the dashboard from the Cost Intelligence Dashb
 
                         }
                     ],
-                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/optics_cost_analysis"
+                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/cost-intelligence-dashboard"
                 }
             },
             "VersionDescription": "1"
