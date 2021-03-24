@@ -1,6 +1,6 @@
 ---
-title: "Visualize the data with Amazon QuickSight"
-date: 2020-04-24T11:16:09-04:00
+title: "Visualize the workload data"
+date: 2021-03-24T15:16:08+10:00
 chapter: false
 weight: 4
 pre: "<b>4. </b>"
@@ -29,7 +29,7 @@ Before you can analyze and visualize the data in QuickSight, you must create dat
 
 1.  To create a dataset, on the **Datasets** page, choose **New dataset**, and then choose **Athena**.
 2.  Choose the Glue database that was created as part of the Glue Crawler creation step.
-3.  Choose **Directly Query your data**. *![Under Tables contain the data you can visualize, well_architected_reports_view is selected.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-11-border.png)
+3.  Choose **Directly Query your data**. *![Under Tables contain the data you can visualize, well_architected_reports_view is selected.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-11-choose-quicksight-table.png)
 
 #### Create your analysis
 
@@ -53,7 +53,7 @@ Each dataset can be used to build visualizations for the following:
 
 This list not exhaustive. At AWS, we look forward to seeing the visualizations you'll build for your organization. Below shows an example of a dashboard:
 
-![The Overview tab of the dashboard shows that 12 reviews have been conducted. It displays the top three high-risk questions and the workloads with the most high-risk items.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-13-blur.png)
+![The Overview tab of the dashboard shows that 12 reviews have been conducted. It displays the top three high-risk questions and the workloads with the most high-risk items.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-12-dashboard-example.png)
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../5_clean_up/" />}}

@@ -1,7 +1,7 @@
 ---
-title: "Use Amazon Athena and Amazon QuickSight to build custom reports of AWS Well-Architected Reviews"
+title: "Build custom reports of AWS Well-Architected Reviews"
 #menutitle: "Lab #1"
-date: 2020-04-24T11:16:08-04:00
+date: 2021-03-24T15:16:08+10:00
 chapter: false
 weight: 4
 ---
@@ -22,9 +22,7 @@ This lab presents a simple approach for aggregating the data of the workload rev
 
 Many customers use multiple AWS accounts to provide administrative autonomy for their teams. The AWS WA Tool offers a simple way to share workloads with other AWS accounts. You can share a workload that you own in your account with AWS accounts used by other members of your review team or with a centralized AWS account.  For more information, see [sharing a Workload](https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads-sharing.html).
 
-![Architecture diagram with data flow steps (1-4) described in the post.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Screen-Shot-2021-02-22-at-1.50.23-pm-1.png)
-
-*Figure 1: Architecture diagram*
+![Architecture diagram with data flow steps (1-4) described in the post.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-1-architecture-diagram.png)
 
 1.  After workloads are defined in the AWS WA Tool, [AWS Lambda](https://aws.amazon.com/lambda/) can poll the AWS Well-Architected Tool API to extract the raw data and store it in an [Amazon Simple Storage Service](https://aws.amazon.com/s3/) (Amazon S3) bucket.
 2.  [AWS Glue](https://aws.amazon.com/glue) crawlers are used to discover schema and store it in the AWS Glue Data Catalog.

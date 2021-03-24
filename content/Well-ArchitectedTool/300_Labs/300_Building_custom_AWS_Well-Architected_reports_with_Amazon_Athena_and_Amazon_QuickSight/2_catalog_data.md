@@ -1,6 +1,6 @@
 ---
-title: "Use AWS Glue to catalog the Well-Architected workload data"
-date: 2020-04-24T11:16:09-04:00
+title: "Catalog the workload data"
+date: 2021-03-24T15:16:08+10:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
@@ -20,7 +20,7 @@ AWS Glue is a fully managed extract, transform, and load (ETL) service that make
 8.  Next select **Add database**, and fill-in a name e.g. `war-reports`. Select **Create** and then **Next**.
 9.  Review the configuration and select **Finish** to create the Crawler.
 
-![Image of Crawler configuration.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-5-1.png)
+![Image of Crawler configuration.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-5-glue-crawler-config.png)
 
 
 #### Run the Crawler
@@ -29,7 +29,7 @@ AWS Glue is a fully managed extract, transform, and load (ETL) service that make
 2.  Wait for the crawler to complete running, which should take approximately one minute.
 3.  From the left navigation pane, choose **Databases**.
 4.  Find the database that was created during the Crawler creation, select it and choose **View Tables**.
-5.  In the **Name** field, you should see "workloadreports". Select this and examine the metadata that was discovered during the crawler run, as shown in Figure 6. ![The workloadreports table details include fields for database, classification, location, last updated, input format, table properties, and more. The Schema section of the page displays columns for column name, data type, partition key, and comment.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-6-border-1.png)
+5.  In the **Name** field, you should see "workloadreports". Select this and examine the metadata that was discovered during the crawler run, as shown in Figure 6. ![The workloadreports table details include fields for database, classification, location, last updated, input format, table properties, and more. The Schema section of the page displays columns for column name, data type, partition key, and comment.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-6-workloadsreport-table.png)
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../3_query_data/" />}}

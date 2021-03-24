@@ -1,6 +1,6 @@
 ---
-title: "Query the Well-Architected workload data with Amazon Athena"
-date: 2020-04-24T11:16:09-04:00
+title: "Query the workload data"
+date: 2021-03-24T15:16:08+10:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
@@ -22,7 +22,7 @@ LIMIT 4;
 ```
 
 
-![report_answers](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-7.png)
+![report_answers](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-7-report-answers.png)
 
 
 #### Create a view for the workload answers data
@@ -52,7 +52,7 @@ FROM "YOUR_DATABASE_NAME"."well_architected_reports_view"
 
 ```
 
-![well_architected_reports_view](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-8.png)
+![well_architected_reports_view](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-8-well-arch-reports-view.png)
 
 
 #### Create a view for the workload risk counts data
@@ -84,7 +84,7 @@ FROM "YOUR_DATABASE_NAME"."well_architected_workload_risk_view"
 LIMIT 4;
 ```
 
-![well_architected_workload_risk_view](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-9.png)
+![well_architected_workload_risk_view](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-9-well-arch-workload-risk-view.png)
 
 
 #### Create a view for the workload's milestone data
@@ -119,7 +119,7 @@ FROM "YOUR_DATABASE_NAME"."well_architected_workload_milestone_view"
 
 ```
 
-![well_architected_workload_milestone_view](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-10.png)
+![well_architected_workload_milestone_view](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-10-well-arch-workload-milestone-view.png)
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../4_visualize/" />}}

@@ -1,6 +1,6 @@
 ---
-title: "Extract, transform, and load Well-Architected workload data"
-date: 2020-04-24T11:16:09-04:00
+title: "Extract workload data"
+date: 2021-03-24T15:16:08+10:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
@@ -14,7 +14,7 @@ To extract the Well-Architected workload data, we'll create an AWS Lambda functi
 3.  Under **Permissions**, select the option to "Create new role from template(s)", assigning a role name of `extract-war-reports_role`.
 4.  Then, choose **Create function**. Lambda will then create a new function along with a role for executing the function.
 
-![Image of creating Lambda function showing data inputs provided in above text.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-2-border.png)
+![Image of creating Lambda function showing data inputs provided in above text.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-2-lambda_config.png)
 
 Now, go ahead and paste the following code into the function editor. This code handles calls to obtain the workload data and storing in Amazon S3.  Select **Deploy** to commit the code changes.
 
@@ -174,13 +174,13 @@ Select Edit under Environment variables, and add the following environment varia
 
 Your environment variables should now look like this:
 
-![Image of creating environment variables showing data inputs provided in above text.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-3-border.png)
+![Image of creating environment variables showing data inputs provided in above text.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-3-env-variable-config.png)
 
 #### Trigger configuration
 
 Let's configure an Amazon Eventbridge ([Amazon CloudWatch Events](https://aws.amazon.com/cloudwatch/)) schedule to have AWS Lambda poll the Well-Architected Tool API to extract all shared workloads to the AWS WA Tool in your AWS management account.  Expand the **Designer** drop-down list and then select **EventBridge (CloudWatch Events)** as a trigger.  Fill in `LambdaExtractWARReportsSchedule` as the Rule name.  Select Schedule expression, and fill in a suitable expression that meets your requirements, e.g. `rate(1 hour)` will configure the Lambda function once every hour.
 
-![Image of Lambda trigger configuration, showing data inputs provided in above text.](https://d2908q01vomqb2.cloudfront.net/972a67c48192728a34979d9a35164c1295401b71/2021/02/22/Picture-4-border.png)
+![Image of Lambda trigger configuration, showing data inputs provided in above text.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-4-lambda-trigger-config.png)
 
 #### Lambda timeout
 
