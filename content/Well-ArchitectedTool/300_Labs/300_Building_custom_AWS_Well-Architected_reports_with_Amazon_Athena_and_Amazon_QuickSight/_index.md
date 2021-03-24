@@ -18,6 +18,8 @@ By building your own integrations with the AWS WA Tool, your enterprise can supp
 
 This lab presents a simple approach for aggregating the data of the workload reviews into a central data lake repository. It helps teams to analyze their organization's Well-Architected maturity across multiple AWS accounts and workloads and perform centralized reporting on high-risk issues (HRIs).
 
+![DashboardExample](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-12-dashboard-example.png)
+
 ## Architecture overview
 
 Many customers use multiple AWS accounts to provide administrative autonomy for their teams. The AWS WA Tool offers a simple way to share workloads with other AWS accounts. You can share a workload that you own in your account with AWS accounts used by other members of your review team or with a centralized AWS account.  For more information, see [sharing a Workload](https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads-sharing.html).
