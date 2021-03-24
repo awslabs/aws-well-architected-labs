@@ -34,7 +34,7 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https%3A%2F%2Fee-assets-prod-us-east-1.s3.amazonaws.com%2Fmodules%2F8cf0b70c5c7a489ebe4e957c2f32bb67%2Fv1%2FQuickSightCurReportAutomation.yml)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https%3A%2F%2Fee-assets-prod-us-east-1.s3.amazonaws.com%2Fmodules%2F8cf0b70c5c7a489ebe4e957c2f32bb67%2Fv2%2FQuickSightCurReportAutomation.yml)
 	
 ![Images/cf_dash_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_2.png)
 
