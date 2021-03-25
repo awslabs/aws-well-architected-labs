@@ -1,7 +1,7 @@
 ---
 title: "Exploring AWS Lambda code"
 menutitle: "Explore Lambda code"
-date: 2020-03-08T11:16:08-04:00
+date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"

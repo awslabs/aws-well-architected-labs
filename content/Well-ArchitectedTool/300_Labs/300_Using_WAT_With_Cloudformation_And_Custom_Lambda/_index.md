@@ -1,7 +1,7 @@
 ---
 title: "Level 300: Using Well-Architected AWS Lambda-backed custom resources for AWS CloudFormation"
-#menutitle: "Lab #1"
-date: 2021-01-15T11:16:09-04:00
+menutitle: "Well-Architected AWS Lambda-backed custom resources"
+date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 1
 hidden: false
@@ -28,8 +28,10 @@ The knowledge you acquire will help you learn how to programmatically access con
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create new IAM roles, deploy Lambda function, and use Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy)
 
-## Costs:
-* [AWS Pricing](https://aws.amazon.com/pricing/)
+## Costs
+- The [Lambda functions](https://aws.amazon.com/lambda/pricing/) deployed in this lab should fit within the free tier usage assuming you haven't already consumed it.
+- The [API Gateway](https://aws.amazon.com/api-gateway/pricing/) deployed in this lab should fit within the free tier usage assuming you haven't already consumed it.
+
 
 ## Time to complete
 - The lab should take approximately 30 minutes to complete

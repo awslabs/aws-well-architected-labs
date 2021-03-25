@@ -1,7 +1,7 @@
 ---
 title: "Explore Well-Architected Review"
 menutitle: "Explore WA Review"
-date: 2020-03-08T11:16:08-04:00
+date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 5
 pre: "<b>5. </b>"

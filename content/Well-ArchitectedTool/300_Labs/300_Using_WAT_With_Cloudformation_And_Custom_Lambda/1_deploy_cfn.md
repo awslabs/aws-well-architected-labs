@@ -1,7 +1,7 @@
 ---
 title: "Deploying the infrastructure"
 menutitle: "Deploy Infrastructure"
-date: 2020-03-08T11:16:08-04:00
+date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"

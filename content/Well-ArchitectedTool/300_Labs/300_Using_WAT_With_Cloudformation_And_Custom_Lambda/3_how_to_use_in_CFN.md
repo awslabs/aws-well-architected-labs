@@ -1,7 +1,7 @@
 ---
 title: "How to utilize AWS Lambda-backed custom resources in CloudFormation"
 menutitle: "Use Lambda in CloudFormation"
-date: 2020-03-08T11:16:08-04:00
+date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
