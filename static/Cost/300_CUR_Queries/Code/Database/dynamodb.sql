@@ -1,4 +1,9 @@
-SELECT 
+-- query_id: dynamodb
+-- query_description: This query will output the total monthly sum per resource for all DynamoDB purchase options (including reserved capacity) across all DynamoDB usage types (including data transfer and storage costs). 
+-- query_columns: bill_payer_account_id,line_item_usage_account_id,month,product_location,line_item_resource_id,capacity_mode_line_item_line_item_type,purchase_option_line_item_line_item_type,usage_type_product_product_family,sum_line_item_usage_amount,sum_line_item_unblended_cost,sum_reservation_unused_quantity,sum_reservation_unused_recurring_fee,reservation_reservation_a_r_n
+-- query_link: /cost/300_labs/300_cur_queries/queries/database/
+
+SELECT -- automation_select_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
   month,
@@ -25,12 +30,13 @@ SELECT
   SUM(CAST(reservation_unused_quantity AS double)) as sum_reservation_unused_quantity,
   SUM(CAST(reservation_unused_recurring_fee as decimal(16,8))) as sum_reservation_unused_recurring_fee,
   reservation_reservation_a_r_n
-FROM 
-  ${table_name}
-  WHERE year = '2020' AND (month BETWEEN '07' AND '10' OR month BETWEEN '7' AND '10')
+FROM -- automation_from_stmt
+  ${table_name} -- automation_tablename
+  WHERE -- automation_where_stmt
+  year = '2020' AND (month BETWEEN '07' AND '10' OR month BETWEEN '7' AND '10') -- automation_timerange_year_month
   AND line_item_product_code = 'AmazonDynamoDB'
-  AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
-GROUP BY
+  AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
   month,
@@ -40,5 +46,5 @@ GROUP BY
   7,
   8,
   reservation_reservation_a_r_n
-ORDER BY
+ORDER BY -- automation_order_stmt
   sum_line_item_unblended_cost DESC;

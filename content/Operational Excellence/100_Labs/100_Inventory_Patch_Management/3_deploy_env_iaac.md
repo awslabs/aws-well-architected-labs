@@ -24,9 +24,9 @@ Apply the following best practices when using tags:
 * Err on the side of using too many tags rather than too few tags.
 * [Develop a tagging strategy](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
 
->**Note**<br>It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
+>**Note** It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
 
->**Important**<br>**Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
+>**Important** **Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
 
 ## Management Tools: CloudFormation
 
@@ -38,7 +38,7 @@ Apply the following best practices when using tags:
 
 To deploy the lab infrastructure:
 
-1. [**Download the CloudFormation script** for this lab from](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
+1. [**Download the CloudFormation script** for this lab through this link](/Operations/100_Inventory_and_Patch_Mgmt/Code/OE_Inventory_and_Patch_Mgmt.json).
 1. Use your administrator account to access the CloudFormation console at <https://console.aws.amazon.com/cloudformation/>.
 1. Choose **Create Stack**.
 1. On the **Select Template** page, select **Upload a template file** and select the `OE_Inventory_and_Patch_Mgmt.json` file you just downloaded.

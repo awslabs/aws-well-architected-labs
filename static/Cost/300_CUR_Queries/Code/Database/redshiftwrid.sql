@@ -1,7 +1,12 @@
-SELECT 
+-- query_id: redshift
+-- query_description: This query will provide daily unblended and amortized cost as well as usage information per linked account for Amazon Redshift. 
+-- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,product_instance_type,split_line_item_resource_id,line_item_operation,line_item_usage_type,line_item_line_item_type,pricing_term,product_usage_family,product_product_family,usage_quantity,unblended_cost,amortized_cost,ri_sp_trueup,ri_sp_upfront_fees
+-- query_link: /cost/300_labs/300_cur_queries/queries/database/
+
+SELECT -- automation_select_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
-  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, -- automation_timerange_dateformat
   product_instance_type,
   SPLIT_PART(line_item_resource_id,':',7) as split_line_item_resource_id,
   line_item_operation,
@@ -29,15 +34,15 @@ SELECT
  sum(CASE
       WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
       WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
-FROM 
-  ${table_name}
-WHERE
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+FROM -- automation_from_stmt
+  ${table_name} -- automation_tablename
+WHERE -- automation_where_stmt
+  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
   AND product_product_name = 'Amazon Redshift'
-  AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
-GROUP BY
+  AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY -- automation_groupby_stmt
   1,2,3,4,5,6,7,8,9,10,11
-ORDER BY
+ORDER BY -- automation_order_stmt
   day_line_item_usage_start_date,
   product_product_family,
   unblended_cost DESC;

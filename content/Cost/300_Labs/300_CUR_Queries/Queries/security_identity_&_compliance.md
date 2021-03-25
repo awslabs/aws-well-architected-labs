@@ -17,10 +17,11 @@ You may need to change variables used as placeholders in your query. **${table_N
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon GuardDuty](#amazon-guardduty)
+  * [Amazon Cognito](#amazon-cognito)
+  * [AWS WAF](#aws-waf)
 
-{{< expand "Amazon GuardDuty" >}}
-
-{{% markdown_wrapper %}}
+### Amazon GuardDuty
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon GuardDuty Usage. The usage amount and cost will be summed.
@@ -49,7 +50,7 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
     WHERE
           (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
       AND product_product_name = 'Amazon GuardDuty'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -63,17 +64,13 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
       sum_line_item_unblended_cost,
       trim_product_group;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon GuardDuty" query_text="Amazon GuardDuty Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "Amazon Cognito" >}}
-
-{{% markdown_wrapper %}}
+### Amazon Cognito
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon Cognito Usage. The usage amount and cost will be summed.
@@ -101,7 +98,7 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
     WHERE
       (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
       AND product_product_name = 'Amazon Cognito'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -114,15 +111,11 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
       sum_line_item_unblended_cost,
       line_item_operation;
 
-{{% /markdown_wrapper %}}
-
 {{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" %}}
 
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< expand "AWS WAF" >}}
-
-{{% markdown_wrapper %}}
+### AWS WAF
 
 #### Query Description
 This query provides daily unblended cost and usage information about AWS WAF Usage including web acl, rule id, and region. The usage amount and cost will be summed and the cost will be in descending order.
@@ -157,7 +150,7 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
     WHERE
       (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
       AND product_product_name = 'AWS WAF'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -176,11 +169,9 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
       sum_line_item_unblended_cost,
       product_group;
 
-{{% /markdown_wrapper %}}
+{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon WAF" button_text="Help & Feedback" %}}
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

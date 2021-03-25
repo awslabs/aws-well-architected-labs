@@ -1,7 +1,12 @@
-SELECT
+-- query_id: ecs-hours-per-day
+-- query_description: This query will output the daily ECS cost and usage per resource, by usage type and purchase option, both unblended and amortized costs are shown.
+-- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,split_line_item_resource_id,case_line_item_usage_type,case_pricing_term,sum_line_item_usage_amount,sum_line_item_unblended_cost,amortized_cost
+-- query_link: /cost/300_labs/300_cur_queries/queries/container/
+
+SELECT -- automation_select_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
-  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, -- automation_timerange_dateformat
   SPLIT_PART(SPLIT_PART(line_item_resource_id,':',6),'/',2) AS split_line_item_resource_id,
   CASE
     WHEN line_item_usage_type LIKE '%%Fargate-GB%%' THEN 'GB per hour'
@@ -37,22 +42,22 @@ SELECT
     WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
     WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost"
       ELSE "line_item_unblended_cost" END) "amortized_cost"
-  FROM
-    ${table_name}
-  WHERE
-    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+  FROM -- automation_from_stmt
+    ${table_name} -- automation_tablename
+  WHERE -- automation_where_stmt
+    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
     AND line_item_product_code in ('AmazonECS')
     AND line_item_operation != 'ECSTask-EC2'
     AND product_product_family != 'Data Transfer'
-    AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount')
-  GROUP BY
+    AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  GROUP BY -- automation_groupby_stmt
     bill_payer_account_id,
     line_item_usage_account_id,
     3,
     4,
     5,
     6
-  ORDER BY
+  ORDER BY -- automation_order_stmt
     day_line_item_usage_start_date ASC,
     case_pricing_term,
     sum_line_item_usage_amount DESC;

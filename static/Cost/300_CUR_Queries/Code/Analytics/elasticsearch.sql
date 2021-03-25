@@ -33,7 +33,7 @@ FROM
 WHERE
   year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
   AND product_product_name = 'Amazon Elasticsearch Service'
-  AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount') 
+  AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY
   1,2,3,4,5,6,7,8,9,10
 ORDER BY
