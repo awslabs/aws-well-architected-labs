@@ -80,6 +80,11 @@ Parameters:
     List of supported values:
     https://gohugo.io/content-management/syntax-highlighting/#list-of-chroma-highlighting-languages
 
+    * `highlightopts="linenos=table,hl_lines=8 15-17,linenostart=199"`: The programming language syntax highlighting.
+      List of supported values:
+      https://gohugo.io/content-management/syntax-highlighting/#list-of-chroma-highlighting-languages
+
+
 */}}
 
 {{/* Get the filepath */}}
@@ -104,7 +109,7 @@ Parameters:
 {{/* If Code, then highlight with the specified language. */}}
 {{ if eq (.Get "code") "true" }}
 
-{{ highlight ($.Scratch.Get "filepath" | readFile | safeHTML ) (.Get "lang") "" }}
+{{ highlight ($.Scratch.Get "filepath" | readFile | safeHTML ) (.Get "lang") (.Get "highlightopts") }}
 
 {{ else }}
 

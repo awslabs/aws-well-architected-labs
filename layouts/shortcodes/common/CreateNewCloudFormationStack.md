@@ -27,11 +27,18 @@
 
 1. For **Configure stack options** we recommend configuring tags, which are key-value pairs, that can help you identify your stacks and the resources they create. For example, enter *Owner* in the left column which is the key, and your email address in the right column which is the value. We will not use additional permissions or advanced options so click **Next**. For more information, see [Setting AWS CloudFormation Stack Options](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide//cfn-console-add-tags.html).
 
-1. For **Review**
+{{ if .Get "SAMDeploy"}}1. For **Review**
+    * Review the contents of the page
+    * At the bottom of the page, select
+      * **I acknowledge that AWS CloudFormation might create IAM resources.**
+      * **I acknowledge that AWS CloudFormation might create IAM resources with custom names.**
+      * **I acknowledge that AWS CloudFormation might require the following capability: CAPABILITY_AUTO_EXPAND**
+    ![CFNIamCapabilities](/Common/images/CreateNewCloudFormationStack/CFNSARCapabilities.png?classes=lab_picture_small)
+    * Click **Create stack**{{else}}1. For **Review**
     * Review the contents of the page
     * At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
     * Click **Create stack**
-     ![CFNIamCapabilities](/Common/images/CreateNewCloudFormationStack/CFNIamCapabilities.png)
+     ![CFNIamCapabilities](/Common/images/CreateNewCloudFormationStack/CFNIamCapabilities.png){{ end }}  
 
 1. This will take you to the CloudFormation stack status page, showing the stack creation in progress.  
     * Click on the **Events** tab
