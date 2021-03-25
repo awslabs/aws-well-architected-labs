@@ -40,8 +40,7 @@ This example will show you how to replace the AccountID, with a name that is mea
 	- **linked_account_id** = **(Your linked Account Id field name)**
 ![Images/quicksight_mapping_8.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_8.png)
 
-10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **Int**:
-![Images/quicksight_mapping_9.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_9.png)
+10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **String**:
 
 11. Select **Save**
 
@@ -62,7 +61,7 @@ You now have new fields that can be used on the visuals - we will now use them
 14. Edit the calculated field **Account**:
 ![Images/quicksight_mapping_11.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_11.png)
 
-15. Change the formula from **toString({linked_account_id})** to **{Account Name}**
+15. Change the formula from **{linked_account_id}** to **{Account Name}**
 ![Images/quicksight_mapping_12.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_12.png)
 
 16. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
