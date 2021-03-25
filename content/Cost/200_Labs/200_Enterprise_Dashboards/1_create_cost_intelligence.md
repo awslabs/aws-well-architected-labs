@@ -12,9 +12,12 @@ pre: "<b>1. </b>"
 ## Contributors 
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
+- Aaron Edell, Global Head of Business and GTM - EC2 Insights
+- Timur Tulyaganov, AWS Technical Account Manager
+- Yuriy Prykhodko, AWS Technical Account Manager
 
 ### FAQ
-The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
+The FAQ with the added Visual by Visual breakdown for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 
 ### Request Template Access
 Ensure you have requested access to the Cost Intelligence template [here.](http://d3ozd1vexgt67t.cloudfront.net/)
@@ -346,5 +349,12 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 {{% notice tip %}}
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
+
+### Additional Dashboard Resources
+For opportunities to customize or add additional dashboard insights 
+
+- Continue with modules 2-4 in the Level 200: Enterprise Dashboard
+- Create the [CUDOS dashboard](https://cudos.workshop.aws/intro.html) to get ideas on visuals you want to add to your Cost Intelligence Dashboard. The CUDOS QuickSight dashboard is built on top of the Cost Intelligence Dashboard so you can leverage your existing data sets. 
+
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_modify_cost_intelligence/" />}}
