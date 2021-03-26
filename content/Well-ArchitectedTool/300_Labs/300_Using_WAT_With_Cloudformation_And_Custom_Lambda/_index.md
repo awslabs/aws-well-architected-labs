@@ -1,6 +1,6 @@
 ---
-title: "Level 300: Using Well-Architected AWS Lambda-backed custom resources for AWS CloudFormation"
-menutitle: "Well-Architected AWS Lambda-backed custom resources"
+title: "Level 300: Using custom resource in AWS CloudFormation to create and update Well-Architected Reviews"
+menutitle: "Using custom resource in AWS CloudFormation to create and update Well-Architected Reviews"
 date: 2021-03-25T11:16:09-04:00
 chapter: false
 weight: 1
