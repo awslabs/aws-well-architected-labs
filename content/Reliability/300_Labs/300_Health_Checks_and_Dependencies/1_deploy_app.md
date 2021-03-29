@@ -7,7 +7,7 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2 frontend by an Elastic Load Balancer reverse-proxy, with a dependency on Amazon DynamoDB.
+You will create a multi-tier architecture using AWS and run a simple service on it. The service is a web server running on Amazon EC2. It has an Elastic Load Balancer reverse-proxy in front of it, and has a dependency on Amazon DynamoDB.
 
 **Note**: The concepts covered by this lab apply whether your service dependency is an AWS resource like Amazon DynamoDB, or an external service called via API. The DynamoDB dependency here acts as a _mock_ for an external service called **RecommendationService**. The **getRecommendation** API on this service is a dependency for the web service used in this lab.  **getRecommendation** is actually a `get_item` call to a DynamoDB table.
 
