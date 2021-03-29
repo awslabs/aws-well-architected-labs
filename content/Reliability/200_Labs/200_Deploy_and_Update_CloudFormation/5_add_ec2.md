@@ -45,11 +45,11 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
     You _only_ need to specify these six properties:
 
-    * **IamInstanceProfile:** Reference `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
-    * **ImageId:** Reference `LatestAmiId`, which is the parameter discussed previously
-    * **InstanceType:** Reference `InstanceType`, another parameter
-    * **SecurityGroupIds:** Refer `PublicSecurityGroup`, which is defined elsewhere in the template
-    * **SubnetId:** Reference `PublicSubnet1`, which is defined elsewhere in the template
+    * **IamInstanceProfile:** References `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
+    * **ImageId:** References `LatestAmiId`, which is the parameter discussed previously
+    * **InstanceType:** References `InstanceType`, another parameter
+    * **SecurityGroupIds:** References `PublicSecurityGroup`, which is defined elsewhere in the template
+    * **SubnetId:** References `PublicSubnet1`, which is defined elsewhere in the template
     * **Tags:** Use this YAML block:
 
             Tags:

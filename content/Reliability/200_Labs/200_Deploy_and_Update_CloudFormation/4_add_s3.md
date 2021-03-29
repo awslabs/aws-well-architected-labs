@@ -83,7 +83,7 @@ For this task you are going to specify a Parameter where you can set the bucket 
     * It is actually more constrictive than what is allowed.  See **Rules for Bucket Naming** under [Bucket Restrictions and Limitations](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) for more details.
 
 1. Add two more lines to your S3 bucket under in the **Resources** section of your template so it looks like this
-    * Be cautious to maintin the two-space indents where indicated
+    * Be cautious to maintain the two-space indents where indicated
 
             MyS3Bucket:
               Type: AWS::S3::Bucket

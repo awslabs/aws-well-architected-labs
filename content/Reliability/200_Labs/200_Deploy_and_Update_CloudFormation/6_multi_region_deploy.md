@@ -89,7 +89,7 @@ Now that the necessary permissions have been created, the next step is to launch
 
     ![StackSetAccounts](/Reliability/200_Deploy_and_Update_CloudFormation/Images/StackSetAccounts.png?classes=lab_picture_auto)
 
-1.  Under **Specify regions** select 2 regions you would like to deploy the stacks across. I have selected **US East (N.Virginia)** and **US West (Oregon)**.
+1.  Under **Specify regions** select 2 regions you would like to deploy the stacks across. I have selected **US East (N.Virginia)** and **US West (Oregon)**. You can select as many regions as you want to deploy stacks into, including the same region where the StackSet is being created.
 1.  Leave values for **Deployment options** as-is and click **Next**.
 
     ![StackSetRegions](/Reliability/200_Deploy_and_Update_CloudFormation/Images/StackSetRegions.png?classes=lab_picture_auto)
