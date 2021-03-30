@@ -17,9 +17,9 @@ For this exercise we will assume you now know how to edit your CloudFormation te
 
 ### 6.1 Set up permissions for CloudFormation StackSets
 
-AWS CloudFormation StackSets requires specific permissions to be able to deploy stacks in multiple AWS accounts across multiple AWS Regions. It needs an administrator role that is used to perform StackSets operations, and an execution role to deploy the actual stacks in target accounts. These roles require specific naming conventions - **AWSCloudFormationStackSetAdministrationRole** for the administrator role, and **AWSCloudFormationStackSetExecutionRole** for the execution role. StackSets execution will fail if either of these roles are missing. The **AWSCloudFormationStackSetAdministrationRole** should be created in the account where you are creating the StackSet. The **AWSCloudFormationStackSetExecutionRole** should be created in each target account where you wish to deploy the stack. Learn more about [granting self-managed permissions](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html) for CloudFormation StackSets. If you accounts are managed using AWS Organizations, you can [enable trusted access](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-enable-trusted-access.html) and CloudFormation will take care of provisioning all the necessary roles across the accounts.
+AWS CloudFormation StackSets requires specific permissions to be able to deploy stacks in multiple AWS accounts across multiple AWS Regions. It needs an administrator role that is used to perform StackSets operations, and an execution role to deploy the actual stacks in target accounts. These roles require specific naming conventions - **AWSCloudFormationStackSetAdministrationRole** for the administrator role, and **AWSCloudFormationStackSetExecutionRole** for the execution role. StackSets execution will fail if either of these roles are missing. The **AWSCloudFormationStackSetAdministrationRole** should be created in the account where you are creating the StackSet (The Administrator account - see the diagram above). The **AWSCloudFormationStackSetExecutionRole** should be created in each target account where you wish to deploy the stack. Learn more about [granting self-managed permissions](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html) for CloudFormation StackSets. If you accounts are managed using AWS Organizations, you can [enable trusted access](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-enable-trusted-access.html) and CloudFormation will take care of provisioning all the necessary roles across the accounts.
 
-For this lab, I will walk you through the process of creating a StackSet to deploy stacks across multiple regions in a single account (the same account where the StackSet is being created). For simplicity and ease of use, I will use CloudFormation to create the administrator and execution roles.
+For this lab, we will walk through the process of creating a StackSet to deploy stacks across multiple regions in a single account (the same account where the StackSet is being created). For simplicity and ease of use, we will use CloudFormation to create the administrator and execution roles.
 
 1.  Download the administrator role CloudFormation template - https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml
 1.  Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation) and click **Create Stack** > **With new resources**
@@ -56,14 +56,13 @@ Now that the necessary permissions have been created, the next step is to launch
 
 ### 6.2 Deploy CloudFormation stacks using CloudFormation StackSets
 
-1.  Download the sample template [simple_stackset_plus_s3_ec2_server.yaml](/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stackset_plus_s3_ec2_server.yaml)
 1.  Go to the [AWS CloudFormation StackSets console](https://console.aws.amazon.com/cloudformation/home#/stacksets) and click **Create StackSet**
 
     ![CFNCreateStackSetButton](/Reliability/200_Deploy_and_Update_CloudFormation/Images/CFNCreateStackSetButton.png?classes=lab_picture_auto)
 
 1.  Leave Prepare template setting as-is
     * For **Template source** select **Upload a template file**
-    * Click **Choose file** and supply the CloudFormation template you downloaded: _simple_stackset_plus_s3_ec2_server.yaml_
+    * Click **Choose file** and supply the CloudFormation template you used in the previous section (where you added an EC2 instance with user data). If you ran into any issues, or want a fresh template to use for this section you can right click and download this link - [simple_stack_plus_s3_ec2_server.yaml](/Reliability/200_Deploy_and_Update_CloudFormation/Code/CloudFormation/simple_stack_plus_s3_ec2_server.yaml)
 
     ![StackSetUploadTemplateFile](/Reliability/200_Deploy_and_Update_CloudFormation/Images/StackSetUploadTemplateFile.png?classes=lab_picture_auto)
 

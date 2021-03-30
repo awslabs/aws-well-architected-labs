@@ -35,7 +35,7 @@ You will now delete the **CloudFormationLab** CloudFormation stack.
 ## References & useful resources
 
 * [What is AWS CloudFormation?](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
-* CloudFormation [AWS Resource and Property Types Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+* [CloudFormation Resource and property reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 * [Working with AWS CloudFormation StackSets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html)
 
 {{< prev_next_button link_prev_url="../5_add_ec2/" title="Congratulations!" final_step="true" >}}

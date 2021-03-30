@@ -104,7 +104,12 @@ Resources:
   ###########
 
   MyS3Bucket:
-    Type: AWS::S3::Bucket
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Join
+        - '-'
+        - - !Ref S3BucketName
+          - !Ref 'AWS::Region'
 
   MyEC2Instance:
     Type: AWS::EC2::Instance

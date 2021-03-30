@@ -82,16 +82,20 @@ For this task you are going to specify a Parameter where you can set the bucket 
     * This satisfies the constraints on what is allowed in an S3 bucket name
     * It is actually more constrictive than what is allowed.  See **Rules for Bucket Naming** under [Bucket Restrictions and Limitations](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) for more details.
 
-1. Add two more lines to your S3 bucket under in the **Resources** section of your template so it looks like this
+1. Add a few more lines to your S3 bucket under in the **Resources** section of your template so it looks like this
     * Be cautious to maintain the two-space indents where indicated
 
             MyS3Bucket:
-              Type: AWS::S3::Bucket
+              Type: 'AWS::S3::Bucket'
               Properties:
-                BucketName: !Ref S3BucketName
+                BucketName: !Join
+                  - '-'
+                  - - !Ref S3BucketName
+                    - !Ref 'AWS::Region'
 
     * The **Properties** label defines that the items that follow (indented underneath) are properties of the S3 bucket
     * For the **BucketName** property you are specifying a reference to another value in the template. Specifically you are indicating that the string entered as the **S3BucketName** parameter should be used as the name of the bucket
+    * The **[!Join function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-join.html)** concatenates strings in a CloudFormation template. Use that to add the AWS Region to make the bucket more unique. AWS::Region is a **[pseudo-parameter](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html#cfn-pseudo-param-region)** available within CloudFormation.
     * Save the file
 
 1. Go to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation)
