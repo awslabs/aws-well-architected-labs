@@ -9,9 +9,10 @@ tags:
   - implement_change
 ---
 
-## Author
+## Authors
 
 * Seth Eliot, Principal Reliability Solutions Architect, AWS Well-Architected
+* Mahanth Jayadeva, Solutions Architect, Well-Architected
 
 ## Introduction
 
