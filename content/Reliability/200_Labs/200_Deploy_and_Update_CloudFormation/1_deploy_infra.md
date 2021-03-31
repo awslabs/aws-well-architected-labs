@@ -59,7 +59,7 @@ Look through the file. You will notice several sections:
 |CloudFormation tip|
 |:---:|
 |When editing CloudFormation templates written in YAML, be extra cautious that you maintain the correct number of spaces for each indentation|
-|Indents are always in increments of two spaces|
+|Indents are always in increments of two spaces. You can use your IDE (may require extensions) or a free online linter such as http://www.yamllint.com/ to identify and correct any syntax errors you may have within your YAML file.|
 
 You will now use this **template** to launch a **CloudFormation stack** that will deploy AWS resources in your AWS account.
 
