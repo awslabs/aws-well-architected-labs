@@ -1,4 +1,4 @@
-name: 'CFN-NAG check via Github Actions'
+name: 'PRODUCTION - CFN-NAG check via Github Actions'
 
 
 on: [push]
