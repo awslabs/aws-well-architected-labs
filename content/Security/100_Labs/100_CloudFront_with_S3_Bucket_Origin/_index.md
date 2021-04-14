@@ -1,7 +1,7 @@
 ---
 title: "CloudFront with S3 Bucket Origin"
 menutitle: "CloudFront with S3 Bucket Origin"
-date: 2020-09-16T11:16:08-04:00
+date: 2021-03-28T23:50:10+01:00
 chapter: false
 weight: 3
 ---
@@ -24,7 +24,7 @@ This hands-on lab will guide you through the steps to host static web content in
 ## Costs
 
 - Typically less than $1 per month (depending on the number of requests) if the account is only used for personal testing or training, and the tear down is not performed.
-- [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/) [Amazon CloudFront Pricing](https://aws.amazon.com/cloudfront/pricing/)
+- [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/)
 - [Amazon CloudFront pricing](https://aws.amazon.com/cloudfront/pricing/)
 - [AWS Pricing](https://aws.amazon.com/pricing/)
 
