@@ -14,19 +14,15 @@ The code has been broken up into functions which accept various parameters, so y
 
 ## Parameters
 ```
-usage: duplicateWAFR.py [-h] --fromaccount FROMACCOUNT --toaccount TOACCOUNT --workloadid WORKLOADID [--fromregion FROMREGION] [--toregion TOREGION]
+usage: duplicateWAFR.py [-h] [--fromaccount FROMACCOUNT] [--toaccount TOACCOUNT] --workloadid WORKLOADID [--fromregion FROMREGION] [--toregion TOREGION]
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --fromaccount FROMACCOUNT
-                        From Profile Name
-  --toaccount TOACCOUNT
-                        From Profile Name
-  --workloadid WORKLOADID
-                        WorkloadID. Example: 1e5d148ab9744e98343cc9c677a34682
-  --fromregion FROMREGION
-                        From Region Name. Example: us-east-1
-  --toregion TOREGION   To Region Name. Example: us-east-2
+  -h, --help                show this help message and exit
+  --fromaccount FROMACCOUNT AWS CLI Profile Name or will use the default session for the shell
+  --toaccount TOACCOUNT     AWS CLI Profile Name or will use the default session for the shell
+  --workloadid WORKLOADID   WorkloadID. Example: 1e5d148ab9744e98343cc9c677a34682
+  --fromregion FROMREGION   From Region Name. Example: us-east-1
+  --toregion TOREGION       To Region Name. Example: us-east-2
 ```
 
 ## Limitations
