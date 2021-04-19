@@ -9,7 +9,7 @@ pre: "<b>3. </b>"
 ## Generating a WellArchitected Framework HTML Report
 
 ```shell
-$ ./generateWAFReport.py --profile acct2 --workloadid c896b2b1142f6ea8dc228746744c6ed2 --region us-east-1
+$ ./generateWAFReport.py --profile acct2 --workloadid c896b2b1142f6ea8dc22874674400002 --region us-east-1
 2021-04-19 12:47:06.672 INFO generateWAFReport - main: Starting Boto 1.17.27 Session
 2021-04-19 12:47:15.097 INFO generateWAFReport - main: Creating HTML file /var/folders/sw/1xkhcl751fj_fxr63jb5qr2m0000gs/T/tmpft2fam0k.html
 2021-04-19 12:47:15.097 INFO generateWAFReport - main: Opening HTML URL (file:///var/folders/sw/1xkhcl751fj_fxr63jb5qr2m0000gs/T/tmpft2fam0k.html) in default WebBrowser
