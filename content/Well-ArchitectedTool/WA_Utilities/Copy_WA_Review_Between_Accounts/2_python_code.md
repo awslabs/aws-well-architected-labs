@@ -36,4 +36,6 @@ optional arguments:
 1. If a Workload exists in the target account with the same name, the script will just attempt to update the review with the data from the source, not create a new one.
 
 ### Python Code {#duplicateWAFR_Code}
+[Link to download the code](/watool/utilities/Code/duplicateWAFR.py)
+
 {{< readfile file="/static/watool/utilities/Code/duplicateWAFR.py" code="true" lang="python" highlightopts="linenos=table" >}}

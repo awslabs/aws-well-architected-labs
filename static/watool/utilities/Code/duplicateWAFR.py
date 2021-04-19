@@ -48,8 +48,8 @@ logging.getLogger('s3transfer').setLevel(logging.CRITICAL)
 logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 
 PARSER = argparse.ArgumentParser()
-PARSER.add_argument('--fromaccount', required=True, help='From Profile Name')
-PARSER.add_argument('--toaccount', required=True, help='From Profile Name')
+PARSER.add_argument('--fromaccount', required=False, default="", help='AWS CLI Profile Name or will use the default session for the shell')
+PARSER.add_argument('--toaccount', required=False, default="", help='AWS CLI Profile Name or will use the default session for the shell')
 PARSER.add_argument('--workloadid', required=True, help='WorkloadID. Example: 1e5d148ab9744e98343cc9c677a34682')
 PARSER.add_argument('--fromregion', required=False, default="us-east-1", help='From Region Name. Example: us-east-1')
 PARSER.add_argument('--toregion', required=False, default="us-east-1", help='To Region Name. Example: us-east-2')
@@ -601,14 +601,20 @@ def main():
     boto3_min_version = "1.16.38"
     # Verify if the version of Boto3 we are running has the wellarchitected APIs included
     if (packaging.version.parse(boto3.__version__) < packaging.version.parse(boto3_min_version)):
-        logger.error("Your Boto3 version (%s) is less than %s. You must ugprade to run this script (pip3 upgrade boto3)" % (boto3.__version__, boto3_min_version))
+        logger.error("Your Boto3 version (%s) is less than %s. You must ugprade to run this script (pip3 install boto3 --upgrade --user)" % (boto3.__version__, boto3_min_version))
         exit()
 
     # STEP 1 - Configure environment
     logger.info("Starting Boto %s Session" % boto3.__version__)
     # Create a new boto3 session
-    SESSION1 = boto3.session.Session(profile_name=FROM_ACCOUNT)
-    SESSION2 = boto3.session.Session(profile_name=TO_ACCOUNT)
+    if FROM_ACCOUNT:
+        SESSION1 = boto3.session.Session(profile_name=FROM_ACCOUNT)
+    else:
+        SESSION1 = boto3.session.Session()
+    if TO_ACCOUNT:
+        SESSION2 = boto3.session.Session(profile_name=TO_ACCOUNT)
+    else:
+        SESSION2 = boto3.session.Session()
     # Initiate the well-architected session using the region defined above
     WACLIENT = SESSION1.client(
         service_name='wellarchitected',
