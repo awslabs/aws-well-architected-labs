@@ -628,7 +628,7 @@ def main():
 
 
 
-    logger.info("Copy WorkloadID '%s' from '%s:%s to '%s:%s'" % (FROM_WORKLOADID,REGION_NAME,FROM_ACCOUNT,TO_REGION_NAME,TO_ACCOUNT))
+    logger.info("Copy WorkloadID '%s' from '%s:%s' to '%s:%s'" % (FROM_WORKLOADID,REGION_NAME,FROM_ACCOUNT,TO_REGION_NAME,TO_ACCOUNT))
     # Ignoring milestones for now, will add later if interested
     workloadId = FROM_WORKLOADID
     # Find out what lenses apply to the from workloadid
