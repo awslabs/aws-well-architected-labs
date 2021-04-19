@@ -38,7 +38,7 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
        if isinstance(o, datetime.datetime):
           return o.__str__()
       
-       def list_tags(resource_id):
+       def list_tags(client, resource_id):
           tags = []
           paginator = client.get_paginator("list_tags_for_resource")
           response_iterator = paginator.paginate(ResourceId=resource_id)
@@ -75,7 +75,7 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
                    for account in response["Accounts"]:
                       aid = account["Id"]                
                       if tags_check != '':
-                            tags_list = list_tags(aid) #gets the lists of tags for this account
+                            tags_list = list_tags(client, aid) #gets the lists of tags for this account
                             
                             for tag in os.environ.get("TAGS").split(","): #looking at tags in the enviroment variables split by a space
                                for org_tag in tags_list:
