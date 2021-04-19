@@ -12,7 +12,7 @@ hidden: false
 
 ## Introduction
 
-The purpose of this lab is to teach you how to use the AWS SDK for Python (Boto3) to copy a Well-Architected review to a new location. The python application in this lab allows you to copy a lab between accounts, regions or a combination of both.
+The purpose of this lab is to teach you how to use the AWS SDK for Python (Boto3) to copy a Well-Architected review to a new location. The python application in this lab allows you to copy a workload between accounts, regions, or a combination of both.
 
 ## Prerequisites:
 
