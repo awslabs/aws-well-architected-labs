@@ -42,7 +42,7 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
           tags = []
           paginator = client.get_paginator("list_tags_for_resource")
           response_iterator = paginator.paginate(ResourceId=resource_id)
-          for response in response_iterator
+          for response in response_iterator:
              tags.extend(response['Tags'])
           return tags
 
