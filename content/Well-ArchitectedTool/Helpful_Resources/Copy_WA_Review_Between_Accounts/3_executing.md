@@ -1,12 +1,15 @@
 ---
-title: "Executing Script"
+title: "Script usage examples"
 date: 2021-04-18T11:16:09-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
 ---
 
+Below are some examples on how you can utilize the script:
+
 ## Copying a WellArchitected Tool Review from one region to another
+Example Command: `./duplicateWAFR.py --fromaccount acct2 --toaccount acct2 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-2`
 
 ```shell
 $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct2 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-2
@@ -21,6 +24,8 @@ $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct2 --workloadid c896b2b1
 ```
 
 ## Copying a WellArchitected Tool Review from one account to another in the same region
+Example Command: `./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-1`
+
 ```shell
 $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-1
 2021-04-19 09:46:05.400 INFO duplicateWAFR - main: Starting Boto 1.17.27 Session
@@ -34,6 +39,8 @@ $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1
 ```
 
 ## Copying a WellArchitected Tool Review from one account to another in a different region
+Example Command: `./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-2`
+
 ```shell
 $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1142f6ea8dc228746744c0000 --fromregion us-east-1 --toregion us-east-2
 2021-04-19 09:47:14.227 INFO duplicateWAFR - main: Starting Boto 1.17.27 Session

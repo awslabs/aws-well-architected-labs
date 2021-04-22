@@ -6,11 +6,15 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
+## generateWAFReport.py
+The purpose of this python script is to generate a HTML file that displays some basic Well-Architected Workload information as well as each best practice that was unchecked for any question that has been answered. As part of the report generation, it will also incorporate the specific improvement plan content and display it in-line with each unchecked best practice.
 
-## Python version using Boto3 Library {#python}
 This utility was created using the the [AWS SDK for Python (Boto3)](https://aws.amazon.com/sdk-for-python/). This file assumes you have already setup your AWS credential file, and uses the default profile for all interactions.  
 
-The code has been broken up into functions which accept various parameters, so you can pull those out and place them into integration points in your environment. There is error checking for most of the various API calls, but the code should not be considered production ready. Please review before implementing in your environment.
+{{% notice warning %}}
+There is error checking for most of the various API calls, but the code should **not** be considered production ready. Please review before implementing in your environment.
+{{% /notice %}}
+
 
 ## Parameters
 ```
@@ -25,8 +29,8 @@ optional arguments:
 ```
 
 ## Limitations
-1. The HTML generated is staticly defined in the code and not based on a templating language of any kind.
-
+1. The HTML generated is statically defined in the code and not based on a templating language of any kind.
+1. The report will only generate for the base wellarchitected framework, it does not support lenses at this time. 
 
 ### Python Code {#duplicateWAFR_Code}
 [Link to download the code](/watool/utilities/Code/generateWAFReport.py)

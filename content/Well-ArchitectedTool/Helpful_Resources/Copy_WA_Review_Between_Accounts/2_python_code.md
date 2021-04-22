@@ -6,8 +6,9 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
+## duplicateWAFR.py
+The purpose of this python script is to duplicate a Well-Architected Workload review. This can be done within the same account but to a new AWS Region, or it can be done to a different AWS account and/or region. During the copy process, it will generate a new workload in the target account with the same Workload Name, but the workloadId will be unique. If the target workload already exists, the script will prompt the user if they wish to refresh the data from the source workload.
 
-## Python version using Boto3 Library {#python}
 This utility was created using the the [AWS SDK for Python (Boto3)](https://aws.amazon.com/sdk-for-python/). This file assumes you have already setup your AWS credential file, and uses the default profile for all interactions.  
 
 {{% notice warning %}}
