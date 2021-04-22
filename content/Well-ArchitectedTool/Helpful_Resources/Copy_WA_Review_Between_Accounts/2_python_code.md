@@ -38,3 +38,5 @@ optional arguments:
 [Link to download the code](/watool/utilities/Code/duplicateWAFR.py)
 
 {{< readfile file="/static/watool/utilities/Code/duplicateWAFR.py" code="true" lang="python" highlightopts="linenos=table" >}}
+
+{{< prev_next_button link_prev_url="../1_configure_env/" link_next_url="../3_executing/" />}}

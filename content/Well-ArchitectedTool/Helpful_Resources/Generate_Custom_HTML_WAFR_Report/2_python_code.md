@@ -30,9 +30,11 @@ optional arguments:
 
 ## Limitations
 1. The HTML generated is statically defined in the code and not based on a templating language of any kind.
-1. The report will only generate for the base wellarchitected framework, it does not support lenses at this time. 
+1. The report will only generate for the base wellarchitected framework, it does not support lenses at this time.
 
 ### Python Code {#duplicateWAFR_Code}
 [Link to download the code](/watool/utilities/Code/generateWAFReport.py)
 
 {{< readfile file="/static/watool/utilities/Code/generateWAFReport.py" code="true" lang="python" >}}
+
+{{< prev_next_button link_prev_url="../1_configure_env/" link_next_url="../3_executing/" />}}

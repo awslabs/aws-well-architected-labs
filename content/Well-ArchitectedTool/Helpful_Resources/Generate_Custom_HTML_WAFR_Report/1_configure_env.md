@@ -36,6 +36,4 @@ You may need to install the following modules for this script to run:
 1. [BeautifulSoup4](https://pypi.org/project/beautifulsoup4/)
     * pip install beautifulsoup4
 
-
-
-<!-- {{< prev_next_button link_prev_url="../" link_next_url="../2_create_workload/" />}} -->
+{{< prev_next_button link_prev_url="../" link_next_url="../2_python_code/" />}}

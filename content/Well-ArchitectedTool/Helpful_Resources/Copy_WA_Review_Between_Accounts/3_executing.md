@@ -52,3 +52,6 @@ $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1
 2021-04-19 09:47:34.433 INFO duplicateWAFR - main: Copying answers into new workload for lens serverless
 2021-04-19 09:47:37.326 INFO duplicateWAFR - main: Copy complete - exiting
 ```
+
+{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true" >}}
+{{< /prev_next_button >}}

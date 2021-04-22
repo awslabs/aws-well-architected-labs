@@ -32,4 +32,4 @@ pip3 install boto3 --upgrade --user
 ```
 
 
-<!-- {{< prev_next_button link_prev_url="../" link_next_url="../2_create_workload/" />}} -->
+{{< prev_next_button link_prev_url="../" link_next_url="../2_python_code/" />}}
