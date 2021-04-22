@@ -10,7 +10,9 @@ pre: "<b>2. </b>"
 ## Python version using Boto3 Library {#python}
 This utility was created using the the [AWS SDK for Python (Boto3)](https://aws.amazon.com/sdk-for-python/). This file assumes you have already setup your AWS credential file, and uses the default profile for all interactions.  
 
-The code has been broken up into functions which accept various parameters, so you can pull those out and place them into integration points in your environment. There is error checking for most of the various API calls, but the code should not be considered production ready. Please review before implementing in your environment.
+{{% notice warning %}}
+There is error checking for most of the various API calls, but the code should **not** be considered production ready. Please review before implementing in your environment.
+{{% /notice %}}
 
 ## Parameters
 ```
