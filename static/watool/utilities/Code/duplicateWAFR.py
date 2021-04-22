@@ -106,13 +106,13 @@ def CreateNewWorkload(
     except waclient.exceptions.ConflictException as e:
         workloadId,workloadARN = FindWorkload(waclient,workloadName)
         logger.error("ERROR - The workload name %s already exists as workloadId %s" % (workloadName, workloadId))
-        userAnswer=input("Do You Want To Continue? [y/n]")
+        userAnswer=input("Do You Want To Overwrite workload %s? [y/n]" % workloadId)
         if userAnswer == "y":
-            print("doing something")
+            logger.info("Overwriting existing workload")
             UpdateWorkload(waclient,workloadId,workloadARN, workloadName,description,reviewOwner,environment,awsRegions,lenses,tags)
         else:
-            logger.info("Exiting due to duplicate workload in target account")
-            exit()
+            logger.error("Exiting due to duplicate workload and user states they do not want to continue.")
+            exit(1)
         return workloadId, workloadARN
     except botocore.exceptions.ParamValidationError as e:
         logger.error("ERROR - Parameter validation error: %s" % e)
