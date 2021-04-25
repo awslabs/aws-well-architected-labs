@@ -104,6 +104,8 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
             
 	</details>
 
+If you wish to deploy in the managment account here is the [link to Code](/Cost/300_CUR_Queries/Code/Analytics/org_data_man_tags.sql)
+
 
 4. Scroll down to **Environment variables** and click **Edit**
 
