@@ -35,8 +35,16 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
        import datetime
 
        def myconverter(o):
-       if isinstance(o, datetime.datetime):
-          return o.__str__()
+         if isinstance(o, datetime.datetime):
+            return o.__str__()
+      
+       def list_tags(client, resource_id):
+          tags = []
+          paginator = client.get_paginator("list_tags_for_resource")
+          response_iterator = paginator.paginate(ResourceId=resource_id)
+          for response in response_iterator:
+             tags.extend(response['Tags'])
+          return tags
 
        def list_accounts():
           bucket = os.environ["BUCKET_NAME"] #Using enviroment varibles below the lambda will use your S3 bucket
@@ -67,10 +75,10 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
                    for account in response["Accounts"]:
                       aid = account["Id"]                
                       if tags_check != '':
-                            tags_list = client.list_tags_for_resource(ResourceId=aid) #gets the lists of tags for this account
+                            tags_list = list_tags(client, aid) #gets the lists of tags for this account
                             
                             for tag in os.environ.get("TAGS").split(","): #looking at tags in the enviroment variables split by a space
-                               for org_tag in tags_list['Tags']:
+                               for org_tag in tags_list:
                                   if tag == org_tag['Key']: #if the tag found on the account is the same as the current one in the environent varibles, add it to the data
                                         value = org_tag['Value']
                                         kv = {tag : value}
@@ -95,6 +103,8 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
           list_accounts()
             
 	</details>
+
+If you wish to deploy in the managment account here is the [link to Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_man_tags.py)
 
 
 4. Scroll down to **Environment variables** and click **Edit**
