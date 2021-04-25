@@ -35,8 +35,8 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
        import datetime
 
        def myconverter(o):
-       if isinstance(o, datetime.datetime):
-          return o.__str__()
+         if isinstance(o, datetime.datetime):
+            return o.__str__()
       
        def list_tags(client, resource_id):
           tags = []
@@ -104,7 +104,7 @@ To get the Organizations tags, we need to update the Lambda function to pull thi
             
 	</details>
 
-If you wish to deploy in the managment account here is the [link to Code](/Cost/300_CUR_Queries/Code/Analytics/org_data_man_tags.sql)
+If you wish to deploy in the managment account here is the [link to Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_man_tags.py)
 
 
 4. Scroll down to **Environment variables** and click **Edit**
