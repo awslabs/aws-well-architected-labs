@@ -10,7 +10,7 @@ def list_accounts():
     bucket = os.environ["BUCKET_NAME"] #Using environment variables below the Lambda will use your S3 bucket
 
 
-    # create service client using the assumed role credentials
+    # create service client fir org
     client = boto3.client(
         "organizations", region_name="us-east-1" #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
     )
