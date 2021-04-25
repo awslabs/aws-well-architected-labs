@@ -1,0 +1,2 @@
+{"Id": "423143053313", "Arn": "arn:aws:organizations::455007007237:account/o-jrvtbte8wf/423143053313", "Email": "awssteph+sandbox@amazon.com", "Name": "steph-g-aws-sandbox", "Status": "ACTIVE", "JoinedMethod": "INVITED", "JoinedTimestamp": "2020-09-11 15:22:44.689000+01:00", "Env": "Test"}
+{"Id": "455007007237", "Arn": "arn:aws:organizations::455007007237:account/o-jrvtbte8wf/455007007237", "Email": "awssteph@amazon.com", "Name": "steph-g-aws-root", "Status": "ACTIVE", "JoinedMethod": "INVITED", "JoinedTimestamp": "2020-09-11 15:16:56.920000+01:00"}
