@@ -65,7 +65,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 {{% children  /%}}
 
 {{% notice tip %}}
-If you wish to deploy this in your AWS Management Account instead of a Member Account then you can use your Management Account ID instead of a Member Account ID in your IAM Policies crated in the next step. 
+If you wish to deploy this in your AWS Management Account instead of a Member Account then there is a seporate code version which can do this. You do not have to make the IAM Role and Policy made in the Managment account in the next step. 
 {{% /notice %}}
 
 {{< prev_next_button link_next_url="./1_create_static_resources_source/" button_next_text="Start Lab" first_step="true" />}}
