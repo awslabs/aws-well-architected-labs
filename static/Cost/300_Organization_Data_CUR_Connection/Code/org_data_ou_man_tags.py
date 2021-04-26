@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+#Gets org data, grouped by ous and tags from managment accounts in json
 import argparse
 import boto3
 from botocore.exceptions import ClientError
@@ -21,23 +22,10 @@ def list_tags(client, resource_id):
     return tags
     
 def lambda_handler(event, context):
-    
-    # sts_connection = boto3.client('sts')
-    # acct_b = sts_connection.assume_role(
-    #     RoleArn="arn:aws:iam::(account id):role/OrganizationLambdaAccessRole",
-    #     RoleSessionName="cross_acct_lambda"
-    # )
-
-    # ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
-    # SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
-    # SESSION_TOKEN = acct_b['Credentials']['SessionToken']
-
-    # create service client using the assumed role credentials
+    # create service client 
     client = boto3.client(
-        "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
-        #aws_access_key_id=ACCESS_KEY,
-        #aws_secret_access_key=SECRET_KEY,
-        #aws_session_token=SESSION_TOKEN,
+        "organizations", region_name="us-east-1" #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
+        
     )
 
     root_id    = client.list_roots()['Roots'][0]['Id']
@@ -67,7 +55,7 @@ def account_data(f, parent, client):
                         value = org_tag['Value']
                         kv = {tag : value}
                         account.update(kv)
-                
+        account.update({'Parent' : parent})        
         data = json.dumps(account, default = myconverter) #converts datetime to be able to placed in json
 
         f.write(data)
@@ -97,12 +85,8 @@ def get_ou_ids(parent_id, ChildType, client):
 
   for page in iterator:
     for ou in page['Children']:
-      # 1. Add entry
-      # 2. Fetch children recursively
       print(ou['Id'])
       full_result.append(ou['Id'])
-      #full_result.extend(get_ou_ids(ou['Id']))
+
 
   return full_result
-
-lambda_handler(None, None)

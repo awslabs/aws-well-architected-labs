@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
         
-#Lambda Function Code - Lambda_Org_Data
+#Gets org data with tags from managment accounts in json
 import boto3
 from botocore.exceptions import ClientError
 from botocore.client import Config

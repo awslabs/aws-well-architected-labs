@@ -46,10 +46,17 @@ We’ll create an IAM role and policy for the AWS Lambda function to access the 
                     "Sid":"OrgData",
                     "Effect":"Allow",
                     "Action":[
-                        "organizations:ListAccounts",
+                        "organizations:ListAccountsForParent",
+                        "organizations:ListRoots",
                         "organizations:ListCreateAccountStatus",
+                        "organizations:ListAccounts",
+                        "organizations:ListTagsForResource",
                         "organizations:DescribeOrganization",
-                        "organizations:ListTagsForResource"
+                        "organizations:DescribeOrganizationalUnit",
+                        "organizations:DescribeAccount",
+                        "organizations:ListParents",
+                        "organizations:ListOrganizationalUnitsForParent",
+                        "organizations:ListChildren"
                     ],
                     "Resource":"*"
                 },
@@ -117,10 +124,17 @@ As we need to pull the data from the **Management account** we need to allow our
                 "Sid": "OrgData",
                 "Effect": "Allow",
                 "Action": [
-                    "organizations:ListAccounts",
+                    "organizations:ListAccountsForParent",
+                    "organizations:ListRoots",
                     "organizations:ListCreateAccountStatus",
+                    "organizations:ListAccounts",
+                    "organizations:ListTagsForResource",
                     "organizations:DescribeOrganization",
-                    "organizations:ListTagsForResource"
+                    "organizations:DescribeOrganizationalUnit",
+                    "organizations:DescribeAccount",
+                    "organizations:ListParents",
+                    "organizations:ListOrganizationalUnitsForParent",
+                    "organizations:ListChildren"
                 ],
                 "Resource": "*"
             }

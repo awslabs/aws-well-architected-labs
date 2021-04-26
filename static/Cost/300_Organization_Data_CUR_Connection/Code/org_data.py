@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
     
+#Gets org data from linked account in csv
 import argparse
 import boto3
 from botocore.exceptions import ClientError
@@ -38,7 +39,7 @@ def list_accounts():
                 name = account["Name"]
                 time = account["JoinedTimestamp"]
                 status = account["Status"]
-                line = "%s, %s, %s, %s\n" % (aid, name, time, status)
+                line = f"{aid}, {name}, {time}, {status}\n"
                 f.write(line)
     print("respose gathered")
 
