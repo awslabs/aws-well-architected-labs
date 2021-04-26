@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-    
+
+#Gets org data  from managment accounts in csv
 import argparse
 import boto3
 from botocore.exceptions import ClientError
