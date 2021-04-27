@@ -15,17 +15,24 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # # Steps represent a sequence of tasks that will be executed as part of the job
+    # steps:
+    # # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    #   - uses: amazon-archives/amazon-chime-github-webhook@v1
+    #     with:
+    #       # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
+    #       message: "a person pushed to master branch"
+    #       webhook: ${{ secrets.TestRoomWebHookUrl }}
+    #       no-markdown: true
+
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: amazon-archives/amazon-chime-github-webhook@v1
+      - uses: 8398a7/action-slack@v3
         with:
-          # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
-          message: "a person pushed to master branch"
-          webhook: ${{ secrets.TestRoomWebHookUrl }}
-          no-markdown: true
-
-
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.TestRoomWebHookUrl }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
 
           # The chat room webhook URL can be created using Chime:
           # See https://docs.aws.amazon.com/chime/latest/ug/webhooks.html
