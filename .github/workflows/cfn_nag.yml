@@ -24,11 +24,10 @@ jobs:
         if: failure()
         uses: aws-actions/amazon-chime-github-webhook@v1
         with:
-          message: |
-            :rotating_light:
+          message: ":rotating_light:
             ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
             Link to GitHub Action run: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks
-            :rotating_light:
+            :rotating_light:"
           webhook: ${{ secrets.RoomWebHookUrl }}
 
       # - name: cfn-nag-action

@@ -20,8 +20,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: aws-actions/amazon-chime-github-webhook@v1
         with:
-          message: |
-            [${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch.
+          message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
           webhook: ${{ secrets.RoomWebHookUrl }}
 
           # The chat room webhook URL can be created using Chime:
