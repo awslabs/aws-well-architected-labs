@@ -23,6 +23,7 @@ jobs:
           # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
           message: "${{ github.actor}} pushed to master branch"
           webhook: ${{ secrets.RoomWebHookUrl }}
+          no-markdown: true
 
           # The chat room webhook URL can be created using Chime:
           # See https://docs.aws.amazon.com/chime/latest/ug/webhooks.html
