@@ -18,12 +18,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: aws-actions/amazon-chime-github-webhook@v1
+      - uses: amazon-archives/amazon-chime-github-webhook@v1
         with:
           # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
           message: "${{ github.actor}} pushed to master branch"
           webhook: ${{ secrets.RoomWebHookUrl }}
           no-markdown: true
+
+        
 
           # The chat room webhook URL can be created using Chime:
           # See https://docs.aws.amazon.com/chime/latest/ug/webhooks.html
