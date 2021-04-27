@@ -22,7 +22,7 @@ jobs:
         with:
           # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
           message: "a person pushed to master branch"
-          webhook: ${{ secrets.RoomWebHookUrl }}
+          webhook: ${{ secrets.TestRoomWebHookUrl }}
           no-markdown: true
 
 
