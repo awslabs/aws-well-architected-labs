@@ -30,7 +30,7 @@ jobs:
               Content: `https://github.com/awslabs/aws-solutions-constructs/issues/${{ env.ISSUE_NUMBER }}`
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.TestRoomWebHookUrl }}
+          SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
       - name: PR Slack Notification
         if: ${{ github.event_name == 'pull_request' || (github.event.issue.pull_request && github.event_name == 'issue_comment') }}
@@ -44,7 +44,7 @@ jobs:
               Content: `https://github.com/awslabs/aws-solutions-constructs/pull/${{ env.PR_NUMBER }}`
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.TestRoomWebHookUrl }}
+          SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }}
           PR_NUMBER: ${{ github.event.number }}
       - name: Set env
         if: ${{ github.event_name == 'release' }}

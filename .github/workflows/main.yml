@@ -35,5 +35,5 @@ jobs:
                             content: ":rotating_light: [${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch. :rotating_light:"
                           }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.TestRoomWebHookUrl }} # required
+          SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }} # required
         if: always() # Pick up events even if the job fails or is canceled.
