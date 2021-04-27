@@ -30,10 +30,7 @@ jobs:
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
                           {
-                            Content: ":rotating_light:
-                              ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
-                              Link to GitHub Action run: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks
-                              :rotating_light:"
+                            Content: ":rotating_light: \n ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }} \n Link to GitHub Action run: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks \n:rotating_light:"
                           }
           webhook: ${{ secrets.RoomWebHookUrl }}
 
