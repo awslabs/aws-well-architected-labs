@@ -32,7 +32,7 @@ jobs:
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
                           {
-                            text: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch.",
+                            text: ":rotating_light: [${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch. :rotating_light:",
                             author: "${{ github.actor }}",
                             attachments: [{
                             color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
