@@ -32,7 +32,7 @@ jobs:
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
                           {
-                            Content: "\n :rotating_light: \n[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch. \n:rotating_light:"
+                            Content: "\n :rotating_light: [${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch.:rotating_light:"
                           }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }} # required
