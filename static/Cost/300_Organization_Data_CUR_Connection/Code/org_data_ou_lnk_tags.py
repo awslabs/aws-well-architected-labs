@@ -22,10 +22,23 @@ def list_tags(client, resource_id):
     return tags
     
 def lambda_handler(event, context):
-    # create service client 
+
+    sts_connection = boto3.client('sts')
+    acct_b = sts_connection.assume_role(
+        RoleArn="arn:aws:iam::(account id):role/OrganizationLambdaAccessRole",
+        RoleSessionName="cross_acct_lambda"
+    )
+    
+    ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+    SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+    SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+
+    # create service client using the assumed role credentials
     client = boto3.client(
-        "organizations", region_name="us-east-1" #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
-        
+        "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
+        aws_access_key_id=ACCESS_KEY,
+        aws_secret_access_key=SECRET_KEY,
+        aws_session_token=SESSION_TOKEN,
     )
 
     root_id    = client.list_roots()['Roots'][0]['Id']
