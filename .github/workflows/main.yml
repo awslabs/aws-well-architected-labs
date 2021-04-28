@@ -6,7 +6,7 @@ name: PRODUCTION WA Labs
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ epullen ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -14,16 +14,26 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    # # Steps represent a sequence of tasks that will be executed as part of the job
+    # steps:
+    # # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    #   - uses: amazon-archives/amazon-chime-github-webhook@v1
+    #     with:
+    #       # message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
+    #       message: "a person pushed to master branch"
+    #       webhook: ${{ secrets.TestRoomWebHookUrl }}
+    #       no-markdown: true
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: aws-actions/amazon-chime-github-webhook@v1
+      - uses: 8398a7/action-slack@v3
         with:
-          message: "[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch."
-          webhook: ${{ secrets.RoomWebHookUrl }}
-
-          # The chat room webhook URL can be created using Chime:
-          # See https://docs.aws.amazon.com/chime/latest/ug/webhooks.html
-          # It is recommended to store the webhook URL as a secret, to avoid letting unknown user spam your chat room.
-          # See https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables
+          status: custom
+          # fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+                          {
+                            Content: "\n :rotating_light: \n[${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch. \n:rotating_light:"
+                          }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
