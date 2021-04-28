@@ -27,7 +27,7 @@ jobs:
           custom_payload: |
             {
               Type: 'Issue',
-              Content: `https://github.com/awslabs/aws-solutions-constructs/issues/${{ env.ISSUE_NUMBER }}`
+              Content: `https://github.com/${{ github.repository }}/issues/${{ env.ISSUE_NUMBER }}`
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }}
@@ -41,7 +41,7 @@ jobs:
           custom_payload: |
             {
               Type: 'Pull Request',
-              Content: `https://github.com/awslabs/aws-solutions-constructs/pull/${{ env.PR_NUMBER }}`
+              Content: `https://github.com/${{ github.repository }}/pull/${{ env.PR_NUMBER }}`
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }}
@@ -58,7 +58,7 @@ jobs:
           custom_payload: |
             {
               Version: `${{ env.TAG_NAME }}`,
-              Content: `https://github.com/awslabs/aws-solutions-constructs/releases/tag/${{ env.TAG_NAME }}`
+              Content: `https://github.com/${{ github.repository }}/releases/tag/${{ env.TAG_NAME }}`
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK }}
