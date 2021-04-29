@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -36,6 +36,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Container/ecs_eks.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -55,7 +56,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       and line_item_product_code in ('AmazonECS','AmazonEKS')
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -70,8 +71,9 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
       sum_line_item_unblended_cost,
       sum_line_item_usage_amount,
       line_item_operation;
+```
 
-{{% email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS/EKS Query" button_text="Help & Feedback" %}}
+{{< email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS/EKS Query" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -91,6 +93,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Container/ecs_hours_day.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -133,7 +136,7 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
       FROM
         ${table_name}
       WHERE
-        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        ${date_filter}
         AND line_item_product_code in ('AmazonECS')
         AND line_item_operation != 'ECSTask-EC2'
         AND product_product_family != 'Data Transfer'
@@ -149,8 +152,9 @@ Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing
         day_line_item_usage_start_date ASC,
         case_pricing_term,
         sum_line_item_usage_amount DESC;
+```
 
-{{% email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS Daily Usage Hours and Cost by Usage Type and Purchase Option" button_text="Help & Feedback" %}}
+{{< email_button category_text="Container" service_text="Amazon ECS" query_text="Amazon ECS Daily Usage Hours and Cost by Usage Type and Purchase Option" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

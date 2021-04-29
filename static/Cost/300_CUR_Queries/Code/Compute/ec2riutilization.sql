@@ -1,7 +1,8 @@
+-- modified: 2021-04-25
 -- query_id: ec2-ri-utilization
 -- query_description: The Reserved Instance Utilization and Coverage reports are available out-of-the-box in AWS Cost Explorer. This query provides utilization for EC2 Reserved Instances. It shows useful information about the Reserved Instances purchased including Lease ID, instance type and family, used and unused amounts.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,LeaseID,InstanceType,InstanceFamily,Region,line_item_line_item_type,sum_line_item_usage_amount,sum_reservation_unused_quantity,sum_line_item_normalized_usage_amount,sum_reservation_unused_normalized_unit_quantity,sum_line_item_blended_cost,sum_line_item_unblended_cost
-query_link: /cost/300_labs/300_cur_queries/queries/compute/
+-- query_columns: bill_payer_account_id,line_item_blended_cost,line_item_line_item_type,line_item_normalized_usage_amount,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,product_region,reservation_reservation_a_r_n,reservation_unused_normalized_unit_quantity,reservation_unused_quantity
+-- query_link: /cost/300_labs/300_cur_queries/queries/compute/
 
 SELECT -- automation_select_stmt
   bill_payer_account_id,
@@ -25,7 +26,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${tableName} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon Elastic Compute Cloud'
   AND line_item_operation LIKE '%%RunInstance%%'
   AND line_item_line_item_type IN ('Fee','RIFee','DiscountedUsage')

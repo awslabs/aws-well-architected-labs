@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: waf
 -- query_description: This query provides daily unblended cost and usage information about AWS WAF Usage including web acl, rule id, and region. 
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,split_webaclid_line_item_resource_id,split_ruleid_line_item_resource_id,line_item_usage_type,product_group,product_group_description,product_location,product_location_type,line_item_line_item_description,pricing_unit,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_line_item_description,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,pricing_unit,product_group,product_group_description,product_location,product_location_type
 -- query_link: /cost/300_labs/300_cur_queries/queries/security_identity__compliance/
 
 SELECT -- automation_select_stmt

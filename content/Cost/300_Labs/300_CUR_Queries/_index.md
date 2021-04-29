@@ -1,5 +1,5 @@
 ---
-title: "Level 300: CUR Queries"
+title: "Level 300: AWS CUR Query Library"
 #menutitle: "Lab #1"
 date: 2020-08-24T11:16:08-04:00
 chapter: false
@@ -9,7 +9,7 @@ hidden: false
 
 ## Last Updated
 
-January 2021
+March 2021
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

@@ -14,7 +14,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -43,6 +43,7 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/apigateway.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -61,7 +62,7 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon API Gateway'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -72,8 +73,9 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
       line_item_usage_type
     ORDER BY
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon API Gateway" query_text="Amazon API Gateway Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Amazon API Gateway" query_text="Amazon API Gateway Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -94,6 +96,7 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/cloudfront.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -107,7 +110,7 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_product_code = 'AmazonCloudFront'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -120,8 +123,9 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
       line_item_resource_id
     ORDER BY
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="Amazon CloudFront" query_text="Amazon CloudFront Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Amazon CloudFront" query_text="Amazon CloudFront Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -140,6 +144,7 @@ Please refer to each individual service pricing page for more details on how dat
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       line_item_product_code,
       line_item_usage_account_id  ,
@@ -153,7 +158,7 @@ Please refer to each individual service pricing page for more details on how dat
       SUM(CAST(line_item_unblended_cost AS decimal(16,8))) as sum_line_item_unblended_cost
     FROM ${tableName}
     WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_family = 'Data Transfer'
       AND line_item_line_item_type = 'Usage'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -168,8 +173,9 @@ Please refer to each individual service pricing page for more details on how dat
       product_product_family
     ORDER BY 
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer" query_text="Data Transfer Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer" query_text="Data Transfer Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -190,6 +196,7 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer-msk.sql)
 
 #### Query Preview:
+```tsql
     SELECT 
       line_item_product_code,
       line_item_usage_account_id,
@@ -202,7 +209,7 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
       round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost
     FROM ${table_name}
     WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') 
+      ${date_filter} 
       AND line_item_product_code = 'AmazonMSK'
       AND line_item_usage_type LIKE '%DataTransfer%'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -216,8 +223,9 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
       line_item_line_item_description
     ORDER BY  
       sum_line_item_unblended_cost desc
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -236,7 +244,7 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/direct-connect.sql)
 
 #### Query Preview:
-
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -274,8 +282,9 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
       pricing_unit
     ORDER BY
       sum_line_item_unblended_cost Desc
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -296,7 +305,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgatewaywrid.sql)
 
 #### Query Preview:
-
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -312,7 +321,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_family = 'NAT Gateway'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -324,8 +333,9 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
     ORDER BY
       sum_line_item_unblended_cost DESC,
       sum_line_item_usage_amount;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -344,6 +354,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgateway_idle_wrid.sql)
 
 #### Query Preview:
+```tsql
     SELECT
         bill_payer_account_id,
         line_item_usage_account_id,
@@ -387,7 +398,9 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
         AND pricing_unit_per_resource = 1
     ORDER BY
         cost_per_resource DESC
-{{% email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query2" button_text="Help & Feedback" %}}
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query2" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -407,6 +420,7 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/tgwwrid.sql)
 
 #### Query Preview:
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -427,7 +441,7 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_group = 'AWSTransitGateway' 
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -443,8 +457,9 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
       month_line_item_usage_start_date,
       sum_line_item_usage_amount,
       product_attachment_type;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="AWS Transit Gateway" query_text="AWS Transit Gateway Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="AWS Transit Gateway" query_text="AWS Transit Gateway Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -465,6 +480,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/networkusagewrid.sql)
 
 #### Query Preview
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -476,7 +492,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_operation IN (
         'LoadBalancing-PublicIP-In',
         'LoadBalancing-PublicIP-Out',
@@ -498,8 +514,9 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
       day_line_item_usage_start_date ASC,
       sum_line_item_usage_amount DESC,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

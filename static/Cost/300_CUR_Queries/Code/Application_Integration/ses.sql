@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: ses
 -- query_description: This query will provide daily unblended and usage information per linked account for Amazon SES. The output will include detailed information about the product family (Sending Attachments, Data Transfer, etc…) and usage type. The usage amount and cost will be summed and the cost will be in descending order.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,product_product_family,case_line_item_usage_type,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,product_product_family
 -- query_link: /cost/300_labs/300_cur_queries/queries/application_integration/
 
 SELECT -- automation_select_stmt
@@ -24,7 +25,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_Name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon Simple Email Service'
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt

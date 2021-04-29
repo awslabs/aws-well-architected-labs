@@ -14,7 +14,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -22,6 +22,7 @@ You may need to change variables used as placeholders in your query. **${table_N
   * [Region](#region)
   * [Service](#service)
   * [Bill Details by Service](#bill-details-by-service)
+  * [Premium Support Chargeback by Accounts](#premium-support-chargeback-by-accounts)
   
 ### Account
 
@@ -45,6 +46,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendaccount.sql)
 
 #### Query Preview:
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -70,7 +72,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_usage_type != 'Route53-Domains'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
@@ -80,8 +82,9 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     ORDER BY
       month_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Global" service_text="AWS Account" query_text="Global - Account" button_text="Help & Feedback" %}}
+{{< email_button category_text="Global" service_text="AWS Account" query_text="Global - Account" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -108,7 +111,8 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 #### Download SQL File:                                                                                                
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendregion.sql)                                                                                                                       
 
-#### Query Preview:                
+#### Query Preview:   
+```tsql             
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -140,7 +144,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_usage_type != 'Route53-Domains'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -148,9 +152,10 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       line_item_usage_account_id,
       3,
       4;
+```
 
 
-{{% email_button category_text="Global" service_text="AWS Region" query_text="Global - Region" button_text="Help & Feedback" %}}
+{{< email_button category_text="Global" service_text="AWS Region" query_text="Global - Region" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -175,7 +180,8 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendservice.sql)                                                                                    
 
-#### Query Preview:                
+#### Query Preview: 
+```tsql               
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -203,7 +209,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_usage_type != 'Route53-Domains' 
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -214,9 +220,10 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     ORDER BY
       month_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
+```
 
 
-{{% email_button category_text="Global" service_text="AWS Service" query_text="Global - Service" button_text="Help & Feedback" %}}
+{{< email_button category_text="Global" service_text="AWS Service" query_text="Global - Service" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -234,7 +241,8 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/billservice.sql)                                                                                    
 
-#### Query Preview:                
+#### Query Preview:    
+```tsql            
     SELECT 
         DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01') AS month_line_item_usage_start_date,
         bill_bill_type,
@@ -247,7 +255,7 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
     FROM 
           ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
     GROUP BY 1,
              bill_bill_type,
              3,
@@ -259,7 +267,72 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
              product_product_name,
              product_location,
              line_item_line_item_description;
+```
 
-{{% email_button category_text="Global" service_text="AWS Bill" query_text="Global - Bill" button_text="Help & Feedback" %}}
+{{< email_button category_text="Global" service_text="AWS Bill" query_text="Global - Bill" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### Premium Support Chargeback by Accounts
+
+#### Query Description
+This query will provide a monthly individual account chargeback for the premium support cost based on its contribution to overall AWS bill. This query computes the total monthly aws bill (without tax and support charges) and then calculates just the support charges. Based on the Individual accounts usage/spend percentage, its equivalent support fee is computed.
+
+#### Pricing
+Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
+
+#### Sample Output:                                                                                                                                     
+![Images/premiumsupport.png](/Cost/300_CUR_Queries/Images/Global/premiumsupport.png)          
+
+#### Download SQL File:                                                                                                                                       
+[Link to file](/Cost/300_CUR_Queries/Code/Global/premiumsupport.sql)                                                                                    
+
+#### Query Preview:    
+```tsql            
+    SELECT bill_payer_account_id,
+            line_item_usage_account_id,
+            sum(line_item_unblended_cost) sum_line_item_unblended_cost,
+            round(total_support_cost *((sum(line_item_unblended_cost)/total_cost)),
+            2) AS support_cost,
+            round(sum(line_item_unblended_cost)/total_cost*100,
+            2) AS percentage_of_total_cost,
+            ${table_name}.year,
+            ${table_name}.month
+    FROM ${table_name}
+
+    RIGHT JOIN -- Total AWS bill without support    
+        (SELECT sum(line_item_unblended_cost) AS total_cost,
+                year,
+                month
+        FROM ${table_name}
+        WHERE line_item_line_item_type <> 'Tax'
+              AND line_item_product_code <> 'OCBPremiumSupport'
+        GROUP BY  year, month ) AS aws_total_without_support
+        ON (${table_name}.year = aws_total_without_support.year
+            AND ${table_name}.month = aws_total_without_support.month)
+
+    RIGHT JOIN -- Total support    
+        (SELECT sum(line_item_unblended_cost) AS total_support_cost,
+                year,
+                month
+        FROM ${table_name}
+        WHERE line_item_product_code = 'OCBPremiumSupport'
+              AND line_item_line_item_type <> 'Tax'
+        GROUP BY  year, month ) AS aws_support
+        ON (${table_name}.year=aws_support.year
+            AND ${table_name}.month = aws_support.month)
+
+    WHERE line_item_line_item_type <> 'Tax'
+          AND line_item_product_code <> 'OCBPremiumSupport'
+          AND ${table_name}.year = '2020' AND (${table_name}.month BETWEEN '7' AND '9' OR ${table_name}.month BETWEEN '07' AND '09') 
+    GROUP BY  bill_payer_account_id, total_support_cost, total_cost, ${table_name}.year, ${table_name}.month, line_item_usage_account_id
+    ORDER BY  support_cost DESC;
+```
+
+{{< email_button category_text="Global" service_text="AWS Premium Support" query_text="Global - AWS Premium Support" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+{{% notice note %}}
+CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
+{{% /notice %}}

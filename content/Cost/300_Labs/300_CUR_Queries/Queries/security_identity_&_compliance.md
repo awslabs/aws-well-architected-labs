@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -36,6 +36,7 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/guardduty.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -63,8 +64,9 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       trim_product_group;
+```
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon GuardDuty" query_text="Amazon GuardDuty Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon GuardDuty" query_text="Amazon GuardDuty Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -85,6 +87,7 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/cognito.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -110,8 +113,9 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       line_item_operation;
+```
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -130,6 +134,7 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/waf.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -168,8 +173,9 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       product_group;
+```
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon WAF" button_text="Help & Feedback" %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon Cognito" query_text="Amazon WAF" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
