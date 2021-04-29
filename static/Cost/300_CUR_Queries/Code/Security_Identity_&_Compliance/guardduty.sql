@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: guardduty
 -- query_description: This query provides daily unblended cost and usage information about Amazon GuardDuty Usage.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,line_item_usage_type,trim_product_group,pricing_unit,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,pricing_unit,product_group
 -- query_link: /cost/300_labs/300_cur_queries/queries/security_identity__compliance/
 
 SELECT -- automation_select_stmt
