@@ -13,20 +13,29 @@ In this section we will create the AWS Organizations table in Amazon Athena. Thi
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-2.  We are going to create the Organizations table. This can be done in any of the databases that holds your Cost & Usage Report. Copy and paste the below query replacing the **( bucket-name)** with the S3 bucket name which holds the Organizations data, into the query box. Click **Run query**.
+2.  We are going to create the Organizations table. This can be done in any of the databases that holds your Cost & Usage Report.
+* Copy and paste the below query replacing the **( bucket-name)** with the S3 bucket name which holds the Organizations data
+* If you are pulling tags too add the Tags name as they appear in the Organizations page into the query in replace of the **(Tag1)** etc. 
+* Click **Run query**.
 
 		CREATE EXTERNAL TABLE IF NOT EXISTS managementcur.organisation_data (
-		`account_number` string,
-		`account_name` string,
-		`creation_date` string,
-		`status` string 
-		)
-		ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-		WITH SERDEPROPERTIES (
-		'serialization.format' = ',',
-		'field.delim' = ','
-		) LOCATION 's3://(bucket-name)/organisation-data/'
-		TBLPROPERTIES ('has_encrypted_data'='false'); 
+         `Id` string,
+         `Arn` string,
+         `Email` string,
+         `Name` string,
+         `Status` string,
+         `JoinedMethod` string,
+         `JoinedTimestamp` string,
+		 `Parent` string,
+         `(Tag1)` string,
+         `(Tag2)` string, 
+         ...
+			) 
+			ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+			WITH SERDEPROPERTIES (
+					'serialization.format' = '1' ) 
+		  LOCATION 's3://(bucket-name)/organisation-data/' 
+		  TBLPROPERTIES ('has_encrypted_data'='false');
 
 ![Images/Athena_Table.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Table.png)
 
