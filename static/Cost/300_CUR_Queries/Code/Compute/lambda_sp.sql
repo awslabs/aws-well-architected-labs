@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT *
 FROM
 (
@@ -40,7 +41,7 @@ FROM
     0
     ELSE "line_item_unblended_cost" END) "amortized_cost"
     FROM ${table_name}
-      WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      WHERE ${date_filter}
       AND product_product_name = 'AWS Lambda'
       AND line_item_line_item_type like '%%Usage%%'
       AND product_product_family IN ('Data Transfer', 'Serverless')
@@ -105,7 +106,7 @@ FROM
     ELSE "line_item_unblended_cost" END) "amortized_cost"
      
       FROM ${table_name}
-      WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      WHERE ${date_filter}
       AND product_product_name = 'AWS Lambda'
       AND product_product_family IN ('Data Transfer', 'Serverless')
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')

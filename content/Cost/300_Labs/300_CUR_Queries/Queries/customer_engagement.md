@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -34,6 +34,7 @@ Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricin
 [Link to Code](/Cost/300_CUR_Queries/Code/Customer_Engagement/connect.sql)
 
 #### Copy Query
+```tsql
     SELECT *
     FROM 
     ( 
@@ -54,7 +55,7 @@ Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricin
         FROM 
           ${table_name}
         WHERE
-          year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+          ${date_filter}
           AND line_item_product_code = 'AmazonConnect'
           AND line_item_line_item_type = 'Usage'
         GROUP BY
@@ -88,7 +89,7 @@ Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricin
         FROM 
           ${table_name}
         WHERE
-          year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+          ${date_filter}
           AND line_item_product_code = 'ContactCenterTelecomm'
           AND line_item_line_item_type = 'Usage'
         GROUP BY
@@ -103,8 +104,9 @@ Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricin
     ORDER BY
       day_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Customer Engagement" service_text="Amazon Connect" query_text="Amazon Connect Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Customer Engagement" service_text="Amazon Connect" query_text="Amazon Connect Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

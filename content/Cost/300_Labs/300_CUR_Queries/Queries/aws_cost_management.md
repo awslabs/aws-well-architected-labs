@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -34,6 +34,7 @@ Please refer to the [AWS Marketplace FAQ](https://aws.amazon.com/marketplace/hel
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/marketplacespend.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -47,15 +48,16 @@ Please refer to the [AWS Marketplace FAQ](https://aws.amazon.com/marketplace/hel
     FROM 
       ${table_name}
     WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND bill_billing_entity = 'AWS Marketplace'
     GROUP BY
       1,2,3,4,5
     ORDER BY
       month_line_item_usage_start_time ASC,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="AWS Marketplace Total Monthly Spend Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="AWS Marketplace Total Monthly Spend Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

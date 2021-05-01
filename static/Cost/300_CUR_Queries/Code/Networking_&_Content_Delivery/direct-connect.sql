@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: direct-connect
 -- query_description: The query will output AWS Direct Connect charges split by Direct Connect port charges and Data Transfer charges for a specific resource using Direct Connect. 
--- query_columns: bill_payer_account_id,line_item_usage_account_id,month_line_item_usage_start_date,product_port_speed,product_product_family,product_transfer_type,product_from_location,product_to_location,product_direct_connect_location,pricing_unit,line_item_operation,line_item_resource_id,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_operation,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,pricing_unit,product_direct_connect_location,product_from_location,product_port_speed,product_product_family,product_to_location,product_transfer_type
 -- query_link: /cost/300_labs/300_cur_queries/queries/networking__content_delivery/
 
 SELECT -- automation_select_stmt

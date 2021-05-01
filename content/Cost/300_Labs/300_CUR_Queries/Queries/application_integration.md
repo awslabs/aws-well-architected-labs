@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -41,6 +41,7 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/mqwrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -58,7 +59,7 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
     FROM
       ${table_Name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon MQ'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -76,8 +77,9 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC,
       split_line_item_usage_type;
+```
 
-{{% email_button category_text="Application Integration" service_text="Amazon MQ" query_text="Amazon MQ Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Application Integration" service_text="Amazon MQ" query_text="Amazon MQ Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -96,6 +98,7 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/ses.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -117,7 +120,7 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
     FROM 
       ${table_Name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Simple Email Service'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -130,8 +133,9 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
       day_line_item_usage_start_date,
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Application Integration" service_text="Amazon SES" query_text="Amazon SES Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Application Integration" service_text="Amazon SES" query_text="Amazon SES Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -150,6 +154,7 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sns.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -160,7 +165,7 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
     FROM 
       ${table_Name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Simple Notification Service'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -171,8 +176,9 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
     ORDER BY
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Application Integration" service_text="Amazon SNS" query_text="Amazon SNS Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Application Integration" service_text="Amazon SNS" query_text="Amazon SNS Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -191,6 +197,7 @@ Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sqs.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
@@ -202,7 +209,7 @@ Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing
     FROM 
       ${table_Name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_usage_account_id = '444455556666'
       AND line_item_product_code = 'AWSQueueService'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -211,8 +218,9 @@ Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing
     ORDER BY
       sum_line_item_unblended_cost DESC
     LIMIT 20;
+```
 
-{{% email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
