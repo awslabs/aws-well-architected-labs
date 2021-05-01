@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: appstream
 -- query_description: This query will provide unblended cost and usage information per linked account for Amazon AppStream 2.0.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,month_line_item_usage_start_date,product_product_family,product_instance_type,pricing_unit,product_region,sum_line_item_usage_amount,sum_line_item_unblended_cost_reservation_effective_cost
+-- query_columns: bill_payer_account_id,line_item_line_item_type,line_item_unblended_cost,line_item_unblended_cost_reservation_effective_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,pricing_unit,product_instance_type,product_product_family,product_region,reservation_effective_cost
 -- query_link: /cost/300_labs/300_cur_queries/queries/end_user_computing/
 
 SELECT -- automation_select_stmt
@@ -20,7 +21,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon AppStream'
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt

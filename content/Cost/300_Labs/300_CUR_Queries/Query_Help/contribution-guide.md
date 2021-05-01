@@ -58,7 +58,7 @@ Use ${table_name} as the variable for the customer table name.
 **WHERE SECTION RULES:**
 
 To aggregate data, always try to use the default CUR partitions as defined by the CUR CFN template.  The data is partitioned on year and month.  Below is an example on how we are formatting this WHERE statement:
-- EXAMPLE: `year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')`
+- EXAMPLE: `${date_filter}`
 
 For month we use both ‘mm’ vs. ‘m’ as per the example above as previous CFN templates have included both formats.
 

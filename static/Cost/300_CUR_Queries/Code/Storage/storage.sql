@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT 
   bill_payer_account_id,
   line_item_usage_account_id,
@@ -106,7 +107,7 @@ SELECT
 FROM 
   ${tableName}
 WHERE
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+  ${date_filter}
   AND ((line_item_product_code in ('AmazonFSx','AmazonEFS','AmazonS3','AmazonDynamoDB'))
     OR (line_item_product_code = 'AmazonEC2' AND line_item_usage_type LIKE '%EBS:%') 
     OR (line_item_product_code = 'AmazonRDS' AND product_product_family in ('Aurora Global Database','Database Storage','Provisioned IOPS','Storage Snapshot','System Operation')))

@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT * FROM 
         (SELECT bill_payer_account_id,
         line_item_usage_account_id,
@@ -16,7 +17,7 @@ SELECT * FROM
         , (sum(line_item_unblended_cost)-(sum(line_item_usage_amount)*.088)) AS gp3_savings -- 0.088 eu-west-1 pricing
 
         FROM ${table}
-        WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        WHERE ${date_filter}
         AND product_product_name = 'Amazon Elastic Compute Cloud'
         AND line_item_usage_type LIKE '%%EBS%%Volume%%'
         AND product_product_family IN ('Storage','System Operation')
