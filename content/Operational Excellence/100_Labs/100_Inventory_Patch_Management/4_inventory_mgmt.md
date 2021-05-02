@@ -33,7 +33,7 @@ SSM Agent is installed by default on:
 ### 4.1 Setting up Systems Manager
 
 1. Use your administrator account to access the Systems Manager console at <https://console.aws.amazon.com/systems-manager/>.
-1. Choose **Managed Instances** from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
+1. Choose **Fleet Manager** from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
    * As a user with AdministratorAccess permissions, you already have [User Access to Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html).
    * The Amazon Linux AMIs used to create the instances in your environment are dated 2017.09. They are [supported operating systems](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) and have the [SSM Agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed by default.
    * If you are in a [supported region](https://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region) the remaining step is to configure the IAM role for instances that will process commands.
@@ -55,7 +55,7 @@ SSM Agent is installed by default on:
    1. Select the first instance and then choose **Actions**, **Security**, and **Modify IAM Role**.
    1. Under **Modify IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Save**.
    1. Repeat this process, assigning **ManagedInstancesRole** to each of the 3 remaining instances.
-1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Managed Instances** from the navigation bar. Periodically choose **Managed Instances** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
+1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and Fleet Manager** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
 
 >**Note** If desired, you can use a [more restrictive permission set](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html) to grant access to Systems Manager.
 
@@ -73,7 +73,7 @@ You can use [AWS Systems Manager Inventory](https://docs.aws.amazon.com/systems-
 
 ### 4.3 Using Systems Manager Inventory to Track Your Instances
 
-1. Under **Instances & Nodes** in the AWS Systems Manager navigation bar, choose **Inventory**.
+1. Under **Node Management** in the AWS Systems Manager navigation bar, choose **Inventory**.
    1. Scroll down in the window to the **Corresponding managed instances** section. Inventory currently contains only the instance data available from the EC2
    1. Choose the **InstanceID** of one of your systems.
    1. Examine each of the available tabs of data under the **Instance ID** heading.
