@@ -180,4 +180,22 @@ Now you have completed this section you have setup the resources that will enabl
 {{% /notice %}}
 
 
+
+### Bounus Check AWS Organizations Tags
+In the next step we will be setting up a lambda to pull the data from your AWS Organization. If you wish to pull your tags from this data too then follow these steps to see your tags. 
+
+
+1.	From your Amazon console on the top right of your screen click on the drop down and chose **My Organization**.
+
+![Images/myorg.png](/Cost/300_Organization_Data_CUR_Connection/Images/myorg.png)
+
+2.	Open **AWS accounts** and you will see your Organization and your Organization structure. This holds your Organizational Units and your Accounts. Click on an account name that you wish to see the tags for. 
+
+![Images/aws_accounts.png](/Cost/300_Organization_Data_CUR_Connection/Images/aws_accounts.png)
+
+3.	At the bottom of the page, you will see the **Tags** section. Make a note the Tags Keys in the left-hand box which you wish to collect to use with the CUR in the next step. Note, these are **case sensitive** so we recommend copy and pasting them. 
+
+![Images/account_tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/account_tags.png)
+
+
 {{< prev_next_button link_prev_url="../" link_next_url="../2_create_automation_resources_source/" />}}
