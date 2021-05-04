@@ -1,5 +1,5 @@
 ---
-title: "Bonus Organization Tags"
+title: "Bonus Infrastructure as Code"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
 weight: 6
@@ -7,7 +7,7 @@ pre: "<b>6. </b>"
 ---
 
 
-### Update the Amazon Lambda Function to retrieve AWS Organizations tags
+### Bonus Infrastructure as Code
 
 To get the Organizations tags, we need to update the Lambda function to pull this information too. We will be swapping from csv to json as this will allow us to have flexibility with Amazon Athena as different accounts might have different tags. 
 
