@@ -9,153 +9,54 @@ pre: "<b>6. </b>"
 
 ### Bonus Infrastructure as Code
 
-To get the Organizations tags, we need to update the Lambda function to pull this information too. We will be swapping from csv to json as this will allow us to have flexibility with Amazon Athena as different accounts might have different tags. 
+### Optional: Advanced Setup using a CloudFormation Template
+This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates, create an IAM role, create an S3 Bucket, and create an Glue Grawler. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
 
-1.	Go to the **Lambda** service page:
+You will still need to create your IAM role in your Managment account **after** you have deployed the below. This can be see in the create IAM Role and Policies in Management account [step.]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/1_Create_static_resources_Source" >}})
 
-![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
+{{%expand "Click here to continue with the CloudFormation Advanced Setup" %}}
 
-2. Search for the function **Lambda_Org_Data** and click on the name
-
-![Images/Edit_Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Edit_Lambda.png)
-
-3. Scroll down to the **Function Code** section and replace the code with the one below, change (account id) to your **Management Account ID** and (Region) to the **Region** you are deploying in:
-
-    <details>
-    <summary> Click here to see the function code</summary>
-		
-       #!/usr/bin/env python3
-        
-       #Lambda Function Code - Lambda_Org_Data
-       import boto3
-       from botocore.exceptions import ClientError
-       from botocore.client import Config
-       import os
-       import json
-       import datetime
-
-       def myconverter(o):
-         if isinstance(o, datetime.datetime):
-            return o.__str__()
-      
-       def list_tags(client, resource_id):
-          tags = []
-          paginator = client.get_paginator("list_tags_for_resource")
-          response_iterator = paginator.paginate(ResourceId=resource_id)
-          for response in response_iterator:
-             tags.extend(response['Tags'])
-          return tags
-
-       def list_accounts():
-          bucket = os.environ["BUCKET_NAME"] #Using enviroment varibles below the lambda will use your S3 bucket
-          tags_check = os.environ["TAGS"]
-
-          sts_connection = boto3.client('sts')
-          acct_b = sts_connection.assume_role(
-                RoleArn="arn:aws:iam::(account id):role/OrganizationLambdaAccessRole",
-                RoleSessionName="cross_acct_lambda"
-          )
-                
-          ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
-          SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
-          SESSION_TOKEN = acct_b['Credentials']['SessionToken']
-
-          # create service client using the assumed role credentials
-          client = boto3.client(
-                "organizations", region_name="us-east-1", #Using the Organization client to get the data. This MUST be us-east-1 regardless of region you have the lamda in
-                aws_access_key_id=ACCESS_KEY,
-                aws_secret_access_key=SECRET_KEY,
-                aws_session_token=SESSION_TOKEN,
-          )
-          paginator = client.get_paginator("list_accounts") #Paginator for a large list of accounts
-          response_iterator = paginator.paginate()
-          with open('/tmp/org.json', 'w') as f: # Saving in the temporay folder in the lambda
-
-                for response in response_iterator: # extracts the needed info
-                   for account in response["Accounts"]:
-                      aid = account["Id"]                
-                      if tags_check != '':
-                            tags_list = list_tags(client, aid) #gets the lists of tags for this account
-                            
-                            for tag in os.environ.get("TAGS").split(","): #looking at tags in the enviroment variables split by a space
-                               for org_tag in tags_list:
-                                  if tag == org_tag['Key']: #if the tag found on the account is the same as the current one in the environent varibles, add it to the data
-                                        value = org_tag['Value']
-                                        kv = {tag : value}
-                                        account.update(kv)
-                               
-                      data = json.dumps(account, default = myconverter) #converts datetime to be able to placed in json
-
-                      f.write(data)
-                      f.write('\n')
-          print("respose gathered")
-
-          try:
-                s3 = boto3.client('s3', '(Region)',
-                               config=Config(s3={'addressing_style': 'path'}))
-                s3.upload_file(
-                   '/tmp/org.json', bucket, "organisation-data/org.json") #uploading the file with the data to s3
-                print("org data in s3")
-          except Exception as e:
-                print(e)
-
-       def lambda_handler(event, context):
-          list_accounts()
-            
-	</details>
-
-If you wish to deploy in the managment account here is the [link to Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_man_tags.py)
-
-
-4. Scroll down to **Environment variables** and click **Edit**
-
-5. Click Add Environment variables. In the new empty box write **TAGS** under key and a list of tags from your Organisation you would like to include **separated by a comma**. Click **Save**.
-
-![Images/Env_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Env_Tags.png)
-
-6. Scroll to Function code section and Click **Deploy**.
-
-7. You can now test the function by clicking **Test** at the top. 
-
-
-{{% notice info %}}
-If you tested the csv version then you need to go to your S3 but and delete the **csv file** that is there as you will now be using json.
+{{% notice note %}}
+NOTE: An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
 {{% /notice %}}
 
-### Update the Organizations Data Table
-In this section we will update the Organization table in Athena to include the tags specified above.
-1.	Go to the **Athena** service page
+### Create the Cost Intelligence Dashboard using a CloudFormation Template
 
-![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
+1. Login via SSO in your Cost Optimization account
 
-2.	We are going to update the table we created earlier with the tags your chose in the Lambda section. Copy and paste the below query replacing:
+2. Click the **Launch CloudFormation button** below to open the **stack template** and add in the needed variables in your CloudFormation console and select **Next**
 
-* Change **(bucket-name)** with your chosen bucket name from before
-* Add the Tags name as they appear in the Organizations  page into the query in replace of the **(Tag1)**  that you chose in your lambda function etc
-* Remove the **...**
-* Click **Run Query**
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https%3A%2F%2Fee-assets-prod-us-east-1.s3.amazonaws.com%2Fmodules%2F8cf0b70c5c7a489ebe4e957c2f32bb67%2Fv2%2FQuickSightCurReportAutomation.yml)
+	
+![Images/cf_dash_2.png](/Cost/200_Enterprise_Dashboards/Images/cf_dash_2.png)
 
-		CREATE EXTERNAL TABLE IF NOT EXISTS managementcur.organisation_data (
-         `Id` string,
-         `Arn` string,
-         `Email` string,
-         `Name` string,
-         `Status` string,
-         `JoinedMethod` string,
-         `JoinedTimestamp` string,
-         `(Tag1)` string,
-         `(Tag2)` string, 
-         ...
-			) 
-			ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-			WITH SERDEPROPERTIES (
-					'serialization.format' = '1' ) 
-		  LOCATION 's3://(bucket-name)/organisation-data/' 
-		  TBLPROPERTIES ('has_encrypted_data'='false');
+## Test Lamda Funtion
+If you deployed through cloudformation then please test your lambda function now. 
 
-![Images/Update_Athena_Tags.png](/Cost/300_Organization_Data_CUR_Connection/Images/Update_Athena_Tags.png)
+1.	Scroll to the **function code**  and click **Deploy**. Then Click **Test**.
 
-3. There will now be additional columns with your tags in them.
+![Images/Deploy_Function.png](/Cost/300_Organization_Data_CUR_Connection/Images/Deploy_Function.png)
+
+1.	Enter an **Event name** of **Test**, click **Create**:
+
+![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
+
+2.	Click **Test**
+
+3.	The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in Organizations file size over time:
+
+![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
+
+4.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
+
+![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
+
+
+{{% notice note %}}
+NOTE: You have successfully completed all CloudFormation specific steps. All remaining setup and future customizations will follow the same process as the manual steps.
+{{% /notice %}}
+
+{{% /expand%}}
 
 
 {{% notice tip %}}

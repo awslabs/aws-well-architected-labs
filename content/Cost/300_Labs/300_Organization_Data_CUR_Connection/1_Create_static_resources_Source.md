@@ -181,7 +181,7 @@ Now you have completed this section you have setup the resources that will enabl
 
 
 
-### Bounus Check AWS Organizations Tags
+### Bonus Check AWS Organizations Tags
 In the next step we will be setting up a lambda to pull the data from your AWS Organization. If you wish to pull your tags from this data too then follow these steps to see your tags. 
 
 

@@ -6,40 +6,64 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-### Create the Organisations Data Table
-In this section we will create the AWS Organizations table in Amazon Athena. This can then be used to connect to the AWS Cost & Usage Report (CUR) or other data sets you have, to show you the names and emails of your accounts.
+## Create Glue Crawler
+We will prepare the organization data source which we will use to join with the CUR. 
 
-1.	Go to the **Athena** service page
+1. Go to the **Glue** Service page:
+![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
+
+2. Click **Crawlers** from the left menu:
+![Images/glue_crawlers.png](/Cost/200_Pricing_Model_Analysis/Images/glue_crawlers.png)
+
+3. Click **Add crawler**:
+![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
+
+4. Enter a crawler name of **OrgGlueCrawler** and click **Next**:
+
+
+5. Ensure **Data stores** is the source type, click **Next**:
+
+
+6. Click the folder icon to list the S3 folders in your account:
+
+
+7. Expand the bucket which contains your pricing folders, and select the folder name **organisation-data**, click **Select**:
+
+
+8. Click **Next**:
+
+
+9. Click **Next**:
+
+
+10. **Create an IAM role** with a name of **AWS-Organization-Data-Glue-Crawler**, click **Next**:
+
+
+11. Leave the frequency as **Custom**, and click **Next**:
+
+
+12. Click on **Add database**:
+
+
+13. Enter a database name of **managementcur**, and click **Create**:
+
+
+14. Click **Next**:
+
+
+15. Click **Finish**:
+
+
+16. Select the crawler **OrgGlueCrawler** and click **Run crawler**:
+
+17. Once its run, you should see tables created:
+
+
+18.	Go to the **Athena** service page
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-2.  We are going to create the Organizations table. This can be done in any of the databases that holds your Cost & Usage Report.
-* Copy and paste the below query replacing the **( bucket-name)** with the S3 bucket name which holds the Organizations data
-* If you are pulling tags too add the Tags name as they appear in the Organizations page into the query in replace of the **(Tag1)** etc. 
-* Click **Run query**.
-
-		CREATE EXTERNAL TABLE IF NOT EXISTS managementcur.organisation_data (
-         `Id` string,
-         `Arn` string,
-         `Email` string,
-         `Name` string,
-         `Status` string,
-         `JoinedMethod` string,
-         `JoinedTimestamp` string,
-		 `Parent` string,
-         `(Tag1)` string,
-         `(Tag2)` string, 
-         ...
-			) 
-			ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-			WITH SERDEPROPERTIES (
-					'serialization.format' = '1' ) 
-		  LOCATION 's3://(bucket-name)/organisation-data/' 
-		  TBLPROPERTIES ('has_encrypted_data'='false');
-
-![Images/Athena_Table.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Table.png)
-
-3.	Athena should report ‘Query Successful’. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
+19. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
 
 		SELECT * FROM "managementcur"."organisation_data" limit 10;
 

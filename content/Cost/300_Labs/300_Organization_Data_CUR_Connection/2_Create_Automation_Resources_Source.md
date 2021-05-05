@@ -238,6 +238,7 @@ We will setup a Amazon CloudWatch Event to periodically run the Lambda functions
 
 ![Images/CW_Rule_Detail.png](/Cost/300_Organization_Data_CUR_Connection/Images/CW_Rule_Detail.png)
 
+
 {{% notice tip %}}
 You have now created your lambda function  to gather your organization data and place it into the S3 Bucket we made earlier. Using Cloudwatch this will now run every 7 days updating  the data. 
 {{% /notice %}}
