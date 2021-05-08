@@ -19,53 +19,41 @@ We will prepare the organization data source which we will use to join with the 
 ![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
 
 4. Enter a crawler name of **OrgGlueCrawler** and click **Next**:
-
+![Images/Crawler_info.png](/Cost/300_Organization_Data_CUR_Connection/Images/Crawler_info.png)
 
 5. Ensure **Data stores** is the source type, click **Next**:
+![Images/crawler_source_type.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_source_type.png)
 
+6. Click the folder icon to list the S3 folders in your account and find your S3 bucket and find the **organisation-data** folder and click **Next**:
+![Images/s3_source.png](/Cost/300_Organization_Data_CUR_Connection/Images/s3_source.png)
 
-6. Click the folder icon to list the S3 folders in your account:
+7. **Create an IAM role** with a name of **AWS-Organization-Data-Glue-Crawler**, click **Next**:
+![Images/crawler_iam.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_iam.png)
 
+8. Change the frequency as **Custom** and put in 0 8 ? * MON *, and click **Next**:
+![Images/Schedule.png](/Cost/300_Organization_Data_CUR_Connection/Images/Schedule.png)
 
-7. Expand the bucket which contains your pricing folders, and select the folder name **organisation-data**, click **Select**:
+9. Click on **Add database**.  Enter a database name of your CUR database **managementcur**, and click **Next**:
+![Images/crawler_output.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_output.png)
 
+10. Click **Finish**:
+![Images/crawler_finish.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_finish.png)
 
-8. Click **Next**:
+11. Select the crawler **OrgGlueCrawler** and click **Run crawler**:
+![Images/run_crawler.png](/Cost/300_Organization_Data_CUR_Connection/Images/run_crawler.png)
 
+12. Once its run, you should see tables created.
 
-9. Click **Next**:
-
-
-10. **Create an IAM role** with a name of **AWS-Organization-Data-Glue-Crawler**, click **Next**:
-
-
-11. Leave the frequency as **Custom**, and click **Next**:
-
-
-12. Click on **Add database**:
-
-
-13. Enter a database name of **managementcur**, and click **Create**:
-
-
-14. Click **Next**:
-
-
-15. Click **Finish**:
-
-
-16. Select the crawler **OrgGlueCrawler** and click **Run crawler**:
-
-17. Once its run, you should see tables created:
-
-
-18.	Go to the **Athena** service page
+13.	Go to the **Athena** service page
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-19. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
+14. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
 
 		SELECT * FROM "managementcur"."organisation_data" limit 10;
+
+![Images/Athena_Preview.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Preview.png)
+		
 
 {{% notice info %}}
 You have now created your Athena table that will query the organization data in the S3 Bucket. 
