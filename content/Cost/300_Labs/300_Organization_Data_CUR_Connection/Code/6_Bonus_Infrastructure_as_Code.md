@@ -25,9 +25,8 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 Deploy through Console 
 
-1. Click the **Download CloudFormation** by clicking [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml)
+1. Click the **Download CloudFormation** by clicking [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) or if you wish to download stright into your managment account click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main_man.yaml)
   * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
-
 
 2. Login via SSO in your Cost Optimization account and search for **Cloud Formation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
@@ -38,7 +37,7 @@ Deploy through Console
 4. Choose **Template is ready** and **Upload a template file** and upload the main.yaml file you downloaded from above. Click **Next**.
 ![Images/upload_template.png](/Cost/300_Organization_Data_CUR_Connection/Images/upload_template.png)
 
-5. Input the stack name as  **Organization-data-collector-stack** parameter Parameters. Once filled click **Next**.
+5. Input the stack name as  **Organization-data-collector-stack**. Next filled in the Parameters. Click **Next**.
  * **DatabaseName** - Athena Database name where you table will be created
  * **DestinationBucket** - Unique bucket name that is created to hold org data, you will need to use a  with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
  * **ManagementAccountId** - Your Management Account Id where your Optimization is held
@@ -55,7 +54,7 @@ Deploy through Console
 8. Wait for the Cloudformation to deploy, this can be seen when it has **CREATE_COMPLETE** under the stack name.
 ![Images/cf_deployed.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_deployed.png)
 
-9. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you too the lambda. 
+9. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
 ![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
 
 
@@ -66,8 +65,11 @@ Deploy through Console
 2. Run the following in your terminal, esuring that you have access to the member account you wish to deploy in. 
 ``` aws cloudformation create-stack --stack-name Organization-data-collector-stack --template-body file://main.yaml --capabilities CAPABILITY_NAMED_IAM --parameters file://parameter.json```
 
+{{% notice tip %}}
+If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
+{{% /notice %}}
 
-## Test Lamda Funtion
+## Test Lamda Function
 Now you have deployed the cloudformation then you can test your lambda to get your first set of data in Amazon S3. 
 
 
@@ -88,7 +90,8 @@ Now you have deployed the cloudformation then you can test your lambda to get yo
 
 ![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
 
-6. 
+6. Go to the **Glue** Service page:
+![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
 
 7. Now you have deployed your cloudfomation jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your crawler to create your athena table. 
 
