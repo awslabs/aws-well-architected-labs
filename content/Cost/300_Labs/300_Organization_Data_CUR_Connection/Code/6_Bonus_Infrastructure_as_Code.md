@@ -57,6 +57,7 @@ Deploy through Console
 9. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
 ![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
 
+10. Repeat the above steps in your **Managment Account** using the [Management.yaml](/Cost/300_Organization_Data_CUR_Connection/Code/Management.yaml) template
 
 ### Create the Organization data collector using a CloudFormation Template CLI
 

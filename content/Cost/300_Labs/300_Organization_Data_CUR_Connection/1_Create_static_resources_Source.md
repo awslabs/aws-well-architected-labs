@@ -54,13 +54,7 @@ Deploy through Console
 9. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
 ![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
 
-
-### Create the Organization data collector using a CloudFormation Template CLI
-
-1. Deploy through CLI download [parameter.json](/Cost/300_Organization_Data_CUR_Connection/Code/parameter.json) update them with your parameter.
-
-2. Run the following in your terminal, esuring that you have access to the member account you wish to deploy in. 
-``` aws cloudformation create-stack --stack-name Organization-data-collector-stack --template-body file://main.yaml --capabilities CAPABILITY_NAMED_IAM --parameters file://parameter.json```
+10. Repeat the above steps in your **Managment Account** using the [Management.yaml](/Cost/300_Organization_Data_CUR_Connection/Code/Management.yaml) template
 
 {{% notice tip %}}
 If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
