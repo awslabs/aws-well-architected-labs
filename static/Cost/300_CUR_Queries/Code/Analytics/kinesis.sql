@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: kinesis
 -- query_description: This query will provide daily unblended and usage information per linked account for each Kinesis product (Amazon Kinesis, Amazon Kinesis Firehose, and Amazon Kinesis Analytics).
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,split_line_item_resource_id,product_product_name,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,product_product_name
 -- query_link: /cost/300_labs/300_cur_queries/queries/analytics/
 
 SELECT -- automation_select_stmt
@@ -14,7 +15,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_Name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt

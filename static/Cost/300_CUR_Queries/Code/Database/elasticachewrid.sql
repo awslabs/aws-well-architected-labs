@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: elasticcache
 -- query_description: This query will output the total monthly sum per resource for all Amazon ElastiCache purchase options (including reserved instances) across all ElastiCache instances types.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,month_line_item_usage_start_date,split_line_item_resource_id,split_line_item_usage_type,purchase_option_line_item_line_item_type,sum_line_item_usage_amount,sum_line_item_unblended_cost,amortized_cost,ri_sp_trueup,ri_sp_upfront_fees
+-- query_columns: bill_payer_account_id,line_item_line_item_type,line_item_resource_id,line_item_usage_account_id,line_item_usage_start_date,line_item_usage_type
 -- query_link: /cost/300_labs/300_cur_queries/queries/database/
 
 select -- automation_select_stmt
@@ -36,7 +37,7 @@ select -- automation_select_stmt
 FROM -- automation_from_stmt
      ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+    ${date_filter} -- automation_timerange_year_month
     AND product_product_name = 'Amazon ElastiCache'
     AND product_product_family = 'Cache Instance'
     AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')

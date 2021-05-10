@@ -1,7 +1,5 @@
--- query_id: ec2-ri-coverage
--- query_description: The Reserved Instance Utilization and Coverage reports are available out-of-the-box in AWS Cost Explorer. This query provides coverage for EC2 Reserved Instances. It shows useful information about the Reserved Instances purchased including Lease ID, instance type and family, used and unused amounts, and On-Demand usage that could be covered by additional Savings Plans if this is your preferred savings method.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,ReservationType,LeaseID,InstanceType,InstanceFamily,Region,UsageType,sum_line_item_usage_amount,sum_reservation_unused_quantity,sum_line_item_normalized_usage_amount,sum_reservation_unused_normalized_unit_quantity,sum_line_item_blended_cost,sum_line_item_unblended_cost
--- query_link: /cost/300_labs/300_cur_queries/queries/compute/
+-- modified: 2021-04-25
+
 
     SELECT -- automation_select_stmt
       bill_payer_account_id,
@@ -29,7 +27,7 @@
     FROM -- automation_from_stmt
       ${table_name} -- automation_tablename
     WHERE -- automation_where_stmt
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+      ${date_filter} -- automation_timerange_year_month
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_operation LIKE '%%RunInstance%%'
       AND line_item_line_item_type IN ('Usage','Fee','RIFee','DiscountedUsage')

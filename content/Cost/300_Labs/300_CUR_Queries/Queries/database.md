@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -38,6 +38,7 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/rds-w-id.sql)
 
 #### Copy Query
+```tsql
       SELECT bill_payer_account_id,
          line_item_usage_account_id,
          DATE_FORMAT(("line_item_usage_start_date"),
@@ -92,8 +93,9 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
               AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
       GROUP BY  bill_payer_account_id, line_item_usage_account_id, DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'), product_instance_type, line_item_operation, line_item_usage_type, line_item_line_item_type, pricing_term, product_product_family, product_database_engine, line_item_line_item_type, line_item_resource_id
       ORDER BY  day_line_item_usage_start_date, usage_quantity, unblended_cost; 
+```
 
-{{% email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -112,6 +114,7 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/monthly_rds_usage_type_by_tag.sql)
 
 #### Copy Query
+```tsql
     SELECT
         line_item_usage_type,
         month,
@@ -129,8 +132,9 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
         line_item_usage_type,
         month,
         resource_tags_user_environment;
+```
 
-{{% email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Monthly Cost grouped by Usage Type and User Tag" button_text="Help & Feedback" %}}
+{{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Monthly Cost grouped by Usage Type and User Tag" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -149,7 +153,7 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/dynamodb.sql)
 
 #### Copy Query
-
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -171,7 +175,7 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
       reservation_reservation_a_r_n
     FROM 
       ${table_name}
-      WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      WHERE ${date_filter}
       AND line_item_product_code = 'AmazonDynamoDB'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -185,8 +189,9 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
       reservation_reservation_a_r_n
     ORDER BY
       sum_line_item_unblended_cost DESC
+```
 
-{{% email_button category_text="Database" service_text="Amazon DynamoDB" query_text="Amazon DynamoDB Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Database" service_text="Amazon DynamoDB" query_text="Amazon DynamoDB Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -206,6 +211,7 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/redshiftwrid.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -240,7 +246,7 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Redshift'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -249,8 +255,9 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
       day_line_item_usage_start_date,
       product_product_family,
       unblended_cost DESC;
+```
 
-{{% email_button category_text="Database" service_text="Amazon Redshift" query_text="Amazon Redshift Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Database" service_text="Amazon Redshift" query_text="Amazon Redshift Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -269,6 +276,7 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/elasticachewrid.sql)
 
 #### Copy Query
+```tsql
     select 
       bill_payer_account_id,
       line_item_usage_account_id, 
@@ -302,7 +310,7 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
     FROM 
         ${table_name}
     WHERE 
-        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        ${date_filter}
         AND product_product_name = 'Amazon ElastiCache'
         AND product_product_family = 'Cache Instance'
         AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -317,8 +325,9 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
         month_line_item_usage_start_date,
         sum_line_item_usage_amount desc, 
         sum_line_item_unblended_cost 
+```
 
-{{% email_button category_text="Database" service_text="Amazon ElastiCache" query_text="Amazon ElastiCache Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Database" service_text="Amazon ElastiCache" query_text="Amazon ElastiCache Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

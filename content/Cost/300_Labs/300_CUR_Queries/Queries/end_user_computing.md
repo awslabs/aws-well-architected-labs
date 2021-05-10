@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -40,6 +40,7 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/workspaceswrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -59,7 +60,7 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon WorkSpaces'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -79,8 +80,9 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
     ORDER BY
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -103,6 +105,7 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/workspaces_autostop_wrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -166,8 +169,9 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
       line_item_usage_account_id,
       product_operating_system,
       pricing_unit
+```
 
-{{% email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query2" button_text="Help & Feedback" %}}
+{{< email_button category_text="End User Computing" service_text="Amazon WorkSpaces" query_text="Amazon WorkSpaces Query2" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -186,6 +190,7 @@ Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/a
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/appstream.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -203,7 +208,7 @@ Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/a
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon AppStream'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -220,8 +225,9 @@ Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/a
       sum_line_item_usage_amount desc,
       sum_line_item_unblended_cost_reservation_effective_cost,
       product_product_family;
+```
 
-{{% email_button category_text="End User Computing" service_text="Amazon AppStream 2.0" query_text="Amazon AppStream Query" button_text="Help & Feedback" %}}
+{{< email_button category_text="End User Computing" service_text="Amazon AppStream 2.0" query_text="Amazon AppStream Query" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

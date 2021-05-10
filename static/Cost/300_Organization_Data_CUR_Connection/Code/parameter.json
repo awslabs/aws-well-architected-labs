@@ -1,0 +1,26 @@
+[
+    {
+      "ParameterKey": "CrawlerName",
+      "ParameterValue": "crawl-rightsizing-recommendations"
+    }, 
+    {
+      "ParameterKey": "DestinationBucket",
+      "ParameterValue": "rightsizebucket4231430533132"
+    }, 
+    {
+      "ParameterKey": "DestinationPrefix",
+      "ParameterValue": "rightsizing"
+    }, 
+    {
+      "ParameterKey": "RoleName",
+      "ParameterValue": "arn:aws:iam::455007007237:role/rightsizerole"
+    }, 
+    {
+      "ParameterKey": "Tags",
+      "ParameterValue": "Env"
+    }, 
+    {
+      "ParameterKey": "CodeBucket",
+      "ParameterValue": "optics-benchmarking-bucket"
+    }
+  ]

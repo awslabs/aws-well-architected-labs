@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT
   SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
   bill_payer_account_id,
@@ -60,7 +61,7 @@ SELECT
 FROM
   ${table_name}
 WHERE 
-year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+  ${date_filter}
   AND savings_plan_savings_plan_a_r_n <> ''
   AND line_item_line_item_type = 'SavingsPlanRecurringFee'
 GROUP BY
