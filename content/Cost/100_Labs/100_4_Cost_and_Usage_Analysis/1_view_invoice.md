@@ -11,10 +11,10 @@ At the end of a billing cycle or at the time you make a purchase and incur a one
 1. Log into the console via SSO and go to the billing dashboard:
 ![Images/AWSInvoice0.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSInvoice0.png)
 
-2. Select **Orders and invoices** from the menu on the left:
+2. Select **Payments** from the menu on the left:
 ![Images/AWSInvoice1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSInvoice1.png)
 
-3. Click on an **Invoice ID** corresponding to the month you wish to view:
+3. Click on **Transactions** and then an **Invoice ID** corresponding to the month you wish to view:
 ![Images/AWSInvoice2.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSInvoice2.png)
 
 4. It will download a PDF version of your invoice similar to below:

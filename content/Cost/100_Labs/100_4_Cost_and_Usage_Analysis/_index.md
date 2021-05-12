@@ -6,10 +6,11 @@ chapter: false
 weight: 4
 ---
 ## Last Updated
-May 2020
+May 2021
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
+- Matt Berk, Sr. Technical Account Manager
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -32,7 +33,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 ## Costs
-- There are no costs for this lab
+- S3: Storage of DBR file, refer to S3 pricing https://aws.amazon.com/s3/pricing/
 
 ## Time to complete
 - The lab should take approximately 10 minutes to complete

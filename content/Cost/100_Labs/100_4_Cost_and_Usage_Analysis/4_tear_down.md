@@ -1,12 +1,24 @@
 ---
 title: "Tear down"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-05-10T11:16:09-04:00
 chapter: false
 weight: 4
 pre: "<b>4. </b>"
 ---
 
-There is no configuration performed within this lab, so no teardown is required.
+If you'd like to disable the Detailed Billing Report, please follow the following steps. 
+
+### Disabling Detailed Billing Reports
+
+1. Go to the billing dashboard:
+![Images/AWSBillDetail0.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSBillDetail0.png)
+2. Click on the **Billing Preferences** from the left menu:
+![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill0.png)
+3. Click **Detailed Billing Reports [Legacy]** and uncheck the box. Then Click **Save Preferences**:
+![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill9.png)
+
+
+4. If you configured **Save to S3 Bucket** you can delete either the bucket or the DBR files to prevent any further charges. 
 
 {{< prev_next_button link_prev_url="../3_cost_usage_download/"  title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
