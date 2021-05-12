@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: cognito
 -- query_description: This query provides daily unblended cost and usage information about Amazon Cognito Usage. The usage amount and cost will be summed.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,product_product_name,line_item_operation,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_operation,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,product_product_name
 -- query_link: /cost/300_labs/300_cur_queries/queries/security_identity__compliance/
 
 SELECT -- automation_select_stmt

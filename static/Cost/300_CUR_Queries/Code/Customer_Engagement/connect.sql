@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT *
 FROM 
 ( 
@@ -18,7 +19,7 @@ FROM
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_product_code = 'AmazonConnect'
       AND line_item_line_item_type = 'Usage'
     GROUP BY
@@ -52,7 +53,7 @@ FROM
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_product_code = 'ContactCenterTelecomm'
       AND line_item_line_item_type = 'Usage'
     GROUP BY

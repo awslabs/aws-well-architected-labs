@@ -94,6 +94,9 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
     </details>
 
+If you wish to deploy in the managment account here is the [link to Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_man.py)
+
+
 6.	Edit **Basic settings** below:
     -	Memory: **512MB**
     -	Timeout: **2min**

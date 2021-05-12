@@ -16,7 +16,7 @@ December 2020
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-This lab will show you how to combine your organizations information with your AWS Cost & Usage Report, this will enable you to view cost & usage in a way that is more relevant to your organization. It will guide you through the process of setting up an AWS Lambda function to extract the data from AWS Organizations, such as account ID and name, and place it into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it.
+This lab will show you how to combine your organizations information with your AWS Cost & Usage Report, this will enable you to view cost & usage in a way that is more relevant to your organization. It will guide you through the process of setting up an AWS Lambda function to extract the data from AWS Organizations, such as account ID and name, and place it into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it. There is also a Bonus part to the lab where you can pull organization tags that are on account into the data set.
 
 
 ## Architecture 
@@ -64,5 +64,8 @@ Be able to create the below in a sub account where your CUR data is accessible:
 ## Steps:
 {{% children  /%}}
 
+{{% notice tip %}}
+If you wish to deploy this in your AWS Management Account instead of a Member Account then there is a seporate code version which can do this. You do not have to make the IAM Role and Policy made in the Managment account in the next step. 
+{{% /notice %}}
 
 {{< prev_next_button link_next_url="./1_create_static_resources_source/" button_next_text="Start Lab" first_step="true" />}}

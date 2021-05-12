@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -47,20 +47,22 @@ Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2_total_spend.sql)
 
 #### Copy Query
+```tsql
     SELECT line_item_product_code, 
     line_item_line_item_description, 
     round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost 
     FROM ${table_name}
     WHERE
-    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+    ${date_filter}
     AND line_item_product_code like '%AmazonEC2%'
     AND line_item_line_item_type NOT IN ('Tax','Refund')
     AND line_item_product_code like '%AmazonEC2%'
     GROUP BY line_item_product_code, 
     line_item_line_item_description
     ORDER BY sum_line_item_unblended_cost desc
+```
 
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Total Spend" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Total Spend" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -83,6 +85,7 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2runninghours.sql)
 
 #### Copy Query
+```tsql
       SELECT 
         year,
         month,
@@ -115,7 +118,7 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 
       FROM ${table_name}
       WHERE 
-        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        ${date_filter}
         AND ( (line_item_product_code = 'AmazonEC2')
               AND (product_servicecode <> 'AWSDataTransfer')
               AND (line_item_operation LIKE '%RunInstances%')
@@ -138,8 +141,9 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
         8
       ORDER BY 
         usage_quantity DESC
+```
 
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -159,6 +163,7 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2speffective.sql)
 
 #### Copy Query
+```tsql
         SELECT
         bill_payer_account_id,
         line_item_usage_account_id,
@@ -183,7 +188,7 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
         FROM
         ${table_name}
       WHERE
-        year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        ${date_filter}
         AND savings_plan_savings_plan_a_r_n <> ''
         AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
       GROUP by
@@ -198,9 +203,10 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
         savings_plan_end_time
       ORDER BY
         day_line_item_usage_start_date;
+```
 
 
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Effective Savings Plans" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Effective Savings Plans" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -219,6 +225,7 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/compute_sp.sql)
 
 #### Copy Query
+```tsql
     SELECT  
       bill_payer_account_id,
       bill_billing_period_start_date,
@@ -235,7 +242,7 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
       sum(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
     FROM ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
     GROUP BY  
       bill_payer_account_id, 
@@ -251,8 +258,9 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
       savings_plan_savings_plan_rate
     ORDER BY
       sum_pricing_public_on_demand_cost DESC
+```
 
-{{% email_button category_text="Compute" service_text="Compute" query_text="Compute with Savings Plans" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="Compute" query_text="Compute with Savings Plans" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -271,6 +279,7 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/account_spend_of_shared_sp.sql)
 
 #### Copy Query
+```tsql
     SELECT year,
     month,
     bill_payer_account_id,
@@ -295,8 +304,9 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
     bill_payer_account_id,
     savings_plan_offering_type
     ORDER BY sum_savings_plan_savings_plan_effective_cost DESC;
+```
 
-{{% email_button category_text="Compute" service_text="Compute" query_text="Account Spend of Shared Savings Plan" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="Compute" query_text="Account Spend of Shared Savings Plan" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -315,6 +325,7 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/lambda_sp.sql)
 
 #### Copy Query
+```tsql
         SELECT *
           FROM
           (
@@ -357,7 +368,7 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
               0
               ELSE "line_item_unblended_cost" END) "amortized_cost"
               FROM ${table_name}
-                WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+                WHERE ${date_filter}
                 AND product_product_name = 'AWS Lambda'
                 AND line_item_line_item_type like '%%Usage%%'
                 AND product_product_family IN ('Data Transfer', 'Serverless')
@@ -422,7 +433,7 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
               ELSE "line_item_unblended_cost" END) "amortized_cost"
               
                 FROM ${table_name}
-                WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+                WHERE ${date_filter}
                 AND product_product_name = 'AWS Lambda'
                 AND product_product_family IN ('Data Transfer', 'Serverless')
                 AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -445,8 +456,9 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
             day_line_item_usage_start_date,
             sum_line_item_usage_amount,
             sum_line_item_unblended_cost;
+```
 
-{{% email_button category_text="Compute" service_text="Lambda" query_text="Lambda Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="Lambda" query_text="Lambda Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -465,6 +477,7 @@ Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/elb_unsused_wrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -507,8 +520,9 @@ Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com
       AND pricing_unit_per_resource = 1
     ORDER BY
       cost_per_resource DESC
+```
 
-{{% email_button category_text="Compute" service_text="ELB" query_text="Elastic Load Balancing" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="ELB" query_text="Elastic Load Balancing" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -533,6 +547,7 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2_sp_inventory.sql)
 
 #### Copy Query
+```tsql
     SELECT
       SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
       bill_payer_account_id,
@@ -595,7 +610,7 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
     FROM
       ${table}
     WHERE
-    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+    ${date_filter}
       AND savings_plan_savings_plan_a_r_n <> ''
       AND line_item_line_item_type = 'SavingsPlanRecurringFee'
     GROUP BY
@@ -612,8 +627,9 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
     ORDER BY
       split_savings_plan_savings_plan_a_r_n,
       month_line_item_usage_start_date;
+```
 
-{{% email_button category_text="Compute" service_text="ELB" query_text="EC2 Savings Plans Inventory" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="ELB" query_text="EC2 Savings Plans Inventory" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -637,6 +653,7 @@ Please refer to the [EC2 reserved instances pricing page](https://aws.amazon.com
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2ricoverage.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -663,7 +680,7 @@ Please refer to the [EC2 reserved instances pricing page](https://aws.amazon.com
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_operation LIKE '%%RunInstance%%'
       AND line_item_line_item_type IN ('Usage','Fee','RIFee','DiscountedUsage')
@@ -680,8 +697,8 @@ Please refer to the [EC2 reserved instances pricing page](https://aws.amazon.com
       day_line_item_usage_start_date,
       InstanceType,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Compute" service_text="EC2" query_text="EC2 Reserved Instance Coverage" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Reserved Instance Coverage" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
-

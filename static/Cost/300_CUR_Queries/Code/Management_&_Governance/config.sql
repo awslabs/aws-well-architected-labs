@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: config
 -- query_description: This query will provide daily unblended and usage information per linked account for AWS Config.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,product_region,case_line_item_usage_type,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,product_region
 -- query_link: /cost/300_labs/300_cur_queries/queries/management__governance/
 
 SELECT -- automation_select_stmt
@@ -20,7 +21,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${tableName}
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'AWS Config'
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage') 
 GROUP BY -- automation_groupby_stmt

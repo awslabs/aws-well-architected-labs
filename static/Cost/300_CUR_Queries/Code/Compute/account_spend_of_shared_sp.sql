@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: account_spend_of_shared_sp
 -- query_description: This query focuses on surfacing accounts which have utilized AWS Savings Plans for which they are not a buyer.
--- query_columns: year,month,bill_payer_account_id,line_item_usage_account_id,savings_plan_offering_type,line_item_resource_id,sum_line_item_unblended_cost,sum_savings_plan_savings_plan_effective_cost
+-- query_columns: bill_payer_account_id,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,savings_plan_offering_type,savings_plan_savings_plan_effective_cost
 -- query_link: /cost/300_labs/300_cur_queries/queries/compute/
 
 SELECT -- automation_select_stmt

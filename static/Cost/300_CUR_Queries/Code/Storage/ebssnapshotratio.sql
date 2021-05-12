@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: ebssnapshotratio
 -- query_description: This query provides monthly ratio of unblended cost and usage information between Amazon EBS Volume vs Amazon EBS Snapshots Usage per account and region. 
--- query_columns: bill_payer_account_id,month_line_item_usage_start_date,usage_type_product_product_family,product_region,sum_line_item_usage_amount,sum_line_item_unblended_cost
+-- query_columns: bill_payer_account_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,product_product_family,product_region
 -- query_link: /cost/300_labs/300_cur_queries/queries/storage/
 
 SELECT -- automation_select_stmt
@@ -17,7 +18,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon Elastic Compute Cloud'
   AND (product_product_family = 'Storage Snapshot' OR product_product_family = 'Storage')
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')

@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -40,6 +40,7 @@ Please refer to the [Athena pricing page](https://aws.amazon.com/athena/pricing/
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/athena.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -53,7 +54,7 @@ Please refer to the [Athena pricing page](https://aws.amazon.com/athena/pricing/
     FROM 
       ${table_name}
     WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') 
+      ${date_filter} 
       AND line_item_product_code = 'AmazonAthena'
       AND line_item_line_item_type  in ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
@@ -67,8 +68,9 @@ Please refer to the [Athena pricing page](https://aws.amazon.com/athena/pricing/
     ORDER BY 
       sum_line_item_unblended_cost DESC
     LIMIT 20 ; 
+```
 
-{{% email_button category_text="Analytics" service_text="Athena" query_text="Athena Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="Athena" query_text="Athena Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -88,38 +90,38 @@ Please refer to the [Glue pricing page](https://aws.amazon.com/glue/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/gluewrid.sql)
 
 #### Copy Query
-     SELECT
-       bill_payer_account_id,
-       line_item_usage_account_id,
-       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-       line_item_operation,
-       CASE
-         WHEN LOWER(line_item_operation) = 'jobrun' THEN SPLIT_PART(line_item_resource_id, 'job/', 2)
-         WHEN LOWER(line_item_operation) = 'crawlerrun' THEN SPLIT_PART(line_item_resource_id, 'crawler/', 2)
-         ELSE 'N/A'
-       END as split_line_item_resource_id,
-       SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-       SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost
-     FROM
-       ${table_name}
-     WHERE
-       year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-       AND product_product_name = ('AWS Glue')
-       AND line_item_line_item_type  in ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
-       and line_item_resource_id is not null
-       and line_item_resource_id != ''
-     GROUP BY
-       bill_payer_account_id,
-       line_item_usage_account_id,
-       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-       line_item_operation,
-       line_item_resource_id
-     ORDER BY
-       day_line_item_usage_start_date,
-       sum_line_item_usage_amount,
-       sum_line_item_unblended_cost
+```tsql
+    SELECT
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      line_item_operation,
+      CASE
+        WHEN LOWER(line_item_operation) = 'jobrun' THEN SPLIT_PART(line_item_resource_id, 'job/', 2)
+        WHEN LOWER(line_item_operation) = 'crawlerrun' THEN SPLIT_PART(line_item_resource_id, 'crawler/', 2)
+        ELSE 'N/A'
+      END as split_line_item_resource_id,
+      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost
+    FROM
+      ${table_name}
+    WHERE
+      ${date_filter}
+      AND product_product_name = ('AWS Glue')
+      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      line_item_operation,
+      line_item_resource_id
+    ORDER BY
+      day_line_item_usage_start_date,
+      sum_line_item_usage_amount,
+      sum_line_item_unblended_cost;
+```
 
-{{% email_button category_text="Analytics" service_text="Glue" query_text="Glue Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="Glue" query_text="Glue Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -148,6 +150,7 @@ Please refer to the Kinesis pricing pages:
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/kinesis.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -159,7 +162,7 @@ Please refer to the Kinesis pricing pages:
     FROM 
       ${table_Name} 
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -171,8 +174,9 @@ Please refer to the Kinesis pricing pages:
     ORDER BY
       day_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Analytics" service_text="Kinesis" query_text="Kinesis Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="Kinesis" query_text="Kinesis Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -191,6 +195,7 @@ Please refer to the [Elasticsearch pricing page](https://aws.amazon.com/elastics
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/elasticsearch.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -224,7 +229,7 @@ Please refer to the [Elasticsearch pricing page](https://aws.amazon.com/elastics
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elasticsearch Service'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -233,8 +238,9 @@ Please refer to the [Elasticsearch pricing page](https://aws.amazon.com/elastics
       day_line_item_usage_start_date,
       product_product_family,
       unblended_cost DESC;
+```
 
-{{% email_button category_text="Analytics" service_text="Elasticsearch" query_text="Elasticsearch Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="Elasticsearch" query_text="Elasticsearch Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -254,6 +260,7 @@ Please refer to the [EMR pricing page](https://aws.amazon.com/emr/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/emr.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -264,7 +271,7 @@ Please refer to the [EMR pricing page](https://aws.amazon.com/emr/pricing/).
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic MapReduce'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -278,8 +285,9 @@ Please refer to the [EMR pricing page](https://aws.amazon.com/emr/pricing/).
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       split_line_item_usage_type;
+```
 
-{{% email_button category_text="Analytics" service_text="EMR" query_text="EMR Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="EMR" query_text="EMR Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -299,6 +307,7 @@ Please refer to the [Amazon QuickSight pricing page](https://aws.amazon.com/quic
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/quicksight.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -315,7 +324,7 @@ Please refer to the [Amazon QuickSight pricing page](https://aws.amazon.com/quic
     FROM 
         ${table_name}
     WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon QuickSight'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -332,8 +341,9 @@ Please refer to the [Amazon QuickSight pricing page](https://aws.amazon.com/quic
     ORDER BY
       month_line_item_usage_start_date,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Analytics" service_text="Amazon QuickSight" query_text="QuickSight Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Analytics" service_text="Amazon QuickSight" query_text="QuickSight Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
