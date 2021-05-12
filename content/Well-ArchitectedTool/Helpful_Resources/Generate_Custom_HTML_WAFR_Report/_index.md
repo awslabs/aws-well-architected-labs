@@ -1,5 +1,5 @@
 ---
-title: "Genereate a custom WellArchitected Framework HTML Report"
+title: "Generate a custom WellArchitected Framework HTML Report"
 menutitle: "Custom WAF Report"
 date: 2021-04-18T11:16:09-04:00
 chapter: false
