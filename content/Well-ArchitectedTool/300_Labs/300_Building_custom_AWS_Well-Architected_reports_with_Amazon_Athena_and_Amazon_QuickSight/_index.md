@@ -1,5 +1,5 @@
 ---
-title: "Build custom reports of AWS Well-Architected Reviews"
+title: "Level 300: Build custom reports of AWS Well-Architected Reviews"
 #menutitle: "Lab #1"
 date: 2021-03-24T15:16:08+10:00
 chapter: false
