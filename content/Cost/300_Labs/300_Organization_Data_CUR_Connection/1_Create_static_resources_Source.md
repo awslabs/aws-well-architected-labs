@@ -20,7 +20,9 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Grawler. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
 
-1. Click the **Download CloudFormation** by clicking [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) or if you wish to download straight into your management account click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main_man.yaml)
+1. Click the **Download CloudFormation**:
+* Clik [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) if you are deploying to your linked account (recommended)
+* Click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main_man.yaml) if you wish to deploy straight into your management account 
   * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
 
 2. Login via SSO in your Cost Optimization account and search for **CloudFormation**
@@ -36,7 +38,6 @@ This section is **optional** and automates the creation of the AWS organizations
  * **DatabaseName** - Athena Database name where you table will be created
  * **DestinationBucket** - Unique bucket name that is created to hold org data, you will need to use a  with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
  * **ManagementAccountId** - Your Management Account Id where your Optimization is held
- * **RoleARN** - ARN of the IAM role deployed in the management accounts which can retrieve AWS Org information e.g.arn:aws:iam::123456789:role/OrganizationLambdaAccessRole
  * **Tags** - List of tags from your Organisation you would like to include separated by a comma.
 ![Images/Parameters.png](/Cost/300_Organization_Data_CUR_Connection/Images/Parameters.png)
 

@@ -6,9 +6,6 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that is created to hold org data
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  RoleARN:
-    Type: String
-    Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Org information e.g.arn:aws:iam::123456789:role/OrganizationLambdaAccessRole
   Tags:
     Type: String
     Description: List of tags from your Organisation you would like to include separated by a comma.
@@ -91,7 +88,7 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource:
-                  Ref: RoleARN
+                  !Sub "arn:aws:iam:${ManagementAccountId}:role/OrganizationLambdaAccessRole"
         - PolicyName: "LambdaOrgPolicy"
           PolicyDocument:
             Version: "2012-10-17"

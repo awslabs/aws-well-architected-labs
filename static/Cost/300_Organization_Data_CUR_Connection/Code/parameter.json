@@ -10,11 +10,7 @@
     {
       "ParameterKey": "DestinationPrefix",
       "ParameterValue": "rightsizing"
-    }, 
-    {
-      "ParameterKey": "RoleName",
-      "ParameterValue": "arn:aws:iam::455007007237:role/rightsizerole"
-    }, 
+    },  
     {
       "ParameterKey": "Tags",
       "ParameterValue": "Env"
