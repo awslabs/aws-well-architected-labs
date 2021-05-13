@@ -11,7 +11,7 @@ Parameters:
     Description: List of tags from your Organisation you would like to include separated by a comma.
   ManagementAccountId:
     Type: String
-    Description: Your Management Account Id
+    Description: Your Management Account Id - Make sure no spaces when putting in
   DatabaseName:
     Type: String
     Description: Athena Database name where you table will be created
@@ -88,7 +88,7 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource:
-                  !Sub "arn:aws:iam:${ManagementAccountId}:role/OrganizationLambdaAccessRole"
+                  !Sub "arn:aws:iam::${ManagementAccountId}:role/OrganizationLambdaAccessRole"
         - PolicyName: "LambdaOrgPolicy"
           PolicyDocument:
             Version: "2012-10-17"
