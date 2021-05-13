@@ -278,6 +278,11 @@ Now you have completed this section there is a bonus part where you can check th
 ### Bonus Check AWS Organizations Tags
 In the next step we will be setting up a lambda to pull the data from your AWS Organization. If you wish to pull your tags from this data too then follow these steps to see your tags. 
 
+If you can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/organizations/list-tags-for-resource.html) then you can run the below command in your terminal where you have access to your management account to see an individual accounts tags:
+
+    aws organizations list-tags-for-resource --resource-id (account id)
+
+#### Bonus Check AWS Organizations Tags from Console
 
 1.	From your Amazon console on the top right of your screen click on the drop down and chose **My Organization**.
 
