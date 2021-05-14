@@ -114,7 +114,7 @@ Resources:
   LambdaOrgData:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: organization-lambda-function
+      FunctionName: Lambda_Org_Data
       Description: LambdaFunctioni of python3.8.
       Runtime: python3.8
       Code:
