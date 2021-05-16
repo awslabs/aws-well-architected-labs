@@ -1,22 +1,22 @@
 [
     {
       "ParameterKey": "CrawlerName",
-      "ParameterValue": "crawl-rightsizing-recommendations"
+      "ParameterValue": ""
     }, 
     {
       "ParameterKey": "DestinationBucket",
-      "ParameterValue": "rightsizebucket4231430533132"
+      "ParameterValue": ""
     }, 
     {
       "ParameterKey": "DestinationPrefix",
-      "ParameterValue": "rightsizing"
+      "ParameterValue": ""
     },  
     {
       "ParameterKey": "Tags",
-      "ParameterValue": "Env"
+      "ParameterValue": ""
     }, 
     {
       "ParameterKey": "CodeBucket",
-      "ParameterValue": "optics-benchmarking-bucket"
+      "ParameterValue": ""
     }
   ]
