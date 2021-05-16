@@ -170,7 +170,7 @@ We’ll create an IAM role and policy for the AWS Lambda function to access the 
 
 4.	Fill in the following
 * **Policy Name** LambdaOrgPolicy
-* **Description** Access to S3 for Lambda function to collect Orginization data
+* **Description** Access to S3 for Lambda function to collect organization data
 * Click **Create policy**
 
 ![Images/LambdaOrgPolicy.png](/Cost/300_Organization_Data_CUR_Connection/Images/LambdaOrgPolicy.png)
@@ -271,7 +271,7 @@ Now you have completed this section you have setup the resources that will enabl
 
 
 {{% notice note %}}
-Now you have completed this section there is a bonus part where you can check the Tags on your AWS Accounts. These are using in the lambda if you wish. 
+Now you have completed this section there is a bonus part where you can check the Tags on your AWS Accounts. These can be used in the lambda if you wish. 
 {{% /notice %}}
 
 {{%expand "Click here to see the Bonus Check AWS Organizations Tags" %}}

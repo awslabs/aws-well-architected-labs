@@ -67,5 +67,5 @@ You now have successfully utilized Organization mapping data on your Cost Intell
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../4_visualize_organization_data_in_quicksight/" link_next_url="../6_bonus_org_tags/" />}}
+{{< prev_next_button link_prev_url="../4_visualize_organization_data_in_quicksight/" link_next_url="../6_teardown/" />}}
 

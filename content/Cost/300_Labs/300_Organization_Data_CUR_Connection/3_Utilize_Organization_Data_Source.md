@@ -72,14 +72,14 @@ We will be running an example query on how you can connect your CUR to this Orga
 
 		SELECT line_item_usage_account_id,
 			line_item_product_code,
-			 account_name,
+			 name,
 			sum(line_item_unblended_cost) AS line_item_unblended_cost_cost
 		FROM "managementcur"."cur" cur
 		JOIN  "managementcur"."organisation_data"
-		ON "cur".line_item_usage_account_id = organisation_data.account_number
+		ON "cur".line_item_usage_account_id = organisation_data.id
 		WHERE month = '10'
 				AND year = '2020'
-		GROUP BY  line_item_usage_account_id,  account_name, line_item_product_code
+		GROUP BY  line_item_usage_account_id,  name, line_item_product_code
 		limit 10;
 
 ![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
@@ -98,7 +98,7 @@ If you would like to always have your Organizations data connected to your CUR t
 		SELECT *
 		FROM ("managementcur"."cur" cur
 		INNER JOIN "managementcur"."organisation_data"
-			ON ("cur"."line_item_usage_account_id" = "organisation_data"."account_number")) 
+			ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
 			
 
 
