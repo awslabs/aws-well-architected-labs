@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 ### Create Resource
 
-To deploy the resource you need for this lab you have two options. You can deploy using a AWS CloudFormation template which allows you to complete the lab in less than half the time as the standard setup. Or, you can deploy manually if you do not have access to deploy using CloudFormation or would like hands one experience going through the steps.
+To deploy the resource you need for this lab you have three options. You can deploy using a AWS CloudFormation template or a Terraform module, either allows you to complete the lab in less than half the time as the standard setup. Or, you can deploy manually if you do not have access to deploy using CloudFormation or would like hands one experience going through the steps.
 
 {{%expand "Click here to continue with the CloudFormation Advanced Setup" %}}
 
@@ -91,8 +91,54 @@ NOTE: You have successfully completed all CloudFormation specific steps. All rem
 
 {{% /expand%}}
 
+{{%expand "Click here to continue with the Terraform Advanced Setup" %}}
+### Create the Organization data collector using Terraform
 
-{{%expand "Click here to continue with Create Resources Manually" %}}
+There is an AWS [Github Repo](https://github.com/awslabs/well-architected-lab300-aws-organization-data-terraform-module) which has a module to deploy all the resources needed in this lab. Please deploy using the instructions in the github repo then return to the step below.
+
+{{% notice tip %}}
+If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
+{{% /notice %}}
+
+## Test Lamda Function
+Now you have deployed the Terraform then you can test your lambda to get your first set of data in Amazon S3. 
+
+
+1. Go to the **Lambda** service page :
+
+![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
+
+
+2. Search for your new function called **Lambda_Org_Data** and clikc on it. To test your lambda function click **Test**
+![Images/lambda_test_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/lambda_test_cf.png) 
+
+3. Enter an **Event name** of **Test**, click **Create**:
+
+![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
+
+4.	Click **Test**
+
+5.	The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in Organizations file size over time:
+
+![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
+
+6.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
+
+![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
+
+7. Go to the **Glue** Service page:
+![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
+
+8. Now you have deployed your Terraform jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your crawler to create your athena table. 
+
+{{% notice note %}}
+NOTE: You have successfully completed all Terraform specific steps. All remaining setup and future customizations will follow the same process as the manual steps.
+{{% /notice %}}
+
+{{% /expand%}}
+
+
+{{%expand "Click here to continue with Creating Resources Manually" %}}
 ### Create the Organization data collector manually
 
 ### Create Amazon S3 Bucket and Folders
