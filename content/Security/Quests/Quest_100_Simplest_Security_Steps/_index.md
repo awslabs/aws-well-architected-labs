@@ -15,7 +15,7 @@ description: "These are the six things we encourage all customers to do to impro
 
 ## Introduction
 
-The following steps will enable the customers to improve their security posture in the cloud in a very easy manner.
+These are the six things we encourage all customers to do to improve their security in the cloud.
 
 ## Prerequisites
 
