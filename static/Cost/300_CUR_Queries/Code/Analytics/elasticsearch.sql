@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT
   bill_payer_account_id,
   line_item_usage_account_id,
@@ -31,7 +32,7 @@ SELECT
 FROM
   ${table_name}
 WHERE
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+  ${date_filter}
   AND product_product_name = 'Amazon Elasticsearch Service'
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY

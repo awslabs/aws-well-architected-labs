@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: billservice
 -- query_description: This query will provide a monthly cost summary by AWS Service Charge which is an approximation to the monthly bill in the billing console.
--- query_columns: month_line_item_usage_start_date,bill_bill_type,product_product_name,product_location,line_item_line_item_description,round_sum_line_item_unblended_cost,sum_line_item_usage_amount
+-- query_columns: bill_bill_type,line_item_line_item_description,line_item_unblended_cost,line_item_usage_amount,line_item_usage_start_date,product_location,product_product_family
 -- query_link: /cost/300_labs/300_cur_queries/queries/global/
 
 SELECT -- automation_select_stmt
@@ -15,7 +16,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
 GROUP BY -- automation_groupby_stmt
   1,
   bill_bill_type,

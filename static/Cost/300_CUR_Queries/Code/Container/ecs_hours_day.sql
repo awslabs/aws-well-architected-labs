@@ -1,7 +1,4 @@
--- query_id: ecs-hours-per-day
--- query_description: This query will output the daily ECS cost and usage per resource, by usage type and purchase option, both unblended and amortized costs are shown.
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,split_line_item_resource_id,case_line_item_usage_type,case_pricing_term,sum_line_item_usage_amount,sum_line_item_unblended_cost,amortized_cost
--- query_link: /cost/300_labs/300_cur_queries/queries/container/
+-- modified: 2021-04-25
 
 SELECT -- automation_select_stmt
   bill_payer_account_id,
@@ -45,7 +42,7 @@ SELECT -- automation_select_stmt
   FROM -- automation_from_stmt
     ${table_name} -- automation_tablename
   WHERE -- automation_where_stmt
-    year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+    ${date_filter} -- automation_timerange_year_month
     AND line_item_product_code in ('AmazonECS')
     AND line_item_operation != 'ECSTask-EC2'
     AND product_product_family != 'Data Transfer'

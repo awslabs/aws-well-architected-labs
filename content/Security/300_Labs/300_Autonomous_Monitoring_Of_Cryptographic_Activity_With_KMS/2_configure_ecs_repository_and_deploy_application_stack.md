@@ -131,7 +131,7 @@ Our sample application is configured as follows:
 
 * Our application is built using nodejs express ( You can find the source code under app/app.js file of the [github]() repository ) 
 * The service will expose a REST API wth **/encrypt** and **/decrypt** action.
-* The **/encrypt** will take an input of a JSON payload with key and value as below `'{"Name":"Andy Jassey","Text":"Welcome To ReInvent 2020!"}'`
+* The **/encrypt** will take an input of a JSON payload with key and value as below `'{"Name":"Andy Jassy","Text":"Welcome To ReInvent 2020!"}'`
 * The **Name** Key will be the identifier that we will use to store the encrypted value of **Text** Value.
 * The application will then call the [KMS Encrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html) and encrypt it again using a KMS key that we designate. (For simplicity, in this mock app we will be using the same KMS key for every **Name** you put in, ideally you want to use individual key for each name)
 * The encrypted value of **Text** key will then be stored in an [RDS](https://aws.amazon.com/rds/) database, and the app will return a **Encryption Key** value that the user will have to pass on to decrypt the Text later
@@ -253,7 +253,7 @@ From your **Cloud9** terminal, replace the < Application Endpoint URL > with the
 ```
 ALBURL="< Application Endpoint URL >"
 
-curl --header "Content-Type: application/json" --request POST --data '{"Name":"Andy Jassey","Text":"Welcome to ReInvent 2020!"}' $ALBURL/encrypt
+curl --header "Content-Type: application/json" --request POST --data '{"Name":"Andy Jassy","Text":"Welcome to ReInvent 2020!"}' $ALBURL/encrypt
 ```
 
 Once you've executed this you should see an output similar to this:

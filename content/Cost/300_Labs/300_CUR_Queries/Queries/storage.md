@@ -13,7 +13,7 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
@@ -40,6 +40,7 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/s3costusagetypewrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -127,8 +128,9 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
     ORDER BY
       day_line_item_usage_start_date ASC,
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Storage" service_text="Amazon S3" query_text="Amazon S3 Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon S3" query_text="Amazon S3 Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -147,6 +149,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshot-spend.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -157,7 +160,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
     FROM
       ${tableName}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Snapshot%%'
       AND product_product_family LIKE 'Storage Snapshot'
@@ -171,8 +174,9 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       sum_line_item_unblended_cost DESC, 
       sum_line_item_usage_amount DESC,
       date_line_item_usage_start_date ASC; 
+```
 
-{{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Snapshot Spend" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Snapshot Spend" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -191,6 +195,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebsusagespend.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -217,7 +222,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
     FROM
       ${tableName}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Volume%%'
       AND product_product_family  IN ('Storage','System Operation')
@@ -229,8 +234,9 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       line_item_usage_type
     ORDER BY
       sum_line_item_unblended_cost DESC;
+```
 
-{{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Usage Spend" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Usage Spend" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -249,6 +255,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshotratio.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id ,
       line_item_usage_account_id,
@@ -263,7 +270,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
     FROM
       ${tableName}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND (product_product_family = 'Storage Snapshot' OR product_product_family = 'Storage')
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
@@ -280,8 +287,9 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       month_line_item_usage_start_date ASC, 
       sum_line_item_unblended_cost DESC,
       sum_line_item_usage_amount DESC;
+```
 
-{{% email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Volume vs Snapshot Ratio, Usage Spend" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon EBS" query_text="AWS EBS Volume vs Snapshot Ratio, Usage Spend" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -300,6 +308,7 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/efswrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -315,7 +324,7 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon Elastic File System'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -333,8 +342,9 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost DESC,
       line_item_usage_type;
+```
 
-{{% email_button category_text="Storage" service_text="Amazon EFS" query_text="Amazon EFS Query1" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon EFS" query_text="Amazon EFS Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -353,6 +363,7 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/fsxwrid.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -367,7 +378,7 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name = 'Amazon FSx'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -383,8 +394,9 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
       day_line_item_usage_start_date,
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost;
+```
 
-{{% email_button category_text="Storage" service_text="Amazon FSx" query_text="Amazon FSx Query" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="Amazon FSx" query_text="Amazon FSx Query" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -403,6 +415,7 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/backup_spend.sql)
 
 #### Copy Query
+```tsql
     SELECT
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -417,7 +430,7 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
     FROM
       ${table_name}
     WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+      ${date_filter}
       AND product_product_name like '%Backup%'
       AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
@@ -433,8 +446,9 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       line_item_usage_type;
+```
 
-{{% email_button category_text="Storage" service_text="AWS Backup" query_text="AWS Backup Query" button_text="Help & Feedback" %}}
+{{< email_button category_text="Storage" service_text="AWS Backup" query_text="AWS Backup Query" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -453,6 +467,7 @@ Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebs_gp2_to_gp3.sql)
 
 #### Copy Query
+```tsql
     SELECT * FROM 
         (SELECT bill_payer_account_id,
         line_item_usage_account_id,
@@ -471,7 +486,7 @@ Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/
         , (sum(line_item_unblended_cost)-(sum(line_item_usage_amount)*.088)) AS gp3_savings -- 0.088 eu-west-1 pricing
 
         FROM ${table}
-        WHERE year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
+        WHERE ${date_filter}
         AND product_product_name = 'Amazon Elastic Compute Cloud'
         AND line_item_usage_type LIKE '%%EBS%%Volume%%'
         AND product_product_family IN ('Storage','System Operation')
@@ -482,8 +497,9 @@ Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/
         GROUP BY bill_payer_account_id, line_item_usage_account_id, month, line_item_usage_type, product_location, product_region, line_item_resource_id, pricing_public_on_demand_rate, month
         ORDER BY sum_line_item_unblended_cost DESC)
         WHERE gb_charged < 1000;
+```
 
-{{% email_button category_text="Compute" service_text="ELB" query_text="Elastic Block Storage gp2 upgrade to up3" button_text="Help & Feedback" %}}
+{{< email_button category_text="Compute" service_text="ELB" query_text="Elastic Block Storage gp2 upgrade to up3" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

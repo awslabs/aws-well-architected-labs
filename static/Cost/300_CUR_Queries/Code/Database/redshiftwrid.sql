@@ -1,6 +1,7 @@
+-- modified: 2021-04-25
 -- query_id: redshift
 -- query_description: This query will provide daily unblended and amortized cost as well as usage information per linked account for Amazon Redshift. 
--- query_columns: bill_payer_account_id,line_item_usage_account_id,day_line_item_usage_start_date,product_instance_type,split_line_item_resource_id,line_item_operation,line_item_usage_type,line_item_line_item_type,pricing_term,product_usage_family,product_product_family,usage_quantity,unblended_cost,amortized_cost,ri_sp_trueup,ri_sp_upfront_fees
+-- query_columns: bill_payer_account_id,line_item_line_item_type,line_item_operation,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_start_date,line_item_usage_type,pricing_term,product_instance_type,product_product_family,product_usage_family
 -- query_link: /cost/300_labs/300_cur_queries/queries/database/
 
 SELECT -- automation_select_stmt
@@ -37,7 +38,7 @@ SELECT -- automation_select_stmt
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-  year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09') -- automation_timerange_year_month
+  ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon Redshift'
   AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt

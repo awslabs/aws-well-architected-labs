@@ -16,7 +16,7 @@ Run the command shown below within your **Cloud9 IDE**, replacing the < encrypt 
 
 ```
 ALBURL="http://< Application endpoint URL >"
-curl --header "Content-Type: application/json" --request GET --data '{"Name":"Andy Jassey","Key":"<encrypt key>"}' $ALBURL/decrypt
+curl --header "Content-Type: application/json" --request GET --data '{"Name":"Andy Jassy","Key":"<encrypt key>"}' $ALBURL/decrypt
 ```
 
 Once that is successful, you should see out put like below:
@@ -33,7 +33,7 @@ Run below command once again, but this time, pass on a wrong key for the encrypt
 
 ```
 ALBURL="http://< Application endpoint URL >"
-curl --header "Content-Type: application/json" --request GET --data '{"Name":"Andy Jassey","Key":"some-random-false-key"}' $ALBURL/decrypt
+curl --header "Content-Type: application/json" --request GET --data '{"Name":"Andy Jassy","Key":"some-random-false-key"}' $ALBURL/decrypt
 ```
 
 Once it is triggered, you should see output like below signifying that the decrypt procedure has failed, and in the background a failed KMS API has been called. :
