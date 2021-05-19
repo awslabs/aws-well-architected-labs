@@ -36,7 +36,7 @@ This section is **optional** and automates the creation of the AWS organizations
 
 5. Input the stack name as  **Organization-data-collector-stack**. Then filled in the Parameters. Click **Next**.
  * **DatabaseName** - Athena Database name where you table will be created
- * **DestinationBucket** - Unique bucket name that is created to hold org data, you will need to use a  with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
+ * **DestinationBucket** - The name you would like of the bucket that will be created in to hold org data, you will need to use a with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
  * **ManagementAccountId** - Your Management Account Id where your Optimization is held
  * **Tags** - List of tags from your Organisation you would like to include separated by a comma.
 ![Images/Parameters.png](/Cost/300_Organization_Data_CUR_Connection/Images/Parameters.png)
