@@ -7,10 +7,10 @@ pre: "<b>3. </b>"
 ---
 
 ## Exporting a workload to a JSON file
-Example Command: `./exportImportWAFR.py -f test5.json --exportWorkload --profile acct2 -w c896b2b1142f6ea8dc22874674400002`
+Example Command: `./exportImportWAFR.py -f workload_output.json --exportWorkload --profile acct2 -w c896b2b1142f6ea8dc22874674400002`
 
 ```shell
-./exportImportWAFR.py -f workload_output.json --exportWorkload --profile acct2 -w c896b2b1142f6ea8dc22874674400002
+$ ./exportImportWAFR.py -f workload_output.json --exportWorkload --profile acct2 -w c896b2b1142f6ea8dc22874674400002
 2021-05-19 15:39:46.921 INFO exportImportWAFR - main: Script version 0.1
 2021-05-19 15:39:46.921 INFO exportImportWAFR - main: Starting Boto 1.17.27 Session
 2021-05-19 15:39:47.066 INFO exportImportWAFR - main: Exporting workload 'c896b2b1142f6ea8dc22874674400002' to file workload_output.json
@@ -28,10 +28,10 @@ Example Command: `./exportImportWAFR.py -f test5.json --exportWorkload --profile
 
 ```
 ## Importing a workload from a JSON file
-Example Command: `./exportImportWAFR.py -f test5.json --importWorkload  --profile acct2 --region us-east-2`
+Example Command: `./exportImportWAFR.py -f workload_output.json --importWorkload  --profile acct2 --region us-west-1`
 
 ```shell
-./exportImportWAFR.py -f workload_output.json --importWorkload  --profile acct2 --region us-west-1
+$ ./exportImportWAFR.py -f workload_output.json --importWorkload  --profile acct2 --region us-west-1
 2021-05-19 15:41:31.711 INFO exportImportWAFR - main: Script version 0.1
 2021-05-19 15:41:31.711 INFO exportImportWAFR - main: Starting Boto 1.17.27 Session
 2021-05-19 15:41:31.836 INFO exportImportWAFR - main: Creating a new workload from file workload_output.json
