@@ -30,7 +30,8 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
 ![Images/Create_Function_Name.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Function_Name.png)
 
-5.	Copy and paste the following code into the **Function code** section and change (account id) to your **Management Account ID** on line 30 and (Region) to the **Region** on line 82 you are deploying in:
+5.	Copy and paste the code below into the **Function code** section and change (account id) to your **Management Account ID** on line 30 and (Region) to the **Region** on line 82 you are deploying in. Or, if you wish to deploy in the managment account here is the [link to the Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_ou_man_tags.py).
+
 
     <details>
     <summary> Click here to see the function code</summary>
@@ -163,7 +164,6 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
     </details>
 
-If you wish to deploy in the managment account here is the [link to Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_ou_man_tags.py)
 
 
 6.	Under Configuration -> General Configuration edit **Basic settings** below:

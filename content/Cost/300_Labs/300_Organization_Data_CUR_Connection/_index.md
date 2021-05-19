@@ -36,6 +36,8 @@ This lab will show you how to combine your organizations information with your A
 - Completed the Cost and Usage Analysis lab [200_4_Cost_and_Usage_Analysis]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
 - Completed the Cost Visualization Lab [200_5_Cost_Visualization]({{< ref "/Cost/200_Labs/200_5_Cost_Visualization" >}}) 
 
+## Deploymeny Options
+We suggest you do not deploy resources into your management account and instead use the cost account created in [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}). However, there are options to deploy all resources into your management account if you wish. To do this complete all steps in you management account and do not create the role in the 'Create IAM Role and Policies in Management account' step.
 
 ## Permissions required
 

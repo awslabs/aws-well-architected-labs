@@ -9,7 +9,7 @@ pre: "<b>4. </b>"
 ### Join your AWS Organizations data with the AWS Cost & Usage Report in Amazon Quicksight
 
 
-In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from the Cost Visualization lab.
+In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from the Cost Visualization lab. Please make sure you have completed the 100 AWS Account Setup [QuickSight]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup/6_QuickSight" >}}) part of the lab as this will allow QuickSight to have access to your S3 bucket thats starts with 'cost'.
 
 1. Log on to the console via SSO, go to the **QuickSight** service, Enter your email address and click **Continue**:
 
