@@ -2,8 +2,8 @@
 title: "Tear down"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-weight: 6
-pre: "<b>6. </b>"
+weight: 5
+pre: "<b>5. </b>"
 ---
 
 No tear down is required for this lab.
@@ -15,4 +15,3 @@ Now that you have completed the lab, if you have implemented this knowledge in y
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST6 - "How do you meet cost targets when you select resource type, size and number?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-cost-effective-resources.html)
 {{< /prev_next_button >}}
-

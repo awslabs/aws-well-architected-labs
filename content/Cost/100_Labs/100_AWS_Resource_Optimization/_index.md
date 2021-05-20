@@ -1,33 +1,42 @@
 ---
-title: "Level 100: EC2 Rightsizing"
+title: "Level 100: EC2 Right Sizing"
 #menutitle: "Lab #3"
-date: 2020-04-24T11:16:08-04:00
+date: 2021-05-18T11:16:08-04:00
 chapter: false
 weight: 6
 ---
+## Last Updated
+May 2021
+
 ## Authors
 - Arthur Basbaum, AWS Cloud Economics
+- Travis Ketcherside, AWS Technical Account Manager
 
 ## Feedback
-If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
+If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com.
 
 ## Introduction
- This hands-on lab will give you an overview on **Amazon CloudWatch** and **AWS Resource Optimization** and how to prioritize your EC2 Rightsizing efforts.
+This hands-on lab will give you an overview on **AWS Resource Optimization** and how to prioritize your EC2 Right Sizing efforts.
 
 ## Goals
-- Learn how to check metrics like CPU, Network and Disk usage on Amazon CloudWatch
-- Enable and use the AWS Resource Optimization and get EC2 Right Sizing recommendations
+- Enable and use AWS Resource Optimization to get EC2 Right Sizing recommendations
 - Learn how to filter AWS Resource Optimization report and focus only on the less complex high saving cases
 
 ## Prerequisites
-- Root user access to the management account
-- Enable AWS Resource Optimization at *AWS Cost Explorer > Recommendations* no additional cost.
+- Have at least one Amazon EC2 instance running
+- Enable [AWS Resource Optimization](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html#rr-getting-started) at *AWS Cost Explorer > Recommendations* no additional cost
 
 ## Permissions required
-- Log in as the Cost Optimization team, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
-- NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
+- A minimum of read-only access to the AWS Billing Console
+- Read-only access can be granted via the AWSBillingReadOnlyAccess IAM Policy
+- There may be permission error messages during the lab, as the console may require additional privilege
+- These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required
 
-## Steps:
+## Costs
+- https://aws.amazon.com/aws-cost-management/pricing/
+- There are no costs for this lab but you need to have at least 1 Amazon EC2 instance running. If you don't have any instance running please check the [AWS Free Tier page](https://aws.amazon.com/free/) for more information
+
+## Steps
 {{% children  /%}}
 
-{{< prev_next_button link_next_url="./1_cloudwatch_intro/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_intro_right_sizing/" button_next_text="Start Lab" first_step="true" />}}
