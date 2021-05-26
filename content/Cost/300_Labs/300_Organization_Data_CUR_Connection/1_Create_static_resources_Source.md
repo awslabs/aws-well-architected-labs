@@ -18,42 +18,33 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 ### Create the Organization data collector using a CloudFormation Template Console
 
-This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Crawler. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
+This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Crawler. **If you do not have the required permissions skip over this section to continue using the standard setup**.
 
 1. Click the **Download CloudFormation**:
-* Click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) if you are deploying to your linked account (recommended)
-* Click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main_man.yaml) if you wish to deploy straight into your management account 
-  * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
+* Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/main.yaml) if you are deploying to your linked account (recommended)
 
-2. Login via SSO in your Cost Optimization account and search for **CloudFormation**
-![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
+* Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/main_man.yaml) if you wish to deploy straight into your management account 
 
-3. On the right side of the screen select **Create stack** and choose **With new resources (standard)**
-![Images/create_stack.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_stack.png)
-
-4. Choose **Template is ready** and **Upload a template file** and upload the main.yaml file you downloaded from above. Click **Next**.
-![Images/upload_template.png](/Cost/300_Organization_Data_CUR_Connection/Images/upload_template.png)
-
-5. Input the stack name as  **Organization-data-collector-stack**. Then filled in the Parameters. Click **Next**.
+2. Input the stack name as  **Organization-data-collector-stack**. Then filled in the Parameters. Click **Next**.
  * **DatabaseName** - Athena Database name where you table will be created
  * **DestinationBucket** - The name you would like of the bucket that will be created in to hold org data, you will need to use a with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
  * **ManagementAccountId** - Your Management Account Id where your Optimization is held
  * **Tags** - List of tags from your Organization you would like to include separated by a comma.
 ![Images/Parameters.png](/Cost/300_Organization_Data_CUR_Connection/Images/Parameters.png)
 
-6. Scroll down and click **Next**
+3. Scroll down and click **Next**
 ![Images/cf_next.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_next.png)
 
-7. Scroll down and tick the box acknowledging that this will create and IAM Role. Click **Create stack**
+4. Scroll down and tick the box acknowledging that this will create and IAM Role. Click **Create stack**
 ![Images/iam_agree_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/iam_agree_cf.png)
 
-8. Wait for the CloudFormation to deploy, this can be seen when it has **CREATE_COMPLETE** under the stack name.
+5. Wait for the CloudFormation to deploy, this can be seen when it has **CREATE_COMPLETE** under the stack name.
 ![Images/cf_deployed.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_deployed.png)
 
-9. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
+6. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
 ![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
 
-10. Repeat the above steps in your **Management account** using the [Management.yaml](/Cost/300_Organization_Data_CUR_Connection/Code/Management.yaml) template to deploy an IAM Role to allow the lambda to pull data into the Cost Optimization account. If you cannot deploy a CloudFormation into your management account please see the **Create IAM Role and Policies in Management account** Step further down this page to create manually.
+7. Repeat the above steps in your **Management account** using the [Management.yaml](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/Management.yaml) template to deploy an IAM Role to allow the lambda to pull data into the Cost Optimization account. If you cannot deploy a CloudFormation into your management account please see the **Create IAM Role and Policies in Management account** Step further down this page to create manually.
 
 {{% notice tip %}}
 If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
