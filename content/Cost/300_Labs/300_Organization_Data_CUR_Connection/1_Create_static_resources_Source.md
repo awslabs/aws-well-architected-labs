@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 ### Create Resource
 
-To deploy the resource you need for this lab you have three options. You can deploy using a AWS CloudFormation template or a Terraform module, either allows you to complete the lab in less than half the time as the standard setup. Or, you can deploy manually if you do not have access to deploy using CloudFormation or would like hands one experience going through the steps.
+To deploy the resource, you need for this lab you have three options. You can deploy using a AWS CloudFormation template or a Terraform module, either allows you to complete the lab in less than half the time as the standard setup. Or, you can deploy manually if you do not have access to deploy using CloudFormation or would like hands one experience going through the steps.
 
 {{%expand "Click here to continue with the CloudFormation Advanced Setup" %}}
 
@@ -18,10 +18,10 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 ### Create the Organization data collector using a CloudFormation Template Console
 
-This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Grawler. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
+This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Crawler. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
 
 1. Click the **Download CloudFormation**:
-* Clik [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) if you are deploying to your linked account (recommended)
+* Click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main.yaml) if you are deploying to your linked account (recommended)
 * Click [here](/Cost/300_Organization_Data_CUR_Connection/Code/main_man.yaml) if you wish to deploy straight into your management account 
   * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
 
@@ -38,13 +38,13 @@ This section is **optional** and automates the creation of the AWS organizations
  * **DatabaseName** - Athena Database name where you table will be created
  * **DestinationBucket** - The name you would like of the bucket that will be created in to hold org data, you will need to use a with **cost** at the start, (we have used cost-aws-lab-organisation-bucket)
  * **ManagementAccountId** - Your Management Account Id where your Optimization is held
- * **Tags** - List of tags from your Organisation you would like to include separated by a comma.
+ * **Tags** - List of tags from your Organization you would like to include separated by a comma.
 ![Images/Parameters.png](/Cost/300_Organization_Data_CUR_Connection/Images/Parameters.png)
 
 6. Scroll down and click **Next**
 ![Images/cf_next.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_next.png)
 
-7. Scroll down and tick the box acknowledgeing that this will create and IAM Role. Click **Create stack**
+7. Scroll down and tick the box acknowledging that this will create and IAM Role. Click **Create stack**
 ![Images/iam_agree_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/iam_agree_cf.png)
 
 8. Wait for the CloudFormation to deploy, this can be seen when it has **CREATE_COMPLETE** under the stack name.
@@ -59,8 +59,8 @@ This section is **optional** and automates the creation of the AWS organizations
 If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
 {{% /notice %}}
 
-## Test Lamda Function
-Now you have deployed the cloudformation then you can test your lambda to get your first set of data in Amazon S3. 
+## Test Lambda Function
+Now you have deployed the CloudFormation then you can test your lambda to get your first set of data in Amazon S3. 
 
 
 1. To test your lambda function click **Test**
@@ -83,7 +83,7 @@ Now you have deployed the cloudformation then you can test your lambda to get yo
 6. Go to the **Glue** Service page:
 ![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
 
-7. Now you have deployed your cloudfomation jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your crawler to create your athena table. 
+7. Now you have deployed your CloudFomation jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your crawler to create your athena table. 
 
 {{% notice note %}}
 NOTE: You have successfully completed all CloudFormation specific steps. All remaining setup and future customizations will follow the same process as the manual steps.
@@ -100,7 +100,7 @@ There is an AWS [Github Repo](https://github.com/awslabs/well-architected-lab300
 If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
 {{% /notice %}}
 
-## Test Lamda Function
+## Test Lambda Function
 Now you have deployed the Terraform then you can test your lambda to get your first set of data in Amazon S3. 
 
 

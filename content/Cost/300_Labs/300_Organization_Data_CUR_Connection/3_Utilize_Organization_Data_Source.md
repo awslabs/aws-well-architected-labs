@@ -107,7 +107,7 @@ If you would like to always have your Organizations data connected to your CUR t
 		SELECT * FROM "managementcur"."org_cur" limit 10;
 
 {{% notice tip %}}
-Having run these queries you can now see how the Organization data connects to your Cost and Usage Report. 
+Having run these queries, you can now see how the Organization data connects to your Cost and Usage Report. 
 {{% /notice %}}
 
 

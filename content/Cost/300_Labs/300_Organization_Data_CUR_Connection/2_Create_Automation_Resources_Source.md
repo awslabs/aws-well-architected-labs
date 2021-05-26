@@ -30,7 +30,7 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
 ![Images/Create_Function_Name.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Function_Name.png)
 
-5.	Copy and paste the code below into the **Function code** section and change (account id) to your **Management Account ID** on line 30 and (Region) to the **Region** on line 82 you are deploying in. Or, if you wish to deploy in the managment account here is the [link to the Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_ou_man_tags.py).
+5.	Copy and paste the code below into the **Function code** section and change (account id) to your **Management Account ID** on line 30 and (Region) to the **Region** on line 82 you are deploying in. Or, if you wish to deploy in the management account here is the [link to the Code](/Cost/300_Organization_Data_CUR_Connection/Code/org_data_ou_man_tags.py). You will only change the (Region) in the management account version. 
 
 
     <details>
@@ -184,7 +184,7 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
 
 9. If you wish to pull **tags** from your accounts as well, **Add environment variable** and add the below. If you don't skip this:
     - In **Key** paste TAGS
-    - In **Value** paste list of tags from your Organisation you would like to include **separated by a comma**
+    - In **Value** paste list of tags from your Organization you would like to include **separated by a comma**
     
 Click **Save**
 
@@ -211,7 +211,7 @@ Click **Save**
 
 ### Amazon CloudWatch Events Setup
 
-We will setup a Amazon CloudWatch Event to periodically run the Lambda functions, this will update the Organizations and include any newly created accounts.
+We will setup an Amazon CloudWatch Event to periodically run the Lambda functions, this will update the Organizations and include any newly created accounts.
 
 1.	Go to the CloudWatch service page:
 
@@ -240,7 +240,7 @@ We will setup a Amazon CloudWatch Event to periodically run the Lambda functions
 
 
 {{% notice tip %}}
-You have now created your lambda function  to gather your organization data and place it into the S3 Bucket we made earlier. Using Cloudwatch this will now run every 7 days updating  the data. 
+You have now created your lambda function  to gather your organization data and place it into the S3 Bucket we made earlier. Using CloudWatch this will now run every 7 days updating  the data. 
 {{% /notice %}}
 
 
