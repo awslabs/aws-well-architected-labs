@@ -41,10 +41,10 @@ This section is **optional** and automates the creation of the AWS organizations
 5. Wait for the CloudFormation to deploy, this can be seen when it has **CREATE_COMPLETE** under the stack name.
 ![Images/cf_deployed.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_deployed.png)
 
-6. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
-![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
+6. Repeat the above steps in your **Management account** using the [Management.yaml](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/Management.yaml) template to deploy an IAM Role to allow the lambda to pull data into the Cost Optimization account. If you cannot deploy a CloudFormation into your management account please see the **Create IAM Role and Policies in Management account** Step further down this page to create manually.
 
-7. Repeat the above steps in your **Management account** using the [Management.yaml](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/Management.yaml) template to deploy an IAM Role to allow the lambda to pull data into the Cost Optimization account. If you cannot deploy a CloudFormation into your management account please see the **Create IAM Role and Policies in Management account** Step further down this page to create manually.
+7. Now go back to your linked account and find your deployed CloudFormation template. Select your stack and click on **Resources** and find the lambda function **LambdaOrgData** and click on the link to take you to the lambda. 
+![Images/cf_lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/cf_lambda.png)
 
 {{% notice tip %}}
 If you wish to add more tags at a later date you can either update your lambda in the console or update the CloudFormation Parameters. You can see your tags in the bonus section at the bottom of this page.
