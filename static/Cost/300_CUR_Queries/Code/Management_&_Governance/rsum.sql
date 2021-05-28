@@ -6,28 +6,29 @@
 
 SELECT -- automation_select_stmt
   CASE
-    WHEN ("bill_billing_entity" = 'AWS Marketplace' AND "line_item_line_item_type" NOT LIKE '%Discount%') THEN "product_product_name"
-    WHEN ("product_product_name" = '') THEN "line_item_product_code" ELSE "product_product_name" END "product_name",
-    CASE product_region
-      WHEN NULL THEN 'Global'
-      WHEN '' THEN 'Global'
-      WHEN 'global' THEN 'Global'
-      ELSE product_region
-    END AS product_region,
-    line_item_availability_zone, 
-    sum(line_item_unblended_cost) sum_line_item_unblended_cost
+    WHEN (bill_billing_entity = 'AWS Marketplace' AND line_item_line_item_type NOT LIKE '%Discount%') THEN product_product_name
+    WHEN (product_product_name = '') THEN line_item_product_code 
+    ELSE product_product_name 
+  END AS case_product_name,
+  CASE product_region
+    WHEN NULL THEN 'Global'
+    WHEN '' THEN 'Global'
+    WHEN 'global' THEN 'Global'
+    ELSE product_region
+  END AS case_product_region,
+  line_item_availability_zone, 
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-line_item_usage_start_date >= now() - interval '30' day 
-AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  line_item_usage_start_date >= now() - INTERVAL '30' day  -- automation_timerange_year_month
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt
   1, 
   line_item_product_code, 
   line_item_availability_zone, 
-  product_region
-HAVING sum(line_item_unblended_cost) > 0
+  case_product_region
+HAVING SUM(line_item_unblended_cost) > 0
 ORDER BY -- automation_order_stmt
-  product_region, 
-  sum_line_item_unblended_cost DESC
-;
+  case_product_region, 
+  sum_line_item_unblended_cost DESC;

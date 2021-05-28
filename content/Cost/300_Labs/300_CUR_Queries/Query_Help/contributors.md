@@ -32,3 +32,4 @@ The CUR Library is intended to be an open source library of Cost & Usage Reports
 - Yuriy Prykhodko, Sr. TAM, AWS Enterprise Support
 - Mariano Iumiento, TAM, AWS Enterprise Support
 - Roger Vandervort, Sr. TAM, AWS Enterprise Support
+- Mark Rekai, Sr. TAM, AWS Enterprise Support

@@ -11,14 +11,14 @@ SELECT -- automation_select_stmt
   savings_plan_savings_plan_a_r_n,
   line_item_product_code,
   line_item_usage_type,
-  sum(line_item_usage_amount) sum_line_item_usage_amount,
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
   line_item_line_item_description,
   pricing_public_on_demand_rate,
-  sum(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
+  SUM(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
   savings_plan_savings_plan_rate,
-  sum(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
+  SUM(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
 FROM -- automation_from_stmt
-${table_name} -- automation_tablename
+  ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
@@ -36,3 +36,4 @@ GROUP BY -- automation_groupby_stmt
   savings_plan_savings_plan_rate
 ORDER BY -- automation_order_stmt
   sum_pricing_public_on_demand_cost DESC
+;

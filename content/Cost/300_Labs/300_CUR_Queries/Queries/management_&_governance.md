@@ -50,14 +50,14 @@ Please refer to the [AWS Config pricing page](https://aws.amazon.com/config/pric
         WHEN line_item_usage_type LIKE '%%ConfigRuleEvaluations%%' THEN 'ConfigRuleEvaluations'      
         ELSE 'Others'
       END AS case_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${tableName}
     WHERE
       (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
       AND product_product_name = 'AWS Config'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage') 
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage') 
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -96,14 +96,14 @@ Please refer to the [CloudTrail pricing page](https://aws.amazon.com/cloudtrail/
       line_item_usage_account_id,
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date, 
       product_product_name, 
-      SPLIT_PART(line_item_usage_type,'-',2)  as split_line_item_usage_type, 
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount, 
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SPLIT_PART(line_item_usage_type,'-',2)  AS split_line_item_usage_type, 
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount, 
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM ${table_name}
     WHERE 
       ${date_filter}
       AND product_product_name = 'AWS CloudTrail'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY  
       bill_payer_account_id, 
       line_item_usage_account_id, 
@@ -111,7 +111,7 @@ Please refer to the [CloudTrail pricing page](https://aws.amazon.com/cloudtrail/
       SPLIT_PART(line_item_usage_type,'-',2), 
       product_product_name
     ORDER BY  
-      sum_line_item_unblended_cost desc, 
+      sum_line_item_unblended_cost DESC, 
       month_line_item_usage_start_date, 
       sum_line_item_usage_amount;
 ```
@@ -153,13 +153,13 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
       ELSE 'Others'
       END AS line_item_usage_type,
       line_item_operation,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost 
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost 
     FROM ${tableName}
     WHERE 
       ${date_filter}
       AND product_product_name = 'AmazonCloudWatch'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -167,7 +167,7 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
       line_item_usage_type,
       line_item_operation
     ORDER BY
-    sum_line_item_unblended_cost desc;
+    sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Management %26 Governance" service_text="AWS CloudWatch" query_text="AWS CloudWatch Query1" button_text="Help & Feedback" >}}
@@ -177,7 +177,7 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
 ### Regional Service Usage Mapping
 
 #### Query Description
-Amazon Web Services publishes our most up-to-the-minute information on our [Service Health Dashboard](https://status.aws.amazon.com/).  This dashboard is based on region and service.  While we try to notify you of ongoing problems that may be impactful to your workloads via your [Personal Health Dashboard](https://aws.amazon.com/premiumsupport/technology/personal-health-dashboard/) you may want to proactivly check where you currently have service usage and cost that may be impacted by our event or another regional issue.
+Amazon Web Services publishes our most up-to-the-minute information on our [Service Health Dashboard](https://status.aws.amazon.com/).  This dashboard is based on region and service.  While we try to notify you of ongoing problems that may be impactful to your workloads via your [Personal Health Dashboard](https://aws.amazon.com/premiumsupport/technology/personal-health-dashboard/) you may want to proactively check where you currently have service usage and cost that may be impacted by our event or another regional issue.
 
 This Regional Service Usage Mapping query transforms your billing data into a summarized view of your usage of AWS services by region and availability zone, providing your operations teams with the ability to respond quickly and accurately during impacting service events.
 
@@ -191,27 +191,30 @@ This Regional Service Usage Mapping query transforms your billing data into a su
 ```tsql
     SELECT 
       CASE
-        WHEN ("bill_billing_entity" = 'AWS Marketplace' AND "line_item_line_item_type" NOT LIKE '%Discount%') THEN "product_product_name"
-        WHEN ("product_product_name" = '') THEN "line_item_product_code" ELSE "product_product_name" END "product_name",
-        CASE product_region
-          WHEN NULL THEN 'Global'
-          WHEN '' THEN 'Global'
-          WHEN 'global' THEN 'Global'
-          ELSE product_region
-        END AS product_region,
-        line_item_availability_zone, 
-        sum(line_item_unblended_cost) sum_line_item_unblended_cost
+        WHEN (bill_billing_entity = 'AWS Marketplace' AND line_item_line_item_type NOT LIKE '%Discount%') THEN product_product_name
+        WHEN (product_product_name = '') THEN line_item_product_code 
+        ELSE product_product_name 
+      END AS product_name,
+      CASE product_region
+        WHEN NULL THEN 'Global'
+        WHEN '' THEN 'Global'
+        WHEN 'global' THEN 'Global'
+        ELSE product_region
+      END AS product_region,
+      line_item_availability_zone, 
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
     FROM 
       ${table_name} 
     WHERE 
-    line_item_usage_start_date >= now() - interval '30' day 
-    AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      ${date_filter}
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       1, 
       line_item_product_code, 
       line_item_availability_zone, 
       product_region
-    HAVING sum(line_item_unblended_cost) > 0
+    HAVING 
+      SUM(line_item_unblended_cost) > 0
     ORDER BY 
       product_region, 
       sum_line_item_unblended_cost DESC;

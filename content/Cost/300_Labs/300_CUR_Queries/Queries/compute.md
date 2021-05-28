@@ -44,22 +44,26 @@ Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ![Images/ec2_total_spend.png](/Cost/300_CUR_Queries/Images/Compute/ec2_total_spend.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2_total_spend.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2totalspend.sql)
 
 #### Copy Query
 ```tsql
-    SELECT line_item_product_code, 
-    line_item_line_item_description, 
-    round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost 
-    FROM ${table_name}
-    WHERE
-    ${date_filter}
-    AND line_item_product_code like '%AmazonEC2%'
-    AND line_item_line_item_type NOT IN ('Tax','Refund')
-    AND line_item_product_code like '%AmazonEC2%'
-    GROUP BY line_item_product_code, 
-    line_item_line_item_description
-    ORDER BY sum_line_item_unblended_cost desc
+SELECT 
+  line_item_product_code, 
+  line_item_line_item_description, 
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost 
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND line_item_product_code LIKE '%AmazonEC2%'
+  AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
+  AND line_item_product_code LIKE '%AmazonEC2%'
+GROUP BY 
+  line_item_product_code, 
+  line_item_line_item_description
+ORDER BY 
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Total Spend" button_text="Help & Feedback" >}}
@@ -86,61 +90,50 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 
 #### Copy Query
 ```tsql
-      SELECT 
-        year,
-        month,
-        bill_billing_period_start_date,
-        date_trunc('hour', line_item_usage_start_date) as hour_line_item_usage_start_date, 
-        bill_payer_account_id, 
-        line_item_usage_account_id,
-        (CASE 
-          WHEN (line_item_usage_type LIKE '%SpotUsage%') THEN
-            SPLIT_PART(line_item_usage_type, ':', 2)
-          ELSE product_instance_type
-          END) AS product_instance_type,
-        (CASE
-          WHEN (savings_plan_savings_plan_a_r_n <> '') THEN
-            'SavingsPlan'
-          WHEN (reservation_reservation_a_r_n <> '') THEN
-            'Reserved'
-          WHEN (line_item_usage_type LIKE '%Spot%') THEN
-            'Spot'
-          ELSE 'OnDemand' END) as purchase_option, 
-          sum(CASE
-            WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN
-              savings_plan_savings_plan_effective_cost
-            WHEN line_item_line_item_type = 'DiscountedUsage' THEN
-              reservation_effective_cost
-            WHEN line_item_line_item_type = 'Usage' THEN
-              line_item_unblended_cost
-            ELSE 0 END) as amortized_cost, 
-        round(sum(line_item_usage_amount), 2) usage_quantity
-
-      FROM ${table_name}
-      WHERE 
-        ${date_filter}
-        AND ( (line_item_product_code = 'AmazonEC2')
-              AND (product_servicecode <> 'AWSDataTransfer')
-              AND (line_item_operation LIKE '%RunInstances%')
-              AND (line_item_usage_type NOT LIKE '%DataXfer%') 
-            )
-        AND (
-              (line_item_line_item_type = 'Usage')
-              OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
-              OR (line_item_line_item_type = 'DiscountedUsage')
-            )
-      GROUP BY  
-        year, 
-        month,
-        bill_billing_period_start_date,  
-        product_instance_type,
-        date_trunc('hour', line_item_usage_start_date),
-        bill_payer_account_id,
-        line_item_usage_account_id,
-        7,
-        8
-      ORDER BY 
-        usage_quantity DESC
+SELECT 
+  bill_billing_period_start_date,
+  line_item_usage_start_date, 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  CASE 
+    WHEN (line_item_usage_type LIKE '%SpotUsage%') THEN SPLIT_PART(line_item_usage_type, ':', 2)
+    ELSE product_instance_type
+  END AS case_product_instance_type,
+  CASE
+    WHEN (savings_plan_savings_plan_a_r_n <> '') THEN 'SavingsPlan'
+    WHEN (reservation_reservation_a_r_n <> '') THEN 'Reserved'
+    WHEN (line_item_usage_type LIKE '%Spot%') THEN 'Spot'
+    ELSE 'OnDemand' 
+  END AS case_purchase_option, 
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+    WHEN line_item_line_item_type = 'Usage' THEN line_item_unblended_cost
+    ELSE 0 
+  END) AS sum_amortized_cost, 
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount
+FROM 
+  ${table_name}  
+WHERE 
+  ${date_filter} 
+  AND (line_item_product_code = 'AmazonEC2'
+    AND product_servicecode <> 'AWSDataTransfer'
+    AND line_item_operation LIKE '%RunInstances%'
+    AND line_item_usage_type NOT LIKE '%DataXfer%'
+  )
+  AND (line_item_line_item_type = 'Usage'
+    OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
+    OR (line_item_line_item_type = 'DiscountedUsage')
+  )
+GROUP BY 
+  bill_billing_period_start_date,
+  line_item_usage_start_date, 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  5, --refers to case_product_instance_type
+  6 --refers to case_purchase_option 
+ORDER BY 
+  sum_line_item_usage_amount DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" >}}
@@ -164,45 +157,38 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 
 #### Copy Query
 ```tsql
-        SELECT
-        bill_payer_account_id,
-        line_item_usage_account_id,
-        DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d') AS day_line_item_usage_start_date, 
-        SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS savings_plan_savings_plan_a_r_n,
-        CASE
-          savings_plan_offering_type
-          WHEN 'EC2InstanceSavingsPlans' THEN 'EC2 Instance Savings Plans'
-          WHEN 'ComputeSavingsPlans' THEN 'Compute Savings Plans'
-          ELSE savings_plan_offering_type
-        END AS "Type",
-        savings_plan_region,
-        CASE 
-          WHEN product_product_name = 'Amazon EC2 Container Service' THEN 'Fargate'
-          WHEN product_product_name = 'AWS Lambda' THEN 'Lambda'
-          ELSE product_instance_type_family 
-        END AS "Instance Type Family",
-        SUM (TRY_CAST(line_item_unblended_cost as decimal(16, 8))) as "On Demand Cost",
-        SUM(TRY_CAST(savings_plan_savings_plan_effective_cost AS decimal(16, 8))) as "Effective Cost",
-        SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost, 
-        savings_plan_end_time
-        FROM
-        ${table_name}
-      WHERE
-        ${date_filter}
-        AND savings_plan_savings_plan_a_r_n <> ''
-        AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
-      GROUP by
-              bill_payer_account_id,
-            line_item_usage_account_id,
-            DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'),
-        savings_plan_savings_plan_a_r_n,
-        savings_plan_offering_type,
-        savings_plan_region,
-        product_instance_type_family,
-        product_product_name, 
-        savings_plan_end_time
-      ORDER BY
-        day_line_item_usage_start_date;
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS savings_plan_savings_plan_a_r_n,
+  savings_plan_offering_type,
+  savings_plan_region,
+  CASE 
+  	WHEN line_item_product_code = 'AmazonECS' THEN 'Fargate'
+  	WHEN line_item_product_code = 'AWSLambda' THEN 'Lambda'
+  	ELSE product_instance_type_family 
+  END AS case_instance_type_family,
+  savings_plan_end_time,
+  SUM(TRY_CAST(line_item_unblended_cost AS DECIMAL(16, 8))) AS sum_line_item_unblended_cost,
+  SUM(TRY_CAST(savings_plan_savings_plan_effective_cost AS DECIMAL(16, 8))) AS sum_savings_plan_savings_plan_effective_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND savings_plan_savings_plan_a_r_n <> ''
+  AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2),
+  savings_plan_offering_type,
+  savings_plan_region,
+  7, -- refers to case_instance_type_family
+  savings_plan_end_time
+ORDER BY 
+  day_line_item_usage_start_date;
 ```
 
 
@@ -222,42 +208,43 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 ![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/compute_sp.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/compute_sp.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/computesp.sql)
 
 #### Copy Query
 ```tsql
-    SELECT  
-      bill_payer_account_id,
-      bill_billing_period_start_date,
-      line_item_usage_account_id,
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
-      savings_plan_savings_plan_a_r_n,
-      line_item_product_code,
-      line_item_usage_type,
-      sum(line_item_usage_amount) sum_line_item_usage_amount,
-      line_item_line_item_description,
-      pricing_public_on_demand_rate,
-      sum(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
-      savings_plan_savings_plan_rate,
-      sum(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
-    FROM ${table_name}
-    WHERE
-      ${date_filter}
-      AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
-    GROUP BY  
-      bill_payer_account_id, 
-      bill_billing_period_start_date, 
-      line_item_usage_account_id, 
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
-      savings_plan_savings_plan_a_r_n, 
-      line_item_product_code, 
-      line_item_usage_type, 
-      line_item_unblended_rate, 
-      line_item_line_item_description, 
-      pricing_public_on_demand_rate, 
-      savings_plan_savings_plan_rate
-    ORDER BY
-      sum_pricing_public_on_demand_cost DESC
+SELECT 
+  bill_payer_account_id,
+  bill_billing_period_start_date,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date, 
+  savings_plan_savings_plan_a_r_n,
+  line_item_product_code,
+  line_item_usage_type,
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+  line_item_line_item_description,
+  pricing_public_on_demand_rate,
+  SUM(pricing_public_on_demand_cost) AS sum_pricing_public_on_demand_cost,
+  savings_plan_savings_plan_rate,
+  SUM(savings_plan_savings_plan_effective_cost) AS sum_savings_plan_savings_plan_effective_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND line_item_line_item_type LIKE 'SavingsPlanCoveredUsage'
+GROUP BY 
+  bill_payer_account_id, 
+  bill_billing_period_start_date, 
+  line_item_usage_account_id, 
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'), 
+  savings_plan_savings_plan_a_r_n, 
+  line_item_product_code, 
+  line_item_usage_type, 
+  line_item_unblended_rate, 
+  line_item_line_item_description, 
+  pricing_public_on_demand_rate, 
+  savings_plan_savings_plan_rate
+ORDER BY 
+  sum_pricing_public_on_demand_cost DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="Compute" query_text="Compute with Savings Plans" button_text="Help & Feedback" >}}
@@ -276,34 +263,34 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 ![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/account_spend_of_shared_sp.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/account_spend_of_shared_sp.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/accountspendofsharedsp.sql)
 
 #### Copy Query
 ```tsql
-    SELECT year,
-    month,
-    bill_payer_account_id,
-    line_item_usage_account_id,
-    savings_plan_offering_type,
-    line_item_resource_id,
-    SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost,
-    SUM(CAST(savings_plan_savings_plan_effective_cost AS decimal(16, 8))) AS sum_savings_plan_savings_plan_effective_cost
-    FROM ${table_name}
-    WHERE
-    year = '2020'
-    AND (month BETWEEN '9' AND '12' OR month BETWEEN '09' AND '12')
-    AND (bill_payer_account_id = '111122223333'
-    AND line_item_usage_account_id = '444455556666'
-    AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
-    AND savings_plan_savings_plan_a_r_n NOT LIKE '%444455556666%')
-    GROUP BY
-    year,
-    month,
-    line_item_resource_id,
-    line_item_usage_account_id,
-    bill_payer_account_id,
-    savings_plan_offering_type
-    ORDER BY sum_savings_plan_savings_plan_effective_cost DESC;
+SELECT 
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  savings_plan_offering_type,
+  line_item_resource_id,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16, 8))) AS sum_line_item_unblended_cost,
+  SUM(CAST(savings_plan_savings_plan_effective_cost AS DECIMAL(16, 8))) AS sum_savings_plan_savings_plan_effective_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter}
+  AND bill_payer_account_id = '111122223333' 
+  AND line_item_usage_account_id = '444455556666' 
+  AND line_item_line_item_type = 'SavingsPlanCoveredUsage'
+  AND savings_plan_savings_plan_a_r_n NOT LIKE '%444455556666%'
+GROUP BY 
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+  line_item_resource_id,
+  line_item_usage_account_id,
+  bill_payer_account_id,
+  savings_plan_offering_type
+ORDER BY 
+  sum_savings_plan_savings_plan_effective_cost DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="Compute" query_text="Account Spend of Shared Savings Plan" button_text="Help & Feedback" >}}
@@ -322,140 +309,117 @@ Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/
 ![Images/lambda_sp.png](/Cost/300_CUR_Queries/Images/Compute/lambda_sp.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/lambda_sp.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/lambdasp.sql)
 
 #### Copy Query
 ```tsql
-        SELECT *
-          FROM
-          (
-            (  
-              SELECT
-                  bill_payer_account_id,
-                  line_item_usage_account_id, 
-                  line_item_line_item_type,
-                  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-                  product_region,
-                  CASE
-                      WHEN line_item_usage_type LIKE '%%Lambda-Edge-GB-Second%%' THEN 'Lambda EDGE GB x Sec.'
-                      WHEN line_item_usage_type LIKE '%%Lambda-Edge-Request%%' THEN 'Lambda EDGE Requests'
-                      WHEN line_item_usage_type LIKE '%%Lambda-GB-Second%%' THEN 'Lambda GB x Sec.'
-                      WHEN line_item_usage_type LIKE '%%Request%%' THEN 'Lambda Requests'
-                      WHEN line_item_usage_type LIKE '%%In-Bytes%%' THEN 'Data Transfer (IN)'
-                      WHEN line_item_usage_type LIKE '%%Out-Bytes%%' THEN 'Data Transfer (Out)'
-                      WHEN line_item_usage_type LIKE '%%Regional-Bytes%%' THEN 'Data Transfer (Regional)'
-                      ELSE 'Other'
-                  END as UsageType,
-                  line_item_resource_id,
-                  pricing_term,
-                  SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-                  SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost, 
-                  sum(CASE
-              WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN
-              "savings_plan_savings_plan_effective_cost"
-              WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN
-              ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment")
-              WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN
-              0
-              WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN
-              0
-              WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN
-              "reservation_effective_cost"
-              WHEN ("line_item_line_item_type" = 'RIFee') THEN
-              ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-              WHEN (("line_item_line_item_type" = 'Fee')
-                  AND ("reservation_reservation_a_r_n" <> '')) THEN
-              0
-              ELSE "line_item_unblended_cost" END) "amortized_cost"
-              FROM ${table_name}
-                WHERE ${date_filter}
-                AND product_product_name = 'AWS Lambda'
-                AND line_item_line_item_type like '%%Usage%%'
-                AND product_product_family IN ('Data Transfer', 'Serverless')
-                AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-              GROUP BY
-              bill_payer_account_id,
-                line_item_usage_account_id,
-                DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-                product_region,
-                line_item_usage_type,
-                line_item_resource_id,
-                pricing_term,
-                line_item_line_item_type
-              ORDER BY 
-                day_line_item_usage_start_date,
-                sum_line_item_usage_amount,
-                sum_line_item_unblended_cost
-            )
+SELECT *
+FROM
+(
+  (  
+    SELECT
+      bill_payer_account_id,
+      line_item_usage_account_id, 
+      line_item_line_item_type,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      product_region,
+      CASE
+        WHEN line_item_usage_type LIKE '%Lambda-Edge-GB-Second%' THEN 'Lambda EDGE GB x Sec.'
+        WHEN line_item_usage_type LIKE '%Lambda-Edge-Request%' THEN 'Lambda EDGE Requests'
+        WHEN line_item_usage_type LIKE '%Lambda-GB-Second%' THEN 'Lambda GB x Sec.'
+        WHEN line_item_usage_type LIKE '%Request%' THEN 'Lambda Requests'
+        WHEN line_item_usage_type LIKE '%In-Bytes%' THEN 'Data Transfer (IN)'
+        WHEN line_item_usage_type LIKE '%Out-Bytes%' THEN 'Data Transfer (Out)'
+        WHEN line_item_usage_type LIKE '%Regional-Bytes%' THEN 'Data Transfer (Regional)'
+        ELSE 'Other'
+      END AS case_line_item_usage_type,
+      line_item_resource_id,
+      pricing_term,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost, 
+      SUM(CASE
+        WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+        WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN savings_plan_total_commitment_to_date - savings_plan_used_commitment
+        WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0 
+        WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
+        WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+        WHEN line_item_line_item_type = 'RIFee' THEN reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee
+        WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN 0
+        ELSE line_item_unblended_cost 
+      END) AS sum_amortized_cost
+    FROM ${table_name}
+      WHERE ${date_filter}
+      AND product_product_name = 'AWS Lambda'
+      AND line_item_line_item_type LIKE '%Usage%'
+      AND product_product_family IN ('Data Transfer', 'Serverless')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      line_item_line_item_type,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      product_region,
+      6, -- refers to case_line_item_usage_type
+      line_item_resource_id,
+      pricing_term
+  )
 
-            UNION
+  UNION
 
-            (
-              SELECT
-                bill_payer_account_id,
-                  line_item_usage_account_id,
-              line_item_line_item_type,
-                  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-                  product_region AS Region,
-                  CASE
-                      WHEN line_item_usage_type LIKE '%%Lambda-Edge-GB-Second%%' THEN 'Lambda EDGE GB x Sec.'
-                      WHEN line_item_usage_type LIKE '%%Lambda-Edge-Request%%' THEN 'Lambda EDGE Requests'
-                      WHEN line_item_usage_type LIKE '%%Lambda-GB-Second%%' THEN 'Lambda GB x Sec.'
-                      WHEN line_item_usage_type LIKE '%%Request%%' THEN 'Lambda Requests'
-                      WHEN line_item_usage_type LIKE '%%In-Bytes%%' THEN 'Data Transfer (IN)'
-                      WHEN line_item_usage_type LIKE '%%Out-Bytes%%' THEN 'Data Transfer (Out)'
-                      WHEN line_item_usage_type LIKE '%%Regional-Bytes%%' THEN 'Data Transfer (Regional)'
-                      ELSE 'Other'
-                  END as UsageType,
-                  line_item_resource_id,
-                  CASE savings_plan_offering_type 
-                      WHEN 'ComputeSavingsPlans' THEN 'Compute Savings Plans'
-                      ELSE savings_plan_offering_type
-                  END AS ChargeType,
-                  SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-                  SUM(CAST(savings_plan_savings_plan_effective_cost AS decimal(16,8))) AS sum_savings_plan_savings_plan_effective_cost,
-              sum(CASE
-              WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN
-              "savings_plan_savings_plan_effective_cost"
-              WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN
-              ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment")
-              WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN
-              0
-              WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN
-              0
-              WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN
-              "reservation_effective_cost"
-              WHEN ("line_item_line_item_type" = 'RIFee') THEN
-              ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-              WHEN (("line_item_line_item_type" = 'Fee')
-                  AND ("reservation_reservation_a_r_n" <> '')) THEN
-              0
-              ELSE "line_item_unblended_cost" END) "amortized_cost"
-              
-                FROM ${table_name}
-                WHERE ${date_filter}
-                AND product_product_name = 'AWS Lambda'
-                AND product_product_family IN ('Data Transfer', 'Serverless')
-                AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-              GROUP BY
-              bill_payer_account_id,
-                line_item_usage_account_id,
-                DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-                product_region,
-                line_item_usage_type,
-                line_item_resource_id,
-                savings_plan_offering_type, 
-                line_item_line_item_type
-              ORDER BY  
-                day_line_item_usage_start_date ASC,
-                sum_line_item_usage_amount DESC
-            )
-          ) AS aggregatedTable
+  (
+    SELECT
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      line_item_line_item_type,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      product_region,
+      CASE
+        WHEN line_item_usage_type LIKE '%Lambda-Edge-GB-Second%' THEN 'Lambda EDGE GB x Sec.'
+        WHEN line_item_usage_type LIKE '%Lambda-Edge-Request%' THEN 'Lambda EDGE Requests'
+        WHEN line_item_usage_type LIKE '%Lambda-GB-Second%' THEN 'Lambda GB x Sec.'
+        WHEN line_item_usage_type LIKE '%Request%' THEN 'Lambda Requests'
+        WHEN line_item_usage_type LIKE '%In-Bytes%' THEN 'Data Transfer (IN)'
+        WHEN line_item_usage_type LIKE '%Out-Bytes%' THEN 'Data Transfer (Out)'
+        WHEN line_item_usage_type LIKE '%Regional-Bytes%' THEN 'Data Transfer (Regional)'
+        ELSE 'Other'
+      END AS case_line_item_usage_type,
+      line_item_resource_id,
+      savings_plan_offering_type,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(savings_plan_savings_plan_effective_cost AS DECIMAL(16,8))) AS sum_savings_plan_savings_plan_effective_cost,
+      SUM(CASE
+        WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+        WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN savings_plan_total_commitment_to_date - savings_plan_used_commitment
+        WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0
+        WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
+        WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+        WHEN line_item_line_item_type = 'RIFee' THEN reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee
+        WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN 0
+        ELSE line_item_unblended_cost 
+      END) AS sum_amortized_cost
+    FROM 
+      ${table_name}
+    WHERE 
+      ${date_filter}
+      AND product_product_name = 'AWS Lambda'
+      AND product_product_family IN ('Data Transfer', 'Serverless')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    GROUP BY
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      line_item_line_item_type,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+      product_region,
+      6, --refers to case_line_item_usage_type
+      line_item_resource_id,
+      savings_plan_offering_type
+  )
+) AS aggregatedTable
 
-          ORDER BY
-            day_line_item_usage_start_date,
-            sum_line_item_usage_amount,
-            sum_line_item_unblended_cost;
+ORDER BY
+  day_line_item_usage_start_date,
+  sum_line_item_usage_amount,
+  sum_line_item_unblended_cost;
 ```
 
 {{< email_button category_text="Compute" service_text="Lambda" query_text="Lambda Query1" button_text="Help & Feedback" >}}
@@ -474,52 +438,52 @@ Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com
 ![Images/elb_unused_wrid.png](/Cost/300_CUR_Queries/Images/Compute/elb_unused_wrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elb_unsused_wrid.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elbunsusedwrid.sql)
 
 #### Copy Query
 ```tsql
+SELECT
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  SPLIT_PART(line_item_resource_id, ':', 6) split_line_item_resource_id,
+  product_region,
+  pricing_unit,
+  sum_line_item_usage_amount,
+  CAST(cost_per_resource AS DECIMAL(16, 8)) AS sum_line_item_unblended_cost
+FROM
+  (
     SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      SPLIT_PART(line_item_resource_id, ':', 6) split_line_item_resource_id,
+      line_item_resource_id,
       product_region,
       pricing_unit,
-      sum_line_item_usage_amount,
-      CAST(cost_per_resource AS decimal(16, 8)) AS "sum_line_item_unblended_cost"
+      line_item_usage_account_id,
+      bill_payer_account_id,
+      SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+      SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
+      SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
+      COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
     FROM
-      (
-        SELECT
-          line_item_resource_id,
-          product_region,
-          pricing_unit,
-          line_item_usage_account_id,
-          bill_payer_account_id,
-          SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
-          SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
-          SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
-          COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
-        FROM
-          ${table_name}
-        WHERE
-          line_item_product_code = 'AWSELB'
-          -- get previous month
-          AND month = cast(month(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
-          -- get year for previous month
-          AND year = cast(year(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
-          AND line_item_line_item_type = 'Usage'
-        GROUP BY
-          line_item_resource_id,
-          product_region,
-          pricing_unit,
-          line_item_usage_account_id,
-          bill_payer_account_id
-      )
+      ${table_name}
     WHERE
-      -- filter only resources which ran more than half month (336 hrs)
-      usage_per_resource_and_pricing_unit > 336
-      AND pricing_unit_per_resource = 1
-    ORDER BY
-      cost_per_resource DESC
+      line_item_product_code = 'AWSELB'
+      -- get previous month
+      AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+      -- get year for previous month
+      AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+      AND line_item_line_item_type = 'Usage'
+    GROUP BY
+      line_item_resource_id,
+      product_region,
+      pricing_unit,
+      line_item_usage_account_id,
+      bill_payer_account_id
+  )
+WHERE
+  -- filter only resources which ran more than half month (336 hrs)
+  usage_per_resource_and_pricing_unit > 336
+  AND pricing_unit_per_resource = 1
+ORDER BY
+  cost_per_resource DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="ELB" query_text="Elastic Load Balancing" button_text="Help & Feedback" >}}
@@ -548,85 +512,45 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 
 #### Copy Query
 ```tsql
-    SELECT
-      SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date,
-      CASE
-        savings_plan_offering_type
-        WHEN 'EC2InstanceSavingsPlans' THEN 'EC2 Instance Savings Plans'
-        WHEN 'ComputeSavingsPlans' THEN 'Compute Savings Plans'
-        ELSE savings_plan_offering_type
-      END AS "Type",
-      savings_plan_region,
-      DATE_FORMAT(
-        from_iso8601_timestamp(savings_plan_start_time),
-        '%Y-%m-%d'
-      ) AS "Start Date",
-      DATE_FORMAT(
-        from_iso8601_timestamp(savings_plan_end_time),
-        '%Y-%m-%d'
-      ) AS "End Date",
-      savings_plan_payment_option AS "savings_plan_payment_option",
-      savings_plan_purchase_term AS "savings_plan_purchase_term",
-      SUM(
-        TRY_CAST(
-          savings_plan_recurring_commitment_for_billing_period AS decimal(16, 8)
-        )
-      ) AS "Recurring commitment for billing period / Monthly Fee",
-      SUM(
-        TRY_CAST(
-          savings_plan_total_commitment_to_date AS decimal(16, 8)
-        )
-      ) AS "Total Commit to Date",
-      SUM(
-        TRY_CAST(
-          savings_plan_used_commitment AS decimal(16, 8)
-        )
-      ) AS "Used Commitment",
-      avg(
-        case
-          when line_item_line_item_type = 'SavingsPlanRecurringFee' then TRY_CAST(
-            savings_plan_total_commitment_to_date as decimal(8, 2)
-          )
-        end
-      ) as "Hourly Commitment",
-      TRY_CAST(
-        (
-          (
-            SUM(
-              TRY_CAST(
-                savings_plan_used_commitment AS decimal(16, 8)
-              )
-            ) / SUM(
-              TRY_CAST(
-                savings_plan_total_commitment_to_date AS decimal(16, 8)
-              )
-            )
-          ) * 100
-        ) AS decimal(3, 0)
-      ) AS "Utilization (%)"
-    FROM
-      ${table}
-    WHERE
-    ${date_filter}
-      AND savings_plan_savings_plan_a_r_n <> ''
-      AND line_item_line_item_type = 'SavingsPlanRecurringFee'
-    GROUP BY
-      savings_plan_savings_plan_a_r_n,
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      4,
-      savings_plan_offering_type,
-      savings_plan_region,
-      savings_plan_start_time,
-      savings_plan_end_time,
-      savings_plan_payment_option,
-      savings_plan_purchase_term
-    ORDER BY
-      split_savings_plan_savings_plan_a_r_n,
-      month_line_item_usage_start_date;
+SELECT
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date,
+  savings_plan_offering_type,
+  savings_plan_region,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_start_time),'%Y-%m-%d') AS day_savings_plan_start_time,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_end_time),'%Y-%m-%d') AS day_savings_plan_end_time,
+  savings_plan_payment_option,
+  savings_plan_purchase_term,
+  SUM(TRY_CAST(savings_plan_recurring_commitment_for_billing_period AS DECIMAL(16, 8))) AS sum_savings_plan_recurring_committment_for_billing_period,
+  SUM(TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(16, 8))) AS sum_savings_plan_total_commitment_to_date, 
+  SUM(TRY_CAST(savings_plan_used_commitment AS DECIMAL(16, 8))) AS sum_savings_plan_used_commitment,
+  AVG(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(8, 2))
+  END) AS "Hourly Commitment",
+  -- (used commitment / total commitment) * 100 = utilization %
+  TRY_CAST(((SUM(TRY_CAST(savings_plan_used_commitment AS DECIMAL(16, 8))) / SUM(TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(16, 8)))) * 100) AS DECIMAL(3, 0)) AS calc_savings_plan_utilization_percent
+FROM
+  ${table_name}
+WHERE 
+  ${date_filter}
+  AND savings_plan_savings_plan_a_r_n <> ''
+  AND line_item_line_item_type = 'SavingsPlanRecurringFee'
+GROUP BY
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2),
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m'),
+  savings_plan_offering_type,
+  savings_plan_region,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_start_time),'%Y-%m-%d'),
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_end_time),'%Y-%m-%d'),
+  savings_plan_payment_option,
+  savings_plan_purchase_term
+ORDER BY
+  split_savings_plan_savings_plan_a_r_n,
+  month_line_item_usage_start_date;
 ```
 
 {{< email_button category_text="Compute" service_text="ELB" query_text="EC2 Savings Plans Inventory" button_text="Help & Feedback" >}}
@@ -654,49 +578,51 @@ Please refer to the [EC2 reserved instances pricing page](https://aws.amazon.com
 
 #### Copy Query
 ```tsql
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      CASE
-        WHEN line_item_line_item_type IN ('Usage') THEN 'OnDemand'
-        WHEN line_item_line_item_type IN ('Fee','RIFee','DiscountedUsage') THEN 'ReservedInstance'
-      END AS ReservationType,
-      SPLIT_PART(SPLIT_PART(reservation_reservation_a_r_n,':',6),'/',2) AS LeaseID,
-      SPLIT_PART(line_item_usage_type ,':',2) AS InstanceType,
-      SPLIT_PART(SPLIT_PART(line_item_usage_type ,':',2), '.', 1) AS InstanceFamily,
-      CASE product_region
-        WHEN NULL THEN 'Global'
-        WHEN '' THEN 'Global'
-        ELSE product_region
-      END as Region,
-      line_item_line_item_type as UsageType,
-      SUM(TRY_CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(TRY_CAST(reservation_unused_quantity AS double)) AS sum_reservation_unused_quantity,
-      SUM(TRY_CAST(line_item_normalized_usage_amount AS double)) AS sum_line_item_normalized_usage_amount,
-      SUM(TRY_CAST(reservation_unused_normalized_unit_quantity AS double)) AS sum_reservation_unused_normalized_unit_quantity,
-      SUM(CAST(reservation_effective_cost AS decimal(16,8))) AS sum_line_item_blended_cost,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM
-      ${table_name}
-    WHERE
-      ${date_filter}
-      AND product_product_name = 'Amazon Elastic Compute Cloud'
-      AND line_item_operation LIKE '%%RunInstance%%'
-      AND line_item_line_item_type IN ('Usage','Fee','RIFee','DiscountedUsage')
-      AND product_product_family NOT IN ('Data Transfer')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      3,
-      5,
-      6,
-      product_region,
-      line_item_line_item_type
-    ORDER BY
-      day_line_item_usage_start_date,
-      InstanceType,
-      sum_line_item_unblended_cost DESC;
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  CASE 
+    WHEN line_item_line_item_type IN ('Usage') THEN 'OnDemand'
+    WHEN line_item_line_item_type IN ('Fee','RIFee','DiscountedUsage') THEN 'ReservedInstance' 
+  END AS case_purchase_option,
+  SPLIT_PART(SPLIT_PART(reservation_reservation_a_r_n,':',6),'/',2) AS split_reservation_reservation_a_r_n,
+  SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type_instance_type,
+  SPLIT_PART(SPLIT_PART(line_item_usage_type ,':',2), '.', 1) AS split_line_item_usage_type_instance_family,
+  CASE product_region
+    WHEN NULL THEN 'Global'
+    WHEN '' THEN 'Global'
+    ELSE product_region
+  END AS case_product_region,
+  line_item_line_item_type,
+  SUM(TRY_CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(TRY_CAST(reservation_unused_quantity AS DOUBLE)) AS sum_reservation_unused_quantity,
+  SUM(TRY_CAST(line_item_normalized_usage_amount AS DOUBLE)) AS sum_line_item_normalized_usage_amount,
+  SUM(TRY_CAST(reservation_unused_normalized_unit_quantity AS DOUBLE)) AS sum_reservation_unused_normalized_unit_quantity,
+  SUM(CAST(reservation_effective_cost AS DECIMAL(16,8))) AS sum_reservation_effective_cost,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Elastic Compute Cloud'
+  AND line_item_operation LIKE '%RunInstance%'
+  AND line_item_line_item_type IN ('Usage','Fee','RIFee','DiscountedUsage')
+  AND product_product_family NOT IN ('Data Transfer')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  4, -- refers to case_purchase_option
+  SPLIT_PART(SPLIT_PART(reservation_reservation_a_r_n,':',6),'/',2),
+  SPLIT_PART(line_item_usage_type ,':',2),
+  SPLIT_PART(SPLIT_PART(line_item_usage_type ,':',2), '.', 1),
+  8, -- refers to case_product_region
+  line_item_line_item_type
+ORDER BY 
+  day_line_item_usage_start_date,
+  split_line_item_usage_type_instance_type,
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Reserved Instance Coverage" button_text="Help & Feedback" >}}

@@ -1,17 +1,17 @@
 -- modified: 2021-04-25
 SELECT bill_payer_account_id,
         line_item_usage_account_id,
-        sum(line_item_unblended_cost) sum_line_item_unblended_cost,
-        round(total_support_cost *((sum(line_item_unblended_cost)/total_cost)),
+        SUM(line_item_unblended_cost) sum_line_item_unblended_cost,
+        ROUND(total_support_cost *((SUM(line_item_unblended_cost)/total_cost)),
         2) AS support_cost,
-        round(sum(line_item_unblended_cost)/total_cost*100,
+        ROUND(SUM(line_item_unblended_cost)/total_cost*100,
         2) AS percentage_of_total_cost,
         ${table_name}.year,
         ${table_name}.month
 FROM ${table_name}
 
 RIGHT JOIN -- Total AWS bill without support    
-    (SELECT sum(line_item_unblended_cost) AS total_cost,
+    (SELECT SUM(line_item_unblended_cost) AS total_cost,
             year,
             month
     FROM ${table_name}
@@ -22,7 +22,7 @@ RIGHT JOIN -- Total AWS bill without support
         AND ${table_name}.month = aws_total_without_support.month)
 
 RIGHT JOIN -- Total support    
-    (SELECT sum(line_item_unblended_cost) AS total_support_cost,
+    (SELECT SUM(line_item_unblended_cost) AS total_support_cost,
             year,
             month
     FROM ${table_name}
