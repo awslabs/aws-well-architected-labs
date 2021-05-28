@@ -2,8 +2,8 @@
 title: "Teardown"
 date: 2020-10-26T11:10:08-04:00
 chapter: false
-weight: 7
-pre: "<b>7. </b>"
+weight: 6
+pre: "<b>6. </b>"
 ---
 
 The following resources were created in this lab:
