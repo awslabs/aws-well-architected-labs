@@ -1,0 +1,22 @@
+[
+    {
+      "ParameterKey": "CrawlerName",
+      "ParameterValue": ""
+    }, 
+    {
+      "ParameterKey": "DestinationBucket",
+      "ParameterValue": ""
+    }, 
+    {
+      "ParameterKey": "DestinationPrefix",
+      "ParameterValue": ""
+    },  
+    {
+      "ParameterKey": "Tags",
+      "ParameterValue": ""
+    }, 
+    {
+      "ParameterKey": "CodeBucket",
+      "ParameterValue": ""
+    }
+  ]

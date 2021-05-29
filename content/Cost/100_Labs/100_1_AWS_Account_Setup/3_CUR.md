@@ -141,7 +141,7 @@ When CUR files are delivered they will now automatically have permissions allowi
 
 
 ### Update existing CURs
-If there are existing CURs from other reports that need permissions to be updated, you can use the following CLI - which will copy the objects over themselves and update the permissions as it copies.
+If there are existing CURs from other reports that need permissions to be updated, you can use the following CLI - which will copy the objects over themselves and update the permissions as it copies. You can use this [link](https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html) to find you canonical ID's.
 
     aws s3 cp --recursive s3://(CUR bucket) s3://(CUR bucket) --grants read=id=(sub account canonical ID) full=id=(management account canonical ID) --storage-class STANDARD
 

@@ -6,33 +6,54 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-### Create the Organisations Data Table
-In this section we will create the AWS Organizations table in Amazon Athena. This can then be used to connect to the AWS Cost & Usage Report (CUR) or other data sets you have, to show you the names and emails of your accounts.
+## Create Glue Crawler
+We will prepare the organization data source which we will use to join with the CUR. 
 
-1.	Go to the **Athena** service page
+1. Go to the **Glue** Service page:
+![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
+
+2. Click **Crawlers** from the left menu:
+![Images/glue_crawlers.png](/Cost/200_Pricing_Model_Analysis/Images/glue_crawlers.png)
+
+3. Click **Add crawler**:
+![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
+
+4. Enter a crawler name of **OrgGlueCrawler** and click **Next**:
+![Images/Crawler_info.png](/Cost/300_Organization_Data_CUR_Connection/Images/Crawler_info.png)
+
+5. Ensure **Data stores** is the source type, click **Next**:
+![Images/crawler_source_type.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_source_type.png)
+
+6. Click the folder icon to list the S3 folders in your account and find your S3 bucket and find the **organisation-data** folder and click **Next**:
+![Images/s3_source.png](/Cost/300_Organization_Data_CUR_Connection/Images/s3_source.png)
+
+7. **Create an IAM role** with a name of **AWS-Organization-Data-Glue-Crawler**, click **Next**:
+![Images/crawler_iam.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_iam.png)
+
+8. Change the frequency as **Custom** and put in 0 8 ? * MON *, and click **Next**:
+![Images/Schedule.png](/Cost/300_Organization_Data_CUR_Connection/Images/Schedule.png)
+
+9. Click on **Add database**.  Enter a database name of your CUR database **managementcur**, and click **Next**:
+![Images/crawler_output.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_output.png)
+
+10. Click **Finish**:
+![Images/crawler_finish.png](/Cost/300_Organization_Data_CUR_Connection/Images/crawler_finish.png)
+
+11. Select the crawler **OrgGlueCrawler** and click **Run crawler**:
+![Images/run_crawler.png](/Cost/300_Organization_Data_CUR_Connection/Images/run_crawler.png)
+
+12. Once its run, you should see tables created.
+
+13.	Go to the **Athena** service page
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-2.  We are going to create the Organizations table. This can be done in any of the databases that holds your Cost & Usage Report. Copy and paste the below query replacing the **( bucket-name)** with the S3 bucket name which holds the Organizations data, into the query box. Click **Run query**.
-
-		CREATE EXTERNAL TABLE IF NOT EXISTS managementcur.organisation_data (
-		`account_number` string,
-		`account_name` string,
-		`creation_date` string,
-		`status` string 
-		)
-		ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-		WITH SERDEPROPERTIES (
-		'serialization.format' = ',',
-		'field.delim' = ','
-		) LOCATION 's3://(bucket-name)/organisation-data/'
-		TBLPROPERTIES ('has_encrypted_data'='false'); 
-
-![Images/Athena_Table.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Table.png)
-
-3.	Athena should report ‘Query Successful’. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
+14. Run the below query, to view your data in Amazon S3. As you can see, we have the account number, the name, when it was created and the current status of that account.
 
 		SELECT * FROM "managementcur"."organisation_data" limit 10;
+
+![Images/Athena_Preview.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Preview.png)
+		
 
 {{% notice info %}}
 You have now created your Athena table that will query the organization data in the S3 Bucket. 
@@ -51,14 +72,14 @@ We will be running an example query on how you can connect your CUR to this Orga
 
 		SELECT line_item_usage_account_id,
 			line_item_product_code,
-			 account_name,
+			 name,
 			sum(line_item_unblended_cost) AS line_item_unblended_cost_cost
 		FROM "managementcur"."cur" cur
 		JOIN  "managementcur"."organisation_data"
-		ON "cur".line_item_usage_account_id = organisation_data.account_number
+		ON "cur".line_item_usage_account_id = organisation_data.id
 		WHERE month = '10'
 				AND year = '2020'
-		GROUP BY  line_item_usage_account_id,  account_name, line_item_product_code
+		GROUP BY  line_item_usage_account_id,  name, line_item_product_code
 		limit 10;
 
 ![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
@@ -77,7 +98,7 @@ If you would like to always have your Organizations data connected to your CUR t
 		SELECT *
 		FROM ("managementcur"."cur" cur
 		INNER JOIN "managementcur"."organisation_data"
-			ON ("cur"."line_item_usage_account_id" = "organisation_data"."account_number")) 
+			ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
 			
 
 
@@ -86,7 +107,7 @@ If you would like to always have your Organizations data connected to your CUR t
 		SELECT * FROM "managementcur"."org_cur" limit 10;
 
 {{% notice tip %}}
-Having run these queries you can now see how the Organization data connects to your Cost and Usage Report. 
+Having run these queries, you can now see how the Organization data connects to your Cost and Usage Report. 
 {{% /notice %}}
 
 
