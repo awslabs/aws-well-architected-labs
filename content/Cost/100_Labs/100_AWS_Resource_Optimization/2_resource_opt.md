@@ -21,7 +21,8 @@ Amazon EC2 Resource Optimization offers right sizing recommendations in AWS Cost
 
 In case you haven’t enabled the Amazon EC2 Resource Optimization please do so (no additional cost), it may take up to 24 hours in order to generate your first recommendations. Only regular or a management account can enable rightsizing recommendations. After you enable the feature, both member and management account can access rightsizing recommendations unless the management account specifically prohibits member account access on the settings page.
 
-To improve the recommendation quality, AWS might use your published utilization metrics, such as disk or memory utilization, to improve our recommendation models and algorithms. All metrics are anonymized and aggregated before AWS uses them for model training. If you want to opt out of this experience and request that your metrics not be stored and used for model improvement, contact AWS Support. For more information, see [AWS Service Terms](https://aws.amazon.com/service-terms/).
+| *To improve the recommendation quality, AWS might use your published utilization metrics, such as disk or memory utilization, to improve our recommendation models and algorithms. All metrics are anonymized and aggregated before AWS uses them for model training. If you want to opt out of this experience and request that your metrics not be stored and used for model improvement, contact AWS Support. For more information, see [AWS Service Terms](https://aws.amazon.com/service-terms/).* |
+|------|
 
 #### 4. Getting to know the Amazon EC2 Resource Optimization Recommendations parameters
 ![Images/ResourceOpt4.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt04.png?classes=lab_picture_small)

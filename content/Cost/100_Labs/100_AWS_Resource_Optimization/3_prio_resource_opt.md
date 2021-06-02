@@ -77,7 +77,7 @@ This will focus on the underutilized resources (>1% CPU) that belongs to previou
 
 Moving to a modern generation may require additional testing hours compared to instances identified on Group 1, but depending on the case it can maximize savings and performance. Refer to the [EC2 previous generation](https://aws.amazon.com/ec2/previous-generation/) page for information on upgrade paths to cerrent generation instance families.
 
-As AWS continues to innovate, new instance types become available often with a cheaper hourly cost and better performance versus current generation instances. Review the [Amazon EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/) to see current instance families. For example, the new [Graviton](https://aws.amazon.com/ec2/graviton/) instances offer even more savings and performance but require additional testing because they use a different processor architecture (arm).
+> As AWS continues to innovate, new instance types become available often with a cheaper hourly cost and better performance versus current generation instances. Review the [Amazon EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/) to see current instance families. For example, the new [Graviton](https://aws.amazon.com/ec2/graviton/) instances offer even more savings and performance but require additional testing because they use a different processor architecture (arm).
 
 If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally **2,534 recommendations to 22** with **$6,362 per month in potential savings**.
 

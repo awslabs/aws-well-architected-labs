@@ -1,12 +1,12 @@
 ---
-title: "Level 100: EC2 Right Sizing"
+title: "Level 100: EC2 Resource Optimization"
 #menutitle: "Lab #3"
 date: 2021-05-18T11:16:08-04:00
 chapter: false
 weight: 6
 ---
 ## Last Updated
-May 2021
+June 2021
 
 ## Authors
 - Arthur Basbaum, AWS Cloud Economics
@@ -24,7 +24,7 @@ This hands-on lab will give you an overview on **AWS Resource Optimization** and
 
 ## Prerequisites
 - Have at least one Amazon EC2 instance running
-- Enable [AWS Resource Optimization](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html#rr-getting-started) at *AWS Cost Explorer > Recommendations* no additional cost
+- Enable [AWS Resource Optimization](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html#rr-getting-started) at *AWS Cost Explorer > Recommendations* (no additional cost)
 
 ## Permissions required
 - A minimum of read-only access to the AWS Billing Console
@@ -33,8 +33,8 @@ This hands-on lab will give you an overview on **AWS Resource Optimization** and
 - These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required
 
 ## Costs
-- https://aws.amazon.com/aws-cost-management/pricing/
 - There are no costs for this lab but you need to have at least 1 Amazon EC2 instance running. If you don't have any instance running please check the [AWS Free Tier page](https://aws.amazon.com/free/) for more information
+- [Click here to check the costs associated with other AWS Cost Management tools](https://aws.amazon.com/aws-cost-management/pricing/)
 
 ## Steps
 {{% children  /%}}
