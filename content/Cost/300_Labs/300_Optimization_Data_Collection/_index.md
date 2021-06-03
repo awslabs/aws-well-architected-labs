@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Organization Data CUR Connection"
+title: "Level 300: Optimization Data Collection"
 #menutitle: "Lab #1"
 date: 2020-10-22T11:16:08-04:00
 chapter: false
@@ -16,17 +16,15 @@ December 2020
 If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-This lab will show you how to combine your organizations information with your AWS Cost & Usage Report, this will enable you to view cost & usage in a way that is more relevant to your organization. It will guide you through the process of setting up an AWS Lambda function to extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This will then be place into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it. This can be deployed manually or through AWS CloudFormation. We also now offer a terraform module to deploy this code.
-
+When reviewing costs in AWS it important to have all the data you need in one place. Following on from the Cost and Usage Report setup, which you can see in this [Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) this lab will give you a template of how you can pull your own sets of data as well as some pre made modules to help collect data for optimization and chargeback. Using either CloudFormation or Terraform the modules will follow the structure of using an AWS Lambda function to extract the data, then this will then be place into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it. 
 
 ## Architecture 
 
-![Images/create_role.png](/Cost/300_Organization_Data_CUR_Connection/Images/Arch.png)
-
+![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
 
 ## Goals
-- Combine your AWS Organizations information with your CUR
-- Allows you to view costs against accounts with names you provide enriching the data
+- Deploy base resources that you will be reused in multiple modules
+- Deploy modules to collect data 
 
 
 ## Prerequisites
@@ -44,6 +42,9 @@ We suggest you do not deploy resources into your management account and instead 
 Be able to create the below in the management account:
 - IAM role and policy
 
+Be able to create the below in the all accounts you wish to collect data from:
+- IAM role and policy
+
 Be able to create the below in a sub account where your CUR data is accessible:
 - Amazon S3 Bucket 
 - AWS Lambda function 
@@ -59,7 +60,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 
 ## Costs
 - Estimated costs should be <$5 a month for small Organization 
-- [Amazon QuickSight pricing](https://aws.amazon.com/quicksight/pricing/?nc=sn&loc=4)
+
 
 ## Time to complete
 - 30 minutes
