@@ -13,9 +13,9 @@ If you'd like to disable the Detailed Billing Report, please follow the followin
 1. Go to the billing dashboard:
 ![Images/AWSBillDetail0.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSBillDetail0.png)
 2. Click on the **Billing Preferences** from the left menu:
-![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill0.png)
+![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill5.png)
 3. Click **Detailed Billing Reports [Legacy]** and uncheck the box. Then Click **Save Preferences**:
-![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill9.png)
+![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill6.png)
 
 
 4. If you configured **Save to S3 Bucket** you can delete either the bucket or the DBR files to prevent any further charges. 
