@@ -12,5 +12,5 @@ Control Tower sets up your landing zone to leverage [AWS Single Sign-On](https:/
 
 ### Walk through
 
-1. In your existing AWS account [perform a credentials audit, add multi factor authentication to root and ensure that details are up to date](../100_AWS_Account_and_Root_User/README.md)
+1. In your existing AWS account [perform a credentials audit, add multi factor authentication to root and ensure that details are up to date](https://docs.aws.amazon.com/general/latest/gr/aws-security-audit-guide.html)
 1. Configure [AWS SSO to federate identity](https://controltower.aws-management.tools/infrastructure/sso/). If you are not using SSO you can still federate Identity [leveraging a SAML provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html) and then [use cross account access roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) to access the accounts that we setup in step 1.
