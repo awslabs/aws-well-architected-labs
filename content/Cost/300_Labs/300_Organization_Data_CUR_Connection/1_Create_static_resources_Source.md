@@ -20,7 +20,7 @@ NOTE: An IAM role will be created when you create the CloudFormation stack. Plea
 
 This section is **optional** and automates the creation of the AWS organizations data collection using a **CloudFormation template**.  You will require permissions to modify CloudFormation templates, create an IAM role, S3 Bucket, Lambda and create a Glue Crawler. **If you do not have the required permissions skip over this section to continue using the standard setup**.
 
-1. Click the **Download CloudFormation**:
+1. 
 * Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/main.yaml) if you are deploying to your linked account (recommended)
 
 * Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/main_man.yaml) if you wish to deploy straight into your management account 
