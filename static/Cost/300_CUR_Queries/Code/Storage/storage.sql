@@ -108,10 +108,10 @@ FROM
   ${tableName}
 WHERE
   ${date_filter}
-  AND ((line_item_product_code in ('AmazonFSx','AmazonEFS','AmazonS3','AmazonDynamoDB'))
+  AND ((line_item_product_code IN ('AmazonFSx','AmazonEFS','AmazonS3','AmazonDynamoDB'))
     OR (line_item_product_code = 'AmazonEC2' AND line_item_usage_type LIKE '%EBS:%') 
-    OR (line_item_product_code = 'AmazonRDS' AND product_product_family in ('Aurora Global Database','Database Storage','Provisioned IOPS','Storage Snapshot','System Operation')))
-  AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+    OR (line_item_product_code = 'AmazonRDS' AND product_product_family IN ('Aurora Global Database','Database Storage','Provisioned IOPS','Storage Snapshot','System Operation')))
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
   AND (line_item_usage_type not LIKE '%DataTransfer%' 
         AND line_item_usage_type not LIKE '%DataXfer%'
         AND line_item_usage_type not LIKE '%In-Bytes%'
@@ -126,4 +126,5 @@ GROUP BY
   5 --refers to case_line_item_usage_type
 ORDER BY 
   day_line_item_usage_start_date ASC, 
-  sum_line_item_unblended_cost DESC;
+  sum_line_item_unblended_cost DESC
+;
