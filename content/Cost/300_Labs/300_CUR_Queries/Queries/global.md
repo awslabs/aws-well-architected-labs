@@ -436,18 +436,18 @@ Example 2:
 This query will provide monthly unblended cost for all [Serverless products](https://aws.amazon.com/serverless/) in use across all regions.  This query is helpful in tracking Serverless product adoption as application teams modernize their applications.  You can expand the query to include line_item_usage_account_id to show individual service charges per linked account.  This query helps provide a view that is difficult to achieve within Cost Explorer.  
 
 #### Pricing
-[AWS Lambda pricing page](https://aws.amazon.com/lambda/pricing/)
-[AWS Fargate pricing page](https://aws.amazon.com/fargate/pricing/)
-[Amazon EventBridge pricing page](https://aws.amazon.com/eventbridge/pricing/)
-[AWS Step Functions pricing page](https://aws.amazon.com/step-functions/pricing/)
-[Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/)
-[Amazon SNS pricing page](https://aws.amazon.com/sns/pricing/)
-[Amazon API Gateway pricing page](https://aws.amazon.com/api-gateway/pricing/)
-[AWS AppSync pricing page](https://aws.amazon.com/appsync/pricing/)
-[Amazon S3 pricing page](https://aws.amazon.com/s3/pricing/)
-[Amazon DynamoDB pricing page](https://aws.amazon.com/dynamodb/pricing/)
-[Amazon RDS Proxy pricing page](https://aws.amazon.com/rds/proxy/pricing)
-[Amazon Aurora pricing page](https://aws.amazon.com/rds/aurora/pricing/)
+* [AWS Lambda pricing page](https://aws.amazon.com/lambda/pricing/)
+* [AWS Fargate pricing page](https://aws.amazon.com/fargate/pricing/)
+* [Amazon EventBridge pricing page](https://aws.amazon.com/eventbridge/pricing/)
+* [AWS Step Functions pricing page](https://aws.amazon.com/step-functions/pricing/)
+* [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/)
+* [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing/)
+* [Amazon API Gateway pricing page](https://aws.amazon.com/api-gateway/pricing/)
+* [AWS AppSync pricing page](https://aws.amazon.com/appsync/pricing/)
+* [Amazon S3 pricing page](https://aws.amazon.com/s3/pricing/)
+* [Amazon DynamoDB pricing page](https://aws.amazon.com/dynamodb/pricing/)
+* [Amazon RDS Proxy pricing page](https://aws.amazon.com/rds/proxy/pricing)
+* [Amazon Aurora pricing page](https://aws.amazon.com/rds/aurora/pricing/)
 
 #### Sample Output:                                                                                                                                     
 ![Images/serverless.png](/Cost/300_CUR_Queries/Images/Global/serverless.png)          
