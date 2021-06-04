@@ -3,6 +3,7 @@ title: "Index File"
 date: 2021-06
 chapter: false
 weight: 8
+hidden: true
 pre: "<b> </b>"
 ---
 {{% notice info %}}
