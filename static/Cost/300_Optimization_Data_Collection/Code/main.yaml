@@ -6,13 +6,21 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that needs to be created to hold information
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    Default: optimizationdatacollectionbucket
+  ManagementAccountRole: 
+    Type: String
+    Description: This will be the name of the IAM role that will be deployed in the management account which can retrieve AWS Org data. This is deployed in the next step
+    Default: AWS-Management-Account-Data-Collector-Role
+  ManagementAccountID: 
+    Type: String
+    Description: Your Management Account ID
+  #Reusable Resources:
 Resources:
-#Reusable Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName:
-        Ref: DestinationBucket
+        !Sub "${DestinationBucket}${AWS::AccountId}"
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -48,7 +56,6 @@ Resources:
                           - ''
                           - - !GetAtt S3Bucket.Arn 
                             - '*'
-
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -57,6 +64,6 @@ Outputs:
   S3BucketARN:
     Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
     Value:
-       Fn::GetAtt:
+      Fn::GetAtt:
         - S3Bucket
         - Arn 

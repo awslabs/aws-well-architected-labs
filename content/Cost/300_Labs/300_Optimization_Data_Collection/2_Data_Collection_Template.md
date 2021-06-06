@@ -7,9 +7,9 @@ pre: "<b>2. </b>"
 ---
 
 ### Example Module Explanation
-You can use this template to build your own data collection modules or skip to the [next step]({{< ref "/Cost/300_Labs/300_Optimization_Data_Collection/3_Data_Collection_Cloud_Formation_Modules" >}}) to use the ones provided. In the next step we will be providing you with modules you can add to your main file. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your main file. 
+You can use this template to build your own data collection modules or skip to the [next step]({{< ref "/Cost/300_Labs/300_Optimization_Data_Collection/4_Data_Collection_Cloud_Formation_Modules" >}}) to use the ones provided. In the next step we will be providing you with modules you can add to your main.yaml file. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your main.yaml file. 
 
-1.  **Download CloudFormation** by clicking [here](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml). This will be the foundation of the rest of the lab and will will add to this to build out the modules.
+1.  **Download CloudFormation** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml) This will be the foundation of the rest of this section and will will add to this to build out the modules.
 
 2. The first section we have **Parameters** which can be passed in from the main template. These are good for roles you will be using if assuming into accounts or reusable resources like S3. There are also **Outputs** which can be pulled from the module and shared in the main file. 
 
@@ -27,7 +27,7 @@ These are all needed actions for the lambda. If you need to add more to access t
 * Uploading the file into a partitioned folder in S3
 * Starting the crawler to create/update the Athena Table
 
-5. There is a Glue Crawler which is the one we triggered in the Lambda which reads from your S3 bucket and creates a table based on the data. It used the Glue Role we made in the main file.
+5. There is a Glue Crawler which is the one we triggered in the Lambda which reads from your S3 bucket and creates an Athena table based on the data. It used the Glue Role we made in the main file.
 
 6. To trigger the Lambda we use a Cloudwatch event which runs on a pre-defined schedule. You can find more options for scheduling [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
 
@@ -47,19 +47,17 @@ Once you have your module created you can add it to your main CloudFormation Tem
 * An example link of the S3 object
 * The Parameters needed for the template
 
-    DataStack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3-eu-west-1.amazonaws.com/mybucket/lambda_s3_athen_cf_template.yaml
-      TimeoutInMinutes: 2
-      Parameters:
-        DestinationBucketARN: !GetAtt S3Bucket.Arn 
-        DestinationBucket: !GetAtt S3Bucket
-        GlueRoleARN: !GetAtt GlueRole.Arn
-        .
-        .
-        .
-        
+      DataStack:
+      Type: AWS::CloudFormation::Stack
+      Properties:
+        TemplateURL: https://s3-eu-west-1.amazonaws.com/mybucket/lambda_s3_athen_cf_template.yaml
+        TimeoutInMinutes: 2
+        Parameters:
+          DestinationBucketARN: !GetAtt S3Bucket.Arn 
+          DestinationBucket: !GetAtt S3Bucket
+          GlueRoleARN: !GetAtt GlueRole.Arn
+          
+          
 4. Now you have added your new module you can update your CloudFormation stack in the console. 
 
 {{% notice note %}}
@@ -67,4 +65,4 @@ NOTE: If you would like more information on AWS CloudFormation checkout there [w
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../1_Main_Resources/" link_next_url="../6_teardown/" />}}
+{{< prev_next_button link_prev_url="../1_Main_Resources/" link_next_url="../3_Management_Account/" />}}
