@@ -2,8 +2,8 @@
 title: "Data Collection Template"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 2
-pre: "<b>2. </b>"
+weight: 3
+pre: "<b>3. </b>"
 ---
 
 ### Example Module Explanation
@@ -12,7 +12,6 @@ You can use this template to build your own data collection modules or skip to t
 1.  **Download CloudFormation** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml) This will be the foundation of the rest of this section and will will add to this to build out the modules.
 
 2. The first section we have **Parameters** which can be passed in from the main template. These are good for roles you will be using if assuming into accounts or reusable resources like S3. There are also **Outputs** which can be pulled from the module and shared in the main file. 
-
 
 
 3. To collect the data we have a lambda function which uses a role to have permissions for the resources its going to be utilizing.  By default the role can currently: 
@@ -65,4 +64,4 @@ NOTE: If you would like more information on AWS CloudFormation checkout there [w
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../1_Main_Resources/" link_next_url="../3_Management_Account/" />}}
+{{< prev_next_button link_prev_url="../2_Management_Account/" link_next_url="../4_Data_Collection_Cloud_Formation_Modules/" />}}

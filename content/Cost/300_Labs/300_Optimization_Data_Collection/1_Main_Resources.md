@@ -105,4 +105,4 @@ NOTE: You have successfully setup the main CloudFormation specific steps. You ca
 {{% /expand%}}
 
 
-{{< prev_next_button link_prev_url="../" link_next_url="../2_Data_Collection_Template/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../2_Management_Account/" />}}

@@ -2,8 +2,8 @@
 title: "Management Account"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 3
-pre: "<b>3 </b>"
+weight: 2
+pre: "<b>2 </b>"
 ---
 
 ### Role for Management Account
@@ -26,6 +26,7 @@ As some of the data needed for these module is in the Management account we need
 
 6. Call the Stack **OptimizationDataRoleStack**
 
+7. Make a note of the IAM role ARN as we will use this in the next step
 
 
 {{% notice tip %}}
@@ -33,4 +34,4 @@ You have now deployed the cloudformation template to build an IAM Role to allow 
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../2_Data_Collection_Template/" link_next_url="../4_Data_Collection_Cloud_Formation_Modules/" />}}
+{{< prev_next_button link_prev_url="../1_Main_Resources/" link_next_url="../3_Data_Collection_Template/" />}}

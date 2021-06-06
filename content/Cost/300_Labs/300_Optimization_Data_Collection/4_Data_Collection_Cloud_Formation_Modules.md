@@ -58,4 +58,4 @@ You have now created your lambda modules you may need access to your Management 
 
 
 
-{{< prev_next_button link_prev_url="../2_Data_Collection_Template/" link_next_url="../4_Management_Account/" />}}
+{{< prev_next_button link_prev_url="../3_Data_Collection_Template/" link_next_url="../5_teardown/" />}}
