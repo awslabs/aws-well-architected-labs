@@ -24,6 +24,8 @@ As some of the data needed for these module is in the Management account we need
 
 5. In the Parameters section use the account ID you deployed the main.yaml file into for **CostAccountID**
 
+6. Call the Stack **OptimizationDataRoleStack**
+
 
 
 {{% notice tip %}}
