@@ -5,11 +5,11 @@ chapter: false
 pre: "<b>3. </b>"
 weight: 3
 ---
-We will create a monthly savings plan coverage budget which will notify if the coverage of Savings Plan for EC2 is below the specified amount. 
+We will create a monthly savings plan coverage budget, which will notify if the coverage of Savings Plan for EC2 is below the specified amount. 
 
-You should **not** set an arbitrary limit to alarm on (i.e. alarm if coverage is less than 80%) instead select your current level of coverage - so if coverage reduces, you can act and increase coverage if required.
+You should **not** set an arbitrary limit for the alarm, (i.e. alarm if coverage is less than 80%) instead select your current level of coverage - so if coverage reduces, you can act and increase coverage if required.
 
-1. From the **AWS Budgets** dashboard in the console, click **Create budget**:
+1. From the **Budgets** dashboard in the console, click **Create budget**:
 ![Images/AWSLab7.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSLab7.png)
 
 2. Select **Savings Plans budget**, and click **Set your budget >**:

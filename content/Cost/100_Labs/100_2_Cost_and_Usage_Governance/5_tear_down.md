@@ -7,12 +7,12 @@ weight: 5
 ---
 
 ### Delete a budget report
-We will delete the bugdet report.
+We will delete the bugdet report we created in the previous step.
 
 1. From the **Budgets Reports** dashboard, click on the three dots next to the **Weekly Budgets** budget report, and click **Delete**:
 ![Images/AWSTeardown1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSTeardown1.png)
 
-2. You can see there are no budget reports:
+2. You can see now there are no budget reports:
 ![Images/AWSTeardown2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSTeardown2.png)
 
 ### Delete a budget
