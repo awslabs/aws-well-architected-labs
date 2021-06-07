@@ -39,60 +39,63 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
 
 #### Copy Query
 ```tsql
-      SELECT bill_payer_account_id,
-         line_item_usage_account_id,
-         DATE_FORMAT(("line_item_usage_start_date"),
-         '%Y-%m-%d') AS day_line_item_usage_start_date, product_instance_type, line_item_operation, line_item_usage_type, line_item_line_item_type, pricing_term, product_product_family , SPLIT_PART(line_item_resource_id,':',7) AS line_item_resource_id,
-          CASE product_database_engine
-          WHEN '' THEN
-          'Not Applicable'
-          ELSE product_database_engine
-          END AS OS , sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN
-          "line_item_usage_amount"
-          WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN
-          "line_item_usage_amount"
-          WHEN ("line_item_line_item_type" = 'Usage') THEN
-          "line_item_usage_amount"
-          ELSE 0 END) "usage_quantity", sum ("line_item_unblended_cost") "unblended_cost", sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN
-          "savings_plan_savings_plan_effective_cost"
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN
-          ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment")
-          WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN
-          0
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN
-          0
-          WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN
-          "reservation_effective_cost"
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN
-          ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-          WHEN (("line_item_line_item_type" = 'Fee')
-              AND ("reservation_reservation_a_r_n" <> '')) THEN
-          0
-          ELSE "line_item_unblended_cost" END) "amortized_cost", sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN
-          (-"savings_plan_amortized_upfront_commitment_for_billing_period")
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN
-          (-"reservation_amortized_upfront_fee_for_billing_period")
-          ELSE 0 END) "ri_sp_trueup", sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN
-          "line_item_unblended_cost"
-          WHEN (("line_item_line_item_type" = 'Fee')
-              AND ("reservation_reservation_a_r_n" <> '')) THEN
-          "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
-      FROM ${table_name}
-      WHERE year = '2020'
-              AND (month
-          BETWEEN '7'
-              AND '9'
-              OR month
-          BETWEEN '07'
-              AND '09')
-              AND product_product_name = 'Amazon Relational Database Service'
-              AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-      GROUP BY  bill_payer_account_id, line_item_usage_account_id, DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d'), product_instance_type, line_item_operation, line_item_usage_type, line_item_line_item_type, pricing_term, product_product_family, product_database_engine, line_item_line_item_type, line_item_resource_id
-      ORDER BY  day_line_item_usage_start_date, usage_quantity, unblended_cost; 
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  product_instance_type, 
+  line_item_operation, 
+  line_item_usage_type, 
+  line_item_line_item_type,
+  pricing_term, 
+  product_product_family, 
+  SPLIT_PART(line_item_resource_id,':',7) AS split_line_item_resource_id,
+  product_database_engine,
+  SUM(CASE WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN line_item_usage_amount
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN line_item_usage_amount
+    WHEN line_item_line_item_type = 'Usage' THEN line_item_usage_amount
+    ELSE 0 
+  END) AS sum_line_item_usage_amount, 
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost, 
+  SUM(CASE WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN savings_plan_total_commitment_to_date - savings_plan_used_commitment
+    WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0
+    WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+    WHEN line_item_line_item_type = 'RIFee' THEN reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN 0
+    ELSE line_item_unblended_cost 
+  END) AS sum_amortized_cost, 
+  SUM(CASE WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN -savings_plan_amortized_upfront_commitment_for_billing_period
+    WHEN line_item_line_item_type = 'RIFee' THEN -reservation_amortized_upfront_fee_for_billing_period
+    ELSE 0 
+  END) AS sum_ri_sp_trueup, 
+  SUM(CASE WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN line_item_unblended_cost
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN line_item_unblended_cost 
+    ELSE 0 
+  END) AS sum_ri_sp_upfront_fees
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Relational Database Service'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  product_instance_type, 
+  line_item_operation, 
+  line_item_usage_type, 
+  line_item_line_item_type,
+  pricing_term, 
+  product_product_family, 
+  SPLIT_PART(line_item_resource_id,':',7),
+  product_database_engine,
+ORDER BY 
+  day_line_item_usage_start_date, 
+  usage_quantity, 
+  unblended_cost; 
 ```
 
 {{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Query1" button_text="Help & Feedback" >}}
@@ -115,23 +118,27 @@ Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing
 
 #### Copy Query
 ```tsql
-    SELECT
-        line_item_usage_type,
-        month,
-        resource_tags_user_environment,
-        SUM(CAST(line_item_blended_cost AS decimal(16,8))) AS sum_line_item_blended_cost
-    FROM 
-        ${table_name}
-    WHERE year = '2020' AND (month BETWEEN '1' AND '12' OR month BETWEEN '01' AND '12')
-    AND line_item_product_code='AmazonRDS'
-    AND resource_tags_user_environment = 'dev'
-    GROUP BY  
-        1,2,3
-    HAVING sum(line_item_blended_cost) > 0
-    ORDER BY 
-        line_item_usage_type,
-        month,
-        resource_tags_user_environment;
+SELECT
+  line_item_usage_type,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+  resource_tags_user_environment,
+  SUM(CAST(line_item_blended_cost AS DECIMAL(16,8))) AS sum_line_item_blended_cost
+FROM 
+  ${table_name}
+WHERE 
+  ${date_filter}
+  AND line_item_product_code='AmazonRDS'
+  AND resource_tags_user_environment = 'dev'
+GROUP BY  
+  line_item_usage_type,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+  resource_tags_user_environment
+HAVING 
+  SUM(line_item_blended_cost) > 0
+ORDER BY 
+  line_item_usage_type,
+  month_line_item_usage_start_date,
+  resource_tags_user_environment;
 ```
 
 {{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Monthly Cost grouped by Usage Type and User Tag" button_text="Help & Feedback" >}}
@@ -154,41 +161,51 @@ Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pric
 
 #### Copy Query
 ```tsql
-    SELECT 
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      month,
-      product_location,
-      SPLIT_PART(line_item_resource_id, 'table/', 2) as line_item_resource_id,
-      (CASE
-        WHEN line_item_line_item_type LIKE '%Fee' THEN 'DynamoDB Reserved Capacity'
-        WHEN line_item_line_item_type = 'DiscountedUsage' THEN 'DynamoDB Reserved Capacity'
-        ELSE 'DynamoDB Usage' 
-      END) as purchase_option_line_item_line_item_type,
-      (CASE
-        WHEN product_product_family = 'Data Transfer' THEN 'DynamoDB Data Transfer'
-        WHEN product_product_family LIKE '%Storage' THEN 'DynamoDB Storage'
-        ELSE 'DynamoDB Usage' 
-      END) as usage_type_product_product_family,   
-      SUM(CAST(line_item_usage_amount AS double)) as sum_line_item_usage_amount,
-      SUM(CAST(line_item_blended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost,
-      reservation_reservation_a_r_n
-    FROM 
-      ${table_name}
-      WHERE ${date_filter}
-      AND line_item_product_code = 'AmazonDynamoDB'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      month,
-      product_location,
-      line_item_resource_id,
-      line_item_line_item_type,
-      product_product_family,
-      reservation_reservation_a_r_n
-    ORDER BY
-      sum_line_item_unblended_cost DESC
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+  product_location,
+  SPLIT_PART(line_item_resource_id, 'table/', 2) AS line_item_resource_id,
+  CASE
+    WHEN line_item_usage_type LIKE '%CapacityUnit%' THEN 'DynamoDB Provisioned Capacity'
+    WHEN line_item_usage_type LIKE '%HeavyUsage%' THEN 'DynamoDB Provisioned Capacity'
+    WHEN line_item_usage_type LIKE '%RequestUnit%' THEN 'DynamoDB On-Demand Capacity'
+    ELSE 'DynamoDB Usage'
+  END AS case_line_item_usage_type,
+  CASE
+    WHEN line_item_line_item_type LIKE '%Fee' THEN 'DynamoDB Reserved Capacity'
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN 'DynamoDB Reserved Capacity'
+    ELSE 'DynamoDB Usage' 
+  END AS case_purchase_option,
+  CASE
+    WHEN product_product_family = 'Data Transfer' THEN 'DynamoDB Data Transfer'
+    WHEN product_product_family LIKE '%Storage' THEN 'DynamoDB Storage'
+    ELSE 'DynamoDB Usage' 
+  END AS case_product_product_family,   
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_blended_cost AS DECIMAL(16,8))) AS sum_line_item_blended_cost,
+  SUM(CAST(reservation_unused_quantity AS DOUBLE)) AS sum_reservation_unused_quantity,
+  SUM(CAST(reservation_unused_recurring_fee AS DECIMAL(16,8))) AS sum_reservation_unused_recurring_fee,
+  reservation_reservation_a_r_n
+FROM 
+  ${table_name} 
+WHERE 
+  {$date_filter}
+  AND line_item_product_code = 'AmazonDynamoDB'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+  product_location,
+  SPLIT_PART(line_item_resource_id, 'table/', 2),
+  6, -- refers to case_line_item_usage_type
+  7, -- refers to case_purchase_option
+  8, -- refers to case_product_product_family
+  reservation_reservation_a_r_n
+ORDER BY 
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Database" service_text="Amazon DynamoDB" query_text="Amazon DynamoDB Query1" button_text="Help & Feedback" >}}
@@ -212,49 +229,67 @@ Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pric
 
 #### Copy Query
 ```tsql
-    SELECT 
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      product_instance_type,
-      SPLIT_PART(line_item_resource_id,':',7) as split_line_item_resource_id,
-      line_item_operation,
-      line_item_usage_type,
-      line_item_line_item_type,
-      pricing_term,
-      product_usage_family,
-      product_product_family,
-      sum(CASE 
-      WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_usage_amount" ELSE 0 END) "usage_quantity",
-      sum ("line_item_unblended_cost") "unblended_cost",
-      sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "savings_plan_savings_plan_effective_cost" 
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment") 
-          WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN 0
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
-          WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost"  
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-          WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 ELSE "line_item_unblended_cost" END) "amortized_cost",
-    sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN (-"savings_plan_amortized_upfront_commitment_for_billing_period") 
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period") ELSE 0 END) "ri_sp_trueup",
-    sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-          WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
-    FROM 
-      ${table_name}
-    WHERE
-      ${date_filter}
-      AND product_product_name = 'Amazon Redshift'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      1,2,3,4,5,6,7,8,9,10,11
-    ORDER BY
-      day_line_item_usage_start_date,
-      product_product_family,
-      unblended_cost DESC;
+SELECT
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  product_instance_type,
+  SPLIT_PART(line_item_resource_id,':',7) AS split_line_item_resource_id,
+  line_item_operation,
+  line_item_usage_type,
+  line_item_line_item_type,
+  pricing_term,
+  product_usage_family,
+  product_product_family,
+  SUM(CASE 
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN line_item_usage_amount 
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN line_item_usage_amount 
+    WHEN line_item_line_item_type = 'Usage' THEN line_item_usage_amount 
+    ELSE 0 
+  END) AS sum_line_item_usage_amount,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost 
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN savings_plan_total_commitment_to_date - savings_plan_used_commitment 
+    WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0
+    WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost  
+    WHEN line_item_line_item_type = 'RIFee' THEN reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN 0 
+    ELSE line_item_unblended_cost 
+  END) AS sum_amortized_cost,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN -savings_plan_amortized_upfront_commitment_for_billing_period
+    WHEN line_item_line_item_type = 'RIFee' THEN -reservation_amortized_upfront_fee_for_billing_period 
+    ELSE 0 
+  END) AS sum_ri_sp_trueup,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN line_item_unblended_cost
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN line_item_unblended_cost
+    ELSE 0 
+  END) AS ri_sp_upfront_fees
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Redshift'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  product_instance_type,
+  SPLIT_PART(line_item_resource_id,':',7),
+  line_item_operation,
+  line_item_usage_type,
+  line_item_line_item_type,
+  pricing_term,
+  product_usage_family,
+  product_product_family
+ORDER BY 
+  day_line_item_usage_start_date,
+  product_product_family,
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Database" service_text="Amazon Redshift" query_text="Amazon Redshift Query1" button_text="Help & Feedback" >}}
@@ -277,54 +312,66 @@ Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/ela
 
 #### Copy Query
 ```tsql
-    select 
-      bill_payer_account_id,
-      line_item_usage_account_id, 
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01') AS month_line_item_usage_start_date,
-      SPLIT_PART(line_item_resource_id,':',7) as split_line_item_resource_id,
-      SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type,
-    (CASE 
-      WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN 'Reserved Instance'
-      WHEN ("line_item_line_item_type" = 'Usage') THEN 'OnDemand' ELSE 'Others' END) purchase_option_line_item_line_item_type,
-    sum(CASE 
-      WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_usage_amount" ELSE 0 END) sum_line_item_usage_amount,
-      sum(CASE
-        WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN 0 ELSE "line_item_unblended_cost" END) sum_line_item_unblended_cost,
-      sum(CASE
-        WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "savings_plan_savings_plan_effective_cost"
-        WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment")
-        WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN 0
-        WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
-        WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost"
-        WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-        WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 ELSE "line_item_unblended_cost" END) "amortized_cost",
-      sum(CASE
-        WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN (-"savings_plan_amortized_upfront_commitment_for_billing_period")
-        WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period")
-        WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN (-"line_item_unblended_cost" ) ELSE 0 END) "ri_sp_trueup",
-      sum(CASE
-        WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-        WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"      
-    FROM 
-        ${table_name}
-    WHERE 
-        ${date_filter}
-        AND product_product_name = 'Amazon ElastiCache'
-        AND product_product_family = 'Cache Instance'
-        AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY  
-        DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01'), 
-        bill_payer_account_id, 
-        line_item_usage_account_id, 
-        line_item_line_item_type, 
-        line_item_resource_id, 
-        line_item_usage_type
-    ORDER BY  
-        month_line_item_usage_start_date,
-        sum_line_item_usage_amount desc, 
-        sum_line_item_unblended_cost 
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id, 
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date, 
+  SPLIT_PART(line_item_resource_id,':',7) AS split_line_item_resource_id,
+  SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type,
+  CASE 
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN 'Reserved Instance'
+    WHEN line_item_line_item_type = 'Usage' THEN 'OnDemand' 
+    ELSE 'Others' 
+  END AS case_purchase_option,
+  SUM(CASE 
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN line_item_usage_amount 
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN line_item_usage_amount 
+    WHEN line_item_line_item_type = 'Usage' THEN line_item_usage_amount 
+    ELSE 0 
+  END) AS sum_line_item_usage_amount,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0 
+    ELSE line_item_unblended_cost 
+  END) AS sum_line_item_unblended_cost,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN savings_plan_total_commitment_to_date - savings_plan_used_commitment
+    WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0
+    WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+    WHEN line_item_line_item_type = 'RIFee' THEN reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN 0 
+    ELSE line_item_unblended_cost 
+  END) AS sum_amortized_cost,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN -savings_plan_amortized_upfront_commitment_for_billing_period
+    WHEN line_item_line_item_type = 'RIFee' THEN -reservation_amortized_upfront_fee_for_billing_period
+    WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN -line_item_unblended_cost
+    ELSE 0 
+  END) AS sum_ri_sp_trueup,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN line_item_unblended_cost
+    WHEN line_item_line_item_type = 'Fee' AND reservation_reservation_a_r_n <> '' THEN line_item_unblended_cost 
+    ELSE 0 
+  END) AS ri_sp_upfront_fees
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon ElastiCache'
+  AND product_product_family = 'Cache Instance'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+    DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+    bill_payer_account_id, 
+    line_item_usage_account_id, 
+    line_item_line_item_type, 
+    line_item_resource_id, 
+    line_item_usage_type
+ORDER BY 
+    month_line_item_usage_start_date,
+    sum_line_item_usage_amount DESC, 
+    sum_line_item_unblended_cost;
 ```
 
 {{< email_button category_text="Database" service_text="Amazon ElastiCache" query_text="Amazon ElastiCache Query1" button_text="Help & Feedback" >}}

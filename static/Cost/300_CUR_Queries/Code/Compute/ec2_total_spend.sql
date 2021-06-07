@@ -5,19 +5,20 @@
 --query_link: /cost/300_labs/300_cur_queries/queries/compute/
 
 SELECT -- automation_select_stmt
-line_item_product_code, 
-line_item_line_item_description, 
-round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost 
+  line_item_product_code, 
+  line_item_line_item_description, 
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost 
 FROM -- automation_from_stmt
-${table_name} -- automation_tablename
+  ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
-${date_filter} -- automation_timerange_year_month
-AND line_item_product_code like '%AmazonEC2%'
-AND line_item_line_item_type NOT IN ('Tax','Refund')
-AND line_item_product_code like '%AmazonEC2%'
+  ${date_filter} -- automation_timerange_year_month
+  AND line_item_product_code LIKE '%AmazonEC2%'
+  AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
+  AND line_item_product_code LIKE '%AmazonEC2%'
 GROUP BY -- automation_groupby_stmt
-line_item_product_code, 
-line_item_line_item_description
+  line_item_product_code, 
+  line_item_line_item_description
 ORDER BY -- automation_order_stmt
-sum_line_item_unblended_cost desc;
+sum_line_item_unblended_cost desc
+;
 

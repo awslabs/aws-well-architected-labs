@@ -67,15 +67,15 @@ SELECT
     WHEN line_item_operation LIKE '%StorageLens%' THEN 'Storage Lens'
 
     ELSE 'Other ' || line_item_usage_type
-  END as case_line_item_usage_type,
-  SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-  SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+  END AS case_line_item_usage_type,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
 FROM 
   ${table_name}
 WHERE
   (year = '2020' AND month IN ('7','9') OR year = '2020' AND month IN ('07','09'))
   AND line_item_product_code = 'AmazonS3'
-  AND line_item_line_item_type  in ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
 GROUP BY
   bill_payer_account_id,
   line_item_usage_account_id,
@@ -85,4 +85,5 @@ GROUP BY
   6 --refers to case_line_item_usage_type
 ORDER BY
   day_line_item_usage_start_date ASC,
-  sum_line_item_unblended_cost DESC;
+  sum_line_item_unblended_cost DESC
+;
