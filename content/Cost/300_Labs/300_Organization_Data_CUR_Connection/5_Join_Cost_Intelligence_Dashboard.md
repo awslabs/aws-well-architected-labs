@@ -30,7 +30,7 @@ This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_
 ![Images/dashboard_mapping_6.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_6.png)
 
 7. Create following **join clause** :
-	- **linked_account_id** = **account_number**
+	- **linked_account_id** = **id**
 Click **Apply**
 
 ![Images/dashboard_mapping_7.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_7.png)
@@ -55,7 +55,7 @@ You now have new fields that can be used on the visuals in the Cost Intelligence
 12. Edit the calculated field **Account**:
 ![Images/dashboard_mapping_12.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_12.png)
 
-13. Change the formula from **toString({linked_account_id})** to **{account_name}**
+13. Change the formula from **toString({linked_account_id})** to **{name}**
 ![Images/dashboard_mapping_13.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_13.png)
 
 14. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
