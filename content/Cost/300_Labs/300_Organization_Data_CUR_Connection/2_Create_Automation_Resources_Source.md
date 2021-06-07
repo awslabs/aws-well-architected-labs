@@ -39,8 +39,6 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
         #!/usr/bin/env python3
 
         #Gets org data, grouped by ous and tags from managment accounts in json
-        #Author Stephanie Gooch 2020
-
         import argparse
         import boto3
         from botocore.exceptions import ClientError
@@ -124,42 +122,37 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
                 print(f"{file_name}org data in s3")
             except Exception as e:
                 print(e)
-
-
+        def printout(parent_id, test, client):
+            print(parent_id)
+            paginator = client.get_paginator('list_children')
+            iterator = paginator.paginate( ParentId=parent_id, ChildType='ORGANIZATIONAL_UNIT')
+            for page in iterator:
+                for ou in page['Children']:
+                    test.append(ou['Id'])
+                    printout(ou['Id'], test, client)
+            return test
 
         def get_ou_ids(parent_id, client):
             full_result = {}
-            
-            paginator = client.get_paginator('list_organizational_units_for_parent')
-            iterator  = paginator.paginate(
-                ParentId=parent_id
+            test = []
+            ous = printout(parent_id, test, client)
+            print(ous)
 
-            )
-
-            for page in iterator:
-                for ou in page['OrganizationalUnits']:
-                    print(ou['Name'])
-                    full_result[ou['Id']]=[]
-                    full_result[ou['Id']].append(ou['Name'])
-
-
+            for ou in ous:
+                ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
+                full_result[ou]=[]
+                full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
             return full_result
 
         def get_acc_ids(parent_id,  client):
-            full_result = []
-            
-            paginator = client.get_paginator('list_accounts_for_parent')
-            iterator  = paginator.paginate(
-                ParentId=parent_id
-            )
-
-            for page in iterator:
-                for acc in page['Accounts']:
-                    print(acc['Id'])
-                    full_result.append(acc['Id'])
-
-
-            return full_result
+        full_result = []
+        paginator = client.get_paginator('list_accounts_for_parent')
+        iterator  = paginator.paginate(ParentId=parent_id)
+        for page in iterator:
+            for acc in page['Accounts']:
+            print(acc['Id'])
+            full_result.append(acc['Id'])
+        return full_result
 
 
     </details>
