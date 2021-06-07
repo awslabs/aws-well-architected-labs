@@ -51,7 +51,7 @@ If you wish to add more tags at a later date you can either update your lambda i
 {{% /notice %}}
 
 ## Test Lambda Function
-Now you have deployed the CloudFormation then you can test your lambda to get your first set of data in Amazon S3. 
+Now that you have deployed the CloudFormation, you must test your Lambda function to get your first set of data in Amazon S3. 
 
 
 1. To test your lambda function click **Test**
@@ -67,14 +67,14 @@ Now you have deployed the CloudFormation then you can test your lambda to get yo
 
 ![Images/Lambda_Success.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda_Success.png)
 
-5.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size is in it:
+5.	Go to your S3 bucket and into the organisation-data folder and you should see a file of non-zero size:
 
 ![Images/Org_in_S3.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_in_S3.png)
 
 6. Go to the **Glue** Service page:
 ![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
 
-7. Now you have deployed your CloudFomation jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your crawler to create your athena table. 
+7. Now that you have deployed your CloudFomation, jump to step 11 on **Create Glue Crawler** on Utilize Organization Data Source [page]({{< ref "/Cost/300_Labs/300_Organization_Data_CUR_Connection/3_Utilize_Organization_Data_Source" >}}) to run your Glue crawler which will create your Athena table. 
 
 {{% notice note %}}
 NOTE: You have successfully completed all CloudFormation specific steps. All remaining setup and future customizations will follow the same process as the manual steps.

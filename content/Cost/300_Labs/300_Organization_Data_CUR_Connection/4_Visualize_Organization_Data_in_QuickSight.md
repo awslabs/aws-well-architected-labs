@@ -35,7 +35,7 @@ In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from th
 
 ![Images/Inital_Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Inital_Join.png)
 
-7. The left box should be your Cost and Usage Report. Under that select the drop down bock and choose **line_item_usage_account_id**. In the right box under the Organizations_data select **account_number**. On the right select **Full Join**. Then click **Apply**.
+7. The left box should be your Cost and Usage Report. Under that select the drop down bock and choose **line_item_usage_account_id**. In the right box under the Organizations_data select **id**. On the right select **Full Join**. Then click **Apply**.
 
 ![Images/Joins.png](/Cost/300_Organization_Data_CUR_Connection/Images/Joins.png)
 
