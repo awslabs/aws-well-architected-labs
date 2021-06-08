@@ -122,20 +122,20 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
                 print(f"{file_name}org data in s3")
             except Exception as e:
                 print(e)
-        def printout(parent_id, test, client):
+        def ou_loop(parent_id, test, client):
             print(parent_id)
             paginator = client.get_paginator('list_children')
             iterator = paginator.paginate( ParentId=parent_id, ChildType='ORGANIZATIONAL_UNIT')
             for page in iterator:
                 for ou in page['Children']:
                     test.append(ou['Id'])
-                    printout(ou['Id'], test, client)
+                    ou_loop(ou['Id'], test, client)
             return test
 
         def get_ou_ids(parent_id, client):
             full_result = {}
             test = []
-            ous = printout(parent_id, test, client)
+            ous = ou_loop(parent_id, test, client)
             print(ous)
 
             for ou in ous:
