@@ -44,14 +44,14 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
       line_item_usage_type,
       TRIM(REPLACE(product_group, 'Security Services - Amazon GuardDuty ', '')) AS trim_product_group,   
       pricing_unit, 
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${tableName}
     WHERE
-          (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'Amazon GuardDuty'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -94,14 +94,14 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
       product_product_name,
       line_item_operation, 
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${tableName}
     WHERE
-      (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'Amazon Cognito'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -148,14 +148,14 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
       product_location_type,
       line_item_line_item_description,
       pricing_unit,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${tableName}
     WHERE
-      (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'AWS WAF'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,

@@ -15,14 +15,14 @@ SELECT -- automation_select_stmt
     WHEN NULL THEN 'Global'
     WHEN '' THEN 'Global'
     ELSE product_region
-  END as Region,
+  END AS Region,
   line_item_line_item_type,
-  SUM(TRY_CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-  SUM(TRY_CAST(reservation_unused_quantity AS double)) AS sum_reservation_unused_quantity,
-  SUM(TRY_CAST(line_item_normalized_usage_amount AS double)) AS sum_line_item_normalized_usage_amount,
-  SUM(TRY_CAST(reservation_unused_normalized_unit_quantity AS double)) AS sum_reservation_unused_normalized_unit_quantity,
-  SUM(CAST(line_item_blended_cost AS decimal(16,8))) AS sum_line_item_blended_cost,
-  SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+  SUM(TRY_CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(TRY_CAST(reservation_unused_quantity AS DOUBLE)) AS sum_reservation_unused_quantity,
+  SUM(TRY_CAST(line_item_normalized_usage_amount AS DOUBLE)) AS sum_line_item_normalized_usage_amount,
+  SUM(TRY_CAST(reservation_unused_normalized_unit_quantity AS DOUBLE)) AS sum_reservation_unused_normalized_unit_quantity,
+  SUM(CAST(line_item_blended_cost AS DECIMAL(16,8))) AS sum_line_item_blended_cost,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
 FROM -- automation_from_stmt
   ${tableName} -- automation_tablename
 WHERE -- automation_where_stmt
@@ -41,4 +41,5 @@ GROUP BY -- automation_groupby_stmt
 ORDER BY -- automation_order_stmt
   day_line_item_usage_start_date,
   InstanceType,
-  sum_line_item_unblended_cost DESC;
+  sum_line_item_unblended_cost DESC
+;

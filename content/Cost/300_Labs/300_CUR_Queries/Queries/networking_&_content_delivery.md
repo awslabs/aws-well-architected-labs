@@ -47,7 +47,7 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
-      SPLIT_PART(line_item_resource_id, 'apis/', 2) as split_line_item_resource_id,
+      SPLIT_PART(line_item_resource_id, 'apis/', 2) AS split_line_item_resource_id,
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS day_line_item_usage_start_date,
       CASE  
         WHEN line_item_usage_type LIKE '%%ApiGatewayRequest%%' OR line_item_usage_type LIKE '%%ApiGatewayHttpRequest%%' THEN 'Requests' 
@@ -57,14 +57,14 @@ Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api
         WHEN line_item_usage_type LIKE '%%CacheUsage%%' THEN 'Cache Usage'
         ELSE 'Other'
       END AS case_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       ${date_filter}
       AND product_product_name = 'Amazon API Gateway'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -104,15 +104,15 @@ Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/clou
       product_region,
       product_product_family, -- NOTE: product_product_family used in place of large line_item_usage_type CASE
       line_item_operation,
-      SPLIT_PART(line_item_resource_id, 'distribution/', 2) as split_line_item_resource_id,
-      SUM(CAST(line_item_usage_amount AS double)) as sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) as sum_line_item_unblended_cost
+      SPLIT_PART(line_item_resource_id, 'distribution/', 2) AS split_line_item_resource_id,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       ${date_filter}
       AND line_item_product_code = 'AmazonCloudFront'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -148,24 +148,24 @@ Please refer to each individual service pricing page for more details on how dat
     SELECT 
       line_item_product_code,
       line_item_usage_account_id  ,
-      date_format(line_item_usage_start_date,'%Y-%m-%d') AS date_line_item_usage_start_date, 
+      DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS date_line_item_usage_start_date, 
       line_item_usage_type, 
       product_from_location, 
       product_to_location, 
       product_product_family, 
       line_item_resource_id, 
-      SUM(CAST(line_item_usage_amount AS double)) as sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) as sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM ${tableName}
     WHERE 
       ${date_filter}
       AND product_product_family = 'Data Transfer'
       AND line_item_line_item_type = 'Usage'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       line_item_product_code,
       line_item_usage_account_id,
-      date_format(line_item_usage_start_date, '%Y-%m-%d'),
+      DATE_FORMAT(line_item_usage_start_date, '%Y-%m-%d'),
       line_item_resource_id,
       line_item_usage_type,
       product_from_location,
@@ -200,29 +200,29 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing
     SELECT 
       line_item_product_code,
       line_item_usage_account_id,
-      date_format(line_item_usage_start_date,'%Y-%m-%d') AS date_line_item_usage_start_date, 
+      DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS date_line_item_usage_start_date, 
       line_item_resource_id,
       line_item_usage_type,
       line_item_line_item_description,
       product_product_family,
-      sum(line_item_usage_amount)/1024 as sum_line_item_usage_amount,
-      round(sum(line_item_unblended_cost),2) as sum_line_item_unblended_cost
+      SUM(line_item_usage_amount)/1024 AS sum_line_item_usage_amount,
+      ROUND(SUM(line_item_unblended_cost),2) AS sum_line_item_unblended_cost
     FROM ${table_name}
     WHERE 
       ${date_filter} 
       AND line_item_product_code = 'AmazonMSK'
       AND line_item_usage_type LIKE '%DataTransfer%'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY  
       line_item_product_code,
       line_item_usage_account_id,
-      date_format(line_item_usage_start_date, '%Y-%m-%d'),
+      DATE_FORMAT(line_item_usage_start_date, '%Y-%m-%d'),
       line_item_resource_id,
       line_item_usage_type,
       product_product_family, 
       line_item_line_item_description
     ORDER BY  
-      sum_line_item_unblended_cost desc
+      sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer - MSK" query_text="Data Transfer - MSK Query1" button_text="Help & Feedback" >}}
@@ -258,15 +258,15 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
       pricing_unit,
       line_item_operation,
       line_item_resource_id,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
-      year = '2020' AND (month = BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09' )
+      ${date_filter}
       AND product_product_name = 'AWS Direct Connect' 
       AND product_transfer_type NOT IN ('IntraRegion Inbound','InterRegion Inbound')
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -281,7 +281,7 @@ Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/dir
       product_direct_connect_location,
       pricing_unit
     ORDER BY
-      sum_line_item_unblended_cost Desc
+      sum_line_item_unblended_cost Desc;
 ```
 
 {{< email_button category_text="Networking %26 Content Delivery" service_text="AWS Direct Connect" query_text="AWS Direct Connect Query1" button_text="Help & Feedback" >}}
@@ -316,14 +316,14 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
         WHEN line_item_usage_type LIKE '%%NatGateway-Hours' THEN 'NAT Gateway Hourly Charge'          -- Hourly charge for NAT Gateways
         ELSE line_item_usage_type
       END AS line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       ${date_filter}
       AND product_product_family = 'NAT Gateway'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -362,7 +362,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
         product_region,
         pricing_unit,
         sum_line_item_usage_amount,
-        CAST(cost_per_resource AS decimal(16, 8)) AS "sum_line_item_unblended_cost"
+        CAST(cost_per_resource AS DECIMAL(16, 8)) AS sum_line_item_unblended_cost
     FROM
         (
             SELECT
@@ -379,11 +379,11 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
                 ${table_name}
             WHERE
                 line_item_product_code = 'AmazonEC2'
-                AND line_item_usage_type like '%Nat%'
+                AND line_item_usage_type LIKE '%Nat%'
                 -- get previous month
-                AND month = cast(month(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+                AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
                 -- get year for previous month
-                AND year = cast(year(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+                AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
                 AND line_item_line_item_type = 'Usage'
             GROUP BY
                 line_item_resource_id,
@@ -397,7 +397,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
         usage_per_resource_and_pricing_unit > 336
         AND pricing_unit_per_resource = 1
     ORDER BY
-        cost_per_resource DESC
+        cost_per_resource DESC;
 ```
 
 {{< email_button category_text="Networking %26 Content Delivery" service_text="NAT Gateway" query_text="NAT Gateway Query2" button_text="Help & Feedback" >}}
@@ -426,7 +426,7 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
       line_item_usage_account_id,
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
       CASE
-        WHEN line_item_resource_id like 'arn%' THEN CONCAT(SPLIT_PART(line_item_resource_id,'/',2),' - ',product_location)
+        WHEN line_item_resource_id LIKE 'arn%' THEN CONCAT(SPLIT_PART(line_item_resource_id,'/',2),' - ',product_location)
         ELSE CONCAT(line_item_resource_id,' - ',product_location)
       END AS line_item_resource_id,
       product_location,
@@ -436,14 +436,14 @@ Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pr
         WHEN pricing_unit = 'hour' THEN 'Hourly charges'
         WHEN pricing_unit = 'GigaBytes' THEN 'Data processing charges'
       END AS pricing_unit,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       ${date_filter}
       AND product_group = 'AWSTransitGateway' 
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -487,8 +487,8 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
       line_item_operation,
       line_item_resource_id,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
@@ -503,7 +503,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
         'VPCPeering-In',
         'VPCPeering-Out'
       )
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,

@@ -65,7 +65,7 @@ We will update the CUR bucket so that the Cost Optimization linked account can a
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::(sub account ID):root"
+                "AWS": "arn:aws:iam::(Cost Optimization Member account ID):root"
             },
             "Action": "s3:ListBucket",
             "Resource": "arn:aws:s3:::(CUR bucket)"

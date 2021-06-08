@@ -30,21 +30,21 @@ For a reference of a properly constructed query please reference the Examples be
 It is recommended to sanitize the query of your account and resource related data.  Please reference the [Fictitious names and numbers](https://alpha-docs-aws.amazon.com/awsstyleguide/latest/styleguide/safenames.html) documentation. Be advised, during the review process, queries submitted with customer account data will be sanitized.
 
 To fill fields with dummy data, use the following select statement (example shown fills *bill_payer_account_id* with dummy data):
-- EXAMPLE: `'111122223333' as bill_payer_account_id`
-- EXAMPLE: `'444455556666' as line_item_usage_account_id`
+- EXAMPLE: `'111122223333' AS bill_payer_account_id`
+- EXAMPLE: `'444455556666' AS line_item_usage_account_id`
 
 For line_item_resource_id there is not a reference to all resources in the safenames document.  Where possible use:
-- EXAMPLE: `‘<resource id>' as line_item_resource_id`
+- EXAMPLE: `‘<resource id>' AS line_item_resource_id`
 
 **COLUMN NAMING:**
 
 If a column requires a specific name to be defined ( i.e. after running a sum function ), use the name of the outer most function followed by the column name:
-- EXAMPLE: `SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,`
-- EXAMPLE: `SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,`
+- EXAMPLE: `SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,`
+- EXAMPLE: `SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,`
 - EXAMPLE: `SPLIT_PART(line_item_resource_id, 'crawler/', 2) AS split_line_item_resource_id,`
 - EXAMPLE: `SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type`
 
-For date_format use the value defined by the format:
+For DATE_FORMAT use the value defined by the format:
 - EXAMPLE: `DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,`
 - EXAMPLE: `DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS day_line_item_usage_start_date,`
 
@@ -60,7 +60,7 @@ Use ${table_name} as the variable for the customer table name.
 To aggregate data, always try to use the default CUR partitions as defined by the CUR CFN template.  The data is partitioned on year and month.  Below is an example on how we are formatting this WHERE statement:
 - EXAMPLE: `${date_filter}`
 
-For month we use both ‘mm’ vs. ‘m’ as per the example above as previous CFN templates have included both formats.
+For month we use both ‘mm' vs. ‘m' as per the example above as previous CFN templates have included both formats.
 
 **ORDER BY SECTION RULES:**
 
@@ -72,7 +72,7 @@ Order is currently at authors discretion. You can use the selected data includin
 **OTHER:**
 
 - Variables use a dollar sign ($) curly brackets {} and a name with fields separated by underscore _.
-- Rule: For fields without spaces, do not use quotes “ ” around field name.
+- Rule: For fields without spaces, do not use quotes " " around field name.
 - Rule: Queries should end with a semi-colon.
 - Rule: Review Domain Markdown Process defined below.
 - Rule: Must be run on a CUR Athena Database before loaded.  

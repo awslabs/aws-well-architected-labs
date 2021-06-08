@@ -42,41 +42,41 @@ This query will **not** run against CUR data that does not have any Amazon MQ us
 
 #### Copy Query
 ```tsql
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      product_broker_engine,
-      line_item_usage_type,
-      product_product_family,
-      pricing_unit,
-      pricing_term,
-      SPLIT_PART(line_item_usage_type, ':', 2) AS split_line_item_usage_type,
-      SPLIT_PART(line_item_resource_id, ':', 7) AS split_line_item_resource_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      line_item_operation,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM
-      ${table_Name}
-    WHERE
-      ${date_filter}
-      AND product_product_name = 'Amazon MQ'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      product_broker_engine,
-      product_product_family,
-      pricing_unit,
-      pricing_term,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      line_item_usage_type,
-      line_item_resource_id,
-      line_item_operation
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_unblended_cost DESC,
-      split_line_item_usage_type;
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  product_broker_engine,
+  line_item_usage_type,
+  product_product_family,
+  pricing_unit,
+  pricing_term,
+  SPLIT_PART(line_item_usage_type, ':', 2) AS split_line_item_usage_type,
+  SPLIT_PART(line_item_resource_id, ':', 7) AS split_line_item_resource_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  line_item_operation,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_Name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon MQ'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  product_broker_engine,
+  product_product_family,
+  pricing_unit,
+  pricing_term,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  line_item_usage_type,
+  line_item_resource_id,
+  line_item_operation
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_unblended_cost DESC,
+  split_line_item_usage_type;
 ```
 
 {{< email_button category_text="Application Integration" service_text="Amazon MQ" query_text="Amazon MQ Query1" button_text="Help & Feedback" >}}
@@ -99,40 +99,40 @@ Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing
 
 #### Copy Query
 ```tsql
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      product_product_family,
-      CASE
-        WHEN line_item_usage_type LIKE '%%DataTransfer-In-Bytes%%' THEN 'Data Transfer GB (IN) '
-        WHEN line_item_usage_type LIKE '%%DataTransfer-Out-Bytes%%' THEN 'Data Transfer GB (Out)'
-        WHEN line_item_usage_type LIKE '%%AttachmentsSize-Bytes%%' THEN 'Attachments GB'
-        WHEN line_item_usage_type LIKE '%%Recipients' THEN 'Recipients'
-        WHEN line_item_usage_type LIKE '%%Recipients-EC2' THEN 'Recipients'
-        WHEN line_item_usage_type LIKE '%%Recipients-MailboxSim' THEN 'Recipients (MailboxSimulator)'
-        WHEN line_item_usage_type LIKE '%%Message%%' THEN 'Messages'
-        WHEN line_item_usage_type LIKE '%%ReceivedChunk%%' THEN 'Received Chunk'
-        ELSE 'Others'
-      END as case_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_Name}
-    WHERE
-      ${date_filter}
-      AND product_product_name = 'Amazon Simple Email Service'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      bill_payer_account_id, 
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      product_product_family,
-      line_item_usage_type
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_usage_amount,
-      sum_line_item_unblended_cost DESC;
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  product_product_family,
+  CASE
+    WHEN line_item_usage_type LIKE '%%DataTransfer-In-Bytes%%' THEN 'Data Transfer GB (IN) '
+    WHEN line_item_usage_type LIKE '%%DataTransfer-Out-Bytes%%' THEN 'Data Transfer GB (Out)'
+    WHEN line_item_usage_type LIKE '%%AttachmentsSize-Bytes%%' THEN 'Attachments GB'
+    WHEN line_item_usage_type LIKE '%%Recipients' THEN 'Recipients'
+    WHEN line_item_usage_type LIKE '%%Recipients-EC2' THEN 'Recipients'
+    WHEN line_item_usage_type LIKE '%%Recipients-MailboxSim' THEN 'Recipients (MailboxSimulator)'
+    WHEN line_item_usage_type LIKE '%%Message%%' THEN 'Messages'
+    WHEN line_item_usage_type LIKE '%%ReceivedChunk%%' THEN 'Received Chunk'
+    ELSE 'Others'
+  END AS case_line_item_usage_type,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_Name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Simple Email Service'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  product_product_family,
+  5 --refers to case_line_item_usage_type
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_usage_amount,
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Application Integration" service_text="Amazon SES" query_text="Amazon SES Query1" button_text="Help & Feedback" >}}
@@ -155,27 +155,27 @@ Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing
 
 #### Copy Query
 ```tsql
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      CONCAT(product_product_family,' - ',line_item_operation) AS concat_product_product_family,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_Name}
-    WHERE
-      ${date_filter}
-      AND product_product_name = 'Amazon Simple Notification Service'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      bill_payer_account_id, 
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      CONCAT(product_product_family,' - ',line_item_operation)
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_unblended_cost DESC;
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  CONCAT(product_product_family,' - ',line_item_operation) AS concat_product_product_family,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_Name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Simple Notification Service'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  CONCAT(product_product_family,' - ',line_item_operation)
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_unblended_cost DESC;
 ```
 
 {{< email_button category_text="Application Integration" service_text="Amazon SNS" query_text="Amazon SNS Query1" button_text="Help & Feedback" >}}
@@ -198,26 +198,29 @@ Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing
 
 #### Copy Query
 ```tsql
-    SELECT 
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      line_item_usage_type,
-      line_item_operation,
-      line_item_resource_id,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_Name}
-    WHERE
-      ${date_filter}
-      AND line_item_usage_account_id = '444455556666'
-      AND line_item_product_code = 'AWSQueueService'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-    GROUP BY
-      1,2,3,4,5
-    ORDER BY
-      sum_line_item_unblended_cost DESC
-    LIMIT 20;
+SELECT 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  line_item_usage_type,
+  line_item_operation,
+  line_item_resource_id,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_Name} 
+WHERE 
+  ${date_filter} 
+  AND line_item_product_code = 'AWSQueueService'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  line_item_usage_type,
+  line_item_operation,
+  line_item_resource_id
+ORDER BY 
+  sum_line_item_unblended_cost DESC
+LIMIT 20; 
 ```
 
 {{< email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Query1" button_text="Help & Feedback" >}}

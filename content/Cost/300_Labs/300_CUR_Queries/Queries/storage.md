@@ -109,15 +109,15 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
         WHEN line_item_operation LIKE '%StorageLens%' THEN 'Storage Lens'
     
         ELSE 'Other ' || line_item_usage_type
-      END as case_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      END AS case_line_item_usage_type,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${table_name}
     WHERE
       (year = '2020' AND month IN ('7','9') OR year = '2020' AND month IN ('07','09'))
       AND line_item_product_code = 'AmazonS3'
-      AND line_item_line_item_type  in ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage','Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -155,8 +155,8 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       line_item_usage_account_id,
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m-%d') AS date_line_item_usage_start_date,
       product_region,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${tableName}
     WHERE
@@ -164,7 +164,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Snapshot%%'
       AND product_product_family LIKE 'Storage Snapshot'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -216,9 +216,9 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
         WHEN 'directAPI' THEN 'EBS Direct API Requests'
         WHEN 'FastSnapshotRestore' THEN 'EBS Fast Snapshot Restore'        
         ELSE SPLIT_PART(line_item_usage_type,':',2)
-    END as line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    END AS line_item_usage_type,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${tableName}
     WHERE
@@ -226,7 +226,7 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND line_item_usage_type LIKE '%%EBS%%Volume%%'
       AND product_product_family  IN ('Storage','System Operation')
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -265,15 +265,15 @@ Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing
         WHEN product_product_family = 'Storage Snapshot' THEN 'EBS Snapshot'
       END AS usage_type_product_product_family,
       product_region,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${tableName}
     WHERE
       ${date_filter}
       AND product_product_name = 'Amazon Elastic Compute Cloud'
       AND (product_product_family = 'Storage Snapshot' OR product_product_family = 'Storage')
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -319,14 +319,14 @@ Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing
       product_storage_class,
       pricing_unit,
       line_item_operation,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${table_name}
     WHERE
       ${date_filter}
       AND product_product_name = 'Amazon Elastic File System'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -368,19 +368,19 @@ Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing
       bill_payer_account_id,
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      SPLIT_PART(line_item_resource_id, ':', 6) as split_line_item_resource_id,
+      SPLIT_PART(line_item_resource_id, ':', 6) AS split_line_item_resource_id,
       product_deployment_option,
       line_item_usage_type,
       product_product_family,
       pricing_unit,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${table_name}
     WHERE
       ${date_filter}
       AND product_product_name = 'Amazon FSx'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -424,15 +424,15 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
       product_product_family,
       line_item_usage_type,
       line_item_operation,
-      SPLIT_PART(line_item_usage_type, '-', 4) as split_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SPLIT_PART(line_item_usage_type, '-', 4) AS split_line_item_usage_type,
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${table_name}
     WHERE
       ${date_filter}
-      AND product_product_name like '%Backup%'
-      AND line_item_line_item_type  in ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND product_product_name LIKE '%Backup%'
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -480,10 +480,10 @@ Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/
         SPLIT_PART(SPLIT_PART(line_item_usage_type ,
         ':',2),'.',2) AS ebs_type,
 
-        sum(line_item_usage_amount) AS gb_charged,
-        sum(line_item_unblended_cost) AS sum_line_item_unblended_cost,
-        sum(line_item_usage_amount)*.088 AS gp3_price -- 0.088 eu-west-1 pricing
-        , (sum(line_item_unblended_cost)-(sum(line_item_usage_amount)*.088)) AS gp3_savings -- 0.088 eu-west-1 pricing
+        SUM(line_item_usage_amount) AS gb_charged,
+        SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
+        SUM(line_item_usage_amount)*.088 AS gp3_price -- 0.088 eu-west-1 pricing
+        , (SUM(line_item_unblended_cost)-(SUM(line_item_usage_amount)*.088)) AS gp3_savings -- 0.088 eu-west-1 pricing
 
         FROM ${table}
         WHERE ${date_filter}
