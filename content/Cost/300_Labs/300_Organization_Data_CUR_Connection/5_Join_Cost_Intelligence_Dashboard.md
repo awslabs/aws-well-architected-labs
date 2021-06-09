@@ -30,17 +30,14 @@ This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_
 ![Images/dashboard_mapping_6.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_6.png)
 
 7. Create following **join clause** :
-	- **linked_account_id** = **account_number**
+	- **linked_account_id** = **id**
 Click **Apply**
 
 ![Images/dashboard_mapping_7.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_7.png)
 
-8. Scroll down in the field list, and confirm the **Account ID** must be **Int**:
-![Images/dashboard_mapping_8.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_8.png)
+8. Select **Save**
 
-9. Select **Save**
-
-10. Repeat **steps 2-9**, creating mapping joins for your remaining QuickSight data sets:
+9. Repeat **steps 2-9**, creating mapping joins for your remaining QuickSight data sets:
 
 	- s3_view
 	- ec2_running_cost
@@ -50,15 +47,15 @@ Click **Apply**
 You now have new fields that can be used on the visuals in the Cost Intelligence Dashboard - we will now use them
 {{% /notice %}}
 
-11. Go to the **Cost Intelligence Analysis**
+10. Go to the **Cost Intelligence Analysis**
 
-12. Edit the calculated field **Account**:
+11. Edit the calculated field **Account**:
 ![Images/dashboard_mapping_12.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_12.png)
 
-13. Change the formula from **toString({linked_account_id})** to **{account_name}**
+12. Change the formula from **toString({linked_account_id})** to **{name}**
 ![Images/dashboard_mapping_13.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_13.png)
 
-14. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
+13. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
 ![Images/dashboard_mapping_14.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_14.png)
 
 
