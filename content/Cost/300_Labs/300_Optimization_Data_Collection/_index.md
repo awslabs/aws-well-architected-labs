@@ -46,6 +46,7 @@ Be able to create the below in the all accounts you wish to collect data from:
 - IAM role and policy
 
 Be able to create the below in a sub account where your CUR data is accessible:
+- Deploy CloudFormation
 - Amazon S3 Bucket 
 - AWS Lambda function 
 - IAM role and policy

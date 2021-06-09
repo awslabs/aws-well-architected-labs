@@ -26,10 +26,14 @@ As some of the data needed for these module is in the Management account we need
 
 6. Call the Stack **OptimizationDataRoleStack**
 
-7. Make a note of the IAM role ARN as we will use this in the next step
+7. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
+
+8. Make a note of the IAM role ARN as we will use this in the next step by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
+![Images/Managment_CF_deployed.png](/Cost/300_Optimization_Data_Collection/Images/Managment_CF_deployed.png)
 
 
-{{% notice tip %}}
+{{% notice note %}}
 You have now deployed the cloudformation template to build an IAM Role to allow the lambda to pull data into the Cost Optimization account. You can now test your lambda functions. 
 {{% /notice %}}
 

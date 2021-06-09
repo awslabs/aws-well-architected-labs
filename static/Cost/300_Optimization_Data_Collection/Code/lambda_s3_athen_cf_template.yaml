@@ -4,6 +4,7 @@ Parameters:
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
+    Default: Optimization_Data
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket to hold data information
@@ -11,7 +12,6 @@ Parameters:
   ManagementAccountRole:
     Type: String
     Description: ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
-    Default: ''
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.

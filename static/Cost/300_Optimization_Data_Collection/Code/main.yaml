@@ -14,6 +14,17 @@ Parameters:
   ManagementAccountID: 
     Type: String
     Description: Your Management Account ID
+Outputs:
+  S3Bucket:
+    Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+    Value:
+      Ref: S3Bucket
+  S3BucketARN:
+    Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+    Value:
+      Fn::GetAtt:
+        - S3Bucket
+        - Arn 
   #Reusable Resources:
 Resources:
   S3Bucket:
@@ -56,14 +67,3 @@ Resources:
                           - ''
                           - - !GetAtt S3Bucket.Arn 
                             - '*'
-Outputs:
-  S3Bucket:
-    Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
-    Value:
-      Ref: S3Bucket
-  S3BucketARN:
-    Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
-    Value:
-      Fn::GetAtt:
-        - S3Bucket
-        - Arn 

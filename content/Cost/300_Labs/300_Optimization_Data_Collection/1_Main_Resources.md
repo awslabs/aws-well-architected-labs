@@ -92,15 +92,19 @@ Or copy the below:
 4. Choose **Template is ready** and **Upload a template file** and upload the main.yaml file you downloaded from above. Click **Next**.
 ![Images/upload_template.png](/Cost/300_Organization_Data_CUR_Connection/Images/upload_template.png)
 
-5. Fill in the parameters with the information described.
+5. Call the stack **OptimizationDataCollectionStack** and fill in the parameters with the information described. The Role mentioned will be deployed in the next step. Click **Next** and **Next again**
+![Images/Main_CF_Parameters.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Parameters.png)
 
-6. Call the stack **OptimizationDataCollectionStack**
+6. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
+7. Wait till your CloudFormation has status as **CREATE_COMPLETE**.
+![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
    
 {{% notice note %}}
-NOTE: You have successfully setup the main CloudFormation specific steps. You can deploy through the CLI using the below command or through the [console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html)
-``` aws cloudformation crate-stack --stack-name OptimizationDataCollectionStack --template-body file://main.yaml --capabilities CAPABILITY_NAMED_IAM --parameters file://parameter.json```
+You have successfully setup the main CloudFormation specific steps. You can deploy through the CLI using the below command or through the [console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html) aws cloudformation crate-stack --stack-name OptimizationDataCollectionStack --template-body file://main.yaml --capabilities CAPABILITY_NAMED_IAM --parameters file://parameter.json
 {{% /notice %}}
+
 
 {{% /expand%}}
 
