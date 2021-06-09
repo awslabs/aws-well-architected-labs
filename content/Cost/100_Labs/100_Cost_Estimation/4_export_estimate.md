@@ -6,6 +6,7 @@ weight: 4
 pre: "<b>4. </b>"
 ---
 
+## Export Estimate
 On the **My Estimate** page, click on the **Action** button
 
 ![Images/CostEstimation25](/Cost/100_Cost_Estimation/Images/CostEstimation25.png?classes=lab_picture_small)
@@ -14,7 +15,7 @@ Click on  **Export estimate**
 
 ![Images/CostEstimation26](/Cost/100_Cost_Estimation/Images/CostEstimation26.png?classes=lab_picture_small)
 
-Click on "OK"
+Click on **"OK"**
 
 ![Images/CostEstimation27](/Cost/100_Cost_Estimation/Images/CostEstimation27.png?classes=lab_picture_small)
 

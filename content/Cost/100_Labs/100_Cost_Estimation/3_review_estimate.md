@@ -6,7 +6,7 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-
+## Review Estimate 
 Review the overall costs (for all 3 services) in the **My Estimate** page. Pricing Calculator provides total cost for first 12 months. 
 If needed, you can edit/delete the configuration of the services added by clicking on the **Action** button in each service tile. 
 
