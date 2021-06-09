@@ -2,8 +2,8 @@
 title: "Tear down"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
-pre: "<b>9. </b>"
-weight: 9
+pre: "<b>10. </b>"
+weight: 10
 ---
 
 This exercise covered fundamental steps that are required for all AWS accounts to enable Cost Optimization. There is no specific tear down for this lab.
