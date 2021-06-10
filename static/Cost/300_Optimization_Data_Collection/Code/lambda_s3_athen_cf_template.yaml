@@ -193,3 +193,14 @@ Resources:
       Name: !Sub ${CFDataName}-summary-view
       QueryString: !Sub
         "SELECT * from ${DatabaseName}"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn

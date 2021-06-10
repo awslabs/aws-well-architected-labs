@@ -1,0 +1,374 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
+Parameters:
+  CrawlerName:
+    Type: String
+    Default: crawl-rightsizing-recommendations
+    Description: Name of the AWS crawler to be created
+    AllowedPattern: ^.*[^0-9]$
+    ConstraintDescription: Must end with non-numeric character.
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that exists or needs to be created to hold rightsizing information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  DestinationPrefix:
+    Type: String
+    Description: Name of the folder/prefix for rightsizing information to be stored in
+    Default: rightsizing
+  RoleName:
+    Type: String
+    Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Cost Explorer rightsizing information.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: Rightsize-Data
+  Schedule:
+    Type: String
+    Default: "cron(30 12 L * ? *)"
+    Description: Cloud watch event Schedule to trigger the lambda 
+Outputs:
+  CostExplorerRightsizingLambdaRoleARN:
+    Description: Role for Lambda execution of AWS Cost Explorer Rightsizing recommendations.
+    Value:
+      Fn::GetAtt:
+        - RightsizingLambdaRole
+        - Arn
+  LambdaCostExplorerRightsizingARN:
+    Description: Lambda function ARN for retrieving AWS Cost Explorer Rightsizing recommendations
+    Value:
+      Fn::GetAtt:
+        - LambdaFunction
+        - Arn
+  GlueCrawler:
+    Value:
+      Ref: RightsizingCrawler
+  GlueCrawlerRoleARN:
+    Value:
+      Fn::GetAtt:
+        - RightsizingGlueRole
+        - Arn
+Resources:
+
+  RightsizingLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-Cost-Explorer-Rightsizing-Execute-Lambda
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "Assume-Management-Rightsizing-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource:
+                  Ref: RoleName
+        - PolicyName: "Rightsizing-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: !Ref DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: "arn:aws:logs:*:*:*"
+  RightsizingGlueRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-Cost-Explorer-Rightsizing-Glue-Crawler
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Path: /
+      Policies:
+        - PolicyName: "Get-Rightsizing-Recommendation-S3"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                Resource: !Sub "${DestinationBucketARN}*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aws-cost-explorer-rightsizing-recommendations-function
+      Description: LambdaFunction to retreive list of organization
+      Runtime: python3.8
+      Code:
+        ZipFile: |
+          import boto3.session
+          import boto3
+          from boto3.s3.transfer import S3Transfer
+          import logging
+          from datetime import date
+          import datetime
+          import json
+          import os
+
+          AWS_REGION = "us-east-1"
+          AWS_COST_EXPLORER_SERVICE_KEY = "ce"
+          RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
+          BENEFITS_CONSIDERED = True
+          GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
+          BUCKET = os.environ['S3_BUCKET']
+          ROLE_ARN = os.environ['ROLE_ARN']
+          PATH = os.environ['PATH']
+          CRAWLER_NAME = os.environ['CRAWLER_NAME']
+
+          def start_crawler():
+              glue_client = boto3.client('glue')
+              try:
+                  glue_client.start_crawler(Name=CRAWLER_NAME)
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+
+          def upload_file_to_s3(s3client, bucket_name, src, dest):
+              transfer = S3Transfer(s3client)
+              print("Uploading file %s to %s/%s" % (src, bucket_name, dest))
+              transfer.upload_file(src, bucket_name, dest, extra_args={'ACL': 'bucket-owner-full-control'})
+              print('file upload successful')
+
+
+          def store_data_to_s3(data, s3client, path, filename):
+
+              today = date.today()
+              year = today.year
+              month = today.strftime('%m')
+              day = today.day
+
+              filepath = '/tmp/%s-%s' % (today, filename)
+              with open(filepath, 'w') as f:
+                  json.dump(data, f, default=str)
+                  f.write('\n')
+              upload_file_to_s3(s3client, BUCKET, filepath,
+                                "%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
+                                % (path, year, month, day, year, month, day, filename))
+
+          def lambda_handler(event, context):
+
+              logger = logging.getLogger()
+              logger.setLevel(logging.INFO)
+
+              sts_connection = boto3.client('sts')
+              s3client = boto3.client('s3')
+              try:
+                  assumed_role = sts_connection.assume_role(
+                                  RoleArn=ROLE_ARN,
+                                  RoleSessionName="cross_acct_lambda"
+                              )
+                  ACCESS_KEY = assumed_role['Credentials']['AccessKeyId']
+                  SECRET_KEY = assumed_role['Credentials']['SecretAccessKey']
+                  SESSION_TOKEN = assumed_role['Credentials']['SessionToken']
+
+                  assumed_role_session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
+                                                               aws_secret_access_key=SECRET_KEY,
+                                                               aws_session_token=SESSION_TOKEN)
+
+                  cost_explorer = assumed_role_session.client(AWS_COST_EXPLORER_SERVICE_KEY, AWS_REGION)
+
+                  today = date.today()
+                  datestr = today.strftime('%Y') + '-' + today.strftime('%m') + '-' + today.strftime('%d')
+
+                  token = None
+                  result = {"RecommendationDate": datestr,
+                            "RightsizingRecommendations":[]}
+                  while True:
+                      kwargs = {}
+                      if token:
+                          kwargs = {"NextPageToken": token}
+                      response = cost_explorer.get_rightsizing_recommendation(
+                              Service='AmazonEC2',
+                              Configuration={
+                                  'RecommendationTarget': RECOMMENDATION_TARGET,
+                                  'BenefitsConsidered': BENEFITS_CONSIDERED
+                              },
+                              PageSize=5000,
+                              **kwargs)
+                      #print response
+                      result["RightsizingRecommendations"] += response["RightsizingRecommendations"]
+                      #print response["RightsizingRecommendations"]
+                      token = response.get("NextPageToken", None)
+                      if not token:
+                          break
+                  store_data_to_s3(result, s3client, PATH, GENERIC_FILENAME)
+                  start_crawler()
+                  return "Successful"
+
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+                  return "Failed"
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - RightsizingLambdaRole
+          - Arn
+      Environment:
+        Variables:
+          S3_BUCKET:
+            Ref: DestinationBucket
+          ROLE_ARN:
+            Ref: RoleName
+          PATH:
+            Ref: DestinationPrefix
+          CRAWLER_NAME:
+            Ref: RightsizingCrawler
+  RightsizingCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        Ref: CrawlerName
+      Role: !GetAtt RightsizingGlueRole.Arn
+      DatabaseName: Rightsizing
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${DestinationPrefix}/"
+  AthenaQuery:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: rightsizing
+      Description: Provides a summary view of the rightsizing recommendations
+      Name: rightsizing-summary-view
+      QueryString:
+        --  Click Create as view then you can run from that
+
+        WITH rightsizing_dates AS (
+            SELECT "recommendations"."currentinstance"."resourceid"          AS "instance_id"
+                , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
+                , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
+                , count(*)                                                  AS "frequency"
+            FROM (rightsizing.rightsizing
+                CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
+            GROUP BY 1
+        ),
+            data AS (
+                SELECT recommendations
+                FROM (rightsizing.rightsizing
+                    CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
+                WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
+
+            ),
+            all_tags AS (
+                SELECT "recommendations"."currentinstance"."resourceid" AS "instance_id"
+                    , tags.key
+                    , "tags"."values"[1]                               as "value"
+                FROM data
+                    CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") AS t(tags)
+            ),
+            chosen_tags AS (
+
+                SELECT instance_id
+                    , kv['user:Name'] AS "Name"
+                FROM (
+                    SELECT instance_id
+                        , map_agg(key, value) AS kv
+                    FROM all_tags
+                    GROUP BY instance_id
+                )
+            ),
+            recs AS (
+                SELECT "recommendations"."currentinstance"."resourceid"                                          AS "instance_id"
+                    , "recommendations"."currentinstance"."instancename"                                        AS "instance_name"
+                    , "recommendations"."accountid"                                                             AS "account_id"
+                    , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" AS "instance_type"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage"
+                            END) AS double)                                                                     AS "max_cpu_utilization"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage"
+                            END) AS double)                                                                     AS "max_memory_utilization"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage"
+                            END) AS double)                                                                     AS "max_disk_utilization"
+                    , "recommendations"."rightsizingtype"                                                       AS "recommended_action"
+                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_1"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost"
+                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings"
+                FROM data
+            )
+        SELECT recs.*
+            , rightsizing_dates.earliest_date
+            , rightsizing_dates.latest_date
+            , rightsizing_dates.frequency
+            , chosen_tags.name
+        FROM recs
+            JOIN      rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id")
+            LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id")
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Weekly Notification Event for lambda data
+      Name: !Sub "${CFDataName}-Weekly-Scheduler"
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+          Id: WeeklyTriggerForEBSUtilization
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn

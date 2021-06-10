@@ -17,6 +17,7 @@ Now that you have you main file you can now start adding modules. The below is a
 
 3. Choose **Template is ready** and **Upload a template file** and upload the updated main.yaml file. Click **Next** and continue through to deployment.
 
+4. If needed add the IAM Policy needed to the Management Role crated in section 2 buy adding a new policy section to the Management CloudFormation. 
 
 
 
@@ -33,13 +34,12 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
         RightsizeStack:
             Type: AWS::CloudFormation::Stack
             Properties:
-            Parameters:
-                CrawlerName: !Ref CrawlerName
-                DestinationBucket: !Ref S3Bucket
-                DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                RoleName: !Ref ManagementAccountRole
-            TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
-            TimeoutInMinutes: 5
+                Parameters:
+                    DestinationBucket: !Ref S3Bucket
+                    DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                    RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+                TimeoutInMinutes: 5
 
 
 * Management Policy needed:
