@@ -143,12 +143,12 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
             )
 
             for page in iterator:
-            for ou in page['OrganizationalUnits']:
-            # 1. Add entry
-            # 2. Fetch children recursively
-                full_result[ou['Id']]=[]
-                full_result[ou['Id']].append(ou['Name'])
-                full_result.update(get_ou_ids(ou['Id'], client))
+                for ou in page['OrganizationalUnits']:
+                # 1. Add entry
+                # 2. Fetch children recursively
+                    full_result[ou['Id']]=[]
+                    full_result[ou['Id']].append(ou['Name'])
+                    full_result.update(get_ou_ids(ou['Id'], client))
 
             return full_result
     

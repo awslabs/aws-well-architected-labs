@@ -75,14 +75,20 @@ def ou_loop(parent_id, test, client):
 
 def get_ou_ids(parent_id, client):
     full_result = {}
-    test = []
-    ous = ou_loop(parent_id, test, client)
-    print(ous)
 
-    for ou in ous:
-        ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
-        full_result[ou]=[]
-        full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
+    paginator = client.get_paginator('list_organizational_units_for_parent')
+    iterator  = paginator.paginate(
+    ParentId=parent_id,
+    )
+
+    for page in iterator:
+        for ou in page['OrganizationalUnits']:
+        # 1. Add entry
+        # 2. Fetch children recursively
+            full_result[ou['Id']]=[]
+            full_result[ou['Id']].append(ou['Name'])
+            full_result.update(get_ou_ids(ou['Id'], client))
+
     return full_result
 
 def get_acc_ids(parent_id,  client):
