@@ -16,7 +16,6 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                #- !Sub "arn:aws:iam::${CostAccountID}:role/AWS-Management-Account-Data-Collector-Role"
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
       ManagedPolicyArns:
@@ -37,7 +36,7 @@ Resources:
                 Resource: "*"
 Outputs:
   LambdaRole:
-    Description: AWS-Management-Account-Data-Collector-Role for lambda to assume in cost account 
+    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole

@@ -29,7 +29,7 @@ Or copy the below:
         ManagementAccountRole: 
             Type: String
             Description: This will be the name of the IAM role that will be deployed in the management account which can retrieve AWS Org data. This is deployed in the next step
-            Default: AWS-Management-Account-Data-Collector-Role
+            Default: Lambda-Assume-Role-Management-Account
         ManagementAccountID: 
             Type: String
             Description: Your Management Account ID
