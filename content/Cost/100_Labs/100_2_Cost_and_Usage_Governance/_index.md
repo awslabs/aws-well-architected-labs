@@ -11,6 +11,8 @@ May 2021
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
 
+## Contributor
+- Cy Hopkins, Enterprise Solutions Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -19,7 +21,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Introduction
  This hands-on lab will guide you through the steps to implement cost and usage governance. The skills you learn will help you control your cost and usage in alignment with your business requirements.
 
-![Images/AWSCostReadme.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSCostReadme.png)
+![Images/AWSCostReadme.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSCostReadme.png?classes=lab_picture_small)
 
 ## Goals
 - Implement AWS Budgets to notify on usage and spend
