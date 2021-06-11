@@ -6,15 +6,16 @@ weight: 4
 pre: "<b>4. </b>"
 ---
 
-If you'd like to disable the Detailed Billing Report, please follow the following steps. 
+If you'd like to disable the Monthly Reports, please follow the following steps:
 
-### Disabling Detailed Billing Reports
+### Disabling Monthly Reports
 
 1. Go to the billing dashboard:
 ![Images/AWSBillDetail0.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSBillDetail0.png?classes=lab_picture_small)
 2. Click on the **Billing Preferences** from the left menu:
 ![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill5.png?classes=lab_picture_small)
-3. Click **Detailed Billing Reports [Legacy]** and uncheck the box. Then Click **Save Preferences**:
+
+3. Click **Detailed Billing Reports [Legacy]** and uncheck the box. Then Click **Save Preferences**.
 ![Images/AWSBillDetail1.png](/Cost/100_4_Cost_and_Usage_Analysis/Images/AWSDownloadBill6.png?classes=lab_picture_small)
 
 
