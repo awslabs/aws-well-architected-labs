@@ -14,10 +14,11 @@ hidden: false
 {{< /rawhtml >}}
 
 ## Last Updated
-October 2020
+May 2021
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
+- Matt Berk, Sr. Technical Account Manager
 
 
 ## Feedback

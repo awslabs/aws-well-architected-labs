@@ -31,4 +31,4 @@ It is possible to enable a CSV version of your summary cost and usage informatio
 
 For more details on the monthly report please take a look here: https://docs.aws.amazon.com/cur/latest/userguide/monthly-report.html. 
 
-{{< prev_next_button link_prev_url="../2_cost_usage_detail/" link_next_url="../4_tear_down/" />}}
+{{< prev_next_button link_prev_url="../8_cost_tags/" link_next_url="../10_tear_down/" />}}
