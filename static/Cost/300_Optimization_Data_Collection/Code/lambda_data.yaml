@@ -1,0 +1,174 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to be created to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CodeBucket:
+      Type: String
+      Description: S3 Bucket that exists and holds code
+  CodeKey:
+    Type: String
+    Description: file name of ZipFile with data code
+    Default: cloudformation/source.zip
+  Prefix:
+    Type: String
+    Description: Service which the data collector is looking at
+    AllowedValues:
+      - ami
+      - ebs
+      - snapshots
+      - ta
+      - ecs
+  ScheduleExpression:
+    Type: String
+    Description: Event Schedule
+    Default: "cron(30 12 L * ? *)"
+  GlueRoleARN:
+    Type: String
+Outputs:
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+  GlueCrawler:
+    Value:
+      Fn::Sub: "${CFDataName}Crawler"
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: "*"
+        - PolicyName: !Sub "${CFDataName}-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource:
+                  !Ref DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+        # - PolicyName: "data"
+        #   PolicyDocument:
+        #     Version: "2012-10-17"
+        #     Statement:
+        #       - Effect: "Allow"
+        #         Action: 
+        #         - "ec2:DescribeImages"
+        #         - "ec2:DescribeVolumeStatus"
+        #         - "ec2:DescribeSnapshotAttribute"
+        #         - "ec2:DescribeImageAttribute"
+        #         - "ec2:DescribeVolumes"
+        #         - "ec2:DescribeVolumesModifications"
+        #         - "ec2:DescribeSnapshots"
+        #         - "ec2:DescribeVolumeAttribute"  
+        #         - "ec2:DescribeRegions"           
+        #         Resource: "*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Code:
+         S3Bucket: !Ref CodeBucket
+         S3Key: !Ref CodeKey
+         #ZipFile
+
+      Handler: 'main.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: DestinationBucket
+          ROLENAME:
+            Ref: MultiAccountRoleName
+          PATH:
+            Ref: CFDataName
+          CRAWLER_NAME:
+            Ref: Crawler
+          PREFIX:
+            Ref: Prefix
+  Crawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}Crawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Weekly Notificaton Event for lambda data
+      Name: !Sub "${CFDataName}-Weekly-Scheduler"
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+          Id: WeeklyTriggerForEBSUtilization
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  # AthenaQuery:
+  #   Type: AWS::Athena::NamedQuery
+  #   Properties:
+  #     Database: !Ref DatabaseName
+  #     Description: Provides a summary view of the lambda data
+  #     Name: !Sub ${CFDataName}-summary-view
+  #     QueryString: !Sub
+  #       "SELECT * from ${DatabaseName}"

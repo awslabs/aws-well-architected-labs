@@ -48,6 +48,27 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 {{% /expand%}}
 
 
+
+{{%expand "Static Data Collector " %}}
+        DataStack:
+            Type: AWS::CloudFormation::Stack
+            Properties:
+            TemplateURL:  "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+            TimeoutInMinutes: 2
+            Parameters:
+                DestinationBucket: !Ref S3Bucket
+                DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                Prefix: "ami"
+                DatabaseName: "Data"
+                CFDataName: "AMI"
+                GlueRoleARN: !GetAtt GlueRole.Arn
+
+* Multi Account Policy needed:
+
+        -  ""
+
+{{% /expand%}}
+
 {{% notice tip %}}
 You have now created your lambda modules you may need access to your Management account to get this information. In the next step we will create this role
 {{% /notice %}}
