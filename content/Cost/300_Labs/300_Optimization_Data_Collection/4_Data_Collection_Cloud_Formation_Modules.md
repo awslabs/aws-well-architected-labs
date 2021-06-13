@@ -55,6 +55,15 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
         Type: String
         Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
     Resource:
+        AccountCollector:
+            Type: AWS::CloudFormation::Stack
+            Properties:
+            TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+            TimeoutInMinutes: 2
+            Parameters:
+                RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                #TaskQueuesUrl: !GetAtt 'DataStackMulti.Outputs.SQSUrl'
+
         DataStack:
             Type: AWS::CloudFormation::Stack
             Properties:

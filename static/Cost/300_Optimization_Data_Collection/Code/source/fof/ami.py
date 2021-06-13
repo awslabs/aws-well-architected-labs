@@ -41,7 +41,7 @@ def main(account_id):
 
 def assume_role(account_id, service, region):
     role_name = os.environ['ROLENAME']
-    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
     sts_client = boto3.client('sts')
     
     try:

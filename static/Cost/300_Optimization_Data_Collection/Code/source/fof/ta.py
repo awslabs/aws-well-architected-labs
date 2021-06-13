@@ -4,6 +4,7 @@ import datetime
 import logging
 from json import JSONEncoder
 from datetime import date
+from botocore.exceptions import ClientError
 from botocore.client import Config
 import os
 
@@ -13,10 +14,9 @@ class DateTimeEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (datetime.date, datetime.datetime)):
             return obj.isoformat()
-def main():
+def main(account_id):
     with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
-
-        support_client = boto3.client("support", region_name="us-east-1")
+        support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         for case in response["checks"]:
             meta = case["metadata"]
@@ -38,13 +38,32 @@ def main():
 
                 f.write(check_result)
                 f.write("\n")
-                
-def lits_regions():
-    from boto3.session import Session
 
-    s = Session()
-    ecs_regions = s.get_available_regions('ecs')
-    return ecs_regions
+def assume_role(account_id, service, region):
+    role_name = os.environ['ROLENAME']
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" 
+    sts_client = boto3.client('sts')
+    
+    try:
+        #region = sts_client.meta.region_name
+        assumedRoleObject = sts_client.assume_role(
+            RoleArn=role_arn,
+            RoleSessionName="AssumeRoleRoot"
+            )
+        
+        credentials = assumedRoleObject['Credentials']
+        client = boto3.client(
+            service,
+            aws_access_key_id=credentials['AccessKeyId'],
+            aws_secret_access_key=credentials['SecretAccessKey'],
+            aws_session_token=credentials['SessionToken'],
+            region_name = region
+        )
+        return client
+
+    except ClientError as e:
+        logging.warning(f"Unexpected error Account {account_id}: {e}")
+        return None
 
 
 if __name__ == "__main__":

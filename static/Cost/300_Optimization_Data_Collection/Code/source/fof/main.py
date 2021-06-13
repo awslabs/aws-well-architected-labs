@@ -36,13 +36,13 @@ def lambda_handler(event, context):
             else:
                 print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
             print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix)
+            s3(DestinationPrefix, account_id)
             #start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def s3(DestinationPrefix):
+def s3(DestinationPrefix, account_id):
     bucket = os.environ[
         "BUCKET_NAME"
     ]  # Using enviroment varibles below the lambda will use your S3 bucket
@@ -54,11 +54,38 @@ def s3(DestinationPrefix):
         s3.upload_file(
             "/tmp/data.json",
             bucket,
-            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}.json",
+            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
         )  # uploading the file with the data to s3
-        print(f"Data in s3 - optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
+        print(f"Data {account_id} in s3 - optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
     except Exception as e:
         print(e)
+
+
+def assume_role(account_id, service, region):
+    role_name = os.environ['ROLENAME']
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
+    sts_client = boto3.client('sts')
+    
+    try:
+        #region = sts_client.meta.region_name
+        assumedRoleObject = sts_client.assume_role(
+            RoleArn=role_arn,
+            RoleSessionName="AssumeRoleRoot"
+            )
+        
+        credentials = assumedRoleObject['Credentials']
+        client = boto3.client(
+            service,
+            aws_access_key_id=credentials['AccessKeyId'],
+            aws_secret_access_key=credentials['SecretAccessKey'],
+            aws_session_token=credentials['SessionToken'],
+            region_name = region
+        )
+        return client
+
+    except ClientError as e:
+        logging.warning(f"Unexpected error Account {account_id}: {e}")
+        return None
 
 
 def start_crawler():

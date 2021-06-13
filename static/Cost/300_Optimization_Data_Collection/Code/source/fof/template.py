@@ -52,13 +52,40 @@ except Exception as e:
 start_crawler()
 
 def start_crawler():
-glue_client = boto3.client('glue')
-os.environ['ROLE_ARN']
-try:
-    glue_client.start_crawler(Name=os.environ['CRAWLER_NAME'])
-except Exception as e:
-    # Send some context about this error to Lambda Logs
-    logging.warning("%s" % e)     
+    glue_client = boto3.client('glue')
+    os.environ['ROLE_ARN']
+    try:
+        glue_client.start_crawler(Name=os.environ['CRAWLER_NAME'])
+    except Exception as e:
+        # Send some context about this error to Lambda Logs
+        logging.warning("%s" % e)     
+
+
+def assume_role(account_id, service, region):
+    role_name = os.environ['ROLENAME']
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
+    sts_client = boto3.client('sts')
+    
+    try:
+        #region = sts_client.meta.region_name
+        assumedRoleObject = sts_client.assume_role(
+            RoleArn=role_arn,
+            RoleSessionName="AssumeRoleRoot"
+            )
+        
+        credentials = assumedRoleObject['Credentials']
+        client = boto3.client(
+            service,
+            aws_access_key_id=credentials['AccessKeyId'],
+            aws_secret_access_key=credentials['SecretAccessKey'],
+            aws_session_token=credentials['SessionToken'],
+            region_name = region
+        )
+        return client
+
+    except ClientError as e:
+        logging.warning(f"Unexpected error Account {account_id}: {e}")
+        return None
 
 
 def lits_regions():
