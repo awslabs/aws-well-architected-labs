@@ -59,3 +59,11 @@ try:
 except Exception as e:
     # Send some context about this error to Lambda Logs
     logging.warning("%s" % e)     
+
+
+def lits_regions():
+    from boto3.session import Session
+
+    s = Session()
+    ecs_regions = s.get_available_regions('ecs')
+    return ecs_regions

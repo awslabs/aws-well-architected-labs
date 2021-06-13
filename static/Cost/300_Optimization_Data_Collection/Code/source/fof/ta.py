@@ -38,6 +38,14 @@ def main():
 
                 f.write(check_result)
                 f.write("\n")
+                
+def lits_regions():
+    from boto3.session import Session
+
+    s = Session()
+    ecs_regions = s.get_available_regions('ecs')
+    return ecs_regions
+
 
 if __name__ == "__main__":
     main()

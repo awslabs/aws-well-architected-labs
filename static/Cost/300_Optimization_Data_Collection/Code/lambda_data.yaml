@@ -4,6 +4,7 @@ Parameters:
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
+    Default: Optimization_Data
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket to be created to hold data information
@@ -20,10 +21,11 @@ Parameters:
   CodeBucket:
       Type: String
       Description: S3 Bucket that exists and holds code
+      Default: aws-well-architected-labs-ireland
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: cloudformation/source.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
   Prefix:
     Type: String
     Description: Service which the data collector is looking at
@@ -146,8 +148,8 @@ Resources:
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
-      Description: Weekly Notificaton Event for lambda data
-      Name: !Sub "${CFDataName}-Weekly-Scheduler"
+      Description: Notification Event for lambda data
+      Name: !Sub "${CFDataName}-Scheduler"
       ScheduleExpression: !Ref ScheduleExpression
       State: ENABLED
       Targets:
@@ -155,7 +157,7 @@ Resources:
             Fn::GetAtt:
               - LambdaFunction
               - Arn
-          Id: WeeklyTriggerForEBSUtilization
+          Id: TriggerForUtilization
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -164,11 +166,3 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
-  # AthenaQuery:
-  #   Type: AWS::Athena::NamedQuery
-  #   Properties:
-  #     Database: !Ref DatabaseName
-  #     Description: Provides a summary view of the lambda data
-  #     Name: !Sub ${CFDataName}-summary-view
-  #     QueryString: !Sub
-  #       "SELECT * from ${DatabaseName}"

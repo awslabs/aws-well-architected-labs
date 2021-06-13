@@ -50,18 +50,24 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 
 
 {{%expand "Static Data Collector " %}}
+    Parameters:
+        MultiAccountRoleName:
+        Type: String
+        Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+    Resource:
         DataStack:
             Type: AWS::CloudFormation::Stack
             Properties:
-            TemplateURL:  "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-            TimeoutInMinutes: 2
-            Parameters:
-                DestinationBucket: !Ref S3Bucket
-                DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                Prefix: "ami"
-                DatabaseName: "Data"
-                CFDataName: "AMI"
-                GlueRoleARN: !GetAtt GlueRole.Arn
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                    DestinationBucket: !Ref S3Bucket
+                    DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                    Prefix: "ami"
+                    DatabaseName: "Data"
+                    CFDataName: "AMI"
+                    GlueRoleARN: !GetAtt GlueRole.Arn
+                    MultiAccountRoleName: !Ref MultiAccountRoleName
 
 * Multi Account Policy needed:
 

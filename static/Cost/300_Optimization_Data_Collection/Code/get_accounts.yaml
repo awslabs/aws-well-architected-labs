@@ -1,16 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Organization data collections.
 Parameters:
-  RoleName:
+  RoleARN:
     Type: String
     Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Org data.
-  CFDataName:
-    Type: String
-    Description: The name of what this cf is doing.
-    Default: 'ecs-services-clusters'
   TaskQueuesUrl:
     Type: String
     Description: the Ques URL that will get the accounts messages, split by comers
+    Default: ''
 Outputs:
   LambdaFunctionName:
     Value:
@@ -25,7 +22,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: AWS-Orgonisation-Account-Collector-Role
+      RoleName: AWS-Organization-Account-Collector-Role
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -39,14 +36,14 @@ Resources:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
       Path: /
       Policies:
-        - PolicyName: "Assume-Management-Orgonisation-Data-Role"
+        - PolicyName: "Assume-Management-Organization-Data-Role"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource:
-                  Ref: RoleName
+                  Ref: RoleARN
         - PolicyName: "S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -152,12 +149,12 @@ Resources:
       Environment:
         Variables:
           SQS_URL: !Ref TaskQueuesUrl
-          ROLE_ARN: !Ref RoleName
+          ROLE_ARN: !Ref RoleARN
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
       Description: Monthly
-      Name: !Sub "${CFDataName}-Monthly-Scheduler-For-Accounts"
+      Name: "Monthly-Scheduler-For-Accounts"
       ScheduleExpression: "cron(30 12 L * ? *)"
       State: ENABLED
       Targets:
