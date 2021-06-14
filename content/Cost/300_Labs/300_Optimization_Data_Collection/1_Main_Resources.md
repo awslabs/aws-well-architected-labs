@@ -43,7 +43,7 @@ Or copy the below:
         GlueRole:
             Type: AWS::IAM::Role
             Properties:
-            RoleName: AWS-Cost-Explorer-Glue-Crawler
+            RoleName: AWS-OPTICS-Glue-Crawler
             AssumeRolePolicyDocument:
                 Statement:
                 - Action:

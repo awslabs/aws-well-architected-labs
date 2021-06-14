@@ -35,10 +35,6 @@ Parameters:
       - snapshots
       - ta
       - ecs
-  ScheduleExpression:
-    Type: String
-    Description: Event Schedule
-    Default: "cron(30 12 L * ? *)"
   GlueRoleARN:
     Type: String
 Outputs:
@@ -92,22 +88,12 @@ Resources:
                 Action:
                   - "glue:StartCrawler"
                 Resource: "*"
-        # - PolicyName: "data"
-        #   PolicyDocument:
-        #     Version: "2012-10-17"
-        #     Statement:
-        #       - Effect: "Allow"
-        #         Action: 
-        #         - "ec2:DescribeImages"
-        #         - "ec2:DescribeVolumeStatus"
-        #         - "ec2:DescribeSnapshotAttribute"
-        #         - "ec2:DescribeImageAttribute"
-        #         - "ec2:DescribeVolumes"
-        #         - "ec2:DescribeVolumesModifications"
-        #         - "ec2:DescribeSnapshots"
-        #         - "ec2:DescribeVolumeAttribute"  
-        #         - "ec2:DescribeRegions"           
-        #         Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
+                Resource: "*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -117,8 +103,6 @@ Resources:
       Code:
          S3Bucket: !Ref CodeBucket
          S3Key: !Ref CodeKey
-         #ZipFile
-
       Handler: 'main.lambda_handler'
       MemorySize: 2688
       Timeout: 300
@@ -147,35 +131,22 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
-  CloudWatchTrigger:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: Notification Event for lambda data
-      Name: !Sub "${CFDataName}-Scheduler"
-      ScheduleExpression: !Ref ScheduleExpression
-      State: ENABLED
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - LambdaFunction
-              - Arn
-          Id: TriggerForUtilization
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/${Prefix}-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: lambda:InvokeFunction
-      Principal: events.amazonaws.com
+      Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt CloudWatchTrigger.Arn
+      SourceArn: !GetAtt TaskQueue.Arn
   TaskQueue: 
     Type: AWS::SQS::Queue
     Properties: 
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
-  EventSourceMappingECS:
+  EventSourceMapping:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
