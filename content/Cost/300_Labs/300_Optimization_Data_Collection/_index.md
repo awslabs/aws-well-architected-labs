@@ -23,7 +23,7 @@ When reviewing costs in AWS it important to have all the data you need in one pl
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
 
 ## Goals
-- Deploy base resources that you will be reused in multiple modules
+- Deploy base resources that will be reused in multiple modules
 - Deploy modules to collect data 
 
 

@@ -64,7 +64,10 @@ The available resources who's data can be collected are the following:
  * ebs
  * snapshot
 
-        -  "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+        -  "ec2:DescribeVolumeStatus"
+        -  "ec2:DescribeVolumes"
+        -  "imagebuilder:ListImages"
+        -  "imagebuilder:GetImage"
 
 
 * ta
