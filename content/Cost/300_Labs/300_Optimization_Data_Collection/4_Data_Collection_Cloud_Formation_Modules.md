@@ -49,36 +49,79 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 
 
 
-{{%expand "Static Data Collector " %}}
-    Parameters:
-        MultiAccountRoleName:
-        Type: String
-        Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
-    Resource:
-        DataStackMulti:
-            Type: AWS::CloudFormation::Stack
-            Properties:
-            TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-            TimeoutInMinutes: 2
-            Parameters:
-                DestinationBucket: !Ref S3Bucket
-                DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                Prefix: "ami"
-                CFDataName: "AMI"
-                GlueRoleARN: !GetAtt GlueRole.Arn
-                MultiAccountRoleName: "<MultiAccountRoleName>"
-        AccountCollector:
-            Type: AWS::CloudFormation::Stack
-            Properties:
-            TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-            TimeoutInMinutes: 2
-            Parameters:
-                RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                TaskQueuesUrl: !GetAtt 'DataStackMulti.Outputs.SQSUrl'
+{{%expand "Static Data Collector" %}}
+
+### Static Data Collector
+This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS que which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an S3 bucket and is read into Athena by Glue.  
+
+This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 
 * Multi Account Policy needed:
 
-        -  ""
+
+The available resources who's data can be collected are the following:
+ * ami
+ * ebs
+ * snapshot
+
+        -  "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+
+
+* ta
+       
+        - "trustedadvisor:*"
+
+* ecs
+
+        -  "ecs:ListAttributes",
+        -  "ecs:DescribeTaskSets",
+        -  "ecs:DescribeTaskDefinition",
+        -  "ecs:DescribeClusters",
+        -  "ecs:ListServices",
+        -  "ecs:ListAccountSettings",
+        -  "ecs:DescribeCapacityProviders",
+        -  "ecs:ListTagsForResource",
+        -  "ecs:ListTasks",
+        -  "ecs:ListTaskDefinitionFamilies",
+        -  "ecs:DescribeServices",
+        -  "ecs:ListContainerInstances",
+        -  "ecs:DescribeContainerInstances",
+        -  "ecs:DescribeTasks",
+        -  "ecs:ListTaskDefinitions",
+        -  "ecs:ListClusters"
+
+* CloudFormation to add:
+
+
+        Parameters:
+            MultiAccountRoleName:
+            Type: String
+            Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+
+
+        Resource:
+            DataStackMulti:
+                Type: AWS::CloudFormation::Stack
+                Properties:
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                    DestinationBucket: !Ref S3Bucket
+                    DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                    Prefix: "ami" # example 
+                    CFDataName: "AMI" # example 
+                    GlueRoleARN: !GetAtt GlueRole.Arn
+                    MultiAccountRoleName: !Ref MultiAccountRoleName
+            AccountCollector:
+                Type: AWS::CloudFormation::Stack
+                Properties:
+                TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                    RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                    TaskQueuesUrl: !GetAtt 'DataStackMulti.Outputs.SQSUrl'
+
+
 
 {{% /expand%}}
 
