@@ -97,4 +97,3 @@ def start_crawler():
     except Exception as e:
         # Send some context about this error to Lambda Logs
         logging.warning("%s" % e)
-lambda_handler(None, None)

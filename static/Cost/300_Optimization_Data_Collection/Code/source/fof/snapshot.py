@@ -16,6 +16,7 @@ def main(account_id):
     list_region = lits_regions()
     with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
         for region in list_region:
+            print(region)
             client = assume_role(account_id, "ec2", region)
             try:
                 response = client.describe_snapshots(OwnerIds=["self"])
@@ -28,6 +29,7 @@ def main(account_id):
 
                     f.write(dataJSONData)
                     f.write("\n")
+                    print(f"{region} ebs data collected")
             except Exception as e:
                             print(e)
                             pass
