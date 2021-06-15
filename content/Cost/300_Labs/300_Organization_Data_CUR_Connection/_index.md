@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-December 2020
+June 2021
 
 ## Authors
 - Stephanie Gooch, Commercial Architect (AWS)

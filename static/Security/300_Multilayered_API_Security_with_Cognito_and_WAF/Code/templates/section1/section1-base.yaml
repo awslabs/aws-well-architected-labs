@@ -1,0 +1,578 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: WA Lab environment
+
+Parameters:
+  SBucketName:
+    Type: String
+    Description: S3 Bucket where you upload 3 Lambda deployment packages (.zip file)
+  RDSDBName:
+    Type: String
+    Description: database name
+    Default: playersdb
+  DBTableName:
+    Type: String
+    Description: table name
+    Default: players
+  RDSUserName:
+    Type: String
+    Description: database userman
+    Default: admin
+
+Resources:
+
+  # create VPC
+  RDSVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+        CidrBlock: 10.0.0.0/16
+        EnableDnsSupport: 'true'
+        EnableDnsHostnames: 'true'
+        Tags:
+        - Key: Name
+          Value: RDSVPC
+
+  # create subnets
+  WAprivateDBSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+        - Key: Name
+          Value: WAprivateDBSubnet1
+
+  WAprivateDBSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+      - Key: Name
+        Value: WAprivateDBSubnet2
+
+  WAprivateLambdaSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+      - Key: Name
+        Value: WAprivateLambdaSubnet1
+
+  WAprivateLambdaSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+      - Key: Name
+        Value: WAprivateLambdaSubnet2
+
+  WApublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.5.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+      - Key: Name
+        Value: WApublicSubnet1
+
+  WApublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RDSVPC
+      CidrBlock: 10.0.6.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+          Ref: 'AWS::Region'
+      Tags:
+      - Key: Name
+        Value: WApublicSubnet2
+
+  # create and attach internet gateway
+  # Internet gatewat and NAT are required so that Lambdas running inside VPC can invoke ManageConnections lambda function (running out of VPC)
+  WAInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: WAInternetGateway
+
+  AttachInternetGateway:
+    DependsOn: WAInternetGateway
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref RDSVPC
+      InternetGatewayId: !Ref WAInternetGateway
+
+  # create route tables
+  CustomRouteTable:
+    DependsOn: AttachInternetGateway
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref RDSVPC
+      Tags:
+      - Key: Name
+        Value: CustomRouteTable
+
+  WARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref RDSVPC
+      Tags:
+      - Key: Name
+        Value: WARouteTable
+
+  # attach route tables
+  WASubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WAprivateDBSubnet1
+      RouteTableId: !Ref WARouteTable
+
+  WASubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WAprivateDBSubnet2
+      RouteTableId: !Ref WARouteTable
+
+  WASubnetRouteTableAssociation3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WAprivateLambdaSubnet1
+      RouteTableId: !Ref WARouteTable
+
+  WASubnetRouteTableAssociation4:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WAprivateLambdaSubnet2
+      RouteTableId: !Ref WARouteTable
+
+  # public subnets get attached to CustomRouteTable
+  WASubnetRouteTableAssociation5:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WApublicSubnet1
+      RouteTableId: !Ref CustomRouteTable
+
+  WASubnetRouteTableAssociation6:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WApublicSubnet2
+      RouteTableId: !Ref CustomRouteTable
+
+  # create and attach NAT gateway
+  WANAT:
+    DependsOn: RDSVPC
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt [WAEIP,AllocationId]
+      SubnetId: !Ref WApublicSubnet1
+
+  WAEIP:
+    DependsOn: AttachInternetGateway
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  # create routes
+
+  RouteToNAT:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref WARouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref WANAT
+
+  RouteToInternet:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref CustomRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref WAInternetGateway
+
+  # create security groups
+  # Only allow Lambda security group
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow WA SQL access from lambda subnets
+      VpcId:
+        Ref: RDSVPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '3306'
+        ToPort: '3306'
+        SourceSecurityGroupId : !Ref LambdaSecurityGroup
+      Tags:
+      - Key: Name
+        Value: RDSSecurityGroup
+
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Lambda ENIs
+      VpcId:
+        Ref: RDSVPC
+      Tags:
+      - Key: Name
+        Value: LambdaSecurityGroup
+
+  # Create Db subnet groups for RDS instance
+  WADBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: 'RDS subnets'
+      SubnetIds:
+        - !Ref WAprivateDBSubnet1
+        - !Ref WAprivateDBSubnet2
+      Tags:
+        -
+          Key: Name
+          Value: WADBSubnetGroup
+  # Will be assumed by RDSLambdaCFNInit Lambda function
+  RDSLambdaCFNInitRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: 'Allow'
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: '/'
+      Policies:
+        -
+          PolicyName: 'AllowSM'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: 'Allow'
+                Action: 'secretsmanager:*'
+                Resource: '*'
+        -
+          PolicyName: 'AllowS3'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: 'Allow'
+                Action: 's3:*'
+                Resource: '*'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+  # Will be assumed by LambdaRDSTest and LambdaRDSTestHarness Lambda functions
+  RDSLambdaTestRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: 'Allow'
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: '/'
+      Policies:
+        -
+          PolicyName: 'AllowS3'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: 'Allow'
+                Action: 's3:*'
+                Resource: '*'
+        -
+          PolicyName: 'AllowSM'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: 'Allow'
+                Action: 'secretsmanager:*'
+                Resource: '*'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+  LambdaRDSTest:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Description: 'Test Lambda function to access a RDS Database and read sample data'
+      Runtime: python3.8
+      #CodeUri: 's3://walabscode/rds-query.zip'
+      CodeUri:
+        Bucket: !Ref SBucketName
+        Key: rds-query.zip
+      Role: !GetAtt RDSLambdaTestRole.Arn
+      MemorySize: 128
+      Timeout: 60
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+      VpcConfig: # For accessing RDS instance
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref WAprivateLambdaSubnet1
+          - !Ref WAprivateLambdaSubnet2
+      Environment:
+        Variables:
+          RDS_HOST: !GetAtt WADBInstance.Endpoint.Address
+          RDS_USERNAME: !Ref RDSUserName
+          SECRET_NAME: !Ref WARDSInstanceRotationSecret
+          RDS_DB_NAME: !Ref RDSDBName
+          RDS_Table_NAME: !Ref DBTableName
+          #RDS_DB_NAME: 'playersdb'
+
+  apiGateway:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Name: 'wa-lab-rds-api'
+      Description: 'WA API Gateway'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Tags:
+      - Key: Name
+        Value: apiGateway
+
+  apiGatewayRootMethod:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      AuthorizationType: 'NONE'
+      HttpMethod: 'GET'
+      ResourceId: !GetAtt 'apiGateway.RootResourceId'
+      RestApiId: !Ref 'apiGateway'
+      RequestValidatorId: !Ref apiRequestValidator
+      MethodResponses:
+      - StatusCode: 200
+        ResponseModels:
+          application/json: Empty
+        ResponseParameters:
+          method.response.header.Content-Type: true
+          method.response.header.Content-Length: true
+      RequestParameters:
+        method.request.querystring.id: true
+      Integration:
+        IntegrationHttpMethod: 'POST'  # https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-lambda-template-invoke-error/
+        Type: 'AWS'
+        Uri: !Sub
+          - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations'
+          - lambdaArn: !GetAtt 'LambdaRDSTest.Arn'
+        IntegrationResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Content-Type: integration.response.body.headers.Content-Type
+            method.response.header.Content-Length: integration.response.body.headers.Content-Length
+          ResponseTemplates:
+            application/json: $input.path('$')
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: #Accept Query String
+          application/json: !Join
+            - ''
+            - -  "{\n \"id\": \"$input.params('id')\"  \n}"
+
+  # add request validator in console
+  apiRequestValidator:
+    Type: AWS::ApiGateway::RequestValidator
+    Properties:
+      RestApiId: !Ref apiGateway
+      ValidateRequestParameters: true
+
+  apiGatewayDeployment:
+    Type: 'AWS::ApiGateway::Deployment'
+    DependsOn:
+      - 'apiGatewayRootMethod'
+    Properties:
+      RestApiId: !Ref 'apiGateway'
+      StageName: 'Dev'
+
+  # Allow API Gateway to invoke LambdaRDSTest
+  lambdaApiGatewayInvoke:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt 'LambdaRDSTest.Arn'
+      Principal: 'apigateway.amazonaws.com'
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/*/GET/'
+
+  LambdaRDSCreateTable:
+    DependsOn:
+      - WAEIP # for deletion, this lambda function requires access to S3 bucket, hence this dependency. (chained to NAT and internet gateway)
+      - WASubnetRouteTableAssociation1
+      - WASubnetRouteTableAssociation2
+      - WASubnetRouteTableAssociation3
+      - WASubnetRouteTableAssociation4
+      - WASubnetRouteTableAssociation5
+      - WASubnetRouteTableAssociation6
+      - RouteToInternet
+      - RouteToNAT
+      - RDSSecurityGroup
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Description: 'Lambda function which will execute when this CFN template is created, updated or deleted'
+      Runtime: python3.8
+      #CodeUri: 's3://walabscode/rds-create-table.zip'
+      CodeUri:
+        Bucket: !Ref SBucketName
+        Key: rds-create-table.zip
+      Role: !GetAtt RDSLambdaCFNInitRole.Arn
+      MemorySize: 128
+      Timeout: 60
+      VpcConfig: # For accessing RDS instance
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref WAprivateLambdaSubnet1
+          - !Ref WAprivateLambdaSubnet2
+      Environment:
+        Variables:
+          RDS_HOST: !GetAtt WADBInstance.Endpoint.Address
+          RDS_USERNAME: !Ref RDSUserName
+          SECRET_NAME: !Ref WARDSInstanceRotationSecret
+          RDS_DB_NAME: !Ref RDSDBName
+          RDS_Table_NAME: !Ref DBTableName
+
+  InvokeLambdaRDSCreateTable:
+    Type: AWS::CloudFormation::CustomResource
+    Version: '1.0'
+    Properties:
+      ServiceToken: !GetAtt LambdaRDSCreateTable.Arn
+
+  #grant access to CloudFormation-specific S3 buckets for resources in a VPC that must respond to a custom resource request or a wait condition.
+  CloudFormationEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !Ref LambdaSecurityGroup
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.cloudformation"
+      SubnetIds:
+        - !Ref WAprivateLambdaSubnet1
+        - !Ref WAprivateLambdaSubnet2
+      VpcEndpointType: 'Interface'
+      VpcId: !Ref RDSVPC
+
+  #This is a Secret resource with a randomly generated password in its SecretString JSON.
+  WARDSInstanceRotationSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: 'RDS MySQL password'
+      GenerateSecretString:
+        #SecretStringTemplate: !Sub '{"username": "admin"}'
+        SecretStringTemplate: !Sub '{"username": "${RDSUserName}"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 16
+        ExcludeCharacters: '"@/\'
+      Tags:
+        -
+          Key: Name
+          Value: WARDSPassword
+
+  #This is a RDS instance resource. Its master username and password use dynamic references to resolve values from SecretsManager.
+  #The dynamic reference guarantees that CloudFormation will not log or persist the resolved value
+  #We use a ref to the Secret resource logical id in order to construct the dynamic reference, since the Secret name is being
+  #generated by CloudFormation
+  WADBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 20
+      DBInstanceClass: db.t2.micro
+      DBName: !Ref RDSDBName
+      Engine: mysql
+      MasterUsername: !Ref RDSUserName
+      MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref WARDSInstanceRotationSecret, ':SecretString:password}}' ]]
+      MultiAZ: False
+      PubliclyAccessible: False
+      StorageType: gp2
+      DBSubnetGroupName: !Ref WADBSubnetGroup
+      VPCSecurityGroups:
+        - !Ref RDSSecurityGroup
+      BackupRetentionPeriod: 0
+      DBInstanceIdentifier: 'WA-lab-mysql-RDS'
+      Tags:
+      - Key: Name
+        Value: WADBInstance
+
+  #This is a SecretTargetAttachment resource which updates the referenced Secret resource with properties about
+  #the referenced RDS instance
+  SecretRDSInstanceAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref WARDSInstanceRotationSecret
+      TargetId: !Ref WADBInstance
+      TargetType: AWS::RDS::DBInstance
+
+  #Cloud9 to provide IDE
+  Cloud9:
+    Type: 'AWS::Cloud9::EnvironmentEC2'
+    Properties:
+      Name: !Sub '${AWS::StackName}-Cloud9-IDE'
+      Description: 'Cloud9 Environment for WA Lab'
+      AutomaticStopTimeMinutes: 30
+      SubnetId: !Ref WApublicSubnet1
+      InstanceType: 't2.micro'
+      Repositories:
+        - PathComponent: /walab-scripts
+          RepositoryUrl: 'https://github.com/awswa/walab-scripts.git'
+
+Outputs:
+  APIGatewayURL:
+    Description: URL of your API endpoint
+    Value: !Join
+      - ''
+      - - https://
+        - !Ref apiGateway
+        - '.execute-api.'
+        - !Ref 'AWS::Region'
+        - '.amazonaws.com/Dev/?id=1'
+  RDSMysqlSecret:
+    Description: Secrets Manager Secret for RDS Mysql
+    Value: !Sub https://console.aws.amazon.com/secretsmanager/home?region=${AWS::Region}#/secret?name=${WARDSInstanceRotationSecret}
+  RDS:
+    Description: RDS Mysql
+    Value: !Sub https://console.aws.amazon.com/rds/home?region=${AWS::Region}#database:id=${WADBInstance};is-cluster=false
+  Cloud9URL:
+    Description: Cloud9 Environment
+    Value:
+      Fn::Join:
+      - ''
+      - - !Sub https://${AWS::Region}.console.aws.amazon.com/cloud9/ide/
+        - !Ref 'Cloud9'

@@ -14,10 +14,11 @@ hidden: false
 {{< /rawhtml >}}
 
 ## Last Updated
-October 2020
+May 2021
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected
+- Matt Berk, Sr. Technical Account Manager
 
 
 ## Feedback
@@ -46,7 +47,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - https://aws.amazon.com/aws-cost-management/pricing/
 - Variable costs will be incurred
 - Cost Explorer: $0.01 per 1,000 usage records
-- S3: Storage of CUR file, refer to S3 pricing https://aws.amazon.com/s3/pricing/
+- S3: Storage of CUR and/or monthly report file, refer to S3 pricing https://aws.amazon.com/s3/pricing/
 - Estimated costs should be <$5 a month for small accounts
 
 ## Time to complete
