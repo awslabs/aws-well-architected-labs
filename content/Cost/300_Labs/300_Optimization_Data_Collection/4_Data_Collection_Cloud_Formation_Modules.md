@@ -61,14 +61,18 @@ This relies on a role to be available in all accounts in your organization to re
 
 The available resources who's data can be collected are the following:
  * ami
- * ebs
- * snapshot
-
-        -  "ec2:DescribeVolumeStatus"
-        -  "ec2:DescribeVolumes"
+    
         -  "imagebuilder:ListImages"
         -  "imagebuilder:GetImage"
 
+ * ebs
+
+        -  "ec2:DescribeVolumeStatus"
+        -  "ec2:DescribeVolumes"
+
+ * snapshot
+
+        - "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
 
 * ta
        
