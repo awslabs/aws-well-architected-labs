@@ -104,6 +104,7 @@ The available resources who's data can be collected are the following:
             MultiAccountRoleName:
             Type: String
             Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+            Default: OPTICS-Assume-Role-Management-Account
 
 
         Resource:
