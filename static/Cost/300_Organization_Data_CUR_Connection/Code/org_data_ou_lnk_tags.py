@@ -77,7 +77,7 @@ def account_data(f, parent, parent_name, client):
 def s3_upload(file_name):
     bucket = os.environ["BUCKET_NAME"] #Using environment variables below the Lambda will use your S3 bucket
     try:
-        s3 = boto3.client('s3', '(Region)',
+        s3 = boto3.client('s3', os.environ["REGION"],
                         config=Config(s3={'addressing_style': 'path'}))
         s3.upload_file(
             f'/tmp/{file_name}.json', bucket, f"organisation-data/{file_name}.json") #uploading the file with the data to s3

@@ -14,16 +14,18 @@ As some of the data needed for these module is in the Management account we need
 1. Login via SSO in your Management account and search for **Cloud Formation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
-2. Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Organization_Data_CUR_Connection/main.yaml)
+2. Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/Optimization_Data_Collection/Management.yaml)
 
-5. In the Parameters section use the account ID you deployed the main.yaml file into for **CostAccountID**
+5. Call the Stack **OptimizationManagementDataRoleStack**
 
-6. Call the Stack **OptimizationManagementDataRoleStack**
+6. In the Parameters section use the account ID you deployed the main.yaml file into for **CostAccountID** 
 
-7. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+7. Scroll to the bottom and click **Next**
+
+8. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-8. Make a note of the IAM role ARN as we will use this in the next step by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
+9. Make a note of the IAM role ARN as we will use this in the next step by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
 ![Images/Managment_CF_deployed.png](/Cost/300_Optimization_Data_Collection/Images/Managment_CF_deployed.png)
 
 
@@ -38,7 +40,10 @@ If you already have a role which can read into your accounts then please skip th
 1. Login via SSO in your Management account and search for **Cloud Formation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
-2. Click on the side panel on the left hand side of the screen and select **StackSets**. If you have not enabled this Click the button **Enable trusted access**. Once Successful or if you have it enabled already click **Create StackSet**.  
+2. Click on the side panel on the left hand side of the screen and select **StackSets**. If you have not enabled this Click the button **Enable trusted access**. 
+#Downloadable!!!!!!!!
+
+3. Once Successful or if you have it enabled already click **Create StackSet**.  
 ![Images/Enable_trusted_accessed.png](/Cost/300_Optimization_Data_Collection/Images/Enable_trusted_accessed.png)
 
 4. Choose **Amazon S3 URL** copy and paste the below link into the box. Click **Next**.
@@ -54,16 +59,14 @@ If you already have a role which can read into your accounts then please skip th
 
 ![Images/SS_permission.png](/Cost/300_Optimization_Data_Collection/Images/SS_permission.png)
 
-7. Choose a Region which you are deploying the rest of your resources into then  Click **Next**.
+7. Leave all as default and choose a Region which you are deploying the rest of your resources into then  Click **Next**.
 ![Images/SS_region.png](/Cost/300_Optimization_Data_Collection/Images/SS_region.png)
 
 8. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-
-
 {{% notice note %}}
-You have now deployed the cloudformation template to build an IAM Role to allow the lambda to pull data into the Cost Optimization account. You can now test your lambda functions. 
+If you wish to do this not from a payer level then you will need to provide a role for just accounts you wish to assume into 
 {{% /notice %}}
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Data Collection Template"
+title: "Data Collection Template (Optional)"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 3

@@ -11,13 +11,15 @@ Now that you have you main file you can now start adding modules. The below is a
 
 
 
-1. Open your main file and in the **Resource** section copy and past stacks from below.
+1. Open your **main.yaml** file that you downloaded at the start and in the **Resource** section copy and past stacks from below.
 
-2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** and click update stack. 
+2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
 
-3. Choose **Template is ready** and **Upload a template file** and upload the updated main.yaml file. Click **Next** and continue through to deployment.
+3. click **Update** 
 
-4. If needed add the IAM Policy needed to the Management Role crated in section 2 buy adding a new policy section to the Management CloudFormation. 
+4. Choose **Replace current template** and **Upload a template file** and upload the updated main.yaml file. Click **Next** and continue through to deployment same as you did before.
+
+5. If needed add the IAM Policy needed to the Management Role crated in section 2 buy adding a new policy section to the Management CloudFormation. 
 
 
 

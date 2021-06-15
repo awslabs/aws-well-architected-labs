@@ -70,7 +70,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 {{% children  /%}}
 
 {{% notice tip %}}
-If you wish to deploy this in your AWS Management Account instead of a Member Account then there is a separate code version which can do this. You do not have to make the IAM Role and Policy made in the Management account in the next step. 
+TBC
 {{% /notice %}}
 
 {{< prev_next_button link_next_url="./1_create_static_resources_source/" button_next_text="Start Lab" first_step="true" />}}
