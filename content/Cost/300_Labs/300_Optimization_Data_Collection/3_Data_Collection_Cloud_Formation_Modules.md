@@ -2,8 +2,8 @@
 title: "Data Collection CloudFormation Modules"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 4
-pre: "<b>4. </b>"
+weight: 3
+pre: "<b>3. </b>"
 ---
 
 ### How to add
@@ -145,4 +145,4 @@ You have now created your lambda modules you may need access to your Management 
 
 
 
-{{< prev_next_button link_prev_url="../3_Data_Collection_Template/" link_next_url="../5_teardown/" />}}
+{{< prev_next_button link_prev_url="../2_Additional_Roles/" link_next_url="../4_Custom_Data_Collection_Module/" />}}

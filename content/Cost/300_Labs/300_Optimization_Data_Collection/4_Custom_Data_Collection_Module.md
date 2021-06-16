@@ -1,9 +1,9 @@
 ---
-title: "Data Collection Template (Optional)"
+title: "Custom Data Collection Module (Optional)"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 3
-pre: "<b>3. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 ### Example Module Explanation
@@ -67,4 +67,4 @@ NOTE: If you would like more information on AWS CloudFormation checkout there [w
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../2_Additional_Roles/" link_next_url="../4_Data_Collection_Cloud_Formation_Modules/" />}}
+{{< prev_next_button link_prev_url="../3_Data_Collection_Cloud_Formation_Modules/" link_next_url="../5_teardown/" />}}
