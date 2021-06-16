@@ -7,7 +7,7 @@ pre: "<b>4. </b>"
 ---
 
 ### Example Module Explanation
-You can use this template to build your own data collection modules or skip to the [next step]({{< ref "/Cost/300_Labs/300_Optimization_Data_Collection/4_Data_Collection_Cloud_Formation_Modules" >}}) to use the ones provided. In the next step we will be providing you with modules you can add to your main.yaml file. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your main.yaml file. 
+You can use this template to build your own data collection modules. In the next step we will be providing you with modules you can add to your main.yaml file. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your main.yaml file. 
 
 1.  **Download CloudFormation template** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml) This will be the foundation of the rest of this section and can be reused to build out the modules.
 

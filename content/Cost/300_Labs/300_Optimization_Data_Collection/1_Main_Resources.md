@@ -14,7 +14,7 @@ The first step is to create a set of reusable resources that can be passed into 
 {{%expand "Click here to continue with the CloudFormation  Setup" %}}
 
 
-1. **Download CloudFormation** by clicking [here](/Cost/300_Optimization_Data_Collection/Code/main.yaml). This will be the foundation of the rest of the lab and will will add to this to build out the modules.
+1. **Download CloudFormation** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/main.yaml) This will be the foundation of the rest of the lab and will will add to this to build out the modules.
   * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
 Or copy the below:
 

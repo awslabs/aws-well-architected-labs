@@ -29,7 +29,7 @@ When reviewing costs in AWS it important to have all the data you need in one pl
 
 ## Prerequisites
 - Access to the management AWS Account of the AWS Organization to deploy a cross account role
-- A sub account within the Organization
+- A sub account within the Organization - referred to as **Cost Optimization Account**
 - Completed the Account Setup Lab [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
 - Completed the Cost and Usage Analysis lab [200_4_Cost_and_Usage_Analysis]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
 - Completed the Cost Visualization Lab [200_5_Cost_Visualization]({{< ref "/Cost/200_Labs/200_5_Cost_Visualization" >}}) 

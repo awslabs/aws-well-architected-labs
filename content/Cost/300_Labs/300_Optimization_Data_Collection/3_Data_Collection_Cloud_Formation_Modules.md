@@ -6,21 +6,22 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-### How to add
-Now that you have you main file you can now start adding modules. The below is an example of adding the the module we made earlier. Further down there are pre made modules you can add in as well. 
+### Add Data Collector Modules
+Now that you have deployed your main.yaml file and your additional roles you can now start adding modules. Below there are pre made modules you can add to your main file. Each set will have the resources and parameters you need along with additional 
 
 
 
-1. Open your **main.yaml** file that you downloaded at the start and in the **Resource** section copy and past stacks from below.
+1. Open your **main.yaml** file that you downloaded at the start and in the **Resource** section copy and paste a module from below.
 
 2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
 
-3. click **Update** 
+3. Click **Update** 
+![Images/Update_CF.png](/Cost/300_Optimization_Data_Collection/Images/Update_CF.png)
 
 4. Choose **Replace current template** and **Upload a template file** and upload the updated main.yaml file. Click **Next** and continue through to deployment same as you did before.
+![Images/Update_replace.png](/Cost/300_Optimization_Data_Collection/Images/Update_replace.png) 
 
-5. If needed add the IAM Policy needed to the Management Role crated in section 2 buy adding a new policy section to the Management CloudFormation. 
-
+5. If need to add the IAM Policy to the IAM Roles created in section 2, then follow the same process. 
 
 
 ## Pre-made modules
@@ -44,7 +45,7 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
                 TimeoutInMinutes: 5
 
 
-* Management Policy needed:
+* Add to Management Role Policy:
 
         -  "ce:GetRightsizingRecommendation"
 {{% /expand%}}
@@ -57,8 +58,9 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS que which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an S3 bucket and is read into Athena by Glue.  
 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
+NOTE: ONLY WORKS IN US-WEST-1 ATM
 
-* Multi Account Policy needed:
+* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
 
 The available resources who's data can be collected are the following:
@@ -131,12 +133,28 @@ The available resources who's data can be collected are the following:
                     RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                     TaskQueuesUrl: !GetAtt 'DataStackMulti.Outputs.SQSUrl'
 
+## Testing
 
+Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
+1. The updated CloudFormation will crated a Nested stack. By clicking on your stack and selecting **Resources** find your lambda function and click the hyperlink.
+
+2. To test your lambda function click **Test**
+![Images/lambda_test_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/lambda_test_cf.png) 
+
+3. Enter an **Event name** of **Test**, click **Create**:
+
+![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
+
+4.	Click **Test**
+
+5.	The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
+
+6. By going to athena you will be able to see your data in the **Optimization_Data** Database
 {{% /expand%}}
 
 {{% notice tip %}}
-You have now created your lambda modules you may need access to your Management account to get this information. In the next step we will create this role
+If you would like to make your own modules then go to the next section to learn more on how they are made!
 {{% /notice %}}
 
 
