@@ -18,27 +18,21 @@ def main(account_id):
         for region in list_region:
             print(region)
             client = assume_role(account_id, "ec2", region)
-            
-            # volumes = client.volumes.filter()
-            # volume_ids = [v.id for v in volumes]
-
-            # for vol in volume_ids:
             try:
-                
-                response = client.describe_volumes() #VolumeIds=[vol]
-                data = response["Volumes"][0]
+               
+                paginator = client.get_paginator('describe_volumes')
+                response_iterator = paginator.paginate()
+                for response in response_iterator:
+                    data = response["Volumes"][0]
 
-                dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
+                    dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
 
-                f.write(dataJSONData)
-                f.write("\n")
+                    f.write(dataJSONData)
+                    f.write("\n")
                 print(f"{region} ebs data collected")
             except Exception as e:
                 print(e)
                 pass
-        
-# {"VolumeId": just print that }
-
 
 def assume_role(account_id, service, region):
     role_name = os.environ['ROLENAME']
