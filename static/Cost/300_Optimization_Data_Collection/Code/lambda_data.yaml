@@ -146,6 +146,7 @@ Resources:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
+      KmsMasterKeyId: "AES256"
   EventSourceMapping:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
