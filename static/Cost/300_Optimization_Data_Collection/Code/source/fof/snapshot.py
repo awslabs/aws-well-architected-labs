@@ -19,17 +19,14 @@ def main(account_id):
             print(region)
             client = assume_role(account_id, "ec2", region)
             try:
-                response = client.describe_snapshots(OwnerIds=["self"])
-
-                for image in response["Snapshots"]:
-                    
-                    dataJSONData = json.dumps(image, cls=DateTimeEncoder)  # indent=4,
-
-                    # jsondata = json.dumps(data) #converts datetime to be able to placed in json
-
-                    f.write(dataJSONData)
-                    f.write("\n")
-                    print(f"{region} ebs data collected")
+                paginator = client.get_paginator('describe_snapshots')
+                response_iterator = paginator.paginate(OwnerIds=["self"])
+                for response in response_iterator:
+                    for image in response["Snapshots"]:
+                        dataJSONData = json.dumps(image, cls=DateTimeEncoder)
+                        f.write(dataJSONData)
+                        f.write("\n")
+                print(f"{region} ebs data collected")
             except Exception as e:
                             print(e)
                             pass
@@ -40,7 +37,6 @@ def assume_role(account_id, service, region):
     sts_client = boto3.client('sts')
     
     try:
-        #region = sts_client.meta.region_name
         assumedRoleObject = sts_client.assume_role(
             RoleArn=role_arn,
             RoleSessionName="AssumeRoleRoot"
