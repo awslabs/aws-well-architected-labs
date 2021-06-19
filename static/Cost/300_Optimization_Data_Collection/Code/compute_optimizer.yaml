@@ -1,9 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
+Description: Retrieves AWS Compute Optimizer information from across an organization
 Parameters:
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
+    Default: Optimization_Data
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket to be created to hold data information
@@ -11,29 +12,29 @@ Parameters:
   RoleNameARN:
     Type: String
     Description: ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
-    Default: ''
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
+    Default: ComputeOptimizer
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
   CodeBucket:
       Type: String
       Description: S3 Bucket that exists and holds code
+      Default: aws-well-architected-labs-ireland
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: cloudformation/source.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/coc.zip
   Prefix:
     Type: String
     Description: Service which the data collector is looking at
-    AllowedValues:
-      - coc
-  ScheduleExpression:
-    Type: String
-    Description: Event Schedule
-    Default: "cron(30 12 L * ? *)"
+    Default: COC
+  # ScheduleExpression:
+  #   Type: String
+  #   Description: Event Schedule
+  #   Default: "cron(30 12 L * ? *)"
   GlueRoleARN:
     Type: String
 Outputs:
@@ -56,9 +57,6 @@ Outputs:
   SQSUrl:
     Description: TaskQueue URL the account collector lambda
     Value: !Ref TaskQueue
-  GlueCrawler:
-    Value:
-      Fn::Sub: "${CFDataName}Crawler"
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
@@ -201,27 +199,27 @@ Resources:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_lambda"
 
   
-  CloudWatchTrigger:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: Weekly Notification Event for lambda data
-      Name: !Sub "${CFDataName}-Weekly-Scheduler"
-      ScheduleExpression: !Ref ScheduleExpression
-      State: ENABLED
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - LambdaFunction
-              - Arn
-          Id: WeeklyTriggerForEBSUtilization
+  # CloudWatchTrigger:
+  #   Type: AWS::Events::Rule
+  #   Properties:
+  #     Description:  Notification Event for lambda data
+  #     Name: !Sub "${CFDataName}-Scheduler"
+  #     ScheduleExpression: !Ref ScheduleExpression
+  #     State: ENABLED
+  #     Targets:
+  #       - Arn:
+  #           Fn::GetAtt:
+  #             - LambdaFunction
+  #             - Arn
+  #         Id: TriggerForEBSUtilization
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: lambda:InvokeFunction
-      Principal: events.amazonaws.com
+      Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt CloudWatchTrigger.Arn
+      SourceArn: !GetAtt TaskQueue.Arn
   TaskQueue: 
     Type: AWS::SQS::Queue
     Properties: 
