@@ -25,19 +25,15 @@ Now that you have deployed your main.yaml file and your additional roles you can
 
 6. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
 
-        - PolicyName: "Management-Account-permissions"
+        - PolicyName: "Example policy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "ce:GetRightsizingRecommendation"
-                  - "organizations:ListAccounts"
-                  - "organizations:ListCreateAccountStatus"
-                  - "organizations:DescribeOrganization"
-                  - "organizations:ListTagsForResource"
-                  - ***ADD IN HERE***
+                  - <required actions>
                 Resource: "*"
+
 
 
 
@@ -103,24 +99,6 @@ The available resources who's data can be collected are the following:
        
         - "trustedadvisor:*"
 
-* ecs
-
-        -  "ecs:ListAttributes",
-        -  "ecs:DescribeTaskSets",
-        -  "ecs:DescribeTaskDefinition",
-        -  "ecs:DescribeClusters",
-        -  "ecs:ListServices",
-        -  "ecs:ListAccountSettings",
-        -  "ecs:DescribeCapacityProviders",
-        -  "ecs:ListTagsForResource",
-        -  "ecs:ListTasks",
-        -  "ecs:ListTaskDefinitionFamilies",
-        -  "ecs:DescribeServices",
-        -  "ecs:ListContainerInstances",
-        -  "ecs:DescribeContainerInstances",
-        -  "ecs:DescribeTasks",
-        -  "ecs:ListTaskDefinitions",
-        -  "ecs:ListClusters"
 
 * CloudFormation to add:
 
@@ -139,7 +117,7 @@ The available resources who's data can be collected are the following:
                 TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
                 TimeoutInMinutes: 2
                 Parameters:
-                    DestinationBucket: !GetAtt S3Bucket
+                    DestinationBucket: !Ref S3Bucket
                     DestinationBucketARN: !GetAtt S3Bucket.Arn 
                     Prefix: "ami" # example 
                     CFDataName: "AMI" # example 
@@ -152,7 +130,7 @@ The available resources who's data can be collected are the following:
                 TimeoutInMinutes: 2
                 Parameters:
                     RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                    TaskQueuesUrl: !GetAtt 'DataStackMulti.Outputs.SQSUrl'
+                    TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
 
 {{% notice note %}}
@@ -173,13 +151,11 @@ The Compute Optimizer Service ** Currently this data only lasts*** and does not 
                 COCDataStack:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Compute_Optimizer.yaml"
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
                     TimeoutInMinutes: 2
                     Parameters:
                         DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                        DestinationBucket: !GetAtt S3Bucket
-                        CodeBucket: !Ref CodeBucket
-                        CodeKey: "cloudformation/COC.py.zip"
+                        DestinationBucket: !Ref S3Bucket
                         GlueRoleARN: !GetAtt GlueRole.Arn
                         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                 AccountCollector:
@@ -189,7 +165,8 @@ The Compute Optimizer Service ** Currently this data only lasts*** and does not 
                     TimeoutInMinutes: 2
                     Parameters:
                         RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                        TaskQueuesUrl: !GetAtt 'COCDataStack.Outputs.SQSUrl'
+                        TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
+                        
 
 * Add to Management Role Policy:
 
@@ -213,6 +190,77 @@ The Compute Optimizer Service ** Currently this data only lasts*** and does not 
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
 {{% /notice %}}
+{{% /expand%}}
+
+
+{{%expand "ECS Chargeback Data" %}}
+
+## ECS Chargeback
+
+* CloudFormation to add:
+
+                ECSStack:
+                    Type: AWS::CloudFormation::Stack
+                    Properties:
+                    TemplateURL: !Ref EcsDataFileURL
+                    TimeoutInMinutes: 2
+                    Parameters:
+                        DestinationBucket: !Ref S3Bucket
+                        GlueRoleArn: !GetAtt GlueRole.Arn 
+                        DatabaseName: !Ref DatabaseName
+                        ECSRoleName: !Ref ECSRoleName
+                AccountCollector:
+                    Type: AWS::CloudFormation::Stack
+                    Properties:
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                    TimeoutInMinutes: 2
+                    Parameters:
+                        RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                        TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
+
+* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+
+        - PolicyName: !Sub "ECS Read Access"
+                PolicyDocument:
+                    Version: "2012-10-17"
+                    Statement:
+                    - Effect: "Allow"
+                        Action: 
+                        - "ecs:ListAttributes"
+                        - "ecs:DescribeTaskSets"
+                        - "ecs:DescribeTaskDefinition"
+                        - "ecs:DescribeClusters"
+                        - "ecs:ListServices"
+                        - "ecs:ListAccountSettings"
+                        - "ecs:DescribeCapacityProviders"
+                        - "ecs:ListTagsForResource"
+                        - "ecs:ListTasks"
+                        - "ecs:ListTaskDefinitionFamilies"
+                        - "ecs:DescribeServices"
+                        - "ecs:ListContainerInstances"
+                        - "ecs:DescribeContainerInstances"
+                        - "ecs:DescribeTasks"
+                        - "ecs:ListTaskDefinitions"
+                        - "ecs:ListClusters"
+                        Resource: "*"
+
+                "ecs:ListAttributes"
+                "ecs:DescribeTaskSets"
+                "ecs:DescribeTaskDefinition"
+                "ecs:DescribeClusters"
+                "ecs:ListServices"
+                "ecs:ListAccountSettings"
+                "ecs:DescribeCapacityProviders"
+                "ecs:ListTagsForResource"
+                "ecs:ListTasks"
+                "ecs:ListTaskDefinitionFamilies"
+                "ecs:DescribeServices"
+                "ecs:ListContainerInstances"
+                "ecs:DescribeContainerInstances"
+                "ecs:DescribeTasks"
+                "ecs:ListTaskDefinitions"
+                "ecs:ListClusters"
+
 {{% /expand%}}
 
 

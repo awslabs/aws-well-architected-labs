@@ -16,20 +16,20 @@ June 2021
 If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-When reviewing costs in AWS it important to have all the data you need in one place. Following on from the Cost and Usage Report setup, which you can see in this [Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) this lab will give you a template of how you can pull your own sets of data as well as some pre made modules to help collect data for optimization and chargeback. Using either CloudFormation or Terraform the modules will follow the structure of using an AWS Lambda function to extract the data, then this will then be place into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it. 
+When reviewing costs in AWS it important to have all the data you need in one place. Following on from the Cost and Usage Report setup, which you can see in the [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) lab,  this lab will give you a template of how you can pull your own sets of data as well as some pre made modules to help collect data for optimization and chargeback. Using either CloudFormation or Terraform the modules will follow the structure of using an AWS Lambda function to extract the data, then this will then be place into Amazon S3. From there, Amazon Athena will be able to read this data using a glue crawler to produce a table that can be utilise and even connected to your AWS Cost & Usage Report to enrich it. 
 
 ## Architecture 
 
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
 
 ## Goals
-- Deploy base resources that will be reused in multiple modules
+- Deploy resources that will be reused in multiple modules
 - Deploy modules to collect data 
 
 
 ## Prerequisites
-- Access to the management AWS Account of the AWS Organization to deploy a cross account role
-- A sub account within the Organization - referred to as **Cost Optimization Account**
+- Access to the Management AWS Account of the AWS Organization to deploy Cloudformation
+- Access to a sub account within the Organization - referred to as **Cost Optimization Account**
 - Completed the Account Setup Lab [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
 - Completed the Cost and Usage Analysis lab [200_4_Cost_and_Usage_Analysis]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
 - Completed the Cost Visualization Lab [200_5_Cost_Visualization]({{< ref "/Cost/200_Labs/200_5_Cost_Visualization" >}}) 
@@ -41,9 +41,7 @@ We suggest you do not deploy resources into your management account and instead 
 
 Be able to create the below in the management account:
 - IAM role and policy
-
-Be able to create the below in the all accounts you wish to collect data from:
-- IAM role and policy
+- Deploy CloudFormation
 
 Be able to create the below in a sub account where your CUR data is accessible:
 - Deploy CloudFormation
