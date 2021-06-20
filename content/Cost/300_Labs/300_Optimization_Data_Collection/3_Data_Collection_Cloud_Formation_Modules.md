@@ -202,13 +202,12 @@ The AccountCollector module is reusable and only needs to be added once but mult
                 ECSStack:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: !Ref EcsDataFileURL
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
                     TimeoutInMinutes: 2
                     Parameters:
                         DestinationBucket: !Ref S3Bucket
                         GlueRoleArn: !GetAtt GlueRole.Arn 
-                        DatabaseName: !Ref DatabaseName
-                        ECSRoleName: !Ref ECSRoleName
+                        MultiAccountRoleName: !Ref MultiAccountRoleName
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
