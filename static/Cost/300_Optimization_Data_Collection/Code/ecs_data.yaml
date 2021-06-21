@@ -12,7 +12,7 @@ Parameters:
   DatabaseName:
     Type: String
     Description: Name of the Athena database to hold lambada information
-    Default: Optimization_Data
+    Default: optimization_data
   GlueRoleArn:
     Type: String
     Description: ARN of the IAM role deployed to use for glue.

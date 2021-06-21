@@ -89,8 +89,7 @@ The available resources who's data can be collected are the following:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "imagebuilder:ListImages"
-                  - "imagebuilder:GetImage"
+                  - "ec2:DescribeImages"
                 Resource: "*"
 
  * ebs
