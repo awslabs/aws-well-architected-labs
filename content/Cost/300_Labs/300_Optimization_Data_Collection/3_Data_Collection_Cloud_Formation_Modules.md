@@ -83,21 +83,53 @@ NOTE: ONLY WORKS IN US-WEST-1 ATM
 The available resources who's data can be collected are the following:
  * ami
     
-        -  "imagebuilder:ListImages"
-        -  "imagebuilder:GetImage"
+        - PolicyName: "ImageReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "imagebuilder:ListImages"
+                  - "imagebuilder:GetImage"
+                Resource: "*"
 
  * ebs
 
-        -  "ec2:DescribeVolumeStatus"
-        -  "ec2:DescribeVolumes"
+        
+        - PolicyName: "VolumeReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                -  "ec2:DescribeVolumeStatus"
+                -  "ec2:DescribeVolumes"
+                Resource: "*"
 
  * snapshot
 
-        - "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+        - PolicyName: "SnapshotsReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                - "ec2:DescribeSnapshots"
+                - "ec2:DescribeSnapshotAttribute"
+                Resource: "*"
+        
+
 
 * ta
-       
-        - "trustedadvisor:*"
+       - PolicyName: "TAPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                - "trustedadvisor:*"
+                Resource: "*"
+        
 
 
 * CloudFormation to add:
@@ -170,22 +202,29 @@ The Compute Optimizer Service ** Currently this data only lasts*** and does not 
 
 * Add to Management Role Policy:
 
-                - "compute-optimizer:*"
-                - "EC2:DescribeInstances"
-                - "cloudwatch:GetMetricData"
-                - "autoscaling:DescribeAutoScalingGroups"
-                - "compute-optimizer:UpdateEnrollmentStatus"
-                - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                - "compute-optimizer:GetEC2InstanceRecommendations"
-                - "compute-optimizer:GetEnrollmentStatus"
-                - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                - "compute-optimizer:GetRecommendationSummaries"
-                - "organizations:ListAccounts"
-                - "organizations:DescribeOrganization"
-                - "organizations:DescribeAccount"
-                - "lambda:ListFunctions"
-                - "lambda:ListProvisionedConcurrencyConfigs"
-                - "EC2:DescribeVolumes"     
+                - PolicyName: !Sub "Compute Optimizer Policy"
+                PolicyDocument:
+                    Version: "2012-10-17"
+                    Statement:
+                    - Effect: "Allow"
+                        Action: 
+                        - "compute-optimizer:*"
+                        - "EC2:DescribeInstances"
+                        - "cloudwatch:GetMetricData"
+                        - "autoscaling:DescribeAutoScalingGroups"
+                        - "compute-optimizer:UpdateEnrollmentStatus"
+                        - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                        - "compute-optimizer:GetEC2InstanceRecommendations"
+                        - "compute-optimizer:GetEnrollmentStatus"
+                        - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
+                        - "compute-optimizer:GetRecommendationSummaries"
+                        - "organizations:ListAccounts"
+                        - "organizations:DescribeOrganization"
+                        - "organizations:DescribeAccount"
+                        - "lambda:ListFunctions"
+                        - "lambda:ListProvisionedConcurrencyConfigs"
+                        - "EC2:DescribeVolumes" 
+                        Resource: "*"    
 
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
@@ -219,12 +258,12 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 * Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
-        - PolicyName: !Sub "ECS Read Access"
+        - PolicyName: "ECSReadAccess"
                 PolicyDocument:
                     Version: "2012-10-17"
                     Statement:
                     - Effect: "Allow"
-                        Action: 
+                    Action: 
                         - "ecs:ListAttributes"
                         - "ecs:DescribeTaskSets"
                         - "ecs:DescribeTaskDefinition"
@@ -241,24 +280,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
                         - "ecs:DescribeTasks"
                         - "ecs:ListTaskDefinitions"
                         - "ecs:ListClusters"
-                        Resource: "*"
-
-                "ecs:ListAttributes"
-                "ecs:DescribeTaskSets"
-                "ecs:DescribeTaskDefinition"
-                "ecs:DescribeClusters"
-                "ecs:ListServices"
-                "ecs:ListAccountSettings"
-                "ecs:DescribeCapacityProviders"
-                "ecs:ListTagsForResource"
-                "ecs:ListTasks"
-                "ecs:ListTaskDefinitionFamilies"
-                "ecs:DescribeServices"
-                "ecs:ListContainerInstances"
-                "ecs:DescribeContainerInstances"
-                "ecs:DescribeTasks"
-                "ecs:ListTaskDefinitions"
-                "ecs:ListClusters"
+                    Resource: "*"
 
 {{% /expand%}}
 
