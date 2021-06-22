@@ -3,7 +3,7 @@ title: "Check for non-compliant resources"
 date: 2021-05-20T11:16:08-04:00
 chapter: false
 weight: 3
-pre: "<b>1. </b>"
+pre: "<b>3. </b>"
 ---
 
 Launch an EC2 with compliant tags and one with noncompliant tags

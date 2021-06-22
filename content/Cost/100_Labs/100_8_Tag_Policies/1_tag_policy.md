@@ -16,6 +16,8 @@ AWS Organizations - When signed in to the organization's master account, you use
 
 AWS Resource Groups - When signed in to an account in your organization, you use Resource Groups to find noncompliant tags on resources in the account. You can correct noncompliant tags in the AWS service where you created the resource.
 
+There is a optional python script method to setup basic tag polices and SCPs which can be found [here.](https://github.com/awslabs/tag-policy-setup)
+
 ### Create a Tag Policy
 We will create a policy containing two tagging rules. Both tag rules, environment and business unit, will require specific values and syntax in order to be compliant.
 
