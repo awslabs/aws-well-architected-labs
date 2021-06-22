@@ -32,9 +32,8 @@ Parameters:
     AllowedValues:
       - ami
       - ebs
-      - snapshots
+      - snapshot
       - ta
-      - ecs
   GlueRoleARN:
     Type: String
 Outputs:

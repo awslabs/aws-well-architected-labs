@@ -11,7 +11,6 @@ import ami
 import ebs
 import snapshot
 import ta
-import ecs
 
 def lambda_handler(event, context):
     # Read from accounts collector?
@@ -31,8 +30,6 @@ def lambda_handler(event, context):
                 snapshot.main(account_id)
             elif DestinationPrefix == 'ta':
                 ta.main(account_id)
-            elif DestinationPrefix == 'ecs':
-                ecs.main(account_id)
             else:
                 print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
             print(f"{DestinationPrefix} respose gathered")
@@ -90,7 +87,6 @@ def assume_role(account_id, service, region):
 
 def start_crawler():
     glue_client = boto3.client("glue")
-    os.environ["ROLE_ARN"]
     try:
         glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
     except Exception as e:
