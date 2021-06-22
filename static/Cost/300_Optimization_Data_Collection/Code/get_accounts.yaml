@@ -7,7 +7,14 @@ Parameters:
   TaskQueuesUrl:
     Type: String
     Description: the Ques URL that will get the accounts messages, split by comers
+  Suffix:
+    Type: String
+    Description: If this module needs to be made more than one a Suffix can be added
     Default: ''
+  Schedule:
+    Type: String
+    Description: Cron job to trigger the lambda using cloudwatch event
+    Default: "cron(30 12 L * ? *)"
 Outputs:
   LambdaFunctionName:
     Value:
@@ -22,7 +29,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: AWS-Organization-Account-Collector-Role
+      RoleName: !Sub "AWS-Organization-Account-Collector-Role${Suffix}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -69,7 +76,7 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: AWS-Orgonisation-Account-Collector
+      FunctionName: !Sub "AWS-Organization-Account-Collector${Suffix}"
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
@@ -154,8 +161,8 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Monthly
-      Name: "Monthly-Scheduler-For-Accounts"
-      ScheduleExpression: "cron(30 12 L * ? *)"
+      Name: !Sub "Monthly-Scheduler-For-Accounts${Suffix}"
+      ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
         - Arn:
