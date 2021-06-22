@@ -64,6 +64,8 @@ If you already have a role which can read into your accounts then please skip th
 9. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
+10. This role will now be deployed to all linked accounts. If you wish to also access data in your management account. Deploy the same CloudFormation stack as a normal stack in your management account as you did in the **Role for Management Account** step above. 
+
 {{% notice note %}}
 You will need to keep your optimisation_read_only_role.yaml file to add permissions to later so please store somewhere safely
 {{% /notice %}}
