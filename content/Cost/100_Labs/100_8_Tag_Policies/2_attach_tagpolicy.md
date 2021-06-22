@@ -3,7 +3,7 @@ title: "Attach the Tag Policy to an account"
 date: 2021-05-20T11:16:08-04:00
 chapter: false
 weight: 2
-pre: "<b>1. </b>"
+pre: "<b>2. </b>"
 ---
 
 ### Attach Tag Policy to an account

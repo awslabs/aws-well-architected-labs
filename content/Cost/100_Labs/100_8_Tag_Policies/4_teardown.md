@@ -3,7 +3,7 @@ title: "Teardown"
 date: 2021-05-20T11:16:08-04:00
 chapter: false
 weight: 4
-pre: "<b>1. </b>"
+pre: "<b>4. </b>"
 ---
 
 The following resources were created in this lab:
