@@ -8,7 +8,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "OPTICS-Assume-Role-Management-Account"
+      RoleName: "Optimization-data-Multi-Account-Role"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
