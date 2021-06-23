@@ -51,8 +51,8 @@ def lambda_handler(event, context):
                                     for service in services["services"]:
                                         data = {
                                             "cluster": cluster.split("/")[1],
-                                            "services": i.split("/")[2],
-                                            "serviceName": service.get("serviceName"),
+                                            "service": service.get("serviceName"),
+                                            "servicesARN": i, #.split("/")[2]
                                             "tags": service.get("tags"),
                                             "account_id":account_id
 

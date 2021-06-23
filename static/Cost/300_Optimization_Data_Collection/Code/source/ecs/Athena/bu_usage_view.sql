@@ -13,7 +13,7 @@ SELECT
 , "cur"."year"
 , "cluster"
 , "services"
-, "servicename"
+, "servicearn"
 , "account_id"
 , "value"
 FROM
@@ -39,7 +39,7 @@ LEFT JOIN (
    SELECT
      "cluster"
    , "services"
-   , "servicename"
+   , "servicearn"
    , "value"
    , "year"
    , "month"
@@ -47,4 +47,4 @@ LEFT JOIN (
    FROM
      cluster_metadata_view
 )  clusters_data ON ((("clusters_data"."account_id" = "cur"."line_item_usage_account_id") AND (("clusters_data"."services" = "cur"."resource_tags_aws_ecs_service_name") AND ("clusters_data"."year" = "cur"."year"))) AND ("clusters_data"."month" = "cur"."month")))
-GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "cur"."month", "cur"."year", "cluster", "services", "servicename", "value", "task", "account_id"
+GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "cur"."month", "cur"."year", "cluster", "services", "servicearn", "value", "task", "account_id"
