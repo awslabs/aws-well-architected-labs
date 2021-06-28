@@ -1,5 +1,5 @@
 ---
-title: "Level 100: EC2 Resource Optimization"
+title: "Level 100: Rightsizing Recommendations"
 #menutitle: "Lab #3"
 date: 2021-05-18T11:16:08-04:00
 chapter: false
@@ -16,15 +16,15 @@ June 2021
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com.
 
 ## Introduction
-This hands-on lab will give you an overview on **AWS Resource Optimization** and how to prioritize your EC2 Right Sizing efforts.
+This hands-on lab will give you an overview on **Rightsizing recommendations** and how to prioritize your EC2 rightsizing efforts.
 
 ## Goals
-- Enable and use AWS Resource Optimization to get EC2 Right Sizing recommendations
-- Learn how to filter AWS Resource Optimization report and focus only on the less complex high saving cases
+- Enable and use Rightsizing recommendations
+- Learn how to filter Rightsizing recommendations report and focus only on the less complex high saving cases
 
 ## Prerequisites
 - Have at least one Amazon EC2 instance running
-- Enable [AWS Resource Optimization](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html#rr-getting-started) at *AWS Cost Explorer > Recommendations* (no additional cost)
+- Enable [Rightsizing recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html#rr-getting-started) at *AWS Cost Explorer > Rightsizing recommendations* (no additional cost)
 
 ## Permissions required
 - A minimum of read-only access to the AWS Billing Console

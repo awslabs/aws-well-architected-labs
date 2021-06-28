@@ -1,5 +1,5 @@
 ---
-title: "Other Right Sizing tools"
+title: "Other Rightsizing Tools"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 4
@@ -9,7 +9,7 @@ pre: "<b>4. </b>"
 #### Other AWS Right Sizing tools
 
 
-Launched during reInvent 2019, [AWS Compute Optimizer](http://aws.amazon.com/compute-optimizer/) is another tool that can help identify EC2 right sizing opportunities. AWS Compute Optimizer recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. Over-provisioning resources can lead to unnecessary infrastructure cost and under-provisioning resources can lead to poor application performance. Compute Optimizer helps you choose the optimal Amazon EC2 instance types, including those that are part of an Amazon EC2 Auto Scaling group, as well as optimal Amazon EBS volume configurations, based on your utilization data.
+Launched during re:Invent 2019, [AWS Compute Optimizer](http://aws.amazon.com/compute-optimizer/) is another tool that can help identify EC2 right sizing opportunities. AWS Compute Optimizer recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. Over-provisioning resources can lead to unnecessary infrastructure cost and under-provisioning resources can lead to poor application performance. Compute Optimizer helps you choose the optimal Amazon EC2 instance types, including those that are part of an Amazon EC2 Auto Scaling group, as well as optimal Amazon EBS volume configurations, based on your utilization data.
 
 Compute Optimizer is available to you at no additional charge. To get started, you can opt in to the service in the AWS Compute Optimizer Console.
 

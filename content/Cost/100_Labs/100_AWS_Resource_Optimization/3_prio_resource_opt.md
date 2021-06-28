@@ -1,19 +1,19 @@
 ---
-title: "Prioritizing Amazon EC2 Resource Optimization recommendations"
+title: "Prioritizing Rightsizing Recommendations"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
 ---
 
-Now that you understand how Amazon EC2 Resource Optimization works let's run an example and find how to prioritize quick wins.
+Now that you understand how AWS Cost Explorer Rightsizing recommendations work let's run an example and find how to prioritize quick wins.
 
-#### 1. Download the **Amazon EC2 Resource Optimization** report
+#### 1. Download the **Rightsizing recommendations** report
 ![Images/ResourceOpt09.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt09.png?classes=lab_picture_small)
 
-If you don’t have any Amazon EC2 Resource Optimization recommendation use the file below as a reference.
+If you don’t have any Rightsizing recommendations, use the file below as a reference.
 
-[Sample Amazon EC2 Resource Optimization file (.csv)](/Cost/100_AWS_Resource_Optimization/Code/ENT206-ec2-rightsizing-recommendations.csv)
+[Sample Rightsizing recommendations file (.csv)](/Cost/100_AWS_Resource_Optimization/Code/ENT206-ec2-rightsizing-recommendations.csv)
 
 #### 2. Let’s filter out instances that are either too small or were only running for a few hours since the analysis was made
 
@@ -91,7 +91,7 @@ This will select underutilized resources from the current, most modern generatio
 
 ![Images/ResourceOpt14.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt14.png?classes=lab_picture_small)
 
-Also, do not forget to check the other recommended instance types (columns AB to AK on the provided template); Amazon EC2 Resource Optimization will recommend up to 3 instances for each resource moving from a more conservative recommendation (the first recommendation) to a more aggressive and higher savings recommendation (second and third recommendations).
+Also, do not forget to check the other recommended instance types (columns AB to AK on the provided template); Rightsizing recommendations will recommend up to 3 instances for each resource moving from a more conservative recommendation (the first recommendation) to a more aggressive and higher savings recommendation (second and third recommendations).
 
 If you are using the Right Sizing CSV file provided in this lab exercise, you will notice that we filtered down from originally **2,534 recommendations to 22** with **$4,879.56 per month in potential savings**.
 
