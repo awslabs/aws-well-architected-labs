@@ -35,8 +35,8 @@ def main(account_id):
 
                     for resource in flaggedResources.get("flaggedResources"):
                         meta_result = dict(zip(meta, resource["metadata"]))
-
-                f.write(check_result)
+                dataJSONData = json.dumps(check_result['result'], cls=DateTimeEncoder)
+                f.write(dataJSONData)
                 f.write("\n")
 
 def assume_role(account_id, service, region):

@@ -127,6 +127,8 @@ The available resources who's data can be collected are the following:
               - Effect: "Allow"
                 Action:
                 - "trustedadvisor:*"
+                - "support:DescribeTrustedAdvisorChecks"
+                - "support:DescribeTrustedAdvisorCheckResult"
                 Resource: "*"
         
 
@@ -145,23 +147,23 @@ The available resources who's data can be collected are the following:
             DataStackMulti:
                 Type: AWS::CloudFormation::Stack
                 Properties:
-                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-                TimeoutInMinutes: 2
-                Parameters:
-                    DestinationBucket: !Ref S3Bucket
-                    DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                    Prefix: "ami" # example 
-                    CFDataName: "AMI" # example 
-                    GlueRoleARN: !GetAtt GlueRole.Arn
-                    MultiAccountRoleName: !Ref MultiAccountRoleName
+                  TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                  TimeoutInMinutes: 2
+                  Parameters:
+                      DestinationBucket: !Ref S3Bucket
+                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                      Prefix: "ami" # example 
+                      CFDataName: "AMI" # example 
+                      GlueRoleARN: !GetAtt GlueRole.Arn
+                      MultiAccountRoleName: !Ref MultiAccountRoleName
             AccountCollector:
                 Type: AWS::CloudFormation::Stack
                 Properties:
-                TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                TimeoutInMinutes: 2
-                Parameters:
-                    RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                    TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+                  TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                  TimeoutInMinutes: 2
+                  Parameters:
+                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
 
 {{% notice note %}}
@@ -175,28 +177,28 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## Compute Optimizer Collector
 
-The Compute Optimizer Service ** Currently this data only lasts*** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
+The Compute Optimizer Service **Currently this data only lasts** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
 
 * CloudFormation to add:
 
                 COCDataStack:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
-                    TimeoutInMinutes: 2
-                    Parameters:
-                        DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                        DestinationBucket: !Ref S3Bucket
-                        GlueRoleARN: !GetAtt GlueRole.Arn
-                        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+                      TimeoutInMinutes: 2
+                      Parameters:
+                          DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                          DestinationBucket: !Ref S3Bucket
+                          GlueRoleARN: !GetAtt GlueRole.Arn
+                          RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                    TimeoutInMinutes: 2
-                    Parameters:
-                        RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                        TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
+                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                      TimeoutInMinutes: 2
+                      Parameters:
+                          RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                          TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
                         
 
 * Add to Management Role Policy:
@@ -240,20 +242,20 @@ The AccountCollector module is reusable and only needs to be added once but mult
                 ECSStack:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
-                    TimeoutInMinutes: 2
-                    Parameters:
-                        DestinationBucket: !Ref S3Bucket
-                        GlueRoleArn: !GetAtt GlueRole.Arn 
-                        MultiAccountRoleName: !Ref MultiAccountRoleName
+                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+                      TimeoutInMinutes: 2
+                      Parameters:
+                          DestinationBucket: !Ref S3Bucket
+                          GlueRoleArn: !GetAtt GlueRole.Arn 
+                          MultiAccountRoleName: !Ref MultiAccountRoleName
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
-                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                    TimeoutInMinutes: 2
-                    Parameters:
-                        RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                        TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
+                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                      TimeoutInMinutes: 2
+                      Parameters:
+                          RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                          TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
 
 * Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
