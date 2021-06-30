@@ -52,7 +52,7 @@ SELECT
     WHEN line_item_line_item_type = 'SavingsPlanNegation' THEN 0
     WHEN line_item_line_item_type = 'SavingsPlanUpfrontFee' THEN 0
     WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
-    ELSE ine_item_unblended_cost 
+    ELSE line_item_unblended_cost 
   END) AS sum_amortized_cost
 FROM 
   ${table_name} 
