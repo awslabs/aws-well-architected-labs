@@ -14,9 +14,9 @@ The first step is to create a set of reusable resources that can be passed into 
 {{%expand "Click here to continue with the CloudFormation  Setup" %}}
 
 
-1. **Download CloudFormation** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/main.yaml) This will be the foundation of the rest of the lab and will will add to this to build out the modules.
-  * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
-Or copy the below:
+1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/main.yaml) if you are deploying to your linked account (recommended)
+
+Or if you wish to keep this on your local machine please copy the below and deploy how you would normally:
 
         AWSTemplateFormatVersion: '2010-09-09'
         Description: Main CF template that builds shared resources and other stacks
@@ -82,23 +82,16 @@ Or copy the below:
                 - S3Bucket
                 - Arn 
 
+2. Click **Next**.
+![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
-2. Login via SSO in your Cost Optimization account and search for **Cloud Formation**.
-![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
-
-3. On the right side of the screen select **Create stack** and choose **With new resources (standard)**
-![Images/create_stack.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_stack.png)
-
-4. Choose **Template is ready** and **Upload a template file** and upload the main.yaml file you downloaded from above. Click **Next**.
-![Images/upload_template.png](/Cost/300_Organization_Data_CUR_Connection/Images/upload_template.png)
-
-5. Call the stack **OptimizationDataCollectionStack** and fill in the parameters with the information described. The Role mentioned will be deployed in the next step. Click **Next** and **Next again**
+3. Call the stack **OptimizationDataCollectionStack** and fill in the parameters with the information described. The Role mentioned will be deployed in the next step. Click **Next** and **Next again**
 ![Images/Main_CF_Parameters.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Parameters.png)
 
-6. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+4. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-7. Wait till your CloudFormation has status as **CREATE_COMPLETE**.
+5. Wait till your CloudFormation has status as **CREATE_COMPLETE**.
 ![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
    
 {{% notice note %}}

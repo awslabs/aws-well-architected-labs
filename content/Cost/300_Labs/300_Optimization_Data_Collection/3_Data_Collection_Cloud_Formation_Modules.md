@@ -11,19 +11,26 @@ Now that you have deployed your main.yaml file and your additional roles you can
 
 
 
-1. Open your **main.yaml** file that you downloaded at the start and in the **Resource** section copy and paste a module from the pre-made module section.
+1. Login via SSO in your Cost Optimization account and search for **Cloud Formation**.
+![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
 2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
 
 3. Click **Update** 
 ![Images/Update_CF.png](/Cost/300_Optimization_Data_Collection/Images/Update_CF.png)
 
-4. Choose **Replace current template** and **Upload a template file** and upload the updated main.yaml file. Click **Next** and continue through to deployment same as you did before.
-![Images/Update_replace.png](/Cost/300_Optimization_Data_Collection/Images/Update_replace.png) 
+4. Choose **Edit template in designer** then click **View in Designer**
+![Images/update_in_designer.png](/Cost/300_Optimization_Data_Collection/Images/update_in_designer.png) 
 
-5. To add the IAM Policy rule to the IAM Roles created in section 2, then go to your management account.
+5. In the template box copy your module code and past at the bottom of the template. Then **Click** the upload button on the top left hand corner. 
+![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
 
-6. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
+6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
+![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
+
+7. To add the IAM Policy rule to the IAM Roles created in section 2, then go to your management account.
+
+8. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
 
         - PolicyName: "Example policy"
           PolicyDocument:
@@ -37,7 +44,7 @@ Now that you have deployed your main.yaml file and your additional roles you can
 
 
 
-7. In the console follow the same process as above to update your cloudformation stack.
+9. In the console follow the same process as above to update your cloudformation stack.
 
 
 ## Pre-made modules
