@@ -95,12 +95,9 @@ Or if you wish to keep this on your local machine please copy the below and depl
 ![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
    
 {{% notice note %}}
-You will need the main.yaml file later in the lab so store safely. 
+We will edit this template in designer in the AWS Console. If you wish to keep a version locally then download and manage how you would normally. 
 {{% /notice %}}
 
-{{% notice note %}}
-You have successfully setup the main CloudFormation specific steps. You can deploy through the CLI using the below command or through the [console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html) aws cloudformation crate-stack --stack-name OptimizationDataCollectionStack --template-body file://main.yaml --capabilities CAPABILITY_NAMED_IAM --parameters file://parameter.json
-{{% /notice %}}
 
 
 {{% /expand%}}
