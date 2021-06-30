@@ -14,7 +14,7 @@ The first step is to create a set of reusable resources that can be passed into 
 {{%expand "Click here to continue with the CloudFormation  Setup" %}}
 
 
-1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/main.yaml) if you are deploying to your linked account (recommended)
+1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your linked account (recommended)
 
 Or if you wish to keep this on your local machine please copy the below and deploy how you would normally:
 

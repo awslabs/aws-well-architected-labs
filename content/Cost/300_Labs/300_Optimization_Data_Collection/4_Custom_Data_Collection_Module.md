@@ -7,11 +7,11 @@ pre: "<b>4. </b>"
 ---
 
 ### Example Module Explanation
-You can use this template to build your own data collection modules. In the next step we will be providing you with modules you can add to your main.yaml file. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your main.yaml file. 
+You can use this template to build your own data collection modules. In the next step we will be providing you with modules you can add to your template. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your template. 
 
 1.  **Download CloudFormation template** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml) This will be the foundation of the rest of this section and can be reused to build out the modules.
 
-2. The first section we have **Parameters** which can be passed in from the main template. These are good for roles you will be using for reusable resources like the Amazon S3 Bucket or IAM Roles. There are also **Outputs** which  declares output values that you can import into other stacks in the main file. 
+2. The first section we have **Parameters** which can be passed in from the main template. These are good for roles you will be using for reusable resources like the Amazon S3 Bucket or IAM Roles. There are also **Outputs** which  declares output values that you can import into other stacks in the template. 
 
 
 3. To collect the data we have a lambda function which uses a role to have permissions for the resources its going to be utilizing.  By default the role can currently: 
@@ -26,7 +26,7 @@ These are all needed actions for the basic lambda. If you need to add more to ac
 * Uploading the file into a partitioned folder in S3 (based on year and month)
 * Starting the crawler to create/update the Athena Table
 
-5. There is a Glue Crawler which is the one we triggered in the Lambda which reads from your S3 bucket and creates an Athena table based on the data. It used the Glue Role we made in the main file.
+5. There is a Glue Crawler which is the one we triggered in the Lambda which reads from your S3 bucket and creates an Athena table based on the data. It used the Glue Role we made in the template.
 
 6. To trigger the Lambda we use a Cloudwatch event which runs on a pre-defined schedule. You can find more options for scheduling [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
 
@@ -34,9 +34,9 @@ These are all needed actions for the basic lambda. If you need to add more to ac
 
 ## Using the module in your Main CloudFormation Template
 
-Once you have your module created you can add it to your main CloudFormation Template from the first stage.  
+Once you have your module created you can add it to your CloudFormation Template from the first stage.  
 
-1. Save this file in your own S3 bucket which will be referred to as your **Code Bucket** in your Cost Optimization account where your main file is deployed.  
+1. Save this file in your own S3 bucket which will be referred to as your **Code Bucket** in your Cost Optimization account where your template is deployed.  
 
 2. Once uploaded you can see your **Object URL** on the properties of the object. This will be used in the **TemplateURL** in the next step.
 ![Images/module_template_object_url.png](/Cost/300_Optimization_Data_Collection/Images/module_template_object_url.png)

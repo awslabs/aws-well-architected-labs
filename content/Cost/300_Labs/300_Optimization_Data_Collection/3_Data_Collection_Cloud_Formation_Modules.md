@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 ---
 
 ### Add Data Collector Modules
-Now that you have deployed your main.yaml file and your additional roles you can now start adding modules. Below there are pre made modules you can add to your main file. Each set will have the resources and parameters you need along with policy requirements for the roles you made. 
+Now that you have deployed your template and your additional roles you can now start adding modules. Below there are pre made modules you can add to your template. Each set will have the resources and parameters you need along with policy requirements for the roles you made. 
 
 
 
@@ -25,31 +25,8 @@ Now that you have deployed your main.yaml file and your additional roles you can
 5. In the template box copy your module code and past at the bottom of the template. Then **Click** the upload button on the top left hand corner. 
 ![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
 
-6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
-![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 
-7. To add the IAM Policy rule to the IAM Roles created in section 2, then go to your management account.
-
-8. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
-
-        - PolicyName: "Example policy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - <required actions>
-                Resource: "*"
-
-
-
-
-9. In the console follow the same process as above to update your cloudformation stack.
-
-
-## Pre-made modules
-
-
+#### Pre-made modules
 
 {{%expand "RightSize Recommendations" %}}
 
@@ -291,6 +268,32 @@ The AccountCollector module is reusable and only needs to be added once but mult
                     Resource: "*"
 
 {{% /expand%}}
+
+6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
+![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
+
+
+
+### Update Role
+
+1. To add the IAM Policy rule to the IAM Roles created in section 2, then go to your management account.
+
+2. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
+
+        - PolicyName: "Example policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - <required actions>
+                Resource: "*"
+
+
+
+
+3. In the console follow the same process as above to update your cloudformation stack.
+
 
 
 ## Testing Lambdas 
