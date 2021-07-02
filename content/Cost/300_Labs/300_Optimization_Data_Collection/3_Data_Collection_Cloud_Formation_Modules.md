@@ -59,7 +59,7 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS que which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an S3 bucket and is read into Athena by Glue.  
 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
-NOTE: ONLY WORKS IN US-WEST-1 ATM
+NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 
 * Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
@@ -140,6 +140,7 @@ The available resources who's data can be collected are the following:
                       CFDataName: "AMI" # example 
                       GlueRoleARN: !GetAtt GlueRole.Arn
                       MultiAccountRoleName: !Ref MultiAccountRoleName
+                      CodeBucket: aws-well-architected-labs-<regionname>
             AccountCollector:
                 Type: AWS::CloudFormation::Stack
                 Properties:
@@ -162,6 +163,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## Compute Optimizer Collector
 
 The Compute Optimizer Service **Currently this data only lasts** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
+NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 
 * CloudFormation to add:
 
@@ -175,6 +177,7 @@ The Compute Optimizer Service **Currently this data only lasts** and does not sh
                           DestinationBucket: !Ref S3Bucket
                           GlueRoleARN: !GetAtt GlueRole.Arn
                           RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                          CodeBucket: aws-well-architected-labs-<regionname>
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
@@ -221,6 +224,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
+NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 * CloudFormation to add:
 
                 ECSStack:
@@ -232,6 +236,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
                           DestinationBucket: !Ref S3Bucket
                           GlueRoleArn: !GetAtt GlueRole.Arn 
                           MultiAccountRoleName: !Ref MultiAccountRoleName
+                          CodeBucket: aws-well-architected-labs-<regionname>
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:

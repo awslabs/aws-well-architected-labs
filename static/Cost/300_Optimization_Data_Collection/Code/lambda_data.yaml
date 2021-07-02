@@ -21,7 +21,12 @@ Parameters:
   CodeBucket:
       Type: String
       Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs-ireland
+      Default: aws-well-architected-labs
+      AllowedValues:
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code

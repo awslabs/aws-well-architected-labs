@@ -22,7 +22,12 @@ Parameters:
   CodeBucket:
       Type: String
       Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs-ireland
+      Default: aws-well-architected-labs
+      AllowedValues:
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
@@ -31,17 +36,9 @@ Parameters:
     Type: String
     Description: Service which the data collector is looking at
     Default: COC
-  # ScheduleExpression:
-  #   Type: String
-  #   Description: Event Schedule
-  #   Default: "cron(30 12 L * ? *)"
   GlueRoleARN:
     Type: String
 Outputs:
-  # AthenaSavedQuery:
-  #   Description: This saved query will provide you a summary of your lambda data
-  #   Value:
-  #     Ref: AthenaQuery
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
     Value:
