@@ -6,7 +6,7 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-> **NOTE**: In order to complete this step you need to have Rightsizing Recommendations (no additional cost). You can do that by going to AWS Cost Explorer>>Recommendations (left bar) section. Allow up to 24 hours after enabling this feature to start getting recommendations.
+> **NOTE**: In order to complete this step you need to have findings within Rightsizing Recommendations. You can do that by going to *AWS Cost Explorer>>Right Sizing Recommendations (left bar)* section. Allow up to 24 hours after enabling this feature (no additional cost) to start getting recommendations.
 
 AWS Cost Explorer Rightsizing Recommendations offers EC2 resource optimization recommendations without any additional cost. These recommendations identify idle and underutilized instances across your accounts, regions, and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (using Amazon CloudWatch metrics) and your existing reservation footprint to identify opportunities for cost savings (e.g., by terminating idle instances or downsizing active instances to lower-cost options within the same family/generation).
 
@@ -60,17 +60,17 @@ AWS recommends you to start your rightsizing exercises with idle instances becau
 
 > Please check with your technical team and advisors before moving forward and terminating idle instances. There are unique situations (eg disaster recover systems) where an idle utilization is expected.
 
-![Images/ResourceOpt7.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07mem.png?classes=lab_picture_small)
+Below you can see an example of an idle recommendation. Highlighted areas show the estimated annual savings after turning off this instance as well as the the account name, region and instance ID to facilitate tracking it accross your environment. On the bottom of the page you can also find tagging information.
 
-On the right column you can check how the last 14 days (or 336 hours) were charged for that instance. In this example, all the hours were On Demand so the potential savings of terminating this resource corresponds to the entire cost of running a r5.8xlarge.
+![Images/ResourceOpt07-idle-01.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07-idle-01.png?classes=lab_picture_small)
 
-Finally, for the instance reported above we have installed the Amazon CloudWatch memory agent to collect memory consumption, that's why we can see a memory utilization in the bottom left. You can enable Amazon CloudWatch to report memory utilization and improve the recommendation accuracy. Please check the [200 level EC2 Right Sizing lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for more information on how to enable memory utilization metrics.
+![Images/ResourceOpt07-idle-02.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07-idle-02.png?classes=lab_picture_small)
+
+Keep scrolling down to find additional information about that instance, like CPU, Network and Disk utilization. You can also add [AWS CloudWatch agents](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) to collect memory utilization from your instances and get a more accurate recommendation. Check the [200 level EC2 Right Sizing lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for more information. Finally, under the **running hours** section you can see which pricing model this instance is running, on the example above all the 336 hours (14 days) are On Demand.
 
 **Underutilized instance recommendation**
 
 For instances where the CPU utilization is above 1% over the past 14 days Rightsizing recommendations will look for instances that are cheaper and can sustain the utilization reported on CloudWatch. You can check the estimated savings on the top row as well as the target instance that workload should be using to achieve these savings. AWS also uses the rightsizing engine to project the CPU utilization for the recommended instance type.
-
-On the example below we haven't enabled the CloudWatch agent to collect memory and disk utilization. On these cases Rightsizing recommendations will still provide a recommendation, however if you need more data to take action make sure to enable these agents. Check the [200 level EC2 Right Sizing lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for further instructions.
 
 ![Images/ResourceOpt7.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07.png?classes=lab_picture_small)
 
