@@ -277,6 +277,14 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
 6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 
+{{% notice Note %}}
+Currently the AllowedValues for CodeBucket are:
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
+{{% /notice %}}
+
 
 
 ### Update Role
