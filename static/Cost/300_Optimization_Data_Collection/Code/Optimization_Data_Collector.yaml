@@ -18,6 +18,15 @@ Parameters:
     Type: String
     Description: This will be the name of the IAM role that will be deployed from the management account to linked accounts as a read only role
     Default: "Optimization-data-Multi-Account-Role"
+  CodeBucket:
+    Type: String
+    Description: The AWS Well Architected S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
+    Default: aws-well-architected-labs
+    AllowedValues:
+      - aws-well-architected-labs-ireland
+      - aws-well-architected-labs
+      - aws-well-architected-labs-ohio
+      - aws-well-architected-labs-virginia
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations

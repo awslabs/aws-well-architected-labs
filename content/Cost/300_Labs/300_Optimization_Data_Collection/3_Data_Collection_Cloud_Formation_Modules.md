@@ -140,7 +140,7 @@ The available resources who's data can be collected are the following:
                       CFDataName: "AMI" # example 
                       GlueRoleARN: !GetAtt GlueRole.Arn
                       MultiAccountRoleName: !Ref MultiAccountRoleName
-                      CodeBucket: aws-well-architected-labs-<regionname>
+                      CodeBucket: !Ref CodeBucket
             AccountCollector:
                 Type: AWS::CloudFormation::Stack
                 Properties:
@@ -177,7 +177,7 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
                           DestinationBucket: !Ref S3Bucket
                           GlueRoleARN: !GetAtt GlueRole.Arn
                           RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                          CodeBucket: aws-well-architected-labs-<regionname>
+                          CodeBucket: !Ref CodeBucket
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
@@ -236,7 +236,7 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
                           DestinationBucket: !Ref S3Bucket
                           GlueRoleArn: !GetAtt GlueRole.Arn 
                           MultiAccountRoleName: !Ref MultiAccountRoleName
-                          CodeBucket: aws-well-architected-labs-<regionname>
+                          CodeBucket: !Ref CodeBucket
                 AccountCollector:
                     Type: AWS::CloudFormation::Stack
                     Properties:
