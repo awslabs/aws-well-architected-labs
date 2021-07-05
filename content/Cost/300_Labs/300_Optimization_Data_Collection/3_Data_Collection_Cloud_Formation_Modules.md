@@ -104,7 +104,7 @@ The available resources who's data can be collected are the following:
 
 
 * ta
-       - PolicyName: "TAPolicy"
+        - PolicyName: "TAPolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -190,7 +190,7 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
 
 * Add to Management Role Policy:
 
-                - PolicyName: !Sub "Compute Optimizer Policy"
+              - PolicyName: !Sub "Compute Optimizer Policy"
                 PolicyDocument:
                     Version: "2012-10-17"
                     Statement:
@@ -224,7 +224,6 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
-NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 * CloudFormation to add:
 
                 ECSStack:
@@ -248,7 +247,7 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
 
 * Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
-        - PolicyName: "ECSReadAccess"
+              - PolicyName: "ECSReadAccess"
                 PolicyDocument:
                     Version: "2012-10-17"
                     Statement:
@@ -274,18 +273,83 @@ NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architecte
 
 {{% /expand%}}
 
+
+{{%expand "RDS Utilization Data" %}}
+
+## RDS Utilization
+The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. 
+
+* CloudFormation to add:
+
+            RDSMetricsStack:
+            Type: AWS::CloudFormation::Stack
+            Properties:
+              TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+              TimeoutInMinutes: 2
+              Parameters:
+                  DestinationBucket: !Ref S3Bucket
+                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                  GlueRoleArn: !GetAtt GlueRole.Arn 
+                  MultiAccountRoleName: !Ref MultiAccountRoleName
+
+* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+
+                  - PolicyName: "RDSUtilReadOnlyPolicy"
+                    PolicyDocument:
+                      Version: "2012-10-17"
+                      Statement:
+                          - Effect: "Allow"
+                            Action:
+                            - "rds:DescribeDBProxyTargetGroups"
+                            - "rds:DescribeDBInstanceAutomatedBackups"
+                            - "rds:DescribeDBEngineVersions"
+                            - "rds:DescribeDBSubnetGroups"
+                            - "rds:DescribeGlobalClusters"
+                            - "rds:DescribeExportTasks"
+                            - "rds:DescribePendingMaintenanceActions"
+                            - "rds:DescribeEngineDefaultParameters"
+                            - "rds:DescribeDBParameterGroups"
+                            - "rds:DescribeDBClusterBacktracks"
+                            - "rds:DescribeCustomAvailabilityZones"
+                            - "rds:DescribeReservedDBInstancesOfferings"
+                            - "rds:DescribeDBProxyTargets"
+                            - "rds:DownloadDBLogFilePortion"
+                            - "rds:DescribeDBInstances"
+                            - "rds:DescribeSourceRegions"
+                            - "rds:DescribeEngineDefaultClusterParameters"
+                            - "rds:DescribeInstallationMedia"
+                            - "rds:DescribeDBProxies"
+                            - "rds:DescribeDBParameters"
+                            - "rds:DescribeEventCategories"
+                            - "rds:DescribeDBProxyEndpoints"
+                            - "rds:DescribeEvents"
+                            - "rds:DescribeDBClusterSnapshotAttributes"
+                            - "rds:DescribeDBClusterParameters"
+                            - "rds:DescribeEventSubscriptions"
+                            - "rds:DescribeDBSnapshots"
+                            - "rds:DescribeDBLogFiles"
+                            - "rds:DescribeDBSecurityGroups"
+                            - "rds:DescribeDBSnapshotAttributes"
+                            - "rds:DescribeReservedDBInstances"
+                            - "rds:ListTagsForResource"
+                            - "rds:DescribeValidDBInstanceModifications"
+                            - "rds:DescribeDBClusterSnapshots"
+                            - "rds:DescribeOrderableDBInstanceOptions"
+                            - "rds:DescribeOptionGroupOptions"
+                            - "rds:DescribeDBClusterEndpoints"
+                            - "rds:DescribeCertificates"
+                            - "rds:DescribeDBClusters"
+                            - "rds:DescribeAccountAttributes"
+                            - "rds:DescribeOptionGroups"
+                            - "rds:DescribeDBClusterParameterGroups"
+                            - "ec2:DescribeRegions"
+                            Resource: "*"
+
+
+{{% /expand%}}
+
 6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
-
-{{% notice Note %}}
-Currently the AllowedValues for CodeBucket are:
-        - aws-well-architected-labs-ireland
-        - aws-well-architected-labs
-        - aws-well-architected-labs-ohio
-        - aws-well-architected-labs-virginia
-{{% /notice %}}
-
-
 
 ### Update Role
 
