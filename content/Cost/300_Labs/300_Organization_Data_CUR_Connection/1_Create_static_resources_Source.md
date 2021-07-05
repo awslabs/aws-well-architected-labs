@@ -100,7 +100,7 @@ Now you have deployed the Terraform then you can test your lambda to get your fi
 ![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
 
 
-2. Search for your new function called **Lambda_Org_Data** and clikc on it. To test your lambda function click **Test**
+2. Search for your new function called **Lambda_Org_Data** and click on it. To test your lambda function click **Test**
 ![Images/lambda_test_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/lambda_test_cf.png) 
 
 3. Enter an **Event name** of **Test**, click **Create**:

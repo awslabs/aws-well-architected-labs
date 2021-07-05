@@ -6,6 +6,8 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
+
+{{%expand "Click here to continue with the manuel Setup" %}}
 ### Create S3 Bucket and Folders
 Create a **single S3 bucket** that contains **two folders** - **od_pricedata** and **sp_pricedata**, these will contain the on-demand pricing data and the Savings Plans pricing data.
 
@@ -454,8 +456,46 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 35. Click **Save**:
 ![Images/glue_schemasave.png](/Cost/200_Pricing_Model_Analysis/Images/glue_schemasave.png)
 
+{{% /expand%}}
+
+
+
+{{%expand "Click here to continue with the Terraform Advanced Setup" %}}
+### Create the Pricing Sources using Terraform
+
+There is an AWS [Github Repo](https://github.com/awslabs/well-architected-lab200-pricing-model-analysis-terraform-module) which has a module to deploy all the resources needed in this lab. Please deploy using the instructions in the github repo then return to the step below.
+
+
+
+## Test Lambda Function
+Now you have deployed the Terraform then you can test your lambda to get your first set of data in Amazon S3. 
+
+
+1. Go to the **Lambda** service page :
+![Images/Lambda.png](/Cost/300_Organization_Data_CUR_Connection/Images/Lambda.png)
+
+
+2. Search for your new function called **Cost_SPTool_ODPricing_Download** and click on it. To test your lambda function click **Test**
+
+![Images/lambda_test.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_test.png)
+
+3. Enter an **Event name** of **Test**, click **Create**:
+![Images/lambda_testcreate.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testcreate.png)
+
+4. Click **Test**:
+![Images/lambda_testrun.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_testrun.png)
+
+5. The function will run, it will take a minute or two given the size of the pricing files and processing required, then return success. Click **Details** and verify there is headroom in the configured resources and duration to allow any increases in pricing file size over time:
+![Images/lambda_runsuccess.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_runsuccess.png)
+
+6. Do the same for the **Cost_SPTool_SPPricing_Download** function
+
+{{% /expand%}}
+
+
 {{% notice tip %}}
 You have successfully setup the pricing data source. We have a database of on demand and Savings Plans rates.
 {{% /notice %}}
+
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_usage_source/" />}}
