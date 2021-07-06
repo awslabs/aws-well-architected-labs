@@ -21,7 +21,7 @@ In case you haven’t enabled the Amazon Rightsizing Recommendations please do s
 | *To improve the recommendation quality, AWS might use your published utilization metrics, such as disk or memory utilization, to improve our recommendation models and algorithms. All metrics are anonymized and aggregated before AWS uses them for model training. If you want to opt out of this experience and request that your metrics not be stored and used for model improvement, contact AWS Support. For more information, see [AWS Service Terms](https://aws.amazon.com/service-terms/).* |
 |------|
 
-#### 3. Getting to know the Amazon Rightsizing Recommendation parameters
+#### 3. Getting to know the Amazon Rightsizing recommendation parameters
 ![Images/ResourceOpt4.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt04.png?classes=lab_picture_small)
 
 AWS Cost Explorer Rightsizing recommendations will analyze the usage for the last 14 days for each account. If the instance was stopped or terminated, AWS removes it from recommendation. For all remaining instances, AWS uses Amazon CloudWatch to get maximum CPU utilization data, memory utilization (if enabled), network in/out, local disk input/ output (I/O), and performance of attached EBS volumes for the last 14 days. This is to produce conservative recommendations, not to recommend instance modifications that could be detrimental to application performance or that could unexpectedly impact your performance.
