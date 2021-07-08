@@ -20,6 +20,8 @@ SELECT -- automation_select_stmt
     WHEN line_item_usage_type LIKE '%%GMD-Metrics%%' THEN 'GetMetricData'
   ELSE 'Others'
   END AS line_item_usage_type,
+  -- if uncommenting, also uncomment one other occurrence of line_item_resource_id in GROUP BY
+  -- SPLIT_PART(line_item_resource_id,':',7) as ResourceID, 
   line_item_operation,
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
   SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost 
@@ -34,6 +36,7 @@ GROUP BY -- automation_groupby_stmt
   line_item_usage_account_id,
   DATE_FORMAT(line_item_usage_start_date,'%Y-%m'), -- automation_timerange_dateformat
   line_item_usage_type,
+  -- line_item_resource_id,
   line_item_operation
 ORDER BY -- automation_order_stmt
 sum_line_item_unblended_cost desc

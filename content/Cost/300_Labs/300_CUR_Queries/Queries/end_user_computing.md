@@ -102,7 +102,7 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
 ![Images/workspaceswrid.png](/Cost/300_CUR_Queries/Images/End_User_Computing/workspaces_autostop_wrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/workspaces_autostop_wrid.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/amazon-workspaces-auto-stop.sql)
 
 #### Copy Query
 ```tsql
@@ -142,9 +142,9 @@ This query will **not** run against CUR data that does not have any Amazon WorkS
         WHERE
           line_item_product_code = 'AmazonWorkSpaces' 
           -- get previous month
-          AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR) 
+          AND CAST(month AS INT) = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT) 
           -- get year for previous month
-          AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+          AND CAST(year AS INT) = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT)
           AND line_item_line_item_type = 'Usage'
           AND line_item_usage_type LIKE '%AutoStop%'
         GROUP BY

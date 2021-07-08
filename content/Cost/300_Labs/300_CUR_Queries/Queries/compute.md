@@ -23,9 +23,10 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Compute with Savings Plans](#compute-with-savings-plans)
   * [Account Spend of Shared Savings Plan](#account-spend-of-shared-savings-plan)
   * [Lambda](#lambda)
-  * [Elastic Load Balancing](#elastic-load-balancing)
+  * [Elastic Load Balancing - Idle ELBs](#elastic-load-balancing---idle-elbs)
   * [EC2 Savings Plans Inventory](#ec2-savings-plans-inventory)
   * [EC2 Reserved Instance Coverage](#ec2-reserved-instance-coverage)
+  * [AWS Outposts - EC2 Hours a Day](#aws-outposts---ec2-hours-a-day)
 
 ### EC2 Total Spend
 
@@ -426,7 +427,7 @@ ORDER BY
 
 [Back to Table of Contents](#table-of-contents)
 
-### Elastic Load Balancing
+### Elastic Load Balancing - Idle ELBs
 
 #### Query Description
 This query will display cost and usage of Elastic Load Balancers which didn't receive any traffic last month and ran for more than 336 hours (14 days). Resources returned by this query could be considered for deletion.
@@ -438,7 +439,7 @@ Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com
 ![Images/elb_unused_wrid.png](/Cost/300_CUR_Queries/Images/Compute/elb_unused_wrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elbunsusedwrid.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elastic-load-balancing-idle-elbs.sql)
 
 #### Copy Query
 ```tsql
@@ -626,5 +627,66 @@ ORDER BY
 ```
 
 {{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Reserved Instance Coverage" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### AWS Outposts - EC2 Hours a Day
+
+#### Query Description
+AWS Services running locally on [AWS Outposts](https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/aws-outposts.html)  will be charged on usage only. Operating system charges are billed based on usage as an uplift to cover the license fee and no minimum fee required. This query will provide the Amazon EC2 software costs (like Windows, RHEL or others) on AWS Outposts. These software fees are not included with the cost of the AWS Outposts racks and are billed separately here. The output will include detailed information about the instance type, pre-installed softwares, operating system, description, amortized cost, and usage quantity. The output will be ordered by amortized cost in descending order.
+
+#### Pricing
+Please refer to the [AWS Outposts pricing page](https://aws.amazon.com/outposts/pricing/).
+
+#### Sample Output
+*Sample output includes a subset of query columns*
+![Images/ec2ricoverage.png](/Cost/300_CUR_Queries/Images/Compute/outposts_ec2runninghours.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/outposts_ec2runninghours.sql)
+
+#### Copy Query
+```tsql
+SELECT 
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  bill_payer_account_id, 
+  line_item_usage_account_id,  
+  line_item_resource_id,
+  product_instance_type,
+  product_operating_system,
+  product_pre_installed_sw,
+  line_item_line_item_description, 
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+  SUM(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanCoveredUsage' THEN savings_plan_savings_plan_effective_cost
+    WHEN line_item_line_item_type = 'DiscountedUsage' THEN reservation_effective_cost
+    WHEN line_item_line_item_type = 'Usage' THEN line_item_unblended_cost
+    ELSE 0 
+  END) AS sum_amortized_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND line_item_product_code = 'AWSOutposts'
+  AND line_item_operation LIKE '%%RunInstance%%'
+  AND (line_item_line_item_type = 'Usage'
+    OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
+    OR (line_item_line_item_type = 'DiscountedUsage')
+  )
+GROUP BY
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  bill_payer_account_id, 
+  line_item_usage_account_id,  
+  line_item_resource_id,
+  product_instance_type,
+  product_operating_system,
+  product_pre_installed_sw,
+  line_item_line_item_description
+ORDER BY
+  day_line_item_usage_start_date ASC,
+  sum_amortized_cost DESC;
+```
+
+{{< email_button category_text="Compute" service_text="Outposts" query_text="AWS Outposts EC2 Hours a Day" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
