@@ -21,6 +21,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Amazon API Gateway](#amazon-api-gateway)
   * [Amazon CloudFront](#amazon-cloudfront)
   * [Data Transfer](#data-transfer)
+  * [Data Transfer Regional](#data-transfer-regional)
   * [Data Transfer - MSK](#data-transfer---msk)
   * [AWS Direct Connect](#aws-direct-connect)
   * [NAT Gateway](#nat-gateway)
@@ -179,6 +180,55 @@ Please refer to each individual service pricing page for more details on how dat
 
 [Back to Table of Contents](#table-of-contents)
 
+
+### Data Transfer Regional
+
+#### Query Description
+This query provides monthly unblended cost and usage information about Data Transfer Regional (Inter AZ) usage including resource id that sourced the traffic and the product code corresponding to the source traffic. The usage amount and cost will be summed and the cost will be in descending order.
+
+#### Pricing
+Please refer to each individual service pricing page for more details on how data transfer charges are handled for that service.
+
+#### Sample Output
+![Images/data-transfer-regional.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer-regional.png)
+
+#### Download SQL File
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer-regional.sql)
+
+#### Copy Query
+```tsql
+    SELECT 
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS day_line_item_usage_start_date, 
+      line_item_product_code,
+      product_product_family,
+      product_region,
+      line_item_line_item_description,
+      line_item_resource_id,
+      sum(line_item_unblended_cost) AS sum_line_item_unblended_cost
+    FROM 
+      ${table_name} 
+    WHERE 
+      ${date_filter} 
+      AND line_item_line_item_description LIKE '%regional data transfer%'
+    GROUP BY  
+      bill_payer_account_id, 
+      line_item_usage_account_id, 
+      DATE_FORMAT((line_item_usage_start_date),'%Y-%m'), 
+      line_item_product_code,
+      product_product_family,
+      product_region,
+      line_item_line_item_description,
+      line_item_resource_id
+    ORDER BY 
+      sum_line_item_unblended_cost DESC
+    ;
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Data Transfer Regional" query_text="Data Transfer Regional" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
 
 
 ### Data Transfer - MSK
@@ -351,7 +401,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 ![Images/natgateway_idle_wrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgateway_idle_wrid.png)
 
 #### Download SQL File:
-[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgateway_idle_wrid.sql)
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/nat-gateway-idle.sql)
 
 #### Query Preview:
 ```tsql
@@ -381,9 +431,9 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
                 line_item_product_code = 'AmazonEC2'
                 AND line_item_usage_type LIKE '%Nat%'
                 -- get previous month
-                AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+                AND CAST(month AS INT) = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT)
                 -- get year for previous month
-                AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+                AND CAST(year AS INT) = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT)
                 AND line_item_line_item_type = 'Usage'
             GROUP BY
                 line_item_resource_id,

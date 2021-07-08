@@ -123,7 +123,11 @@ Please refer to the [CloudTrail pricing page](https://aws.amazon.com/cloudtrail/
 ### AWS CloudWatch
 
 #### Query Description
-This query will provide monthly unblended and usage information per linked account for AWS CloudWatch. The output will include detailed information about the usage type. The cost will be summed by month, account, and usage type, and displayed in descending order.
+This query will provide monthly unblended and usage information per linked account for AWS CloudWatch. The output will include detailed information about the usage type. The cost will be summed by month, account, and usage type, and displayed in descending order.  
+
+{{% notice tip %}}
+Resource ID can also be included by uncommenting the appropriate lines in the query.  
+{{% /notice %}}
 
 #### Pricing
 Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/pricing/).
@@ -152,6 +156,8 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
         WHEN line_item_usage_type LIKE '%%GMD-Metrics%%' THEN 'GetMetricData'
       ELSE 'Others'
       END AS line_item_usage_type,
+      -- if uncommenting, also uncomment one other occurrence of line_item_resource_id in GROUP BY
+      -- SPLIT_PART(line_item_resource_id,':',7) as ResourceID, 
       line_item_operation,
       SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
       SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost 
@@ -165,6 +171,7 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
       line_item_usage_account_id,
       DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
       line_item_usage_type,
+      -- line_item_resource_id,
       line_item_operation
     ORDER BY
     sum_line_item_unblended_cost DESC;

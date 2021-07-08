@@ -23,7 +23,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Compute with Savings Plans](#compute-with-savings-plans)
   * [Account Spend of Shared Savings Plan](#account-spend-of-shared-savings-plan)
   * [Lambda](#lambda)
-  * [Elastic Load Balancing](#elastic-load-balancing)
+  * [Elastic Load Balancing - Idle ELBs](#elastic-load-balancing---idle-elbs)
   * [EC2 Savings Plans Inventory](#ec2-savings-plans-inventory)
   * [EC2 Reserved Instance Coverage](#ec2-reserved-instance-coverage)
 
@@ -426,7 +426,7 @@ ORDER BY
 
 [Back to Table of Contents](#table-of-contents)
 
-### Elastic Load Balancing
+### Elastic Load Balancing - Idle ELBs
 
 #### Query Description
 This query will display cost and usage of Elastic Load Balancers which didn't receive any traffic last month and ran for more than 336 hours (14 days). Resources returned by this query could be considered for deletion.
@@ -438,7 +438,7 @@ Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com
 ![Images/elb_unused_wrid.png](/Cost/300_CUR_Queries/Images/Compute/elb_unused_wrid.png)
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elbunsusedwrid.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/elastic-load-balancing-idle-elbs.sql)
 
 #### Copy Query
 ```tsql
