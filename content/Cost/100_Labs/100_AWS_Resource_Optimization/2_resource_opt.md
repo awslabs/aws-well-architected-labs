@@ -6,7 +6,7 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-> **NOTE**: In order to complete this step you need to have findings within Rightsizing Recommendations. You can do that by going to *AWS Cost Explorer>>Right Sizing Recommendations (left bar)* section. Allow up to 24 hours after enabling this feature (no additional cost) to start getting recommendations.
+> **NOTE**: In order to complete this step you need to have findings within Rightsizing Recommendations. You can do that by going to *AWS Cost Explorer>>Rightsizing Recommendations (left bar)* section. Allow up to 24 hours after enabling this feature (no additional cost) to start getting recommendations.
 
 AWS Cost Explorer Rightsizing Recommendations offers EC2 resource optimization recommendations without any additional cost. These recommendations identify idle and underutilized instances across your accounts, regions, and tags. To generate these recommendations, AWS analyzes your historical EC2 resource usage (using Amazon CloudWatch metrics) and your existing reservation footprint to identify opportunities for cost savings (e.g., by terminating idle instances or downsizing active instances to lower-cost options within the same family/generation).
 
@@ -66,7 +66,7 @@ Below you can see an example of an idle recommendation. Highlighted areas show t
 
 ![Images/ResourceOpt07-idle-02.png](/Cost/100_AWS_Resource_Optimization/Images/ResourceOpt07-idle-02.png?classes=lab_picture_small)
 
-Keep scrolling down to find additional information about that instance, like CPU, Network and Disk utilization. You can also add [AWS CloudWatch agents](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) to collect memory utilization from your instances and get a more accurate recommendation. Check the [200 level EC2 Right Sizing lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for more information. Finally, under the **running hours** section you can see which pricing model this instance is running, on the example above all the 336 hours (14 days) are On Demand.
+Keep scrolling down to find additional information about that instance, like CPU, Network and Disk utilization. You can also add [AWS CloudWatch agents](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) to collect memory utilization from your instances and get a more accurate recommendation. Check the [200 level Rightsizing recommendations lab]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) for more information. Finally, under the **running hours** section you can see which pricing model this instance is running, on the example above all the 336 hours (14 days) are On Demand.
 
 **Underutilized instance recommendation**
 
