@@ -12,7 +12,7 @@ Launched during re:Invent 2019, [AWS Compute Optimizer](http://aws.amazon.com/co
 
 Compute Optimizer is available at no additional cost. To get started, you just need to opt in using the [AWS Compute Optimizer Console](http://aws.amazon.com/compute-optimizer/).
 
-##### AWS Compute Optimizer vs Cost Explorer Rightsizing recommendations
+#### Comparing AWS Compute Optimizer vs Cost Explorer Rightsizing recommendations
 
 Both AWS Compute Optimizer and Cost Explorer Rightsizing recommendations use the same engine to provide rightsizing recommendations. Amazon EC2 Resource Optimization focuses on cost reduction providing recommendations only for over-provisioned resources. AWS Compute Optimizer aggregates **over and under provisioned resources** on their recommendations. In addition to EC2 it also covers Auto-Scaling Groups, Lambda functions, and EBS volumes.
 
