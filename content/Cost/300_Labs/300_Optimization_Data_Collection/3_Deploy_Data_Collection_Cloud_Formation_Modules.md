@@ -6,27 +6,14 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-### Add Data Collector Modules
+## Data Modules 
 Now that you have deployed your template and your additional roles you can now start adding modules. Below there are pre made modules you can add to your template. Each set will have the resources and parameters you need along with policy requirements for the roles you made. 
 
+For every module you want you add there are two steps to complete:
+* Update main.yaml with script
+* Update additionalroles.yaml with IAM
 
-
-1. Login via SSO in your Cost Optimization account and search for **Cloud Formation**.
-![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
-
-2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
-
-3. Click **Update** 
-![Images/Update_CF.png](/Cost/300_Optimization_Data_Collection/Images/Update_CF.png)
-
-4. Choose **Edit template in designer** then click **View in Designer**
-![Images/update_in_designer.png](/Cost/300_Optimization_Data_Collection/Images/update_in_designer.png) 
-
-5. In the template box copy your module code and past at the bottom of the template. Then **Click** the upload button on the top left hand corner. 
-![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
-
-
-#### Pre-made modules
+This is what you can add. The steps to do this are afterwards.
 
 {{%expand "RightSize Recommendations" %}}
 
@@ -48,77 +35,29 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 
 * Add to Management Role Policy:
 
-        -  "ce:GetRightsizingRecommendation"
+        - PolicyName: "RightsizeReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetRightsizingRecommendation"
+                Resource: "*"
+
 {{% /expand%}}
 
 
 
-{{%expand "Static Data Collector" %}}
+{{%expand "Inventory Collector" %}}
 
-### Static Data Collector
-This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS que which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an S3 bucket and is read into Athena by Glue.  
+### Inventory Collector
+This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket and is read into AWs Athena by AWS Glue.  
 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 
-* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
 
-
-The available resources who's data can be collected are the following:
- * ami
-    
-        - PolicyName: "ImageReadOnlyPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "ec2:DescribeImages"
-                Resource: "*"
-
- * ebs
-
-        
-        - PolicyName: "VolumeReadOnlyPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                -  "ec2:DescribeVolumeStatus"
-                -  "ec2:DescribeVolumes"
-                Resource: "*"
-
- * snapshot
-
-        - PolicyName: "SnapshotsReadOnlyPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                - "ec2:DescribeSnapshots"
-                - "ec2:DescribeSnapshotAttribute"
-                Resource: "*"
-        
-
-
-* ta
-        - PolicyName: "TAPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                - "trustedadvisor:*"
-                - "support:DescribeTrustedAdvisorChecks"
-                - "support:DescribeTrustedAdvisorCheckResult"
-                Resource: "*"
-        
-
-
-* CloudFormation to add:
-
+* CloudFormation to add to Optimization_Data_Collector.yaml:
 
         Parameters:
             MultiAccountRoleName:
@@ -151,6 +90,110 @@ The available resources who's data can be collected are the following:
                       TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
 
+* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+
+These are the resources which can be collected:
+ * Amazon Machine Images
+    
+        - PolicyName: "ImageReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DescribeImages"
+                Resource: "*"
+
+ * Amazon Elastic Block Store (EBS)
+
+        
+        - PolicyName: "VolumeReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                -  "ec2:DescribeVolumeStatus"
+                -  "ec2:DescribeVolumes"
+                Resource: "*"
+
+ * Amazon EBS snapshots
+
+        - PolicyName: "SnapshotsReadOnlyPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                - "ec2:DescribeSnapshots"
+                - "ec2:DescribeSnapshotAttribute"
+                Resource: "*"
+        
+
+
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
+{{% /notice %}}
+
+{{% /expand%}}
+
+
+{{%expand "Inventory Collector" %}}
+
+###  Trusted Advisor
+This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
+NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
+
+
+* CloudFormation to add to Optimization_Data_Collector.yaml:
+
+
+        Parameters:
+            MultiAccountRoleName:
+            Type: String
+            Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+            Default: OPTICS-Assume-Role-Management-Account
+
+
+        Resource:
+             TrustedAdvisor:
+                Type: AWS::CloudFormation::Stack
+                Properties:
+                  TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                  TimeoutInMinutes: 2
+                  Parameters:
+                      DestinationBucket: !Ref S3Bucket
+                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                      Prefix: "ta"
+                      CFDataName: "TA"
+                      GlueRoleARN: !GetAtt GlueRole.Arn
+                      MultiAccountRoleName: !Ref MultiAccountRoleName
+                      CodeBucket: !Ref CodeBucket
+            AccountCollector:
+                Type: AWS::CloudFormation::Stack
+                Properties:
+                  TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                  TimeoutInMinutes: 2
+                  Parameters:
+                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+
+
+
+* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+     
+          - PolicyName: "TAPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                  - "trustedadvisor:*"
+                  - "support:DescribeTrustedAdvisorChecks"
+                  - "support:DescribeTrustedAdvisorCheckResult"
+                  Resource: "*"
+          
+
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
 {{% /notice %}}
@@ -165,7 +208,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 The Compute Optimizer Service **Currently this data only lasts** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
 NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 
-* CloudFormation to add:
+* CloudFormation to add to Optimization_Data_Collector.yaml:
 
                 COCDataStack:
                     Type: AWS::CloudFormation::Stack
@@ -224,7 +267,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
-* CloudFormation to add:
+* CloudFormation to add to Optimization_Data_Collector.yaml:
 
                 ECSStack:
                     Type: AWS::CloudFormation::Stack
@@ -279,7 +322,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## RDS Utilization
 The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. 
 
-* CloudFormation to add:
+* CloudFormation to add to Optimization_Data_Collector.yaml:
 
             RDSMetricsStack:
             Type: AWS::CloudFormation::Stack
@@ -348,30 +391,59 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
 
 {{% /expand%}}
 
+
+### How to Update Optimization Stack
+1. Login via SSO in your Cost Optimization account and search for **Cloud Formation**.
+![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
+
+2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
+
+3. Click **Update** 
+![Images/Update_CF.png](/Cost/300_Optimization_Data_Collection/Images/Update_CF.png)
+
+4. Choose **Edit template in designer** then click **View in Designer**
+![Images/update_in_designer.png](/Cost/300_Optimization_Data_Collection/Images/update_in_designer.png) 
+
+5. In the template box copy your module code and past at the bottom of the template. Then **Click** the upload button on the top left hand corner.  
+**You can did the necessary code above in the Data Modules.**
+![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
+
 6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 
-### Update Role
 
-1. To add the IAM Policy rule to the IAM Roles created in section 2, then go to your management account.
+### How to Update Roles
+The IAM Roles created in the pervious section need to be update with the relevant permissions. Depending on the module, you will need to add the permissions to either the management role or the role created in the stack set. In the pre made modules this will be specified. 
 
-2. In either your Management.yaml or optimisation_read_only_role.yaml files (depending on the module) copy the permissions and to the Management-Account-permissions section under actions e.g.
+1. Login via SSO in your Management account and search for **Cloud Formation**
+![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
-        - PolicyName: "Example policy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - <required actions>
-                Resource: "*"
+### How to Update Role Management.yaml
+2. Select the **OptimizationManagementDataRoleStack** and click **Update**
+![Images/Update_man_role.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role.png)  
 
 
+3. Select **Edit template in designer** then **View in Designer**
+![Images/Edit_template_man_role.png](/Cost/300_Optimization_Data_Collection/Images/Edit_template_man_role.png)  
 
+4. Copy the IAM permission code from the module section above. In Designer in the template section past the code just above the output section. Click the Upload button in the top corner.
+![Images/Update_man_role_design.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role_design.png)  
 
-3. In the console follow the same process as above to update your cloudformation stack.
+5. Click Next and keep everything to default till deployed
 
+### How to Update Role optimisation_read_only_role.yaml
 
+2. Copy the IAM permission code from the module section above. In your local copy of the optimisation_read_only_role.yaml file add it to the bottom. 
+
+3. In Cloudformation click on the hamburger icon on the side panel on the left hand side of the screen and select **StackSets**. 
+
+4. Select the **OptimizationDataRoleStack**. Click Actions, Edit StackSet Details
+![Images/Update_SS.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS.png)  
+
+5. Select **Replace current template**, **Upload a template file** then **Choose file** with you local copy of the optimisation_read_only_role.yaml file
+![Images/Update_SS_File.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS_File.png)  
+
+6. Click Next and keep everything to default till deployed
 
 ## Testing Lambdas 
 

@@ -11,9 +11,6 @@ pre: "<b>1. </b>"
 The first step is to create a set of reusable resources that can be passed into the other modules. 
 
 
-{{%expand "Click here to continue with the CloudFormation  Setup" %}}
-
-
 1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your linked account (recommended)
 
 Or if you wish to keep this on your local machine please copy the below and deploy how you would normally:
@@ -23,7 +20,7 @@ Or if you wish to keep this on your local machine please copy the below and depl
         Parameters:
         DestinationBucket:
             Type: String
-            Description: Name of the S3 Bucket that needs to be created to hold information
+            Description: Name of the S3 Bucket that needs to be created to hold information. This will be combined with account id to make unique. 
             AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
             Default: optimizationdatacollectionbucket
         ManagementAccountRole: 
@@ -97,10 +94,6 @@ Or if you wish to keep this on your local machine please copy the below and depl
 {{% notice note %}}
 We will edit this template in designer in the AWS Console. If you wish to keep a version locally then download and manage how you would normally. 
 {{% /notice %}}
-
-
-
-{{% /expand%}}
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_Additional_Roles/" />}}

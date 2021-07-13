@@ -16,15 +16,21 @@ June 2021
 If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-When reviewing costs in AWS it important to have all the data you need in one place. Following on from the Cost and Usage Report setup, which you can see in the [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) lab,  this lab will give you a template of how you can pull your own sets of data as well as some pre made modules to help collect data for optimization and chargeback. Using either CloudFormation or Terraform the modules will follow the structure of using an AWS Lambda function to extract the data, then this will then be place into Amazon S3. From there, Amazon Athena will be able to read this data using a glue crawler to produce a table that can be utilise and even connected to your AWS Cost & Usage Report to enrich it. 
+This lab is designed to enable you to collect utilization data from different service to help you identify optimization opportunities. This lab will give you pre made modules to collect data and show you how to pull your own sets of data. In the CloudFormation modules we will follow the structure of using an AWS Lambda function to extract the data, then this will be placed into Amazon S3. From there, Amazon Athena will be able to read this data using a AWS Glue Crawler to produce a table that can be utilize and even connected to your AWS Cost & Usage Report to enrich it. 
+
+The three main styles of data are:
+* Optimizing and rightsize recommendations 
+* inventory of services
+* Utilization metrics of resources 
 
 ## Architecture 
 
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
 
 ## Goals
-- Deploy resources that will be reused in multiple modules
+- Deploy main resources which will be used by the modules
 - Deploy modules to collect data 
+- Retrieve optimization data 
 
 
 ## Prerequisites
@@ -67,8 +73,5 @@ Be able to create the below in a sub account where your CUR data is accessible:
 ## Steps:
 {{% children  /%}}
 
-{{% notice tip %}}
-TBC
-{{% /notice %}}
 
 {{< prev_next_button link_next_url="./1_create_static_resources_source/" button_next_text="Start Lab" first_step="true" />}}
