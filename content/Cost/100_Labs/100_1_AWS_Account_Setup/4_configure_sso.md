@@ -214,7 +214,7 @@ You **MUST** work with your security team/specialist to ensure you create the po
 20. Click **Proceed to AWS accounts**:
 ![Images/ssoaccount_success.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_success.png)
 
-21. setup the Cost Optimization member account, select the **Memeber account**, click **Assign users**
+21. setup the Cost Optimization member account, select the **Member account**, click **Assign users**
 
 22. Select **Groups**, select the **Cost_Optimization** group, click **Next: Permission sets**:
 ![Images/ssoaccount_groups.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_groups.png)

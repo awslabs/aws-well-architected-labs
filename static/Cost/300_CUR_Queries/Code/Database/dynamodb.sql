@@ -48,5 +48,5 @@ GROUP BY -- automation_groupby_stmt
   8, -- refers to case_product_product_family
   reservation_reservation_a_r_n
 ORDER BY -- automation_order_stmt
-  sum_line_item_unblended_cost DESC
+  sum_line_item_blended_cost DESC
 ;

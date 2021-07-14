@@ -17,11 +17,88 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon Aurora Global Database](#amazon-aurora-global-database)
   * [Amazon RDS](#amazon-rds)
   * [Amazon RDS - Monthly Cost grouped by Usage Type and Resource Tag](#amazon-rds---monthly-cost-grouped-by-usage-type-and-resource-tag)
   * [Amazon DynamoDB](#amazon-dynamodb)
   * [Amazon Redshift](#amazon-redshift)
   * [Amazon ElastiCache](#amazon-elasticache)
+  
+### Amazon Aurora Global Database
+
+#### Query Description
+This query provides a breakdown of costs associated with an Aurora Global Database deployment, excluding backup costs. Output will be grouped by day, account, charge type, usage type, operation, description, and resource ID. Output will be sorted by day, then cost (descending).
+
+Aurora Global Databases are comprised of multiple components, each of which appears as a separate line item in CUR. There is no overarching Aurora Global Database resource ID that can be used to filter query output. This means to get an accurate picture of a specific Aurora Global DB deployment, the relevant cluster and database instance resource IDs in each region where the database is replicated must be added to the WHERE filter. Placeholder variables indicated by a dollar sign and curly braces (${ }) appear where resource IDs should be inserted. Placeholder variables must be replaced before the query will run. Note that depending on your deployment model, you may need to add or remove lines from the WHERE filter as indicated.
+
+Resource IDs can be retrieved through the console, CLI, SDK, or other tools, as normal. If you only have access to CUR, consider the simple query ```SELECT DISTINCT(line_item_resource_id) FROM ${table_name} WHERE line_item_product_code = 'AmazonRDS'``` which will turn up a list of RDS resource IDs. Even in smaller environments the number of resource IDs returned may make it challenging to identify the right resource IDs. In that case, consider adding additional columns to help differentiate and identify the correct resource, such as columns with [user-defined cost allocation tags](https://docs.aws.amazon.com/cur/latest/userguide/resource-tags-columns.html). For example, ```SELECT DISTINCT(line_item_resource_id), resource_tags_user_name, resource_tags_user_cost_center FROM ${table_name} WHERE line_item_product_code = 'AmazonRDS'```. 
+
+Consider the following Aurora Global DB deployment example:
+* Primary Region 
+    * Primary writer instance 
+    * One reader instance
+* Secondary Region 1
+  * Three reader instances
+* Secondary Region 2
+  * Zero instances (headless)
+
+In this example, the following resource IDs would be needed: 
+  * Primary region cluster ID 
+  * Primary region writer instance name 
+  * Primary region reader instance name
+  * Secondary region 1 cluster ID
+  * Secondary region 1 reader1 instance name
+  * Secondary region 1 reader2 instance name
+  * Secondary region 1 reader3 instance name
+  * Secondary region 2 cluster ID 
+
+#### Pricing 
+Please refer to the [Amazon Aurora pricing page](https://aws.amazon.com/rds/aurora/pricing/).
+
+#### Sample Output
+![Images/auroraglobaldb.png](/Cost/300_CUR_Queries/Images/Database/auroraglobaldb.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Database/auroraglobaldb.sql)
+
+#### Copy Query
+```tsql
+SELECT 
+  DATE_TRUNC('day',line_item_usage_start_date) AS day_line_item_usage_start_date, 
+  line_item_usage_account_id,
+  line_item_line_item_type,
+  line_item_usage_type,
+  line_item_operation,
+  line_item_line_item_description,
+  line_item_resource_id,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount
+FROM 
+  ${table_name}
+WHERE 
+  ${date_filter}
+  AND (line_item_resource_id LIKE '%${primary_cluster_id}%' -- primary region cluster id in format 'cluster-xxxxxxxxxxxxxxxxxxxxxxxx'
+    OR line_item_resource_id LIKE '%${secondary_cluster_id_1}%' -- secondary region cluster id in format 'cluster-xxxxxxxxxxxxxxxxxxxxxxxx'
+    OR line_item_resource_id LIKE '%${secondary_cluster_id_n}%' -- additional secondary region cluster id. copy and paste this line once per additional region/cluster
+    OR line_item_resource_id LIKE '%${primary_cluster_db_instance_name_1}%' -- primary region database instance name. user defined string, e.g 'team-a-mysql-db-1'
+    OR line_item_resource_id LIKE '%${primary_cluster_db_instance_name_n}%' -- additional primary region database instance name. copy and paste this line once per additional instance
+    OR line_item_resource_id LIKE '%${secondary_cluster_db_instance_name_1}%' -- secondary region database instance name. user defined string, e.g 'team-a-mysql-db-2'. optional if running headless.
+    OR line_item_resource_id LIKE '%${secondary_cluster_db_instance_name_n}%' -- additional secondary region database instance name. copy and paste this line once per additional instance
+  )
+  AND line_item_usage_type NOT LIKE '%BackupUsage%'
+GROUP BY 
+  DATE_TRUNC('day', line_item_usage_start_date), 
+  line_item_usage_account_id,
+  line_item_line_item_type,
+  line_item_usage_type,
+  line_item_operation,
+  line_item_line_item_description,
+  line_item_resource_id
+ORDER BY
+  day_line_item_usage_start_date, 
+  sum_line_item_unblended_cost DESC
+  ;
+  ```
   
 ### Amazon RDS
 
@@ -91,7 +168,7 @@ GROUP BY
   pricing_term, 
   product_product_family, 
   SPLIT_PART(line_item_resource_id,':',7),
-  product_database_engine,
+  product_database_engine
 ORDER BY 
   day_line_item_usage_start_date, 
   usage_quantity, 
@@ -205,7 +282,7 @@ GROUP BY
   8, -- refers to case_product_product_family
   reservation_reservation_a_r_n
 ORDER BY 
-  sum_line_item_unblended_cost DESC;
+  sum_line_item_blended_cost DESC;
 ```
 
 {{< email_button category_text="Database" service_text="Amazon DynamoDB" query_text="Amazon DynamoDB Query1" button_text="Help & Feedback" >}}

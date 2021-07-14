@@ -27,6 +27,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
     * [AWS Product Descriptions and Pricing Units](#aws-product-descriptions-and-pricing-units)
     * [CUR Table Data with Reserved Instances or Savings Plans](#cur-table-data-with-reserved-instances-or-savings-plans)
     * [Unblended, Blended, Amortized, and Net Costs](#unblended-blended-amortized-and-net-costs)
+  * [CUR Query Building]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help/query-building.md" >}})
 
 ----  
 ### Documentation Links
