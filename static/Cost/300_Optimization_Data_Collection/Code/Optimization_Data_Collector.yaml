@@ -20,7 +20,7 @@ Parameters:
     Default: "Optimization-data-Multi-Account-Role"
   CodeBucket:
     Type: String
-    Description: The AWS Well Architected S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
+    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
     Default: aws-well-architected-labs
     AllowedValues:
       - aws-well-architected-labs-ireland

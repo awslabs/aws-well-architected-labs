@@ -18,66 +18,87 @@ Or if you wish to keep this on your local machine please copy the below and depl
         AWSTemplateFormatVersion: '2010-09-09'
         Description: Main CF template that builds shared resources and other stacks
         Parameters:
-        DestinationBucket:
-            Type: String
-            Description: Name of the S3 Bucket that needs to be created to hold information. This will be combined with account id to make unique. 
-            AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-            Default: optimizationdatacollectionbucket
-        ManagementAccountRole: 
-            Type: String
-            Description: This will be the name of the IAM role that will be deployed in the management account which can retrieve AWS Org data. This is deployed in the next step
-            Default: Lambda-Assume-Role-Management-Account
-        ManagementAccountID: 
-            Type: String
-            Description: Your Management Account ID
-        Resources:
-        #Reusable Resources:
-        S3Bucket:
-            Type: 'AWS::S3::Bucket'
-            Properties:
-            BucketName:
-            !Sub "${DestinationBucket}${AWS::AccountId}"
-        GlueRole:
-            Type: AWS::IAM::Role
-            Properties:
-            RoleName: AWS-OPTICS-Glue-Crawler
-            AssumeRolePolicyDocument:
-                Statement:
-                - Action:
-                    - sts:AssumeRole
-                    Effect: Allow
-                    Principal:
-                    Service:
-                        - glue.amazonaws.com
-                Version: 2012-10-17
-            ManagedPolicyArns:
-                - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
-            Path: /
-            Policies:
-                - PolicyName: "Put-S3"
-                PolicyDocument:
-                    Version: "2012-10-17"
-                    Statement:
-                    - Effect: "Allow"
-                        Action:
-                        - "s3:PutObject"
-                        - "s3:GetObject"
-                        Resource: !Join
-                                - ''
-                                - - !GetAtt S3Bucket.Arn 
-                                    - '*'
-
+            DestinationBucket:
+                Type: String
+                Description: Name of the S3 Bucket that needs to be created to hold information
+                AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+                Default: costoptimizationdatacollectionbucket
+            ManagementAccountRole: 
+                Type: String
+                Description: This will be the name of the IAM role that will be deployed in the management account which can retrieve AWS Org data. This is deployed in the next step
+                Default: Lambda-Assume-Role-Management-Account
+            ManagementAccountID: 
+                Type: String
+                Description: Your Management Account ID
+            MultiAccountRoleName:
+                Type: String
+                Description: This will be the name of the IAM role that will be deployed from the management account to linked accounts as a read only role
+                Default: "Optimization-data-Multi-Account-Role"
+            CodeBucket:
+                Type: String
+                Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
+                Default: aws-well-architected-labs
+                AllowedValues:
+                - aws-well-architected-labs-ireland
+                - aws-well-architected-labs
+                - aws-well-architected-labs-ohio
+                - aws-well-architected-labs-virginia
         Outputs:
-        S3Bucket:
-            Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
-            Value:
-            Ref: S3Bucket
-        S3BucketARN:
-            Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
-            Value:
-            Fn::GetAtt:
-                - S3Bucket
-                - Arn 
+            S3Bucket:
+                Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+                Value:
+                Ref: S3Bucket
+            S3BucketARN:
+                Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+                Value:
+                Fn::GetAtt:
+                    - S3Bucket
+                    - Arn 
+        #Reusable Resources:
+        Resources:
+            S3Bucket:
+                Type: 'AWS::S3::Bucket'
+                Properties:
+                BucketName:
+                    !Sub "${DestinationBucket}${AWS::AccountId}"
+                VersioningConfiguration:
+                    Status: Enabled
+                BucketEncryption:
+                    ServerSideEncryptionConfiguration:
+                    - ServerSideEncryptionByDefault:
+                        SSEAlgorithm: AES256
+            GlueRole:
+                Type: AWS::IAM::Role
+                Properties:
+                RoleName: AWS-OPTICS-Glue-Crawler
+                AssumeRolePolicyDocument:
+                    Statement:
+                    - Action:
+                        - sts:AssumeRole
+                        Effect: Allow
+                        Principal:
+                        Service:
+                            - glue.amazonaws.com
+                    Version: 2012-10-17
+                ManagedPolicyArns:
+                    - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+                Path: /
+                Policies:
+                    - PolicyName: "Put-S3"
+                    PolicyDocument:
+                        Version: "2012-10-17"
+                        Statement:
+                        - Effect: "Allow"
+                            Action:
+                            - "s3:PutObject"
+                            - "s3:GetObject"
+                            Resource: !Join
+                                    - ''
+                                    - - !GetAtt S3Bucket.Arn 
+                                        - '*'
+{{% notice note %}}
+NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
+{{% /notice %}}
 
 2. Click **Next**.
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
