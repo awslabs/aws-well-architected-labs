@@ -8,8 +8,8 @@ pre: "<b>3. </b>"
 
 ## Data Modules 
 For every module you want you add there are two steps to complete:
-* Update OptimizationDataCollectionStack with module
-* Update either OptimizationManagementDataRoleStack or OptimizationDataCollectionStack depending on the role it is using
+* Update **OptimizationDataCollectionStack** with module
+* Update either **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** depending on the role it is using
 
 This is what you can add. The steps to do this are afterwards.
 
