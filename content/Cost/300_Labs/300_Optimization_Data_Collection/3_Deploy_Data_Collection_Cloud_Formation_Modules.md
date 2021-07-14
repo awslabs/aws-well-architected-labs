@@ -1,5 +1,5 @@
 ---
-title: "Deploy CloudFormation Modules"
+title: "Deploy Data Collection Modules"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 3
@@ -7,18 +7,21 @@ pre: "<b>3. </b>"
 ---
 
 ## Data Modules 
-For every module you want you add there are two steps to complete:
-* Update **OptimizationDataCollectionStack** with module
-* Update either **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** depending on the role it is using
+For every module you want you add there are three steps to complete:
+1. Update **OptimizationDataCollectionStack** to retrieve the data. 
+1. Grant additional permissions to the IAM roles created by **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** so they can access the relevant data. 
+   For our pre-made modules, it will specify which stack will need to be updated. 
+1. Test the deployed Lambda function to confirm it is working as excepted
 
-This is what you can add. The steps to do this are afterwards.
+We have prepared some common options you can use. The detailed steps on how to add these modules can be found below the examples:
 
-{{%expand "RightSize Recommendations" %}}
+{{%expand "Cost Explorer Rightsizing Recommendations" %}}
 
-### RightSize Recommendations
+### Cost Explorer Rightsizing Recommendations
 This solution will collect rightsizing recommendations from AWS Cost Explorer in your management account and upload them to an Amazon S3 bucket. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more [here.](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation Stack to add to **OptimizationDataCollectionStack**  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
         RightsizeStack:
             Type: AWS::CloudFormation::Stack
@@ -31,7 +34,8 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
                 TimeoutInMinutes: 5
 
 
-* CloudFormation Policy to add to OptimizationManagementDataRoleStack:
+* IAM Policy to add to **OptimizationManagementDataRoleStack**:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationmanagementdatarolestack)
 
         - PolicyName: "RightsizeReadOnlyPolicy"
           PolicyDocument:
@@ -53,7 +57,8 @@ This module is designed to loop through your organizations account and collect d
 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
 
             DataStackMulti:
@@ -78,12 +83,15 @@ This relies on a role to be available in all accounts in your organization to re
                       RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                       TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
+{{% /notice %}}
 
-* CloudFormation Policy to add to OptimizationDataRoleStack:
+* Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation stack depending on what you want to ingest:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
-These are the resources which can be collected:
 
- **Amazon Machine Images**
+  **Amazon Machine Images**
     
         - PolicyName: "ImageReadOnlyPolicy"
           PolicyDocument:
@@ -94,7 +102,7 @@ These are the resources which can be collected:
                   - "ec2:DescribeImages"
                 Resource: "*"
 
- **Amazon Elastic Block Store (EBS)**
+  **Amazon Elastic Block Store (EBS)**
 
         - PolicyName: "VolumeReadOnlyPolicy"
           PolicyDocument:
@@ -106,7 +114,7 @@ These are the resources which can be collected:
                 -  "ec2:DescribeVolumes"
                 Resource: "*"
 
- **Amazon EBS snapshots**
+  **Amazon EBS snapshots**
 
         - PolicyName: "SnapshotsReadOnlyPolicy"
           PolicyDocument:
@@ -119,11 +127,6 @@ These are the resources which can be collected:
                 Resource: "*"
         
 
-
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
-{{% /notice %}}
-
 {{% /expand%}}
 
 
@@ -133,7 +136,8 @@ The AccountCollector module is reusable and only needs to be added once but mult
 This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
 
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
              TrustedAdvisor:
                 Type: AWS::CloudFormation::Stack
@@ -157,9 +161,13 @@ This module will retrieve all AWS Trusted Advisor recommendations from all your 
                       RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                       TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
+{{% /notice %}}
 
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation stack:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
-* CloudFormation Policy to add to OptimizationDataRoleStack:
      
           - PolicyName: "TAPolicy"
             PolicyDocument:
@@ -173,9 +181,7 @@ This module will retrieve all AWS Trusted Advisor recommendations from all your 
                   Resource: "*"
           
 
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
-{{% /notice %}}
+
 
 {{% /expand%}}
 
@@ -184,10 +190,12 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## Compute Optimizer Collector
 
-The Compute Optimizer Service **Currently this data only lasts** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
+The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
+In this module, the data will be collected and placed into an Amazon S3 Bucket and read by Athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
 
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation to add to *OptimizationDataCollectionStack* :  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
                 COCDataStack:
                     Type: AWS::CloudFormation::Stack
@@ -208,9 +216,13 @@ The Compute Optimizer Service **Currently this data only lasts** and does not sh
                       Parameters:
                           RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                           TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
-                        
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
+{{% /notice %}}
 
-* CloudFormation Policy to add to OptimizationManagementDataRoleStack:
+* IAM Policy to add to *OptimizationManagementDataRoleStack*:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationmanagementdatarolestack)
+
 
               - PolicyName: !Sub "Compute Optimizer Policy"
                 PolicyDocument:
@@ -236,9 +248,7 @@ The Compute Optimizer Service **Currently this data only lasts** and does not sh
                         - "EC2:DescribeVolumes" 
                         Resource: "*"    
 
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
-{{% /notice %}}
+
 {{% /expand%}}
 
 
@@ -246,7 +256,8 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
                 ECSStack:
                     Type: AWS::CloudFormation::Stack
@@ -267,7 +278,9 @@ The AccountCollector module is reusable and only needs to be added once but mult
                           RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                           TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
 
-* CloudFormation Policy to add to OptimizationDataRoleStack:
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation stack:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
+
 
               - PolicyName: "ECSReadAccess"
                 PolicyDocument:
@@ -301,7 +314,8 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## RDS Utilization
 The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. 
 
-* CloudFormation to add to OptimizationDataCollectionStack:
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
             RDSMetricsStack:
             Type: AWS::CloudFormation::Stack
@@ -314,7 +328,9 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
                   GlueRoleArn: !GetAtt GlueRole.Arn 
                   MultiAccountRoleName: !Ref MultiAccountRoleName
 
-* CloudFormation Policy to add to OptimizationDataRoleStack:
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation Stack:  
+  [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
+
 
                   - PolicyName: "RDSUtilReadOnlyPolicy"
                     PolicyDocument:
@@ -371,8 +387,8 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
 {{% /expand%}}
 
 
-### How to Update Optimization Stack
-1. Login via SSO in your Cost Optimization account and search for **Cloud Formation**.
+### How to Update OptimizationDataCollectionStack
+1. Login via SSO in your Cost Optimization account and search for **CloudFormation**.
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
 2. In your Cost Account under CloudFormation select your **OptimizationDataCollectionStack** 
@@ -391,26 +407,47 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 
 
-### How to Update Roles
-The IAM Roles created in the pervious section need to be update with the relevant permissions. Depending on the module, you will need to add the permissions to either the management role or the role created in the stack set. In the pre made modules this will be specified. 
+### How to Update IAM Policies in OptimizationDataRoleStack
+The IAM Roles created in the previous section need to be updated with the relevant permissions. Depending on the module, you will need to add the permissions to either the management role or the role created in the stack set. In the pre made modules this will be specified. 
 
-1. Login via SSO in your Management account and search for **Cloud Formation**
+1. Login via SSO in your Management account and search for **CloudFormation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
-### How to Update Role Management.yaml
-2. Select the **OptimizationManagementDataRoleStack** and click **Update**
+### How to Update IAM Policies in OptimizationManagementDataRoleStack
+The IAM Roles created in the previous section need to be updated with the relevant permissions.
+
+Depending on the module, you will need to add the permissions to either the management role or the
+role created in the stack set. In the pre-made modules this will be specified.
+
+These instructions are for updating the roles in **OptimizationManagementDataRoleStack**. This stack is
+deployed in the management account.
+
+1. Login via SSO in your Management account and search for **CloudFormation**
+   ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
+
+2. Select the **OptimizationManagementDataRoleStack** and click **Update**  
 ![Images/Update_man_role.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role.png)  
-
-
-3. Select **Edit template in designer** then **View in Designer**
+   
+3. Select **Edit template in designer** then **View in Designer**  
 ![Images/Edit_template_man_role.png](/Cost/300_Optimization_Data_Collection/Images/Edit_template_man_role.png)  
 
-4. Copy the IAM permission code from the module section above. In Designer in the template section past the code just above the output section. Click the Upload button in the top corner.
+4. Copy the IAM permission code from the module section above. In Designer in the template section past the code just above the output section.
+   Click the Upload button in the top corner.  
 ![Images/Update_man_role_design.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role_design.png)  
 
 5. Click Next and keep everything to default till deployed
 
-### How to Update Role optimisation_read_only_role.yaml
+### How to Update Role OptimizationDataRoleStack
+The IAM Roles created in the previous section need to be updated with the relevant permissions.
+
+Depending on the module, you will need to add the permissions to either the management role or the
+role created in the stack set. In the pre-made modules this will be specified.
+
+These instructions are for updating the roles in **OptimizationDataRoleStack**. This stack is
+deployed in each of the linked accounts.
+
+1. Login via SSO in your Management account and search for **CloudFormation**
+   ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
 2. Copy the IAM permission code from the module section above. In your local copy of the optimisation_read_only_role.yaml file add it to the bottom. 
 
@@ -424,11 +461,11 @@ The IAM Roles created in the pervious section need to be update with the relevan
 
 6. Click Next and keep everything to default till deployed
 
-## Testing Lambdas 
+## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
-1. The updated CloudFormation will crated a Nested stack. By clicking on your stack and selecting **Resources** find your lambda function and click the hyperlink.
+1. The updated CloudFormation will have created a Nested stack. By clicking on your stack and selecting **Resources** find your lambda function and click the hyperlink.
 
 2. To test your lambda function click **Test**
 ![Images/lambda_test_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/lambda_test_cf.png) 

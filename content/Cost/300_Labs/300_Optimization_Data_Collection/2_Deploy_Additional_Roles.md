@@ -1,5 +1,5 @@
 ---
-title: "Deploy Additional Roles"
+title: "Grant permissions to your accounts in your AWS Organization"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 2
