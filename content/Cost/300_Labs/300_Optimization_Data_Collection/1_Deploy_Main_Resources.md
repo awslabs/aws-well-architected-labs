@@ -37,7 +37,6 @@ Or if you wish to keep this on your local machine please copy the below and depl
             CodeBucket:
                 Type: String
                 Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
-                Default: aws-well-architected-labs
                 AllowedValues:
                 - aws-well-architected-labs-ireland
                 - aws-well-architected-labs

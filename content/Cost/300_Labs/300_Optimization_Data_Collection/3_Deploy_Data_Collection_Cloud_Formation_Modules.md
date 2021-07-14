@@ -1,5 +1,5 @@
 ---
-title: "Deploy Data Collection Cloud Formation Modules"
+title: "Deploy CloudFormation Modules"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 3
@@ -7,11 +7,9 @@ pre: "<b>3. </b>"
 ---
 
 ## Data Modules 
-Now that you have deployed your template and your additional roles you can now start adding modules. Below there are pre made modules you can add to your template. Each set will have the resources and parameters you need along with policy requirements for the roles you made. 
-
 For every module you want you add there are two steps to complete:
-* Update main.yaml with script
-* Update additionalroles.yaml with IAM
+* Update OptimizationDataCollectionStack with module
+* Update either OptimizationManagementDataRoleStack or OptimizationDataCollectionStack depending on the role it is using
 
 This is what you can add. The steps to do this are afterwards.
 
@@ -20,7 +18,7 @@ This is what you can add. The steps to do this are afterwards.
 ### RightSize Recommendations
 This solution will collect rightsizing recommendations from AWS Cost Explorer in your management account and upload them to an Amazon S3 bucket. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more [here.](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
 
-* Main file module:
+* CloudFormation to add to OptimizationDataCollectionStack:
 
         RightsizeStack:
             Type: AWS::CloudFormation::Stack
@@ -33,7 +31,7 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
                 TimeoutInMinutes: 5
 
 
-* Add to Management Role Policy:
+* CloudFormation Policy to add to OptimizationManagementDataRoleStack:
 
         - PolicyName: "RightsizeReadOnlyPolicy"
           PolicyDocument:
@@ -55,16 +53,9 @@ This module is designed to loop through your organizations account and collect d
 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 
-* CloudFormation to add to Optimization_Data_Collector.yaml:
-
-        Parameters:
-            MultiAccountRoleName:
-            Type: String
-            Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
-            Default: OPTICS-Assume-Role-Management-Account
+* CloudFormation to add to OptimizationDataCollectionStack:
 
 
-        Resource:
             DataStackMulti:
                 Type: AWS::CloudFormation::Stack
                 Properties:
@@ -88,10 +79,11 @@ This relies on a role to be available in all accounts in your organization to re
                       TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
 
-* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+* CloudFormation Policy to add to OptimizationDataRoleStack:
 
 These are the resources which can be collected:
- * Amazon Machine Images
+
+ **Amazon Machine Images**
     
         - PolicyName: "ImageReadOnlyPolicy"
           PolicyDocument:
@@ -102,9 +94,8 @@ These are the resources which can be collected:
                   - "ec2:DescribeImages"
                 Resource: "*"
 
- * Amazon Elastic Block Store (EBS)
+ **Amazon Elastic Block Store (EBS)**
 
-        
         - PolicyName: "VolumeReadOnlyPolicy"
           PolicyDocument:
             Version: "2012-10-17"
@@ -115,7 +106,7 @@ These are the resources which can be collected:
                 -  "ec2:DescribeVolumes"
                 Resource: "*"
 
- * Amazon EBS snapshots
+ **Amazon EBS snapshots**
 
         - PolicyName: "SnapshotsReadOnlyPolicy"
           PolicyDocument:
@@ -136,23 +127,14 @@ The AccountCollector module is reusable and only needs to be added once but mult
 {{% /expand%}}
 
 
-{{%expand "Inventory Collector" %}}
+{{%expand "Trusted Advisor" %}}
 
 ###  Trusted Advisor
 This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
 
 
-* CloudFormation to add to Optimization_Data_Collector.yaml:
+* CloudFormation to add to OptimizationDataCollectionStack:
 
-
-        Parameters:
-            MultiAccountRoleName:
-            Type: String
-            Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
-            Default: OPTICS-Assume-Role-Management-Account
-
-
-        Resource:
              TrustedAdvisor:
                 Type: AWS::CloudFormation::Stack
                 Properties:
@@ -177,7 +159,7 @@ This module will retrieve all AWS Trusted Advisor recommendations from all your 
 
 
 
-* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+* CloudFormation Policy to add to OptimizationDataRoleStack:
      
           - PolicyName: "TAPolicy"
             PolicyDocument:
@@ -205,7 +187,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 The Compute Optimizer Service **Currently this data only lasts** and does not show historical information. In this module the data will be collected and placed into S3 and read by athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
 
 
-* CloudFormation to add to Optimization_Data_Collector.yaml:
+* CloudFormation to add to OptimizationDataCollectionStack:
 
                 COCDataStack:
                     Type: AWS::CloudFormation::Stack
@@ -228,7 +210,7 @@ The Compute Optimizer Service **Currently this data only lasts** and does not sh
                           TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
                         
 
-* Add to Management Role Policy:
+* CloudFormation Policy to add to OptimizationManagementDataRoleStack:
 
               - PolicyName: !Sub "Compute Optimizer Policy"
                 PolicyDocument:
@@ -264,7 +246,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
-* CloudFormation to add to Optimization_Data_Collector.yaml:
+* CloudFormation to add to OptimizationDataCollectionStack:
 
                 ECSStack:
                     Type: AWS::CloudFormation::Stack
@@ -285,7 +267,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
                           RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                           TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
 
-* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+* CloudFormation Policy to add to OptimizationDataRoleStack:
 
               - PolicyName: "ECSReadAccess"
                 PolicyDocument:
@@ -319,7 +301,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## RDS Utilization
 The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. 
 
-* CloudFormation to add to Optimization_Data_Collector.yaml:
+* CloudFormation to add to OptimizationDataCollectionStack:
 
             RDSMetricsStack:
             Type: AWS::CloudFormation::Stack
@@ -332,7 +314,7 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
                   GlueRoleArn: !GetAtt GlueRole.Arn 
                   MultiAccountRoleName: !Ref MultiAccountRoleName
 
-* Multi Account Policy needed to add to optimisation_read_only_role.yaml:
+* CloudFormation Policy to add to OptimizationDataRoleStack:
 
                   - PolicyName: "RDSUtilReadOnlyPolicy"
                     PolicyDocument:
