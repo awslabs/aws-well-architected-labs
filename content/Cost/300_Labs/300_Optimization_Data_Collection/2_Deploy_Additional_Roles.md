@@ -1,9 +1,9 @@
 ---
-title: "Additional Roles"
+title: "Deploy Additional Roles"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 2
-pre: "<b>2 </b>"
+pre: "<b>2. </b>"
 ---
 
 ### Role for Management Account

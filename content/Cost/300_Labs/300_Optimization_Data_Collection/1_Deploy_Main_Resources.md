@@ -1,5 +1,5 @@
 ---
-title: "Main Resources"
+title: "Deploy Main Resources"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 1
@@ -97,7 +97,7 @@ Or if you wish to keep this on your local machine please copy the below and depl
                                     - - !GetAtt S3Bucket.Arn 
                                         - '*'
 {{% notice note %}}
-NOTE: CODEBUCKET if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
+For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
 {{% /notice %}}
 
 2. Click **Next**.

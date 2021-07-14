@@ -1,5 +1,5 @@
 ---
-title: "Data Collection CloudFormation Modules"
+title: "Deploy Data Collection Cloud Formation Modules"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 3
