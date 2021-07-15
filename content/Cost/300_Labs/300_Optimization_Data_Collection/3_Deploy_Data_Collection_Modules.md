@@ -191,7 +191,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## Compute Optimizer Collector
 
 The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
-In this module, the data will be collected and placed into an Amazon S3 Bucket and read by Athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. 
+In this module, the data will be collected and placed into an Amazon S3 Bucket and read by Athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
 
 
 * CloudFormation to add to *OptimizationDataCollectionStack* :  
@@ -312,7 +312,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 {{%expand "RDS Utilization Data" %}}
 
 ## RDS Utilization
-The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. 
+The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. You can use the saved Athena query as a view to query these results and track your recommendations.
 
 * CloudFormation to add to **OptimizationDataCollectionStack**:  
   [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
