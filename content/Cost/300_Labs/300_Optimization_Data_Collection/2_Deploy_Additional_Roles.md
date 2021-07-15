@@ -1,5 +1,5 @@
 ---
-title: "Deploy Additional Roles"
+title: "Grant permissions to your accounts in your AWS Organization"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 2
@@ -63,4 +63,4 @@ Note this role will not be deployed into the management account so if you wish t
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../1_Main_Resources/" link_next_url="../3_Data_Collection_Cloud_Formation_Modules/" />}}
+{{< prev_next_button link_prev_url="../1_Deploy_Main_Resources/" link_next_url="../3_Deploy_Data_Collection_Modules/" />}}
