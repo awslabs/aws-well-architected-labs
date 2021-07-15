@@ -407,12 +407,6 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 
 
-### How to Update IAM Policies in OptimizationDataRoleStack
-The IAM Roles created in the previous section need to be updated with the relevant permissions. Depending on the module, you will need to add the permissions to either the management role or the role created in the stack set. In the pre made modules this will be specified. 
-
-1. Login via SSO in your Management account and search for **CloudFormation**
-![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
-
 ### How to Update IAM Policies in OptimizationManagementDataRoleStack
 The IAM Roles created in the previous section need to be updated with the relevant permissions.
 
@@ -486,9 +480,7 @@ If you would like to make your own modules then go to the next section to learn 
 {{% /notice %}}
 
 
-## Tips
-* If you are using a resource from another module and passing it in then ...
+Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or Passing into Amazon Quicksight.
 
 
-
-{{< prev_next_button link_prev_url="../2_Additional_Roles/" link_next_url="../4_Custom_Data_Collection_Module/" />}}
+{{< prev_next_button link_prev_url="../2_Deploy_Additional_Roles/" link_next_url="../4_Create_Custom_Data_Collection_Module/" />}}
