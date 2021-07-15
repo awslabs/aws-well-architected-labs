@@ -470,9 +470,18 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 4.	Click **Test**
 
-5.	The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
+5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
 
-6. By going to athena you will be able to see your data in the **Optimization_Data** Database
+6. Go to the **Athena** service page
+
+![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
+
+7. You will be able to see your data in the **Optimization_Data** Database
+
+![Images/Optimization_Data_DB.png](/Cost/300_Optimization_Data_Collection/Images/Optimization_Data_DB.png)
+
+8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
+![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
 
 
 {{% notice tip %}}
