@@ -24,8 +24,9 @@ FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
-  AND line_item_product_code = 'AWSOutposts'
-  AND line_item_operation LIKE '%%RunInstance%%'
+  AND product_location_type='AWS Outposts'
+  AND product_product_family='Compute Instance'
+  AND line_item_operation LIKE '%RunInstance%'
   AND (line_item_line_item_type = 'Usage'
     OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
     OR (line_item_line_item_type = 'DiscountedUsage')

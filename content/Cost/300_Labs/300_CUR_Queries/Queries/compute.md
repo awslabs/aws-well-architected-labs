@@ -667,8 +667,9 @@ FROM
   ${table_name} 
 WHERE 
   ${date_filter} 
-  AND line_item_product_code = 'AWSOutposts'
-  AND line_item_operation LIKE '%%RunInstance%%'
+  AND product_location_type='AWS Outposts'
+  AND product_product_family='Compute Instance'
+  AND line_item_operation LIKE '%RunInstance%'
   AND (line_item_line_item_type = 'Usage'
     OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
     OR (line_item_line_item_type = 'DiscountedUsage')
