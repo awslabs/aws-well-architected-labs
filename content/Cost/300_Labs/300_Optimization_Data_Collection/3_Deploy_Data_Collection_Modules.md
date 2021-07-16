@@ -256,6 +256,8 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
+This will enable you too automated report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster. Instructions on how to use this data can be found (here)[https://github.com/aws-samples/ecs-chargeback-cloudformation]
+
 * CloudFormation to add to **OptimizationDataCollectionStack**:  
   [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
