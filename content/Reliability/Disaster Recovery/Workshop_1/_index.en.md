@@ -2,7 +2,7 @@
 title = "Module 1: Backup and Restore"
 date = 2021-05-06T09:52:56-04:00
 weight = 110
-chapter = true
+chapter = false
 pre = ""
 +++
 

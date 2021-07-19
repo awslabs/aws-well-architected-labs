@@ -2,7 +2,7 @@
 title = "Module 3: Warm Standby"
 date = 2021-05-06T09:52:56-04:00
 weight = 140
-chapter = true
+chapter = false
 pre = ""
 +++
 

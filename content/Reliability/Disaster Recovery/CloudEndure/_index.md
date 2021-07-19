@@ -2,7 +2,7 @@
 title = "Module 5: CloudEndure"
 date = 2021-05-06T09:53:21-04:00
 weight = 150
-chapter = true
+chapter = false
 pre = ""
 +++
 
