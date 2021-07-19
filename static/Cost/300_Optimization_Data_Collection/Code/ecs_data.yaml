@@ -29,6 +29,12 @@ Parameters:
       - aws-well-architected-labs
       - aws-well-architected-labs-ohio
       - aws-well-architected-labs-virginia
+      - aws-well-architected-labs-california
+      - aws-well-architected-labs-oregon
+      - aws-well-architected-labs-singapore
+      - aws-well-architected-labs-frankfurt
+      - aws-well-architected-labs-london
+      - aws-well-architected-labs-stockholm
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
@@ -256,4 +262,30 @@ Resources:
             cluster_metadata_view
         )  clusters_data ON (((\"clusters_data\".\"account_id\" = \"cur\".\"line_item_usage_account_id\") AND ((\"clusters_data\".\"services\" = \"cur\".\"resource_tags_aws_ecs_service_name\") AND (\"clusters_data\".\"year\" = \"cur\".\"year\"))) AND (\"clusters_data\".\"month\" = \"cur\".\"month\")))
         GROUP BY \"bill_payer_account_id\", \"line_item_usage_account_id\", \"line_item_product_code\", \"line_item_operation\", \"line_item_resource_id\", \"resource_tags_aws_ecs_service_Name\", \"line_item_usage_type\", \"line_item_operation\", \"cur\".\"month\", \"cur\".\"year\", \"cluster\", \"services\", \"servicearn\", \"value\", \"task\", \"account_id\""  
-          
+  AthenaEC2CChargeBackQuery:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: ecs_chargeback_report
+      QueryString: 
+        "SELECT bu_usage_view.line_item_usage_account_id, sum(sum_line_item_usage_amount) AS task_usage, total_usage, (sum(sum_line_item_usage_amount)/total_usage) as percent,  ec2_cost, ((sum(sum_line_item_usage_amount)/total_usage)*ec2_cost) as ecs_cost,
+        \"cluster\",
+        services,
+        servicearn,
+        value,
+        bu_usage_view.month,
+        bu_usage_view.year
+        FROM \"bu_usage_view\"
+        left join (select line_item_usage_account_id, sum(sum_line_item_usage_amount) as total_usage, year, month from \"bu_usage_view\" where \"cluster\" <> '' group by line_item_usage_account_id, year, month) sum
+        on sum.line_item_usage_account_id = bu_usage_view.line_item_usage_account_id
+        and sum.month=bu_usage_view.month
+        and sum.year=bu_usage_view.year
+        left join
+        (SELECT line_item_usage_account_id, month, year, sum(sum_line_item_amortized_cost) as ec2_cost FROM \"ec2_cluster_costs_view\" group by  line_item_usage_account_id,month,year) ec2_cost
+        on ec2_cost.month=bu_usage_view.month
+        and ec2_cost.year=bu_usage_view.year
+        and ec2_cost.line_item_usage_account_id=bu_usage_view.line_item_usage_account_id
+        where \"cluster\" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),bu_usage_view.month = '12', bu_usage_view.month = CAST((month(now())-1) AS VARCHAR) )
+        and  if((date_format(current_timestamp , '%M') = 'January'), bu_usage_view.year = CAST((year(now())-1) AS VARCHAR) ,bu_usage_view.year = CAST(year(now()) AS VARCHAR))
+        GROUP BY  \"cluster\", services, servicearn, value, bu_usage_view.month, bu_usage_view.year, bu_usage_view.line_item_usage_account_id, total_usage, ec2_cost"

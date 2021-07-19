@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Optimization Data Collection"
+title: "Level 300: Optimization Data Collection - BETA"
 #menutitle: "Lab #1"
 date: 2020-10-22T11:16:08-04:00
 chapter: false

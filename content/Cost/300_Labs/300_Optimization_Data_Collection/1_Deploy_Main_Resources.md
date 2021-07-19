@@ -42,6 +42,12 @@ Or if you wish to keep this on your local machine please copy the below and depl
                 - aws-well-architected-labs
                 - aws-well-architected-labs-ohio
                 - aws-well-architected-labs-virginia
+                - aws-well-architected-labs-california
+                - aws-well-architected-labs-oregon
+                - aws-well-architected-labs-singapore
+                - aws-well-architected-labs-frankfurt
+                - aws-well-architected-labs-london
+                - aws-well-architected-labs-stockholm
         Outputs:
             S3Bucket:
                 Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations

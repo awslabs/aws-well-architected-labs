@@ -27,6 +27,12 @@ Parameters:
         - aws-well-architected-labs
         - aws-well-architected-labs-ohio
         - aws-well-architected-labs-virginia
+        - aws-well-architected-labs-california
+        - aws-well-architected-labs-oregon
+        - aws-well-architected-labs-singapore
+        - aws-well-architected-labs-frankfurt
+        - aws-well-architected-labs-london
+        - aws-well-architected-labs-stockholm
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
