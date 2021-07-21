@@ -20,6 +20,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Amazon Aurora Global Database](#amazon-aurora-global-database)
   * [Amazon RDS](#amazon-rds)
   * [Amazon RDS - Monthly Cost grouped by Usage Type and Resource Tag](#amazon-rds---monthly-cost-grouped-by-usage-type-and-resource-tag)
+  * [Amazon RDS on AWS Outposts](#amazon-rds-on-aws-outposts)
   * [Amazon DynamoDB](#amazon-dynamodb)
   * [Amazon Redshift](#amazon-redshift)
   * [Amazon ElastiCache](#amazon-elasticache)
@@ -220,6 +221,61 @@ ORDER BY
 ```
 
 {{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Monthly Cost grouped by Usage Type and User Tag" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon RDS on AWS Outposts
+
+#### Query Description
+This query will output the total daily unblended costs for RDS Instances running on AWS Outposts racks. This query will be helpful to visualize a quick breakdown of cost components for RDS usage based on instance type, database engine and deployment option (Multi vs Single-AZ).
+
+#### Pricing
+Please refer to the [Amazon RDS on Outposts pricing page](https://aws.amazon.com/rds/outposts/pricing/).
+
+#### Sample Output
+![Images/rds_outposts.png](/Cost/300_CUR_Queries/Images/Database/rds_outposts.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Database/rds_outposts.sql)
+
+#### Copy Query
+```tsql
+SELECT  
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  SPLIT_PART(line_item_resource_id,':',7) AS split_line_item_resource_id,
+  product_instance_type,
+  product_database_engine,
+  product_deployment_option,
+  SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost 
+FROM  
+  ${table_name} 
+WHERE
+  ${date_filter} 
+  AND product_location_type='AWS Outposts'
+  AND product_product_family='Database Instance'
+  AND line_item_product_code = 'AmazonRDS'
+  AND (line_item_line_item_type = 'Usage'
+    OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
+    OR (line_item_line_item_type = 'DiscountedUsage')
+  )
+GROUP BY
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  line_item_resource_id,
+  product_instance_type,
+  product_database_engine,
+  product_deployment_option
+ORDER BY
+  day_line_item_usage_start_date ASC,
+  sum_line_item_usage_amount DESC,
+  sum_line_item_unblended_cost DESC;
+```
+
+{{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS on AWS Outposts" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
