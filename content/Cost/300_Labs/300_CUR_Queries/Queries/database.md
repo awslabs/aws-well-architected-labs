@@ -489,7 +489,13 @@ Please refer to the [Amazon DocumentDB pricing page](https://aws.amazon.com/docu
       AND line_item_product_code = 'AmazonDocDB'
       AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','Fee','RIFee')
     GROUP BY  
-      1,2,3,4,5,6,7
+      1, -- bill_payer_account_id
+      2, -- line_item_usage_account_id
+      3, -- day_line_item_usage_start_date
+      4, -- line_item_resource_id
+      5, -- line_item_usage_type
+      6, -- product_region
+      7 -- line_item_product_code
     ORDER BY
       sum_line_item_unblended_cost DESC;
 ```
