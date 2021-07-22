@@ -7,11 +7,14 @@ weight: 4
 hidden: false
 ---
 ## Last Updated
-May 2020
+July 2021
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
 - Spencer Marley, Commercial Architect
+
+## Contributors
+- Alee Whitman, Sr. Commercial Architect (AWS OPTICS) 
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
