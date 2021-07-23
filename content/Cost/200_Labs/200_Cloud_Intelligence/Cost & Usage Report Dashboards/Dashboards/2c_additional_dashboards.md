@@ -7,7 +7,7 @@ pre: "<b>2c. </b>"
 ---
 
 ## Introduction
-In addition to the two foundational Cloud Intelligence Dashboards, Cost Intelligence Dashboard and CUDOS, we have service or specific use case dashboards that help you dive deeper and gain additional insights. 
+In addition to the two foundational Cloud Intelligence Dashboards CUR Dashboards, Cost Intelligence Dashboard and CUDOS, we have service and specific use case dashboards that help you dive deeper and gain additional insights.
 
 ### Data Transfer Dashboard
 
