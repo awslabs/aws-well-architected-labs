@@ -4,6 +4,14 @@ Parameters:
   CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
+Outputs:
+  LambdaRole:
+    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn 
+
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
@@ -34,10 +42,3 @@ Resources:
                   - "organizations:DescribeOrganization"
                   - "organizations:ListTagsForResource"
                 Resource: "*"
-Outputs:
-  LambdaRole:
-    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
-    Value:
-      Fn::GetAtt:
-        - LambdaRole
-        - Arn 

@@ -63,4 +63,4 @@ Note this role will not be deployed into the management account so if you wish t
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../1_Deploy_Main_Resources/" link_next_url="../3_Deploy_Data_Collection_Modules/" />}}
+{{< prev_next_button link_prev_url="../1_deploy_main_resources/" link_next_url="../3_deploy_data_collection_modules" />}}

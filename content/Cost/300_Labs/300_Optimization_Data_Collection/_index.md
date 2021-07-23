@@ -14,6 +14,7 @@ June 2021
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
+NOTE: This is a BETA Lab so please share feedback as we are still developing
 
 ## Introduction
 This lab is designed to enable you to collect utilization data from different service to help you identify optimization opportunities. This lab will give you pre made modules to collect data and show you how to pull your own sets of data. In the CloudFormation modules we will follow the structure of using an AWS Lambda function to extract the data, then this will be placed into Amazon S3. From there, Amazon Athena will be able to read this data using a AWS Glue Crawler to produce a table that can be utilize and even connected to your AWS Cost & Usage Report to enrich it. 
@@ -74,4 +75,4 @@ Be able to create the below in a sub account where your CUR data is accessible:
 {{% children  /%}}
 
 
-{{< prev_next_button link_next_url="./1_create_static_resources_source/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_Deploy_Main_Resources/" button_next_text="Start Lab" first_step="true" />}}

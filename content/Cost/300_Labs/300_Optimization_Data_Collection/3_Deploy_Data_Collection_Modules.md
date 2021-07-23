@@ -8,9 +8,9 @@ pre: "<b>3. </b>"
 
 ## Data Modules 
 For every module you want you add there are three steps to complete:
-1. Update **OptimizationDataCollectionStack** to retrieve the data. 
 1. Grant additional permissions to the IAM roles created by **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** so they can access the relevant data. 
    For our pre-made modules, it will specify which stack will need to be updated. 
+1. Update **OptimizationDataCollectionStack** to retrieve the data. 
 1. Test the deployed Lambda function to confirm it is working as excepted
 
 We have prepared some common options you can use. The detailed steps on how to add these modules can be found below the examples:
@@ -19,19 +19,7 @@ We have prepared some common options you can use. The detailed steps on how to a
 
 ### Cost Explorer Rightsizing Recommendations
 This solution will collect rightsizing recommendations from AWS Cost Explorer in your management account and upload them to an Amazon S3 bucket. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more [here.](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
-
-* CloudFormation Stack to add to **OptimizationDataCollectionStack**  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
-
-        RightsizeStack:
-            Type: AWS::CloudFormation::Stack
-            Properties:
-                Parameters:
-                    DestinationBucket: !Ref S3Bucket
-                    DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                    RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
-                TimeoutInMinutes: 5
+This Data will be partitioned by year, month, day. 
 
 
 * IAM Policy to add to **OptimizationManagementDataRoleStack**:  
@@ -46,6 +34,19 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
                   - "ce:GetRightsizingRecommendation"
                 Resource: "*"
 
+* CloudFormation Stack to add to **OptimizationDataCollectionStack**  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack) 
+
+          RightsizeStack:
+            Type: AWS::CloudFormation::Stack
+            Properties:
+              Parameters:
+                  DestinationBucket: !Ref S3Bucket
+                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                  RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+              TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+              TimeoutInMinutes: 5
+
 {{% /expand%}}
 
 
@@ -54,40 +55,10 @@ This solution will collect rightsizing recommendations from AWS Cost Explorer in
 
 ### Inventory Collector
 This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket and is read into AWs Athena by AWS Glue.  
-
+This Data will be partitioned by year, month. 
 This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 
-* CloudFormation to add to **OptimizationDataCollectionStack**:  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
-
-
-            DataStackMulti:
-                Type: AWS::CloudFormation::Stack
-                Properties:
-                  TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-                  TimeoutInMinutes: 2
-                  Parameters:
-                      DestinationBucket: !Ref S3Bucket
-                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                      Prefix: "ami" # example 
-                      CFDataName: "AMI" # example 
-                      GlueRoleARN: !GetAtt GlueRole.Arn
-                      MultiAccountRoleName: !Ref MultiAccountRoleName
-                      CodeBucket: !Ref CodeBucket
-            AccountCollector:
-                Type: AWS::CloudFormation::Stack
-                Properties:
-                  TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                  TimeoutInMinutes: 2
-                  Parameters:
-                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                      TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
-
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
-{{% /notice %}}
-
-* Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation stack depending on what you want to ingest:  
+* Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation StackSet depending on what you want to ingest:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
 
@@ -127,6 +98,36 @@ The AccountCollector module is reusable and only needs to be added once but mult
                 Resource: "*"
         
 
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+
+            DataStackMulti:
+              Type: AWS::CloudFormation::Stack
+              Properties:
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                  DestinationBucket: !Ref S3Bucket
+                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                  Prefix: "ami" # example 
+                  CFDataName: "AMI" # example 
+                  GlueRoleARN: !GetAtt GlueRole.Arn
+                  MultiAccountRoleName: !Ref MultiAccountRoleName
+                  CodeBucket: !Ref CodeBucket
+            AccountCollector:
+              Type: AWS::CloudFormation::Stack
+              Properties:
+                TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                  RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                  TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
+{{% /notice %}}
+
 {{% /expand%}}
 
 
@@ -134,38 +135,10 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ###  Trusted Advisor
 This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
+This Data will be partitioned by year, month, day. 
 
 
-* CloudFormation to add to **OptimizationDataCollectionStack**:  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
-
-             TrustedAdvisor:
-                Type: AWS::CloudFormation::Stack
-                Properties:
-                  TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-                  TimeoutInMinutes: 2
-                  Parameters:
-                      DestinationBucket: !Ref S3Bucket
-                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                      Prefix: "ta"
-                      CFDataName: "TA"
-                      GlueRoleARN: !GetAtt GlueRole.Arn
-                      MultiAccountRoleName: !Ref MultiAccountRoleName
-                      CodeBucket: !Ref CodeBucket
-            AccountCollector:
-                Type: AWS::CloudFormation::Stack
-                Properties:
-                  TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                  TimeoutInMinutes: 2
-                  Parameters:
-                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                      TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
-
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
-{{% /notice %}}
-
-* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation stack:  
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation StackSet:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
      
@@ -182,6 +155,34 @@ The AccountCollector module is reusable and only needs to be added once but mult
           
 
 
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+            TrustedAdvisor:
+              Type: AWS::CloudFormation::Stack
+              Properties:
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                  DestinationBucket: !Ref S3Bucket
+                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                  Prefix: "ta"
+                  CFDataName: "TA"
+                  GlueRoleARN: !GetAtt GlueRole.Arn
+                  MultiAccountRoleName: !Ref MultiAccountRoleName
+                  CodeBucket: !Ref CodeBucket
+            AccountCollector:
+              Type: AWS::CloudFormation::Stack
+              Properties:
+                TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                  RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                  TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
+{{% /notice %}}
 
 {{% /expand%}}
 
@@ -192,62 +193,62 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
 In this module, the data will be collected and placed into an Amazon S3 Bucket and read by Athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
+This Data will be separated by type service and partitioned by year, month . 
 
-
-* CloudFormation to add to *OptimizationDataCollectionStack* :  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
-
-                COCDataStack:
-                    Type: AWS::CloudFormation::Stack
-                    Properties:
-                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
-                      TimeoutInMinutes: 2
-                      Parameters:
-                          DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                          DestinationBucket: !Ref S3Bucket
-                          GlueRoleARN: !GetAtt GlueRole.Arn
-                          RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                          CodeBucket: !Ref CodeBucket
-                AccountCollector:
-                    Type: AWS::CloudFormation::Stack
-                    Properties:
-                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                      TimeoutInMinutes: 2
-                      Parameters:
-                          RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                          TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
-{{% notice note %}}
-The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
-{{% /notice %}}
 
 * IAM Policy to add to *OptimizationManagementDataRoleStack*:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationmanagementdatarolestack)
 
 
-              - PolicyName: !Sub "Compute Optimizer Policy"
+              - PolicyName: "ComputeOptimizerPolicy"
                 PolicyDocument:
-                    Version: "2012-10-17"
-                    Statement:
-                    - Effect: "Allow"
-                        Action: 
-                        - "compute-optimizer:*"
-                        - "EC2:DescribeInstances"
-                        - "cloudwatch:GetMetricData"
-                        - "autoscaling:DescribeAutoScalingGroups"
-                        - "compute-optimizer:UpdateEnrollmentStatus"
-                        - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                        - "compute-optimizer:GetEC2InstanceRecommendations"
-                        - "compute-optimizer:GetEnrollmentStatus"
-                        - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                        - "compute-optimizer:GetRecommendationSummaries"
-                        - "organizations:ListAccounts"
-                        - "organizations:DescribeOrganization"
-                        - "organizations:DescribeAccount"
-                        - "lambda:ListFunctions"
-                        - "lambda:ListProvisionedConcurrencyConfigs"
-                        - "EC2:DescribeVolumes" 
-                        Resource: "*"    
+                  Version: "2012-10-17"
+                  Statement:
+                  - Effect: "Allow"
+                    Action: 
+                      - "compute-optimizer:*"
+                      - "EC2:DescribeInstances"
+                      - "cloudwatch:GetMetricData"
+                      - "autoscaling:DescribeAutoScalingGroups"
+                      - "compute-optimizer:UpdateEnrollmentStatus"
+                      - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                      - "compute-optimizer:GetEC2InstanceRecommendations"
+                      - "compute-optimizer:GetEnrollmentStatus"
+                      - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
+                      - "compute-optimizer:GetRecommendationSummaries"
+                      - "organizations:ListAccounts"
+                      - "organizations:DescribeOrganization"
+                      - "organizations:DescribeAccount"
+                      - "lambda:ListFunctions"
+                      - "lambda:ListProvisionedConcurrencyConfigs"
+                      - "EC2:DescribeVolumes" 
+                      Resource: "*"    
 
+* CloudFormation to add to *OptimizationDataCollectionStack* :  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+                COCDataStack:
+                  Type: AWS::CloudFormation::Stack
+                  Properties:
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+                    TimeoutInMinutes: 2
+                    Parameters:
+                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                      DestinationBucket: !Ref S3Bucket
+                      GlueRoleARN: !GetAtt GlueRole.Arn
+                      RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      CodeBucket: !Ref CodeBucket
+                AccountCollector:
+                  Type: AWS::CloudFormation::Stack
+                  Properties:
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                    TimeoutInMinutes: 2
+                    Parameters:
+                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
+{{% notice note %}}
+The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
+{{% /notice %}}
 
 {{% /expand%}}
 
@@ -256,31 +257,10 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## ECS Chargeback
 
-This will enable you too automated report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster. Instructions on how to use this data can be found (here)[https://github.com/aws-samples/ecs-chargeback-cloudformation]
+This will enable you too automated report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster. Instructions on how to use this data can be found [here.](https://github.com/aws-samples/ecs-chargeback-cloudformation) This Data will be partitioned by year, month, day. 
 
-* CloudFormation to add to **OptimizationDataCollectionStack**:  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
-                ECSStack:
-                    Type: AWS::CloudFormation::Stack
-                    Properties:
-                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
-                      TimeoutInMinutes: 2
-                      Parameters:
-                          DestinationBucket: !Ref S3Bucket
-                          GlueRoleArn: !GetAtt GlueRole.Arn 
-                          MultiAccountRoleName: !Ref MultiAccountRoleName
-                          CodeBucket: !Ref CodeBucket
-                AccountCollector:
-                    Type: AWS::CloudFormation::Stack
-                    Properties:
-                      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-                      TimeoutInMinutes: 2
-                      Parameters:
-                          RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                          TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
-
-* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation stack:  
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation StackSet:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
 
@@ -308,6 +288,28 @@ This will enable you too automated report to show costs associated with ECS Task
                         - "ecs:ListClusters"
                     Resource: "*"
 
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+                ECSStack:
+                  Type: AWS::CloudFormation::Stack
+                  Properties:
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+                    TimeoutInMinutes: 2
+                    Parameters:
+                      DestinationBucket: !Ref S3Bucket
+                      GlueRoleArn: !GetAtt GlueRole.Arn 
+                      MultiAccountRoleName: !Ref MultiAccountRoleName
+                      CodeBucket: !Ref CodeBucket
+                AccountCollector:
+                  Type: AWS::CloudFormation::Stack
+                  Properties:
+                    TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+                    TimeoutInMinutes: 2
+                    Parameters:
+                      RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                      TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
+
 {{% /expand%}}
 
 
@@ -315,22 +317,9 @@ This will enable you too automated report to show costs associated with ECS Task
 
 ## RDS Utilization
 The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. You can use the saved Athena query as a view to query these results and track your recommendations.
+This is partitioned by TBC. 
 
-* CloudFormation to add to **OptimizationDataCollectionStack**:  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
-
-            RDSMetricsStack:
-            Type: AWS::CloudFormation::Stack
-            Properties:
-              TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
-              TimeoutInMinutes: 2
-              Parameters:
-                  DestinationBucket: !Ref S3Bucket
-                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
-                  GlueRoleArn: !GetAtt GlueRole.Arn 
-                  MultiAccountRoleName: !Ref MultiAccountRoleName
-
-* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation Stack:  
+* IAM Policy to add to **OptimizationDataRoleStack** CloudFormation StackSet:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
 
 
@@ -385,10 +374,27 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
                             - "ec2:DescribeRegions"
                             Resource: "*"
 
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+            RDSMetricsStack:
+              Type: AWS::CloudFormation::Stack
+              Properties:
+                TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+                TimeoutInMinutes: 2
+                Parameters:
+                  DestinationBucket: !Ref S3Bucket
+                  DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                  GlueRoleArn: !GetAtt GlueRole.Arn 
+                  MultiAccountRoleName: !Ref MultiAccountRoleName
 
 {{% /expand%}}
 
+## How to Update your CloudFormation
 
+To add your selected modules from above please follow the steps specified in the module section. 
+
+{{%expand "How to Update OptimizationDataCollectionStack" %}}
 ### How to Update OptimizationDataCollectionStack
 1. Login via SSO in your Cost Optimization account and search for **CloudFormation**.
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
@@ -401,19 +407,19 @@ The module will collect RDS Cloudwatch metrics from your accounts. Using this da
 4. Choose **Edit template in designer** then click **View in Designer**
 ![Images/update_in_designer.png](/Cost/300_Optimization_Data_Collection/Images/update_in_designer.png) 
 
-5. In the template box copy your module code and past at the bottom of the template. Then **Click** the upload button on the top left hand corner.  
-**You can did the necessary code above in the Data Modules.**
+5. In the template box copy your module code and past at the bottom of the template. When using Designer we recommend reverse tabbing the code to the left then doing the tabs manually to format the data as seen in the picture below yourself. This will help with formatting the code all in the same style. Then **Click** the upload button on the top left hand corner.  
+
 ![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
 
 6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
+{{% /expand%}}
 
-
+{{%expand "How to Update IAM Policies in OptimizationManagementDataRoleStack" %}}
 ### How to Update IAM Policies in OptimizationManagementDataRoleStack
 The IAM Roles created in the previous section need to be updated with the relevant permissions.
 
-Depending on the module, you will need to add the permissions to either the management role or the
-role created in the stack set. In the pre-made modules this will be specified.
+Depending on the module, you will need to add the permissions to either the management role or the role created in the stack set. In the pre-made modules this will be specified.
 
 These instructions are for updating the roles in **OptimizationManagementDataRoleStack**. This stack is
 deployed in the management account.
@@ -427,14 +433,16 @@ deployed in the management account.
 3. Select **Edit template in designer** then **View in Designer**  
 ![Images/Edit_template_man_role.png](/Cost/300_Optimization_Data_Collection/Images/Edit_template_man_role.png)  
 
-4. Copy the IAM permission code from the module section above. In Designer in the template section past the code just above the output section.
+4. Copy the IAM permission code from the module section above. In Designer in the template section paste the code at the bottom.
    Click the Upload button in the top corner.  
 ![Images/Update_man_role_design.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role_design.png)  
 
 5. Click Next and keep everything to default till deployed
+{{% /expand%}}
 
-### How to Update Role OptimizationDataRoleStack
-The IAM Roles created in the previous section need to be updated with the relevant permissions.
+{{%expand "How to Update IAM Policies in OptimizationDataRoleStack" %}}
+### How to Update IAM Policies in OptimizationDataRoleStack
+The IAM Roles created in the previous section stack set need to be updated with the relevant permission.
 
 Depending on the module, you will need to add the permissions to either the management role or the
 role created in the stack set. In the pre-made modules this will be specified.
@@ -442,21 +450,25 @@ role created in the stack set. In the pre-made modules this will be specified.
 These instructions are for updating the roles in **OptimizationDataRoleStack**. This stack is
 deployed in each of the linked accounts.
 
-1. Login via SSO in your Management account and search for **CloudFormation**
+1. Copy the IAM permission code from the module section above. Using the file you downloaded in the **Role for Read Only Data Collector** step (called optimisation_read_only_role.yaml), paste the additional policy at the bottom and save. 
+
+2. Login via SSO in your Management account and search for **CloudFormation**
    ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
 
-2. Copy the IAM permission code from the module section above. In your local copy of the optimisation_read_only_role.yaml file add it to the bottom. 
+3. Copy the IAM permission code from the module section above. In your local copy of the optimisation_read_only_role.yaml file add it to the bottom. 
 
-3. In Cloudformation click on the hamburger icon on the side panel on the left hand side of the screen and select **StackSets**. 
+4. In Cloudformation click on the hamburger icon on the side panel on the left hand side of the screen and select **StackSets**. 
 
-4. Select the **OptimizationDataRoleStack**. Click Actions, Edit StackSet Details
+5. Select the **OptimizationDataRoleStack**. Click Actions, Edit StackSet Details
 ![Images/Update_SS.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS.png)  
 
-5. Select **Replace current template**, **Upload a template file** then **Choose file** with you local copy of the optimisation_read_only_role.yaml file
+6. Select **Replace current template**, **Upload a template file** then **Choose file** with you local copy of the optimisation_read_only_role.yaml file
 ![Images/Update_SS_File.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS_File.png)  
 
-6. Click Next and keep everything to default till deployed
+7. Click Next and keep everything to default till deployed
+{{% /expand%}}
 
+{{%expand "Testing your deployment" %}}
 ## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -485,7 +497,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
 ![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
 
-
+{{% /expand%}}
 {{% notice tip %}}
 If you would like to make your own modules then go to the next section to learn more on how they are made!
 {{% /notice %}}
@@ -494,4 +506,4 @@ If you would like to make your own modules then go to the next section to learn 
 Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or Passing into Amazon Quicksight.
 
 
-{{< prev_next_button link_prev_url="../2_Deploy_Additional_Roles/" link_next_url="../4_Create_Custom_Data_Collection_Module/" />}}
+{{< prev_next_button link_prev_url="../2_deploy_additional_roles/" link_next_url="../4_create_custom_data_collection_module/" />}}
