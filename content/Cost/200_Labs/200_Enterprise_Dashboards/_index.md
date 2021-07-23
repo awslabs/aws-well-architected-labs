@@ -4,7 +4,7 @@ title: "Level 200: Enterprise Dashboards"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
 weight: 8
-hidden: false
+hidden: true
 ---
 ## Last Updated
 March 2021
