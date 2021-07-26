@@ -6,6 +6,12 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
+
+
+{{%expand " " %}}
 ## Authors
 - Alee Whitman, Commercial Architect (AWS OPTICS)
 
@@ -25,7 +31,7 @@ Ensure you have requested access to the Cost Intelligence template [here.](http:
 ### Optional: Advanced Setup using a CloudFormation Template
 This section is **optional** and automates the creation of the Cost Intelligence Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates, create an IAM role, create an S3 Bucket, and create an Athena Database. **If you do not have the required permissions skip over this section to continue using the standard setup**. 
 
-{{%expand "Click here to continue with the CloudFormation Advanced Setup" %}}
+
 
 {{% notice note %}}
 NOTE: An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
@@ -102,7 +108,6 @@ To validate your QuickSight complete the tasks below:
 NOTE: You have successfully completed all CloudFormation specific steps. All remaining setup and future customizations will follow the same process as the manual steps.
 {{% /notice %}}
 
-{{% /expand%}}
 
 To create the dashboard using the **standard setup** move to the **Create Athena Views** section
 
@@ -358,3 +363,5 @@ For opportunities to customize or add additional dashboard insights
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_modify_cost_intelligence/" />}}
+
+{{% /expand%}}

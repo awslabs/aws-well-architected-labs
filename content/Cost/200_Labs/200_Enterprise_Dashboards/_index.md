@@ -6,6 +6,13 @@ chapter: false
 weight: 8
 hidden: true
 ---
+
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
+
+
+{{%expand " " %}}
 ## Last Updated
 March 2021
 
@@ -66,4 +73,7 @@ We recommend validating your data by comparing the aggregate un-grouped Payer an
 ## Steps:
 {{% children  /%}}
 
+
 {{< prev_next_button link_next_url="./1_create_cost_intelligence/" button_next_text="Start Lab" first_step="true" />}}
+
+{{% /expand%}}
