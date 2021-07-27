@@ -108,7 +108,8 @@ For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-we
 2. Click **Next**.
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
-3. Call the stack **OptimizationDataCollectionStack** and fill in the parameters with the information described. The Role mentioned will be deployed in the next step. Click **Next** and **Next again**
+3. Call the stack **OptimizationDataCollectionStack** and fill in the parameters with the information described. The Role mentioned will be deployed in the next step.
+ Select the **Code bucket** for the region you are in. Click **Next** and **Next again**
 ![Images/Main_CF_Parameters.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Parameters.png)
 
 4. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
