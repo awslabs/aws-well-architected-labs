@@ -37,7 +37,7 @@ This lab will show you how to combine your organizations information with your A
 - Completed the Cost Visualization Lab [200_5_Cost_Visualization]({{< ref "/Cost/200_Labs/200_5_Cost_Visualization" >}}) 
 
 ## Deployment Options
-We suggest you do not deploy resources into your management account and instead use the cost account created in [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}). However, there are options to deploy all resources into your management account if you wish. To do this complete all steps in you management account and do not create the role in the 'Create IAM Role and Policies in Management account' step.
+We suggest you do not deploy resources into your management account and instead use the cost account created in [100_1_AWS_Account_Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}). However, there are options to deploy all resources into your management account if you wish. To do this complete all steps in you management account and do not create the role in the 'Create IAM Role and Policies in Management account' step. Please note this will be in a yaml format. 
 
 ## Permissions required
 
@@ -50,6 +50,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 - IAM role and policy
 - Amazon CloudWatch trigger
 - Amazon Athena Table
+- AWS Glue Crawler
 
 
 ## Optional

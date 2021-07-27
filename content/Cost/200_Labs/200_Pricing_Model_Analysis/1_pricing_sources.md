@@ -6,8 +6,8 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-
-{{%expand "Click here to continue with the manuel Setup" %}}
+### Option 1: Manual Deployment
+{{%expand "Click here to continue with the manual Setup" %}}
 ### Create S3 Bucket and Folders
 Create a **single S3 bucket** that contains **two folders** - **od_pricedata** and **sp_pricedata**, these will contain the on-demand pricing data and the Savings Plans pricing data.
 
@@ -459,7 +459,7 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 {{% /expand%}}
 
 
-
+### Option 2: Terraform Advanced Deployment
 {{%expand "Click here to continue with the Terraform Advanced Setup" %}}
 ### Create the Pricing Sources using Terraform
 
