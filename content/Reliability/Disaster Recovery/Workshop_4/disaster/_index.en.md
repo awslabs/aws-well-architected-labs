@@ -4,52 +4,54 @@ date =  2021-05-11T11:43:28-04:00
 weight = 5
 +++
 
-We are going to browse to The Unicorn - us-east-1 website via the Cloud Distribution url.  Then we are going to signup for an account and login.  Once we are logged in we will add some products to our cart.  Then we will simulate a region failure in N. Virginia (us-east-1) at the S3 static website level.  This will cause the CloudFront Origin Failover feature to kick in and CloudFront will redirect us to The Unicorn Shop - us-west-1 website.  As a user, this redirection should be seamless.  You should still be logged into your session and the products in your cart will remain there.
+When a regional service event affects the Unicorn application in the Primary, N. Virginia (us-east-1) region, you want to fail-over to Secondary, N. California (us-west-1) region.
 
-1.1 Using your newly deployed CloudFront website.
+We assume a regional service event has occurred. In this section, we will manually fail over the application to the Secondary region.  The CloudFront distribution will detect the service interruption and automatically begin routing requests from the `Primary-Active` to the `Passive-Secondary` website seamlessly.
+
+Before simulating the outage, we need to create test data through the web application. This step requires creating enrolling in the store, then adding items into the shopping cart.  After the outage, the user’s session should remain active and uninterrupted.
+
+## Create and Populate the Shopping Cart
+
+1.1 Navigate to the **CloudFront Domain Name** using your favorite browser.
 
 {{% notice info %}}
-If you don't have your **CloudFront Domain Name**, you can retrieve it via **Step 1.11** in **Setup CloudFront**
+If you don't have your **CloudFront Domain Name**, you can retrieve it via **Step 4.2** in **Setup CloudFront**.
 {{% /notice %}}
 
-1.2 Click **Signup**
+1.2 Click the **Signup** button.
 
 {{< img d-1.png >}}
 
-1.3 Fill out Signup Form
+1.3 Register yourself into the application. You need to provide an e-mail address, which does not need to be valid.
 
 {{< img d-2.png >}}
 
-1.4 Click **Login**
+1.4 Log in to the application using your e-mail address from the previous step.
 
 {{< img d-3.png >}}
 
-1.5 After login, add **Products** to your **Cart**.
+1.5 Add/remove items to your shopping cart by clicking on a Unicorn, followed by clicking the **Add to cart** button.
 
-1.6 We will now simulate a regional service event that is affecting the S3 static website in N. Virginia (us-east-1) that is serving The Unicorn Shop website.
+## Simulating a Regional Service Event
 
-1.7  Navigate to **S3**.
+We will now simulate a regional service event affecting the S3 static website in N. Virginia (us-east-1) serving The Unicorn Shop website.
+
+2.2  Navigate to **S3** in the console.
 
 {{< img d-4.png >}}
 
-1.8 Click **active-primary-uibucket-xxxx**.
+2.3 Click into the **active-primary-uibucket-xxxx** bucket.
 
 {{< img d-5.png >}}
 
-1.9 Click **Permissions**.
-
-Scroll to **Block public access (bucket settings)**
-
-Click **Edit**
+2.4 Under the **Permissions** tab, click the **Edit** button to modify the **Block public access (bucket settings)** configuration.
 
 {{< img d-6.png >}}
 
-1.10 Check **Block all public access** and click **Save**.
+2.5 Enable the **Block all public access** checkbox and then click the **Save** button.
 
 {{< img d-7.png >}}
 
 {{% notice info %}}
-**Your S3 active-primary-uibucket-xxxs bucket that is hosting the static website is now un-accessible.  When CloudFront sends a request, the API call will return a 403 error.  CloudFront will failover to the secondary origin and redirect to the S3 passive-secondary-uibucket-xxxx bucket that is hosting the static website in N. California us-west-1.**
+Your Amazon S3 bucket that hosts the Primary-Active website is now inaccessible.  When CloudFront attempts to route the user’s request to this instance, it will receive an HTTP 403 status error (Forbidden).  The Distribution will automatically handle this scenario by failing over to the Passive-Secondary instance.
 {{% /notice %}}
-
-

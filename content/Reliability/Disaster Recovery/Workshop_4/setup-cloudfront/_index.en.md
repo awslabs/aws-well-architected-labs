@@ -8,95 +8,78 @@ You can improve resiliency and increase availability for specific scenarios by s
 
 We are going to configure CloudFront with origin failover in the below steps using our **active-primary-uibucket-xxx** S3 static website as our primary origin and our **passive-secondary-uibucket-xxxx** S3 static website as our failover origin.
 
-1.1 Navigate to **CloudFront**.
+{{% notice note %}}
+You will need the Amazon CloudFormation output parameter values from the `Primary-Active` and `Passive-Secondary` stacks to complete this section.
+{{% /notice %}}
+
+## Create the Amazon CloudFront Distribution
+
+1.1 Navigate to **CloudFront** in the console.
 
 {{< img cf-1.png >}}
 
-1.2 Click **Creat Distribution**.
+1.2 Click the **Creat Distribution** button.
 
 {{< img cf-2.png >}}
 
-1.3 Click **Get Started**.
+1.3 Click the **Get Started** button to continue.
 
 {{< img cf-3.png >}}
 
-1.4 Create Distribution
-
-{{% notice note %}}
-This is where you are going to need the values that you copied from your CloudFormation Outputs Tab from your `Active-Primary` Stack Creation.
-{{% /notice %}}
-
-* **Origin Domain Name** `WebsiteURL` </br>
-(Do not choose the S3 bucket in the drop-down - copy and paste the `WebsiteURL` from the CloudFormation Stack Creation Output Tab)
+1.4 On the **Create Distribution** page, set the **Origin DomainName** equal to the **WebsiteURL** value from the `Primary-Active` stack outputs.  Do not to choose the Amazon S3 bucket in the drop-down.
 
 {{< img cf-4.png >}}
 
-Scroll to the bottom and click **Create Distribution**.
+## Configure the Distribution Settings
 
-
-1.5 Click the **checkbox** to select the newly created distribution and then click **Distribution Settings**.
+2.1 Scroll to the page's bottom and click the **Create Distribution** button.  Enable the checkbox next to the new distribution, then click the **Distribution Settings** button.
 
 {{< img cf-6.png >}}
 
-1.5 Click **Origins and Origin Groups** and then click **Create Origin**
+2.2 Under the **Origins and Origin Groups** tab, click the **Create Origin** button.
 
 {{< img cf-7.png >}}
 
-1.6 Create Origin
-
-{{% notice note %}}
-This is where you are going to need the values that you copied from your CloudFormation Outputs Tab from your `Passive-Secondary` Stack Creation.
-{{% /notice %}}
-
-* **Origin Domain Name** `WebsiteURL` </br>
-(Do not choose the S3 bucket in the drop-down - copy and paste the `WebsiteURL` from the CloudFormation Stack Creation Output Tab)
-
-Click **Create**
+2.3 On the **Create Origin** page, specify the **Origin Domain Name** equal to the **WebsiteURL** value from your `Passive-Secondary` stack outputs.  Do not choose the Amazon S3 bucket in the dropdown.  Finally, click the **Create** button.
 
 {{< img cf-8.png >}}
 
-1.7 Click **Create Origin Group**
+2.4 Under the **Origins and Origin Groups**, click the **Create Origin Group** button.
 
 {{< img cf-9.png >}}
 
-1.8 Create Origin Group
+2.5 On the **Edit Origin Group** page, use the **Add** button to include the `Primary-Active` Origin, then the `Passive-Secondary` origin.  Confirm that the **1 (Primary)** has the **Origin ID** of the `Primary-Active` **WebsiteURL**.
 
-Click **Add** to add **both** origins to the group.
-
-Make sure that **1 (Primary)** has the **Origin ID** of the `Active-Primary WebsiteURL`.
-
-Check all **checkboxes** for **Failover Criteria**.
-
-Click **Create**.
+2.6 Enable all **checkboxes** under the **Failover Criteria** section.  Then click the **Create** button.
 
 {{< img cf-10.png >}}
 
-1.9 Click **Behaviors**.
+## Configure Distribution Behaviors
 
-Click the **checkbox** to select the existig behavior.
-
-Click **Edit**.
+3.1 Under the **Behaviors** tab, enable the checkbox next to the default behavior, and click the **Edit** button.
 
 {{< img cf-11.png >}}
 
-1.10 Select the newly created Origin Group for the **Origin or Origin Group**
+3.2 Set the **Origin or Origin Group** dropdown to the Origin Group (see section 2).
 
-Scroll to the bottom and click **Yes, Edit**.
+3.3 Scroll to the page's bottom and click the **Yes, Edit** button.
 
 {{< img cf-12.png >}}
 
-1.11 Click **Distributions**
+3.4 Navigate to the **Distributions** page.
 
-Wait for Distribution **Status** to show **Deployed**.
+3.5 Wait for Distribution's **Status** to equal **Deployed**.
 
 {{< img cf-5.png >}}
 
-Copy the **Domain Name** into a new browser window and you should see **The Unicorn Shop - us-east-1** website.
+## Verify the Distribution
+
+4.1 Copy the CloudFront Distribution's **Domain Name** into a new browser window.
 
 {{< img cf-13.png >}}
 
+4.2 Confirm that the website's header says **The Unicorn Shop - us-east-1**.
+
 {{< img cf-14.png >}}
 
-#### <center>Congragulations !  Your CloudFront distribution is working !
-
-
+## Congragulations!  Your CloudFront distribution is working!

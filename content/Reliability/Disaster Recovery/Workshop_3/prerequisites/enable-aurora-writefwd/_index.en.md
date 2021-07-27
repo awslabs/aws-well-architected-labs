@@ -16,11 +16,11 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 
 {{< img a-1.png >}}
 
-1.3 Nex, click into **DB Instances**.
+1.3 Next, click into **DB Instances**.
 
 {{< img a-2.png >}}
 
-1.4 Select **dr-immersionday-secondary-warm** and click **Modify**.
+1.4 Select **dr-immersionday-secondary-warm** and click the **Modify** button.
 
 {{< img a-3.png >}}
 

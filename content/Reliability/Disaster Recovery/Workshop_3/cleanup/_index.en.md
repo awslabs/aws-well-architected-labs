@@ -27,7 +27,6 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 {{% /notice %}}
 
-
 ## Database Clean up
 
 {{% notice note %}}

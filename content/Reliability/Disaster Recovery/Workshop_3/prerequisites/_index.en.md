@@ -5,14 +5,14 @@ weight = 1
 +++
 
 
-We will launch the same CloudFormation template in both the Primary N. Virginia (us-east-1) and Secondary N. California (us-west-1) regions. Once the CloudFormation templates complete successfully, we will configure our static websites to host from Amazon S3 and connect CloudFormation provisioned to the API endpoints.
+We will launch the same CloudFormation template in both the Primary N. Virginia (us-east-1) and Secondary N. California (us-west-1) regions. After the CloudFormation templates finish executing, we will configure Amazon S3 to host our static websites and utilize the Amazon RDS MySQL cluster.
 
 ## Getting Started
 
 Login to the [AWS Console](https://us-east-1.console.aws.amazon.com/console).
 
 {{% notice note %}}
-If you are using your own AWS account be aware that you will incur costs for the resources deployed in this workshop. Complete the cleanup steps at the end to minimize those costs.
+If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. Complete the cleanup steps at the end to minimize those costs.
 
-If you are running this at a group event - please log in via Event Engine. Instructions are provided by the event host.
+If you are running this at a group event - please log in via Event Engine. The event host will provide the Instructions.
 {{% /notice %}}
