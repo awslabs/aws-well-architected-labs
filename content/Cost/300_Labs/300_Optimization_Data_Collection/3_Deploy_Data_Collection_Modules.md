@@ -10,15 +10,15 @@ pre: "<b>3. </b>"
 For every module you want you add there are three steps to complete:
 1. Grant additional permissions to the IAM roles created by **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** so they can access the relevant data. 
    For our pre-made modules, it will specify which stack will need to be updated. 
-1. Update **OptimizationDataCollectionStack** to retrieve the data. 
-1. Test the deployed Lambda function to confirm it is working as excepted
+1. Update **OptimizationDataCollectionStack** with the module to retrieve the data. 
+1. Test the deployed Lambda function to confirm it is working as expected
 
-We have prepared some common options you can use. The detailed steps on how to add these modules can be found below the examples:
+
 
 {{%expand "Cost Explorer Rightsizing Recommendations" %}}
 
 ### Cost Explorer Rightsizing Recommendations
-This solution will collect rightsizing recommendations from AWS Cost Explorer in your management account and upload them to an Amazon S3 bucket. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more [here.](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
+This solution will collect rightsizing recommendations from AWS Cost Explorer in your management account. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more about the recommendations [here.](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
 This Data will be partitioned by year, month, day. 
 
 
@@ -54,9 +54,8 @@ This Data will be partitioned by year, month, day.
 {{%expand "Inventory Collector" %}}
 
 ### Inventory Collector
-This module is designed to loop through your organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket and is read into AWs Athena by AWS Glue.  
+This module is designed to loop through your AWS Organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket in the Cost Account.  
 This Data will be partitioned by year, month. 
-This relies on a role to be available in all accounts in your organization to read this information. The role will need the below access to get the data
 
 * Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation StackSet depending on what you want to ingest:  
   [Link to Instructions](#how-to-update-iam-policies-in-optimizationdatarolestack)
@@ -192,8 +191,8 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## Compute Optimizer Collector
 
 The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
-In this module, the data will be collected and placed into an Amazon S3 Bucket and read by Athena so you can view the recommendations over time and have access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
-This Data will be separated by type service and partitioned by year, month . 
+In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
+This Data will be separated by type service and partitioned by year, month. 
 
 
 * IAM Policy to add to *OptimizationManagementDataRoleStack*:  
@@ -415,6 +414,9 @@ To add your selected modules from above please follow the steps specified in the
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
 {{% /expand%}}
 
+
+
+### How to Update IAM Policies in OptimizationManagementDataRoleStack
 {{%expand "How to Update IAM Policies in OptimizationManagementDataRoleStack" %}}
 ### How to Update IAM Policies in OptimizationManagementDataRoleStack
 The IAM Roles created in the previous section need to be updated with the relevant permissions.
@@ -440,6 +442,8 @@ deployed in the management account.
 5. Click Next and keep everything to default till deployed
 {{% /expand%}}
 
+
+### How to Update IAM Policies in OptimizationDataRoleStack
 {{%expand "How to Update IAM Policies in OptimizationDataRoleStack" %}}
 ### How to Update IAM Policies in OptimizationDataRoleStack
 The IAM Roles created in the previous section stack set need to be updated with the relevant permission.
