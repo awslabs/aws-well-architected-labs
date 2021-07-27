@@ -69,7 +69,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 	- [View4 - s3](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/4_view4/)	
 
 8. Create the **RI SP Mapping view** by modifying the following code, and executing it in Athena:
-	- [View3 - RI SP Mapping](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/5_view5/)	
+	- [View5 - RI SP Mapping](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/5_view5/)	
 
 9. Create the **customer_all view** by modifying the following code, and executing it in Athena:
 	- [View6 - customer_all](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/6_view6/)	
