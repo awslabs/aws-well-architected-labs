@@ -579,7 +579,7 @@ Once complete navigate back to this page and complete the remaining prerequisite
 
 1. You will be asked to **sign up** before you will be able to use it
 
-    ![QuickSight Sign up Workflow Image](https://wellarchitectedlabs.com//Cost/200_Cloud_Intelligence/Images/QS-signup.png?classes=lab_picture_small)
+    ![QuickSight Sign up Workflow Image](https://wellarchitectedlabs.com/Cost/200_Cloud_Intelligence/Images/QS-signup.png?classes=lab_picture_small)
 
 1. After pressing the **Sign up** button you will be presented with 2 options, please ensure you select the **Enterprise Edition** during this step
 
