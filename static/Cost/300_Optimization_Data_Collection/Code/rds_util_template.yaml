@@ -147,7 +147,7 @@ Resources:
           import boto3.session
           import os
           from boto3.s3.transfer import S3Transfer
-          from datetime import datetime, timedelta
+          from datetime import datetime, timedelta, date
           import json
           from re import sub
           import logging
@@ -189,6 +189,9 @@ Resources:
           DAYS = int(os.environ['DAYS'])
           past = now - timedelta(days=DAYS)
           today = datetime.today().strftime('%Y-%m-%d')
+          tod = date.today()
+          year = tod.year
+          month = tod.strftime('%m')
           future = now# + timedelta(minutes=10)
           period = 3600
           s3client = boto3.client('s3')
@@ -251,8 +254,7 @@ Resources:
                   json.dump(data, f, default=str)
                   f.write('\n')
               upload_file_to_s3(s3client, DEST_BUCKET, filepath,
-                              "%s/%s/accountid=%s/region=%s/%s=%s/%s-%s"
-                              %(DEST_PREFIX, path, accountID, region,  resource_type, resource_value, today, filename))
+                              f"{DEST_PREFIX}/{path}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
           def start_crawler():
               glue_client = boto3.client('glue')
               try:

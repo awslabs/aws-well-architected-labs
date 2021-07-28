@@ -13,6 +13,9 @@ For every module you want you add there are three steps to complete:
 1. Update **OptimizationDataCollectionStack** with the module to retrieve the data. 
 1. Test the deployed Lambda function to confirm it is working as expected
 
+{{% notice tip %}}
+These modules templates are managed in AWS owned buckets. If you do not wish to have updates on them from AWS then please save a copy to a bucket in your account and use instead. 
+{{% /notice %}}
 
 
 {{%expand "Cost Explorer Rightsizing Recommendations" %}}
