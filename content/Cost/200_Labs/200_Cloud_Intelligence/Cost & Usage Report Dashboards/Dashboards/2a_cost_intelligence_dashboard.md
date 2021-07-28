@@ -304,7 +304,7 @@ aws quicksight delete-dashboard --dashboard-id cost_intelligence_dashboard --reg
 ### Saving and Sharing your Dashboard in QuickSight
 Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
 	
-- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/Cost/200_Labs/200_Cloud_Intelligence/QuickSight/QuickSight)	
+- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)	
 	
 
 {{% /expand%}}
@@ -447,7 +447,7 @@ To validate your QuickSight complete the tasks below:
 ### Saving and Sharing your Dashboard in QuickSight
 Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
 	
-- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/Cost/200_Labs/200_Cloud_Intelligence/QuickSight/QuickSight)	
+- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)	
 
 
 {{% /expand%}}
