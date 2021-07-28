@@ -49,6 +49,7 @@ This Data will be partitioned by year, month, day.
                   RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
               TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
               TimeoutInMinutes: 5
+* [Test your Lambda](#testing-your-deployment) 
 
 {{% /expand%}}
 
@@ -126,6 +127,9 @@ This Data will be partitioned by year, month.
                   RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                   TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
+
+* [Test your Lambda](#testing-your-deployment) 
+
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
 {{% /notice %}}
@@ -181,6 +185,8 @@ This Data will be partitioned by year, month, day.
                 Parameters:
                   RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                   TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+
+* [Test your Lambda](#testing-your-deployment) 
 
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple queues can be added too TaskQueuesUrl
@@ -248,6 +254,8 @@ This Data will be separated by type service and partitioned by year, month.
                     Parameters:
                       RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                       TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
+
+* [Test your Lambda](#testing-your-deployment)                       
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
 {{% /notice %}}
@@ -311,6 +319,9 @@ This will enable you too automated report to show costs associated with ECS Task
                     Parameters:
                       RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                       TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
+* [Test your Lambda](#testing-your-deployment) 
+
+
 
 {{% /expand%}}
 
@@ -390,13 +401,15 @@ This is partitioned by TBC.
                   GlueRoleArn: !GetAtt GlueRole.Arn 
                   MultiAccountRoleName: !Ref MultiAccountRoleName
 
+* [Test your Lambda](#testing-your-deployment) 
+
+
 {{% /expand%}}
 
 ## How to Update your CloudFormation
 
 To add your selected modules from above please follow the steps specified in the module section. 
 
-{{%expand "How to Update OptimizationDataCollectionStack" %}}
 ### How to Update OptimizationDataCollectionStack
 1. Login via SSO in your Cost Optimization account and search for **CloudFormation**.
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
@@ -409,18 +422,15 @@ To add your selected modules from above please follow the steps specified in the
 4. Choose **Edit template in designer** then click **View in Designer**
 ![Images/update_in_designer.png](/Cost/300_Optimization_Data_Collection/Images/update_in_designer.png) 
 
-5. In the template box copy your module code and past at the bottom of the template. When using Designer we recommend reverse tabbing the code to the left then doing the tabs manually to format the data as seen in the picture below yourself. This will help with formatting the code all in the same style. Then **Click** the upload button on the top left hand corner.  
+5. In the template box copy your module code and past at the bottom of the template. When using Designer we recommend deleting the first space of the first line of the module. This will help with formatting the code all in the same style. Then **Click** the upload button on the top left hand corner.  
 
 ![Images/designer_view.png](/Cost/300_Optimization_Data_Collection/Images/designer_view.png) 
 
 6. This will take you back to the upload section. Click **Next** and follow the same process you did on the initial setup. 
 ![Images/Update_stack.png](/Cost/300_Optimization_Data_Collection/Images/Update_stack.png) 
-{{% /expand%}}
 
 
 
-### How to Update IAM Policies in OptimizationManagementDataRoleStack
-{{%expand "How to Update IAM Policies in OptimizationManagementDataRoleStack" %}}
 ### How to Update IAM Policies in OptimizationManagementDataRoleStack
 The IAM Roles created in the previous section need to be updated with the relevant permissions.
 
@@ -443,11 +453,10 @@ deployed in the management account.
 ![Images/Update_man_role_design.png](/Cost/300_Optimization_Data_Collection/Images/Update_man_role_design.png)  
 
 5. Click Next and keep everything to default till deployed
-{{% /expand%}}
 
 
-### How to Update IAM Policies in OptimizationDataRoleStack
-{{%expand "How to Update IAM Policies in OptimizationDataRoleStack" %}}
+
+
 ### How to Update IAM Policies in OptimizationDataRoleStack
 The IAM Roles created in the previous section stack set need to be updated with the relevant permission.
 
@@ -473,9 +482,9 @@ deployed in each of the linked accounts.
 ![Images/Update_SS_File.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS_File.png)  
 
 7. Click Next and keep everything to default till deployed
-{{% /expand%}}
 
-{{%expand "Testing your deployment" %}}
+
+
 ## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -504,7 +513,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
 ![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
 
-{{% /expand%}}
+
 {{% notice tip %}}
 If you would like to make your own modules then go to the next section to learn more on how they are made!
 {{% /notice %}}
