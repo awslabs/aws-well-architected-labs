@@ -4,21 +4,21 @@ date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-#### S3 Cleanup
+## Cleanup Amazon S3
 
-1.1 Navigate to **S3**.
+1.1 Navigate to **S3** in the console.
 
 {{< img cl-1.png >}}
 
-1.2 Selet the **active-primary-uibucket-xxxx** and click **Empty**.
+1.2 Find the bucket with prefix **active-primary-uibucket-xxxx** and click the **Empty** button.
 
 {{< img cl-2.png >}}
 
-1.3 Type in **permanently delete** in the confirmation box and click **Empty**.
+1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 
-1.4 When you see the green banner at the top stating the bucket has been emptied successfully click **Exit**.
+1.4 Wait until you see the green banner across the top of the page, indicating the bucket is empty. Then click the **Exit** button.
 
 {{< img cl-4.png >}}
 
@@ -29,74 +29,70 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 `passive-secondary-assetbucket-xxxx`
 {{% /notice %}}
 
+## Cleanup Amazon DynamoDB Global Tables
 
-#### Database Cleanup
+2.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-1.1 In the top right corner, change your region to **N. Virginia (us-east-1)**.
-
-1.2  Navigate to **DynamoDB**.
+2.2  Navigate to **DynamoDB** in the console.
 
 {{< img dd-1.png >}}
 
-1.3 Click **Tables**.
+2.3 Navigate into the **Tables** subpage.
 
 {{< img dd-2.png >}}
 
-1.4 Select the `unishophotstandy` table.
+2.4 Click into the `unishophotstandy` table properties.
 
 {{< img dd-3.png >}}
 
-1.5 Click on the **Global Tables** tab.  Select the **N. California (us-west-1)** region and Click **Delete Region**.
+2.5 Under the **Global Tables** tab, use the **Delete Region** button to remove the **N. California (us-west-1)** replica.
 
 {{< img cl-10.png >}}
 
-1.6 Type `delete` and Click the **Delete** button.
+2.6 Type `delete` into the confirmation box, and then click the **Delete** button.
 
 {{< img cl-11.png >}}
 
-1.7 In the top right corner, change your region to **N. California (us-west-1)**.
+2.7 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
 
-1.8 Navigate to **RDS**.
+2.8 Navigate to **RDS** in the console.
 
 {{< img a-1.png >}}
 
-1.9 Click **DB Instances**.
+2.9 Click **DB Instances**.
 
 {{< img a-2.png >}}
 
-1.10  Select `unishopappv1db` and Select **Delete**
+2.10  Choose the `unishopappv1db` database, then click the **Delete** menu item under the **Actions** dropdown.
 
 {{< img cl-12.png >}}
 
-1.11  Uncheck **Create final snapshot**.  Check **I acknowledgement ...**.  Type `delete me` and Click the **Delete** button.
+2.11  Uncheck the **Create final snapshot** checkbox. Next, enable the **I acknowledgement ...** checkbox.  Then type `delete me` into the confirmation box. Finally, click the **Delete** button.
 
 {{< img cl-13.png >}}
 
+## Cleanup Amazon CloudFormation
 
-#### CloudFormation Cleanup
+3.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
 
-1.1 In the top right corner, change your region to **N. California (us-west-1)**.
-
-1.2 Navigate to **CloudFormation**.
+3.2 Navigate to **CloudFormation** in the console.
 
 {{< img cl-5.png >}}
 
-1.3 Select the **Passive-Secondary** stack and click **Delete**.
+3.3 Select the **Passive-Secondary** stack and click the **Delete** button.
 
 {{< img cl-8.png >}}
 
-1.4 Click **Delete stack**
+3.4 Click the **Delete stack** button to confirm the removal.
 
 {{< img cl-9.png >}}
 
-1.5 In the top right corner, change your region to **N. Virginia (us-east-1)**.
+3.5 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-1.6 Select the **Active-Primary** stack and click **Delete**.
+3.6 Select the **Active-Primary** stack and click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-1.7 Click **Delete stack**
+3.7 Click **Delete stack** button to confirm the removal.
 
 {{< img cl-7.png >}}
-
-

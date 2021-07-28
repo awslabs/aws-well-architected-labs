@@ -4,7 +4,6 @@ date =  2021-05-11T11:43:28-04:00
 weight = 6
 +++
 
-1.1 If you go back and refresh your browser, you should now see **The Unicorn Shop - us-west-1** website.  You should still be logged into the site and your cart should still contain the products you previously added.  (You may have to do a hard refresh)
+If you go back and refresh your browser, you should now see **The Unicorn Shop - us-west-1** website. You might need to do a hard-page refresh (using CTRL+F5).  The user’s session should still be active, and their cart still contains the products previously added.
 
 {{< img vf-1.png >}}
-

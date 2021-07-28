@@ -4,27 +4,30 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
+## Verify the Active-Primary Website
+
 {{% notice note %}}
-This is where you are going to need the values that you copied from your CloudFormation Outputs Tab from your `Active-Primary` Stack Creation.
+You will need the Amazon CloudFormation output parameter values from the `Active-Primary` stack to complete this section.
 {{% /notice %}}
 
 {{< img pr-6.png >}}
 
-Copy the **WebsiteURL** url value and paste into a browser.
+1.1 Copy the **WebsiteURL** url value and open it with your web browser.
 
-Verify the website header says `The Unicorn Shop - us-east-1`.
+1.2 Verify the website header says `The Unicorn Shop - us-east-1`.
 
 {{< img vw-5.png >}}
 
-{{% notice note %}}
-This is where you are going to need the values that you copied from your CloudFormation Outputs Tab from your `Passive-Secondary` Stack Creation.
-{{% /notice %}}
+## Verify the Passive-Secondary Website
 
+{{% notice note %}}
+You will need the Amazon CloudFormation output parameter values from the `Passive-Secondary` stack to complete this section.
+{{% /notice %}}
 
 {{< img sr-6.png >}}
 
-Copy the **WebsiteURL** url value and paste into a browser.
+2.1 Copy the **WebsiteURL** url value and paste into a browser.
 
-Verify the website header says `The Unicorn Shop - us-west-1`.
+2.2 Verify the website header says `The Unicorn Shop - us-west-1`.
 
 {{< img vw-6.png >}}
