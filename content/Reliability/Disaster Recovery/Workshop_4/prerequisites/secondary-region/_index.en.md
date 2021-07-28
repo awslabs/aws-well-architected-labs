@@ -16,8 +16,6 @@ weight = 6
 
 1.3 Download the CloudFormation Template from this workshop.  Next, select **Upload a template file** and click the **Choose file** button to upload the file.  Finally, click the **Next** button to continue.
 
-{{%attachments style="green" /%}}  
-
 {{% notice note %}}
 Reusable templates are one of the great things about Amazon CloudForamtion and Infrastructure As Code (IaC).
 {{% /notice %}}
