@@ -77,6 +77,4 @@ Your final `config.json` should look similar to this example.
 }
 ```
 
-3.2 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **US West 1 (N. Virginia)** using the Region Selector in the upper right corner.
-
-3.3 Upload the `config.json` into the **passive-secondary-** bucket by repeating the steps from section 2.
+3.2 Upload the `config.json` into the **passive-secondary-** bucket by repeating the steps from section 2.

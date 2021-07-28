@@ -26,7 +26,7 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 {{< img cf-3.png >}}
 
-1.4 On the **Create Distribution** page, set the **Origin DomainName** equal to the **WebsiteURL** value from the `Primary-Active` stack outputs.  Do not to choose the Amazon S3 bucket in the drop-down.
+1.4 On the **Create Distribution** page, set the **Origin DomainName** equal to the **WebsiteURL** value from the `Primary-Active` stack outputs.  Do not choose the Amazon S3 bucket in the drop-down.
 
 {{< img cf-4.png >}}
 

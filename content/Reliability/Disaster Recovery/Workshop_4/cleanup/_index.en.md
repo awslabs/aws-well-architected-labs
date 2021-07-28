@@ -18,7 +18,7 @@ weight = 7
 
 {{< img cl-3.png >}}
 
-1.4 When you see the green banner at the top stating the bucket has is empty, click **Exit**.
+1.4 Wait until you see the green banner across the top of the page, indicating the bucket is empty. Then click the **Exit** button.
 
 {{< img cl-4.png >}}
 
