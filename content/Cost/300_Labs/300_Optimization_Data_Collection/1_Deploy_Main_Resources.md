@@ -11,7 +11,7 @@ pre: "<b>1. </b>"
 The first step is to create a set of reusable resources that can be passed into the other modules. 
 
 
-1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your linked account (recommended)
+1.  Click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your Cost Optimization linked  account (recommended)
 
 Or if you wish to keep this on your local machine please copy the below and deploy how you would normally:
 
@@ -115,7 +115,7 @@ For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-we
 4. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-5. Wait till your CloudFormation has status as **CREATE_COMPLETE**.
+5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
 ![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
    
 {{% notice note %}}

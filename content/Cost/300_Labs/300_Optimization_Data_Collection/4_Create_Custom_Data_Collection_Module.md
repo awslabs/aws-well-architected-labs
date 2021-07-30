@@ -7,7 +7,7 @@ pre: "<b>4. </b>"
 ---
 
 ### Example Module Explanation
-You can use this template to build your own data collection modules. In the next step we will be providing you with modules you can add to your template. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your template. 
+You can use this template to build your own data collection modules. In the next step, we will be providing you with modules you can add to your template. These are sets of Infrastructure as code that have all the resources you need and is easy to add to your template. 
 
 1.  **Download CloudFormation template** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/lambda_s3_athen_cf_template.yaml) This will be the foundation of the rest of this section and can be reused to build out the modules.
 
@@ -28,7 +28,7 @@ These are all needed actions for the basic lambda. If you need to add more to ac
 
 5. There is a Glue Crawler which is the one we triggered in the Lambda which reads from your S3 bucket and creates an Athena table based on the data. It used the Glue Role we made in the template.
 
-6. To trigger the Lambda we use a Cloudwatch event which runs on a pre-defined schedule. You can find more options for scheduling [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
+6. To trigger the Lambda we use a CloudWatch event which runs on a pre-defined schedule. You can find more options for scheduling [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
 
 7. There is an example of a saved Athena query. This is useful if you know that you will be using the same query often and want to have it available.  
 
@@ -63,7 +63,7 @@ Once you have your module created you can add it to your CloudFormation Template
 
 
 {{% notice note %}}
-NOTE: If you would like more information on AWS CloudFormation checkout there [website](https://docs.aws.amazon.com/cloudformation/index.html)
+If you would like more information on AWS CloudFormation checkout there [website](https://docs.aws.amazon.com/cloudformation/index.html)
 {{% /notice %}}
 
 

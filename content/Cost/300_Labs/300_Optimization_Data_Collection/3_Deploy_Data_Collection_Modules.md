@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 ---
 
 ## Data Modules 
-For every module you want you add there are three steps to complete:
+For every module, there are three steps to complete:
 1. Grant additional permissions to the IAM roles created by **OptimizationManagementDataRoleStack** or **OptimizationDataCollectionStack** so they can access the relevant data. 
    For our pre-made modules, it will specify which stack will need to be updated. 
 1. Update **OptimizationDataCollectionStack** with the module to retrieve the data. 
@@ -473,7 +473,7 @@ deployed in each of the linked accounts.
 
 3. Copy the IAM permission code from the module section above. In your local copy of the optimisation_read_only_role.yaml file add it to the bottom. 
 
-4. In Cloudformation click on the hamburger icon on the side panel on the left hand side of the screen and select **StackSets**. 
+4. In CloudFormation click on the hamburger icon on the side panel on the left hand side of the screen and select **StackSets**. 
 
 5. Select the **OptimizationDataRoleStack**. Click Actions, Edit StackSet Details
 ![Images/Update_SS.png](/Cost/300_Optimization_Data_Collection/Images/Update_SS.png)  
