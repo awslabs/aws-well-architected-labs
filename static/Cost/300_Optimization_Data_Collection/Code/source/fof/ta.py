@@ -15,11 +15,13 @@ class DateTimeEncoder(JSONEncoder):
         if isinstance(obj, (datetime.date, datetime.datetime)):
             return obj.isoformat()
 def main(account_id):
+    base = {"AccountId":account_id,"Category":"Cost Optimizing"}
     with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
         support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         for case in response["checks"]:
             meta = case["metadata"]
+
             if case["category"] == "cost_optimizing":
                 c_id = case["id"]
                 check_name = {"name": case["name"], "id": c_id}
@@ -35,7 +37,9 @@ def main(account_id):
 
                     for resource in flaggedResources.get("flaggedResources"):
                         meta_result = dict(zip(meta, resource["metadata"]))
-                dataJSONData = json.dumps(check_result['result'], cls=DateTimeEncoder)
+                        base.update(meta_result)
+                dataJSONData = json.dumps(base, cls=DateTimeEncoder)
+
                 f.write(dataJSONData)
                 f.write("\n")
 
@@ -67,4 +71,5 @@ def assume_role(account_id, service, region):
 
 
 if __name__ == "__main__":
-    main()
+    accountid = os.environ['ACCOUNTID']
+    main(accountid)
