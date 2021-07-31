@@ -37,11 +37,10 @@ def main(account_id):
 
                     for resource in flaggedResources.get("flaggedResources"):
                         meta_result = dict(zip(meta, resource["metadata"]))
-                        base.update(meta_result)
-                dataJSONData = json.dumps(base, cls=DateTimeEncoder)
-
-                f.write(dataJSONData)
-                f.write("\n")
+                        meta_result.update(base)
+                        dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
+                        f.write(dataJSONData)
+                        f.write("\n")
 
 def assume_role(account_id, service, region):
     role_name = os.environ['ROLENAME']
