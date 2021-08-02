@@ -26,6 +26,8 @@ Then run this query to find any files that were created outside of replication:
     select * from inventory_compacted
     where version_id <> 'REPLICA';
 
-If you find any files, download the query results as a CSV file.  Then run this script:
+If you find any files, download the query results as a CSV file.  Then download and run this [script](/Reliability/200_Backup_Restore_Failback_Analytics/Code/src/resync_s3.py):
 
-    python src/resync_s3.py --input <CSV file> --primary <bucket in primary region>
+    python resync_s3.py --input <CSV file> --primary <bucket in primary region>
+
+{{< prev_next_button link_prev_url="../removeinfra" link_next_url="../../next" />}}
