@@ -46,6 +46,11 @@ then
     echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
     exit 1
 fi
+if [ "$prefix" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
+    exit 1
+fi
 UPDATE=${7:-""}    
 CFN_CMD="create-stack"
 if [ "$UPDATE" == "--update" ]

@@ -8,20 +8,30 @@ weight: 10
 
 If we've decided to fail over to the backup region, the first thing we need to do is deploy the rest of the workload in the backup region.
 
-Review the files `scripts/create-dr-infra.sh` and the CloudFormation templates in the `cfn/` directory. Adjust any CloudFormation variables to suit your preferences.  You must update at least the following:
+### Download and review scripts and templates
 
-* `AllowedPrefixIngress`: Set this to a prefix list that represents your producer traffic
-* `AllowedCidrIngress`: Set this to the value found in the output of the primary region's CFN stack.  It's the static IP for our example producer.
-* `BackupBucket`: Set this to the name of the S3 bucket in the backup region
+Download the following files:
+
+* [create-dr-infra.sh](/Reliability/200_Backup_Restore_Failback_Analytics/Code/scripts/create-dr-infra.sh)
+* [dr-infra.yaml](/Reliability/200_Backup_Restore_Failback_Analytics/Code/cfn/dr-infra.yaml)
+
+Review these files and adjust any of the input parameters to suit your needs.
+
+In your working directory, place `create-dr-infra.sh` in a directory called `scripts` and place the file `dr-infra.yaml` in a directory called `cfn`.
+
+### Deploy stack
 
 Now create the stack in the backup region:
 
-    ./scripts/create-dr-infra.sh <template bucket> <template prefix> <stack name> <REGION>
+    export AWS_PROFILE=BACKUP
+    ./scripts/create-dr-infra.sh <template bucket> <template prefix> <stack name> <backup bucket name> <ingress prefix> <ingress CIDR> <REGION>
 
-Again note that the last argument is the primary region.
+Note that we pass in the primary region as the last argument.  The `ingress CIDR` argument is the static IP for our example producer, which you can find in the output of the CFN stack used in the primary region.
 
 For example:
 
-    ./scripts/create-dr-infra.sh backuprestore cfn BackupRestoreInfra us-west-2
+    ./scripts/create-dr-infra.sh backuprestore cfn BackupRestore MyBackupBucket MyPrefix 1.2.3.4/32 us-west-2
 
 To update the stack, add the `--update` flag as the last argument.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../endpoint" />}}

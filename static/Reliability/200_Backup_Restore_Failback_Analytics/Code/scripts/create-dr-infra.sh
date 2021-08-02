@@ -13,33 +13,50 @@
 # permissions and limitations under the License.
 
 
-
 templatebucket=$1
 templateprefix=$2
 stackname=$3
 region=$4
+backupbucket=$5
+prefix=$6
+ingress=$7
 SCRIPTDIR=`dirname $0`
 if [ "$templatebucket" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
     exit 1
 fi
 if [ "$templateprefix" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
     exit 1
 fi
 if [ "$stackname" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
     exit 1
 fi
 if [ "$region" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
     exit 1
 fi
-UPDATE=${5:-""}    
+if [ "$backupbucket" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    exit 1
+fi
+if [ "$prefix" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    exit 1
+fi
+if [ "$ingress" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    exit 1
+fi
+UPDATE=${8:-""}    
 CFN_CMD="create-stack"
 if [ "$UPDATE" == "--update" ]
 then
@@ -58,13 +75,13 @@ echo "Uploading CFN scripts"
 aws s3 sync $SCRIPTDIR/../cfn s3://$templatebucket/$templateprefix
 
 echo "Packaging Glue ETL code"
-aws s3 cp $SCRIPTDIR/../glue/compaction.py s3://rdbackuprestore-dr/code/compaction.py
+aws s3 cp $SCRIPTDIR/../glue/compaction.py s3://$backupbucket/code/compaction.py
 
 aws cloudformation $CFN_CMD --stack-name $stackname \
     --template-url $TEMPLATE_URL \
     --tags Key=Project,Value=BackupRestoreAnalytics \
     --parameters \
-    ParameterKey=AllowedPrefixIngress,ParameterValue=pl-3ea44157 \
-    ParameterKey=AllowedCidrIngress,ParameterValue="35.80.252.59/32" \
-    ParameterKey=BackupBucket,ParameterValue=rdbackuprestore-dr \
+    ParameterKey=AllowedPrefixIngress,ParameterValue=$prefix \
+    ParameterKey=BackupBucket,ParameterValue=$backupbucket \
+    ParameterKey=AllowedCidrIngress,ParameterValue="$ingress" \
     --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM

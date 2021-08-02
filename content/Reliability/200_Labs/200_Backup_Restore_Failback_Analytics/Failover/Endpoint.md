@@ -12,3 +12,5 @@ Go to the Systems Manager console in the primary region and execute the automati
 
 * `BackupRegion`: Set this to your backup region, e.g. `us-east-2`
 * `BackupEndpoint`: Set this to the ARN of the backup ALB.
+
+{{< prev_next_button link_prev_url="../backupinfra" link_next_url="../verify" />}}
