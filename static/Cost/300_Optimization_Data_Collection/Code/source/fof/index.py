@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 #Gets org data, grouped by ous and tags from managment accounts in json
+#Author Stephanie Gooch 2020
+
 import argparse
 import boto3
 from botocore.exceptions import ClientError
@@ -22,10 +24,10 @@ def list_tags(client, resource_id):
     return tags
     
 def lambda_handler(event, context):
-
+    management_account_id = os.environ["MANAGMENT_ACCOOUNT_ID"]
     sts_connection = boto3.client('sts')
     acct_b = sts_connection.assume_role(
-        RoleArn="arn:aws:iam::(account id):role/OrganizationLambdaAccessRole",
+        RoleArn=f"arn:aws:iam::{management_account_id}:role/OrganizationLambdaAccessRole",
         RoleSessionName="cross_acct_lambda"
     )
     
@@ -84,34 +86,37 @@ def s3_upload(file_name):
         print(f"{file_name}org data in s3")
     except Exception as e:
         print(e)
-def ou_loop(parent_id, test, client):
-    print(parent_id)
-    paginator = client.get_paginator('list_children')
-    iterator = paginator.paginate( ParentId=parent_id, ChildType='ORGANIZATIONAL_UNIT')
-    for page in iterator:
-        for ou in page['Children']:
-            test.append(ou['Id'])
-            ou_loop(ou['Id'], test, client)
-    return test
 
 def get_ou_ids(parent_id, client):
     full_result = {}
-    test = []
-    ous = ou_loop(parent_id, test, client)
-    print(ous)
+    
+    paginator = client.get_paginator('list_organizational_units_for_parent')
+    iterator  = paginator.paginate(
+        ParentId=parent_id
 
-    for ou in ous:
-        ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
-        full_result[ou]=[]
-        full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
+    )
+
+    for page in iterator:
+        for ou in page['OrganizationalUnits']:
+            print(ou['Name'])
+            full_result[ou['Id']]=[]
+            full_result[ou['Id']].append(ou['Name'])
+
+
     return full_result
 
 def get_acc_ids(parent_id,  client):
-  full_result = []
-  paginator = client.get_paginator('list_accounts_for_parent')
-  iterator  = paginator.paginate(ParentId=parent_id)
-  for page in iterator:
-    for acc in page['Accounts']:
-      print(acc['Id'])
-      full_result.append(acc['Id'])
-  return full_result
+    full_result = []
+    
+    paginator = client.get_paginator('list_accounts_for_parent')
+    iterator  = paginator.paginate(
+        ParentId=parent_id
+    )
+
+    for page in iterator:
+        for acc in page['Accounts']:
+            print(acc['Id'])
+            full_result.append(acc['Id'])
+
+
+    return full_result
