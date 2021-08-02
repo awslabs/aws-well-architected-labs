@@ -8,25 +8,38 @@ weight: 10
 
 In this section we'll deploy necessary infrastructure to the backup region to support data backup and workload failover.
 
-First, clone this repository and go into the repository directory.
+### S3 bucket for templates
 
-Next, create an S3 bucket to hold the CloudFormation templates.
+First, create an S3 bucket to hold the CloudFormation templates.  We'll call this the `TEMPLATEBUCKET`.
 
-    aws s3 mb s3://<template bucket> --region <REGION>
+    aws s3 mb s3://<TEMPLATEBUCKET> --region <REGION>
 
 Enable versioning on this bucket in the console.
 
-Review the files `scripts/create-dr.sh` and the CloudFormation templates in the `cfn/` directory. Adjust any CloudFormation variables to suit your preferences.  
+### Download and review scripts and templates
+
+Download the following files:
+
+* [create-dr.sh](/Reliability/200_Backup_Restore_Failback_Analytics/Code/scripts/create-dr.sh)
+* [dr-data.yaml](/Reliability/200_Backup_Restore_Failback_Analytics/Code/cfn/dr-data.yaml)
+
+Review these files and adjust any of the input parameters to suit your needs.
+
+In your working directory, place `create-dr.sh` in a directory called `scripts` and place the file `dr-data.yaml` in a directory called `cfn`.
+
+### Deploy stack
 
 Now create the stack in the backup region:
 
     export AWS_PROFILE=BACKUP
-    ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <REGION>
+    ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <backup bucket name> <inventory bucket name> <REGION>
 
 Note that we pass in the primary region as the last argument.
 
 For example:
 
-    ./scripts/create-dr.sh backuprestore cfn BackupRestore us-west-2
+    ./scripts/create-dr.sh backuprestore cfn BackupRestore MyBackupBucket MyInventoryBucket us-west-2
 
 To update the stack, add the `--update` flag as the last argument.
+
+{{< prev_next_button link_prev_url="../" link_next_url="../primaryregion" />}}

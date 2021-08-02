@@ -6,9 +6,9 @@ weight: 20
 
 ## Architecture
 
-In this workshop we'll work with a typical Big Data workload with batch and stream processing components.
+In this workshop we'll work with a typical Big Data workload with streaming ingest and batch processing.
 
-![Big Data Workload](/images/backup-restore-analytics.png)
+![Big Data Workload](/Reliability/200_Backup_Restore_Failback_Analytics/Images/backup-restore-analytics-workshop.png)
 
 ### Ingest
 
@@ -18,10 +18,8 @@ Our data source is streaming data coming from external applications.  We present
 
 Once the data lands in a Kinesis stream, the batch processing flow picks up with a Firehose landing the data in S3.  A nightly Glue job performs batch processing.  A Lambda function registers new partitions in the Glue catalog.
 
-### Stream Processing
-
-From the original Kinesis stream, a Kinesis Analytics application performs the stream processing and writes the output into another data stream.  From the second data stream, the data flows to both S3 via Firehose and to DynamoDB via Lambda.
-
 ## Disaster Recovery
 
 Looking at our architecture, we have two primary data stores, S3 and the Glue catalog.  For S3, we use cross-region replication to backup data to a DR region.  We use Lambda functions in both regions to keep the partitions up to date, so no replication is required.
+
+{{< prev_next_button link_prev_url="../account" link_next_url="../../settingup" />}}

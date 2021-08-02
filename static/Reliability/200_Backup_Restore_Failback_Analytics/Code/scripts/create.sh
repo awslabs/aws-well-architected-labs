@@ -18,28 +18,35 @@ templatebucket=$1
 templateprefix=$2
 stackname=$3
 region=$4
+backupbucket=$5
+prefix=$6
 SCRIPTDIR=`dirname $0`
 if [ "$templatebucket" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
     exit 1
 fi
 if [ "$templateprefix" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
     exit 1
 fi
 if [ "$stackname" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
     exit 1
 fi
 if [ "$region" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
     exit 1
 fi
-UPDATE=${5:-""}    
+if [ "$backupbucket" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <--update>"
+    exit 1
+fi
+UPDATE=${7:-""}    
 CFN_CMD="create-stack"
 if [ "$UPDATE" == "--update" ]
 then
@@ -65,7 +72,7 @@ aws cloudformation $CFN_CMD --stack-name $stackname \
     --template-url $TEMPLATE_URL \
     --tags Key=Project,Value=BackupRestoreAnalytics \
     --parameters \
-    ParameterKey=AllowedPrefixIngress,ParameterValue=pl-f8a64391 \
+    ParameterKey=AllowedPrefixIngress,ParameterValue=$prefix \
     ParameterKey=Bucket,ParameterValue=$templatebucket \
-    ParameterKey=ReplBucketName,ParameterValue=rdbackuprestore-dr \
+    ParameterKey=ReplBucketName,ParameterValue=$backupbucket \
     --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM

@@ -9,3 +9,5 @@ pre: "<b>1. </b>"
 ### Getting Started
 
 In this chapter, we'll cover the prerequisites you'll need for the rest of the workshop.
+
+{{< prev_next_button link_prev_url="../" link_next_url="account" />}}

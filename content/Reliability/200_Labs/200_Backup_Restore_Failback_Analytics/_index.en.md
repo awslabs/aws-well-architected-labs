@@ -1,7 +1,7 @@
 +++
-title: "Level 200: Backup and Restore with Failback for Analytics Worklaod"
-menutitle: "Backup and Restore for Analytics Workload"
-description: "Implement the backup and restore DR pattern with failback capability for an analytics workload"
+title = "Level 200: Backup and Restore with Failback for Analytics Workload"
+menutitle = "Backup and Restore for Analytics Workload"
+description = "Implement the backup and restore DR pattern with failback capability for an analytics workload"
 date = 2021-05-06T09:52:56-04:00
 weight = 5
 chapter = false

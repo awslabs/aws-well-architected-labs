@@ -20,3 +20,5 @@ After a few minutes you should be able to preview the table in Athena and see so
 To produce the nightly compacted files, run the Glue job called `CompactNightly`.  Then you can preview the table `compacteddata`.  
 
 To verify data replication, you can look for files in the bucket in the backup region.
+
+{{< prev_next_button link_prev_url="../primaryregion" link_next_url="../../failover" />}}

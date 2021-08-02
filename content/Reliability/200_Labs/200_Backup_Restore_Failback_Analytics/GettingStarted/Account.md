@@ -31,7 +31,7 @@ If you are running this workshop as part of an Event Engine lab, please log into
 
 If you are using your own AWS account, be sure you have access to create and manage resources in the services noted above.
 
-*After completing the workshop, remember to complete the [cleanup](/next) section to remove any unnecessary AWS resources.*
+*After completing the workshop, remember to complete the [cleanup](../../next) section to remove any unnecessary AWS resources.*
 
 #### Note your account and region
 
@@ -43,4 +43,5 @@ This workshop should work in `us-east-1`, `us-east-2`, or `us-west-2`.  You can 
 
 Also note your AWS account number.  You find this in the console or by running `aws sts get-caller-identity` on the CLI.  We'll refer to this as `ACCOUNT` going forward.
 
+{{< prev_next_button link_prev_url="../" link_next_url="../architecture" />}}
 

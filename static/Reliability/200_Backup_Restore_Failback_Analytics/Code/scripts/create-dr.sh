@@ -16,28 +16,40 @@ templatebucket=$1
 templateprefix=$2
 stackname=$3
 region=$4
+backupbucket=$5
+invbucket=$6
 SCRIPTDIR=`dirname $0`
 if [ "$templatebucket" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
     exit 1
 fi
 if [ "$templateprefix" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
     exit 1
 fi
 if [ "$stackname" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
     exit 1
 fi
 if [ "$region" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
     exit 1
 fi
-UPDATE=${5:-""}    
+if [ "$backupbucket" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
+    exit 1
+fi
+if [ "$invbucket" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <inventory bucket name> <--update>"
+    exit 1
+fi
+UPDATE=${7:-""}    
 CFN_CMD="create-stack"
 if [ "$UPDATE" == "--update" ]
 then
@@ -59,6 +71,6 @@ aws cloudformation $CFN_CMD --stack-name $stackname \
     --template-url $TEMPLATE_URL \
     --tags Key=Project,Value=BackupRestoreAnalytics \
     --parameters \
-    ParameterKey=BackupBucketName,ParameterValue=rdbackuprestore-dr \
-    ParameterKey=InventoryBucketName,ParameterValue=rdbackuprestore-inv \
+    ParameterKey=BackupBucketName,ParameterValue=$backupbucket \
+    ParameterKey=InventoryBucketName,ParameterValue=$invbucket \
     --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
