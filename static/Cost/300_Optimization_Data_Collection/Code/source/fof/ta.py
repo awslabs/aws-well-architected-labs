@@ -16,7 +16,7 @@ class DateTimeEncoder(JSONEncoder):
             return obj.isoformat()
 def main(account_id):
     base = {"AccountId":account_id,"Category":"Cost Optimizing"}
-    with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
+    with open("data.json", "w") as f:  # Saving in the temporay folder in the lambda
         support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         for case in response["checks"]:
@@ -24,23 +24,24 @@ def main(account_id):
 
             if case["category"] == "cost_optimizing":
                 c_id = case["id"]
-                check_name = {"name": case["name"], "id": c_id}
+                CheckName = {"name": case["name"], "CheckId": c_id}
 
                 check_result = support_client.describe_trusted_advisor_check_result(
                     checkId=c_id, language="en"
                 )
+                
+                base.update({'Timestamp':check_result['result']['timestamp']})
+                
+                for resource in check_result["result"]["flaggedResources"]: 
+                    meta_result = dict(zip(meta, resource["metadata"]))
+                    del resource['metadata']
+                    meta_result.update(base)
+                    meta_result.update(CheckName)
+                    meta_result.update(resource)
+                    dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
 
-                if check_result["result"]["status"] == "warning":
-                    flaggedResources = {
-                        "flaggedResources": check_result["result"]["flaggedResources"]
-                    }
-
-                    for resource in flaggedResources.get("flaggedResources"):
-                        meta_result = dict(zip(meta, resource["metadata"]))
-                        meta_result.update(base)
-                        dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
-                        f.write(dataJSONData)
-                        f.write("\n")
+                    f.write(dataJSONData)
+                    f.write("\n")
 
 def assume_role(account_id, service, region):
     role_name = os.environ['ROLENAME']
@@ -48,7 +49,6 @@ def assume_role(account_id, service, region):
     sts_client = boto3.client('sts')
     
     try:
-        #region = sts_client.meta.region_name
         assumedRoleObject = sts_client.assume_role(
             RoleArn=role_arn,
             RoleSessionName="AssumeRoleRoot"
