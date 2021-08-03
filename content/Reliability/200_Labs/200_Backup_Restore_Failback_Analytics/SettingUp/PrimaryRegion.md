@@ -30,13 +30,13 @@ In your working directory, place `create.sh` in a directory called `scripts` and
 Now create the stack in the primary region:
 
     export AWS_PROFILE=PRIMARY
-    ./scripts/create.sh <template bucket> <template prefix> <stack name> <backup bucket name> <ingress prefix list> <REGION>
+    ./scripts/create.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <ingress prefix list> 
 
 Note that we pass in the primary region as the last argument.
 
 For example:
 
-    ./scripts/create.sh backuprestore cfn BackupRestore MyBackupBucket MyPrefixList us-west-2
+    ./scripts/create.sh backuprestore cfn BackupRestore us-west-2 MyBackupBucket MyPrefixList 
 
 To update the stack, add the `--update` flag as the last argument.
 

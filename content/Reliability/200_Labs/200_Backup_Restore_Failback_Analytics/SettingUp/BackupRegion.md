@@ -32,13 +32,13 @@ In your working directory, place `create-dr.sh` in a directory called `scripts` 
 Now create the stack in the backup region:
 
     export AWS_PROFILE=BACKUP
-    ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <backup bucket name> <inventory bucket name> <REGION>
+    ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <inventory bucket name> 
 
 Note that we pass in the primary region as the last argument.
 
 For example:
 
-    ./scripts/create-dr.sh backuprestore cfn BackupRestore MyBackupBucket MyInventoryBucket us-west-2
+    ./scripts/create-dr.sh backuprestore cfn BackupRestore us-west-2 MyBackupBucket MyInventoryBucket 
 
 To update the stack, add the `--update` flag as the last argument.
 
