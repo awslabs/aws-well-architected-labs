@@ -24,6 +24,7 @@ In your working directory, place `create-dr-infra.sh` in a directory called `scr
 Now create the stack in the backup region:
 
     export AWS_PROFILE=BACKUP
+    chmod +x ./scripts/create-dr-infra.sh
     ./scripts/create-dr-infra.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <ingress prefix> <ingress CIDR> 
 
 Note that we pass in the primary region as the last argument.  The `ingress CIDR` argument is the static IP for our example producer, which you can find in the output of the CFN stack used in the primary region.

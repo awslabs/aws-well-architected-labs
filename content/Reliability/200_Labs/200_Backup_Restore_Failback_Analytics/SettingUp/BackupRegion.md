@@ -32,6 +32,7 @@ In your working directory, place `create-dr.sh` in a directory called `scripts` 
 Now create the stack in the backup region:
 
     export AWS_PROFILE=BACKUP
+    chmod +x ./scripts/create-dr.sh
     ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <inventory bucket name> 
 
 Note that we pass in the primary region as the last argument.
