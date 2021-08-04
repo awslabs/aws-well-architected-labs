@@ -418,5 +418,11 @@
     "target": "/well-architectedtool/100_labs/100_walkthrough_of_the_well-architected_tool/",
     "status": "301",
     "condition": null
+  },
+  {
+    "source": "/cost/200_labs/200_enterprise_dashboards/<*>.html",
+    "target": "/cost/200_labs/200_cloud_intelligence/",
+    "status": "301",
+    "condition": null
   }
 ] 

@@ -6,6 +6,12 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
+
+
+{{%expand " " %}}
 ![Images/quicksight_dashboard_dt_new_analysis.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_dashboard_dt_new_analysis.png)
 
 ## Authors
@@ -241,3 +247,4 @@ Perform steps 11 and 12 above to create additional analyses for other teams, thi
 You have successfully created the analysis from a template. For a detailed description of the dashboard read the [FAQ](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
 {{% /notice %}}
 
+{{% /expand%}}

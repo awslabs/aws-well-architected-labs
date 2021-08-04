@@ -6,6 +6,14 @@ weight: 4
 pre: "<b>4. </b>"
 ---
 
+
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
+
+
+{{%expand " " %}}
+
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected  (AWS)
 
@@ -45,3 +53,4 @@ You have successfully created an email report.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../3_create_data_transfer_cost_analysis/" link_next_url="../5_tear_down/" />}}
+{{% /expand%}}

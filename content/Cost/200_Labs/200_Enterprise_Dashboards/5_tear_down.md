@@ -6,7 +6,12 @@ weight: 5
 pre: "<b>5. </b>"
 ---
 
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
 
+
+{{%expand " " %}}
 To perform a teardown for this lab, perform the following steps:
 
 1. Remove QuickSight email reports
@@ -61,4 +66,4 @@ you should re-evaluate the questions in the Well-Architected tool. This lab spec
 {{< /prev_next_button >}}
 
 
-
+{{% /expand%}}

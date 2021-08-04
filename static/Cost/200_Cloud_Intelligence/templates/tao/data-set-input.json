@@ -1,0 +1,1161 @@
+{
+    "DataSetId": "ta-organizational-view",
+    "Name": "ta-organizational-view",
+    "Permissions": [
+        {
+            "Principal": "{user_arn}",
+            "Actions": [
+                "quicksight:UpdateDataSetPermissions",
+                "quicksight:DescribeDataSet",
+                "quicksight:DescribeDataSetPermissions",
+                "quicksight:PassDataSet",
+                "quicksight:DescribeIngestion",
+                "quicksight:ListIngestions",
+                "quicksight:UpdateDataSet",
+                "quicksight:DeleteDataSet",
+                "quicksight:CreateIngestion",
+                "quicksight:CancelIngestion"
+            ]
+        }
+    ],
+    "PhysicalTableMap": {
+        "b5de237f-b599-407f-87ec-32024624ba65": {
+            "RelationalTable": {
+                "DataSourceArn": "arn:aws:quicksight:{region}:{account}:datasource/ta-organizational-view",
+                "Catalog": "AwsDataCatalog",
+                "Schema": "{databaseName}",
+                "Name": "ta_organizational_view_reports",
+                "InputColumns": [
+                    {
+                        "Name": "ip address",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "checkname",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "accountparentname",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "accountid",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "category",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "checkid",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "issuppressed",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resourceid",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "region",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "accountparentid",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "timestamp",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "accountname",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "status",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "acl allows list",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "bucket name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "acl allows upload/delete",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "region name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "policy allows access",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ignored bucket name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "region api parameter",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "password policy",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "reason",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "number",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "uppercase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "lowercase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "non-alphanumeric",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "write enabled",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "same owner",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "target exists",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "target name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "trail name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "logging status",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "last delivery error",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "access key",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "key last rotated",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "iam user",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "mfa delete enabled",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "versioning",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "current usage",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "service",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "limit amount",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "limit name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "snapshot id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "volume name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "snapshot age",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "volume attachment",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "volume id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "snapshot name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "volume type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "volume size",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "monthly storage cost",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "max daily median",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "number of days over",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 14",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 13",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 12",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 11",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 10",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 1",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 2",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 3",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 8",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 9",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 4",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 5",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 6",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "day 7",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "region/az",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "14-day average cpu utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated monthly savings",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "14-day average network i/o",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "number of days low utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone a",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone b",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone e",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone f",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone c",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instances in zone d",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "load balancer associated",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "auto scaling group name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "health check",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "total inbound rules",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "total outbound rules",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "vpc id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "db instance",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "multi-az",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "security group id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ports",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "security group name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "protocol",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "port",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ip range",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "customer gateway",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "vpc",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "active tunnels",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "vpn id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "virtual private gateway",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "distribution domain name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "distribution id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "alternate domain name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "hosted zone name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "hosted zone id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "number of name server delegations used",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "number of days over 90% cpu utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "launch configuration name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "launch type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "launch name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "backup retention period",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "description",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance count",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "group id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource record set identifier",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource record set type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "alias target",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource record set name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "headers",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "cache behavior path pattern",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "lookback period (days)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "upfront cost",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "payment option",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "hourly commitment to purchase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated savings percentage",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "term (years)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "savings plan type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated average utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "origin",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "days since last connection",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "db instance name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "storage provisioned (gb)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated monthly savings (on demand)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "cluster",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated break even (months)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "platform",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expected average ri utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated on-demand cost post recommended ri purchase (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "recommended number of ris to purchase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "upfront cost of ris",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated savings with recommendation (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated cost of ris (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "load balancer name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "# of zones",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "access key id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "case id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "certificate name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "connection details",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "connection id for vif",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "connection id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "current monthly cost",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "data transfer out (gb)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "database edition",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "database engine",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "db instance or cluster id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "deadline",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "deployment option",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ebs optimized",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated cost of reserved instances (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated cost of reserved nodes (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated on-demand cost post recommended reserved instance purchase (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "estimated on-demand cost post recommended reserved nodes purchase (monthly)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expected average reserved instance utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expected average reserved node utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expected avergae reserved instance utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expected avergae reserved node utilization",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "expiration date",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "family",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "fraud type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "gateway id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ingress rule",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance class",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "instance size",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "license model",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "load balancer port",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "location for vif",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "location",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "node type",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "private db instances",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "product description",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "public db instances",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ratio of transfer to storage",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "rds security group name",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "recommended number of reserved instances to purchase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "recommended number of reserved nodes to purchase",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "reserved instance id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "resource record set id",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "s3 storage (gb)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "security group ids",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "time near maximum",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "time updated",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "ttl",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "upfront cost of reserved instances",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "upfront cost of reserved nodes",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "usage (usd per day)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "user name (iam or root)",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "zone",
+                        "Type": "STRING"
+                    },
+                    {
+                        "Name": "function arn",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "max daily error rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "date for max error rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "average daily error rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "lost daily compute cost",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "current day invokes",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "current day error rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "average daily invokes",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "last refresh time",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "max daily timeout rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "date of max daily timeout rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "average daily timeout rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "function timeout setting",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "current day timeout rate",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "runtime",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "days to deprecation",
+                        "Type": "STRING"
+                      },
+                      {
+                        "Name": "deprecation date",
+                        "Type": "STRING"
+                      }
+                ]
+            }
+        }
+    },
+    "LogicalTableMap": {
+        "b5de237f-b599-407f-87ec-32024624ba65": {
+            "Alias": "ta_organizational_view_reports",
+            "DataTransforms": [
+                {
+                    "TagColumnOperation": {
+                        "ColumnName": "region",
+                        "Tags": [
+                            {
+                                "ColumnGeographicRole": "STATE"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "TagColumnOperation": {
+                        "ColumnName": "region name",
+                        "Tags": [
+                            {
+                                "ColumnGeographicRole": "STATE"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "TagColumnOperation": {
+                        "ColumnName": "region api parameter",
+                        "Tags": [
+                            {
+                                "ColumnGeographicRole": "STATE"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "ProjectOperation": {
+                        "ProjectedColumns": [
+                            "ip address",
+                            "checkname",
+                            "accountparentname",
+                            "accountid",
+                            "category",
+                            "checkid",
+                            "issuppressed",
+                            "resourceid",
+                            "region",
+                            "accountparentid",
+                            "timestamp",
+                            "accountname",
+                            "status",
+                            "acl allows list",
+                            "bucket name",
+                            "acl allows upload/delete",
+                            "region name",
+                            "policy allows access",
+                            "ignored bucket name",
+                            "region api parameter",
+                            "password policy",
+                            "reason",
+                            "number",
+                            "uppercase",
+                            "lowercase",
+                            "non-alphanumeric",
+                            "write enabled",
+                            "same owner",
+                            "target exists",
+                            "target name",
+                            "trail name",
+                            "logging status",
+                            "last delivery error",
+                            "access key",
+                            "key last rotated",
+                            "iam user",
+                            "mfa delete enabled",
+                            "versioning",
+                            "current usage",
+                            "service",
+                            "limit amount",
+                            "limit name",
+                            "snapshot id",
+                            "volume name",
+                            "snapshot age",
+                            "volume attachment",
+                            "volume id",
+                            "snapshot name",
+                            "volume type",
+                            "volume size",
+                            "monthly storage cost",
+                            "max daily median",
+                            "number of days over",
+                            "day 14",
+                            "day 13",
+                            "day 12",
+                            "day 11",
+                            "day 10",
+                            "day 1",
+                            "day 2",
+                            "day 3",
+                            "day 8",
+                            "day 9",
+                            "day 4",
+                            "day 5",
+                            "day 6",
+                            "day 7",
+                            "region/az",
+                            "14-day average cpu utilization",
+                            "instance type",
+                            "instance name",
+                            "estimated monthly savings",
+                            "14-day average network i/o",
+                            "number of days low utilization",
+                            "instance id",
+                            "instances in zone a",
+                            "instances in zone b",
+                            "instances in zone e",
+                            "instances in zone f",
+                            "instances in zone c",
+                            "instances in zone d",
+                            "load balancer associated",
+                            "auto scaling group name",
+                            "health check",
+                            "total inbound rules",
+                            "total outbound rules",
+                            "vpc id",
+                            "db instance",
+                            "multi-az",
+                            "security group id",
+                            "ports",
+                            "security group name",
+                            "protocol",
+                            "port",
+                            "ip range",
+                            "customer gateway",
+                            "vpc",
+                            "active tunnels",
+                            "vpn id",
+                            "virtual private gateway",
+                            "distribution domain name",
+                            "distribution id",
+                            "alternate domain name",
+                            "hosted zone name",
+                            "hosted zone id",
+                            "number of name server delegations used",
+                            "number of days over 90% cpu utilization",
+                            "resource name",
+                            "launch configuration name",
+                            "launch type",
+                            "resource type",
+                            "launch name",
+                            "backup retention period",
+                            "description",
+                            "instance count",
+                            "group id",
+                            "resource record set identifier",
+                            "resource record set type",
+                            "alias target",
+                            "resource record set name",
+                            "headers",
+                            "cache behavior path pattern",
+                            "lookback period (days)",
+                            "upfront cost",
+                            "payment option",
+                            "hourly commitment to purchase",
+                            "estimated savings percentage",
+                            "term (years)",
+                            "savings plan type",
+                            "estimated average utilization",
+                            "origin",
+                            "days since last connection",
+                            "db instance name",
+                            "storage provisioned (gb)",
+                            "estimated monthly savings (on demand)",
+                            "cluster",
+                            "estimated break even (months)",
+                            "platform",
+                            "expected average ri utilization",
+                            "estimated on-demand cost post recommended ri purchase (monthly)",
+                            "recommended number of ris to purchase",
+                            "upfront cost of ris",
+                            "estimated savings with recommendation (monthly)",
+                            "estimated cost of ris (monthly)",
+                            "load balancer name",
+                            "# of zones",
+                            "access key id",
+                            "case id",
+                            "certificate name",
+                            "connection details",
+                            "connection id for vif",
+                            "connection id",
+                            "current monthly cost",
+                            "data transfer out (gb)",
+                            "database edition",
+                            "database engine",
+                            "db instance or cluster id",
+                            "deadline",
+                            "deployment option",
+                            "ebs optimized",
+                            "estimated cost of reserved instances (monthly)",
+                            "estimated cost of reserved nodes (monthly)",
+                            "estimated on-demand cost post recommended reserved instance purchase (monthly)",
+                            "estimated on-demand cost post recommended reserved nodes purchase (monthly)",
+                            "expected average reserved instance utilization",
+                            "expected average reserved node utilization",
+                            "expected avergae reserved instance utilization",
+                            "expected avergae reserved node utilization",
+                            "expiration date",
+                            "family",
+                            "fraud type",
+                            "gateway id",
+                            "ingress rule",
+                            "instance class",
+                            "instance size",
+                            "license model",
+                            "load balancer port",
+                            "location for vif",
+                            "location",
+                            "node type",
+                            "private db instances",
+                            "product description",
+                            "public db instances",
+                            "ratio of transfer to storage",
+                            "rds security group name",
+                            "recommended number of reserved instances to purchase",
+                            "recommended number of reserved nodes to purchase",
+                            "reserved instance id",
+                            "resource record set id",
+                            "s3 storage (gb)",
+                            "security group ids",
+                            "time near maximum",
+                            "time updated",
+                            "ttl",
+                            "upfront cost of reserved instances",
+                            "upfront cost of reserved nodes",
+                            "usage (usd per day)",
+                            "user name (iam or root)",
+                            "zone",
+                            "function arn",
+                            "max daily error rate",
+                            "date for max error rate",
+                            "average daily error rate",
+                            "lost daily compute cost",
+                            "current day invokes",
+                            "current day error rate",
+                            "average daily invokes",
+                            "last refresh time",
+                            "max daily timeout rate",
+                            "date of max daily timeout rate",
+                            "average daily timeout rate",
+                            "function timeout setting",
+                            "current day timeout rate",
+                            "runtime",
+                            "days to deprecation",
+                            "deprecation date"
+                        ]
+                    }
+                }
+            ],
+            "Source": {
+                "PhysicalTableId": "b5de237f-b599-407f-87ec-32024624ba65"
+            }
+        }
+    },
+    "ImportMode": "SPICE"
+}
+

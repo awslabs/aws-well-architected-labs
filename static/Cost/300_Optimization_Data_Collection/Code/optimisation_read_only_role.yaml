@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack that will deployed across all accounts in an org so we can assume to read data using a lambda 
+Parameters:
+  CostAccountID:
+    Type: String
+    Description: AccountId of where the collector is deployed
+Outputs:
+  LambdaRole:
+    Description: OPTICS-Assume-Role-Management-Account for lambda to assume in cost account 
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn 
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "Optimization-data-Multi-Account-Role"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS:
+                -  !Sub "arn:aws:iam::${CostAccountID}:root"
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "ami"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "imagebuilder:ListImages"
+                  - "imagebuilder:GetImage"
+                Resource: "*"

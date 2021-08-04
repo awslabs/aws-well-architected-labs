@@ -10,7 +10,7 @@ May 2021
 
 ## Authors
 - Tony Weldon, Commercial Architect
-
+- Stephanie Gooch, Commercial Architect (AWS)
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
