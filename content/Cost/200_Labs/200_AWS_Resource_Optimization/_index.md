@@ -25,7 +25,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Prerequisites
 - Completion of [Level 100: Rightsizing Recommendations](https://wellarchitectedlabs.com/cost/100_labs/100_aws_resource_optimization/)
-- Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) at no additional cost.
+- Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) at no additional cost. After AWS Compute Optimizer is enabled it may take up to 12 hours to fully analyze the AWS resources in your account.
 
 ## Permissions required
 - IAM permissions for [read-only access](https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#standalone-account-access) for AWS Compute Optimizer

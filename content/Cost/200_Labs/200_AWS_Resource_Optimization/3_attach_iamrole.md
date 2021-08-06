@@ -15,7 +15,7 @@ weight: 3
 #### 3. Select **Linux 2 AMI (HVM)**
 ![Images/MemInstall02b.png](/Cost/200_AWS_Resource_Optimization/Images/MemInstall02a.png?classes=lab_picture_small)
 
-#### 4. Select **t2.micro** (free tire eligible) and click **Review and launch**:
+#### 4. Select **t2.micro** (free tier eligible) and click **review and launch**:
 ![Images/MemInstall02b.png](/Cost/200_AWS_Resource_Optimization/Images/MemInstall02c.png?classes=lab_picture_small)
 
 #### 5. Click **Launch**

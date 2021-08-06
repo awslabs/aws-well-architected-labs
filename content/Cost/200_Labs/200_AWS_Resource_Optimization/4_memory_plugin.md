@@ -128,7 +128,7 @@ You have now completed the CloudWatch agent installation and will be able to mon
 
 **[BONUS]** The next step is not mandatory to complete this lab.
 
-If you have a lot of instances manually installing the CloudWatch agent on each of them is not a scalable option. Consider using AWS Systems Manager or a pre-configured AWS CloudFormation template to automatically install the CloudWatch agent by default on all your stacks.
+If you have to install and start the CloudWatch agent on several instances at once doing it manually might not be a scalable option. Consider using [AWS Systems Manager](https://aws.amazon.com/systems-manager/) or a pre-configured AWS CloudFormation template to automatically install the CloudWatch agent by default on all your stacks.
 
 [AWS Systems Manager](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/installing-cloudwatch-agent-ssm.html) Steps:
 

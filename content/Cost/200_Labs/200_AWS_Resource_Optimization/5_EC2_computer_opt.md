@@ -8,47 +8,49 @@ weight: 5
 
 > **NOTE**: In order to complete this step you need to have [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) enabled.
 
-> **Important:** If you have just installed the CloudWatch agent on your instances it may take a couple of days for AWS Compute Optimizer to start providing updated recommendations. You may not see the memory data during the first checks.
+AWS Compute Optimizer uses machine learning to analyzes the configuration and utilization data of your AWS resources. It reports whether your resources are optimal, and generates recommendations (findings) to reduce the cost and improve the performance of your workloads.
 
-AWS Compute Optimizer recommends optimal compute resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. Over-provisioning compute can lead to unnecessary infrastructure cost and under-provisioning compute can lead to poor application performance. Compute Optimizer helps you choose the optimal instance types based on your utilization data.
+When it comes to EC2 instances there are three types of findings:
 
-Why use AWS Compute Optimizer?
+- **Over-provisioned**. An EC2 instance is considered over-provisioned when at least one of the utilization metrics (CPU, Memory, Network) can be sized down while still meeting the performance requirements of your workload, and when no specification is under-provisioned. Over-provisioned EC2 instances might lead to unnecessary infrastructure cost.
+- **Under-provisioned**. An EC2 instance is considered under-provisioned when at least one of the utilization metrics (CPU, Memory, Network) does not meet the performance requirements of your workload. Under-provisioned EC2 instances might lead to poor application performance.
+- **Optimized**. An EC2 instance is considered optimized when all the utilization metrics (CPU, Memory, Network) meet the performance requirements of your workload, and the instance is not over-provisioned. For optimized instances, Compute Optimizer might sometimes recommend a new generation instance type.
 
-- **Lower cost** of EC2 instances, EBS volumes, Lambda functions, and auto-scaling groups
-- **Optimize performance** with actionable recommendations
-- AWS Compute Optimizer is available at **no additional charge**
+You can enable AWS Compute Optimizer across your AWS Organization and filter the recommendations by AWS Accounts, AWS resource (EC2 instances, EBS volumes, Auto Scaling groups or Lambda functions) and AWS regions.
 
-Let's get started!
+> **NOTE:** If you have just installed the CloudWatch agent on your instances it may take a couple of days for AWS Compute Optimizer to start providing updated recommendations. You may not see the memory data during the first checks.
+
+During the steps below we will review some AWS Computer Optimizer examples and how the recommendations are affected by having an additional datapoint from the EC2 instance memory utilization.
 
 #### 1. Navigate to the **AWS Compute Optimizer** page.
 
 ![Images/ResourceOpt01.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt01.png?classes=lab_picture_small)
 
-#### 2. Ensure you are on the **Dashboard** view and have the desired region selected. The Dashboard view will show you all recommendation types and allow you to drill into the desired AWS resource (EC2 instances, EBS volumes, or Auto Scaling groups).
+#### 2. Ensure you are on the **Dashboard** view and have the desired region selected.
 
 ![Images/ResourceOpt2.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt02.png?classes=lab_picture_small)
 
-#### 3. Navigate to the Compute Optimizer **Dashboard** and select **Over-provisioned instances**.
+#### 3. Select **Over-provisioned instances**.
 
 ![Images/ResourceOpt07.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt03.png?classes=lab_picture_small)
 
-#### 4. Select an instance that is **over-provisioned** and has memory monitoring enabled by clicking the radio button to the left of it then select **View Details**.
+#### 4. Select an instance that is **over-provisioned** and has memory monitoring enabled by clicking the radio button to the left and select **View Details**.
 
 ![Images/ResourceOpt07.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt04.png?classes=lab_picture_small)
 
-#### 5. In this scenario, Compute Optimizer recommends we resize to a t3.large. Our CPU utilization graph shows minimal CPU usage with some bursting. This is an ideal workload for the t3 family.
+#### 5. In this scenario, AWS Compute Optimizer recommends we resize to a t3.large. Our CPU utilization graph shows minimal CPU usage with some bursting. This is an ideal workload for the t3 family.
 
 ![Images/ResourceOpt07.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt05.png?classes=lab_picture_small)
 
-Memory utilization is consistent at 90% and downsizing to a cheaper t3.large will keep our memory at the same size (8 GiB). We can get the same memory performance while reducing overall cost of your EC2 instances.
+Memory utilization is consistent at 90% and downsizing to a cheaper t3.large will keep our memory at the same size (8 GiB). In other words, we can get the same memory performance while reducing overall cost.
 
-> Note: A case could be made that this instance is under-provisioned and upsizing to an instance with more memory is a better solution. For this scenario, the Compute Optimizer views scaling down CPU and keeping the same memory the best decision for cost and performance. However, having memory utilization enabled per instance is an added benefit to the customer that allows additional data points to be taken into account before making a final decision.
+> **NOTE:** A case could be made that this instance is under-provisioned and upsizing to an instance with more memory is a better solution. For this scenario, AWS Compute Optimizer views scaling down CPU and keeping the same memory the best decision for cost and performance. Having memory utilization enabled provides an additional datapoint for customers before making a final decision.
 
-#### 6. Let’s navigate to **under-provisioned EC2 instances**. Click on blue text hyperlink to the right of Under-provisioned instances. If there are none you will be unable to drill into the finding.
+#### 6. Select **Under-provisioned instances**.
 
 ![Images/ResourceOpt3.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt06.png?classes=lab_picture_small)
 
-#### 7. A list of under-provisioned instances will be present. Note the **Recommended instance type**. Select the radio button on the far left of a single instance then select view details in the top right.
+#### 7. A list of under-provisioned instances will be present. Note the **Recommended instance type**. Select the radio button on the far left of the instance and then select **View details** in the top right.
 
 ![Images/ResourceOpt5.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt07.png?classes=lab_picture_small)
 
@@ -56,19 +58,19 @@ Memory utilization is consistent at 90% and downsizing to a cheaper t3.large wil
 
 ![Images/ResourceOpt06.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt08.png?classes=lab_picture_small)
 
-Notice there can be **multiple options for rightsizing** (t3.xlarge, c5.xlarge, m5.xlarge). All options are recommending we move from 2 vCPUs to 4 vCPU’s. The first option will typically be the cheapest. There are multiple columns that allow you to compare and contrast the right choice for upsizing your instance, including price, [performance risk](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html), vCPU’s, memory, storage, and network.
+Notice there can be **multiple options for rightsizing** (t3.xlarge, c5.xlarge, m5.xlarge). All options are recommending we move from 2 vCPUs to 4 vCPU’s. The first option will typically be the cheapest. There are multiple columns that allow you to compare and contrast the right choice for upsizing your instance, including price, [performance risk](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html), CPU, memory, storage, and network.
 
 #### 9. Click through each option using the blue radio button on the left and notice how the below graphs change to show projections for the recommended instance. The **CPU utilization** graph shows our instance is maxed out on CPU and projects an orange dotted line where CPU will be for our new instance.
 
 ![Images/ResourceOpt07.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt09.png?classes=lab_picture_small)
 
-Note that **memory utilization is not currently enabled on this instance**, therefore Compute Optimizer cannot show you what the memory of the instance is. This could be an important detail when making a decision on upsizing. For example, if memory is not an issue option 2 may be a better choice than option 3. We will double our vCPU’s, retain the same memory, and have a cheaper overall on-demand price. Similarly, option 2 may be preferred over option 1 based on [performance risk](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html) associated with option 1. Compute Optimizer will never recommend an instance with less memory if memory monitoring is disabled.
+On the example above you might have noticed that **memory utilization is not currently enabled on this instance**, therefore AWS Compute Optimizer will not report memory utilization. This could be an important datapoint when making a decision to which instance to upsize. For example, if memory is not an issue option 2 may be a better choice than option 3 from a cost perspective. AWS Compute Optimizer will not recommend instances with lower memory if memory monitoring is not available.
 
 #### 10. Let’s take a look at that same instance with memory utilization enabled. Notice we can be more comfortable with our options for rightsizing.
 
 ![Images/ResourceOpt07.png](/Cost/200_AWS_Resource_Optimization/Images/ResourceOpt10.png?classes=lab_picture_small)
 
-Compute Optimizer will now take memory utilization into account. We can see that memory utilization is low and 8 GiB is sufficient. Choosing option 2 (c5.xlarge) will give us additional CPU power and keep our performance risk low by not having to switch to a burstable instance (t3.xlarge). Depending on your goals option 1 may be ideal for cost savings while option 2 would be ideal for overall performance and stability.
+AWS Compute Optimizer will now take memory utilization into account. We can see that memory utilization is low and 8 GiB is sufficient. Choosing option 2 (c5.xlarge) will give us additional CPU power and keep our performance risk low by not having to switch to a burstable instance (t3.xlarge). Depending on your goals option 1 may be ideal for cost savings while option 2 would be ideal for overall performance and stability.
 
 #### Conclusions
 
