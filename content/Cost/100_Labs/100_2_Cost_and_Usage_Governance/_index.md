@@ -6,7 +6,7 @@ chapter: false
 weight: 2
 ---
 ## Last Updated
-May 2021
+July 2021
 
 ## Authors
 - Nathan Besh, Cost Lead Well-Architected

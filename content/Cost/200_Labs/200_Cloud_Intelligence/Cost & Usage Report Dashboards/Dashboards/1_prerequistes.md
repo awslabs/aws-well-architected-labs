@@ -421,6 +421,10 @@ Before you can install or update the AWS CLI version 2 on Windows, be sure you h
 The Cloud Intelligence Dashboards follow the best practices of the AWS Well-Architected labs. The prerequisites below link to each corresponding lab. We recommend following the labs, but have included standalone steps to supplement.  
 {{% /notice %}}
 
+{{% notice note %}}
+The Cloud Intelligence Dashboards support Multi-Payer Cost and Usage Report (CUR) reporting. **Multi-Payer CUR setup cannot use the standalone setup and must follow the Well-Architected Lab references for each prerequisite**    
+{{% /notice %}}
+
 ### Prepare Cost & Usage Report
 The Cost & Usage Report is the foundation for these dashboards. You must have a Cost & Usage Report created with the following format
 - Additional report details: Include **Resource IDs**
@@ -428,6 +432,7 @@ The Cost & Usage Report is the foundation for these dashboards. You must have a 
 - Report Versioning: **Overwrite existing report**
 - Report data integration for: **Amazon Athena**
 - Compression type: **Parquet** 
+
 
 If you do not have a Cost & Usage Report that meets this criteria visit one of the following resources to enable. 
 

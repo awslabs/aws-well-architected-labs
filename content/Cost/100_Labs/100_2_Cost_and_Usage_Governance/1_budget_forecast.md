@@ -16,46 +16,50 @@ Budgets and notifications are updated when your billing data is updated, which i
 We will create a monthly cost budget which will notify if the forecasted amount exceeds the budget.
 
 1. Log into the console via SSO and open the **Billing console**. This can be achieved by using the **search bar** or by selecting **My Billing Dashboard** from your account dropdown menu.
-![Images/1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/1.png?classes=lab_picture_small)
+![Images/Budget1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget1.png?classes=lab_picture_small)
 
 2. Select **Budgets** from the left hand menu:
-![Images/AWSBudget2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget2.png?classes=lab_picture_small)
+![Images/Budget2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget2.png?classes=lab_picture_small)
 
-3. Click on **Create a budget**:
-![Images/AWSBudget3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget3.png?classes=lab_picture_small)
+3. Click on **Create budget**:
+![Images/Budget3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget3.png?classes=lab_picture_small)
 
-4. Ensure **Cost Budget** is selected, and click **Set your budget >**:
-![Images/AWSBudget4.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget4.png?classes=lab_picture_small)
+4. Ensure **Cost budget** is selected, and click on **Next**:
+![Images/Budget4.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget4.png?classes=lab_picture_small)
 
-5. Create a cost budget, enter the following details:
-    - **Name**: CostBudget1
+5. To create a cost budget, enter the following details:
     - **Period**: Monthly
-    - **Budget effective dates**: Recurring Budget
-    - **Start Month**: (select current month)
-    - **Budget amount**: Fixed
-    - **Budgeted amount**: $1 (enter an amount a lot LESS than last months cost),
+    - **Budget effective date**: Recurring Budget
+    - **Start month**: (select current month)
+    - **Choose how to budget**: Fixed
+    - **Budgeted amount**: 1.00 (enter a dollar amount a lot LESS than last months cost)
+    - **Name**: CostBudget1
     -  Other fields: leave as defaults:
-![Images/AWSBudget5.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget5.png?classes=lab_picture_small)
 
-6. Scroll down and click **Configure thresholds >**:
-![Images/AWSBudget6.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget6.png?classes=lab_picture_small)
+Once you have entered all the details select **Next**:
+![Images/Budget5.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget5.png?classes=lab_picture_small)
 
-7. Select:
-    - **Set threshold based on**: Forecasted Costs
-    - **Alert threshold**: 100% of budgeted amount
-    - **Set up your notifications**: Input your email address in the **Email recipients** field
-    - Click on **Confirm budget >**:
-![Images/AWSBudget7.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget7.png?classes=lab_picture_small)
+6. To create an alert for our budget select **Add an alert threshold**:
+![Images/Budget6.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget6.png?classes=lab_picture_small)
 
-8. Review the configuration, and click **Create**:
-![Images/AWSBudget8.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget8.png?classes=lab_picture_small)
+7. For Alert #1 select:
+    - **Threshold**: 100% of budgeted amount
+    - **Trigger**: Forecasted
+    - **Notification preferences**: Input your email address in the **Email recipients** field
+    - Click on **Next**:
+![Images/Budget7.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget7.png?classes=lab_picture_small)
 
-9. You should see the current forecast will exceed the budget (you may need to refresh your browser):
-![Images/AWSBudget9.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget9.png?classes=lab_picture_small)
+8. Here you can attach actions that can be taken when you budget exceeds its threshold. We will not be attaching any actions for this lab. Select **Next** to move to the next page:
+![Images/Budget8.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget8.png?classes=lab_picture_small)
 
-10: You will receive an email similar to this within a few minutes:
-![Images/AWSBudget10.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudget10.png?classes=lab_picture_small)
+9. Review the configuration, and click **Create budget**:
+![Images/Budget9.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget9.png?classes=lab_picture_small)
 
+10. You should see the current forecast will exceed the budget (you may need to refresh your browser):
+![Images/Budget10.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget10.png?classes=lab_picture_small)
+
+11. You will receive an email similar to this within a few minutes:
+![Images/Budget11.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budget11.png?classes=lab_picture_small)
 
 {{% notice tip %}}
 You have created a forecasted budget, when your forecasted costs for the entire account are predicted to exceed the forecast, you will receive a notification.

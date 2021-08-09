@@ -249,7 +249,7 @@ We will now create a bucket in your Cost Optimization account that will hold the
 
 
 ### Update existing CURs - Optional
-If you would like to sync historical objects in your CUR S3 bucket to your Cost Optimization account S3 bucket, you can use the following CLI:
+If you would like to sync historical objects in your Management account CUR S3 bucket to your Cost Optimization account S3 bucket, you can use the following CLI: 
 
 	aws s3 sync s3://<Management_Account_CUR_Bucket_Name> s3://<Cost_Optimization_Account_CUR_Bucket_Name> --acl bucket-owner-full-control
 
