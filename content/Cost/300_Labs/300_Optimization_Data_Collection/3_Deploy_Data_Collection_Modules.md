@@ -184,7 +184,7 @@ This Data will be partitioned by year, month, day.
                 TimeoutInMinutes: 2
                 Parameters:
                   RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-                  TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
+                  TaskQueuesUrl: !Sub "${TrustedAdvisor.Outputs.SQSUrl}"
 
 * [Test your Lambda](#testing-your-deployment) 
 
