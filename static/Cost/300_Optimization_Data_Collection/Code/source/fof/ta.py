@@ -16,7 +16,7 @@ class DateTimeEncoder(JSONEncoder):
             return obj.isoformat()
 def main(account_id):
     base = {"AccountId":account_id,"Category":"Cost Optimizing"}
-    with open("data.json", "w") as f:  # Saving in the temporay folder in the lambda
+    with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
         support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         for case in response["checks"]:
