@@ -102,8 +102,13 @@ This Data will be partitioned by year, month.
         
 
 * CloudFormation to add to **OptimizationDataCollectionStack**:  
-  [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+The services you can collect data are below. Use these in the *Prefix* and *CFDataName* parameters:
+  - ami
+  - ebs
+  - snapshot
+  - ta
 
+[Link to Instructions](#how-to-update-optimizationdatacollectionstack)
 
         DataStackMulti:
           Type: AWS::CloudFormation::Stack
