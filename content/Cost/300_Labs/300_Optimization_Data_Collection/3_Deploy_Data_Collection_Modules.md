@@ -58,7 +58,7 @@ This Data will be partitioned by year, month, day.
 {{%expand "Inventory Collector" %}}
 
 ### Inventory Collector
-This module is designed to loop through your AWS Organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket in the Cost Account.  
+This module is designed to loop through your AWS Organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket in the Cost Account.  See the **Utilise Data Section** for more information on how to use this data.
 This Data will be partitioned by year, month. 
 
 * Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation StackSet depending on what you want to ingest:  
@@ -145,7 +145,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 {{%expand "Trusted Advisor" %}}
 
 ###  Trusted Advisor
-This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
+This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. See the **Utilise Data Section** for more information on how to use this data.
 This Data will be partitioned by year, month, day. 
 
 

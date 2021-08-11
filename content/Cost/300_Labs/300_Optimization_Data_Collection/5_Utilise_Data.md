@@ -20,7 +20,7 @@ When a AMI gets created it takes a Snaphot of the volume. This is then needed to
       'AMI Removed'
       ELSE 'Not AMI'
       END AS status
-  FROM ( 
+        FROM ( 
       (SELECT snapshotid AS snap_id,
           volumeid as volume,
           volumesize,
@@ -51,6 +51,19 @@ When a AMI gets created it takes a Snaphot of the volume. This is then needed to
           FROM "optimization_data"."ami_data") AS k2_ami
               ON snapshots.snap_ami_id = k2_ami.imageid )
     
+
+
+### EBS Volumes and Trusted Advisor Recommendations
+
+Trusted advisor identifies idle and underutilized volumes. This query joins together the data so you can see what portion of your volumes are flagged. 
+
+        SELECT *FROM
+            "optimization_data"."ebs_data"
+        LEFT JOIN 
+        (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid, category, region, year,month
+        from
+        "optimization_data".ta_data ) ta
+        ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."year" and "ebs_data"."month" = "ta"."month"
 
 
 
