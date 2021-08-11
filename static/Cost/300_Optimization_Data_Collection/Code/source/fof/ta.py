@@ -35,6 +35,7 @@ def main(account_id):
                 for resource in check_result["result"]["flaggedResources"]: 
                     meta_result = dict(zip(meta, resource["metadata"]))
                     del resource['metadata']
+                    resource["Region"] = resource.pop("region")
                     meta_result.update(base)
                     meta_result.update(CheckName)
                     meta_result.update(resource)
