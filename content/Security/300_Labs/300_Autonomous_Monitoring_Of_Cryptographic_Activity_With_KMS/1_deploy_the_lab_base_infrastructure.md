@@ -42,7 +42,7 @@ aws cloudformation create-stack --stack-name pattern3-base \
 Confirm that the stack has installed correctly. You can do this by running the describe-stacks command as follows:
 
 ```
-aws cloudformation desribe-stacks --stack-name pattern3-base 
+aws cloudformation describe-stacks --stack-name pattern3-base 
 ```
 
 Locate the StackStatus and confirm it is set to **CREATE_COMPLETE** as shown here:
