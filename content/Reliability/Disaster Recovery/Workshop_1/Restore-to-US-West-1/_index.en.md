@@ -19,7 +19,7 @@ We will simulate a disaster in this exercise by revoking public access to the S3
 
 1.2 Click on the **Name** of the UI bucket.
 
-{{< img RS-54.png >}}
+{{< img RS-59.png >}}
 
 1.3 Select **Permission** and click the **Edit** button under **Block public access**.
 
@@ -233,7 +233,7 @@ MySQL [(none)]>
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
 ```sh
-sudo vi /home/ec2-user/DRImmersionDay/m2mcfg.sh
+sudo vi /home/ec2-user/unishoprun.sh
 ```
 
 **Tip:** Use the full DNS name of the database.
@@ -253,9 +253,7 @@ export PATH=$PATH:/home/ec2-user/gradle-4.6.3/bin
 **Note:**  If our S3 buckets contained application data then it would be necessary to schedule recurring backups to meet the target RPO. This could be done with [Cross Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html). Since our buckets contains no data, only code, we will restore the contents from the EC2 instance.
 
 ```sh
-aws s3 cp /home/ec2-user/DRImmersionDay/UniShopUI s3://backupandrestore-uibucket-XXXXXXXXXXXX-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-
-aws s3 cp /home/ec2-user/DRImmersionDay/UniShopLambda/build/libs s3://backupandrestore-assetbucket-XXXXXXXXXXXX-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+aws s3 cp /home/ec2-user/UniShopUI s3://backupandrestore-uibucket-XXXXXXXXXXXX-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 ```
 
 4.7 Reboot the EC2 instance.
@@ -270,7 +268,7 @@ sudo reboot
 
 4.9 Locate the STACK-NAME-uibucket-XXXXXXXXXXXX-dr bucket we created earlier and click on the **Name**.
 
-{{< img RS-48.png >}}
+{{< img RS-60.png >}}
 
 4.9 Download the **config.json** file from S3 in the  to your local machine.
 
