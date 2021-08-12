@@ -52,6 +52,8 @@ The CUR Query Library Help section is intended to provide tips and information a
 
 [Container]({{< ref "Queries/container.md" >}} "Container")
 
+[Cost Optimization]({{< ref "Queries/cost_optimization.md" >}} "Cost Optimization")
+
 [Customer Engagement]({{< ref "Queries/customer_engagement.md" >}} "Customer Engagement")
 
 [Database]({{< ref "Queries/database.md" >}} "Database")
