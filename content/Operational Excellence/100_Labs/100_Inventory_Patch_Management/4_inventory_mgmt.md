@@ -132,7 +132,7 @@ _Inventory_ is accomplished through the following:
 
 
 
-2. Navigate to **Managed Instances** under **Instances and Nodes** in the navigation bar. An **Association Status** has been established for the inventoried instances under management.
+2. Navigate to **Fleet Manager** under **Instances and Nodes** in the navigation bar. An **Association Status** has been established for the inventoried instances under management.
 1. Choose one of the **Instance ID** links to go to the inventory of the instance. The Inventory tab is now populated and you can track associations and their last activity under the Associations tab.
 1. Navigate to **Compliance** under **Instances & Nodes** in the navigation bar. Here you can view the overall compliance status of your managed instances in the **Compliance Summary** and the individual compliance status of systems in the **Corresponding managed instances** section below.
 
