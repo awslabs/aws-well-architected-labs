@@ -228,7 +228,7 @@ MySQL [(none)]> SHOW DATABASES;
 MySQL [(none)]>
 ```
 
-4.5 Edit the /home/ec2-user/DRImmersionDay/m2mcfg.sh file. Change the database endpoint to the one we saved in step 4.8 above. Change the regions to us-west-1. Finally, change the bucket names to the DR buckets we used in step 2.4 above.
+4.5 Edit the /home/ec2-user/unishoprun.sh file. Change the database endpoint to the one we saved in step 4.8 above. Change the regions to us-west-1. Finally, change the bucket names to the DR buckets we used in step 2.4 above.
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
