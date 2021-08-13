@@ -33,7 +33,7 @@ SSM Agent is installed by default on:
 ### 4.1 Setting up Systems Manager
 
 1. Use your administrator account to access the Systems Manager console at <https://console.aws.amazon.com/systems-manager/>.
-1. Choose **Managed Instances** from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
+1. Choose **Fleet Manager** from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
    * As a user with AdministratorAccess permissions, you already have [User Access to Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html).
    * The Amazon Linux AMIs used to create the instances in your environment are dated 2017.09. They are [supported operating systems](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) and have the [SSM Agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed by default.
    * If you are in a [supported region](https://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region) the remaining step is to configure the IAM role for instances that will process commands.
