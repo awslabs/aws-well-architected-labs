@@ -8,7 +8,6 @@ We will now back up our application to the DR region us-west-1. We will perform 
 - Backup the EC2 instance
 - Backup the RDS database
 - Backup the S3 UI bucket
-- Backup the S3 Asset bucket
 
 ## Backup the EC2 instance
 
@@ -92,7 +91,7 @@ Select the US West (N. California) region and click the **Copy** button.
 
 {{< img BK-35.png >}}
 
-3.2 Note the names of the primary region buckets.
+3.2 Note the names of the primary region bucket.
 
 {{< img RS-48.png >}}
 
@@ -103,24 +102,6 @@ Click the **Create bucket** button.
 Use the same bucket name as the primary bucket and append a “-dr” at the end. Next, select the US West (N. California) us-west-1 region. Finally, save this bucket name as we will need it for our DR runbook.
 
 {{< img BK-30.png >}}
-
-Disable Block all public Access by disabling the root checkbox (and underlying checkboxes as well). Check the acknowledgment box.
-
-{{< img BK-31.png >}}
-
-Leave the rest default and click **Create Bucket**.
-
-{{< img BK-32.png >}}
-
-## Backup the S3 Asset bucket
-
-4.1 Click the **Create Bucket** button to create the Disaster Recovery User Interface (DR UI) bucket.
-
-{{< img BK-29.png >}}
-
-Use the same bucket name as the primary bucket and append a "-dr" at the end. Select the US-west-1 (N. California) region. Save this bucket name as we will need it for our DR runbook.
-
-{{< img BK-33.png >}}
 
 Disable Block all public Access by disabling the root checkbox (and underlying checkboxes as well). Check the acknowledgment box.
 
