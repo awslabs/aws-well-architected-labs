@@ -55,7 +55,7 @@ SSM Agent is installed by default on:
    1. Select the first instance and then choose **Actions**, **Security**, and **Modify IAM Role**.
    1. Under **Modify IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Save**.
    1. Repeat this process, assigning **ManagedInstancesRole** to each of the 3 remaining instances.
-1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Managed Instances** from the navigation bar. Periodically choose **Managed Instances** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
+1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Fleet Manager** from the navigation bar. Periodically choose **Fleet Manager** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
 
 >**Note** If desired, you can use a [more restrictive permission set](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html) to grant access to Systems Manager.
 
