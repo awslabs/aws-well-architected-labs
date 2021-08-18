@@ -60,7 +60,7 @@ Besides deleting idle NATGWs you should also consider the following tips:
 * Consider Setting up Interface VPC Endpoints Instead of NAT Gateways for Other Intra-AWS Traffic
 
 #### Link to Query
-[NAT Gateway - Idle NATGW](../networking_&_content_delivery#nat-gateway---idle-natgw)
+[NAT Gateway - Idle NATGW](../networking__content_delivery#nat-gateway---idle-natgw)
 
 #### Helpful Links
 [Data Transfer Costs Explained](https://github.com/open-guides/og-aws#aws-data-transfer-costs)
