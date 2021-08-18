@@ -25,7 +25,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Data Transfer - MSK](#data-transfer---msk)
   * [AWS Direct Connect](#aws-direct-connect)
   * [NAT Gateway](#nat-gateway)
-  * [NAT Gateway Idle](#nat-gateway-idle)
+  * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
   * [AWS Transit Gateway](#aws-transit-gateway)
   * [Network Usage](#network-usage)
   
@@ -389,7 +389,7 @@ Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for 
 
 [Back to Table of Contents](#table-of-contents)
 
-### NAT Gateway Idle
+### NAT Gateway - Idle NATGW
 
 #### Query Description
 This query shows cost and usage of NAT Gateways which didn't receive any traffic last month and ran for more than 336 hrs. Resources returned by this query could be considered for deletion.

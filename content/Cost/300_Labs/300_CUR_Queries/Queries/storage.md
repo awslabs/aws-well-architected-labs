@@ -521,7 +521,7 @@ Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pric
 ### Amazon EBS Volumes Upgrade gp2 to gp3
 
 #### Query Description
-This query will display cost and usage of Elastic Block Stoarge Volumes that are type gp3. These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query uses 0.088 gp3 pricing please check the pricing page to confirm you are using the correct pricing for your applicable region. For Additional information checkout this [AWS Blog Post.](https://aws.amazon.com/blogs/aws-cost-management/finding-savings-from-2020-reinvent-announcements/)
+This query will display cost and usage of Elastic Block Storage Volumes that are type gp3. These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query uses 0.088 gp3 pricing please check the pricing page to confirm you are using the correct pricing for your applicable region. For Additional information checkout this [AWS Blog Post.](https://aws.amazon.com/blogs/aws-cost-management/finding-savings-from-2020-reinvent-announcements/)
 
 #### Pricing
 Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/ebs/pricing/).
@@ -565,7 +565,7 @@ Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/
         WHERE gb_charged < 1000;
 ```
 
-{{< email_button category_text="Compute" service_text="ELB" query_text="Elastic Block Storage gp2 upgrade to up3" button_text="Help & Feedback" >}}
+{{< email_button category_text="Compute" service_text="ELB" query_text="Elastic Block Storage gp2 upgrade to gp3" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
