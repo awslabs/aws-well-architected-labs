@@ -21,7 +21,6 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [AWS CloudTrail](#aws-cloudtrail)
   * [AWS CloudWatch](#aws-cloudwatch)
   * [Regional Service Usage Mapping](#regional-service-usage-mapping)
-  * [Tag Coverage](#tag-coverage)
 
 ### AWS Config
 
@@ -232,57 +231,6 @@ This Regional Service Usage Mapping query transforms your billing data into a su
 
 [Back to Table of Contents](#table-of-contents)
 
-
-
-### Tag Coverage
-
-#### Query Description
-This query will return a the percentage of resources which are tagged by linked account and product for a specific tag. This will help you determine how good your tagging quality is. For example, if they wish to use to use this field for chargeback or automation. Currently this using the **resource_tags_user_name** tag but this can be swapped out for any other tags in your CUR. To see these tags use this query:
-
-```tsql
-  SELECT column_name
-  FROM   information_schema.columns
-  WHERE  table_schema = '${database_name}'
-        AND table_name = '${table_name}'
-        AND column_name LIKE 'resource_tags%'
-```
-
-
-#### Sample Output
-![Images/tag_coverage.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/tag_coverage.png)
-
-#### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/tag_coverage.sql)
-
-#### Copy Query
-```tsql
-    WITH allresources AS (
-        SELECT
-          line_item_usage_account_id
-        , line_item_product_code
-        , count(DISTINCT line_item_resource_id) AS count_resource
-        , CASE
-            WHEN resource_tags_user_name = '' THEN 'NoTag'
-            ELSE 'Tag'
-          END AS Tag_Status
-        FROM ${table_name} 
-        WHERE  ${date_filter}
-        GROUP BY line_item_usage_account_id, line_item_product_code, 4 -- 4 represents the Tag_Status column
-    )
-    SELECT
-          line_item_usage_account_id
-        , line_item_product_code
-        , sum(count_resource) AS "resources"
-        , sum(CASE WHEN Tag_Status = 'Tag' THEN count_resource ELSE 0 END) AS "tagged_resources"
-        , round(sum(CASE WHEN Tag_Status = 'Tag' THEN CAST(count_resource AS double) ELSE 0. END)/ sum(count_resource) * 100., 1) AS "percentage_tagged"
-    FROM allresources
-    GROUP BY 1,2
-
-```
-
-{{< email_button category_text="Management %26 Governance" service_text="Tag Coveragel" query_text="Tag Coverage Query1" button_text="Help & Feedback" >}}
-
-[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

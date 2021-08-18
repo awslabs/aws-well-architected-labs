@@ -14,17 +14,17 @@ Suppose you are running this workshop in your account. In that case, you should 
 
 {{< img BK-35.png >}}
 
-1.2 Select each of the four buckets created for this workshop and click the **Empty** button.
+1.2 Select each of the two buckets created for this workshop and click the **Empty** button.
 
-{{< img CL-1.png >}}
+{{< img CL-32.png >}}
 
 1.3 Next, enter the text `permanently delete` in the text input field and then click the **Empty** button.
 
-{{< img CL-2.png >}}
+{{< img CL-33.png >}}
 
 1.4 Click into each bucket and confirm that all the objects have been deleted, then click **Exit**.
 
-{{< img CL-4.png >}}
+{{< img CL-34.png >}}
 
 1.6 Repeat this object deletion process for the remaining three buckets.
 
@@ -134,12 +134,12 @@ Repeat the AMI deletion in US-East-1.
 
 6.2 Use the radio button to select one of the buckets created for this workshop and click the **Delete** button.
 
-{{< img CL-5.png >}}
+{{< img CL-35.png >}}
 
 6.3 Enter the bucket name in the text input field and click the **Delete bucket** button.
 
-{{< img CL-7.png >}}
+{{< img CL-36.png >}}
 
-6.4 Repeat the process for the remaining three buckets.
+6.4 Repeat the process for the remaining bucket.
 
-{{< img CL-6.png >}}
+{{< img CL-37.png >}}
