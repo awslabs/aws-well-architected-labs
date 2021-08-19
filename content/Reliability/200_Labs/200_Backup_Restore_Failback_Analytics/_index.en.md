@@ -23,7 +23,7 @@ For RPO, you will lose whatever data your producers were trying to send to the e
 
 To configure the infrastructure and deploy the application, we will use CloudFormation. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
-This workshop takes about an hour to complete. Prior experieince with the AWS Console and Linux command line are helpful but not required.
+This workshop takes about two hours to complete. Prior experience with the AWS Console and Linux command line are helpful but not required.  You should also have basic familiarity with batch and stream processing architectures on AWS.
 
 ## Steps:
 {{% children /%}}

@@ -20,43 +20,61 @@ region=$4
 backupbucket=$5
 prefix=$6
 ingress=$7
+backup_arn=$8
+source_table_arn=$9
+target_table_name=$10
 SCRIPTDIR=`dirname $0`
 if [ "$templatebucket" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$templateprefix" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$stackname" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$region" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$backupbucket" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$prefix" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
 if [ "$ingress" == "" ]
 then
-    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <--update>"
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
     exit 1
 fi
-UPDATE=${8:-""}    
+if [ "$backup_arn" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
+    exit 1
+fi
+if [ "$source_table_arn" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
+    exit 1
+fi
+if [ "$target_table_name" == "" ]
+then
+    echo "Usage: $0 <template bucket> <template prefix> <stack name> <region> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name> <--update>"
+    exit 1
+fi
+UPDATE=${11:-""}    
 CFN_CMD="create-stack"
 if [ "$UPDATE" == "--update" ]
 then
@@ -84,4 +102,7 @@ aws cloudformation $CFN_CMD --stack-name $stackname \
     ParameterKey=AllowedPrefixIngress,ParameterValue=$prefix \
     ParameterKey=BackupBucket,ParameterValue=$backupbucket \
     ParameterKey=AllowedCidrIngress,ParameterValue="$ingress" \
+    ParameterKey=BackupArn,ParameterValue="$backup_arn" \
+    ParameterKey=SourceTableArn,ParameterValue="$source_table_arn" \
+    ParameterKey=TargetTableName,ParameterValue="$target_table_name" \
     --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM

@@ -15,10 +15,16 @@ Run:
     sudo su - ec2-user
     python3 tweetmaker.py --endpoint <Global Accelerator endpoint>
 
+Now, navigate to AWS Console --> Select Kinesis under Service (Search)--> Select Analytics Application --> Click on the application(radio button) --> Select 'Run'.
+
+![KDA](/Reliability/200_Backup_Restore_Failback_Analytics/Images/kda.png)
+
 After a few minutes you should be able to preview the table in Athena and see some output.  The Glue database is called `backuprestoredb` and the raw tweets are in a table called `rawdata`.  
 
 To produce the nightly compacted files, run the Glue job called `CompactNightly`.  Then you can preview the table `compacteddata`.  
 
 To verify data replication, you can look for files in the bucket in the backup region.
+
+You can also verify that data is getting populated in the DynamoDB table - `processed_tweets`.  We have set up an AWS backup plan where we would be backing up this table every hour. 
 
 {{< prev_next_button link_prev_url="../primaryregion" link_next_url="../../failover" />}}

@@ -86,6 +86,8 @@ Resources:
         ServerSideEncryptionConfiguration:
         - ServerSideEncryptionByDefault:
             SSEAlgorithm: AES256  
+      VersioningConfiguration:
+        Status: Enabled  
   InventoryBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -387,6 +389,8 @@ Resources:
                   - glue:BatchCreatePartitions
                   - glue:GetPartition
                   - glue:CreatePartition
+                  - lakeformation:*
+                  - glue:*
                 Resource: 
                   - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":table/", !Ref DbName, "/", !Ref DbTableRaw]]
                   - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":database/", !Ref DbName]]

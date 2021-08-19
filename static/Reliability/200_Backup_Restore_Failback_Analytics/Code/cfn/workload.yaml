@@ -159,6 +159,14 @@ Resources:
       Tags: 
         - Key: "Project"
           Value: !Ref ProjectName
+  ProcessedStream: 
+    Type: AWS::Kinesis::Stream 
+    Properties: 
+      Name: !Join ['_', [!Ref ProjectName, 'ProcessedStream']]
+      ShardCount: !Ref RawShardCount
+      Tags: 
+        - Key: "Project"
+          Value: !Ref ProjectName
 
   IngestFnRole:
     Type: "AWS::IAM::Role"
@@ -569,6 +577,47 @@ Resources:
                   - "kinesis:ListShards"
                 Resource: !GetAtt RawStream.Arn
 
+  ProcessedFhRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "firehose.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+      Policies:
+        -
+          PolicyName: processed_fh
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - "s3:AbortMultipartUpload"
+                  - "s3:GetBucketLocation"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:ListBucketMultipartUploads"
+                  - "s3:PutObject"
+                Resource: 
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket, "/*"]]
+              - 
+                Effect: Allow
+                Action:
+                  - "kinesis:DescribeStream"
+                  - "kinesis:GetShardIterator"
+                  - "kinesis:GetRecords"
+                  - "kinesis:ListShards"
+                Resource: !GetAtt ProcessedStream.Arn
   RawFh:
     Type: AWS::KinesisFirehose::DeliveryStream
     Properties: 
@@ -587,6 +636,420 @@ Resources:
           Value: !Join ["", [!Ref ProjectName, "-Rawfh"]]
 
   
+  ProcessedFh:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties: 
+      DeliveryStreamType: KinesisStreamAsSource
+      KinesisStreamSourceConfiguration: 
+        KinesisStreamARN: !GetAtt ProcessedStream.Arn
+        RoleARN: !GetAtt ProcessedFhRole.Arn
+      S3DestinationConfiguration: 
+        BucketARN: !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+        Prefix: "processed/"
+        RoleARN: !GetAtt ProcessedFhRole.Arn
+      Tags: 
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Processedfh"]]
+
+  ProcessedTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "processed_tweets"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - Key: "backup"
+          Value: "Hourly"
+
+  LambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: LambdaFunctionPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - dynamodb:*
+              - kinesis:*
+            Resource: '*'
+
+  ProcessedLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.6
+      Timeout: 5
+      Handler: index.handler
+      Role: !GetAtt LambdaFunctionRole.Arn
+      Code:
+        ZipFile:
+          !Sub
+            - |-
+              #!/usr/bin/env python3
+
+              import base64
+              import json
+              import boto3
+
+              print('Loading function')
+
+
+              def handler(event, context):
+                #print("Received event: " + json.dumps(event, indent=2))
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('processed_tweets')
+                for record in event['Records']:
+                  # Kinesis data is base64 encoded so decode here
+                  id=(record['kinesis']['sequenceNumber'])
+                  payload = base64.b64decode(record['kinesis']['data']).decode('utf-8')
+        
+                  table.put_item(Item= {'id': id,'payload':  payload})
+
+                  print("Decoded payload: " + payload)
+                return 'Successfully processed {} records.'.format(len(event['Records']))
+            
+            -
+              lambda_function_role_arn: !Ref LambdaFunctionRole
+
+  InboundStreamLambdaFunctionEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties: 
+      BatchSize: 100 
+      Enabled: true
+      EventSourceArn: !GetAtt ProcessedStream.Arn
+      FunctionName: !GetAtt ProcessedLambdaFunction.Arn
+      MaximumBatchingWindowInSeconds: 0
+      StartingPosition: LATEST 
+
+
+  KinesisAnalyticsApp:
+    Type: AWS::KinesisAnalytics::Application
+    Properties:
+      ApplicationName: !Sub '${AWS::StackName}-KinesisAnalyticsApplication'
+      ApplicationDescription: Kineis Analytics Solution Accelerator
+      ApplicationCode: !Sub |
+            -- Approximate distinct count  - Counts the number of distinct items in a stream using HyperLogLog.
+            -- Returns the approximate number of distinct items in a specified column over a tumbling window.
+            -- Note that when there are less or equal to 10,000 items in the window, the function returns exact count.
+            CREATE OR REPLACE STREAM DESTINATION_SQL_STREAM (NUMBER_OF_DISTINCT_ITEMS BIGINT);
+            CREATE OR REPLACE PUMP "STREAM_PUMP" AS INSERT INTO "DESTINATION_SQL_STREAM"
+            SELECT STREAM NUMBER_OF_DISTINCT_ITEMS FROM TABLE(COUNT_DISTINCT_ITEMS_TUMBLING(
+              CURSOR(SELECT STREAM * FROM "SOURCE_SQL_STREAM_001"),
+              'favorite_count', -- name of column in single quotes
+              60 -- tumbling window size in seconds
+              )
+            );
+
+
+      Inputs:
+        - NamePrefix: SOURCE_SQL_STREAM
+          InputSchema:
+            RecordColumns:
+              - Name: type
+                SqlType: VARCHAR(8)
+                Mapping: $.type
+              - Name: coordinates
+                SqlType: VARCHAR(32)
+                Mapping: $.coordinates
+              - Name: retweeted
+                SqlType: BOOLEAN
+                Mapping: $.retweeted
+              - Name: source
+                SqlType: VARCHAR(128)
+                Mapping: $.source
+              - Name: hashtags
+                SqlType: VARCHAR(1024)
+                Mapping: $.hashtags
+              - Name: urls
+                SqlType: VARCHAR(1024)
+                Mapping: $.urls
+              - Name: agent
+                SqlType: VARCHAR(128)
+                Mapping: $.agent
+              - Name: reply_count
+                SqlType: INTEGER
+                Mapping: $.reply_count
+              - Name: favorite_count
+                SqlType: INTEGER
+                Mapping: $.favorite_count
+              - Name: type0
+                SqlType: VARCHAR(8)
+                Mapping: $.type0
+              - Name: coordinates0
+                SqlType: VARCHAR(32)
+                Mapping: $.coordinates0
+              - Name: id_str
+                SqlType: VARCHAR(32)
+                Mapping: $.id_str
+              - Name: timestamp_ms
+                SqlType: BIGINT
+                Mapping: $.timestamp_ms
+              - Name: truncated
+                SqlType: BOOLEAN
+                Mapping: $.truncated
+              - Name: retweet_count
+                SqlType: INTEGER
+                Mapping: $.retweet_count
+              - Name: id
+                SqlType: INTEGER
+                Mapping: $.id  
+              - Name: possibly_sensitive
+                SqlType: BOOLEAN
+                Mapping: $.possibly_sensitive  
+              - Name: filter_level
+                SqlType: VARCHAR(32)
+                Mapping: $.filter_level  
+              - Name: quote_count
+                SqlType: INTEGER
+                Mapping: $.quote_count
+              - Name: lang
+                SqlType: VARCHAR(4)
+                Mapping: $.lang  
+              - Name: favorited
+                SqlType: BOOLEAN
+                Mapping: $.favorited  
+              - Name: is_quote_status
+                SqlType: BOOLEAN
+                Mapping: $.is_quote_status 
+              - Name: created_at
+                SqlType: VARCHAR(16)
+                Mapping: $.created_at 
+              - Name: in_reply_to_screen_name
+                SqlType: VARCHAR(16)
+                Mapping: $.in_reply_to_screen_name 
+              - Name: in_reply_to_user_id_str
+                SqlType: VARCHAR(16)
+                Mapping: $.in_reply_to_user_id_str 
+              - Name: text
+                SqlType: VARCHAR(64)
+                Mapping: $.text 
+              - Name: id0
+                SqlType: INTEGER
+                Mapping: $.id0 
+              - Name: url
+                SqlType: VARCHAR(32)
+                Mapping: $.url 
+              - Name: place_type
+                SqlType: VARCHAR(16)
+                Mapping: $.place_type 
+              - Name: name
+                SqlType: VARCHAR(32)
+                Mapping: $.name 
+              - Name: full_name
+                SqlType: VARCHAR(32)
+                Mapping: $.full_name 
+              - Name: country_code
+                SqlType: VARCHAR(4)
+                Mapping: $.country_code 
+              - Name: country
+                SqlType: VARCHAR(64)
+                Mapping: $.country 
+              - Name: type1
+                SqlType: VARCHAR(8)
+                Mapping: $.type1 
+              - Name: coordinates1
+                SqlType: VARCHAR(1024)
+                Mapping: $.coordinates1 
+              - Name: id1
+                SqlType: INTEGER
+                Mapping: $.id1 
+              - Name: id_str0
+                SqlType: INTEGER
+                Mapping: $.id1 
+            RecordFormat:
+              RecordFormatType: JSON
+              MappingParameters:
+                JSONMappingParameters:
+                  RecordRowPath: $
+          KinesisStreamsInput:
+            ResourceARN: !GetAtt RawStream.Arn
+            RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+
+  KinesisAnalyticsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: kinesisanalytics.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: Open
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "*"
+                Resource: "*"
+
+  KMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: "Encryption key for Hourly"
+      EnableKeyRotation: True
+      Enabled: True
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              "AWS": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:root" }
+            Action:
+              - kms:*
+            Resource: "*"
+
+ 
+  BackupPlanWithHourlyBackups:
+    Type: "AWS::Backup::BackupPlan"
+    Properties:
+      BackupPlan:
+        BackupPlanName: "BackupPlanWithHourlyBackups"
+        BackupPlanRule:
+          -
+            RuleName: "RuleForHourlyBackups"
+            TargetBackupVault: !Ref BackupVaultWithHourlyBackups
+            ScheduleExpression: "cron(0 5/1 ? * * *)"
+
+    DependsOn: BackupVaultWithHourlyBackups
+ 
+
+  BackupRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "backup.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+        - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+
+  TagBasedBackupSelection:
+    Type: "AWS::Backup::BackupSelection"
+    Properties:
+      BackupSelection:
+        SelectionName: "TagBasedBackupSelection"
+        IamRoleArn: !GetAtt BackupRole.Arn
+        ListOfTags:
+          - ConditionType: "STRINGEQUALS"
+            ConditionKey: "backup"
+            ConditionValue: "Hourly"
+      BackupPlanId: !Ref BackupPlanWithHourlyBackups
+    DependsOn: BackupPlanWithHourlyBackups
+
+  BackupVaultWithHourlyBackups:
+    Type: "AWS::Backup::BackupVault"
+    Properties:
+      BackupVaultName: "BackupVaultWithHourlyBackups"
+      EncryptionKeyArn: !GetAtt KMSKey.Arn
+
+  KinesisAnalyticsAppAnomalyOutput:
+    Type: AWS::KinesisAnalytics::ApplicationOutput
+    Properties:
+      ApplicationName: !Ref KinesisAnalyticsApp
+      Output:
+        DestinationSchema:
+          RecordFormatType: JSON
+        KinesisStreamsOutput:
+          ResourceARN: !GetAtt ProcessedStream.Arn
+          RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+        Name: DESTINATION_SQL_STREAM
+
+  BackupLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.6
+      Timeout: 5
+      Handler: index.handler
+      Role: !GetAtt BackupLambdaFunctionRole.Arn
+      FunctionName: dynamodb-backup
+      Code:
+        ZipFile:
+          !Sub
+            - |-
+              #!/usr/bin/env python3
+
+              import json
+              import boto3
+              import os
+              #import cfnresponse
+
+              def handler(event, context):
+                client = boto3.client('dynamodb')
+                response = client.create_backup(
+                TableName='processed_tweets',
+                BackupName='processed_tweets_backup'
+                )
+                #responseValue = int(event['ResourceProperties']['Input']) * 5
+                #responseData = {}
+                #responseData['Data'] = responseValue
+                #cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+                # TODO implement
+                return {
+               'statusCode': 200,
+               'body': json.dumps("success")
+                }
+
+            
+            -
+              lambda_function_role_arn: !Ref BackupLambdaFunctionRole
+  
+  BackupLambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            - dynamodb:*
+            Resource: '*'      
 
   ProducerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -917,6 +1380,10 @@ Resources:
         - Destination: 
             Bucket: !Join ["", ["arn:aws:s3:::", !Ref ReplBucketName]]
           Prefix: "nightly/"
+          Status: "Enabled"
+        - Destination: 
+            Bucket: !Join ["", ["arn:aws:s3:::", !Ref ReplBucketName]]
+          Prefix: "processed/"
           Status: "Enabled"
   S3ReplRole:
     Type: 'AWS::IAM::Role'

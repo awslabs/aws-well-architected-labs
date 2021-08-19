@@ -20,6 +20,8 @@ Once the data lands in a Kinesis stream, the batch processing flow picks up with
 
 ## Disaster Recovery
 
-Looking at our architecture, we have two primary data stores, S3 and the Glue catalog.  For S3, we use cross-region replication to backup data to a DR region.  We use Lambda functions in both regions to keep the partitions up to date, so no replication is required.
+Looking at our architecture, we have three primary data stores, S3, DynamoDB, and the Glue catalog.  For S3, we use cross-region replication to backup data to a DR region.  We use Lambda functions in both regions to keep the partitions up to date, so no replication is required.  For DynamodB, we use the point-in-time-recovery (PITR) feature of DynamoDB, and AWS Backup for taking an hourly backup. 
+
+![Failover Strategy](/Reliability/200_Backup_Restore_Failback_Analytics/Images/backup-restore-workshop.png)
 
 {{< prev_next_button link_prev_url="../account" link_next_url="../../settingup" />}}

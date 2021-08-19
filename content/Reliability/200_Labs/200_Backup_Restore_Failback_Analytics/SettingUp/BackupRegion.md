@@ -13,8 +13,7 @@ In this section we'll deploy necessary infrastructure to the backup region to su
 First, create an S3 bucket to hold the CloudFormation templates.  We'll call this the `TEMPLATEBUCKET`.
 
     aws s3 mb s3://<TEMPLATEBUCKET> --region <REGION>
-
-Enable versioning on this bucket in the console.
+    aws s3api put-bucket-versioning --bucket <TEMPLATEBUCKET> --versioning-configuration Status=Enabled
 
 ### Download and review scripts and templates
 
