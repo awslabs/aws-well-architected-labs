@@ -8,14 +8,14 @@ weight: 30
 
 In this section we'll make sure that the workload is running properly, and that data is replicating to the backup region.  We use a python script to simulate a stream of incoming tweets.
 
-Open a Session Manager connection to the EC2 instance sample producer in the primary region.  You can find the instance ID and the Global Accelerator endpoint in the CloudFormation output.
+Open a [Session Manager connection](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html) to the EC2 instance sample producer in the primary region.  You can find the instance ID and the Global Accelerator DNS endpoint in the CloudFormation output.
 
 Run:
 
     sudo su - ec2-user
     python3 tweetmaker.py --endpoint <Global Accelerator endpoint>
 
-Now, navigate to AWS Console --> Select Kinesis under Service (Search)--> Select Analytics Application --> Click on the application(radio button) --> Select 'Run'.
+Now, navigate to Kinesis Analytics in the AWS Console.  Click on the radio button for the application called `<stack name>-KinesisAnalyticsApplication` and select `Run`.
 
 ![KDA](/Reliability/200_Backup_Restore_Failback_Analytics/Images/kda.png)
 

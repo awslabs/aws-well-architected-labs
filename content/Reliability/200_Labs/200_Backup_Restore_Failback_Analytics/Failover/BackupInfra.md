@@ -27,7 +27,7 @@ Now create the stack in the backup region:
     chmod +x ./scripts/create-dr-infra.sh
     ./scripts/create-dr-infra.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <ingress prefix> <ingress CIDR> <backup ARN> <source table ARN> <target table name>
 
-Note that we pass in the primary region as the last argument.  The `ingress CIDR` argument is the static IP for our example producer, which you can find in the output of the CFN stack used in the primary region.
+Note that we pass in the primary region as the fourth argument.  The `ingress CIDR` argument is the static IP for our example producer, which you can find in the output of the CFN stack used in the primary region.  The `source table ARN` argument can be found in the DynamoDB console, and the `target table name` argument is `processed_tweets`.  The `backup ARN` argument is optional in case you want to restore from a specific backup rather than using PITR; you can set it to a placeholder value like `arn` otherwise.
 
 For example:
 
@@ -35,6 +35,6 @@ For example:
 
 To update the stack, add the `--update` flag as the last argument.
 
-Finally, navigate to the AWS Console.  Select Kinesis under Services, select Analytics Application, click on the application(radio button), and select 'Run'.
+Now, navigate to Kinesis Analytics in the AWS Console in the backup region.  Click on the radio button for the application called `<stack name>-KinesisAnalyticsApplication` and select `Run`.
 
 {{< prev_next_button link_prev_url="../" link_next_url="../endpoint" />}}
