@@ -15,7 +15,7 @@ The workload includes streaming ingest and batch processing.
 
 ![Big Data Workload](/Reliability/200_Backup_Restore_Failback_Analytics/Images/backup-restore-analytics-workshop.png)
 
-In a nutshell, there are two primary data stores, S3 and the Glue catalog.  The Glue catalog only receives new partitions as updates, and we use a Lambda function to create those when new partitions land in S3.  One S3 bucket is receiving streaming data, and another is receiving the output of a nightly batch processing job.  Both buckets use S3 CRR to replicate to the backup region.
+In a nutshell, there are three primary data stores, S3, DynamoDB, and the Glue catalog.  The Glue catalog only receives new partitions as updates, and we use a Lambda function to create those when new partitions land in S3.  One S3 bucket is receiving streaming data, and another is receiving the output of a nightly batch processing job.  Both buckets use S3 CRR to replicate to the backup region.  We use DynamoDB point-in-time-recovery (PITR) to handle the database.
 
 In terms of RTO, the failover process involves detecting the failure, deploying the rest of the infrastructure in the backup region, and switching the Global Accelerator endpoint for data producers.  That entire process can be done in as little as 10 minutes once you make the decision to fail over.
 

@@ -34,7 +34,7 @@ Now create the stack in the backup region:
     chmod +x ./scripts/create-dr.sh
     ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <inventory bucket name> 
 
-Note that we pass in the primary region as the last argument.
+Note that we pass in the primary region as the fourth argument.
 
 For example:
 

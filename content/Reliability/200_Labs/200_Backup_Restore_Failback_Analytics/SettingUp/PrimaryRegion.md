@@ -33,7 +33,7 @@ Now create the stack in the primary region:
     chmod +x ./scripts/create.sh
     ./scripts/create.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <ingress prefix list> 
 
-Note that we pass in the primary region as the last argument.
+Note that we pass in the primary region as the fourth argument.
 
 For example:
 
