@@ -32,4 +32,4 @@ If you find any files, download the query results as a CSV file.  Then download 
 
     python resync_s3.py --input <CSV file> --primary <bucket in primary region>
 
-{{< prev_next_button link_prev_url="../removeinfra" link_next_url="../../next" />}}
+{{< prev_next_button link_prev_url="../traffic" link_next_url="../removeinfra" />}}
