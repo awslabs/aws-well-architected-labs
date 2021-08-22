@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
+Description: Retrieves RDS Metric data
 Parameters:
   DatabaseName:
     Type: String

@@ -164,9 +164,9 @@ Cost Allocation tags can be added to any views. We recommend adding while creati
 {{% /notice %}}
 
 {{%expand "Click here - to add your cost allocation tags" %}}
-To add your tags locate the the "line_item_usage_account_id" "linked_account_id" in the query you are using and add it after make sure to add a comma between each attribute and then add a group by field for any tags added (i.e. if you add one cost allocation tag you would add **,35** to group by in the bottom of your query)
+To add your tags locate the the "line_item_usage_account_id" "linked_account_id" in the query you are using and add it after make sure to add a comma between each attribute and then add a group by field for any tags added (i.e. if you add one cost allocation tag you would add **,7** to group by in the bottom of your query)
 
-- Example: Add your project tag by first locating the tag in your CUR attributes for project it will show up as **resource_tags_user_projects**. You will then find the **,"line_item_usage_account_id" "linked_account_id"** line in your query and add **, resource_tags_user_projects** then add **,35** in at the bottom of your query in the group by section.
+- Example: Add your project tag by first locating the tag in your CUR attributes for project it will show up as **resource_tags_user_projects**. You will then find the **,"line_item_usage_account_id" "linked_account_id"** line in your query and add **, resource_tags_user_projects** then add **,7** in at the bottom of your query in the group by section.
 
 {{% /expand%}}
 

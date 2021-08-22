@@ -156,15 +156,20 @@ This option allows your to bring in your AWS Organizations data including OU gro
 
 #### Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
 
+- [Click to navigate to Level 300 Organization CUR connection steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
+
+	
 NOTE: Stop at section 3. Utilize Organization Data Source when you reach the **Join with Cost and Usage Report**
     ------------ | -------------
- 
 
-	- [Click to navigate QuickSight steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
+Create your account_map view by running the following query. 
+  - Replace (database).(tablename) in line 6 with your account_mapping database and organization table name 
+
 
 		CREATE OR REPLACE VIEW account_map AS
 		SELECT DISTINCT
-			"line_item_usage_account_id" "account_id", "line_item_usage_account_id" "account_name"
+			"id" "account_id", 
+			"name" "account_name"
 		FROM
 			(database).(tablename)
 {{% /expand%}}

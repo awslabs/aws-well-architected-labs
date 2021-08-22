@@ -43,7 +43,7 @@ SSM Agent is installed by default on:
    1. Then choose **Create role**.
    1. In the **Select type of trusted entity** section, verify that the default **AWS service** is selected.
    1. In the **Choose the service that will use this role** section, scroll past the first reference to EC2 (**EC2 Allows EC2 instances to call AWS services on your behalf**) and choose **EC2** from within the field of services. This will open the **Select your use case** section further down the page.
-   1. In the **Select your use case** section, choose **EC2 Role for Simple Systems Manager** to select it.
+   1. In the **Select your use case** section, choose **EC2 Role for AWS Systems Manager** to select it.
    1. Then choose **Next: Permissions**.
 1. Under **Attached permissions policy**, verify that **AmazonEC2RoleforSSM** is listed, and then choose **Next: Review**.
 1. In the **Review** section:
