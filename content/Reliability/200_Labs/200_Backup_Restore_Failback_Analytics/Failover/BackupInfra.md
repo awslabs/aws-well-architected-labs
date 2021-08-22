@@ -35,6 +35,16 @@ For example:
 
 To update the stack, add the `--update` flag as the last argument.
 
+### Start Analtyics Application
+
 Now, navigate to Kinesis Analytics in the AWS Console in the backup region.  Click on the radio button for the application called `<stack name>-KinesisAnalyticsApplication` and select `Run`.
+
+### Enable DynamoDB point-in-time recovery 
+
+Navigate to DynamoDB in the AWS Console.  Select the `processed_tweets` table and go to `Backups`.  Enable PITR and save the changes.
+
+![Point-in-time recovery](/Reliability/200_Backup_Restore_Failback_Analytics/Images/pitr1.png)
+
+![Point-in-time recovery](/Reliability/200_Backup_Restore_Failback_Analytics/Images/pitr2.png)
 
 {{< prev_next_button link_prev_url="../" link_next_url="../endpoint" />}}

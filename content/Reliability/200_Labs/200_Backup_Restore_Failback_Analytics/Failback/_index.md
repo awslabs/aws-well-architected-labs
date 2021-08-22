@@ -10,8 +10,9 @@ pre: "<b>4. </b>"
 
 In this chapter, we'll see how to move the workload back to the primary region when the primary region is functional again.
 
-We have three things to consider:
+We have four things to consider:
 
+* We have data in a DynamoDB table in the backup region that is not in the primary region.
 * We have data in the S3 bucket in the backup region that is not in the primary region.
 * We have infrastructure deployed in the backup region that we don't want to live permanently.
 * Our incoming traffic is still going to the backup region.

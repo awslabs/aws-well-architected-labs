@@ -10,4 +10,5 @@ Execute the SSM automation document `failback_runbook`.  You'll need to provide 
 
 * `BackupGroupArn`: Set this to the ARN of the Global Accelerator endpoint group that points to the backup region.
 
+{{< prev_next_button link_prev_url="../" link_next_url="../recreatedynamodb" />}}
 {{< prev_next_button link_prev_url="../" link_next_url="../removeinfra" />}}

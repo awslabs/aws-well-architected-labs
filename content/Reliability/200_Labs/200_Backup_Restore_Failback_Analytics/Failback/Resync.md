@@ -6,11 +6,13 @@ weight: 30
 
 ## Data synchronization
 
-We run an inventory in the backup bucket.  We can use that to find files that were written directly into the backup bucket rather than through replication.  Then we can sync these files back to the primary region.
+We run an inventory in the backup bucket on a daily basis.  We can use that to find files that were written directly into the backup bucket rather than through replication.  Then we can sync these files back to the primary region.
 
 Let's start with the `raw` files.  In Athena, run this query in the backup region:
 
     MSCK REPAIR TABLE inventory;
+
+Note that you must wait for an inventory schedule to complete before you see data in this table.
 
 Then run this query to find any files that were created outside of replication:
 
