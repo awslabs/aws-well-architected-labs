@@ -51,7 +51,15 @@ If you already have a role which can read into your accounts then please skip th
 ![Images/SS_permission.png](/Cost/300_Optimization_Data_Collection/Images/SS_permission.png)
 
 8. Select **Deploy to accounts** into then scroll down and Click **Next**.
+
 ![Images/SS_account.png](/Cost/300_Optimization_Data_Collection/Images/SS_account.png)
+
+{{%expand "If your console does not look the same as above open here" %}}
+8. Select **Deploy to organization** and choose the **region** you are currently deploying too
+
+![Images/SS-Org.png](/Cost/300_Optimization_Data_Collection/Images/SS-Org.png)
+
+{{% /expand%}}
 
 9. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
