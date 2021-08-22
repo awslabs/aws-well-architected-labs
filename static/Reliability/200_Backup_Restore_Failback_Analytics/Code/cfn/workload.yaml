@@ -1,0 +1,1759 @@
+# Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+# 
+#     https://www.apache.org/licenses/LICENSE-2.0
+# 
+# or in the "license" file accompanying this file. This file is distributed 
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+# express or implied. See the License for the specific language governing 
+# permissions and limitations under the License.
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'An analytics workload with batch and stream processing functions'
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: General
+        Parameters:
+          - ProjectName
+          - Bucket 
+          - ReplBucketName
+      - Label:
+          default: Networking
+        Parameters:
+          - vpccidr
+          - AppPublicCIDRA
+          - AppPrivateCIDRA
+          - AppPrivateCIDRB
+          - AppPrivateCIDRC
+          - AppPrivateCIDRD
+          - AllowedPrefixIngress
+      - Label:
+          default: Endpoint Configuration
+        Parameters:
+          - EndpointName
+      - Label:
+          default: Kinesis Configuration
+        Parameters:
+          - RawShardCount
+      - Label:
+          default: Producer Configuration
+        Parameters:
+          - LatestAmiId
+          - ProducerInstanceType
+          - ProducerVolumeSize
+      - Label:
+          default: Consumer Configuration
+        Parameters:
+          - DbName
+          - DbTableRaw
+          - DbTableNightly
+Parameters:
+  DbName:
+    Description: Glue database name
+    Type:  String
+    Default: "backuprestoredb"
+  DbTableRaw:
+    Description: Glue table name for raw input
+    Type:  String
+    Default: "rawdata"
+  DbTableNightly:
+    Description: Glue table name for nightly compacted table
+    Type:  String
+    Default: "compacteddata"
+  LatestAmiId:
+    Description: DO NOT EDIT, looks up latest Amazon Linux AMI
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  ProducerInstanceType:
+    Description: Instance type to use for sample producer
+    Type:  String
+    Default: "t3.medium"
+  ProducerVolumeSize:
+    Description: Volume size for sample EC2 producer
+    Type: Number
+    Default: 40
+  EndpointName:
+    Description: Logical name for the Global Accelerator endpoint
+    Type: String
+    Default: "KinesisFeed"
+  ProjectName:
+    Description: Tagging identifier
+    Type: String
+    Default: "BackupRestoreAnalytics"
+  RawShardCount:
+    Description: Shard count for raw input stream
+    Type: Number
+    Default: 1
+  vpccidr:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/16
+    Default: 10.20.0.0/16
+  AppPublicCIDRA:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/22
+    Default: 10.20.1.0/24
+  AppPrivateCIDRA:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/22
+    Default: 10.20.3.0/24
+  AppPrivateCIDRB:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/22
+    Default: 10.20.4.0/24
+  AppPrivateCIDRC:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/22
+    Default: 10.20.5.0/24
+  AppPrivateCIDRD:
+    Type: String
+    MinLength: 9
+    MaxLength: 18
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/22
+    Default: 10.20.6.0/24
+  AllowedPrefixIngress:
+    Description: Prefix for allowed inbound traffic
+    Type: String
+  Bucket:
+    Description: S3 bucket for storage
+    Type: String
+  ReplBucketName:
+    Description: S3 bucket for DR
+    Type: String
+  
+Resources:
+  GlobalEndpoint:
+    Type: AWS::GlobalAccelerator::Accelerator
+    Properties: 
+      Enabled: True
+      Name: !Ref EndpointName
+      Tags: 
+        - Key: "Project"
+          Value: !Ref ProjectName
+
+  RawStream: 
+    Type: AWS::Kinesis::Stream 
+    Properties: 
+      Name: !Join ['_', [!Ref ProjectName, 'RawStream']]
+      ShardCount: !Ref RawShardCount
+      Tags: 
+        - Key: "Project"
+          Value: !Ref ProjectName
+  ProcessedStream: 
+    Type: AWS::Kinesis::Stream 
+    Properties: 
+      Name: !Join ['_', [!Ref ProjectName, 'ProcessedStream']]
+      ShardCount: !Ref RawShardCount
+      Tags: 
+        - Key: "Project"
+          Value: !Ref ProjectName
+
+  IngestFnRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: lambda_kinesis
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: kinesis:PutRecord
+                Resource: !GetAtt RawStream.Arn
+              -
+                Effect: Allow
+                Action: kinesis:PutRecords
+                Resource: !GetAtt RawStream.Arn
+              -
+                Effect: Allow
+                Action: kinesis:DescribeStream
+                Resource: !GetAtt RawStream.Arn
+
+  PartitionFnRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: lambda_glue
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - glue:GetTable
+                  - glue:BatchCreatePartitions
+                  - glue:GetPartition
+                  - glue:CreatePartition
+                Resource: 
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":table/", !Ref DbName, "/", !Ref DbTableRaw]]
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":database/", !Ref DbName]]
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":catalog"]]
+
+  IngestFn:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Accept incoming messages and relay to a Kinesis stream
+      Runtime: python3.7
+      Role: !GetAtt IngestFnRole.Arn
+      Handler: index.handler
+      Environment:
+        Variables:
+          StreamName: !Ref RawStream
+      Timeout: 10
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-IngestFn"]]
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import time
+          import json
+          import base64
+
+          kinesis = boto3.client('kinesis')
+          stream = os.environ['StreamName']
+          pkey = str(int(time.time()))
+
+          def handler(event, context):
+            print('Received event: ' + str(event))
+            record = event['body']
+            decodedBytes = base64.b64decode(record)
+            decodedStr = str(decodedBytes, "utf-8")
+
+            scode = 200
+            sdesc = "200 OK"
+            try:
+              kinesis.put_record(
+                  StreamName=stream,
+                  Data=decodedStr + "\n",
+                  PartitionKey=pkey)
+            except Exception as e:
+              print("Failed writing to Kinesis")
+              scode = 400
+              sdesc = "400 Failed"
+
+            return {
+                "isBase64Encoded": False,
+                "statusCode": scode,
+                "statusDescription": sdesc,
+                "body": sdesc
+            }
+
+  VPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: !Ref vpccidr
+      EnableDnsHostnames: 'true'
+      EnableDnsSupport: 'true'
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-VPC"]]
+
+  IGW:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-IGW"]]
+  GatewayAttach:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      InternetGatewayId: !Ref IGW
+      VpcId: !Ref VPC
+  
+  SubnetPublicA: 
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [0, !GetAZs ]
+      CidrBlock: !Ref AppPublicCIDRA
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+  SubnetRouteTableAssociatePublicA: 
+    DependsOn: SubnetPublicA
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      SubnetId: !Ref SubnetPublicA
+  RouteDefaultPublic:
+    Type: "AWS::EC2::Route"
+    DependsOn: GatewayAttach
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref RouteTablePublic
+  RouteTablePublic:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+  EIPNatGWA:
+    DependsOn: GatewayAttach
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: vpc
+  NatGatewayA:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      AllocationId: !GetAtt EIPNatGWA.AllocationId
+      SubnetId: !Ref SubnetPublicA
+  RouteTablePrivateA:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-RT-PrivateA"]]
+  PrivateSubnetRouteTableAssociationA:
+    DependsOn: SubnetPrivateA
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPrivateA
+      RouteTableId: !Ref RouteTablePrivateA
+  RouteDefaultPrivateA:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGatewayA
+      RouteTableId: !Ref RouteTablePrivateA
+  SubnetPrivateA:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [0, !GetAZs ]
+      CidrBlock: !Ref AppPrivateCIDRA
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Subnet-PrivateA"]]
+  SubnetPrivateB:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [1, !GetAZs ]
+      CidrBlock: !Ref AppPrivateCIDRB
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Subnet-PrivateB"]]
+  SubnetPrivateC:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [2, !GetAZs ]
+      CidrBlock: !Ref AppPrivateCIDRC
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Subnet-PrivateC"]]
+  SubnetPrivateD:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [0, !GetAZs ]
+      CidrBlock: !Ref AppPrivateCIDRD
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        -
+          Key: Project
+          Value: !Ref ProjectName
+        -
+          Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Subnet-PrivateD"]]
+
+  LbSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "ALB Security Group"
+      SecurityGroupIngress:
+        - SourcePrefixListId: !Ref AllowedPrefixIngress
+          IpProtocol: "TCP"
+          FromPort: 80
+          ToPort: 80
+        - CidrIp: !Join ["", [!Ref EIPNatGWA, "/32"]]
+          IpProtocol: "TCP"
+          FromPort: 80
+          ToPort: 80
+      VpcId: !Ref VPC
+  AlbForLambda:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      Scheme: internal
+      Subnets: 
+        - !Ref SubnetPrivateD
+        - !Ref SubnetPrivateB
+        - !Ref SubnetPrivateC
+      SecurityGroups:
+        - !Ref LbSecurityGroup
+      Tags: 
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Alb"]]
+      Type: application
+
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref AlbForLambda
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref LoadBalancerListener
+      Priority: 1
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup
+          Type: forward
+
+  AlbLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt 
+        - IngestFn
+        - Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: elasticloadbalancing.amazonaws.com
+      
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: 
+      - AlbForLambda
+      - AlbLambdaInvokePermission
+    Properties:
+      HealthCheckEnabled: false
+      Name: AlbLambdaTg
+      TargetType: lambda
+      Targets:
+      - Id: !GetAtt [ IngestFn, Arn ]
+      Tags: 
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-AlbTg"]]
+
+  EndpointListener:
+    Type: AWS::GlobalAccelerator::Listener
+    Properties:
+      AcceleratorArn:
+        Ref: GlobalEndpoint
+      Protocol: TCP
+      PortRanges:
+      - FromPort: 80
+        ToPort: 80
+
+  EndpointGroup:
+    Type: AWS::GlobalAccelerator::EndpointGroup
+    Properties:
+      ListenerArn:
+        Ref: EndpointListener
+      EndpointGroupRegion:
+        Ref: AWS::Region
+      TrafficDialPercentage: 100
+      EndpointConfigurations:
+      - EndpointId: !Ref AlbForLambda
+        ClientIPPreservationEnabled: True
+        Weight: 100
+
+  RawFhRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "firehose.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+      Policies:
+        -
+          PolicyName: raw_fh
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - "s3:AbortMultipartUpload"
+                  - "s3:GetBucketLocation"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:ListBucketMultipartUploads"
+                  - "s3:PutObject"
+                Resource: 
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket, "/*"]]
+              - 
+                Effect: Allow
+                Action:
+                  - "kinesis:DescribeStream"
+                  - "kinesis:GetShardIterator"
+                  - "kinesis:GetRecords"
+                  - "kinesis:ListShards"
+                Resource: !GetAtt RawStream.Arn
+
+  ProcessedFhRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "firehose.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+      Policies:
+        -
+          PolicyName: processed_fh
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - "s3:AbortMultipartUpload"
+                  - "s3:GetBucketLocation"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:ListBucketMultipartUploads"
+                  - "s3:PutObject"
+                Resource: 
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket, "/*"]]
+              - 
+                Effect: Allow
+                Action:
+                  - "kinesis:DescribeStream"
+                  - "kinesis:GetShardIterator"
+                  - "kinesis:GetRecords"
+                  - "kinesis:ListShards"
+                Resource: !GetAtt ProcessedStream.Arn
+  RawFh:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties: 
+      DeliveryStreamType: KinesisStreamAsSource
+      KinesisStreamSourceConfiguration: 
+        KinesisStreamARN: !GetAtt RawStream.Arn
+        RoleARN: !GetAtt RawFhRole.Arn
+      S3DestinationConfiguration: 
+        BucketARN: !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+        Prefix: "raw/"
+        RoleARN: !GetAtt RawFhRole.Arn
+      Tags: 
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Rawfh"]]
+
+  
+  ProcessedFh:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties: 
+      DeliveryStreamType: KinesisStreamAsSource
+      KinesisStreamSourceConfiguration: 
+        KinesisStreamARN: !GetAtt ProcessedStream.Arn
+        RoleARN: !GetAtt ProcessedFhRole.Arn
+      S3DestinationConfiguration: 
+        BucketARN: !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+        Prefix: "processed/"
+        RoleARN: !GetAtt ProcessedFhRole.Arn
+      Tags: 
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Processedfh"]]
+
+  ProcessedTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "processed_tweets"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - Key: "backup"
+          Value: "Hourly"
+
+  LambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: LambdaFunctionPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - dynamodb:*
+              - kinesis:*
+            Resource: '*'
+
+  ProcessedLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.6
+      Timeout: 5
+      Handler: index.handler
+      Role: !GetAtt LambdaFunctionRole.Arn
+      Code:
+        ZipFile:
+          !Sub
+            - |-
+              #!/usr/bin/env python3
+
+              import base64
+              import json
+              import boto3
+
+              print('Loading function')
+
+
+              def handler(event, context):
+                #print("Received event: " + json.dumps(event, indent=2))
+                dynamodb = boto3.resource('dynamodb')
+                table = dynamodb.Table('processed_tweets')
+                for record in event['Records']:
+                  # Kinesis data is base64 encoded so decode here
+                  id=(record['kinesis']['sequenceNumber'])
+                  payload = base64.b64decode(record['kinesis']['data']).decode('utf-8')
+        
+                  table.put_item(Item= {'id': id,'payload':  payload})
+
+                  print("Decoded payload: " + payload)
+                return 'Successfully processed {} records.'.format(len(event['Records']))
+            
+            -
+              lambda_function_role_arn: !Ref LambdaFunctionRole
+
+  InboundStreamLambdaFunctionEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties: 
+      BatchSize: 100 
+      Enabled: true
+      EventSourceArn: !GetAtt ProcessedStream.Arn
+      FunctionName: !GetAtt ProcessedLambdaFunction.Arn
+      MaximumBatchingWindowInSeconds: 0
+      StartingPosition: LATEST 
+
+
+  KinesisAnalyticsApp:
+    Type: AWS::KinesisAnalytics::Application
+    Properties:
+      ApplicationName: !Sub '${AWS::StackName}-KinesisAnalyticsApplication'
+      ApplicationDescription: Kineis Analytics Solution Accelerator
+      ApplicationCode: !Sub |
+            -- Approximate distinct count  - Counts the number of distinct items in a stream using HyperLogLog.
+            -- Returns the approximate number of distinct items in a specified column over a tumbling window.
+            -- Note that when there are less or equal to 10,000 items in the window, the function returns exact count.
+            CREATE OR REPLACE STREAM DESTINATION_SQL_STREAM (NUMBER_OF_DISTINCT_ITEMS BIGINT);
+            CREATE OR REPLACE PUMP "STREAM_PUMP" AS INSERT INTO "DESTINATION_SQL_STREAM"
+            SELECT STREAM NUMBER_OF_DISTINCT_ITEMS FROM TABLE(COUNT_DISTINCT_ITEMS_TUMBLING(
+              CURSOR(SELECT STREAM * FROM "SOURCE_SQL_STREAM_001"),
+              'favorite_count', -- name of column in single quotes
+              60 -- tumbling window size in seconds
+              )
+            );
+
+
+      Inputs:
+        - NamePrefix: SOURCE_SQL_STREAM
+          InputSchema:
+            RecordColumns:
+              - Name: type
+                SqlType: VARCHAR(8)
+                Mapping: $.type
+              - Name: coordinates
+                SqlType: VARCHAR(32)
+                Mapping: $.coordinates
+              - Name: retweeted
+                SqlType: BOOLEAN
+                Mapping: $.retweeted
+              - Name: source
+                SqlType: VARCHAR(128)
+                Mapping: $.source
+              - Name: hashtags
+                SqlType: VARCHAR(1024)
+                Mapping: $.hashtags
+              - Name: urls
+                SqlType: VARCHAR(1024)
+                Mapping: $.urls
+              - Name: agent
+                SqlType: VARCHAR(128)
+                Mapping: $.agent
+              - Name: reply_count
+                SqlType: INTEGER
+                Mapping: $.reply_count
+              - Name: favorite_count
+                SqlType: INTEGER
+                Mapping: $.favorite_count
+              - Name: type0
+                SqlType: VARCHAR(8)
+                Mapping: $.type0
+              - Name: coordinates0
+                SqlType: VARCHAR(32)
+                Mapping: $.coordinates0
+              - Name: id_str
+                SqlType: VARCHAR(32)
+                Mapping: $.id_str
+              - Name: timestamp_ms
+                SqlType: BIGINT
+                Mapping: $.timestamp_ms
+              - Name: truncated
+                SqlType: BOOLEAN
+                Mapping: $.truncated
+              - Name: retweet_count
+                SqlType: INTEGER
+                Mapping: $.retweet_count
+              - Name: id
+                SqlType: INTEGER
+                Mapping: $.id  
+              - Name: possibly_sensitive
+                SqlType: BOOLEAN
+                Mapping: $.possibly_sensitive  
+              - Name: filter_level
+                SqlType: VARCHAR(32)
+                Mapping: $.filter_level  
+              - Name: quote_count
+                SqlType: INTEGER
+                Mapping: $.quote_count
+              - Name: lang
+                SqlType: VARCHAR(4)
+                Mapping: $.lang  
+              - Name: favorited
+                SqlType: BOOLEAN
+                Mapping: $.favorited  
+              - Name: is_quote_status
+                SqlType: BOOLEAN
+                Mapping: $.is_quote_status 
+              - Name: created_at
+                SqlType: VARCHAR(16)
+                Mapping: $.created_at 
+              - Name: in_reply_to_screen_name
+                SqlType: VARCHAR(16)
+                Mapping: $.in_reply_to_screen_name 
+              - Name: in_reply_to_user_id_str
+                SqlType: VARCHAR(16)
+                Mapping: $.in_reply_to_user_id_str 
+              - Name: text
+                SqlType: VARCHAR(64)
+                Mapping: $.text 
+              - Name: id0
+                SqlType: INTEGER
+                Mapping: $.id0 
+              - Name: url
+                SqlType: VARCHAR(32)
+                Mapping: $.url 
+              - Name: place_type
+                SqlType: VARCHAR(16)
+                Mapping: $.place_type 
+              - Name: name
+                SqlType: VARCHAR(32)
+                Mapping: $.name 
+              - Name: full_name
+                SqlType: VARCHAR(32)
+                Mapping: $.full_name 
+              - Name: country_code
+                SqlType: VARCHAR(4)
+                Mapping: $.country_code 
+              - Name: country
+                SqlType: VARCHAR(64)
+                Mapping: $.country 
+              - Name: type1
+                SqlType: VARCHAR(8)
+                Mapping: $.type1 
+              - Name: coordinates1
+                SqlType: VARCHAR(1024)
+                Mapping: $.coordinates1 
+              - Name: id1
+                SqlType: INTEGER
+                Mapping: $.id1 
+              - Name: id_str0
+                SqlType: INTEGER
+                Mapping: $.id1 
+            RecordFormat:
+              RecordFormatType: JSON
+              MappingParameters:
+                JSONMappingParameters:
+                  RecordRowPath: $
+          KinesisStreamsInput:
+            ResourceARN: !GetAtt RawStream.Arn
+            RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+
+  KinesisAnalyticsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: kinesisanalytics.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: Open
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "*"
+                Resource: "*"
+
+  KMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: "Encryption key for Hourly"
+      EnableKeyRotation: True
+      Enabled: True
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              "AWS": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:root" }
+            Action:
+              - kms:*
+            Resource: "*"
+
+ 
+  BackupPlanWithHourlyBackups:
+    Type: "AWS::Backup::BackupPlan"
+    Properties:
+      BackupPlan:
+        BackupPlanName: "BackupPlanWithHourlyBackups"
+        BackupPlanRule:
+          -
+            RuleName: "RuleForHourlyBackups"
+            TargetBackupVault: !Ref BackupVaultWithHourlyBackups
+            ScheduleExpression: "cron(0 5/1 ? * * *)"
+
+    DependsOn: BackupVaultWithHourlyBackups
+ 
+
+  BackupRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "backup.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+        - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+
+  TagBasedBackupSelection:
+    Type: "AWS::Backup::BackupSelection"
+    Properties:
+      BackupSelection:
+        SelectionName: "TagBasedBackupSelection"
+        IamRoleArn: !GetAtt BackupRole.Arn
+        ListOfTags:
+          - ConditionType: "STRINGEQUALS"
+            ConditionKey: "backup"
+            ConditionValue: "Hourly"
+      BackupPlanId: !Ref BackupPlanWithHourlyBackups
+    DependsOn: BackupPlanWithHourlyBackups
+
+  BackupVaultWithHourlyBackups:
+    Type: "AWS::Backup::BackupVault"
+    Properties:
+      BackupVaultName: "BackupVaultWithHourlyBackups"
+      EncryptionKeyArn: !GetAtt KMSKey.Arn
+
+  KinesisAnalyticsAppAnomalyOutput:
+    Type: AWS::KinesisAnalytics::ApplicationOutput
+    Properties:
+      ApplicationName: !Ref KinesisAnalyticsApp
+      Output:
+        DestinationSchema:
+          RecordFormatType: JSON
+        KinesisStreamsOutput:
+          ResourceARN: !GetAtt ProcessedStream.Arn
+          RoleARN: !GetAtt KinesisAnalyticsRole.Arn
+        Name: DESTINATION_SQL_STREAM
+
+  BackupLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.6
+      Timeout: 5
+      Handler: index.handler
+      Role: !GetAtt BackupLambdaFunctionRole.Arn
+      FunctionName: dynamodb-backup
+      Code:
+        ZipFile:
+          !Sub
+            - |-
+              #!/usr/bin/env python3
+
+              import json
+              import boto3
+              import os
+              #import cfnresponse
+
+              def handler(event, context):
+                client = boto3.client('dynamodb')
+                response = client.create_backup(
+                TableName='processed_tweets',
+                BackupName='processed_tweets_backup'
+                )
+                #responseValue = int(event['ResourceProperties']['Input']) * 5
+                #responseData = {}
+                #responseData['Data'] = responseValue
+                #cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "CustomResourcePhysicalID")
+                # TODO implement
+                return {
+               'statusCode': 200,
+               'body': json.dumps("success")
+                }
+
+            
+            -
+              lambda_function_role_arn: !Ref BackupLambdaFunctionRole
+  
+  BackupLambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            - dynamodb:*
+            Resource: '*'      
+
+  ProducerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2 sample producer
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Project"
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-ProducerSG"]]
+      SecurityGroupEgress:
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: "-1"
+
+  ProducerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Path: '/'
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      Policies:
+        -
+          PolicyName: producerpolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket, "/*"]]
+
+  ProducerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: '/'
+      Roles:
+        - !Ref ProducerRole
+
+  SampleProducer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId : !Ref LatestAmiId
+      InstanceType: !Ref ProducerInstanceType
+      HibernationOptions:
+        Configured: True
+      SecurityGroupIds:
+      - !Ref ProducerSecurityGroup
+      IamInstanceProfile: !Ref ProducerInstanceProfile
+      SubnetId: !Ref SubnetPrivateA
+      BlockDeviceMappings: 
+      - DeviceName: "/dev/xvda"
+        Ebs: 
+          Encrypted: True
+          VolumeType: gp2
+          DeleteOnTermination: True
+          VolumeSize: !Ref ProducerVolumeSize
+      Tags:
+        - Key: "Project"
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-Producer"]]
+      UserData:
+        Fn::Base64:
+          Fn::Sub:
+          - |     # No more Fn::Join needed
+            #!/bin/bash -ex
+            sleep 60
+
+            pip3 install Faker requests
+
+            echo "ENDPOINT=${GlobalEndpointDns}" > /home/ec2-user/config.sh
+
+            aws s3 cp s3://${Bucket}/code/tweetmaker.py /home/ec2-user/tweetmaker.py --region ${Region}
+            chown ec2-user:ec2-user /home/ec2-user/tweetmaker.py
+
+          - {
+              Region: !Ref 'AWS::Region',
+              Bucket: !Ref Bucket,
+              GlobalEndpointDns: !GetAtt GlobalEndpoint.DnsName
+            }
+
+  GlueDB:
+    Type: "AWS::Glue::Database"
+    Properties:
+      DatabaseInput:
+        Name: !Ref DbName
+      CatalogId: !Ref AWS::AccountId
+  GlueTable:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableRaw
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Location: !Join ['', ['s3://', !Ref Bucket, '/raw/']]
+          SerdeInfo:
+            SerializationLibrary: org.openx.data.jsonserde.JsonSerDe
+          Columns:
+          - Name: coordinates
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: retweeted
+            Type: boolean
+          - Name: source
+            Type: string
+          - Name: entities
+            Type: struct<hashtags:array<struct<text:string,indices:array<bigint>>>,urls:array<struct<url:string,expanded_url:string,display_url:string,indices:array<bigint>>>>
+          - Name: reply_count
+            Type: bigint
+          - Name: favorite_count
+            Type: bigint
+          - Name: geo
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: id_str
+            Type: string
+          - Name: timestamp_ms
+            Type: bigint
+          - Name: truncated
+            Type: boolean
+          - Name: text
+            Type: string
+          - Name: retweet_count
+            Type: bigint
+          - Name: id
+            Type: bigint
+          - Name: possibly_sensitive
+            Type: boolean
+          - Name: filter_level
+            Type: string
+          - Name: created_at
+            Type: string
+          - Name: place
+            Type: struct<id:string,url:string,place_type:string,name:string,full_name:string,country_code:string,country:string,bounding_box:struct<type:string,coordinates:array<array<array<float>>>>>
+          - Name: favorited
+            Type: boolean
+          - Name: lang
+            Type: string
+          - Name: in_reply_to_screen_name
+            Type: string
+          - Name: is_quote_status
+            Type: boolean
+          - Name: in_reply_to_user_id_str
+            Type: string
+          - Name: user
+            Type: struct<id:bigint,id_str:string,name:string,screen_name:string,location:string,url:string,description:string,translator_type:string,protected:boolean,verified:boolean,followers_count:bigint,friends_count:bigint,listed_count:bigint,favourites_count:bigint,statuses_count:bigint,created_at:string,utc_offset:bigint,time_zone:string,geo_enabled:boolean,lang:string,contributors_enabled:boolean,is_translator:boolean,profile_background_color:string,profile_background_image_url:string,profile_background_image_url_https:string,profile_background_tile:boolean,profile_link_color:string,profile_sidebar_border_color:string,profile_sidebar_fill_color:string,profile_text_color:string,profile_use_background_image:boolean,profile_image_url:string,profile_image_url_https:string,profile_banner_url:string,default_profile:boolean,default_profile_image:boolean>
+          - Name: quote_count
+            Type: bigint
+        Parameters: {'classification': 'json'}
+        PartitionKeys:
+          -
+            Type: string
+            Name: year
+          -
+            Type: string
+            Name: month
+          -
+            Type: string
+            Name: day
+          -
+            Type: string
+            Name: hour
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
+
+  PartFnPermissionRaw:
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt PartitionFn.Arn
+      Principal: "s3.amazonaws.com"
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+  PartitionFn:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Record new partitions in Glue catalog
+      Runtime: python3.7
+      Role: !GetAtt PartitionFnRole.Arn
+      Handler: index.handler
+      Environment:
+        Variables:
+          PartitionFor: !Ref DbTableRaw
+          DatabaseName: !Ref DbName
+          PartitionPrefix: 'raw'
+      Timeout: 60
+      MemorySize: 512
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-PartitionFn"]]
+      Code:
+        ZipFile: |
+          from __future__ import print_function
+          import base64
+          import json
+          import boto3
+          import csv
+          import array
+          import os
+          import traceback
+          import re
+
+          table = os.environ['PartitionFor']
+          databaseName = os.environ['DatabaseName']
+          prefix = os.environ['PartitionPrefix']
+          client = boto3.client('glue')
+
+          def handler(event, context):
+
+              bad_records = []
+              for record in event['Records']:
+                  bucket = record['s3']['bucket']['name']
+                  key = record['s3']['object']['key'] 
+                  print("Detected create event: {0}/{1}".format(bucket, key))
+
+                  m = re.search(prefix + '\/(\d{4})\/(\d{2})\/(\d{2})\/(\d{2})', key)
+                  if m == None:
+                      print("Did not find partition pattern, skipping: {0}".format(key))
+                      continue
+                  year = m.group(1)
+                  month = m.group(2)
+                  day = m.group(3)
+                  hour = m.group(4)
+                  partition = "{0}/{1}/{2}/{3}".format(year, month, day, hour)
+
+                  # See if partition already exists
+                  exists = True
+                  tbl = None
+                  try:
+                      tbl = client.get_table(
+                          DatabaseName=databaseName,
+                          Name=table
+                      )
+                      response = client.get_partition(
+                          DatabaseName=databaseName,
+                          TableName=table,
+                          PartitionValues=[
+                              year,
+                              month,
+                              day,
+                              hour
+                          ]
+                      )
+                      print("Partition {0} already exists for table {1}, skipping".format(partition, table))
+                  except Exception as e:
+                      exists = False
+                      print("Partition {0} does not exist for table {1}, creating".format(partition, table))
+
+                  if exists == False:
+                      try:
+                          sdescriptor = tbl['Table']['StorageDescriptor']
+                          response = client.create_partition(
+                              DatabaseName=databaseName,
+                              TableName=table,
+                              PartitionInput={
+                                  'Values': [
+                                      year,
+                                      month,
+                                      day,
+                                      hour
+                                  ],
+                                  'StorageDescriptor': {
+                                      'Columns': sdescriptor['Columns'],
+                                      'Location': "{0}/{1}/".format(sdescriptor['Location'], partition),
+                                      'InputFormat': sdescriptor['InputFormat'],
+                                      'OutputFormat': sdescriptor['OutputFormat'],
+                                      'Compressed': False,
+                                      'SerdeInfo': sdescriptor['SerdeInfo'],
+                                      'StoredAsSubDirectories': False
+                                  },
+                                  'Parameters': tbl['Table']['Parameters']
+                              }
+                          )
+
+                      except Exception as e:
+                          trc = traceback.format_exc()
+                          print("Error creating partition {0} for table {1}: {2}".format(partition, table, trc))
+                          bad_records.append(partition)
+
+                  return 'Processed {0} records, with {1} partition failures.'.format(len(event['Records']), len(bad_records))
+
+  BucketConfiguration:
+    Type: Custom::S3BucketConfiguration
+    Properties:
+      ServiceToken: !GetAtt S3BucketConfiguration.Arn
+      Bucket: !Ref Bucket
+      NotificationConfiguration:
+        LambdaFunctionConfigurations:
+        - Events: ['s3:ObjectCreated:*']
+          LambdaFunctionArn: !GetAtt PartitionFn.Arn
+          Filter:
+            Key:
+              FilterRules:
+                - 
+                  Name: prefix
+                  Value: "raw/"
+  BucketReplicationConfiguration:
+    DependsOn: NotificationBucketPolicy
+    Type: Custom::S3BucketReplicationConfiguration
+    Properties:
+      ServiceToken: !GetAtt S3BucketReplicationConfiguration.Arn
+      Bucket: !Ref Bucket
+      ReplicationConfiguration:
+        Role: !GetAtt S3ReplRole.Arn
+        Rules:
+        - Destination: 
+            Bucket: !Join ["", ["arn:aws:s3:::", !Ref ReplBucketName]]
+          Prefix: "raw/"
+          Status: "Enabled"
+        - Destination: 
+            Bucket: !Join ["", ["arn:aws:s3:::", !Ref ReplBucketName]]
+          Prefix: "nightly/"
+          Status: "Enabled"
+        - Destination: 
+            Bucket: !Join ["", ["arn:aws:s3:::", !Ref ReplBucketName]]
+          Prefix: "processed/"
+          Status: "Enabled"
+  S3ReplRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+  S3ReplPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetReplicationConfiguration'
+              - 's3:ListBucket'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref Bucket
+          - Action:
+              - 's3:GetObjectVersion'
+              - 's3:GetObjectVersionForReplication'
+              - 's3:GetObjectVersionAcl'
+              - 's3:GetObjectVersionTagging'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref Bucket
+                  - /*
+          - Action:
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ReplBucketName
+                  - /*
+      PolicyName: BucketBackupPolicy
+      Roles:
+        - !Ref S3ReplRole
+  NotificationBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Statement:
+          - Effect: "Allow"
+            Action:
+            - 's3:PutBucketNotification'
+            - 's3:PutReplicationConfiguration'
+            Resource: !Sub "arn:aws:s3:::${Bucket}"
+            Principal:
+              AWS: !GetAtt BucketConfigFnRole.Arn
+  BucketConfigFnRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal: {Service: [lambda.amazonaws.com]}
+          Action: ['sts:AssumeRole']
+      Path: /
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: "iam-role-s3"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: 
+                  - "iam:PassRole"
+                  - "iam:GetRole"
+                Resource: 
+                  - !GetAtt S3ReplRole.Arn
+  S3BucketConfiguration:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: S3 Object Custom Resource
+      Handler: index.handler
+      Role: !GetAtt BucketConfigFnRole.Arn
+      Code:
+        ZipFile: !Sub |
+          var response = require('cfn-response');
+          var AWS = require('aws-sdk');
+          var s3 = new AWS.S3();
+          exports.handler = function(event, context) {
+            var respond = (e) => response.send(event, context, e ? response.FAILED : response.SUCCESS, e ? e : {});
+            process.on('uncaughtException', e=>failed(e));
+            var params = event.ResourceProperties;
+            delete params.ServiceToken;
+            if (event.RequestType === 'Delete') {
+              params.NotificationConfiguration = {};
+              s3.putBucketNotificationConfiguration(params).promise()
+                .then((data)=>respond())
+                .catch((e)=>respond());
+            } else {
+              s3.putBucketNotificationConfiguration(params).promise()
+                .then((data)=>respond())
+                .catch((e)=>respond(e));
+            }
+          };
+      Timeout: 30
+      Runtime: nodejs12.x
+  S3BucketReplicationConfiguration:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: S3 Object Custom Resource
+      Handler: index.handler
+      Role: !GetAtt BucketConfigFnRole.Arn
+      Code:
+        ZipFile: !Sub |
+          var response = require('cfn-response');
+          var AWS = require('aws-sdk');
+          var s3 = new AWS.S3();
+          exports.handler = function(event, context) {
+            var respond = (e) => response.send(event, context, e ? response.FAILED : response.SUCCESS, e ? e : {});
+            process.on('uncaughtException', e=>failed(e));
+            var params = event.ResourceProperties;
+            delete params.ServiceToken;
+            if (event.RequestType === 'Delete') {
+              params.ReplicationConfiguration = {};
+              s3.putBucketReplication(params).promise()
+                .then((data)=>respond())
+                .catch((e)=>respond());
+            } else {
+              s3.putBucketReplication(params).promise()
+                .then((data)=>respond())
+                .catch((e)=>respond(e));
+            }
+          };
+      Timeout: 30
+      Runtime: nodejs12.x
+
+  GlueTableNightly:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableNightly
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          Location: !Join ['', ['s3://', !Ref Bucket, '/nightly/']]
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+            Parameters: {'serialization.format': '1'}
+          Columns:
+          - Name: coordinates
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: retweeted
+            Type: boolean
+          - Name: source
+            Type: string
+          - Name: entities
+            Type: struct<hashtags:array<struct<text:string,indices:array<bigint>>>,urls:array<struct<url:string,expanded_url:string,display_url:string,indices:array<bigint>>>>
+          - Name: reply_count
+            Type: bigint
+          - Name: favorite_count
+            Type: bigint
+          - Name: geo
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: id_str
+            Type: string
+          - Name: timestamp_ms
+            Type: bigint
+          - Name: truncated
+            Type: boolean
+          - Name: text
+            Type: string
+          - Name: retweet_count
+            Type: bigint
+          - Name: id
+            Type: bigint
+          - Name: possibly_sensitive
+            Type: boolean
+          - Name: filter_level
+            Type: array<string>
+          - Name: created_at
+            Type: string
+          - Name: place
+            Type: struct<id:string,url:string,place_type:array<string>,name:string,full_name:string,country_code:string,country:string,bounding_box:struct<type:string,coordinates:array<array<array<double>>>>>
+          - Name: favorited
+            Type: boolean
+          - Name: lang
+            Type: string
+          - Name: in_reply_to_screen_name
+            Type: string
+          - Name: is_quote_status
+            Type: boolean
+          - Name: in_reply_to_user_id_str
+            Type: string
+          - Name: user
+            Type: struct<id:bigint,id_str:string,name:string,screen_name:string,location:string,url:string,description:string,translator_type:array<string>,protected:boolean,verified:boolean,followers_count:bigint,friends_count:bigint,listed_count:bigint,favourites_count:bigint,statuses_count:bigint,created_at:string,utc_offset:bigint,time_zone:string,geo_enabled:boolean,lang:string,contributors_enabled:boolean,is_translator:boolean,profile_background_color:string,profile_background_image_url:string,profile_background_image_url_https:string,profile_background_tile:boolean,profile_link_color:string,profile_sidebar_border_color:string,profile_sidebar_fill_color:string,profile_text_color:string,profile_use_background_image:boolean,profile_image_url:string,profile_image_url_https:string,profile_banner_url:string,default_profile:boolean,default_profile_image:boolean>
+          - Name: quote_count
+            Type: bigint
+          - Name: year_ingested
+            Type: string
+          - Name: month_ingested
+            Type: string
+          - Name: day_ingested
+            Type: string
+        Parameters: {'classification': 'PARQUET'}
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
+
+  CompactionJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Command:
+        Name: glueetl
+        ScriptLocation: !Join ["", ["s3://", !Ref Bucket, "/code/compaction.py"]]
+      MaxRetries: 0
+      MaxCapacity: 10
+      GlueVersion: "2.0"
+      Name: CompactNightly
+      Role: !Ref CompactionJobRole
+
+  CompactionJobRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "glue.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+      Policies:
+        -
+          PolicyName: "glue-job-s3"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: "s3:*"
+                Resource: 
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket]]
+                  - !Join ["", ["arn:aws:s3:::", !Ref Bucket, "/*"]]
+
+  FailoverRunbook: 
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        schemaVersion: '0.3'
+        description: 'Failover an accelerator endpoint'
+        assumeRole: !GetAtt FailoverRunbookRole.Arn
+        parameters:
+          BackupRegion:
+            type: String
+            description: Region that the backup endpoint lives in
+            default: ""
+          BackupEndpoint:
+            type: String
+            description: Backup endpoint ARN
+            default: ""
+        mainSteps:
+        - action: aws:executeAwsApi
+          name: add_endpoint_group
+          inputs:
+            Service: globalaccelerator
+            Api: CreateEndpointGroup
+            ListenerArn: !GetAtt EndpointListener.ListenerArn
+            EndpointGroupRegion: "{{BackupRegion}}"
+            TrafficDialPercentage: 100
+            EndpointConfigurations: 
+            - EndpointId: "{{BackupEndpoint}}"
+              ClientIPPreservationEnabled: True
+              Weight: 100
+        - action: aws:executeAwsApi
+          name: zero_endpoint_group
+          inputs:
+            Service: globalaccelerator
+            Api: UpdateEndpointGroup
+            EndpointGroupArn: !GetAtt EndpointGroup.EndpointGroupArn
+            TrafficDialPercentage: 0
+      DocumentType: Automation
+      Name: 'failover_runbook'
+      DocumentFormat: YAML
+  FailoverRunbookRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ssm.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns: 
+        - "arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole"
+        - "arn:aws:iam::aws:policy/GlobalAcceleratorFullAccess"
+  FailbackRunbook: 
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        schemaVersion: '0.3'
+        description: 'Revert an accelerator endpoint'
+        assumeRole: !GetAtt FailoverRunbookRole.Arn
+        parameters:
+          BackupGroupArn:
+            type: String
+            description: "ARN of the backup region's endpoint group ARN"
+            default: ""
+        mainSteps:
+        - action: aws:executeAwsApi
+          name: restore_endpoint_group
+          inputs:
+            Service: globalaccelerator
+            Api: UpdateEndpointGroup
+            EndpointGroupArn: !GetAtt EndpointGroup.EndpointGroupArn
+            TrafficDialPercentage: 100
+        - action: aws:executeAwsApi
+          name: delete_endpoint_group
+          inputs:
+            Service: globalaccelerator
+            Api: DeleteEndpointGroup
+            EndpointGroupArn: "{{BackupGroupArn}}"
+      DocumentType: Automation
+      Name: 'failback_runbook'
+      DocumentFormat: YAML
+
+Outputs:
+  AcceleratorDnsName:
+    Description: Accelerator DNS Name
+    Value:
+      Fn::GetAtt:
+      - GlobalEndpoint 
+      - DnsName
+  VcpId:
+    Description: VPC ID
+    Value: !Ref VPC
+  ProducerInstanceId:
+    Description: EC2 Instance ID for sample producer
+    Value: !Ref SampleProducer
+  PrimaryEndpointArn:
+    Description: ARN of Global Accelerator Endpoint in Primary Region
+    Value: !GetAtt EndpointGroup.EndpointGroupArn
+  AcceleratorListenerArn:
+    Description: ARN of Global Accelerator Listener
+    Value: !GetAtt EndpointListener.ListenerArn
+  ProducerIP:
+    Description: Static IP for producer
+    Value: !Join ["", [!Ref EIPNatGWA, "/32"]]

@@ -1,0 +1,546 @@
+# Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+# 
+#     https://www.apache.org/licenses/LICENSE-2.0
+# 
+# or in the "license" file accompanying this file. This file is distributed 
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+# express or implied. See the License for the specific language governing 
+# permissions and limitations under the License.
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Data stores for backup/restore strategy'
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: General
+        Parameters:
+          - ProjectName
+          - BackupBucketName
+          - InventoryBucketName
+      - Label:
+          default: Consumer Configuration
+        Parameters:
+          - DbName
+          - DbTableRaw
+          - DbTableNightly
+          - DbTableInventory
+          - DbTableInventoryNightly
+
+Parameters:
+  InventoryBucketName:
+    Description: S3 bucket for inventory
+    Type: String
+    MinLength: 3
+    MaxLength: 64
+    AllowedPattern: '^([a-z]|(\d(?!\d{0,2}\.\d{1,3}\.\d{1,3}\.\d{1,3})))([a-z\d]|(\.(?!(\.|-)))|(-(?!\.))){1,61}[a-z\d\.]$'
+    ConstraintDescription: >
+      Must begin with a letter and only alphanumeric characters or hyphens.
+      Cannot end in a hyphen or period.'
+  BackupBucketName:
+    Type: String
+    Description: >
+      Name for the S3 bucket used for replication.
+    MinLength: 3
+    MaxLength: 64
+    AllowedPattern: '^([a-z]|(\d(?!\d{0,2}\.\d{1,3}\.\d{1,3}\.\d{1,3})))([a-z\d]|(\.(?!(\.|-)))|(-(?!\.))){1,61}[a-z\d\.]$'
+    ConstraintDescription: >
+      Must begin with a letter and only alphanumeric characters or hyphens.
+      Cannot end in a hyphen or period.'
+  DbName:
+    Description: Glue database name
+    Type:  String
+    Default: "backuprestoredb"
+  DbTableRaw:
+    Description: Glue table name for raw input
+    Type:  String
+    Default: "rawdata"
+  DbTableInventory:
+    Description: Glue table name for backup bucket inventory
+    Type:  String
+    Default: "inventory"
+  DbTableInventoryNightly:
+    Description: Glue table name for backup bucket inventory
+    Type:  String
+    Default: "inventory_compacted"
+  DbTableNightly:
+    Description: Glue table name for nightly compacted table
+    Type:  String
+    Default: "compacteddata"
+  ProjectName:
+    Description: Tagging identifier
+    Type: String
+    Default: "BackupRestoreAnalytics"
+
+Resources:
+  InventoryBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref InventoryBucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256  
+      VersioningConfiguration:
+        Status: Enabled  
+  InventoryBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref InventoryBucket
+      PolicyDocument:
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "s3.amazonaws.com"
+            Action:
+            - 's3:PutObject'
+            Resource: !Sub "arn:aws:s3:::${InventoryBucket}/*"
+            Condition:
+              ArnLike:
+                "aws:SourceArn": !Sub "arn:aws:s3:::${BackupBucketName}"
+              StringEquals:
+                "aws:SourceAccount": !Ref AWS::AccountId
+                "s3:x-amz-acl": "bucket-owner-full-control"
+
+  BackupBucket:
+    DependsOn: InventoryBucketPolicy
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BackupBucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256     
+      VersioningConfiguration:
+        Status: Enabled
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - 
+            Event: "s3:ObjectCreated:*"
+            Filter:
+              S3Key:
+                Rules:
+                  - 
+                    Name: prefix
+                    Value: "raw/"
+            Function: !GetAtt PartitionFn.Arn
+      InventoryConfigurations:
+        - Id: BackupInventoryRaw
+          Destination:
+            BucketArn: !GetAtt InventoryBucket.Arn
+            Format: CSV
+            Prefix: "inventory/raw"
+            BucketAccountId: !Ref AWS::AccountId
+          Enabled: true
+          IncludedObjectVersions: Current
+          Prefix: "raw/"
+          ScheduleFrequency: Daily
+          OptionalFields: 
+            - ReplicationStatus
+        - Id: BackupInventoryNightly
+          Destination:
+            BucketArn: !GetAtt InventoryBucket.Arn
+            Format: CSV
+            Prefix: "inventory/nightly"
+            BucketAccountId: !Ref AWS::AccountId
+          Enabled: true
+          IncludedObjectVersions: Current
+          Prefix: "nightly/"
+          ScheduleFrequency: Daily
+          OptionalFields: 
+            - ReplicationStatus
+
+  GlueDB:
+    Type: "AWS::Glue::Database"
+    Properties:
+      DatabaseInput:
+        Name: !Ref DbName
+      CatalogId: !Ref AWS::AccountId
+  GlueTable:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableRaw
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          Location: !Join ['', ['s3://', !Ref BackupBucketName, '/raw/']]
+          SerdeInfo:
+            SerializationLibrary: org.openx.data.jsonserde.JsonSerDe
+          Columns:
+          - Name: coordinates
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: retweeted
+            Type: boolean
+          - Name: source
+            Type: string
+          - Name: entities
+            Type: struct<hashtags:array<struct<text:string,indices:array<bigint>>>,urls:array<struct<url:string,expanded_url:string,display_url:string,indices:array<bigint>>>>
+          - Name: reply_count
+            Type: bigint
+          - Name: favorite_count
+            Type: bigint
+          - Name: geo
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: id_str
+            Type: string
+          - Name: timestamp_ms
+            Type: bigint
+          - Name: truncated
+            Type: boolean
+          - Name: text
+            Type: string
+          - Name: retweet_count
+            Type: bigint
+          - Name: id
+            Type: bigint
+          - Name: possibly_sensitive
+            Type: boolean
+          - Name: filter_level
+            Type: string
+          - Name: created_at
+            Type: string
+          - Name: place
+            Type: struct<id:string,url:string,place_type:string,name:string,full_name:string,country_code:string,country:string,bounding_box:struct<type:string,coordinates:array<array<array<float>>>>>
+          - Name: favorited
+            Type: boolean
+          - Name: lang
+            Type: string
+          - Name: in_reply_to_screen_name
+            Type: string
+          - Name: is_quote_status
+            Type: boolean
+          - Name: in_reply_to_user_id_str
+            Type: string
+          - Name: user
+            Type: struct<id:bigint,id_str:string,name:string,screen_name:string,location:string,url:string,description:string,translator_type:string,protected:boolean,verified:boolean,followers_count:bigint,friends_count:bigint,listed_count:bigint,favourites_count:bigint,statuses_count:bigint,created_at:string,utc_offset:bigint,time_zone:string,geo_enabled:boolean,lang:string,contributors_enabled:boolean,is_translator:boolean,profile_background_color:string,profile_background_image_url:string,profile_background_image_url_https:string,profile_background_tile:boolean,profile_link_color:string,profile_sidebar_border_color:string,profile_sidebar_fill_color:string,profile_text_color:string,profile_use_background_image:boolean,profile_image_url:string,profile_image_url_https:string,profile_banner_url:string,default_profile:boolean,default_profile_image:boolean>
+          - Name: quote_count
+            Type: bigint
+        Parameters: {'classification': 'json'}
+        PartitionKeys:
+          -
+            Type: string
+            Name: year
+          -
+            Type: string
+            Name: month
+          -
+            Type: string
+            Name: day
+          -
+            Type: string
+            Name: hour
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
+
+  PartFnPermissionRaw:
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt PartitionFn.Arn
+      Principal: "s3.amazonaws.com"
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Join ["", ["arn:aws:s3:::", !Ref BackupBucketName]]
+
+  PartitionFn:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Record new partitions in Glue catalog
+      Runtime: python3.7
+      Role: !GetAtt PartitionFnRole.Arn
+      Handler: index.handler
+      Environment:
+        Variables:
+          PartitionFor: !Ref DbTableRaw
+          DatabaseName: !Ref DbName
+          PartitionPrefix: 'raw'
+      Timeout: 60
+      MemorySize: 512
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Join ["", [!Ref ProjectName, "-PartitionFn"]]
+      Code:
+        ZipFile: |
+          from __future__ import print_function
+          import base64
+          import json
+          import boto3
+          import csv
+          import array
+          import os
+          import traceback
+          import re
+
+          table = os.environ['PartitionFor']
+          databaseName = os.environ['DatabaseName']
+          prefix = os.environ['PartitionPrefix']
+          client = boto3.client('glue')
+
+          def handler(event, context):
+
+              bad_records = []
+              for record in event['Records']:
+                  bucket = record['s3']['bucket']['name']
+                  key = record['s3']['object']['key'] 
+                  print("Detected create event: {0}/{1}".format(bucket, key))
+
+                  m = re.search(prefix + '\/(\d{4})\/(\d{2})\/(\d{2})\/(\d{2})', key)
+                  if m == None:
+                      print("Did not find partition pattern, skipping: {0}".format(key))
+                      continue
+                  year = m.group(1)
+                  month = m.group(2)
+                  day = m.group(3)
+                  hour = m.group(4)
+                  partition = "{0}/{1}/{2}/{3}".format(year, month, day, hour)
+
+                  # See if partition already exists
+                  exists = True
+                  tbl = None
+                  try:
+                      tbl = client.get_table(
+                          DatabaseName=databaseName,
+                          Name=table
+                      )
+                      response = client.get_partition(
+                          DatabaseName=databaseName,
+                          TableName=table,
+                          PartitionValues=[
+                              year,
+                              month,
+                              day,
+                              hour
+                          ]
+                      )
+                      print("Partition {0} already exists for table {1}, skipping".format(partition, table))
+                  except Exception as e:
+                      exists = False
+                      print("Partition {0} does not exist for table {1}, creating".format(partition, table))
+
+                  if exists == False:
+                      try:
+                          sdescriptor = tbl['Table']['StorageDescriptor']
+                          response = client.create_partition(
+                              DatabaseName=databaseName,
+                              TableName=table,
+                              PartitionInput={
+                                  'Values': [
+                                      year,
+                                      month,
+                                      day,
+                                      hour
+                                  ],
+                                  'StorageDescriptor': {
+                                      'Columns': sdescriptor['Columns'],
+                                      'Location': "{0}/{1}/".format(sdescriptor['Location'], partition),
+                                      'InputFormat': sdescriptor['InputFormat'],
+                                      'OutputFormat': sdescriptor['OutputFormat'],
+                                      'Compressed': False,
+                                      'SerdeInfo': sdescriptor['SerdeInfo'],
+                                      'StoredAsSubDirectories': False
+                                  },
+                                  'Parameters': tbl['Table']['Parameters']
+                              }
+                          )
+
+                      except Exception as e:
+                          trc = traceback.format_exc()
+                          print("Error creating partition {0} for table {1}: {2}".format(partition, table, trc))
+                          bad_records.append(partition)
+
+                  return 'Processed {0} records, with {1} partition failures.'.format(len(event['Records']), len(bad_records))
+
+  PartitionFnRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: lambda_glue
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - glue:GetTable
+                  - glue:BatchCreatePartitions
+                  - glue:GetPartition
+                  - glue:CreatePartition
+                  - lakeformation:*
+                  - glue:*
+                Resource: 
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":table/", !Ref DbName, "/", !Ref DbTableRaw]]
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":database/", !Ref DbName]]
+                  - !Join ["", ["arn:aws:glue:", !Ref AWS::Region, ":", !Ref AWS::AccountId, ":catalog"]]
+
+  GlueTableNightly:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableNightly
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          Location: !Join ['', ['s3://', !Ref BackupBucketName, '/nightly/']]
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+            Parameters: {'serialization.format': '1'}
+          Columns:
+          - Name: coordinates
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: retweeted
+            Type: boolean
+          - Name: source
+            Type: string
+          - Name: entities
+            Type: struct<hashtags:array<struct<text:string,indices:array<bigint>>>,urls:array<struct<url:string,expanded_url:string,display_url:string,indices:array<bigint>>>>
+          - Name: reply_count
+            Type: bigint
+          - Name: favorite_count
+            Type: bigint
+          - Name: geo
+            Type: struct<type:string,coordinates:array<double>>
+          - Name: id_str
+            Type: string
+          - Name: timestamp_ms
+            Type: bigint
+          - Name: truncated
+            Type: boolean
+          - Name: text
+            Type: string
+          - Name: retweet_count
+            Type: bigint
+          - Name: id
+            Type: bigint
+          - Name: possibly_sensitive
+            Type: boolean
+          - Name: filter_level
+            Type: array<string>
+          - Name: created_at
+            Type: string
+          - Name: place
+            Type: struct<id:string,url:string,place_type:array<string>,name:string,full_name:string,country_code:string,country:string,bounding_box:struct<type:string,coordinates:array<array<array<double>>>>>
+          - Name: favorited
+            Type: boolean
+          - Name: lang
+            Type: string
+          - Name: in_reply_to_screen_name
+            Type: string
+          - Name: is_quote_status
+            Type: boolean
+          - Name: in_reply_to_user_id_str
+            Type: string
+          - Name: user
+            Type: struct<id:bigint,id_str:string,name:string,screen_name:string,location:string,url:string,description:string,translator_type:array<string>,protected:boolean,verified:boolean,followers_count:bigint,friends_count:bigint,listed_count:bigint,favourites_count:bigint,statuses_count:bigint,created_at:string,utc_offset:bigint,time_zone:string,geo_enabled:boolean,lang:string,contributors_enabled:boolean,is_translator:boolean,profile_background_color:string,profile_background_image_url:string,profile_background_image_url_https:string,profile_background_tile:boolean,profile_link_color:string,profile_sidebar_border_color:string,profile_sidebar_fill_color:string,profile_text_color:string,profile_use_background_image:boolean,profile_image_url:string,profile_image_url_https:string,profile_banner_url:string,default_profile:boolean,default_profile_image:boolean>
+          - Name: quote_count
+            Type: bigint
+          - Name: year_ingested
+            Type: string
+          - Name: month_ingested
+            Type: string
+          - Name: day_ingested
+            Type: string
+        Parameters: {'classification': 'PARQUET'}
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
+
+  GlueTableInventory:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableInventory
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.hive.ql.io.SymlinkTextInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat
+          Location: !Join ['', ['s3://', !Ref InventoryBucketName, '/inventory/raw/', !Ref BackupBucketName, '/BackupInventoryRaw/hive']]
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.serde2.OpenCSVSerde
+            Parameters: 
+              serialization.format: "1"
+          Columns:
+          - Name: bucket
+            Type: string
+          - Name: key
+            Type: string
+          - Name: version_id
+            Type: string
+          - Name: is_latest
+            Type: boolean
+          - Name: is_delete_marker
+            Type: boolean
+          - Name: replication_status
+            Type: string
+        PartitionKeys:
+          -
+            Type: string
+            Name: dt 
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
+
+  GlueTableInventoryNightly:
+    Type: "AWS::Glue::Table"
+    Properties:
+      TableInput:
+        Name: !Ref DbTableInventoryNightly
+        StorageDescriptor:
+          StoredAsSubDirectories: false
+          Compressed: False
+          InputFormat: org.apache.hadoop.hive.ql.io.SymlinkTextInputFormat
+          NumberOfBuckets: -1
+          OutputFormat: org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat
+          Location: !Join ['', ['s3://', !Ref InventoryBucketName, '/inventory/nightly/', !Ref BackupBucketName, '/BackupInventoryNightly/hive']]
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.serde2.OpenCSVSerde
+            Parameters: 
+              serialization.format: "1"
+          Columns:
+          - Name: bucket
+            Type: string
+          - Name: key
+            Type: string
+          - Name: version_id
+            Type: string
+          - Name: is_latest
+            Type: boolean
+          - Name: is_delete_marker
+            Type: boolean
+          - Name: replication_status
+            Type: string
+        PartitionKeys:
+          -
+            Type: string
+            Name: dt 
+        TableType: "EXTERNAL_TABLE"
+      DatabaseName: !Ref GlueDB
+      CatalogId: !Ref AWS::AccountId
