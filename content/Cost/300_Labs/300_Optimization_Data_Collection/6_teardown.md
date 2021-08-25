@@ -2,8 +2,8 @@
 title: "Teardown"
 date: 2020-10-26T11:10:08-04:00
 chapter: false
-weight: 5
-pre: "<b>5. </b>"
+weight: 6
+pre: "<b>6. </b>"
 ---
 
 The following resources were created in this lab:
@@ -12,7 +12,7 @@ The following resources were created in this lab:
 - CloudFormation stack in the Cost account - OptimizationDataCollectionStack
 
 
-{{< prev_next_button link_prev_url="../4_create_custom_data_collection_module/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_utilize_data/"  title="Congratulations!" final_step="true" >}}
 
 
 Now that you have completed the lab, if you have implemented this knowledge in your environment,

@@ -58,7 +58,7 @@ This Data will be partitioned by year, month, day.
 {{%expand "Inventory Collector" %}}
 
 ### Inventory Collector
-This module is designed to loop through your AWS Organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket in the Cost Account.  
+This module is designed to loop through your AWS Organizations account and collect data that could be used to find optimization data. It has two components, firstly the AWS accounts collector which used the management role built before. This then passes the account id into an SQS queue which then is used as an event in the next component. This section assumes a role into the account the reads the data and places into an Amazon S3 bucket in the Cost Account.  See the **Utilize Data Section** for more information on how to use this data.
 This Data will be partitioned by year, month. 
 
 * Three different IAM Policies to add to **OptimizationDataRoleStack** CloudFormation StackSet depending on what you want to ingest:  
@@ -145,7 +145,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 {{%expand "Trusted Advisor" %}}
 
 ###  Trusted Advisor
-This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. 
+This module will retrieve all AWS Trusted Advisor recommendations from all your linked account. See the **Utilize Data Section** for more information on how to use this data.
 This Data will be partitioned by year, month, day. 
 
 
@@ -334,7 +334,7 @@ This will enable you too automated report to show costs associated with ECS Task
 {{%expand "RDS Utilization Data" %}}
 
 ## RDS Utilization
-The module will collect RDS Cloudwatch metrics from your accounts. Using this data you can identify possible underutilized instances. You can use the saved Athena query as a view to query these results and track your recommendations.
+The module will collect RDS CloudWatch metrics from your accounts. Using this data you can identify possible underutilized instances. You can use the saved Athena query as a view to query these results and track your recommendations.
 This is partitioned by TBC. 
 
 * IAM Policy to add to **OptimizationDataRoleStack** CloudFormation StackSet:  
@@ -524,7 +524,7 @@ If you would like to make your own modules then go to the next section to learn 
 {{% /notice %}}
 
 
-Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or Passing into Amazon Quicksight.
+Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or Passing into Amazon QuickSight.
 
 
 {{< prev_next_button link_prev_url="../2_deploy_additional_roles/" link_next_url="../4_create_custom_data_collection_module/" />}}
