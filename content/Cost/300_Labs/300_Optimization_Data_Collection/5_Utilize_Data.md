@@ -1,5 +1,5 @@
 ---
-title: "Utilise Data"
+title: "Utilize Data"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
 weight: 5
@@ -10,7 +10,7 @@ pre: "<b>5. </b>"
 Now you have pulled together all this data we have some ways in which you can analyze it and use to make cost optimization decisions 
 
 ### Snapshots and AMIs
-When a AMI gets created it takes a Snaphot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snaphot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'.
+When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'.
 
       SELECT *,
       CASE

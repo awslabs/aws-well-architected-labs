@@ -67,4 +67,4 @@ If you would like more information on AWS CloudFormation checkout there [website
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../3_deploy_data_collection_modules/" link_next_url="../5_Utilise_Data/" />}}
+{{< prev_next_button link_prev_url="../3_deploy_data_collection_modules/" link_next_url="../5_utilize_data/" />}}
