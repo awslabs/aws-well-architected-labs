@@ -45,7 +45,6 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
 
     You _only_ need to specify these six properties:
 
-    * **IamInstanceProfile:** References `Web1InstanceInstanceProfile`, which is defined elsewhere in the template
     * **ImageId:** References `LatestAmiId`, which is the parameter discussed previously
     * **InstanceType:** References `InstanceType`, another parameter
     * **SecurityGroupIds:** References `PublicSecurityGroup`, which is defined elsewhere in the template
@@ -74,7 +73,6 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
       MyEC2Instance:
         Type: AWS::EC2::Instance
         Properties:
-          IamInstanceProfile: !Ref Web1InstanceInstanceProfile
           ImageId: !Ref LatestAmiId
           InstanceType: !Ref InstanceType
           SecurityGroupIds:
