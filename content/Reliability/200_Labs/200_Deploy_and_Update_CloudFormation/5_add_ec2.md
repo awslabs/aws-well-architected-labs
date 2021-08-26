@@ -43,7 +43,7 @@ For more details of this method, see: [AWS Compute Blog: Query for the latest Am
     * Use the YAML format
     * For **Logical ID** (the line above **Type**) use `MyEC2Instance`
 
-    You _only_ need to specify these six properties:
+    You _only_ need to specify these five properties:
 
     * **ImageId:** References `LatestAmiId`, which is the parameter discussed previously
     * **InstanceType:** References `InstanceType`, another parameter
