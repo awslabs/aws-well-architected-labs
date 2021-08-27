@@ -43,6 +43,7 @@ The assumption is that if the Load Balancer has not received any traffic within 
 {{%expand "Click here - to expand the query" %}}
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/elastic-load-balancing-idle-elbs.sql) 
 
+```tsql
 		SELECT
 		  bill_payer_account_id,
 		  line_item_usage_account_id,
@@ -85,7 +86,8 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 		  AND pricing_unit_per_resource = 1
 		ORDER BY
 		  cost_per_resource DESC;
-		  
+```
+
 {{% /expand%}}
 
 
@@ -109,7 +111,7 @@ AutoStop Workspaces are cost effective when used for several hours per day. If A
 {{%expand "Click here - to expand the query" %}}
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/amazon-workspaces-auto-stop.sql) 
 
-
+```tsql
 			SELECT
 			  bill_payer_account_id,
 			  line_item_usage_account_id,
@@ -173,7 +175,7 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 			  line_item_usage_account_id,
 			  product_operating_system,
 			  pricing_unit;
-
+```
 
 {{% /expand%}}
 
@@ -201,6 +203,7 @@ Besides deleting idle NATGWs you should also consider the following tips:
 {{%expand "Click here - to expand the query" %}}
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/nat-gateway-idle.sql) 
 
+```tsql
 		SELECT 
 		  bill_payer_account_id,
 		  line_item_usage_account_id,
@@ -237,7 +240,7 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 		  month_line_item_usage_start_date,
 		  sum_line_item_usage_amount,
 		  product_attachment_type;
-
+```
 
 {{% /expand%}}
 
@@ -255,14 +258,12 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 #### Cost Optimization Technique
 This query will display cost and usage of general purpose Elastic Block Storage Volumes and provide the estimated cost savings for modernizing a gp2 volume to gp3  These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query assumes you would provision the max iops and throughput based on the volume size, but not all resources will require the max amount and should be validated by the resource owner. 
 
+{{% notice tip %}}
+If you are running this for all accounts in a large organization we recommend running the query below first to confirm export size is not over ~1M rows. If the count shown in the query is greater than 1M you will want to filter to groupings of accounts or feed this query into a BI tool such as QuickSight 
+{{% /notice %}}
 
-#### Copy Query
 {{%expand "Click here - to expand the query" %}}
-
-
-**NOTE:** If you are running this for all accounts in a large organization we recommend running the query below first to confirm export size is not over ~1M rows. If the count shown in the query is greater than 1M you will want to filter to groupings of accounts or feed this query into a BI tool such as QuickSight 
--------- ---------
-
+```tsql
 	select count (distinct line_item_resource_id) 
      FROM ${table_name}
      WHERE 
@@ -273,11 +274,15 @@ This query will display cost and usage of general purpose Elastic Block Storage 
 		AND (CAST("concat"("year", '-', "month", '-01') AS date) = ("date_trunc"('month', current_date) - INTERVAL  '1' MONTH))
 		AND line_item_usage_type LIKE '%gp%'
 		AND line_item_usage_type LIKE '%EBS%'  
+```
+{{% /expand%}}
 
--------- ---------
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
 
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/amazon-ebs-volumes-modernize-gp2-to-gp3.sql)
 
+```tsql
 		-- NOTE: If running this at a payer account level with millions of volumes we recommend filtering to specific accounts in line 21
 		WITH 
 		-- Step 1: Filter CUR to return all gp EC2 EBS storage usage data
@@ -416,6 +421,8 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 			LEFT JOIN volume_average ON volume_average.line_item_usage_account_id = linked_account_id and volume_average.bill_billing_period_start_date = billing_period
 				LEFT JOIN volume_count ON volume_count.line_item_usage_account_id = linked_account_id and volume_count.bill_billing_period_start_date = billing_period
 		GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+```
+
 {{% /expand%}}
 #### Helpful Links
 * [Migrate your Amazon EBS volumes from gp2 to gp3 and save up to 20% on costs](https://aws.amazon.com/blogs/storage/migrate-your-amazon-ebs-volumes-from-gp2-to-gp3-and-save-up-to-20-on-costs/)
@@ -437,6 +444,7 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 
 {{%expand "Click here - to expand the query" %}}
 
+```tsql
 		-- Step 1: Filter CUR to return all ebs ec2 snapshot usage data
 		WITH snapshot_usage_all_time AS (
 			SELECT
@@ -486,8 +494,9 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 			WHERE CAST(concat(snapshot.year, '-', snapshot.month, '-01') AS date) = (date_trunc('month', current_date) - INTERVAL '1' MONTH) AND request_dates.current_billing_period = (date_trunc('month', current_date) - INTERVAL '0' MONTH)
 			GROUP BY 1,2,3,4,5,6
 		)
-{{% /expand%}}
+```
 
+{{% /expand%}}
 
 #### Helpful Links
 * [Amazon Data Lifecycle Manager](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html)
@@ -524,7 +533,7 @@ This query breaks out the previous month's costs and usage of each S3 bucket by 
 
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/s3-bucket-trends-and-optimizations.sql)
 
-
+```tsql
 		-- Step 1: Enter S3 standard savings savings assumption. Default is set to 0.3 for 30% savings 
 		WITH inputs AS (
 			SELECT * FROM (VALUES (0.3)) t(s3_standard_savings)),
@@ -702,8 +711,10 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 		, s3_get_object_usage_quantity
 		, s3_copy_object_usage_quantity
 		FROM previous_month_usage, inputs
+```
 
 {{% /expand%}}
+
 
 #### Helpful Links
 * [5 Ways to reduce data storage costs using Amazon S3 Storage Lens](https://aws.amazon.com/blogs/storage/5-ways-to-reduce-costs-using-amazon-s3-storage-lens/)
