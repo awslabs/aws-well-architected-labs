@@ -39,3 +39,5 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 1.6 Type **confirm** and Click the **Confirm** button.
 
 {{< img pr-4.png >}}
+
+{{< img pr-5.png >}}
