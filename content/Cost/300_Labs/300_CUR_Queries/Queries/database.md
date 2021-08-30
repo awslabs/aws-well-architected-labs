@@ -24,6 +24,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Amazon DynamoDB](#amazon-dynamodb)
   * [Amazon Redshift](#amazon-redshift)
   * [Amazon ElastiCache](#amazon-elasticache)
+  * [Amazon DocumentDB](#amazon-documentdb)
   
 ### Amazon Aurora Global Database
 
@@ -508,6 +509,54 @@ ORDER BY
 ```
 
 {{< email_button category_text="Database" service_text="Amazon ElastiCache" query_text="Amazon ElastiCache Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon DocumentDB
+
+#### Query Description
+This query will output the total daily cost per DocumentDB cluster. The output will include detailed information about the resource id (cluster name) and usage type.  The unblended cost will be summed and in descending order. 
+
+#### Pricing
+Please refer to the [Amazon DocumentDB pricing page](https://aws.amazon.com/documentdb/pricing/).
+
+#### Sample Output
+![Images/documentdb_daily_cost.png](/Cost/300_CUR_Queries/Images/Database/documentdb_daily_cost.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Database/documentdb_daily_cost.sql)
+
+#### Copy Query
+```tsql
+    SELECT 
+      bill_payer_account_id,
+      line_item_usage_account_id,
+      DATE_FORMAT(("line_item_usage_start_date"),'%Y-%m-%d') AS day_line_item_usage_start_date,
+      SPLIT_PART(line_item_resource_id,':',7) AS line_item_resource_id,
+      line_item_usage_type,
+      product_region,
+      line_item_product_code,
+      sum(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
+      sum(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+    FROM 
+      ${table_Name}
+    WHERE
+      ${date_filter}
+      AND line_item_product_code = 'AmazonDocDB'
+      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','Fee','RIFee')
+    GROUP BY  
+      1, -- bill_payer_account_id
+      2, -- line_item_usage_account_id
+      3, -- day_line_item_usage_start_date
+      4, -- line_item_resource_id
+      5, -- line_item_usage_type
+      6, -- product_region
+      7 -- line_item_product_code
+    ORDER BY
+      sum_line_item_unblended_cost DESC;
+```
+
+{{< email_button category_text="Database" service_text="Amazon DocumentDB" query_text="Amazon DocumentDB Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
