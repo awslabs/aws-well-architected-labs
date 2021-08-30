@@ -21,10 +21,16 @@ Prior to deleting resources, check with the application owner that your analysis
 {{% /notice %}}
 
 ### Table of Contents
+- Compute
   * [Elastic Load Balancing - Idle ELB](#elastic-load-balancing---idle-elb)
-  * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
-  * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)
-  * [Amazon EBS Volumes Upgrade gp2 to gp3](#amazon-ebs-volumes-upgrade-gp2-to-gp3)
+- End User Computing 
+  * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)  
+- Networking & Content Delivery   
+  * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)  
+- Storage  
+  * [EBS Volumes Modernize gp2 to gp3](#amazon-ebs-volumes-modernize-gp2-to-gp3)
+  * [EBS Snapshot Trends](#amazon-ebs-snapshot-trends)
+  * [S3 Bucket Trends and Optimizations](#amazon-s3-bucket-trends-and-optimizations)
   
 ### Elastic Load Balancing - Idle ELB
 
@@ -33,8 +39,57 @@ This query will display cost and usage of Elastic Load Balancers which didn’t 
 
 The assumption is that if the Load Balancer has not received any traffic within 14 days, it is likely orphaned and can be deleted.
 
-#### Link to Query
-[Elastic Load Balancing - Idle ELB](../compute/#elastic-load-balancing---idle-elb)
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/elastic-load-balancing-idle-elbs.sql) 
+
+```tsql
+		SELECT
+		  bill_payer_account_id,
+		  line_item_usage_account_id,
+		  SPLIT_PART(line_item_resource_id, ':', 6) split_line_item_resource_id,
+		  product_region,
+		  pricing_unit,
+		  sum_line_item_usage_amount,
+		  CAST(cost_per_resource AS DECIMAL(16, 8)) AS sum_line_item_unblended_cost
+		FROM
+		  (
+			SELECT
+			  line_item_resource_id,
+			  product_region,
+			  pricing_unit,
+			  line_item_usage_account_id,
+			  bill_payer_account_id,
+			  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+			  SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
+			  SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
+			  COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
+			FROM
+			  ${table_name}
+			WHERE
+			  line_item_product_code = 'AWSELB'
+			  -- get previous month
+			  AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+			  -- get year for previous month
+			  AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+			  AND line_item_line_item_type = 'Usage'
+			GROUP BY
+			  line_item_resource_id,
+			  product_region,
+			  pricing_unit,
+			  line_item_usage_account_id,
+			  bill_payer_account_id
+		  )
+		WHERE
+		  -- filter only resources which ran more than half month (336 hrs)
+		  usage_per_resource_and_pricing_unit > 336
+		  AND pricing_unit_per_resource = 1
+		ORDER BY
+		  cost_per_resource DESC;
+```
+
+{{% /expand%}}
+
 
 #### Helpful Links
 Please refer to the [ELB AWS CLI documentation](https://docs.aws.amazon.com/elasticloadbalancing/index.html) for deletion instructions.  The commands vary between the ELB types. 
@@ -46,6 +101,91 @@ Please refer to the [ELB AWS CLI documentation](https://docs.aws.amazon.com/elas
 {{< email_button category_text="Cost Optimization" service_text="Elastic Load Balancing - Idle ELB" query_text="Elastic Load Balancing - Idle ELB query 1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### Amazon WorkSpaces - Auto Stop
+
+#### Cost Optimization Technique
+AutoStop Workspaces are cost effective when used for several hours per day. If AutoStop Workspaces run for more than 80 hrs per month it is more cost effective to switch to AlwaysOn mode. This query shows AutoStop Workspaces which ran more that 80 hrs in previous month. If the usage pattern for these Workspaces is the same month over month it's possible to optimize cost by switching to AlwaysOn mode. For example, Windows PowerPro (8 vCPU, 32GB RAM) bundle in eu-west-1 runs for 400 hrs per month. In AutoStop mode it costs $612/month ($8.00/month + 400 * $1.53/hour) while if used in AlwaysOn mode it would cost $141/month.
+
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/amazon-workspaces-auto-stop.sql) 
+
+```tsql
+			SELECT
+			  bill_payer_account_id,
+			  line_item_usage_account_id,
+			  SPLIT_PART(line_item_resource_id, '/', 2) AS split_line_item_resource_id,
+			  product_region,
+			  product_operating_system,
+			  product_bundle_description,
+			  product_software_included,
+			  product_license,
+			  product_rootvolume,
+			  product_uservolume,
+			  pricing_unit,
+			  sum_line_item_usage_amount,
+			  CAST(total_cost_per_resource AS DECIMAL(16, 8)) AS "sum_line_item_unblended_cost(incl monthly fee)"
+			FROM
+			  (
+				SELECT
+				  bill_payer_account_id,
+				  line_item_usage_account_id,
+				  line_item_resource_id,
+				  product_operating_system,
+				  pricing_unit,
+				  product_region,
+				  product_bundle_description,
+				  product_rootvolume,
+				  product_uservolume,
+				  product_software_included,
+				  product_license,
+				  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+				  SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS total_cost_per_resource,
+				  SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_amount_per_resource_and_pricing_unit
+				FROM
+				  $ {table_name}
+				WHERE
+				  line_item_product_code = 'AmazonWorkSpaces' 
+				  -- get previous month
+				  AND CAST(month AS INT) = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT) 
+				  -- get year for previous month
+				  AND CAST(year AS INT) = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS INT)
+				  AND line_item_line_item_type = 'Usage'
+				  AND line_item_usage_type LIKE '%AutoStop%'
+				GROUP BY
+				  line_item_usage_account_id,
+				  line_item_resource_id,
+				  product_operating_system,
+				  pricing_unit,
+				  product_region,
+				  product_bundle_description,
+				  product_rootvolume,
+				  product_uservolume,
+				  bill_payer_account_id,
+				  product_software_included,
+				  product_license
+			  )     
+			WHERE
+			  -- return only workspaces which ran more than 80 hrs
+			  usage_amount_per_resource_and_pricing_unit > 80
+			ORDER BY
+			  total_cost_per_resource DESC,
+			  line_item_resource_id,
+			  line_item_usage_account_id,
+			  product_operating_system,
+			  pricing_unit;
+```
+
+{{% /expand%}}
+
+#### Helpful Links
+Please refer to the AWS Solution, [Amazon WorkSpaces Cost Optimizer](https://aws.amazon.com/solutions/implementations/amazon-workspaces-cost-optimizer/).  This solution analyzes all of your Amazon WorkSpaces usage data and automatically converts the WorkSpace to the most cost-effective billing option (hourly or monthly), depending on your individual usage. This solution also helps you monitor your WorkSpace usage and optimize costs.  This automates the manual process of running the above query and adjusting your WorkSpaces configuration.  
+
+{{< email_button category_text="Cost Optimization" service_text="Amazon WorkSpaces - Auto Stop" query_text="Amazon WorkSpaces - Auto Stop query 1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
 
 ### NAT Gateway - Idle NATGW
 
@@ -59,8 +199,51 @@ Besides deleting idle NATGWs you should also consider the following tips:
 * Consider Sending Amazon S3 and Dynamo Traffic Through Gateway VPC Endpoints Instead of NAT Gateways
 * Consider Setting up Interface VPC Endpoints Instead of NAT Gateways for Other Intra-AWS Traffic
 
-#### Link to Query
-[NAT Gateway - Idle NATGW](../networking__content_delivery#nat-gateway---idle-natgw)
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/nat-gateway-idle.sql) 
+
+```tsql
+		SELECT 
+		  bill_payer_account_id,
+		  line_item_usage_account_id,
+		  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
+		  CASE
+			WHEN line_item_resource_id LIKE 'arn%' THEN CONCAT(SPLIT_PART(line_item_resource_id,'/',2),' - ',product_location)
+			ELSE CONCAT(line_item_resource_id,' - ',product_location)
+		  END AS line_item_resource_id,
+		  product_location,
+		  product_attachment_type,
+		  pricing_unit,
+		  CASE
+			WHEN pricing_unit = 'hour' THEN 'Hourly charges'
+			WHEN pricing_unit = 'GigaBytes' THEN 'Data processing charges'
+		  END AS pricing_unit,
+		  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+		  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+		FROM 
+		  ${table_name}
+		WHERE
+		  ${date_filter}
+		  AND product_group = 'AWSTransitGateway' 
+		  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+		GROUP BY
+		  bill_payer_account_id, 
+		  line_item_usage_account_id,
+		  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
+		  line_item_resource_id,
+		  product_location,
+		  product_attachment_type,
+		  pricing_unit
+		ORDER BY
+		  sum_line_item_unblended_cost DESC,
+		  month_line_item_usage_start_date,
+		  sum_line_item_usage_amount,
+		  product_attachment_type;
+```
+
+{{% /expand%}}
+
 
 #### Helpful Links
 [Data Transfer Costs Explained](https://github.com/open-guides/og-aws#aws-data-transfer-costs)
@@ -69,36 +252,481 @@ Besides deleting idle NATGWs you should also consider the following tips:
 
 [Back to Table of Contents](#table-of-contents)
 
-### Amazon WorkSpaces - Auto Stop
+
+### Amazon EBS Volumes Modernize gp2 to gp3
 
 #### Cost Optimization Technique
-AutoStop Workspaces are cost effective when used for several hours per day. If AutoStop Workspaces run for more than 80 hrs per month it is more cost effective to switch to AlwaysOn mode. This query shows AutoStop Workspaces which ran more that 80 hrs in previous month. If the usage pattern for these Workspaces is the same month over month it's possible to optimize cost by switching to AlwaysOn mode. For example, Windows PowerPro (8 vCPU, 32GB RAM) bundle in eu-west-1 runs for 400 hrs per month. In AutoStop mode it costs $612/month ($8.00/month + 400 * $1.53/hour) while if used in AlwaysOn mode it would cost $141/month.
+This query will display cost and usage of general purpose Elastic Block Storage Volumes and provide the estimated cost savings for modernizing a gp2 volume to gp3  These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query assumes you would provision the max iops and throughput based on the volume size, but not all resources will require the max amount and should be validated by the resource owner. 
 
-#### Link to Query
-[Amazon WorkSpaces - Auto Stop](../end_user_computing/#amazon-workspaces---auto-stop)
+{{% notice tip %}}
+If you are running this for all accounts in a large organization we recommend running the query below first to confirm export size is not over ~1M rows. If the count shown in the query is greater than 1M you will want to filter to groupings of accounts or feed this query into a BI tool such as QuickSight 
+{{% /notice %}}
 
+{{%expand "Click here - to expand the query" %}}
+```tsql
+	select count (distinct line_item_resource_id) 
+     FROM ${table_name}
+     WHERE 
+		line_item_product_code = 'AmazonEC2') 
+		AND line_item_line_item_type = 'Usage' 
+		AND bill_payer_account_id <> ''
+		AND line_item_usage_account_id <> ''
+		AND (CAST("concat"("year", '-', "month", '-01') AS date) = ("date_trunc"('month', current_date) - INTERVAL  '1' MONTH))
+		AND line_item_usage_type LIKE '%gp%'
+		AND line_item_usage_type LIKE '%EBS%'  
+```
+{{% /expand%}}
+
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/amazon-ebs-volumes-modernize-gp2-to-gp3.sql)
+
+```tsql
+		-- NOTE: If running this at a payer account level with millions of volumes we recommend filtering to specific accounts in line 21
+		WITH 
+		-- Step 1: Filter CUR to return all gp EC2 EBS storage usage data
+		ebs_all AS (
+			 SELECT
+			   bill_billing_period_start_date
+			 , line_item_usage_start_date
+			 , bill_payer_account_id
+			 , line_item_usage_account_id
+			 , line_item_resource_id 
+			 , product_volume_api_name
+			 , line_item_usage_type
+			 , pricing_unit
+			 , line_item_unblended_cost
+			 , line_item_usage_amount
+			 FROM
+				  ${table_name}
+			 WHERE (line_item_product_code = 'AmazonEC2') AND (line_item_line_item_type = 'Usage') 
+			   AND bill_payer_account_id <> ''
+			   AND line_item_usage_account_id <> ''	   
+			   AND (CAST("concat"("year", '-', "month", '-01') AS date) = ("date_trunc"('month', current_date) - INTERVAL  '1' MONTH))
+			   AND line_item_usage_type LIKE '%gp%'
+			   AND line_item_usage_type LIKE '%EBS%' 
+
+		),
+		-- Step 2: Pivot table so gp cost and usage into separate columns
+		ebs_spend AS (
+			 SELECT
+			   bill_billing_period_start_date AS billing_period
+			 , date_trunc('day',line_item_usage_start_date) AS usage_date
+			 , bill_payer_account_id AS payer_account_id
+			 , line_item_usage_account_id AS linked_account_id
+			 , line_item_resource_id AS resource_id
+			 , product_volume_api_name AS volume_api_name
+			 , SUM (CASE
+					   WHEN (pricing_unit = 'GB-Mo' AND  line_item_usage_type LIKE '%EBS:VolumeUsage%')
+					   THEN  line_item_usage_amount ELSE 0 END) "usage_storage_gb_mo"
+			 , SUM (CASE
+				  WHEN (pricing_unit = 'IOPS-Mo' AND  line_item_usage_type LIKE '%IOPS%') THEN line_item_usage_amount 
+				  ELSE 0 END) "usage_iops_mo"
+			 , SUM (CASE WHEN (pricing_unit = 'GiBps-mo' AND  line_item_usage_type LIKE '%Throughput%') THEN  line_item_usage_amount ELSE 0 END) "usage_throughput_gibps_mo"
+			 , SUM (CASE WHEN (pricing_unit = 'GB-Mo' AND  line_item_usage_type LIKE '%EBS:VolumeUsage%') THEN  (line_item_unblended_cost) ELSE 0 END) "cost_storage_gb_mo"
+			 , SUM (CASE WHEN (pricing_unit = 'IOPS-Mo' AND  line_item_usage_type LIKE '%IOPS%') THEN  (line_item_unblended_cost) ELSE 0 END) "cost_iops_mo"
+			 , SUM (CASE WHEN (pricing_unit = 'GiBps-mo' AND  line_item_usage_type LIKE '%Throughput%') THEN  (line_item_unblended_cost) ELSE 0 END) "cost_throughput_gibps_mo"
+			 FROM
+				  ebs_all
+			 GROUP BY 1, 2, 3, 4, 5,6
+		),
+		-- Step 3: Return avg daily volumes
+		volume_average AS (
+			SELECT 
+			 bill_billing_period_start_date
+			,date_trunc('day',line_item_usage_start_date) AS usage_date
+			, line_item_usage_account_id
+			, count(distinct line_item_resource_id) "daily_resource_count"
+			FROM ebs_all
+			GROUP BY 1,2,3 
+		),
+		volume_count AS (
+			SELECT 
+			 bill_billing_period_start_date
+			, line_item_usage_account_id
+			, count(distinct line_item_resource_id) "total_resource_count"
+			FROM ebs_all
+			GROUP BY 1,2	
+		),
+		ebs_spend_with_unit_cost AS (
+			 SELECT
+			   *
+			 , cost_storage_gb_mo/usage_storage_gb_mo AS "current_unit_cost"
+			 , CASE
+				  WHEN usage_storage_gb_mo <= 150 THEN 'under 150GB-Mo'
+				  WHEN usage_storage_gb_mo > 150 AND usage_storage_gb_mo <= 1000 THEN 'between 150-1000GB-Mo' 
+				  ELSE 'over 1000GB-Mo' 
+			   END AS storage_summary
+			 , CASE
+				  WHEN volume_api_name <> 'gp2' THEN 0
+				  WHEN usage_storage_gb_mo*3 < 3000 THEN 3000 - 3000
+				  WHEN usage_storage_gb_mo*3 > 16000 THEN 16000 - 3000
+				  ELSE usage_storage_gb_mo*3 - 3000
+			   END AS usage_added_iops_mo
+			 , CASE
+				  WHEN volume_api_name <> 'gp2' THEN 0
+				  WHEN usage_storage_gb_mo <= 150 THEN 0 
+				  ELSE 125
+			   END AS usage_added_throughput_gibps_mo
+			 , cost_storage_gb_mo + cost_iops_mo + cost_throughput_gibps_mo AS ebs_gp_all_cost
+			 , CASE
+				  WHEN volume_api_name = 'gp2' THEN  (cost_iops_mo + cost_throughput_gibps_mo + cost_storage_gb_mo)
+				  ELSE 0
+			   END "ebs_gp2_cost"
+			 , CASE
+				  WHEN volume_api_name = 'gp3' THEN  (cost_iops_mo + cost_throughput_gibps_mo + cost_storage_gb_mo)
+				  ELSE 0
+			   END "ebs_gp3_cost"
+			 , CASE
+				  WHEN volume_api_name = 'gp2' THEN cost_storage_gb_mo*0.8/usage_storage_gb_mo
+				  ELSE 0
+			   END AS "estimated_gp3_unit_cost"
+			 FROM
+				  ebs_spend
+			LEFT JOIN volume_average ON volume_average.line_item_usage_account_id = linked_account_id and volume_average.bill_billing_period_start_date = billing_period
+		 )
+
+		SELECT
+		  billing_period
+		, payer_account_id
+		, linked_account_id
+		, resource_id
+		, volume_api_name
+		, usage_storage_gb_mo
+		, usage_iops_mo
+		, usage_throughput_gibps_mo
+		, storage_summary
+		, usage_added_iops_mo
+		, usage_added_throughput_gibps_mo
+		, ebs_gp_all_cost
+		, ebs_gp2_cost
+		, ebs_gp3_cost
+		/* Calculate cost for gp2 gp3 estimate using the following
+			  - Storage always 20% cheaper
+			  - Additional iops per iops-mo is 6% of the cost of 1 gp3 GB-mo
+			  - Additional throughput per gibps-mo is 50% of the cost of 1 gp3 GB-mo */
+		, CASE 
+			 /*ignore non gp2' */
+			 WHEN volume_api_name = 'gp2' THEN ebs_gp2_cost
+				  - (cost_storage_gb_mo*0.8 
+					   + estimated_gp3_unit_cost * 0.5 * usage_added_throughput_gibps_mo
+					   + estimated_gp3_unit_cost * 0.06 * usage_added_iops_mo)
+			 ELSE 0
+			 END AS ebs_gp3_potential_savings
+		, avg(volume_average.daily_resource_count) daily_volumes
+		, max(volume_count.total_resource_count) total_resource_count
+		FROM 
+		  ebs_spend_with_unit_cost 
+			LEFT JOIN volume_average ON volume_average.line_item_usage_account_id = linked_account_id and volume_average.bill_billing_period_start_date = billing_period
+				LEFT JOIN volume_count ON volume_count.line_item_usage_account_id = linked_account_id and volume_count.bill_billing_period_start_date = billing_period
+		GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+```
+
+{{% /expand%}}
 #### Helpful Links
-Please refer to the AWS Solution, [Amazon WorkSpaces Cost Optimizer](https://aws.amazon.com/solutions/implementations/amazon-workspaces-cost-optimizer/).  This solution analyzes all of your Amazon WorkSpaces usage data and automatically converts the WorkSpace to the most cost-effective billing option (hourly or monthly), depending on your individual usage. This solution also helps you monitor your WorkSpace usage and optimize costs.  This automates the manual process of running the above query and adjusting your WorkSpaces configuration.  
-
-{{< email_button category_text="Cost Optimization" service_text="Amazon WorkSpaces - Auto Stop" query_text="Amazon WorkSpaces - Auto Stop query 1" button_text="Help & Feedback" >}}
-
-[Back to Table of Contents](#table-of-contents)
-
-### Amazon EBS Volumes Upgrade gp2 to gp3
-
-#### Cost Optimization Technique
-This query will display cost and usage of Elastic Block Storage Volumes that are type gp3. These resources returned by this query could be considered for upgrade to gp3 as with up to 20% cost savings, gp3 volumes help you achieve more control over your provisioned IOPS, giving the ability to provision storage with your unique applications in mind. This query uses 0.088 gp3 pricing please check the pricing page to confirm you are using the correct pricing for your applicable region. 
-
-#### Link to Query
-[Amazon EBS Volumes Upgrade gp2 to gp3](../storage/#amazon-ebs-volumes-upgrade-gp2-to-gp3)
-
-#### Helpful Links
+* [Migrate your Amazon EBS volumes from gp2 to gp3 and save up to 20% on costs](https://aws.amazon.com/blogs/storage/migrate-your-amazon-ebs-volumes-from-gp2-to-gp3-and-save-up-to-20-on-costs/)
 * [gp2 to gp3 conversion blog discussion](https://aws.amazon.com/blogs/aws-cost-management/finding-savings-from-2020-reinvent-announcements/)
 * [EBS Volume Modifications](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/requesting-ebs-volume-modifications.html)
 
-{{< email_button category_text="Cost Optimization" service_text="Elastic Block Storage gp2 upgrade to up3" query_text="Elastic Block Storage gp2 upgrade to gp3 query 1" button_text="Help & Feedback" >}}
+
+{{< email_button category_text="Cost Optimization" service_text="Elastic Block Storage gp2 modernize to gp3" query_text="Elastic Block Storage gp2 modernize to gp3 query 1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### Amazon EBS Snapshot Trends
+
+#### Cost Optimization Technique
+This query looks across your EC2 EBS Snapshots to identify all snapshots that still exist today with their previous month spend. It then provides the start date which is the first billing period the snapshot appeared in your CUR and groups them so you can see if they are over 6 months old. Snapshots over 6 months old should be tagged to keep or cleaned up.  
+
+#### Copy Query
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/amazon-ebs-snapshot-trends.sql)
+
+{{%expand "Click here - to expand the query" %}}
+
+```tsql
+		-- Step 1: Filter CUR to return all ebs ec2 snapshot usage data
+		WITH snapshot_usage_all_time AS (
+			SELECT
+			  year
+			, month
+			, bill_billing_period_start_date AS billing_period
+			, bill_payer_account_id AS payer_account_id
+			, line_item_usage_account_id AS linked_account_id
+			, line_item_resource_id AS resource_id
+			, sum(line_item_usage_amount) AS usage_quantity
+			, sum(line_item_unblended_cost) AS unblended_cost
+			, sum(pricing_public_on_demand_cost) AS public_cost 
+			FROM ${table_name}
+			WHERE bill_payer_account_id <> ''
+			  AND line_item_resource_id <> ''
+			  AND line_item_line_item_type LIKE '%Usage%'
+			  AND line_item_product_code = 'AmazonEC2' 
+			  AND line_item_usage_type LIKE '%EBS:Snapshot%'
+			GROUP BY 1, 2, 3, 4, 5,6 
+		),	
+		-- Step 2: Return most recent billing_period and the first billing_period
+		request_dates AS (
+			SELECT
+			  resource_id AS request_dates_resource_id
+			, max(billing_period) AS current_billing_period
+			, min(billing_period) AS start_date	
+			FROM snapshot_usage_all_time
+			GROUP BY 1
+		)	
+		(
+		-- Step 3: Pivot table so looking at previous month filtered for only snapshots still available in the current month
+			SELECT
+			  billing_period
+			, request_dates.current_billing_period
+			, request_dates.start_date
+			, payer_account_id
+			, linked_account_id
+			, resource_id
+			, sum(usage_quantity) AS usage_quantity	
+			, sum(unblended_cost) AS ebs_snapshot_cost
+			, sum(public_cost) AS public_cost
+			, sum((CASE WHEN (request_dates.start_date > (request_dates.current_billing_period - INTERVAL  '6' MONTH)) THEN unblended_cost ELSE 0 END)) "ebs_snapshots_under_6mo_cost"
+			, sum((CASE WHEN (request_dates.start_date <= (request_dates.current_billing_period - INTERVAL  '6' MONTH)) THEN unblended_cost ELSE 0 END))"ebs_snapshots_over_6mo_cost"
+		 /*No savings estimate since it uses uses 100% of snapshot cost for snapshots over 6mos as savings estimate*/ 
+			FROM snapshot_usage_all_time snapshot
+			LEFT JOIN request_dates ON request_dates.request_dates_resource_id = snapshot.resource_id
+			WHERE CAST(concat(snapshot.year, '-', snapshot.month, '-01') AS date) = (date_trunc('month', current_date) - INTERVAL '1' MONTH) AND request_dates.current_billing_period = (date_trunc('month', current_date) - INTERVAL '0' MONTH)
+			GROUP BY 1,2,3,4,5,6
+		)
+```
+
+{{% /expand%}}
+
+#### Helpful Links
+* [Amazon Data Lifecycle Manager](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html)
+
+
+{{< email_button category_text="Cost Optimization" service_text="EC2 EBS Snapshot Trends" query_text="EC2 EBS Snapshot Trends" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### Amazon S3 Bucket Trends and Optimizations 
+
+#### Cost Optimization Technique
+This query breaks out the previous month's costs and usage of each S3 bucket by storage class and includes and separates out identifiers that can be used to identify trends or potential areas to look into for optimization across Lifecycle Policies or Intelligent Tiering. The query uses this information to provide a variety of checks for each S3 bucket including:
+
+{{%expand "Click here - to see Bucket Trend Checks" %}}
+- **S3_all_cost:** Provides a way to find your top spend buckets  
+- **bucket_name_keywords:** Checks if buckets contain any of the keywords for use of storage classes beyond S3 Standard and returns the first keyword that matches. If no keywords match it will show 'other'
+- **last_requests:** Looks back across all billing periods available in your CUR to identify the last usage date that there was any usage for 'PutObject', 'PutObjectForRepl', 'GetObject', and 'CopyObject'. If this field is blank it means there have been no requests across these operations since your CUR was created and the last requests is older than your CUR's first billing_period. 
+- **s3_standard_underutilized_optimization:** Checks if your bucket is only using S3 standard storage and has had no active requests ('PutObject', 'PutObjectForRepl', 'GetObject', and 'CopyObject') in the last 6 months. If it meets this criteria it will show 'Potential Underutilized S3 Bucket - S3 Standard only with no active requests in the last 6mo' and this will be something your teams should validate for moving to another storage class or deleting completely. 
+- **s3_standard_infrequent_access_optimization:** Checks if any buckets with one of the keywords is using only S3 Standard Storage. If it is it will flag it as 'Potential Infrequent Access Optimization - S3 Standard only with Keywords' 
+- **s3_replication_bucket_optimization:** Checks if a bucket has any usage across s3 transition, put object, get_object, and s3_copy. If it it doesn't it returns 'Potential Replication Bucket Optimization - Active Non-Replication Requests or Transitions''
+- **s3_standard_only_bucket:** Checks if a bucket is only using S3 standard	
+- **s3_archive_in_use:** Checks if a bucket is using any Archive storage (Glacier or Glacier Deep Archive)
+- **Active Requests:** Checks if a bucket has any active requests last month across 'PutObject', 'PutObjectForRepl', 'GetObject', and 'CopyObject'.
+- **s3_inventory_in_use:** Checks if the bucket is using S3 Inventory
+- **s3_analytics_in_use:** Checks if the bucket is using S3 Analytics
+- **s3_int_in_use:** Checks if the bucket is using Intelligent Tiering
+- **s3_standard_storage_potential_savings:** Provides an estimated savings if you were to move your S3 Standard Storage to Infrequent Access. This query uses 30% as an assumption, but you can adjust to your preferred value. 
+{{% /expand%}}
+
+
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/s3-bucket-trends-and-optimizations.sql)
+
+```tsql
+		-- Step 1: Enter S3 standard savings savings assumption. Default is set to 0.3 for 30% savings 
+		WITH inputs AS (
+			SELECT * FROM (VALUES (0.3)) t(s3_standard_savings)),
+			
+		-- Step 2: Filter CUR to return all storage usage data
+		s3_usage_all_time AS (
+			SELECT
+			  year
+			, month
+			, bill_billing_period_start_date AS billing_period
+			, line_item_usage_start_date AS usage_start_date
+			, bill_payer_account_id AS payer_account_id
+			, line_item_usage_account_id AS linked_account_id
+			, line_item_resource_id AS resource_id
+			, line_item_operation AS operation
+			, CASE 
+				WHEN line_item_usage_type LIKE '%EarlyDelete%' THEN 'EarlyDelete' ELSE line_item_operation END "early_delete_adjusted_operation" 
+			, CASE
+				  WHEN line_item_product_code = 'AmazonGlacier' AND line_item_operation = 'Storage' THEN 'Amazon Glacier'
+				  WHEN line_item_product_code = 'AmazonS3' AND product_volume_type LIKE '%Intelligent-Tiering%' AND line_item_operation LIKE '%IntelligentTieringFAStorage%' THEN 'Intelligent-Tiering Frequent Access'
+				  WHEN line_item_product_code = 'AmazonS3' AND product_volume_type LIKE '%Intelligent-Tiering%' AND line_item_operation LIKE '%IntelligentTieringIAStorage%' THEN 'Intelligent-Tiering Infrequent Access'
+				  ELSE product_volume_type
+			  END AS storage_class_type
+			, sum(line_item_usage_amount) AS usage_quantity
+			, sum(line_item_unblended_cost) unblended_cost
+			, sum(CASE
+				WHEN (pricing_unit = 'GB-Mo' AND line_item_operation like '%Storage%' AND product_volume_type LIKE '%Glacier Deep Archive%') THEN line_item_unblended_cost
+				WHEN (pricing_unit = 'GB-Mo' AND line_item_operation like '%Storage%') THEN line_item_unblended_cost 
+				ELSE 0
+				END) AS s3_all_storage_cost
+			, sum(CASE WHEN (pricing_unit = 'GB-Mo' AND line_item_operation like '%Storage%') THEN line_item_usage_amount ELSE 0 END) AS s3_all_storage_usage_quantity
+			FROM  ${table_name}, inputs
+			WHERE bill_payer_account_id <> ''
+			  AND line_item_resource_id <> ''
+			  AND line_item_line_item_type LIKE '%Usage%'
+			  AND (line_item_product_code LIKE '%AmazonGlacier%' OR line_item_product_code LIKE '%AmazonS3%')
+			GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+		),
+
+		-- Step 3: Return most recent request date to understand if bucket is in active use
+		most_recent_request AS (
+			SELECT DISTINCT
+			  resource_id
+			, max(usage_start_date) AS last_request_date
+			FROM s3_usage_all_time
+			WHERE usage_quantity > 0
+			  AND operation IN ('PutObject', 'PutObjectForRepl', 'GetObject', 'CopyObject')
+			GROUP BY 1
+		),
+
+		-- Step 4: Pivot table so storage classes into separate columns and filter for current month
+		previous_month_usage AS (
+
+			SELECT DISTINCT
+			  billing_period
+			, date_trunc('month', usage_start_date) AS "usage_date"
+			, payer_account_id
+			, linked_account_id
+			, s3.resource_id
+			, most_recent_request.last_request_date AS "last_requests"
+			, sum(unblended_cost) AS s3_all_cost
+			-- All Storage
+			, sum(s3_all_storage_cost) AS s3_all_storage_cost
+			, sum(s3_all_storage_usage_quantity) AS "s3_all_storage_usage_quantity"
+			-- S3 Standard
+			, sum(CASE WHEN storage_class_type = 'Standard' THEN s3_all_storage_cost ELSE 0 END) AS "s3_standard_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'Standard' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_standard_storage_usage_quantity"
+			-- S3 Standard Infrequent Access
+			, sum(CASE WHEN storage_class_type = 'Standard - Infrequent Access' THEN s3_all_storage_cost ELSE 0 END) AS "s3_standard-ia_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'Standard - Infrequent Access' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_standard-ia_storage_usage_quantity"
+		   -- S3 One Zone Infrequent Access
+			, sum(CASE WHEN storage_class_type = 'One Zone - Infrequent Access' THEN s3_all_storage_cost ELSE 0 END) AS "s3_onezone-ia_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'One Zone - Infrequent Access' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_onezone-ia_storage_usage_quantity"
+		   -- S3 Reduced Redundancy
+			, sum(CASE WHEN storage_class_type = 'Reduced Redundancy' THEN s3_all_storage_cost ELSE 0 END) AS "s3_reduced_redundancy_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'Reduced Redundancy' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_reduced_redundancy_storage_usage_quantity"
+		   -- S3 Intelligent-Tiering
+			, sum(CASE WHEN storage_class_type LIKE '%Intelligent-Tiering%' THEN s3_all_storage_cost ELSE 0 END) AS "s3_intelligent-tiering_storage_cost"
+			, sum(CASE WHEN storage_class_type LIKE '%Intelligent-Tiering%' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_intelligent-tiering_storage_usage_quantity"
+		   -- Glacier
+			, sum(CASE WHEN storage_class_type = 'Amazon Glacier' THEN s3_all_storage_cost ELSE 0 END) AS "s3_glacier_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'Amazon Glacier' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_glacier_storage_usage_quantity"
+		   -- Glacier Deep Archive
+			, sum(CASE WHEN storage_class_type = 'Glacier Deep Archive' THEN s3_all_storage_cost ELSE 0 END) AS "s3_glacier_deep_archive_storage_storage_cost"
+			, sum(CASE WHEN storage_class_type = 'Glacier Deep Archive' THEN s3_all_storage_usage_quantity ELSE 0 END) AS "s3_glacier_deep_archive_storage_usage_quantity"
+		   -- Operations
+			, sum(CASE WHEN operation = 'PutObject' THEN usage_quantity ELSE 0 END) AS "s3_put_object_usage_quantity"
+			, sum(CASE WHEN operation = 'PutObjectForRepl' THEN usage_quantity ELSE 0 END) AS "s3_put_object_replication_usage_quantity"
+			, sum(CASE WHEN operation = 'GetObject' THEN usage_quantity ELSE 0 END) AS "s3_get_object_usage_quantity"
+			, sum(CASE WHEN operation = 'CopyObject' THEN usage_quantity ELSE 0 END) AS "s3_copy_object_usage_quantity"
+			, sum(CASE WHEN operation = 'Inventory' THEN usage_quantity ELSE 0 END) AS "s3_inventory_usage_quantity"
+			, sum(CASE WHEN operation = 'S3.STORAGE_CLASS_ANALYSIS.OBJECT' THEN usage_quantity ELSE 0 END) AS "s3_analytics_usage_quantity"
+			,sum(CASE WHEN operation like '%Transition%' THEN usage_quantity ELSE 0 END) AS "s3_transition_usage_quantity"
+			,sum(CASE WHEN early_delete_adjusted_operation = 'EarlyDelete' THEN unblended_cost
+			ELSE 0 END) AS "s3_early_delete_cost"	
+			FROM s3_usage_all_time s3
+			LEFT JOIN most_recent_request ON most_recent_request.resource_id = s3.resource_id
+			WHERE CAST(concat(s3.year, '-', s3.month, '-01') AS date) = (date_trunc('month', current_date) - INTERVAL '1' MONTH)
+			GROUP BY 1, 2, 3, 4, 5, 6
+		)
+
+		-- Step 5: Apply KPI logic - Add or Adjust bucket name keywords based on your requirements 
+		SELECT DISTINCT
+		  billing_period
+		, usage_date
+		, payer_account_id
+		, linked_account_id
+		, resource_id
+		, CASE 
+			WHEN resource_id LIKE '%backup%' THEN 'backup'
+			WHEN resource_id LIKE '%archive%' THEN 'archive'
+			WHEN resource_id LIKE '%historical%' THEN 'historical'	
+			WHEN resource_id LIKE '%log%' THEN 'log' 
+			WHEN resource_id LIKE '%compliance%' THEN 'compliance'
+			ELSE 'Other'
+		  END AS bucket_name_keywords
+		, last_requests
+		, CASE
+			WHEN last_requests >= (usage_date - INTERVAL  '6' MONTH) THEN 'No Action'
+			WHEN s3_all_storage_cost = s3_standard_storage_cost THEN 'Potential Underutilized S3 Bucket - S3 Standard only with no active requests in the last 6mo'
+			ELSE 'No Action'
+		  END AS s3_standard_underutilized_optimization
+		, CASE
+			WHEN s3_all_storage_cost <> s3_standard_storage_cost THEN 'No Action'
+			WHEN resource_id LIKE '%backup%' THEN 'Potential Infrequent Access Optimization - S3 Standard only with Keywords'
+			WHEN resource_id LIKE '%archive%' THEN 'Potential Infrequent Access Optimization - S3 Standard only with Keywords'
+			WHEN resource_id LIKE '%historical%' THEN 'Potential Infrequent Access Optimization - S3 Standard only with Keywords'
+			WHEN resource_id LIKE '%log%' THEN 'Potential Infrequent Access Optimization - S3 Standard only with Keywords'
+			WHEN resource_id LIKE '%compliance%' THEN 'Potential Infrequent Access Optimization - S3 Standard only with Keywords'
+			ELSE 'No Action' 
+		  END AS s3_standard_infrequent_access_optimization
+		, CASE
+			WHEN (s3_transition_usage_quantity + s3_put_object_usage_quantity + s3_get_object_usage_quantity + s3_copy_object_usage_quantity) > 0 THEN 'No Action'
+			WHEN s3_put_object_replication_usage_quantity > 0 THEN 'Potential Replication Bucket Optimization - No Active Requests or Transitions'
+			ELSE 'No Action' 
+		  END AS s3_replication_bucket_optimization  
+		, CASE
+			WHEN s3_all_storage_cost = s3_standard_storage_cost THEN 'S3 Standard Only - Potential Opportunity for Lifecycle Policies or Intelligent Tiering'
+			ELSE 'Not S3 Standard Only' 
+		  END AS s3_standard_only_bucket
+		, CASE
+			WHEN s3_glacier_deep_archive_storage_storage_cost > 0 THEN 'Archive Storage Classes in Use'
+			WHEN s3_glacier_storage_cost > 0 THEN 'Archive Storage Classes in Use'
+			ELSE 'No Archive Storage Usage' 
+		  END AS s3_archive_in_use 
+		, CASE
+			WHEN s3_put_object_usage_quantity + s3_put_object_replication_usage_quantity + s3_get_object_usage_quantity + s3_copy_object_usage_quantity = 0 THEN 'No Active Requests'
+			ELSE 'Active Requests'
+		  END AS request_summary
+		, CASE WHEN s3_inventory_usage_quantity > 0 THEN 'S3 Inventory - In Use' ELSE 'S3 Inventory - Not in Use' END AS s3_inventory_in_use
+		, CASE WHEN s3_analytics_usage_quantity > 0 THEN 'S3 Analytics - In Use' ELSE 'S3 Analytics - Not in Use' END AS s3_analytics_in_use
+		, CASE WHEN "s3_intelligent-tiering_storage_usage_quantity" > 0 THEN 'S3 INT - In Use' ELSE 'S3 INT - Not in Use' END AS s3_int_in_use
+		, s3_standard_storage_cost * s3_standard_savings AS s3_standard_storage_potential_savings 
+		, s3_all_cost
+		, s3_all_storage_cost
+		, s3_all_storage_usage_quantity
+		, s3_standard_storage_cost
+		, s3_standard_storage_usage_quantity
+		, "s3_standard-ia_storage_cost"
+		, "s3_standard-ia_storage_usage_quantity"
+		, "s3_onezone-ia_storage_cost"
+		, "s3_onezone-ia_storage_usage_quantity"
+		, s3_reduced_redundancy_storage_cost
+		, s3_reduced_redundancy_storage_usage_quantity
+		, s3_glacier_deep_archive_storage_storage_cost
+		, s3_glacier_deep_archive_storage_usage_quantity
+		, "s3_intelligent-tiering_storage_cost"
+		, "s3_intelligent-tiering_storage_usage_quantity"
+		, s3_glacier_storage_cost
+		, s3_glacier_storage_usage_quantity
+		, s3_early_delete_cost  
+		, s3_transition_usage_quantity
+		, s3_put_object_usage_quantity
+		, s3_put_object_replication_usage_quantity
+		, s3_get_object_usage_quantity
+		, s3_copy_object_usage_quantity
+		FROM previous_month_usage, inputs
+```
+
+{{% /expand%}}
+
+
+#### Helpful Links
+* [5 Ways to reduce data storage costs using Amazon S3 Storage Lens](https://aws.amazon.com/blogs/storage/5-ways-to-reduce-costs-using-amazon-s3-storage-lens/)
+* [Amazon S3 cost optimization for predictable and dynamic access patterns](https://aws.amazon.com/blogs/storage/amazon-s3-cost-optimization-for-predictable-and-dynamic-access-patterns/)
+* [Simplify your data lifecycle by using object tags with Amazon S3 Lifecycle](https://aws.amazon.com/blogs/storage/simplify-your-data-lifecycle-by-using-object-tags-with-amazon-s3-lifecycle/)
+
+
+{{< email_button category_text="Cost Optimization" service_text="Amazon S3 Bucket Trends" query_text="Amazon S3 Bucket Trends" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
