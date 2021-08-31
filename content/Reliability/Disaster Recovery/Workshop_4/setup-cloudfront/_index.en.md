@@ -30,7 +30,7 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 {{< img cf-4.png >}}
 
-1.5 Under **Default Cache Behaivor Settings**, set the **Cache Policy** to `Managed-CachingDisabled` before continuing.
+1.5 Under **Default Cache Behaivor Settings**, set the **Cache Policy** to `Managed-CachingDisabled` disable CloudFront caching.  Typically you would select the default value for production workloads.
 
 {{% notice warning %}}
 The next module **Disaster!** will not work without modifying this value.
