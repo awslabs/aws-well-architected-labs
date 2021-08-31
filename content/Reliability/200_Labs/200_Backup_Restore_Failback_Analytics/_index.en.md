@@ -9,6 +9,13 @@ hidden = false
 pre = ""
 +++
 
+## Authors
+
+* Randy DeFauw, Principal Solutions Architect 
+* Neelam Koshiya, Senior Solutions Architect
+
+## Introduction
+
 In this module, you will go through the Backup and Restore DR strategy for an analytics workload. To learn more about this DR strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-ii-backup-and-restore-with-rapid-recovery/).
 
 The workload includes streaming ingest and batch processing.
