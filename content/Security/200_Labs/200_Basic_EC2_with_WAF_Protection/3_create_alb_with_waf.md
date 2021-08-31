@@ -46,7 +46,7 @@ ACL we previously created and test.
 
 ### 3.2 Configure Application Load Balancer with WAF
 
-1. Open the AWS WAF console at https://console.aws.amazon.com/waf/.
+1. Open the AWS WAF console at https://console.aws.amazon.com/wafv2/home?region=global#/webacls.
 2. In the navigation pane, choose Web ACLs.
 
 ![waf-alb-1](/Security/200_Basic_EC2_with_WAF_Protection/Images/waf-alb-1.png)
