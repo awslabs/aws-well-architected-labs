@@ -30,6 +30,14 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 {{< img cf-4.png >}}
 
+1.5 Under **Default Cache Behaivor Settings**, set the **Cache Policy** to `Managed-CachingDisabled` before continuing.
+
+{{% notice warning %}}
+The next module **Disaster!** will not work without modifying this value.
+{{% /notice %}}
+
+{{< img cf-15.png >}}
+
 ## Configure the Distribution Settings
 
 2.1 Scroll to the page's bottom and click the **Create Distribution** button.  Enable the checkbox next to the new distribution, then click the **Distribution Settings** button.
