@@ -19,4 +19,6 @@ We have four things to consider:
 
 We'll tackle these one at a time.  We'll start by restoring the DynamoDB table from the backup region to the primary region, as that requires deleting and recreating the table.  Then we'll switch the endpoint to redirect traffic to the primary region, and take care of any data in S3.
 
+{{% children /%}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="recreatedynamodb" />}}
