@@ -16,7 +16,7 @@ pre = ""
 
 ## Introduction
 
-In this module, you will go through the Backup and Restore DR strategy for an analytics workload. To learn more about this DR strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-ii-backup-and-restore-with-rapid-recovery/).
+In this module, you will go through the Backup and Restore Disaster Recovery (DR) strategy for an analytics workload. To learn more about this DR strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-ii-backup-and-restore-with-rapid-recovery/).
 
 The workload includes streaming ingest and batch processing.
 
