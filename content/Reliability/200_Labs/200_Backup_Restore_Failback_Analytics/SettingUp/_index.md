@@ -10,4 +10,6 @@ pre: "<b>2. </b>"
 
 In this chapter, we'll deploy our Big Data workload.  We'll deploy necessary infrastructure into the backup region, deploy the workload in the primary region, and then test that the workload is functioning correctly.
 
+{{% children %}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="backupregion" />}}
