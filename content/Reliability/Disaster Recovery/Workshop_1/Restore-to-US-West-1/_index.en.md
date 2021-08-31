@@ -244,8 +244,6 @@ export Database=dr-lab-restore.XXXXXXXXXXXX.us-west-1.rds.amazonaws.com
 export DB_ENDPOINT=dr-lab-restore.XXXXXXXXXXXX.us-west-1.rds.amazonaws.com
 export AWS_DEFAULT_REGION=us-west-1
 export UI_RANDOM_NAME=backupandrestore-uibucket-<XXXXXXXXXXXX>-dr
-export ASSETS_RANDOM_NAME=backupandrestore-assetbucket-<XXXXXXXXXXXX>-dr
-export PATH=$PATH:/home/ec2-user/gradle-4.6.3/bin
 ```
 
 4.6 Run the following two commands to copy application files to the DR S3 buckets:
