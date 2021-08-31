@@ -27,3 +27,5 @@ This workshop takes about two hours to complete. Prior experience with the AWS C
 
 ## Steps:
 {{% children /%}}
+
+{{< prev_next_button link_next_url="./gettingstarted/" button_next_text="Start Lab" first_step="true" />}}
