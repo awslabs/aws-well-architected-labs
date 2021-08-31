@@ -70,7 +70,7 @@ Also note your AWS account number.  You find this in the console or by running `
 
 #### Managed Prefix List
 
-You will have to create two prefix list in each region, one in the backup region and another one in the primary region. 
+You will have to create two prefix lists, one in the backup region and another one in the primary region.  These prefix lists should include the network range (CIDR) that you want to use for ingress traffic, such as your corporate network.
 
 For instructions on creating prefix list, refer to the [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/managed-prefix-lists.html).
 
