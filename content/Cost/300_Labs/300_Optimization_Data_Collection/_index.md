@@ -21,13 +21,25 @@ This lab is in **BETA** and your feedback is key to developing the lab. Please s
 
 
 ## Introduction
+Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, IoT, security and enterprise applications. These services help organizations move faster, lower IT costs, and scale.
+
+There are many ways to cost-optimize on AWS. Relevant data for identfying cost-optimization opportunities can come from different services and you may need to make apple-to-apples comparisons before making a business decision. 
+
 This lab is designed to **enable you to collect utilization data from different services to help you identify optimization opportunities**. This lab provides pre made modules to automate data collection and show you how to pull your additional data sets on your own. The CloudFormation modules in this lab follow the structure of using an AWS Lambda function to extract the data, then this is placed into Amazon S3. From there, Amazon Athena is able to read this data using an AWS Glue Crawler to produce a table that can be utilized for optimization analysis and even joined with your AWS Cost & Usage Report (CUR) to enrich it. 
 
 The three main styles of data are:
 * Optimization and rightsizing recommendations 
 * Service Inventories  
 * Resource utilization metrics
- 
+
+The services you will learn to pull data from in this lab are:
+* Cost Explorer Rightsizing Recommendations
+* Inventory Collector
+* Trusted Advisor
+* Compute Optimizer Collector
+* ECS Chargeback Data
+* RDS Utilization Data
+
 ## Architecture 
 
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
