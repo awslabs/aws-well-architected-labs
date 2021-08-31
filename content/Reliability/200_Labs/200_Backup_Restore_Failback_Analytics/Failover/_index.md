@@ -10,4 +10,6 @@ pre: "<b>3. </b>"
 
 In this chapter, we'll test failing over to the backup region, assuming that our entire primary region is now unavailable.  Note that in reality you may need to failover if the primary region has experienced only a partial degradation of service.
 
+{{% children /%}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="backupinfra" />}}
