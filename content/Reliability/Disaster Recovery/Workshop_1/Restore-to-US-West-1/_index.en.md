@@ -288,7 +288,7 @@ Save file name: `config.json`
 
 4.11 Navigate to the **Objects** tab for the UI Bucket and click the **Upload** button. Follow the prompt to upload `config.json` to your S3 static website.
 
-{{< img FE-9.png >}}
+{{< img FE-10.png >}}
 
 4.12 Grant public access to the file by allowing **Everyone** Read permissions.
 
