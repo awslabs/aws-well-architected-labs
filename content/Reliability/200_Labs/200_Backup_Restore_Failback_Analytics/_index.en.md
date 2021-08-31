@@ -22,13 +22,13 @@ The workload includes streaming ingest and batch processing.
 
 ![Big Data Workload](/Reliability/200_Backup_Restore_Failback_Analytics/Images/backup-restore-analytics-workshop.png)
 
-In a nutshell, there are three primary data stores, S3, DynamoDB, and the Glue catalog.  The Glue catalog only receives new partitions as updates, and we use a Lambda function to create those when new partitions land in S3.  One S3 bucket is receiving streaming data, and another is receiving the output of a nightly batch processing job.  Both buckets use S3 CRR to replicate to the backup region.  We use DynamoDB point-in-time-recovery (PITR) to handle the database.
+In a nutshell, there are three primary data stores, [Amazon Simple Storage Service (Amazon S3)](http://aws.amazon.com/s3), [Amazon DynamoDB](http://aws.amazon.com/dynamodb), and the [AWS Glue](https://aws.amazon.com/glue) catalog.  The AWS Glue catalog only receives new partitions as updates, and we use a [AWS Lambda](http://aws.amazon.com/lambda) function to create those when new partitions land in S3.  One S3 bucket is receiving streaming data, and another is receiving the output of a nightly batch processing job.  Both buckets use S3 CRR to replicate to the backup region.  We use DynamoDB point-in-time-recovery (PITR) to handle the database.
 
-In terms of RTO, the failover process involves detecting the failure, deploying the rest of the infrastructure in the backup region, and switching the Global Accelerator endpoint for data producers.  That entire process can be done in as little as 10 minutes once you make the decision to fail over.
+In terms of RTO, the failover process involves detecting the failure, deploying the rest of the infrastructure in the backup region, and switching the [AWS Global Accelerator](http://aws.amazon.com/global-accelerator) endpoint for data producers.  That entire process can be done in as little as 10 minutes once you make the decision to fail over.
 
 For RPO, you will lose whatever data your producers were trying to send to the endpoint from the time it became unhealthy to the time the failover completed.  You may also lose some data in the original region that was not successfully replicated.  
 
-To configure the infrastructure and deploy the application, we will use CloudFormation. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
+To configure the infrastructure and deploy the application, we will use [AWS CloudFormation](http://aws.amazon.com/cloudformation). CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
 This workshop takes about two hours to complete. Prior experience with the AWS Console and Linux command line are helpful but not required.  You should also have basic familiarity with batch and stream processing architectures on AWS.
 
