@@ -39,9 +39,9 @@ After you have your account identified, pick a primary AWS region to work in, su
 
 #### CLI Profiles 
 
-Set up two CLI profiles, one for the primary region and one for the backup region.  We'll refer to these as `PRIMARY` and `BACKUP` going forward.
+Set up two CLI profiles, one for the primary region and one for the backup region.  We'll name these `PRIMARY` and `BACKUP`.
 
-In this example `PRIMARY=us-west-2` and `BACKUP=us-east-2`.  Choose whichever regions you prefer.
+In this example `PRIMARY` uses `us-west-2` and `BACKUP` uses `us-east-2`.  Choose whichever regions you prefer.
 
 ```
 $ aws configure --profile BACKUP
