@@ -73,9 +73,23 @@ Also note your AWS account number.  You find this in the console or by running `
 
 #### Managed Prefix List
 
-You will have to create two prefix lists, one in the backup region and another one in the primary region.  These prefix lists should include the network range (CIDR) that you want to use for ingress traffic, such as your corporate network.
+You will have to create two prefix lists, one in the backup region and another one in the primary region.  These prefix lists should include the network range (CIDR) that you want to use for ingress traffic, such as your corporate network.  If you do not know the CIDR to use and you are working in an AWS-provided account, you can set this to `0.0.0.0/0` to allow inbound traffic from anywhere, but be aware that this is an insecure configuration and should not be used in your own accounts without a security review.
 
-For instructions on creating prefix list, refer to the [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/managed-prefix-lists.html).
+For instructions on creating prefix list, refer to the [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/managed-prefix-lists.html).  From the command line, you could run:
+
+    export AWS_PROFILE=PRIMARY
+    aws ec2 create-managed-prefix-list \
+        --prefix-list-name <choose a name> \
+        --entries Cidr=<enter your CIDR>,Description=CorpNetworkPrimary \
+        --max-entries 10 \
+        --address-family IPv4 
+    export AWS_PROFILE=BACKUP
+    aws ec2 create-managed-prefix-list \
+        --prefix-list-name <choose a name> \
+        --entries Cidr=<enter your CIDR>,Description=CorpNetworkBackup \
+        --max-entries 10 \
+        --address-family IPv4 
+
 
 {{< prev_next_button link_prev_url="../" link_next_url="../architecture" />}}
 
