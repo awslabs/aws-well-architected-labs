@@ -30,7 +30,9 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 {{< img cf-4.png >}}
 
-1.5 Under **Default Cache Behaivor Settings**, set the **Cache Policy** to `Managed-CachingDisabled` disable CloudFront caching.  Typically you would select the default value for production workloads.
+1.5 Under **Default Cache Behaivor Settings**, set the **Cache Policy** to **Managed-CachingDisabled** disable CloudFront caching.  In production, customers typically want to use the default value **Managed-CachingOptimized**.  
+
+One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior mask the mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html).
 
 {{% notice warning %}}
 The next module **Disaster!**, will not work without modifying this value.
