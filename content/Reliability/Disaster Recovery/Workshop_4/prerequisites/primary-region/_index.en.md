@@ -6,7 +6,7 @@ weight = 4
 
 ## Deploying the Amazon CloudFormation Template
 
-1.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **US East (N. Virginia) us-east-1 using the Region Selector in the upper right corner
+1.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **US East (N. Virginia) us-east-1** using the Region Selector in the upper right corner
 
 1.2 Navigate to **CloudFormation** in the console.
 
