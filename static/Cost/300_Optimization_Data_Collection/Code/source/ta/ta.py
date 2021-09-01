@@ -36,7 +36,7 @@ def main(account_id):
                 mytime =check_result['result']['timestamp']
                 epoch = datetime.datetime(1970, 1, 1)
                 epoch_time = int((datetime.datetime.strptime(mytime, p) - epoch).total_seconds())      
-                base.update({'Timestamp':check_result['result']['timestamp'], 'Epoch_Timestamp':epoch_time})
+                base.update({'DateTime':check_result['result']['timestamp'], 'Timestamp':epoch_time})
 
                 for resource in check_result["result"]["flaggedResources"]: 
                     meta_result = dict(zip(meta, resource["metadata"]))
