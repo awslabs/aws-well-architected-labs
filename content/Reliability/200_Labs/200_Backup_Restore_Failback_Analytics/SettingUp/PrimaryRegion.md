@@ -23,7 +23,7 @@ Download the following files:
 
 Review these files and adjust any of the input parameters to suit your needs.
 
-In your working directory, place `create.sh` in a directory called `scripts` and place the file `workload.yaml` in a directory called `cfn`.  Place `tweetmaker.py` in a directory called `src` and `compation.py` in a directory called `glue`.
+In your working directory, place `create.sh` in a directory called `scripts` and place the file `workload.yaml` in a directory called `cfn`.  Place `tweetmaker.py` in a directory called `src` and `compaction.py` in a directory called `glue`.
 
 ### Deploy stack
 
