@@ -26,7 +26,7 @@ Apply the following best practices when using tags:
 
 >**Note** It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
 
->**Important** **Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
+>**Important**: "**Patch Group**" is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
 
 ## Management Tools: CloudFormation
 

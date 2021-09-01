@@ -22,3 +22,4 @@ If you are running this at a group event - please log in via Event Engine. The e
 
 1.4 Uncheck "Block all public access," including any child selections. Click "Save Changes." You will be required to confirm the changes.
 {{< img S3-public-3.png >}}
+{{< img S3-public-4.png >}}

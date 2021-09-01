@@ -191,7 +191,7 @@ Please make a note of the **Endpoint** as we will need it later.
 
 {{< img RS-45.png >}}
 
-4.4 Once logged in test database connectivity. Use the database endpoint we saved in step 4.8 above.
+4.4 Once logged in test database connectivity. Use the database endpoint we saved in step 3.8 above.
 
 ```sh
 sudo mysql -u UniShopAppV1User -h dr-lab-restore.XXXXXXXXXXXX.us-west-1.rds.amazonaws.com -P 3306 -pUniShopAppV1Password
@@ -228,12 +228,12 @@ MySQL [(none)]> SHOW DATABASES;
 MySQL [(none)]>
 ```
 
-4.5 Edit the /home/ec2-user/unishoprun.sh file. Change the database endpoint to the one we saved in step 4.8 above. Change the regions to us-west-1. Finally, change the bucket names to the DR buckets we used in step 2.4 above.
+4.5 Edit the /home/ec2-user/unishopcfg.sh file. Change the database endpoint to the one we saved in step 4.8 above. Change the regions to us-west-1. Finally, change the bucket names to the DR buckets we used in step 2.4 above.
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
 ```sh
-sudo vi /home/ec2-user/unishoprun.sh
+sudo vi /home/ec2-user/unishopcfg.sh
 ```
 
 **Tip:** Use the full DNS name of the database.
@@ -244,8 +244,6 @@ export Database=dr-lab-restore.XXXXXXXXXXXX.us-west-1.rds.amazonaws.com
 export DB_ENDPOINT=dr-lab-restore.XXXXXXXXXXXX.us-west-1.rds.amazonaws.com
 export AWS_DEFAULT_REGION=us-west-1
 export UI_RANDOM_NAME=backupandrestore-uibucket-<XXXXXXXXXXXX>-dr
-export ASSETS_RANDOM_NAME=backupandrestore-assetbucket-<XXXXXXXXXXXX>-dr
-export PATH=$PATH:/home/ec2-user/gradle-4.6.3/bin
 ```
 
 4.6 Run the following two commands to copy application files to the DR S3 buckets:
@@ -253,7 +251,7 @@ export PATH=$PATH:/home/ec2-user/gradle-4.6.3/bin
 **Note:**  If our S3 buckets contained application data then it would be necessary to schedule recurring backups to meet the target RPO. This could be done with [Cross Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html). Since our buckets contains no data, only code, we will restore the contents from the EC2 instance.
 
 ```sh
-aws s3 cp /home/ec2-user/UniShopUI s3://backupandrestore-uibucket-XXXXXXXXXXXX-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+sudo aws s3 cp /home/ec2-user/UniShopUI s3://backupandrestore-uibucket-XXXXXXXXXXXX-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 ```
 
 4.7 Reboot the EC2 instance.
@@ -290,7 +288,7 @@ Save file name: `config.json`
 
 4.11 Navigate to the **Objects** tab for the UI Bucket and click the **Upload** button. Follow the prompt to upload `config.json` to your S3 static website.
 
-{{< img FE-9.png >}}
+{{< img FE-10.png >}}
 
 4.12 Grant public access to the file by allowing **Everyone** Read permissions.
 
