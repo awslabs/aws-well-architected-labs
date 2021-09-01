@@ -20,7 +20,9 @@ Once the data lands in a Kinesis stream, the batch processing flow picks up with
 
 ## Disaster Recovery
 
-Looking at our architecture, we have three primary data stores, S3, DynamoDB, and the Glue catalog.  For S3, we use cross-region replication to backup data to a DR region.  For DynamodB, we use the point-in-time-recovery (PITR) feature of DynamoDB, and AWS Backup for taking an hourly backup. 
+Looking at our architecture, we have three primary data stores, S3, DynamoDB, and the Glue catalog.  For S3, we use cross-region replication to backup data to a DR region.  
+
+For DynamodB, we use the point-in-time-recovery (PITR) feature of DynamoDB, and AWS Backup for taking an hourly backup.  During a failover, a Lambda function automatically restores the most recent PITR snapshot into a DynamoDB table in the backup region.  Note that we could choose to restore from the PITR snapshot on a regular schedule instead of during failover.
 
 For the Glue catalog, we use a Lambda function to register new partitions in the Glue catalog.  The function triggers when objects are created in S3.  It looks at the object prefix to understand the partition structure, and creates a new partition in the Glue catalog if necessary.  Because the function is running in the primary region and the backup region, we do not need to take extra steps to replicate the Glue catalog.  The function in the backup region will create new partitions as S3 cross-region replication copies objects into the bucket in the backup region.
 
