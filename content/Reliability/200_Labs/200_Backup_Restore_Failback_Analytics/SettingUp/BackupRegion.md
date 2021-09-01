@@ -6,7 +6,7 @@ weight: 10
 
 ## Backup Region
 
-In this section we'll deploy necessary infrastructure to the backup region to support data backup and workload failover.
+In this section we'll deploy necessary infrastructure to the backup region to support data backup and workload failover.  
 
 ### S3 bucket for templates
 
