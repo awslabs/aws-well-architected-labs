@@ -36,7 +36,14 @@ Now create the stack in the backup region:
     chmod +x ./scripts/create-dr.sh
     ./scripts/create-dr.sh <template bucket> <template prefix> <stack name> <REGION> <backup bucket name> <inventory bucket name> 
 
-Note that we pass in the primary region as the fourth argument.  This argument is the region that the template bucket is in, and we created the template bucket in the primary region.
+The input arguments are:
+
+* `template bucket` - the name of the S3 bucket we created earlier in this section.  We use it to store the CloudFormation templates and other data.
+* `template prefix` - An S3 prefix we append to the CloudFormation template file names.  We use `cfn` as a convention.
+* `stack name` - The name of the CloudFormation stack.  You can pick any suitable name.
+* `REGION` - The primary region.  This argument is the region that the template bucket is in, and we created the template bucket in the primary region.
+* `backup bucket name` - The name for the S3 bucket used for data replication.  You can pick any globally unique name that satisfies the S3 bucket naming rules.
+* `inventory bucket name` - The name for the S3 bucket used for S3 inventory.  You can pick any globally unique name that satisfies the S3 bucket naming rules.
 
 For example:
 
