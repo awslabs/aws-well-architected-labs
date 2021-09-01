@@ -26,7 +26,7 @@ In a nutshell, there are three primary data stores, [Amazon Simple Storage Servi
 
 In terms of RTO, the failover process involves detecting the failure, deploying the rest of the infrastructure in the backup region, and switching the [AWS Global Accelerator](http://aws.amazon.com/global-accelerator) endpoint for data producers.  That entire process can be done in as little as 10 minutes once you make the decision to fail over.
 
-For RPO, you will lose whatever data your producers were trying to send to the endpoint from the time it became unhealthy to the time the failover completed.  You may also lose some data in the original region that was not successfully replicated.  
+For RPO, you will lose whatever data your producers were trying to send to the endpoint from the time it became unhealthy to the time the failover completed.  You may also lose some data in the original region that was not successfully replicated by S3 cross-region replication or by DynamoDB point-in-time recovery.  
 
 To configure the infrastructure and deploy the application, we will use [AWS CloudFormation](http://aws.amazon.com/cloudformation). CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
