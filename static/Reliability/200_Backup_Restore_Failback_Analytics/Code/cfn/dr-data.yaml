@@ -24,7 +24,7 @@ Metadata:
           - BackupBucketName
           - InventoryBucketName
       - Label:
-          default: Consumer Configuration
+          default: AWS Glue Catalog Configuration
         Parameters:
           - DbName
           - DbTableRaw
