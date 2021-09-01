@@ -24,7 +24,7 @@ def main(account_id):
 
             if case["category"] == "cost_optimizing":
                 c_id = case["id"]
-                CheckName = {"name": case["name"], "CheckId": c_id}
+                CheckName = {"CheckName": case["name"], "CheckId": c_id}
 
                 check_result = support_client.describe_trusted_advisor_check_result(
                     checkId=c_id, language="en"
