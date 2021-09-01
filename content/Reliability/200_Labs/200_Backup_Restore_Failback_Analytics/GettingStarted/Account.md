@@ -66,7 +66,10 @@ For more details refer to the [CLI documentation](https://docs.aws.amazon.com/cl
 This workshop should work in `us-east-1`, `us-east-2`, or `us-west-2`.  You can likely use it in other regions but may have to make some minor adjustments to the CloudFormation templates.
 
 #### Account Number
-Also note your AWS account number.  You find this in the console or by running `aws sts get-caller-identity` on the CLI.  We'll refer to this as `ACCOUNT` going forward.
+Also note your AWS account number.  You find this in the console or by running `aws sts get-caller-identity` on the CLI.  We'll refer to this as `ACCOUNT` going forward.  You can store this in an environment variable for convenience:
+
+    export AWS_PROFILE=PRIMARY
+    export ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 
 #### Managed Prefix List
 
