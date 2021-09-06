@@ -17,6 +17,7 @@ $RECYCLE.BIN/
 .pyc
 dist/
 .vscode/
+*.code-workspace
 
 # https://github.com/awslabs/aws-well-architected-labs/issues/92
 !docs/stylesheets/

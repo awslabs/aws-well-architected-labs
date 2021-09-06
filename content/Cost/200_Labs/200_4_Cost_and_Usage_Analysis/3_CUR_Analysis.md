@@ -271,7 +271,7 @@ You can use this in two ways:
 {{% notice tip %}}
 You have now setup and completed basic analysis of a Cost and Usage Report (CUR). 
 - [Visit the Well-Architected Cloud Intelligence Dashboards for ways to create a CUR QuickSight Dashboard using a ready to customize template]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}})
-- [Visit the Well-Architected CUR Query Library for queries to help you get started with analyzing your spend]({{< ref "/Cost/300_Labs/300_cur_queries" >}})
+- [Visit the Well-Architected CUR Query Library for queries to help you get started with analyzing your spend]({{< ref "/Cost/300_Labs/300_CUR_Queries" >}})
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../2_setup_athena/" link_next_url="../4_tear_down/" />}}
