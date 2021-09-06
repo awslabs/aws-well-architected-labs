@@ -21,4 +21,4 @@ We'll tackle these one at a time.  We'll start by restoring the DynamoDB table f
 
 {{% children /%}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="recreatedynamodb" />}}
+{{< prev_next_button link_prev_url="../failover/verify/" link_next_url="recreatedynamodb" />}}

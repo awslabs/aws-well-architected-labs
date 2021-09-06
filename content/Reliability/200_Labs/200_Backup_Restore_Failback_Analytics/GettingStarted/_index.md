@@ -10,6 +10,6 @@ pre: "<b>1. </b>"
 
 In this chapter, we'll cover the prerequisites you'll need for the rest of the workshop.
 
-{{% children %}}
+{{% children /%}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="account" />}}

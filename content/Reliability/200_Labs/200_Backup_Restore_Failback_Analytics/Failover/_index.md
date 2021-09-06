@@ -12,4 +12,4 @@ In this chapter, we'll test failing over to the backup region, assuming that our
 
 {{% children /%}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="backupinfra" />}}
+{{< prev_next_button link_prev_url="../settingup/testworkload/" link_next_url="backupinfra" />}}

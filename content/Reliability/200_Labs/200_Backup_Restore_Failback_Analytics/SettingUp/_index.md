@@ -12,6 +12,6 @@ In this chapter, we'll deploy our Big Data workload.  We'll deploy necessary inf
 
 For the sake of convenience, we create the data replication targets in the backup region first.  
 
-{{% children %}}
+{{% children /%}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="backupregion" />}}
+{{< prev_next_button link_prev_url="../gettingstarted/architecture/" link_next_url="backupregion" />}}
