@@ -10,4 +10,4 @@ pre = "<b>5. </b>"
 
 Congratulations for finishing this workshop!  Continue on to learn how to clean up after using this workshop. 
 
-{{< prev_next_button link_prev_url="../" link_next_url="cleanup" />}}
+{{< prev_next_button link_prev_url="../failback/resync/" link_next_url="cleanup" />}}
