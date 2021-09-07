@@ -1,3 +1,4 @@
+import pdb
 import boto3
 import json
 import datetime
@@ -29,9 +30,6 @@ def main(account_id):
                 check_result = support_client.describe_trusted_advisor_check_result(
                     checkId=c_id, language="en"
                 )
-                
-                
-
                 p = '%Y-%m-%dT%H:%M:%SZ'
                 mytime =check_result['result']['timestamp']
                 epoch = datetime.datetime(1970, 1, 1)

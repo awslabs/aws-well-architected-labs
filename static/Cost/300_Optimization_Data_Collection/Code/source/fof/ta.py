@@ -1,3 +1,4 @@
+import pdb
 import boto3
 import json
 import datetime
@@ -24,14 +25,17 @@ def main(account_id):
 
             if case["category"] == "cost_optimizing":
                 c_id = case["id"]
-                CheckName = {"name": case["name"], "CheckId": c_id}
+                CheckName = {"CheckName": case["name"], "CheckId": c_id}
 
                 check_result = support_client.describe_trusted_advisor_check_result(
                     checkId=c_id, language="en"
                 )
-                
-                base.update({'Timestamp':check_result['result']['timestamp']})
-                
+                p = '%Y-%m-%dT%H:%M:%SZ'
+                mytime =check_result['result']['timestamp']
+                epoch = datetime.datetime(1970, 1, 1)
+                epoch_time = int((datetime.datetime.strptime(mytime, p) - epoch).total_seconds())      
+                base.update({'DateTime':check_result['result']['timestamp'], 'Timestamp':epoch_time})
+
                 for resource in check_result["result"]["flaggedResources"]: 
                     meta_result = dict(zip(meta, resource["metadata"]))
                     del resource['metadata']
@@ -73,3 +77,8 @@ def assume_role(account_id, service, region):
 if __name__ == "__main__":
     accountid = os.environ['ACCOUNTID']
     main(accountid)
+
+
+
+
+
