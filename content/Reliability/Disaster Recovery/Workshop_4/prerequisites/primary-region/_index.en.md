@@ -58,24 +58,16 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 
 {{< img dd-3.png >}}
 
-2.4 Under the **Global Tables** table, click the **Enable streams** button.
+2.4 Under the **Global Tables** table, click the **Create replica** button.
 
 {{< img dd-4.png >}}
 
-2.5 On the **Manage Stream** dialog, click the **Enable** button.
+2.5 Select the **US West (N. California)** region under Available replication Region, and then click the **Create replica** button.
 
 {{< img dd-5.png >}}
 
-2.5 Next, click the **Add region** button.
+2.5 Wait for the **US WEST (N. California)** region's status to be **Active**.
 
 {{< img dd-6.png >}}
-
-2.6 On the **Add replica to global table** dialog, select the **US West (N. California)** region, and then click the **Create replica** button.
-
-{{< img dd-7.png >}}
-
-2.7 Wait for the **US EAST (N. Virginia)** and **US WEST (N. California)** region's status to be **Active**.
-
-{{< img dd-8.png >}}
 
 ## Congragulations!  Your Primary Region and DynamoDB Global Tables are working!
