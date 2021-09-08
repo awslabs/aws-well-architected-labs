@@ -42,7 +42,7 @@ We will now simulate a regional service event affecting the S3 static website in
 
 2.3 Click into the **active-primary-uibucket-xxxx** bucket.
 
-{{< img d-5.png >}}
+{{< img c-9.png >}}
 
 2.4 Under the **Permissions** tab, click the **Edit** button to modify the **Block public access (bucket settings)** configuration.
 

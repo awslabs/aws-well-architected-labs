@@ -51,7 +51,7 @@ We would create a [backup plan](https://docs.aws.amazon.com/aws-backup/latest/de
 
 {{< img BK-10.png >}}
 
-2.2 Navigate to the AWS backup **Dashboard** and click the **Create an on-demand backup** button.
+2.2 Navigate to the AWS backup **Protected resources** page and click the **Create an on-demand backup** button.
 
 {{< img BK-22.png >}}
 
