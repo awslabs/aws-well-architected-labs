@@ -145,4 +145,5 @@ Repeat the AMI deletion in US-East-1.
 {{< img CL-37.png >}}
 
 {{< prev_next_button link_prev_url="../restore-to-us-west-1/" title="Congratulations!" final_step="true" >}}
+This lab specifically helps you with the best practices covered in question [REL 13  How do you plan for disaster recovery (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
 {{< /prev_next_button >}}
