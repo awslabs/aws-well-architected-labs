@@ -60,4 +60,58 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 
 2.5 Scroll down to the page's bottom and click the **Continue** button. Finally click the **Modify Cluster** button.
 
-## Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
+## Configure the Passive-Secondary Website
+
+3.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
+
+{{% notice note %}}
+You will need the Amazon CloudFormation output parameter values from the `Passive-Secondary` stack to complete this section.
+{{% /notice %}}
+
+{{< img sr-6.png >}}
+
+3.2 Using your favorite editor, create a new file named `config.json` file.  Initialize the document to the template provided below.  Next, set the **host** property equal to the **APIGURL** output value from the `Passive-Secondary` CloudFormation stack.  Remove the trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-west-1`.
+
+```json
+{
+    "host": "{{Replace with your APIGURL copied from above}}",
+    "region": "us-west-1"
+}
+```
+
+Your final `config.json` should look similar to this example.
+
+```json
+{
+    "host": "https://xxxxxxxx.execute-api.us-west-1.amazonaws.com/Production",
+    "region": "us-west-1"
+}
+```
+
+### Upload the configuration to Amazon S3
+
+4.1 Navigate to **S3** in the console.
+
+{{< img c-8.png >}}
+
+4.2 Find the bucket that begins with **passive-secondary-uibucket-**.  It will have a random suffix from the Amazon CloudFormation deployment.
+
+{{< img c-9.png >}}
+
+4.3 Next, click into the bucket and then click the **Upload** button.
+
+{{< img c-11.png >}}
+
+4.4 Click the **Add Files** button and specify the `config.json` file from the previous step.
+
+{{< img c-12.png >}}
+
+4.5 Scroll down to **Permissions Section** section. Select the **Specify Individual ACL permissions** radio button.  Next, check the **Read** checkbox next to **Everyone (public access)** grantee.
+
+{{< img c-13.png >}}
+
+4.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Then click the **Upload** button to continue.
+
+{{< img c-14.png >}}
+
+## Congratulations! Your Secondary Region is Working and Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!

@@ -29,6 +29,7 @@ To connect the applicaiton to the newly promoted Aurora Database in the us-west-
 1.6 Change the current directory to the ec2-user's home folder.
 
 ```sh
+sudo su ec2-user
 cd /home/ec2-user/
 ```
 

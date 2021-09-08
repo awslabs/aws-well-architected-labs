@@ -62,4 +62,58 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 
 {{< img dd-6.png >}}
 
+## Configure the Active-Primary Website
+
+3.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+
+{{% notice note %}}
+You will need the Amazon CloudFormation output parameter values from the `Active-Primary` stack to complete this section.
+{{% /notice %}}
+
+{{< img pr-6.png >}}
+
+3.2 Using your favorite editor, create a new file named `config.json` file.  Initialize the document to the template provided below.  Next, set the **host** property equal to the **APIGURL** output value from the `Active-Primary` CloudFormation stack.  Remove the trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-east-1`.
+
+```json
+{
+    "host": "{{Replace with your APIGURL copied from above}}",
+    "region": "us-east-1"
+}
+```
+
+Your final `config.json` should look similar to this example.
+
+```json
+{
+    "host": "https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Production",
+    "region": "us-east-1"
+}
+```
+
+### Upload the configuration to Amazon S3
+
+4.1 Navigate to **S3** in the console.
+
+{{< img c-8.png >}}
+
+4.2 Find the bucket that begins with **active-primary-uibucket-**.  It will have a random suffix from the Amazon CloudFormation deployment.
+
+{{< img c-9.png >}}
+
+4.3 Next, click into the bucket and then click the **Upload** button.
+
+{{< img c-11.png >}}
+
+4.4 Click the **Add Files** button and specify the `config.json` file from the previous step.
+
+{{< img c-12.png >}}
+
+4.5 Scroll down to **Permissions Section** section. Select the **Specify Individual ACL permissions** radio button.  Next, check the **Read** checkbox next to **Everyone (public access)** grantee.
+
+{{< img c-13.png >}}
+
+4.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Then click the **Upload** button to continue.
+
+{{< img c-14.png >}}
+
 ## Congragulations!  Your Primary Region and DynamoDB Global Tables are working!
