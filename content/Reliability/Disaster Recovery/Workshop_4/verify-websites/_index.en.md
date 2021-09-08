@@ -31,3 +31,6 @@ You will need the Amazon CloudFormation output parameter values from the `Passiv
 2.2 Verify the website header says `The Unicorn Shop - us-west-1`.
 
 {{< img vw-6.png >}}
+
+{{< prev_next_button link_prev_url="../prerequisites/secondary-region/" link_next_url="../setup-cloudfront/" />}}
+

@@ -112,3 +112,5 @@ Leave the rest default and click **Create Bucket**.
 {{< img BK-32.png >}}
 
 ## We are ready for a disaster!
+
+{{< prev_next_button link_prev_url="../us-east-1-deployment/" link_next_url="../restore-to-us-west-1/" />}}

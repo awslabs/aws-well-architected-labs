@@ -19,3 +19,5 @@ Afterward, we will verify the DR scenario. Meeting our [RPO / RTO](https://docs.
 This workshop takes about 60 minutes to complete. Prior experieince with the AWS Console and Linux command line are helpful but not required.
 
 {{< img arch-2.png >}}
+
+{{< prev_next_button link_next_url="./prerequisites/" button_next_text="Start Lab" first_step="true" />}}

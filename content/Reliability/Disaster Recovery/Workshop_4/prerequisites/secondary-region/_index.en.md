@@ -115,3 +115,5 @@ Your final `config.json` should look similar to this example.
 {{< img c-14.png >}}
 
 ## Congratulations! Your Secondary Region is Working and Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
+
+{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../verify-websites/" />}}

@@ -87,3 +87,6 @@ The next module **Disaster!**, will not work without modifying this value.
 {{< img cf-14.png >}}
 
 ## Congragulations!  Your CloudFront distribution is working!
+
+{{< prev_next_button link_prev_url="../verify-websites/" link_next_url="../disaster/" />}}
+

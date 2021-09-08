@@ -117,3 +117,6 @@ Your final `config.json` should look similar to this example.
 {{< img c-14.png >}}
 
 ## Congragulations!  Your Primary Region and DynamoDB Global Tables are working!
+
+{{< prev_next_button link_prev_url="../" link_next_url="../secondary-region/" />}}
+

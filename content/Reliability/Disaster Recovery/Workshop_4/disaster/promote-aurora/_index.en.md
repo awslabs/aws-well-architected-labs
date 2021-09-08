@@ -31,3 +31,6 @@ We are going to promote Aurora secondary database.
 1.6 Grab a snack! It takes few minutes for the operation to complete.
 
 ## Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+
+{{< prev_next_button link_prev_url="../" link_next_url="../ec2-instance/" />}}
+

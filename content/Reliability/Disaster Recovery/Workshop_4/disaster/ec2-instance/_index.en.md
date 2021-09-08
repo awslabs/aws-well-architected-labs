@@ -59,3 +59,6 @@ java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.l
 {{< img am-7.png >}}
 
 ## Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
+
+{{< prev_next_button link_prev_url="../promote-aurora/" link_next_url="../../verify-failover/" />}}
+
