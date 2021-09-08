@@ -6,37 +6,27 @@ weight = 6
 
 ## Deploying the Amazon CloudFormation Template
 
-1.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
+1.1 Create the application in the Secondary region (us-west-1) by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=Passive-Secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/HotStandby.yaml).
 
-{{< img sr-1.png >}}
+1.2  Specify stack details.
 
-1.2 Navigate to **CloudFormation** in the console. Click on the **Create stack** dropdown and select the **With new resources (standard)** link.
-
-{{< img sr-2.png >}}
-
-1.3 Next, select **Upload a template file** and click the **Choose file** button to upload `HotStandby.yaml`, the CloudFormation Template downloaded during the **Primary (Active) Region Prerequisite** section.  Finally, click the **Next** button to continue.
-
-{{% notice note %}}
-Reusable templates are one of the great things about Amazon CloudForamtion and Infrastructure As Code (IaC).
-{{% /notice %}}
-
-Click **Next**
-
-{{< img sr-3.png >}}
-
-1.4  On the Specify stack details page, set the **Stack Name** to `Passive-Secondary`.  Next, set the **IsPrimary** parameter to `no`.  Finally, click the **Next** button to continue.
+Change the **IsPrimary** parameter to value `no`.
 
 {{% notice info %}}
-Leave the **LatestAmiId** parameter as the default value.
+**Leave LatestAmiId as the default values**
 {{% /notice %}}
+
+1.3 Click **Next** to continue.
 
 {{< img sr-4.png >}}
 
-1.5 Scroll to the bottom of  the Configure stack options page.  Then check the **I acknowledge that AWS CloudFormation might create IAM resources with custom names** checkbox.  Finally, click the **Create stack** button to deploy the website.
+1.4 Leave the **Configure stack options** page defaults and click **Next** to continue.
+
+1.5 Scroll to the bottom of the page and click the **checkbox** to acknowledge IAM role creation, then click **Create stack**.
 
 {{< img sr-5.png >}}
 
-1.8 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need them to complete future steps.
+1.6 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
 
 {{< img sr-6.png >}}
 

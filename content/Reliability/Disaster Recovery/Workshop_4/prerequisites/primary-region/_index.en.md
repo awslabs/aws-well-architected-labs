@@ -6,35 +6,27 @@ weight = 4
 
 ## Deploying the Amazon CloudFormation Template
 
-1.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **US East (N. Virginia) us-east-1** using the Region Selector in the upper right corner
+1.1 Deploy the application to the primary region (us-east-1) by launching this [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Active-Primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/HotStandby.yaml).
 
-1.2 Navigate to **CloudFormation** in the console.
-
-{{< img pr-1.png >}}
-
-1.3 Click the **Create stack** button.
-
-{{< img pr-2.png >}}
-
-1.4 Download the CloudFormation Template from this workshop.  Next, select **Upload a template file** and click the **Choose file** button to upload the file.  Finally, click the **Next** button to continue.
-
-{{%attachments style="green" /%}}
-
-{{< img pr-3.png >}}
-
-1.5  On the Specify stack details page, set the **Stack Name** to `Active-Primary`.  Next, set the **IsPrimary** parameter to `yes`.  Finally, click the **Next** button to continue.
+1.2  Specify the stack parameters.
 
 {{% notice info %}}
-Leave the **LatestAmiId** parameter as the default value.
+**Leave isPrimary and LatestAmiId as the default values**
 {{% /notice %}}
+
+1.3 Click **Next**
 
 {{< img pr-4.png >}}
 
-1.6 Scroll to the bottom of  the Configure stack options page.  Then check the **I acknowledge that AWS CloudFormation might create IAM resources with custom names** checkbox.  Finally, click the **Create stack** button to deploy the website.
+1.4 Leave Configure stack options page as all defaults
+
+1.5 Click **Next**
+
+1.6 Scroll to the bottom of the page, click the checkbox to acknowledge IAM role creation, and then click **Create stack**.
 
 {{< img pr-5.png >}}
 
-1.8 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need them to complete future steps.
+1.7 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
 
 {{< img pr-6.png >}}
 
