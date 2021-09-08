@@ -43,3 +43,6 @@ Click on the CloudFormation stack "Warm-Secondary". Fetch the website URL from t
 3.1 Log in to the application using your e-mail address from the previous step.
 
 3.2 1.Try adding a new item to the cart. The web app should increase the total cart items count shown at the top of the page.
+
+{{< prev_next_button link_prev_url="../prerequisites/enable-aurora-writefwd/" link_next_url="../failover/" />}}
+

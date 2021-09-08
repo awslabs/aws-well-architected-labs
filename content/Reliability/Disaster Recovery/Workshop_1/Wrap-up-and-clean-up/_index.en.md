@@ -143,3 +143,6 @@ Repeat the AMI deletion in US-East-1.
 6.4 Repeat the process for the remaining bucket.
 
 {{< img CL-37.png >}}
+
+{{< prev_next_button link_prev_url="../restore-to-us-west-1/" title="Congratulations!" final_step="true" >}}
+{{< /prev_next_button >}}

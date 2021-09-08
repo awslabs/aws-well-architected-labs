@@ -41,3 +41,5 @@ weight = 5
 Our application is now up and running in the primary region.
 
 {{< img FE-1.png >}}
+
+{{< prev_next_button link_prev_url="../prerequisites/" link_next_url="../backup-to-us-west-1/" />}}

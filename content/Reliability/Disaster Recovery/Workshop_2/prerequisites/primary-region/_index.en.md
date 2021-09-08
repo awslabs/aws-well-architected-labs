@@ -29,3 +29,6 @@ weight = 4
 {{% /notice %}}
 
 {{< img pr-6.png >}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../secondary-region/" />}}
+

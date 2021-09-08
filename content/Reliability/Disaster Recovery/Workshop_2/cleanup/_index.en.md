@@ -78,3 +78,6 @@ This step is required as we did manual promotion for the Aurora Database.
 4.3 Click **Delete stack** to confirm the deletion.
 
 {{< img cl-7.png >}}
+
+{{< prev_next_button link_prev_url="../verify-failover/" title="Congratulations!" final_step="true" >}}
+{{< /prev_next_button >}}

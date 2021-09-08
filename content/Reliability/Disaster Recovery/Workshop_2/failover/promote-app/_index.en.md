@@ -21,3 +21,6 @@ weight = 4
 1.5 Scroll to the bottom of the page and click the **checkbox** to acknowledge then click **Update stack**.
 
 {{< img da-5.png >}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="../promote-aurora/" />}}
+

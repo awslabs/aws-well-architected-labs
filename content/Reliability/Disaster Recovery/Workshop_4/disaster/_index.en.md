@@ -55,3 +55,6 @@ We will now simulate a regional service event affecting the S3 static website in
 {{% notice info %}}
 Your Amazon S3 bucket that hosts the Primary-Active website is now inaccessible.  When CloudFront attempts to route the user’s request to this instance, it will receive an HTTP 403 status error (Forbidden).  The Distribution will automatically handle this scenario by failing over to the Passive-Secondary instance.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../setup-cloudfront/" link_next_url="./promote-aurora/" />}}
+

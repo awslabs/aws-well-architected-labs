@@ -96,3 +96,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 3.7 Click **Delete stack** button to confirm the removal.
 
 {{< img cl-7.png >}}
+
+{{< prev_next_button link_prev_url="../verify-failover/" title="Congratulations!" final_step="true" >}}
+{{< /prev_next_button >}}
+

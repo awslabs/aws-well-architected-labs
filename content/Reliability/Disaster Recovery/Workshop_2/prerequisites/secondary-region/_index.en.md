@@ -30,3 +30,5 @@ weight = 5
 **Wait for the stack creation to complete**
 {{% /notice %}}
 {{< img sr-6.png >}}
+
+{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../verify-primary-website/" />}}
