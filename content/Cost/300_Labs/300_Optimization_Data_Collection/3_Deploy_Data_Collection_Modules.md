@@ -172,7 +172,7 @@ This Data will be partitioned by year, month, day.
         TrustedAdvisor:
           Type: AWS::CloudFormation::Stack
           Properties:
-                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
                 TimeoutInMinutes: 2
                 Parameters:
                   DestinationBucket: !Ref S3Bucket
