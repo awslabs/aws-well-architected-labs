@@ -411,6 +411,30 @@ This is partitioned by TBC.
 
 {{% /expand%}}
 
+
+{{%expand "AWS Organization Data Export" %}}
+
+## AWS Organization Data Export
+This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab.
+It is not partitioned.
+
+*   [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+        OrganizationData:
+          Type: AWS::CloudFormation::Stack
+          Properties:
+            TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+            TimeoutInMinutes: 2
+            Parameters:
+              DestinationBucket: !Ref S3Bucket
+              GlueRoleARN: !GetAtt GlueRole.Arn
+              ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+              Tags: "Env"
+
+* [Test your Lambda](#testing-your-deployment) 
+{{% /expand%}}
+
+
 ## How to Update your CloudFormation
 
 To add your selected modules from above please follow the steps specified in the module section. 

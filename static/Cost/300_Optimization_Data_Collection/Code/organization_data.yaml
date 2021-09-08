@@ -15,7 +15,7 @@ Parameters:
   DatabaseName:
     Type: String
     Description: Athena Database name where you table will be created
-    Default: managementcur
+    Default: optimization_data
   GlueRoleARN:
     Type: String
   Suffix:
