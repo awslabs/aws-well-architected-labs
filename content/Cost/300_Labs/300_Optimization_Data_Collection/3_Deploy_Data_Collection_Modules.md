@@ -398,7 +398,7 @@ This is partitioned by TBC.
         RDSMetricsStack:
           Type: AWS::CloudFormation::Stack
           Properties:
-            TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
+            TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
             TimeoutInMinutes: 2
             Parameters:
               DestinationBucket: !Ref S3Bucket
