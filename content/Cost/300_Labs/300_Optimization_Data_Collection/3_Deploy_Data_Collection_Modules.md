@@ -415,7 +415,7 @@ This is partitioned by TBC.
 {{%expand "AWS Organization Data Export" %}}
 
 ## AWS Organization Data Export
-This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab.
+This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**
 It is not partitioned.
 
 *   [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
