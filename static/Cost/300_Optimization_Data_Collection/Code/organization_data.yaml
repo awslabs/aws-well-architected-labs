@@ -52,6 +52,7 @@ Resources:
           #Author Stephanie Gooch 2020
           import argparse
           import boto3
+          import logging
           from botocore.exceptions import ClientError
           from botocore.client import Config
           import os
@@ -61,6 +62,15 @@ Resources:
           def myconverter(o):
               if isinstance(o, datetime.datetime):
                   return o.__str__()
+
+          def start_crawler(Crawler_Name):
+            glue_client = boto3.client("glue")
+            try:
+                glue_client.start_crawler(Name=Crawler_Name)
+                print(f"{Crawler_Name} has been started")
+            except Exception as e:
+                # Send some context about this error to Lambda Logs
+                logging.warning("%s" % e)
 
           def list_tags(client, resource_id):
               tags = []
@@ -95,6 +105,7 @@ Resources:
               with open('/tmp/acc-org.json', 'w') as f:
                   account_data(f, root_id, root_id, client)
               s3_upload('acc-org')
+              start_crawler(os.environ["CRAWLER"])
 
           def account_data(f, parent, parent_name, client):
               tags_check = os.environ["TAGS"]
@@ -170,6 +181,7 @@ Resources:
           BUCKET_NAME: !Ref DestinationBucket
           REGION: !Ref "AWS::Region"
           MANAGMENTARN: !Ref ManagementAccountRole
+          CRAWLER: !Ref OrgCrawler
   OrgCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -177,7 +189,7 @@ Resources:
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Schedule:
-        ScheduleExpression: "cron(0 8 ? * MON *)"
+        ScheduleExpression: !Ref Schedule
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/organisation-data/"
@@ -217,6 +229,10 @@ Resources:
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
                 Resource: "arn:aws:logs:*:*:*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
