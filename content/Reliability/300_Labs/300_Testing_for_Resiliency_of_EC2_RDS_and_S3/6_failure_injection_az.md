@@ -1,7 +1,7 @@
 ---
 title: "Test Resiliency Using Availability Zone (AZ) Failure Injection"
 menutitle: "AZ Failure Injection"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
 pre: "<b>6. </b>"
 weight: 6
@@ -90,4 +90,4 @@ This step is optional. To simulate the AZ returning to health do the following:
 
 * Note how the auto scaling redistributes the EC2 serves across the availability zones
 
-{{< prev_next_button link_prev_url="../5_failure_injection_rds" link_next_url="../7_failure_injection_optional/" />}}
+{{< prev_next_button link_prev_url="../5_failure_injection_rds" link_next_url="../7_failure_injection_app/" />}}

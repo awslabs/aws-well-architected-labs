@@ -2,7 +2,7 @@
 title: "Level 300: Testing for Resiliency of EC2, RDS, and AZ"
 menutitle: "Test Resiliency EC2, RDS, & AZ"
 description: "Use code to inject faults simulating EC2, RDS, and Availability Zone failures. These are used as part of Chaos Engineering to test workload resiliency"
-date: 2020-04-24T11:16:08-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
 weight: 2
 tags:
@@ -23,6 +23,7 @@ tags:
 * Rodney Lester, Senior Solutions Architect Manager, AWS Well-Architected
 * Adrian Hornsby, Principal Tech Evangelist, AWS
 * Seth Eliot, Principal Reliability Solutions Architect, AWS Well-Architected
+* Mahanth Jayadeva, Solutions Architect, AWS Well-Architected
 
 ## Introduction
 
@@ -44,12 +45,14 @@ The skills you learn will help you build resilient workloads in alignment with t
 * Learn how to implement resiliency using those tests
 * Learn how to think about what a failure will cause within your infrastructure
 * Learn how common AWS services can reduce mean time to recovery (MTTR)
+* Learn how resiliency testing can be performed using AWS Fault Injection Simulator (FIS)
 
 ## Prerequisites:
 
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to create Amazon Virtual Private Cloud(s) (VPCs), including subnets, security groups, internet gateways, NAT Gateways, Elastic IP Addresses, and route tables. The credentials must also be able to create the database subnet group needed for a Multi-AZ RDS instance. The credential will need permissions to create IAM Role, instance profiles, AWS Auto Scaling launch configurations, application load balancers, auto scaling group, and EC2 instances.
 * An IAM user or federated credentials into that account that has permissions to deploy the deployment automation, which consists of IAM service linked roles, AWS Lambda functions, and an AWS Step Functions state machine to execute the deployment.
+* An IAM user or federated credentials into that account that has permissions to create experiment templates and run experiments using FIS.
 
 ## Note:
 

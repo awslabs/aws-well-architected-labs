@@ -1,7 +1,7 @@
 ---
 title: "Deploy the Infrastructure and Application"
 menutitle: "Deploy Application"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
@@ -18,7 +18,7 @@ You will create a multi-tier architecture using AWS and run a simple service on 
 {{%expand "Click here for instructions to access your assigned AWS account:" %}} {{% common/Workshop_AWS_Account %}} {{% /expand%}}
 
 **If you are using your own AWS account**:
-{{%expand "Click here for instructions to use your own AWS account:" %}} 
+{{%expand "Click here for instructions to use your own AWS account:" %}}
 * Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
 * You will need the AWS credentials, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, of this IAM user for later use in this lab.
     * If you do not have this IAM user's credentials or you wish to create a new IAM user with needed permissions, follow the [instructions here to create them]({{< ref "Documentation/Self_AWS_Account.md" >}})

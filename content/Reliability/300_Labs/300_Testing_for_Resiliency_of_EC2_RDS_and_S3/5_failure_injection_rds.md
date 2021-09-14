@@ -1,7 +1,7 @@
 ---
 title: "Test Resiliency Using RDS Failure Injection"
 menutitle: "RDS Failure Injection"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
 pre: "<b>5. </b>"
 weight: 5
@@ -87,12 +87,87 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 
 1. [optional] Go to the [Auto scaling group](http://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-2#AutoScalingGroups:) and AWS Elastic Load Balancer [Target group](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#TargetGroups:) consoles to see how EC2 instance and traffic routing was handled
 
-#### 5.2.4 RDS failure injection - conclusion
+### 5.3 RDS failure injection using AWS Fault Injection Simulator (FIS)
+
+As in section **5.1**, you will simulate a critical failure of the Amazon RDS DB instance, but using FIS.
+
+#### 5.3.1 Create experiment template
+
+1. Go to the RDS Dashboard in the AWS Console at <http://console.aws.amazon.com/rds>
+
+1. From the RDS dashboard
+      * Click on "DB Instances (_n_/40)"
+      * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
+      * If running the **multi-region** deployment, select the DB instance with Role=**Master**
+      * Select the **Configuration** tab
+
+1. Look at the configured values. Note the following:
+      * Value of the **Info** field is **Available**
+      * RDS DB is configured to be **Multi-AZ**.  The _primary_ DB instance is in AZ **us-east-2a** and the _standby_ DB instance is in AZ **us-east-2b**
+        ![DBInitialConfiguration](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/DBInitialConfiguration.png)
+
+1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
+
+1. Click on **Create expermient template** to define the type of failure you want to inject.
+
+    ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
+
+1. Enter `Experiment template for RDS resiliency testing` for **Description** and `RDS-resiliency-testing` for **Name**. For **IAM role** select `WALab-FIS-role`.
+
+    ![ExperimentName-RDS](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ExperimentName-RDS.png?classes=lab_picture_auto)
+
+1. Scroll down to **Actions** and click **Add action**.
+
+    ![AddAction](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AddAction.png?classes=lab_picture_auto)
+
+1. Enter `reboot-database` for the **Name**. Under **Action type** select **aws:rds:reboot-db-instances**. Enter `true` under **forceFailover - optional** and click **Save**.
+
+    ![ActionRDS](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ActionRDS.png?classes=lab_picture_auto)
+
+1. Scroll down to **Targets** and click **Edit** next to **DBInstances-Target-1 (aws:rds:db)**.
+
+    ![EditTargetRDS](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EditTargetRDS.png?classes=lab_picture_auto)
+
+1. Under **Target method**, select **Resource tags and filters**. Select **Count** for **Selection mode** and enter `1` under **Number of resources**. This ensures that FIS will only reboot one RDS DB instance.
+
+1. Scroll down to **Resource tags** and click **Add new tag**. Enter `Workshop` for **Key** and `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` for **Value**. These are the same tags that are on the RDS DB instance used in this lab.
+
+    ![SelectTargetRDS](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/SelectTargetRDS.png?classes=lab_picture_auto)
+
+1. You can choose to stop running an experiment when certain thresholds are met, in this case, using CloudWatch Alarms under **Stop condition**. For this lab, you can leave this blank.
+
+1. Click **Create experiment template**.
+
+1. In the warning pop-up, confirm that you want to create the experiment template without a stop condition by entering `create` in the text box. Click **Create experiment template**.
+
+    ![CreateTemplate](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/CreateTemplate.png?classes=lab_picture_auto)
+
+#### 5.3.2 Run the experiment
+
+1. Click on **Experiment templates** from the menu on the left.
+
+1. Select the experiment template **RDS-resiliency-testing** and click **Actions**. Select **Start experiment**.
+
+    ![StartExperimentRDS-1](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperimentRDS-1.png?classes=lab_picture_auto)
+
+1. You can choose to add a tag to the experiment if you wish to do so.
+
+1. Click **Start experiment**.
+
+    ![StartExperimentRDS-2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperimentRDS-2.png?classes=lab_picture_auto)
+
+1. In the pop-up, type `start` and click **Start experiment**.
+
+    ![StartExperiment](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperiment.png?classes=lab_picture_auto)
+
+1. Revisit section **5.2** to observe the system response to the RDS instance failure.
+
+### 5.4 RDS failure injection - conclusion
 
 * AWS RDS Database failover took less than a minute
 * Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
 
-#### 5.2.5 [OPTIONAL] RDS failure injection - improving resiliency
+#### 5.4.1 [OPTIONAL] RDS failure injection - improving resiliency
 
 In this section you reduce the unavailability time from four minutes to _under one minute_.
 
@@ -111,7 +186,7 @@ Use _either_ the **Express Steps** or **Detailed Steps** below:
    1. Change the **BootObject** parameter to `server_with_reconnect.py`
 
 ##### Detailed Steps
-{{%expand "Click here for detailed steps for updating the Cloudformation stack:" %}} 
+{{%expand "Click here for detailed steps for updating the Cloudformation stack:" %}}
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation>
 1. Click on **WebServersForResiliencyTesting** Cloudformation stack
 1. Click the **Update** button

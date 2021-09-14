@@ -1,7 +1,7 @@
 ---
 title: "Test Resiliency Using EC2 Failure Injection"
 menutitle: "EC2 Failure Injection"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
 pre: "<b>4. </b>"
 weight: 4
@@ -115,7 +115,92 @@ _Draining_ allows existing, in-flight requests made to an instance to complete, 
 
 *__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
 
-#### 4.2.4 EC2 failure injection - conclusion
+### 4.3 EC2 failure injection using AWS Fault Injection Simulator (FIS)
+
+As in section **4.1**, you will simulate a critical problem with one of the three web servers used by your service, but using FIS. You can create an experiment template and use this template to run failure injection experiments on your resources.
+
+#### 4.3.1 Create experiment template
+
+1. Navigate to the EC2 console at <http://console.aws.amazon.com/ec2> and click **Instances** in the left pane.
+
+1. There are three EC2 instances with a name beginning with **WebServerforResiliency**. For these EC2 instances note:
+      1. Each has a unique *Instance ID*
+      1. There is one instance per each Availability Zone
+      1. All instances are healthy
+
+    ![EC2InitialCheck](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2InitialCheck.png)
+
+1. Open up two more console in separate tabs/windows. From the left pane, open **Target Groups** and **Auto Scaling Groups** in separate tabs. You now have three console views open
+
+    ![NavToTargetGroupAndScalingGroup](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/NavToTargetGroupAndScalingGroup.png)
+
+1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
+
+1. Click on **Create expermient template** to define the type of failure you want to inject.
+
+    ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
+
+1. Enter `Experiment template for EC2 resiliency testing` for **Description** and `EC2-resiliency-testing` for **Name**. For **IAM role** select `WALab-FIS-role`.
+
+    ![ExperimentName-EC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ExperimentName-EC2.png?classes=lab_picture_auto)
+
+1. Scroll down to **Actions** and click **Add action**.
+
+    ![AddAction](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AddAction.png?classes=lab_picture_auto)
+
+1. Enter `terminate-instance` for the **Name**. Under **Action type** select **aws:ec2:terminate-instances** and click **Save**.
+
+    ![ActionEC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ActionEC2.png?classes=lab_picture_auto)
+
+1. Scroll down to **Targets** and click **Edit** next to **Instances-Target-1 (aws:ec2:instance)**.
+
+    ![EditTargetEC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EditTargetEC2.png?classes=lab_picture_auto)
+
+1. Under **Target method**, select **Resource tags and filters**. Select **Count** for **Selection mode** and enter `1` under **Number of resources**. This ensures that FIS will only terminate one instance.
+
+1. Scroll down to **Resource tags** and click **Add new tag**. Enter `Workshop` for **Key** and `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` for **Value**. These are the same tags that are on the EC2 instances used in this lab. Click **Save**. This ensures that EC2 instances launched as part of this lab are the only ones selected for failure injection.
+
+    ![SelectTargetEC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/SelectTargetEC2.png?classes=lab_picture_auto)
+
+1. You can choose to stop running an experiment when certain thresholds are met, in this case, using CloudWatch Alarms under **Stop condition**. For this lab, you can leave this blank.
+
+1. Click **Create experiment template**.
+
+1. In the warning pop-up, confirm that you want to create the experiment template without a stop condition by entering `create` in the text box. Click **Create experiment template**.
+
+    ![CreateTemplate](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/CreateTemplate.png?classes=lab_picture_auto)
+
+#### 4.3.4 Run the experiment
+
+1. Click on **Experiment templates** from the menu on the left.
+
+1. Select the experiment template **EC2-resiliency-testing** and click **Actions**. Select **Start experiment**.
+
+    ![StartExperimentEC2-1](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperimentEC2-1.png?classes=lab_picture_auto)
+
+1. You can choose to add a tag to the experiment if you wish to do so.
+
+1. Click **Start experiment**.
+
+    ![StartExperimentEC2-2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperimentEC2-2.png?classes=lab_picture_auto)
+
+1. In the pop-up, type `start` and click **Start experiment**.
+
+    ![StartExperiment](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperiment.png?classes=lab_picture_auto)
+
+1. Go to the *EC2 Instances* console which you already have open (or [click here to open a new one](http://console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:))
+
+      * Periodically refresh it. (_Note_: it is usually more efficient to use the refresh button in the console, than to refresh the browser)
+
+           ![RefreshButton](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/RefreshButton.png)
+
+      * Observe the status of the instances listed. As shown in the screen cap below, one of the instances will show _shutting down_ and will ultimately transition to _terminated_.
+
+           ![EC2ShuttingDown](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2ShuttingDown.png)
+
+1. Revisit section **4.2** to observe the system response to the EC2 failure.
+
+### 4.4 EC2 failure injection - conclusion
 
 Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
 
