@@ -35,3 +35,6 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 {{< img a-5.png >}}
 
 ## Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
+
+{{< prev_next_button link_prev_url="../secondary-region/" link_next_url="../../verify-websites/" />}}
+

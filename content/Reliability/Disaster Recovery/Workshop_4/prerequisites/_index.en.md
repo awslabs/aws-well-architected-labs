@@ -41,3 +41,5 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 {{< img pr-4.png >}}
 
 {{< img pr-5.png >}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="./primary-region/" />}}

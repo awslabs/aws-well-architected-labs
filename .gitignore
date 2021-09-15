@@ -13,10 +13,11 @@ $RECYCLE.BIN/
 # OSX
 .DS_Store
 
-*.zip
+#*.zip
 .pyc
 dist/
 .vscode/
+*.code-workspace
 
 # https://github.com/awslabs/aws-well-architected-labs/issues/92
 !docs/stylesheets/

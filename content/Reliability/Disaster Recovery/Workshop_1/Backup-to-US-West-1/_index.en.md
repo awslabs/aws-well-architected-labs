@@ -51,7 +51,7 @@ We would create a [backup plan](https://docs.aws.amazon.com/aws-backup/latest/de
 
 {{< img BK-10.png >}}
 
-2.2 Navigate to the AWS backup **Dashboard** and click the **Create an on-demand backup** button.
+2.2 Navigate to the AWS backup **Protected resources** page and click the **Create an on-demand backup** button.
 
 {{< img BK-22.png >}}
 
@@ -112,3 +112,5 @@ Leave the rest default and click **Create Bucket**.
 {{< img BK-32.png >}}
 
 ## We are ready for a disaster!
+
+{{< prev_next_button link_prev_url="../us-east-1-deployment/" link_next_url="../restore-to-us-west-1/" />}}

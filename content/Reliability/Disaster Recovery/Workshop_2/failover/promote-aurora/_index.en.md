@@ -29,3 +29,6 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 1.6 It takes few minutes to complete  the operation.
 
 ## Congratulations! Your Aurora Secondary Database is promoted to a stand-alone database and can now become the Primary database!
+
+{{< prev_next_button link_prev_url="../promote-app/" link_next_url="../../verify-failover/" />}}
+

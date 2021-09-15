@@ -29,3 +29,6 @@ Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone in
 1.6 Grab a snack! It takes few minutes for the operation to complete.
 
 ## Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+
+{{< prev_next_button link_prev_url="../promote-app/" link_next_url="../../verify-failover/" />}}
+
