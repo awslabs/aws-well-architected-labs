@@ -39,6 +39,7 @@ The services you will learn to pull data from in this lab are:
 * Compute Optimizer Collector
 * ECS Chargeback Data
 * RDS Utilization Data
+* AWS Organization Data Export
 
 ## Architecture 
 
