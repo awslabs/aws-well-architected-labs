@@ -13,7 +13,7 @@ $RECYCLE.BIN/
 # OSX
 .DS_Store
 
-*.zip
+#*.zip
 .pyc
 dist/
 .vscode/
