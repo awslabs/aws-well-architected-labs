@@ -25,3 +25,5 @@ Click on **WebsiteURL** parameter value to goto website
 1.2 You should see items in your shopping cart that you added in primary region.
 
 {{< img vf-4.png >}}
+
+{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup/" />}}

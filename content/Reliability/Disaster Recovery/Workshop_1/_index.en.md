@@ -19,3 +19,6 @@ We will initially deploy Unishop to the us-east-1 AWS region and verify function
 This workshop takes about 90 minutes to complete. Prior experieince with the AWS Console and Linux command line are helpful but not required.
 
 {{< img AC-1.png >}}
+
+{{< prev_next_button link_next_url="./prerequisites/" button_next_text="Start Lab" first_step="true" />}}
+

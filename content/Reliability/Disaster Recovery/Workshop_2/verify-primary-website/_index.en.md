@@ -29,3 +29,5 @@ Click on the CloudFormation stack "Pilot-Primary". Fetch the website URL from th
 1.6 Add/remove items to your shopping cart by clicking on a Unicorn, followed by clicking the **Add to cart** button.
 
 {{< img vw-6.png >}}
+
+{{< prev_next_button link_prev_url="../prerequisites/secondary-region/" link_next_url="../failover/" />}}

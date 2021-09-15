@@ -16,3 +16,5 @@ If you are using a personal AWS account, be aware that you will incur costs for 
 
 If you are running this at a group event - please log in via Event Engine. The event host will provide the Instructions.
 {{% /notice %}}
+
+{{< prev_next_button link_prev_url="../" link_next_url="./primary-region/" />}}

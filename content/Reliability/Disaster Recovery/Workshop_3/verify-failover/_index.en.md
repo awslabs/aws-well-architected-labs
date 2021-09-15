@@ -16,3 +16,6 @@ weight = 6
 2.2 You should see items in your shopping cart that you added from the Primary region.
 
 {{< img vf-1.png >}}
+
+{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup" />}}
+
