@@ -14,6 +14,10 @@ Use one of the following queries depending on whether you have Reserved Instance
 We recommend large customers with over 500 linked accounts or more than $10M a month in invoiced cost update the usage date field in the query from 'day' to 'month' for improved performance
 {{% /notice %}}
 
+{{% notice note %}}
+If you get the error that the column 'product_database_engine' does not exist, then it is very likely that in none of your accounts a database in the RDS service has been started. To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next interation of the crawler the column will appear. You can verify this by running the Athena query: `SHOW COLUMNS FROM tablename` - and replace the tablename accordinly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
+{{% /notice %}}
+
 
 - {{%expand "Click here - if you have both Savings Plans and Reserved Instances" %}}
 
