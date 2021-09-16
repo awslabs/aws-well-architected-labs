@@ -6,14 +6,19 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
->**NOTE:** In order to run this lab you will need to have at least one **EC2 instance** running and have [AWS Computer Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) enabled at your account.
+### Introduction
+{{% notice note %}}
+ In order to run this lab you will need to have at least one **EC2 instance** running and have [AWS Computer Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) enabled at your account.
+{{% /notice %}}
 
-As discussed during the [100 level Rightsizing Recommendations lab]({{< ref "/Cost/100_Labs/100_AWS_Resource_Optimization/1_intro_right_sizing" >}}), rightsizing should be an ongoing effort at your organization and one of the best practices is to measure utilization and test new resource configuration multiple times so you only need to modify it once. The last thing you want is for a new resource type to be uncapable of handling load or functioning incorrectly.
+As highlighted in the [100 level Rightsizing Recommendations lab]({{< ref "/Cost/100_Labs/100_AWS_Resource_Optimization/1_intro_right_sizing" >}}), rightsizing should be an ongoing effort at your organization and one of the best practices is to measure utilization and test new resource configuration multiple times so you only need to modify it once. The last thing you want is for a new resource type to be uncapable of handling load or functioning incorrectly.
 
-During this lab we will create a **custom metric** in **Amazon CloudWatch** and install the CloudWatch agent on one EC2 instance to collect memory utilization. This will help improve the recommendation accuracy of **AWS Compute Optimizer**. Be aware that custom metrics are not part of the Amazon CloudWatch [free tier](https://aws.amazon.com/free/) usage so **additional costs will be incurred**. For more information read the [Amazon CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) page.
+In this lab we will create a **custom metric** in **Amazon CloudWatch** and install the CloudWatch agent on one EC2 instance to collect memory utilization. This will help improve the recommendation accuracy of **AWS Compute Optimizer**. Be aware that custom metrics are not part of the Amazon CloudWatch [free tier](https://aws.amazon.com/free/) usage so **additional costs will be incurred**. For more information read the [Amazon CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) page.
 
 Before learning how to capture the memory utilization from a specific resource at your account, let's first do a quick overview on Amazon CloudWatch.
 
+
+### Getting to know Amazon CloudWatch
 The first step to perform rightsizing is to monitor and analyze your current use of services to gain insight into instance performance and usage patterns. Observe performance over at least a two-week period (ideally, over a one-month period) to capture the workload and business peak. The most common metrics that define instance performance are vCPU utilization, memory utilization, network utilization, and disk i/o.
 
 1. Log into the AWS console and go to the **Amazon CloudWatch** service page:
@@ -33,9 +38,9 @@ The first step to perform rightsizing is to monitor and analyze your current use
 
 6. Navigate to the **CPU Utilization Average** widget and launch the **View Metrics detailed** page. Using the **Graphed metrics** session try to answer the following questions:
 
-- a) What is the instance with the lowest CPU Average?
-- b) What is the instance with the lowest CPU Max?
-- c) What is the instance with the lowest CPU Min?
+	1. What is the instance with the lowest CPU Average?
+	2. What is the instance with the lowest CPU Max?
+	3. What is the instance with the lowest CPU Min?
 
 ![Images/CloudWatch06.png](/Cost/200_AWS_Resource_Optimization/Images/CloudWatch06.png?classes=lab_picture_small)
 ![Images/CloudWatch07.png](/Cost/200_AWS_Resource_Optimization/Images/CloudWatch07.png?classes=lab_picture_small)

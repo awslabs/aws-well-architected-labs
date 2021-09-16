@@ -6,7 +6,9 @@ pre: "<b>5. </b>"
 weight: 5
 ---
 
-> **NOTE**: In order to complete this step you need to have [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) enabled.
+{{% notice note %}}
+In order to complete this step, you need to have [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) enabled.
+{{% /notice %}}
 
 AWS Compute Optimizer uses machine learning to analyze the configuration and utilization data of your AWS resources. It reports whether your resources are optimal and generates recommendations (findings) to reduce the cost and improve the performance of your workloads.
 
@@ -18,9 +20,11 @@ When it comes to EC2 instances there are three types of findings:
 
 You can enable AWS Compute Optimizer across your AWS Organization and filter the recommendations by AWS Accounts, AWS resource (EC2 instances, EBS volumes, Auto Scaling groups or Lambda functions), and AWS regions.
 
-> **NOTE:** If you have just installed the CloudWatch agent on your instances it may take a couple of days for AWS Compute Optimizer to start providing updated recommendations. You may not see the memory data during the first checks.
+{{% notice note %}}
+If you have just installed the CloudWatch agent on your instances it may take a couple of days for AWS Compute Optimizer to start providing updated recommendations. You may not see the memory data during the first checks.
+{{% /notice %}}
 
-During the steps below we will review some AWS Computer Optimizer examples and how the recommendations are affected by having an additional datapoint from the EC2 instance memory utilization.
+During the steps below we will review some AWS Computer Optimizer examples and how the recommendations are affected by having an additional data point from the EC2 instance memory utilization.
 
 1. Navigate to the **AWS Compute Optimizer** page.
 
@@ -44,7 +48,9 @@ During the steps below we will review some AWS Computer Optimizer examples and h
 
 Memory utilization is consistent at 90% and downsizing to a cheaper t3.large will keep our memory at the same size (8 GiB). In other words, we can get the same memory performance while reducing overall cost.
 
-> **NOTE:** A case could be made that this instance is under-provisioned and upsizing to an instance with more memory is a better solution. For this scenario, AWS Compute Optimizer views scaling down CPU and keeping the same memory the best decision for cost and performance. Having memory utilization enabled provides an additional datapoint for customers before making a final decision.
+{{% notice note %}}
+A case could be made that this instance is under-provisioned and upsizing to an instance with more memory is a better solution. For this scenario, AWS Compute Optimizer views scaling down CPU and keeping the same memory the best decision for cost and performance. Having memory utilization enabled provides an additional data point for customers before making a final decision.
+{{% /notice %}}
 
 6. Select **Under-provisioned instances**.
 

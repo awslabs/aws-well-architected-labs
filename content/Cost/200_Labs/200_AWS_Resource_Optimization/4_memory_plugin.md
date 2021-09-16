@@ -6,12 +6,14 @@ pre: "<b>4. </b>"
 weight: 4
 ---
 
-> **NOTE**: There are multiple ways to install the CloudWatch agent. This lab will walk through a manual install on a single instance. Please visit the [CloudWatch installation documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html) for a comprehensive list of ways to install CloudWatch.
+{{% notice note %}}
+There are multiple ways to install the CloudWatch agent. This lab will walk through a manual install on a single instance. Please visit the [CloudWatch installation documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html) for a comprehensive list of ways to install CloudWatch.
+{{% /notice %}}
 
 1. We are now going to manually install the **CloudWatch agent** to start collecting memory data, to start let's go back to the **Amazon EC2 Dashboard**.
 ![Images/MemInstall01.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall01.png?classes=lab_picture_small)
 
-2. On the left bar, click on **Instances** and select the **EC2 Instance** with the *CloudWatchAgentServerRole* IAM role.
+2. On the left bar, click on **Instances** and select the **EC2 Instance** with the **CloudWatchAgentServerRole** IAM role.
 ![Images/MemInstall02.png](/Cost/200_AWS_Resource_Optimization/Images/AgentInstall02.png?classes=lab_picture_small)
 
 3. Connect into the EC2 Instance using the **browser-based SSH connection tool**.
@@ -126,7 +128,10 @@ Select the **Instance** from the list below:
 
 You have now completed the CloudWatch agent installation and will be able to monitor on Amazon CloudWatch the memory utilization of that instance.
 
-**[BONUS]** The next step is not mandatory to complete this lab.
+#### Automation Option
+{{% notice note %}}
+The next step is not mandatory to complete this lab.
+{{% /notice %}}
 
 If you have to install and start the CloudWatch agent on several instances at once doing it manually might not be a scalable option. Consider using [AWS Systems Manager](https://aws.amazon.com/systems-manager/) or a pre-configured AWS CloudFormation template to automatically install the CloudWatch agent by default on all your stacks.
 
