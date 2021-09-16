@@ -25,7 +25,7 @@ Parameters:
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
-    Default: "cron(30 12 L * ? *)"
+    Default: "rate(14 days)"
 Outputs:
   LambdaFunctionName:
     Value:

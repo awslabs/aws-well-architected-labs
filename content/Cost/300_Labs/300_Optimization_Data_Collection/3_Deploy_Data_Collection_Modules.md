@@ -139,6 +139,7 @@ DataStackMulti
 
 AccountCollector
     - Suffix: ''
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment) 
 
@@ -207,6 +208,7 @@ DataStackMulti
 
 AccountCollector
     - Suffix: ''
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment) 
 
@@ -286,6 +288,7 @@ DataStackMulti
 
 AccountCollector
     - Suffix: ''
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment)                       
 {{% notice note %}}
@@ -361,6 +364,7 @@ DataStackMulti
 
 AccountCollector
     - Suffix: ''
+    - Schedule: rate(14 days)
 
 
 * [Test your Lambda](#testing-your-deployment) 
@@ -479,7 +483,7 @@ It is not partitioned.
 
 * Optional Parameters:
     - Suffix: ''
-    - Schedule: cron(30 12 L * ? *)
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment) 
 {{% /expand%}}

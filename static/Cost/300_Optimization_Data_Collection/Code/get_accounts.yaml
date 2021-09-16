@@ -14,7 +14,7 @@ Parameters:
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
-    Default: "cron(30 12 L * ? *)"
+    Default: "rate(14 days)"
 Outputs:
   LambdaFunctionName:
     Value:
@@ -160,8 +160,8 @@ Resources:
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
-      Description: Monthly
-      Name: !Sub "Monthly-Scheduler-For-Accounts${Suffix}"
+      Description: Scheduler-For-Accounts
+      Name: !Sub "Scheduler-For-Accounts${Suffix}"
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
