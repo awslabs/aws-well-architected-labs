@@ -1,6 +1,6 @@
 import boto3
 import json
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import json
 import os
 import logging
@@ -87,6 +87,12 @@ def write_file(file_name, data):
 
 
 def s3_upload(recommendations, Region, account_id):
+
+    d = datetime.now()
+    month = d.strftime("%m")
+    year = d.strftime("%Y")
+    dt_string = d.strftime("%d%m%Y-%H%M%S")
+
     today = date.today()
     year = today.year
     month = today.month
@@ -94,7 +100,7 @@ def s3_upload(recommendations, Region, account_id):
         S3BucketName = os.environ["BUCKET_NAME"]
         s3 = boto3.client('s3', Region,
                             config=Config(s3={'addressing_style': 'path'}))
-        s3.upload_file(f'/tmp/{recommendations}_recommendations.json', S3BucketName, f"Compute_Optimizer/Compute_Optimizer_{recommendations}/year={year}/month={month}/{recommendations}_recommendations_{account_id}.json")
+        s3.upload_file(f'/tmp/{recommendations}_recommendations.json', S3BucketName, f"Compute_Optimizer/Compute_Optimizer_{recommendations}/year={year}/month={month}/{recommendations}_recommendations_{account_id}-{dt_string}.json")
         print(f"{recommendations} data in s3 {S3BucketName}")
     except Exception as e:
         # Send some context about this error to Lambda Logs

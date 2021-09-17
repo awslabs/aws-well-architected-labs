@@ -1,6 +1,6 @@
 import boto3
 import logging
-from datetime import date
+from datetime import date, datetime
 import json
 import os
 from botocore.exceptions import ClientError
@@ -14,7 +14,6 @@ def lambda_handler(event, context):
     # Use same setup as mult ecs
     # pass in account id 
     DestinationPrefix = os.environ["PREFIX"]
-    #import pdb; pdb.set_trace()
     try:
         for record in event['Records']:
             account_id = record["body"]
@@ -31,6 +30,13 @@ def lambda_handler(event, context):
         logging.warning(f"{e}" )
 
 def s3(DestinationPrefix, account_id):
+
+    d = datetime.now()
+    month = d.strftime("%m")
+    year = d.strftime("%Y")
+    dt_string = d.strftime("%d%m%Y-%H%M%S")
+
+
     bucket = os.environ[
         "BUCKET_NAME"
     ]  # Using enviroment varibles below the lambda will use your S3 bucket
@@ -42,7 +48,7 @@ def s3(DestinationPrefix, account_id):
         s3.upload_file(
             "/tmp/data.json",
             bucket,
-            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
+            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
         )  # uploading the file with the data to s3
         print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
     except Exception as e:
