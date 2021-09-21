@@ -7,28 +7,18 @@ from botocore.exceptions import ClientError
 from botocore.client import Config
 
 # Data code to import
-import ami
-import ebs
-import snapshot
 import ta
 
 def lambda_handler(event, context):
     # Read from accounts collector?
-    # Use same seyup as mult ecs
+    # Use same setup as mult ecs
     # pass in account id 
     DestinationPrefix = os.environ["PREFIX"]
-    #import pdb; pdb.set_trace()
     try:
         for record in event['Records']:
             account_id = record["body"]
             print(account_id)
-            if DestinationPrefix == 'ami':
-                ami.main(account_id)
-            elif DestinationPrefix == 'ebs':
-                ebs.main(account_id)
-            elif DestinationPrefix == 'snapshot':
-                snapshot.main(account_id)
-            elif DestinationPrefix == 'ta':
+            if DestinationPrefix == 'ta':
                 ta.main(account_id)
             else:
                 print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
@@ -45,6 +35,7 @@ def s3(DestinationPrefix, account_id):
     month = d.strftime("%m")
     year = d.strftime("%Y")
     dt_string = d.strftime("%d%m%Y-%H%M%S")
+
 
     bucket = os.environ[
         "BUCKET_NAME"
@@ -70,6 +61,7 @@ def assume_role(account_id, service, region):
     sts_client = boto3.client('sts')
     
     try:
+        #region = sts_client.meta.region_name
         assumedRoleObject = sts_client.assume_role(
             RoleArn=role_arn,
             RoleSessionName="AssumeRoleRoot"

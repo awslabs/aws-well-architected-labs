@@ -132,6 +132,14 @@ The services you can collect data are below. Use these in the *Prefix* and *CFDa
               RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
               TaskQueuesUrl: !Sub "${DataStackMulti.Outputs.SQSUrl}"
 
+* Optional Parameters with current defaults:
+DataStackMulti
+    - DatabaseName: optimization_data
+    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/fof.zip
+
+AccountCollector
+    - Suffix: ''
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment) 
 
@@ -172,7 +180,7 @@ This Data will be partitioned by year, month, day.
         TrustedAdvisor:
           Type: AWS::CloudFormation::Stack
           Properties:
-                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+                TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
                 TimeoutInMinutes: 2
                 Parameters:
                   DestinationBucket: !Ref S3Bucket
@@ -190,6 +198,17 @@ This Data will be partitioned by year, month, day.
                 Parameters:
                   RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                   TaskQueuesUrl: !Sub "${TrustedAdvisor.Outputs.SQSUrl}"
+
+* Optional Parameters with current defaults:
+DataStackMulti
+    - DatabaseName: optimization_data
+    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/ta.zip
+    - CFDataName: Trusted_Advisor
+    - Prefix: ta
+
+AccountCollector
+    - Suffix: ''
+    - Schedule: rate(14 days)
 
 * [Test your Lambda](#testing-your-deployment) 
 
@@ -260,6 +279,17 @@ This Data will be separated by type service and partitioned by year, month.
               RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
               TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
 
+* Optional Parameters with current defaults:
+DataStackMulti
+    - DatabaseName: optimization_data
+    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/coc.zip
+    - CFDataName: ComputeOptimizer
+    - Prefix: COC
+
+AccountCollector
+    - Suffix: ''
+    - Schedule: rate(14 days)
+
 * [Test your Lambda](#testing-your-deployment)                       
 {{% notice note %}}
 The AccountCollector module is reusable and only needs to be added once but multiple ques can be added too TaskQueuesUrl
@@ -324,6 +354,19 @@ This will enable you too automated report to show costs associated with ECS Task
             Parameters:
               RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
               TaskQueuesUrl: !Sub "${ECSStack.Outputs.SQSUrl}"
+
+* Optional Parameters with current defaults:
+DataStackMulti
+    - DatabaseName: optimization_data
+    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/ecs.zip
+    - CFDataName: ecs-services-clusters
+    - CURTable: managementcur
+
+AccountCollector
+    - Suffix: ''
+    - Schedule: rate(14 days)
+
+
 * [Test your Lambda](#testing-your-deployment) 
 
 
@@ -406,10 +449,45 @@ This is partitioned by TBC.
               GlueRoleArn: !GetAtt GlueRole.Arn 
               MultiAccountRoleName: !Ref MultiAccountRoleName
 
+* Optional Parameters with current defaults:
+DataStackMulti
+    - DatabaseName: optimization_data
+    - CFDataName: RDSMETRICS
+    - DAYS: 1
+
+
 * [Test your Lambda](#testing-your-deployment) 
 
 
 {{% /expand%}}
+
+
+{{%expand "AWS Organization Data Export" %}}
+
+## AWS Organization Data Export
+This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**.
+It is not partitioned.
+* CloudFormation to add to **OptimizationDataCollectionStack**:  
+    [Link to Instructions](#how-to-update-optimizationdatacollectionstack)
+
+          OrganizationData:
+            Type: AWS::CloudFormation::Stack
+            Properties:
+              TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+              TimeoutInMinutes: 2
+              Parameters:
+                DestinationBucket: !Ref S3Bucket
+                GlueRoleARN: !GetAtt GlueRole.Arn
+                ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                Tags: "Env"
+
+* Optional Parameters:
+    - Suffix: ''
+    - Schedule: rate(14 days)
+
+* [Test your Lambda](#testing-your-deployment) 
+{{% /expand%}}
+
 
 ## How to Update your CloudFormation
 

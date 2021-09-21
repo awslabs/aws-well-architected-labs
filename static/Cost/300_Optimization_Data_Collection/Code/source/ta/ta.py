@@ -44,8 +44,8 @@ def main(account_id):
                     meta_result.update(CheckName)
                     meta_result.update(resource)
                     dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
-
-                    f.write(dataJSONData)
+                    lower_json = dataJSONData.lower()
+                    f.write(lower_json)
                     f.write("\n")
 
 def assume_role(account_id, service, region):
