@@ -27,10 +27,10 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 1. You should have already copied the credentials for your account. If _not_ then:
 
-    {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
-    {{% common/Workshop_AWS_Account %}}
-**Now continue the steps to setup your AWS credentials....**
-    {{% /expand%}}
+   {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
+   {{% common/Workshop_AWS_Account %}}
+   **Now continue the steps to setup your AWS credentials....**
+   {{% /expand%}}
 
 1. The copied credentials are already in the form of `export` statements. Run these from your shell command line. Use _your_ values, _not_ the ones below
 

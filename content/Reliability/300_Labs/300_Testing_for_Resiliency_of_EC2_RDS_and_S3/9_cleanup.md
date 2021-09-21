@@ -94,7 +94,7 @@ Using AWS Console:
 The password(s) for your Amazon RDS instances were stored in AWS Systems Manager secure parameter store. These steps will verify the parameter(s) were deleted, and if not then guide you to deleting them. _Choose ONE_: AWS CLI **or** AWS Console.
 
 * **single region** You only need to do the following steps in **us-east-2**
-* **multi region** Do the following steps for both **us-east-2** and **us-west-**2
+* **multi region** Do the following steps for both **us-east-2** and **us-west-2**
 
 Using AWS CLI:
 
