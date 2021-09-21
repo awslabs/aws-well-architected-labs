@@ -68,7 +68,7 @@ This failure injection will simulate a critical problem with one of the three we
 
         ![EC2ShuttingDown](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2ShuttingDown.png)
 
-### 4.2 System response to EC2 instance failure
+### 4.2 System response to EC2 instance failure {#response}
 
 Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
@@ -78,6 +78,7 @@ Refresh the service website several times. Note the following:
 
 * Website remains available
 * The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
+* Also note the `availability_zone` value when you refresh. You can see that requests are being handled by the EC2 instances in only two Availability Zones, while the EC2 instance in the third zone is being replaced
 
 #### 4.2.2 Load balancing
 
@@ -111,9 +112,11 @@ Autos scaling ensures we have the capacity necessary to meet customer demand. Th
 
         ![AutoScalingGroup](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AutoScalingGroup.png)  
 
-_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
+_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance.
+  * __Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.
 
-*__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
+_Auto Scaling_ helps you ensure that you have the correct number of Amazon EC2 instances available to handle the load for your workload.
+  * __Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances
 
 ### 4.3 EC2 failure injection using AWS Fault Injection Simulator (FIS)
 
@@ -130,6 +133,11 @@ As in section **4.1**, you will simulate a critical problem with one of the thre
 
     ![EC2InitialCheck](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2InitialCheck.png)
 
+1. Select the checkbox next to any one of the **WebServerforResiliency** EC2 instances, then click the **Tags** tab.
+    * Verify that there is a tag with **Key** = `Workshop` and **Value** = `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` 
+
+    ![EC2TagCheck](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2TagCheck.png)
+
 1. Open up two more console in separate tabs/windows. From the left pane, open **Target Groups** and **Auto Scaling Groups** in separate tabs. You now have three console views open
 
     ![NavToTargetGroupAndScalingGroup](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/NavToTargetGroupAndScalingGroup.png)
@@ -138,7 +146,7 @@ As in section **4.1**, you will simulate a critical problem with one of the thre
 
 1. Click on **Create expermient template** to define the type of failure you want to inject.
 
-    ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
+    ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png)
 
 1. Enter `Experiment template for EC2 resiliency testing` for **Description** and `EC2-resiliency-testing` for **Name**. For **IAM role** select `WALab-FIS-role`.
 
@@ -198,10 +206,10 @@ As in section **4.1**, you will simulate a critical problem with one of the thre
 
            ![EC2ShuttingDown](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2ShuttingDown.png)
 
-1. Revisit section **4.2** to observe the system response to the EC2 failure.
+1. Revisit [section **4.2**](#response) to observe the system response to the EC2 failure.
 
 ### 4.4 EC2 failure injection - conclusion
 
-Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
+By deploying multiple servers and using Elastic Load Balancing, the workload can suffer the loss of a server but experience no availability disruption. This is because user traffic is automatically routed to the healthy servers and Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
 
 {{< prev_next_button link_prev_url="../3_failure_injection_prep" link_next_url="../5_failure_injection_rds/" />}}

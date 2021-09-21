@@ -11,7 +11,7 @@ Failure injection is a means of testing resiliency by which a specific failure t
 
 You have a choice of environments from which to execute the failure injections for this lab. Bash scripts are a good choice and can be used from a Linux command line. If you prefer Python, Java, Powershell, or C#, then instructions for these are also provided.
 
-In addition to custom scripts, you can also perform failure injection experiments using AWS Fault Injection Simulator (FIS).
+In addition to custom scripts, you can also perform failure injection experiments using [AWS Fault Injection Simulator (FIS)](https://aws.amazon.com/fis/).
 
 ### 2.1 Setup AWS credentials and configuration
 
@@ -150,169 +150,15 @@ Choose the appropriate section below for your language
 
 ### 2.4 Create IAM Role for FIS
 
-In this lab, failures will be simulated using AWS Fault Injection Simulator (FIS) in addition to using custom scripts. FIS needs a service role to use to inject failure for a workload.
+In this lab, some of the experiments will be executed AWS Fault Injection Simulator (FIS) in addition to using custom scripts. FIS needs a service role to inject failures for various components of a workload.
 
-1. Navigate to the [AWS Identity and Access Management (IAM) console](https://console.aws.amazon.com/iamv2/home?#/home).
+**This IAM Role has already been created for you as part of the infrastructure deployment**
 
-1. Click on **Policies** from the menu on the left and then click **Create Policy**.
+You may proceed to the next step.
 
-    ![IAMCreatePolicy](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMCreatePolicy.png?classes=lab_picture_auto)
-
-1. On the **Create policy** wizard, click on the **JSON** tab and replace the contents with the following policy. Click **Next: Tags**.
-
-    ```
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "AllowFISExperimentRoleReadOnly",
-                "Effect": "Allow",
-                "Action": [
-                    "ec2:DescribeInstances",
-                    "ecs:DescribeClusters",
-                    "ecs:ListContainerInstances",
-                    "eks:DescribeNodegroup",
-                    "iam:ListRoles",
-                    "rds:DescribeDBInstances",
-                    "rds:DescribeDbClusters",
-                    "ssm:ListCommands"
-                ],
-                "Resource": "*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleEC2Actions",
-                "Effect": "Allow",
-                "Action": [
-                    "ec2:RebootInstances",
-                    "ec2:StopInstances",
-                    "ec2:StartInstances",
-                    "ec2:TerminateInstances"
-                ],
-                "Resource": "arn:aws:ec2:*:*:instance/*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleECSActions",
-                "Effect": "Allow",
-                "Action": [
-                    "ecs:UpdateContainerInstancesState",
-                    "ecs:ListContainerInstances"
-                ],
-                "Resource": "arn:aws:ecs:*:*:container-instance/*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleEKSActions",
-                "Effect": "Allow",
-                "Action": [
-                    "ec2:TerminateInstances"
-                ],
-                "Resource": "arn:aws:ec2:*:*:instance/*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleFISActions",
-                "Effect": "Allow",
-                "Action": [
-                    "fis:InjectApiInternalError",
-                    "fis:InjectApiThrottleError",
-                    "fis:InjectApiUnavailableError"
-                ],
-                "Resource": "arn:*:fis:*:*:experiment/*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleRDSReboot",
-                "Effect": "Allow",
-                "Action": [
-                    "rds:RebootDBInstance"
-                ],
-                "Resource": "arn:aws:rds:*:*:db:*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleRDSFailOver",
-                "Effect": "Allow",
-                "Action": [
-                    "rds:FailoverDBCluster"
-                ],
-                "Resource": "arn:aws:rds:*:*:cluster:*"
-            },
-            {
-                "Sid": "AllowFISExperimentRoleSSMSendCommand",
-                "Effect": "Allow",
-                "Action": [
-                    "ssm:SendCommand"
-                ],
-                "Resource": [
-                    "arn:aws:ec2:*:*:instance/*",
-                    "arn:aws:ssm:*:*:document/*"
-                ]
-            },
-            {
-                "Sid": "AllowFISExperimentRoleSSMCancelCommand",
-                "Effect": "Allow",
-                "Action": [
-                    "ssm:CancelCommand"
-                ],
-                "Resource": "*"
-            }
-        ]
-    }
-    ```
-
-    ![IAMPolicyDocument](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMPolicyDocument.png?classes=lab_picture_auto)
-
-1. Click **Next: Review**.
-
-1. On the **Review policy** page, enter `WALab-FIS-policy` under **Name** and click **Create policy**.
-
-    ![IAMReviewPolicy](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMReviewPolicy.png?classes=lab_picture_auto)
-
-1. Click on **Roles** from the menu on the left and then click **Create role**.
-
-    ![IAMCreateRole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMCreateRole.png?classes=lab_picture_auto)
-
-1. FIS is currently not listed in the list of services under use cases. For the time being, Select **EC2** and click **Next: Permissions**.
-
-    ![IAMSelectEC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMSelectEC2.png?classes=lab_picture_auto)
-
-1. Under **Attach permissions policies**, enter `WALab-FIS-policy` and select the **WALab-FIS-policy**. This is the policy that was created in the previous steps.
-
-1. Click **Next: Tags**.
-
-    ![IAMAddPolicy](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMAddPolicy.png?classes=lab_picture_auto)
-
-1. Click **Next: Review**.
-
-1. Enter `WALab-FIS-role` for **Role name**. Update the description to `Allows FIS to call AWS services on your behalf.` and click **Create role**.
-
-    ![IAMReviewRole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/IAMReviewRole.png?classes=lab_picture_auto)
-
-1. Search for the newly created role **WALab-FIS-role** and click on it to view details.
-
-1. On the **Trust relationships** tab, click **Edit trust relationship**.
-
-    ![TrustRelationships](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/TrustRelationships.png?classes=lab_picture_auto)
-
-1. Replace the existing **Policy Document** with the following and click **Update Trust Policy**.
-
-    ```
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "fis.amazonaws.com"
-          },
-          "Action": "sts:AssumeRole"
-        }
-      ]
-    }
-    ```
-
-    ![TrustPolicyDocument](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/TrustPolicyDocument.png?classes=lab_picture_auto)
-
-1. The change should be reflected in the **Trust relationships** tab,
-
-    ![UpdatedTrust](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/UpdatedTrust.png?classes=lab_picture_auto)
-
-
+{{%expand "If you would like to view the instructions on how to create the IAM Role for FIS (for your information), then click here:" %}}
+**These instructions are here for informational purposes only. You DO NOT need to execute these as this IAM Role was created for you as part of the infrastructure deployment**
+{{% common/FISExecutionRole %}}
+{{% /expand%}}
 
 {{< prev_next_button link_prev_url="../1_deploy_infra" link_next_url="../3_failure_injection_prep/" />}}

@@ -29,11 +29,11 @@ This failure injection will simulate a critical failure of the Amazon RDS DB ins
       * Click on "DB Instances (_n_/40)"
       * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
       * If running the **multi-region** deployment, select the DB instance with Role=**Master**
-      * Select the **Configuration** tab
 
 1. Look at the configured values. Note the following:
-      * Value of the **Info** field is **Available**
-      * RDS DB is configured to be **Multi-AZ**.  The _primary_ DB instance is in AZ **us-east-2a** and the _standby_ DB instance is in AZ **us-east-2b**
+      * Value of the **Status** field is **Available**
+      * **Region & AZ** shows the AZ for your _primary_ DB instance
+      * Select the **Configuration** tab: **Multi-AZ**. is enabled, and **Secondary Zone** shows the AZ for you _standby_ DB instance
         ![DBInitialConfiguration](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/DBInitialConfiguration.png)
 
 1. To failover of the RDS instance, use the VPC ID as the command line argument replacing `<vpc-id>` in _one_ (and only one) of the scripts/programs below. (choose the language that you setup your environment for)
@@ -48,7 +48,7 @@ This failure injection will simulate a critical failure of the Amazon RDS DB ins
 
 1. The specific output will vary based on the command used, but will include some indication that the your Amazon RDS Database is being failedover: `Failing over mdk29lg78789zt`
 
-### 5.2 System response to RDS instance failure
+### 5.2 System response to RDS instance failure {#response}
 
 Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
@@ -65,7 +65,7 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 #### 5.2.2 Failover to standby
 
 1. On the database console **Configuration** tab
-      1. Refresh and note the values of the **Info** field. It will ultimately return to **Available** when the failover is complete.
+      1. Refresh and note the values of the **Status** field. It will ultimately return to **Available** when the failover is complete.
       1. Note the AZs for the _primary_ and _standby_ instances. They have swapped as the _standby_ has no taken over _primary_ responsibility, and the former _primary_ has been restarted. (After RDS failover it can take several minutes for the console to update as shown below. The failover has however completed)
 
          ![DBPostFailConfiguration](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/DBPostFailConfiguration.png)
@@ -99,16 +99,17 @@ As in section **5.1**, you will simulate a critical failure of the Amazon RDS DB
       * Click on "DB Instances (_n_/40)"
       * Click on the DB identifier for your database (if you have more than one database, refer to the **VPC ID** to find the one for this workshop)
       * If running the **multi-region** deployment, select the DB instance with Role=**Master**
-      * Select the **Configuration** tab
 
 1. Look at the configured values. Note the following:
-      * Value of the **Info** field is **Available**
-      * RDS DB is configured to be **Multi-AZ**.  The _primary_ DB instance is in AZ **us-east-2a** and the _standby_ DB instance is in AZ **us-east-2b**
+      * Value of the **Status** field is **Available**
+      * **Region & AZ** shows the AZ for your _primary_ DB instance
+      * Select the **Configuration** tab: **Multi-AZ**. is enabled, and **Secondary Zone** shows the AZ for you _standby_ DB instance
+      * Select the **Tags** tab: Note the **Value** for the `Workshop` tag
         ![DBInitialConfiguration](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/DBInitialConfiguration.png)
 
 1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
 
-1. Click on **Create expermient template** to define the type of failure you want to inject.
+1. Click on **Create experiment template** to define the type of failure you want to inject.
 
     ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
 
@@ -160,7 +161,7 @@ As in section **5.1**, you will simulate a critical failure of the Amazon RDS DB
 
     ![StartExperiment](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperiment.png?classes=lab_picture_auto)
 
-1. Revisit section **5.2** to observe the system response to the RDS instance failure.
+1. Revisit [section **5.2**](#response) to observe the system response to the RDS instance failure.
 
 ### 5.4 RDS failure injection - conclusion
 

@@ -73,7 +73,7 @@ Before starting, view the deployment machine in the [AWS Step Functions console]
 
 ### 7.2 System response to web server failure
 
-The instances launched as part of this lab are running simple Python webservers. The experiment run in the previous section uses AWS Systems Manager to run a command on the selected instance(s). In this workshop, the command used is **kill-process**. When the experiment runs, the python3 web server process is terminated on one of the instances and it can no longer handle requests. Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
+The instances launched as part of this lab are running simple Python webservers. This experiment uses [AWS Systems Manager](https://aws.amazon.com/systems-manager/) to run a command on the selected instance(s). In this workshop, the command used is **kill-process**. When the experiment runs, the **python3** web server process is terminated on one of the instances and it can no longer handle requests. Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
 #### 7.2.1 System availability
 
@@ -81,6 +81,11 @@ Refresh the service website several times. Note the following:
 
 * Website remains available
 * The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
+* Also note the `availability_zone` value when you refresh. You can see that requests are being handled by the EC2 instances in only two Availability Zones, while the EC2 instance in the third zone is being replaced
+
+Load balancing and Auto Scaling work here much they way they did for the [EC2 failure injection experiment](../4_failure_injection_ec2#response).
+
+{{%expand "[Optional] If you want to review the Load balancing and Auto Scaling behavior again for this case, click here" %}}
 
 #### 7.2.2 Load balancing
 
@@ -116,7 +121,13 @@ Auto Scaling ensures we have the capacity necessary to meet customer demand. The
 
 _Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
 
-*__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
+_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance.
+  * __Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.
+
+_Auto Scaling_ helps you ensure that you have the correct number of Amazon EC2 instances available to handle the load for your workload.
+  * __Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances
+
+{{% /expand%}}
 
 ### 7.3 Web server failure injection - conclusion
 
