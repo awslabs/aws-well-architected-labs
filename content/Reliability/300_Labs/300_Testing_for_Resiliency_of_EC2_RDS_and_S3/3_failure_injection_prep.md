@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 weight: 3
 ---
 
-**Failure injection** (also known as **chaos testing**) is an effective and essential method to validate and understand the resiliency of your workload and is a recommended practice of the [AWS Well-Architected Reliability Pillar](https://aws.amazon.com/architecture/well-architected/). Here you will initiate various failure scenarios and assess how your system reacts.
+**Failure injection** is the means by which we will simulate disruptive real-world events that affect production environments. Such events are used in **chaos engineering** to validate and understand the resiliency of your workload. **Chaos engineering** is a recommended practice of the [AWS Well-Architected Reliability Pillar](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/test-reliability.html). Here you will initiate various failure scenarios and assess how your workload reacts.
 
 ### Preparation
 

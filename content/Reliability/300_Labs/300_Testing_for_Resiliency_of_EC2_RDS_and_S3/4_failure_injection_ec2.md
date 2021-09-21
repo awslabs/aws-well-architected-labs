@@ -78,6 +78,7 @@ Refresh the service website several times. Note the following:
 
 * Website remains available
 * The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
+* Also note the `availability_zone` value when you refresh. You can see that requests are being handled by the EC2 instances in only two Availability Zones, while the EC2 instance in the third zone is being replaced
 
 #### 4.2.2 Load balancing
 
@@ -111,9 +112,11 @@ Autos scaling ensures we have the capacity necessary to meet customer demand. Th
 
         ![AutoScalingGroup](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AutoScalingGroup.png)  
 
-_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance. *__Learn more__: After the lab [see this blog post](https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/) for more information on _draining_.*
-
-*__Learn more__: After the lab see [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) to learn more how auto scaling groups are setup and how they distribute instances, and [Dynamic Scaling for Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html) for more details on setting up auto scaling that responds to demand*
+_Draining_ allows existing, in-flight requests made to an instance to complete, but it will not send any new requests to the instance.
+  * *__Learn more__*: After the lab [see this blog post](_https://aws.amazon.com/blogs/aws/elb-connection-draining-remove-instances-from-service-with-care/_) for more information on _draining_.
+  
+_Auto Scaling_ helps you ensure that you have the correct number of Amazon EC2 instances available to handle the load for your workload.
+  * *__Learn more__*: After the lab see [Auto Scaling Groups](_https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html_) to learn more how auto scaling groups are setup and how they distribute instances
 
 #### 4.2.4 EC2 failure injection - conclusion
 
