@@ -8,55 +8,69 @@ from datetime import date
 from botocore.exceptions import ClientError
 from botocore.client import Config
 import os
-
+cost  = os.environ['COSTONLY']
 # subclass JSONEncoder
 class DateTimeEncoder(JSONEncoder):
     # Override the default method
     def default(self, obj):
         if isinstance(obj, (datetime.date, datetime.datetime)):
             return obj.isoformat()
+
+def cat_check(case):
+    if cost == 'yes':
+        if case["category"] == "cost_optimizing":
+            return "yes"
+        else: 
+             return "no"
+    else:
+        return "yes"
+
+
 def main(account_id):
-    base = {"AccountId":account_id,"Category":"Cost Optimizing"}
+    
     with open("data.json", "w") as f:  # Saving in the temporay folder in the lambda
         support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         
         for case in response["checks"]:
+            base = {"AccountId":account_id,"Category": case["category"]}
             try:
                 meta = case["metadata"]
-                #if case["category"] == "cost_optimizing":
-                c_id = case["id"]
-                CheckName = {"CheckName": case["name"], "CheckId": c_id}
+                c = cat_check(case)
+                if c =='yes':
+                    #if case["category"] == "cost_optimizing":
+                    c_id = case["id"]
+                    CheckName = {"CheckName": case["name"], "CheckId": c_id}
 
-                check_result = support_client.describe_trusted_advisor_check_result(
-                    checkId=c_id, language="en"
-                )
-                p = '%Y-%m-%dT%H:%M:%SZ'
-                print(c_id)
-                mytime =check_result['result']['timestamp']
-                epoch = datetime.datetime(1970, 1, 1)
-                epoch_time = int((datetime.datetime.strptime(mytime, p) - epoch).total_seconds())  
-                
-                base.update({'DateTime':check_result['result']['timestamp'], 'Timestamp':epoch_time})
-
-                for resource in check_result["result"]["flaggedResources"]: 
-                
-                    try:
-                        meta_result = dict(zip(meta, resource["metadata"]))
-                        del resource['metadata']
-                        resource["region"] = resource.pop("region")
-                    except:
-                        meta_result = {}
-                        resource.update({"region":"-"})
-                        
+                    check_result = support_client.describe_trusted_advisor_check_result(
+                        checkId=c_id, language="en"
+                    )
+                    p = '%Y-%m-%dT%H:%M:%SZ'
+                    print(c_id)
+                    mytime =check_result['result']['timestamp']
+                    epoch = datetime.datetime(1970, 1, 1)
+                    epoch_time = int((datetime.datetime.strptime(mytime, p) - epoch).total_seconds())  
                     
-                    meta_result.update(base)
-                    meta_result.update(CheckName)
-                    meta_result.update(resource)
-                    dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
-                    lower_json = dataJSONData.lower()
-                    f.write(lower_json)
-                    f.write("\n")
+                    base.update({'DateTime':check_result['result']['timestamp'], 'Timestamp':epoch_time})
+
+                    for resource in check_result["result"]["flaggedResources"]: 
+                    
+                        try:
+                            meta_result = dict(zip(meta, resource["metadata"]))
+                            del resource['metadata']
+                            resource["region"] = resource.pop("region")
+                        except:
+                            meta_result = {}
+                            resource.update({"region":"-"})
+                            
+                        
+                        meta_result.update(base)
+                        meta_result.update(CheckName)
+                        meta_result.update(resource)
+                        dataJSONData = json.dumps(meta_result, cls=DateTimeEncoder)
+                        lower_json = dataJSONData.lower()
+                        f.write(lower_json)
+                        f.write("\n")
             except Exception as e:
                 print(e)
                 logging.warning(f"{e}" )
