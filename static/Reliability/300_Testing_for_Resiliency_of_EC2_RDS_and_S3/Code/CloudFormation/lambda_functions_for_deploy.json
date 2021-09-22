@@ -530,7 +530,7 @@
     "FisExecutionRole" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
-        "RoleName": "LambdaCustomResourceRole-SecureSsmForRds",
+        "RoleName": "WALab-FIS-role",
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement": [
