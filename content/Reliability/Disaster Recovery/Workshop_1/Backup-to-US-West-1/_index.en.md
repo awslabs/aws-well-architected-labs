@@ -1,5 +1,5 @@
 +++
-title = "Backup to US-west-1"
+title = "Backup to DR Region"
 date =  2021-05-11T20:33:54-04:00
 weight = 6
 +++
@@ -113,4 +113,4 @@ Leave the rest default and click **Create Bucket**.
 
 ## We are ready for a disaster!
 
-{{< prev_next_button link_prev_url="../us-east-1-deployment/" link_next_url="../restore-to-us-west-1/" />}}
+{{< prev_next_button link_prev_url="../verify-website/" link_next_url="../restore-to-us-west-1/" />}}

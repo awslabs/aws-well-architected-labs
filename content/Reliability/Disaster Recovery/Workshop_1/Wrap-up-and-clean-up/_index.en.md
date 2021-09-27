@@ -1,5 +1,5 @@
 +++
-title = "Wrap Up and Clean Up"
+title = "Cleanup Resources"
 date =  2021-05-11T20:41:47-04:00
 weight = 150
 +++

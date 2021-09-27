@@ -1,5 +1,5 @@
 +++
-title = "Restore to US-West-1"
+title = "Restore to DR Region"
 date =  2021-05-11T20:35:50-04:00
 weight = 7
 +++
