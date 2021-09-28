@@ -1,7 +1,7 @@
 +++
 title = "Setup for CloudFront"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 6
 +++
 
 You can improve resiliency and increase availability for specific scenarios by setting up CloudFront with origin failover. To get started, you create an origin group in which you designate a primary origin for CloudFront plus a second origin. CloudFront automatically switches to the second origin when the primary origin returns specific HTTP status code failure responses.  

@@ -1,5 +1,5 @@
 +++
-title = "Fail-over to Secondary"
+title = "Failover to Secondary"
 date =  2021-05-11T11:43:28-04:00
 weight = 4
 +++

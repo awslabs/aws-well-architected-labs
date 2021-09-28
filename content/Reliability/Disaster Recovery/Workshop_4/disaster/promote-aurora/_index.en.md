@@ -8,7 +8,7 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 
 Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone instance.
 
-We are going to promote Aurora secondary database.
+## Promote Aurora secondary database
 
 1.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
 

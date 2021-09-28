@@ -1,7 +1,7 @@
 +++
 title = "Disaster!"
 date =  2021-05-11T11:43:28-04:00
-weight = 5
+weight = 7
 +++
 
 When a regional service event affects the Unicorn application in the Primary, N. Virginia (us-east-1) region, you want to fail-over to Secondary, N. California (us-west-1) region.

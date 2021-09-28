@@ -1,7 +1,7 @@
 +++
 title = "Cleanup Resources"
 date =  2021-05-11T11:43:28-04:00
-weight = 7
+weight = 9
 +++
 
 ## Cleanup Amazon S3
