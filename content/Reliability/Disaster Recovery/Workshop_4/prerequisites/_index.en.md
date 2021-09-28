@@ -4,17 +4,21 @@ date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
 
-## Getting Started
+## Account setup 
 
-We will launch the same CloudFormation template in both the Primary N. Virginia (us-east-1) and Secondary N. California (us-west-1) regions. After the CloudFormation templates finish executing, we will configure Amazon S3 to host our static websites and utilize the Amazon RDS MySQL cluster, Amazon DynamoDB Global Tables, and Amazon CloudFront.
+### Using an account provided through Event Engine
+
+If you are running this workshop as part of an Event Engine lab, please log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
+
+Continue to the [DynamoDB Global Tables](../dynamodb-global/) section of the workshop.
+
+### Using your own AWS account
 
 {{% notice note %}}
-If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. Complete the cleanup steps at the end to minimize those costs.
-
-If you are running this at a group event - please log in via Event Engine. The event host will provide the Instructions.
+If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. After completing the workshop, remember to complete the [Cleanup Resources](../wrap-up-and-clean-up/) section to remove any unnecessary AWS resources.
 {{% /notice %}}
 
-## Allowing Amazon S3 Public Acess
+## Allow Amazon S3 Public Acess
 
 Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
 

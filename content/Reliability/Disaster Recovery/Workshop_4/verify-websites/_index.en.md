@@ -1,7 +1,7 @@
 +++
 title = "Verify Websites"
 date =  2021-05-11T11:43:28-04:00
-weight = 3
+weight = 5
 +++
 
 ## Verify the Active-Primary Website
@@ -32,5 +32,5 @@ You will need the Amazon CloudFormation output parameter values from the `Passiv
 
 {{< img vw-6.png >}}
 
-{{< prev_next_button link_prev_url="../prerequisites/secondary-region/" link_next_url="../setup-cloudfront/" />}}
+{{< prev_next_button link_prev_url="../configure-websites/" link_next_url="../setup-cloudfront/" />}}
 
