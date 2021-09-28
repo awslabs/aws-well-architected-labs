@@ -6,7 +6,7 @@ weight = 5
 
 ## Verify Website
 
-1.0 On the **CloudFormation Outputs** tab, click on the **Website URL**.
+1.1 On the **CloudFormation Outputs** tab, click on the **Website URL**.
 
 {{< img CF-9.png >}}
 
