@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 4
 +++
 
-1.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in the Secondary region (us-west-1).
+1.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/).
 
 1.2 Select the **Warm-Secondary** stack and click **Update**.
 
