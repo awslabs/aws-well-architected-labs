@@ -8,7 +8,7 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 
 Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone instance.
 
-1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/).
+1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 1.2 Click into **DB Instances**.
 

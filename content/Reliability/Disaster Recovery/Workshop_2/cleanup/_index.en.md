@@ -45,7 +45,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 ## CloudFormation Secondary Region Cleanup
 
-3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/).
+3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 3.2 Select the **Pilot-Secondary** stack and click **Delete**.
 
@@ -63,7 +63,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-10.png >}}
 
-3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/).
+3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 3.6 Select the **Pilot-Secondary** stack and click **Delete**.
 
@@ -73,7 +73,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 ## AWS CloudFormation Primary Region Cleanup
 
-4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/).
+4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
 4.2 Select **Pilot-Primary** stack.  Next click the **Delete** button to remove it.
 

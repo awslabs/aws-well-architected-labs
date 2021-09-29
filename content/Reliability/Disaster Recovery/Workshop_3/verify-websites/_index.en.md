@@ -6,7 +6,7 @@ weight = 3
 
 ## Primary Region
 
-1.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/).
+1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
 1.2 Choose the **Warm-Primary** stack.
 
@@ -36,7 +36,7 @@ weight = 3
 
 ## Secondary Region
 
-3.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/).
+3.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
 3.2 Choose the **Warm-Secondary** stack.
 

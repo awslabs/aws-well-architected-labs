@@ -31,7 +31,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/).
+2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 2.2 Select database under **dr-immersionday-secondary-warm** cluster and delete the instance.
 
@@ -45,7 +45,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 ## CloudFormation Secondary Region Cleanup
 
-3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/).
+3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 3.2 Select the **Warm-Secondary** stack and click **Delete**.
 
@@ -63,13 +63,17 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-10.png >}}
 
-3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) and delete the stack.  Select Retain for **Aurora Database Cluster and Instance** as they are already manually deleted.
+3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+
+3.6 Select the **Pilot-Secondary** stack and click **Delete**.
+
+3.7 Select all **Resources to retain** (this is OK because they were manually deleted in the prior section) and click **Delete stack**.
 
 {{< img cl-13.png >}}
 
 ## AWS CloudFormation Primary Region Cleanup
 
-4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/).
+4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
 4.2 Select **Warm-Primary** stack.  Next click the **Delete** button to remove it.
 

@@ -6,7 +6,7 @@ weight = 3
 
 ## Primary Region
 
-1.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/).
+1.1 Navigate to  [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
 1.2 Choose the **Pilot-Primary** stack.
 
