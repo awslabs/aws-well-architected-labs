@@ -4,26 +4,24 @@ date =  2021-05-11T11:43:28-04:00
 weight = 6
 +++
 
-Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in the Secondary region (us-west-1).
+## Secondary Region
 
-{{% notice info %}}
-**You must wait for your CloudFormation Template Update to complete before moving on to this step.**
-{{% /notice %}}
+1.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/).
 
-{{< img vf-0.png >}}
+1.2 Choose the **Pilot-Secondary** stack.
 
-Click on the CloudFormation stack **Pilot-Secondary** and drill into the **Outputs** tab.
+1.3 Then navigate to the **Outputs** tab.
+
 {{< img vf-2.png >}}
 
-
-Click on **WebsiteURL** parameter value to goto website
-{{< img vf-3.png >}}
+1.4 Click on the **WebsiteURL** output link.
 
 ## Verify the Website
 
-1.1 Login into the application. You just need to provide the registered email.
-1.2 You should see items in your shopping cart that you added in primary region.
+2.1 Log in to the application. You need to provide the registered email from the **Pre-requisites > Primary Region** section.
 
-{{< img vf-4.png >}}
+2.2 You should see items in your shopping cart that you added from the primary region **N. Virginia (us-east-1)**.
 
-{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup/" />}}
+{{< img vf-1.png >}}
+
+{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup" />}}
