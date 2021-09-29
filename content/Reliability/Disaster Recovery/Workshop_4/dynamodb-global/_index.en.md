@@ -42,4 +42,4 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 
 ## Congratulations! Your DynamoDB Global Tables have been created!
 
-{{< prev_next_button link_prev_url="../prerequisites/secondary-region/" link_next_url="../enable-aurora-writefwd/" />}}
+{{< prev_next_button link_prev_url="../prerequisites/cfn-outputs/" link_next_url="../enable-aurora-writefwd/" />}}

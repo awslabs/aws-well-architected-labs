@@ -1,7 +1,7 @@
 +++
 title = "Primary Region"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 2
 +++
 
 ## Deploying the Amazon CloudFormation Template
@@ -24,9 +24,5 @@ weight = 4
 
 {{< img pr-5.png >}}
 
-1.6 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
-
-{{< img pr-6.png >}}
-
-{{< prev_next_button link_prev_url="../" link_next_url="../secondary-region/" />}}
+{{< prev_next_button link_prev_url="../s3-access" link_next_url="../secondary-region/" />}}
 

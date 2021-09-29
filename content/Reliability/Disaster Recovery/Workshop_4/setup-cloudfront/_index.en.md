@@ -9,7 +9,7 @@ You can improve resiliency and increase availability for specific scenarios by s
 We are going to configure CloudFront with origin failover in the below steps using our **active-primary-uibucket-xxx** S3 static website as our primary origin and our **passive-secondary-uibucket-xxxx** S3 static website as our failover origin.
 
 {{% notice note %}}
-You will need the Amazon CloudFormation output parameter values from the `Primary-Active` and `Passive-Secondary` stacks to complete this section.
+You will need the Amazon CloudFormation output parameter values from the `Primary-Active` and `Passive-Secondary` stacks to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
 {{% /notice %}}
 
 ## Create the Amazon CloudFront Distribution

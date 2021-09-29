@@ -1,7 +1,7 @@
 +++
 title = "Secondary Region"
 date =  2021-05-11T11:43:28-04:00
-weight = 6
+weight = 3
 +++
 
 ## Deploying the Amazon CloudFormation Template
@@ -18,6 +18,7 @@ Change the **IsPrimary** parameter to value `no`.
 
 1.3 Click **Next** to continue.
 
+
 {{< img sr-4.png >}}
 
 1.4 Leave the **Configure stack options** page defaults and click **Next** to continue.
@@ -26,8 +27,4 @@ Change the **IsPrimary** parameter to value `no`.
 
 {{< img sr-5.png >}}
 
-1.6 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
-
-{{< img sr-6.png >}}
-
-{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../dynamodb-global/" />}}
+{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../cfn-outputs/" />}}

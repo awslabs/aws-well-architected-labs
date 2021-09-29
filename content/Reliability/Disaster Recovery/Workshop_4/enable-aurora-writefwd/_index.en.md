@@ -34,7 +34,11 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 
 {{< img a-4.png >}}
 
-1.6 Scroll down to the page's bottom and click the **Continue** button. Finally click the **Modify Cluster** button.
+1.6 Scroll down to the page's bottom and click the **Continue** button. 
+
+1.7 Select **Apply immediatley** and click the **Modify Cluster** button.
+
+{{< img a-5.png >}}
 
 ## Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
 
