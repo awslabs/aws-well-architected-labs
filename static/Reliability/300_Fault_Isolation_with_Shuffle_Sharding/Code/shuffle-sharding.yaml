@@ -137,6 +137,8 @@ Resources:
       Tags:
         - Key: Name
           Value: Worker-1
+        - Key: Workload
+          Value: WALab-shuffle-sharding
   Instance2:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -170,6 +172,8 @@ Resources:
       Tags:
         - Key: Name
           Value: Worker-2
+        - Key: Workload
+          Value: WALab-shuffle-sharding
   Instance3:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -203,6 +207,8 @@ Resources:
       Tags:
         - Key: Name
           Value: Worker-3
+        - Key: Workload
+          Value: WALab-shuffle-sharding
   Instance4:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -236,6 +242,148 @@ Resources:
       Tags:
         - Key: Name
           Value: Worker-4
+        - Key: Workload
+          Value: WALab-shuffle-sharding
+  Instance5:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet1
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-5
+        - Key: Workload
+          Value: WALab-shuffle-sharding
+  Instance6:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet1
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-6
+        - Key: Workload
+          Value: WALab-shuffle-sharding
+  Instance7:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet2
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-7
+        - Key: Workload
+          Value: WALab-shuffle-sharding
+  Instance8:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref Subnet2
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum update -y
+            - |
+              yum install python-pip -y
+            - |
+              pip install flask
+            - |
+              pip install boto3
+            - |
+              pip install ec2-metadata
+            - >
+              curl -o /home/ec2-user/buggy-webserver.py
+              https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/buggy-webserver.py
+            - >-
+              nohup python /home/ec2-user/buggy-webserver.py >>
+              /var/log/webserver.log 2>&1 &
+      Tags:
+        - Key: Name
+          Value: Worker-8
+        - Key: Workload
+          Value: WALab-shuffle-sharding
   InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
@@ -261,31 +409,6 @@ Resources:
               - Effect: Allow
                 Action: 'ec2:DescribeTags'
                 Resource: '*'
-  TargetGroupAllTargets:
-    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
-    Properties:
-      HealthCheckIntervalSeconds: '5'
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: '2'
-      HealthyThresholdCount: '2'
-      Port: '80'
-      Protocol: HTTP
-      TargetGroupAttributes:
-        - Key: deregistration_delay.timeout_seconds
-          Value: '1'
-      Targets:
-        - Id: !Ref Instance1
-          Port: '80'
-        - Id: !Ref Instance2
-          Port: '80'
-        - Id: !Ref Instance3
-          Port: '80'
-        - Id: !Ref Instance4
-          Port: '80'
-      TargetType: instance
-      UnhealthyThresholdCount: '2'
-      VpcId: !Ref VPC
   TargetGroup1:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     Properties:
@@ -321,7 +444,7 @@ Resources:
         - Key: deregistration_delay.timeout_seconds
           Value: '1'
       Targets:
-        - Id: !Ref Instance1
+        - Id: !Ref Instance2
           Port: '80'
         - Id: !Ref Instance3
           Port: '80'
@@ -342,7 +465,7 @@ Resources:
         - Key: deregistration_delay.timeout_seconds
           Value: '1'
       Targets:
-        - Id: !Ref Instance1
+        - Id: !Ref Instance3
           Port: '80'
         - Id: !Ref Instance4
           Port: '80'
@@ -363,9 +486,9 @@ Resources:
         - Key: deregistration_delay.timeout_seconds
           Value: '1'
       Targets:
-        - Id: !Ref Instance2
+        - Id: !Ref Instance4
           Port: '80'
-        - Id: !Ref Instance3
+        - Id: !Ref Instance5
           Port: '80'
       TargetType: instance
       UnhealthyThresholdCount: '2'
@@ -384,9 +507,9 @@ Resources:
         - Key: deregistration_delay.timeout_seconds
           Value: '1'
       Targets:
-        - Id: !Ref Instance2
+        - Id: !Ref Instance5
           Port: '80'
-        - Id: !Ref Instance4
+        - Id: !Ref Instance6
           Port: '80'
       TargetType: instance
       UnhealthyThresholdCount: '2'
@@ -405,9 +528,51 @@ Resources:
         - Key: deregistration_delay.timeout_seconds
           Value: '1'
       Targets:
-        - Id: !Ref Instance3
+        - Id: !Ref Instance6
           Port: '80'
-        - Id: !Ref Instance4
+        - Id: !Ref Instance7
+          Port: '80'
+      TargetType: instance
+      UnhealthyThresholdCount: '2'
+      VpcId: !Ref VPC
+  TargetGroup7:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: '5'
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '2'
+      HealthyThresholdCount: '2'
+      Port: '80'
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '1'
+      Targets:
+        - Id: !Ref Instance7
+          Port: '80'
+        - Id: !Ref Instance8
+          Port: '80'
+      TargetType: instance
+      UnhealthyThresholdCount: '2'
+      VpcId: !Ref VPC
+  TargetGroup8:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: '5'
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '2'
+      HealthyThresholdCount: '2'
+      Port: '80'
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '1'
+      Targets:
+        - Id: !Ref Instance8
+          Port: '80'
+        - Id: !Ref Instance1
           Port: '80'
       TargetType: instance
       UnhealthyThresholdCount: '2'
@@ -515,6 +680,34 @@ Resources:
                 Value: Foxtrot
       ListenerArn: !Ref ALBListener
       Priority: '6'
+  ALBListenerRule7:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup7
+          Type: forward
+      Conditions:
+        - Field: query-string
+          QueryStringConfig:
+            Values:
+              - Key: name
+                Value: Golf
+      ListenerArn: !Ref ALBListener
+      Priority: '7'
+  ALBListenerRule8:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref TargetGroup8
+          Type: forward
+      Conditions:
+        - Field: query-string
+          QueryStringConfig:
+            Values:
+              - Key: name
+                Value: Hotel
+      ListenerArn: !Ref ALBListener
+      Priority: '8'
   SSMDocument:
     Type: 'AWS::SSM::Document'
     Properties:
@@ -551,3 +744,11 @@ Outputs:
     Value: !Ref Instance3
   Worker4:
     Value: !Ref Instance4
+  Worker5:
+    Value: !Ref Instance5
+  Worker6:
+    Value: !Ref Instance6
+  Worker7:
+    Value: !Ref Instance7
+  Worker8:
+    Value: !Ref Instance8

@@ -9,7 +9,7 @@ pre: "<b>1. </b>"
 
 Traditionally most workloads are designed to withstand infrastructure failure by deploying workload components across multiple Availability Zones/Regions, implementing self-healing capabilities such as AutoScaling, etc. While such techniques are effective in ensuring uptime of workload resources, they do not address issues introduced at the workload application level (i.e. a software bug). Leveraging bulkhead architectures and shuffle sharding techniques will provide additional reliability to workloads by limiting the blast radius of failures so that only a subset of users are impacted by such failures.
 
-![ArchitectureRegular](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/Architecture-regular.png?classes=lab_picture_small)
+![ArchitectureRegular](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/Architecture-regular.png?classes=lab_picture_auto)
 
 You will use AWS CloudFormation to provision the resources needed for this lab. The CloudFormation stack that you provision will create an Application Load Balancer, Target Groups, and EC2 instances in a new VPC.
 
@@ -28,14 +28,14 @@ You will use AWS CloudFormation to provision the resources needed for this lab. 
 
 1. Go to the AWS CloudFormation console at <https://console.aws.amazon.com/cloudformation> and click **Create Stack** > **With new resources (standard)**
 
-    ![CFNCreateStackButton](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNCreateStackButton.png?classes=lab_picture_small)
+    ![CFNCreateStackButton](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNCreateStackButton.png?classes=lab_picture_auto)
 
 1. For **Prepare template** select **Template is ready**
 
     * For **Template source** select **Amazon S3 URL**
     * In the text box under **Amazon S3 URL** specify `https://aws-well-architected-labs-virginia.s3.amazonaws.com/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/regular.yaml`
 
-    ![CFNSpecifyTemplate](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNSpecifyTemplate.png?classes=lab_picture_small)
+    ![CFNSpecifyTemplate](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNSpecifyTemplate.png?classes=lab_picture_auto)
 
 1. Click **Next**
 1. For **Stack name** use `Shuffle-sharding-lab`
@@ -48,7 +48,7 @@ You will use AWS CloudFormation to provision the resources needed for this lab. 
 
     * Click **Create stack**
 
-    ![CFNIamCapabilities](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNIamCapabilities.png?classes=lab_picture_small)
+    ![CFNIamCapabilities](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNIamCapabilities.png?classes=lab_picture_auto)
 
 This will take you to the CloudFormation stack status page, showing the stack creation in progress.
 
@@ -59,7 +59,7 @@ This will take you to the CloudFormation stack status page, showing the stack cr
 The stack takes about 5 mins to create all the resources. Periodically refresh the page until you see that the **Stack Status** is in **CREATE_COMPLETE**. The stack creates the following resources:
 
 * A new VPC, subnets, Internet Gateway, Route tables to host the workload in
-* 4 EC2 instances that host the application
+* 8 EC2 instances that host the application
 * An Application Load Balancer, Listener and rules, and Target Groups to route traffic
 * IAM resources (roles, policies) that allow the EC2 instances to be managed by AWS Systems Manager
 * An SSM Document that will be run on the instances
@@ -72,14 +72,14 @@ Now that the application has been deployed, it is time to test it to understand 
 
 1. Copy the URL provided in the **Outputs** section of the CloudFormation stack created in the previous string.
 
-    ![CFNOutputs](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNOutputs.png?classes=lab_picture_small)
+    ![CFNOutputs](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNOutputs.png?classes=lab_picture_auto)
 
 1. Append the query string `/?name=Alpha` to the URL and paste it into a web browser. The full string should look similar to this - `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha`. Refresh the web browser a few times to see that responses are being returned from different EC2 instances on the back-end
     * The list of EC2 instances in your workload can be viewed in the [AWS Console here](https://console.aws.amazon.com/ec2/v2/home?#Instances:tag:Name=Worker)
 
-    ![RegularAlpha](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/RegularAlpha.png?classes=lab_picture_small)
+    ![RegularAlpha](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/RegularAlpha.png?classes=lab_picture_auto)
 
-1. Update the value for the query string to one of the other customers, the possible values are - Alpha, Bravo, Charlie, Delta, Echo, and Foxtrot
+1. Update the value for the query string to one of the other customers, the possible values are - Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, and Hotel
 
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
@@ -87,6 +87,8 @@ Now that the application has been deployed, it is time to test it to understand 
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Delta`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot`
+    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
+    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
 
     Note: If you see a response that says "This site can't be reached", please make sure you are using the URL obtained from the outputs section of the CloudFormation stack and not the sample URL provided in this lab guide.
 
