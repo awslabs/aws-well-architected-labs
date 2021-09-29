@@ -32,9 +32,7 @@ Your final `config.json` should look similar to this example.
 
 ### Upload the configuration to Amazon S3
 
-2.1 Navigate to **S3** in the console.
-
-{{< img c-8.png >}}
+2.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
 
 2.2 Find the bucket that begins with **active-primary-uibucket-**.  It will have a random suffix from the Amazon CloudFormation deployment.
 
@@ -84,9 +82,7 @@ Your final `config.json` should look similar to this example.
 
 ### Upload the configuration to Amazon S3
 
-4.1 Navigate to **S3** in the console.
-
-{{< img c-8.png >}}
+4.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
 
 4.2 Find the bucket that begins with **passive-secondary-uibucket-**.  It will have a random suffix from the Amazon CloudFormation deployment.
 

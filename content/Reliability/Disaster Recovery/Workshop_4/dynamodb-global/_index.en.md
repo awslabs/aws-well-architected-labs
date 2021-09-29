@@ -14,29 +14,27 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 
 ## Deploying Amazon DynamoDB Global Tables
 
-1.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+1.1 Navigate to [DynamoDB](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** regions.
 
-1.2  Navigate to **DynamoDB** in the console.
-
-{{< img dd-1.png >}}
-
-1.3 Click on the **Tables** link on the left-hand side.
+1.2 Click on the **Tables** link on the left-hand side.
 
 {{< img dd-2.png >}}
 
-1.4 Find the **unishophotstandby** table, and click into the configuration settings.
+1.3 Find the **unishophotstandby** table, and click into the configuration settings.
 
 {{< img dd-3.png >}}
 
-1.5 Under the **Global Tables** table, click the **Create replica** button.
+1.4 Under the **Global Tables** table, click the **Create replica** button.
 
 {{< img dd-4.png >}}
 
-1.6 Select the **US West (N. California)** region under Available replication Region, and then click the **Create replica** button.
+1.5 Select the **US West (N. California)** region under Available replication Region, and then click the **Create replica** button.
 
 {{< img dd-5.png >}}
 
-1.7 Wait for the **US West (N. California)** region's status to be **Active**.
+{{% notice note %}}
+This might take a few minutes, feel free to move onto the next step.  Just make sure the status is showing **Active** before **Verify Websites** step.
+{{% /notice %}}
 
 {{< img dd-6.png >}}
 

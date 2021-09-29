@@ -16,29 +16,29 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 
 ## Configuring Amazon Aurora Write Forwarding
 
-1.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
+1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
-1.2 Navigate to **RDS** in the console.
-
-{{< img a-1.png >}}
-
-1.3 Next, click into **DB Instances**.
+1.2 Next, click into **DB Instances**.
 
 {{< img a-2.png >}}
 
-1.4 Select **hot-standby-passive-secondary** and click the **Modify** button.
+1.3 Select **hot-standby-passive-secondary** and click the **Modify** button.
 
 {{< img a-3.png >}}
 
-1.5 Scroll down to **Read Replica Write Forwarding** and check the **Enable read replica write forwarding** checkbox.
+1.4 Scroll down to **Read Replica Write Forwarding** and check the **Enable read replica write forwarding** checkbox.
 
 {{< img a-4.png >}}
 
-1.6 Scroll down to the page's bottom and click the **Continue** button. 
+1.5 Scroll down to the page's bottom and click the **Continue** button. 
 
-1.7 Select **Apply immediatley** and click the **Modify Cluster** button.
+1.6 Select **Apply immediatley** and click the **Modify Cluster** button.
 
 {{< img a-5.png >}}
+
+{{% notice note %}}
+This might take a few minutes, feel free to move onto the next step.  Just make sure the hot-standby-passive-secondary cluster status is showing **Available** before **Verify Websites** step.
+{{% /notice %}}
 
 ## Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
 

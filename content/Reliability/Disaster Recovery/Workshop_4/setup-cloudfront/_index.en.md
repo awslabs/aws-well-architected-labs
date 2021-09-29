@@ -14,9 +14,7 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 ## Create the Amazon CloudFront Distribution
 
-1.1 Navigate to **CloudFront** in the console.
-
-{{< img cf-1.png >}}
+1.1 Navigate to [CloudFront](https://console.aws.amazon.com/cloudfront/home?region=us-east-1#/).
 
 1.2 Click the **Creat Distribution** button.
 

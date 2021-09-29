@@ -8,15 +8,11 @@ weight = 2
 
 ### Primary Region
 
-1.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+1.1 Navigate to the [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in the **N. Virginia (us-east-1)** region.
 
-1.2 Navigate to **CloudFormation** in the console.
+1.2  Choose the **Active-Primary** stack.
 
-{{< img pr-1.png >}}
-
-1.3  Choose the **Active-Primary** stack.
-
-1.4 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
+1.3 Wait until the stack's status reports **CREATE_COMPLETE**.  Then navigate to the **Outputs** tab and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
 
 {{< img pr-6.png >}}
 
