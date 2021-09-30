@@ -30,6 +30,6 @@ Change the **IsPrimary** parameter to value `no`.
 **Wait for the stack creation to complete**.
 {{% /notice %}}
 
-{{< img sr-5.png >}}
+{{< img sr-6.png >}}
 
 {{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../../enable-aurora-writefwd/" />}}

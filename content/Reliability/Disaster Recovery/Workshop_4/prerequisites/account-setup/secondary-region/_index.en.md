@@ -18,7 +18,6 @@ Change the **IsPrimary** parameter to value `no`.
 
 1.3 Click **Next** to continue.
 
-
 {{< img sr-4.png >}}
 
 1.4 Leave the **Configure stack options** page defaults and click **Next** to continue.
