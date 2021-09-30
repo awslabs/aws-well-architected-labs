@@ -7,7 +7,7 @@ weight = 5
 ## Verify the Active-Primary Website
 
 {{% notice note %}}
-You will need the Amazon CloudFormation output parameter values from the `Active-Primary` stack to complete this section.
+You will need the Amazon CloudFormation output parameter values from the `Active-Primary` stack to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
 {{% /notice %}}
 
 {{< img pr-6.png >}}
@@ -21,7 +21,7 @@ You will need the Amazon CloudFormation output parameter values from the `Active
 ## Verify the Passive-Secondary Website
 
 {{% notice note %}}
-You will need the Amazon CloudFormation output parameter values from the `Passive-Secondary` stack to complete this section.
+You will need the Amazon CloudFormation output parameter values from the `Passive-Secondary` stack to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
 {{% /notice %}}
 
 {{< img sr-6.png >}}

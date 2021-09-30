@@ -34,21 +34,19 @@ If you don't have your **CloudFront Domain Name**, you can retrieve it via **Ste
 
 ## Simulating a Regional Service Event
 
-We will now simulate a regional service event affecting the S3 static website in N. Virginia (us-east-1) serving The Unicorn Shop website.
+We will now simulate a regional service event affecting the S3 static website in **N. Virginia (us-east-1)** serving The Unicorn Shop website.
 
-2.2  Navigate to **S3** in the console.
+2.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
 
-{{< img d-4.png >}}
-
-2.3 Click into the **active-primary-uibucket-xxxx** bucket.
+2.2 Click into the **active-primary-uibucket-xxxx** bucket.
 
 {{< img c-9.png >}}
 
-2.4 Under the **Permissions** tab, click the **Edit** button to modify the **Block public access (bucket settings)** configuration.
+2.3 Under the **Permissions** tab, click the **Edit** button to modify the **Block public access (bucket settings)** configuration.
 
 {{< img d-6.png >}}
 
-2.5 Enable the **Block all public access** checkbox and then click the **Save** button.
+2.4 Enable the **Block all public access** checkbox and then click the **Save** button.
 
 {{< img d-7.png >}}
 

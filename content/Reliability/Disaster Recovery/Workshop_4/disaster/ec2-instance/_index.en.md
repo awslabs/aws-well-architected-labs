@@ -8,15 +8,13 @@ To connect the applicaiton to the newly promoted Aurora Database in the us-west-
 
 ## Connecting the Application
 
-1.1 Navigate to **EC2** in the console.
-
-{{< img am-1.png >}}
+1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
 1.2 Click on the **Instances (running)** tile.
 
 {{< img am-2.png >}}
 
-1.3 Enable the checkbox next to the **UniShopAppV1EC2** instance, then click the **Connect** button.
+1.3 Enable the checkbox next to the **UniShopAppV1EC2HotStandby** instance, then click the **Connect** button.
 
 {{< img am-3.png >}}
 

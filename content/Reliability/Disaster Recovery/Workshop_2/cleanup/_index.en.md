@@ -4,17 +4,15 @@ date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-#### S3 Cleanup
+## Amazon S3 Cleanup
 
-1.1 Navigate to **S3** in the console.
-
-{{< img cl-1.png >}}
+1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
 
 1.2 Select the **pilot-primary-uibucket-xxxx** and click **Empty**.
 
 {{< img cl-2.png >}}
 
-1.3 Type `permanently delete` in the confirmation box and click **Empty**.
+1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 
@@ -28,23 +26,26 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 {{% /notice %}}
 
 ## Database Clean up
+
 {{% notice note %}}
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-2.1 Navigate to Aurora Database in [RDS Console](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1), select database instance under the **dr-immersionday-secondary-pilot** cluster and delete the instance.
+2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+
+2.2 Select database under **dr-immersionday-secondary-pilot** cluster and delete the instance.
 
 {{< img cl-11.png >}}
 
-2.2 Deselect Create final snapshot option, Select "I acknowledge.." option. Click **Delete** button.
+2.3 De-select Create final snapshot option, Select "I acknowledge.." option. Click **Delete** button.
 
 {{< img cl-12.png >}}
 
-2.3 Wait until Amazon Aurora Database Cluster is deleted.
+2.4 Wait until Amazon Aurora Database Cluster is deleted.
 
-## CloudFormation Clean up
+## CloudFormation Secondary Region Cleanup
 
-3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/console) in the AWS Console.
+3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
 3.2 Select the **Pilot-Secondary** stack and click **Delete**.
 
@@ -55,23 +56,26 @@ This step is required as we did manual promotion for the Aurora Database.
 {{< img cl-9.png >}}
 
 {{% notice info %}}
-**Wait for the stack deletion to complete**
+**Wait for the stack deletion to complete**.
 {{% /notice %}}
 
 3.4 CloudFormation stack deletion fails due to the manual deletion of Aurora Database.
 
 {{< img cl-10.png >}}
 
-3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) and delete the stack.  Select Retain for **Aurora Database Cluster and Instance** as they are already manually deleted.
+3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
+3.6 Select the **Pilot-Secondary** stack and click **Delete**.
+
+3.7 Select all **Resources to retain** (this is OK because they were manually deleted in the prior section) and click **Delete stack**.
 
 {{< img cl-13.png >}}
 
 ## AWS CloudFormation Primary Region Cleanup
 
-4.1 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to us-east-1 using the Region Selector in the upper right corner.
+4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
-4.2 Navigate into CloudFormation and find the **Pilot-Primary** stack.  Next click the **Delete** button to remove it.
+4.2 Select **Pilot-Primary** stack.  Next click the **Delete** button to remove it.
 
 {{< img cl-6.png >}}
 
