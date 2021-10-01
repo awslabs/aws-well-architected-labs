@@ -15,7 +15,10 @@ weight: 3
 3. Select **Linux 2 AMI (HVM)**
 ![Images/MemInstall02b.png](/Cost/200_AWS_Resource_Optimization/Images/MemInstall02a.png?classes=lab_picture_small)
 
-4. Select **t2.micro** (free tier eligible) and click **review and launch**:
+4. Select **t2.micro** (free tier eligible) and click **review and launch**
+{{% notice tip %}}
+It is possible to assign the IAM role during EC2 creation by clicking "Next: Configure Instance Details". This lab shows the steps to assign it manually.
+{{% /notice %}}
 ![Images/MemInstall02b.png](/Cost/200_AWS_Resource_Optimization/Images/MemInstall02c.png?classes=lab_picture_small)
 
 5. Click **Launch**
