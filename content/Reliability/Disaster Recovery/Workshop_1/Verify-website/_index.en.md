@@ -1,17 +1,21 @@
 +++
 title = "Verify Website"
 date =  2021-05-11T11:33:17-04:00
-weight = 5
+weight = 2
 +++
 
-## Verify Website
+## Primary Region
 
-1.1 On the **CloudFormation Outputs** tab, click on the **Website URL**.
+1.1 Navigate to  [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
-{{< img CF-9.png >}}
+1.2 Choose the **BackupAndRestore** stack.
 
-Our application is now up and running in the primary region.
+1.3 Navigate to the **Outputs** tab.
 
-{{< img FE-1.png >}}
+{{< img cf-9.png >}}
 
-{{< prev_next_button link_prev_url="../prerequisites/" link_next_url="../backup-to-us-west-1/" />}}
+1.4 Click on the **WebsiteURL** output link.
+
+{{< img fe-1.png >}}
+
+{{< prev_next_button link_prev_url="../prerequisites/" link_next_url="../backup-resources/" />}}
