@@ -12,7 +12,7 @@ weight = 6
 
 {{< img cl-1.png >}}
 
-1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
+1.3 Enter `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 
@@ -65,7 +65,7 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 {{< img CL-21.png >}}
 
-4.3  Uncheck the **Create final snapshot** and **Retain automated backups** checkboxes. Next, enable the **I acknowledgement ...** checkbox.  Then type `delete me` into the confirmation box. Finally, click the **Delete** button.
+4.3  Uncheck the **Create final snapshot** and **Retain automated backups** checkboxes. Next, enable the **I acknowledgement ...** checkbox.  Enter `delete me` into the confirmation box. Click the **Delete** button.
 
 {{< img cl-13.png >}}
 

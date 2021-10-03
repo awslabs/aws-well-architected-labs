@@ -12,7 +12,7 @@ weight = 7
 
 {{< img cl-2.png >}}
 
-1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
+1.3 Enter `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 

@@ -10,11 +10,15 @@ If our EC2 instance contained application data, it would be necessary to schedul
 
 1.1 Navigate to [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
 
-1.2 Select the newly created EC2 instance **( Name: UniShopApp..EC2BAckupAndRestore )** and select **Actions**, then select **Images and Templates**, then select **Create Image**.
+1.2 Click the **Instances (running)** link.
+
+{{< img BK-4.png >}}
+
+1.2 Select **UniShopAppV1EC2BackupAndRestore**.  Click **Create image** under the **Actions -> Images and Templates** dropdown.
 
 {{< img BK-2.png >}}
 
-1.3 Enter a name for the image and click the **Create Image** button.
+1.3 Enter `BackupAndRestoreImage` as the **Image name**, then click the **Create Image** button.
 
 {{< img BK-3.png >}}
 

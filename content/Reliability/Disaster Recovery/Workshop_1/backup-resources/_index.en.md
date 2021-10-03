@@ -1,7 +1,7 @@
 +++
 title = "Create Backup Resources"
 date =  2021-05-11T20:33:54-04:00
-weight = 3
+weight = 2
 +++
 
 Now we are going to backup our resources.  
@@ -15,4 +15,4 @@ We would create a [backup plan](https://docs.aws.amazon.com/aws-backup/latest/de
 
 However, for the workshop, we will create a **manual backup**.
 
-{{< prev_next_button link_prev_url="../verify-website/" link_next_url="./rds/" />}}
+{{< prev_next_button link_prev_url="../prerequisites/" link_next_url="./rds/" />}}

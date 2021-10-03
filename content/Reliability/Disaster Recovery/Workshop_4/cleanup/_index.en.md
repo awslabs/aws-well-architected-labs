@@ -12,7 +12,7 @@ weight = 9
 
 {{< img cl-2.png >}}
 
-1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
+1.3 Enter `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 
@@ -43,7 +43,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-10.png >}}
 
-2.5 Type `delete` into the confirmation box, and then click the **Delete** button.
+2.5 Enter `delete` into the confirmation box, and then click the **Delete** button.
 
 {{< img cl-11.png >}}
 
@@ -57,7 +57,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-12.png >}}
 
-2.9  Uncheck the **Create final snapshot** checkbox. Next, enable the **I acknowledgement ...** checkbox.  Then type `delete me` into the confirmation box. Finally, click the **Delete** button.
+2.9  Uncheck the **Create final snapshot** checkbox. Next, enable the **I acknowledgement ...** checkbox.  Then enter `delete me` into the confirmation box. Finally, click the **Delete** button.
 
 {{< img cl-13.png >}}
 

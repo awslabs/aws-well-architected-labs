@@ -8,19 +8,23 @@ weight = 2
 
 1.1 Create application in primary region **N. Virginia (us-east-1)** by launching this [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=BackupAndRestore&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/BackupAndRestore.yaml).
 
-1.2  Specify stack details.
+1.2 Click the **Next** button.
+
+{{< img CF-1.png >}}
+
+1.3 Click the **Next** button.
 
 {{% notice info %}}
 **Leave LatestAmiId as the default values**
 {{% /notice %}}
 
-1.3 Click **Next** to continue.
+{{< img CF-2.png >}}
 
-{{< img CF-4.png >}}
+1.4 Click the **Next** button.
 
-1.4 Leave the **Configure stack options** page defaults and click **Next** to continue.
+{{< img CF-3.png >}}
 
-1.5 Scroll to the bottom of the page and click the **checkbox** to acknowledge then click **Create stack**.
+1.5 Scroll to the bottom of the page and **enable** the **I acknowledge that AWS CloudFormation might create IAM resources with custom names** checkbox, then click the **Create stack** button.
 
 {{< img pr-5.png >}}
 
@@ -30,5 +34,4 @@ weight = 2
 
 {{< img cf-8.png >}}
 
-
-{{< prev_next_button link_prev_url="../s3-access/" link_next_url="../../../verify-website/" />}}
+{{< prev_next_button link_prev_url="../s3-access/" link_next_url="../../../backup-resources/" />}}

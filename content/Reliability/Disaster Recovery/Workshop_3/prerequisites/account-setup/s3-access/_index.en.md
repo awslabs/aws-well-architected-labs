@@ -22,7 +22,7 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 
 {{< img pr-3.png >}}
 
-1.5 Type **confirm** and Click the **Confirm** button.
+1.5 Enter **confirm** and Click the **Confirm** button.
 
 {{< img pr-4.png >}}
 

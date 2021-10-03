@@ -50,13 +50,11 @@ java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.l
 
 1.9 Save the modifications (CTRL+O) and close the editor (CTRL+X).
 
-1.10 We need to restart the EC2 Instance before the new configuration will take effect.  Return to the browser tab where you launched Session Manager.  Click on the **Instance Id** link.
+1.10 Reboot the EC2 instance so our changes take effect.
 
-{{< img am-6.png >}}
-
-1.11 Under the **Instance state** dropdown, click the **Reboot instance** menu item.
-
-{{< img am-7.png >}}
+```sh
+sudo reboot
+```
 
 ## Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
 

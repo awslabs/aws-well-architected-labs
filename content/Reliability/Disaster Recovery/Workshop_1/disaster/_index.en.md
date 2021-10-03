@@ -19,17 +19,21 @@ We will now simulate a regional service event affecting the S3 static website in
 
 1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
 
-1.2 Click into the **backupandrestore-uibucket-xxxx** bucket.
+1.2 Click on the **backupandrestore-uibucket-xxxx** link.
 
 {{< img c-9.png >}}
 
-1.3 Under the **Permissions** tab, click the **Edit** button to modify the **Block public access (bucket settings)** configuration.
+1.3 Click the **Permissions** link. In the **Block public access (bucket settings)** section, click the **Edit** button.
 
 {{< img d-6.png >}}
 
-1.4 Enable the **Block all public access** checkbox and then click the **Save** button.
+1.4 Enable the **Block all public access** checkbox, then click the **Save** button.
 
 {{< img d-7.png >}}
 
-{{< prev_next_button link_prev_url="../copy-to-secondary/ec2/" link_next_url="./ec2/" />}}
+1.5 Type `confirm`, then click the **Confirm** button.
+
+{{< img d-8.png >}}
+
+{{< prev_next_button link_prev_url="../verify-website/" link_next_url="./ec2/" />}}
 

@@ -10,29 +10,31 @@ weight = 3
 
 1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
-1.2 Select the instance and click **Connect**.
+1.2 Click the **Instances (running)** link.
 
-{{% notice note %}}
-If you have more than one instance running you can verify you are selecting the correct one by checking **Security group name**.
-{{% /notice %}}
+{{< img BK-4.png >}}
+
+1.3 Select the instance that has **backupandrestore-us-west-ec2-SG** as the **Security group name**.  Click the **Connect** button.
 
 {{< img RS-44.png >}}
 
-1.3 Navigate to the **Session Manager** tab and click the **Connect** button.
+1.4 Click the **Session Manager** link, then click the **Connect** button.
 
 {{< img am-4.png >}}
 
-1.4 After a brief moment, a terminal prompt will display.
+1.5 After a brief moment, a terminal prompt will display.
 
 {{< img am-5.png >}}
 
-1.5 Let's connect to the database in the secondary **N. California (us-west-1)** region. Replace the below `backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com` with the endpoint you copied from [RDS Section](../rds/).
+1.6 Let's connect to the database in the secondary **N. California (us-west-1)** region. Replace the below **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).
 
 ```sh
-sh-4.2$ sudo mysql -u UniShopAppV1User -P 3306 -pUniShopAppV1Password -h backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com 
-sh-4.2$ SHOW DATABASES;
+sudo su ec2-user
+cd /home/ec2-user
+sudo mysql -u UniShopAppV1User -P 3306 -pUniShopAppV1Password -h backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com 
+SHOW DATABASES;
 ```
-1.6 Open the `unishopcfg.sh` file for editing with either nano or vi.
+1.7 Open the **unishopcfg.sh** file for editing with either nano or vi.
 
 ```sh
 sudo nano unishopcfg.sh
@@ -40,7 +42,7 @@ sudo nano unishopcfg.sh
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
-1.7 Replace the `backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com` with the endpoint you copied from [RDS Section](../rds/).  Change the region to `us-west-1`.  Add the `-dr` to the end of the S3 bucket name.
+1.8 Replace the **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).  Change the ***AWS_DEFAULT_REGION** to `us-west-1`.  Add the `-dr` to the end of the **UI_RANDOM_NAME**.
 
 ```sh
 #!/bin/bash
@@ -50,7 +52,7 @@ export AWS_DEFAULT_REGION=us-west-1
 export UI_RANDOM_NAME=backupandrestore-uibucket-xxxx-dr
 ```
 
-1.8 Let's copy the application files to the S3 buckets.  Replace the `backupandrestore-uibucket-xxxx-dr` with the name of your S3 bucket.
+1.9 Let's copy the application files to the S3 buckets.  Replace the **backupandrestore-uibucket-xxxx-dr** with the name of your S3 bucket.
 
 {{% notice note %}}
 If our S3 buckets contained application data then it would be necessary to schedule recurring backups to meet the target RPO. This could be done with Cross Region Replication. Since our buckets contains no data, only code, we will restore the contents from the EC2 instance.
@@ -60,7 +62,7 @@ If our S3 buckets contained application data then it would be necessary to sched
 sudo aws s3 cp /home/ec2-user/UniShopUI s3://backupandrestore-uibucket-xxxx-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 ```
 
-1.9 Reboot the EC2 instance so our changes take effect.
+1.10 Reboot the EC2 instance so our changes take effect.
 
 ```sh
 sudo reboot
@@ -86,38 +88,37 @@ Your final `config.json` should look similar to this example.
 }
 ```
 
-
 ### S3
 
 3.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
 
-3.2 Find the bucket that ends with **-dr-*.
+3.2 Find the bucket that ends with **-dr-** and click the bucket name link.
 
 {{< img c-9.png >}}
 
-3.3 Next, click into the bucket and then click the **Upload** button.
+3.3 Cick the **Upload** button.
 
 {{< img c-11.png >}}
 
-3.4 Click the **Add Files** button and specify the `config.json` file from the previous step.
+3.4 Click the **Add Files** button and specify the **config.json** file..
 
 {{< img c-12.png >}}
 
-3.5 Scroll down to **Permissions Section** section. Select the **Specify Individual ACL permissions** radio button.  Next, check the **Read** checkbox next to **Everyone (public access)** grantee.
+3.5 In the **Permissions Section** section. Select the **Specify Individual ACL permissions** radio button.  Enable the **Read** checkbox next to **Everyone (public access)** grantee.
 
 {{< img c-13.png >}}
 
-3.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Then click the **Upload** button to continue.
+3.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Click the **Upload** button.
 
 {{< img c-14.png >}}
 
-3.7 Navigate to the **Properties** tab.  Scroll down to **Static website hosting** section and click the **Edit** button.
+3.7 Click the **Properties** link.  In the **Static website hosting** section, click the **Edit** button.
 
 {{< img c-15.png >}}
 
 {{< img c-16.png >}}
 
-3.8 Under the **Static website hosting** section select Enable and add `index.html` for **Index document** and `error.html` for **Error document**.
+3.8 In the **Static website hosting** section select the **Enable** radio button.  Enter `index.html` as the **Index document** and enter `error.html` as the **Error document**.
 
 {{< img c-17.png >}}
 
@@ -125,7 +126,7 @@ Your final `config.json` should look similar to this example.
 
 {{< img c-18.png >}}
 
-3.10 Scroll down to **Static website hosting** section.  Click on the **Bucket website endpoint**.
+3.10 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
 
 {{< img c-19.png >}}
 
