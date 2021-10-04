@@ -4,7 +4,7 @@ date =  2021-05-11T20:41:47-04:00
 weight = 6
 +++
 
-## Cleanup Amazon S3
+### Amazon S3
 
 1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
 
@@ -25,7 +25,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 `backupandrestore-uibucket-xxxx-dr`
 {{% /notice %}}
 
-## Cleanup Amazon CloudFormation
+### Amazon CloudFormation
 
 2.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
 
@@ -37,7 +37,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-9.png >}}
 
-## Delete the contents of the backup vaults
+### AWS Backup
 
 3.1 Navigate to [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
 
@@ -57,7 +57,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 {{% /notice %}}
 
-### Delete the RDS instance
+### Amazon RDS
 
 4.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -69,7 +69,7 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 {{< img cl-13.png >}}
 
-## Delete EC2 Instance, AMI (Amazon Machine Image) and Security Group
+### Amazon EC2
 
 5.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 

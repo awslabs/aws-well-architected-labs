@@ -4,7 +4,7 @@ date =  2021-05-11T20:35:50-04:00
 weight = 1
 +++
 
-## Launch an EC2 instance from AMI (Amazon Machine Image)
+###  Launch an EC2 instance from AMI (Amazon Machine Image)
 
 1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 

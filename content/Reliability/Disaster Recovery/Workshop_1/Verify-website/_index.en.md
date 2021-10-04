@@ -4,7 +4,7 @@ date =  2021-05-11T11:33:17-04:00
 weight = 4
 +++
 
-## Primary Region
+### Primary Region
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in the **N. Virginia (us-east-1)** region.
 

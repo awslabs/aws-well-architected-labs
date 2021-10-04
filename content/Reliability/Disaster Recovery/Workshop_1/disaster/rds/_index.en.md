@@ -4,7 +4,7 @@ date =  2021-05-11T20:35:50-04:00
 weight = 2
 +++
 
-## Restore RDS Database
+### Restore RDS Database
 
 1.1 Navigate to [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -30,7 +30,7 @@ If you don't see your backup, check the status of the **Copy Job**. Navigate to 
 
 {{< img RS-20.png >}}
 
-## Configure Security Group
+### Configure Security Group
 
 2.1 Navigate to [VPC](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -46,7 +46,7 @@ If you don't see your backup, check the status of the **Copy Job**. Navigate to 
 
 {{< img RS-40.png >}}
 
-## Modify RDS Security Group
+### Modify RDS Security Group
 
 3.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -59,7 +59,6 @@ If you don't see your backup, check the status of the **Copy Job**. Navigate to 
 {{% notice note %}}
 The database must have a **Status** of **Available**.
 {{% /notice %}}
-
 
 {{< img RS-25.png >}}
 

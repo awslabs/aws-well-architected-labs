@@ -8,7 +8,7 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 
 Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone instance.
 
-## Promote Aurora secondary database
+### Promote Aurora secondary database
 
 1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -24,7 +24,7 @@ Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone in
 
 {{< img a-4.png >}}
 
-## Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+#### Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
 
 {{< prev_next_button link_prev_url="../" link_next_url="../ec2-instance/" />}}
 

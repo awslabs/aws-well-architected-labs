@@ -14,7 +14,7 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 **You must wait for the Secondary Region stack to successfully be created before moving on to this step.**
 {{% /notice %}}
 
-## Configuring Amazon Aurora Write Forwarding
+### Configuring Amazon Aurora Write Forwarding
 
 1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -40,6 +40,6 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 This might take a few minutes, feel free to move onto the next step.  Just make sure the hot-standby-passive-secondary cluster status is showing **Available** before **Verify Websites** step.
 {{% /notice %}}
 
-## Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
+#### Congratulations! Your Amazon Aurora Global Database now supports Read-Replica Write Forwarding!
 
 {{< prev_next_button link_prev_url="../dynamodb-global/" link_next_url="../configure-websites/" />}}

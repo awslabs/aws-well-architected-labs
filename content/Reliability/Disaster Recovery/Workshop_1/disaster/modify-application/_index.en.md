@@ -4,8 +4,6 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-## Modifying the application
-
 ### EC2
 
 1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
@@ -129,6 +127,8 @@ Your final `config.json` should look similar to this example.
 3.10 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
 
 {{< img c-19.png >}}
+
+{{< img rs-45.png >}}
 
 #### Congratulations !  You should see your application The Unicorn Shop in the **us-west-1** region.
 

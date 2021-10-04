@@ -13,7 +13,7 @@ We will perform the following:
 - Restore the RDS database from backup
 - Configure the application 
 
-## Simulating a Regional Service Event
+### Simulating a Regional Service Event
 
 We will now simulate a regional service event affecting the S3 static website in **N. Virginia (us-east-1)** serving The Unicorn Shop website.
 
@@ -34,6 +34,22 @@ We will now simulate a regional service event affecting the S3 static website in
 1.5 Type `confirm`, then click the **Confirm** button.
 
 {{< img d-8.png >}}
+
+1.6 Type `confirm`, then click the **Confirm** button.
+
+{{< img d-8.png >}}
+
+1.7 Click the **Properties** link.  
+
+{{< img d-10.png >}}
+
+1.8 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
+
+{{< img d-11.png >}}
+
+1.9  You should get a **403 Forbidden** error.
+
+{{< img d-9.png >}}
 
 {{< prev_next_button link_prev_url="../verify-website/" link_next_url="./ec2/" />}}
 

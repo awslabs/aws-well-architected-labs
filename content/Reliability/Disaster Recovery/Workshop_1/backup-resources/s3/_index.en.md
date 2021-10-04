@@ -4,7 +4,7 @@ date =  2021-05-11T20:33:54-04:00
 weight = 3
 +++
 
-## Create the S3 UI bucket
+### Create the S3 UI bucket in the secondary N. California (us-west-1) region.
 
 1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
 

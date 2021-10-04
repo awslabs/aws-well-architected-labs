@@ -10,7 +10,7 @@ We assume a regional service event has occurred. In this section, we will manual
 
 Before simulating the outage, we need to create test data through the web application. This step requires creating enrolling in the store, then adding items into the shopping cart.  After the outage, the user’s session should remain active and uninterrupted.
 
-## Create and Populate the Shopping Cart
+### Create and Populate the Shopping Cart
 
 1.1 Navigate to the **CloudFront Domain Name** using your favorite browser.
 
@@ -32,7 +32,7 @@ If you don't have your **CloudFront Domain Name**, you can retrieve it via **Ste
 
 1.5 Add/remove items to your shopping cart by clicking on a Unicorn, followed by clicking the **Add to cart** button.
 
-## Simulating a Regional Service Event
+### Simulating a Regional Service Event
 
 We will now simulate a regional service event affecting the S3 static website in **N. Virginia (us-east-1)** serving The Unicorn Shop website.
 

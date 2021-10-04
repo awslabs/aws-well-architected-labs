@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 9
 +++
 
-## Cleanup Amazon S3
+### Amazon S3
 
 1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
 
@@ -27,7 +27,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 `passive-secondary-assetbucket-xxxx`
 {{% /notice %}}
 
-## Cleanup Amazon DynamoDB Global Tables
+### Amazon DynamoDB 
 
 2.1 Navigate to [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
 
@@ -61,7 +61,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-13.png >}}
 
-## Cleanup Amazon CloudFormation
+### Amazon CloudFormation
 
 3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 

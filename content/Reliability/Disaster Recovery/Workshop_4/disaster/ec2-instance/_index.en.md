@@ -6,7 +6,7 @@ weight = 7
 
 To connect the applicaiton to the newly promoted Aurora Database in the us-west-1 region, we need to modify the `Passive-Secondary` web application's configuration.
 
-## Connecting the Application
+### Connecting the Application
 
 1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 
@@ -56,7 +56,7 @@ java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.l
 sudo reboot
 ```
 
-## Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
+#### Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
 
 {{< prev_next_button link_prev_url="../promote-aurora/" link_next_url="../../verify-failover/" />}}
 

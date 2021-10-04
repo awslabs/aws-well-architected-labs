@@ -12,7 +12,7 @@ We are going to configure CloudFront with origin failover in the below steps usi
 You will need the Amazon CloudFormation output parameter values from the `Primary-Active` and `Passive-Secondary` stacks to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
 {{% /notice %}}
 
-## Create the Amazon CloudFront Distribution
+### Create the Amazon CloudFront Distribution
 
 1.1 Navigate to [CloudFront](https://console.aws.amazon.com/cloudfront/home?region=us-east-1#/).
 
@@ -36,7 +36,7 @@ The next module **Disaster!**, will not work without modifying this value.
 
 1.5 Scroll to the page's bottom and click the **Create Distribution** button.  
 
-## Configure the Distribution Settings
+### Configure the Distribution Settings
 
 2.1 Under the **Origins** tab, click the **Create origin** button.
 
@@ -56,7 +56,7 @@ The next module **Disaster!**, will not work without modifying this value.
 
 {{< img cf-22.png >}}
 
-## Configure Distribution Behaviors
+### Configure Distribution Behaviors
 
 3.1 Under the **Behaviors** tab, enable the button next to the default behavior, and click the **Edit** button.
 
@@ -74,7 +74,7 @@ The next module **Disaster!**, will not work without modifying this value.
 
 {{< img cf-25.png >}}
 
-## Verify the Distribution
+### Verify the Distribution
 
 4.1 Copy the CloudFront Distribution's **Domain Name** into a new browser window.
 
@@ -84,7 +84,7 @@ The next module **Disaster!**, will not work without modifying this value.
 
 {{< img cf-14.png >}}
 
-## Congragulations!  Your CloudFront distribution is working!
+#### Congragulations!  Your CloudFront distribution is working!
 
 {{< prev_next_button link_prev_url="../verify-websites/" link_next_url="../disaster/" />}}
 
