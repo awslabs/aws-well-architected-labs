@@ -10,4 +10,6 @@ weight = 1
 If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. After completing the workshop, remember to complete the [Cleanup Resources](../../cleanup/) section to remove any unnecessary AWS resources.
 {{% /notice %}}
 
+This workshop takes about 60 minutes to complete. 
+
 {{< prev_next_button link_prev_url="../" link_next_url="./s3-access/" />}}
