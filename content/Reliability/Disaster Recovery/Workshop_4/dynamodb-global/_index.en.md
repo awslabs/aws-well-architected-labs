@@ -12,7 +12,7 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 **You must wait for the Primary Region stack to successfully be created before moving on to this step.**
 {{% /notice %}}
 
-## Deploying Amazon DynamoDB Global Tables
+### Deploying Amazon DynamoDB Global Tables
 
 1.1 Navigate to [DynamoDB](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** regions.
 
@@ -38,6 +38,6 @@ This might take a few minutes, feel free to move onto the next step.  Just make 
 
 {{< img dd-6.png >}}
 
-## Congratulations! Your DynamoDB Global Tables have been created!
+#### Congratulations! Your DynamoDB Global Tables have been created!
 
 {{< prev_next_button link_prev_url="../prerequisites/cfn-outputs/" link_next_url="../enable-aurora-writefwd/" />}}

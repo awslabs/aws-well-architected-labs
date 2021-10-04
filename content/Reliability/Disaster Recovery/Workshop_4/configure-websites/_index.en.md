@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 4
 +++
 
-## Configure the Active-Primary Website
+### Configure the Active-Primary Website
 
 {{% notice note %}}
 You will need the Amazon CloudFormation output parameter values from the `Active-Primary` stack to complete this section.  For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
@@ -54,7 +54,7 @@ Your final `config.json` should look similar to this example.
 
 {{< img pc-14.png >}}
 
-## Configure the Passive-Secondary Website
+### Configure the Passive-Secondary Website
 
 {{% notice note %}}
 You will need the Amazon CloudFormation output parameter values from the `Passive-Secondary` stack to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.

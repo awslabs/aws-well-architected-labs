@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 9
 +++
 
-## Cleanup Amazon S3
+### Amazon S3
 
 1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
 
@@ -12,7 +12,7 @@ weight = 9
 
 {{< img cl-2.png >}}
 
-1.3 Type `permanently delete` into the confirmation box and then click **Empty**.
+1.3 Enter `permanently delete` into the confirmation box and then click **Empty**.
 
 {{< img cl-3.png >}}
 
@@ -27,7 +27,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 `passive-secondary-assetbucket-xxxx`
 {{% /notice %}}
 
-## Cleanup Amazon DynamoDB Global Tables
+### Amazon DynamoDB 
 
 2.1 Navigate to [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
 
@@ -43,7 +43,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-10.png >}}
 
-2.5 Type `delete` into the confirmation box, and then click the **Delete** button.
+2.5 Enter `delete` into the confirmation box, and then click the **Delete** button.
 
 {{< img cl-11.png >}}
 
@@ -57,11 +57,11 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-12.png >}}
 
-2.9  Uncheck the **Create final snapshot** checkbox. Next, enable the **I acknowledgement ...** checkbox.  Then type `delete me` into the confirmation box. Finally, click the **Delete** button.
+2.9  Uncheck the **Create final snapshot** checkbox. Next, enable the **I acknowledgement ...** checkbox.  Then enter `delete me` into the confirmation box. Finally, click the **Delete** button.
 
 {{< img cl-13.png >}}
 
-## Cleanup Amazon CloudFormation
+### Amazon CloudFormation
 
 3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
 

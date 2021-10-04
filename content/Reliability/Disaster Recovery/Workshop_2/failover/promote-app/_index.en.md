@@ -4,7 +4,6 @@ date =  2021-05-11T11:43:28-04:00
 weight = 4
 +++
 
-
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
 1.2 Select the **Pilot-Secondary** stack and click **Update**.
