@@ -9,7 +9,7 @@ You can improve resiliency and increase availability for specific scenarios by s
 We are going to configure CloudFront with origin failover in the below steps using our **active-primary-uibucket-xxx** S3 static website as our primary origin and our **passive-secondary-uibucket-xxxx** S3 static website as our failover origin.
 
 {{% notice note %}}
-You will need the Amazon CloudFormation output parameter values from the `Primary-Active` and `Passive-Secondary` stacks to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
+You will need the Amazon CloudFormation output parameter values from the **Primary-Active** and **Passive-Secondary** stacks to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
 {{% /notice %}}
 
 ### Create the Amazon CloudFront Distribution
@@ -20,7 +20,11 @@ You will need the Amazon CloudFormation output parameter values from the `Primar
 
 {{< img cf-16.png >}}
 
-1.3 On the **Create Distribution** page, set the **Origin Domain** equal to the **WebsiteURL** value from the `Primary-Active` stack outputs.  Do not choose the Amazon S3 bucket in the drop-down.
+1.3 On the **Create Distribution** page, set the **Origin Domain** equal to the **WebsiteURL** value from the **Primary-Active** stack outputs.  
+
+{{% notice warning %}}
+**DO NOT** choose the Amazon S3 bucket in the drop-down for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
+{{% /notice %}}
 
 {{< img cf-17.png >}}
 
@@ -42,7 +46,11 @@ The next module **Disaster!**, will not work without modifying this value.
 
 {{< img cf-19.png >}}
 
-2.2 On the **Create Origin** page, specify the **Origin Domain** equal to the **WebsiteURL** value from your `Passive-Secondary` stack outputs.  Do not choose the Amazon S3 bucket in the dropdown.  Finally, click the **Create origin** button.
+2.2 On the **Create Origin** page, specify the **Origin Domain** equal to the **WebsiteURL** value from your **Passive-Secondary** stack outputs. Finally, click the **Create origin** button.
+
+{{% notice warning %}}
+**DO NOT** choose the Amazon S3 bucket in the drop-down for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
+{{% /notice %}}
 
 {{< img cf-20.png >}}
 
@@ -50,7 +58,7 @@ The next module **Disaster!**, will not work without modifying this value.
 
 {{< img cf-21.png >}}
 
-2.4 On the **Create Origin Group** page, use the **Add** button to select the `Primary-Active` origin, then the `Passive-Secondary` origin.  Confirm that the **1 (Primary)** has the **Origin ID** of the `Primary-Active` **WebsiteURL**.
+2.4 On the **Create Origin Group** page, use the **Add** button to select the **Primary-Active** origin, then the **Passive-Secondary** origin.  Confirm that the **1 (Primary)** has the **Origin ID** of the **Primary-Active** **WebsiteURL**.
 
 2.5 Enable all **checkboxes** under the **Failover Criteria** section.  Then click the **Create origin group** button.
 
