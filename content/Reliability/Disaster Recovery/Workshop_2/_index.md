@@ -16,7 +16,7 @@ We will initially deploy the primary Unishop instance into the N. Virginia regio
 
 Afterward, we will verify the DR scenario. Meeting our [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) within 10s of minutes requires Amazon Aurora MySQL Cluster with the Amazon Aurora MySQL Global database feature enabled.  This feature adds cross-region database replication capabilities.
 
-This workshop takes about 60 minutes to complete. Prior experieince with the AWS Console and Linux command line are helpful but not required.
+Prior experieince with the AWS Console and Linux command line are helpful but not required.
 
 {{< img arch-2.png >}}
 

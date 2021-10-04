@@ -16,7 +16,7 @@ We will initially deploy the primary Unishop instance into the N. Virginia regio
 
 Afterward, we will verify the DR scenario. Meeting our [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _virtually instantaneously_, requires an Amazon CloudFront distribution with Orgin Failover policy.  Additionally, the workshop deploys an Amazon RDS Aurora MySQL Clusters with the **1/** Read-Replica Write Forwarding and **2/** Amazon Aurora MySQL Global tables enabled. These features support replicating database changes from either region. Finally we will configure DynamoDB Global Tables which will replicate data between regions.
 
-This workshop takes about 60 minutes to complete. Prior experieince with the AWS Console and Linux command line are helpful but not required.
+Prior experieince with the AWS Console and Linux command line are helpful but not required.
 
 {{< img workshop-4-arch.png >}}
 
