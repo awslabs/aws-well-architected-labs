@@ -35,19 +35,15 @@ We will now simulate a regional service event affecting the S3 static website in
 
 {{< img d-8.png >}}
 
-1.6 Type `confirm`, then click the **Confirm** button.
-
-{{< img d-8.png >}}
-
-1.7 Click the **Properties** link.  
+1.6 Click the **Properties** link.  
 
 {{< img d-10.png >}}
 
-1.8 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
+1.7 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
 
 {{< img d-11.png >}}
 
-1.9  You should get a **403 Forbidden** error.
+1.8  You should get a **403 Forbidden** error.
 
 {{< img d-9.png >}}
 
