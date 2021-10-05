@@ -18,7 +18,7 @@ weight = 2
 
 #### Secondary Region
 
-2.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
+2.1 Change your console’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
 
 2.2 Choose the **Passive-Secondary** stack.
 
