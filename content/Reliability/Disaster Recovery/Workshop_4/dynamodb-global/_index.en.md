@@ -14,7 +14,7 @@ We are going to configure DynamoDB global tables replicating from **AWS Region N
 
 ### Deploying Amazon DynamoDB Global Tables
 
-1.1 Navigate to [DynamoDB](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** regions.
+1.1 Navigate to [DynamoDB](https://console.aws.amazon.com/dynamodbv2/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** regions.
 
 1.2 Click on the **Tables** link on the left-hand side.
 
