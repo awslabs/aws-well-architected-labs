@@ -15,44 +15,45 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace com.app.resiliency
 {
-
     public class Failover
     {
-
         public static void Main(string[] args)
         {
-
             if (args.Length > 0)
             {
-                IList<string> arguments = (IList<string>)(args);
-
-                if (arguments.Contains("AZ") && arguments.Count == 3)
+                if (args.Contains("AZ") && args.Length == 3)
                 {
-                    string vpcId = arguments[1];
-                    string azId = arguments[2];
+                    string vpcId = args[1];
+                    string azId = args[2];
                     AZFailover azFailover = new AZFailover(vpcId, azId);
-                    azFailover.failover();
+                    Task.Run(() => azFailover.Failover()).Wait();
                 }
-                else if (arguments.Contains("EC2") && arguments.Count == 2)
+                else if (args.Contains("EC2") && args.Length == 2)
                 {
-                    string vpcId = arguments[1];
+                    string vpcId = args[1];
                     InstanceFailover instanceFailover = new InstanceFailover(vpcId);
-                    instanceFailover.failover();
+                    Task.Run(() => instanceFailover.Failover()).Wait();
                 }
-                else if (arguments.Contains("RDS") && arguments.Count == 2)
+                else if (args.Contains("RDS") && args.Length == 2)
                 {
-                    string vpcId = arguments[1];
+                    string vpcId = args[1];
                     RDSFailover rdsFailover = new RDSFailover(vpcId);
-                    rdsFailover.failover();
+                    Task.Run(() => rdsFailover.Failover()).Wait();
                 }
                 else
                 {
                     throw new System.ArgumentException("Invalid argument passed");
                 }
+            }
+            else
+            {
+                Console.WriteLine("Specify either AZ, EC2, or RDS as the first parameter. For AZ, specify the VPC Id and AZ Id. For EC2 and RDS, specify the VPC Id.");
             }
         }
     }

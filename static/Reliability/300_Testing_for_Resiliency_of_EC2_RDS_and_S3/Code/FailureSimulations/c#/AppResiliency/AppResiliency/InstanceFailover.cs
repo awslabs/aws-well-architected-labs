@@ -19,27 +19,34 @@ using System;
 using Amazon.EC2;
 using System.Collections.Generic;
 using Amazon.EC2.Model;
+using System.Threading.Tasks;
 
 namespace com.app.resiliency
 {
 
     public class InstanceFailover
     {
-
-        private static readonly AmazonEC2Client EC2_CLIENT = new AmazonEC2Client(Amazon.RegionEndpoint.USEast2);
+        private IAmazonEC2 ec2Client;
         private string vpcId;
 
-        internal InstanceFailover(string vpcId)
+        internal InstanceFailover(string vpcId, Amazon.RegionEndpoint region = null)
         {
             this.vpcId = vpcId;
+
+            if (region == null)
+            {
+                region = Amazon.RegionEndpoint.USEast2;
+            }
+
+            ec2Client = new AmazonEC2Client(region);
         }
 
-        public virtual void failover()
+        public virtual async Task Failover()
         {
             try
             {
                 DescribeInstancesResponse describeInstancesResult
-                           = EC2_CLIENT.DescribeInstancesAsync(new DescribeInstancesRequest()
+                           = await ec2Client.DescribeInstancesAsync(new DescribeInstancesRequest()
                            {
                                Filters = new List<Filter> {
                                     new Filter {
@@ -51,22 +58,30 @@ namespace com.app.resiliency
                                         Values = new List<string> { "running" }
                                     }
                                 }
-                }).GetAwaiter().GetResult();
+                           });
 
                 // Note: This assumes there is one reservation with an instance in it for readability.
                 string instanceId = describeInstancesResult.Reservations[0].Instances[0].InstanceId;
                 Console.WriteLine("Terminating instanceId " + instanceId);
-                var instanceIdentifier = new List<string> { instanceId };
 
-                TerminateInstancesRequest terminateInstancesRequest = new TerminateInstancesRequest();
-                terminateInstancesRequest.InstanceIds = instanceIdentifier;
-                EC2_CLIENT.TerminateInstancesAsync(terminateInstancesRequest);
+                var response = await ec2Client.TerminateInstancesAsync(new TerminateInstancesRequest()
+                {
+                    InstanceIds = { instanceId }
+                });
+
+                if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Instance terminated successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Error terminating instance, received " + response.HttpStatusCode.ToString());
+                }
             }
             catch (Exception exception)
             {
                 Console.WriteLine("Unkown exception occured " + exception.Message);
             }
         }
-
     }
 }

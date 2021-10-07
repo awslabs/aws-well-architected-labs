@@ -1,17 +1,25 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppResiliency", "AppResiliency\AppResiliency.csproj", "{A3E21600-CE59-4786-AE30-70DE4977ED14}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppResiliency", "AppResiliency\AppResiliency.csproj", "{4D7858EB-28A2-47E7-855D-1214918EFADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A3E21600-CE59-4786-AE30-70DE4977ED14}.Debug|x86.ActiveCfg = Debug|x86
-		{A3E21600-CE59-4786-AE30-70DE4977ED14}.Debug|x86.Build.0 = Debug|x86
-		{A3E21600-CE59-4786-AE30-70DE4977ED14}.Release|x86.ActiveCfg = Release|x86
-		{A3E21600-CE59-4786-AE30-70DE4977ED14}.Release|x86.Build.0 = Release|x86
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E523B72B-02BA-4543-BEB3-61FFD6078BF1}
 	EndGlobalSection
 EndGlobal
