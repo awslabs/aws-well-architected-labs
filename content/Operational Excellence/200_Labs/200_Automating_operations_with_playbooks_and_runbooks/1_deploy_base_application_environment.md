@@ -37,9 +37,9 @@ In this first step you will provision a [CloudFormation](https://aws.amazon.com/
 
 1. Click on the link below to deploy the stack. This will take you to the CloudFormation console in your account. Use `walab-ops-base-resources` as the stack name, and take the default values for all options.
 
-    * **us-west-2** : [here](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://sssalim-cfn-template-temp.s3-ap-southeast-2.amazonaws.com/base_resources.yml)
-    * **ap-southeast-2** : [here](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://sssalim-cfn-template-temp.s3-ap-southeast-2.amazonaws.com/base_resources.yml)
-    * **ap-southeast-1** : [here](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://sssalim-cfn-template-temp.s3-ap-southeast-2.amazonaws.com/base_resources.yml)
+    * **us-west-2** : [here](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://aws-well-architected-labs-singapore.s3.ap-southeast-1.amazonaws.com/Operations/200_Automating_operations_with_playbooks_and_runbooks/base_resources.yml)
+    * **ap-southeast-2** : [here](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://aws-well-architected-labs-singapore.s3.ap-southeast-1.amazonaws.com/Operations/200_Automating_operations_with_playbooks_and_runbooks/base_resources.yml)
+    * **ap-southeast-1** : [here](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/create/review?stackName=walab-ops-base-resources&templateURL=https://aws-well-architected-labs-singapore.s3.ap-southeast-1.amazonaws.com/Operations/200_Automating_operations_with_playbooks_and_runbooks/base_resources.yml)
 
 2. Once the template is deployed, wait until the CloudFormation Stack reaches the **CREATE_COMPLETE** state.
 
