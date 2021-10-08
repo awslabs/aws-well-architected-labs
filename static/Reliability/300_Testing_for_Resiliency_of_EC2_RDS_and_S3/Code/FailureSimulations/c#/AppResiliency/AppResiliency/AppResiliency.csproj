@@ -4,13 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>com.app.resiliency</RootNamespace>
-    <Platforms>x64</Platforms>
+    <Platforms>x64;ARM64</Platforms>
   </PropertyGroup>
 
     <PropertyGroup>
         <PublishSingleFile>true</PublishSingleFile>
     </PropertyGroup>
-
 
     <ItemGroup>
     <PackageReference Include="AWSSDK.AutoScaling" Version="3.7.5.29" />

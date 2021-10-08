@@ -8,16 +8,23 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9EA2C7F-8067-4D37-A104-872629DEADB7}"
 	ProjectSection(SolutionItems) = preProject
 		build.ps1 = build.ps1
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
+		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|ARM64.Build.0 = Debug|ARM64
 		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|x64.ActiveCfg = Release|x64
 		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Debug|x64.Build.0 = Release|x64
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|ARM64.ActiveCfg = Release|ARM64
+		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|ARM64.Build.0 = Release|ARM64
 		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|x64.ActiveCfg = Release|x64
 		{4D7858EB-28A2-47E7-855D-1214918EFADA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
