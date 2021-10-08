@@ -128,7 +128,7 @@ namespace com.app.resiliency
             }
             catch (Exception exception)
             {
-                Console.WriteLine("Unkown exception occured " + exception.Message);
+                Console.WriteLine("Unknown exception occurred " + exception.Message);
             }
         }
 
