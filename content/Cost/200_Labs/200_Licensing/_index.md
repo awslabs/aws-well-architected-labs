@@ -28,7 +28,7 @@ these techniques can be applied to any licensed software.
 You will first setup a data source (if required) using the sample provided. This is a Cost and Usage report that contains licensed usage. You may use your own
 cost and usage report, however you need to ensure there is licensed usage and modify the examples in the lab.
 
-You analyze the CUR to discover the costs of operating system licenses, and als the cost of running licensed operating systems. With this data you will make an analysis of the cost savings by switching to an unlicensed operating system.
+You analyze the CUR to discover the costs of operating system licenses, and also the cost of running licensed operating systems. With this data you will make an analysis of the cost savings by switching to an unlicensed operating system.
 We have also provided an additional data set with the changes applied, to simulate this change and verify the savings.
 
 ![Images/AWSCostReadme.png](/Cost/200_Licensing/Images/AWSCostReadme.png)
