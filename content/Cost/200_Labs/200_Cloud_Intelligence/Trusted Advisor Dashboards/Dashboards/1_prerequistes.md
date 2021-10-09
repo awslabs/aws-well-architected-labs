@@ -455,7 +455,7 @@ Configuration **MUST** be performed at the Athena workgroup level.
 {{% /notice %}}
 
 ### Enable QuickSight 
-uickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps.
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps.
 
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services
