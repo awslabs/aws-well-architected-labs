@@ -11,14 +11,14 @@ The Read-Replica Write Forwarding feature's typical latency is under one second 
 Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our Amazon Aurora MySQL Replica instance!
 
 {{% notice note %}}
-**You must wait for the Secondary Region stack to successfully be created before moving on to this step.**
+**If you are using your own AWS Account, you must wait for the Secondary Region stack to successfully be created before moving on to this step.**
 {{% /notice %}}
 
 ### Configuring Amazon Aurora Write Forwarding
 
-1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Next, click into **DB Instances**.
+1.2 Click **DB Instances** link.
 
 {{< img a-2.png >}}
 

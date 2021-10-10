@@ -6,7 +6,7 @@ weight = 1
 
 ### Backup the RDS database 
 
-1.1 Navigate to [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) in the **N. Vriginia (us-east-1)** region.
+1.1 Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in the **N. Vriginia (us-east-1)** region.
 
 1.2 Click the **Protected resources** link, then click the **Create an on-demand backup** button.
 

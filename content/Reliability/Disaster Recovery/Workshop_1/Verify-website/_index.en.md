@@ -6,7 +6,7 @@ weight = 4
 
 ### Primary Region
 
-1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in the **N. Virginia (us-east-1)** region.
+1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashbaord in the **N. Virginia (us-east-1)** region.
 
 1.2 Select **BackupAndRestore** under **Stacks**.
 

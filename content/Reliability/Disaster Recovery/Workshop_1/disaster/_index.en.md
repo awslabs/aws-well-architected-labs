@@ -17,7 +17,7 @@ We will perform the following:
 
 We will now simulate a regional service event affecting the S3 static website in **N. Virginia (us-east-1)** serving The Unicorn Shop website.
 
-1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Click on the **backupandrestore-uibucket-xxxx** link.
 

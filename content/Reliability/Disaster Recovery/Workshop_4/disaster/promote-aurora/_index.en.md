@@ -10,17 +10,17 @@ Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone in
 
 ### Promote Aurora secondary database
 
-1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Click into **DB Instances**.
+1.2 Click the **DB Instances** link.
 
 {{< img a-2.png >}}
 
-1.3 Find **hot-standby-passive-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
+1.3 Select **hot-standby-passive-secondary** then cllick **Remove from global database** in the **Actions** dropdown.
 
 {{< img a-3.png >}}
 
-1.4 Click **Remove and Promote** to confirm the server promotion.
+1.4 Click the **Remove and Promote** button.
 
 {{< img a-4.png >}}
 

@@ -8,7 +8,7 @@ weight = 1
 
 Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
 
-1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 Click [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Click **Block Public Access settings for this account**.
 
@@ -22,7 +22,7 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 
 {{< img pr-3.png >}}
 
-1.5 Enter **confirm** and click the **Confirm** button.
+1.5 Enter `confirm` and click the **Confirm** button.
 
 {{< img pr-4.png >}}
 

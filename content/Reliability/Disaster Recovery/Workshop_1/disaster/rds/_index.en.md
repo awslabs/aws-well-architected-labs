@@ -6,7 +6,7 @@ weight = 2
 
 ### Restore RDS Database
 
-1.1 Navigate to [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+1.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 1.2 Click the **Backup Vaults** link, then click the **Default** link.
 
@@ -17,7 +17,7 @@ weight = 2
 {{< img BK-27.png >}}
 
 {{% notice warning %}}
-If you don't see your backup, check the status of the **Copy Job**. Navigate to [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region. Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your backup is **Completed**.
+If you don't see your backup, check the status of the **Copy Job**. Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in **N. Virginia (us-east-1)** region. Click the **Jobs** link, then click the **Copy jobs** link.  Verify the **Status** of your backup is **Completed**.
 {{% /notice %}}
 
 {{< img BK-26.png >}}
@@ -32,7 +32,7 @@ If you don't see your backup, check the status of the **Copy Job**. Navigate to 
 
 ### Configure Security Group
 
-2.1 Navigate to [VPC](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+2.1 Click [VPC](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 2.2 Click the **Security Groups** link, then click the **Create security group** button.
 
@@ -48,7 +48,7 @@ If you don't see your backup, check the status of the **Copy Job**. Navigate to 
 
 ### Modify RDS Security Group
 
-3.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+3.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 3.2 Click the **DB Instances** link.
 
