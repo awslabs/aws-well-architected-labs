@@ -28,7 +28,7 @@ def cat_check(case):
 
 def main(account_id):
     
-    with open("data.json", "w") as f:  # Saving in the temporay folder in the lambda
+    with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
         support_client = assume_role(account_id, "support", "us-east-1")
         response = support_client.describe_trusted_advisor_checks(language="en")
         
@@ -38,7 +38,6 @@ def main(account_id):
                 meta = case["metadata"]
                 c = cat_check(case)
                 if c =='yes':
-                    #if case["category"] == "cost_optimizing":
                     c_id = case["id"]
                     CheckName = {"CheckName": case["name"], "CheckId": c_id}
 
