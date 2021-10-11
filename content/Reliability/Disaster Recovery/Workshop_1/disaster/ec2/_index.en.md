@@ -28,7 +28,7 @@ weight = 1
 
 1.7 Click the **Next: Add tags** button and click the **Next: Configure Security Group** button.
 
-1.8 Select **Create a new security group** and enter `backupandrestore-us-west-ec2-SG` as the **Security group name** and **Description**.  Add the rules as shown by clicking the **Add Rule** button.  (Cllick on image to enlarge) Click the **Review and Launch** button.
+1.8 Select **Create a new security group** and enter `backupandrestore-us-west-ec2-SG` as the **Security group name** and **Description**.  Add the rules as shown by clicking the **Add Rule** button.  (Click on image to enlarge) Click the **Review and Launch** button.
 
 {{< img ss-3.png >}}
 
