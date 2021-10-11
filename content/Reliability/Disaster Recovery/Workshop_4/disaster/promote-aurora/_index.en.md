@@ -16,7 +16,7 @@ Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone in
 
 {{< img a-2.png >}}
 
-1.3 Select **hot-standby-passive-secondary** then cllick **Remove from global database** in the **Actions** dropdown.
+1.3 Select **hot-standby-passive-secondary** then click **Remove from global database** in the **Actions** dropdown.
 
 {{< img a-3.png >}}
 
