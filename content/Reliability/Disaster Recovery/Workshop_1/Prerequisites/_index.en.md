@@ -14,10 +14,12 @@ All resources for this workshop have been pre-provisioned.
 
 **Continue to the [Create Backup Resources](../backup-resources/) section of the workshop.**
 
+
 #### Using your own AWS account
 
-If you are running this workshop in your own account, click **Next Step**.
+Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
 
-{{< prev_next_button link_prev_url="../" link_next_url="./account-setup/" />}}
+**Continue to the [Account Setup](./account-setup/) section of the workshop.**
+
 
 

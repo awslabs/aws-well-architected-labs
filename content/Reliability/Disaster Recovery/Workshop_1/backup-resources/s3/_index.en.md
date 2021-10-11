@@ -6,7 +6,7 @@ weight = 3
 
 ### Create the S3 UI bucket in the secondary N. California (us-west-1) region.
 
-1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Copy the name of the UI bucket that is in **N.Virginia (us-east-1)** region.  It will be similar to `backupandrestore-uibucket-xxxx`.
 

@@ -6,7 +6,7 @@ weight = 2
 
 ### Copy the EC2 AMI (Amazon Machine Image)
 
-1.1 Navigate to [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
+1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Click the **AMIs** link.
 

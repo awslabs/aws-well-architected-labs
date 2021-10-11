@@ -8,17 +8,17 @@ To connect the applicaiton to the newly promoted Aurora Database in the us-west-
 
 ### Connecting the Application
 
-1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Click on the **Instances (running)** tile.
+1.2 Click the **Instances (running)** link.
 
 {{< img am-2.png >}}
 
-1.3 Enable the checkbox next to the **UniShopAppV1EC2HotStandby** instance, then click the **Connect** button.
+1.3 Select **UniShopAppV1EC2HotStandby**, then click the **Connect** button.
 
 {{< img am-3.png >}}
 
-1.4 Navigate to the **Session Manager** tab and click the **Connect** button.
+1.4 Click the **Session Manager** link, then click the **Connect** button.
 
 {{< img am-4.png >}}
 
@@ -33,7 +33,7 @@ sudo su ec2-user
 cd /home/ec2-user/
 ```
 
-1.7 Open the `unishoprun.sh` file for editing with either nano or vi.
+1.7 Open the **unishoprun.sh** file for editing with either nano or vi.
 
 ```sh
 sudo nano unishoprun.sh
@@ -41,7 +41,7 @@ sudo nano unishoprun.sh
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
-1.8 Delete the previous file contents.  Then copy and paste this script into the `unishoprun.sh` script.
+1.8 Delete the previous file contents.  Then copy and paste this script into the **unishoprun.sh** script.
 
 ```sh
 #!/bin/bash

@@ -6,7 +6,7 @@ weight = 6
 
 ### Amazon S3
 
-1.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Select the bucket with prefix **backupandrestore-uibucket-xxxx** and click the **Empty** button.
 
@@ -27,7 +27,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 ### Amazon CloudFormation
 
-2.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
+2.1 Click [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 2.2 Select the **BackupAndRestore** stack and click the **Delete** button.
 
@@ -39,7 +39,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 ### AWS Backup
 
-3.1 Navigate to [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) in the **N. Virginia (us-east-1)** region.
+3.1 Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 3.2 Click **Backup Vaults** and select **Default**.
 
@@ -59,7 +59,7 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 ### Amazon RDS
 
-4.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+4.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 4.2 Select the **backupandrestore-secondary-region** database.  Select **Actions**, then select **Delete**.
 
@@ -71,7 +71,7 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 ### Amazon EC2
 
-5.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+5.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 5.2 Select the instance and click **Instance State**, then click **Terminate instance**.
 
@@ -81,7 +81,7 @@ If you have more than one instance running you can verify you are selecting the 
 
 {{< img CL-26.png >}}
 
-5.3 Navigate to **AMIs** and select the AMI.  Click **Actions**, then click **Deregister**.
+5.3 Click the **AMIs** link and select the AMI.  Click **Deregister** under the **Actions** dropdown.
 
 {{< img CL-27.png >}}
 
@@ -89,7 +89,7 @@ If you have more than one instance running you can verify you are selecting the 
 
 {{< img CL-28.png >}}
 
-5.5 Navigate to **Security groups**. Select all security groups created **launch-wizard-1** and **rds-secondary-sg**. Click **Actions**, then click **Delete security groups**.
+5.5 Click the **Security groups** link. Select all security groups created **launch-wizard-1** and **rds-secondary-sg**. Click **Actions**, then click **Delete security groups**.
 
 {{< img CL-29.png >}}
 

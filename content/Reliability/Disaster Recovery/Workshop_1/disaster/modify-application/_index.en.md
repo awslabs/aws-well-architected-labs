@@ -6,7 +6,7 @@ weight = 3
 
 ### EC2
 
-1.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) in the **N. California (us-west-1)** region.
+1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 1.2 Click the **Instances (running)** link.
 
@@ -88,7 +88,7 @@ Your final `config.json` should look similar to this example.
 
 ### S3
 
-3.1 Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
+3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashbarod.
 
 3.2 Find the bucket that ends with **-dr-** and click the bucket name link.
 
