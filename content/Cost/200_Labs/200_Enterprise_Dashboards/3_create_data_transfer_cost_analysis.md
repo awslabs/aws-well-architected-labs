@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 ---
 
 {{% notice note %}}
-This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence/" >}})
 {{% /notice %}}
 
 

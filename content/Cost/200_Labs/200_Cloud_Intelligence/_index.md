@@ -37,6 +37,7 @@ In this lab, you will find step-by-step guides on how to implement some or all o
 - [**Cost Intelligence Dashboard (CID) - Overview**](#cost-intelligence-dashboard-cid)
 - [**CUDOS Dashboard - Overview**](#cudos-dashboard)
 - [**Trusted Advisor Organizational (TAO) Dashboard - Overview**](#trusted-advisor-organizational-tao-dashboard)
+- [**Additional Dashboards - Overview**](#additional-dashboards)
 
 The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
 
@@ -103,10 +104,21 @@ Trusted Advisor Organizational (TAO) requires the management account in your org
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
 - [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
+### Additional Dashboards
+In addition to the 3 foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.   
+
+* Data Transfer Dashboard 
+* Trends Dashboard
+
+**Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
+
+- [Get started with the Additional Dashboards](cost-usage-report-dashboards/)
+
 ## Steps:
 - [Get started with the Cost Intelligence Dashboard](cost-usage-report-dashboards/)
 - [Get started with the CUDOS Dashboard](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
+- [Get started with the Additional Dashboards](cost-usage-report-dashboards/)
 
 ## Authors
 

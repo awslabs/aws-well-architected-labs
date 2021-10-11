@@ -91,6 +91,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 1.	From the left hand menu, choose **Datasets**
 
     ![qs_dataset_sidebar](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset_sidebar.png?classes=lab_picture_small)
+	
 1.	Click **New dataset** displayed in the top right corner
 
     ![qs_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset.png?classes=lab_picture_small)
@@ -114,12 +115,22 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 1.	Click **Add Data**
 
     ![qs_add_data](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data.png?classes=lab_picture_small)
+	
+1.  Select **Data source**	
+  
+  ![qs_add_data_source](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_source.png?classes=lab_picture_small)
+	
+10. Choose your **Cost_Dashboard** view and click **Select**
 
-1.	Choose your **account_map** view and click **Select**
+    ![qs_select_data_source_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_data_source_add.png?classes=lab_picture_small)
 
-    ![qs_add_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_account_map.png?classes=lab_picture_small)
+1.  Select the **database** which holds the CUR views you created
+	![qs_select_database_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_database_add.png?classes=lab_picture_small)
+	
+12.  Choose your **account_map** view and click **Select**
+	![qs_add_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_account_map.png?classes=lab_picture_small)
 
-1.	Click the two circles to open the **Join conﬁguration**, then select **Left** to change your join type
+13.	Click the two circles to open the **Join conﬁguration**, then select **Left** to change your join type
 
     ![qs_join_account_map_left](/Cost/200_Cloud_Intelligence/Images/cur/qs_join_account_map_left.png?classes=lab_picture_small)
 	
@@ -155,15 +166,20 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
     ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_exit_refresh.png?classes=lab_picture_small)
 
-1.	Repeat **steps 3-18**, creating data sets with the remaining Athena views. The data source name will be **Cost_Dashboard**, and select the following views as the table:
+1.	Repeat **steps 3-21**, creating data sets with the remaining Athena views. You will reuse your existing **Cost_Dashboard** data source, and select the following views as the table:
 
  - s3_view
  - ec2_running_cost
  - compute_savings_plan_eligible_spend
 
-	When this step is complete, your Datasets tab should have **4 new SPICE Datasets**.
 
-20.	Select the **summary_view** dataset
+	**NOTE:** Make sure to reuse the existing Athena data source by scrolling to the bottom of the Data source create/select page when creating a new Dataset instead of creating a new data source  
+		------------ | -------------
+			![qs_data_source_scroll](/Cost/200_Cloud_Intelligence/Images/cur/qs_data_source_scroll.png?classes=lab_picture_small)
+
+	When this step is complete, your Datasets tab should have **4 new SPICE Datasets**
+	
+23.	Select the **summary_view** dataset
 
     ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
 
@@ -175,7 +191,18 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
     ![qs_add_data_2](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_2.png?classes=lab_picture_small)
 
-1.	Choose your **ri_sp_mapping view** and click **Select**
+1. Select **Data source**	
+    ![qs_add_data_source](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_source.png?classes=lab_picture_small)
+	
+1.	Choose your **Cost_Dashboard** view and click **Select**
+
+    ![qs_select_data_source_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_data_source_add.png?classes=lab_picture_small)
+
+1.  Select the **database** which holds the CUR views you created
+
+   ![qs_select_database_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_database_add.png?classes=lab_picture_small)	
+	
+29.	Choose your **ri_sp_mapping view** and click **Select**
 
     ![qs_add_ri_sp](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_ri_sp.png?classes=lab_picture_small)
 
@@ -214,7 +241,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
     ![qs_direct_query](/Cost/200_Cloud_Intelligence/Images/cur/qs_direct_query.png?classes=lab_picture_small)
 
-32.	Repeat steps 8-18, but configure this join clause in step 11:
+32.	Repeat steps 8-15, but configure this join clause in step 14:
     **line_item_usage_account_id** = **account_id**
 
     ![qs_customer_all_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_customer_all_map.png?classes=lab_picture_small)
