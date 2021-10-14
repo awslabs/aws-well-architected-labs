@@ -145,7 +145,8 @@ def lambda_handler(event, context):
     try:
         for record in event['Records']:
         
-            account_id = record["body"]
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
             
             print(account_id)
             data = get_ec2_instance_recommendations(account_id, client)
