@@ -527,6 +527,124 @@
       }
     },
 
+    "FisExecutionRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName": "WALab-FIS-role",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": [
+                        "fis.amazonaws.com"
+                    ]
+                },
+                "Action": [
+                    "sts:AssumeRole"
+                ]
+            }
+        ]
+        },
+        "Policies" : [ {
+          "PolicyName" : "WALab-FIS-policy",
+          "PolicyDocument" : {
+            "Statement": [
+              {
+                  "Sid": "AllowFISExperimentRoleReadOnly",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:DescribeInstances",
+                      "ecs:DescribeClusters",
+                      "ecs:ListContainerInstances",
+                      "eks:DescribeNodegroup",
+                      "iam:ListRoles",
+                      "rds:DescribeDBInstances",
+                      "rds:DescribeDbClusters",
+                      "ssm:ListCommands"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleEC2Actions",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:RebootInstances",
+                      "ec2:StopInstances",
+                      "ec2:StartInstances",
+                      "ec2:TerminateInstances"
+                  ],
+                  "Resource": "arn:aws:ec2:*:*:instance/*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleECSActions",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ecs:UpdateContainerInstancesState",
+                      "ecs:ListContainerInstances"
+                  ],
+                  "Resource": "arn:aws:ecs:*:*:container-instance/*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleEKSActions",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:TerminateInstances"
+                  ],
+                  "Resource": "arn:aws:ec2:*:*:instance/*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleFISActions",
+                  "Effect": "Allow",
+                  "Action": [
+                      "fis:InjectApiInternalError",
+                      "fis:InjectApiThrottleError",
+                      "fis:InjectApiUnavailableError"
+                  ],
+                  "Resource": "arn:*:fis:*:*:experiment/*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleRDSReboot",
+                  "Effect": "Allow",
+                  "Action": [
+                      "rds:RebootDBInstance"
+                  ],
+                  "Resource": "arn:aws:rds:*:*:db:*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleRDSFailOver",
+                  "Effect": "Allow",
+                  "Action": [
+                      "rds:FailoverDBCluster"
+                  ],
+                  "Resource": "arn:aws:rds:*:*:cluster:*"
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleSSMSendCommand",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssm:SendCommand"
+                  ],
+                  "Resource": [
+                      "arn:aws:ec2:*:*:instance/*",
+                      "arn:aws:ssm:*:*:document/*"
+                  ]
+              },
+              {
+                  "Sid": "AllowFISExperimentRoleSSMCancelCommand",
+                  "Effect": "Allow",
+                  "Action": [
+                      "ssm:CancelCommand"
+                  ],
+                  "Resource": "*"
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
     "LambdaCustomResourceRole": {
       "Type": "AWS::IAM::Role",
       "DeletionPolicy" : "Retain",
@@ -712,10 +830,71 @@
           "      ]\n",
           "    }\n",
           "  }\n",
-          "}\n"          
+          "}\n"
           ]]
         },
         "RoleArn" : { "Fn::GetAtt" : [ "StateExecutionRole", "Arn" ] }
+      }
+    },
+    "StartStateMachine": {
+        "Type": "Custom::StartStateMachine",
+        "Properties": {
+            "ServiceToken": { "Fn::GetAtt" : [ "StartStateMachineLambda", "Arn" ] },
+            "StateMachineARN": {"Ref": "DeploymentMachine"},
+            "MultiRegion" : "false"
+        }
+    },
+    "StartStateMachineLambda": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+            "Description" : "Function for the custom resource that will start the execution of the state machine",
+            "Code" : {
+              "S3Bucket" : { "Ref" : "LambdaFunctionsBucket" },
+              "S3Key"    : "Reliability/StartStateMachine.zip"
+            },
+            "FunctionName" : "StartStateMachine",
+            "Handler" : "StartStateMachine.lambda_handler",
+            "MemorySize" :  "128",
+            "Role" : { "Fn::GetAtt" : [ "StartStateMachineLambdaRole", "Arn" ] },
+            "Runtime" : "python3.6",
+            "Timeout" : "30"
+        }
+    },
+    "StartStateMachineLambdaRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "StartStateMachineLambdaRole",
+        "Description" : "Gives Lambda permission to start execution of state machine",
+        "AssumeRolePolicyDocument" : {
+          "Version" : "2012-10-17",
+          "Statement" : [ {
+            "Effect" : "Allow",
+            "Principal" : { "Service" : "lambda.amazonaws.com" },
+            "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Policies": [
+          {
+                        "PolicyName": "StartStateMachine",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Sid": "VisualEditor0",
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "iam:PassRole",
+                                        "states:StartExecution"
+                                    ],
+                                    "Resource": [
+                                        {"Ref": "DeploymentMachine"},
+                                        { "Fn::GetAtt" : [ "StateExecutionRole", "Arn" ] }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+        ]
       }
     }
   },
@@ -729,7 +908,7 @@
           "Arn"
         ]
       }
-    }  
+    }
   }
 
 }

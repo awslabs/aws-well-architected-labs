@@ -5,6 +5,7 @@ The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consi
 ### Linux
 
 * This includes:
+  * AWS CloudShell
   * All native Linux installs
   * MacOS
   * Windows Subsystem for Linux (WSL)

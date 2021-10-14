@@ -1,9 +1,9 @@
 ---
 title: "Tear down this lab"
-date: 2020-04-24T11:16:09-04:00
+date: 2021-09-14T11:16:08-04:00
 chapter: false
-pre: "<b>8. </b>"
-weight: 8
+pre: "<b>9. </b>"
+weight: 9
 ---
 
 {{% common/EventEngineVsOwnAccountCleanup %}}
@@ -98,7 +98,7 @@ The password(s) for your Amazon RDS instances were stored in AWS Systems Manager
 
 Using AWS CLI:
 
-* In the following command use the [workshop name supplied in step 1.4.4.](#deployinfra) when you ran the step function state machine. If you kept the defaults, the command will work as-is:
+* The following command will delete the parameter:
 
         aws ssm delete-parameter --name 300-ResiliencyofEC2RDSandS3
 
@@ -116,11 +116,25 @@ Using AWS Console:
       1. Click the **Delete** button
       1. Click **Delete** again
 
+### Delete FIS experiment templates
+
+1. Navigate to the FIS console at <http://console.aws.amazon.com/fis>
+1. For each experiment template created as part of this lab:
+    * Select the template
+    * Click **Actions**
+    * Select **Delete experiment template**
+
+### Delete FIS service role
+
+1. Navigate to the [AWS Identity and Access Management (IAM) console](https://console.aws.amazon.com/iamv2/home?#/home).
+1. Delete the **WALab-FIS-policy** IAM policy.
+1. Delete the **WALab-FIS-role** IAM role.
+
 ---
 
 ## References & useful resources
 
-* EC2 [Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html)
+* [EC2 Auto Scaling Groups](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html)
 * [What Is an Application Load Balancer?](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)
 * [High Availability (Multi-AZ) for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html)
 * [Amazon RDS Under the Hood: Multi-AZ](https://aws.amazon.com/blogs/database/amazon-rds-under-the-hood-multi-az/)
@@ -128,6 +142,6 @@ Using AWS Console:
 * [Injecting Chaos to Amazon EC2 using AWS System Manager](https://medium.com/@adhorn/injecting-chaos-to-amazon-ec2-using-amazon-system-manager-ca95ee7878f5)
 * [Build a serverless multi-region, active-active backend solution in an hour](https://read.acloud.guru/building-a-serverless-multi-region-active-active-backend-36f28bed4ecf)
 
-{{< prev_next_button link_prev_url="../7_failure_injection_optional/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../8_failure_injection_optional/" title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 12  How do you test reliability?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
 {{< /prev_next_button >}}
