@@ -12,7 +12,7 @@ This application stack will comprise of the following :
 
 
 * [Application Load Balancer (ALB)](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html).
-* [Autoscaling Group](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html.) along with it's Launch Configuration.
+* [Autoscaling Group](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) along with it's Launch Configuration.
 
 Once you completed below steps, you base architecture will be as follows:
 

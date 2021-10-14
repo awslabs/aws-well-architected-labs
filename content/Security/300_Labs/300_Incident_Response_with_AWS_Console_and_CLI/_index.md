@@ -27,7 +27,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
 * An IAM user or role in your AWS account.
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
-* CloudTrail must already be enabled in your account and logging to CloudWatch Logs, follow the [Automated Deployment of Detective Controls](../200_Automated_Deployment_of_Detective_Controls/README.md) lab to enable.
+* CloudTrail must already be enabled in your account and logging to CloudWatch Logs, follow the [Automated Deployment of Detective Controls](../../200_Labs/200_Automated_Deployment_of_Detective_Controls/) lab to enable.
 
 ## Steps:
 {{% children  %}}
