@@ -48,8 +48,8 @@ print("Done")
 If you wish to bypass using the pre-defined AWS System Manager documents below, you can also run this script interactively on each EC2 node using [AWS Systems Manager Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html).  
 
 
-1.	Open the AWS Console (https://console.awa.amazon.com)
-1.	In the “Find Services” search bar, type “systems manager” and press enter
+1.	Open the AWS Console (https://console.aws.amazon.com)
+1.	In the “Find Services” search bar, type “Systems Manager” and press enter
 ![BeforeTest1](/Performance/100_Clock_Source_Performance/Images/BeforeTest1.png)
 1.	Under “Instances & Nodes” click on “Run Command” and on the left side of the screen again click on “Run a command”
 ![BeforeTest2](/Performance/100_Clock_Source_Performance/Images/BeforeTest2.png)

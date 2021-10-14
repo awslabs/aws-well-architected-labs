@@ -15,59 +15,69 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
 using Amazon.RDS;
 using Amazon.RDS.Model;
+using System;
+using System.Threading.Tasks;
 
 namespace com.app.resiliency
 {
-
-    public class RDSFailover
+    internal class RDSFailover
     {
-
-        private static readonly AmazonRDSClient RDS_CLIENT = new AmazonRDSClient(Amazon.RegionEndpoint.USEast2);
+        private IAmazonRDS rdsClient;
         private string vpcId;
 
-        internal RDSFailover(string vpcId)
+        internal RDSFailover(string vpcId, Amazon.RegionEndpoint region = null)
         {
             this.vpcId = vpcId;
+            if (region == null)
+            {
+                region = Amazon.RegionEndpoint.USEast2;
+            }
+
+            rdsClient = new AmazonRDSClient(region);
         }
 
 
-        public virtual void failover()
+        public virtual async Task Failover()
         {
             try
             {
                 //fail over rds which is in the same AZ
                 // Note: This turns the asynchronous call into a synchronous one
-                DescribeDBInstancesResponse describeDBInstancesResult = RDS_CLIENT.DescribeDBInstancesAsync().GetAwaiter().GetResult();
-                IList<DBInstance> dbInstances = describeDBInstancesResult.DBInstances;
-                string dbInstancedId = null;
-                foreach (DBInstance dbInstance in dbInstances)
+                DescribeDBInstancesResponse describeDBInstancesResult = await rdsClient.DescribeDBInstancesAsync();
+
+                string dbInstancedId = String.Empty;
+
+                foreach (DBInstance dbInstance in describeDBInstancesResult.DBInstances)
                 {
-                    if (string.Equals(dbInstance.DBSubnetGroup.VpcId, vpcId, StringComparison.OrdinalIgnoreCase)
+                    if (String.Equals(dbInstance.DBSubnetGroup.VpcId, vpcId, StringComparison.OrdinalIgnoreCase)
                         && dbInstance.MultiAZ && dbInstance.StatusInfos.Count == 0)
                     {
                         dbInstancedId = dbInstance.DBInstanceIdentifier;
+                        break;
                     }
                 }
-                if (!string.IsNullOrEmpty(dbInstancedId))
+
+                if (!String.IsNullOrEmpty(dbInstancedId))
                 {
-                    RebootDBInstanceRequest rebootDBInstanceRequest = new RebootDBInstanceRequest();
-                    rebootDBInstanceRequest.DBInstanceIdentifier = dbInstancedId;
-                    rebootDBInstanceRequest.ForceFailover = true;
-                    Console.WriteLine("Rebooting dbInstanceId " + dbInstancedId);
-                    // Note: This turns the asynchronous call into a synchronous one
-                    RDS_CLIENT.RebootDBInstanceAsync(rebootDBInstanceRequest).GetAwaiter().GetResult();
+                    Console.WriteLine("Rebooting rds instance " + dbInstancedId);
+
+                    var response = await rdsClient.RebootDBInstanceAsync(new RebootDBInstanceRequest()
+                    {
+                        DBInstanceIdentifier = dbInstancedId,
+                        ForceFailover = true
+                    });
+                }
+                else
+                {
+                    Console.WriteLine($"Did not find a multi-az database in the VPC {vpcId}");
                 }
             }
             catch (Exception exception)
             {
-                Console.WriteLine("Unkown exception occured " + exception.Message);
+                Console.WriteLine("Unknown exception occurred " + exception.Message);
             }
         }
-
     }
-
 }

@@ -6,19 +6,19 @@ weight = 7
 
 To connect the applicaiton to the newly promoted Aurora Database in the us-west-1 region, we need to modify the `Passive-Secondary` web application's configuration.
 
-1.1 Navigate to **EC2** in the console.
+### Connecting the Application
 
-{{< img am-1.png >}}
+1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Click on the **Instances (running)** tile.
+1.2 Click the **Instances (running)** link.
 
 {{< img am-2.png >}}
 
-1.3 Enable the checkbox next to the **UniShopAppV1EC2** instance, then click the **Connect** button.
+1.3 Select **UniShopAppV1EC2HotStandby**, then click the **Connect** button.
 
 {{< img am-3.png >}}
 
-1.4 Navigate to the **Session Manager** tab and click the **Connect** button.
+1.4 Click the **Session Manager** link, then click the **Connect** button.
 
 {{< img am-4.png >}}
 
@@ -33,7 +33,7 @@ sudo su ec2-user
 cd /home/ec2-user/
 ```
 
-1.7 Open the `unishoprun.sh` file for editing with either nano or vi.
+1.7 Open the **unishoprun.sh** file for editing with either nano or vi.
 
 ```sh
 sudo nano unishoprun.sh
@@ -41,7 +41,7 @@ sudo nano unishoprun.sh
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
-1.8 Delete the previous file contents.  Then copy and paste this script into the `unishoprun.sh` script.
+1.8 Delete the previous file contents.  Then copy and paste this script into the **unishoprun.sh** script.
 
 ```sh
 #!/bin/bash
@@ -50,15 +50,13 @@ java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.l
 
 1.9 Save the modifications (CTRL+O) and close the editor (CTRL+X).
 
-1.10 We need to restart the EC2 Instance before the new configuration will take effect.  Return to the browser tab where you launched Session Manager.  Click on the **Instance Id** link.
+1.10 Reboot the EC2 instance so our changes take effect.
 
-{{< img am-6.png >}}
+```sh
+sudo reboot
+```
 
-1.11 Under the **Instance state** dropdown, click the **Reboot instance** menu item.
-
-{{< img am-7.png >}}
-
-## Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
+#### Congragulations!  Your Application has been updated to use the Aurora Promoted Database!
 
 {{< prev_next_button link_prev_url="../promote-aurora/" link_next_url="../../verify-failover/" />}}
 

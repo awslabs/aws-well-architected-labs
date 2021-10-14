@@ -1,0 +1,261 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Well Architected Operational Excellence Lab
+
+Parameters:
+  Cloud9CidrBlock:
+    Description: The CIDR block range for your Cloud9 IDE VPC
+    Type: String
+    Default: 10.43.0.0/28
+  GitRepositoryURL:
+    Description: The Git repository URL for the project we are cloning
+    Type: String
+    Default: https://github.com/awslabs/aws-well-architected-labs.git
+
+
+Resources:
+  #------------------------------------------------------------
+  # Create a VPC with a public and private subnet
+  #------------------------------------------------------------
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs ''
+      CidrBlock: 172.31.1.0/24
+      MapPublicIpOnLaunch: true
+  
+  PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - '1'
+        - !GetAZs ''
+      CidrBlock: 172.31.3.0/24
+      MapPublicIpOnLaunch: true
+
+  PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs ''
+      CidrBlock: 172.31.2.0/24
+      MapPublicIpOnLaunch: false
+
+  PrivateSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - '1'
+        - !GetAZs ''
+      CidrBlock: 172.31.4.0/24
+      MapPublicIpOnLaunch: false
+
+  #-------------------------------------------------------------
+  # Create an IGW and attach to the created VPC
+  # Create a NAT GW with an associated public IP address.
+  #------------------------------------------------------------- 
+
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-InternetGateway"
+
+  IGWAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+  
+  NatGateway:
+    Type: "AWS::EC2::NatGateway"
+    DependsOn: NatPublicIP
+    Properties: 
+      AllocationId: !GetAtt NatPublicIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+
+  NatPublicIP:
+    Type: "AWS::EC2::EIP"
+    DependsOn: VPC
+    Properties:
+      Domain: vpc
+      
+  #-------------------------------------------------------------
+  # Create public route table and attach to the public subnets
+  #-------------------------------------------------------------
+
+  PublicRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-Public-RouteTable1"
+
+  
+  PublicRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-Public-RouteTable2"
+
+  PublicRoute1:
+    Type: 'AWS::EC2::Route'
+    DependsOn: 
+      - IGW
+      - IGWAttach
+    Properties:
+      RouteTableId: !Ref PublicRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+
+  PublicRoute2:
+    Type: 'AWS::EC2::Route'
+    DependsOn: 
+      - IGW
+      - IGWAttach
+    Properties:
+      RouteTableId: !Ref PublicRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+  
+  PublicSubnet1RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable1
+
+  PublicSubnet1RouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable2
+
+  #-------------------------------------------------------------
+  # Create public route table and attach to the public subnets
+  #-------------------------------------------------------------
+
+  PrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+
+  
+  PrivateRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+
+  PrivateRoute1:
+    Type: 'AWS::EC2::Route'
+    DependsOn: IGW
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateRoute2:
+    Type: 'AWS::EC2::Route'
+    DependsOn: IGW
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateSubnet1RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable1
+
+  PrivateSubnet1RouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable2
+
+  # ------------------
+  # ECR Repository
+  # ------------------
+
+  AppContainerRepository: 
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: walab-ops-sample-application
+
+  Cloud9:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      AutomaticStopTimeMinutes: 30
+      Description: Well Architected Operational Excellence lab workspace
+      InstanceType: t2.small
+      ImageId: amazonlinux-2-x86_64
+      Name: !Sub "WellArchitectedOps-${AWS::StackName}"
+      Repositories:
+        - PathComponent: /aws-well-architected-labs
+          RepositoryUrl: !Ref GitRepositoryURL
+      SubnetId: !Ref PublicSubnet1
+
+Outputs:
+  Cloud9DevEnvUrl:
+    Description: Cloud9 Development Environment
+    Value: !Sub "https://${AWS::Region}.console.aws.amazon.com/cloud9/ide/${Cloud9}"
+
+
+Outputs:
+  OutputVPC:
+    Description: Baseline VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VpcId"
+  OutputVPCCidrBlock:
+    Description: Baseline VPC Cidr Block
+    Value: !GetAtt VPC.CidrBlock
+    Export:
+      Name: !Sub "${AWS::StackName}-VpcCidrBlock"      
+  OutputPublicSubnet1:
+    Description: Public Subnet 1 VPC
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet1"
+  OutputPublicSubnet2:
+    Description: Public Subnet 2 VPC
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet2"
+  OutputPrivateSubnet1:
+    Description: Private Subnet 1 VPC
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet1"
+  OutputPrivateSubnet2:
+    Description: Private Subnet 2 VPC
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet2"
+  OutputAppContainerRepository:
+    Description: Applicaton ECR Repository
+    Value: !Ref AppContainerRepository
+    Export:
+      Name: !Sub "${AWS::StackName}-AppContainerRepository"

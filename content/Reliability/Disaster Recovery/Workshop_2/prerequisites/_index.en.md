@@ -4,16 +4,19 @@ date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
 
-We will be launching the same CloudFormation template in two separate regions - N. Virginia (us-east-1) and N. California (us-west-1). These regions will represent our Primary Region (us-east-1) and our Secondary Region (us-west-2). Once the CloudFormation templates complete successfully, we will configure our static websites hosted in S3 to connect to the API endpoints created from running the CloudFormation template.
+## Account setup 
 
-## Getting Started
+### Using an account provided by instructor at virtual or in-person workshop
 
-Login to your [**AWS Console**](https://us-east-1.console.aws.amazon.com/console)
+If you are running this workshop as part of an instructor led workshop, please log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
 
-{{% notice note %}}
-If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. Complete the cleanup steps at the end to minimize those costs.
+All resources for this workshop have been pre-provisioned.
 
-If you are running this at a group event - please log in via Event Engine. The event host will provide the Instructions.
-{{% /notice %}}
+**Continue to the [Verify Website](../verify-primary-website/) section of the workshop.**
 
-{{< prev_next_button link_prev_url="../" link_next_url="./primary-region/" />}}
+### Using your own AWS account
+
+If you are running this workshop in your own account, click **Next Step**.
+
+{{< prev_next_button link_prev_url="../" link_next_url="./account-setup/" />}}
+
