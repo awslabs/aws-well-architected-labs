@@ -1,4 +1,4 @@
-## Install AWS CLI v2
+## Install AWS CLI v2 {#install-aws-cli}
 
 The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consistent interface for interacting with all parts of AWS.
 
@@ -14,6 +14,7 @@ Verify existing version:
 ![Step1](/Common/awscliv2/Step1.png)
 
 #### If the version number is less than 2.1.12 or you get "command not found"
+You need to install or upgrade.  Follow these steps:
 * `curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"`
 * `unzip awscliv2.zip`
 * `sudo ./aws/install --update`

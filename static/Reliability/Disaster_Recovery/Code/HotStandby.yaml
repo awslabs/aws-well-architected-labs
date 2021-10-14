@@ -29,7 +29,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPC
+          Value: UniShopAppV1VPCHotStandby
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -554,7 +554,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2
+          Value: UniShopAppV1EC2HotStandby
   DynamoDBTable:
     Condition: CreatePrimaryDB
     Type: AWS::DynamoDB::Table

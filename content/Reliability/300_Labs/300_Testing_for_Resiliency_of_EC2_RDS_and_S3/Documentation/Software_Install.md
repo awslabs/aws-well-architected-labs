@@ -11,12 +11,12 @@ This reference will help you install software necessary to setup your workshop e
 1. [AWS CLI](#install-aws-cli)
 1. [jq](#jq)
 
-{{% common/InstallAWSCLI %}}
+{{% common/InstallAWSCLIv2 %}}
 
-**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})**
+**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#setupenv" >}})**
 
 ---
 
 {{% common/Installjq %}}
 
-**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#bash" >}})**
+**STOP HERE and return to the [Lab Guide]({{< ref "../2_configure_env.md#setupenv" >}})**

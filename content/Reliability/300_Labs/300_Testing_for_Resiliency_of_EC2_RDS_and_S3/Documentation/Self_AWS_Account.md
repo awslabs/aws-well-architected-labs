@@ -39,15 +39,16 @@ Use the instructions only if you cannot **Create new AWS credentials for an IAM 
 
 1. Sign in to the AWS Management Console and open the IAM console at <https://console.aws.amazon.com/iam/>
 
-1. In the navigation pane, choose **Users** and then choose **Add user**.
+1. In the navigation pane, choose **Users** and then choose **Add users**.
 
-1. Type the user name for the new user. if you wish you can choose `rel300-workshop`
+1. Type the user name for the new user. if you wish you can choose `rel300-chaos-workshop-user`
 
-1. Select **programmatic access**. Including access to the AWS Management Console is optional
+1. Select **Access key - Programmatic access**. 
+    * Including access to the AWS Management Console is optional. To do this select **Password - AWS Management Console access**
 
 1. Choose **Next: Permissions**
 
-1. select **Attach existing policies to user directly**
+1. select **Attach existing policies directly**
      * In the search box type `PowerUserAccess`
      * tick the check box next to **PowerUserAccess**
 

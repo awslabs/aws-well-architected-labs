@@ -26,7 +26,7 @@ We will now create a Lambda function which will run the code and produce the rep
 
 5. In **Function code** section, configure the following:
     - **Code entry type**: Upload a file from Amazon S3
-    - **Amazon S3 link URL**: https://s3.amazonaws.com/bucket name/AutoCURDelivery.zip
+    - **Amazon S3 link URL**: https://s3.amazonaws.com/bucket-name/AutoCURDelivery.zip
     - **Handler**: auto_cur_delivery.lambda_handler
 ![Images/function_code.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/function_code.png)
 
@@ -58,5 +58,3 @@ We will now create a Lambda function which will run the code and produce the rep
 
 
 Now you have completed this auto CUR delivery solution with default CUR query. In the next step we will add an additional query, and a CloudWatch scheduled event to trigger Lambda function as required. 
-
-{{< prev_next_button link_prev_url="../4_configure_function_parameters/" link_next_url="../6_cloudwatch_event/" />}}

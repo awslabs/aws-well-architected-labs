@@ -36,6 +36,10 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 - Create the Cost Intelligence dashboard
 - Create the CUDOS dashboard
+- Create Additional Dashboards
+	- Data Transfer Dashboard
+	- Trends Dashboard 
+
 - Distribute your dashboards in your organization
 
 
@@ -61,5 +65,9 @@ Approximately 45-60 minutes to onboard all CUR dashboards in this section manual
 ## Steps:
 
 {{% children  /%}}
+
+{{% notice note %}}
+Additional Dashboards include the **Data Transfer Dashboard** and **Trends Dashboard** 
+{{% /notice %}} 
 
 {{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1_prerequistes/" button_next_text="Start Lab" first_step="true" />}}

@@ -103,4 +103,4 @@ This hands-on lab will guide you on how to automatically extract part of your CU
 
 | | |
 |---|---|
-| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}}) | **200 Level Lab**: Build an Enterpise QuickSight dashboard for cost and usage analysis. |
+| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}}) | **200 Level Lab**: Build an Enterprise QuickSight dashboard for cost and usage analysis. |

@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  AutomationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ssm.amazonaws.com
+            - ec2.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+        - PolicyName: PassRole
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'iam:PassRole'
+                Resource: '*'
+        - PolicyName: SNSPublish
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'sns:Publish'
+                Resource: '*'                
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole
+        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonECS_FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchSyntheticsReadOnlyAccess
+      Path: "/"
+      RoleName: AutomationRole
+      

@@ -1,0 +1,46 @@
+Parameters:
+  PlaybookIAMRole:
+    Type: String
+    
+Resources:
+  PlaybookInvestigateAlarm: 
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Name: Playbook-Investigate-Application-From-Alarm
+      Content: 
+        description: |2-
+          # What is does this playbook do?
+
+          This playbook will execute **Playbook-Gather-Resources** to gather Application resources monitored by Canary.
+
+          Then subsequently execute **Playbook-Investigate-Application-Resources** to Investigate the resources for issues. 
+
+          Outputs of the investigation will be sent to SNS Topic Subscriber
+        schemaVersion: '0.3'
+        assumeRole: !Ref PlaybookIAMRole
+        parameters:
+          AlarmARN:
+            type: String
+          SNSTopicARN:
+            type: String
+        mainSteps:
+          - name: gatherResources
+            action: 'aws:executeAutomation'
+            inputs:
+              DocumentName: Playbook-Gather-Resources
+              RuntimeParameters:
+                AlarmARN: '{{AlarmARN}}'
+          - name: investigateAppResources
+            action: 'aws:executeAutomation'
+            inputs:
+              DocumentName: Playbook-Investigate-Application-Resources
+              RuntimeParameters:
+                Resources: '{{gatherResources.Output}}'
+          - name: AWSPublishSNSNotification
+            action: 'aws:executeAutomation'
+            inputs:
+              DocumentName: AWS-PublishSNSNotification
+              RuntimeParameters:
+                TopicArn: '{{SNSTopicARN}}'
+                Message: '{{ investigateAppResources.Output }}'
