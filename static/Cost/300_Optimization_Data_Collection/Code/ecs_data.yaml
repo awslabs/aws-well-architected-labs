@@ -113,6 +113,10 @@ Resources:
                 - "ecs:ListTaskDefinitions"
                 - "ecs:ListClusters"
                 Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
 
   LambdaFunction:
     Type: AWS::Lambda::Function
@@ -137,6 +141,8 @@ Resources:
           PREFIX:
             Ref: CFDataName
           ROLENAME : !Ref MultiAccountRoleName
+          CRAWLER_NAME:
+            Ref: Crawler
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
