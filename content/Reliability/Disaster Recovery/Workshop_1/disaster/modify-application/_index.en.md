@@ -68,7 +68,7 @@ sudo reboot
 
 ### Create application configuration file
 
-2.1 Using your favorite editor, create a new file named `config.json` file. Set the **host** property equal to the **EC2 public IPv4 DNS name** copied from [EC2 Section](../ec2/).  Remove the trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-east-1`.
+2.1 Using your favorite editor, create a new file named `config.json` file. Set the **host** property equal to the **EC2 public IPv4 DNS name** copied from [EC2 Section](../ec2/).  Add ('http://') and remove any trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-west-1`.
 
 ```json
 {
