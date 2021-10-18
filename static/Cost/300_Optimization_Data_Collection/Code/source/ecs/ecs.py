@@ -15,7 +15,8 @@ def lambda_handler(event, context):
     try:
         for record in event['Records']:
            
-            account_id = record["body"]
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
             
             print(account_id)
             list_region = lits_regions()
