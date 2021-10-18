@@ -188,8 +188,6 @@ Resources:
       Name: OrgGlueCrawler
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
-      Schedule:
-        ScheduleExpression: !Ref Schedule
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/organisation-data/"

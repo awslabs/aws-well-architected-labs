@@ -129,6 +129,8 @@ Resources:
             Ref: Crawler
           PREFIX:
             Ref: Prefix
+          COSTONLY:
+            "no"
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:

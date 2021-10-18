@@ -308,7 +308,8 @@ Resources:
           def lambda_handler(event, context):
               try:
                   for record in event['Records']:
-                      account_id = record["body"]
+                      body = json.loads(record["body"])
+                      account_id = body["account_id"]
                       print(account_id)
                       s3client = boto3.client('s3')
                       regions = get_supported_regions('ec2')
