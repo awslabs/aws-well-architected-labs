@@ -11,6 +11,8 @@ July 2021
 
 ## Authors
 - Stephanie Gooch, Commercial Architect (AWS)
+- Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
+
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
