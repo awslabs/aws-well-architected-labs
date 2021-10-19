@@ -6,7 +6,7 @@ chapter: false
 weight: 6
 ---
 ## Last Updated
-July 2021
+October 2021
 
 ## Authors
 - Jeff Kassel, AWS Technical Account Manager

@@ -82,4 +82,8 @@ AWS Compute Optimizer will now take memory utilization into account. We can see 
 
 Using **AWS Compute Optimizer** to get recommendations for rightsizing EC2 instances is a free and recommended routine. In this lab we explored recommendations for both an under-provisioned and over-provisioned EC2 instance and why having memory utilization enabled makes the recommendations more precise and gives a more holistic view of the EC2 instance performance. The knowledge gained from this lab should help you make rightsizing decisions to decrease cost and improve performance.
 
+{{% notice tip %}}
+Visit the [Level 300 Optimization Data Collection Lab]({{< ref "/Cost/300_Labs/300_optimization_data_collection">}}) for opportunities to automate the collection of Compute Optimizer to identify resources that are underutilized for multiple lookback periods
+{{% /notice %}}
+
 {{< prev_next_button link_prev_url="../4_memory_plugin/" link_next_url="../6_tear_down/" />}}
