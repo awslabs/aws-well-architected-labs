@@ -22,7 +22,7 @@ The top section will show the estimated savings and number of recommendations, t
 4. On the right select the filter: **Based on the past** 30 days:
 ![Images/AWSRI4.png](/Cost/200_3_Pricing_Models/Images/AWSRI4.png)
 
-View the **Purcahse Recommendations**, if the 7 days recommendation is more than the 30 days recommendation - your usage is **increasing** and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is **decreasing** and you need to look further into your usage patterns to see which RI's would be suitable.
+View the **Purchase Recommendations**, if the 7 days recommendation is more than the 30 days recommendation - your usage is **increasing** and the recommendations are lower risk.  If the 7 days recommendation is less than 30 days, then your usage is **decreasing** and you need to look further into your usage patterns to see which RI's would be suitable.
 
 {{% notice tip %}}
 You now have an overview of your potential savings and your usage trends.
