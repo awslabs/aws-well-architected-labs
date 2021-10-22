@@ -194,7 +194,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "AWS-Organization-Account-Collector-Role${Suffix}"
+      RoleName: !Sub "AWS-Organization-Data-Execute-Lambda${Suffix}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
