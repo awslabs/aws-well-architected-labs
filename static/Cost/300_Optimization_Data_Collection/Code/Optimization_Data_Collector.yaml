@@ -99,8 +99,9 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
-  IncludeOrgDataModule: Collects AWS Organizations data such as account Id, account name, organization parent and specified tags
+  IncludeOrgDataModule: 
     Type: String
+    Description: Collects AWS Organizations data such as account Id, account name, organization parent and specified tags
     AllowedValues:
       - "yes"
       - "no" 
@@ -130,6 +131,18 @@ Outputs:
       Fn::GetAtt:
         - S3Bucket
         - Arn 
+  RoleARN:
+    Description: "The arn of the IAM role that deployed in the management account which can retrieve AWS Organization data"
+    Value: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+  TaskQueuesUrl:
+    Description: "SQS topics created for deployed modules"
+    Value:
+      Fn::Join:
+        - ','
+        - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals 
     - !Ref IncludeTAModule
@@ -275,7 +288,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data2.yaml"
       TimeoutInMinutes: 2
       Parameters:
         DestinationBucket: !Ref S3Bucket
@@ -298,17 +311,5 @@ Resources:
                   - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-Outputs:
-  RoleARN:
-    Description: "The arn of the IAM role that deployed in the management account which can retrieve AWS Organization data"
-    Value: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-  TaskQueuesUrl:
-    Description: "SQS topics created for deployed modules"
-    Value:
-      Fn::Join:
-        - ','
-        - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-          - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-          - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-          - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+  
 
