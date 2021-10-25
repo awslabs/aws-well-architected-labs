@@ -99,7 +99,7 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
-  IncludeOrgDataModule:
+  IncludeOrgDataModule: Collects AWS Organizations data such as account Id, account name, organization parent and specified tags
     Type: String
     AllowedValues:
       - "yes"
@@ -297,6 +297,7 @@ Resources:
                   - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Outputs:
   RoleARN:
     Description: "The arn of the IAM role that deployed in the management account which can retrieve AWS Organization data"
