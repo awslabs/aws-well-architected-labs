@@ -240,13 +240,11 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data2.yaml"
       TimeoutInMinutes: 2
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
-        Prefix: "ami" # example 
-        CFDataName: "AMI" # example 
         GlueRoleARN: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Ref MultiAccountRoleName
         CodeBucket: !Ref CodeBucket
@@ -288,7 +286,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data2.yaml"
       TimeoutInMinutes: 2
       Parameters:
         DestinationBucket: !Ref S3Bucket

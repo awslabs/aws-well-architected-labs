@@ -48,8 +48,8 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
           state,
           rootdevicetype,
           virtualizationtype
-          FROM "optimization_data"."ami_data") AS k2_ami
-              ON snapshots.snap_ami_id = k2_ami.imageid )
+          FROM "optimization_data"."ami_data") AS ami
+              ON snapshots.snap_ami_id = ami.imageid )
     
 
 
