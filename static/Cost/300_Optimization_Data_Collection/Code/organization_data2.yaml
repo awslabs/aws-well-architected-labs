@@ -41,14 +41,12 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: Lambda_Org_Data
-      Description: LambdaFunctioni of python3.8.
+      Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
-        # S3Key: index.py.zip
-        # S3Bucket: !Ref AWSCodeBucketName
         ZipFile: |
           #!/usr/bin/env python3
-          #Gets org data, grouped by ous and tags from managment accounts in json
+          #Gets org data, grouped by ous and tags from management accounts in json
           #Author Stephanie Gooch 2020
           import argparse
           import boto3
