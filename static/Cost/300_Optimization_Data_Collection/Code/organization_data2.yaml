@@ -40,7 +40,7 @@ Resources:
   LambdaOrgData:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: Lambda_Org_Data
+      FunctionName: Lambda_Organization_Data_Collector
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
