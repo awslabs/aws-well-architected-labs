@@ -7,7 +7,10 @@ pre: "<b>5. </b>"
 ---
 
 ## Utilizing Your Data 
-Now you have pulled together all this data we have some ways in which you can analyze it and use to make cost optimization decisions 
+Now you have pulled together optimization data there different ways in which you can analyze and visualize it and use to make infrastructure optimization decisions 
+
+### Visualization of Trusted Advisor data with Amazon QuickSight
+You can visualize Trusted Advisor Data with [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/). To deploy [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) please follow either [automated](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/3_auto_deployment/) or [manual](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/4_manual-deployment-prepare/) deployment steps and specify organizational data collection bucket created in this lab as a source
 
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'.
@@ -48,8 +51,8 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
           state,
           rootdevicetype,
           virtualizationtype
-          FROM "optimization_data"."ami_data") AS k2_ami
-              ON snapshots.snap_ami_id = k2_ami.imageid )
+          FROM "optimization_data"."ami_data") AS ami
+              ON snapshots.snap_ami_id = ami.imageid )
     
 
 
@@ -64,9 +67,6 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
         from
         "optimization_data".ta_data ) ta
         ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."year" and "ebs_data"."month" = "ta"."month"
-
-### Visualization of Trusted Advisor data with Amazon QuickSight
-You can visualize Trusted Advisor Data with [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/). To deploy [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) please follow either [automated](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/3_auto_deployment/) or [manual](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/4_manual-deployment-prepare/) deployment steps and specify organizational data collection bucket created in this lab as a source
 
 
 {{< prev_next_button link_prev_url="../4_Create_Custom_Data_Collection_Module/" link_next_url="../6_teardown/" />}}

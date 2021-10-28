@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-July 2021
+October 2021
 
 ## Authors
 - Stephanie Gooch, Commercial Architect (AWS)
@@ -15,7 +15,7 @@ July 2021
 
 
 ## Feedback
-If you wish to provide feedback on this lab, there is an error, or you have a suggestion, please email: costoptimization@amazon.com
+If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
 
 {{% notice note %}}
 This lab is in **BETA** and your feedback is key to developing the lab. Please share any feedback, bugs, or ideas to help improve the lab
@@ -23,34 +23,52 @@ This lab is in **BETA** and your feedback is key to developing the lab. Please s
 
 
 ## Introduction
-Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, IoT, security and enterprise applications. These services help organizations move faster, lower IT costs, and scale.
+Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, security and enterprise applications. These services help organizations move faster, lower IT costs and scale.
 
-There are many ways to cost-optimize on AWS. Relevant data for identfying cost-optimization opportunities can come from different services and you may need to make apple-to-apples comparisons before making a business decision. 
+This lab is designed to **enable you to collect utilization data from different AWS services to help you identify optimization opportunities**. This lab provides set of optional modules to automate data collection and explains how to create custom modules to pull additional data sets. 
 
-This lab is designed to **enable you to collect utilization data from different services to help you identify optimization opportunities**. This lab provides pre made modules to automate data collection and show you how to pull your additional data sets on your own. The CloudFormation modules in this lab follow the structure of using an AWS Lambda function to extract the data, then this is placed into Amazon S3. From there, Amazon Athena is able to read this data using an AWS Glue Crawler to produce a table that can be utilized for optimization analysis and even joined with your AWS Cost & Usage Report (CUR) to enrich it. 
-
-The three main styles of data are:
-* Optimization and rightsizing recommendations 
-* Service Inventories  
-* Resource utilization metrics
-
-The services you will learn to pull data from in this lab are:
-* Cost Explorer Rightsizing Recommendations
-* Inventory Collector
-* Trusted Advisor
-* Compute Optimizer Collector
-* ECS Chargeback Data
-* RDS Utilization Data
-* AWS Organization Data Export
+The main sources of the data used in optional modules:
+* [Cost Explorer Rightsizing Recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
+* [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/technology/trusted-advisor/)
+* [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/)
+* [Amazon EC2](https://aws.amazon.com/ec2/?ec2-whats-new.sort-by=item.additionalFields.postDateTime&ec2-whats-new.sort-order=desc) service inventories like Amazon EBS volumes, snapshots and AMIs
+* [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data 
+* [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
+* [AWS Organizations](https://aws.amazon.com/organizations/) data export
 
 ## Architecture 
+Resources for this lab deployed with AWS CloudFormation:
+1. **Optimization Data Collection** Stack deploys core resources for the lab and allows to choose which [data collection modules](../300_optimization_data_collection/3_data_collection_modules) to deploy. Each data collection module is optional. We recommend to deploy this stack in separate optimization data collection AWS account. 
+1. **Optimization Management Data Role** Stack deploys AWS IAM Role for AWS Lambda which allows read-only access to retrieve linked accounts information from AWS Organizations. This stack should be deployed in management AWS account
+1. **Optimization Data Collection** StackSet deploys IAM role required for AWS Lambda to get optimization data for each module. StackSet should be deployed from either organization's management account or a delegated administrator account to all linked accounts in organization. 
 
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
 
+Resources deployed with Optimization Data Collection Stack launch following workflow:
+
+**Collecting linked account information**: 
+1. [Amazon EventBridge](https://aws.amazon.com/eventbridge/) rule invokes account collector [AWS Lambda](https://aws.amazon.com/lambda/) based on schedule in optimization data collection account. By default schedule triggers Lambda function every 14 days and can be adjusted if needed.
+2. The Lambda function assumes [AWS Identity and Access Management](https://aws.amazon.com/iam/) (IAM) role in management account, retrieves linked accounts ids and names via [AWS Organizations](https://aws.amazon.com/organizations/) SDK and sends them to [Amazon Simple Queue Service](https://aws.amazon.com/sqs/) (SQS) queues for every deployed data collection module.  
+
+**Collecting optimization data from linked accounts**:
+
+3. Messages in SQS queue trigger Lambda functions for each data collection module
+4. Each data collection module Lambda function assumes IAM role in linked accounts listed in SQS messages and retrieves respective optimization data via [AWS SDK for Python](https://aws.amazon.com/sdk-for-python/). Collected data stored in data collection [Amazon S3](https://aws.amazon.com/s3/) bucket
+
+**Analyzing and visualizing optimization data**:
+
+5. Once data stored in S3 bucket, Lambda function triggers [AWS Glue](https://aws.amazon.com/glue/) crawler which creates or updates table in Glue Data Catalog
+6. Optimization data can be queried and analyzed with [Amazon Athena](https://aws.amazon.com/athena) or visualized with [Amazon QuickSight](https://aws.amazon.com/quicksight/) to get optimization recommendations 
+
+It is possible to deploy **Optimization Data Collection** Stack to organization's management account. Deployment in such case will look like on architecture diagram below
+{{%expand "Architecture for management account deployment" %}}
+![Images/Arc_mngmt_acct.png](/Cost/300_Optimization_Data_Collection/Images/Arc_mngmt_acct.png)
+{{% /expand%}}
+
 ## Goals
-- Deploy main resources which will be used by the modules
-- Deploy modules to collect data 
-- Retrieve optimization data 
+- Deploy core resources and data collection modules
+- Collect optimization data in S3 bucket
+- Query and analyze optimization data with Amazon Athena or visualize it with Amazon QuickSight
 
 
 ## Prerequisites

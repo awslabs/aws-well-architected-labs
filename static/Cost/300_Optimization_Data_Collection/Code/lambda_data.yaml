@@ -15,6 +15,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
+    Default: Inventory
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
@@ -37,14 +38,6 @@ Parameters:
     Type: String
     Description: file name of ZipFile with data code
     Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
-  Prefix:
-    Type: String
-    Description: Service which the data collector is looking at
-    AllowedValues:
-      - ami
-      - ebs
-      - snapshot
-      - ta
   GlueRoleARN:
     Type: String
 Outputs:
@@ -128,20 +121,42 @@ Resources:
             Ref: MultiAccountRoleName
           PATH:
             Ref: CFDataName
-          CRAWLER_NAME:
-            Ref: Crawler
-          PREFIX:
-            Ref: Prefix
-  Crawler:
+          AMICrawler:
+            Ref: AMICrawler
+          SnapshotCrawler:
+            Ref: SnapshotCrawler
+          EBSCrawler:
+            Ref: EBSCrawler
+  AMICrawler:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub "${CFDataName}Crawler"
+        !Sub "${CFDataName}AMICrawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/${Prefix}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/ami-data/"
+  SnapshotCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}SnapshotCrawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/snapshot-data/"
+  EBSCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}EBSCrawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/ebs-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -162,3 +177,48 @@ Resources:
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
       FunctionName: !GetAtt LambdaFunction.Arn
+  AthenaSnaphotAMI:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's
+      Name: snapshot-ami-query
+      QueryString: !Sub
+        "SELECT *,
+        CASE
+        WHEN snap_ami_id = imageid THEN
+        'AMI Avalible'
+        WHEN snap_ami_id LIKE 'ami%' THEN
+        'AMI Removed'
+        ELSE 'Not AMI'
+        END AS status
+          FROM ( 
+        (SELECT snapshotid AS snap_id,
+            volumeid as volume,
+            volumesize,
+            starttime,
+            Description AS snapdescription,
+            year,
+            month,
+            ownerid,
+            
+            CASE
+            WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN
+            split_part(Description,' ', 5)
+            WHEN substr(Description, 2, 11) = 'Copied snap' THEN
+            split_part(Description,' ', 9)
+            WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN
+            split_part(Description,' ', 4)
+            ELSE ''
+            END AS \"snap_ami_id\"
+        FROM \"optimization_data\".\"snapshot_data\"
+        ) AS snapshots
+        LEFT JOIN 
+            (SELECT imageid,
+            name,
+            description,
+            state,
+            rootdevicetype,
+            virtualizationtype
+            FROM \"optimization_data\".\"ami_data\") AS ami
+                ON snapshots.snap_ami_id = ami.imageid )"

@@ -40,15 +40,13 @@ Resources:
   LambdaOrgData:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: Lambda_Org_Data
-      Description: LambdaFunctioni of python3.8.
+      FunctionName: Lambda_Organization_Data_Collector
+      Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
-        # S3Key: index.py.zip
-        # S3Bucket: !Ref AWSCodeBucketName
         ZipFile: |
           #!/usr/bin/env python3
-          #Gets org data, grouped by ous and tags from managment accounts in json
+          #Gets org data, grouped by ous and tags from management accounts in json
           #Author Stephanie Gooch 2020
           import argparse
           import boto3
@@ -59,7 +57,7 @@ Resources:
           import datetime
           import json
 
-          def myconverter(o):
+          def timeconverter(o):
               if isinstance(o, datetime.datetime):
                   return o.__str__()
 
@@ -122,7 +120,7 @@ Resources:
                                   kv = {tag : value}
                                   account.update(kv)
                   account.update({'Parent' : parent_name})        
-                  data = json.dumps(account, default = myconverter) 
+                  data = json.dumps(account, default = timeconverter) 
 
                   f.write(data)
                   f.write('\n')
@@ -194,7 +192,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "AWS-Organization-Account-Collector-Role${Suffix}"
+      RoleName: !Sub "AWS-Organization-Data-Execute-Lambda${Suffix}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:

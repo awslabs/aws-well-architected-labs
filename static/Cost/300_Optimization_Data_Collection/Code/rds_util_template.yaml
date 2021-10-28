@@ -18,7 +18,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: RDSMETRICS
+    Default: rds_metrics
   DAYS:
     Type: Number
     Description: Number of days going back that you want to get data for
