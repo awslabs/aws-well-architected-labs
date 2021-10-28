@@ -62,7 +62,7 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role
-    Default: "Optimization-data-Multi-Account-Role"
+    Default: "Optimization-Data-Multi-Account-Role"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
