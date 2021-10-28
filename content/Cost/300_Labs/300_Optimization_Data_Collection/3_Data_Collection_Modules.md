@@ -12,6 +12,7 @@ pre: "<b>3. </b>"
 These modules templates are managed in AWS owned buckets. If you do not wish to have updates on them from AWS then please save a copy to a bucket in your account and use instead. 
 {{% /notice %}}
 
+Below are the modules we have available in this lab. You can read more about them by expanding the sections. You have selected your chosen modules in the Deploy Main Resources section so no action is needed. 
 
 {{%expand "Cost Explorer Rightsizing Recommendations" %}}
 
