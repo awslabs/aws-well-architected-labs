@@ -47,13 +47,13 @@ Resources for this lab deployed with AWS CloudFormation:
 Resources deployed with Optimization Data Collection Stack launch following workflow:
 
 **Collecting linked account information**: 
-1. [Amazon EventBridge](https://aws.amazon.com/eventbridge/) rule invokes account collector [AWS Lambda](https://aws.amazon.com/lambda/) on every 14 days schedule in optimization data collection account 
+1. [Amazon EventBridge](https://aws.amazon.com/eventbridge/) rule invokes account collector [AWS Lambda](https://aws.amazon.com/lambda/) based on schedule in optimization data collection account. By default schedule triggers Lambda function every 14 days and can be adjusted if needed.
 2. The Lambda function assumes [AWS Identity and Access Management](https://aws.amazon.com/iam/) (IAM) role in management account, retrieves linked accounts ids and names via [AWS Organizations](https://aws.amazon.com/organizations/) SDK and sends them to [Amazon Simple Queue Service](https://aws.amazon.com/sqs/) (SQS) queues for every deployed data collection module.  
 
 **Collecting optimization data from linked accounts**:
 
 3. Messages in SQS queue trigger Lambda functions for each data collection module
-4. Lambda function of each data collection module assumes IAM role in each linked account received in SQS message and retrieves respective optimization data via [AWS SDK for Python](https://aws.amazon.com/sdk-for-python/). Retrieved data stored in data collection [Amazon S3](https://aws.amazon.com/s3/) bucket
+4. Each data collection module Lambda function assumes IAM role in linked accounts listed in SQS messages and retrieves respective optimization data via [AWS SDK for Python](https://aws.amazon.com/sdk-for-python/). Collected data stored in data collection [Amazon S3](https://aws.amazon.com/s3/) bucket
 
 **Analyzing and visualizing optimization data**:
 
