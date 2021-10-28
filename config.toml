@@ -18,7 +18,6 @@ ordersectionsby = "weight"
     # 5000 - Cost Optimization
     # 6000 - Well Architected Tool
     # 7000 - Well Architected Partners
-
 editURL = "https://github.com/awslabs/aws-well-architected-labs/blob/master/content/"
 description = "Hands on labs and real world design scenarios for Well-Architected workloads"
 author = "Well-Architected Team"
