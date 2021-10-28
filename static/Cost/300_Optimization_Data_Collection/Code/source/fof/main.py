@@ -10,32 +10,37 @@ from botocore.client import Config
 import ami
 import ebs
 import snapshot
-import ta
 
 def lambda_handler(event, context):
-    # Read from accounts collector?
-    # Use same seyup as mult ecs
     # pass in account id 
-    DestinationPrefix = os.environ["PREFIX"]
-    #import pdb; pdb.set_trace()
+
     try:
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
             print(account_id)
-            if DestinationPrefix == 'ami':
-                ami.main(account_id)
-            elif DestinationPrefix == 'ebs':
-                ebs.main(account_id)
-            elif DestinationPrefix == 'snapshot':
-                snapshot.main(account_id)
-            elif DestinationPrefix == 'ta':
-                ta.main(account_id)
-            else:
-                print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
+
+            #AMI Data
+            DestinationPrefix = 'ami'
+            ami.main(account_id)
             print(f"{DestinationPrefix} respose gathered")
             s3(DestinationPrefix, account_id)
-            start_crawler()
+            start_crawler(os.environ["AMICrawler"])
+
+            #EBS Data
+            DestinationPrefix = 'ebs'
+            ebs.main(account_id)
+            print(f"{DestinationPrefix} respose gathered")
+            s3(DestinationPrefix, account_id)
+            start_crawler(os.environ["EBSCrawler"])
+
+            #Snapshot Data
+            DestinationPrefix = 'snapshot'
+            snapshot.main(account_id)
+            print(f"{DestinationPrefix} respose gathered")
+            s3(DestinationPrefix, account_id)
+            start_crawler(os.environ["SnapshotCrawler"])
+           
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
@@ -91,10 +96,10 @@ def assume_role(account_id, service, region):
         return None
 
 
-def start_crawler():
+def start_crawler(CrawlerName):
     glue_client = boto3.client("glue")
     try:
-        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        glue_client.start_crawler(Name=CrawlerName)
     except Exception as e:
         # Send some context about this error to Lambda Logs
         logging.warning("%s" % e)
