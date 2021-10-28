@@ -29,14 +29,14 @@ Patch Manager uses **patch baselines**, which include rules for auto-approving p
 
 ### 5.1 Create a Patch Baseline
 
-1. Under **Instances and Nodes** in the **AWS Systems Manager** navigation bar, choose **Patch Manager**.
+1. Under **Node Management** in the **AWS Systems Manager** navigation bar, choose **Patch Manager**.
 1. Click the **View predefined patch baselines** link under the **Configure patching** button on the upper right.
 1. Choose **Create patch baseline**.
-1. On the **Create patch baseline** page in the **Provide patch baseline details** section:
+1. On the **Create patch baseline** page in the **Patch baseline details** section:
    1. Enter a **Name** for your custom patch baseline, such as `AmazonLinuxSecAndNonSecBaseline`.
    1. Optionally enter a description, such as `Amazon Linux patch baseline including security and non-security patches`.
    1. Select **Amazon Linux** from the list.
-1. In the **Approval rules** section:
+1. In the **Approval rules for operating systems** section:
    1. Examine the options in the lists and ensure that **Product**, **Classification**, and **Severity** have values of **All**.
    1. Leave the **Auto approval delay** at its default of **0 days**.
    1. Change the value of **Compliance reporting - optional** to **Critical**.
@@ -91,9 +91,9 @@ All AWS provided Automation and Run Command documents can be viewed in AWS Syste
 To examine AWS-RunPatchBaseline in Documents:
 
 1. In the AWS Systems Manager navigation bar under **Shared Resources**, choose **Documents**.
-1. Click in the **search box**, select **Document name prefix**, and then **Equal**.
+1. Click in the **search box**, select **Document name prefix**, and then **Equals**.
 1. Type `AWS-Run` into the text field and press _Enter_ on your keyboard to start the search.
-1. Select AWS-RunPatchBaseline and choose **View details**.
+1. Select **AWS-RunPatchBaseline** and choose **View details**.
 1. Review the content of each tab in the details page of the document.
 
 
@@ -104,7 +104,7 @@ To examine AWS-RunPatchBaseline in Documents:
 
 ### 5.4 Scan Your Instances with AWS-RunPatchBaseline via Run Command
 
-1. Under **Instances and Nodes** in the AWS Systems Manager navigation bar, choose **Run Command**. In the Run Command dashboard, you will see previously executed commands including the execution of AWS-RefreshAssociation, which was performed when you set up inventory.
+1. Under **Node Management** in the AWS Systems Manager navigation bar, choose **Run Command**. In the Run Command dashboard, you will see previously executed commands including the execution of AWS-RefreshAssociation, which was performed when you set up inventory.
 1. (Optional) choose a Command ID from the list and examine the record of the command execution.
 1. Choose **Run Command** in the top right of the window.
 1. In the **Run a command** window, under **Command document**:
@@ -112,7 +112,7 @@ To examine AWS-RunPatchBaseline in Documents:
 	* Choose **AWS-RunPatchBaseline** in the list.
 1. In the **Command parameters** section, leave the **Operation** value as the default **Scan**.
 1. In the **Targets** section:
-   * Under **Specify targets by**, choose **Specifying a tag** to reveal the **Tags** sub-section.
+   * Under **Choose a method for selecting targets**, choose **Specify instance tags** to reveal the **Tags** sub-section.
    * Under **Enter a tag key**, enter `Workload`, and under **Enter a tag value**, enter `Test` and click **Add**.
 
 The remaining Run Command features enable you to:
@@ -132,13 +132,13 @@ The remaining Run Command features enable you to:
 
 ### 5.5 Review Initial Patch Compliance
 
-1. Under **Instances & Nodes** in the the AWS Systems Manager navigation bar, choose **Compliance**.
+1. Under **Node Management** in the the AWS Systems Manager navigation bar, choose **Compliance**.
 1. On the **Compliance** page in the **Compliance resources summary**, you will now see that there are 4 systems that have critical severity compliance issues. In the **Resources** list, you will see the individual compliance status and details.
 
 
 ### 5.6 Patch Your Instances with AWS-RunPatchBaseline via Run Command
 
-1. Under **Instances and Nodes** in the AWS Systems Manager navigation bar, choose **Run Command**.
+1. Under **Node Management** in the AWS Systems Manager navigation bar, choose **Run Command**.
 1. Choose **Run Command** in the top right of the window.
 1. In the **Run a command** window, under **Command document**:
    1. Choose the search icon, select `Platform types`, and then choose `Linux` to display all the available commands that can be applied to Linux instances.
@@ -164,7 +164,7 @@ The remaining Run Command features enable you to:
 
 ### 5.7 Review Patch Compliance After Patching
 
-1. Under **Instances & Nodes** in the the AWS Systems Manager navigation bar, choose **Compliance**.
+1. Under **Node Management** in the the AWS Systems Manager navigation bar, choose **Compliance**.
 1. The **Compliance resources summary** will now show that there are 4 systems that have satisfied critical severity patch compliance.
 
 In the optional Scheduling Automated Operations Activities section of this lab you can set up Systems Manager Maintenance Windows and schedule the automated application of patches.

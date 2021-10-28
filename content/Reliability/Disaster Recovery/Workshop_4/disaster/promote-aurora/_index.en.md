@@ -8,29 +8,23 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 
 Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone instance.
 
-We are going to promote Aurora secondary database.
+### Promote Aurora secondary database
 
-1.1 Change your [console](https://us-west-1.console.aws.amazon.com/console)’s region to **N. California (us-west-1)** using the Region Selector in the upper right corner.
+1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Navigate to **RDS** in the console.
-
-{{< img a-1.png >}}
-
-1.3 Click into **DB Instances**.
+1.2 Click the **DB Instances** link.
 
 {{< img a-2.png >}}
 
-1.4 Find **hot-standby-passive-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
+1.3 Select **hot-standby-passive-secondary** then click **Remove from global database** in the **Actions** dropdown.
 
 {{< img a-3.png >}}
 
-1.5 Click **Remove and Promote** to confirm the server promotion.
+1.4 Click the **Remove and Promote** button.
 
 {{< img a-4.png >}}
 
-1.6 Grab a snack! It takes few minutes for the operation to complete.
-
-## Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+#### Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
 
 {{< prev_next_button link_prev_url="../" link_next_url="../ec2-instance/" />}}
 

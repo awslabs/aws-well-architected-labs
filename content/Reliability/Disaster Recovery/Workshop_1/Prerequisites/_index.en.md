@@ -1,28 +1,25 @@
 +++
-title = "Prerequisites"
+title = "Pre-requisites"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 1
 +++
 
-Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
+### Account setup 
 
-{{% notice note %}}
-If you are using a personal AWS account, be aware that you will incur costs for the resources deployed in this workshop. Complete the cleanup steps at the end to minimize those costs.
+#### Using an account provided by instructor at virtual or in-person workshop
 
-If you are running this at a group event - please log in via Event Engine. The event host will provide the Instructions.{{% /notice %}}
+If you are running this workshop as part of an instructor led workshop, please log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
 
-1.1 Login to your [AWS console](https://console.aws.amazon.com/console/home#). Go to the Amazon S3 console and **Deactivate Block Public Access**. Consider referencing [this page](https://aws.amazon.com/s3/features/block-public-access/) or this [video](https://youtu.be/kMi5PSyFu8s) to find out more about this setting.
+All resources for this workshop have been pre-provisioned.
 
-1.2 Open S3, and on the left, click on "Block Public Access settings for this account."
+**Continue to the [Create Backup Resources](../backup-resources/) section of the workshop.**
 
-{{< img S3-public-1.png >}}
 
-1.3 If you see that "Block all public access" is "On," then click on the "Edit" button to get to the next screen.
-{{< img S3-public-2.png >}}
+#### Using your own AWS account
 
-1.4 Uncheck "Block all public access," including any child selections. Click "Save Changes." You will be required to confirm the changes.
-{{< img S3-public-3.png >}}
-{{< img S3-public-4.png >}}
+Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
 
-{{< prev_next_button link_prev_url="../" link_next_url="../us-east-1-deployment/" />}}
+**Continue to the [Account Setup](./account-setup/) section of the workshop.**
+
+
 

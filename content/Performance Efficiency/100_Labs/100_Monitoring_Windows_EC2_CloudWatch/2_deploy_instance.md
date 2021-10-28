@@ -30,7 +30,7 @@ The CloudFormation template that accompanies this lab requires the ability to cr
 {{% common/CreateNewCloudFormationStack templatename="WindowsMachineDeploy.yaml" stackname="WindowsMachineDeploy" %}}
     * **Stack name** – Use **WindowsMachineDeploy** (case sensitive)
 
-    * **VPCImportName** - The subnet you wish to deploy the EC2 instance into for testing. For this lab, we use a default VPC subnet within the account.
+    * **VPCImportName** - The VPC that we will deploy to. This will default to the name of the VPC you created in the previous step.
     * **InstanceAMI** – This will auto-populate with the latest version of the Windows 2019 Base AMI
     * **InstanceType** - Instance Type, defaults to t3.large but can use any size supported by Windows in the region you have chosen
     <!-- * **KeyPair** – keyname to use for the test (in case you want to RDP into the box to run additional tests). Select the one you created above or another one if you had a pre-existing keypair from the drop-down. -->

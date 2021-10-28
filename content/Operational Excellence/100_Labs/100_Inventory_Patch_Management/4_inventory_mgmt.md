@@ -33,7 +33,7 @@ SSM Agent is installed by default on:
 ### 4.1 Setting up Systems Manager
 
 1. Use your administrator account to access the Systems Manager console at <https://console.aws.amazon.com/systems-manager/>.
-1. Choose **Managed Instances** from the navigation bar. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
+1. Choose **Fleet Manager** from the navigation bar in the **Node Management** menu. If you have not satisfied the pre-requisites for Systems Manager, you will arrive at the **AWS Systems Manager Managed Instances** page.
    * As a user with AdministratorAccess permissions, you already have [User Access to Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html).
    * The Amazon Linux AMIs used to create the instances in your environment are dated 2017.09. They are [supported operating systems](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-supported-oses.html) and have the [SSM Agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed by default.
    * If you are in a [supported region](https://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region) the remaining step is to configure the IAM role for instances that will process commands.
@@ -45,7 +45,9 @@ SSM Agent is installed by default on:
    1. In the **Choose the service that will use this role** section, scroll past the first reference to EC2 (**EC2 Allows EC2 instances to call AWS services on your behalf**) and choose **EC2** from within the field of services. This will open the **Select your use case** section further down the page.
    1. In the **Select your use case** section, choose **EC2 Role for AWS Systems Manager** to select it.
    1. Then choose **Next: Permissions**.
-1. Under **Attached permissions policy**, verify that **AmazonEC2RoleforSSM** is listed, and then choose **Next: Review**.
+1. Under **Attached permissions policy**, verify that **AmazonEC2RoleforSSM** is listed, and then choose **Next: Tags**.
+1. In the **Tags** section:
+   1. Add one or more **keys** and **values**, then choose **Next: Review**.
 1. In the **Review** section:
    1. Enter a **Role name**, such as `ManagedInstancesRole`.
    1. Accept the default in the **Role description**.
@@ -55,7 +57,7 @@ SSM Agent is installed by default on:
    1. Select the first instance and then choose **Actions**, **Security**, and **Modify IAM Role**.
    1. Under **Modify IAM Role**, select **ManagedInstancesRole** from the drop down list and choose **Save**.
    1. Repeat this process, assigning **ManagedInstancesRole** to each of the 3 remaining instances.
-1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Managed Instances** from the navigation bar. Periodically choose **Managed Instances** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
+1. Return to the [Systems Manager console](https://console.aws.amazon.com/systems-manager/) and choose **Fleet Manager** from the navigation bar in the **Node Management** menu. Periodically choose **Fleet Manager** until your instances begin to appear in the list. Over the next couple of minutes your instances will populate into the list as managed instances.
 
 >**Note** If desired, you can use a [more restrictive permission set](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-access-user.html) to grant access to Systems Manager.
 
@@ -73,7 +75,7 @@ You can use [AWS Systems Manager Inventory](https://docs.aws.amazon.com/systems-
 
 ### 4.3 Using Systems Manager Inventory to Track Your Instances
 
-1. Under **Instances & Nodes** in the AWS Systems Manager navigation bar, choose **Inventory**.
+1. Under **Node Management** in the AWS Systems Manager navigation bar, choose **Inventory**.
    1. Scroll down in the window to the **Corresponding managed instances** section. Inventory currently contains only the instance data available from the EC2
    1. Choose the **InstanceID** of one of your systems.
    1. Examine each of the available tabs of data under the **Instance ID** heading.
@@ -115,7 +117,7 @@ When you performed the **Setup Inventory** actions, you created an association i
 
 ### 4.4 Review Association Status
 
-1. Under **Actions** in the navigation bar, select **State Manager**. At this point, the **Status** may show that the inventory activity has not yet completed.
+1. Under **Node Management** in the navigation bar, select **State Manager**. At this point, the **Status** may show that the inventory activity has not yet completed.
    1. Choose the single Association id that is the result of your **Setup Inventory** action.
    1. Examine each of the available tabs of data under the **Association ID** heading.
    1. Choose **Edit**.
@@ -132,9 +134,9 @@ _Inventory_ is accomplished through the following:
 
 
 
-2. Navigate to **Managed Instances** under **Instances and Nodes** in the navigation bar. An **Association Status** has been established for the inventoried instances under management.
+2. Navigate to **Fleet Manager** under **Node Management** in the navigation bar. An **Association Status** has been established for the inventoried instances under management.
 1. Choose one of the **Instance ID** links to go to the inventory of the instance. The Inventory tab is now populated and you can track associations and their last activity under the Associations tab.
-1. Navigate to **Compliance** under **Instances & Nodes** in the navigation bar. Here you can view the overall compliance status of your managed instances in the **Compliance Summary** and the individual compliance status of systems in the **Corresponding managed instances** section below.
+1. Navigate to **Compliance** under **Node Management** in the navigation bar. Here you can view the overall compliance status of your managed instances in the **Compliance Resources Summary** and the individual compliance status of systems in the **Corresponding managed instances** section below.
 
 >**Note** The inventory activity can take up to 10 minutes to complete. While waiting for the inventory activity to complete, you can proceed with the next section.
 

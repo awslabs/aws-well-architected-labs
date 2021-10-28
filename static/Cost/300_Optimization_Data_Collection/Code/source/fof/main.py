@@ -20,7 +20,8 @@ def lambda_handler(event, context):
     #import pdb; pdb.set_trace()
     try:
         for record in event['Records']:
-            account_id = record["body"]
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
             print(account_id)
             if DestinationPrefix == 'ami':
                 ami.main(account_id)

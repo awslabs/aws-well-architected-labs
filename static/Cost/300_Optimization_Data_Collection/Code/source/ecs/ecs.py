@@ -15,7 +15,8 @@ def lambda_handler(event, context):
     try:
         for record in event['Records']:
            
-            account_id = record["body"]
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
             
             print(account_id)
             list_region = lits_regions()
@@ -81,6 +82,7 @@ def lambda_handler(event, context):
                 f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
             )  # uploading the file with the data to s3
             print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
+            start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
@@ -119,3 +121,12 @@ def lits_regions():
     s = Session()
     ecs_regions = s.get_available_regions('ecs')
     return ecs_regions
+
+def start_crawler():
+    glue_client = boto3.client("glue")
+    try:
+        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        print("Crawler Started")
+    except Exception as e:
+        # Send some context about this error to Lambda Logs
+        logging.warning("%s" % e)

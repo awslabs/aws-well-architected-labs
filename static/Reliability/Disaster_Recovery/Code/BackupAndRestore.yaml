@@ -15,7 +15,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPC
+          Value: UniShopAppV1VPCBackupAndRestore
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -496,7 +496,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2
+          Value: UniShopAppV1EC2BackupAndRestore
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL
