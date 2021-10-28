@@ -26,10 +26,9 @@ Some of the data needed for the modules is in the **Management account** we will
 
 
 
-### Role for Read Only Data Collector
+### Read Only roles for Data Collector modules
 
-Some of the data needed for these modules is in all of the accounts in an AWS Organization we will use a CloudFormation StackSet to deploy a single read only role to all accounts. 
-If you already have a role which can read into your accounts then please skip this section and use this as your **MultiAccountRoleName** parameter later
+Modules deployed in **OptimizationDataCollectionStack** (previous step) allow to collect data from all of the accounts in an AWS Organization we will use a CloudFormation StackSet to deploy a single read only role to all accounts. 
 
 1. **Download CloudFormation** by clicking [here.](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) This will be the foundation of the rest of the lab and we will add to this to build out the modules so please **store somewhere safely** as there is not designer in StackSets. 
 
@@ -43,7 +42,8 @@ If you already have a role which can read into your accounts then please skip th
 
 5. Choose **Template is ready** and **Upload a template file** and upload the optimisation_read_only_role.yaml file you downloaded from above. Click **Next**.
 
-6. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**
+6. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
+
 ![Images/SS_param.png](/Cost/300_Optimization_Data_Collection/Images/SS_param.png)
 
 7. Leave all as default and Click **Next**.
@@ -67,8 +67,8 @@ If you already have a role which can read into your accounts then please skip th
 10. This role will now be deployed to all linked accounts. If you wish to also access data in your management account, deploy the same CloudFormation stack as a normal stack in your management account as you did in the **Role for Management Account** step above. 
 
 {{% notice tip %}}
-Note this role will not be deployed into the management account so if you wish to read data from this account too, deploy as a normal CloudFormation stack. 
+Note this role will not be deployed into the management account so if you wish to read data from this account too, deploy as a CloudFormation stack. 
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../1_deploy_main_resources/" link_next_url="../3_deploy_data_collection_modules" />}}
+{{< prev_next_button link_prev_url="../1_deploy_main_resources/" link_next_url="../3_data_collection_modules" />}}
