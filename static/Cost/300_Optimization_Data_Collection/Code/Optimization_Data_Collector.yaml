@@ -51,7 +51,7 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that needs to be created to hold information
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-    Default: costoptimizationdatacollectionbucket
+    Default: optimizationdata
   ManagementAccountRole: 
     Type: String
     Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data.
