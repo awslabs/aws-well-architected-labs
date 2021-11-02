@@ -217,7 +217,7 @@ Resources:
     Condition: DeployTAModule
     Properties:
           TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
-          TimeoutInMinutes: 2
+          TimeoutInMinutes: 5
           Parameters:
             DestinationBucket: !Ref S3Bucket
             DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -241,7 +241,7 @@ Resources:
     Condition: DeployInventoryCollectorModule
     Properties:
       TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
-      TimeoutInMinutes: 2
+      TimeoutInMinutes: 5
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -253,7 +253,7 @@ Resources:
     Condition: DeployComputeOptimizerModule
     Properties:
       TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
-      TimeoutInMinutes: 2
+      TimeoutInMinutes: 5
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
@@ -265,7 +265,7 @@ Resources:
     Condition: DeployEcsChargebackModule
     Properties:
       TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
-      TimeoutInMinutes: 2
+      TimeoutInMinutes: 5
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
@@ -276,7 +276,7 @@ Resources:
     Condition: DeployRDSUtilizationModule
     Properties:
       TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
-      TimeoutInMinutes: 2
+      TimeoutInMinutes: 5
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -287,7 +287,7 @@ Resources:
     Condition: DeployOrgDataModule
     Properties:
       TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
-      TimeoutInMinutes: 2
+      TimeoutInMinutes: 5
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
@@ -298,7 +298,7 @@ Resources:
     Condition: DeployAccountCollector
     Properties:
           TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-          TimeoutInMinutes: 2
+          TimeoutInMinutes: 5
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
             TaskQueuesUrl: 
