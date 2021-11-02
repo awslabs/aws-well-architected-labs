@@ -21,6 +21,7 @@ Metadata:
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
+          - IncludeBudgetsModule
     ParameterLabels:
       DestinationBucket:
         default: 'Destination S3 bucket'
@@ -45,7 +46,9 @@ Metadata:
       IncludeRDSUtilizationModule:
         default: 'Include RDS Utilization Data Collection Module'
       IncludeOrgDataModule:
-        default: 'Include AWS Organization Data Collection Module'        
+        default: 'Include AWS Organization Data Collection Module' 
+      IncludeBudgetsModule:
+        default: 'Include AWS Budgets Collection Module'
 Parameters:
   DestinationBucket:
     Type: String
@@ -105,6 +108,13 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  IncludeBudgetsModule: 
+    Type: String
+    Description: Collects AWS Budgets
+    AllowedValues:
+      - "yes"
+      - "no" 
+  
   
   CodeBucket:
     Type: String
@@ -165,6 +175,9 @@ Conditions:
   DeployOrgDataModule: !Equals
     - !Ref IncludeOrgDataModule
     - "yes" 
+  DeployBudgetsModule: !Equals
+    - !Ref IncludeBudgetsModule
+    - "yes"
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
@@ -293,6 +306,17 @@ Resources:
         GlueRoleARN: !GetAtt GlueRole.Arn
         ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
         Tags: "Env"
+  BudgetsModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployBudgetsModule
+    Properties:
+      Parameters:
+          DestinationBucket: !Ref S3Bucket
+          DestinationBucketARN: !GetAtt S3Bucket.Arn 
+          ManagementAccountID: !Ref ManagementAccountID
+          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Budgets.yaml"
+      TimeoutInMinutes: 5
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector

@@ -1,0 +1,277 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves AWS Billing Budgets
+Parameters:
+  CrawlerName:
+    Type: String
+    Default: budgets-crawler
+    Description: Name of the AWS crawler to be created
+    AllowedPattern: ^.*[^0-9]$
+    ConstraintDescription: Must end with non-numeric character.
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that exists or needs to be created to hold information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold budgets information
+  DestinationPrefix:
+    Type: String
+    Description: Name of the folder/prefix for budgets information to be stored in
+    Default: budgets
+  RoleName:
+    Type: String
+    Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Budgets information.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: Budgets
+  Schedule:
+    Type: String
+    Default: "cron(30 12 L * ? *)"
+    Description: Cloud watch event Schedule to trigger the lambda 
+  ManagementAccountID: 
+    Type: String
+    Description: Your Management Account ID
+Outputs:
+  CostExplorerBudgetsLambdaRoleARN:
+    Description: Role for Lambda execution of AWS Billing Budgets.
+    Value:
+      Fn::GetAtt:
+        - BudgetsLambdaRole
+        - Arn
+  LambdaCostExplorerBudgetsARN:
+    Description: Lambda function ARN for retrieving AWS Billing Budgets
+    Value:
+      Fn::GetAtt:
+        - LambdaFunction
+        - Arn
+  GlueCrawler:
+    Value:
+      Ref: BudgetsCrawler
+  GlueCrawlerRoleARN:
+    Value:
+      Fn::GetAtt:
+        - BudgetsGlueRole
+        - Arn
+Resources:
+
+  BudgetsLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-Budgets-Execute-Lambda
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "Assume-Management-Budgets-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource:
+                  Ref: RoleName
+        - PolicyName: "Budgets-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: !Ref DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: "arn:aws:logs:*:*:*"
+  BudgetsGlueRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-Cost-Explorer-Budgets-Glue-Crawler
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Path: /
+      Policies:
+        - PolicyName: "Get-Budgets-Recommendation-S3"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                Resource: !Sub "${DestinationBucketARN}*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aws-budgets-function
+      Description: LambdaFunction to retreive list of organization
+      Runtime: python3.8
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import json#
+          import datetime
+          from json import JSONEncoder
+          import logging
+          from botocore.client import Config
+
+          # subclass JSONEncoder
+          class DateTimeEncoder(JSONEncoder):
+              # Override the default method
+              def default(self, obj):
+                  if isinstance(obj, (datetime.date, datetime.datetime)):
+                      return obj.isoformat()
+
+          def lambda_handler(event, context):
+              ROLE_ARN = os.environ['ROLE_ARN']
+
+              sts_connection = boto3.client('sts')
+              acct_b = sts_connection.assume_role(
+                      RoleArn=ROLE_ARN,
+                      RoleSessionName="cross_acct_lambda"
+              )
+                          
+              ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+              SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+              SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+
+              # create service client using the assumed role credentials
+              client = boto3.client(
+                      "budgets",
+                      aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_KEY,
+                      aws_session_token=SESSION_TOKEN,
+              )
+
+              account_id = os.environ['ACCOUNT_ID']
+              paginator = client.get_paginator("describe_budgets") #Paginator for a large list of accounts
+              response_iterator = paginator.paginate(AccountId=account_id)
+
+              #import pdb; pdb.set_trace()
+              with open("/tmp/data.json", "w") as f:
+                  for budgets in response_iterator:
+                      for budget in budgets['Budgets']:
+                          print(budget)
+                          dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
+                          f.write(dataJSONData)
+                          f.write("\n")
+              s3_upload()
+              start_crawler()
+
+          def s3_upload():
+
+              d = datetime.datetime.now()
+              month = d.strftime("%m")
+              year = d.strftime("%Y")
+              dt_string = d.strftime("%d%m%Y-%H%M%S")
+
+              today = datetime.date.today()
+              year = today.year
+              month = today.month
+              try:
+                  S3BucketName = os.environ["BUCKET_NAME"]
+                  DestinationPrefix = os.environ["PATH"]
+                  s3 = boto3.client('s3', os.environ["REGION"],
+                                      config=Config(s3={'addressing_style': 'path'}))
+                  s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/year={year}/month={month}/budgets-{dt_string}.json")
+                  print(f"Budget data in s3 {S3BucketName}")
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+
+          def start_crawler():
+              glue_client = boto3.client("glue")
+              Crawler_Name = os.environ["CRAWLER_NAME"]
+              try:
+                  glue_client.start_crawler(Name=Crawler_Name)
+                  print(f"{Crawler_Name} has been started")
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+
+
+          lambda_handler(None, None)
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - BudgetsLambdaRole
+          - Arn
+      Environment:
+        Variables:
+          ACCOUNT_ID:
+            Ref: ManagementAccountID
+          BUCKET_NAME:
+            Ref: DestinationBucket
+          ROLE_ARN:
+            Ref: RoleName
+          PATH:
+            Ref: DestinationPrefix
+          CRAWLER_NAME:
+            Ref: BudgetsCrawler
+  BudgetsCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        Ref: CrawlerName
+      Role: !GetAtt BudgetsGlueRole.Arn
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${DestinationPrefix}/"
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Notification Event for lambda data
+      Name: !Sub "${CFDataName}-Scheduler"
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+          Id: TriggerForEBSUtilization
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
