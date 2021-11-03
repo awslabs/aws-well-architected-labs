@@ -1,0 +1,31 @@
+{
+  "name": "wildrydes",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@aws-amplify/cli": "^3.9.0",
+    "aws-amplify": "^1.1.40",
+    "aws-amplify-vue": "^0.2.17",
+    "axios": ">=0.21.1",
+    "core-js": "^2.6.5",
+    "esri-loader": "^2.10.0",
+    "vue": "^2.6.10",
+    "vue-js-modal": "^1.3.31",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.6.10"
+  }
+}

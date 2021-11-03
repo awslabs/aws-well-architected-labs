@@ -62,10 +62,10 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 
 ### 1.2. Deploy The Blue Car Application.
 
-1. Launch Cloud9 from the AWS Console. The repository where all of the CloudFormation templates are stored will be automatically cloned. Go to **oncall-health-sample-app** directory and run **bash build_script.sh**. It may take 9-10 minutes to complete this deployment.
+1. Launch Cloud9 from the AWS Console. The repository where all of the CloudFormation templates are stored will be automatically cloned. Go to **aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app** directory path and run **bash build_script.sh**. It may take 9-10 minutes to complete this deployment.
 
 ```
-cd oncall-health-sample-app
+cd aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app
 bash build_script.sh
 ```
 

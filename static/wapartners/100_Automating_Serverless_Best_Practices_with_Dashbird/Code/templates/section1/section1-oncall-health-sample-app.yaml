@@ -12,8 +12,8 @@ Resources:
       AutomaticStopTimeMinutes: 30
       InstanceType: 't2.micro'
       Repositories:
-        - PathComponent: /oncall-health-sample-app
-          RepositoryUrl: 'https://github.com/stephensalim/oncall-health-sample-app.git'
+        - PathComponent: /aws-well-architected-labs
+          RepositoryUrl: 'https://github.com/awslabs/aws-well-architected-labs.git'
 
 Outputs:
   Cloud9URL:

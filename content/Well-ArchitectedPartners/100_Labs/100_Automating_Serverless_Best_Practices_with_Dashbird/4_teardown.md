@@ -9,8 +9,10 @@ The following steps will remove the services which are deployed in the lab.
 
 ### 1. Delete CloudFormation stacks
 
-1. Simply run **teardown_script.sh** as shown:
+1. Go to **aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app** directory path and run **teardown_script.sh**. 
+
 ```
+cd aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app
 bash teardown_script.sh
 ```
 ![Section4 Teardown](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section4/section4-teardown.png)
