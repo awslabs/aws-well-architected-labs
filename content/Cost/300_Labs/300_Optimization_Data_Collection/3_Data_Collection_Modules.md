@@ -476,7 +476,7 @@ If you have just deployed all resources into your Management Account please see 
 
 In some cases we have seen customers who have deployed all CloudFormation into just their Management Account have role access issues. If you have this issue then please do the below, if not please ignore.
 
-To fix this, all you have to do is remove/comment out the assume role parts of the Lambda code. Please see example below.
+To fix this, all you have to do is remove/comment out the assume role parts of the Lambda code. This will be on different lines in each lambda function. 
 
 ![Images/assume-role-comment.png](/Cost/300_Optimization_Data_Collection/Images/assume-role-comment.png)
 
