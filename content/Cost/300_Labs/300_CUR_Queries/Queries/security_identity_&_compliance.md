@@ -13,14 +13,15 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon GuardDuty](#amazon-guardduty)
+  * [Amazon Cognito](#amazon-cognito)
+  * [AWS WAF](#aws-waf)
 
-{{< expand "Amazon GuardDuty" >}}
-
-{{% markdown_wrapper %}}
+### Amazon GuardDuty
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon GuardDuty Usage. The usage amount and cost will be summed.
@@ -35,6 +36,7 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/guardduty.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -42,14 +44,14 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
       line_item_usage_type,
       TRIM(REPLACE(product_group, 'Security Services - Amazon GuardDuty ', '')) AS trim_product_group,   
       pricing_unit, 
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${tableName}
     WHERE
-          (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'Amazon GuardDuty'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id, 
       line_item_usage_account_id,
@@ -62,18 +64,15 @@ Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guard
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       trim_product_group;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon GuardDuty" query_text="Amazon GuardDuty Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon GuardDuty" query_text="Amazon GuardDuty Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
-
+[Back to Table of Contents](#table-of-contents)
 
 
-{{< expand "Amazon Cognito" >}}
 
-{{% markdown_wrapper %}}
+### Amazon Cognito
 
 #### Query Description
 This query provides daily unblended cost and usage information about Amazon Cognito Usage. The usage amount and cost will be summed.
@@ -88,20 +87,21 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/cognito.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
       product_product_name,
       line_item_operation, 
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
       ${tableName}
     WHERE
-      (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'Amazon Cognito'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -113,16 +113,13 @@ Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       line_item_operation;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" %}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< /expand >}}
-
-{{< expand "AWS WAF" >}}
-
-{{% markdown_wrapper %}}
+### AWS WAF
 
 #### Query Description
 This query provides daily unblended cost and usage information about AWS WAF Usage including web acl, rule id, and region. The usage amount and cost will be summed and the cost will be in descending order.
@@ -137,6 +134,7 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/waf.sql)
 
 #### Copy Query
+```tsql
     SELECT 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -150,14 +148,14 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
       product_location_type,
       line_item_line_item_description,
       pricing_unit,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
+      SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+      SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM 
       ${tableName}
     WHERE
-      (year = '2020' AND month IN ('1','01') OR year = '2020' AND month IN ('2','02'))
+      ${date_filter}
       AND product_product_name = 'AWS WAF'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -175,12 +173,11 @@ Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for 
       sum_line_item_usage_amount,
       sum_line_item_unblended_cost,
       product_group;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Security, Identity, %26 Compliance" service_text="Amazon Cognito" query_text="Amazon WAF" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Security, Identity, & Compliance" service_text="Amazon Cognito" query_text="Amazon Cognito Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

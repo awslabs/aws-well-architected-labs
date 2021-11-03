@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploys a role to management account so we can assume to read data using a lambda 
+Parameters:
+  CostAccountID:
+    Type: String
+    Description: AccountId of where the collector is deployed
+Outputs:
+  LambdaRole:
+    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn 
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "Lambda-Assume-Role-Management-Account"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS:
+                -  !Sub "arn:aws:iam::${CostAccountID}:root"
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "Management-Account-permissions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetRightsizingRecommendation"
+                  - "organizations:ListAccounts"
+                  - "organizations:ListCreateAccountStatus"
+                  - "organizations:DescribeOrganization"
+                  - "organizations:ListTagsForResource"
+                  - "organizations:ListRoots"
+                  - "organizations:ListChildren"
+                  - "organizations:ListAccountsForParent"
+                  - "organizations:DescribeOrganizationalUnit"
+                  - "organizations:DescribeAccount"
+                  - "organizations:ListParents"
+                  - "organizations:ListOrganizationalUnitsForParent"
+                  - "organizations:ListChildren"
+                Resource: "*"

@@ -26,7 +26,7 @@ Apply the following best practices when using tags:
 
 >**Note** It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
 
->**Important** **Patch Group** is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
+>**Important**: "**Patch Group**" is a reserved tag key used by **Systems Manager Patch Manager** that is case sensitive with a space between the two words.
 
 ## Management Tools: CloudFormation
 
@@ -73,7 +73,7 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
 
 When the **Status** of your stack displays **CREATE_COMPLETE** in the filter list, you have just created a representation of a typical lift and shift 2-tier application migrated to the cloud.
 
-13. Navigate to the [EC2 console](https://console.aws.amazon.com/ec2/) to view the deployed systems:
+16. Navigate to the [EC2 console](https://console.aws.amazon.com/ec2/) to view the deployed systems:
  	1. Choose **Instances**.
 	1. Select a server and review the details under its **Description** and **Tag** tabs.
 	1. (Optional) choose **Security Groups** and select the Security Group whose name begins with the name of your stack. Examine the inbound rules.

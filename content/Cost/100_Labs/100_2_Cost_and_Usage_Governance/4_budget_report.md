@@ -9,34 +9,25 @@ weight: 4
 AWS Budgets Reports allow you to create and send daily, weekly, or monthly reports to monitor the performance of your AWS Budgets.
 
 1. From the Budgets dashboard, Click on **Budgets Reports**:
-![Images/AWSBudgetReport1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport1.png)
+![Images/BudgetReports1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetReports1.png?classes=lab_picture_small)
 
 2. Click **Create budget report**:
-![Images/AWSBudgetReport2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport2.png)
+![Images/BudgetReports2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetReports2.png?classes=lab_picture_small)
 
 3. Create a report with the following details:
-    - **Report name**: WeeklyBudgets
     - **Select all budgets**
-
-4. Click **Configure delivery settings >**:
-![Images/AWSBudgetReport3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport3.png)
-
-5. Configure the delivery settings:
     - **Report frequency**: Weekly
     - **Day of week**: Monday
-    - **Email recipients**: <your email>
+    - **Email recipients**: Input your email address
+    - **Report name**: WeeklyBudgets
+    - Select the **Create budget report** button when finished:
+![Images/BudgetReports3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetReports3.png?classes=lab_picture_small)
 
-6. Click **Confirm budget report >**:
-![Images/AWSBudgetReport4.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport4.png)
+4. Your budget report should now be complete:
+![Images/BudgetReports4.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetReports4.png?classes=lab_picture_small)
 
-7. Review the configuration, click **Create**:
-![Images/AWSBudgetReport5.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport5.png)
-
-8. Your budget report should now be complete:
-![Images/AWSBudgetReport6.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport6.png)
-
-9. You should receive an email similar to the one below:
-![Images/AWSBudgetReport7.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSBudgetReport7.png)
+5. You should receive an email similar to the one below:
+![Images/BudgetReports5.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetReports5.png?classes=lab_picture_small)
 
 {{% notice tip %}}
 You have created a budget report. Use reports to regularly track your progress against defined budgets.

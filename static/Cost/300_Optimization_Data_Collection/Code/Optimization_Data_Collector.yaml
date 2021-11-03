@@ -1,0 +1,313 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Main CloudFormation template that builds shared resources and modules stacks
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: 'Deployment parameters'
+        Parameters:
+          - DestinationBucket
+          - ManagementAccountRole
+          - ManagementAccountID
+          - MultiAccountRoleName
+          - CodeBucket
+      - Label:
+          default: 'Available modules'
+        Parameters:
+          - IncludeTAModule
+          - IncludeRightsizingModule
+          - IncludeInventoryCollectorModule
+          - IncludeComputeOptimizerModule
+          - IncludeECSChargebackModule
+          - IncludeRDSUtilizationModule
+          - IncludeOrgDataModule
+    ParameterLabels:
+      DestinationBucket:
+        default: 'Destination S3 bucket'
+      ManagementAccountRole:
+        default: 'Management account role'
+      ManagementAccountID:
+        default: 'Management account Id'
+      MultiAccountRoleName:
+        default: 'Multi Account Role Name'
+      CodeBucket:
+        default: "Code Bucket"
+      IncludeTAModule:
+        default: 'Include AWS Trusted Advisor Data Collection Module'
+      IncludeRightsizingModule:
+        default: 'Include Rightsizing Recommendations Data Collection Module'
+      IncludeInventoryCollectorModule:
+        default: 'Include Inventory Collector Module'
+      IncludeComputeOptimizerModule:
+        default: 'Include AWS Compute Optimizer Data Collection Module'
+      IncludeECSChargebackModule:
+        default: 'Include ECS Chargeback Data Collection Module'
+      IncludeRDSUtilizationModule:
+        default: 'Include RDS Utilization Data Collection Module'
+      IncludeOrgDataModule:
+        default: 'Include AWS Organization Data Collection Module'        
+Parameters:
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that needs to be created to hold information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    Default: costoptimizationdatacollectionbucket
+  ManagementAccountRole: 
+    Type: String
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data.
+    Default: Lambda-Assume-Role-Management-Account
+  ManagementAccountID: 
+    Type: String
+    Description: Your Management Account ID
+  MultiAccountRoleName:
+    Type: String
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role
+    Default: "Optimization-Data-Multi-Account-Role"
+  IncludeTAModule:
+    Type: String
+    Description: Collects AWS Trusted Advisor recommendations data
+    AllowedValues:
+      - "yes"
+      - "no"  
+  IncludeRightsizingModule:
+    Type: String
+    Description: "Collects AWS Cost Explorer Rightsizing Recommendations"
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeInventoryCollectorModule:
+    Type: String
+    Description: Collects data about AMIs, EBS volumes and snapshots    
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeComputeOptimizerModule:
+    Type: String
+    Description: Collects AWS Compute Optimizer service recommendations
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeECSChargebackModule:
+    Type: String
+    Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeRDSUtilizationModule:
+    Type: String
+    Description: Collects RDS CloudWatch metrics from your accounts  
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeOrgDataModule: 
+    Type: String
+    Description: Collects AWS Organizations data such as account Id, account name, organization parent and specified tags
+    AllowedValues:
+      - "yes"
+      - "no" 
+  
+  CodeBucket:
+    Type: String
+    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
+    AllowedValues:
+      - aws-well-architected-labs-ireland
+      - aws-well-architected-labs
+      - aws-well-architected-labs-ohio
+      - aws-well-architected-labs-virginia
+      - aws-well-architected-labs-california
+      - aws-well-architected-labs-oregon
+      - aws-well-architected-labs-singapore
+      - aws-well-architected-labs-frankfurt
+      - aws-well-architected-labs-london
+      - aws-well-architected-labs-stockholm
+Outputs:
+  S3Bucket:
+    Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+    Value:
+      Ref: S3Bucket
+  S3BucketARN:
+    Description: ARN of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
+    Value:
+      Fn::GetAtt:
+        - S3Bucket
+        - Arn 
+  RoleARN:
+    Description: "The arn of the IAM role that deployed in the management account which can retrieve AWS Organization data"
+    Value: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+  TaskQueuesUrl:
+    Description: "SQS topics created for deployed modules"
+    Value:
+      Fn::Join:
+        - ','
+        - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+Conditions:
+  DeployTAModule: !Equals 
+    - !Ref IncludeTAModule
+    - "yes"
+  DeployRightsizingModule: !Equals 
+    - !Ref IncludeRightsizingModule
+    - "yes"
+  DeployInventoryCollectorModule: !Equals 
+    - !Ref IncludeInventoryCollectorModule
+    - "yes"
+  DeployComputeOptimizerModule: !Equals 
+    - !Ref IncludeComputeOptimizerModule
+    - "yes"
+  DeployEcsChargebackModule: !Equals 
+    - !Ref IncludeECSChargebackModule
+    - "yes"
+  DeployRDSUtilizationModule: !Equals
+    - !Ref IncludeRDSUtilizationModule
+    - "yes" 
+  DeployOrgDataModule: !Equals
+    - !Ref IncludeOrgDataModule
+    - "yes" 
+  DeployAccountCollector: !Or
+    - !Condition DeployTAModule
+    - !Condition DeployInventoryCollectorModule
+    - !Condition DeployComputeOptimizerModule
+    - !Condition DeployEcsChargebackModule
+#Reusable Resources:
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName:
+        !Sub "${DestinationBucket}${AWS::AccountId}"
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+  GlueRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-OPTICS-Glue-Crawler
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Path: /
+      Policies:
+        - PolicyName: "Put-S3"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                Resource: !Join
+                          - ''
+                          - - !GetAtt S3Bucket.Arn 
+                            - '*'
+  TrustedAdvisorModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployTAModule
+    Properties:
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
+          TimeoutInMinutes: 2
+          Parameters:
+            DestinationBucket: !Ref S3Bucket
+            DestinationBucketARN: !GetAtt S3Bucket.Arn 
+            Prefix: "ta"
+            CFDataName: "TA"
+            GlueRoleARN: !GetAtt GlueRole.Arn
+            MultiAccountRoleName: !Ref MultiAccountRoleName
+            CodeBucket: !Ref CodeBucket
+  RightsizeModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployRightsizingModule
+    Properties:
+      Parameters:
+          DestinationBucket: !Ref S3Bucket
+          DestinationBucketARN: !GetAtt S3Bucket.Arn 
+          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+      TimeoutInMinutes: 5
+  InventoryCollectorModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployInventoryCollectorModule
+    Properties:
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+      TimeoutInMinutes: 2
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn 
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        MultiAccountRoleName: !Ref MultiAccountRoleName
+        CodeBucket: !Ref CodeBucket
+  ComputeOptimizerModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployComputeOptimizerModule
+    Properties:
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TimeoutInMinutes: 2
+      Parameters:
+        DestinationBucketARN: !GetAtt S3Bucket.Arn 
+        DestinationBucket: !Ref S3Bucket
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+        CodeBucket: !Ref CodeBucket
+  EcsChargebackModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployEcsChargebackModule
+    Properties:
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+      TimeoutInMinutes: 2
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        GlueRoleArn: !GetAtt GlueRole.Arn 
+        MultiAccountRoleName: !Ref MultiAccountRoleName
+        CodeBucket: !Ref CodeBucket
+  RDSUtilizationModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployRDSUtilizationModule
+    Properties:
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+      TimeoutInMinutes: 2
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn 
+        GlueRoleArn: !GetAtt GlueRole.Arn 
+        MultiAccountRoleName: !Ref MultiAccountRoleName
+  OrgDataModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployOrgDataModule
+    Properties:
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TimeoutInMinutes: 2
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+        Tags: "Env"
+  AccountCollector:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployAccountCollector
+    Properties:
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+          TimeoutInMinutes: 2
+          Parameters:
+            RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+            TaskQueuesUrl: 
+              Fn::Join:
+                - ','
+                - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+  
+

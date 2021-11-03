@@ -1,0 +1,56 @@
+name: 'PRODUCTION - CFN-NAG check via Github Actions'
+
+
+on: [push]
+
+jobs:
+  Cloudformation-checker:
+    name: Check CFN security concerns
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Removing linting for now... not sure how helpful it is
+      # - name: cfn-lint-action
+      #   uses: docker://ghcr.io/scottbrenner/cfn-lint-action:master
+      #   with:
+      #     args: "static/**/*.yaml"
+      - name: cfn-nag-action
+        uses: stelligent/cfn_nag@master
+        with:
+          input_path: "static"
+          extra_args: --ignore-fatal
+      - name: cfn-lint-notification
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }} # required
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+                          {
+                            Content: ":rotating_light: \n ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }} \n Link to GitHub Action run: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks \n:rotating_light:"
+                          }
+          webhook: ${{ secrets.RoomWebHookUrl }}
+
+
+
+    # steps:
+    #   - uses: 8398a7/action-slack@v3
+    #     with:
+    #       status: custom
+    #       # fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+    #       fields: workflow,job,commit,repo,ref,author,took
+    #       custom_payload: |
+    #                       {
+    #                         content: ":rotating_light: [${{ github.workflow }}] ${{ github.actor}} did a [${{ github.event_name }}] on master branch. :rotating_light:"
+    #                       }
+    #     env:
+    #       SLACK_WEBHOOK_URL: ${{ secrets.RoomWebHookUrl }} # required
+    #     if: always() # Pick up events even if the job fails or is canceled.
+
+      # - name: cfn-nag-action
+      #   uses: stelligent/cfn_nag@v0.5.48
+      #   with:
+      #     args: '--input-path cloudformation/

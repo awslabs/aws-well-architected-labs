@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Amazon.AutoScaling;
 using Amazon.AutoScaling.Model;
 using Amazon.EC2;
@@ -29,177 +31,149 @@ namespace com.app.resiliency
 
     public class AZFailover
     {
-    
-        private static readonly AmazonEC2Client EC2_CLIENT = new AmazonEC2Client(Amazon.RegionEndpoint.USEast2);
-        private static readonly AmazonRDSClient RDS_CLIENT = new AmazonRDSClient(Amazon.RegionEndpoint.USEast2);
-        private static readonly AmazonAutoScalingClient AUTO_SCALING_CLIENT = new AmazonAutoScalingClient(Amazon.RegionEndpoint.USEast2);
+        private IAmazonEC2 ec2Client;
+        private IAmazonRDS rdsClient;
+        private IAmazonAutoScaling asClient;
         private string vpcId;
-        private string azId;
+        private string azName;
 
-        internal AZFailover(string vpcId, string azId)
+        internal AZFailover(string vpcId, string azId, Amazon.RegionEndpoint region = null)
         {
             this.vpcId = vpcId;
-            this.azId = azId;
+            this.azName = azId;
+
+            if (region == null)
+            {
+                region = Amazon.RegionEndpoint.USEast2;
+            }
+
+            ec2Client = new AmazonEC2Client(region);
+            rdsClient = new AmazonRDSClient(region);
+            asClient = new AmazonAutoScalingClient(region);
         }
 
-        public virtual void failover()
+        public virtual async Task Failover()
         {
-
             try
             {
-                // Modify the autoscaling group to remove the AZ affected which is the AZ passed in the input
-                // Find the autoscaling group that this is deployed into
-		// Note: This changes the asynchronous call to a synchronous one
-                DescribeAutoScalingGroupsResponse autoScalingGroupsResponse = AUTO_SCALING_CLIENT.DescribeAutoScalingGroupsAsync().GetAwaiter().GetResult();
-
-                if (autoScalingGroupsResponse != null && autoScalingGroupsResponse.AutoScalingGroups.Count > 0)
-                {
-
-                    // Note: This assumes an Auto Scaling group exists; no error checking for readability
-                    AutoScalingGroup autoScalingGroup = autoScalingGroupsResponse.AutoScalingGroups[0];
-                    string autoScalingGroupName = autoScalingGroup.AutoScalingGroupName;
-
-                    // Find all subnets in the availability zone passed in the input
-                    DescribeSubnetsResponse subnetsResult
-                            = EC2_CLIENT.DescribeSubnetsAsync(new DescribeSubnetsRequest()
-                    {
-                        Filters = new List<Amazon.EC2.Model.Filter> {
-                                    new Amazon.EC2.Model.Filter {
-                                        Name = "vpc-id",
-                                        Values = new List<string> { vpcId }
-                                    }
-                        }
-                    }).GetAwaiter().GetResult();
-                    IList<string> desiredSubnetsForASG = new List<string>();
-                    foreach (Amazon.EC2.Model.Subnet subnet in subnetsResult.Subnets)
-                    {
-                        if (!string.Equals(subnet.AvailabilityZone, azId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            desiredSubnetsForASG.Add(subnet.SubnetId);
-                        }
-                    }
-
-                    List<string> desiredSubnets = new List<String>(autoScalingGroup.VPCZoneIdentifier.Split(new[] { ',' },StringSplitOptions.None));
-
-                    var tempList = new List<String>(desiredSubnets);
-                    foreach (var subnet in desiredSubnets)
-                    {
-                        if (!desiredSubnetsForASG.Contains(subnet))
-                        {
-                            tempList.Remove(subnet);
-                        }
-                    }
-                    desiredSubnets = tempList;
-
-                    Console.WriteLine("Updating the auto scaling group " + autoScalingGroupName + " to remove the subnet in the AZ");
-
-                    // Note: This turns the asynchronous call into a synchronous one
-                    UpdateAutoScalingGroupResponse updateAutoScalingGroupResponse 
-                        = AUTO_SCALING_CLIENT.UpdateAutoScalingGroupAsync(new UpdateAutoScalingGroupRequest
-                                                                        {
-                                                                            AutoScalingGroupName = autoScalingGroupName,
-                                                                            VPCZoneIdentifier = string.Join(",", desiredSubnets)
-                                                                        }).GetAwaiter().GetResult();
-                }
+                Console.WriteLine($"Simulating AZ failure for {azName}");
 
                 // Find all subnets in the availability zone passed in the input
-                // Note: This turns the asynchronous call into a synchronous one
-                DescribeSubnetsResponse describeSubnetsResult
-                    = EC2_CLIENT.DescribeSubnetsAsync(new DescribeSubnetsRequest
-                    {
-                        Filters = new List<Amazon.EC2.Model.Filter> {
-                            new Amazon.EC2.Model.Filter {
-                                Name = "vpc-id",
-                                Values = new List<string> { vpcId }
-                            },
-                            new Amazon.EC2.Model.Filter {
-                                Name = "availabilityZone",
-                                Values = new List<string> { azId }
-                            }
-                        }
-                }).GetAwaiter().GetResult();
-
-                IList<string> desiredSubnetsForAddingNewNacl = new List<string>();
-                foreach (Amazon.EC2.Model.Subnet subnet in describeSubnetsResult.Subnets)
-                {
-                    desiredSubnetsForAddingNewNacl.Add(subnet.SubnetId);
-                }
-
-                //Find all the network acl associations matching the subnets identified above
-                // Note: This turns the asynchronous call into a synchronous one
-                DescribeNetworkAclsResponse describeNetworkAclsResult
-                    = EC2_CLIENT.DescribeNetworkAclsAsync(new DescribeNetworkAclsRequest()
+                DescribeSubnetsResponse subnetsInSpecifiedAZandVpc
+                        = await ec2Client.DescribeSubnetsAsync(new DescribeSubnetsRequest()
                         {
                             Filters = new List<Amazon.EC2.Model.Filter> {
                                     new Amazon.EC2.Model.Filter {
-                                        Name = "association.subnet-id",
-                                        Values = (List<string>)desiredSubnetsForAddingNewNacl
+                                        Name = "vpc-id",
+                                        Values = { vpcId }
+                                    },
+                                    new Amazon.EC2.Model.Filter {
+                                        Name = "availability-zone",
+                                        Values = { azName }
                                     }
-                                }
-                }).GetAwaiter().GetResult();
+                            }
+                        });
 
-                IList<NetworkAclAssociation> desiredAclAssociations = new List<NetworkAclAssociation>();
-                // Note: This assumes a Network ACL is present for readability
-                IList<NetworkAclAssociation> networkAclsAssociatedWithSubnet = describeNetworkAclsResult.NetworkAcls[0].Associations;
-                foreach (string subnetId in desiredSubnetsForAddingNewNacl)
+                List<string> subnetIdsInSpecifiedAZ = subnetsInSpecifiedAZandVpc.Subnets.Select(x => x.SubnetId).ToList();
+
+                // Modify the autoscaling group to remove the AZ affected which is the AZ passed in the input
+                // Find the autoscaling group that this is deployed into
+                DescribeAutoScalingGroupsResponse autoScalingGroupsResponse = await asClient.DescribeAutoScalingGroupsAsync();
+
+                if (autoScalingGroupsResponse != null && autoScalingGroupsResponse.AutoScalingGroups.Count > 0)
                 {
-                    foreach (NetworkAclAssociation networkAcl in networkAclsAssociatedWithSubnet)
-                    {
-                        if (string.Equals(networkAcl.SubnetId, subnetId, StringComparison.OrdinalIgnoreCase))
+                    // Note: This assumes an Auto Scaling group exists; no error checking for readability
+                    AutoScalingGroup autoScalingGroup = autoScalingGroupsResponse.AutoScalingGroups[0];
+
+                    Console.WriteLine($"Updating the auto scaling group {autoScalingGroup.AutoScalingGroupName} to remove the subnet in {azName}");
+
+                    UpdateAutoScalingGroupResponse updateAutoScalingGroupResponse
+                        = await asClient.UpdateAutoScalingGroupAsync(new UpdateAutoScalingGroupRequest
                         {
-                            desiredAclAssociations.Add(networkAcl);
-                        }
-                    }
+                            AutoScalingGroupName = autoScalingGroup.AutoScalingGroupName,
+                            VPCZoneIdentifier = String.Join(",", autoScalingGroup.VPCZoneIdentifier.Split(',').Where(x => !subnetIdsInSpecifiedAZ.Contains(x)))
+                        });
                 }
 
-                //create new network acl association with both ingress and egress denying to all the traffic
-                CreateNetworkAclRequest createNetworkAclRequest = new CreateNetworkAclRequest();
-                createNetworkAclRequest.VpcId = vpcId;
-                // Note: This turns the asynchronous call into a synchronous one
-                CreateNetworkAclResponse createNetworkAclResponse = EC2_CLIENT.CreateNetworkAclAsync(createNetworkAclRequest).GetAwaiter().GetResult();
-                string networkAclId = createNetworkAclResponse.NetworkAcl.NetworkAclId;
-                createNetworkAclEntry(networkAclId, 100, "0.0.0.0/0", true, "-1", createPortRange(0, 65535), RuleAction.Deny);
-                createNetworkAclEntry(networkAclId, 101, "0.0.0.0/0", false, "-1", createPortRange(0, 65535), RuleAction.Deny);
-
-                // replace all the network acl associations identified for the above subnets with the new network
-                // acl association which will deny all traffic for those subnets in that AZ
                 Console.WriteLine("Creating new network ACL associations");
-                replaceNetworkAclAssociations(desiredAclAssociations, networkAclId);
+                await BlockSubnetsInAZ(vpcId, subnetIdsInSpecifiedAZ);
+
+                Console.WriteLine("Failing over database");
 
                 //fail over rds which is in the same AZ
-                // Note: This turns the asynchronous call into a synchronous one
-                DescribeDBInstancesResponse describeDBInstancesResult = RDS_CLIENT.DescribeDBInstancesAsync().GetAwaiter().GetResult();
-                IList<DBInstance> dbInstances = describeDBInstancesResult.DBInstances;
-                string dbInstancedId = null;
-                foreach (DBInstance dbInstance in dbInstances)
-                {
-                    if(string.Equals(dbInstance.DBSubnetGroup.VpcId, vpcId, StringComparison.OrdinalIgnoreCase)
-                       && (string.Equals(dbInstance.AvailabilityZone, azId, StringComparison.OrdinalIgnoreCase))
-                            && dbInstance.MultiAZ && dbInstance.StatusInfos.Count == 0)
-                    {
-                        dbInstancedId = dbInstance.DBInstanceIdentifier;
-                    }
-                }
-                // we want to fail over rds if rds is present in the same az where it is affected
-                if (!string.IsNullOrEmpty(dbInstancedId))
+                DescribeDBInstancesResponse describeDBInstancesResult = await rdsClient.DescribeDBInstancesAsync();
 
+                string dbInstancedId = describeDBInstancesResult.DBInstances.Where(x => String.Equals(x.DBSubnetGroup.VpcId, vpcId, StringComparison.OrdinalIgnoreCase) &&
+                    String.Equals(x.AvailabilityZone, azName, StringComparison.OrdinalIgnoreCase) &&
+                    x.MultiAZ &&
+                    !x.StatusInfos.Any())?.Select(x => x.DBInstanceIdentifier).FirstOrDefault();
+
+                // we want to fail over rds if rds is present in the same az where it is affected
+                if (!String.IsNullOrEmpty(dbInstancedId))
                 {
-                    RebootDBInstanceRequest rebootDBInstanceRequest = new RebootDBInstanceRequest();
-                    rebootDBInstanceRequest.DBInstanceIdentifier = dbInstancedId;
-                    rebootDBInstanceRequest.ForceFailover = true;
                     Console.WriteLine("Rebooting dbInstanceId to secondary AZ " + dbInstancedId);
-                    // Note: This turns the asynchronous call into a synchronous one
-                    RDS_CLIENT.RebootDBInstanceAsync(rebootDBInstanceRequest).GetAwaiter().GetResult();
+
+                    var response = await rdsClient.RebootDBInstanceAsync(new RebootDBInstanceRequest()
+                    {
+                        DBInstanceIdentifier = dbInstancedId,
+                        ForceFailover = true
+                    });
                 }
+                else
+                {
+                    Console.WriteLine($"Didn't find DB in the same AZ as {azName}");
+                }
+
+                Console.Write("Done");
             }
             catch (Exception exception)
             {
-                Console.WriteLine("Unkown exception occured " + exception.Message);
+                Console.WriteLine("Unknown exception occurred " + exception.Message);
             }
-
         }
 
-        private PortRange createPortRange(int from, int to)
+        private async Task BlockSubnetsInAZ(string vpcId, List<string> subnetIds)
+        {
+            //Find all existing network acl associations matching the subnets identified above
+            DescribeNetworkAclsResponse describeNetworkAclsResult
+                = await ec2Client.DescribeNetworkAclsAsync(new DescribeNetworkAclsRequest()
+                {
+                    Filters = new List<Amazon.EC2.Model.Filter> {
+                                    new Amazon.EC2.Model.Filter {
+                                        Name = "association.subnet-id",
+                                        Values = subnetIds
+                                    }
+                            }
+                });
+
+            // The describe will return all associations of an ACL, which can be associated with a subnet not in the filter
+            IEnumerable<string> associationsToUpdate = describeNetworkAclsResult.NetworkAcls.SelectMany(x => x.Associations).Where(x => subnetIds.Contains(x.SubnetId)).Select(x => x.NetworkAclAssociationId);
+
+            //create new network acl 
+            CreateNetworkAclResponse createNetworkAclResponse = await ec2Client.CreateNetworkAclAsync(new CreateNetworkAclRequest()
+            {
+                VpcId = vpcId
+            });
+
+            // add both ingress and egress denying to all the traffic to the new ACL
+            string networkAclId = createNetworkAclResponse.NetworkAcl.NetworkAclId;
+            await CreateNetworkAclEntry(networkAclId, 100, "0.0.0.0/0", true, "-1", CreatePortRange(0, 65535), RuleAction.Deny);
+            await CreateNetworkAclEntry(networkAclId, 101, "0.0.0.0/0", false, "-1", CreatePortRange(0, 65535), RuleAction.Deny);
+
+            // update all subnets to be associated with the new ACL
+            foreach (string existingAssociation in associationsToUpdate)
+            {
+                // associates the specified network ACL with the subnet for the specified network ACL association
+                ReplaceNetworkAclAssociationResponse replaceNetworkAclAssociationResponse
+                    = await ec2Client.ReplaceNetworkAclAssociationAsync(new ReplaceNetworkAclAssociationRequest()
+                    {
+                        AssociationId = existingAssociation,
+                        NetworkAclId = networkAclId
+                    });
+            }
+        }
+
+        private PortRange CreatePortRange(int from, int to)
         {
             PortRange portRange = new PortRange();
             portRange.From = from;
@@ -207,7 +181,7 @@ namespace com.app.resiliency
             return portRange;
         }
 
-        private void createNetworkAclEntry(string networkAclId, int ruleNumber, string cidrBlock, bool egress, string protocol, PortRange portRange, RuleAction ruleAction)
+        private async Task CreateNetworkAclEntry(string networkAclId, int ruleNumber, string cidrBlock, bool egress, string protocol, PortRange portRange, RuleAction ruleAction)
         {
             CreateNetworkAclEntryRequest createNetworkAclEntryRequest = new CreateNetworkAclEntryRequest();
             createNetworkAclEntryRequest.NetworkAclId = networkAclId;
@@ -217,21 +191,7 @@ namespace com.app.resiliency
             createNetworkAclEntryRequest.Protocol = protocol;
             createNetworkAclEntryRequest.PortRange = portRange;
             createNetworkAclEntryRequest.RuleAction = ruleAction;
-            CreateNetworkAclEntryResponse createNetworkAclEntryResponse = EC2_CLIENT.CreateNetworkAclEntryAsync(createNetworkAclEntryRequest).GetAwaiter().GetResult();
+            CreateNetworkAclEntryResponse createNetworkAclEntryResponse = await ec2Client.CreateNetworkAclEntryAsync(createNetworkAclEntryRequest);
         }
-
-        private void replaceNetworkAclAssociations(IList<NetworkAclAssociation> desiredAclAssociations, string networkAclId)
-        {
-            foreach (NetworkAclAssociation networkAclAssociation in desiredAclAssociations)
-            {
-                ReplaceNetworkAclAssociationRequest replaceNetworkAclAssociationRequest = new ReplaceNetworkAclAssociationRequest();
-                replaceNetworkAclAssociationRequest.AssociationId = networkAclAssociation.NetworkAclAssociationId;
-                replaceNetworkAclAssociationRequest.NetworkAclId = networkAclId;
-                // Note: This turns the asynchronous call into a synchronous one
-                ReplaceNetworkAclAssociationResponse replaceNetworkAclAssociationResponse 
-                    = EC2_CLIENT.ReplaceNetworkAclAssociationAsync(replaceNetworkAclAssociationRequest).GetAwaiter().GetResult();
-            }
-        }
-
     }
 }

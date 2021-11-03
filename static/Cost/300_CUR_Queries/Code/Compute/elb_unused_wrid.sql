@@ -1,3 +1,4 @@
+-- modified: 2021-04-25
 SELECT
   bill_payer_account_id,
   line_item_usage_account_id,
@@ -5,7 +6,7 @@ SELECT
   product_region,
   pricing_unit,
   sum_line_item_usage_amount,
-  CAST(cost_per_resource AS decimal(16, 8)) AS "sum_line_item_unblended_cost"
+  CAST(cost_per_resource AS DECIMAL(16, 8)) AS sum_line_item_unblended_cost
 FROM
   (
     SELECT
@@ -23,9 +24,9 @@ FROM
     WHERE
       line_item_product_code = 'AWSELB'
       -- get previous month
-      AND month = cast(month(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+      AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
       -- get year for previous month
-      AND year = cast(year(current_timestamp + -1 * interval '1' MONTH) AS VARCHAR)
+      AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
       AND line_item_line_item_type = 'Usage'
     GROUP BY
       line_item_resource_id,
@@ -40,3 +41,4 @@ WHERE
   AND pricing_unit_per_resource = 1
 ORDER BY
   cost_per_resource DESC
+;

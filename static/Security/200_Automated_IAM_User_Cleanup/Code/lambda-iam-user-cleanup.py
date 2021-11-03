@@ -38,7 +38,7 @@ def lambda_handler(event, context):
                 passwordLastUsed)
             deleted = True
         # else, if the features is enabled and the days since used > disable setting
-        elif (minAgeUnusedUsersToDelete > 0 and daysSinceUsed >= minAgeUnusedUsersToDelete):
+        elif (minAgeUnusedUsersToDelete > 0 and daysSinceUsed >= minAgeUnusedUsersToDisable):
             # Force a password reset
             client.update_login_profile(
                 UserName=u['UserName'],

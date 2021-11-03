@@ -1,0 +1,206 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  ManagementAccountRole:
+    Type: String
+    Description: ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: S3-Data
+  GlueRoleARN:
+    Type: String
+    Description: ARN of the IAM role deployed in the accounts which can run glue
+  Schedule:
+    Type: String
+    Default: "cron(30 12 L * ? *)"
+    Description: Cloud watch event Schedule to trigger the lambda 
+Outputs:
+  AthenaSavedQuery:
+    Description: This saved query will provide you a summary of your lambda data
+    Value:
+      Ref: AthenaQuery
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+  GlueCrawler:
+    Value:
+      Fn::Sub: "${CFDataName}Crawler"
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "Assume-Management-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: 
+                  Ref: ManagementAccountRole
+        - PolicyName: !Sub "${CFDataName}-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: !Sub "arn:aws:s3:::${DestinationBucket}"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+        - PolicyName: !Sub "${CFDataName}-Lambda-Service-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:Get*"
+                  - "s3:List*"
+                Resource: "*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Code:
+        ZipFile: |
+          import boto3
+          import logging
+          from datetime import date, datetime
+          import json
+          import os
+          from botocore.exceptions import ClientError
+          from botocore.client import Config
+
+          def myconverter(o):
+              if isinstance(o, datetime):
+                  return o.__str__()
+
+          def lambda_handler(event, context):
+              DestinationBucket = os.environ["BUCKET_NAME"] #Using environment variables below the lambda will use your S3 bucket
+              DestinationPrefix =  "s3_bucket"
+
+              ####CODE TO GET DATA CAN BE REPLACED######
+              client = boto3.client("s3")
+
+              with open('/tmp/data.json', 'w') as f: # Saving in the temporary folder in the lambda
+                  response = client.list_buckets()
+                  for bucket in response['Buckets']:
+                      print(bucket)
+                      bucket_objects = client.list_objects(Bucket=bucket['Name'])
+                      try:
+                          for object in bucket_objects['Contents']:
+              
+              ####CODE TO GET DATA######    
+                              jsondata = json.dumps(object, default = myconverter) #converts datetime to be able to placed in json
+
+                              f.write(jsondata)
+                              f.write('\n')
+                      except Exception as e:
+                          print(e)
+                          pass
+              print("respose gathered")
+              today = date.today()
+              year = today.year
+              month = today.month
+
+              try:
+                  s3 = boto3.client('s3', config=Config(s3={'addressing_style': 'path'}))
+                  s3.upload_file(
+                      '/tmp/data.json', DestinationBucket, f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}.json") #uploading the file with the data to s3
+                  print(f"Data in s3 - {DestinationBucket}/{DestinationPrefix}-data/year={year}/month={month}")
+              except Exception as e:
+                  print(e)
+              start_crawler()
+
+          def start_crawler():
+              glue_client = boto3.client('glue')
+              try:
+                  glue_client.start_crawler(Name=os.environ['CRAWLER_NAME'])
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)     
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: DestinationBucket
+          CRAWLER_NAME:
+            Ref: Crawler
+  Crawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}Crawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Weekly Notification Event for lambda data
+      Name: !Sub "${CFDataName}-Weekly-Scheduler"
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+          Id: WeeklyTriggerForEBSUtilization
+  AthenaQuery:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: !Sub ${CFDataName}-summary-view
+      QueryString: !Sub
+        "SELECT * from ${DatabaseName}"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn

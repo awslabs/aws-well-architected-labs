@@ -6,22 +6,22 @@ pre: "<b>5. </b>"
 weight: 5
 ---
 
-### Delete a budget report
-We will delete the bugdet report.
+### Delete a Budget Report
+We will delete the bugdet report we created in the previous step.
 
-1. From the **Budgets Reports** dashboard, click on the three dots next to the **Weekly Budgets** budget report, and click **Delete**:
-![Images/AWSTeardown1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSTeardown1.png)
+1. From the **Budgets Reports** dashboard, check the box next to the **Weekly Budgets** budget report. Then select **Delete** from the **Actions** dropdown:
+![Images/BudgetLabCleanup1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetLabCleanup1.png?classes=lab_picture_small)
 
-2. You can see there are no budget reports:
-![Images/AWSTeardown2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/AWSTeardown2.png)
+2. Click on the **Confirm** button to confirm you want to delete the budget report. The dashboard should now tell you your budget has been deleted:
+![Images/BudgetLabCleanup2.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetLabCleanup2.png?classes=lab_picture_small)
 
-### Delete a budget
-We will delete all three budgets that we configured.
+### Delete a Budget
+We will delete all three budgets that we configured during the lab.
 
-1. From the **Budgets** dashboard, click the **three dots** next to the budget **CostBudget1**, click **Delete**: 
-![Images/Budgets_Delete.png](/Cost/100_2_Cost_and_Usage_Governance/Images/Budgets_Delete.png)
+1. From the **Budgets** dashboard, check the box next to the **CostBudget1** budget. Then select **Delete** from the **Actions** dropdown: 
+![Images/BudgetLabCleanup3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/BudgetLabCleanup3.png?classes=lab_picture_small)
 
-2. Do the same for the budgets **EC2_actual** and **SP_Coverage**
+2. Click on the **Confirm** button to confirm you want to delete the budget. Follow the same steps to remove the budgets **EC2_actual** and **SP_Coverage**
 
 {{< prev_next_button link_prev_url="../4_budget_report/"  title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,

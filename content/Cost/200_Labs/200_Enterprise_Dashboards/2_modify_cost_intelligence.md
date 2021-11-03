@@ -6,6 +6,12 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
+{{% notice note %}}
+This **Lab has moved** under the Level 200 Cloud Intelligence Dashboards.[**Click this link to navigate to the updated Lab**]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}})
+{{% /notice %}}
+
+
+{{%expand " " %}}
 ## Authors
 - Alee Whitman, Commercial Architect (AWS)
 
@@ -40,8 +46,7 @@ This example will show you how to replace the AccountID, with a name that is mea
 	- **linked_account_id** = **(Your linked Account Id field name)**
 ![Images/quicksight_mapping_8.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_8.png)
 
-10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **Int**:
-![Images/quicksight_mapping_9.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_9.png)
+10. Scroll down in the field list, and confirm the new fields have the correct data types. The **Account ID** must be **String**:
 
 11. Select **Save**
 
@@ -62,7 +67,7 @@ You now have new fields that can be used on the visuals - we will now use them
 14. Edit the calculated field **Account**:
 ![Images/quicksight_mapping_11.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_11.png)
 
-15. Change the formula from **toString({linked_account_id})** to **{Account Name}**
+15. Change the formula from **{linked_account_id}** to **{Account Name}**
 ![Images/quicksight_mapping_12.png](/Cost/200_Enterprise_Dashboards/Images/quicksight_mapping_12.png)
 
 16. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
@@ -94,3 +99,4 @@ You have successfully updated your Cost value and customized the Summary View.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../1_create_cost_intelligence/" link_next_url="../3_create_data_transfer_cost_analysis/" />}}
+{{% /expand%}}

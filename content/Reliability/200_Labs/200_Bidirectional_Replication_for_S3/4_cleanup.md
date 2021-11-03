@@ -19,7 +19,7 @@ You cannot delete an Amazon S3 bucket unless it is empty, so you need to empty t
 
 Go to the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/home), or if you are already there click on **Amazon S3** in the upper left corner
 
-**For _each_ of he four buckets do the following:**
+**For _each_ of the four buckets do the following:**
 
 1. Select the radio button next to the bucket
 1. Click **Empty**

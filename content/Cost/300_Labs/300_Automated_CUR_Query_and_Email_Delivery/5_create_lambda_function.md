@@ -26,7 +26,7 @@ We will now create a Lambda function which will run the code and produce the rep
 
 5. In **Function code** section, configure the following:
     - **Code entry type**: Upload a file from Amazon S3
-    - **Amazon S3 link URL**: https://s3.amazonaws.com/bucket name/AutoCURDelivery.zip
+    - **Amazon S3 link URL**: https://s3.amazonaws.com/bucket-name/AutoCURDelivery.zip
     - **Handler**: auto_cur_delivery.lambda_handler
 ![Images/function_code.png](/Cost/300_Automated_CUR_Query_and_Email_Delivery/Images/function_code.png)
 

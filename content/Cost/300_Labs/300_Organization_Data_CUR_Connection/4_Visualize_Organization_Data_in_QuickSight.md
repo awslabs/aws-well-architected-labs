@@ -9,7 +9,7 @@ pre: "<b>4. </b>"
 ### Join your AWS Organizations data with the AWS Cost & Usage Report in Amazon Quicksight
 
 
-In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from the Cost Visualization lab.
+In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from the Cost Visualization lab. Please make sure you have completed the 100 AWS Account Setup [QuickSight]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup/6_QuickSight" >}}) part of the lab as this will allow QuickSight to have access to your S3 bucket that starts with 'cost'.
 
 1. Log on to the console via SSO, go to the **QuickSight** service, Enter your email address and click **Continue**:
 
@@ -35,7 +35,7 @@ In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from th
 
 ![Images/Inital_Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Inital_Join.png)
 
-7. The left box should be your Cost and Usage Report. Under that select the drop down bock and choose **line_item_usage_account_id**. In the right box under the Organizations_data select **account_number**. On the right select **Full Join**. Then click **Apply**.
+7. The left box should be your Cost and Usage Report. Under that select the drop down bock and choose **line_item_usage_account_id**. In the right box under the Organizations_data select **id**. On the right select **Full Join**. Then click **Apply**.
 
 ![Images/Joins.png](/Cost/300_Organization_Data_CUR_Connection/Images/Joins.png)
 
@@ -54,20 +54,20 @@ In Amazon Quicksight we will add to the existing AWS Cost & Usage Report from th
 11. Click on your dataset again and click **Create analysis**.
 ![Images/Create_Analysis.png](/Cost/300_Organization_Data_CUR_Connection/Images/Create_Analysis.png)
 
-12. Now you will be taken to a new dashboard. On the left you can see some of the column names we have addedd such as account_name. 
+12. Now you will be taken to a new dashboard. On the left you can see some of the column names we have added such as account_name. 
 
 13. On the top of the screen click on **Field wells** and pull in the following:
 - Drag in **account_name** into Y axis 
-- **line_itemunblended_cost** into Value (ensure the Aggregate is Sum).
+- **line_item_unblended_cost** into Value (ensure the Aggregate is Sum).
 
-The visuale below will show you your spend by account name. 
+The visual below will show you your spend by account name. 
 
 ![Images/Dashboard.png](/Cost/300_Organization_Data_CUR_Connection/Images/Dashboard.png)
 
 
 
 {{% notice tip %}}
-Congratulations - QuickSight is now setup for your users to see the account names and other details in your dashbaords.
+Congratulations - QuickSight is now setup for your users to see the account names and other details in your dashboards.
 {{% /notice %}}
 
 

@@ -1,0 +1,14 @@
+[
+    {
+      "DatabaseName": "CrawlerName",
+      "ParameterValue": ""
+    }, 
+    {
+      "ParameterKey": "DestinationBucket",
+      "ParameterValue": ""
+    }, 
+    {
+      "ParameterKey": "ManagementAccountId",
+      "ParameterValue": ""
+    }
+  ]

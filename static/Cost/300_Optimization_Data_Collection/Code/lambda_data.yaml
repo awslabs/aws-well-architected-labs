@@ -1,0 +1,224 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves Inventory data for the chosen service
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to be created to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: Inventory
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CodeBucket:
+      Type: String
+      Description: S3 Bucket that exists and holds code
+      Default: aws-well-architected-labs
+      AllowedValues:
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
+        - aws-well-architected-labs-california
+        - aws-well-architected-labs-oregon
+        - aws-well-architected-labs-singapore
+        - aws-well-architected-labs-frankfurt
+        - aws-well-architected-labs-london
+        - aws-well-architected-labs-stockholm
+  CodeKey:
+    Type: String
+    Description: file name of ZipFile with data code
+    Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
+  GlueRoleARN:
+    Type: String
+Outputs:
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+  GlueCrawler:
+    Value:
+      Fn::Sub: "${CFDataName}Crawler"
+  SQSUrl:
+    Description: TaskQueue URL the account collector lambda
+    Value: !Ref TaskQueue
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: "*"
+        - PolicyName: !Sub "${CFDataName}-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource:
+                  !Ref DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
+                Resource: "*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Code:
+         S3Bucket: !Ref CodeBucket
+         S3Key: !Ref CodeKey
+      Handler: 'main.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: DestinationBucket
+          ROLENAME:
+            Ref: MultiAccountRoleName
+          PATH:
+            Ref: CFDataName
+          AMICrawler:
+            Ref: AMICrawler
+          SnapshotCrawler:
+            Ref: SnapshotCrawler
+          EBSCrawler:
+            Ref: EBSCrawler
+  AMICrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}AMICrawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/ami-data/"
+  SnapshotCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}SnapshotCrawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/snapshot-data/"
+  EBSCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub "${CFDataName}EBSCrawler"
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/ebs-data/"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
+  AthenaSnaphotAMI:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's
+      Name: snapshot-ami-query
+      QueryString: !Sub
+        "SELECT *,
+        CASE
+        WHEN snap_ami_id = imageid THEN
+        'AMI Avalible'
+        WHEN snap_ami_id LIKE 'ami%' THEN
+        'AMI Removed'
+        ELSE 'Not AMI'
+        END AS status
+          FROM ( 
+        (SELECT snapshotid AS snap_id,
+            volumeid as volume,
+            volumesize,
+            starttime,
+            Description AS snapdescription,
+            year,
+            month,
+            ownerid,
+            
+            CASE
+            WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN
+            split_part(Description,' ', 5)
+            WHEN substr(Description, 2, 11) = 'Copied snap' THEN
+            split_part(Description,' ', 9)
+            WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN
+            split_part(Description,' ', 4)
+            ELSE ''
+            END AS \"snap_ami_id\"
+        FROM \"optimization_data\".\"snapshot_data\"
+        ) AS snapshots
+        LEFT JOIN 
+            (SELECT imageid,
+            name,
+            description,
+            state,
+            rootdevicetype,
+            virtualizationtype
+            FROM \"optimization_data\".\"ami_data\") AS ami
+                ON snapshots.snap_ami_id = ami.imageid )"

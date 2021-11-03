@@ -13,14 +13,68 @@ Use the clipboard in the top right of the text boxes below to copy all of the te
 {{% /notice %}}
 
 {{% notice info %}}
-You may need to change variables used as placeholders in your query. **${table_Name}** is a common variable which needs to be replaced. **Example: cur_db.cur_table**
+CUR Query Library uses placeholder variables, indicated by a dollar sign and curly braces (**${  }**). **${table_name}** and **${date_filter}** are common placeholder variables used throughout CUR Query Library, which must be replaced before a query will run. For example, if your CUR table is called **cur_table** and is in a database called **cur_db**, you would replace **${table_name}** with **cur_db.cur_table**. For **${date_filter}**, you have multiple options. See [Filtering by Date]({{< ref "/Cost/300_labs/300_CUR_Queries/Query_Help#filtering-by-date" >}}) in the CUR Query Library Help section for additional details.
 {{% /notice %}}
 
 ### Table of Contents
+  * [Amazon Athena](#amazon-athena)
+  * [AWS Glue](#aws-glue)
+  * [Amazon Kinesis](#amazon-kinesis)
+  * [Amazon Elasticsearch](#amazon-elasticsearch)
+  * [Amazon EMR](#amazon-emr)
+  * [Amazon QuickSight](#amazon-quicksight)
+  
+### Amazon Athena
 
-{{< expand "AWS Glue" >}}
+#### Query Description
+This query will provide daily unblended and usage information for Amazon Athena.  The output will include detailed information about the resource id.  The cost will be summed and in descending order.
 
-{{% markdown_wrapper %}}
+#### Pricing
+Please refer to the [Athena pricing page](https://aws.amazon.com/athena/pricing/).
+
+#### Sample Output
+![Images/athena.png](/Cost/300_CUR_Queries/Images/Analytics/athena.png)
+
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Analytics/athena.sql)
+
+#### Copy Query
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  line_item_usage_type,
+  line_item_resource_id,
+  product_region,
+  line_item_product_code,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND line_item_product_code = 'AmazonAthena'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  line_item_usage_start_date,
+  line_item_usage_type,
+  line_item_resource_id,
+  product_region,
+  line_item_product_code
+ORDER BY 
+  sum_line_item_unblended_cost DESC
+LIMIT 20; 
+```
+
+{{< email_button category_text="Analytics" service_text="Athena" query_text="Athena Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### AWS Glue
 
 #### Query Description
 This query will provide daily unblended and usage information per linked account for AWS Glue.  The output will include detailed information about the resource id (Glue Crawler) and API operation.  The cost will be summed and in descending order.
@@ -36,41 +90,44 @@ Please refer to the [Glue pricing page](https://aws.amazon.com/glue/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/gluewrid.sql)
 
 #### Copy Query
-    SELECT 
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      line_item_operation,
-      SPLIT_PART(line_item_resource_id, 'crawler/', 2) AS split_line_item_resource_id,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_name}
-    WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND product_product_name = ('AWS Glue')
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      line_item_operation,
-      line_item_resource_id
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_unblended_cost DESC;
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,  
+  line_item_operation,
+  CASE
+    WHEN LOWER(line_item_operation) = 'jobrun' THEN SPLIT_PART(line_item_resource_id, 'job/', 2)
+    WHEN LOWER(line_item_operation) = 'crawlerrun' THEN SPLIT_PART(line_item_resource_id, 'crawler/', 2)
+    ELSE 'N/A'
+  END AS case_line_item_resource_id,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16, 8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = ('AWS Glue')
+  AND line_item_line_item_type IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  line_item_operation,
+  line_item_resource_id
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_usage_amount,
+  sum_line_item_unblended_cost;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Analytics" service_text="Glue" query_text="Glue Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Analytics" service_text="Glue" query_text="Glue Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
 
-{{< expand "Amazon Kinesis" >}}
-
-{{% markdown_wrapper %}}
+### Amazon Kinesis
 
 #### Query Description
 This query will provide daily unblended and usage information per linked account for each Kinesis product (Amazon Kinesis, Amazon Kinesis Firehose, and Amazon Kinesis Analytics).  The output will include detailed information about the resource id (Stream, Delivery Stream, etc...) and API operation.  The cost will be summed and in descending order.
@@ -93,39 +150,37 @@ Please refer to the Kinesis pricing pages:
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/kinesis.sql)
 
 #### Copy Query
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      SPLIT_PART(line_item_resource_id,':',6) as split_line_item_resource_id,
-      product_product_name,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16, 8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_Name} 
-    WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      line_item_resource_id,
-      product_product_name
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_unblended_cost DESC;
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  SPLIT_PART(line_item_resource_id,':',6) AS split_line_item_resource_id,
+  product_product_name,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16, 8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_Name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  line_item_resource_id,
+  product_product_name
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_unblended_cost DESC;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Analytics" service_text="Kinesis" query_text="Kinesis Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Analytics" service_text="Kinesis" query_text="Kinesis Query1" button_text="Help & Feedback" %}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< /expand >}}
-
-{{< expand "Amazon Elasticsearch" >}}
-
-{{% markdown_wrapper %}}
+### Amazon Elasticsearch
 
 #### Query Description
 This query will provide daily unblended and amortized cost as well as usage information per linked account for Amazon Elasticsearch.  The output will include detailed information about the resource id (ES Domain), usage type, and API operation.  The usage amount and cost will be summed and the cost will be in descending order. This query includes RI and SP true up which will show any upfront fees to the account that purchased the pricing model.
@@ -140,59 +195,74 @@ Please refer to the [Elasticsearch pricing page](https://aws.amazon.com/elastics
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/elasticsearch.sql)
 
 #### Copy Query
-    SELECT
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      SPLIT_PART(line_item_resource_id,':',6) as split_line_item_resource_id,
-      product_product_family,
-      product_instance_family,
-      product_instance_type,
-      pricing_term,
-      product_storage_media,
-      product_transfer_type,
-      sum(CASE 
-      WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "line_item_usage_amount" 
-      WHEN ("line_item_line_item_type" = 'Usage') THEN "line_item_usage_amount" ELSE 0 END) "usage_quantity",
-      sum ("line_item_unblended_cost") "unblended_cost",
-      sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanCoveredUsage') THEN "savings_plan_savings_plan_effective_cost" 
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN ("savings_plan_total_commitment_to_date" - "savings_plan_used_commitment") 
-          WHEN ("line_item_line_item_type" = 'SavingsPlanNegation') THEN 0
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN 0
-          WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost"  
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee")
-          WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 ELSE "line_item_unblended_cost" END) "amortized_cost",
-    sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanRecurringFee') THEN (-"savings_plan_amortized_upfront_commitment_for_billing_period") 
-          WHEN ("line_item_line_item_type" = 'RIFee') THEN (-"reservation_amortized_upfront_fee_for_billing_period") ELSE 0 END) "ri_sp_trueup",
-    sum(CASE
-          WHEN ("line_item_line_item_type" = 'SavingsPlanUpfrontFee') THEN "line_item_unblended_cost"
-          WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN "line_item_unblended_cost"ELSE 0 END) "ri_sp_upfront_fees"
-    FROM
-      ${table_name}
-    WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND product_product_name = 'Amazon Elasticsearch Service'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount') 
-    GROUP BY
-      1,2,3,4,5,6,7,8,9,10
-    ORDER BY
-      day_line_item_usage_start_date,
-      product_product_family,
-      unblended_cost DESC;
+```tsql
+SELECT
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+  SPLIT_PART(line_item_resource_id,':',6) AS split_line_item_resource_id,
+  product_product_family,
+  product_instance_family,
+  product_instance_type,
+  pricing_term,
+  product_storage_media,
+  product_transfer_type,
+  SUM(CASE 
+    WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN line_item_usage_amount 
+    WHEN (line_item_line_item_type = 'DiscountedUsage') THEN line_item_usage_amount 
+    WHEN (line_item_line_item_type = 'Usage') THEN line_item_usage_amount 
+    ELSE 0 
+  END) AS sum_line_item_usage_amount,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
+  SUM(CASE
+    WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+    WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+    WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+    WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+    WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+    WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+    WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+    ELSE line_item_unblended_cost 
+  END) AS sum_amortized_cost,
+  SUM(CASE
+    WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
+    WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period) 
+    ELSE 0 
+  END) AS sum_ri_sp_trueup,
+  SUM(CASE
+    WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
+    WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
+    ELSE 0 
+  END) AS sum_ri_sp_upfront_fees
+FROM
+  ${table_name}
+WHERE
+  ${date_filter}
+  AND product_product_name = 'Amazon Elasticsearch Service'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  SPLIT_PART(line_item_resource_id,':',6),
+  product_product_family,
+  product_instance_family,
+  product_instance_type,
+  pricing_term,
+  product_storage_media,
+  product_transfer_type
+ORDER BY
+  day_line_item_usage_start_date,
+  product_product_family,
+  sum_line_item_unblended_cost DESC;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Analytics" service_text="Elasticsearch" query_text="Elasticsearch Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Analytics" service_text="Elasticsearch" query_text="Elasticsearch Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 
-{{< expand "Amazon EMR" >}}
-
-{{% markdown_wrapper %}}
+### Amazon EMR
 
 #### Query Description
 This query will provide daily unblended cost and usage information per linked account for Amazon EMR.  The cost will be summed and the cost will be in descending order. 
@@ -207,40 +277,38 @@ Please refer to the [EMR pricing page](https://aws.amazon.com/emr/pricing/).
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/emr.sql)
 
 #### Copy Query
-    SELECT 
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
-      SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM 
-      ${table_name}
-    WHERE
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND product_product_name = 'Amazon Elastic MapReduce'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
-    GROUP BY
-      bill_payer_account_id, 
-      line_item_usage_account_id,
-      DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
-      line_item_usage_type,
-      line_item_line_item_type
-    ORDER BY
-      day_line_item_usage_start_date,
-      sum_line_item_usage_amount,
-      sum_line_item_unblended_cost,
-      split_line_item_usage_type;
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  SPLIT_PART(line_item_usage_type ,':',2) AS split_line_item_usage_type,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon Elastic MapReduce'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
+  line_item_usage_type,
+  line_item_line_item_type
+ORDER BY 
+  day_line_item_usage_start_date,
+  sum_line_item_usage_amount,
+  sum_line_item_unblended_cost DESC,
+  split_line_item_usage_type;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Analytics" service_text="EMR" query_text="EMR Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Analytics" service_text="EMR" query_text="EMR Query1" button_text="Help & Feedback" %}}
+[Back to Table of Contents](#table-of-contents)
 
-{{< /expand >}}
-
-{{< expand "Amazon QuickSight" >}}
-
-{{% markdown_wrapper %}}
+### Amazon QuickSight
 
 #### Query Description
 This query will provide monthly unblended and usage information per linked account for Amazon QuickSight.  The output will include detailed information about the usage type and its usage amount. The cost will be summed and in descending order.
@@ -256,45 +324,39 @@ Please refer to the [Amazon QuickSight pricing page](https://aws.amazon.com/quic
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/quicksight.sql)
 
 #### Copy Query
-    SELECT 
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
-      CASE 
-        WHEN LOWER(line_item_usage_type) LIKE 'qs-user-enterprise%' THEN 'Users - Enterprise'
-        WHEN LOWER(line_item_usage_type) LIKE 'qs-user-standard%' THEN 'Users - Standard'
-        WHEN LOWER(line_item_usage_type) LIKE 'qs-reader-usage%' THEN 'Reader Usage'
-        WHEN LOWER(line_item_usage_type) LIKE '%spice' THEN 'SPICE'  
-        ELSE line_item_usage_type
-      END as purchase_type_line_item_usage_type,
-      SUM(CAST(line_item_usage_amount AS double)) AS sum_line_item_usage_amount,
-      SUM(CAST(line_item_unblended_cost AS decimal(16,8))) AS sum_line_item_unblended_cost
-    FROM 
-        ${table_name}
-    WHERE 
-      year = '2020' AND (month BETWEEN '7' AND '9' OR month BETWEEN '07' AND '09')
-      AND product_product_name = 'Amazon QuickSight'
-      AND line_item_line_item_type NOT IN ('Tax','Credit','Refund','EdpDiscount','Fee','RIFee')
-    GROUP BY
-      bill_payer_account_id,
-      line_item_usage_account_id,
-      DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
-      CASE 
-          WHEN LOWER(line_item_usage_type) LIKE 'qs-user-enterprise%' THEN 'Users - Enterprise'
-          WHEN LOWER(line_item_usage_type) LIKE 'qs-user-standard%' THEN 'Users - Standard'
-          WHEN LOWER(line_item_usage_type) LIKE 'qs-reader-usage%' THEN 'Reader Usage'
-          WHEN LOWER(line_item_usage_type) LIKE '%spice' THEN 'SPICE'  
-          ELSE line_item_usage_type
-      END
-    ORDER BY
-      month_line_item_usage_start_date,
-      sum_line_item_unblended_cost DESC;
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date, 
+  CASE
+    WHEN LOWER(line_item_usage_type) LIKE 'qs-user-enterprise%' THEN 'Users - Enterprise'
+    WHEN LOWER(line_item_usage_type) LIKE 'qs-user-standard%' THEN 'Users - Standard'
+    WHEN LOWER(line_item_usage_type) LIKE 'qs-reader-usage%' THEN 'Reader Usage'
+    WHEN LOWER(line_item_usage_type) LIKE '%spice' THEN 'SPICE'  
+    ELSE line_item_usage_type
+  END AS case_line_item_usage_type,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+  AND product_product_name = 'Amazon QuickSight'
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'), 
+  4 -- refers to case_line_item_usage_type
+ORDER BY 
+  month_line_item_usage_start_date,
+  sum_line_item_unblended_cost DESC;
+```
 
-{{% /markdown_wrapper %}}
+{{< email_button category_text="Analytics" service_text="Amazon QuickSight" query_text="QuickSight Query1" button_text="Help & Feedback" >}}
 
-{{% email_button category_text="Analytics" service_text="Amazon QuickSight" query_text="QuickSight Query1" button_text="Help & Feedback" %}}
-
-{{< /expand >}}
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: <a href="mailto:curquery@amazon.com?subject=Cur Query Library Request - Analytics">curquery@amazon.com</a>

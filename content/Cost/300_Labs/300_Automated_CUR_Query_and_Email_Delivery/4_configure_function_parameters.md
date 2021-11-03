@@ -21,7 +21,7 @@ This step is used to edit parameters (CUR database name and table, SES sender an
     - **Region**: The region where SES service is called, i.e. us-east-1
     - **Subject**: SES mail subject, i.e. Cost and Utilization Report
     - **Sender**: Your sender e-mail address, i.e. john@example.com
-    - **Recipient**: Your recipient e-mail addresses. If there are multiple recipients, separate them by comma, i.e. john@example.com,alice@example.com
+    - **Recipient**: Your recipient e-mail addresses. If there are multiple recipients, separate them by comma, i.e. john@example.com, alice@example.com
 
 4. Keep other configuration unchanged and save **config.yml**.
 

@@ -27,10 +27,10 @@ Otherwise you should choose **Option 2** or **Option 3**
 
 1. You should have already copied the credentials for your account. If _not_ then:
 
-    {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
-    {{% common/Workshop_AWS_Account %}}
-**Now continue the steps to setup your AWS credentials....**
-    {{% /expand%}}
+   {{%expand "Click here for instructions to copy the credentials from your assigned AWS account:" %}}
+   {{% common/Workshop_AWS_Account %}}
+   **Now continue the steps to setup your AWS credentials....**
+   {{% /expand%}}
 
 1. The copied credentials are already in the form of `export` statements. Run these from your shell command line. Use _your_ values, _not_ the ones below
 
@@ -148,17 +148,7 @@ For your convenience:
 
 ### Option 4 (PowerShell) {#powershell}
 
-1. If you do not have the AWS Tools for Powershell, download and install them following the instructions here. <https://aws.amazon.com/powershell/>.
-
-1. Start a Windows PowerShell for AWS session. If prompted for AWS Secret Key during initialization, type Control-C to break out of the dialog.
-
-1. Configure your AWS credentials with the following PowerShell commands. Note that if you are using an instructor supplied AWS account, you must include the optional SessionToken flag and value as shown below in brackets (omit the brackets when running the command):
-
-```powershell
-Set-AWSCredentials -AccessKey <Your access key> -SecretKey <Your secret key> \
-[ -SessionToken <your session key> ] -StoreAs <SomeProfileName>
-Initialize-AWSDefaults -ProfileName <SomeProfileName> -Region us-east-2
-```
+You will setup your AWS credentials as part of setting up AWS Tools for Powershell. [Continue with this step]({{< ref "../2_configure_env.md#setupenv" >}}).
 
 ---
 **Return to the Lab Guide to continue the lab**

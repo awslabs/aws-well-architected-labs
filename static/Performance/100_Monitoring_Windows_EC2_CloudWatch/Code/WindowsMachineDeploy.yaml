@@ -271,8 +271,11 @@ Resources:
                 }
           commands:
             0-enableSSM:
-              command: 'powershell.exe -Command "Set-Service -Name AmazonSSMAgent -StartupType Automatic" '
-              waitAfterCompletion: '0'
+              command: powershell.exe -Command "Set-Service -Name AmazonSSMAgent -StartupType Automatic"
+              waitAfterCompletion: 0
+            1-restartSSM:
+              command: powershell.exe -Command "Restart-Service AmazonSSMAgent"
+              waitAfterCompletion: 30
         01a-ConfigureCWAgentMetrics:
           files:
             "C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent.json":
@@ -526,25 +529,31 @@ Resources:
       Monitoring: True
       SubnetId:
         Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
+        # Fn::ImportValue: !Sub '${VPCImportName}-Shared1Subnet1'
       UserData:
         Fn::Base64:
          !Sub |
-          <script>
-          wmic product where "description='Amazon SSM Agent' " uninstall
-          wmic product where "description='aws-cfn-bootstrap' " uninstall
-          powershell -Command "Invoke-WebRequest -Uri 'https://live.sysinternals.com/Testlimit.exe' -OutFile c:\Testlimit.exe"
-          powershell -Command "Invoke-WebRequest -Uri 'https://live.sysinternals.com/cpustres.exe' -OutFile c:\cpustres.exe"
-          powershell -Command "(New-Object Net.WebClient).DownloadFile('https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi','C:\amazon-cloudwatch-agent.msi')"
-          C:\amazon-cloudwatch-agent.msi
-          start /wait c:\\Windows\\system32\\msiexec /passive /qn /i https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-win64-latest.msi
-          powershell.exe -Command "iwr https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe  -UseBasicParsing -OutFile C:\\AmazonSSMAgentSetup.exe"
-          start /wait C:\\AmazonSSMAgentSetup.exe /install /quiet
-          cfn-init.exe -v -c config -s ${AWS::StackName} --resource TestServerHost --region ${AWS::Region}
-          powershell -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"
-          c:\ProgramData\chocolatey\bin\choco install python -y
-          c:\ProgramData\chocolatey\bin\choco install vim nano -y
-          c:\ProgramData\chocolatey\bin\RefreshEnv.cmd
-          </script>
+          <powershell>
+           echo "Start install of cloudwatch agent"
+           Start-Process msiexec.exe -Wait -ArgumentList '/passive /qn /i https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi'
+           echo "Start install of AWS CLI v2"
+           Start-Process msiexec.exe -Wait -ArgumentList '/passive /qn /i https://awscli.amazonaws.com/AWSCLIV2.msi'
+
+           echo "Installing Choco"
+           Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+           echo "Installing vim, nano, python from Choco"
+           choco install vim nano python -y
+
+           echo "Initialize disks"
+           & 'C:\ProgramData\Amazon\EC2-Windows\Launch\Scripts\InitializeDisks.ps1'
+           echo "Grab some files"
+           Invoke-WebRequest -Uri 'https://live.sysinternals.com/Testlimit.exe' -OutFile c:\Testlimit.exe
+           Invoke-WebRequest -Uri 'https://live.sysinternals.com/cpustres.exe' -OutFile c:\cpustres.exe
+
+           echo "setting CFN INIT"
+           cfn-init.exe --verbose --configsets=config --stack=${AWS::StackName} --resource TestServerHost --region ${AWS::Region}
+
+          </powershell>
 
   LogGroup:
     Type: AWS::Logs::LogGroup

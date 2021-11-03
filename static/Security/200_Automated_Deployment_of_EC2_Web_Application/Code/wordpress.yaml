@@ -291,7 +291,7 @@ Resources:
               php: []
               php-mysql: []
           sources:
-            /var/www/html: 'https://wordpress.org/latest.tar.gz'
+            /var/www/html: 'https://wordpress.org/wordpress-5.1.1.tar.gz'
           files:
             /tmp/create-wp-config:
               content: !Sub |

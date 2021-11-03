@@ -1,0 +1,945 @@
+Parameters:
+  PlaybookIAMRole:
+    Type: String
+
+Resources:
+  PlaybookInvestigateAlarm: 
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Name: Playbook-Investigate-Application-Resources
+      Content: 
+        schemaVersion: '0.3'
+        assumeRole: "{{AutomationAssumeRole}}"
+        parameters:
+          Resources:
+            description: (Required) The Stringified Resources list from Gather Resource Alarm Output.
+            type: String
+          AutomationAssumeRole:
+            type: String
+            default: !Ref PlaybookIAMRole
+            description: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.
+        outputs:
+          - Inspect_Playbook_Results.Result            
+        mainSteps:
+        - name: Gather_ELB_Statistics
+          action: aws:executeScript
+          description: Gather ELB Statistics
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String           
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              def arn_deconstruct(arn):
+                arnlist = arn.split(":")
+                
+                service=arnlist[2]
+                region=arnlist[3]
+                accountid=arnlist[4]
+                resources = arnlist[5].split("/")
+                servicetype = resources[0]
+                servicemode = resources[1]
+                resourcename = resources[2]
+                resourceid = resources[3]
+                
+                return {
+                  "Service": service,
+                  "Region": region,
+                  "AccountId": accountid,
+                  "Type": servicetype,
+                  "Mode" : servicemode,
+                  "Name" : resourcename,
+                  "Id" : resourceid
+                }
+              
+              
+              def get_related_metrics(elb):
+                cwclient = boto3.client('cloudwatch', region_name = elb['Region'] )
+                if elb['Mode'] == 'app':
+                  response = cwclient.list_metrics(
+                    Namespace='AWS/ApplicationELB',
+                    Dimensions=[
+                        {
+                            'Name':'LoadBalancer',
+                            'Value': '{}/{}/{}'.format(elb['Mode'],elb['Name'],elb['Id'])
+                        }
+                    ]
+                  )
+                return(response['Metrics']) 
+                
+                
+              def get_stat(elb,metricname,stat):
+                cwclient = boto3.client('cloudwatch', region_name = elb['Region'] )
+                
+                if elb['Mode'] == 'app':
+                  response = cwclient.get_metric_statistics(
+                    Namespace='AWS/ApplicationELB',
+                    MetricName=metricname,
+                    StartTime=datetime.now() - timedelta(minutes=60),
+                    EndTime=datetime.now(),
+                    Period=60,      
+                    Dimensions=[
+                        {
+                            'Name':'LoadBalancer',
+                            'Value': '{}/{}/{}'.format(elb['Mode'],elb['Name'],elb['Id'])
+                        }
+                    ],
+                    Statistics=[stat]
+                  )
+                  
+                x = []  
+                result = {} 
+                if len(response['Datapoints']) > 0:
+                  for i in response['Datapoints']:
+                    x.append(i[stat])
+                    result['OverallValue'] = cal_average(x)
+                else:
+                  result['OverallValue'] = None
+                result['Statistics'] = stat
+                result['TimeWindow'] = 60
+                return(result)
+              
+              def find_elb_resource(res):
+                result = None
+                r = json.loads(res['Resourceslist'])
+                for i in r:
+                  if i['Type'] == 'AWS::ElasticLoadBalancingV2::Listener':
+                    result = i['PhysicalResourceId']
+                return result
+              
+              def cal_average(num):
+                  sum_num = 0
+                  for t in num:
+                      sum_num = sum_num + t           
+              
+                  avg = sum_num / len(num)
+                  return avg
+              
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                      return o.__str__()
+                
+              def handler(event, context):
+                
+                arn = find_elb_resource(event)
+                result = {}  
+                
+                if arn is not None:
+                  elb = arn_deconstruct(arn)
+              
+                  metricslist = get_related_metrics(elb)
+                  result['TargetResponseTime'] = get_stat(elb,'TargetResponseTime','Average')
+                  result['Target2XXCount'] = get_stat(elb,'HTTPCode_Target_2XX_Count','Sum')
+                  result['Target3XXCount'] = get_stat(elb,'HTTPCode_Target_2XX_Count','Sum')
+                  result['Target4XXCount'] = get_stat(elb,'HTTPCode_Target_4XX_Count','Sum')
+                  result['Target5XXCount'] = get_stat(elb,'HTTPCode_Target_5XX_Count','Sum')
+                  result['TargetConnectionErrorCount'] = get_stat(elb,'TargetConnectionErrorCount','Sum')
+                  result['UnHealthyHostCount'] = get_stat(elb,'UnHealthyHostCount','Average')
+                  result['ActiveConnectionCount'] = get_stat(elb,'ActiveConnectionCount','Sum')
+                  result['ELB3XXCount'] = get_stat(elb,'HTTPCode_ELB_3XX_Count','Sum')
+                  result['ELB4XXCount'] = get_stat(elb,'HTTPCode_ELB_4XX_Count','Sum')
+                  result['ELB5XXCount'] = get_stat(elb,'HTTPCode_ELB_5XX_Count','Sum')
+                  result['ELB500Count'] = get_stat(elb,'HTTPCode_ELB_500_Count','Sum')
+                  result['ELB502Count'] = get_stat(elb,'HTTPCode_ELB_502_Count','Sum')
+                  result['ELB503Count'] = get_stat(elb,'HTTPCode_ELB_503_Count','Sum')
+                  result['ELB504Count'] = get_stat(elb,'HTTPCode_ELB_504_Count','Sum')
+                  
+                  serialized_result = json.dumps(result, default = myconverter )
+                  result['Result'] = json.dumps(json.loads(serialized_result))
+              
+                return result
+        - name: Gather_RDS_Config
+          action: aws:executeScript
+          description: Gather RDS Configurations
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String               
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              def arn_deconstruct(arn):
+                arnlist = arn.split(":")
+                
+                service=arnlist[2]
+                region=arnlist[3]
+                accountid=arnlist[4]
+                resources = arnlist[5].split("/")
+                servicetype = resources[0]
+                servicemode = resources[1]
+                resourcename = resources[2]
+                resourceid = resources[3]
+                
+                return {
+                  "Service": service,
+                  "Region": region,
+                  "AccountId": accountid,
+                  "Type": servicetype,
+                  "Mode" : servicemode,
+                  "Name" : resourcename,
+                  "Id" : resourceid
+                }
+              
+              
+                
+              def get_rds_config(rdsname):
+                  rdsclient = boto3.client('rds')
+                  
+                  res = rdsclient.describe_db_instances(
+                      DBInstanceIdentifier=rdsname
+                  )
+                  result = res['DBInstances'][0]
+                  
+                  return(result)
+              
+              def get_rds_parameters(rdsparamgroups):
+                  result = []
+                  rdsclient = boto3.client('rds')
+                  
+                  for i in rdsparamgroups:
+                    name = i['DBParameterGroupName']
+                    res = rdsclient.describe_db_parameters(
+                      DBParameterGroupName=name
+                    )
+                    x = {
+                      'DBParamGroup' : i,
+                      'Parameters' : res['Parameters']
+                    }
+                    result.append(x)
+                  
+                  return result
+                    
+              
+              def find_rds_resource(res):
+                result = None
+                r = json.loads(res['Resourceslist'])
+                for i in r:
+                  if i['Type'] == 'AWS::RDS::DBInstance':
+                    result = i['PhysicalResourceId']
+                return result
+              
+              def cal_average(num):
+                  sum_num = 0
+                  for t in num:
+                      sum_num = sum_num + t           
+              
+                  avg = sum_num / len(num)
+                  return avg
+              
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                      return o.__str__()
+                
+              def handler(event, context):
+                param = None
+                result = {}
+                
+                rdsrsname = find_rds_resource(event)
+                rdsconfig = get_rds_config(rdsrsname)
+                
+                if len(rdsconfig['DBParameterGroups']) > 0:
+                  param = get_rds_parameters(rdsconfig['DBParameterGroups'])
+
+                result['Result'] = json.dumps({
+                  'config' : json.loads(json.dumps(rdsconfig,default = myconverter)),
+                  'parameters' : param
+                } );
+                
+                return result
+        - name: Gather_RDS_Statistics
+          action: aws:executeScript
+          description: Gather RDS Statistics
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String            
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              def arn_deconstruct(arn):
+                arnlist = arn.split(":")
+                
+                service=arnlist[2]
+                region=arnlist[3]
+                accountid=arnlist[4]
+                resources = arnlist[5].split("/")
+                servicetype = resources[0]
+                servicemode = resources[1]
+                resourcename = resources[2]
+                resourceid = resources[3]
+                
+                return {
+                  "Service": service,
+                  "Region": region,
+                  "AccountId": accountid,
+                  "Type": servicetype,
+                  "Mode" : servicemode,
+                  "Name" : resourcename,
+                  "Id" : resourceid
+                }
+              
+              
+              def get_related_metrics(rdsname):
+                cwclient = boto3.client('cloudwatch')
+                response = cwclient.list_metrics(
+                  Namespace='AWS/RDS',
+                  Dimensions=[
+                      {
+                          'Name':'DBInstanceIdentifier',
+                          'Value': rdsname
+                      }
+                  ]
+                )
+                return(response['Metrics']) 
+                
+                
+              def get_stat(rdsname,metricname,stat):
+                cwclient = boto3.client('cloudwatch')
+                
+                response = cwclient.get_metric_statistics(
+                  Namespace='AWS/RDS',
+                  MetricName=metricname,
+                  StartTime=datetime.now() - timedelta(minutes=60),
+                  EndTime=datetime.now(),
+                  Period=60,      
+                  Dimensions=[
+                      {
+                          'Name':'DBInstanceIdentifier',
+                          'Value': rdsname
+                      }
+                  ],
+                  Statistics=[stat]
+                )
+                  
+                x = []  
+                result = {} 
+                if len(response['Datapoints']) > 0:
+                  for i in response['Datapoints']:
+                    x.append(i[stat])
+                    result['OverallValue'] = cal_average(x)
+                else:
+                  result['OverallValue'] = None
+                result['Statistics'] = stat
+                result['TimeWindow'] = 60
+                return(result)
+              
+              
+              def find_rds_resource(res):
+                result = None
+                r = json.loads(res['Resourceslist'])
+                for i in r:
+                  if i['Type'] == 'AWS::RDS::DBInstance':
+                    result = i['PhysicalResourceId']
+                return result
+              
+              def cal_average(num):
+                  sum_num = 0
+                  for t in num:
+                      sum_num = sum_num + t           
+              
+                  avg = sum_num / len(num)
+                  return avg
+              
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                      return o.__str__()
+                
+              def handler(event, context):
+                
+                rdsrsname = find_rds_resource(event)
+                metrics = get_related_metrics(rdsrsname)
+                result = {}  
+                output = {}
+                
+                result['BinLogDiskUsage'] = get_stat(rdsrsname,'BinLogDiskUsage','Sum')
+                result['BurstBalance'] = get_stat(rdsrsname,'BurstBalance','Average')
+                result['CPUUtilization'] = get_stat(rdsrsname,'CPUUtilization','Average')
+                result['CPUCreditUsage'] = get_stat(rdsrsname,'CPUCreditUsage','Sum')
+                result['CPUCreditBalance'] = get_stat(rdsrsname,'CPUCreditBalance','Maximum')
+                result['DatabaseConnections'] = get_stat(rdsrsname,'DatabaseConnections','Sum')
+                result['DiskQueueDepth'] = get_stat(rdsrsname,'DiskQueueDepth','Maximum')         
+                result['FailedSQLServerAgentJobsCount'] = get_stat(rdsrsname,'FailedSQLServerAgentJobsCount','Average')
+                result['FreeableMemory'] = get_stat(rdsrsname,'FreeableMemory','Maximum')
+                result['MaximumUsedTransactionIDs'] = get_stat(rdsrsname,'MaximumUsedTransactionIDs','Maximum')
+                result['NetworkReceiveThroughput'] = get_stat(rdsrsname,'NetworkReceiveThroughput','Average')
+                result['NetworkTransmitThroughput'] = get_stat(rdsrsname,'NetworkTransmitThroughput','Average')
+                result['OldestReplicationSlotLag'] = get_stat(rdsrsname,'OldestReplicationSlotLag','Maximum')
+                result['ReadIOPS'] = get_stat(rdsrsname,'ReadIOPS','Average')
+                result['ReadLatency'] = get_stat(rdsrsname,'ReadLatency','Average')
+                result['ReadThroughput'] = get_stat(rdsrsname,'ReadThroughput','Average')
+                result['ReplicaLag'] = get_stat(rdsrsname,'ReplicaLag','Average')
+                result['ReplicationSlotDiskUsage'] = get_stat(rdsrsname,'ReplicationSlotDiskUsage','Maximum')
+                result['SwapUsage'] = get_stat(rdsrsname,'SwapUsage','Maximum')
+                result['TransactionLogsDiskUsage'] = get_stat(rdsrsname,'TransactionLogsDiskUsage','Maximum')
+                result['TransactionLogsGeneration'] = get_stat(rdsrsname,'TransactionLogsGeneration','Average')
+                result['ReplicationSlotDiskUsage'] = get_stat(rdsrsname,'ReplicationSlotDiskUsage','Maximum')
+                result['WriteIOPS'] = get_stat(rdsrsname,'WriteIOPS','Average')
+                result['WriteLatency'] = get_stat(rdsrsname,'WriteLatency','Average')
+                result['WriteThroughput'] = get_stat(rdsrsname,'WriteThroughput','Average')
+                output['Result'] = json.dumps(result)
+                
+                return output
+        - name: Gather_ECS_Statistics
+          action: aws:executeScript
+          description: Gather ECS Service CloudWatch metrics
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String            
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              def arn_deconstruct(arn):
+                arnlist = arn.split(":")
+                
+                service=arnlist[2]
+                region=arnlist[3]
+                accountid=arnlist[4]
+                resources = arnlist[5].split("/")
+                servicetype = resources[0]
+                clustername = resources[1]
+                servicename = resources[2]
+                
+                return {
+                  "Service": service,
+                  "Region": region,
+                  "AccountId": accountid,
+                  "Type": servicetype,
+                  "ClusterName" : clustername,
+                  "ServiceName" : servicename
+                }
+              
+              
+              def get_related_metrics(res):
+                cwclient = boto3.client('cloudwatch', region_name = res['Region'] )
+              
+                response = cwclient.list_metrics(
+                  Namespace='AWS/ECS',
+                  Dimensions=[
+                      {
+                          'Name':'ServiceName',
+                          'Value': res['ServiceName']
+                      },
+                      {
+                          'Name':'ClusterName',
+                          'Value': res['ClusterName']
+                      }        
+                  ]
+                )
+                return(response['Metrics']) 
+                
+                
+              def get_stat(res,metricname,stat):
+                cwclient = boto3.client('cloudwatch', region_name = res['Region'] )
+                
+                response = cwclient.get_metric_statistics(
+                  Namespace='AWS/ECS',
+                  MetricName=metricname,
+                  StartTime=datetime.now() - timedelta(minutes=6),
+                  EndTime=datetime.now(),
+                  Period=1,      
+                  Dimensions=[
+                      {
+                          'Name':'ServiceName',
+                          'Value': res['ServiceName']
+                      },
+                      {
+                          'Name':'ClusterName',
+                          'Value': res['ClusterName']
+                      }
+                  ],
+                  Statistics=[stat]
+                )
+                
+                x = []  
+                result = {} 
+                if len(response['Datapoints']) > 0:
+                  for i in response['Datapoints']:
+                    x.append(i[stat])
+                  result['OverallValue'] = cal_average(x)
+                else:
+                  result['OverallValue'] = None
+                result['Statistics'] = stat
+                result['TimeWindow'] = 60
+                # result['Datapoints'] = response['Datapoints']
+                return(result)
+              
+              
+              def find_ecsservice_resource(res):
+                result = None
+                r = json.loads(res['Resourceslist'])
+                for i in r:
+                  if i['Type'] == 'AWS::ECS::Service':
+                    result = i['PhysicalResourceId']
+                return result
+              
+              def cal_average(num):
+                  sum_num = 0
+                  for t in num:
+                      sum_num = sum_num + t           
+              
+                  avg = sum_num / len(num)
+                  return avg
+              
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                      return o.__str__()
+                
+              def handler(event, context):
+                
+                arn = find_ecsservice_resource(event)
+                result = {}  
+                
+                if arn is not None:
+                  ecsservice = arn_deconstruct(arn)
+                  result = {}
+                  output = {}
+                  result['CPUUtilization'] = get_stat(ecsservice,'CPUUtilization','Maximum')
+                  result['MemoryUtilization'] = get_stat(ecsservice,'MemoryUtilization','Maximum')
+                  serialized_result = json.dumps(result,default = myconverter )
+                  result = json.loads(serialized_result)
+                  output['Result']=json.dumps(result)
+              
+                result = output
+                
+                return result
+        - name: Gather_ECS_Error_Logs
+          action: aws:executeScript
+          description: Search and gather error in ECS logs
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String             
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              import time
+              
+              def arn_deconstruct(arn):
+                arnlist = arn.split(":")
+              
+                service=arnlist[2]
+                region=arnlist[3]
+                accountid=arnlist[4]
+                resources = arnlist[5].split("/")
+                servicetype = resources[0]
+                servicemode = resources[1]
+                resourcename = resources[2]
+              
+                return {
+                  "Service": service,
+                  "Region": region,
+                  "AccountId": accountid,
+                  "Type": servicetype,
+                  "Mode" : servicemode,
+                  "Name" : resourcename
+                }
+                
+                
+              def find_ecs_resource(res):
+                result = {}
+              
+                r = json.loads(res['Resourceslist'])
+                for i in r:
+                  if i['Type'] == 'AWS::ECS::Cluster':
+                    result['ECSCluster'] = i['PhysicalResourceId']
+                  if i['Type'] == 'AWS::ECS::Service':
+                    result['ECSService'] = i['PhysicalResourceId']
+              
+                return result
+              
+              def find_ecs_logs(ecsclsname,ecssvcname,region):
+                result = []
+                
+                ecsclient = boto3.client('ecs', region_name = region )
+                ecssvcres = ecsclient.describe_services(
+                  cluster=ecsclsname,
+                  services=[ ecssvcname ]
+                )
+                
+                if len(ecssvcres['services']) > 0:
+                  taskdef = ecssvcres['services'][0]['taskDefinition']
+                  taskdefres = ecsclient.describe_task_definition(
+                    taskDefinition=taskdef
+                  )
+                  
+                  contdef = taskdefres['taskDefinition']['containerDefinitions']
+                  
+                  for i in contdef:
+                    result.append(i['logConfiguration'])
+                  
+                return result
+              
+              
+              def find_error_in_logs(loglist):
+                result = []
+                loggroups = []
+                logsclient = boto3.client('logs')
+                
+                for i in loglist:
+                  options = i['options']
+                  if 'awslogs-group' in options:
+                    loggroups.append(options['awslogs-group'])
+                    now = int(datetime.now().timestamp())
+                      
+                    res = logsclient.start_query( 
+                      logGroupNames=loggroups,
+                      startTime = now - 3000,
+                      endTime = now,
+                      queryString = "fields @message | filter @message like \"Error:\" | limit 5"
+                    )
+              
+                    response = None
+                    while response == None or response['status'] == 'Running':
+                        time.sleep(1)
+                        response = logsclient.get_query_results(
+                            queryId=  res['queryId']
+                        )
+                    
+                    if 'results' in response:
+                      if len(response['results']) > 0:
+                        for i in response['results']:
+                          for x in i:
+                            if x['field'] == '@ptr':
+                              pointer = x['value']
+                          recdetail = logsclient.get_log_record(
+                              logRecordPointer=pointer
+                          )
+                          
+                          result.append(recdetail['logRecord'])
+                          
+                return result
+                
+              
+              def cal_average(num):
+                sum_num = 0
+                for t in num:
+                    sum_num = sum_num + t           
+              
+                avg = sum_num / len(num)
+                return avg
+              
+              def myconverter(o):
+                if isinstance(o, datetime):
+                    return o.__str__()
+              
+              def handler(event, context):
+                result = {}
+                x = []
+                res = find_ecs_resource(event)
+                ecssvc = arn_deconstruct(res['ECSService'])
+                loglist = find_ecs_logs(res['ECSCluster'],ecssvc['Name'],ecssvc['Region'])
+                
+                x = find_error_in_logs(loglist)
+                
+                if len(x) > 0:
+                  result['Result'] = json.dumps(x)
+                else:
+                  result['Result'] = "None"
+                
+                return result
+        - name: Gather_ECS_Config
+          action: aws:executeScript
+          description: Gather ECS Configurations
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String             
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              Resourceslist: '{{Resources}}'
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              
+                            
+              def arn_deconstruct(arn):
+                  arnlist = arn.split(":")
+                  
+                  service=arnlist[2]
+                  region=arnlist[3]
+                  accountid=arnlist[4]
+                  resources = arnlist[5].split("/")
+                  servicetype = resources[0]
+                  clustername = resources[1]
+                  servicename = resources[2]
+                  
+                  return {
+                    "Service": service,
+                    "Region": region,
+                    "AccountId": accountid,
+                    "Type": servicetype,
+                    "ClusterName" : clustername,
+                    "ServiceName" : servicename
+                  }
+              
+              def get_ecs_service_config(res):
+                  ecsclient = boto3.client('ecs')
+                  
+                  response = ecsclient.describe_services(
+                    cluster= res['ClusterName'],
+                    services=[ res['ServiceName'] ]
+                  )
+                  
+                  if len(response['services']) > 0:
+                    result = response['services'][0]
+                  
+                  return(result)
+              
+              def get_scaling_policy(res):
+                  result = []
+                  aaclient = boto3.client('application-autoscaling')
+                  
+                  response = aaclient.describe_scaling_policies(
+                    ServiceNamespace = 'ecs',
+                    ResourceId = 'service/{}/{}'.format(res['ClusterName'],res['ServiceName'])
+                  )
+                  
+                  if len(response['ScalingPolicies']) > 0:
+                    result = response['ScalingPolicies']
+                  
+                  return(result)
+                
+              def find_ecsservice_resource(res):
+                  result = None
+                  r = json.loads(res['Resourceslist'])
+                  for i in r:
+                    if i['Type'] == 'AWS::ECS::Service':
+                      result = i['PhysicalResourceId']
+                  return result
+                
+              def cal_average(num):
+                  sum_num = 0
+                  for t in num:
+                    sum_num = sum_num + t           
+                  
+                  avg = sum_num / len(num)
+                  return avg
+              
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                    return o.__str__()
+                  
+              def handler(event, context):
+              
+                        
+                  arn = find_ecsservice_resource(event)
+                  ecsres = arn_deconstruct(arn)
+                  result = {}
+                  output = {}
+                  
+                  if ecsres is not None:
+                    ecssvccfg = json.dumps(get_ecs_service_config(ecsres),default = myconverter )
+              
+                  result = json.loads(ecssvccfg)
+                  result['scalingpolicies'] = json.loads(json.dumps( get_scaling_policy(ecsres),default = myconverter ))
+              
+                  output['Result'] = json.dumps(result,default = myconverter )
+                  return output            
+        - name: Inspect_Playbook_Results
+          action: aws:executeScript
+          description: Inspect Results
+          outputs:
+            - Name: Result
+              Selector: $.Payload.Result
+              Type: String               
+          inputs:
+            Runtime: python3.6
+            Handler: handler
+            InputPayload:
+              ELBStatistics: '{{Gather_ELB_Statistics.Result}}'
+              RDSConfig: '{{Gather_RDS_Config.Result}}'
+              RDSStatistics: '{{Gather_RDS_Statistics.Result}}'
+              ECSStatistics: '{{Gather_ECS_Statistics.Result}}'
+              ECSErrorLogs: '{{Gather_ECS_Error_Logs.Result}}'  
+              ECSConfig: '{{Gather_ECS_Config.Result}}' 
+            Script: |-
+              import json
+              import re
+              from datetime import datetime,timedelta
+              import boto3
+              import os
+              
+              def inspect_elb_stats(elbstat):
+                
+                result = {}
+                stat = json.loads(elbstat)
+                
+                #Benchmark Max Values
+                TargetResponseTime = 5
+                TargetConnectionErrorCount = 0
+                UnHealthyHostCount = 0
+                ELB5XXCount = 0
+                ELB500Count = 0
+                ELB502Count = 0
+                ELB503Count = 0
+                ELB504Count = 0
+                Target4XXCount = 0
+                Target5XXCount = 0
+                
+                if  stat['TargetResponseTime']['OverallValue'] is not None and stat['TargetResponseTime']['OverallValue'] > TargetResponseTime:
+                    result['TargetResponseTime'] = stat['TargetResponseTime']['OverallValue'] 
+                
+                if  stat['TargetConnectionErrorCount']['OverallValue'] is not None and stat['TargetConnectionErrorCount']['OverallValue'] > TargetConnectionErrorCount:
+                    result['TargetConnectionErrorCount'] = stat['TargetConnectionErrorCount']['OverallValue']
+                    
+                if  stat['UnHealthyHostCount']['OverallValue'] is not None  and stat['UnHealthyHostCount']['OverallValue'] > UnHealthyHostCount  :
+                    result['UnHealthyHostCount'] = stat['UnHealthyHostCount']['OverallValue']
+                    
+                if  stat['ELB5XXCount']['OverallValue'] is not None and stat['ELB5XXCount']['OverallValue'] > ELB5XXCount :
+                    result['ELB5XXCount'] = stat['ELB5XXCount']['OverallValue']
+                    
+                if  stat['ELB500Count']['OverallValue'] is not None and stat['ELB500Count']['OverallValue'] > ELB500Count  :
+                    result['ELB500Count'] = stat['ELB500Count']['OverallValue']
+                    
+                if  stat['ELB502Count']['OverallValue'] is not None and stat['ELB502Count']['OverallValue'] > ELB502Count:
+                    result['ELB502Count'] = stat['ELB502Count']['OverallValue']
+                    
+                if  stat['ELB503Count']['OverallValue'] is not None and stat['ELB503Count']['OverallValue'] > ELB503Count:
+                    result['ELB503Count'] = stat['ELB503Count']['OverallValue']
+                    
+                if  stat['ELB504Count']['OverallValue'] is not None and stat['ELB504Count']['OverallValue'] > ELB504Count:
+                    result['ELB504Count'] = stat['ELB504Count']['OverallValue']        
+                
+                if  stat['Target4XXCount']['OverallValue'] is not None and stat['Target4XXCount']['OverallValue'] > Target4XXCount  :
+                    result['Target4XXCount'] = stat['Target4XXCount']['OverallValue']        
+                
+                if  stat['Target5XXCount']['OverallValue'] is not None and stat['Target5XXCount']['OverallValue'] > Target5XXCount   :
+                    result['Target5XXCount'] = stat['Target5XXCount']['OverallValue']        
+                
+                return result
+              
+              def inspect_rds_stats():
+                #Benchmark Values
+                DatabaseConnections = 150
+              
+              
+              def inspect_ecs_logs(ecslogs):
+                #Benchmark Max Values
+                Count = 0
+              
+                result = []
+                print(ecslogs)
+                
+                if ecslogs is not None:
+                  stat = json.loads(ecslogs)
+                  if len(stat) > 0 :
+                    result = stat
+                
+                return result
+              
+              
+              def inspect_ecs_stats(ecstat):
+                
+                result = {}
+                stat = json.loads(ecstat)
+                
+                #Benchmark Max Values
+                CPUUtilization = 80
+              
+                if stat['CPUUtilization']['OverallValue'] is not None and stat['CPUUtilization']['OverallValue'] > CPUUtilization:
+                    result['CPUUtilization'] = stat['CPUUtilization']['OverallValue'] 
+                
+                return result
+
+              def inspect_ecs_config(ecsconf):
+                
+                result = {}
+                conf = json.loads(ecsconf)
+                
+                if 'runningCount' in conf:
+                  result['TaskRunningCount'] = conf['runningCount'] 
+                
+                if 'desiredCount' in conf:
+                  result['TaskDesiredCount'] = conf['desiredCount'] 
+
+                if 'pendingCount' in conf:
+                  result['TaskPendingCount'] = conf['pendingCount'] 
+
+                if 'launchType' in conf:
+                  result['LaunchType'] = conf['launchType']                                 
+              
+              
+                return result              
+
+              def myconverter(o):
+                  if isinstance(o, datetime):
+                    return o.__str__()
+                                  
+              def handler(event, context):
+              
+                result = {}
+                output = {}
+              
+                elbstat = event['ELBStatistics']
+                output['ELB'] = inspect_elb_stats(elbstat)
+                
+                ecsstat = event['ECSStatistics']
+                ecslogs = event['ECSErrorLogs']
+                ecsconf = event['ECSConfig']
+
+                output['ECS'] = inspect_ecs_stats(ecsstat)
+                output['ECS']['CurrentConfig'] =inspect_ecs_config(ecsconf)
+                
+                
+                if ecslogs != "None":
+                  output['ECS']['Logs'] = inspect_ecs_logs(ecslogs)
+                
+                x = json.dumps(output, default = myconverter )
+                
+                result['Result'] = x
+                
+                
+                return result

@@ -5,11 +5,20 @@
 * Run the following command
 
         $ jq --version
-        jq-1.5-1-a5b5cbe
+        jq-1.6
 * Any version is fine.
-* If you instead got `command not found` then you need to install `jq`. Follow the instructions at <https://stedolan.github.io/jq/download/>
+* If you instead got `command not found` then you need to install `jq`. 
 
-* If that succeeded, then you are finished.  Return to the Lab Guide
+
+### Install jq
+
+* If you are using Amazon Linux (or Red Hat Enterprise Linux) run the following:
+
+        sudo yum install jq
+
+* If using another Linux distro, then follow the instructions at <https://stedolan.github.io/jq/download/>
+
+* If that succeeded, then you are finished.  Return to the **Lab Guide**
 
 ### Alternate instructions for Linux
 

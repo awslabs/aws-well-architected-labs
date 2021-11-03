@@ -17,6 +17,10 @@ $RECYCLE.BIN/
 .pyc
 dist/
 .vscode/
+*.code-workspace
 
 # https://github.com/awslabs/aws-well-architected-labs/issues/92
 !docs/stylesheets/
+/.vs
+/static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/c#/AppResiliency/.vs/AppResiliency/v16
+/static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/c#/AppResiliency/output
