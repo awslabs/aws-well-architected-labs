@@ -59,7 +59,7 @@ git commit -m "Configure Cognito"
 git push
 
 echo "# Waiting for App to be deployed"
-sleep 500
+sleep 1000
 APPID=$(aws cloudformation describe-stacks --stack-name oncall-health-amplify | jq '.Stacks[0].Outputs[] | select(.OutputKey == "OutputAppId") | .OutputValue' | sed -e 's/^"//' -e 's/"$//')
 BACKEND_STACK=$(aws amplify list-backend-environments --app-id $APPID | jq '.backendEnvironments[0].stackName' | sed -e 's/^"//' -e 's/"$//')
 AUTH_CHILD_STACK_ARN=$(aws cloudformation describe-stack-resources --stack-name $BACKEND_STACK | jq '.StackResources[] | select(.LogicalResourceId == "authoncallhealth") | .PhysicalResourceId' | sed -e 's/^"//' -e 's/"$//')
