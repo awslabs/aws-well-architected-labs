@@ -2,12 +2,8 @@
 clear
 
 echo "[ DELETE unrelated Files]"
-cd ~/environment/aws-well-architected-labs/static/wapartners
-rm -Rvf !("100_Automating_Serverless_Best_Practices_with_Dashbird")
-cd ~/environment/aws-well-architected-labs/static
-rm -Rvf !("wapartners")
-cd ~/environment/aws-well-architected-labs/
-rm -Rvf !("static")
+cd ~/environment/aws-well-architected-labs
+find ~/environment/aws-well-architected-labs -not -path '*100_Automating_Serverless_Best_Practices_with_Dashbird*' -delete 2>/dev/null
 
 echo "[ BUILD SAMPLE APP - START ]"
 
