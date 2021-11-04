@@ -5,6 +5,12 @@ echo "[ DELETE unrelated Files]"
 cd ~/environment/aws-well-architected-labs
 find ~/environment/aws-well-architected-labs -not -path '*100_Automating_Serverless_Best_Practices_with_Dashbird*' -delete 2>/dev/null
 
+echo "[ UNZIP APP Files]"
+cd ~/environment/aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app/
+mkdir oncall-health
+cd oncall-health
+unzip ../oncall-health.zip
+
 echo "[ BUILD SAMPLE APP - START ]"
 
 echo "# Installing jq tool"
