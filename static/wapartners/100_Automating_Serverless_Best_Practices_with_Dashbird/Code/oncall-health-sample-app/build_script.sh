@@ -1,5 +1,14 @@
 #!/bin/bash
 clear
+
+echo "[ DELETE unrelated Files]"
+cd ~/environment/aws-well-architected-labs/static/wapartners
+rm -Rvf !("100_Automating_Serverless_Best_Practices_with_Dashbird")
+cd ~/environment/aws-well-architected-labs/static
+rm -Rvf !("wapartners")
+cd ~/environment/aws-well-architected-labs/
+rm -Rvf !("static")
+
 echo "[ BUILD SAMPLE APP - START ]"
 
 echo "# Installing jq tool"
