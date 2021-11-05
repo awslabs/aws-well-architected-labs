@@ -443,7 +443,7 @@ It is not partitioned.
 {{%expand "AWS Budgets Export" %}}
 ## AWS Budgets
 
-AWS Budgets allows you to set custom budgets to track your cost and usage from the simplest to the most complex use cases. This module will export the data from all budgets so you can group together reports and combine with dashboards. This Data will be separated by type service and partitioned by year, month. 
+AWS Budgets allows you to set custom budgets to track your cost and usage from the simplest to the most complex use cases. This module will export the data from all budgets so you can group together reports and combine with dashboards. This Data will be separated by type service and partitioned by year, month. This also has a saved query to create a view. 
 
             BudgetsModule:
                 Type: AWS::CloudFormation::Stack
