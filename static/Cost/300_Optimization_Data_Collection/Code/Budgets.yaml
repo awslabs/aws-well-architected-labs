@@ -21,7 +21,7 @@ Parameters:
   DestinationPrefix:
     Type: String
     Description: Name of the folder/prefix for budgets information to be stored in
-    Default: budgets
+    Default: Budgets
   RoleName:
     Type: String
     Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Budgets information.
@@ -201,7 +201,7 @@ Resources:
               try:
                   S3BucketName = os.environ["BUCKET_NAME"]
                   DestinationPrefix = os.environ["PATH"]
-                  s3 = boto3.client('s3', os.environ["REGION"],
+                  s3 = boto3.client('s3',
                                       config=Config(s3={'addressing_style': 'path'}))
                   s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/year={year}/month={month}/budgets-{dt_string}.json")
                   print(f"Budget data in s3 {S3BucketName}")
@@ -241,6 +241,7 @@ Resources:
             Ref: DestinationPrefix
           CRAWLER_NAME:
             Ref: BudgetsCrawler
+
   BudgetsCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -275,3 +276,22 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
+  AthenaQuery:
+      Type: AWS::Athena::NamedQuery
+      Properties:
+        Database: optimization_data
+        Description: Provides a summary view of the budgets
+        Name: aws_budgets
+        QueryString:
+          CREATE OR REPLACE VIEW aws_budgets AS 
+          SELECT
+            budgetname,
+            budgetlimit.amount,  
+            costfilters.service[1] as service,
+            calculatedspend.actualspend.amount as actualspend,
+            calculatedspend.forecastedspend.amount as forecastedspend,
+          year, 
+          month
+
+          FROM
+            "optimization_data"."budgets"
