@@ -12,7 +12,7 @@ weight = 3
 
 {{< img BK-4.png >}}
 
-1.3 Select the instance that has **backupandrestore-us-west-ec2-SG** as the **Security group name**.  Click the **Connect** button.
+1.3 Select the **BackupAndRestoreSecondary** instance, then click the **Connect** button.
 
 {{< img RS-44.png >}}
 
@@ -24,14 +24,45 @@ weight = 3
 
 {{< img am-5.png >}}
 
-1.6 Let's connect to the database in the secondary **N. California (us-west-1)** region. Replace the below **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).
-
+1.6 Let's connect to the database in the secondary **N. California (us-west-1)** region. 
 ```sh
 sudo su ec2-user
 cd /home/ec2-user
-sudo mysql -u UniShopAppV1User -P 3306 -pUniShopAppV1Password -h backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com 
-SHOW DATABASES;
 ```
+Replace the below **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).
+
+```sh
+sudo mysql -u UniShopAppV1User -P 3306 -pUniShopAppV1Password -h backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com
+```
+
+Type **show databases**.
+
+```sh
+MySQL [(none)]> show databases;
+```
+
+You should see the following:
+
+```sh 
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| unishop            |
++--------------------+
+5 rows in set (0.02 sec)
+
+```
+
+Type **exit** to return to the command prompt.
+
+```sh
+MySQL [(none)]> exit
+```
+
 1.7 Open the **unishopcfg.sh** file for editing with either nano or vi.
 
 ```sh
@@ -50,17 +81,25 @@ export AWS_DEFAULT_REGION=us-west-1
 export UI_RANDOM_NAME=backupandrestore-uibucket-xxxx-dr
 ```
 
-1.9 Let's copy the application files to the S3 buckets.  Replace the **backupandrestore-uibucket-xxxx-dr** with the name of your S3 bucket.
+Exit the editor, saving your changes.
+
+1.9 Lets use the source command which reads and executes commands from the unishopcfg.sh file
+
+```sh
+source unishopcfg.sh
+```
+
+1.10 Let's copy the application files to the S3 buckets. 
 
 {{% notice note %}}
 If our S3 buckets contained application data then it would be necessary to schedule recurring backups to meet the target RPO. This could be done with Cross Region Replication. Since our buckets contains no data, only code, we will restore the contents from the EC2 instance.
 {{% /notice %}}
 
 ```sh
-sudo aws s3 cp /home/ec2-user/UniShopUI s3://backupandrestore-uibucket-xxxx-dr/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+sudo aws s3 cp /home/ec2-user/UniShopUI s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 ```
 
-1.10 Reboot the EC2 instance so our changes take effect.
+1.11 Reboot the EC2 instance so our changes take effect.
 
 ```sh
 sudo reboot
@@ -72,7 +111,7 @@ sudo reboot
 
 ```json
 {
-    "host": "{{Replace with your EC2 public IPv4 DNS name copied from EC2 section}}",
+    "host": "http://{{Replace with your EC2 public IPv4 DNS name copied from EC2 section}}",
     "region": "us-west-1"
 }
 ```
@@ -90,7 +129,7 @@ Your final `config.json` should look similar to this example.
 
 3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashbarod.
 
-3.2 Find the bucket that ends with **-dr-** and click the bucket name link.
+3.2 Click the link for **backupandrestore-uibucket-xxxx-dr**.
 
 {{< img c-9.png >}}
 
@@ -109,6 +148,8 @@ Your final `config.json` should look similar to this example.
 3.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Click the **Upload** button.
 
 {{< img c-14.png >}}
+
+Click the **Close** button.
 
 3.7 Click the **Properties** link.  In the **Static website hosting** section, click the **Edit** button.
 
