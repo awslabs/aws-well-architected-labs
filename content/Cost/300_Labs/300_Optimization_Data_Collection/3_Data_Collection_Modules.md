@@ -419,7 +419,8 @@ DataStackMulti
 
 ## AWS Organization Data
 This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**.
-It is not partitioned.
+It is not partitioned. Currnetly this data looks for tags **'Env'** This can be updated in the lambda function **Environment Variables** separated by a comer. 
+
 * CloudFormation added to **OptimizationDataCollectionStack**:  
 
           OrganizationData:

@@ -69,4 +69,40 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
         ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."year" and "ebs_data"."month" = "ta"."month"
 
 
+
+### AWS Budgets into Cost Dashboard
+
+In these labs we have a couple of amazing cost dashboards that can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/). If you would like to add your budget data into these dashboard please follow the below steps. 
+
+1. Ensure you have budget data in your athena table
+
+2. Create a Amazon Athena View of this data to extract the relevant information. 
+
+        CREATE OR REPLACE VIEW aws_budgets_view AS 
+        SELECT
+        budgetname as budget_name
+        ,cast(budgetlimit.amount as decimal) budget_amount
+        ,timeunit
+        ,budgettype as budget_type
+        ,year as budget_year
+        ,month as budget_month
+        FROM
+        "optimization_data"."budgets"
+        where budgettype = 'COST' 
+        and costfilters.service[1] is NULL
+
+3. Go to the **Amazon QuickSight** service homepage
+
+2. In **QuickSight**, select the **summary_view** Data Set
+
+3. Select **Edit data set**
+
+4. Select **Add data**:
+![Images/dashboard_mapping_3.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
+
+4. Add 
+ Select your Amazon Athena **organization_data** table and click **Select**
+![Images/Budget_Data.png](/Cost/300_Organization_Data_CUR_Connection/Images/Budget_Data.png)
+
+
 {{< prev_next_button link_prev_url="../4_Create_Custom_Data_Collection_Module/" link_next_url="../6_teardown/" />}}
