@@ -9,6 +9,7 @@ pre: "<b>1. </b>"
 
 Traditionally most workloads are designed to withstand infrastructure failure by deploying workload components across multiple Availability Zones/Regions, implementing self-healing capabilities such as AutoScaling, etc. While such techniques are effective in ensuring uptime of workload resources, they do not address issues introduced at the workload application level (i.e. a software bug). Leveraging bulkhead architectures and shuffle sharding techniques will provide additional reliability to workloads by limiting the blast radius of failures so that only a subset of users are impacted by such failures.
 
+The following diagram shows the initial architecture you will deploy.  This architecture has **_no_** sharding:
 ![ArchitectureRegular](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/Architecture-regular.png?classes=lab_picture_auto)
 
 You will use AWS CloudFormation to provision the resources needed for this lab. The CloudFormation stack that you provision will create an Application Load Balancer, Target Groups, and EC2 instances in a new VPC.
@@ -68,7 +69,7 @@ Once the stack is in **CREATE_COMPLETE**, visit the **Outputs** section for the 
 
 ### 1.3 Test the application
 
-Now that the application has been deployed, it is time to test it to understand how it works. The sample application used in this lab is a simple web application that returns a message with the Worker that responded to the request. Customers pass in a query string with the request to identify themselves. The query string used here is **name**.
+Now that the application has been deployed, it is time to test it to understand how it works. The sample application used in this lab is a simple web application that returns a message with the Worker that responded to the request. Customers pass in a query string as part of the request to identify themselves. The query string used here is **name**.
 
 1. Copy the URL provided in the **Outputs** section of the CloudFormation stack created in the previous string.
 
@@ -79,7 +80,7 @@ Now that the application has been deployed, it is time to test it to understand 
 
     ![RegularAlpha](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/RegularAlpha.png?classes=lab_picture_auto)
 
-1. Update the value for the query string to one of the other customers, the possible values are - Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, and Hotel
+1. Update the value for the query string to one of the other customers, the possible values are - **Alpha**, **Bravo**, **Charlie**, **Delta**, **Echo**, **Foxtrot**, **Golf**, and **Hotel**
 
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`

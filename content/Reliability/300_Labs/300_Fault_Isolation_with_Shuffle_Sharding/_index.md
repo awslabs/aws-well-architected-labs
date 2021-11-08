@@ -8,7 +8,7 @@ weight: 3
 tags:
   - mitigate_failure
 ---
-## Authors
+## Author
 
 * Mahanth Jayadeva, Solutions Architect, AWS Well-Architected
 
