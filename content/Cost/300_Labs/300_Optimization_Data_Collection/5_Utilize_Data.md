@@ -100,9 +100,14 @@ In these labs we have a couple of amazing cost dashboards that can be found [her
 4. Select **Add data**:
 ![Images/dashboard_mapping_3.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
 
-4. Add 
- Select your Amazon Athena **organization_data** table and click **Select**
-![Images/Budget_Data.png](/Cost/300_Organization_Data_CUR_Connection/Images/Budget_Data.png)
+5. Select your Amazon Athena **aws_budgets_view** table and click **Select**
+![Images/Budget_Data.png](/Cost/300_Optimization_Data_Collection/Images/Budget_Data.png)
+
+6. Click on the join and choose month, year from summary_view and budget_month, budget_year to join. Click **Save**.
+![Images/Budget_join.png](/Cost/300_Optimization_Data_Collection/Images/Budget_join.png)
+
+7. In your Analysis you can now add a Budget figure to your lines. Make sure to change to **Average**.
+![Images/Budget_viz.png](/Cost/300_Optimization_Data_Collection/Images/Budget_viz.png)
 
 
 {{< prev_next_button link_prev_url="../4_Create_Custom_Data_Collection_Module/" link_next_url="../6_teardown/" />}}
