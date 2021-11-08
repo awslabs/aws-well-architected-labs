@@ -11,43 +11,58 @@ pre: "<b>2. </b>"
 
 In the scenario used in the lab, the application has a known issue which is triggered by passing a "bad" query string. If such a request is received, the EC2 instance that handles the request will become unresponsive and the application will crash on the instance. The "bad" query string that triggers this is **bug** with a value of **true**. The development team is aware of this bug and are working on a fix, however, the issue exists today and customers might accidentally or intentionally trigger it. This is referred to as a "poison pill", a bug or issue which when introduced into a system could compromise the functionality of the system.
 
-1. Imagine a situation where a customer accidentally triggers the bug in the application that causes it to shutdown on the instance where the request was received. This can be done by including the query-string **bug=true**. The modified URL should look like this - http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha&bug=true
+1. Imagine a situation where a customer accidentally triggers the bug in the application that causes it to shutdown on the instance where the request was received. 
+   * This can be done by including the query-string `&bug=true`. 
+   * The modified URL should look like this - http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha&bug=true (but using your own base URL)
+   * Request the page for customer **Alpha** using your modified URL
 
 1. You should see an Internal Server Error response on the browser indicating that the application has stopped working as expected on the instance that processed this request
 
     ![PoisonPill](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/PoisonPill.png?classes=lab_picture_auto)
 
-1. At this point, there are 7 healthy instances still available so other customers are not impacted. You can verify this by opening another browser tab and specifying the URL with a different customer name and **without** the **bug** query string as shown below. Try with at least two other customers, you may try them all if you want to, but it is not necessary.
+1. At this point, there are 7 healthy instances still available so other customers are not impacted. You can verify this: 
+   * Open another browser tab and specify the URL with a different customer name and **without** the **bug** query string as shown below.
+   * Try with at least two other customers, you may try them all if you want to, but it is not necessary.
 
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Charlie`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Delta`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Charlie`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Delta`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
 
-    If you refresh the browser for requests from the other customers listed above, you will see that responses are being returned only from 7 EC2 instances instead of 8.
+   * Refresh the browser for requests from these other customers listed above. You will see that responses are being returned only from 7 EC2 instances instead of 8.
 
-    Note: If you see a response that says "This site can't be reached", please make sure you are using the URL obtained from the outputs section of the CloudFormation stack and not the sample URL provided in this lab guide.
+   Note: If you see a response that says "This site can't be reached", please make sure you are using the URL obtained from the outputs section of the CloudFormation stack and not the sample URL provided in this lab guide.
 
-1. Customer **Alpha**, not aware of this bug in the application, will retry the request. Refresh the page with customer **Alpha**'s request with the **bug=true** query string to simulate this. This request is then routed to one of the 7 remaining healthy instances. The bug is triggered again and another instance goes down leaving only 6 healthy instances. This can be verified by sending requests from one of the other customers without including the query string **bug=true** and seeing responses from only 6 EC2 instances.
+1. Customer **Alpha**, not aware of this bug in the application, will retry the request. 
+   * Return to the first browser tab (the one with the "buggy request" from **Alpha**)
+   * Refresh the page *once* with customer **Alpha**'s request with the **bug=true** query string. 
 
-1. This process continues with customer **Alpha** retrying requests until all instances are unhealthy. Refresh the page at least 6 more times as customer **Alpha** with the query string **bug=true**. You will eventually see the response change to “502 Bad Gateway” because there are no healthy instances to handle requests. You can verify this by sending requests from other customers, you should see a **502 Bad Gateway** response received for all requests from all customers.
+1. This new request is then routed to one of the 7 remaining healthy instances. The bug is triggered again and another instance goes down leaving only 6 healthy instances. 
+   * This can be verified in the second browser tab
+   * Try sending requests from one of the *other* customers *without* including the query string **bug=true** and see that responses come from only 6 EC2 instances.
 
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Charlie`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Delta`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
-    * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
+1. This process continues with customer **Alpha** retrying requests until all instances are unhealthy.
+   * Return to the first browser tab
+   * Refresh the page at least 6 more times as customer **Alpha** with the query string **bug=true**.
+   * You will eventually see the response change to “502 Bad Gateway” because there are no healthy instances to handle requests.
+   * You can verify this by sending requests from other customers (*without* including the query string **bug=true**), you should see a **502 Bad Gateway** response received for all requests from all customers.
 
-    This is what is known as a "retry storm", where a customer is unknowingly making bad requests and retrying the request every time it fails because they are not aware of the bug within the application.
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Charlie`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Delta`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Echo`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Foxtrot`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
+      * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
 
-    ![502BadGateway](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/502BadGateway.png?classes=lab_picture_auto)
+   This is what is known as a "retry storm", where a customer is unknowingly making bad requests and retrying the request every time it fails because they are not aware of the bug within the application.
 
-    {{% notice tip %}}This lab will cover how to use sharding to mitigate the impact of retry storms. After the lab, also see the [AWS Well-Architected best practice **Control and limit retry calls**](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-interactions-in-a-distributed-system-to-mitigate-or-withstand-failures.html) as another practice to limit problems caused by retry storms{{% /notice %}}
+   ![502BadGateway](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/502BadGateway.png?classes=lab_picture_auto)
+
+   {{% notice tip %}}This lab will cover how to use sharding to mitigate the impact of retry storms. After the lab, also see the [AWS Well-Architected best practice **Control and limit retry calls**](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-interactions-in-a-distributed-system-to-mitigate-or-withstand-failures.html) as another practice to limit problems caused by retry storms{{% /notice %}}
 
 1. In this situation, a buggy request made by one customer has taken down all instances on the backend resulting in complete downtime and all customers are now affected. This is a widespread scope of impact with **100%** of customers affected.
 
