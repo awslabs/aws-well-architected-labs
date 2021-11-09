@@ -16,7 +16,15 @@ tags:
 We have a CloudWatch dashboard to show us CPU and Memory statistics for the deployed EC2 instance. In order to showcase the dashboards, lets add a synthetic load to the machine.
 
 ## Stress
-For this lab, the EC2 instance will install a utility called stress.  This tool is designed to subject your system to a configurable measure of CPU, memory, I/O and disk stress.  This command we will use:
+For this lab, the EC2 instance will install a utility called stress.  This tool is designed to subject your system to a configurable measure of CPU, memory, I/O and disk stress. 
+
+Stress tools is not installed by default, you will need to install the package in advance:
+```
+sudo amazon-linux-extras install epel -y
+sudo yum install stress -y
+```
+ 
+To use this command we will use:
 ```
 sudo stress --cpu 8 --vm-bytes $(awk '/MemAvailable/{printf "%d\n", $2 * 0.9;}' < /proc/meminfo)k --vm-keep -m 1
 ```
@@ -28,7 +36,6 @@ sudo stress --cpu 8 --vm-bytes $(awk '/MemAvailable/{printf "%d\n", $2 * 0.9;}' 
   * This will re-dirty memory instead of freeing and reallocating.
 * -m 1
   * This will spawn 1 worker spinning on malloc()/free()
-  
 
 ## Generate Load
 
