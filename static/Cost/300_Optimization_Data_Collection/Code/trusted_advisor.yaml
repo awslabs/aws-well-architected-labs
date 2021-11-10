@@ -112,7 +112,7 @@ Resources:
          S3Key: !Ref CodeKey
       Handler: 'main.lambda_handler'
       MemorySize: 2688
-      Timeout: 600
+      Timeout: 300
       Role:
         Fn::GetAtt:
           - LambdaRole

@@ -129,7 +129,7 @@ Resources:
         S3Bucket: !Ref CodeBucket 
       Handler: 'ecs.lambda_handler'
       MemorySize: 2688
-      Timeout: 600
+      Timeout: 300
       Role:
         Fn::GetAtt:
           - LambdaRole
