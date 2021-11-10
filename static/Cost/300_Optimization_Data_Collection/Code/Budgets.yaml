@@ -31,7 +31,7 @@ Parameters:
     Default: Budgets
   Schedule:
     Type: String
-    Default: "cron(30 12 L * ? *)"
+    Default: "cron(30 12 1 * ? *)"
     Description: Cloud watch event Schedule to trigger the lambda 
   ManagementAccountID: 
     Type: String
