@@ -6,9 +6,9 @@ pre: "<b>3. </b>"
 weight: 3
 ---
 
-The on-demand nature of the AWS Cloud allows for a production-scale test environment to be deployed in a matter of minutes. 
+The on-demand nature of the AWS Cloud allows for a production-scale test environment to be deployed in a matter of minutes.
 
-While AWS serverless services allow for efficient scaling individually, it is important to consider the effect of [Service Quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) at both region and account level. Ignoring these maximum limits can become immediately impactful to a production workload. 
+While AWS serverless services allow for efficient scaling individually, it is important to consider the effect of [Service Quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) at both region and account level. Ignoring these maximum limits can become immediately impactful to a production workload.
 
 In this section we will perform load testing on our deployed Blue Car application to ensure that the architecture scales in alignment to the traffic which is being processed.
 
@@ -30,12 +30,15 @@ Complete the following steps:
 
 [Artillery](https://artillery.io/) is one of the most popular open-source tools for load testing serverless API. You will configure the number of requests per second and test duration.
 
-1. In Cloud9, open **test.yaml** in altilery_load_test directory.
+1. In Cloud9, open **test.yaml** in altilery_load_test directory. Please ensure you are still in **aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app/**
+
 ```
-cd altilery_load_test/
+cd artillery_load_test/
 vi test.yaml
 ```
-![Section3 Open Config](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-open-config.png)
+
+
+![Section3 Open Config](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-open-configfile.png)
 
 2. We will need to replace **API Invoke URL** and **Auth Token** with the values you have generated. The current configuration is set to **200 requests per a second** over a **10-second duration**.
 
@@ -44,7 +47,7 @@ vi test.yaml
 3. You should be seeing **test.yaml** as shown:
 ![Section3 Replace API Auth Token](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-replace-api-auth-token.png)
 
-4. Run load test by running artillery cli with test configuration as shown below. Run this cli 2-3 times and check to see that no 5xx errors are generated. 
+4. Run load test by running artillery cli with test configuration as shown below. Run this cli **2-3 times** and check to see that no 5xx errors are generated.
 
 
 ```
@@ -54,7 +57,7 @@ artillery run ./test.yaml
 ![Section3 Run Test](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-run-test.png)
 
 {{% notice note %}}
-**Note:** If you see 4XX error, please check if you updated auth token correctly in test.yaml.
+**Note:** If you see 4XX error, your auth token probably has expired.(Access token expiration: 60 minutes) You can refresh the blue car application and get a new auth token by clicking **auth token**. Please update auth token correctly in test.yaml.
 {{% /notice %}}
 
 
@@ -109,7 +112,7 @@ responsetime < 3
 ![Section3 Write Throttled Requests](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-write-throttled-requests.png)
 
 {{% notice note %}}
-Take a note of **Average item size** to calculate the appropriate write capacity unit.
+Take a note of **Average item size** to calculate the appropriate write capacity unit. However, DynamoDB updates the following information approximately every six hours. Average item size for this lab will be 137 byte. Let's use this size.
 {{% /notice %}}
 
 15. To address the throttling, go to the **Additional settings** and select **Edit** to enable DynamoDB auto-scaling.
@@ -120,7 +123,7 @@ Take a note of **Average item size** to calculate the appropriate write capacity
 
 ![Section3 Capacity Calculation](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-capacity-calculation.png)
 
-17. Our test ultimately reached a peak of 200 write requests per second but we do not consistently write this amount of write. Hence, we will configure Auto scaling that dynamically adjusts provisioned throughput capacity on our behalf, in response to actual traffic patterns under monitoring. Auto Scaling enables us to effectively eliminate the guesswork involved in provisioning adequate capacity. Please see [Managing Throughput Capacity Automatically with DynamoDB Auto Scaling](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/AutoScaling.html).
+17. Our test ultimately reached a peak of 200 write requests per second but we do not consistently write this amount of write. Hence, we will configure Auto scaling that dynamically adjusts provisioned throughput capacity on our behalf, in response to actual traffic patterns under monitoring. Auto Scaling enables us to effectively eliminate the guesswork involved in provisioning adequate capacity. Please see [Managing Throughput Capacity Automatically with DynamoDB Auto Scaling](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/AutoScaling.html) and check the estimated cost before you enable auto scaling.
 
 {{% notice note %}}
 **NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
@@ -132,8 +135,11 @@ Take a note of **Average item size** to calculate the appropriate write capacity
 
 ![Section3 Autoscaling Activity](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-autoscaling-activity.png)
 
-19. Now I am able to put all item with 201 response. If you see 4XX error, please update auth token correctly in test.yaml.
+19. If you perform the same load test a few times, 5xx errs will be gone. Now I am able to put all 2000 items with 201 response. If you see 4XX error, please update auth token correctly in test.yaml as your auth token has expired.
 
+```
+artillery run ./test.yaml
+```
 ![Section3 Re-run Test](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section3/section3-rerun-test.png)
 
 20. Once you stop testing, DynamoDB auto scaling will automatically scale down the write capacity units to 1.

@@ -6,7 +6,7 @@ pre: "<b>1. </b>"
 weight: 1
 ---
 
-You will start by deploying the example application which allows a customer to order medical assistance based on selecting a map location. The application consists of a public AWS API gateway which connects to a serverless application layer [AWS Lambda](https://aws.amazon.com/lambda/), which uses [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) . 
+You will start by deploying the example application which allows a customer to order medical assistance based on selecting a map location. The application consists of a public AWS API gateway which connects to a serverless application layer [AWS Lambda](https://aws.amazon.com/lambda/), which uses [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) .
 
 You will also deploy [AWS Amplify](https://aws.amazon.com/amplify/) to host the static website with CI/CD build-in and [Amazon Cognito](https://aws.amazon.com/cognito/) to manage users.
 
@@ -62,14 +62,14 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 
 ### 1.2. Deploy The Blue Car Application.
 
-1. Launch Cloud9 from the AWS Console. The repository where all of the CloudFormation templates are stored will be automatically cloned. Go to **oncall-health-sample-app** directory and run **bash build_script.sh**. It may take 9-10 minutes to complete this deployment.
+1. Launch Cloud9 from the AWS Console. The repository where all of the CloudFormation templates are stored will be automatically cloned. Go to **aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app** directory path and run **bash build_script.sh**. It may take 20-25 minutes to complete this deployment.
 
 ```
-cd oncall-health-sample-app
+cd aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app
 bash build_script.sh
 ```
 
-![Section1 Cloud9](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section1/section1-cloud9.png)
+![Section1 Cloud9](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section1/section1-cloud9-console.png)
 
 2. In the CloudFormation console, you will see a new stack called **oncall-health-amplify**. Click **oncall-health-amplify** and go to the **Outputs** section of the CloudFormation stack. Then, click **AppURL** to access the application.
 
@@ -87,7 +87,7 @@ bash build_script.sh
 
 ![Section1 User Information](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section1/section1-user-information.png)
 
-6. Retrieve the **Confirmation code** from your email which you entered previously and click **CONFIRM**
+6. Retrieve the **Confirmation code** from your email which you entered previously and click **CONFIRM**. This step is required because only verified user can call blue car in the application.
 
 ![Section1 Confirm](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section1/section1-confirm.png)
 
