@@ -17,13 +17,6 @@ We will now create the data sets in QuickSight from the Athena view and an analy
 1. Login to your central AWS account.
 
 2. Run CloudFormation stack to create QuickSight Athena dataset and a Dashboard.
-<!-- {{%expand "Click here - if you wish to launch CloudFormation directly" %}}
-Click [Here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https://d36ux702kcm75i.cloudfront.net/vpc_flowlogs_quicksight_template.yaml&stackName=VPCFlowLogsQuickSightStack-01) to launch CloudFormation template in your account to enable VPC Flow logs. Then click on **Next**
-![Images/qs-vpcfl-athena-01.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-quicksight-01.png)
-{{% /expand%}}
-OR
-{{%expand "Click here - if you wish to manually download the CloudFormation template and run it" %}} 
-{{% /expand%}}-->
 - Download CloudFormation Template:
   [vpc_flowlogs_quicksight_template.yaml](https://d36ux702kcm75i.cloudfront.net/vpc_flowlogs_quicksight_template.yaml)
 
@@ -34,21 +27,8 @@ OR
   1. In **Specify template** section, select **Upload a template** file. 
   2. Then **Choose File** and upload the template **_vpc_flowlogs_quicksight_template.yaml_** (you have downloaded previously)
   3. Then **Click Next**
-    <!-- If you have downloaded template earlier, navigate to CloudFormation. 
-    - In **Create stack** menu select standard option.  -->
       
     ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
-
-
-<!-- 1. - Download CloudFormation Template:
-    - [vpc_flowlogs_quicksight_template.yaml](https://d36ux702kcm75i.cloudfront.net/vpc_flowlogs_quicksight_template.yaml) 
-        - This cloudformation template creates Athena DataBase, an external table, VPC Flow Logs View, a cloudwatch rule and a lambda function to create partition in external Athena table at daily frequency.
-
-2. From AWS Console switch to primary region and navigate to CloudFormation. Then click on **Create stack**
-![Images/qs-vpcfl-08.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-08.png)
-
-3. In **Create stack** page Under **Specify template** select **Upload a template file**. Choose File and upload the template you just modified. Click **Next**
-![Images/qs-vpcfl-qs-01.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-qs-01.png) -->
 
 4. In **Specify stack details** page:
    1. Provide unique stack name e.g. **VPCFlowLogsQuickSightStack-01**

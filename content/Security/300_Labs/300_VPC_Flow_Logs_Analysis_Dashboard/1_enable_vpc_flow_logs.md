@@ -1,6 +1,5 @@
 ---
 title: "Enable VPC Flow Logs"
-#menutitle: "Lab #1"
 date: 2021-09-18T06:00:00-00:00
 chapter: false
 weight: 1
@@ -38,16 +37,6 @@ QuickSight dashboard provided in this lab requires all the fields mentioned in t
 
 2. Run CloudFormation stack to enable VPC Flow Logs.
 
-<!-- https://cf-templates-wa-lab.s3.amazonaws.com/vpc-flow-logs-custom.yaml -->
-
-<!-- {{%expand "Click here - if you wish to launch CloudFormation directly" %}}
-Click [Here](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https://d36ux702kcm75i.cloudfront.net/vpc-flow-logs-custom.yaml&stackName=EnableVPCFlowLog) to launch CloudFormation template in your account to enable VPC Flow logs. Then click on **Next**
-
-![Images/quicksight_dashboard_dt-2.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-01.png)
-{{% /expand%}}
-OR
-{{%expand "Click here - if you wish to manually download the CloudFormation template and run it" %}} -->
-<!-- {{% /expand%}} -->
 - Download CloudFormation Template:
     - [vpc-flow-logs-custom.yaml](https://d36ux702kcm75i.cloudfront.net/vpc-flow-logs-custom.yaml) 
         - This CloudFormation template enables VPC Flow Logs in the account you run it. You will need to run it per VPC.
@@ -187,13 +176,5 @@ Repeat above steps 1 thru 10 if you wish to enable VPC Flow Logs for VPCs in eac
 {{% /notice %}}
 
 {{% /expand%}}
-
-
-<!-- {{< prev_next_button link_prev_url="../4_distribute_dashboards/"  title="Congratulations!" final_step="true" >}}
-Now that you have completed the lab, if you have implemented this knowledge in your environment,
-you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
-[COST3 - "How do you monitor usage and cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
-{{< /prev_next_button >}} -->
-
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_create_athena_lambda_cloudwatch_rule/" />}}

@@ -2,16 +2,12 @@
 title: "Level 300: VPC Flow Logs Analysis Dashboard"
 menutitle: "VPC Flow Logs Analysis Dashboard"
 date: 2021-09-18T06:00:00-00:00
-#chapter: false
 weight: 9
 hidden: false
 ---
 
 ## Author
 - Chaitanya Shah, Sr. Technical Account Manager, AWS
-<!-- ![class=thumbnail](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/ChaitanyaShah.png?floatleft) -->
-
-<!-- ## Feedback -->
 
 ## Introduction
 VPC Flow Logs enables you to capture information about the IP traffic going to and from network interfaces in your VPC. The VPC Flow Logs Analysis Dashboard is an interactive, customizable and accessible QuickSight dashboard to help customers gain insights into traffic details of VPC in a graphical way. 
