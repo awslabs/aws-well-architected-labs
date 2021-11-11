@@ -164,11 +164,14 @@ Do you want to give access to the dashboards to someone within your organization
 Create a CSV file that looks something like this:
 
 	username,account_id
-	holborn@amazon.co.uk,"123456123456,987654987654"
-	frpas@amazon.fr,123456123456
-	aaredell@amazon.com,789123456123
+	holborn@amazon.co.uk,"123456123456"
+	holborn@amazon.co.uk,"987654987654"
+	frpas@amazon.fr,"123456123456"
+	aaredell@amazon.com,"789123456123"
 
-Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Wrap multiple account IDs inside quotes if required. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
+Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Create a separate row for a single username having access to multiple account IDs. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
+
+If you want to use QuickSight groups the CSV input file is slightly different.  Instead of UserName as the initial field you have to use GroupName.  Also, you can only use Users or Groups in the input file, not both. [This page](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html#create-data-set-rules-for-row-level-security) provides more details. QuickSight groups can only be created and managed via the QuickSight CLI. There is no UI for this in the QuickSight console.
 
 You now have 2 options on how to proceed:
 
