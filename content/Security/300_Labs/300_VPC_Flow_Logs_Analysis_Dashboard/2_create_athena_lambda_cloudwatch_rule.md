@@ -84,7 +84,7 @@ OR
 - Click **Next**
 
 ![Images/quicksight_dashboard_dt-10.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-10.png)
-4. Add tags **Name=VPCFlowLogs-Lambda-Stack** and **Purpose=WALabVPCFlowLogs**. Keep rest of the selections to **default** vaules. Click **Next**
+4. Add tags **Name=VPCFlowLogs-Lambda-Stack** and **Purpose=WALabVPCFlowLogs**. Keep rest of the selections to **default** values. Click **Next**
 ![Images/quicksight_dashboard_dt-11.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-11.png)
 5. Review the Stack and click on **I acknowledge that AWS CloudFormation might create IAM resources.** checkbox, Click on **Create Stack**
 ![Images/quicksight_dashboard_dt-12.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-12.png)

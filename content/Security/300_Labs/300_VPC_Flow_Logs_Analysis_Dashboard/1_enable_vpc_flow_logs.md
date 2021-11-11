@@ -11,15 +11,28 @@ hidden: false
 {{% notice note %}}
 **Central AWS Account:** AWS account which you want to designate for storing VPC Flow Logs centrally. This account will also contain Athena DB, table and QuickSight Dashboard.\
  \
-**Additional Accounts:** These are other accoutns that you own and has VPCs that you wish to enable Flow Logs and have an ability to push it to Central AWS Account's S3 bucket.\
+**Additional Accounts:** These are other accounts that you own and has VPCs that you wish to enable Flow Logs and have an ability to push it to Central AWS Account's S3 bucket.\
  \
 **QuickSight:** To manage VPC Flow Logs and QuickSight dashboard in central account please make sure you create resources for the central account in the region supported by QuickSight. Refer to this [link](https://docs.aws.amazon.com/quicksight/latest/user/regions.html) to see supported regions.
 {{% /notice %}}
 
-### Enable VPC Flow Logs
-We assume that you already have VPC and existing resources running in your account. If you wish to crete VPC please refer to [documentation](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/gsg_create_vpc.html) and for other reseource like Subnet, EC2 etc. refer to appropriate service documentation [here](https://docs.aws.amazon.com/index.html). 
+### VPC
+If you already have VPC and other resources running your AWS account continue with next section "Enable VPC Flow Logs" otherwise click on below link to deploy VPC and a toy webapp into your account.
+{{%expand "Click here for instructions how to deploy a VPC to your AWS account:" %}}
+{{% common/Create_VPC_Stack stackname="WebApp1-VPC" %}}
 
-QuickSight dashboard provided in this lab requires all the fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) are required. If you already have enabled VPC Flow logs with those fields (with CSV format, Hive partition enabled and delivered to S3) then you can skip this section and proceed to "**Create Athena resources, Lambda function and CloudWatch rule**" section to continue. If you do not have VPC flow logs enabled or existing VPC Flow logs does not have all the required fields then this section will help you in enabling vpc flow logs for existing VPC(s) in your account. Repeate all the steps from this section for each VPC in case you want to enable VPC Flow logs in respective account to visualize them in QuickSight dashboard under central account.
+Wait until the VPC CloudFormation stack status is CREATE_COMPLETE, then continue. This will take about four minutes.
+
+* Download the CloudFormation template: [_staticwebapp.yaml_](/Reliability/Common/Code/CloudFormation/staticwebapp.yaml)
+  * You can right-click then choose **Save link as**; or you can right click and copy the link to use with `wget`
+
+{{% common/CreateNewCloudFormationStack stackname="CloudFormationLab" templatename="staticwebapp.yaml" /%}}
+
+{{% /expand%}}
+
+### Enable VPC Flow Logs
+
+QuickSight dashboard provided in this lab requires all the fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) are required. If you already have enabled VPC Flow logs with those fields (with CSV format, Hive partition enabled and delivered to S3) then you can skip this section and proceed to ["**Create Athena resources, Lambda function and CloudWatch rule**"](../2_create_athena_lambda_cloudwatch_rule/) section to continue. If you do not have VPC flow logs enabled or existing VPC Flow logs does not have all the required fields then this section will help you in enabling vpc flow logs for existing VPC(s) in your account. Repeat all the steps from this section for each VPC in case you want to enable VPC Flow logs in respective account to visualize them in QuickSight dashboard under central account.
 
 1. Login to your central AWS account.
 
@@ -37,7 +50,7 @@ OR
 <!-- {{% /expand%}} -->
 - Download CloudFormation Template:
     - [vpc-flow-logs-custom.yaml](https://d36ux702kcm75i.cloudfront.net/vpc-flow-logs-custom.yaml) 
-        - This cloudformation template enables VPC Flow Logs in the account you run it. You will need to run it per VPC.
+        - This CloudFormation template enables VPC Flow Logs in the account you run it. You will need to run it per VPC.
 
     - From AWS Console navigate to CloudFormation. Then click on **Create stack**
     ![Images/quicksight_dashboard_dt-8.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-08.png)
@@ -48,7 +61,7 @@ OR
       3. **Click Next**
     ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
 
-3. Provide name for the stack e.g. "vpc-flow-logs-stack" and values for the stack parameters and then click **Next**
+3. Provide name for the stack e.g., "vpc-flow-logs-stack" and values for the stack parameters and then click **Next**
 
     - **TrafficType** (ACCEPT, REJECT, ALL): Type of traffic you wish to record
         - ACCEPT — The recorded traffic was permitted by the security groups and network ACLs.
@@ -63,11 +76,11 @@ OR
 
         **If you are enabling VPC Flow Logs in additional account then please make sure to modify S3 bucket's policy from the central account to grant access to additional account and provide the name of the central bucket to this parameter.**
 {{% notice note %}}
-**VpcFlowLogsBucketName** - This buket will be used to gather vpc flow logs for all of your vpcs from one or more accounts. So please make sure this is the central account where you want your VPC flow logs to be collected and QuickSight dashboard to be hosted.
+**VpcFlowLogsBucketName** - This bucket will be used to gather vpc flow logs for all of your vpcs from one or more accounts. So please make sure this is the central account where you want your VPC flow logs to be collected and QuickSight dashboard to be hosted.
 {{% /notice%}}
     - **VpcFlowLogsFilePrefix (Optional)**: VPC Flow [logfile prefix](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html#flow-logs-s3-path) in S3 bucket. See bold text in below example
 
-        **e.g.** bucket_name/<span style="color: #f92672">**vpc-flow-logs**</span>/AWSLogs/aws_account_id/vpcflowlogs/region/year/month/day/
+        **e.g.,** bucket_name/<span style="color: #f92672">**vpc-flow-logs**</span>/AWSLogs/aws_account_id/vpcflowlogs/region/year/month/day/
 
     - **VpcId**: You can find the VPC ID in [console](https://console.aws.amazon.com/vpc/home?region=us-east-1#vpcs:) 
 
@@ -98,13 +111,13 @@ We recommend you to create a life cycle policy to delete logs older than 90 days
 
 - {{%expand "Click here to see the steps to Delete older VPC Flow Logs from S3 bucket" %}}
 
-1. Login to central AWS account if you are not already in that acccount.
+1. Login to central AWS account if you are not already in that account.
 2. Navigate to S3 service from console
 3. Click on S3 bucket where you stored VPC Flow Logs and click on **Management** link.
 ![Images/qs-vpcfl-s3-0.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-s3-0.png)
 4. Click on **Create lifecycle rule**
 ![Images/qs-vpcfl-s3-1.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-s3-1.png)
-5. Enter name for the rule e.g. **90_DAY_DELETE**. You can edit the number of days based on your requirement.
+5. Enter name for the rule e.g., **90_DAY_DELETE**. You can edit the number of days based on your requirement.
     - Check **"This rule applies to all objects in the bucket"**
     - Check **"I acknowledge that this rule will apply to all the objects in the bucket."**
     - Under **"Lifecycle rule actions"** check
@@ -124,7 +137,7 @@ We recommend you to create a life cycle policy to delete logs older than 90 days
 
 - {{%expand "Click here to see the steps to enable VPC Flow logs in additional accounts" %}}
 
-##### Before you proceed to enable VPC Flow Logs in additional account, you need to grant permission to access S3 bucket(from central account) for target account’s VPC to push logs. Repeate all the steps from this section for each Account/VPC.
+##### Before you proceed to enable VPC Flow Logs in additional account, you need to grant permission to access S3 bucket(from central account) for target account’s VPC to push logs. Repeat all the steps from this section for each Account/VPC.
 
 
 Please follow below steps to edit S3 bucket policy in central account:
@@ -133,9 +146,9 @@ Please follow below steps to edit S3 bucket policy in central account:
 3. Scroll down to the bucket policy. You will see existing policy like below.
 4. Click on Edit. In the policy json find resource attribute. Add another line under resource to grant permission to store flow logs from another account you wish to. 
     
-            e.g. "arn:aws:s3:::wa-lab-vpc-flow-logs/vpc-flow-logs/AWSLogs/<New account number>/*"
+            e.g., "arn:aws:s3:::wa-lab-vpc-flow-logs/vpc-flow-logs/AWSLogs/<New account number>/*"
     
-    Note: Above is an example only. Please change it according to your bucket name, prefix and New account number with actual target account number. If Resource attribute of the policy is not an array, then you need to add any additional account in array format (as a comma separated list surrounded in square brackets)
+    Note: Above is an example only. Please change it according to your bucket name, prefix and `<New account number>` with actual target account number. If Resource attribute of the policy is not an array, then you need to add any additional account in array format (as a comma separated list surrounded in square brackets)
 5. Click on Save.
 6. Log out from central account.
 7. Repeat steps 1 thru 9 from section “**Enable VPC Flow Logs**” to enable logs in new account for desired VPC.
@@ -153,7 +166,7 @@ Please follow below steps to edit S3 bucket policy in central account:
     1. Replace `<your new account number>` with your new account number at 2 places
     2. Replace the `yyyy`,`mm`,`dd` with date for the log file at 2 places. Look into S3 bucket for files created under specific date
 
-        **Note: Navigate to S3 service and click on S3 bucket you have created to store VPC Flow Logs, to see the date and region information as shown in example image below. If you do not see any content then you may need to wait until log records are written to the bucket based on 1 or 10 minutes granularity**
+        **Note: Navigate to S3 service and click on S3 bucket you have created to store VPC Flow Logs, to see the date and region information as shown in example image below. If you do not see any content then you may need to wait until log records are written to the bucket based on 1- or 10-minutes granularity**
 
         ![images/qs-vpcfl-partitions.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-partitions.png)
         

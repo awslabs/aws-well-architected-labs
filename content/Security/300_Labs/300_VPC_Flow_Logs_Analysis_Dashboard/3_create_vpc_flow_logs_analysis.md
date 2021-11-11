@@ -12,7 +12,7 @@ To manage VPC Flow Logs and QuickSight dashboard in central account please make 
 {{% /notice %}}
 
 ### Create QuickSight Dataset and Dashboard
-We will now create the data sets in QuickSight from the Athena view and a analysis dashboard. All the steps from this section are required to execute one time in central account.
+We will now create the data sets in QuickSight from the Athena view and an analysis dashboard. All the steps from this section are required to execute one time in central account.
 
 1. Login to your central AWS account.
 
