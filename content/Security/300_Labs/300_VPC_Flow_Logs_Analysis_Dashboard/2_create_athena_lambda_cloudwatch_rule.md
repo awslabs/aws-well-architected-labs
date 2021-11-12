@@ -17,7 +17,7 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 2. Run CloudFormation stack to create Athena Database, Table, Lambda function and Cloudwatch rule.
 
  - Download CloudFormation Template:
- [vpc_athena_db_table_view_lambda.yaml](https://d36ux702kcm75i.cloudfront.net/vpc_athena_db_table_view_lambda.yaml)
+ [vpc_athena_db_table_view_lambda.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_athena_db_table_view_lambda.yaml)
 
     This cloudformation template creates
     - **Athena DataBase, an external table, VPC Flow Logs View:** To query and fetch data from S3 bucket for VPC Flow Logs.
