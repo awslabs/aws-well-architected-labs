@@ -12,7 +12,7 @@ hidden: false
 ## Introduction
 VPC Flow Logs enables you to capture information about the IP traffic going to and from network interfaces in your VPC. The VPC Flow Logs Analysis Dashboard is an interactive, customizable and accessible QuickSight dashboard to help customers gain insights into traffic details of VPC in a graphical way. 
 
-Dashboard depends on all the fields below and required in VPC Flow Logs that are stored in S3:
+The dashboard depends on all the fields below. Therefore all of these fields are required in the VPC Flow Logs that are stored in S3:
 - version, account-id, interface-id, srcaddr, dstaddr, srcport, dstport, protocol, packets, bytes, start, end, action, log-status, vpc-id, az-id, instance-id, pkt-srcaddr, pkt-dstaddr, region, subnet-id, sublocation-id, sublocation-type, tcp-flags, type, flow-direction, pkt-dst-aws-service, pkt-src-aws-service, traffic-path
 
 This dashboard contains breakdowns with the following visuals. Available views are Summary, Details by daily, Minutes level granularity, and Enhanced view:
