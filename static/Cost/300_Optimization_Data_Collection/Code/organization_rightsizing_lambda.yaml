@@ -240,7 +240,7 @@ Resources:
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688
-      Timeout: 300
+      Timeout: 600
       Role:
         Fn::GetAtt:
           - RightsizingLambdaRole
