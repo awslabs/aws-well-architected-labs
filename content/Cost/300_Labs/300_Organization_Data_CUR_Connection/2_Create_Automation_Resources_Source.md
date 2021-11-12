@@ -145,14 +145,14 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
             return full_result
 
         def get_acc_ids(parent_id,  client):
-        full_result = []
-        paginator = client.get_paginator('list_accounts_for_parent')
-        iterator  = paginator.paginate(ParentId=parent_id)
-        for page in iterator:
-            for acc in page['Accounts']:
-            print(acc['Id'])
-            full_result.append(acc['Id'])
-        return full_result
+            full_result = []
+            paginator = client.get_paginator('list_accounts_for_parent')
+            iterator  = paginator.paginate(ParentId=parent_id)
+            for page in iterator:
+                for acc in page['Accounts']:
+                print(acc['Id'])
+                full_result.append(acc['Id'])
+            return full_result
 
 
     </details>
