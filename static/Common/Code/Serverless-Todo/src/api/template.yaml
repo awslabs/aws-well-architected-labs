@@ -171,7 +171,7 @@ Resources:
       CodeUri: create
       Handler: app.handler
       MemorySize: 512
-      Runtime: python3.7
+      Runtime: python3.9
       Tags:
         Name: TodoApp
       Timeout: 60
@@ -202,7 +202,7 @@ Resources:
       CodeUri: read
       Handler: app.handler
       MemorySize: 512
-      Runtime: python3.7
+      Runtime: python3.9
       Tags:
         Name: TodoApp
       Timeout: 60
@@ -229,7 +229,7 @@ Resources:
       CodeUri: delete
       Handler: app.handler
       MemorySize: 512
-      Runtime: python3.7
+      Runtime: python3.9
       Tags:
         Name: TodoApp
       Timeout: 60
@@ -256,7 +256,7 @@ Resources:
       CodeUri: update
       Handler: app.handler
       MemorySize: 512
-      Runtime: python3.7
+      Runtime: python3.9
       Tags:
         Name: TodoApp
       Timeout: 60

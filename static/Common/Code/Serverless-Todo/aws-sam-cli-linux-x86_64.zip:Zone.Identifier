@@ -1,3 +1,0 @@
-[ZoneTransfer]
-ZoneId=3
-HostUrl=https://github-releases.githubusercontent.com/92205085/b3599d47-a6c5-463e-a96f-fcc79f95aa36?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211112T035744Z&X-Amz-Expires=300&X-Amz-Signature=8f54a34d6a383e95cc95e8147cb70c1043aaac8c0fa6aee7e07db5627d0b1a93&X-Amz-SignedHeaders=host&actor_id=3674210&key_id=0&repo_id=92205085&response-content-disposition=attachment%3B%20filename%3Daws-sam-cli-linux-x86_64.zip&response-content-type=application%2Foctet-stream
