@@ -6,7 +6,7 @@ Metadata:
     - Label:
         default: 'Deployment parameters'
       Parameters:
-        - OptimizationAccountID
+        - CostAccountID
     - Label:
         default: 'Available modules'
       Parameters:
@@ -17,8 +17,8 @@ Metadata:
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
     ParameterLabels:
-      OptimizationAccountID:
-        default: 'Optimization Account Id'
+      CostAccountID:
+        default: 'Cost Account Id'
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -32,7 +32,7 @@ Metadata:
       IncludeRDSUtilizationModule:
         default: 'Include RDS Utilization Data Collection Module'    
 Parameters:
-  OptimizationAccountID:
+  CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
   IncludeTAModule:
@@ -110,7 +110,7 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                -  !Sub "arn:aws:iam::${OptimizationAccountID}:root"
+                -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute

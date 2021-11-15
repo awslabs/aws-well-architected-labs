@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Deploys a role to management account so we can assume to read data using a lambda 
 Parameters:
-  OptimizationAccountID:
+  CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
 Outputs:
@@ -24,7 +24,7 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                -  !Sub "arn:aws:iam::${OptimizationAccountID}:root"
+                -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute

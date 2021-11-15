@@ -14,7 +14,7 @@ Some of the data needed for the modules is in the **Management account** we will
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
-3. In the Parameters section use the Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **OptimizationAccountID** 
+3. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID** 
 
 4. Scroll to the bottom and click **Next**
 
@@ -42,7 +42,7 @@ Modules deployed in **OptimizationDataCollectionStack** (previous step) allow to
 
 5. Choose **Template is ready** and **Upload a template file** and upload the optimisation_read_only_role.yaml file you downloaded from above. Click **Next**.
 
-6. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **OptimizationAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
+6. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
 
 ![Images/SS_param.png](/Cost/300_Optimization_Data_Collection/Images/SS_param.png)
 
