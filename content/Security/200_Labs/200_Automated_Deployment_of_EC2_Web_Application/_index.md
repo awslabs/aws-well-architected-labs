@@ -21,7 +21,7 @@ This lab will create the web application and all components using the example Cl
 * Auto scaling group of web instances
 * A role attached to the auto-scaled instances allows temporary security credentials to be used
 * Instances use Systems Manager instead of SSH for administration
-* Amazon Aurora serverless datbase cluster
+* Amazon Aurora serverless database cluster
 * Secrets manager secret for database cluster
 * AWS Key Management Service is used for key management of Aurora database
 * Security groups for load balancer and web instances to restrict network traffic

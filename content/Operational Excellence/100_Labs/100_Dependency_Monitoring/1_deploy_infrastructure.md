@@ -49,6 +49,7 @@ You will use AWS CloudFormation to provision resources that will emulate the wor
 1. Click **Next**
 1. For **Stack name** use `Dependency-Monitoring-Lab`
 1. **Parameters**
+    * **AvailabilityZone** - select one of the availability zones from the list
     * **BucketName** - enter a name for the S3 bucket that will be created as part of the lab. Amazon S3 bucket names are globally unique, and the namespace is shared by all AWS accounts, so make sure you name the bucket as uniquely as possible. For example - `wa-lab-<your last name>-<date><time>`.
     * **LatestAmiId** - leave the default value here. This will ensure that CloudFormation will retrieve the latest Amazon Linux AMI for the region you are launching the stack in.
     * **NotificationEmail** - specify an email address that you have access to. This is the email address that notifications related to the dependent service will be sent to.

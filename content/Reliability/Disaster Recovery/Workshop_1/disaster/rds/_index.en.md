@@ -6,6 +6,11 @@ weight = 2
 
 ### Restore RDS Database
 
+{{% notice info %}}
+If you are running this workshop as part of an instructor led workshop, the RDS has already been restored to the **N. California (us-west-1)** region due to time constraints.  **Please review the steps in this section so you understand how the restore should work and then continue with the Configure Security Group Section below**.
+{{% /notice  %}}
+
+
 1.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 1.2 Click the **Backup Vaults** link, then click the **Default** link.
@@ -22,7 +27,7 @@ If you don't see your backup, check the status of the **Copy Job**. Click [AWS B
 
 {{< img BK-26.png >}}
 
-1.4 In the **Settings** section, enter `backupandrestore-secondary-region` as the **DB Instance Identifier**. Under **Network & Security** section, select **us-west-1a** as the **Availability zone**.
+1.4 In the **Settings** section, enter `backupandrestore-secondary-region` as the **DB Instance Identifier**. Under **Network & Security** section, select **us-west-xx** as the **Availability zone**.
 
 {{< img RS-18.png >}}
 
@@ -42,11 +47,11 @@ If you don't see your backup, check the status of the **Copy Job**. Click [AWS B
 
 {{< img RS-24.png >}}
 
-2.4 in the **Inbound Rules** section, click the **Add rule** button.  Select **MYSQL/Aurora** as the **Type**.  Select **Customer** as the **Source** and choose **backupandrestore-us-west-ec2-SG**.  This will allow the communication between your EC2 instance and your RDS instance. Click the **Create security group** button.
+2.4 in the **Inbound Rules** section, click the **Add rule** button.  Select **MYSQL/Aurora** as the **Type**.  Select **Custom** as the **Source** and choose **backupandrestore-us-west-ec2-SG**.  This will allow the communication between your EC2 instance and your RDS instance. Click the **Create security group** button.
 
 {{< img RS-40.png >}}
 
-### Modify RDS Security Group
+### Modify RDS 
 
 3.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

@@ -22,19 +22,23 @@ weight = 1
 
 {{< img RS-8.png >}}
 
-1.6 Select **BackupRestore-S3InstanceProfile-xxxx** as the **IAM Role**, then click the **Next: Add Storage** button.
+1.6 Select **BackupAndRestore-S3InstanceProfile-xxxx** as the **IAM Role**, then click the **Next: Add Storage** button.
 
 {{< img rs-9.png >}}
 
-1.7 Click the **Next: Add tags** button and click the **Next: Configure Security Group** button.
+1.7 Click the **Next: Add tags** button.
 
-1.8 Select **Create a new security group** and enter `backupandrestore-us-west-ec2-SG` as the **Security group name** and **Description**.  Add the rules as shown by clicking the **Add Rule** button.  (Click on image to enlarge) Click the **Review and Launch** button.
+1.8 Add `Name` as the **Key** and `BackupAndRestoreSecondary` as the **Value**, then click the **Next: Configure Security Group** button.
+
+{{< img rs-10.png >}}
+
+1.9 Select **Create a new security group** and enter `backupandrestore-us-west-ec2-SG` as the **Security group name** and **Description**.  Add the rules as shown by clicking the **Add Rule** button.  (Click on image to enlarge) Click the **Review and Launch** button.
 
 {{< img ss-3.png >}}
 
-1.9 Click the **Launch** button.
+1.10 Click the **Launch** button.
 
-1.10 Select **Proceed without a key pair**, enable the **I acknowledge that without a key pair,...** checkbox, then click the **Launch Instances** button.
+1.11 Select **Proceed without a key pair**, enable the **I acknowledge that without a key pair,...** checkbox, then click the **Launch Instances** button.
 
 {{< img RS-15.png >}}
 

@@ -108,10 +108,9 @@ Parameters:
   
   CodeBucket:
     Type: String
-    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region. The Default is in Oregon
+    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region.
     AllowedValues:
       - aws-well-architected-labs-ireland
-      - aws-well-architected-labs
       - aws-well-architected-labs-ohio
       - aws-well-architected-labs-virginia
       - aws-well-architected-labs-california

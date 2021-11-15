@@ -1,0 +1,21 @@
+Resources:
+  App:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: todoApp
+      Tags:
+        - Key: Name
+          Value: TodoApp
+
+  Branch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !Sub "${App.AppId}"
+      BranchName: prod
+
+Outputs:
+  AppId:
+    Value: !Sub "${App.AppId}"
+
+  DefaultDomain:
+    Value: !Sub "https://prod.${App.DefaultDomain}"
