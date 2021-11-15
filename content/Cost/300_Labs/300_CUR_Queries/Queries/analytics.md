@@ -239,6 +239,7 @@ FROM
 WHERE
   ${date_filter}
   AND product_product_name in ('Amazon Elasticsearch Service' ,'Amazon OpenSearch Service')
+  AND line_item_product_code = 'AmazonES'
   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY
   bill_payer_account_id,
