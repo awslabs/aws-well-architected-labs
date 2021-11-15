@@ -176,17 +176,14 @@ Note : Application resources must be deployed using CloudFormation and properly 
 
   ![Section4 ](/Operations/200_Automating_operations_with_playbooks_and_runbooks/Images/section4-create-automation-addstep.png)
 
-
-{{%expand "Code"%}}
-
   ```
-  import json
-  import re
-  from datetime import datetime
-  import boto3
-  import os
+    import json
+    import re
+    from datetime import datetime
+    import boto3
+    import os
 
-  def arn_deconstruct(arn):
+    def arn_deconstruct(arn):
     arnlist = arn.split(":")
     service=arnlist[2]
     region=arnlist[3]
@@ -201,11 +198,11 @@ Note : Application resources must be deployed using CloudFormation and properly 
       "Name": name
     }
 
-  def locate_alarm_source(alarm):
+    def locate_alarm_source(alarm):
     cwclient = boto3.client('cloudwatch', region_name = alarm['Region'] )
     alarm_source = {}
     alarm_detail = cwclient.describe_alarms(AlarmNames=[alarm['Name']])  
-    
+
     if len(alarm_detail['MetricAlarms']) > 0:
       metric_alarm = alarm_detail['MetricAlarms'][0]
       namespace = metric_alarm['Namespace']
@@ -225,7 +222,7 @@ Note : Application resources must be deployed using CloudFormation and properly 
       result = alarm_source
       return result
 
-  def locate_canary_endpoint(canaryname,region):
+    def locate_canary_endpoint(canaryname,region):
     result = None
     synclient = boto3.client('synthetics', region_name = region )
     res = synclient.get_canary(Name=canaryname)
@@ -237,7 +234,7 @@ Note : Application resources must be deployed using CloudFormation and properly 
     return result
 
 
-  def locate_app_tag_value(resource):
+    def locate_app_tag_value(resource):
     result = None
     if resource['Type'] == 'CloudWatchSynthetics':
       synclient = boto3.client('synthetics', region_name = resource['Region'] )
@@ -249,9 +246,9 @@ Note : Application resources must be deployed using CloudFormation and properly 
           result = apptag_val
     return result
 
-  def locate_app_resources_by_tag(tag,region):
+    def locate_app_resources_by_tag(tag,region):
     result = None
-    
+
     # Search CloufFormation Stacks for tag
     cfnclient = boto3.client('cloudformation', region_name = region )
     list = cfnclient.list_stacks(StackStatusFilter=['CREATE_COMPLETE','ROLLBACK_COMPLETE','UPDATE_COMPLETE','UPDATE_ROLLBACK_COMPLETE','IMPORT_COMPLETE','IMPORT_ROLLBACK_COMPLETE']  )
@@ -273,9 +270,9 @@ Note : Application resources must be deployed using CloudFormation and properly 
                 }
               )
             result =  app_resources_list
-    
+
     return result
-  def script_handler(event, context):
+    def script_handler(event, context):
     result = {}
     arn = event['CloudWatchAlarmARN']
     alarm = arn_deconstruct(arn)
@@ -283,7 +280,7 @@ Note : Application resources must be deployed using CloudFormation and properly 
 
     alarm_source = locate_alarm_source(alarm) # Identify Alarm Source
     tag_value = locate_app_tag_value(alarm_source) #Identify tag from source
-    
+
     if alarm_source['Type'] == 'CloudWatchSynthetics':
       endpoint = locate_canary_endpoint(alarm_source['Name'],alarm_source['Region'])
       result['CanaryEndpoint'] = endpoint
@@ -291,11 +288,9 @@ Note : Application resources must be deployed using CloudFormation and properly 
     # Locate cloudformation with tag
     resources = locate_app_resources_by_tag(tag_value,alarm['Region'])
     result['ApplicationStackResources'] = json.dumps(resources) 
-    
+
     return result
   ```
-{{%/expand%}}
-
 
   8. Under **Additional inputs** specify the input value to the step, passing in the parameter we created previously. To do this, specify below values:
   
