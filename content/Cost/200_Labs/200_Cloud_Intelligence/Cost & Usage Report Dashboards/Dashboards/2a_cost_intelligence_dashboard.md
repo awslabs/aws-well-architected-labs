@@ -346,11 +346,11 @@ The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-sampl
 
 
 ### Option 3: CloudFormation Deployment
-This section is **optional** and automates the creation of the Cost Intelligence Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates, create an IAM role, create an S3 Bucket, and create an Athena Database. **If you do not have the required permissions use the Manual Deployment**. 
+This section is **optional** and automates the creation of the Cost Intelligence Dashboard and CUDOS Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
-**NOTE:** An IAM role and a new Athena Datasource will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
+**NOTE:** An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
     ------------ | -------------
 
 ### Create the Cost Intelligence Dashboard using a CloudFormation Template
@@ -359,66 +359,84 @@ This section is **optional** and automates the creation of the Cost Intelligence
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https%3A%2F%2Fee-assets-prod-us-east-1.s3.amazonaws.com%2Fmodules%2F8cf0b70c5c7a489ebe4e957c2f32bb67%2Fv2%2FQuickSightCurReportAutomation.yml)
+	- [Launch CloudFormation Template](https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200_Cloud_Intelligence_Dashboards%09/cid_cudos.yaml)
 	
-![Images/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_2.png)
+![Images/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_2.png?classes=lab_picture_small)
 
 3. Enter a **Stack name** for your template such as **Cost-Intelligence-Dashboard-QuickSight**
-![Images/cf_dash_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_3.png)
+![Images/cf_dash_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_3.png?classes=lab_picture_small)
 
 4. Review **1stReadMe** parameter to confirm prerequisites before specifying the other parameters
-![Images/cf_dash_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_4.png)
+![Images/cf_dash_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_4.png?classes=lab_picture_small)
 
-5. Validate your Athena primary workgroup has an output location 
+5. Update your **AthenaQueryResultsBucket** with the Athena results location where your CUR table is
+![Images/cf_dash_4_1.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_4_1.png?classes=lab_picture_small)
+To validate your Athena primary workgroup has an output location by  
 	- Open a new tab or window and navigate to the **Athena** console
 	- Select **Workgroup: primary**
-![Images/cf_dash_athena_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_2.png)
+![Images/cf_dash_athena_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_2.png?classes=lab_picture_small)
 	- Click the bubble next to **primary** and then select view **detail**
-![Images/cf_dash_athena_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_3.png)
+![Images/cf_dash_athena_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_3.png?classes=lab_picture_small)
 	- Confirm your **Query result location** is configured with an S3 bucket path. 
-		- If configured, **continue to step 6**. 
+		- If configured, add the location to the **AthenaQueryResultsBucket** in your CloudFormation Template.
 		- If not configured, continue to setting up by clicking **Edit workgroup**
-![Images/cf_dash_athena_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_4.png)
+![Images/cf_dash_athena_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_4.png?classes=lab_picture_small)
 	- Add the **S3 bucket path** you have selected for your Query result location and click save
-![Images/cf_dash_athena_5.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_5.png)
+![Images/cf_dash_athena_5.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_5.png?classes=lab_picture_small)
+	- Add the location to the **AthenaQueryResultsBucket** in your CloudFormation Template. 
+
 
 6. Update your **BucketFolderPath** with the S3 path where your **year partitions of CUR data** are stored
-![Images/cf_dash_6.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_6.png)
+![Images/cf_dash_6.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_6.png?classes=lab_picture_small)
 To validate the correct path for your year partitions of the CUR data follow the tasks below:
 	- Open a new tab or window and navigate to the **S3** console
 	- Select the S3 Bucket your CUR is located in
-![Images/cf_dash_s3_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_s3_2.png)	
+![Images/cf_dash_s3_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_s3_2.png?classes=lab_picture_small)	
 	- Navigate your folders until you find the folder with the **year partitions of the CUR**
-![Images/cf_dash_s3_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_s3_3.png)	
+![Images/cf_dash_s3_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_s3_3.png?classes=lab_picture_small)	
 		- Tip: Your yearly partitions folder is located in the folder with your .yml file, monthly folders, and status report
 	- Add the identified BucketFolderPath to the CloudFormation parameter making sure to **not add trailing /**  (eg - BucketName/FolderName/.../FolderName)	
 		- Tip: copy and paste the **S3 URI** then **remove the leading 's3://' and the ending '/'**
 
-7. Update your **QuickSightUser** with your **QuickSight username** 
-![Images/cf_dash_7.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_7.png)
+7. Update your **CURDatabaseName** and **CURTableName** with the name of the CUR Athena Database and Table
+![Images/cf_dash_6_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_6_2.png?classes=lab_picture_small)
+To validate the Athena Database and Table of the CUR data follow the tasks below:
+	- Open a new tab or window and navigate to the **Glue** console
+	- Select the Athena Table your CUR is located in
+![Images/cf_dash_glue_1.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_glue_1.png?classes=lab_picture_small)	
+	- Find your Database **CURDatabaseName** and Table **CURTableName** 
+![Images/cf_dash_glue_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_glue_2.png?classes=lab_picture_small)
+	- Add the identified CURDatabaseName and CURTableName to the CloudFormation parameter
+
+8. Update your **QuickSightUser** with your **QuickSight username** 
+![Images/cf_dash_7.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_7.png?classes=lab_picture_small)
 To validate your QuickSight complete the tasks below:
 	- Open a new tab or window and navigate to the **QuickSight** console
-	- Click on the **profile icon** in the top right side of the navigation bar, then select **Manage QuickSight**
-![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png)
-	- Locate your username in the **manage users** section 
-![Images/cf_dash_qs_3.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_3.png)
+	- Find your username in the top right navigation bar
+![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
+	- Add the identified username to the CloudFormation parameter
+	
+8. Update your **QuicksightIdentityRegion** with your **QuickSight region** 
+![Images/cf_dash_8.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_8.png?classes=lab_picture_small)
 
-8. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+	- **Optional** add a **Suffix** if you want to create multiple instances of the same account. 
 
-9. Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png)
+9. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-10. You will see the stack will start in **CREATE_IN_PROGRESS**
-![Images/cf_dash_10.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_10.png)
+10. Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
+
+11. You will see the stack will start in **CREATE_IN_PROGRESS** 
+![Images/cf_dash_10.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_10.png?classes=lab_picture_small)
 
 **NOTE:** This step can take 5-15mins
     ------------ | -------------
 
-11. Once complete, the stack will show **CREATE_COMPLETE**
-![Images/cf_dash_11.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_11.png)
+12. Once complete, the stack will show **CREATE_COMPLETE**
+![Images/cf_dash_11.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_11.png?classes=lab_picture_small)
 
-12. Navigate to **Dashboards** page in your QuickSight console, click on your **Dashboard name**
-![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png)
+13. Navigate to **Dashboards** page in your QuickSight console, click on your **Cost Intelligence Dashboard name** or your **CUDOS Dashboard name**
+![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png?classes=lab_picture_small)
 
 ### Creating your Account Mapping
 
