@@ -164,10 +164,10 @@ Do you want to give access to the dashboards to someone within your organization
 Create a CSV file that looks something like this:
 
 	username,account_id
-	holborn@amazon.co.uk,"123456123456"
-	holborn@amazon.co.uk,"987654987654"
-	frpas@amazon.fr,"123456123456"
-	aaredell@amazon.com,"789123456123"
+	user1@amazon.co.uk,"123456123456"
+	user1@amazon.co.uk,"987654987654"
+	user2@amazon.fr,"123456123456"
+	user3@amazon.com,"789123456123"
 
 Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Create a separate row for a single username having access to multiple account IDs. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
 
