@@ -359,7 +359,7 @@ This section is **optional** and automates the creation of the Cost Intelligence
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200_Cloud_Intelligence_Dashboards%09/cid_cudos.yaml)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cid_cudos.yaml)
 	
 ![Images/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_2.png?classes=lab_picture_small)
 
