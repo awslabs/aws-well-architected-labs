@@ -140,8 +140,9 @@ Outputs:
         - ','
         - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-          - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          #- !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals 
     - !Ref IncludeTAModule
@@ -182,6 +183,15 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function: !Sub "arn:aws:lambda:eu-west-1:${AWS::AccountId}:function:Compute-Optimizer-Crawler-Lambda-Function"
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value: Compute_Optimizer/
   ComputeOptimizerBucketPolicy:
     Condition: DeployComputeOptimizerModule
     Type: AWS::S3::BucketPolicy
@@ -202,9 +212,9 @@ Resources:
             Resource: !Sub "${S3Bucket.Arn}/*"
             Principal: {"Service": "compute-optimizer.amazonaws.com"}
             Condition: {"StringEquals": {
-                    "s3:x-amz-acl": "bucket-owner-full-control",
-                    "aws:SourceAccount": "${ManagementAccountID}",
-                    "aws:SourceArn": "arn:aws:compute-optimizer:eu-west-1:${ManagementAccountID}:*"
+                    "s3:x-amz-acl":  "bucket-owner-full-control",
+                    "aws:SourceAccount": !Sub "${ManagementAccountID}",
+                    "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
                 }
             }
   GlueRole:
@@ -276,7 +286,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer2.yaml"
       TimeoutInMinutes: 2
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -330,7 +340,7 @@ Resources:
                 - ','
                 - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-                  - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  #- !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
   

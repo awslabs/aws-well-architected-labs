@@ -16,6 +16,10 @@ Parameters:
     Type: String
     Description: The name of what this cf is doing.
     Default: ComputeOptimizer
+  Schedule:
+    Type: String
+    Description: Cron job to trigger the lambda using cloudwatch event
+    Default: "rate(14 days)"
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
@@ -37,7 +41,7 @@ Parameters:
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/coc.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/coc2.zip
   Prefix:
     Type: String
     Description: Service which the data collector is looking at
@@ -57,9 +61,12 @@ Outputs:
        Fn::GetAtt:
         - LambdaFunction
         - Arn
-  SQSUrl:
-    Description: TaskQueue URL the account collector lambda
-    Value: !Ref TaskQueue
+  CrawlerFunctionARN:
+    Description: Crawler Lambda Arn
+    Value: 
+       Fn::GetAtt:
+        - CrawlerFunction
+        - Arn
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
@@ -164,6 +171,108 @@ Resources:
             Ref: LambdaCrawler
           PREFIX:
             Ref: Prefix
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: !Sub "Scheduler-For-${Prefix}"
+      Name: !Sub "Scheduler-For-${Prefix}"
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - LambdaFunction
+              - Arn
+          Id: TriggerForGetAccounts
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  CrawlerFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "Compute-Optimizer-Crawler-Lambda-Function"
+      Description: "LambdaFunction to retrieve start CO Crawlers"
+      Runtime: python3.8
+      Code:
+        ZipFile: |
+          import boto3
+          import logging
+          import os
+
+          def lambda_handler(event, context):
+              glue_client = boto3.client('glue')
+              crawlers = [os.environ["EC2Crawler"], os.environ["AUTOCrawler"],os.environ["EBSCrawler"],os.environ["LambdaCrawler"] ]
+
+              for crawler in crawlers:
+                  try:
+                      glue_client.start_crawler(Name=crawler)
+                  except Exception as e:
+                      # Send some context about this error to Lambda Logs
+                      logging.warning("%s" % e)
+
+      Handler: 'start_crawler.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - CrawlerLambdaIAMRole
+          - Arn
+      Environment:
+        Variables:
+          EC2Crawler:
+            Ref: EC2Crawler
+          AUTOCrawler:
+            Ref: AUTOCrawler
+          EBSCrawler:
+            Ref: EBSCrawler
+          LambdaCrawler:
+            Ref: LambdaCrawler 
+  CrawlerLambdaIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetBucketNotification'
+                  - 's3:PutBucketNotification'
+                Resource: !Sub 'arn:aws:s3:::${DestinationBucket}'
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - "glue:StartCrawler"
+                Resource: '*'
+  LambdaCrawlerInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt CrawlerFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${DestinationBucket}'
   EC2Crawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -200,27 +309,6 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_lambda"
-  EventPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
-      Action: lambda:InvokeFunction
-      Principal: sqs.amazonaws.com
-      SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
-    Type: AWS::SQS::Queue
-    Properties: 
-      VisibilityTimeout: 300
-      ReceiveMessageWaitTimeSeconds: 20
-      DelaySeconds: 2
-      KmsMasterKeyId: "alias/aws/sqs"
-  EventSourceMappingECS:
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      EventSourceArn: !GetAtt TaskQueue.Arn
-      FunctionName: !GetAtt LambdaFunction.Arn
-
   EC2AthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
