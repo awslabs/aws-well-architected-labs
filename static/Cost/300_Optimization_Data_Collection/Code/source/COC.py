@@ -13,7 +13,7 @@ def get_ec2_instance_recommendations(client, year, month):
             includeMemberAccounts=True,
             s3DestinationConfig={
                 'bucket': S3BucketName,
-                'keyPrefix': f'Compute_Optimizer_EC2/year={year}/month={month}'
+                'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_EC2/year={year}/month={month}'
                 }
         )
         print('EC2 instances Report created')
@@ -29,7 +29,7 @@ def get_auto_scaling_group_recommendations(client, year, month):
             includeMemberAccounts=True,
             s3DestinationConfig={
                 'bucket': S3BucketName,
-                'keyPrefix': f'Compute_Optimizer_Auto_Scaling_Groups/year={year}/month={month}'
+                'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_Auto_Scaling_Groups/year={year}/month={month}'
                 }
         )
         print('ASG instances Report created')
@@ -44,7 +44,7 @@ def get_lambda_function_recommendations(client, year, month):
             includeMemberAccounts=True,
             s3DestinationConfig={
                 'bucket': S3BucketName,
-                'keyPrefix': f'Compute_Optimizer_Lambda/year={year}/month={month}'
+                'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_Lambda/year={year}/month={month}'
                 }
         )
         print('Lamda instances Report created')
@@ -59,7 +59,7 @@ def get_ebs_volume_recommendations(client, year, month):
             includeMemberAccounts=True,
             s3DestinationConfig={
                 'bucket': S3BucketName,
-                'keyPrefix': f'Compute_Optimizer_EBS/year={year}/month={month}'
+                'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_EBS/year={year}/month={month}'
                 }
         )
         print('EBS instances Report created')

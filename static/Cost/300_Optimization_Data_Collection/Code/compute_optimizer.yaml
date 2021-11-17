@@ -215,7 +215,7 @@ Resources:
                       # Send some context about this error to Lambda Logs
                       logging.warning("%s" % e)
 
-      Handler: 'start_crawler.lambda_handler'
+      Handler: 'index.lambda_handler'
       MemorySize: 2688
       Timeout: 300
       Role:
