@@ -282,6 +282,8 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_ec2_instance"
+            Exclusions:
+              - "**.json"
   AUTOCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -291,6 +293,8 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_auto_scale"
+            Exclusions:
+              - "**.json"
   EBSCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -300,6 +304,8 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_ebs_volume"
+            Exclusions:
+              - "**.json"
   LambdaCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -309,6 +315,8 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_lambda"
+            Exclusions:
+              - "**.json"
   EC2AthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:

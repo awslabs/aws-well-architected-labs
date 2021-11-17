@@ -282,7 +282,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer2.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
