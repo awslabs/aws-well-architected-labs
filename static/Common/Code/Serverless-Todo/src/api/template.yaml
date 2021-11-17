@@ -1,0 +1,283 @@
+Transform: AWS::Serverless-2016-10-31
+Description: |
+  API for Todo MVC App
+
+Resources:
+  APIKey:
+    Type: AWS::KMS::Key
+    Properties:
+      PendingWindowInDays: 7
+      KeyPolicy:
+        Version: '2012-10-17'
+        Id: root
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'kms:*'
+            Resource: '*'
+      Tags:
+        - Key: Name
+          Value: TodoApp
+
+  CreateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId: !Ref APIKey
+      # Keep messages for 10 min
+      MessageRetentionPeriod: 600
+      VisibilityTimeout: 240
+      Tags:    
+        - Key: Name
+          Value: TodoApp
+
+  SendToSQSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ apigateway.amazonaws.com ]
+            Action: [ sts:AssumeRole ]
+      Description: Allows API Gateway to send a message to SQS
+      Policies:
+        - PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Resource: !Sub "${CreateQueue.Arn}"
+                Action: [ sqs:SendMessage ]
+              - Effect: Allow
+                Resource: !Sub "${APIKey.Arn}"
+                Action: 
+                  - kms:GenerateDataKey
+                  - kms:Decrypt
+          PolicyName: SendToSQS
+      Tags:
+        - Key: Name
+          Value: TodoApp
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: todo_id
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: todo_id
+          AttributeType: S
+      SSESpecification:
+        KMSMasterKeyId: !Ref APIKey
+        SSEEnabled: true
+        SSEType: KMS
+      Tags:
+        - Key: Name
+          Value: TodoApp
+
+  API:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: TodoApp
+      EndpointConfiguration: REGIONAL
+      StageName: Prod
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders:
+          "'Content-Type,Authorization,X-Amz-Date'"
+        MaxAge: "'600'"
+      DefinitionBody:
+        swagger: "2.0"
+        paths:
+          "/":
+            # post:
+            #   x-amazon-apigateway-integration:
+            #     uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateFunction.Arn}/invocations"
+            #     httpMethod: "POST"
+            #     type: "aws_proxy"
+            post:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Methods:
+                      type: "string"
+                    Access-Control-Allow-Headers:
+                      type: "string"
+              x-amazon-apigateway-integration:
+                credentials: !Sub "${SendToSQSRole.Arn}"
+                uri: !Sub "arn:aws:apigateway:eu-west-1:sqs:path/${AWS::AccountId}/${CreateQueue.QueueName}"
+                responses:
+                  "200":
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Methods: "'*'"
+                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+                      method.response.header.Access-Control-Allow-Origin: "'*'"
+                    responseTemplates:
+                      application/json: "{\"todo_id\": $input.json(\"$.SendMessageResponse.SendMessageResult.MessageId\")}"
+                requestParameters:
+                  integration.request.header.Content-Type: "'application/x-www-form-urlencoded'"
+                requestTemplates:
+                  application/json: "Action=SendMessage&MessageBody=$input.body"
+                passthroughBehavior: "never"
+                httpMethod: "POST"
+                type: "aws"
+            get:
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReadFunction.Arn}/invocations"
+                httpMethod: "POST"
+                type: "aws_proxy"
+          "/{id}":
+            delete:
+              parameters:
+                - name: id
+                  in: path
+                  required: true
+                  type: string
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteFunction.Arn}/invocations"
+                httpMethod: "POST"
+                type: "aws_proxy"
+            post:
+              parameters:
+                - name: id
+                  in: path
+                  required: true
+                  type: string
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateFunction.Arn}/invocations"
+                httpMethod: "POST"
+                type: "aws_proxy"
+        definitions:
+          Empty:
+            type: "object"
+            title: "Empty Schema"
+            
+  CreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: create
+      Handler: app.handler
+      MemorySize: 512
+      Runtime: python3.9
+      Tags:
+        Name: TodoApp
+      Timeout: 60
+      Tracing: Active
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref Table
+        - KMSDecryptPolicy:
+            KeyId: !Ref APIKey
+      Events:
+        # API:
+        #   Type: Api
+        #   Properties:
+        #     Method: POST
+        #     Path: /
+        #     RestApiId: !Ref API
+        SQS:
+          Type: SQS
+          Properties:
+            Queue: !Sub "${CreateQueue.Arn}"
+      Environment:
+        Variables:
+          DDB_TABLE: !Ref Table
+
+  ReadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: read
+      Handler: app.handler
+      MemorySize: 512
+      Runtime: python3.9
+      Tags:
+        Name: TodoApp
+      Timeout: 60
+      Tracing: Active
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref Table
+        - KMSDecryptPolicy:
+            KeyId: !Ref APIKey
+      Events:
+        API:
+          Type: Api
+          Properties:
+            Method: GET
+            Path: /
+            RestApiId: !Ref API
+      Environment:
+        Variables:
+          DDB_TABLE: !Ref Table
+
+  DeleteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete
+      Handler: app.handler
+      MemorySize: 512
+      Runtime: python3.9
+      Tags:
+        Name: TodoApp
+      Timeout: 60
+      Tracing: Active
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref Table
+        - KMSDecryptPolicy:
+            KeyId: !Ref APIKey
+      Events:
+        API:
+          Type: Api
+          Properties:
+            Method: DELETE
+            Path: /{id}
+            RestApiId: !Ref API
+      Environment:
+        Variables:
+          DDB_TABLE: !Ref Table
+
+  UpdateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: update
+      Handler: app.handler
+      MemorySize: 512
+      Runtime: python3.9
+      Tags:
+        Name: TodoApp
+      Timeout: 60
+      Tracing: Active
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref Table
+        - KMSDecryptPolicy:
+            KeyId: !Ref APIKey
+      Events:
+        API:
+          Type: Api
+          Properties:
+            Method: POST
+            Path: /{id}
+            RestApiId: !Ref API
+      Environment:
+        Variables:
+          DDB_TABLE: !Ref Table
+
+Outputs:
+  BaseUrl:
+    Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Description: Base URL for the API Gateway

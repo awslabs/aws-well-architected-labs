@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  AmplifyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - amplify.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
+        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+               
+  AmplifyApp:
+    Type: "AWS::Amplify::App"
+    Properties:
+      Name: oncall-health
+      Repository: 
+        Fn::ImportValue:
+          !Sub "oncall-health-repo-CloneUrlHttp"
+      Description: Oncall Health Vue App
+      EnvironmentVariables:
+         - Name: "_LIVE_UPDATES" 
+           Value: "[{\"name\":\"Amplify CLI\",\"pkg\":\"@aws-amplify/cli\",\"type\":\"npm\",\"version\":\"latest\"}]"
+      CustomRules:
+        - Status: "404-200"
+          Source: "/<*>"
+          Target: "/index.html"
+        - Status: "200"
+          Source: "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>"
+          Target: "/index.html"
+      BuildSpec: |-
+        version: 1
+        backend:
+          phases:
+            build:
+              commands:
+                - '# Execute Amplify CLI with the helper script'
+                - amplifyPush --simple
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm install
+            build:
+              commands:
+                - npm run build
+          artifacts:
+            baseDirectory: dist
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+      IAMServiceRole: !GetAtt AmplifyRole.Arn
+
+  AmplifyBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      BranchName: master
+      AppId: !GetAtt AmplifyApp.AppId
+      Description: Master Branch
+      EnableAutoBuild: true
+      EnvironmentVariables:
+        - Name: USER_BRANCH
+          Value: prod
+      Stage: PRODUCTION
+
+        
+Outputs:
+  OutputAppId:
+    Value: !GetAtt AmplifyApp.AppId
+  AppURL:
+      Description: oncall-health-sample-app URL
+      Value: !Sub
+        - "https://master.${AppId}.amplifyapp.com"
+        - AppId: !GetAtt AmplifyApp.AppId

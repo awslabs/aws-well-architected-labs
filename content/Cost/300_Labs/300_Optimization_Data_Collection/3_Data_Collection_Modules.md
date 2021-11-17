@@ -188,7 +188,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
 In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
 This Data will be separated by type service and partitioned by year, month. 
-
+Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
 
 * IAM Policy added to  **OptimizationManagementDataRoleStack**:  
 
@@ -491,6 +491,20 @@ If you are using a module connected to Account Collector the you will need to us
 8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
 ![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
 
+
+
+If you have just deployed all resources into your Management Account please see below.
+{{%expand "Deployed just into Management Account" %}}
+
+In some cases we have seen customers who have deployed all CloudFormation into just their Management Account have role access issues. If you have this issue then please do the below, if not please ignore.
+
+To fix this, all you have to do is remove/comment out the assume role parts of the Lambda code. This will be on different lines in each lambda function. 
+
+![Images/assume-role-comment.png](/Cost/300_Optimization_Data_Collection/Images/assume-role-comment.png)
+
+Once this is done you can redeploy.
+
+{{% /expand%}}
 
 {{% notice tip %}}
 If you would like to make your own modules then go to the next section to learn more on how they are made!

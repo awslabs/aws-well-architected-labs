@@ -9,15 +9,15 @@ weight: 6
 
 ### Break the application
 
-You will now introduce the poison pill into the workload by including the **bug** query-string with your requests and see how the updated workload architecture handles it. As in the previous case, imagine that customer Alpha triggered the bug in the application again.
+You will now introduce the poison pill into the workload by including the **bug** query-string with your requests and see how the updated workload architecture handles it. As in the previous case, imagine that customer **Alpha** triggered the bug in the application again.
 
-1. Include the query-string **bug** with a value of **true** and make a request as customer Alpha. The modified URL should look like this - http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha&bug=true
+1. Include the query-string **bug** with a value of **true** and make a request as customer **Alpha**. The modified URL should look like this - http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Alpha&bug=true
 1. This should result in an Internal Server Error response on the browser indicating that the application has stopped working as expected on the instance that processed this request
 
     ![PoisonPill](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/PoisonPill.png?classes=lab_picture_auto)
 
-1. Just like before, customer Alpha, not aware of this bug in the application, will retry the request. Refresh the page to simulate this as you did before. This request is routed to the other healthy instance in the shard for customer Alpha. The bug is triggered again and the other instance goes down as well. The entire shard is now affected.
-1. All requests to this shard will now fail because there are no healthy instances in the shard. No matter how many times the page is refreshed, you will see a 502 Bad Gateway for customer Alpha showing that customer Alpha is experiencing complete downtime. At this point, the overall capacity of the fleet has decresed from 4 EC2 instances to 2 EC2 instances.
+1. Just like before, customer **Alpha**, not aware of this bug in the application, will retry the request. Refresh the page to simulate this as you did before. This request is routed to the other healthy instance in the shard for customer **Alpha**. The bug is triggered again and the other instance goes down as well. The entire shard is now affected.
+1. All requests to this shard will now fail because there are no healthy instances in the shard. No matter how many times the page is refreshed, you will see a 502 Bad Gateway for customer **Alpha** showing that customer **Alpha** is experiencing complete downtime. At this point, the overall capacity of the fleet has decreased from 4 EC2 instances to 2 EC2 instances.
 
     ![502BadGateway](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/502BadGateway.png?classes=lab_picture_auto)
 
@@ -31,7 +31,7 @@ You will now introduce the poison pill into the workload by including the **bug*
     * http://shuffle-alb-8vonmf2ywl5z-682850122.us-east-1.elb.amazonaws.com/?name=Golf
     * http://shuffle-alb-8vonmf2ywl5z-682850122.us-east-1.elb.amazonaws.com/?name=Hotel
 
-1. The impact is localized to a specific shard and only customer Alpha is affected. Customers that have a shared EC2 instance with customer Alpha will only have 1 EC2 instance available to respond to requests. While this might lead to some degree of degradation for those customers, it is still an improvement over complete downtime. The scope of impact has now been reduced so that only **12.5%** of customers are affected by the failure induced by the poison pill. With larger fleet and shard sizes, the number of combinations will increase resulting in customers having different degrees of degradation i.e. some customers will only have a fraction of their overall shard capacity affected instead of complete downtime.
+2. The impact is localized to a specific shard and only customer **Alpha** experiences unavailability. Customers **Bravo** and **Hotel** that have a shared EC2 instance with customer **Alpha** will still have one EC2 instance available to respond to requests. While this might lead to some degree of degradation for those customers, it is still an improvement over complete downtime. The scope of impact has now been reduced so that only **12.5%** of customers are affected by the failure induced by the poison pill. With larger fleet and shard sizes, the number of combinations will increase resulting in customers having different degrees of degradation i.e. some customers will only have a fraction of their overall shard capacity affected instead of complete downtime.
 
     | **Customer Name** | **Workers**         |
     |-------------------|-------------------|
@@ -62,7 +62,7 @@ For example if there were 100 workers, and we assign a unique combination of 5 w
 
 ![ScopeShuffleSharding-5](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/ScopeShuffleSharding-5.png?classes=lab_picture_auto)
 
-> **With this shuffle sharded architecture, the scope of impact is further reduced by the combination of Workers used to generate shards. Here with six shards, if a customer experiences a problem, then the shard hosting them as well as the Workers mapped to that shard might be impacted. However, that shard represents only a fraction of the overall service. Since this is just a lab we kept it simple with only six shards, but with more shards, the scope of impact decreases further. Adding more shards requires adding more capacity (more workers). With higher number of Workers, it is possible to achieve a higher number of unique combinations resulting in exponential improvement of the scope of impact of failures.**
+> **With this shuffle sharded architecture, the scope of impact is further reduced by the combination of Workers used to generate shards. Here with eight shards, if a customer experiences a problem, then the shard hosting them as well as the Workers mapped to that shard might be impacted. However, that shard represents only a fraction of the overall service. Since this is just a lab we kept it simple with only eight shards, but with more shards, the scope of impact decreases further. Adding more shards requires adding more capacity (more workers). With higher number of Workers, it is possible to achieve a higher number of unique combinations resulting in exponential improvement of the scope of impact of failures.**
 
 ### Fix the application
 
@@ -70,7 +70,7 @@ Note: This is optional and does not need to be completed if you are planning on 
 
 {{%expand "Click here for instructions to fix the application:" %}}
 
-As in the previous sections, Systems Manager will be used to fix the application and return functionality to the users that are affected - Alpha, Bravo, and Charlie.
+As in the previous sections, Systems Manager will be used to fix the application and return functionality to the users that are affected - **Alpha**, **Bravo**, and **Hotel**.
 
 1. Go to the Outputs section of the CloudFormation stack and open the link for “SSMDocument”. This will take you to the Systems Manager console.
 
@@ -81,7 +81,7 @@ As in the previous sections, Systems Manager will be used to fix the application
     ![SSMRunCommand](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/SSMRunCommand.png?classes=lab_picture_auto)
 
 1. Scroll down to the **Targets** section and select **Choose instances manually**
-1. In the list of instances, check the box next to the nodes that were affected. You can identify the nodes that were impacted by looking at the table above and determining the nodes mapped to the customer that introduced the “poison pill”. If you followed instructions in this guide and introduced the poison pill as customer Alpha, check the box next to the EC2 instances with the names **Worker-1** and **Worker-2**.
+1. In the list of instances, check the box next to the nodes that were affected. You can identify the nodes that were impacted by looking at the table above and determining the nodes mapped to the customer that introduced the “poison pill”. If you followed instructions in this guide and introduced the poison pill as customer **Alpha**, check the box next to the EC2 instances with the names **Worker-1** and **Worker-2**.
 
     ![SSMNode1andNode2](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/SSMWorker1andWorker2.png?classes=lab_picture_auto)
 

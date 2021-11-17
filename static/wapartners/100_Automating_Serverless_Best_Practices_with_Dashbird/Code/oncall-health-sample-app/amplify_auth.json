@@ -1,0 +1,15 @@
+{
+   "version": 1,
+   "resourceName": "oncallhealth",  
+   "serviceConfiguration": {
+    "userPoolConfiguration":{
+        "signinMethod": "USERNAME",
+        "requiredSignupAttributes": ["EMAIL"],
+        "readAttributes":["EMAIL_VERIFIED"]
+    },
+    "includeIdentityPool": true,
+    "useDefault": "default",
+    "serviceName": "Cognito",
+    "dependsOn": []    
+  }
+}

@@ -31,9 +31,9 @@ In the scenario used in the lab, the application has a known issue which is trig
 
     Note: If you see a response that says "This site can't be reached", please make sure you are using the URL obtained from the outputs section of the CloudFormation stack and not the sample URL provided in this lab guide.
 
-1. Customer Alpha, not aware of this bug in the application, will retry the request. Refresh the page with customer Alpha's request with the **bug=true** query string to simulate this. This request is then routed to one of the 7 remaining healthy instances. The bug is triggered again and another instance goes down leaving only 6 healthy instances. This can be verified by sending requests from one of the other customers without including the query string **bug=true** and seeing responses from only 6 EC2 instances.
+1. Customer **Alpha**, not aware of this bug in the application, will retry the request. Refresh the page with customer **Alpha**'s request with the **bug=true** query string to simulate this. This request is then routed to one of the 7 remaining healthy instances. The bug is triggered again and another instance goes down leaving only 6 healthy instances. This can be verified by sending requests from one of the other customers without including the query string **bug=true** and seeing responses from only 6 EC2 instances.
 
-1. This process continues with customer Alpha retrying requests until all instances are unhealthy. Refresh the page at least 6 more times as customer Alpha with the query string **bug=true**. You will eventually see the response change to “502 Bad Gateway” because there are no healthy instances to handle requests. You can verify this by sending requests from other customers, you should see a **502 Bad Gateway** response received for all requests from all customers.
+1. This process continues with customer **Alpha** retrying requests until all instances are unhealthy. Refresh the page at least 6 more times as customer **Alpha** with the query string **bug=true**. You will eventually see the response change to “502 Bad Gateway” because there are no healthy instances to handle requests. You can verify this by sending requests from other customers, you should see a **502 Bad Gateway** response received for all requests from all customers.
 
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Bravo`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Charlie`
@@ -43,9 +43,11 @@ In the scenario used in the lab, the application has a known issue which is trig
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Golf`
     * `http://shuffle-alb-1p2xbmzo541rr-1602891463.us-east-1.elb.amazonaws.com/?name=Hotel`
 
-    This is what is known as a "retry-storm", where a customer is unknowingly making bad requests and retrying the request every time it fails because they are not aware of the bug within the application.
+    This is what is known as a "retry storm", where a customer is unknowingly making bad requests and retrying the request every time it fails because they are not aware of the bug within the application.
 
     ![502BadGateway](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/502BadGateway.png?classes=lab_picture_auto)
+
+    {{% notice tip %}}This lab will cover how to use sharding to mitigate the impact of retry storms. After the lab, also see the [AWS Well-Architected best practice **Control and limit retry calls**](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-interactions-in-a-distributed-system-to-mitigate-or-withstand-failures.html) as another practice to limit problems caused by retry storms{{% /notice %}}
 
 1. In this situation, a buggy request made by one customer has taken down all instances on the backend resulting in complete downtime and all customers are now affected. This is a widespread scope of impact with **100%** of customers affected.
 
