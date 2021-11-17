@@ -267,7 +267,7 @@ If you are running this for all accounts in a large organization we recommend ru
 	select count (distinct line_item_resource_id) 
      FROM ${table_name}
      WHERE 
-		line_item_product_code = 'AmazonEC2') 
+		line_item_product_code = 'AmazonEC2' 
 		AND line_item_line_item_type = 'Usage' 
 		AND bill_payer_account_id <> ''
 		AND line_item_usage_account_id <> ''

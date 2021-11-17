@@ -192,8 +192,8 @@ Resources:
           DataSetReferences:
             - DataSetPlaceholder: 'vpc_flow_logs_view'
               DataSetArn: !GetAtt 'VpcFlowLogsAthenaDataset.Arn'
-          Arn: 'arn:aws:quicksight:us-east-1:869004330191:template/vpc-flow-logs-analysis-enhanced-template'
-      VersionDescription: '1'
+          Arn: 'arn:aws:quicksight:us-east-1:869004330191:template/vpc-flow-logs-analysis-enhanced-template-v6'
+      VersionDescription: 'VPC Flow Logs Dashboard reInvent 2021- v6'
 Outputs:
   StackName:
     Description: 'Stack name'
