@@ -419,7 +419,7 @@ DataStackMulti
 
 ## AWS Organization Data
 This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**.
-It is not partitioned. Currnetly this data looks for tags **'Env'** This can be updated in the lambda function **Environment Variables** separated by a comer. 
+It is not partitioned. Currently this data looks for tags **'Env'** This can be updated in the lambda function **Environment Variables** separated by a comer. 
 
 * CloudFormation added to **OptimizationDataCollectionStack**:  
 
@@ -456,7 +456,6 @@ AWS Budgets allows you to set custom budgets to track your cost and usage from t
                       ManagementAccountID: !Ref ManagementAccountID
                       RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
                   TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Budgets.yaml"
-                  TimeoutInMinutes: 5
 
 * [Test your Lambda](#testing-your-deployment) 
 {{% /expand%}}
