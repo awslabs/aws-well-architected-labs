@@ -324,11 +324,12 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-EC2-summary-view
       QueryString: !Sub
-        "SELECT  accountid, instancename, instancearn, split(replace(instancearn,'"' ,''),'/')[1] as id, finding,
-          FROM ${DatabaseName}.\"compute_optimizer_ec2_instance\"
-          WHERE if((date_format(current_timestamp , '%M') = 'January'),month = '12', month = CAST ((month (now ())-1) AS VARCHAR) )
-          AND if((date_format(current_timestamp , '%M') = 'January'), year = CAST ((year (now ())-1) AS VARCHAR) ,year = CAST (year (now ()) AS VARCHAR))
-        AND finding != 'OPTIMIZED'"
+        "SELECT instancearn, split_part(replace(instancearn,'\"' ,''),'/',2) as instance_id
+        , current_onDemandPrice-recommendationOptions_1_onDemandPrice as recommendationOptions_1_Saving
+        , current_onDemandPrice-recommendationOptions_2_onDemandPrice as recommendationOptions_2_Saving
+        , current_onDemandPrice-recommendationOptions_3_onDemandPrice as recommendationOptions_3_Saving
+        , *
+        FROM optimization_data.compute_optimizer_ec2_instance "
   EBSAthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
