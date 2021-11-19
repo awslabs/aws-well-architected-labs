@@ -287,6 +287,8 @@ Resources:
             SELECT
               budgetname budget_name
             , CAST(budgetlimit.amount AS decimal) budget_amount
+            , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
+            , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
             , timeunit
             , budgettype budget_type
             , year budget_year
