@@ -74,23 +74,25 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
 ### AWS Budgets into Cost Dashboard
 
 In these labs we have a couple of amazing cost dashboards that can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/). If you would like to add your budget data into these dashboard please follow the below steps. Data must be collected and the crawler finished running before this query can be run. 
+There is a saved query called **aws_budgets** created in the CloudFormation. This is used when connecting to dashboard.
 
 1. Ensure you have budget data in your Amazon Athena table
 
-2. Create a Amazon Athena View of this data to extract the relevant information. 
+2. Create a Amazon Athena View of this data to extract the relevant information. The **costfilters** identifies if this is just an account spend budget or filtered. As this if for CUDOS we have filtered these out for the query but all budgets data is in the table. 
 
         CREATE OR REPLACE VIEW aws_budgets_view AS 
-        SELECT
-        budgetname as budget_name
-        ,cast(budgetlimit.amount as decimal) budget_amount
-        ,timeunit
-        ,budgettype as budget_type
-        ,year as budget_year
-        ,month as budget_month
-        FROM
-        "optimization_data"."budgets"
-        where budgettype = 'COST' 
-        and costfilters.service[1] is NULL
+            SELECT
+              budgetname budget_name
+            , CAST(budgetlimit.amount AS decimal) budget_amount
+            , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
+            , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
+            , timeunit
+            , budgettype budget_type
+            , year budget_year
+            , month budget_month
+            FROM
+              "optimization_data"."budgets"
+            WHERE (budgettype = 'COST')  AND costfilters.filter[1] = 'None'
 
 3. Go to the **Amazon QuickSight** service homepage
 
