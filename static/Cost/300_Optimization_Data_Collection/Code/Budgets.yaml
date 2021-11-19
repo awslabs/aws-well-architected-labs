@@ -176,18 +176,20 @@ Resources:
               account_id = os.environ['ACCOUNT_ID']
               paginator = client.get_paginator("describe_budgets") #Paginator for a large list of accounts
               response_iterator = paginator.paginate(AccountId=account_id)
-
-              with open("/tmp/data.json", "w") as f:
-                  for budgets in response_iterator:
-                      for budget in budgets['Budgets']:
-                          print(budget)
-                          if len(budget['CostFilters']) == 0:# IF null then add a none value for Crawler
-                              budget.update({'CostFilters': {'Filter': ['None']}})
-                          dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
-                          f.write(dataJSONData)
-                          f.write("\n")
-              s3_upload()
-              start_crawler()
+              try:
+                with open("/tmp/data.json", "w") as f:
+                    for budgets in response_iterator:
+                        for budget in budgets['Budgets']:
+                            print(budget)
+                            if len(budget['CostFilters']) == 0:# IF null then add a none value for Crawler
+                                budget.update({'CostFilters': {'Filter': ['None']}})
+                            dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
+                            f.write(dataJSONData)
+                            f.write("\n")
+                s3_upload()
+                start_crawler()
+              except Exception as e:
+                logging.warning(e)
 
           def s3_upload():
 
