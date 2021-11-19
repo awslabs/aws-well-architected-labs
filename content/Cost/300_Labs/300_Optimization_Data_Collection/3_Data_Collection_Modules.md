@@ -418,8 +418,10 @@ DataStackMulti
 {{%expand "AWS Organization Data Export" %}}
 
 ## AWS Organization Data
-This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**.
-It is not partitioned.
+This module will extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This data can be connected to your AWS Cost & Usage Report to enrich it or other modules in this lab. In Tags list all the tags from your Organization you would like to include **separated by a comma**.It is not partitioned. 
+
+Currently this data looks for tags **'Env'** This can be updated in the lambda function **Environment Variables** separated by a comer. 
+
 * CloudFormation added to **OptimizationDataCollectionStack**:  
 
           OrganizationData:
@@ -440,7 +442,24 @@ It is not partitioned.
 * [Test your Lambda](#testing-your-deployment) 
 {{% /expand%}}
 
+{{%expand "AWS Budgets Export" %}}
+## AWS Budgets
 
+AWS Budgets allows you to set custom budgets to track your cost and usage from the simplest to the most complex use cases. This module will export the data from all budgets so you can group together reports and combine with dashboards. This Data will be separated by type service and partitioned by year, month. This also has a saved query to create a view. 
+
+            BudgetsModule:
+                Type: AWS::CloudFormation::Stack
+                Condition: DeployBudgetsModule
+                Properties:
+                  Parameters:
+                      DestinationBucket: !Ref S3Bucket
+                      DestinationBucketARN: !GetAtt S3Bucket.Arn 
+                      ManagementAccountID: !Ref ManagementAccountID
+                      RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+                  TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Budgets.yaml"
+
+* [Test your Lambda](#testing-your-deployment) 
+{{% /expand%}}
 ## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -453,6 +472,10 @@ Once you have deployed your modules you will be able to test your Lambda functio
 3. Enter an **Event name** of **Test**, click **Create**:
 
 ![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
+
+If you are using a module connected to Account Collector the you will need to use the below json and pass in the **Replace_AccountID** you wish to test 
+      
+      {"Records": [{"messageId": "e215b689", "receiptHandle": "AQE", "body": "{"/account_id"/:"/Replace_AccountID"/, "/account_name/": /"name/"}", "attributes": {"ApproximateReceiveCount": "1", "SentTimestamp": "1", "SenderId": "A:role", "ApproximateFirstReceiveTimestamp": "1"}, "messageAttributes": {}, "md5OfBody": "1", "eventSource": "aws:sqs", "eventSourceARN": "arn:aws:sqs:eu-west-1:Account_id:role", "awsRegion": "eu-west-1"}]}
 
 4.	Click **Test**
 
