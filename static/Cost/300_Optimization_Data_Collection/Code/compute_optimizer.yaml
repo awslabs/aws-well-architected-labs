@@ -337,8 +337,8 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-EBS-summary-view
       QueryString: !Sub
-        "SELECT  accountid, volumearn, 'ebs' AS \"resource type\", currentconfiguration.volumetype, finding, volumerecommendationoptions[1].configuration.volumetype AS \"recommended volumetype\",currentconfiguration,  volumerecommendationoptions
-          FROM ${DatabaseName}.compute_optimizer_ebs_volume
-          WHERE if((date_format(current_timestamp , '%M') = 'January'),month = '12', month = CAST ((month (now ())-1) AS VARCHAR) )
-          AND if((date_format(current_timestamp , '%M') = 'January'), year = CAST ((year (now ())-1) AS VARCHAR) ,year = CAST (year (now ()) AS VARCHAR))
-        AND finding != 'Optimized'"
+        "SELECT split_part(replace(volumearn,'\"' ,''),'/',2) as volumeid
+        , current_monthlyprice-recommendationoptions_1_monthlyprice as recommendationOptions_1_Saving
+        , current_monthlyprice-recommendationoptions_2_monthlyprice as recommendationOptions_2_Saving
+        ,*
+        FROM optimization_data.compute_optimizer_ebs_volume"

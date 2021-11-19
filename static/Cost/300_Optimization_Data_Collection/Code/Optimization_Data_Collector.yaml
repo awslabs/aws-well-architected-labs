@@ -198,7 +198,7 @@ Resources:
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
-            Function: !Sub "arn:aws:lambda:eu-west-1:${AWS::AccountId}:function:Compute-Optimizer-Crawler-Lambda-Function"
+            Function: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:Compute-Optimizer-Crawler-Lambda-Function"
             Filter:
               S3Key:
                 Rules:
