@@ -324,7 +324,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-EC2-summary-view
       QueryString: !Sub
-        "SELECT  accountid, instancename, instancearn, 'ec2' AS \"resource type\", currentinstancetype AS \"current instance type\", finding, recommendationoptions[1].instancetype AS \"recommended instance size\"
+        "SELECT  accountid, instancename, instancearn, split(replace(instancearn,'"' ,''),'/')[1] as id, finding,
           FROM ${DatabaseName}.\"compute_optimizer_ec2_instance\"
           WHERE if((date_format(current_timestamp , '%M') = 'January'),month = '12', month = CAST ((month (now ())-1) AS VARCHAR) )
           AND if((date_format(current_timestamp , '%M') = 'January'), year = CAST ((year (now ())-1) AS VARCHAR) ,year = CAST (year (now ()) AS VARCHAR))
