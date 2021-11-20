@@ -127,9 +127,27 @@ Using bash is an effective way to execute the failure injection tests for this w
 
             $ sudo apt install maven
 
-1. Next choose one of the following options: **Option A** or **Option B**.
+1. Next choose one of the following options: **Option A** or **Option B**. 
+    * Note: If using **CloudShell** then choose **Option A**
 
-    * **Option A**: If you are comfortable with git.
+    * **Option A**:
+      1. Download the zipfile of the executable 
+
+              $ wget https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip
+              ...
+              2021-11-20 01:20:28 (43.1 MB/s) - ‘javaresiliency.zip’ saved [19825502/19825502]
+
+      1. unzip it
+
+              $ unzip javaresiliency.zip 
+              Archive:  javaresiliency.zip
+              ...
+              inflating: java/app-resiliency-1.0.jar
+
+      2. go to the build directory: `cd java/appresiliency`
+
+
+    * **Option B**: If you are comfortable with git and are _not_ using CloudShell
       1. Clone the aws-well-architected-labs repo
 
               $ git clone https://github.com/awslabs/aws-well-architected-labs.git
@@ -137,18 +155,13 @@ Using bash is an effective way to execute the failure injection tests for this w
               ...
               Checking out files: 100% (1935/1935), done.
 
-      1. go to the build directory
+      2. go to the build directory
 
               cd aws-well-architected-labs/static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency/
 
-    * **Option B**:
-      1. Download the zipfile of the executables at the following URL <https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip>
-      1. unzip it
-      1. go to the build directory: `cd java/appresiliency`
+2. Build: `sudo mvn clean package shade:shade`    
 
-1. Build: `sudo mvn clean package shade:shade`    
-
-1. `cd target` - this is where your `jar` files were built and where you can run from the command line
+3. `cd target` - this is where your `jar` files were built and where you can run from the command line
 
 
 {{% /expand %}}
