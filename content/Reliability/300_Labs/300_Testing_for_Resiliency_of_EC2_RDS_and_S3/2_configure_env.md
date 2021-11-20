@@ -110,12 +110,13 @@ Using bash is an effective way to execute the failure injection tests for this w
 {{% expand "Click here for instructions if using Java:" %}}
 
 1. Java and Maven must be installed
-
-        $ mvn -version
-        Apache Maven 3.0.5 (Red Hat 3.0.5-17)
-        Maven home: /usr/share/maven
-        Java version: 1.8.0_302, vendor: Red Hat, Inc.
-        ...
+    ```bash
+    $ mvn -version
+    Apache Maven 3.0.5 (Red Hat 3.0.5-17)
+    Maven home: /usr/share/maven
+    Java version: 1.8.0_302, vendor: Red Hat, Inc.
+    ...
+    ```
 
 1. If Maven is not installed, or Java is not 1.8 or higher, then install Maven and Java
 
@@ -132,32 +133,36 @@ Using bash is an effective way to execute the failure injection tests for this w
 
     * **Option A**:
       1. Download the zipfile of the executable 
-
-              $ wget https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip
-              ...
-              2021-11-20 01:20:28 (43.1 MB/s) - ‘javaresiliency.zip’ saved [19825502/19825502]
+          ```bash
+          $ wget https://s3.us-east-2.amazonaws.com/aws-well-architected-labs-ohio/Reliability/javaresiliency.zip
+          ...
+          2021-11-20 01:20:28 (43.1 MB/s) - ‘javaresiliency.zip’ saved [19825502/19825502]
+          ```
 
       1. unzip it
-
-              $ unzip javaresiliency.zip 
-              Archive:  javaresiliency.zip
-              ...
-              inflating: java/app-resiliency-1.0.jar
+          ```bash
+          $ unzip javaresiliency.zip 
+          Archive:  javaresiliency.zip
+          ...
+          inflating: java/app-resiliency-1.0.jar
+          ```
 
       2. go to the build directory: `cd java/appresiliency`
 
 
     * **Option B**: If you are comfortable with git and are _not_ using CloudShell
       1. Clone the aws-well-architected-labs repo
-
-              $ git clone https://github.com/awslabs/aws-well-architected-labs.git
-              Cloning into 'aws-well-architected-labs'...
-              ...
-              Checking out files: 100% (1935/1935), done.
+          ```bash
+          $ git clone https://github.com/awslabs/aws-well-architected-labs.git
+          Cloning into 'aws-well-architected-labs'...
+          ...
+          Checking out files: 100% (1935/1935), done.
+          ```
 
       2. go to the build directory
-
-              cd aws-well-architected-labs/static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency/
+          ```bash
+          cd aws-well-architected-labs/static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/java/appresiliency/
+          ```
 
 2. Build: `sudo mvn clean package shade:shade`    
 
