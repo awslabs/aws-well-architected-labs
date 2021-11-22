@@ -22,38 +22,39 @@ Before starting, view the deployment machine in the [AWS Step Functions console]
 #### 7.1.1 Create experiment template
 
 1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
+   * Troubleshooting: If screen is blank, then select the region **US East (Ohio)**
 
-1. Click on **Create expermient template** to define the type of failure you want to inject.
+2. Click on **Create expermient template** to define the type of failure you want to inject.
 
     ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
 
-1. Enter `Experiment template for application resiliency testing` for **Description** and `App-resiliency-testing` for **Name**. For **IAM role** select `WALab-FIS-role`.
+3. Enter `Experiment template for application resiliency testing` for **Description** and `App-resiliency-testing` for **Name**. For **IAM role** select `WALab-FIS-role`.
 
     ![ExperimentName-App](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ExperimentName-App.png?classes=lab_picture_auto)
 
-1. Scroll down to **Actions** and click **Add action**.
+4. Scroll down to **Actions** and click **Add action**.
 
     ![AddAction](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AddAction.png?classes=lab_picture_auto)
 
-1. Enter `kill-webserver` for the **Name**. Under **Action type** select **aws:ssm:send-command/AWSFIS-Run-Kill-Process**. Under **documentParameters** enter `{"ProcessName":"python3","Signal":"SIGKILL"}`. For **duration** select **Minutes** and then enter 5 in the text box next to it. Click **Save**.
+5. Enter `kill-webserver` for the **Name**. Under **Action type** select **aws:ssm:send-command/AWSFIS-Run-Kill-Process**. Under **documentParameters** enter `{"ProcessName":"python3","Signal":"SIGKILL"}`. For **duration** select **Minutes** and then enter 5 in the text box next to it. Click **Save**.
 
     ![ActionApp](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ActionApp.png?classes=lab_picture_auto)
 
-1. Scroll down to **Targets** and click **Edit** next to **Instances-Target-1 (aws:ec2:instance)**.
+6. Scroll down to **Targets** and click **Edit** next to **Instances-Target-1 (aws:ec2:instance)**.
 
     ![EditTargetApp](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EditTargetApp.png?classes=lab_picture_auto)
 
-1. Under **Target method**, select **Resource tags and filters**. Select **Count** for **Selection mode** and enter `1` under **Number of resources**. This ensures that FIS will only kill the web server on one instance.
+7. Under **Target method**, select **Resource tags and filters**. Select **Count** for **Selection mode** and enter `1` under **Number of resources**. This ensures that FIS will only kill the web server on one instance.
 
-1. Scroll down to **Resource tags** and click **Add new tag**. Enter `Workshop` for **Key** and `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` for **Value**. These are the same tags that are on the EC2 instances used in this lab.
+8. Scroll down to **Resource tags** and click **Add new tag**. Enter `Workshop` for **Key** and `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` for **Value**. These are the same tags that are on the EC2 instances used in this lab.
 
     ![SelectTargetEC2](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/SelectTargetEC2.png?classes=lab_picture_auto)
 
-1. You can choose to stop running an experiment when certain thresholds are met, in this case, using CloudWatch Alarms under **Stop condition**. For this lab, you can leave this blank.
+9.  You can choose to stop running an experiment when certain thresholds are met, in this case, using CloudWatch Alarms under **Stop condition**. For this lab, you can leave this blank.
 
-1. Click **Create experiment template**.
+10. Click **Create experiment template**.
 
-1. In the warning pop-up, confirm that you want to create the experiment template without a stop condition by entering `create` in the text box. Click **Create experiment template**.
+11. In the warning pop-up, confirm that you want to create the experiment template without a stop condition by entering `create` in the text box. Click **Create experiment template**.
 
     ![CreateTemplate](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/CreateTemplate.png?classes=lab_picture_auto)
 
