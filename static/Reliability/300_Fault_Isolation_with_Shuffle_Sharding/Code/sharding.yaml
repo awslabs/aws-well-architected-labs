@@ -695,6 +695,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   BravoCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -741,6 +746,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   CharlieCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -787,6 +797,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   DeltaCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -833,6 +848,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   EchoCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -879,6 +899,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   FoxtrotCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -925,6 +950,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   GolfCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -971,6 +1001,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   HotelCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -1017,6 +1052,11 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroup1
+      - TargetGroup2
+      - TargetGroup3
+      - TargetGroup4
   CanaryDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
     Properties:

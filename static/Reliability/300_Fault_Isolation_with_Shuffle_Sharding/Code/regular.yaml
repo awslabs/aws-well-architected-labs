@@ -620,6 +620,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   BravoCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -666,6 +668,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   CharlieCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -712,6 +716,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   DeltaCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -758,6 +764,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   EchoCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -804,6 +812,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   FoxtrotCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -850,6 +860,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   GolfCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -896,6 +908,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   HotelCanary:
     Type: 'AWS::Synthetics::Canary'
     Properties:
@@ -942,6 +956,8 @@ Resources:
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
   CanaryDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
     Properties:
