@@ -24,7 +24,7 @@ Before starting, view the deployment machine in the [AWS Step Functions console]
 1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
    * Troubleshooting: If screen is blank, then select the region **US East (Ohio)**
 
-2. Click on **Create expermient template** to define the type of failure you want to inject.
+2. Click on **Create experiment template** to define the type of failure you want to inject.
 
     ![FISconsole](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/FISconsole.png?classes=lab_picture_auto)
 
@@ -36,7 +36,7 @@ Before starting, view the deployment machine in the [AWS Step Functions console]
 
     ![AddAction](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/AddAction.png?classes=lab_picture_auto)
 
-5. Enter `kill-webserver` for the **Name**. Under **Action type** select **aws:ssm:send-command/AWSFIS-Run-Kill-Process**. Under **documentParameters** enter `{"ProcessName":"python3","Signal":"SIGKILL"}`. For **duration** select **Minutes** and then enter 5 in the text box next to it. Click **Save**.
+5. Enter `kill-webserver` for the **Name**. Under **Action type** select **aws:ssm:send-command/AWSFIS-Run-Kill-Process**. Under **documentParameters** enter `{"ProcessName":"python3","Signal":"SIGKILL"}`. For **duration** select **Minutes** and then enter 2 in the text box next to it. Click **Save**.
 
     ![ActionApp](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/ActionApp.png?classes=lab_picture_auto)
 
