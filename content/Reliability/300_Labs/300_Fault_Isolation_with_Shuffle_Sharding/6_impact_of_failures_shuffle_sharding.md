@@ -74,7 +74,7 @@ You can look at the **AvailabilityDashboard** to see the impact of the failure i
 
 1. Switch to the tab that the **AvailabilityDashboard** opened. (You can also retrieve the URL from the CloudFormation stack Outputs).
 
-1. You can see that the introduction of the poison-pill and subsequent retries by customer **Alpha** has only impacted customer **Bravo** as the canaries for these two customers are unable to make successful requests to the workload.
+1. You can see that the introduction of the poison-pill and subsequent retries by customer **Alpha** has not impacted any other customer.
     * Notice that the impact is localized to a specific shard and the other customers are not impacted by this.
     * With sharding, only **12.5%** of customers are impacted.
     * **NOTE:** You might have to wait a few minutes for the dashboard to get updated.
@@ -87,7 +87,7 @@ Note: This is optional and does not need to be completed if you are planning on 
 
 {{%expand "Click here for instructions to fix the application:" %}}
 
-As in the previous sections, Systems Manager will be used to fix the application and return functionality to the users that are affected - **Alpha**, **Bravo**, and **Hotel**.
+As in the previous sections, Systems Manager will be used to fix the application and return functionality to the users that are affected. The Systems Manager Document restarts the application on the selected instances.
 
 1. Go to the Outputs section of the CloudFormation stack and open the link for “SSMDocument”. This will take you to the Systems Manager console.
 

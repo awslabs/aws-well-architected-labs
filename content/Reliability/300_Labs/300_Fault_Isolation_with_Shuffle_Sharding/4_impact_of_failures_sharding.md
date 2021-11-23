@@ -57,7 +57,7 @@ You can look at the **AvailabilityDashboard** to see the impact of the failure i
 
 ### Fix the application
 
-As in the previous section, Systems Manager will be used to fix the application and return functionality to the users that are affected - **Alpha** and **Bravo**.
+As in the previous section, Systems Manager will be used to fix the application and return functionality to the users that are affected - **Alpha** and **Bravo**. The Systems Manager Document restarts the application on the selected instances.
 
 1. Go to the Outputs section of the CloudFormation stack and open the link for “SSMDocument”. This will take you to the Systems Manager console.
 

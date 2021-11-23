@@ -64,7 +64,7 @@ You can look at the **AvailabilityDashboard** to see the impact of the failure i
 
 ### Fix the application
 
-As previously mentioned, the development team is aware of this bug within the application and are working on a fix, however, the fix will not be rolled out for several weeks/months. They have been able to identify the root cause of the issue and provided a temporary manual fix for it. Whenever this issue is encountered, the Operations team executes the temporary fix to bring the application back up again. They have codified this process into a Systems Manager Document and use Systems Manager to implement the fix on their fleet if outages occur.
+As previously mentioned, the development team is aware of this bug within the application and are working on a fix, however, the fix will not be rolled out for several weeks/months. They have been able to identify the root cause of the issue and provided a temporary manual fix for it. Whenever this issue is encountered, the Operations team executes the temporary fix to bring the application back up again. They have codified this process into a Systems Manager Document and use Systems Manager to implement the fix on their fleet if outages occur. The Systems Manager Document restarts the application on the selected instances.
 
 1. Go to the Outputs section of the CloudFormation stack and open the link for “SSMDocument”. This will take you to the Systems Manager console.
 
