@@ -728,8 +728,6 @@ Resources:
       DocumentType: Command
   CanaryBucket:
     Type: 'AWS::S3::Bucket'
-  CanaryLogGroup:
-    Type: 'AWS::Logs::LogGroup'
   CanaryRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -768,9 +766,7 @@ Resources:
                   - 'logs:PutLogEvents'
                   - 'logs:CreateLogGroup'
                 Resource:
-                  - !GetAtt
-                    - CanaryLogGroup
-                    - Arn
+                  - '*'
               - Effect: Allow
                 Action:
                   - 's3:ListAllMyBuckets'
