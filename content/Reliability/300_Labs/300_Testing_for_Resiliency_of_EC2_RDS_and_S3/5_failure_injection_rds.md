@@ -65,7 +65,14 @@ Watch how the service responds. Note how AWS systems help maintain service avail
       * **502 Bad Gateway**: The Amazon Elastic Load Balancer got a bad request from the server
       * An error you will _not_ see is **This site can’t be reached**. This is because the Elastic Load Balancer has a node in each of the three Availability Zones and is always available to serve requests.
 
-1. Continue on to the next steps, periodically returning to attempt to refresh the website.
+1. This can also be verified by viewing the canary run data.
+      * Go to the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+      * click on the `WebServersforResiliencyTesting` stack
+      * click on the **Outputs** tab
+      * Open the URL for **WorkloadAvailability** in a new window
+      * You will see that canary runs are failing because the website is _not_ available.
+
+1. Continue on to the next steps, periodically returning to attempt to refresh the website or viewing the canary runs.
 
 #### 5.2.2 Failover to standby
 
