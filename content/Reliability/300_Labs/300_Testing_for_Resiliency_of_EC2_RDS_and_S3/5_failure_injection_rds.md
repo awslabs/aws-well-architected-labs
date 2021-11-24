@@ -15,7 +15,7 @@ In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **
 > Hypothesis: If the primary RDS instance dies, then availability will not be impacted
 
 
-1. Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+1. [Optional] Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
     * **single region**: `WaitForMultiAZDB` shows completed (green)
     * **multi region**: both `WaitForRDSRRStack1` and `CheckRDSRRStatus1` show completed (green)
 
