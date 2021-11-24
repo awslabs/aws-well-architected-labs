@@ -268,7 +268,8 @@ Resources:
   AthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
-      Database: rightsizing
+      Database: 
+        Ref: DatabaseName
       Description: Provides a summary view of the rightsizing recommendations
       Name: rightsizing-summary-view
       QueryString:
@@ -279,13 +280,13 @@ Resources:
                 , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
                 , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
                 , count(*)                                                  AS "frequency"
-            FROM (rightsizing.rightsizing
+            FROM (optimization_data.rightsizing
                 CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
             GROUP BY 1
         ),
             data AS (
                 SELECT recommendations
-                FROM (rightsizing.rightsizing
+                FROM (optimization_data.rightsizing
                     CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
                 WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
 
