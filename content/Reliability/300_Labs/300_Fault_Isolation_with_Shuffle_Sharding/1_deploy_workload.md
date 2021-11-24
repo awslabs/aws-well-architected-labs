@@ -18,7 +18,7 @@ You will use AWS CloudFormation to provision the resources needed for this lab. 
 
 **If you are attending an in-person workshop and were provided with an AWS account by the instructor**:
 
-{{%expand "Click here for instructions to access your assigned AWS account:" %}} {{% common/Workshop_AWS_Account %}} {{% /expand%}}
+{{%expand "Click here for instructions to access your assigned AWS account:" %}} {{% common/Workshop_AWS_Account noCreds="true" %}} {{% /expand%}}
 
 **If you are using your own AWS account**:
 {{%expand "Click here for instructions to use your own AWS account:" %}}
