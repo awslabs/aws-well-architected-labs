@@ -15,9 +15,9 @@ This failure injection will simulate a critical failure of the web server runnin
 In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **hypothesis**.  For this experiment the hypothesis is:
 > Hypothesis: If the server process on a single instance is killed, then availability will not be impacted
 
-Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
-  * **single region**: `WaitForWebApp` shows completed (green)
-  * **multi region**: `WaitForWebApp1` shows completed (green)
+1. [Optional] Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+   * **single region**: `WaitForWebApp` shows completed (green)
+   * **multi region**: `WaitForWebApp1` shows completed (green)
 
 #### 7.1.1 Create experiment template
 

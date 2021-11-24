@@ -14,7 +14,7 @@ This failure injection will simulate a critical problem with one of the three we
 In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **hypothesis**.  For this experiment the hypothesis is:
 > Hypothesis: If one EC2 instance dies, then availability will not be impacted
 
-1. Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+1. [Optional] Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
     * **single region**: `WaitForWebApp` shows completed (green)
     * **multi region**: `WaitForWebApp1` shows completed (green)
 
