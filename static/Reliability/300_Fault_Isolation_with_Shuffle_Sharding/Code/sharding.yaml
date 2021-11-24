@@ -501,6 +501,8 @@ Resources:
       Subnets:
         - !Ref Subnet1
         - !Ref Subnet2
+    DependsOn:
+      - VPCGatewayAttachment
   ALBListener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
