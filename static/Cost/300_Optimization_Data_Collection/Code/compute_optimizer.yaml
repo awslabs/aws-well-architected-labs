@@ -48,6 +48,9 @@ Parameters:
     Default: COC
   GlueRoleARN:
     Type: String
+  S3CrawlerQue:
+    Type: String
+    Description: SQS that will be used to trigger the crawler lambda to pull data in
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -270,9 +273,14 @@ Resources:
     Properties:
       FunctionName: !GetAtt CrawlerFunction.Arn
       Action: 'lambda:InvokeFunction'
-      Principal: s3.amazonaws.com
+      Principal: sqs.amazonaws.com #s3.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !Sub 'arn:aws:s3:::${DestinationBucket}'
+      SourceArn: !Ref S3CrawlerQue
+  LambdaCrawlerEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !Ref S3CrawlerQue
+      FunctionName: !GetAtt CrawlerFunction.Arn
   EC2Crawler:
     Type: AWS::Glue::Crawler
     Properties:
