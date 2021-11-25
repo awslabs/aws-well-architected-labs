@@ -259,9 +259,9 @@ Resources:
         Statement:
         - Sid: SQSEventPolicy
           Effect: Allow
-          Principal: "*"
+          Principal: {"Service": "s3.amazonaws.com"}
           Action: SQS:*
-          Resource: "*"
+          Resource: !GetAtt S3CrawlerQue.Arn
           Condition:
             ArnLike:
               aws:SourceArn: arn:aws:s3:::*
