@@ -33,6 +33,11 @@ Parameters:
     Type: String
     Default: "cron(30 12 L * ? *)"
     Description: Cloud watch event Schedule to trigger the lambda 
+  GlueRoleARN:
+    Type: String
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   CostExplorerRightsizingLambdaRoleARN:
     Description: Role for Lambda execution of AWS Cost Explorer Rightsizing recommendations.
@@ -49,17 +54,11 @@ Outputs:
   GlueCrawler:
     Value:
       Ref: RightsizingCrawler
-  GlueCrawlerRoleARN:
-    Value:
-      Fn::GetAtt:
-        - RightsizingGlueRole
-        - Arn
 Resources:
-
   RightsizingLambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: AWS-Cost-Explorer-Rightsizing-Execute-Lambda
+      RoleName: !Sub "${RolePrefix}AWS-Cost-Explorer-Rightsizing-Execute-Lambda"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -100,32 +99,6 @@ Resources:
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
                 Resource: "arn:aws:logs:*:*:*"
-  RightsizingGlueRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: AWS-Cost-Explorer-Rightsizing-Glue-Crawler
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - glue.amazonaws.com
-        Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
-      Path: /
-      Policies:
-        - PolicyName: "Get-Rightsizing-Recommendation-S3"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "s3:PutObject"
-                  - "s3:GetObject"
-                Resource: !Sub "${DestinationBucketARN}*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -260,7 +233,7 @@ Resources:
     Properties:
       Name:
         Ref: CrawlerName
-      Role: !GetAtt RightsizingGlueRole.Arn
+      Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:

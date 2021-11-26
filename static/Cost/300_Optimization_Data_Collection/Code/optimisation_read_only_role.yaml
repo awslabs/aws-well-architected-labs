@@ -7,6 +7,7 @@ Metadata:
         default: 'Deployment parameters'
       Parameters:
         - CostAccountID
+        - MultiAccountRoleName
     - Label:
         default: 'Available modules'
       Parameters:
@@ -19,6 +20,8 @@ Metadata:
     ParameterLabels:
       CostAccountID:
         default: 'Cost Account Id'
+      MultiAccountRoleName:
+        default: 'Multi Account Role Name'
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -35,6 +38,10 @@ Parameters:
   CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
+  MultiAccountRoleName:
+    Type: String
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Default: "Optimization-Data-Multi-Account-Role"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -93,7 +100,7 @@ Conditions:
     - "yes"  
 Outputs:
   LambdaRole:
-    Description: OPTICS-Assume-Role-Management-Account for lambda to assume in cost account 
+    Description: For lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole
@@ -102,7 +109,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "Optimization-Data-Multi-Account-Role"
+      RoleName: !Ref MultiAccountRoleName
       AssumeRolePolicyDocument:
         Statement:
           - Action:
