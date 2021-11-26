@@ -204,7 +204,7 @@ Resources:
           - Arn
       Environment:
         Variables:
-          S3_BUCKET:
+          BUCKET_NAME:
             !Ref DestinationBucket
           ACCOUNT_ID: AWS::AccountId
           CRAWLER_NAME: !Ref Crawler
