@@ -118,7 +118,7 @@ Resources:
 
           AWS_REGION = "us-east-1"
           AWS_COST_EXPLORER_SERVICE_KEY = "ce"
-          RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
+          RECOMMENDATION_TARGET = os.environ['RECOMMENDATION_TARGET']
           BENEFITS_CONSIDERED = True
           GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
           BUCKET = os.environ['S3_BUCKET']
@@ -228,6 +228,8 @@ Resources:
             Ref: DestinationPrefix
           CRAWLER_NAME:
             Ref: RightsizingCrawler
+          RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
+
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
     Properties:
