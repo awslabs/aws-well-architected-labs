@@ -31,14 +31,14 @@ def lambda_handler(event, context):
 
     root_id    = client.list_roots()['Roots'][0]['Id']
     ou_id_list = get_ou_ids(root_id, client)
-    import pdb; pdb.set_trace()
-    with open('ou-org.json', 'w') as f:
+    #import pdb; pdb.set_trace()
+    with open('/tmp/ou-org.json', 'w') as f:
         for ou in ou_id_list.keys():
-            account_data(f, ou, ou_id_list[ou][0], client)
+            account_data(f, ou, ou_id_list[ou][0], client, ou_id_list[ou][1])
     s3_upload('ou-org')
 
     with open('/tmp/acc-org.json', 'w') as f:
-        account_data(f, root_id, root_id, client)
+        account_data(f, root_id, root_id, client,'')
     s3_upload('acc-org')
     start_crawler(os.environ["CRAWLER"])
 
@@ -47,11 +47,15 @@ def get_ou_ids(parent_id, client):
     test = []
     ous = ou_loop(parent_id, test, client)
     print(ous)
-
+    
     for ou in ous:
         ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
         full_result[ou]=[]
         full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
+        tags =list_tags(client, ou)
+        
+        full_result[ou].append(tags)
+   
     return full_result
 
 
@@ -66,7 +70,7 @@ def ou_loop(parent_id, test, client):
     return test
 
 
-def account_data(f, parent, parent_name, client):
+def account_data(f, parent, parent_name, client, parent_tags):
     tags_check = os.environ["TAGS"]
     account_id_list = get_acc_ids(parent, client)
     for account_id in account_id_list:
@@ -80,7 +84,7 @@ def account_data(f, parent, parent_name, client):
                         value = org_tag['Value']
                         kv = {tag : value}
                         account.update(kv)
-        account.update({'Parent' : parent_name})        
+        account.update({'Parent' : parent_name, 'Parent_Tags':parent_tags})        
         data = json.dumps(account, default = timeconverter) 
 
         f.write(data)
@@ -97,7 +101,7 @@ def get_acc_ids(parent_id,  client):
             full_result.append(acc['Id'])
     return full_result
 
-def list_tags(client, resource_id):
+def list_tags(client, resource_id): 
     tags = []
     paginator = client.get_paginator("list_tags_for_resource")
     response_iterator = paginator.paginate(ResourceId=resource_id)
