@@ -71,7 +71,7 @@ Parameters:
     Default: "Optimization-Data-Multi-Account-Role"
   RolePrefix:
     Type: String
-    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: ""
   IncludeTAModule:
     Type: String
