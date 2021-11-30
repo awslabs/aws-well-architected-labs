@@ -137,6 +137,7 @@ Resources:
       Runtime: python3.8
       Code:
         ZipFile: |
+          #Author Stephanie Gooch 2021
           import boto3
           import os
           import json
