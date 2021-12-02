@@ -267,6 +267,9 @@ Resources:
               - Effect: Allow
                 Action:
                   - "glue:StartCrawler"
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
                 Resource: '*'
   LambdaCrawlerInvokePermission:
     Type: 'AWS::Lambda::Permission'

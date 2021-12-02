@@ -184,9 +184,45 @@ Conditions:
     - !Condition DeployEcsChargebackModule
 #Reusable Resources:
 Resources:
+  S3CrawlerQue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      #KmsMasterKeyId: "alias/costoptimizationdata/sqs"
+      QueueName: S3CrawlerQue
+  CrawlerSQSPolicy: 
+    DependsOn: 
+      - S3CrawlerQue
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      Queues:  
+        - Ref: S3CrawlerQue
+      PolicyDocument:
+        Id: SQSPolicy
+        Statement:
+        - Sid: SQSEventPolicy
+          Effect: Allow
+          Principal: {"Service": "s3.amazonaws.com"}
+          Action: sqs:SendMessage
+          Resource: !GetAtt S3CrawlerQue.Arn
+          Condition:
+            ArnLike:
+              aws:SourceArn: !Sub "arn:aws:s3:::${DestinationBucket}${AWS::AccountId}"
+            StringEquals:
+                'aws:SourceAccount': !Sub '${AWS::AccountId}'
+        - Sid: S3decrypt
+          Effect: Allow
+          Principal: {"Service": "s3.amazonaws.com"}
+          Action: 
+            - kms:GenerateDataKey
+            - kms:Decrypt
+          Resource: "*"
   S3Bucket:
     DependsOn: 
       - CrawlerSQSPolicy
+      - S3CrawlerQue
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName:
@@ -208,8 +244,7 @@ Resources:
         #           Value: Compute_Optimizer/
         QueueConfigurations:
           - Event: s3:ObjectCreated:*
-            Queue: 
-              !GetAtt S3CrawlerQue.Arn
+            Queue: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue"
             Filter:
               S3Key:
                 Rules:
@@ -240,31 +275,6 @@ Resources:
                     "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
                 }
             }
-  S3CrawlerQue: 
-    Type: AWS::SQS::Queue
-    Properties: 
-      VisibilityTimeout: 300
-      ReceiveMessageWaitTimeSeconds: 20
-      DelaySeconds: 2
-      KmsMasterKeyId: "alias/aws/sqs"
-  CrawlerSQSPolicy: 
-    DependsOn: 
-      - S3CrawlerQue
-    Type: AWS::SQS::QueuePolicy
-    Properties: 
-      Queues:  
-        - Ref: S3CrawlerQue
-      PolicyDocument:
-        Id: SQSPolicy
-        Statement:
-        - Sid: SQSEventPolicy
-          Effect: Allow
-          Principal: {"Service": "s3.amazonaws.com"}
-          Action: SQS:*
-          Resource: !GetAtt S3CrawlerQue.Arn
-          Condition:
-            ArnLike:
-              aws:SourceArn: arn:aws:s3:::*
       
   GlueRole:
     Type: AWS::IAM::Role
