@@ -190,7 +190,6 @@ Resources:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
-      #KmsMasterKeyId: "alias/costoptimizationdata/sqs"
       QueueName: S3CrawlerQue
   CrawlerSQSPolicy: 
     DependsOn: 
@@ -212,13 +211,6 @@ Resources:
               aws:SourceArn: !Sub "arn:aws:s3:::${DestinationBucket}${AWS::AccountId}"
             StringEquals:
                 'aws:SourceAccount': !Sub '${AWS::AccountId}'
-        - Sid: S3decrypt
-          Effect: Allow
-          Principal: {"Service": "s3.amazonaws.com"}
-          Action: 
-            - kms:GenerateDataKey
-            - kms:Decrypt
-          Resource: "*"
   S3Bucket:
     DependsOn: 
       - CrawlerSQSPolicy
@@ -234,14 +226,6 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
       NotificationConfiguration:
-        # LambdaConfigurations:
-        #   - Event: s3:ObjectCreated:*
-        #     Function: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:Compute-Optimizer-Crawler-Lambda-Function"
-        #     Filter:
-        #       S3Key:
-        #         Rules:
-        #         - Name: prefix
-        #           Value: Compute_Optimizer/
         QueueConfigurations:
           - Event: s3:ObjectCreated:*
             Queue: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue"
@@ -274,8 +258,7 @@ Resources:
                     "aws:SourceAccount": !Sub "${ManagementAccountID}",
                     "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
                 }
-            }
-      
+            } 
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
