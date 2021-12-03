@@ -11,6 +11,7 @@ Metadata:
           - ManagementAccountID
           - MultiAccountRoleName
           - CodeBucket
+          - RolePrefix
       - Label:
           default: 'Available modules'
         Parameters:
@@ -33,6 +34,8 @@ Metadata:
         default: 'Multi Account Role Name'
       CodeBucket:
         default: "Code Bucket"
+      RolePrefix:
+        default: "Role Prefix"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -57,15 +60,19 @@ Parameters:
     Default: costoptimizationdata
   ManagementAccountRole: 
     Type: String
-    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data.
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
     Default: Lambda-Assume-Role-Management-Account
   ManagementAccountID: 
     Type: String
     Description: Your Management Account ID
   MultiAccountRoleName:
     Type: String
-    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
     Default: "Optimization-Data-Multi-Account-Role"
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Default: ""
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -198,7 +205,7 @@ Resources:
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: AWS-OPTICS-Glue-Crawler
+      RoleName: !Sub "${RolePrefix}AWS-OPTICS-Glue-Crawler"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -228,7 +235,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTAModule
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor_dev.yaml"
           Parameters:
             DestinationBucket: !Ref S3Bucket
             DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -237,6 +244,7 @@ Resources:
             GlueRoleARN: !GetAtt GlueRole.Arn
             MultiAccountRoleName: !Ref MultiAccountRoleName
             CodeBucket: !Ref CodeBucket
+            RolePrefix: !Ref RolePrefix
   RightsizeModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRightsizingModule
@@ -245,59 +253,66 @@ Resources:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
           RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+          GlueRoleARN: !GetAtt GlueRole.Arn
+          RolePrefix: !Ref RolePrefix
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda_dev.yaml"
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleARN: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Ref MultiAccountRoleName
         CodeBucket: !Ref CodeBucket
+        RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer_dev.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
         CodeBucket: !Ref CodeBucket
+        RolePrefix: !Ref RolePrefix
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Ref MultiAccountRoleName
         CodeBucket: !Ref CodeBucket
+        RolePrefix: !Ref RolePrefix
   RDSUtilizationModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRDSUtilizationModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Ref MultiAccountRoleName
+        RolePrefix: !Ref RolePrefix
   OrgDataModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
         Tags: "Env"
+        RolePrefix: !Ref RolePrefix
   BudgetsModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployBudgetsModule
@@ -307,14 +322,16 @@ Resources:
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
           ManagementAccountID: !Ref ManagementAccountID
           RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
+          RolePrefix: !Ref RolePrefix
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets_dev.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts_dev.yaml"
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+            RolePrefix: !Ref RolePrefix
             TaskQueuesUrl: 
               Fn::Join:
                 - ','

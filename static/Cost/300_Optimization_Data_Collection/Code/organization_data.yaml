@@ -18,10 +18,9 @@ Parameters:
     Default: optimization_data
   GlueRoleARN:
     Type: String
-  Suffix:
+  RolePrefix:
     Type: String
-    Description: If this module needs to be made more than one a Suffix can be added
-    Default: ''
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
@@ -192,7 +191,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "AWS-Organization-Data-Execute-Lambda${Suffix}"
+      RoleName: !Sub "${RolePrefix}AWS-Organization-Data-Execute-Lambda"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -233,7 +232,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Monthly
-      Name: !Sub "Monthly-Scheduler-For-Accounts${Suffix}"
+      Name: Monthly-Scheduler-For-Accounts
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:

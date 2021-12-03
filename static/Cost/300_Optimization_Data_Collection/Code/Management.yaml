@@ -4,9 +4,13 @@ Parameters:
   CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
+  ManagementAccountRole:
+    Type: String
+    Description: Name of role deployed into Management account to read high level data
+    Default: "Lambda-Assume-Role-Management-Account" 
 Outputs:
   LambdaRole:
-    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
+    Description: Role for lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole
@@ -16,7 +20,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "Lambda-Assume-Role-Management-Account"
+      RoleName: !Ref ManagementAccountRole
       AssumeRolePolicyDocument:
         Statement:
           - Action:
