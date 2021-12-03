@@ -10,7 +10,7 @@ Parameters:
     Default: "Lambda-Assume-Role-Management-Account" 
 Outputs:
   LambdaRole:
-    Description: for lambda to assume in cost account 
+    Description: Role for lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole
