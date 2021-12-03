@@ -23,7 +23,8 @@ For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-we
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
 3. Call the stack **OptimizationDataCollectionStack** and fill Deployment parameters. The Role mentioned in **Multi Account Role Name** parameter will be deployed in the next step.
- Select the **Code bucket** for the region you are deploying in and fill **Management account Id**. You have the option to change the name of your access roles, if you do please make the same changes in the other deployments.
+ Select the **Code bucket** for the region you are deploying in and fill **Management account Id**. You have the option to change the name of your access roles, if you do please make the same changes in the **Role for Management Account** and the  **Read Only roles for Data Collector** deployments.
+ 
  Under available modules section select modules which you would like to deploy. Detailed description of each module can be found [here](../3_data_collection_modules)
  Click **Next** and **Next again**
 ![Images/Main_CF_Parameters.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Parameters.png)
