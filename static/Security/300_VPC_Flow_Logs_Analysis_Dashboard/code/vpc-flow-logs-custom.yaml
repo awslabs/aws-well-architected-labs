@@ -1,0 +1,119 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  VpcId:
+    Type: String
+    Description: 'VPC ID for which flow logs will be enabled.'
+  TrafficType:
+    Description: 'The type of traffic that you wish to log.'
+    Type: String
+    Default: ALL
+    AllowedValues:
+    - ALL
+    - ACCEPT
+    - REJECT  
+  VpcFlowLogsBucketName:
+    Description: 'Optional - The name of an S3 bucket where you want flow logs to be stored. If you leave this empty, this stack will create S3 bucket for you.'
+    Type: String
+    Default: ''
+  VpcFlowLogsFilePrefix:
+    Description: (Optional) - The log file prefix in S3 bucket that comes aftter s3 bucket name
+    Type: String
+    Default: ''
+Conditions:
+  VpcLogBucketCondition: !Equals [!Ref VpcFlowLogsBucketName, '']
+  ExistingBucket: !Not [!Equals [!Ref VpcFlowLogsBucketName, '']]
+  HasLogFilePrefix: !Not [!Equals [!Ref VpcFlowLogsFilePrefix, '']]
+Resources:
+  VpcLogBucket:
+    Condition: VpcLogBucketCondition
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      PublicAccessBlockConfiguration:
+            BlockPublicAcls : true
+            BlockPublicPolicy : true
+            IgnorePublicAcls : true
+            RestrictPublicBuckets : true
+      Tags:
+        -
+          Key: Name
+          Value: VPCFlowLogs-Bucket
+        -
+          Key: Purpose
+          Value: WALabVPCFlowLogs
+  VpcLogBucketPolicy:
+    Condition: VpcLogBucketCondition
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref VpcLogBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: AWSLogDeliveryWrite
+          Effect: Allow
+          Principal:
+            Service: 'delivery.logs.amazonaws.com'
+          Action: 's3:PutObject'
+          Resource: !If [HasLogFilePrefix, !Sub '${VpcLogBucket.Arn}/${VpcFlowLogsFilePrefix}/AWSLogs/${AWS::AccountId}/*', !Sub '${VpcLogBucket.Arn}/AWSLogs/${AWS::AccountId}/*']
+          Condition:
+            StringEquals:
+              's3:x-amz-acl': 'bucket-owner-full-control'
+        - Sid: AWSLogDeliveryAclCheck
+          Effect: Allow
+          Principal:
+            Service: 'delivery.logs.amazonaws.com'
+          Action: 's3:GetBucketAcl'
+          Resource: !GetAtt 'VpcLogBucket.Arn'
+        - Sid: AllowSSLRequestsOnly
+          Effect: Deny
+          Principal: '*'
+          Action: 's3:*'
+          Resource:
+          - !GetAtt 'VpcLogBucket.Arn'
+          - !Sub '${VpcLogBucket.Arn}/*'
+          Condition:
+            Bool:
+              'aws:SecureTransport': false
+  VpcFlowLogNewBucket:
+    Condition: VpcLogBucketCondition
+    DependsOn: VpcLogBucketPolicy
+    Type: 'AWS::EC2::FlowLog'
+    Properties:
+      LogDestination: !If [HasLogFilePrefix, !Sub '${VpcLogBucket.Arn}/${VpcFlowLogsFilePrefix}/', !GetAtt 'VpcLogBucket.Arn']
+      LogDestinationType: s3
+      ResourceId: !Ref VpcId
+      ResourceType: 'VPC'
+      TrafficType: !Ref TrafficType      
+      LogFormat: '${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status} ${vpc-id} ${az-id} ${instance-id} ${pkt-srcaddr} ${pkt-dstaddr} ${region} ${subnet-id} ${sublocation-id} ${sublocation-type} ${tcp-flags} ${type} ${flow-direction} ${pkt-dst-aws-service} ${pkt-src-aws-service} ${traffic-path}'
+      MaxAggregationInterval: 600 # You can specify 60 seconds (1 minute) or 600 seconds (10 minutes).
+      Tags:
+        -
+          Key: Name
+          Value: VPCFlowLogs-CFN
+        -
+          Key: Purpose
+          Value: WALabVPCFlowLogs
+  VpcFlowLogExistingBucket:
+    Condition: ExistingBucket
+    Type: 'AWS::EC2::FlowLog'
+    Properties:
+      LogDestination: !If [HasLogFilePrefix, !Sub 'arn:aws:s3:::${VpcFlowLogsBucketName}/${VpcFlowLogsFilePrefix}/', !Sub 'arn:aws:s3:::${VpcFlowLogsBucketName}']
+      LogDestinationType: s3
+      ResourceId: !Ref VpcId
+      ResourceType: 'VPC'
+      TrafficType: !Ref TrafficType      
+      LogFormat: '${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status} ${vpc-id} ${az-id} ${instance-id} ${pkt-srcaddr} ${pkt-dstaddr} ${region} ${subnet-id} ${sublocation-id} ${sublocation-type} ${tcp-flags} ${type} ${flow-direction} ${pkt-dst-aws-service} ${pkt-src-aws-service} ${traffic-path}'
+      MaxAggregationInterval: 600 # You can specify 60 seconds (1 minute) or 600 seconds (10 minutes).
+      Tags:
+        -
+          Key: Name
+          Value: VPCFlowLogs-CFN
+        -
+          Key: Purpose
+          Value: WALabVPCFlowLogs
+Outputs:
+  StackName:
+    Description: 'Stack name.'
+    Value: !Sub '${AWS::StackName}'
+  LogBucketName:
+    Description: 'VPC Flow Logs bucket name.'
+    Value: !If [VpcLogBucketCondition, !Ref VpcLogBucket, !Ref VpcFlowLogsBucketName]

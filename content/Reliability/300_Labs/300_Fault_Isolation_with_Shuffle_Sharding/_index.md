@@ -20,11 +20,11 @@ Without any sharding, any worker (such as servers, queues, or databases) in your
 
 In this lab, you will create a workload with a sample application running on EC2 instances. You will then create a strategy to distribute traffic using shuffle sharding and reduce the blast radius when a failure occurs.
 
-The skills you learn will help you [use bulkhead architectures](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/use-fault-isolation-to-protect-your-workload.html) in alignment with Reliability best practices of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+The skills you learn will help you [use fault isolation to protect your workload](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/use-fault-isolation-to-protect-your-workload.html) in alignment with Reliability best practices of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
 ## Goals:
 
-* Deploy a workload with a bulkhead architecture to limit propagation of failures
+* Deploy a workload with a sharded architecture to limit propagation of failures
 * Implement shuffle sharding to further limit failure propagation
 * Test failure within the workload and ensure the scope of impact is minimized
 

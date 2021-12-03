@@ -38,7 +38,7 @@ QuickSight dashboard provided in this lab requires all the fields mentioned in t
 2. Run CloudFormation stack to enable VPC Flow Logs.
 
 - Download CloudFormation Template:
-    - [vpc-flow-logs-custom.yaml](https://d36ux702kcm75i.cloudfront.net/vpc-flow-logs-custom.yaml) 
+    - [vpc-flow-logs-custom.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc-flow-logs-custom.yaml) 
         - This CloudFormation template enables VPC Flow Logs in the account you run it. You will need to run it per VPC.
 
     - From AWS Console navigate to CloudFormation. Then click on **Create stack**
