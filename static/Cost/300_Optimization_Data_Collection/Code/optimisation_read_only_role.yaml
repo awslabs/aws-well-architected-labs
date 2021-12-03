@@ -17,6 +17,7 @@ Metadata:
         - IncludeComputeOptimizerModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
+        - IncludeBudgetsModule
     ParameterLabels:
       CostAccountID:
         default: 'Cost Account Id'
@@ -33,7 +34,9 @@ Metadata:
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
-        default: 'Include RDS Utilization Data Collection Module'    
+        default: 'Include RDS Utilization Data Collection Module' 
+      IncludeBudgetsModule:
+        default: 'Include Budgets Collection Module'    
 Parameters:
   CostAccountID:
     Type: String
@@ -78,6 +81,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  IncludeBudgetsModule:
+    Type: String
+    Description: Collects budgets from your accounts
+    AllowedValues:
+      - "yes"
+      - "no"
 
 Conditions:
   IncludeTAModulePolicy: !Equals 
@@ -98,6 +107,9 @@ Conditions:
   IncludeRDSUtilizationModulePolicy: !Equals
     - !Ref IncludeRDSUtilizationModule
     - "yes"  
+  IncludeBudgetsModulePolicy: !Equals
+    - !Ref IncludeBudgetsModule
+    - "yes"
 Outputs:
   LambdaRole:
     Description: For lambda to assume in cost account 
@@ -163,6 +175,21 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ce:GetRightsizingRecommendation"
+            Resource: "*"
+      Roles:
+        - Ref: LambdaRole
+  BudgetsReadOnlyPolicy:
+    Type: 'AWS::IAM::Policy'
+    Condition: IncludeBudgetsModulePolicy
+    Properties:
+      PolicyName: BudgetsReadOnlyPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "budgets:ViewBudget"
+              - "budgets:Describe*"
             Resource: "*"
       Roles:
         - Ref: LambdaRole

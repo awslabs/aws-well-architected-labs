@@ -72,7 +72,7 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
-    Default: ""
+    Default: "WA-"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -159,6 +159,7 @@ Outputs:
           - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals 
     - !Ref IncludeTAModule
@@ -189,6 +190,7 @@ Conditions:
     - !Condition DeployInventoryCollectorModule
     - !Condition DeployComputeOptimizerModule
     - !Condition DeployEcsChargebackModule
+    - !Condition DeployBudgetsModule
 #Reusable Resources:
 Resources:
   S3Bucket:
@@ -320,8 +322,8 @@ Resources:
       Parameters:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
-          ManagementAccountID: !Ref ManagementAccountID
-          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+          GlueRoleArn: !GetAtt GlueRole.Arn 
+          MultiAccountRoleName: !Ref MultiAccountRoleName
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets_dev.yaml"
   AccountCollector:
@@ -340,5 +342,6 @@ Resources:
                   - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
   
 

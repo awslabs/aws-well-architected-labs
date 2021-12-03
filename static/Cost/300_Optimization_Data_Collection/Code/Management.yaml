@@ -53,6 +53,4 @@ Resources:
                   - "organizations:ListParents"
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
-                  - "budgets:ViewBudget"
-                  - "budgets:Describe*"
                 Resource: "*"
