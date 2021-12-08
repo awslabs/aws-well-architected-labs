@@ -38,16 +38,6 @@ Resources:
                 - 'amplify:GetBackendEnvironment'
                 - 'amplify:UpdateBranch'
                 Resource: "*"
-        - PolicyName: amplify
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action: 
-                - 'amplify:CreateBackendEnvironment'
-                - 'amplify:GetApp'
-                - 'amplify:GetBackendEnvironment'
-                Resource: "*"
         - PolicyName: iam
           PolicyDocument:
             Version: "2012-10-17"
@@ -87,7 +77,7 @@ Resources:
                   - 's3:PutBucketTagging'
                   - 's3:PutEncryptionConfiguration'
                   Resource: "*"
-        - PolicyName: kms
+        - PolicyName: ssm
           PolicyDocument:
               Version: "2012-10-17"
               Statement:
