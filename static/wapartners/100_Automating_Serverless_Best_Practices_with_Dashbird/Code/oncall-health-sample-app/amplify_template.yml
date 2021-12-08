@@ -13,11 +13,88 @@ Resources:
                 - amplify.amazonaws.com
             Action:
               - sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
-        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-               
+      Policies:
+        - PolicyName: cognito
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'cognito-identity:CreateIdentityPool'
+                - 'cognito-identity:SetIdentityPoolRoles'
+                - 'cognito-idp:CreateUserPool'
+                - 'cognito-identity:DescribeIdentityPool'
+                - 'cognito-idp:CreateUserPoolClient'
+                Resource: "*"
+        - PolicyName: amplify
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'amplify:ListApps'
+                - 'amplify:CreateBackendEnvironment'
+                - 'amplify:GetApp'
+                - 'amplify:GetBackendEnvironment'
+                - 'amplify:UpdateBranch'
+                Resource: "*"
+        - PolicyName: amplify
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'amplify:CreateBackendEnvironment'
+                - 'amplify:GetApp'
+                - 'amplify:GetBackendEnvironment'
+                Resource: "*"
+        - PolicyName: iam
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'iam:CreateRole'
+                - 'iam:GetRole'
+                - 'iam:GetRolePolicy'
+                - 'iam:PutRolePolicy'
+                Resource: "*"
+        - PolicyName: kms
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'kms:Decrypt'
+                  Resource: "*"
+        - PolicyName: lambda
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'lambda:CreateFunction'
+                  - 'lambda:GetFunction'
+                  - 'lambda:GetFunctionCodeSigningConfig'
+                  Resource: "*"
+        - PolicyName: s3
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 's3:CreateBucket'
+                  - 's3:PutBucketTagging'
+                  - 's3:PutEncryptionConfiguration'
+                  Resource: "*"
+        - PolicyName: kms
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'ssm:GetParametersByPath'
+                  Resource: "*"
   AmplifyApp:
     Type: "AWS::Amplify::App"
     Properties:
@@ -27,8 +104,8 @@ Resources:
           !Sub "oncall-health-repo-CloneUrlHttp"
       Description: Oncall Health Vue App
       EnvironmentVariables:
-         - Name: "_LIVE_UPDATES" 
-           Value: "[{\"name\":\"Amplify CLI\",\"pkg\":\"@aws-amplify/cli\",\"type\":\"npm\",\"version\":\"latest\"}]"
+        - Name: "_LIVE_UPDATES" 
+          Value: "[{\"name\":\"Amplify CLI\",\"pkg\":\"@aws-amplify/cli\",\"type\":\"npm\",\"version\":\"latest\"}]"
       CustomRules:
         - Status: "404-200"
           Source: "/<*>"
