@@ -182,7 +182,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: cluster_metadata_view
-      QueryString: !Sub
+      QueryString:
         "CREATE OR REPLACE VIEW cluster_metadata_view AS 
           SELECT
             *

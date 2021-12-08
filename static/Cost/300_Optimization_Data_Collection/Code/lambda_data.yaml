@@ -186,7 +186,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's
       Name: snapshot-ami-query
-      QueryString: !Sub
+      QueryString: 
         "SELECT *,
         CASE
         WHEN snap_ami_id = imageid THEN
