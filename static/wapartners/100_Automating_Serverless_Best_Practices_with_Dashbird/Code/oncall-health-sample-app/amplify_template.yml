@@ -71,17 +71,33 @@ Resources:
                   - 'lambda:GetFunction'
                   - 'lambda:GetFunctionCodeSigningConfig'
                   Resource: "*"
-        - PolicyName: s3
+        - PolicyName: AmplifyStorageSDKCalls
           PolicyDocument:
               Version: "2012-10-17"
               Statement:
                 - Effect: Allow
                   Action: 
                   - 's3:CreateBucket'
-                  - 's3:PutBucketTagging'
+                  - 's3:DeleteBucket'
+                  - 's3:DeleteBucketPolicy'
+                  - 's3:DeleteBucketWebsite'
+                  - 's3:DeleteObject'
+                  - 's3:DeleteObjectVersion'
+                  - 's3:GetBucketLocation'
+                  - 's3:GetObject'
+                  - 's3:ListAllMyBuckets'
+                  - 's3:ListBucket'
+                  - 's3:ListBucketVersions'
+                  - 's3:PutBucketAcl'
+                  - 's3:PutBucketCORS'
+                  - 's3:PutBucketNotification'
+                  - 's3:PutBucketPolicy'
+                  - 's3:PutBucketVersioning'
+                  - 's3:PutBucketWebsite'
                   - 's3:PutEncryptionConfiguration'
+                  - 's3:PutLifecycleConfiguration'
                   - 's3:PutObject'
-                  - 's3:PutEncryptionConfiguration'
+                  - 's3:PutObjectAcl'
                   Resource: "*"
         - PolicyName: ssm
           PolicyDocument:
