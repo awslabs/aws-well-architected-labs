@@ -50,6 +50,8 @@ Resources:
                 - 'iam:GetRole'
                 - 'iam:GetRolePolicy'
                 - 'iam:PutRolePolicy'
+                - 'iam:PassRole'
+                - 'iam:DeleteRolePolicy'
                 Resource: "*"
         - PolicyName: kms
           PolicyDocument:
