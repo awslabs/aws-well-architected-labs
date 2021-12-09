@@ -1,5 +1,5 @@
 ---
-title: "Trusted Advisor Dashboard"
+title: "Trusted Advisor Organizational (TAO) Dashboard"
 #menutitle: "Lab #2"
 date: 2020-09-07T11:16:08-04:00
 chapter: false

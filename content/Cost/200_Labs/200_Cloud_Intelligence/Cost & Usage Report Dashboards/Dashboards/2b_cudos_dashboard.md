@@ -15,7 +15,7 @@ If you used the automation scripts in the [previous step](/cost/200_labs/200_clo
 {{% /notice %}}
 
 ## Deployment Options
-There are 2 options to deploy the CUDOS Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 3 options to deploy the CUDOS Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
 
 
 ### Option 1: Manual Deployment
