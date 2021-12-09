@@ -38,7 +38,9 @@ Resources:
                 - 'amplify:CreateBackendEnvironment'
                 - 'amplify:GetApp'
                 - 'amplify:GetBackendEnvironment'
+                - 'amplify:UpdateApp'
                 - 'amplify:UpdateBranch'
+                - 'amplifybackend:*'
                 Resource: "*"
         - PolicyName: iam
           PolicyDocument:
