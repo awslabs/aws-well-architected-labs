@@ -18,6 +18,7 @@ June 2021
 
 ## Contributors
 + Oleksandr Moskalenko, Technical Account Manager, EMEA
++ Georgios Rozakis, Technical Account Manager, EMEA
 
 
 ## Feedback
