@@ -13,6 +13,8 @@ Resources:
                 - amplify.amazonaws.com
             Action:
               - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
       Policies:
         - PolicyName: cognito
           PolicyDocument:
