@@ -78,6 +78,8 @@ Resources:
                   - 's3:CreateBucket'
                   - 's3:PutBucketTagging'
                   - 's3:PutEncryptionConfiguration'
+                  - 's3:PutObject'
+                  - 's3:PutEncryptionConfiguration'
                   Resource: "*"
         - PolicyName: ssm
           PolicyDocument:
