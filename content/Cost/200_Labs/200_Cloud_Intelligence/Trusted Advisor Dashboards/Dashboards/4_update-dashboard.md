@@ -62,4 +62,4 @@ You can select certain accounts but please ensure you maintain consistency in fo
 1. **Open** and **Refresh** ta-organizational-view dataset in QuickSight
 ![Image](/Cost/200_Cloud_Intelligence/Images/tao/QS_refresh_ds.png?classes=lab_picture_small)
 
-{{< prev_next_button link_prev_url="../5_manual-deployment-deploy/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/">}}
+{{< prev_next_button link_prev_url="../3_deployment/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/">}}

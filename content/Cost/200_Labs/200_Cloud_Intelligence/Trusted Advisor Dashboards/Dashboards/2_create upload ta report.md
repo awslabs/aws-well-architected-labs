@@ -54,4 +54,4 @@ Please makes sure you've deployed [Optimization Data Collection lab](https://wel
 **NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
     ------------ | -------------
 {{% /expand%}}
-{{< prev_next_button link_prev_url="../1_prerequistes" link_next_url="../3_auto_deployment/" />}}
+{{< prev_next_button link_prev_url="../1_prerequistes" link_next_url="../3_deployment/" />}}
