@@ -38,9 +38,7 @@ Resources:
                 - 'amplify:CreateBackendEnvironment'
                 - 'amplify:GetApp'
                 - 'amplify:GetBackendEnvironment'
-                - 'amplify:UpdateApp'
                 - 'amplify:UpdateBranch'
-                - 'amplifybackend:*'
                 Resource: "*"
         - PolicyName: iam
           PolicyDocument:
@@ -119,6 +117,7 @@ Resources:
                   - 'cloudformation:DescribeStacks'
                   - 'cloudformation:CreateStack'
                   - 'cloudformation:UpdateStack'
+                  - 'cloudformation:ListStackResources'
                   Resource: "*"
   AmplifyApp:
     Type: "AWS::Amplify::App"
