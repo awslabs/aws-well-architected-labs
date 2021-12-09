@@ -27,6 +27,8 @@ Resources:
                 - 'cognito-idp:CreateUserPool'
                 - 'cognito-identity:DescribeIdentityPool'
                 - 'cognito-idp:CreateUserPoolClient'
+                - 'cognito-idp:DeleteUserPoolClient'
+                - 'cognito-idp:DeleteUserPool'
                 Resource: "*"
         - PolicyName: amplify
           PolicyDocument:
@@ -52,6 +54,7 @@ Resources:
                 - 'iam:PutRolePolicy'
                 - 'iam:PassRole'
                 - 'iam:DeleteRolePolicy'
+                - 'iam:DeleteRole'
                 Resource: "*"
         - PolicyName: kms
           PolicyDocument:
@@ -70,6 +73,8 @@ Resources:
                   - 'lambda:CreateFunction'
                   - 'lambda:GetFunction'
                   - 'lambda:GetFunctionCodeSigningConfig'
+                  - 'lambda:InvokeFunction'
+                  - 'lambda:DeleteFunction'
                   Resource: "*"
         - PolicyName: AmplifyStorageSDKCalls
           PolicyDocument:
