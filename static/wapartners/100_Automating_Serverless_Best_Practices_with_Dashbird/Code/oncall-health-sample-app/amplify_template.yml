@@ -95,6 +95,7 @@ Resources:
                   Action: 
                   - 'cloudformation:DescribeStackResources'
                   - 'cloudformation:DescribeStackResource'
+                  - 'cloudformation:DescribeStackEvents'
                   - 'cloudformation:DescribeStacks'
                   - 'cloudformation:CreateStack'
                   - 'cloudformation:UpdateStack'
