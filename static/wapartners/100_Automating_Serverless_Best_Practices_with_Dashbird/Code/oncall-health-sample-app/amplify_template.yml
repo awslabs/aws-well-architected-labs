@@ -87,6 +87,18 @@ Resources:
                   Action: 
                   - 'ssm:GetParametersByPath'
                   Resource: "*"
+        - PolicyName: cloudformation
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'cloudformation:DescribeStackResources'
+                  - 'cloudformation:DescribeStackResource'
+                  - 'cloudformation:DescribeStacks'
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:UpdateStack'
+                  Resource: "*"
   AmplifyApp:
     Type: "AWS::Amplify::App"
     Properties:
