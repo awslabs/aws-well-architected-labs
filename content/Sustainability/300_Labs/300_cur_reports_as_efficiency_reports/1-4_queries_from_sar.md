@@ -16,12 +16,12 @@ Let's deploy this from the AWS Serverless Application Repository:
 2. Choose **Deploy**.
 3. Change the AWS Management Console's **region** to the region in which the bucket with the CUR data is, as set up in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}).
 4. Fill the fields according to the configuration of your AWS Cost & Usage Report:
-    * CurBucketName: <see Bucket>
-    * ReportName: <see Report name>
-    * ReportPathPrefix: <see Report path Prefix>
+    * CurBucketName: **your bucket name**
+    * ReportName: **your report name**
+    * ReportPathPrefix: **your report path prefix**
 {{% notice note %}}
 **Note** If you chose Option C in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), use:
-  * CurBucketName: <Bucket>
+  * CurBucketName: **your-bucket-name**
   * ReportName: `proxy-metrics-lab`
   * ReportPathPrefix: `cur-data/hourly`
 {{% /notice %}}

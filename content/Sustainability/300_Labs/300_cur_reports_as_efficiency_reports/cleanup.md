@@ -13,6 +13,5 @@ To cleanup the resources created by this lab, please follow these steps:
 3. Empty and delete the Amazon S3 bucket if you have created one before to store the sample CUR data.
 
 {{< prev_next_button link_prev_url="../3_add_assumptions_iac"  title="Congratulations!" final_step="true" >}}
-Now that you have completed the lab, if you have implemented this knowledge in your environment or workload,
-you should complete a milestone in the Well-Architected tool.
+You should now have a firm understanding of using proxy metrics to inform environmental sustainability improvements.
 {{< /prev_next_button >}}

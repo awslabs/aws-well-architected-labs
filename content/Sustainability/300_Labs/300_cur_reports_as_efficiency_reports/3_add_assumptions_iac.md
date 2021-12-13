@@ -28,7 +28,7 @@ cdk deploy \
     --databaseName=<optional databasename override, default: aws_usage_queries_database>
 ```
 {{% notice note %}}
-**Note** If you still have the serverless application repository app deployed from [lab1-4](), you will need to delete the stack named `serverlessrepo-aws-usage-queries` from AWS CloudFormation console before deploying via the CDK command to remove resource conflicts.
+**Note** If you still have the serverless application repository app deployed from [lab 1.4]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-4_queries_from_sar.md" >}}), you will need to delete the stack named `serverlessrepo-aws-usage-queries` from AWS CloudFormation console before deploying via the CDK command to remove resource conflicts.
 {{% /notice %}}
 {{% notice note %}}
 **Note** If you have not previously used AWS CDK in your AWS account, you may need to bootstrap the account by running `cdk bootstrap aws://ACCOUNT-NUMBER/REGION`. Please review the [AWS CDK getting started page](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html) for more information.

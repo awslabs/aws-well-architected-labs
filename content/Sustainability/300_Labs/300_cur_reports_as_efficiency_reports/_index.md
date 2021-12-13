@@ -29,7 +29,7 @@ At the end of this lab you will:
 
 ## Prerequisites
 
-The lab is designed to run in your account. You can pick a region in which you run the lab. If you have existing AWS Cost & Usage Report (CUR) data in a bucket, you should run the lab in the region of this bucket. Pick a region in where Amazon Athena is available.
+The lab is designed to run in your account. You can pick a region in which you run the lab. If you have existing AWS Cost & Usage Report (CUR) data in a bucket, you should run the lab in the region of this bucket. [Pick a region where Amazon Athena is available](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/).
 
 {{% notice note %}}
 **NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).

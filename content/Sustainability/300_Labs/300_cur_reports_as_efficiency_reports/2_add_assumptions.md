@@ -10,7 +10,7 @@ pre: "<b>2 </b>"
 
 By now you will have setup usage reports in the AWS Billing dashboard, view these reports with Amazon Athena, and bootstrap this architecture with pre-populated views deployed through the AWS Serverless Application Repository.
 
-In this lab, you will bring your own assumptions to your queries. These could be a a preference of one instance family over another, such as using [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances. Or a preference for certain AWS regions over others, especially those regions where [AWS purchases and retires environmental attributes](https://sustainability.aboutamazon.com/environment/the-cloud?energyType=true), like Renewable Energy Credits and Guarantees of Origin, to cover the non-renewable energy we use.
+In this lab, you will bring your own assumptions to your queries. These could be a a preference of one instance family over another, such as using [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances. Or a preference for certain AWS regions over others, especially those regions where [AWS purchases and retires environmental attributes](https://sustainability.aboutamazon.com/environment/the-cloud?energyType=true), like Renewable Energy Credits and Guarantees of Origin, to cover the non-renewable energy AWS use.
 
 Some examples of assumptions you might make are:
 * Using one instance family over another
