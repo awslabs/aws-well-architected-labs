@@ -53,6 +53,14 @@ Refresh the service website several times
 * **Scenario 1**: If you selected an AZ _not_ containing the AWS RDS _primary_ DB instance then you should see uninterrupted availability
 * **Scenario 2**: If you selected the AZ containing the AWS RDS _primary_ DB instance, then an availability loss similar to what you saw with RDS fault injection testing will occur.
 
+Verify your observations by going through the canary run data:
+
+* Go to the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+* click on the `WebServersforResiliencyTesting` stack
+* click on the **Outputs** tab
+* Open the URL for **WorkloadAvailability** in a new window
+* You will see that canary runs are failing because the website is _not_ available.
+
 #### 6.2.2 Scenario 1 - Load balancer and web server tiers
 
 This scenario is similar to the EC2 failure injection test because there is only one EC2 server per AZ in our architecture. Look at the same screens as you did before, for that test:

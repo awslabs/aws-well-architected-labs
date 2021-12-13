@@ -14,7 +14,7 @@ This failure injection will simulate a critical problem with one of the three we
 In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **hypothesis**.  For this experiment the hypothesis is:
 > Hypothesis: If one EC2 instance dies, then availability will not be impacted
 
-1. Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
+1. [Optional] Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
     * **single region**: `WaitForWebApp` shows completed (green)
     * **multi region**: `WaitForWebApp1` shows completed (green)
 
@@ -82,6 +82,14 @@ Refresh the service website several times. Note the following:
 * Website remains available
 * The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
 * Also note the `availability_zone` value when you refresh. You can see that requests are being handled by the EC2 instances in only two Availability Zones, while the EC2 instance in the third zone is being replaced
+
+Availability can also be measured programmatically using [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) canaries. A canary has already been created as part of the `WebServersforResiliencyTesting` stack. The canary has been configured to send a simple GET request to the application endpoint at 1 minute intervals.
+
+* Go to the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+* click on the `WebServersforResiliencyTesting` stack
+* click on the **Outputs** tab
+* Open the URL for **WorkloadAvailability** in a new window
+* View canary run data to see if there are any failed runs due to workload unavailability
 
 #### 4.2.2 Load balancing
 
@@ -152,7 +160,7 @@ As in section **4.1**, you will simulate a critical problem with one of the thre
     ![EC2InitialCheck](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2InitialCheck.png)
 
 1. Select the checkbox next to any one of the **WebServerforResiliency** EC2 instances, then click the **Tags** tab.
-    * Verify that there is a tag with **Key** = `Workshop` and **Value** = `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3` 
+    * Verify that there is a tag with **Key** = `Workshop` and **Value** = `AWSWellArchitectedReliability300-ResiliencyofEC2RDSandS3`
 
     ![EC2TagCheck](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/EC2TagCheck.png)
 

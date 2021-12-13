@@ -34,7 +34,8 @@ The main sources of the data used in optional modules:
 * [Amazon EC2](https://aws.amazon.com/ec2/?ec2-whats-new.sort-by=item.additionalFields.postDateTime&ec2-whats-new.sort-order=desc) service inventories like Amazon EBS volumes, snapshots and AMIs
 * [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data 
 * [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
-* [AWS Organizations](https://aws.amazon.com/organizations/) data export
+* [AWS Organizations](https://aws.amazon.com/organizations/) data export 
+* [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/) data export
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:

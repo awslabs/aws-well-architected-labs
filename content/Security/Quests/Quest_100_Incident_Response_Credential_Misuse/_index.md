@@ -47,7 +47,7 @@ In this practical we are going to:
 
 1.1 Login to the AWS console of your AWS account dedicated to training, and select your closest region. If you are at an AWS event follow the instructions provided.
 
-### 2. Create IAM user with an access key
+### 2. Deploy detective controls using CloudFormation
 
 2.1 Follow the instructions in [Automated Deployment of Detective Controls](https://www.wellarchitectedlabs.com/security/200_labs/200_automated_deployment_of_detective_controls/1_create_stack/) and wait for the deployment to complete. It's important that you name your S3 buckets to be globally unique and adhere to [bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html). It's a common practice to include your account ID as part of the name.
 

@@ -450,6 +450,8 @@ Resources:
       Subnets:
         - !Ref Subnet1
         - !Ref Subnet2
+    DependsOn:
+      - VPCGatewayAttachment
   ALBListener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
@@ -517,11 +519,450 @@ Resources:
                   sudo nohup python /home/ec2-user/buggy-webserver.py >>
                   /var/log/webserver.log 2>&1 &
       DocumentType: Command
+  CanaryBucket:
+    Type: 'AWS::S3::Bucket'
+  CanaryRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: SyntheticsCanary
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref CanaryBucket
+                      - /*
+              - Effect: Allow
+                Action:
+                  - 's3:GetBucketLocation'
+                Resource:
+                  - !GetAtt
+                    - CanaryBucket
+                    - Arn
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:CreateLogGroup'
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Action:
+                  - 's3:ListAllMyBuckets'
+                  - 'xray:PutTraceSegments'
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Resource: '*'
+                Action: 'cloudwatch:PutMetricData'
+                Condition:
+                  StringEquals:
+                    'cloudwatch:namespace': CloudWatchSynthetics
+  AlphaCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: alpha
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Alpha";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  BravoCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: bravo
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Bravo";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  CharlieCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: charlie
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Charlie";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  DeltaCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: delta
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Delta";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  EchoCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: echo
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Echo";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  FoxtrotCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: foxtrot
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Foxtrot";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  GolfCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: golf
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Golf";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  HotelCanary:
+    Type: 'AWS::Synthetics::Canary'
+    Properties:
+      Name: hotel
+      ExecutionRoleArn: !GetAtt
+        - CanaryRole
+        - Arn
+      Code:
+        Handler: pageloadBlueprint.handler
+        Script: !Join
+          - ''
+          - - |-
+              var synthetics = require('Synthetics');
+              const log = require('SyntheticsLogger');
+
+              const pageLoadBlueprint = async function () {
+
+                  // INSERT URL here
+                  const URL = "http://
+            - !GetAtt
+              - ALB
+              - DNSName
+            - |
+              /?name=Hotel";
+
+                  let page = await synthetics.getPage();
+                  const response = await page.goto(URL, {waitUntil: 'domcontentloaded', timeout: 30000});
+                  //Wait for page to render.
+                  //Increase or decrease wait time based on endpoint being monitored.
+                  await page.waitFor(15000);
+                  await synthetics.takeScreenshot('loaded', 'loaded');
+                  let pageTitle = await page.title();
+                  log.info('Page title: ' + pageTitle);
+                  if (response.status() !== 200) {
+                      throw "Failed to load page!";
+                  }
+              };
+
+              exports.handler = async () => {
+                  return await pageLoadBlueprint();
+              };
+      ArtifactS3Location: !Sub 's3://${CanaryBucket}'
+      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      Schedule:
+        Expression: rate(1 minute)
+      StartCanaryAfterCreation: true
+    DependsOn:
+      - TargetGroupAllTargets
+  CanaryDashboard:
+    Type: 'AWS::CloudWatch::Dashboard'
+    Properties:
+      DashboardName: Customer-availability
+      DashboardBody: !Sub >-
+        {"widgets":[{"type":"metric","x":0,"y":0,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","alpha"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Alpha"}},{"type":"metric","x":6,"y":0,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","bravo"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Bravo"}},{"type":"metric","x":12,"y":0,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","charlie"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Charlie"}},{"type":"metric","x":18,"y":0,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","delta"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Delta"}},{"type":"metric","x":0,"y":6,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","echo"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Echo"}},{"type":"metric","x":6,"y":6,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","foxtrot"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Foxtrot"}},{"type":"metric","x":12,"y":6,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","golf"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Golf"}},{"type":"metric","x":18,"y":6,"width":6,"height":6,"properties":{"metrics":[["CloudWatchSynthetics","SuccessPercent","CanaryName","hotel"]],"view":"timeSeries","stacked":false,"region":"${AWS::Region}","period":60,"stat":"Sum","title":"Hotel"}}]}
 Outputs:
-  URL:
-    Value: !GetAtt
-      - ALB
-      - DNSName
   SSMDocument:
     Value: !Join
       - ''
@@ -529,19 +970,64 @@ Outputs:
         - !Ref SSMDocument
         - /description?region=
         - !Ref 'AWS::Region'
-  Worker1:
-    Value: !Ref Instance1
-  Worker2:
-    Value: !Ref Instance2
-  Worker3:
-    Value: !Ref Instance3
-  Worker4:
-    Value: !Ref Instance4
-  Worker5:
-    Value: !Ref Instance5
-  Worker6:
-    Value: !Ref Instance6
-  Worker7:
-    Value: !Ref Instance7
-  Worker8:
-    Value: !Ref Instance8
+  CustomerAlpha:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Alpha
+  CustomerBravo:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Bravo
+  CustomerCharlie:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Charlie
+  CustomerDelta:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Delta
+  CustomerEcho:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Echo
+  CustomerFoxtrot:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Foxtrot
+  CustomerGolf:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Golf
+  CustomerHotel:
+    Value: !Join
+      - ''
+      - - !GetAtt
+          - ALB
+          - DNSName
+        - /?name=Hotel
+  AvailabilityDashboard:
+    Value: !Join
+      - ''
+      - - https://console.aws.amazon.com/cloudwatch/home#dashboards:name=
+        - !Ref CanaryDashboard
