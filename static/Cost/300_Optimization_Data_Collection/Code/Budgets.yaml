@@ -158,11 +158,8 @@ Resources:
                               for budget in budgets['Budgets']:
                                   print(budget)
                                   budget.update({'Account_ID': account_id, 'Account_Name': account_name})
-                                  try: 
-                                      if len(budget['CostFilters']) == 0:# IF null then add a none value for Crawler
-                                          budget.update({'CostFilters': {'Filter': ['None']}})
-                                  except:
-                                      budget.update({'CostFilters': {'Filter': ['None']}})
+                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0:
+                                    budget.update({'CostFilters': {'Filter': ['None']}})
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
                                   f.write("\n")
