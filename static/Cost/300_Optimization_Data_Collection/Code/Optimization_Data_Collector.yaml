@@ -180,7 +180,7 @@ Conditions:
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
-    - !Condition DeployComputeOptimizerModule
+    - !Condition DeployRDSUtilizationModule
     - !Condition DeployEcsChargebackModule
 #Reusable Resources:
 Resources:
