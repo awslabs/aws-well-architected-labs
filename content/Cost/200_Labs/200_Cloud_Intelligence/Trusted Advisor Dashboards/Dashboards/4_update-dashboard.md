@@ -1,9 +1,9 @@
 ---
 title: Optional Steps
 date: 2021-02-10T11:43:22+00:00
-weight: 6
+weight: 4
 chapter: false
-pre: "<b>6. </b>"
+pre: "<b>4. </b>"
 ---
 
 ### Optional Step 1: Update dashboard template
@@ -21,6 +21,11 @@ pre: "<b>6. </b>"
     ```bash
     aws quicksight update-dashboard-published-version --region {region} --aws-account-id {account} --dashboard-id ta-organizational-view --version-number {version}
     ```
+**Alternatively automation script can be used for update**
+
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
+
+Follow the [How to use steps](https://github.com/aws-samples/aws-cudos-framework-deployment#how-to-use) for installation and dashboard deployment. We recommend to use **AWS CloudShell** for automated deployment
 
 ### Optional Step 2: Add new TA Organizational view report
 
@@ -52,9 +57,9 @@ You can select certain accounts but please ensure you maintain consistency in fo
 1. **Upload** downloaded report to the `reports` folder in the S3 bucket
 
     Make sure you upload **unzipped** folder to S3 bucket
-    ![Image](/Cost/200_Cloud_Intelligence/Images/S3-upload-report.png?classes=lab_picture_small)
+    ![Image](/Cost/200_Cloud_Intelligence/Images/S3-upload-report.png?classes=lab_picture_small)![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report2.png?classes=lab_picture_small)
 
 1. **Open** and **Refresh** ta-organizational-view dataset in QuickSight
 ![Image](/Cost/200_Cloud_Intelligence/Images/tao/QS_refresh_ds.png?classes=lab_picture_small)
 
-{{< prev_next_button link_prev_url="../5_manual-deployment-deploy/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/">}}
+{{< prev_next_button link_prev_url="../3_deployment/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/">}}

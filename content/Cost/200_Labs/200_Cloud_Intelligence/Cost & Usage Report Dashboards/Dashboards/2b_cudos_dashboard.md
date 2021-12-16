@@ -15,7 +15,7 @@ If you used the automation scripts in the [previous step](/cost/200_labs/200_clo
 {{% /notice %}}
 
 ## Deployment Options
-There are 2 options to deploy the CUDOS Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 3 options to deploy the CUDOS Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
 
 
 ### Option 1: Manual Deployment
@@ -365,7 +365,7 @@ The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-sampl
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
-- Navigate to the [CUDOS section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/cudos)  
+- Navigate to the [CUDOS section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/)  
 {{% /expand%}}
 
 ### Option 3: CloudFormation Deployment
@@ -474,7 +474,7 @@ Now that you have your dashboard created you can share your dashboard with users
 
 {{%expand "Click here to update your dashboard with the latest version" %}}
 
-If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/cudos/CHANGELOG.md), you already know that we continue improving Cloud Intelligence Dashboards.
+If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-cudos.md), you already know that we continue improving Cloud Intelligence Dashboards.
 
 To pull the latest version of the dashboard from the public template please use the following steps.
 

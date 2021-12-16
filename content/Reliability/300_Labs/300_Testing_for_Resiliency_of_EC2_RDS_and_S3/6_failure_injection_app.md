@@ -90,7 +90,15 @@ Refresh the service website several times. Note the following:
 * The remaining two EC2 instances are handling all the requests (as per the displayed `instance_id`)
 * Also note the `availability_zone` value when you refresh. You can see that requests are being handled by the EC2 instances in only two Availability Zones, while the EC2 instance in the third zone is being replaced
 
-Load balancing and Auto Scaling work here much they way they did for the [EC2 failure injection experiment](../4_failure_injection_ec2#response).
+This can also be verified by viewing the canary run data.
+
+* Go to the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+* click on the `WebServersforResiliencyTesting` stack
+* click on the **Outputs** tab
+* Open the URL for **WorkloadAvailability** in a new window
+* Canary runs continue to be successful confirming that the website is available
+
+Load balancing and Auto Scaling work here much the way they did for the [EC2 failure injection experiment](../4_failure_injection_ec2#response).
 
 {{%expand "[Optional] If you want to review the Load balancing and Auto Scaling behavior again for this case, click here" %}}
 
