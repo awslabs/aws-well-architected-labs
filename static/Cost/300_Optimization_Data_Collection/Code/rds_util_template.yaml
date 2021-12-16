@@ -148,6 +148,7 @@ Resources:
         ZipFile: |
           import boto3
           import boto3.session
+          from botocore.exceptions import ClientError
           import os
           from boto3.s3.transfer import S3Transfer
           from datetime import datetime, timedelta, date

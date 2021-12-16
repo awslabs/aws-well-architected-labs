@@ -8,6 +8,7 @@ Metadata:
       Parameters:
         - CostAccountID
         - MultiAccountRoleName
+        - RolePrefix
     - Label:
         default: 'Available modules'
       Parameters:
@@ -23,6 +24,8 @@ Metadata:
         default: 'Cost Account Id'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
+      RolePrefix:
+        default: "Role Prefix"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -45,6 +48,10 @@ Parameters:
     Type: String
     Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
     Default: "Optimization-Data-Multi-Account-Role"
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Default: "WA-"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -121,7 +128,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Ref MultiAccountRoleName
+      RoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:

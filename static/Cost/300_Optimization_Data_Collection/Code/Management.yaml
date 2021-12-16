@@ -8,6 +8,10 @@ Parameters:
     Type: String
     Description: Name of role deployed into Management account to read high level data
     Default: "Lambda-Assume-Role-Management-Account" 
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Default: "WA-"
 Outputs:
   LambdaRole:
     Description: Role for lambda to assume in cost account 
@@ -20,7 +24,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Ref ManagementAccountRole
+      RoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:

@@ -245,7 +245,7 @@ Resources:
             Prefix: "ta"
             CFDataName: "TA"
             GlueRoleARN: !GetAtt GlueRole.Arn
-            MultiAccountRoleName: !Ref MultiAccountRoleName
+            MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
             CodeBucket: !Ref CodeBucket
             RolePrefix: !Ref RolePrefix
   RightsizeModule:
@@ -255,7 +255,7 @@ Resources:
       Parameters:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
-          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
           GlueRoleARN: !GetAtt GlueRole.Arn
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda_dev.yaml"
@@ -268,7 +268,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleARN: !GetAtt GlueRole.Arn
-        MultiAccountRoleName: !Ref MultiAccountRoleName
+        MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !Ref CodeBucket
         RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
@@ -280,7 +280,7 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
-        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         CodeBucket: !Ref CodeBucket
         RolePrefix: !Ref RolePrefix
   EcsChargebackModule:
@@ -291,7 +291,7 @@ Resources:
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
-        MultiAccountRoleName: !Ref MultiAccountRoleName
+        MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !Ref CodeBucket
         RolePrefix: !Ref RolePrefix
   RDSUtilizationModule:
@@ -303,7 +303,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleArn: !GetAtt GlueRole.Arn 
-        MultiAccountRoleName: !Ref MultiAccountRoleName
+        MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         RolePrefix: !Ref RolePrefix
   OrgDataModule:
     Type: AWS::CloudFormation::Stack
@@ -313,7 +313,7 @@ Resources:
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
-        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         Tags: "Env"
         RolePrefix: !Ref RolePrefix
   BudgetsModule:
@@ -324,7 +324,7 @@ Resources:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
           GlueRoleArn: !GetAtt GlueRole.Arn 
-          MultiAccountRoleName: !Ref MultiAccountRoleName
+          MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets_dev.yaml"
   AccountCollector:
@@ -333,7 +333,7 @@ Resources:
     Properties:
           TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts_dev.yaml"
           Parameters:
-            RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
+            RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
             RolePrefix: !Ref RolePrefix
             TaskQueuesUrl: 
               Fn::Join:
