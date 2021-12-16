@@ -413,13 +413,23 @@ Before you can install or update the AWS CLI version 2 on Windows, be sure you h
 
 **Full details on installing, updating and uninstalling AWS CLI from supported operating systems is available [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).**
 
+### Enable Trusted Advisor Data Collection
+
+There are 2 supported data collection methods:
+1. **Trusted Advisor Organizational View** - provides an easy way to collect Trusted Advisor checks for all accounts in your AWS Organizations without need to provision any additional resources. Only manual data refresh is supported.
+2. **Trusted Advisor API via deployment of [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)** - provides an automated way to collect Trusted Advisor checks for all accounts in your AWS Organizations via deployment of required AWS resources from provided AWS CloudFormation templates. Supports automated data refresh.
+
+Please choose preferred data collection method and expand respective section below to proceed:
+
+{{%expand "Trusted Advisor Organizational View" %}}
+
 ### Enable Trusted Advisor Organizational View
 
 For the step by step guide please follow [the documentation](https://docs.aws.amazon.com/awssupport/latest/user/organizational-view.html#enable-organizational-view)
 
 ![Image](/Cost/200_Cloud_Intelligence/Images/tao/TA_org_view_enable.png?classes=lab_picture_small)
 
-### Stage 1 - Create S3 bucket.
+### Create S3 bucket.
 
 1. Create an S3 bucket in a [QuickSight supported AWS region](https://docs.aws.amazon.com/quicksight/latest/user/regions.html) (for example us-east-1)
 
@@ -429,7 +439,12 @@ For the step by step guide please follow [the documentation](https://docs.aws.am
 {{% notice note %}}
 You can use any S3 bucket name. Please save {bucket} name. It will be needed in Stage 2
 {{% /notice %}}
-
+{{% /expand%}}
+{{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab" %}}
+Please follow the steps in [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. 
+**NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
+    ------------ | -------------
+{{% /expand%}}
 ### Prepare Athena
 If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Prepare Trusted Advisor Organizational View](prepare-ta-org-view.html).
 
@@ -468,7 +483,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 1. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
 
-    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your TA Report file.
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your TA report files.
 
         ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
     
