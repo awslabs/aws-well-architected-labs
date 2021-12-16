@@ -191,6 +191,7 @@ Conditions:
     - !Condition DeployComputeOptimizerModule
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
+    - !Condition DeployRDSUtilizationModule
 #Reusable Resources:
 Resources:
   S3Bucket:
