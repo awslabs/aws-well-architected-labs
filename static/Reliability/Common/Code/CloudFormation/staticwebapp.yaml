@@ -30,7 +30,7 @@ Parameters:
   VPCImportName:
     Type: String
     Description: 'The CloudFormation name of the VPC stack to import'
-    Default: 'WebApp1-VPC'
+    Default: 'WebApp1-Vpc'
     MinLength: '3'
     MaxLength: '32'
   VPCImportApp1Instance1Subnet1:
