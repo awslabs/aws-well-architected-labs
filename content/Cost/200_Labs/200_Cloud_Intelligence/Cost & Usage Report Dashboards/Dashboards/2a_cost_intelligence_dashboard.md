@@ -291,7 +291,7 @@ aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
 
                  }
              ],
-                     "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/cost-intelligence-dashboard"
+                     "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/Cost_Intelligence_Dashboard"
          }
      },
      "VersionDescription": "1"
