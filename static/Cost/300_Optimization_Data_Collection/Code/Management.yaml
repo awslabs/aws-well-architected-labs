@@ -58,3 +58,26 @@ Resources:
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
                 Resource: "*"
+        - PolicyName: ComputeOptimizerPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:*"
+                  - "EC2:DescribeInstances"
+                  - "cloudwatch:GetMetricData"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                  - "compute-optimizer:UpdateEnrollmentStatus"
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                  - "compute-optimizer:GetEC2InstanceRecommendations"
+                  - "compute-optimizer:GetEnrollmentStatus"
+                  - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
+                  - "compute-optimizer:GetRecommendationSummaries"
+                  - "organizations:ListAccounts"
+                  - "organizations:DescribeOrganization"
+                  - "organizations:DescribeAccount"
+                  - "lambda:ListFunctions"
+                  - "lambda:ListProvisionedConcurrencyConfigs"
+                  - "EC2:DescribeVolumes" 
+                Resource: "*"
