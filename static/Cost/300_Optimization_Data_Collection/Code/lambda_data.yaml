@@ -40,6 +40,9 @@ Parameters:
     Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
   GlueRoleARN:
     Type: String
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -57,7 +60,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -183,7 +186,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's
       Name: snapshot-ami-query
-      QueryString: !Sub
+      QueryString: 
         "SELECT *,
         CASE
         WHEN snap_ami_id = imageid THEN

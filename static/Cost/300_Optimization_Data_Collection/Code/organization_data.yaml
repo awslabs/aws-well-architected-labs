@@ -18,10 +18,9 @@ Parameters:
     Default: optimization_data
   GlueRoleARN:
     Type: String
-  Suffix:
+  RolePrefix:
     Type: String
-    Description: If this module needs to be made more than one a Suffix can be added
-    Default: ''
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
@@ -60,23 +59,6 @@ Resources:
           def timeconverter(o):
               if isinstance(o, datetime.datetime):
                   return o.__str__()
-
-          def start_crawler(Crawler_Name):
-            glue_client = boto3.client("glue")
-            try:
-                glue_client.start_crawler(Name=Crawler_Name)
-                print(f"{Crawler_Name} has been started")
-            except Exception as e:
-                # Send some context about this error to Lambda Logs
-                logging.warning("%s" % e)
-
-          def list_tags(client, resource_id):
-              tags = []
-              paginator = client.get_paginator("list_tags_for_resource")
-              response_iterator = paginator.paginate(ResourceId=resource_id)
-              for response in response_iterator:
-                  tags.extend(response['Tags'])
-              return tags
               
           def lambda_handler(event, context):
               management_role_arn = os.environ["MANAGMENTARN"]
@@ -94,18 +76,41 @@ Resources:
 
               root_id    = client.list_roots()['Roots'][0]['Id']
               ou_id_list = get_ou_ids(root_id, client)
-              
               with open('/tmp/ou-org.json', 'w') as f:
                   for ou in ou_id_list.keys():
-                      account_data(f, ou, ou_id_list[ou][0], client)
+                      account_data(f, ou, ou_id_list[ou][0], client, ou_id_list[ou][1])
               s3_upload('ou-org')
 
               with open('/tmp/acc-org.json', 'w') as f:
-                  account_data(f, root_id, root_id, client)
+                  account_data(f, root_id, root_id, client,'')
               s3_upload('acc-org')
               start_crawler(os.environ["CRAWLER"])
 
-          def account_data(f, parent, parent_name, client):
+          def get_ou_ids(parent_id, client):
+              full_result = {}
+              test = []
+              ous = ou_loop(parent_id, test, client)
+              print(ous)
+              
+              for ou in ous:
+                  ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
+                  full_result[ou]=[]
+                  full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
+                  tags =list_tags(client, ou)
+                  full_result[ou].append(tags)
+              return full_result
+
+          def ou_loop(parent_id, test, client):
+              print(parent_id)
+              paginator = client.get_paginator('list_children')
+              iterator = paginator.paginate( ParentId=parent_id, ChildType='ORGANIZATIONAL_UNIT')
+              for page in iterator:
+                  for ou in page['Children']:
+                      test.append(ou['Id'])
+                      ou_loop(ou['Id'], test, client)
+              return test
+
+          def account_data(f, parent, parent_name, client, parent_tags):
               tags_check = os.environ["TAGS"]
               account_id_list = get_acc_ids(parent, client)
               for account_id in account_id_list:
@@ -119,11 +124,28 @@ Resources:
                                   value = org_tag['Value']
                                   kv = {tag : value}
                                   account.update(kv)
-                  account.update({'Parent' : parent_name})        
+                  account.update({'Parent' : parent_name, 'Parent_Tags':parent_tags})        
                   data = json.dumps(account, default = timeconverter) 
-
                   f.write(data)
                   f.write('\n')
+
+          def get_acc_ids(parent_id,  client):
+              full_result = []
+              paginator = client.get_paginator('list_accounts_for_parent')
+              iterator  = paginator.paginate(ParentId=parent_id)
+              for page in iterator:
+                  for acc in page['Accounts']:
+                      print(acc['Id'])
+                      full_result.append(acc['Id'])
+              return full_result
+
+          def list_tags(client, resource_id): 
+              tags = []
+              paginator = client.get_paginator("list_tags_for_resource")
+              response_iterator = paginator.paginate(ResourceId=resource_id)
+              for response in response_iterator:
+                  tags.extend(response['Tags'])
+              return tags
 
           def s3_upload(file_name):
               bucket = os.environ["BUCKET_NAME"] 
@@ -134,37 +156,15 @@ Resources:
               except Exception as e:
                   print(e)
 
-          def ou_loop(parent_id, test, client):
-            print(parent_id)
-            paginator = client.get_paginator('list_children')
-            iterator = paginator.paginate( ParentId=parent_id, ChildType='ORGANIZATIONAL_UNIT')
-            for page in iterator:
-                for ou in page['Children']:
-                    test.append(ou['Id'])
-                    ou_loop(ou['Id'], test, client)
-            return test
+          def start_crawler(Crawler_Name):
+              glue_client = boto3.client("glue")
+              try:
+                  glue_client.start_crawler(Name=Crawler_Name)
+                  print(f"{Crawler_Name} has been started")
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
 
-          def get_ou_ids(parent_id, client):
-              full_result = {}
-              test = []
-              ous = ou_loop(parent_id, test, client)
-              print(ous)
-
-              for ou in ous:
-                  ou_info = client.describe_organizational_unit(OrganizationalUnitId=ou)
-                  full_result[ou]=[]
-                  full_result[ou].append(ou_info['OrganizationalUnit']['Name'])
-              return full_result
-
-          def get_acc_ids(parent_id,  client):
-            full_result = []
-            paginator = client.get_paginator('list_accounts_for_parent')
-            iterator  = paginator.paginate(ParentId=parent_id)
-            for page in iterator:
-              for acc in page['Accounts']:
-                print(acc['Id'])
-                full_result.append(acc['Id'])
-            return full_result
       Handler: 'index.lambda_handler'
       MemorySize: 2688
       Timeout: 600
@@ -192,7 +192,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "AWS-Organization-Data-Execute-Lambda${Suffix}"
+      RoleName: !Sub "${RolePrefix}AWS-Organization-Data-Execute-Lambda"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -233,7 +233,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Monthly
-      Name: !Sub "Monthly-Scheduler-For-Accounts${Suffix}"
+      Name: Monthly-Scheduler-For-Accounts
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
