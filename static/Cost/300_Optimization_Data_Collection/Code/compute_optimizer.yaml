@@ -51,6 +51,9 @@ Parameters:
   S3CrawlerQue:
     Type: String
     Description: SQS that will be used to trigger the crawler lambda to pull data in
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -74,7 +77,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:

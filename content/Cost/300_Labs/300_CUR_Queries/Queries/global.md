@@ -151,7 +151,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost ) 
         ELSE 0 
-      END) AS ri_sp_trueup
+      END) AS ri_sp_trueup,
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 

@@ -52,7 +52,7 @@ We will show how you can build automated runbooks and playbooks to investigate a
 ## Prerequisites:
 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. The account should not be used for production purposes.  
-* An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) in your AWS account with full access to [CloudFormation,](https://aws.amazon.com/cloudformation/) [Amazon ECS,](https://aws.amazon.com/ecs/)[Amazon RDS,](https://aws.amazon.com/rds/)[Amazon Virtual Private Cloud (VPC),](https://aws.amazon.com/vpc/) [AWS Identity and Access Management (IAM)](https://aws.amazon.com/iam/).  
+* An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) in your AWS account with full access to [CloudFormation,](https://aws.amazon.com/cloudformation/) [Amazon ECS,](https://aws.amazon.com/ecs/)[Amazon RDS,](https://aws.amazon.com/rds/) [Amazon Virtual Private Cloud (VPC),](https://aws.amazon.com/vpc/) [AWS Identity and Access Management (IAM),](https://aws.amazon.com/iam/) [AWS Cloud9](https://aws.amazon.com/cloud9/)
 
 ## Costs
 
