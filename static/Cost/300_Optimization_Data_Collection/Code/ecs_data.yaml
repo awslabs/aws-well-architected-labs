@@ -42,6 +42,9 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -62,7 +65,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -179,7 +182,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: cluster_metadata_view
-      QueryString: !Sub
+      QueryString:
         "CREATE OR REPLACE VIEW cluster_metadata_view AS 
           SELECT
             *

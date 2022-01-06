@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Optimization Data Collection - BETA"
+title: "Level 300: Optimization Data Collection"
 #menutitle: "Lab #1"
 date: 2020-10-22T11:16:08-04:00
 chapter: false
@@ -16,10 +16,6 @@ October 2021
 
 ## Feedback
 If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
-
-{{% notice note %}}
-This lab is in **BETA** and your feedback is key to developing the lab. Please share any feedback, bugs, or ideas to help improve the lab
-{{% /notice %}}
 
 
 ## Introduction
