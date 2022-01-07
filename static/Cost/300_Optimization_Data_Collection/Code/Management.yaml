@@ -4,9 +4,17 @@ Parameters:
   CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
+  ManagementAccountRole:
+    Type: String
+    Description: Name of role deployed into Management account to read high level data
+    Default: "Lambda-Assume-Role-Management-Account" 
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Default: "WA-"
 Outputs:
   LambdaRole:
-    Description: Lambda-Assume-Role-Management-Account for lambda to assume in cost account 
+    Description: Role for lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole
@@ -16,7 +24,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "Lambda-Assume-Role-Management-Account"
+      RoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -49,6 +57,27 @@ Resources:
                   - "organizations:ListParents"
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
-                  - "budgets:ViewBudget"
-                  - "budgets:Describe*"
+                Resource: "*"
+        - PolicyName: ComputeOptimizerPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:*"
+                  - "EC2:DescribeInstances"
+                  - "cloudwatch:GetMetricData"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                  - "compute-optimizer:UpdateEnrollmentStatus"
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                  - "compute-optimizer:GetEC2InstanceRecommendations"
+                  - "compute-optimizer:GetEnrollmentStatus"
+                  - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
+                  - "compute-optimizer:GetRecommendationSummaries"
+                  - "organizations:ListAccounts"
+                  - "organizations:DescribeOrganization"
+                  - "organizations:DescribeAccount"
+                  - "lambda:ListFunctions"
+                  - "lambda:ListProvisionedConcurrencyConfigs"
+                  - "EC2:DescribeVolumes" 
                 Resource: "*"

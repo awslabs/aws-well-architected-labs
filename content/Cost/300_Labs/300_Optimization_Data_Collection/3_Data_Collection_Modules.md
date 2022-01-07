@@ -473,10 +473,6 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 ![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
 
-If you are using a module connected to Account Collector the you will need to use the below json and pass in the **Replace_AccountID** you wish to test 
-      
-      {"Records": [{"messageId": "e215b689", "receiptHandle": "AQE", "body": "{"/account_id"/:"/Replace_AccountID"/, "/account_name/": /"name/"}", "attributes": {"ApproximateReceiveCount": "1", "SentTimestamp": "1", "SenderId": "A:role", "ApproximateFirstReceiveTimestamp": "1"}, "messageAttributes": {}, "md5OfBody": "1", "eventSource": "aws:sqs", "eventSourceARN": "arn:aws:sqs:eu-west-1:Account_id:role", "awsRegion": "eu-west-1"}]}
-
 4.	Click **Test**
 
 5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 

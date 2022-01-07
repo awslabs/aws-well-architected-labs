@@ -1,5 +1,5 @@
 ---
-title: "Trusted Advisor Dashboard"
+title: "Trusted Advisor Organizational (TAO) Dashboard"
 #menutitle: "Lab #2"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-June 2021
+December 2021
 
 ## Authors
 
@@ -18,6 +18,7 @@ June 2021
 
 ## Contributors
 + Oleksandr Moskalenko, Technical Account Manager, EMEA
++ Georgios Rozakis, Technical Account Manager, EMEA
 
 
 ## Feedback

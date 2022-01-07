@@ -7,14 +7,13 @@ Parameters:
   TaskQueuesUrl:
     Type: String
     Description: the Ques URL that will get the accounts messages, split by comers
-  Suffix:
-    Type: String
-    Description: If this module needs to be made more than one a Suffix can be added
-    Default: ''
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
     Default: "rate(14 days)"
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   LambdaFunctionName:
     Value:
@@ -29,7 +28,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "AWS-Organization-Account-Collector-Role${Suffix}"
+      RoleName: !Sub "${RolePrefix}AWS-Organization-Account-Collector-Role"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -76,7 +75,7 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "AWS-Organization-Account-Collector${Suffix}"
+      FunctionName: AWS-Organization-Account-Collector
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
@@ -168,7 +167,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Scheduler-For-Accounts
-      Name: !Sub "Scheduler-For-Accounts${Suffix}"
+      Name: Scheduler-For-Accounts
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:

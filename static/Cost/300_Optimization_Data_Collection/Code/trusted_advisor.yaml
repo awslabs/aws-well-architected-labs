@@ -42,6 +42,9 @@ Parameters:
     Type: String
     Description: Service which the data collector is looking at
     Default: ta
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
   GlueRoleARN:
     Type: String
 Outputs:
@@ -61,7 +64,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
