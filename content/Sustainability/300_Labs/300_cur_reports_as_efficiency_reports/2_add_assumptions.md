@@ -78,6 +78,6 @@ GROUP BY instance_family, region, account_id, purchase_option, year, month
 ORDER BY 8 DESC
 ```
 
-Congratulations! You have put additional assumptions into views about regions to enrich the usage data by weights. You can now continue with Lab 3 to see how you could add the additional views and tables in an Infrastructure as Code (IaC) approach.
+Congratulations! You have put additional assumptions into views to extend the usage data by weights. You can now continue with Lab 3 to see how you could add the additional views and tables in an Infrastructure as Code (IaC) approach.
 
 {{< prev_next_button link_prev_url="../1-4_queries_from_sar" link_next_url="../3_add_assumptions_iac" />}}

@@ -104,8 +104,8 @@ Now it’s time to get started! Enjoy the labs and have fun!
 ## Goals
 At the end of this lab you will:
 
-* Understand the need for proxy metrics and identify candidates
-* Draw these KPIs from your AWS Cost & Usage Report (or sample data) and prepare the data ready for dashboarding with e.g. Amazon QuickSight
+* Understand the need for proxy metrics for sustainability and identify candidates
+* Draw these proxy metrics from your AWS Cost & Usage Report (or sample data) and prepare the data ready for dashboarding with e.g. Amazon QuickSight
 * Learn how you can add your own data and combine it with the AWS Cost & Usage Reports
 
 ## Prerequisites
