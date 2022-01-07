@@ -133,6 +133,6 @@ ORDER BY 8 DESC
 If you don't return any results, try troubleshooting your data. Do you have any instances of the defined types in the regions you have given points?
 
 
-Congratulations! You have now brought your own assumptions, defined them in infrastructure code, and deployed them with AWS CDK. Defining assumptions as IaC brings the benefit of change tracking and makes the reporting more maintainable. Make sure to follow the cleanup steps to remove un-required resources after the lab.
+Congratulations! You have now brought your own assumptions, defined them in infrastructure code, and deployed them with AWS CDK. Defining assumptions as IaC brings the benefit of change tracking and makes the reporting more maintainable. Make sure to follow the [clean up instructions]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/cleanup.md" >}}) to remove unrequired resources after running the lab.
 
 {{< prev_next_button link_prev_url="../2_add_assumptions" link_next_url="../cleanup" />}}
