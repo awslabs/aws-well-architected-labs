@@ -8,16 +8,10 @@ pre: "<b>1.4 </b>"
 
 # Lab 1.4
 
-So far, you have learnt how to prepare, discover, and query your AWS Cost and Usage report data with Amazon Athena manually.
+In the previous steps you've made the AWS Cost & Usage Report data available to Amazon Athena with a lot of manual steps.
+In this lab you will use sample code to automate this setup and deploy a set of pre-canned queries automatically.
 
-In this lab section, you will deploy an application from the [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/) which sets up the AWS Glue resources and deploy further pre-canned Amazon Athena queries automatically. Everything is packaged and available in the [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/) called [AWS Usage Queries](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:387304072572:applications~aws-usage-queries) (find the [source code on GitHub](https://github.com/aws-samples/aws-usage-queries)).
-
-Deploying this application will run a AWS Cloud Development Kit (CDK) template that bootstraps:
-* AWS Glue catalog metadata in your account to query the CUR
-* Additional reference data you can use to enrich your queries - such as instance type information
-* Common queries as AWS Glue views, e.g. EC2 instance vCPU hours by account and month
-
-Once you have deployed the AWS Usage Queries application, you will be able to make use of the additional pre-canned queries and modify the queries in the following labs.
+The sample code is packaged and available in the [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/) and called [AWS Usage Queries](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:387304072572:applications~aws-usage-queries) (find the [source code on GitHub](https://github.com/aws-samples/aws-usage-queries)).
 
 Let's deploy this from the AWS Serverless Application Repository:
 
@@ -48,8 +42,8 @@ ALTER TABLE `cur_hourly` SET TBLPROPERTIES ('projection.year.range'='2018,2022')
 12. Explore the data. Choose the **three dots** next to the tables and views and choose **Preview table**.
 ![Preview table](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-4/images/explore-data.png)
 
-Congratulations! With a two click deployment from the AWS Serverless Application Repository you can query the CUR data, have pre-canned queries for proxy metrics of Amazon EC2 and Amazon S3, and additional reference data for the EC2 instance types in the table `ref_instance_types`.
+Congratulations! With a two-click deployment you can now query the CUR data, have pre-canned queries for proxy metrics for Amazon EC2 and Amazon S3, and additional reference data for the EC2 instance types in the table `ref_instance_types`.
 
-You can now continue with Part 2.
+You can now continue with Lab 2 in which you will learn to extend the queries by further data sources.
 
 {{< prev_next_button link_prev_url="../1-3_query_s3_usage_by_class" link_next_url="../2_add_assumptions" />}}

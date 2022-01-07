@@ -8,6 +8,10 @@ pre: "<b>1.3 </b>"
 
 # Lab 1.3
 
+In the previous steps, you learned how you can run SQL queries on your AWS Cost & Usage Report data with Amazon Athena.
+In this step you will learn how you can aggregate the usage data by type and AWS account.
+This way you can calculate proxy metrics for sustainability and Key Performance Indicators (KPI) of your application teams.
+
 Let's query the `cur_hourly` table we just created to get the Amazon S3 storage by account and storage class.
 
 1. Go to the [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) in the same region as before.
@@ -30,7 +34,7 @@ GROUP BY line_item_usage_account_id,
 ```
 4. Click **Run query**
 
-Congratulations! You have now the Amazon S3 storage grouped by month, year, storage class, and account. You could now use this data to show-back the data to your application owners (e.g. by their accounts).
+You have now the Amazon S3 storage grouped by month, year, storage class, and account.
 
 You can also save the query now as a view to refer to it later. This way you don't need to remember the query and can also handle the view like a normal table, e.g. for joins with other tables.
 
@@ -45,5 +49,6 @@ You can also save the query now as a view to refer to it later. This way you don
 You can now see new view called `storage_by_class` on the left menu. Choose the three dots next to the `storage_by_class` table and choose **Preview view** to test if it works.
 ![Preview view](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/preview-view.png)
 
+Congratulations, by the end of this step you learned to query AWS Cost & Usage Report data with Amazon Athena. You have run SQL queries on that data to aggregate it by usage type and AWS account to calculate proxy metrics for sustainability. And finally, you saved this query as a view. Now you can use this view's data to establish KPIs for your AWS account owners and application teams.
 
 {{< prev_next_button link_prev_url="../1-2_discover_cur_data" link_next_url="../1-4_queries_from_sar" />}}

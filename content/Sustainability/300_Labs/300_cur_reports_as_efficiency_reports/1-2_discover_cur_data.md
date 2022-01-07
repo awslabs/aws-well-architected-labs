@@ -8,7 +8,7 @@ pre: "<b>1.2 </b>"
 
 # Lab 1.2
 
-Let's create an AWS Glue table for your CUR data in your bucket so can easily query the data by means of standard SQL (Structured Query Language) without loading the data into a database.
+In the previous step, you provided AWS Cost & Usage Report data in an Amazon S3 bucket. In this step you will make this usage data available in the AWS Glue data catalog for Amazon Athena. Amazon Athena allows you to run SQL (Structured Query Language) queries on the data without loading it into a database and calculate proxy metrics for sustainability.
 
 1. Go to the [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) in a region in which your CUR data is stored. This is the same region your S3 bucket resides as defined in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}).
 2. If this is your first time to visit the Athena console in your current AWS Region, choose **Explore the query editor**, then choose **set up a query result location in Amazon S3** and follow the steps from the (Amazon Athena docs to specify a query result location)[https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location]. Depending on your setup, you may need to create a new workgroup within Amazon Athena.
@@ -197,6 +197,6 @@ TBLPROPERTIES (
 8. Now you can preview random 10 entries. Choose the three dots next to the `cur_hourly` table and choose **Preview table**.
 ![Preview Table](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/preview-table.png)
 
-Congratulations! You now can explore your CUR data with Amazon Athena. And as soon as new data is delivered, it will be returned in your next query immediately. Take the time to explore the columns of your reports.
+Congratulations! You now can explore your CUR data with Amazon Athena with SQL queries. As soon as new CUR data gets written to Amazon S3, it will be returned in your next query immediately. Take the time to expirement with Amazon Athena's query editor and explore the columns of your reports.
 
 {{< prev_next_button link_prev_url="../1-1_prepare_cur_data" link_next_url="../1-3_query_s3_usage_by_class" />}}
