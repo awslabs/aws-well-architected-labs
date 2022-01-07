@@ -62,20 +62,12 @@ If you already have an account in Dashbird, go to 2.2.
 
 ### 2.2. Well-Architected Insights
 
-From the Dashbird console, you can now access the Well-Architected Insights. From here, you should be able to see the Well-Architected best practices broken down by five pillars of Well-Architected Framework.
+From the Dashbird console, you can now access the Well-Architected Insights. From here, you should be able to see the Well-Architected best practices broken down by six pillars of Well-Architected Framework.
 
-1. Click **Well-Architected Lens** on the left panel to see your workload performance against each one of five pillars.
+1. Click **Well-Architected Lens** on the left panel to see your workload performance against each one of six pillars.
 
 ![Section2 Well-Architected Lens](/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Images/section2/section2-well-architected-lens.png)
 
 ___
 **END OF SECTION 2**
 ___
-
-
-
-
-
-
-
-
