@@ -13,6 +13,10 @@ This lab is an extension to part 2, where we explain how to add more data in CSV
 In this lab, you will learn how to use and customise the library introduced in [lab 1.4]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-4_queries_from_sar.md" >}}) for your own needs.
 
 # Lab
+## Prerequisites
+
+This lab utilises the [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html). If you do not already have the AWS CDK installed in your environment, please follow the [prerequisites](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_prerequisites) and [installation guide](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_install) from the [AWS CDK getting started page](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html).
+
 ## Stage 1 - Deploy the CDK stack
 
 1. Head to the [aws-usage-queries](https://github.com/aws-samples/aws-usage-queries) repository in github.

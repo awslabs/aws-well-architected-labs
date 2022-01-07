@@ -8,11 +8,11 @@ pre: "<b>2 </b>"
 
 # Introduction
 
-By now you will have setup usage reports in the AWS Billing dashboard, view these reports with Amazon Athena, and bootstrap this architecture with pre-populated views deployed through the AWS Serverless Application Repository.
+By now you will have setup usage reports in the AWS Billing dashboard, view these reports with Amazon Athena, and bootstrap this architecture with pre-populated views deployed through the AWS Serverless Application Repository AWS Usage Queries app.
 
-In this lab, you will bring your own assumptions to your queries. These could be a a preference of one instance family over another, such as using [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances. Or a preference for certain AWS regions over others, especially those regions where [AWS purchases and retires environmental attributes](https://sustainability.aboutamazon.com/environment/the-cloud?energyType=true), like Renewable Energy Credits and Guarantees of Origin, to cover the non-renewable energy AWS use.
+In this lab, you will bring your own assumptions to your queries. Every business has their own sustainability goals for their workloads and methodologies used to calculate the impact of their workloads. Making assumptions about the environments in which your workloads operate, can provide metrics which simplify and reinforce the need to adapt a workload to meet sustainability goals. An example of an assumption could be a preference of one instance family over another, such as using [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances. Or a preference for certain AWS regions over others, especially those regions where [AWS purchases and retires environmental attributes](https://sustainability.aboutamazon.com/environment/the-cloud?energyType=true), like Renewable Energy Credits and Guarantees of Origin, to cover the non-renewable energy AWS use.
 
-Some examples of assumptions you might make are:
+Some more examples of assumptions you might make are:
 * Using one instance family over another
 * Region preference
 * Adding weights or additional data to calculate derivative metrics

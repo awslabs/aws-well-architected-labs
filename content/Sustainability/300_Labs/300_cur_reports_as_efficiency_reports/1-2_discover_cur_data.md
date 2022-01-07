@@ -11,16 +11,17 @@ pre: "<b>1.2 </b>"
 Let's create an AWS Glue table for your CUR data in your bucket so can easily query the data by means of standard SQL (Structured Query Language) without loading the data into a database.
 
 1. Go to the [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) in a region in which your CUR data is stored. This is the same region your S3 bucket resides as defined in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}).
-2. If the introductory interstitial screen appears, choose **Explore the query editor**, then choose **set up a query result location in Amazon S3** and follow the steps from the (Amazon Athena docs to specify a query result location)[https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location]. Depending on your setup, you may need to create a new workgroup within Amazon Athena.
+2. If this is your first time to visit the Athena console in your current AWS Region, choose **Explore the query editor**, then choose **set up a query result location in Amazon S3** and follow the steps from the (Amazon Athena docs to specify a query result location)[https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location]. Depending on your setup, you may need to create a new workgroup within Amazon Athena.
 3. Create a new AWS Glue database via the Amazon Athena's query editor. Enter the query:
 ```sql
 CREATE DATABASE proxy_metrics_lab
 ```
 4. Click **Run query**
-5. Choose the **Database** `proxy_metrics_lab`
+5. Choose the **Database** `proxy_metrics_lab` from the drop down menu.
+![proxy_metrics_lab database](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/database-selection.png)
 6. Now you need to tell AWS Glue where the data to query is stored. You create a table in AWS Glue via a DDL (Data Definition Language) SQL statement in Amazon Athena. Fill the **New Query** field with the following query. You need to replace `S3 URL HERE` on line 160 of the query with the URI of the root of your cost and usage reports in the form of `s3://<bucket>/<Report path prefix>/<Report name>/`.
   * If you followed option B in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), your S3 URI may look like `s3://<bucket>/cur-data/hourly/proxy-metrics-lab/proxy-metrics-lab/`.
-  * If you followed option C in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), your S3 URI may look like `s3://<your-bucket-name>/cur-data/hourly/proxy-metrics-lab/`.  
+  * If you followed option C in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), your S3 URI may look like `s3://<bucket>/cur-data/hourly/proxy-metrics-lab/`.  
 ```sql
 CREATE EXTERNAL TABLE `cur_hourly`(
   `identity_line_item_id` string,
