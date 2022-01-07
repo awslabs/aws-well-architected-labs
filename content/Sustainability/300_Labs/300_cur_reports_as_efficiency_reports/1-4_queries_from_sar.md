@@ -8,7 +8,10 @@ pre: "<b>1.4 </b>"
 
 # Lab 1.4
 
-You might want to automate the setup of the AWS Glue resources and deploy further pre-canned queries automatically. Everything is packaged and available in the [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/) called [AWS Usage Queries](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:387304072572:applications~aws-usage-queries) (find the [source code on GitHub](https://github.com/aws-samples/aws-usage-queries)).
+In the previous steps you've made the AWS Cost & Usage Report data available to Amazon Athena with a lot of manual steps.
+In this lab you will use sample code to automate this setup and deploy a set of pre-canned queries automatically.
+
+The sample code is packaged and available in the [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/) and called [AWS Usage Queries](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:387304072572:applications~aws-usage-queries) (find the [source code on GitHub](https://github.com/aws-samples/aws-usage-queries)).
 
 Let's deploy this from the AWS Serverless Application Repository:
 
@@ -37,8 +40,8 @@ ALTER TABLE `cur_hourly` SET TBLPROPERTIES ('projection.year.range'='2018,2022')
 ```
 12. Explore the data. Choose the **three dots** next to the tables and views and choose **Preview table**.
 
-Congratulations! With a two click deployment from the AWS Serverless Application Repository you can query the CUR data, have pre-canned queries for proxy metrics of Amazon EC2 and Amazon S3, and additional reference data for the EC2 instance types in the table `ref_instance_types`.
+Congratulations! With a two-click deployment you can now query the CUR data, have pre-canned queries for proxy metrics for Amazon EC2 and Amazon S3, and additional reference data for the EC2 instance types in the table `ref_instance_types`.
 
-You can now continue with Part 2.
+You can now continue with Lab 2 in which you will learn to extend the queries by further data sources.
 
 {{< prev_next_button link_prev_url="../1-3_query_s3_usage_by_class" link_next_url="../2_add_assumptions" />}}

@@ -8,11 +8,13 @@ pre: "<b>1.1 </b>"
 
 # Lab 1.1
 
-To query AWS Cost & Usage Reports (CUR) you need to have CUR data in one of your buckets. Your options:
+In this lab you will provide AWS Cost & Usage Report (CUR) data in one of your Amazon S3 buckets. In later labs we will query that data to calculate proxy metrics for sustainability.
 
-* Option A: **existing CUR reports** from your AWS account. This option makes sense, if you already have configured CUR in your account.
+There are several options to provide AWS Cost & Usage Report data:
+
+* Option A: use **existing CUR reports** from your AWS account. This option makes sense, if you already have configured CUR in your account.
 * Option B: create a **new CUR report** in your AWS account. This option makes sense, if your account has significant resource and you are willing to **suspend the lab for at least 24 hours** to wait for CUR data collection.
-* Option C: CUR sample data.
+* Option C: copy **CUR sample data** to your bucket.
 
 ## Option A - Existing CUR reports
 If you have cost usage reporting currently enabled in your account, please check whether the setup of the report is appropriate for this lab.
@@ -68,5 +70,7 @@ s3://<your-bucket-name>/cur-data/hourly/proxy-metrics-lab/year=2018/month=11/Nov
 s3://<your-bucket-name>/cur-data/hourly/proxy-metrics-lab/year=2018/month=10/Oct2018-WorkshopCUR-00001.snappy.parquet
 ```
 {{% /expand%}}
+
+Congratulations, you now have AWS Cost & Usage Report data in an Amazon S3 bucket which we can query with Athena in the next step.
 
 {{< prev_next_button link_prev_url="../" link_next_url="../1-2_discover_cur_data" />}}

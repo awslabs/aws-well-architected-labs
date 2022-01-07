@@ -8,18 +8,18 @@ pre: "<b>2 </b>"
 
 # Introduction
 
-By now you will have setup usage reports in the AWS Billing dashboard, view these reports with Amazon Athena, and bootstrap this architecture with pre-populated views deployed through the AWS Serverless Application Repository.
+By now you have queried AWS Cost & Usage reports with Amazon Athena. You drew proxy metrics for sustainability from AWS usage data.
+Calculating key performance indicators (KPIs), you might want to extend the queries with further assumptions/ data to reinforce sustainable best practices.
 
-In this lab, you will bring your own assumptions to your queries. These could be a a preference of one instance family over another, such as using [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances. Or a preference for certain AWS regions over others, especially those regions where [AWS purchases and retires environmental attributes](https://sustainability.aboutamazon.com/environment/the-cloud?energyType=true), like Renewable Energy Credits and Guarantees of Origin, to cover the non-renewable energy AWS use.
+Some examples for further assumptions:
 
-Some examples of assumptions you might make are:
-* Using one instance family over another
-* Region preference
-* Adding weights or additional data to calculate derivative metrics
+* preference of one EC2 instance family over another (e.g. [AWS Graviton](https://aws.amazon.com/ec2/graviton/) based instances)
+* AWS Region preference by user location or the published carbon intensity of electricity grids
+* preference of EC2 Spot instances to increase the overall utilization of the cloud's resources while decreasing cost
 
-This lab shows you how you can add weights at the example of a region and instance family.
+In this lab you will learn to make that data available to your queries as a simple view in Amazon Athena.
 
-# Lab
+# Lab 2
 
 1. Go the the [Amazon Athena console](https://console.aws.amazon.com/athena/home?#query) in the region where you deployed earlier the AWS Serverless Application Repository application in [lab 1.4]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-4_queries_from_sar.md" >}}).
 2. Choose the Database `aws_usage_queries_database`, which you have deployed in [lab 1.4]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-4_queries_from_sar.md" >}}).
@@ -78,10 +78,6 @@ GROUP BY instance_family, region, account_id, purchase_option, year, month
 ORDER BY 8 DESC
 ```
 
-Congratulations! You have put additional assumptions into views about regions to enrich the usage data by weights.
-
-You could also add more weights regarding the purchase option to e.g. encourage teams to use EC2 Spot as it supports an overall higher utilization of the cloud's resources while decreasing cost.
-
-You can now continue with Part 3 to see how you could add the additional views and tables in an Infrastructure as Code (IaC) approach.
+Congratulations! You have put additional assumptions into views about regions to enrich the usage data by weights. You can now continue with Lab 3 to see how you could add the additional views and tables in an Infrastructure as Code (IaC) approach.
 
 {{< prev_next_button link_prev_url="../1-4_queries_from_sar" link_next_url="../3_add_assumptions_iac" />}}
