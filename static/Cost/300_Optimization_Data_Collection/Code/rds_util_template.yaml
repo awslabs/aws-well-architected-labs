@@ -26,6 +26,9 @@ Parameters:
   GlueRoleArn:
     Type: String
     Description: ARN of the IAM role deployed to use for glue.
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   AthenaSavedQuery:
     Description: This saved query will provide you a summary of your lambda data
@@ -44,7 +47,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -145,6 +148,7 @@ Resources:
         ZipFile: |
           import boto3
           import boto3.session
+          from botocore.exceptions import ClientError
           import os
           from boto3.s3.transfer import S3Transfer
           from datetime import datetime, timedelta, date

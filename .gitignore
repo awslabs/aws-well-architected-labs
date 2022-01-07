@@ -18,6 +18,7 @@ $RECYCLE.BIN/
 dist/
 .vscode/
 *.code-workspace
+.hugo_build.lock
 
 # https://github.com/awslabs/aws-well-architected-labs/issues/92
 !docs/stylesheets/

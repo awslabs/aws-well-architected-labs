@@ -384,6 +384,7 @@
       "Type" : "AWS::IAM::Role",
       "Properties" : {
         "RoleName" : "WebAppLambdaRole",
+        "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/CloudWatchSyntheticsFullAccess" ],
         "AssumeRolePolicyDocument" : {
           "Version" : "2012-10-17",
           "Statement" : [ {
@@ -425,6 +426,10 @@
                 "iam:DescribeInstanceProfiles",
                 "iam:DescribeRoles",
                 "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
+                "iam:CreatePolicy",
+                "iam:GetRole",
                 "elasticloadbalancing:AddTags",
                 "elasticloadbalancing:RemoveTags",
                 "elasticloadbalancing:CreateListener",
@@ -445,7 +450,9 @@
                 "logs:PutLogEvents",
                 "logs:PutRetentionPolicy",
                 "logs:TagLogGroup",
-                "ssm:GetParameter"
+                "ssm:GetParameter",
+                "s3:CreateBucket",
+                "synthetics:CreateCanary"
               ],
               "Resource" : "*"
             } ]

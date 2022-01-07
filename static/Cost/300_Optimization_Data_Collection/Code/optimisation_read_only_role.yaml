@@ -7,6 +7,8 @@ Metadata:
         default: 'Deployment parameters'
       Parameters:
         - CostAccountID
+        - MultiAccountRoleName
+        - RolePrefix
     - Label:
         default: 'Available modules'
       Parameters:
@@ -16,9 +18,14 @@ Metadata:
         - IncludeComputeOptimizerModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
+        - IncludeBudgetsModule
     ParameterLabels:
       CostAccountID:
         default: 'Cost Account Id'
+      MultiAccountRoleName:
+        default: 'Multi Account Role Name'
+      RolePrefix:
+        default: "Role Prefix"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -30,11 +37,21 @@ Metadata:
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
-        default: 'Include RDS Utilization Data Collection Module'    
+        default: 'Include RDS Utilization Data Collection Module' 
+      IncludeBudgetsModule:
+        default: 'Include Budgets Collection Module'    
 Parameters:
   CostAccountID:
     Type: String
     Description: AccountId of where the collector is deployed
+  MultiAccountRoleName:
+    Type: String
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Default: "Optimization-Data-Multi-Account-Role"
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Default: "WA-"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -71,6 +88,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  IncludeBudgetsModule:
+    Type: String
+    Description: Collects budgets from your accounts
+    AllowedValues:
+      - "yes"
+      - "no"
 
 Conditions:
   IncludeTAModulePolicy: !Equals 
@@ -91,9 +114,12 @@ Conditions:
   IncludeRDSUtilizationModulePolicy: !Equals
     - !Ref IncludeRDSUtilizationModule
     - "yes"  
+  IncludeBudgetsModulePolicy: !Equals
+    - !Ref IncludeBudgetsModule
+    - "yes"
 Outputs:
   LambdaRole:
-    Description: OPTICS-Assume-Role-Management-Account for lambda to assume in cost account 
+    Description: For lambda to assume in cost account 
     Value:
       Fn::GetAtt:
         - LambdaRole
@@ -102,7 +128,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "Optimization-Data-Multi-Account-Role"
+      RoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -156,6 +182,21 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ce:GetRightsizingRecommendation"
+            Resource: "*"
+      Roles:
+        - Ref: LambdaRole
+  BudgetsReadOnlyPolicy:
+    Type: 'AWS::IAM::Policy'
+    Condition: IncludeBudgetsModulePolicy
+    Properties:
+      PolicyName: BudgetsReadOnlyPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "budgets:ViewBudget"
+              - "budgets:Describe*"
             Resource: "*"
       Roles:
         - Ref: LambdaRole

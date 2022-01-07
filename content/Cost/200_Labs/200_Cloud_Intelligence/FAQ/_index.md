@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
-October 2021
+November 2021
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
@@ -257,6 +257,19 @@ On each of the datasets that the CUDOS dashboard is using, define Row Level Secu
 9. Repeat steps for all CUDOS-related datasets (See below for a list of current Dataset Names)
 
 Once you have applied the CUDOS_Dataset_rules S3 Dataset to all your CUDOS datasets, visit the CUDOS Dashboard as a user who is defined in the csv file, and confirm the Account IDs shown are only the ones specified in that file.
+
+{{% /expand%}}
+
+## How do I fix the COLUMN_GEOGRAPHIC_ROLE_MISMATCH error? 
+
+When attempting to deploy the dashboard manually, some users get an error that states COLUMN_GEOGRAPHIC_ROLE_MISMATCH. 
+{{%expand "Click here to expand answer" %}}
+
+This error is caused by there being too many [data source connectors](https://docs.aws.amazon.com/quicksight/latest/user/working-with-data-sources.html) in QuickSight with the same name. To check how many data source connectors you have, visit QuickSight datasets and click on **new datasets**. Scroll to the bottom and note how many Athena data connectors there are with the same name. 
+
+![Images/Sduplicatedataset.png](/Cost/200_Cloud_Intelligence/Images/duplicatedataset.png?classes=lab_picture_small)
+
+Unless you know which datasets are tied to which data sources, it is faster to simply delete all the Cloud Intelligence Dashboards data sources and data sets from QuickSight, and start adding them again, this time only using a single data source. This is described in detail in [this lab under the manual deployment option](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2a_cost_intelligence_dashboard/) as step 22. You should only have one data source for all your Cloud Intelligence Dashboard datasets, including customer_all. If you wish to use separate data sources, they must not have the same name. 
 
 {{% /expand%}}
 

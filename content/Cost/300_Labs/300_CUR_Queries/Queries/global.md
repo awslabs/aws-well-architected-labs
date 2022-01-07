@@ -24,6 +24,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Premium Support Chargeback by Accounts](#premium-support-chargeback-by-accounts)
   * [Unblended Cost by Charge Type](#cost-by-charge-type)
   * [Serverless Product Spend](#serverless-product-spend)
+  * [Amortized Cost By Charge Type](#amortized-cost-by-charge-type)
   
 ### Account
 
@@ -150,7 +151,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost ) 
         ELSE 0 
-      END) AS ri_sp_trueup
+      END) AS ri_sp_trueup,
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
@@ -562,6 +563,64 @@ ORDER BY
 ```
 
 {{< email_button category_text="Global" service_text="Serverless" query_text="Global - Serverless Product Spend" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### Amortized Cost By Charge Type
+
+#### Query Description
+This query provides amortized cost by charge type for a given month. The output includes payer account ID, the month, charge types and the amortized cost for the charge type. It closely matches Cost Explorer result when "show costs as" amortized cost is selected under the advanced options and grouped by charge type.
+
+#### Pricing
+Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
+
+Choosing advanced options Cost Explorer documentation - [Link](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-advanced.html)
+
+#### Cost Explorer Links
+These links are provided as an example to compare CUR report output to Cost Explorer output.
+
+Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=RecordType&hasBlended=false&hasAmortized=true&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last6Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&filter=%5B%5D&chartStyle=Stack&forecastTimeRangeOption=None&usageAs=usageQuantity)
+
+#### Sample Output:
+![Images/spendaccount.png](/Cost/300_CUR_Queries/Images/Global/amortized_cost_by_charge_type.png)
+
+#### Download SQL File:
+[Link to file](/Cost/300_CUR_Queries/Code/Global/amortized_cost_by_charge_type.sql)
+
+#### Query Preview:  
+```tsql  
+SELECT 
+  bill_payer_account_id,
+  CASE 
+      WHEN (line_item_line_item_type = 'Fee' AND product_product_name = 'AWS Premium Support') THEN 'Support fee'
+      WHEN (line_item_line_item_type = 'Fee' AND bill_billing_entity <> 'AWS') THEN 'Marketplace fee'
+	  WHEN (line_item_line_item_type = 'DiscountedUsage') THEN 'Reservation applied usage'
+      ELSE line_item_line_item_type 
+    END charge_type,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date
+  , 
+  round(sum(CASE
+      WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost
+      WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN round((savings_plan_total_commitment_to_date - savings_plan_used_commitment),8)
+      WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+      WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+      WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+      WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+      WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 ELSE line_item_unblended_cost END),2) sum_amortized_cost
+FROM 
+  ${table_name} 
+WHERE 
+  ${date_filter} 
+GROUP BY 
+  bill_payer_account_id,
+  2, -- month_line_item_usage_start_date
+  3 -- sum_amortized_cost
+ORDER BY 
+  sum_amortized_cost DESC
+  ;
+```
+
+{{< email_button category_text="Global" service_text="Global" query_text="Global - Amortized by charge type" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 

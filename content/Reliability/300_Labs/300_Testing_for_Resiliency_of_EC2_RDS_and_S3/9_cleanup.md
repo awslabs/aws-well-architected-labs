@@ -8,17 +8,28 @@ weight: 9
 
 {{% common/EventEngineVsOwnAccountCleanup %}}
 
+### Delete S3 Bucket used by canary
+
+The canary (synthetic monitor) puts its run data into an S3 bucket. You need to empty and delete the bucket
+1. Go to the [S3 Console](https://s3.console.aws.amazon.com/s3/home)
+2. Select the checkbox next to the bucket whose name starts with **webserversforresiliencytesting-canarybucket**
+3. Click **Empty**
+4. Follow the directions to empty the bucket
+5. Click **Exit**
+6. Ensuring the checkbox next to the canary bucket is still selected, click **Delete**
+7. Follow the directions to delete the bucket
+
 ### Remove manually provisioned resources
 
-Some resources were created by the failure simulation scripts. You need to remove these first
+Some resources were created by the failure simulation scripts. If you ran the **AZ failure injection** You need to remove these.
 
 1. Go to the [Network ACL console](https://us-east-2.console.aws.amazon.com/vpc/home?region=us-east-2#acls:)
-1. Look at the NACL entries for the VPC called **ResiliencyVPC**
-1. For any of these NACLs that are _not_ _Default_ do the following
+2. Look at the NACL entries for the VPC called **ResiliencyVPC**
+3. For any of these NACLs that are _not_ _Default_ do the following
       1. Select the NACL
-      1. **Actions** >> **Edit subnet associations**
-      1. Uncheck all boxes and click **Edit**
-      1. **Actions** >> **Delete network ACL**
+      2. **Actions** >> **Edit subnet associations**
+      3. Uncheck all boxes and click **Edit**
+      4. **Actions** >> **Delete network ACL**
 
 ### Remove AWS CloudFormation provisioned resources
 
