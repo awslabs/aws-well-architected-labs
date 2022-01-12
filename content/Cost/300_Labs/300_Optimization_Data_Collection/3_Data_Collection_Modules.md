@@ -186,7 +186,7 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## Compute Optimizer
 
 The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
-In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena query as a view to query these results and track your recommendations.
+In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations.
 This Data will be separated by type service and partitioned by year, month. 
 Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
 
@@ -229,14 +229,6 @@ Please make sure you enable Compute Optimizer following this [guide.](https://do
               GlueRoleARN: !GetAtt GlueRole.Arn
               RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
               CodeBucket: !Ref CodeBucket
-        AccountCollector:
-          Type: AWS::CloudFormation::Stack
-          Properties:
-            TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
-            TimeoutInMinutes: 2
-            Parameters:
-              RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-              TaskQueuesUrl: !Sub "${COCDataStack.Outputs.SQSUrl}"
 
 * Optional Parameters with current defaults:
 DataStackMulti
@@ -464,10 +456,19 @@ AWS Budgets allows you to set custom budgets to track your cost and usage from t
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
-1. The updated CloudFormation will have created a Nested stack. By clicking on your stack and selecting **Resources** find your lambda function and click the hyperlink.
+1. Depending on the module which you would like to test the following Lambda functions should be triggered:
+- **Inventory Collector** module -> **AWS-Organization-Account-Collector** Lambda function
+- **Trusted Advisor** module -> **AWS-Organization-Account-Collector** Lambda function
+- **ECS Chargeback Data** module -> **AWS-Organization-Account-Collector** Lambda function
+- **RDS Utilization Data module** module -> **AWS-Organization-Account-Collector** Lambda function
+- **AWS Budgets Export module** module -> **AWS-Organization-Account-Collector** Lambda function
+- **Cost Explorer Rightsizing Recommendations** module -> **aws-cost-explorer-rightsizing-recommendations-function** Lambda function
+- **Compute Optimizer Collector** module -> **ComputeOptimizer-Lambda-Function** Lambda function
+- **AWS Organization Data Export** module -> **Lambda_Organization_Data_Collector** Lambda function
 
-2. To test your lambda function click **Test**
-![Images/lambda_test_cf.png](/Cost/300_Organization_Data_CUR_Connection/Images/lambda_test_cf.png) 
+
+2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
+![Images/lambda_test_cf.png](/Cost/300_Optimization_Data_Collection/Images/lambda_test_cf.png) 
 
 3. Enter an **Event name** of **Test**, click **Create**:
 
@@ -481,12 +482,15 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 ![Images/Athena.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena.png)
 
-7. You will be able to see your data in the **Optimization_Data** Database
+7. You will be able to see your data in the **optimization_data** Database
 
 ![Images/Optimization_Data_DB.png](/Cost/300_Optimization_Data_Collection/Images/Optimization_Data_DB.png)
 
 8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
 ![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
+Otherwise you can query each table directly by clicking on **Preview Table** button
+![Images/athena_query_table.png](/Cost/300_Optimization_Data_Collection/Images/athena_query_table.png)
+
 
 
 
@@ -508,7 +512,7 @@ If you would like to make your own modules then go to the next section to learn 
 {{% /notice %}}
 
 
-Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or Passing into Amazon QuickSight.
+Now you have your data in AWS Athena you can use this to identify optimization opportunities using Athena Queries or visualizing data in Amazon QuickSight.
 
 
-{{< prev_next_button link_prev_url="../2_deploy_additional_roles/" link_next_url="../4_create_custom_data_collection_module/" />}}
+{{< prev_next_button link_prev_url="../2_deploy_additional_roles/" link_next_url="../4_utilize_data/" />}}
