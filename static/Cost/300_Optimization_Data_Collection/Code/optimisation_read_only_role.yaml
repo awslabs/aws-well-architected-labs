@@ -15,7 +15,6 @@ Metadata:
         - IncludeTAModule
         - IncludeRightsizingModule
         - IncludeInventoryCollectorModule
-        - IncludeComputeOptimizerModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
         - IncludeBudgetsModule
@@ -32,8 +31,6 @@ Metadata:
         default: 'Include Rightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
-      IncludeComputeOptimizerModule:
-        default: 'Include AWS Compute Optimizer Data Collection Module'
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
@@ -70,12 +67,6 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
-  IncludeComputeOptimizerModule:
-    Description: Collects AWS Compute Optimizer service recommendations
-    Type: String
-    AllowedValues:
-      - "yes"
-      - "no" 
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -104,9 +95,6 @@ Conditions:
     - "yes"
   IncludeInventoryCollectorModulePolicy: !Equals 
     - !Ref IncludeInventoryCollectorModule
-    - "yes"
-  IncludeComputeOptimizerModulePolicy: !Equals 
-    - !Ref IncludeComputeOptimizerModule
     - "yes"
   IncludeECSChargebackModulePolicy: !Equals 
     - !Ref IncludeECSChargebackModule
@@ -218,35 +206,6 @@ Resources:
             Resource: "*"
       Roles:
         - Ref: LambdaRole
-  ComputeOptimizerPolicy:
-    Type: 'AWS::IAM::Policy'
-    Condition: IncludeComputeOptimizerModulePolicy
-    Properties:
-      PolicyName: ComputeOptimizerPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "compute-optimizer:*"
-              - "EC2:DescribeInstances"
-              - "cloudwatch:GetMetricData"
-              - "autoscaling:DescribeAutoScalingGroups"
-              - "compute-optimizer:UpdateEnrollmentStatus"
-              - "compute-optimizer:GetAutoScalingGroupRecommendations"
-              - "compute-optimizer:GetEC2InstanceRecommendations"
-              - "compute-optimizer:GetEnrollmentStatus"
-              - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-              - "compute-optimizer:GetRecommendationSummaries"
-              - "organizations:ListAccounts"
-              - "organizations:DescribeOrganization"
-              - "organizations:DescribeAccount"
-              - "lambda:ListFunctions"
-              - "lambda:ListProvisionedConcurrencyConfigs"
-              - "EC2:DescribeVolumes" 
-            Resource: "*"
-      Roles:
-        - Ref: LambdaRole 
   ECSChargebackPolicy:
     Type: 'AWS::IAM::Policy'
     Condition: IncludeECSChargebackModulePolicy
