@@ -360,3 +360,18 @@ Resources:
           *
         FROM optimization_data.compute_optimizer_ebs_volume 
         WHERE volumearn like '%vol%' "
+  LambdaAthenaQuery:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: !Sub ${CFDataName}-Lambda-summary-view
+      QueryString: 
+        "SELECT 
+          split_part(replace(functionarn,'\"' ,''),':',7) as function_name, 
+          try_cast(current_costtotal AS DOUBLE) - try_cast(recommendationOptions_1_costhigh AS DOUBLE) as recommendationOptions_1_Saving ,
+          try_cast(current_costtotal AS DOUBLE) - try_cast(recommendationOptions_2_costhigh AS DOUBLE) as recommendationOptions_2_Saving ,
+          try_cast(current_costtotal AS DOUBLE) - try_cast(recommendationOptions_3_costhigh AS DOUBLE) as recommendationOptions_3_Saving , 
+          * 
+          FROM optimization_data.compute_optimizer_lambda
+          WHERE functionarn like '%arn%'"
