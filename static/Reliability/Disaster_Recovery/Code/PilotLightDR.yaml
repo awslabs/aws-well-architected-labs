@@ -300,26 +300,24 @@ Resources:
               amazon-cloudwatch-agent: []
               mariadb: []
               java-1.8.0-openjdk-devel: []
-              unzip: []
         configure:
           commands:
-            0-clone-repo:
-              command: >-
-                aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/
-                /home/ec2-user/DRImmersionDay/ --recursive --no-sign-request
-            1-populate-buckets:
+            0-populate-buckets:
               command: !Join
                 - ''
                 - - |
-                    #!/bin/bash
+                    #!/bin/bash      
 
+                  - |
+                    sudo mkdir /home/ec2-user/UniShopUI/                              
+                
                   - export AWS_DEFAULT_REGION=
                   - !Ref 'AWS::Region'
                   - |+
 
                   - export UI_RANDOM_NAME=
                   - !Ref UIBucket
-                  - |+
+                  - |+                                          
 
                   - export HOSTNAME=
                   - "http://"
@@ -330,14 +328,24 @@ Resources:
                   - $(echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}')
                   - |+
 
-                  - |
-                    echo $JSON_STRING | sudo tee /home/ec2-user/DRImmersionDay/UniShopUI/config.json
                   - >
+                    aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
+                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                                    
+
+                  - |
+                    echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json                          
 
                   - >
-                    aws s3 cp /home/ec2-user/DRImmersionDay/UniShopUI
-                    s3://$UI_RANDOM_NAME/ --recursive --grants
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+                    aws s3 cp /home/ec2-user/UniShopUI/
+                    s3://$UI_RANDOM_NAME/ --recursive --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                    
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
+
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
+ 
         create-tables:
           commands:
             1-create-tables:
@@ -346,17 +354,17 @@ Resources:
                 - - 'sudo mysql -u UniShopAppV1User -h '
                   - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
                   - |2
-                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/DRImmersionDay/create_tables.sql
+                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
         create-service-files:
           files:
-            /etc/systemd/system/mono2micro.service:
+            /etc/systemd/system/unishop.service:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     [Unit]
                   - |
-                    Description=Restart Mono2Micro
+                    Description=Restart UniShop
                   - |
                     Wants=network.target
                   - >
@@ -369,7 +377,7 @@ Resources:
                   - |
                     Type=simple
                   - |
-                    ExecStart=/home/ec2-user/DRImmersionDay/m2minit.sh
+                    ExecStart=/home/ec2-user/unishopinit.sh
                   - |
                     Restart=on-failure
                   - |
@@ -385,20 +393,20 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/DRImmersionDay/m2minit.sh:
+            /home/ec2-user/unishopinit.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
                   - |
-                    source /home/ec2-user/DRImmersionDay/m2mcfg.sh
+                    source /home/ec2-user/unishopcfg.sh
                   - |
-                    source /home/ec2-user/DRImmersionDay/m2mrun.sh
+                    source /home/ec2-user/unishoprun.sh
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/DRImmersionDay/m2mcfg.sh:
+            /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
@@ -423,7 +431,7 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/DRImmersionDay/m2mrun.sh:
+            /home/ec2-user/unishoprun.sh:
               encoding: plain
               content: !Join
                 - ''
@@ -433,9 +441,9 @@ Resources:
                   - ' '
                   - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
                   - >
-                    /home/ec2-user/DRImmersionDay/UniShopAppV1-0.0.1-SNAPSHOT.jar
+                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
                     &>
-                    /home/ec2-user/DRImmersionDay/app.log
+                    /home/ec2-user/app.log
                     &
               mode: '000555'
               group: ec2-user
@@ -456,7 +464,7 @@ Resources:
                   - |2
                                         {
                   - |2
-                                            "file_path": "/home/ec2-user/DRImmersionDay/app.log",
+                                            "file_path": "/home/ec2-user/app.log",
                   - !Join
                     - ''
                     - - '                        "log_group_name":'
@@ -495,9 +503,9 @@ Resources:
                 - - |
                     sudo systemctl daemon-reload
                   - |
-                    sudo systemctl enable mono2micro
+                    sudo systemctl enable unishop
                   - |
-                    sudo systemctl start mono2micro
+                    sudo systemctl start unishop
                   - >
                     sudo amazon-cloudwatch-agent-ctl -a fetch-config -s -m ec2
                     -c

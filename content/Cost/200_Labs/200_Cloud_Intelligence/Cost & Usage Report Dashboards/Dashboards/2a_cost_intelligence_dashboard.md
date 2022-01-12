@@ -341,7 +341,7 @@ The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-sampl
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
-- Navigate to the [CID section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/cudos)  
+- Navigate to the [CID section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main)  
 {{% /expand%}}
 
 

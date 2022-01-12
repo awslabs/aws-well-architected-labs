@@ -16,7 +16,7 @@ def get_ec2_instance_recommendations(client, year, month):
                 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_ec2_instance/year={year}/month={month}'
                 }
         )
-        print('EC2 instances Report created')
+        print('EC2 instances export queued. JobId: ' + response['jobId'])
         
     except Exception as e:
                 pass
@@ -32,7 +32,7 @@ def get_auto_scaling_group_recommendations(client, year, month):
                 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_auto_scale/year={year}/month={month}'
                 }
         )
-        print('ASG instances Report created')
+        print('ASG instances export queued. JobId: ' + response['jobId'])
         
     except Exception as e:
                 pass
@@ -47,7 +47,7 @@ def get_lambda_function_recommendations(client, year, month):
                 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_lambda/year={year}/month={month}'
                 }
         )
-        print('Lamda instances Report created')
+        print('Lambda export queued. JobId: ' + response['jobId'])
     except Exception as e:
                 pass
                 logging.warning(f"{e} - Lambda")
@@ -62,7 +62,7 @@ def get_ebs_volume_recommendations(client, year, month):
                 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_ebs_volume/year={year}/month={month}'
                 }
         )
-        print('EBS instances Report created')
+        print('EBS export queued. JobId: ' + response['jobId'])
     except Exception as e:
                 pass
                 logging.warning(f"{e} - EBS")

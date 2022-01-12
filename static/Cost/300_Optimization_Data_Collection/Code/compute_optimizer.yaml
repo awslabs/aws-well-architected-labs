@@ -337,22 +337,26 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-EC2-summary-view
-      QueryString: !Sub
-        "SELECT instancearn, split_part(replace(instancearn,'\"' ,''),'/',2) as instance_id
-        , current_onDemandPrice-recommendationOptions_1_onDemandPrice as recommendationOptions_1_Saving
-        , current_onDemandPrice-recommendationOptions_2_onDemandPrice as recommendationOptions_2_Saving
-        , current_onDemandPrice-recommendationOptions_3_onDemandPrice as recommendationOptions_3_Saving
-        , *
-        FROM optimization_data.compute_optimizer_ec2_instance "
+      QueryString: 
+        "SELECT instancearn, split_part(replace(instancearn,'\"' ,''),'/',2) as instance_id ,
+         try_cast(current_onDemandPrice AS DOUBLE) - try_cast(recommendationOptions_1_onDemandPrice AS DOUBLE) as recommendationOptions_1_Saving , 
+         try_cast(current_onDemandPrice AS DOUBLE) - try_cast(recommendationOptions_2_onDemandPrice AS DOUBLE) as recommendationOptions_2_Saving , 
+         try_cast(current_onDemandPrice AS DOUBLE) - try_cast(recommendationOptions_3_onDemandPrice AS DOUBLE) as recommendationOptions_3_Saving ,
+          * FROM optimization_data.compute_optimizer_ec2_instance WHERE instancearn like '%arn%' "
   EBSAthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-EBS-summary-view
-      QueryString: !Sub
-        "SELECT split_part(replace(volumearn,'\"' ,''),'/',2) as volumeid
-        , current_monthlyprice-recommendationoptions_1_monthlyprice as recommendationOptions_1_Saving
-        , current_monthlyprice-recommendationoptions_2_monthlyprice as recommendationOptions_2_Saving
-        ,*
-        FROM optimization_data.compute_optimizer_ebs_volume"
+      QueryString: 
+        "SELECT split_part(replace(volumearn,'\"' ,''),'/',2) as volumeid,
+        try_cast(
+          current_monthlyprice - recommendationoptions_1_monthlyprice AS DOUBLE
+        ) as recommendationOptions_1_Saving,
+        try_cast(
+          current_monthlyprice - recommendationoptions_2_monthlyprice AS DOUBLE
+        ) as recommendationOptions_2_Saving,
+          *
+        FROM optimization_data.compute_optimizer_ebs_volume 
+        WHERE volumearn like '%vol%' "
