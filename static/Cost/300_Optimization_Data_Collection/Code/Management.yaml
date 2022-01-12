@@ -19,7 +19,6 @@ Outputs:
       Fn::GetAtt:
         - LambdaRole
         - Arn 
-
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
@@ -58,7 +57,7 @@ Resources:
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
                 Resource: "*"
-        - PolicyName: ComputeOptimizerPolicy
+        - PolicyName: "ComputeOptimizerPolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -68,12 +67,7 @@ Resources:
                   - "EC2:DescribeInstances"
                   - "cloudwatch:GetMetricData"
                   - "autoscaling:DescribeAutoScalingGroups"
-                  - "compute-optimizer:UpdateEnrollmentStatus"
-                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                  - "compute-optimizer:GetEC2InstanceRecommendations"
-                  - "compute-optimizer:GetEnrollmentStatus"
-                  - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                  - "compute-optimizer:GetRecommendationSummaries"
+                  - "compute-optimizer:*"
                   - "organizations:ListAccounts"
                   - "organizations:DescribeOrganization"
                   - "organizations:DescribeAccount"

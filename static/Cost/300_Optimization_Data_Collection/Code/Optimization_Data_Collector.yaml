@@ -157,8 +157,8 @@ Outputs:
         - ','
         - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-          - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals 
@@ -188,13 +188,43 @@ Conditions:
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
-    - !Condition DeployComputeOptimizerModule
+    - !Condition DeployRDSUtilizationModule
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
 #Reusable Resources:
 Resources:
+  S3CrawlerQue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      QueueName: S3CrawlerQue
+  CrawlerSQSPolicy: 
+    DependsOn: 
+      - S3CrawlerQue
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      Queues:  
+        - Ref: S3CrawlerQue
+      PolicyDocument:
+        Id: SQSPolicy
+        Statement:
+        - Sid: SQSEventPolicy
+          Effect: Allow
+          Principal: {"Service": "s3.amazonaws.com"}
+          Action: sqs:SendMessage
+          Resource: !GetAtt S3CrawlerQue.Arn
+          Condition:
+            ArnLike:
+              aws:SourceArn: !Sub "arn:aws:s3:::${DestinationBucket}${AWS::AccountId}"
+            StringEquals:
+                'aws:SourceAccount': !Sub '${AWS::AccountId}'
   S3Bucket:
+    DependsOn: 
+      - CrawlerSQSPolicy
+      - S3CrawlerQue
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName:
@@ -205,6 +235,40 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: s3:ObjectCreated:*
+            Queue: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue"
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value: Compute_Optimizer/
+  ComputeOptimizerBucketPolicy:
+    Condition: DeployComputeOptimizerModule
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 's3:GetBucketAcl'
+              - 's3:GetBucketPolicyStatus'
+            Effect: Allow
+            Resource: !GetAtt S3Bucket.Arn 
+            Principal: {"Service": "compute-optimizer.amazonaws.com"}
+          - Action:
+              - 's3:PutObject'
+            Effect: Allow
+            Resource: !Sub "${S3Bucket.Arn}/*"
+            Principal: {"Service": "compute-optimizer.amazonaws.com"}
+            Condition: {"StringEquals": {
+                    "s3:x-amz-acl":  "bucket-owner-full-control",
+                    "aws:SourceAccount": !Sub "${ManagementAccountID}",
+                    "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
+                }
+            } 
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
@@ -282,6 +346,7 @@ Resources:
         GlueRoleARN: !GetAtt GlueRole.Arn
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         CodeBucket: !Ref CodeBucket
+        S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
@@ -340,7 +405,6 @@ Resources:
                 - ','
                 - - !If [DeployTAModule, !Sub "${TrustedAdvisorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-                  - !If [DeployComputeOptimizerModule, !Sub "${ComputeOptimizerModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
