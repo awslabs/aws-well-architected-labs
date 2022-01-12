@@ -41,7 +41,7 @@ Parameters:
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/coc2.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/coc.zip
   Prefix:
     Type: String
     Description: Service which the data collector is looking at
