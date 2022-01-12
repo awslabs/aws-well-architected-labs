@@ -2,8 +2,8 @@
 title: "Create Custom Data Collection Module (Optional)"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 4
-pre: "<b>4. </b>"
+weight: 5
+pre: "<b>5. </b>"
 ---
 
 ### Example Module Explanation
@@ -66,5 +66,4 @@ Once you have your module created you can add it to your CloudFormation Template
 If you would like more information on AWS CloudFormation checkout there [website](https://docs.aws.amazon.com/cloudformation/index.html)
 {{% /notice %}}
 
-
-{{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_utilize_data/" />}}
+{{< prev_next_button link_prev_url="../4_utilize_data/" link_next_url="../6_teardown/" />}}

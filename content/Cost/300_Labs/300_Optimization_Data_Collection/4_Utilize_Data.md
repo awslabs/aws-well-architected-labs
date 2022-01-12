@@ -2,8 +2,8 @@
 title: "Utilize Data"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 5
-pre: "<b>5. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 ## Utilizing Your Data 
@@ -112,5 +112,4 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
 7. In your Analysis you can now add a Budget figure to your lines. Make sure to change to **Average**.
 ![Images/Budget_viz.png](/Cost/300_Optimization_Data_Collection/Images/Budget_viz.png)
 
-
-{{< prev_next_button link_prev_url="../4_Create_Custom_Data_Collection_Module/" link_next_url="../6_teardown/" />}}
+{{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
