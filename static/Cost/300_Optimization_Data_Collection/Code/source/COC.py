@@ -7,7 +7,7 @@ import logging
 from botocore.client import Config
 S3BucketName = os.environ["BUCKET_NAME"]
 
-def get_ec2_instance_recommendations(client, year, month):
+def export_ec2_instance_recommendation(client, year, month):
     try:
         response = client.export_ec2_instance_recommendations(
             includeMemberAccounts=True,
@@ -23,7 +23,7 @@ def get_ec2_instance_recommendations(client, year, month):
                 logging.warning(f"{e} - EC2")
 
 
-def get_auto_scaling_group_recommendations(client, year, month):
+def export_auto_scaling_group_recommendation(client, year, month):
     try:
         response = client.export_auto_scaling_group_recommendations(
             includeMemberAccounts=True,
@@ -38,7 +38,7 @@ def get_auto_scaling_group_recommendations(client, year, month):
                 pass
                 logging.warning(f"{e} - ASGs")
 
-def get_lambda_function_recommendations(client, year, month):
+def export_lambda_function_recommendation(client, year, month):
     try:
         response = client.export_lambda_function_recommendations(
             includeMemberAccounts=True,
@@ -52,7 +52,7 @@ def get_lambda_function_recommendations(client, year, month):
                 pass
                 logging.warning(f"{e} - Lambda")
 
-def get_ebs_volume_recommendations(client, year, month):
+def export_ebs_volume_recommendation(client, year, month):
     try:
         response = client.export_ebs_volume_recommendations(
 
@@ -102,12 +102,10 @@ def lambda_handler(event, context):
     )
     try:
 
-        get_ec2_instance_recommendations(client, year, month)
-                
-        get_auto_scaling_group_recommendations(client, year, month)
-        get_lambda_function_recommendations(client, year, month)
-                
-        get_ebs_volume_recommendations(client, year, month)
+        export_ec2_instance_recommendation(client, year, month)
+        export_auto_scaling_group_recommendation(client, year, month)
+        export_lambda_function_recommendation(client, year, month)
+        export_ebs_volume_recommendation(client, year, month)
                
     except Exception as e:
         # Send some context about this error to Lambda Logs
