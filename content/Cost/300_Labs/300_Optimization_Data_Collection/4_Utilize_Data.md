@@ -112,4 +112,26 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
 7. In your Analysis you can now add a Budget figure to your lines. Make sure to change to **Average**.
 ![Images/Budget_viz.png](/Cost/300_Optimization_Data_Collection/Images/Budget_viz.png)
 
+
+### AWS EBS Volumes and Snapshots
+
+If you wish to see whats volumes have what snapshots attached to them from a holistic view then this query can combine these two data sources. This could provide information into which snapshots you could archive using [lastic Block Storage Snapshots Archive](https://aws.amazon.com/ebs/snapshots/faqs/#Snapshots_Archive)
+
+        with data as (Select volumeid, snapshotid, cast(replace(split(split(starttime, '+')[1],'.')[1],'T',' ') as timestamp) as start_time from  "optimization_data"."snapshot_data"),
+
+        ratio AS(
+        Select distinct volumeid, count(distinct snapshotid) AS "snap_count"
+          from  "optimization_data"."snapshot_data" group by 1),
+          
+        single_snap_vol as	(Select Volumeid from ratio where snap_count = 1)
+
+        select single_snap_vol.Volumeid, snapshotid, start_time  from single_snap_vol
+        Left join (select * from data) data 
+
+        on
+        single_snap_vol.Volumeid = data.Volumeid
+
+        WHERE start_time <= DATE_TRUNC('day', NOW() - INTERVAL '90' DAY)
+        group by 1,2,3
+
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
