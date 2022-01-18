@@ -10,7 +10,7 @@ pre: "<b>2c. </b>"
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 
 ## Contributors 
-- Aaron Edell, Global Head of Business and GTM - EC2 Insights
+- Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
 - Cristian Popa, AWS Sr. Technical Account Manager
 - Oleksandr Moskalenko, Sr. AWS Technical Account Manager
 - Timur Tulyaganov, AWS Principal Technical Account Manager
@@ -18,25 +18,29 @@ pre: "<b>2c. </b>"
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
 
 ## KPI Dashboard 
-The KPI Dashboard is an metric driven dashboard to help customers use KPIs and metrics track goals and identify potential savings opportunities. Executives, directors, and other individuals within the CEO, CIO, or CTO line of businesses or who manage FinOps, DevOps and IT organizations will find the KPI Dashboard detailed and tailored to solve their use cases. Sample of two sheets in the KPI Dashboard  
+The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent On Demand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. 
+
+Example of KPI Dashboard:
 
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
 	
 
-## Deployment Options 
-We are working on the automation options for the KPI Dashboard. Right now, there is only the manual option to deploy the dashboard. The automation options will be coming soon. 
-
-
 ### Option 1: Manual Deployment
-This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight. 
+This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option to users who are new to Athena and QuickSight. 
 {{%expand "Click here to continue with the manual deployment" %}}
+
+### Optional 2: Command Line Tool Deployment
+Coming Soon.
+
+### Option 3: CloudFormation Deployment
+Coming Soon.
 
 ### Create Athena Views
 
 **NOTE:** This dashboard uses the account_map and summary_view as shown in the CID/CUDOS dashboards. If you have not created these dashboards, you will need to create one or both of the dashboards prior to creating the KPI Dashboard 
     ------------ | -------------
 
-The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not you will need to create the alternate views.
+The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances. If you do not have both, follow the instructions within each view below to adjust the query accordingly. 
 
 1. Login via SSO in your Cost Optimization account, go into the **Athena** console:
 
@@ -62,7 +66,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
 
 
-**NOTE:** The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to January 18, 2022 you will want to update to the latest views.
+**NOTE:** The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to January 18, 2022 you will want to update to the latest views above.
     ------------ | -------------
 
 
@@ -151,7 +155,7 @@ The data source for the dashboard will be an Athena view of your existing Cost a
     ------------ | -------------
 
 ### Import Dashboard Template
-We will now use the CLI to create the dashboard from the KPI Dashboard template.
+We will now use the AWS CLI to create the dashboard from the KPI Dashboard template.
 
 1. Edit and Run `list-users` and make a note of your **User ARN**:
 ```
@@ -265,7 +269,7 @@ Now that you have your dashboard created you can share your dashboard with users
 
 {{%expand "Click here to update your dashboard with the latest version" %}}
 
-If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md), you already know that we continue improving Cloud Intelligence Dashboards.
+If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md), you already know that we are always improving the Cloud Intelligence Dashboards.
 
 To pull the latest version of the dashboard from the public template please use the following steps.
 
