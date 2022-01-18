@@ -3,7 +3,7 @@ title: "Additional Dashboards"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
 weight: 3
-pre: "<b>2c. </b>"
+pre: "<b>3. </b>"
 ---
 
 ## Introduction
@@ -245,4 +245,4 @@ The Trends Dashboard provides Financial and Technology organizational leaders ac
 
  {{% /expand%}}
 
-{{< prev_next_button link_prev_url="../2b_cudos_dashboard"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/">}}
+{{< prev_next_button link_prev_url="../2c_kpi_dashboard"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/">}}
