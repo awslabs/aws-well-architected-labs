@@ -11,7 +11,7 @@ pre: "<b>2c. </b>"
 
 ## Contributors 
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
-- Cristian Popa, AWS Sr. Technical Account Manager
+- Georgios Rozakis, AWS Technical Account Manager
 - Oleksandr Moskalenko, Sr. AWS Technical Account Manager
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yash Bindlish, AWS Technical Account Manager
@@ -273,7 +273,7 @@ If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-fra
 
 To pull the latest version of the dashboard from the public template please use the following steps.
 
-1. Create an **update.json** file by removing permissions section from the **kpi_import.json** file. Sample for KPI Dashboard **kpi_update.json** file below:
+1. Create a **kpi_update.json** file by removing permissions section from the **kpi_import.json** file. Sample for KPI Dashboard **kpi_update.json** file below:
 ```json
 {
     "AwsAccountId": "<Account_ID>",
@@ -334,7 +334,7 @@ aws quicksight update-dashboard --cli-input-json file://kpi_update.json --region
 
 4. Query the version number of the published dashboard. Example for KPI Dashboard below:
 ```
-aws quicksight list-dashboard-versions --region <region> --aws-account-id <Account_ID> --dashboard-id kpi_dashboard --query 'sort_by(DashboardVersionSummaryList, &VersionNumber)[-1].VersionNumber'
+aws quicksight list-dashboard-versions --region <region> --aws-account-id <Account_ID> --dashboard-id kpi_dashboard 
 ```
 
 5. Apply the latest pulled changes to the deployed dashboard with this CLI command. Example for KPI Dashboard below:

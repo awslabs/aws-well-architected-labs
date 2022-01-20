@@ -49,9 +49,9 @@ Modify the following SQL query for View1:
 		   , "line_item_product_code" "product_code"
 		   , CASE 
 				WHEN ("line_item_product_code" in ('AmazonSageMaker','MachineLearningSavingsPlans')) THEN 'Machine Learning'
-				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonECS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
+				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonEKS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
 				WHEN (("line_item_product_code" = 'AmazonElastiCache')) THEN 'ElastiCache'
-				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'opensearch'
+				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'OpenSearch'
 				WHEN (("line_item_product_code" = 'AmazonRDS')) THEN 'RDS'
 				WHEN (("line_item_product_code" = 'AmazonRedshift')) THEN 'Redshift'
 				WHEN (("line_item_product_code" = 'AmazonDynamoDB') AND (line_item_operation = 'CommittedThroughput')) THEN 'DynamoDB'
@@ -329,9 +329,9 @@ Modify the following SQL query for View1:
 		   , "line_item_product_code" "product_code"
 		   , CASE 
 				WHEN ("line_item_product_code" in ('AmazonSageMaker','MachineLearningSavingsPlans')) THEN 'Machine Learning'
-				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonECS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
+				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonEKS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
 				WHEN (("line_item_product_code" = 'AmazonElastiCache')) THEN 'ElastiCache'
-				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'opensearch'
+				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'OpenSearch'
 				WHEN (("line_item_product_code" = 'AmazonRDS')) THEN 'RDS'
 				WHEN (("line_item_product_code" = 'AmazonRedshift')) THEN 'Redshift'
 				WHEN (("line_item_product_code" = 'AmazonDynamoDB') AND (line_item_operation = 'CommittedThroughput')) THEN 'DynamoDB'
@@ -605,9 +605,9 @@ Modify the following SQL query for View1:
 		   , "line_item_product_code" "product_code"
 		   , CASE 
 				WHEN ("line_item_product_code" in ('AmazonSageMaker','MachineLearningSavingsPlans')) THEN 'Machine Learning'
-				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonECS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
+				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonEKS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
 				WHEN (("line_item_product_code" = 'AmazonElastiCache')) THEN 'ElastiCache'
-				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'opensearch'
+				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'OpenSearch'
 				WHEN (("line_item_product_code" = 'AmazonRDS')) THEN 'RDS'
 				WHEN (("line_item_product_code" = 'AmazonRedshift')) THEN 'Redshift'
 				WHEN (("line_item_product_code" = 'AmazonDynamoDB') AND (line_item_operation = 'CommittedThroughput')) THEN 'DynamoDB'
@@ -876,9 +876,9 @@ Modify the following SQL query for View1:
 		   , "line_item_product_code" "product_code"
 		   , CASE 
 				WHEN ("line_item_product_code" in ('AmazonSageMaker','MachineLearningSavingsPlans')) THEN 'Machine Learning'
-				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonECS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
+				WHEN ("line_item_product_code" in ('AmazonEC2','AmazonECS','AmazonEKS','AWSLambda','ComputeSavingsPlans')) THEN 'Compute'
 				WHEN (("line_item_product_code" = 'AmazonElastiCache')) THEN 'ElastiCache'
-				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'opensearch'
+				WHEN (("line_item_product_code" = 'AmazonES')) THEN	'OpenSearch'
 				WHEN (("line_item_product_code" = 'AmazonRDS')) THEN 'RDS'
 				WHEN (("line_item_product_code" = 'AmazonRedshift')) THEN 'Redshift'
 				WHEN (("line_item_product_code" = 'AmazonDynamoDB') AND (line_item_operation = 'CommittedThroughput')) THEN 'DynamoDB'
