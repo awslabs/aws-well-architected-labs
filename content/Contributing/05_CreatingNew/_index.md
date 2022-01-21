@@ -47,7 +47,7 @@ Push your changes to GitHub, so that they are stored and backed up by GitHub. Us
 Please write a descriptive commit message following [this](https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project) guidance. Smaller meaningful commits are better than one large commit with lots of changes
 {{% /notice %}}
 
-  ![Images/gitcommit.png](/watool/Contributing/Images/gitcommit.png?classes=lab_picture_small)
+  ![Images/gitcommit.png](/Contributing/Images/gitcommit.png?classes=lab_picture_small)
 
 All your changes will be in the remote repository in GitHub, which can now be merged into the Well-Architected Labs repository.
 

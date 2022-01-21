@@ -12,14 +12,14 @@ All the changes are now in your remote repository, let’s do a pull request to 
 1. Go to the your GitHub Well-Architected Labs remote repository http://github.com/(username)/aws-well-architected-labs/pulls)
 	- Make sure you update with your username
 2. Click **Pull Request**
-  ![Images/pull.png](/watool/Contributing/Images/pull.png?classes=lab_picture_small)
+  ![Images/pull.png](/Contributing/Images/pull.png?classes=lab_picture_small)
 3. Click **compare across forks**
 4. Select **your fork** on the right side as **head repository**
-  ![Images/pull2.png](/watool/Contributing/Images/pull2.png?classes=lab_picture_small)
+  ![Images/pull2.png](/Contributing/Images/pull2.png?classes=lab_picture_small)
 5. Review the changes, and click **Create pull request**
 6. Edit the info (this is public – be careful and add a brief description of the edit or addition)
 	- Make sure to add the label of the Well-Architected Pillar (i.e. COST)
-  ![Images/pull3.png](/watool/Contributing/Images/pull3.png?classes=lab_picture_small)
+  ![Images/pull3.png](/Contributing/Images/pull3.png?classes=lab_picture_small)
 7. Click **Create pull request**
 
 *GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).*
