@@ -41,13 +41,13 @@ You can also save the query now as a view to refer to it later. This way you don
 1. Leave the previously executed query in the query editor.
 2. Choose **Create**.
 3. Choose **View from query**.
-![View from query](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/view-from-query.png)
+![View from query](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/view-from-query.png?classes=lab_picture_small)
 4. Enter `storage_by_class` as **Name**.
 5. Choose **Create**.
-![Create view](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/create-view.png)
+![Create view](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/create-view.png?classes=lab_picture_small)
 
 You can now see new view called `storage_by_class` on the left menu. Choose the three dots next to the `storage_by_class` table and choose **Preview view** to test if it works.
-![Preview view](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/preview-view.png)
+![Preview view](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-3/images/preview-view.png?classes=lab_picture_small)
 
 Congratulations, by the end of this step you learned to query AWS Cost & Usage Report data with Amazon Athena. You have run SQL queries on that data to aggregate it by usage type and AWS account to calculate proxy metrics for sustainability. And finally, you saved this query as a view. Now you can use this view's data to establish KPIs for your AWS account owners and application teams.
 

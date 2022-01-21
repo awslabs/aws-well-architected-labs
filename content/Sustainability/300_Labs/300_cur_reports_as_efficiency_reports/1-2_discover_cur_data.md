@@ -11,14 +11,14 @@ pre: "<b>1.2 </b>"
 In the previous step, you provided AWS Cost & Usage Report data in an Amazon S3 bucket. In this step you will make this usage data available in the AWS Glue data catalog for Amazon Athena. Amazon Athena allows you to run SQL (Structured Query Language) queries on the data without loading it into a database and calculate proxy metrics for sustainability.
 
 1. Go to the [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) in a region in which your CUR data is stored. This is the same region your S3 bucket resides as defined in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}).
-2. If this is your first time to visit the Athena console in your current AWS Region, choose **Explore the query editor**, then choose **set up a query result location in Amazon S3** and follow the steps from the (Amazon Athena docs to specify a query result location)[https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location]. Depending on your setup, you may need to create a new workgroup within Amazon Athena.
+2. If this is your first time to visit the Athena console in your current AWS Region, choose **Explore the query editor**, then choose **set up a query result location in Amazon S3** and follow the steps from the [Amazon Athena docs to specify a query result location](https://docs.aws.amazon.com/athena/latest/ug/querying.html#query-results-specify-location). Depending on your setup, you may need to create a new workgroup within Amazon Athena.
 3. Create a new AWS Glue database via the Amazon Athena's query editor. Enter the query:
 ```sql
 CREATE DATABASE proxy_metrics_lab
 ```
 4. Click **Run query**
 5. Choose the **Database** `proxy_metrics_lab` from the drop down menu.
-![proxy_metrics_lab database](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/database-selection.png)
+![proxy_metrics_lab database](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/database-selection.png?classes=lab_picture_small)
 6. Now you need to tell AWS Glue where the data to query is stored. You create a table in AWS Glue via a DDL (Data Definition Language) SQL statement in Amazon Athena. Fill the **New Query** field with the following query. You need to replace `S3 URL HERE` on line 160 of the query with the URI of the root of your cost and usage reports in the form of `s3://<bucket>/<Report path prefix>/<Report name>/`.
   * If you followed option B in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), your S3 URI may look like `s3://<bucket>/cur-data/hourly/proxy-metrics-lab/proxy-metrics-lab/`.
   * If you followed option C in [lab 1.1]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/1-1_prepare_cur_data.md" >}}), your S3 URI may look like `s3://<bucket>/cur-data/hourly/proxy-metrics-lab/`.  
@@ -195,7 +195,7 @@ TBLPROPERTIES (
 
 7. Choose **Run query**. The Results section of the Query editor should display "Query successful [...]". As the query does use partition projection (see the `TBLPROPERTIES` clause), you do not load the partitions to query the data. Amazon Athena is clever enough to calculate them as long as they are in the range of Jan 2018 to December 2022.
 8. Now you can preview random 10 entries. Choose the three dots next to the `cur_hourly` table and choose **Preview table**.
-![Preview Table](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/preview-table.png)
+![Preview Table](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-2/images/preview-table.png?classes=lab_picture_small)
 
 Congratulations! You now can explore your CUR data with Amazon Athena with SQL queries. As soon as new CUR data gets written to Amazon S3, it will be returned in your next query immediately. Take the time to expirement with Amazon Athena's query editor and explore the columns of your reports.
 

@@ -37,19 +37,19 @@ If you **do not** have cost usage reporting currently enabled in your account, f
 2. Click **Create Report**
 3. Set a **Report name**, e.g. `proxy-metrics-lab`
 4. Select **Include resource IDs**
-![Create CUR Report](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/create_cur_report.png)
+![Create CUR Report](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/create_cur_report.png?classes=lab_picture_small)
 5. Click **Next**
 6. For S3 bucket, click **Configure**. Choose an existing bucket or create a new bucket in a region in which you will also run the Amazon Athena queries later.
 
 {{% notice warning %}}
 **Warning:** If you decide to use an existing bucket, the wizard will overwrite any existing bucket policy.
 {{% /notice %}}
-![Configure Bucket](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/configure_bucket.png)
+![Configure Bucket](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/configure_bucket.png?classes=lab_picture_small)
 7. Review and accept the bucket policy (for newly created bucket)
-![Verify Policy](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/verify_policy.png)
+![Verify Policy](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/verify_policy.png?classes=lab_picture_small)
 8. Set a **Report path prefix**, e.g. `cur-data/hourly`. AWS Cost & Usage Report require a prefix on creation, please set a prefix here.
 9. Select **Enable report data integration** for **Amazon Athena**
-![Delivery Options](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/delivery_options.png)
+![Delivery Options](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/delivery_options.png?classes=lab_picture_small)
 10. Click **Next**
 11. Click **Review and complete**
 
@@ -62,7 +62,7 @@ If you do not already have CUR reports available for your account, and are not i
 {{%expand "Expand me for Option C steps"%}}
 
 1. Create a new bucket in the [Amazon S3 console](https://s3.console.aws.amazon.com/s3/bucket/create), with the default settings. Choose a region in which you will also run the Amazon Athena queries later:
-![Create Bucket](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/create_bucket.png)
+![Create Bucket](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/create_bucket.png?classes=lab_picture_small)
 2. Download and put the `.parquet` files from the [aws-well-architected-labs](https://github.com/awslabs/aws-well-architected-labs/tree/master/static/Cost/200_4_Cost_and_Usage_Analysis/Code) repository to your bucket to the corresponding prefixes in your bucket:
 ```
 s3://<your-bucket-name>/cur-data/hourly/proxy-metrics-lab/year=2018/month=12/Dec2018-WorkshopCUR-00001.snappy.parquet

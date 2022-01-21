@@ -102,12 +102,12 @@ Let's explore these objects further by diving into the regionPoints object. Two 
 
 2. Save `aws-usage-queries.ts`. Then, in your `npm run watch` terminal, you should see the file change detected and an incremental compilation.
 3. Go to the [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) and check the existing tables and views. As the changes above have not yet been deployed, you should just see the two tables originally deployed via the AWS CDK deploy, and the four original views.
-![Existing views](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/existing_views.png)
+![Existing views](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/existing_views.png?classes=lab_picture_small)
 4. Now deploy the new changes by running `cdk deploy` in the terminal. This will take a few moments whilst the data is copied to the S3 bucket and the new tables are created in Athena.
 5. Refresh your [Amazon Athena console](https://console.aws.amazon.com/athena/home?force#query) page. you should now see the two new tables, **instance_family_points** and **region_points** created.
-![New tables](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/new_tables.png)
+![New tables](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/new_tables.png?classes=lab_picture_small)
 6. Preview the **instance_family_points** table, and check the results match your `../instanceFamilyPoints/data.csv` data file.
-![Preview table](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/preview_table.png)
+![Preview table](/Sustainability/300_cur_reports_as_efficiency_reports/lab3/images/preview_table.png?classes=lab_picture_small)
 
 ## Stage 4 - Use the new tables in queries
 Now the new tables have been created, they can be used in the same query used in [lab 2]({{< ref "content/Sustainability/300_Labs/300_cur_reports_as_efficiency_reports/2_add_assumptions.md" >}})
