@@ -8,10 +8,10 @@ documentation, we greatly value feedback and contributions from our community.
 Please read through this document before submitting any issues or pull requests to ensure we have all the necessary 
 information to effectively respond to your bug report or contribution.
 
-[General information, Code of Conduct, Security and Licensing information](content/Contributing/01_General)
+[General information, Code of Conduct, Security and Licensing information](https://www.wellarchitectedlabs.com/contributing/01_general/)
 
 The contribution process for both bugs and new features/labs is:
-1. [Make the team aware bug or new feature via a GitHub issue](content/Contributing/02_ReportingBugs)
-2. [Fork the GitHub repo]({content/Contributing/03_CreatingFork)
-3. [Update]({content/Contributing/04_UpdatingExisting) or [Create a Lab](content/Contributing/05_CreatingNew)
-4. [Submit a Pull Request with your changes from your Fork](content/Contributing/03_CreatingFork)
+1. [Make the team aware bug or new feature via a GitHub issue](https://www.wellarchitectedlabs.com/contributing/02_reportingbugs/)
+2. [Fork the GitHub repo](https://www.wellarchitectedlabs.com/contributing/03_creatingfork/)
+3. [Update](https://www.wellarchitectedlabs.com/contributing/04_updatingexisting/) or [Create a Lab](https://www.wellarchitectedlabs.com/contributing/05_creatingnew/)
+4. [Submit a Pull Request with your changes from your Fork](https://www.wellarchitectedlabs.com/contributing/06_createpr/)
