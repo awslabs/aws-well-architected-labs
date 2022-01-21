@@ -6,11 +6,11 @@ weight: 1
 hidden: false
 ---
 
-## Initial Steps
+### Initial Steps
  - Check for existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
  - [Open an issue](https://github.com/awslabs/aws-well-architected-labs/issues/new) to discuss any significant work or new lab ideas - we would hate for your time to be wasted.
 
-## Requirements
+### Requirements
  - GitHub account
  - Git setup locally on your computer
  - [Install Hugo](https://gohugo.io/getting-started/installing/)
@@ -27,7 +27,6 @@ For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of
 
 ### Security issue notifications
 If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](https://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
-
 
 ### Licensing
 See the [LICENSE](https://github.com/awslabs/aws-well-architected-labs/blob/master/LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
