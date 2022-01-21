@@ -13,10 +13,10 @@ For ease of use and education, it is crucial we maintain uniformity and consiste
 
 - Develop your query following the CUR Library Style Guide rules defined below
 - Execute and validate the query using your own Cost and Usage Report
-- Validate your query results against your Cost Explorer
-- Save your query as a .sql file without underscores as seperators (_i.e. rds_mysql_engine_query.sql NOT rdsmysqlenginequery.sql _).
-- [Clone the github repo and perform a pull request to contribute to the labs using this guide]({{< ref "/Well-ArchitectedTool/100_Labs/Contributing" >}})
-- Place your query in the folder 'static/Cost/300_CUR_Queries/Code/< AWS Product Category Folder >/your_query.sql' (_NOTE: please check below for more information about the folder structure_)
+- Validate your query results against your Cost Explorerç
+- Save your query as a .sql file without underscores as seperators (i.e. `rds_mysql_engine_query.sql` NOT `rdsmysqlenginequery.sql`).
+- Clone the github repo and perform a pull request to contribute to the labs using [this guide]({{< ref "/Contributing" >}})
+- Place your query in the folder `static/Cost/300_CUR_Queries/Code/< AWS Product Category Folder >/your_query.sql` (_NOTE: please check below for more information about the folder structure_)
 
 {{% notice note %}}
 Contributions will take between 2-3 weeks to review, validate and publish. Not all queries will be published if they overlap with an existing query.  
