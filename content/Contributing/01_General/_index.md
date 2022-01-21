@@ -32,4 +32,4 @@ If you discover a potential security issue in this project we ask that you notif
 ### Licensing
 See the [LICENSE](https://github.com/awslabs/aws-well-architected-labs/blob/master/LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
 
-We maa ask you to sign a [Contributor License Agreement (CLA)](https://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
+We may ask you to sign a [Contributor License Agreement (CLA)](https://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
