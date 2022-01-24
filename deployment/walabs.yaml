@@ -20,7 +20,7 @@ Parameters:
   HugoVersion:
     Description: Version of Hugo to deploy
     Type: String
-    Default: "0.72.0"
+    Default: "latest"
   GitHubBranchName:
     Description: Branch to Deploy
     Type: String
