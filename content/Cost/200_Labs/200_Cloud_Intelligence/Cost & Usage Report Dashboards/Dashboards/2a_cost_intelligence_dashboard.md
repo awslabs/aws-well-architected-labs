@@ -568,7 +568,9 @@ aws quicksight list-dashboard-versions --region <region> --aws-account-id <Accou
 ```
 aws quicksight update-dashboard-published-version --region <region> --aws-account-id <Account_ID> --dashboard-id cost_intelligence_dashboard --version-number <version>
 ```
-
+**NOTE:** The update commands were successfully tested in AWS CloudShell (recommended)
+    ------------ | -------------
+	
 {{% /expand%}}
 
 

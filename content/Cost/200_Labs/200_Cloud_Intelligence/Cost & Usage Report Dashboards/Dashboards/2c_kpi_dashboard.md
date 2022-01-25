@@ -11,6 +11,7 @@ pre: "<b>2c. </b>"
 
 ## Contributors 
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
+- Alex Head, OPTICS Manager 
 - Georgios Rozakis, AWS Technical Account Manager
 - Oleksandr Moskalenko, Sr. AWS Technical Account Manager
 - Timur Tulyaganov, AWS Principal Technical Account Manager
@@ -18,22 +19,18 @@ pre: "<b>2c. </b>"
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
 
 ## KPI Dashboard 
-The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent On Demand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. 
+The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent OnDemand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. 
 
 Example of KPI Dashboard:
 
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
 	
+## Deployment Options
+There is currently only 1 option to deploy the KPI Dashboard. Automation and CloudFormation deployments coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
 
 ### Option 1: Manual Deployment
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option to users who are new to Athena and QuickSight. 
 {{%expand "Click here to continue with the manual deployment" %}}
-
-### Optional 2: Command Line Tool Deployment
-Coming Soon.
-
-### Option 3: CloudFormation Deployment
-Coming Soon.
 
 ### Create Athena Views
 
@@ -324,7 +321,7 @@ To pull the latest version of the dashboard from the public template please use 
     ------------ | -------------
     \<Account_ID> | AWS Account ID where the dashboard will be deployed
     \<Region> | [Region Code](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) where the dashboard will be deployed (Example eu-west-1)
-    \<DatasetID> | Replace with Dataset ID's from the datasets you created in the Preparing Quicksight section **NOTE:** There are 6 unique Dataset IDs
+    \<DatasetID> | Replace with Dataset ID's from the datasets you created in the Preparing QuickSight section **NOTE:** There are 6 unique Dataset IDs
 
 
 3. Pull the latest published version of the dashboard template. Example for KPI Dashboard below:
@@ -341,6 +338,8 @@ aws quicksight list-dashboard-versions --region <region> --aws-account-id <Accou
 ```
 aws quicksight update-dashboard-published-version --region <region> --aws-account-id <Account_ID> --dashboard-id kpi_dashboard --version-number <version>
 ```
+**NOTE:** The update commands were successfully tested in AWS CloudShell (recommended)
+    ------------ | -------------
 
 {{% /expand%}}
 
