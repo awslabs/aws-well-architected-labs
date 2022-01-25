@@ -124,13 +124,14 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 
 - Aaron Edell, Global Head of Business and GTM (Cloud Intelligence Dashboards)
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
-- Timur Tulyaganov, AWS Sr. Technical Account Manager
+- Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
 
 ## Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
 - Barry Miller, Technical Account Manager
 - Chaitanya Shah, Sr. Technical Account Manager
+- Cristian Popa, Sr. Technical Account Manager
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 - Lakhvinder Singh Gill, Enterprise Support Lead
 - Manik Chopra, Senior Technical Account Manager
