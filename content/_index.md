@@ -25,4 +25,4 @@ The labs are structured around the six pillars of the [Well-Architected Framewor
 
 
 ## Contributing
-[Click here for the process to perform a pull request to contribute to the labs]({{< ref "/Well-ArchitectedTool/100_Labs/Contributing" >}})
+[Click here for the process to perform a pull request to contribute to the labs]({{< ref "/Contributing" >}})
