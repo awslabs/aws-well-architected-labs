@@ -252,6 +252,8 @@ If something goes wrong in the dashboard creation step, correct the issue then d
 aws quicksight delete-dashboard --dashboard-id kpi_dashboard --region <Region> --aws-account-id <Account_ID>
 ```
 
+
+
 ### Saving and Sharing your Dashboard in QuickSight
 Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
 	
@@ -260,6 +262,14 @@ Now that you have your dashboard created you can share your dashboard with users
 	
 {{% /expand%}}
 
+
+### Optional 2: Automation Scripts Deployment
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
+
+{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
+
+- Navigate to the [KPI section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/)  
+{{% /expand%}}
 
 
 ### Update Dashboard Template - Optional
