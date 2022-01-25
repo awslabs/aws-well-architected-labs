@@ -346,7 +346,6 @@ The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-sampl
 
 #### Complete Account Map
 In order to automate adding your account names to your dashboard, complete Option 3 from this page; [View0 - account_map](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
-{{% /expand%}}
 
 
 ### Option 3: CloudFormation Deployment
