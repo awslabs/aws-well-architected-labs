@@ -545,4 +545,4 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
 
 {{% /expand%}}
 
-{{< prev_next_button link_prev_url="../2a_cost_intelligence_dashboard" link_next_url="../2c_additional_dashboards" />}}
+{{< prev_next_button link_prev_url="../2a_cost_intelligence_dashboard" link_next_url="../2c_kpi_dashboard" />}}

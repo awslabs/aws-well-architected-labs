@@ -139,7 +139,7 @@ Modify the following SQL query with your table names:
 		)  a
 		LEFT JOIN (
 		   SELECT DISTINCT
-			 "lpad"("account_number", 12, '0') "account_id"
+			 "lpad"("account_id", 12, '0') "account_id"
 		   , account_name
 		   , business_unit
 		   , team
