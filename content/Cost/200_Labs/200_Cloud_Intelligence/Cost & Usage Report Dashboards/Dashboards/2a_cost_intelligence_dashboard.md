@@ -336,12 +336,13 @@ Now that you have your dashboard created you can share your dashboard with users
 
 {{% /expand%}}
 
-### Optional 2: Command Line Tool Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a command line tool (CLI). The CLI allow you to complete the workshops in about 5 minutes by running 1 command in CloudShell or your command line interface of choice.
+### Optional 2: Automation Scripts Deployment
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
 
-{{%expand "Click here to continue with the Command Line Tool Deployment" %}}
+{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
-- Navigate to the [CID section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main)  
+- Navigate to the [CID section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/)  
+{{% /expand%}}
 
 #### Complete Account Map
 In order to automate adding your account names to your dashboard, complete Option 3 from this page; [View0 - account_map](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
