@@ -8,7 +8,7 @@ hidden: FALSE
 
 
 ## KPI EBS Snap View
-This view will be used to create the **KPI EBS Snap view ** that is used to analyze EBS snap metrics and potential savings opportunities. There is only one version of this view and it is not dependent on if you have or do not have Reserved Instances or Savings Plans.      
+This view will be used to create the **KPI EBS Snap view** that is used to analyze EBS snap metrics and potential savings opportunities. There is only one version of this view and it is not dependent on if you have or do not have Reserved Instances or Savings Plans.      
 
 
 ### Create View
