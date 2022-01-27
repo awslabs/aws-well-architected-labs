@@ -18,12 +18,12 @@ This view will be used to create the **KPI EBS Storage All view** that is used t
 Modify the following SQL query for the KPI EBS Storage All view: 
  - Update line 21, replace (database).(tablename) with your CUR database and table name 
 
+
 		CREATE OR REPLACE VIEW kpi_ebs_storage_all AS 
 		WITH 
 		-- Step 1: Add mapping view
 		map AS(SELECT *
 		FROM account_map),
-
 		-- Step 2: Filter CUR to return all EC2 EBS storage usage data
 		ebs_all AS (
 		SELECT
@@ -47,9 +47,7 @@ Modify the following SQL query for the KPI EBS Storage All view:
 		AND line_item_usage_type NOT LIKE '%Snap%'
 		AND line_item_usage_type LIKE '%EBS%' 
 		),
-
 		-- Step 3: Pivot table so storage types cost and usage into separate columns
-
 		ebs_spend AS (
 		SELECT DISTINCT
 		bill_billing_period_start_date AS billing_period
@@ -72,7 +70,6 @@ Modify the following SQL query for the KPI EBS Storage All view:
 		ebs_all
 		GROUP BY 1, 2, 3, 4, 5,6
 		),
-
 		ebs_spend_with_unit_cost AS (
 		SELECT 
 		*
@@ -128,7 +125,6 @@ Modify the following SQL query for the KPI EBS Storage All view:
 		END AS "estimated_gp3_unit_cost"
 		FROM
 		ebs_spend
-
 		),
 		ebs_before_map AS		
 		( 
@@ -152,7 +148,6 @@ Modify the following SQL query for the KPI EBS Storage All view:
 		, sum(ebs_io2_cost) AS ebs_io2_cost
 		, sum(ebs_gp2_cost) AS ebs_gp2_cost
 		, sum(ebs_gp3_cost) AS ebs_gp3_cost
-
 		/* Calculate cost for gp2 gp3 estimate using the following
 		- Storage always 20% cheaper
 		- Additional iops per iops-mo is 6% of the cost of 1 gp3 GB-mo
