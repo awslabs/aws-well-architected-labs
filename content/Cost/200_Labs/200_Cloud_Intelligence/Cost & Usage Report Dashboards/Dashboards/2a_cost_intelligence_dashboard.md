@@ -336,8 +336,8 @@ Now that you have your dashboard created you can share your dashboard with users
 {{% /expand%}}
 
 
-### Optional 2: Automation Scripts Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
+### Optional 2: Command Line Interface Deployment
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a simple command line tool. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
@@ -570,5 +570,10 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
 	
 {{% /expand%}}
 
+### Saving and Sharing your Dashboard in QuickSight
+Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard.
+	
+- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
+	
 
 {{< prev_next_button link_prev_url="../1_prerequistes/" link_next_url="../2b_cudos_dashboard/" />}}

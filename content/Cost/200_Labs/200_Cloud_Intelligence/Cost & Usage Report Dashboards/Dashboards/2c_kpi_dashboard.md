@@ -26,7 +26,7 @@ Example of KPI Dashboard:
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
 	
 ## Deployment Options
-There is currently only 1 option to deploy the KPI Dashboard. Automation and CloudFormation deployments coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
+There is currently only 2 option to deploy the KPI Dashboard. The CloudFormation template is coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
 
 ### Option 1: Manual Deployment
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option to users who are new to Athena and QuickSight. 
@@ -44,7 +44,6 @@ The data source for the dashboard will be an Athena view of your existing Cost a
 
 2. Create the **KPI Instance Mapping view** by modifying the following code, and executing it in Athena:
 	- [KPI Instance Mapping](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_instance_mapping_view/)
-	
 
 3. Create the **KPI Instance All view** by modifying the following code, and executing it in Athena:
 	- [KPI Instance All](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_instance_all_view/)
@@ -263,12 +262,12 @@ Now that you have your dashboard created you can share your dashboard with users
 {{% /expand%}}
 
 
-### Optional 2: Automation Scripts Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
+### Optional 2: Command Line Interface Deployment
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a simple command line tool. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
-- Navigate to the [KPI section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/)  
+- Navigate to the [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/) and follow the instructions to run the command line tool. You will have the option of deploying the KPI dashboard from the list of supported dashboards. 
 {{% /expand%}}
 
 
@@ -352,5 +351,11 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
     ------------ | -------------
 
 {{% /expand%}}
+
+### Saving and Sharing your Dashboard in QuickSight
+Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard.
+	
+- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
+	
 
 {{< prev_next_button link_prev_url="../2b_cudos_dashboard" link_next_url="../3_additional_dashboards" />}}
