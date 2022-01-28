@@ -762,7 +762,7 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 		line_item_line_item_description
 		ORDER BY
 		sum_line_item_unblended_cost DESC,
-		sum_line_item_usage_amount DESC
+		sum_line_item_usage_amount DESC;
 ```
 
 #### Helpful Links

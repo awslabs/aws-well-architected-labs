@@ -24,5 +24,5 @@
 		line_item_line_item_description
 	ORDER BY
 		sum_line_item_unblended_cost DESC,
-		sum_line_item_usage_amount DESC
+		sum_line_item_usage_amount DESC;
 
