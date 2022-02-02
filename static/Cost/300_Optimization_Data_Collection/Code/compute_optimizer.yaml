@@ -283,6 +283,8 @@ Resources:
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !Ref S3CrawlerQue
   LambdaCrawlerEventSourceMapping:
+    DependsOn:
+      - LambdaCrawlerInvokePermission
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: !Ref S3CrawlerQue
