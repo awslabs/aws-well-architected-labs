@@ -259,6 +259,8 @@ Resources:
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
   EventSourceMapping:
+    DependsOn:
+      - EventPermission
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
