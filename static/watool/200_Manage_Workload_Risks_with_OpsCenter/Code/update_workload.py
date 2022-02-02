@@ -36,29 +36,33 @@ def lambda_handler(event, context):
             QuestionId=question_id
         )
 
-        #Check if none of these is a selected option
-        for bp_choice in current_answer['Answer']['Choices']:
-            if bp_choice['Title'] == 'None of these':
-                none_of_these = bp_choice['ChoiceId']
-
         selected_choices = current_answer['Answer']['SelectedChoices']
 
-        #If none of these is selected, no best practices applied for this question
-        for choice_id in selected_choices:
-            if choice_id == none_of_these:
-                selected_choices = []
+        #Check if workload has been updated manually
+        if new_bp in selected_choices:
+            print('Workload already up to date, no action needed')
+        else:
+            #Check if none of these is a selected option
+            for bp_choice in current_answer['Answer']['Choices']:
+                if bp_choice['Title'] == 'None of these':
+                    none_of_these = bp_choice['ChoiceId']
 
-        selected_choices.append(new_bp)
+            #If none of these is selected, no best practices applied for this question
+            for choice_id in selected_choices:
+                if choice_id == none_of_these:
+                    selected_choices = []
 
-        print('update answer: ', selected_choices)
+            selected_choices.append(new_bp)
 
-        #Update the answers for the question on the AWS WA Tool
-        updated_answer = wa.update_answer(
-            WorkloadId=workload,
-            LensAlias='wellarchitected',
-            QuestionId=question_id,
-            SelectedChoices=selected_choices
-        )
+            print('update answer: ', selected_choices)
+
+            #Update the answers for the question on the AWS WA Tool
+            updated_answer = wa.update_answer(
+                WorkloadId=workload,
+                LensAlias='wellarchitected',
+                QuestionId=question_id,
+                SelectedChoices=selected_choices
+            )
 
         #Get current state for the workload that is tracked in DynamoDB
         workload_current_state = dynamodb.get_item(
