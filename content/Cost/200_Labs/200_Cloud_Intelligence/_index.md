@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-July 2021
+January 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -37,6 +37,7 @@ In this lab, you will find step-by-step guides on how to implement some or all o
 - [**Cost Intelligence Dashboard (CID) - Overview**](#cost-intelligence-dashboard-cid)
 - [**CUDOS Dashboard - Overview**](#cudos-dashboard)
 - [**Trusted Advisor Organizational (TAO) Dashboard - Overview**](#trusted-advisor-organizational-tao-dashboard)
+- [**KPI & Modernization Dashboard (KPI) - Overview**](#kpi-dashboard)
 - [**Additional Dashboards - Overview**](#additional-dashboards)
 
 The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
@@ -104,6 +105,19 @@ Trusted Advisor Organizational (TAO) requires the management account in your org
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
 - [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
+### KPI Dashboard
+The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent OnDemand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. Out-of-the-box benefits of the KPI dashboard include (but are not limited to):
+
+* Track percent on-demand across all your teams.
+* See potential cost savings by meeting certain KPIs and goals for your organization.
+* Quickly locate cost-optimization opportunities such as infrequently used S3 buckets, old EBS snapshots, and Graviton eligible instance usage. .
+
+**Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
+
+- [Get started with the KPI Dashboard](cost-usage-report-dashboards/)
+- Explore a sample KPI Dashboard - Coming Soon
+
+
 ### Additional Dashboards
 In addition to the 3 foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.   
 
@@ -117,6 +131,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 ## Steps:
 - [Get started with the Cost Intelligence Dashboard](cost-usage-report-dashboards/)
 - [Get started with the CUDOS Dashboard](cost-usage-report-dashboards/)
+- [Get started with the KPI Dashboard](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
 - [Get started with the Additional Dashboards](cost-usage-report-dashboards/)
 
