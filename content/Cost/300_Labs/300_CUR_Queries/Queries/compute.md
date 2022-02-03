@@ -57,7 +57,7 @@ FROM
   ${table_name} 
 WHERE 
   ${date_filter} 
-  AND line_item_product_code LIKE '%AmazonEC2%'
+  AND line_item_product_code = 'AmazonEC2'
   AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
 GROUP BY 
   line_item_product_code, 
