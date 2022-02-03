@@ -21,7 +21,7 @@ pre: "<b>2c. </b>"
 ## KPI Dashboard 
 The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent OnDemand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. 
 
-Example of KPI Dashboard:
+- [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi) 
 
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
 	
