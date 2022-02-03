@@ -59,7 +59,6 @@ WHERE
   ${date_filter} 
   AND line_item_product_code LIKE '%AmazonEC2%'
   AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
-  AND line_item_product_code LIKE '%AmazonEC2%'
 GROUP BY 
   line_item_product_code, 
   line_item_line_item_description
