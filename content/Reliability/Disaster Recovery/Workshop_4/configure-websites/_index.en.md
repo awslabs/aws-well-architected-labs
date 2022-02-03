@@ -50,7 +50,7 @@ Your final **config.json** should look similar to this example.
 
 {{< img pc-13.png >}}
 
-2.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Click the **Upload** button.
+2.6 Enable the **I understand the effects of these changes on the specified objects.** checkbox.  Click the **Upload** button.
 
 {{< img pc-14.png >}}
 
@@ -100,7 +100,7 @@ Your final **config.json** should look similar to this example.
 
 {{< img c-13.png >}}
 
-4.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Click the **Upload** button.
+4.6 Enable the **I understand the effects of these changes on the specified objects.** checkbox.  Click the **Upload** button.
 
 {{< img c-14.png >}}
 

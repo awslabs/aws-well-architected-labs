@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-To connect the applicaiton to the newly promoted Aurora Database in the us-west-1 region, we need to modify the `Passive-Secondary` web application's configuration.
+To connect the application to the newly promoted Aurora Database in the us-west-1 region, we need to modify the `Passive-Secondary` web application's configuration.
 
 ### Connecting the Application
 

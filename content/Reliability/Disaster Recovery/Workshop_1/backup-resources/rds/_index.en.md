@@ -17,7 +17,7 @@ weight = 1
 {{< img BK-23.png >}}
 
 {{% notice warning %}}
-If you see this error, please **REPEAT** Steps 1.1 through 1.3 above makig sure you start from Step 1.1.
+If you see this error, please **REPEAT** Steps 1.1 through 1.3 above making sure you start from Step 1.1.
 {{% /notice %}}
 
 {{< img BK-26.png >}}
