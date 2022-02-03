@@ -106,7 +106,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **passive-secondary-uibucket-xxxx*
 
 {{< img cf-14.png >}}
 
-#### Congragulations!  Your CloudFront distribution is working!
+#### Congratulations!  Your CloudFront distribution is working!
 
 {{< prev_next_button link_prev_url="../verify-websites/" link_next_url="../disaster/" />}}
 

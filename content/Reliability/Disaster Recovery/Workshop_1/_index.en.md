@@ -16,7 +16,7 @@ To configure the infrastructure and deploy the application, we will use CloudFor
 
 We will initially deploy Unishop to the us-east-1 AWS region and verify functionality. Then we will use an AWS EC2 AMI and AWS Backup to create copies of the application server and database in the us-west-1 region. Finally, we will use the copies to create and test a fully functional application in the us-west-1 region.
 
-Prior experieince with the AWS Console and Linux command line are helpful but not required.
+Prior experience with the AWS Console and Linux command line are helpful but not required.
 
 {{< img AC-1.png >}}
 

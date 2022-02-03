@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
 
-## Allow Amazon S3 Public Acess
+## Allow Amazon S3 Public Access
 
 Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
 

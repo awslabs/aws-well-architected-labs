@@ -22,7 +22,7 @@ weight = 2
 
 2.2 Select **Passive-Secondary**.
 
-2.3 Wait until the stack's status reports **CREATE_COMPLETE**.  Then cick the **Outputs** link and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
+2.3 Wait until the stack's status reports **CREATE_COMPLETE**.  Then click the **Outputs** link and record the values of the **APIGURL**, **WebsiteURL**, and **WebsiteBucket** outputs.  You will need these to complete future steps.
 
 {{< img sr-6.png >}}
 
