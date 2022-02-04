@@ -42,7 +42,7 @@ def main(account_id, account_name):
                         checkId=check_id, language="en"
                     )
                     format = '%Y-%m-%dT%H:%M:%SZ'
-                    print(check_id)
+                    #print(check_id)
                     mytime =check_result['result']['timestamp']
                     epoch = datetime.datetime(1970, 1, 1)
                     epoch_time = int((datetime.datetime.strptime(mytime, format) - epoch).total_seconds())  

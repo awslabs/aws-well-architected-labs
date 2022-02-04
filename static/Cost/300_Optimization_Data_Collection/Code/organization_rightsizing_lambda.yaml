@@ -141,19 +141,22 @@ Resources:
 
 
           def store_data_to_s3(data, s3client, path, filename):
+              file = os.path.getsize(f"/tmp/{filename}.json")
+              if file == 0:  
+                  print(f"No data in file for {DestinationPrefix}")
+              else:
+                today = date.today()
+                year = today.year
+                month = today.strftime('%m')
+                day = today.day
 
-              today = date.today()
-              year = today.year
-              month = today.strftime('%m')
-              day = today.day
-
-              filepath = '/tmp/%s-%s' % (today, filename)
-              with open(filepath, 'w') as f:
-                  json.dump(data, f, default=str)
-                  f.write('\n')
-              upload_file_to_s3(s3client, BUCKET, filepath,
-                                "%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
-                                % (path, year, month, day, year, month, day, filename))
+                filepath = '/tmp/%s-%s' % (today, filename)
+                with open(filepath, 'w') as f:
+                    json.dump(data, f, default=str)
+                    f.write('\n')
+                upload_file_to_s3(s3client, BUCKET, filepath,
+                                  "%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
+                                  % (path, year, month, day, year, month, day, filename))
 
           def lambda_handler(event, context):
 

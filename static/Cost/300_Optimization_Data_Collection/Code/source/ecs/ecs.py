@@ -71,18 +71,23 @@ def lambda_handler(event, context):
                         pass
                 
             print("respose gathered")
-            today = date.today()
-            year = today.year
-            month = today.month
-            
-            client = boto3.client("s3")
-            client.upload_file(
-                "/tmp/data.json",
-                bucket,
-                f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
-            )  # uploading the file with the data to s3
-            print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
-            start_crawler()
+
+            file = os.path.getsize("/tmp/data.json")
+            if file == 0:  
+                print(f"No data in file for {DestinationPrefix}")
+            else:
+                today = date.today()
+                year = today.year
+                month = today.month
+                
+                client = boto3.client("s3")
+                client.upload_file(
+                    "/tmp/data.json",
+                    bucket,
+                    f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
+                )  # uploading the file with the data to s3
+                print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
+                start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
