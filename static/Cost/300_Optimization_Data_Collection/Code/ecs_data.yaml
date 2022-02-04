@@ -38,7 +38,7 @@ Parameters:
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/ecs_dev.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/ecs.zip
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
