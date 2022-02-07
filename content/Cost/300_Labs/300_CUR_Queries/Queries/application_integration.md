@@ -20,7 +20,8 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Amazon MQ](#amazon-mq)
   * [Amazon SES](#amazon-ses)
   * [Amazon SNS](#amazon-sns)
-  * [Amazon SQS](#amazon-sqs)
+  * [Amazon SQS Top 20 Daily Unblended Costs](#amazon-sqs-top-20-daily-unblended-costs)
+  * [Amazon SQS By Product Family](#amazon-sqs-by-product-family)
   
 ### Amazon MQ
 
@@ -182,7 +183,7 @@ ORDER BY
 
 [Back to Table of Contents](#table-of-contents)
 
-### Amazon SQS
+### Amazon SQS Top 20 Daily Unblended Costs
 
 #### Query Description
 This query will provide the top 20 daily unblended costs as well as usage information for a specified linked account for Amazon SQS.  The output will include detailed information about the resource id (queue), usage type, and API operation.  The cost will be summed and in descending order.  This is helpful for tracking down spikes in cost for SQS usage.  Cost Explorer will provide you all of this information except the resource ID.  This allows your investigation to be targeted to a time range, linked account, API operation, and resource that is generating the usage.
@@ -223,7 +224,49 @@ ORDER BY
 LIMIT 20; 
 ```
 
-{{< email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Query1" button_text="Help & Feedback" >}}
+{{< email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS Top 20 Daily Unblended Costs" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+### Amazon SQS By Product Family
+
+#### Query Description
+This query will provide daily unblended cost and usage information for Amazon SQS, grouped by account and operation. The operation is also grouped using product_product_family, which results in values such as "Data Transfer - Receive" and "API Request - SendMessageBatch". Output is ordered by date, then by cost (descending). This can be used to identify specific API operations driving the most daily cost, which allows for targeted investigation into optimization opportunities.
+
+#### Pricing
+Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/).  Please refer to the [Reducing Amazon SQS costs page](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/reducing-costs.html) and [Enabling client-side buffering and request batching](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-client-side-buffering-request-batching.html) for Cost Optimization suggestions.
+
+#### Sample Output
+![Images/sqs-by-product-family.png](/Cost/300_CUR_Queries/Images/Application_Integration/sqs-by-product-family.png)
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sqs-by-product-family.sql)
+
+#### Copy Query
+```tsql
+SELECT
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
+  CONCAT(product_product_family,' - ',line_item_operation) AS concat_product_product_family,
+  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+FROM
+    ${table_name}
+WHERE
+    ${date_filter}}
+    AND line_item_product_code = 'AWSQueueService'
+    AND line_item_line_item_type IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY
+  bill_payer_account_id, 
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
+  CONCAT(product_product_family,' - ',line_item_operation)
+ORDER BY
+  day_line_item_usage_start_date,
+  sum_line_item_unblended_cost DESC;
+```
+
+{{< email_button category_text="Application Integration" service_text="Amazon SQS" query_text="Amazon SQS By Product Family" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
