@@ -22,11 +22,15 @@ weight = 3
 
 {{< img BK-30.png >}}
 
-1.6 In the **Block Public Access settings for this bucket** secion.  Disable the **Block *all* public access** checkbox including all chidren.  Enable the **I acknowledge that the current settings....** checkbox. 
+1.6 In the **Object Ownership** section. Select **ACLs enabled**.
+
+{{< img BK-33.png >}}
+
+1.7 In the **Block Public Access settings for this bucket** section.  Disable the **Block *all* public access** checkbox including all children.  Enable the **I acknowledge that the current settings....** checkbox. 
 
 {{< img BK-31.png >}}
 
-1.7 Click the **Create Bucket** button.
+1.8 Click the **Create Bucket** button.
 
 {{< img BK-32.png >}}
 

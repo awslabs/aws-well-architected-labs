@@ -133,7 +133,7 @@ Your final `config.json` should look similar to this example.
 
 {{< img c-9.png >}}
 
-3.3 Cick the **Upload** button.
+3.3 Click the **Upload** button.
 
 {{< img c-11.png >}}
 
@@ -145,7 +145,7 @@ Your final `config.json` should look similar to this example.
 
 {{< img c-13.png >}}
 
-3.6 Enable the **I understand the effets of these changes on the specified objects.** checkbox.  Click the **Upload** button.
+3.6 Enable the **I understand the effects of these changes on the specified objects.** checkbox.  Click the **Upload** button.
 
 {{< img c-14.png >}}
 

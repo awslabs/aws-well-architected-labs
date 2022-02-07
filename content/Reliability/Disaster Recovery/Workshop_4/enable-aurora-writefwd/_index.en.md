@@ -32,7 +32,7 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 
 1.5 Scroll down to the page's bottom and click the **Continue** button. 
 
-1.6 Select **Apply immediatley** and click the **Modify Cluster** button.
+1.6 Select **Apply immediately** and click the **Modify Cluster** button.
 
 {{< img a-5.png >}}
 
