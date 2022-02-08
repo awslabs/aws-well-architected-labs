@@ -12,9 +12,8 @@ FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
-  AND line_item_product_code LIKE '%AmazonEC2%'
+  AND line_item_product_code = 'AmazonEC2'
   AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
-  AND line_item_product_code LIKE '%AmazonEC2%'
 GROUP BY -- automation_groupby_stmt
   line_item_product_code, 
   line_item_line_item_description
