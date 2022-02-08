@@ -72,8 +72,8 @@ def lambda_handler(event, context):
                 
             print("respose gathered")
 
-            file = os.path.getsize("/tmp/data.json")
-            if file == 0:  
+            fileSize = os.path.getsize("/tmp/data.json")
+            if fileSize == 0:  
                 print(f"No data in file for {DestinationPrefix}")
             else:
                 today = date.today()

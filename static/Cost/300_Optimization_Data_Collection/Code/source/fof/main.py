@@ -47,8 +47,8 @@ def lambda_handler(event, context):
 
 def s3(DestinationPrefix, account_id):
     
-    file = os.path.getsize("/tmp/data.json")
-    if file == 0:  
+    fileSize = os.path.getsize("/tmp/data.json")
+    if fileSize == 0:  
         print(f"No data in file for {DestinationPrefix}")
     else:
         d = datetime.now()

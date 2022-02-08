@@ -141,8 +141,8 @@ Resources:
 
 
           def store_data_to_s3(data, s3client, path, filename):
-              file = os.path.getsize(f"/tmp/{filename}.json")
-              if file == 0:  
+              fileSize = os.path.getsize(f"/tmp/{filename}.json")
+              if fileSize == 0:  
                   print(f"No data in file for {DestinationPrefix}")
               else:
                 today = date.today()

@@ -259,8 +259,8 @@ Resources:
                     json.dump(data, f, default=str)
                     f.write('\n')
                 #Check file size
-                file = os.path.getsize(filepath)
-                if file == 0:  
+                fileSize = os.path.getsize(filepath)
+                if fileSize == 0:  
                     print(f"No data in file for {DestinationPrefix}")
                 else:
                     upload_file_to_s3(s3client, DEST_BUCKET, filepath,
