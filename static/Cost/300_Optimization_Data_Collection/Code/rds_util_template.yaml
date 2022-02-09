@@ -253,12 +253,18 @@ Resources:
               print('file upload successful')
 
           def store_data_to_s3(data, s3client, region, service, path, resource_type, resource_value, filename, accountID):
-              filepath='/tmp/%s-%s' %(region, filename)
-              with open(filepath, 'w') as f:
-                  json.dump(data, f, default=str)
-                  f.write('\n')
-              upload_file_to_s3(s3client, DEST_BUCKET, filepath,
-                              f"{DEST_PREFIX}/{path}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
+              
+                filepath=f"/tmp/{region}-{filename}"
+                with open(filepath, 'w') as f:
+                    json.dump(data, f, default=str)
+                    f.write('\n')
+                #Check file size
+                fileSize = os.path.getsize(filepath)
+                if fileSize == 0:  
+                    print(f"No data in file for {DestinationPrefix}")
+                else:
+                    upload_file_to_s3(s3client, DEST_BUCKET, filepath,
+                                    f"{DEST_PREFIX}/{path}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
           def start_crawler():
               glue_client = boto3.client('glue')
               try:
