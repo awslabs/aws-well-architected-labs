@@ -414,15 +414,11 @@ Before you can install or update the AWS CLI version 2 on Windows, be sure you h
     If Windows is unable to find the program, you might need to close and reopen the command prompt window to refresh the path, or add the installation directory to your PATH environment variable manually.
 {{% /expand%}}
 
-**Full details on installing, updating and uninstalling AWS CLI from supported operating systems is available [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).**
+**Full details on installing, updating, and uninstalling AWS CLI from supported operating systems is available [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).**
 
-
-{{% notice tip %}}
-The Cloud Intelligence Dashboards follow the best practices of the AWS Well-Architected labs. The prerequisites below link to each corresponding lab. We recommend following the labs, but have included standalone steps to supplement.  
-{{% /notice %}}
 
 {{% notice note %}}
-The Cloud Intelligence Dashboards support Multi-Payer Cost and Usage Report (CUR) reporting. **Multi-Payer CUR setup cannot use the standalone setup and must follow the Well-Architected Lab references for each prerequisite**    
+The Cloud Intelligence Dashboards support Multi-Payer Cost and Usage Report (CUR) reporting. **After using the steps below to setup a CUR in each payer account, visit [this section](/cost/200_labs/200_cloud_intelligence/faq/) of the lab on combining multiple CURs for the Cloud Intelligence Dashboards before returning here**    
 {{% /notice %}}
 
 ### Prepare Cost & Usage Report
@@ -434,19 +430,14 @@ The Cost & Usage Report is the foundation for these dashboards. You must have a 
 - Compression type: **Parquet** 
 
 
-If you do not have a Cost & Usage Report that meets this criteria visit one of the following resources to enable. 
+If you do not have a Cost & Usage Report that meets this criteria follow the *steps for preparing your Cost & Usage report* setup guide below. 
 
 {{% notice note %}}
 It can take up to 24 hours for AWS to start delivering reports to your Amazon S3 bucket. After delivery starts, AWS updates the AWS Cost and Usage Reports files at least once a day.
 {{% /notice %}}
 
-{{%expand "Click here - to create using the Level 100 Account Setup: Lab Guide" %}}
-#### Configure using the the Level 100 Account Setup: Lab Guide
-[Click to navigate the Level 100 Account Setup: Lab Guide](https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/) to configure your Cost & Usage Report. Once complete, you will need to wait up to 24hrs for your report to generate. Once available navigate back to this page and complete the remaining prerequisites 
-{{% /expand%}}
-
-{{%expand "Click here - to create using the standalone setup guide" %}}
-#### Configure using the Standalone setup guide
+{{%expand "Click here see steps for preparing your Cost & Usage report" %}}
+#### Configure CUR
 1. [Sign in](https://console.aws.amazon.com/billing/home#/) to the Billing and Cost Management console.
 
 1. On the navigation pane, choose **Cost & Usage Reports**.
@@ -491,17 +482,10 @@ It can take up to 24 hours for AWS to start delivering reports to your Amazon S3
 {{% /expand%}}
 
 ### Enable your Cost & Usage Reports in Athena
-The dashboards use Athena as the QuickSight data source for generating your dashboards. If you do not have your Cost & Usage Report enabled in Athena visit one of the following resources to enable. 
+The dashboards use Athena as the QuickSight data source for generating your dashboards. If you do not have your Cost & Usage Report enabled in Athena please click to expand the setup guide below. 
 
-{{%expand "Click here - to create using the Level 200 Cost and Usage Analysis lab" %}}
-#### Configure using the the Level 200 Cost and Usage Analysis lab
-[Click to navigate to the Level 200 Cost and Usage Analysis lab](https://wellarchitectedlabs.com/cost/200_labs/200_4_cost_and_usage_analysis/) Once complete navigate back to this page and complete the remaining prerequisites 
-
-{{% /expand%}}
-
-
-{{%expand "Click here - to create using the standalone setup guide" %}}
-#### Configure using the Standalone setup guide
+{{%expand "Click here - to follow the steps for setting up Athena for the first time" %}}
+#### Configure Athena
 ##### 1. Prepare Athena
 If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to step 2 **Prepare CUR & Athena Integration** 
 
@@ -564,20 +548,9 @@ To streamline and automate integration of your Cost and Usage Reports with Athen
 
 
 ### Enable QuickSight 
-QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete one of the options below.
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
-{{%expand "Click here - to create using the Level 100 Account Setup: Lab Guide" %}}
-
-#### Configure using the the Level 100 Account Setup: Lab Guide
-[Click to navigate the Level 100 Account Setup: Lab Guide]( https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/) to configure setup Amazon QuickSight. 
-
-**NOTE:** An **Enterprise Edition of QuickSight** is required for all dashboard template labs. You will need to upgrade from the Standard Edition**
-    ------------ | -------------
-	
-Once complete navigate back to this page and complete the remaining prerequisites 
-
-{{% /expand%}}
-{{%expand "Click here - to create using the standalone setup guide" %}}
+{{%expand "Click here - to setup QuickSight" %}}
 #### Enable QuickSight:
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services

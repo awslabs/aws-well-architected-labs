@@ -250,32 +250,34 @@ If something goes wrong in the dashboard creation step, correct the issue then d
 ```
 aws quicksight delete-dashboard --dashboard-id kpi_dashboard --region <Region> --aws-account-id <Account_ID>
 ```
+{{% /expand%}}
 
 
+### Option 2: Command Line Interface Deployment
+The CID command line tool is an optional way to create the Cloud Intelligence Dashboards. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
+
+{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
+
+- Navigate to the [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/) and follow the instructions to run the command line tool. You will have the option of deploying the KPI dashboard from the list of supported dashboards. 
+
+Once complete, visit the [account mapping page](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/) and follow the steps there to get your account names into the dashboard. 
+{{% /expand%}}
 
 ### Saving and Sharing your Dashboard in QuickSight
 Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
 	
 - [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
-	
-	
-{{% /expand%}}
-
-
-### Optional 2: Command Line Interface Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a simple command line tool. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
-
-{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
-
-- Navigate to the [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/) and follow the instructions to run the command line tool. You will have the option of deploying the KPI dashboard from the list of supported dashboards. 
-{{% /expand%}}
-
 
 ### Update Dashboard Template - Optional
 
 {{%expand "Click here to update your dashboard with the latest version" %}}
 
 If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md), you already know that we are always improving the Cloud Intelligence Dashboards.
+
+#### Option 1: Command Line Tool
+Visit the [GitHub repository](https://github.com/aws-samples/aws-cudos-framework-deployment/) to download and install the CID Command Line Tool and follow the instructions for running the `update` command. 
+
+#### Option 2: Manual Update
 
 To pull the latest version of the dashboard from the public template please use the following steps.
 
@@ -351,11 +353,3 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
     ------------ | -------------
 
 {{% /expand%}}
-
-### Saving and Sharing your Dashboard in QuickSight
-Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard.
-	
-- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
-	
-
-{{< prev_next_button link_prev_url="../2b_cudos_dashboard" link_next_url="../3_additional_dashboards" />}}
