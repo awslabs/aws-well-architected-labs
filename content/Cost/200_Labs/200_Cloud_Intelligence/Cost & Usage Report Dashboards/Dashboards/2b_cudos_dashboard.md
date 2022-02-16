@@ -350,21 +350,47 @@ If something goes wrong in the dashboard creation step, correct the issue then d
 ```
 aws quicksight delete-dashboard --dashboard-id cudos --region <Region> --aws-account-id <Account_ID>
 ```
-
-### Saving and Sharing your Dashboard in QuickSight
-Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
-	
-- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
-	
 	
 {{% /expand%}}
 
-### Optional 2: Command Line Interface Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a simple command line tool. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
+### Option 2: Command Line Interface Deployment
+The CID command line tool is an optional way to create the Cloud Intelligence Dashboards. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
 
-- Navigate to the [CUDOS section of the Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/)  
+1. Navigate to the [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment/) and follow the instructions to run the command line tool. You will have the option of deploying the CUDOS Dashboard from the list of supported dashboards.
+
+**Follow the remaining steps if you have not already deployed the Cost Intelligence Dashboard in [the previous step](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2a_cost_intelligence_dashboard/).**
+
+2. Once complete, visit the [account mapping page](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/) and follow the steps there to get your account names into the dashboard. 
+
+#### Schedule dataset refresh in QuickSight. 
+1.	Select the **summary_view** dataset
+
+    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
+
+1.	Click **Schedule refresh**
+
+    ![qs_schedule_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_schedule_refresh.png?classes=lab_picture_small)
+
+1.	Click **Create**
+
+    ![qs_create_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_refresh.png?classes=lab_picture_small)
+
+1.	Enter a daily schedule, in the appropriate time zone and click **Create**
+
+    ![qs_daily_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_daily_refresh.png?classes=lab_picture_small)
+
+1.	Click **Cancel** to exit
+
+    ![qs_cancel_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_cancel_refresh.png?classes=lab_picture_small)
+
+1.	Click **x** to exit
+
+    ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_exit_refresh.png?classes=lab_picture_small)
+
+1.	Repeat these steps with any remaining Athena datasets **except** customer_all.
+
 {{% /expand%}}
 
 ### Option 3: CloudFormation Deployment
@@ -460,14 +486,12 @@ To validate your QuickSight complete the tasks below:
 13. Navigate to **Dashboards** page in your QuickSight console, click on your **Cost Intelligence Dashboard name** or your **CUDOS Dashboard name**
 ![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png?classes=lab_picture_small)
 
+{{% /expand%}}
 
 ### Saving and Sharing your Dashboard in QuickSight
 Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
 	
 - [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)	
-
-
-{{% /expand%}}
 
 ### Update Dashboard Template - Optional
 
@@ -476,6 +500,11 @@ Now that you have your dashboard created you can share your dashboard with users
 If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-cudos.md), you already know that we continue improving Cloud Intelligence Dashboards.
 
 To pull the latest version of the dashboard from the public template please use the following steps.
+
+#### Option 1: Command Line Tool
+Visit the [GitHub repository](https://github.com/aws-samples/aws-cudos-framework-deployment/) to download and install the CID Command Line Tool and follow the instructions for running the `update` command. 
+
+#### Option 2: Manual Update
 
 1. Create an **update.json** file by removing permissions section from the **import.json** file. Sample for CUDOS Dashboard **update.json** file below:
 ```json

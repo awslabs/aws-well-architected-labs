@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-January 2022
+February 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -72,7 +72,6 @@ The Cost Intelligence Dashboard is a customizable and accessible dashboard to he
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
-- [Get started with the Cost Intelligence Dashboard](cost-usage-report-dashboards/)
 - [Explore a sample Cost Intelligence Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cid) 
 
 ### CUDOS Dashboard
@@ -84,7 +83,6 @@ The CUDOS Dashboard is an in-depth, granular, and recommendation-driven dashboar
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
-- [Get started with the CUDOS Dashboard](cost-usage-report-dashboards/)
 - [Explore a sample CUDOS Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cudos) 
 
 ### Trusted Advisor Organizational (TAO) Dashboard
@@ -102,7 +100,6 @@ Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve secur
 Trusted Advisor Organizational (TAO) requires the management account in your organization to have Business or Enterprise support plan and enabled organizational view. [Click to learn more](https://docs.aws.amazon.com/awssupport/latest/user/organizational-view.html)
 {{% /notice %}}
 
-- [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
 - [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
 ### KPI Dashboard
@@ -114,8 +111,7 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
-- [Get started with the KPI Dashboard](cost-usage-report-dashboards/)
-- Explore a sample KPI Dashboard - Coming Soon
+- [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
 
 
 ### Additional Dashboards
@@ -126,14 +122,10 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
-- [Get started with the Additional Dashboards](cost-usage-report-dashboards/)
 
 ## Steps:
-- [Get started with the Cost Intelligence Dashboard](cost-usage-report-dashboards/)
-- [Get started with the CUDOS Dashboard](cost-usage-report-dashboards/)
-- [Get started with the KPI Dashboard](cost-usage-report-dashboards/)
+- [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
-- [Get started with the Additional Dashboards](cost-usage-report-dashboards/)
 
 ## Authors
 

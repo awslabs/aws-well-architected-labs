@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-July 2021
+February 2022
 
 
 ## Feedback
@@ -36,6 +36,7 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 - Create the Cost Intelligence dashboard
 - Create the CUDOS dashboard
+- Create the KPI dashboard
 - Create Additional Dashboards
 	- Data Transfer Dashboard
 	- Trends Dashboard 
@@ -47,6 +48,7 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 - Permission to access Amazon Athena, AWS Glue, the Amazon S3 bucket where the CUR lives, and Amazon QuickSight via both the console and the Command Line Tool. 
 - Permissions for CloudFormation is helpful but not required. 
+- You can download and apply to IAM this set of minimal permissions (https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/assets/minimal_permissions.json)
 
 {{% notice note %}}
 Detailed permissions are shared in the next step

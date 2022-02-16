@@ -18,6 +18,7 @@ If you wish to provide feedback on this lab, there is an error, or you have a su
 ## Introduction
 This lab will show you how to combine your organizations information with your AWS Cost & Usage Report, this will enable you to view cost & usage in a way that is more relevant to your organization. It will guide you through the process of setting up an AWS Lambda function to extract the data from AWS Organizations, such as account ID, account name, organization parent and specified tags. This will then be place into Amazon S3. From there, Amazon Athena will be able to read this data to produce a table that can be connected to your AWS Cost & Usage Report to enrich it. This can be deployed manually or through AWS CloudFormation. We also now offer a terraform module to deploy this code.
 
+**NOTE:** If you are thinking about combining your AWS Organizations data with other sources of data such as your Cost & Usage Report, Trusted Advisor, Compute Optimizer, etc. (creating a **datalake**) and/or using the Cloud Intelligence Dashboards [dashboards]({{< ref "/Cost/200_labs/200_cloud_intelligence/" >}}) then we recommend using the 300 Optimization Data Collection [Lab.]({{< ref "/Cost/300_labs/300_optimization_data_collection/" >}})  This lab contains the setup of this module, plus many more data collectors. 
 
 ## Architecture 
 
