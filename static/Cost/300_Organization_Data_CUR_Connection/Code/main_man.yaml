@@ -233,7 +233,7 @@ Resources:
   OrgCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: OrgGlueCrawler
+      Name: Org_Glue_Crawler
       Role: !GetAtt GlueRole.Arn 
       DatabaseName: !Ref DatabaseName
       Schedule:
