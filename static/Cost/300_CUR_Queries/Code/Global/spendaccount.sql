@@ -30,14 +30,15 @@ SELECT -- automation_select_stmt
   END) AS ri_sp_trueup, 
   SUM(CASE
       WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
-      WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_costELSE 0 
+      WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost
+      ELSE 0 
   END) AS ri_sp_upfront_fees
 FROM -- automation_from_stmt
   ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND line_item_usage_type != 'Route53-Domains'
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee','RIFee','Fee')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
