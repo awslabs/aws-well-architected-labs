@@ -18,7 +18,7 @@ We will prepare the organization data source which we will use to join with the 
 3. Click **Add crawler**:
 ![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
 
-4. Enter a crawler name of **OrgGlueCrawler** and click **Next**:
+4. Enter a crawler name of **Org_Glue_Crawler** and click **Next**:
 ![Images/Crawler_info.png](/Cost/300_Organization_Data_CUR_Connection/Images/Crawler_info.png)
 
 5. Ensure **Data stores** is the source type, click **Next**:
