@@ -1,0 +1,10 @@
+All yaml are files are in the account 87******** - well-architected-content@amazon.com 
+
+In the bucket aws-well-architected-labs. These are then replicated to the other regional buckets.
+
+To add a regional bucket follow these steps:
+* create bucket following the naming convention aws-well-architected-labs-<region>
+* add this to the role s3-replication-role
+* create a replication role on the aws-well-architected-labs bucket on prefix Cost/Labs/300_Optimization_Data_Collection/
+* Use the s3-replication-role role
+* New files will be replicated 
