@@ -371,7 +371,7 @@ The CID command line tool is an optional way to create the Cloud Intelligence Da
 
 
 ### Option 3: CloudFormation Deployment
-This section is **optional** and automates the creation of the Cost Intelligence Dashboard and CUDOS Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
+This section is **optional** and automates the creation of the Cost Intelligence Dashboard and CUDOS Dashboard using **CloudFormation templates**. The CloudFormation templates allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
@@ -462,6 +462,8 @@ To validate your QuickSight complete the tasks below:
 
 13. Navigate to **Dashboards** page in your QuickSight console, click on your **Cost Intelligence Dashboard name** or your **CUDOS Dashboard name**
 ![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png?classes=lab_picture_small)
+
+14. Set up scheduled SPICE refresh for SPICE Datasets manually or deploy a [spice-refresh-cfn.yml](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/cfn-templates/spice-refresh-cfn.yml)
 
 ### Creating your Account Mapping
 
