@@ -186,8 +186,9 @@ Modify the following SQL query for View5 - RI SP Mapping:
 
 ### Validate View
 
-- Confirm the view is working, run the following Athena query and you should receive 10 rows of data:
+- Confirm the view is working, run the following Athena query and substitute (database) for your CUR database and you should receive 10 rows of data:
+ 
 
-        select * from costmaster.ri_sp_mapping
+        select * from (database).ri_sp_mapping
         limit 10
 		
