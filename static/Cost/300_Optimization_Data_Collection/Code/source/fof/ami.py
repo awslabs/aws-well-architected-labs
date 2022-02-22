@@ -1,4 +1,5 @@
 import boto3
+from boto3.session import Session
 from botocore.exceptions import ClientError
 import json
 import datetime
@@ -19,8 +20,9 @@ def main(account_id):
     with open(
         "/tmp/data.json", "w"
     ) as f:  # Saving in the temporay folder in the lambda
+        session = assume_session(account_id)
         for region in list_region:
-            client = assume_role(account_id, "ec2", region)
+            client = session("ec2",region_name = region)
                         
             try:
                 response = client.describe_images(Owners=["self"])
@@ -39,7 +41,7 @@ def main(account_id):
     
 
 
-def assume_role(account_id, service, region):
+def assume_session(account_id):
     role_name = os.environ['ROLENAME']
     role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
     sts_client = boto3.client('sts')
@@ -52,14 +54,12 @@ def assume_role(account_id, service, region):
             )
         
         credentials = assumedRoleObject['Credentials']
-        client = boto3.client(
-            service,
+        session = Session(
             aws_access_key_id=credentials['AccessKeyId'],
             aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken'],
-            region_name = region
+            aws_session_token=credentials['SessionToken']
         )
-        return client
+        return session
 
     except ClientError as e:
         logging.warning(f"Unexpected error Account {account_id}: {e}")
