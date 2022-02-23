@@ -457,9 +457,9 @@ Accounts have both RI and SP usage during the billing period
       WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
       ELSE 0 
     END) AS ri_sp_upfront_fees
-
+```
 Accounts have SP usage but no RI usage during the billing period
-
+```tsql
     DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01') AS month_line_item_usage_start_date,
     SUM(CASE
       WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
