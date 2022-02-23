@@ -26,7 +26,7 @@ def lambda_handler(event, context):
                 ) as f:  # Saving in the temporay folder in the lambda
                 session = assume_session(account_id)
                 for region in list_region:
-                    client = session("ecs",region_name = region)
+                    client = session.client("ecs",region_name = region)
                     
                     paginator = client.get_paginator(
                         "list_clusters"

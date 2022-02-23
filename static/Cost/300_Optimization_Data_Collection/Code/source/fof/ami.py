@@ -22,7 +22,7 @@ def main(account_id):
     ) as f:  # Saving in the temporay folder in the lambda
         session = assume_session(account_id)
         for region in list_region:
-            client = session("ec2",region_name = region)
+            client = session.client("ec2",region_name = region)
                         
             try:
                 response = client.describe_images(Owners=["self"])

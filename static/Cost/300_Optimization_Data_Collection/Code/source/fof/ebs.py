@@ -19,7 +19,7 @@ def main(account_id):
         session = assume_session(account_id)      
         for region in list_region:
             print(region)
-            client = session("ec2",region_name = region)
+            client = session.client("ec2",region_name = region)
             try:
                
                 paginator = client.get_paginator('describe_volumes')
