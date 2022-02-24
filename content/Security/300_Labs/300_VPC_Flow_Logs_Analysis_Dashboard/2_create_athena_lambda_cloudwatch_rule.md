@@ -46,7 +46,7 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
    3. **AthenaResultsOutputLocation:** URI path of the Amazon S3 bucket where Athena query results are stored.
    4. **HiveCompatibleS3prefix:** [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) Adds prefixes of partition keys in s3 object key (Hive-compatible S3 prefix)
         
-        Note: Please select true for Parquet
+        Note: Please select true for Parquet file format
 
    5. **S3BucketRegion:** Region of the S3 bucket created in the central account. e.g. _us-east-1_
    6. **VpcFlowLogsAthenaDatabaseName:** Only provide existing database name if it has a table with all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new DB.

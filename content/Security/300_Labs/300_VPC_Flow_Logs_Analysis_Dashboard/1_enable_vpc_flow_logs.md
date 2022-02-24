@@ -42,7 +42,7 @@ Use aws cli or AWS CloudShell to run below command. This command will create Flo
 1. Navigate to CloudShell from AWS Console from the account where your VPC is located.
     Note: Please make sure you have correct region selected.
 2. Replace `<VPC ID>` with VPC id from your account. You can find the VPC ID in [console](https://console.aws.amazon.com/vpc/home?region=us-east-1#vpcs:) 
-3. Replace `<S3 ARN>` with S3 buckets arn from central account. Please specify subfolder in case you are storing logs in under it. 
+3. Replace `<S3 ARN>` with S3 buckets arn from central account. Please specify subfolder in case you are storing logs under it. 
     
     e.g. `arn:aws:s3:::my-flow-log-bucket/my-custom-flow-logs/`
 
