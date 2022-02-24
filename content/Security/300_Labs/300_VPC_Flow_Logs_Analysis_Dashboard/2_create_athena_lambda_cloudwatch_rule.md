@@ -34,7 +34,14 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 
 - Create stack page:
   1. In **Specify template** section, select **Upload a template** file. 
-  2. Then **Choose File** and upload the template **_vpc_athena_db_table_view_lambda.yaml_** (you have downloaded previously)
+  2. Then **Choose File** and upload the template (you have downloaded previously)
+      
+      CSV file format: **_vpc_athena_db_table_view_lambda.yaml_**
+
+      OR
+
+      Parquet file format: **_vpc_athena_db_table_view_lambda_parquet.yaml_**
+
   3. Then **Click Next**
       
     ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
