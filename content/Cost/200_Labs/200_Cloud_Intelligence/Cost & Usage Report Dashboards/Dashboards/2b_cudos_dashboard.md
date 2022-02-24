@@ -486,6 +486,11 @@ To validate your QuickSight complete the tasks below:
 13. Navigate to **Dashboards** page in your QuickSight console, click on your **Cost Intelligence Dashboard name** or your **CUDOS Dashboard name**
 ![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png?classes=lab_picture_small)
 
+14. Set up scheduled SPICE refresh for SPICE Datasets manually or click the **Launch Spice Refresh CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
+
+	- [Launch Spice Refresh CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/spice_refresh.yaml)
+	
+
 {{% /expand%}}
 
 ### Saving and Sharing your Dashboard in QuickSight
