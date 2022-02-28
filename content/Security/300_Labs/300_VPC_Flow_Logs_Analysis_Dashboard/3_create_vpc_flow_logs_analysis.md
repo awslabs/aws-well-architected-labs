@@ -32,11 +32,11 @@ We will now create the data sets in QuickSight from the Athena view and an analy
   1. In **Specify template** section, select **Upload a template** file. 
   2. Then **Choose File** and upload the appropriate template below (you have downloaded previously)
       
-      CSV file format: **_vpc_flowlogs_quicksight_template.yaml_**
+      **CSV file format**: **_vpc_flowlogs_quicksight_template.yaml_**
 
       **OR**
 
-      Parquet file format: **_vpc_flowlogs_quicksight_multi_view_template.yaml_**
+      **Parquet file format**: **_vpc_flowlogs_quicksight_multi_view_template.yaml_**
 
   3. Then **Click Next**
       

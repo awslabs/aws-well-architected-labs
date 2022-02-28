@@ -53,7 +53,7 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
    3. **AthenaResultsOutputLocation:** URI path of the Amazon S3 bucket where Athena query results are stored.
    4. **HiveCompatibleS3prefix:** [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) Adds prefixes of partition keys in s3 object key (Hive-compatible S3 prefix)
         
-        Note: Please select true for Parquet file format
+        Note: Please select true for Parquet file format and false for CSV format.
 
    5. **S3BucketRegion:** Region of the S3 bucket created in the central account. e.g. _us-east-1_
    6. **VpcFlowLogsAthenaDatabaseName:** Only provide existing database name if it has a table with all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new DB.
@@ -64,13 +64,21 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 
    e.g.
 
-   For CSV - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs/AWSLogs/0123456789/vpcflowlogs/us-east-1/2021/11/01/_**
+   - For CSV - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs/AWSLogs/0123456789/vpcflowlogs/us-east-1/2021/11/01/_**
    
-   For Parquet - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs-enh-parquet/AWSLogs/_**
+   - For Parquet - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs-enh-parquet/AWSLogs/_**
 
 - Click **Next**
 
+{{%expand "Click here to see Parquet Stack parameters" %}}
+![Images/quicksight_dashboard_dt-10-1.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-10-1.png)
+{{%/expand%}}
+
+
+{{%expand "Click here to see CSV Stack parameters" %}}
 ![Images/quicksight_dashboard_dt-10.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-10.png)
+{{%/expand%}}
+
 4. Add tags **Name=VPCFlowLogs-Lambda-Stack** and **Purpose=WALabVPCFlowLogs**. Keep rest of the selections to **default** values. Click **Next**
 ![Images/quicksight_dashboard_dt-11.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-11.png)
 5. Review the Stack and click on **I acknowledge that AWS CloudFormation might create IAM resources.** checkbox, Click on **Create Stack**
