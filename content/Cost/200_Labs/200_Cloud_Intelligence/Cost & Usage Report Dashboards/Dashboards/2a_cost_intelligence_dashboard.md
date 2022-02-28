@@ -463,55 +463,10 @@ To validate your QuickSight complete the tasks below:
 13. Navigate to **Dashboards** page in your QuickSight console, click on your **Cost Intelligence Dashboard name** or your **CUDOS Dashboard name**
 ![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_12.png?classes=lab_picture_small)
 
-14. Set up scheduled SPICE refresh for SPICE Datasets manually or deploy a [spice-refresh-cfn.yml](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/cfn-templates/spice-refresh-cfn.yml)
+14. Set up scheduled SPICE refresh for SPICE Datasets manually or click the **Launch Spice Refresh CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-### Creating your Account Mapping
-
-1. Navigate to **Athena** in the AWS console:
-
-1. Create the **account_map view** by modifying the following code, and executing it in Athena:
-	- [View0 - account_map](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
-
-1. Go to the **QuickSight** service homepage inside your account. Be sure to select the correct region from the top right user menu or you will not see your expected tables
-
-    ![qs_region](/Cost/200_Cloud_Intelligence/Images/cur/qs_region.png?classes=lab_picture_small)
+	- [Launch Spice Refresh CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/spice_refresh.yaml)
 	
-1.	From the left hand menu, choose **Datasets**
-
-    ![qs_dataset_sidebar](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset_sidebar.png?classes=lab_picture_small)
-	
-1.	Select the **summary_view** dataset
-
-    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
-
-1.	Click **Edit Data Set**
-
-    ![qs_edit_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_edit_dataset.png?classes=lab_picture_small)
-
-1.	Click **Add Data**
-
-    ![qs_add_data](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data.png?classes=lab_picture_small)
-
-1.	Choose your **account_map** view and click **Select**
-
-    ![qs_add_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_account_map.png?classes=lab_picture_small)
-
-1.	Click the two circles to open the **Join conﬁguration**, then select **Left** to change your join type
-
-    ![qs_join_account_map_left](/Cost/200_Cloud_Intelligence/Images/cur/qs_join_account_map_left.png?classes=lab_picture_small)
-	
-1.	Configure the join clause to **linked_account_id = account_id**, then click **Apply**
-
-    ![qs_join_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_join_account_map.png?classes=lab_picture_small)
-	
-1.	Select **Save**
-
-    ![qs_save_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_save_summary.png?classes=lab_picture_small)
-	
-1.	Repeat **steps 3-11**, for the remaining 3 data sets. 
- - s3_view
- - ec2_running_cost
- - compute_savings_plan_eligible_spend
 
 **NOTE:** You have successfully created the Cost Intelligence Dashboard. For a detailed description of the dashboard read the [FAQ](/Cost/200_Cloud_Intelligence/Cost_Intelligence_Dashboard_ReadMe.pdf)
     ------------ | -------------

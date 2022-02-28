@@ -41,7 +41,7 @@ FROM -- automation_from_stmt
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND line_item_usage_type != 'Route53-Domains' 
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee','RIFee','Fee')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,

@@ -29,7 +29,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
 ### Account
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -83,7 +83,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       ${date_filter}
       AND line_item_usage_type != 'Route53-Domains'
-      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee','RIFee','Fee')
     GROUP BY 
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -101,7 +101,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Region
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
 
 #### Pricing
 
@@ -162,7 +162,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       ${date_filter}
       AND line_item_usage_type != 'Route53-Domains'
-      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee','RIFee','Fee')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
@@ -178,7 +178,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Service
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by service.  We have additionally broken out Data Transfer for each service.  The query also includes ri_sp_trueup and ri_sip_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by service.  We have additionally broken out Data Transfer for each service.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -236,7 +236,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
     WHERE
       ${date_filter}
       AND line_item_usage_type != 'Route53-Domains' 
-      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+      AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee','RIFee','Fee')
     GROUP BY
       bill_payer_account_id,
       line_item_usage_account_id,
