@@ -50,7 +50,7 @@ pre: "<b>1. </b>"
 
 #### Update CFM guidance
  - **Goal**: Ensure you keep up to date with best practices
- - **Target**: Review [Well-Architected Cost Optimization Whitepaper](https://d1.awsstatic.com/whitepapers/architecture/AWS-Cost-Optimization-Pillar.pdf) yearly, and update all training & process inline with any changes
+ - **Target**: Review [Well-Architected Cost Optimization Whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html) yearly, and update all training & process inline with any changes
  - **Best Practice**: [Cost-Aware Processes](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost-aware-processes.html)
  - **Measures**: % of processes updated
  - **Good/Bad**: Good
