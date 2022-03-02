@@ -183,8 +183,8 @@ To add your tags locate the the "line_item_usage_account_id" "linked_account_id"
 {{% /expand%}}
 ### Validate View 
 
-- Confirm the view is working, run the following Athena query and you should receive 10 rows of data:
+- Confirm the view is working, run the following Athena query and substitute (database) for your CUR database and you should receive 10 rows of data:
 
-        select * from costmaster.ec2_running_cost
+        select * from (database).ec2_running_cost
 		
         limit 10
