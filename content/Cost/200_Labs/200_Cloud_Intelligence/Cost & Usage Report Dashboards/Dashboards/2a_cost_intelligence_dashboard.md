@@ -13,8 +13,9 @@ pre: "<b>2a. </b>"
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
-- Timur Tulyaganov, AWS Sr. Technical Account Manager
+- Timur Tulyaganov, AWS Principal. Technical Account Manager
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Aidin Khosrowshahi, AWS Sr. Technical Account Manager
 
 {{< rawhtml >}}
 <video width="600" height="450" controls>
