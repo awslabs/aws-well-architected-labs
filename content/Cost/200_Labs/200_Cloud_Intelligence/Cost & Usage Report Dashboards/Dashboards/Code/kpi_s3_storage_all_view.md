@@ -46,7 +46,7 @@ Modify the following SQL query for the KPI S3 Storage All view:
 			, CASE
 				  WHEN line_item_product_code = 'AmazonGlacier' AND line_item_operation = 'Storage' THEN 'Amazon Glacier'
 				 				  
-				  WHEN line_item_product_code = 'AmazonS3' AND product_volume_type LIKE '%Intelligent-Tiering%' AND line_item_operation LIKE '%IntelligentTiering%' THEN 'Intelligent-Tiering'			  
+				  WHEN line_item_product_code = 'AmazonS3' AND product_volume_type LIKE '%Intelligent%' AND line_item_operation LIKE '%IntelligentTiering%' THEN 'Intelligent-Tiering'			  
 				  ELSE product_volume_type
 			  END AS storage_class_type
 			, pricing_unit  
