@@ -6,8 +6,6 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-### Get access to the Templates
-Submit the AWS Account ID you're using to instantiate the dashboard into [this form](http://d3ozd1vexgt67t.cloudfront.net/)in order to enable the templates in your account.
 
 ### Install or Update the AWS CLI
 CLI commands are required to complete the dashboard setup. If you need to enable your AWS CLI, follow the steps below. 
