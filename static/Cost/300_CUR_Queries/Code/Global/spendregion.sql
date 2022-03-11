@@ -1,4 +1,4 @@
--- modified: 2021-04-25
+-- modified: 2022-03-11
 -- query_id: spendregion
 -- query_description: This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.
 -- query_columns: bill_payer_account_id,line_item_line_item_type,line_item_usage_account_id,line_item_usage_start_date,product_region
