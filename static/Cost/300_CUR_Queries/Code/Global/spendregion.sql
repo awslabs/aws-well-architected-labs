@@ -14,10 +14,7 @@ SELECT -- automation_select_stmt
     WHEN 'global' THEN 'Global'
     ELSE product_region
   END AS case_product_region,
-  SUM(CASE
-    WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-    ELSE line_item_unblended_cost 
-  END) AS sum_line_item_unblended_cost,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
   SUM(CASE
     WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
     WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
@@ -28,12 +25,18 @@ SELECT -- automation_select_stmt
     WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
     ELSE line_item_unblended_cost 
   END) AS amortized_cost,
-  SUM(CASE
-    WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-    WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-    WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost ) 
-    ELSE 0 
-  END) AS ri_sp_trueup,
+  (SUM(line_item_unblended_cost)
+    - SUM(CASE
+      WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+      WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+      WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+      WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+      WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+      WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+      WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+      ELSE line_item_unblended_cost 
+    END)
+  ) AS ri_sp_trueup, 
   SUM(CASE
       WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
       WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 

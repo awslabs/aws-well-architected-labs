@@ -29,7 +29,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
 ### Account
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -53,26 +53,29 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       bill_payer_account_id,
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01') AS month_line_item_usage_start_date, 
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost
+        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
-        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
         WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
-        ELSE line_item_unblended_cost
+        ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
@@ -101,7 +104,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Region
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
 
 #### Pricing
 
@@ -132,10 +135,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN 'global' THEN 'Global'
         ELSE product_region
       END AS product_region,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
@@ -146,12 +146,18 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
         ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost ) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
@@ -178,7 +184,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Service
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by service.  We have additionally broken out Data Transfer for each service.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by service.  Data Transfer is also broken out for each service.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -206,26 +212,29 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN (line_item_line_item_type = 'Usage' AND product_product_family = 'Data Transfer') THEN CONCAT('DataTransfer-',line_item_product_code) 
         ELSE line_item_product_code 
       END AS service_line_item_product_code,
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost
+        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
-        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost
+        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
         WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
         ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost
