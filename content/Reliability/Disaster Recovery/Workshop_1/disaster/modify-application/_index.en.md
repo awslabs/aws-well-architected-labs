@@ -127,7 +127,7 @@ Your final `config.json` should look similar to this example.
 
 ### S3
 
-3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashbarod.
+3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 3.2 Click the link for **backupandrestore-uibucket-xxxx-dr**.
 
