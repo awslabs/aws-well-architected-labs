@@ -15,6 +15,7 @@ To create and subscribe to an SNS topic:
 1. Navigate to the SNS console at <https://console.aws.amazon.com/sns/>.
 1. Choose **Create topic**.
 1. In the **Create new topic** window:
+   1. In the **Type** field, select `Standard`.
    1. In the **Topic name** field, enter `AdminAlert`.
    1. In the **Display name** field, enter `AdminAlert`.
    1. Choose **Create topic**.
