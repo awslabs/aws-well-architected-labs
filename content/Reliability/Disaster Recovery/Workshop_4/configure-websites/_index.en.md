@@ -104,4 +104,4 @@ Your final **config.json** should look similar to this example.
 
 {{< img c-14.png >}}
 
-{{< prev_next_button link_prev_url="../enable-aurora-writefwd/" link_next_url="../verify-websites/" />}}
+{{< prev_next_button link_prev_url="../verify-aurora-writefwd/" link_next_url="../verify-websites/" />}}

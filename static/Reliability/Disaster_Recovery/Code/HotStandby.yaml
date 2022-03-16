@@ -187,6 +187,11 @@ Resources:
                     - AssetBucket
                     - Arn
                   - /*
+          - Effect: Allow
+            Action:
+              - 'rds:ModifyDBCluster'
+            Resource:
+              - '*'                        
       Roles:
         - !Ref S3Role
   S3Role:
@@ -276,7 +281,7 @@ Resources:
           default:
             - update
             - install
-            - configure
+            - configure       
             - create-tables
             - create-service-files
             - start-service
@@ -284,6 +289,7 @@ Resources:
             - update
             - install
             - configure
+            - configure-global-db                 
             - create-service-files
             - start-service
         update:
@@ -347,8 +353,7 @@ Resources:
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
 
                   - >                       
-                    aws s3 cp
-                    /home/ec2-user/UniShopLambda-0.0.1.jar
+                    aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
                     s3://$ASSETS_RANDOM_NAME/ --grants
                     read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
@@ -361,6 +366,10 @@ Resources:
                   - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
                   - |2
                      -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+        configure-global-db:
+          commands:
+            1-enable-write-forwarding:
+              command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-standby-passive-secondary --region us-west-1 --enable-global-write-forwarding                     
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:

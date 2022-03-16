@@ -54,5 +54,5 @@ weight = 3
 
 4.2 Try adding a new item to the cart. The web app should increase the total cart items count shown at the top of the page.
 
-{{< prev_next_button link_prev_url="../enable-aurora-writefwd/" link_next_url="../failover/" />}}
+{{< prev_next_button link_prev_url="../verify-aurora-writefwd/" link_next_url="../failover/" />}}
 
