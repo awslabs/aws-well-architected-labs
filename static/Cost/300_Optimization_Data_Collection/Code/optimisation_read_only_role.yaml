@@ -288,6 +288,7 @@ Resources:
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
               - "ec2:DescribeRegions"
+              - "cloudwatch:GetMetricStatistics"
             Resource: "*"
       Roles:
         - Ref: LambdaRole
