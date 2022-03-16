@@ -202,6 +202,7 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       QueueName: S3CrawlerQue
+      KmsMasterKeyId: "alias/aws/sqs"
   CrawlerSQSPolicy: 
     DependsOn: 
       - S3CrawlerQue
