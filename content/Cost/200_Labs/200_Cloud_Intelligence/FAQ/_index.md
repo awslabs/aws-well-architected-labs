@@ -13,7 +13,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## How do I setup the dashboards on top of multiple payer accounts?
 
-This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up CUR S3 bucket replication to S3 bucket in separate Governance account.
+This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Governance Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Governance account.
 {{%expand "Click here to expand step by step instructions" %}}
 
 ![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
@@ -22,8 +22,9 @@ This scenario allows customers with multiple payer (management) accounts to depl
 
 #### Setup S3 CUR Bucket Replication
 
-1. Create S3 bucket with enabled versioning in the **region where QuickSight is available.**
-2. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} and {BucketName}. You can add more payer accounts to the policy if needed.
+1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
+2. Create an S3 bucket with enabled versioning.
+3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
 
 		{
 		"Version": "2008-10-17",
@@ -39,7 +40,7 @@ This scenario allows customers with multiple payer (management) accounts to depl
             		"s3:ReplicateObject",
             		"s3:ReplicateDelete"
         		],
-        		"Resource": "arn:aws:s3:::{BucketName}/*"
+        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
     		},
     		{
         		"Sid": "Set permissions on bucket",
@@ -52,7 +53,7 @@ This scenario allows customers with multiple payer (management) accounts to depl
          		   "s3:GetBucketVersioning",
          		   "s3:PutBucketVersioning"
         		],
-        		"Resource": "arn:aws:s3:::{BucketName}"
+        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
     		},
     		{
         		"Sid": "Set permissions to pass object ownership",
@@ -68,7 +69,7 @@ This scenario allows customers with multiple payer (management) accounts to depl
             		"s3:GetObjectVersionTagging",
             		"s3:PutObject"
         		],
-        		"Resource": "arn:aws:s3:::{bucket name}/*"
+        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
     		}
 		]
 		}
@@ -79,16 +80,16 @@ This policy supports objects encrypted with either SSE-S3 or not encrypted objec
 
 This step should be done in each payer (management) account.
 
-1. Open S3 bucket with CUR
-2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled
+1. Open S3 bucket in Payer account with CUR.
+2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled.
 3. On Management tab under Replication rules click on Create replication rule.
-4. Specify rule name 
+4. Specify rule name.
 
 ![Images/s3_bucket_replication_1.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_1.png?classes=lab_picture_small)
 
-5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account
-6. Select Change object ownership to destination bucket owner checkbox
-7. Select Create new role under IAM Role section 
+5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account.
+6. Select Change object ownership to destination bucket owner checkbox.
+7. Select Create new role under IAM Role section.
 
 ![Images/s3_bucket_replication_2.png.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_2.png?classes=lab_picture_small)
 
@@ -98,7 +99,7 @@ This step should be done in each payer (management) account.
 
 This step should be done in each payer (management) account.
 
-Sync existing objects from CUR S3 bucket to S3 bucket in Governance account
+Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
 
 	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
 
