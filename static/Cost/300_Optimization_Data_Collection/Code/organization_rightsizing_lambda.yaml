@@ -239,8 +239,8 @@ Resources:
                   return "Failed"
 
       Handler: 'index.lambda_handler'
-      MemorySize: 2688
-      Timeout: 600
+      MemorySize: 512
+      Timeout: 90
       Role:
         Fn::GetAtt:
           - RightsizingLambdaRole
