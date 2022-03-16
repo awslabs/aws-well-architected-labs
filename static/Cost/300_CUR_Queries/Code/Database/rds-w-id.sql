@@ -48,7 +48,7 @@ WHERE -- automation_where_stmt
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,
-  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, -- automation_timerange_dateformat
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), -- automation_timerange_dateformat
   product_instance_type, 
   line_item_operation, 
   line_item_usage_type, 
@@ -59,5 +59,5 @@ GROUP BY -- automation_groupby_stmt
   product_database_engine,
 ORDER BY -- automation_order_stmt
   day_line_item_usage_start_date, 
-  usage_quantity, 
-  unblended_cost; 
+  sum_line_item_usage_amount, 
+  sum_amortized_cost; 
