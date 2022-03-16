@@ -118,7 +118,7 @@ Resources:
 
           AWS_REGION = "us-east-1"
           AWS_COST_EXPLORER_SERVICE_KEY = "ce"
-          BENEFITS_CONSIDERED = True
+          BENEFITS_CONSIDERED = False
           GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
           BUCKET = os.environ['S3_BUCKET']
           ROLE_ARN = os.environ['ROLE_ARN']
@@ -203,9 +203,9 @@ Resources:
                               PageSize=5000,
                               **kwargs)
                       print("Same family Data")
-                      print(response)
+                      #print(response)
                       result["RightsizingRecommendationsSameFamily"] += response["RightsizingRecommendations"]
-                      print(response["RightsizingRecommendations"])
+                      #print(response["RightsizingRecommendations"])
                       
                       RECOMMENDATION_TARGET = 'CROSS_INSTANCE_FAMILY'
                       token = None
@@ -221,9 +221,9 @@ Resources:
                               PageSize=5000,
                               **kwargs)
                       print("Cross family Data")
-                      print(response)
+                      #print(response)
                       result["RightsizingRecommendationsCrossFamily"] += response["RightsizingRecommendations"]
-                      print(response["RightsizingRecommendations"])
+                      #print(response["RightsizingRecommendations"])
 
                       token = response.get("NextPageToken", None)
                       if not token:
@@ -277,110 +277,80 @@ Resources:
       QueryString:
         --  Click Create as view then you can run from that
 
-        WITH rightsizing_dates AS (
-            SELECT "recommendations"."currentinstance"."resourceid"          AS "instance_id"
-                , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
-                , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
-                , count(*)                                                  AS "frequency"
-            FROM (optimization_data.rightsizing
-                CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t(recommendations))
-            GROUP BY 1
-        ),
-            data AS (
-                SELECT recommendations
-                FROM (optimization_data.rightsizing
-                    CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t(recommendations))
-                WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
-
-            ),
-            all_tags AS (
-                SELECT "recommendations"."currentinstance"."resourceid" AS "instance_id"
-                    , tags.key
-                    , "tags"."values"[1]                               as "value"
-                FROM data
-                    CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") AS t(tags)
-            ),
-            chosen_tags AS (
-
-                SELECT instance_id
-                    , kv['user:Name'] AS "Name"
-                FROM (
-                    SELECT instance_id
-                        , map_agg(key, value) AS kv
-                    FROM all_tags
-                    GROUP BY instance_id
-                )
-            ),
-            recs AS (
-                SELECT "recommendations"."currentinstance"."resourceid"                                          AS "instance_id"
-                    , "recommendations"."currentinstance"."instancename"                                        AS "instance_name"
-                    , "recommendations"."accountid"                                                             AS "account_id"
-                    , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" AS "instance_type"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage"
-                            END) AS double)                                                                     AS "max_cpu_utilization"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage"
-                            END) AS double)                                                                     AS "max_memory_utilization"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage"
-                            END) AS double)                                                                     AS "max_disk_utilization"
-                    , "recommendations"."rightsizingtype"                                                       AS "recommended_action"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_1"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_1"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_1"
-                      , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_2"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_2"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_2"
-                , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_3"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_3"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_3"
-                FROM data
-            )
-        SELECT recs.*
-            , rightsizing_dates.earliest_date
-            , rightsizing_dates.latest_date
-            , rightsizing_dates.frequency
-            , chosen_tags.name
-        FROM recs
-            JOIN      rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id")
-            LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id")
+        WITH  rightsizing_dates AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , "min"("date_parse"("concat"("year", "month", "day"), '%Y%m%d')) "earliest_date"
+           , "max"("date_parse"("concat"("year", "month", "day"), '%Y%m%d')) "latest_date"
+           , "count"(*) "frequency"
+           FROM
+             (optimization_data.rightsizing
+           CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t (recommendations))
+           GROUP BY 1) 
+        , data AS (
+           SELECT recommendations
+           FROM
+             (optimization_data.rightsizing
+           CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t (recommendations))
+           WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '7' DAY))) 
+        , all_tags AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , tags.key
+           , "tags"."values"[1] "value"
+           FROM
+             (data
+           CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") t (tags))) 
+        , chosen_tags AS (
+           SELECT
+             instance_id
+           , kv['user:Name'] "Name"
+           FROM
+             (
+              SELECT
+                instance_id
+              , "map_agg"(key, value) kv
+              FROM
+                all_tags
+              GROUP BY instance_id
+           ) 
+        ) 
+        , recs AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , "recommendations"."currentinstance"."instancename" "instance_name"
+           , "recommendations"."accountid" "account_id"
+           , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."Region" "instance_region"
+           , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" "instance_type"
+           , CAST("recommendations"."currentinstance"."TotalRunningHoursInLookbackPeriod" AS double) "running_hour_per_lookback_period"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" END) AS double) "max_cpu_utilization"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" END) AS double) "max_memory_utilization"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" END) AS double) "max_disk_utilization"
+           , "recommendations"."rightsizingtype" "recommended_action"
+           , CAST("recommendations"."currentinstance"."monthlycost" AS double) "current_monthly_cost"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_3"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_3"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_3"
+           FROM
+             data) 
+        SELECT
+          recs.*
+        , rightsizing_dates.earliest_date
+        , rightsizing_dates.latest_date
+        , rightsizing_dates.frequency
+        , chosen_tags.name
+        FROM
+          ((recs
+        INNER JOIN rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id"))
+        LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id"))
+        ORDER BY current_monthly_cost DESC
+        
   AthenaQueryCrossFamilyRightSizing:
     Type: AWS::Athena::NamedQuery
     Properties:
@@ -390,110 +360,80 @@ Resources:
       QueryString:
         --  Click Create as view then you can run from that
 
-        WITH rightsizing_dates AS (
-            SELECT "recommendations"."currentinstance"."resourceid"          AS "instance_id"
-                , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
-                , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
-                , count(*)                                                  AS "frequency"
-            FROM (optimization_data.rightsizing
-                CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
-            GROUP BY 1
-        ),
-            data AS (
-                SELECT recommendations
-                FROM (optimization_data.rightsizing
-                    CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
-                WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
+        WITH  rightsizing_dates AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , "min"("date_parse"("concat"("year", "month", "day"), '%Y%m%d')) "earliest_date"
+           , "max"("date_parse"("concat"("year", "month", "day"), '%Y%m%d')) "latest_date"
+           , "count"(*) "frequency"
+           FROM
+             (optimization_data.rightsizing
+           CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t (recommendations))
+           GROUP BY 1) 
+        , data AS (
+           SELECT recommendations
+           FROM
+             (optimization_data.rightsizing
+           CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t (recommendations))
+           WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '7' DAY))) 
+        , all_tags AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , tags.key
+           , "tags"."values"[1] "value"
+           FROM
+             (data
+           CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") t (tags))) 
+        , chosen_tags AS (
+           SELECT
+             instance_id
+           , kv['user:Name'] "Name"
+           FROM
+             (
+              SELECT
+                instance_id
+              , "map_agg"(key, value) kv
+              FROM
+                all_tags
+              GROUP BY instance_id
+           ) 
+        ) 
+        , recs AS (
+           SELECT
+             "recommendations"."currentinstance"."resourceid" "instance_id"
+           , "recommendations"."currentinstance"."instancename" "instance_name"
+           , "recommendations"."accountid" "account_id"
+           , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."Region" "instance_region"
+           , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" "instance_type"
+           , CAST("recommendations"."currentinstance"."TotalRunningHoursInLookbackPeriod" AS double) "running_hour_per_lookback_period"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" END) AS double) "max_cpu_utilization"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" END) AS double) "max_memory_utilization"
+           , CAST((CASE WHEN ("recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" = '') THEN null ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" END) AS double) "max_disk_utilization"
+           , "recommendations"."rightsizingtype" "recommended_action"
+           , CAST("recommendations"."currentinstance"."monthlycost" AS double) "current_monthly_cost"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_1"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_2"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype" ELSE '' END)) "recommended_instance_type_3"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double) ELSE 0E0 END)) "estimated_monthly_cost_type_3"
+           , TRY((CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST("recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double) ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double) END)) "estimated_monthly_savings_type_3"
+           FROM
+             data) 
+        SELECT
+          recs.*
+        , rightsizing_dates.earliest_date
+        , rightsizing_dates.latest_date
+        , rightsizing_dates.frequency
+        , chosen_tags.name
+        FROM
+          ((recs
+        INNER JOIN rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id"))
+        LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id"))
+        ORDER BY current_monthly_cost DESC
 
-            ),
-            all_tags AS (
-                SELECT "recommendations"."currentinstance"."resourceid" AS "instance_id"
-                    , tags.key
-                    , "tags"."values"[1]                               as "value"
-                FROM data
-                    CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") AS t(tags)
-            ),
-            chosen_tags AS (
-
-                SELECT instance_id
-                    , kv['user:Name'] AS "Name"
-                FROM (
-                    SELECT instance_id
-                        , map_agg(key, value) AS kv
-                    FROM all_tags
-                    GROUP BY instance_id
-                )
-            ),
-            recs AS (
-                SELECT "recommendations"."currentinstance"."resourceid"                                          AS "instance_id"
-                    , "recommendations"."currentinstance"."instancename"                                        AS "instance_name"
-                    , "recommendations"."accountid"                                                             AS "account_id"
-                    , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" AS "instance_type"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage"
-                            END) AS double)                                                                     AS "max_cpu_utilization"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage"
-                            END) AS double)                                                                     AS "max_memory_utilization"
-                    , CAST((CASE WHEN (
-                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" =
-                        '') THEN null
-                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage"
-                            END) AS double)                                                                     AS "max_disk_utilization"
-                    , "recommendations"."rightsizingtype"                                                       AS "recommended_action"
-                                        , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_1"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_1"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_1"
-                      , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_2"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_2"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_2"
-                , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
-                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype"
-                            ELSE ''
-                        END)                                                                                     AS "recommended_instance_type_3"
-                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double)
-                            ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost_type_3"
-                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
-                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double)
-                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings_type_3"
-                FROM data
-            )
-        SELECT recs.*
-            , rightsizing_dates.earliest_date
-            , rightsizing_dates.latest_date
-            , rightsizing_dates.frequency
-            , chosen_tags.name
-        FROM recs
-            JOIN      rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id")
-            LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id")
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
