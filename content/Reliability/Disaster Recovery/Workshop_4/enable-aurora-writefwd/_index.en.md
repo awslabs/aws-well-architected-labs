@@ -4,11 +4,11 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-Amazon Aurora Global Database is designed for globally distributed applications, allowing a single Amazon Aurora database to span multiple AWS regions. It replicates your data with no impact on database performance, enables fast local reads with low latency in each region, and provides disaster recovery from region-wide outages.
+Amazon Aurora Global Database is designed for globally distributed applications, allowing a single Amazon Aurora database to span multiple AWS regions. It replicates your data with no impact on database performance, and enables fast local reads with low latency in each region. In a disaster recovery situation, you can promote a secondary region to take full read-write responsibilities in under a minute.
 
-The Read-Replica Write Forwarding feature's typical latency is under one second from secondary to primary databases.  This capability enables low latency global reads across your global presence. In disaster recovery situations, you can promote a secondary region to take full read-write responsibilities in under a minute.
+We also use the Write Forwarding feature of Aurora Global Database. This lets secondary (read-only) clusters in an Aurora global database forward SQL statements that perform write operations to the primary (read-write) cluster. Typical latency is under one second from secondary to primary database clusters.
 
-Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our Amazon Aurora MySQL Replica instance!
+Now, let us configure Amazon Aurora MySQL Write Forwarding on our Amazon Aurora MySQL Replica instance!
 
 {{% notice note %}}
 **If you are using your own AWS Account, you must wait for the Secondary Region stack to successfully be created before moving on to this step.**
@@ -23,6 +23,7 @@ Now, let us configure Amazon Aurora MySQL Read-Replica Write Forwarding on our A
 {{< img a-2.png >}}
 
 1.3 Select **hot-standby-passive-secondary** and click the **Modify** button.
+  * **hot-standby-global** is the Aurora Global Database. **hot-standby-active-primary** is the cluster in the primary region and **hot-standby-passive-secondary** is the cluster in the standby region.
 
 {{< img a-3.png >}}
 
