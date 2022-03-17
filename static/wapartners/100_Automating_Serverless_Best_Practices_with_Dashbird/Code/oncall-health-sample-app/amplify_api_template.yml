@@ -3,6 +3,8 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   CognitoUserPoolArn:
     Type: String
+  AppUrl:
+    Type: String
 
 Resources:
   AppTable:
@@ -64,6 +66,9 @@ Resources:
         - !Ref XraySdk
       CodeUri: ./lambda/app
       Description: Backend API
+      Environment:
+        Variables:
+          APP_URL: !Ref AppUrl
 
   XraySdk:
     Type: AWS::Serverless::LayerVersion
@@ -124,7 +129,9 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Origin:  !Sub 
+                                                                    - "'${ORIGIN}'"
+                                                                    - ORIGIN: !Ref AppUrl
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
             StatusCode: '204'
         RequestTemplates:
@@ -150,7 +157,9 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Origin:  !Sub 
+                                                                    - "'${ORIGIN}'"
+                                                                    - ORIGIN: !Ref AppUrl
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
             StatusCode: '204'
         RequestTemplates:
