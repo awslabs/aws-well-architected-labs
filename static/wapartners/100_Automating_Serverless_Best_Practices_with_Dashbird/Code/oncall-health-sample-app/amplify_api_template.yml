@@ -54,7 +54,7 @@ Resources:
                   - 'xray:PutTraceSegments'
                   - 'xray:PutTelemetryRecords'
                 Resource: "*"
-               
+
   AppLambda:
     Type: AWS::Serverless::Function
     Properties:
