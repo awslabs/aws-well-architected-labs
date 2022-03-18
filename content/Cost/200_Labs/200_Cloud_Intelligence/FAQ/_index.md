@@ -1,6 +1,6 @@
 ---
 title: "FAQ"
-#menutitle: "Lab #1"
+#menutitle: "FAQs"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
 weight: 8
@@ -141,7 +141,14 @@ These actions should be done in Governance account
 
 ## How do I limit access to the data in the Dashboards using row level security? 
 
-Do you want to give access to the dashboards to someone within your organization, but you only want them to see data from accounts or business units associated with their role or position? You can use row level seucirty in QuickSight to accomplish limiting access to data by user. In these steps below, we will define specific Linked Account IDs against individual users. Once the Row-Level Security is enabled, users will continue to load the same Dashboards and Analyses, but will have custom views that restrict the data to only the Linked Account IDs defined. 
+Do you want to give access to the dashboards to someone within your organization, but you only want them to see data from accounts or business units associated with their role or position? You can use row level seucirty in QuickSight to accomplish limiting access to data by user. In these steps below, we will define specific Linked Account IDs against individual users. Once the Row-Level Security is enabled, users will continue to load the same Dashboards and Analyses, but will have custom views that restrict the data to only the Linked Account IDs defined.
+
+**Video Tutorial**
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EFyWEyeXQlE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 {{%expand "Click here to expand step by step instructions" %}}
 
 **Considerations:**
