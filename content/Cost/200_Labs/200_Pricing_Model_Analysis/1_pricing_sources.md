@@ -129,17 +129,15 @@ Create the On-Demand Lambda function to get the pricing information, and extract
            try:
                # Get the EC2 OnDemand pricing file, its huge >1GB
                   
-               r = http.request('GET', 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json')
+               r = http.request('GET', f'{coreURL}/offers/v1.0/aws/AmazonEC2/current/region_index.json')
                data = json.loads(r.data)
 
                client = boto3.client('s3')
                   
                # read data from template
-               print(data)
                for region in data["regions"]:
                       
                    region_code = "ec2pricedata/" + region + ".csv"
-                   print(region_code)
                       
                    region_url = coreURL + data['regions'][region]["currentVersionUrl"].replace(".json", ".csv")
                    r = http.request('GET', region_url)
@@ -177,7 +175,7 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 
            # Return happy
            return {
-           'statusCode': 200
+               'statusCode': 200
            }
 
    </details>
