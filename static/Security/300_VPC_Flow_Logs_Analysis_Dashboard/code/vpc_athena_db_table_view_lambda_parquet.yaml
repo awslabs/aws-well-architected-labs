@@ -14,9 +14,9 @@ Parameters:
     Default: ''
   VpcFlowLogsS3BucketLocation:
     Type: String
-    Description: URI path of Amazon S3 bucket folder where VPC Flow logs files are stored e.g. Location='s3://my-vpc-flow-logs-bucket/vpc-flow-logs-enh-parquet/AWSLogs/0123456789/vpcflowlogs/eu-central-1/2021/11/01/'
+    Description: URI path of Amazon S3 bucket folder where VPC Flow logs files are stored e.g. Location='s3://my-vpc-flow-logs-bucket/vpc-flow-logs-enh-parquet/AWSLogs/'
   VpcFlowLogsFilePrefix:
-    Description: (Optional) - The log file prefix in Amazon S3 bucket that comes right after s3 bucket name e.g. 'vpc-flow-logs'
+    Description: (Optional) - The log file prefix in Amazon S3 bucket that comes right after s3 bucket name e.g. 'vpc-flow-logs-enh-parquet'
     Type: String
     Default: ''
   VpcFlowLogsAthenaDatabaseName:
@@ -31,11 +31,10 @@ Parameters:
     AllowedValues:
       - true
       - false
-    Default: false
+    Default: true
   S3BucketRegion:
     Type: String
     Description: Region of the S3 bucket created in the central account. e.g. us-east-1
-  
 Conditions:
   VpcLogsAthenaDataBaseCondition: !Equals [!Ref VpcFlowLogsAthenaDatabaseName, '']
   ExistingVpcLogsAthenaDataBaseCondition: !Not [!Equals [!Ref VpcFlowLogsAthenaDatabaseName, '']]
@@ -76,74 +75,74 @@ Resources:
         TableType: EXTERNAL_TABLE
         StorageDescriptor:
           Location:  !Ref VpcFlowLogsS3BucketLocation
-          InputFormat: org.apache.hadoop.mapred.TextInputFormat
-          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
           SerdeInfo:
             Parameters:
               skip.header.line.count: "1"
               EXTERNAL: "true"
               field.delim: ' '
               serialization.format: ' '
-            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Columns:
-            - Name: 'version'
-              Type: int
             - Name: 'account_id'
               Type: string
-            - Name: 'interface_id'
-              Type: string
-            - Name: 'srcaddr'
-              Type: string
-            - Name: 'dstaddr'
-              Type: string
-            - Name: 'srcport'
-              Type: int
-            - Name: 'dstport'
-              Type: int
-            - Name: 'protocol'
-              Type: bigint
-            - Name: 'packets'
-              Type: bigint
-            - Name: 'bytes'
-              Type: bigint
-            - Name: 'start'
-              Type: bigint
-            - Name: 'end'
-              Type: bigint
             - Name: 'action'
-              Type: string
-            - Name: 'log_status'
-              Type: string
-            - Name: 'vpc_id'
               Type: string
             - Name: 'az_id'
               Type: string
+            - Name: 'bytes'
+              Type: bigint
+            - Name: 'dstaddr'
+              Type: string
+            - Name: 'dstport'
+              Type: int
+            - Name: 'end'
+              Type: bigint
+            - Name: 'flow_direction'
+              Type: string
             - Name: 'instance_id'
               Type: string
-            - Name: 'pkt_srcaddr'
+            - Name: 'interface_id'
+              Type: string
+            - Name: 'log_status'
+              Type: string
+            - Name: 'packets'
+              Type: bigint
+            - Name: 'pkt_dst_aws_service'
               Type: string
             - Name: 'pkt_dstaddr'
               Type: string
+            - Name: 'pkt_src_aws_service'
+              Type: string
+            - Name: 'pkt_srcaddr'
+              Type: string
+            - Name: 'protocol'
+              Type: bigint
             - Name: 'region'
               Type: string
-            - Name: 'subnet_id'
+            - Name: 'srcaddr'
               Type: string
+            - Name: 'srcport'
+              Type: int
+            - Name: 'start'
+              Type: bigint
             - Name: 'sublocation_id'
               Type: string
             - Name: 'sublocation_type'
               Type: string
+            - Name: 'subnet_id'
+              Type: string
             - Name: 'tcp_flags'
+              Type: int
+            - Name: 'traffic_path'
               Type: int
             - Name: 'type'
               Type: string
-            - Name: 'flow_direction'
-              Type: string
-            - Name: 'pkt_dst_aws_service'
-              Type: string
-            - Name: 'pkt_src_aws_service'
-              Type: string
-            - Name: 'traffic_path'
+            - Name: 'version'
               Type: int
+            - Name: 'vpc_id'
+              Type: string
   # Creates an IAM role for lambda function execution permission
   VPCFlowLogsAthenaIntegrationLambdaExecutorRole:
       Type: AWS::IAM::Role
@@ -204,7 +203,9 @@ Resources:
                     - !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:catalog'
                     - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:database/${VpcFlowLogsAthenaDatabaseName}', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:database/${VpcFlowLogsAthenaDatabase}']
                     - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabaseName}/${VpcFlowLogsAthenaTableName}', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabase}/${VpcFlowLogsAthenaTable}']
-                    - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabaseName}/vpc_flow_logs_view', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabase}/vpc_flow_logs_view']
+                    - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabaseName}/vpc_flow_logs_summary_view', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabase}/vpc_flow_logs_summary_view']
+                    - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabaseName}/vpc_flow_logs_daily_view', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabase}/vpc_flow_logs_daily_view']
+                    - !If [ExistingVpcLogsAthenaDataBaseCondition, !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabaseName}/vpc_flow_logs_enhanced_view', !Sub 'arn:aws:glue:${S3BucketRegion}:${AWS::AccountId}:table/${VpcFlowLogsAthenaDatabase}/vpc_flow_logs_enhanced_view']
                 - Effect: Allow
                   Action:
                     - s3:GetObjectAcl
@@ -250,6 +251,7 @@ Resources:
             athena_month = str(date.month).rjust(2, '0')
             athena_day = str(date.day).rjust(2, '0')
 
+            #Parameters for S3 log location and Athena table (Fill this carefully)
             s3_buckcet_flow_log = '' # '<s3 bucket name where flow logs will be stored>'
             s3_account_prefix = 'vpc-flow-logs/AWSLogs/' # '<prefix for VPC flow logs that comes after bucket name>' e.g. 'vpc-flow-logs'
             s3_ouput = '<S3 bucket URL where Athena query results are stored>'
@@ -285,7 +287,7 @@ Resources:
                         elif state == 'SUCCEEDED':
                             s3_path = response['QueryExecution']['ResultConfiguration']['OutputLocation']
                             filename = re.findall('.*\/(.*)', s3_path)[0]
-                            return response
+                            return filename
                     time.sleep(1)
               except Exception as e:
                 print("Query Exception:- ", e)
@@ -294,7 +296,7 @@ Resources:
 
             #Function to get the regions and run the query on the captured regions
             def lambda_handler(event, context):
-              errs = {}
+              errs = None
               status = cfnresponse.SUCCESS
               account_id=None
               region=None
@@ -304,92 +306,59 @@ Resources:
               frequency = event["ResourceProperties"]["frequency"] if event.get("ResourceProperties") != None else event["frequency"]
               s3_buckcet_flow_log = event["ResourceProperties"]["VpcFlowLogsBucketName"] if event.get("ResourceProperties") != None else event["VpcFlowLogsBucketName"]
               s3_ouput = event["ResourceProperties"]["s3Output"] if event.get("ResourceProperties") != None else event["s3Output"]
-              s3_account_prefix=event["ResourceProperties"]["VpcFlowLogsFilePrefix"] + "AWSLogs/" if event.get("ResourceProperties") != None else event["VpcFlowLogsFilePrefix"] + "/AWSLogs/"
+              s3_account_prefix=event["ResourceProperties"]["VpcFlowLogsFilePrefix"] + "/AWSLogs/" if event.get("ResourceProperties") != None else event["VpcFlowLogsFilePrefix"] + "/AWSLogs/"
               hive_compatible_s3_prefix = event["ResourceProperties"]["HiveCompatibleS3prefix"] if event.get("ResourceProperties") != None else event["HiveCompatibleS3prefix"]
               account_result = s3.list_objects(Bucket=s3_buckcet_flow_log,Prefix=s3_account_prefix, Delimiter='/')
 
               if event.get("RequestType") == 'Delete':
                 status = cfnresponse.SUCCESS
-                cfnresponse.send(event, context, status, {}, event["LogicalResourceId"])
+                cfnresponse.send(event, context, status, errs, event["LogicalResourceId"])
               else:
                 try:
                   for accounts in account_result.get('CommonPrefixes'):
                     get_account=(accounts.get('Prefix','').replace(s3_account_prefix,'').replace('/',''))
-                    if get_account.find("=") >0: 
-                      account_id=get_account.split("=")[1] 
-                    else: 
-                      account_id=get_account
-
-                    if hive_compatible_s3_prefix == 'true':
-                      s3_prefix = s3_account_prefix + get_account + '/aws-service=vpcflowlogs/'
-                    else:
-                      s3_prefix = s3_account_prefix + get_account + '/vpcflowlogs/'
-
+                    if get_account.find("=") >0: account_id=get_account.split("=")[1]
+                    s3_prefix = s3_account_prefix + get_account + '/aws-service=vpcflowlogs/'
                     s3_input = 's3://' + s3_buckcet_flow_log + '/' + s3_prefix
                     
                     result =  s3.list_objects(Bucket=s3_buckcet_flow_log,Prefix=s3_prefix, Delimiter='/')                    
                     for regions in result.get('CommonPrefixes'):
                       get_region=(regions.get('Prefix','').replace(s3_prefix,'').replace('/',''))
-                      if get_region.find("=") >0: 
-                        region=get_region.split("=")[1] 
-                      else: 
-                        region=get_region
-
-                      if hive_compatible_s3_prefix == 'true':
-                        query = str("ALTER TABLE "+ database + "." + table_name +" ADD PARTITION (`aws-account-id`=\""
-                                + account_id + "\", `aws-service`=\"vpcflowlogs\", `aws-region`=\""
-                                + region + "\", year=\""
-                                + athena_year + "\", month=\""
-                                + athena_month + "\", day=\""
-                                + athena_day + "\"")
-                      else:
-                        query = str("ALTER TABLE "+ database + "." + table_name +" ADD PARTITION (`aws-account-id`=\""
+                      if get_region.find("=") >0: region=get_region.split("=")[1]
+                      query = str("ALTER TABLE "+ database + "." + table_name +" ADD PARTITION (`aws-account-id`=\""
                               + account_id + "\", `aws-service`=\"vpcflowlogs\", `aws-region`=\""
                               + region + "\", year=\""
                               + athena_year + "\", month=\""
                               + athena_month + "\", day=\""
                               + athena_day + "\"")
-
-                      if hive_compatible_s3_prefix == 'true':
-                        if frequency == "Hourly":
-                            query += ", hour=\"00\")"
-                        else:
-                            query += ")"
-                        query += " location '" + s3_input + get_region + "/year=" + athena_year + "/month=" + athena_month + "/day=" + athena_day
-                        if frequency == "Hourly":
-                            query += "/hour=00';"
-                        else:
-                            query += "';"
+                      if frequency == "Hourly":
+                          query += ", hour=\"00\")"
                       else:
-                        if frequency == "Hourly":
-                            query += ", \"00\")"
-                        else:
-                            query += ")"
-                        query += " location '" + s3_input + get_region + "/" + athena_year + "/" + athena_month + "/" + athena_day
-                        if frequency == "Hourly":
-                            query += "/00';"
-                        else:
-                            query += "';"
+                          query += ")"
+                      query += " location '" + s3_input + get_region + "/year=" + athena_year + "/month=" + athena_month + "/day=" + athena_day
+                      if frequency == "Hourly":
+                          query += "/hour=00';"
+                      else:
+                          query += "';"
                       ## Enable below prints for debugging ##
-                      # print("*" * 10, "START",  "*" * 10) # -- for debug
-                      # print(region) # -- for debug
-                      # print(query) # -- for debug
-                      # print("*" * 10, "START",  "*" * 10) # -- for debug
-                      # print(database) # -- for debug
-                      # print(s3_ouput) # -- for debug
+                      print("*" * 10, "START",  "*" * 10) # -- for debug
+                      print(get_region) # -- for debug
+                      print(query) # -- for debug
+                      print("*" * 10, "START",  "*" * 10) # -- for debug
+                      print(database) # -- for debug
+                      print(s3_ouput) # -- for debug
 
                       query_result=run_query(query, database, s3_ouput)
 
-                      # print(query_result) # -- for debug
-                      # print("*" * 10, "END",  "*" * 10) # -- for debug
-
+                      print(query_result) # -- for debug
+                      print("*" * 10, "END",  "*" * 10) # -- for debug
                     status = cfnresponse.SUCCESS
                 except Exception as e:
+                  print("lambda_handler Exception:- ", e)
                   errs = e
                   status = cfnresponse.FAILED
                 finally:
-                  status = cfnresponse.SUCCESS
-                  if event.get("RequestType") != None: cfnresponse.send(event, context, status, {}, event.get("LogicalResourceId"))                  
+                  if event.get("RequestType") != None: cfnresponse.send(event, context, status, {}, event.get("LogicalResourceId")) 
         Tags:
           -
             Key: Name
@@ -499,39 +468,26 @@ Resources:
                 database = event["ResourceProperties"]["athenaIntegrations"][0]["database"]
                 s3_output = event["ResourceProperties"]["athenaIntegrations"][0]["s3_output"]
                 vpc_table_name = event["ResourceProperties"]["athenaIntegrations"][0]["vpc_table_name"]
-                if event["RequestType"] == 'Delete':
+                if event.get("RequestType") == 'Delete':
                   status = cfnresponse.SUCCESS
                   cfnresponse.send(event, context, status, errs, event["LogicalResourceId"])
                 else:
                   try:
-                    query = str("CREATE OR REPLACE VIEW vpc_flow_logs_view AS "
-                          + " SELECT  \"version\" \"version\", \"account_id\" \"accountid\", \"interface_id\" \"interfaceid\", \"srcaddr\" \"sourceaddress\""
-                          + ", \"dstaddr\" \"destinationaddress\", \"srcport\" \"sourceport\", \"dstport\" \"destinationport\", \"protocol\" \"protocol\""
-                          + ", \"packets\" \"numpackets\", \"bytes\" \"numbytes\", \"start\" \"starttime\", \"end\" \"endtime\", \"action\" \"action\", \"log_status\" \"logstatus\""
-                          + ", \"vpc_id\" \"vpcid\", \"az_id\" \"azid\", \"instance_id\" \"instanceid\", \"pkt_srcaddr\" \"packetsourceaddr\", \"pkt_dstaddr\" \"packetdestinationaddr\""
-                          + ", \"region\" \"region\", \"subnet_id\" \"subnetid\", \"sublocation_id\" \"sublocationid\", \"sublocation_type\" \"sublocationtype\""
-                          + ", (CASE WHEN (cast(\"tcp_flags\" as varchar) = '1') THEN 'FIN' WHEN (cast(\"tcp_flags\" as varchar) = '2') THEN 'SYN' WHEN (cast(\"tcp_flags\" as varchar) = '3') THEN 'SYN-FIN' WHEN (cast(\"tcp_flags\" as varchar) = '4') THEN 'RST' "
-                          + " WHEN (cast(\"tcp_flags\" as varchar) = '8') THEN 'PSH' WHEN (cast(\"tcp_flags\" as varchar) = '16') THEN 'ACK' WHEN (cast(\"tcp_flags\" as varchar) = '18') THEN 'SYN-ACK' WHEN (cast(\"tcp_flags\" as varchar) = '19') THEN 'SYN-ACK-FIN' "
-                          + " WHEN (cast(\"tcp_flags\" as varchar) = '32') THEN 'URG' ELSE cast(\"tcp_flags\" as varchar) END) \"tcpflags\", \"tcp_flags\" \"tcp_flags\""
-                          + ", \"flow_direction\" \"flowdirection\", \"pkt_src_aws_service\" \"packetsrcawsservice\", \"pkt_dst_aws_service\" \"packetdstawsservice\""
-                          + ", (CASE WHEN (cast(\"traffic_path\" as varchar) = '1') THEN 'ResourceInSameVPC' WHEN (cast(\"traffic_path\" as varchar) = '2') THEN 'IGW-OR-GatewayVPCEndpoint' WHEN (cast(\"traffic_path\" as varchar) = '3') THEN 'VirtualPrivateGateway' "
-                          + " WHEN (cast(\"traffic_path\" as varchar) = '4') THEN 'Intra-RegionVPCPeering' WHEN (cast(\"traffic_path\" as varchar) = '5') THEN 'Inter-RegionVPCPeering' WHEN (cast(\"traffic_path\" as varchar) = '6') THEN 'LocalGateway' "
-                          + " WHEN (cast(\"traffic_path\" as varchar) = '7') THEN 'GatewayVPCEndpoint' WHEN (cast(\"traffic_path\" as varchar) = '8') THEN 'InternetGateway' ELSE cast(\"traffic_path\" as varchar) END) \"trafficpath\", \"traffic_path\" \"traffic_path\", \"type\" \"iptype\""
-                          + ", cast(\"date_format\"(\"from_unixtime\"(\"start\"), '%d') as integer) \"startday\""
-                          + ", cast(\"date_format\"(\"from_unixtime\"(\"start\"), '%m') as integer) \"startmonth\""
-                          + ", cast(\"date_format\"(\"from_unixtime\"(\"end\"), '%d') as integer) \"endday\""
-                          + ", cast(\"date_format\"(\"from_unixtime\"(\"end\"), '%m') as integer) \"endmonth\""
-                          + " FROM " + vpc_table_name + " WHERE (year=format_datetime(current_timestamp,'YYYY') and month=format_datetime(current_timestamp,'MM'))"
-                          + " OR (year=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '3' MONTH),'YYYY') AND month=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '3' MONTH),'MM'))"
-                          + " OR (year=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '2' MONTH),'YYYY') AND month=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '2' MONTH),'MM'))"
-                          + " OR (year=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH),'YYYY') AND month=format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH),'MM'));")
-                        ## Enable below prints for debugging ##
-                        # print("*" * 10, "START",  "*" * 10) # -- for debug
-                        # print(get_region) # -- for debug
-                        # print(query) # -- for debug
-                        #print(database) # -- for debug
-                        #print(s3_output) # -- for debug
-                    query_result=run_query(query, database, s3_output)
+                    ## Enable below prints for debugging ##
+                    # print("*" * 10, "START",  "*" * 10) # -- for debug
+                    summary_query = summary_view_query(vpc_table_name)
+                    daily_query = daily_view_query(vpc_table_name)
+                    enh_query = enhanced_view_query(vpc_table_name)
+                    print(summary_query) # -- for debug
+                    print(daily_query) # -- for debug
+                    print(enh_query) # -- for debug
+                    #print(database) # -- for debug
+                    #print(s3_output) # -- for debug
+                    query_result=run_query(summary_query, database, s3_output)
+                    # print(query_result) # -- for debug
+                    query_result=run_query(daily_query, database, s3_output)
+                    # print(query_result) # -- for debug
+                    query_result=run_query(enh_query, database, s3_output)
                     # print(query_result) # -- for debug
                     # print("*" * 10, "END",  "*" * 10) # -- for debug
                     status = cfnresponse.SUCCESS
@@ -540,7 +496,104 @@ Resources:
                     errs = e
                     status = cfnresponse.FAILED
                   finally:
-                    cfnresponse.send(event, context, status, errs, event["LogicalResourceId"])
+                    status = cfnresponse.SUCCESS
+                    if event.get("RequestType") != None: cfnresponse.send(event, context, status, {}, event.get("LogicalResourceId"))
+            def summary_view_query(vpc_table_name):
+                query = str("CREATE OR REPLACE VIEW vpc_flow_logs_summary_view AS SELECT"
+                      + " \"account_id\" \"accountid\" "
+                      + ", \"interface_id\" \"interfaceid\" "
+                      + ", \"srcaddr\" \"sourceaddress\" "
+                      + ", \"dstaddr\" \"destinationaddress\" "
+                      + ", \"srcport\" \"sourceport\" "
+                      + ", \"dstport\" \"destinationport\" "
+                      + ", \"protocol\" \"protocol\" "
+                      + ", \"sum\"(\"packets\") \"numpackets\" "
+                      + ", \"sum\"(\"bytes\") \"numbytes\" "
+                      + ", \"action\" \"action\" "
+                      + ", \"count\"(\"action\") \"action_count\" "
+                      + ", \"log_status\" \"logstatus\" "
+                      + ", \"count\"(\"log_status\") \"log_status_count\" "
+                      + ", \"vpc_id\" \"vpcid\" "
+                      + ", \"az_id\" \"azid\" "
+                      + ", \"pkt_srcaddr\" \"packetsourceaddr\" "
+                      + ", \"pkt_dstaddr\" \"packetdestinationaddr\" "
+                      + ", \"region\" \"region\" "
+                      + ", \"subnet_id\" \"subnetid\" "
+                      + ", (CASE WHEN (CAST(\"tcp_flags\" AS varchar) = '1') THEN 'FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '2') THEN 'SYN' WHEN (CAST(\"tcp_flags\" AS varchar) = '3') THEN 'SYN-FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '4') THEN 'RST' WHEN (CAST(\"tcp_flags\" AS varchar) = '8') THEN 'PSH' WHEN (CAST(\"tcp_flags\" AS varchar) = '16') THEN 'ACK' WHEN (CAST(\"tcp_flags\" AS varchar) = '18') THEN 'SYN-ACK' WHEN (CAST(\"tcp_flags\" AS varchar) = '19') THEN 'SYN-ACK-FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '32') THEN 'URG' ELSE CAST(\"tcp_flags\" AS varchar) END) \"tcpflags\" "
+                      + ", \"tcp_flags\" \"tcp_flags\" "
+                      + ", \"count\"(\"tcp_flags\") \"tcp_flags_count\" "
+                      + ", \"flow_direction\" \"flowdirection\" "
+                      + ", \"pkt_src_aws_service\" \"packetsrcawsservice\" "
+                      + ", \"pkt_dst_aws_service\" \"packetdstawsservice\" "
+                      + ", (CASE WHEN (CAST(\"traffic_path\" AS varchar) = '1') THEN 'ResourceInSameVPC' WHEN (CAST(\"traffic_path\" AS varchar) = '2') THEN 'IGW-OR-GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '3') THEN 'VirtualPrivateGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '4') THEN 'Intra-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '5') THEN 'Inter-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '6') THEN 'LocalGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '7') THEN 'GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '8') THEN 'InternetGateway' ELSE CAST(\"traffic_path\" AS varchar) END) \"trafficpath\" "
+                      + ", \"traffic_path\" \"traffic_path\" "
+                      + ", \"type\" \"iptype\" "
+                      + "FROM " + vpc_table_name
+                      + " WHERE (((year = format_datetime(current_timestamp, 'YYYY')) AND (month = format_datetime(current_timestamp, 'MM'))) OR ((year = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'YYYY')) AND (month = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'MM')))) "
+                      + "GROUP BY account_id, interface_id, srcaddr, dstaddr, srcport, dstport, protocol, action, log_status, vpc_id, az_id, pkt_srcaddr, pkt_dstaddr, region, subnet_id, tcp_flags, flow_direction, pkt_src_aws_service, pkt_dst_aws_service, traffic_path, type;")
+                return query
+              
+            def daily_view_query(vpc_table_name):
+                query = str("CREATE OR REPLACE VIEW vpc_flow_logs_daily_view AS "
+                            + "   SELECT "
+                            + "     \"account_id\" \"accountid\" "
+                            + "   , \"interface_id\" \"interfaceid\" "
+                            + "   , \"srcaddr\" \"sourceaddress\" "
+                            + "   , \"dstaddr\" \"destinationaddress\" "
+                            + "   , \"srcport\" \"sourceport\" "
+                            + "   , \"dstport\" \"destinationport\" "
+                            + "   , \"protocol\" \"protocol\" "
+                            + "   , \"sum\"(\"packets\") \"numpackets\" "
+                            + "   , \"sum\"(\"bytes\") \"numbytes\" "
+                            + "   , \"start\" \"starttime\" "
+                            + "   , \"end\" \"endtime\" "
+                            + "   , \"action\" \"action\" "
+                            + "   , \"count\"(\"action\") \"action_count\" "
+                            + "   , \"log_status\" \"logstatus\" "
+                            + "   , \"vpc_id\" \"vpcid\" "
+                            + "   , \"az_id\" \"azid\" " 
+                            + "   , \"pkt_srcaddr\" \"packetsourceaddr\" "
+                            + "   , \"pkt_dstaddr\" \"packetdestinationaddr\" "
+                            + "   , \"region\" \"region\" "
+                            + "   , \"subnet_id\" \"subnetid\" "
+                            + "   , (CASE WHEN (CAST(\"tcp_flags\" AS varchar) = '1') THEN 'FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '2') THEN 'SYN' WHEN (CAST(\"tcp_flags\" AS varchar) = '3') THEN 'SYN-FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '4') THEN 'RST' WHEN (CAST(\"tcp_flags\" AS varchar) = '8') THEN 'PSH' WHEN (CAST(\"tcp_flags\" AS varchar) = '16') THEN 'ACK' WHEN (CAST(\"tcp_flags\" AS varchar) = '18') THEN 'SYN-ACK' WHEN (CAST(\"tcp_flags\" AS varchar) = '19') THEN 'SYN-ACK-FIN' WHEN (CAST(\"tcp_flags\" AS varchar) = '32') THEN 'URG' ELSE CAST(\"tcp_flags\" AS varchar) END) \"tcpflags\" "
+                            + "   , \"tcp_flags\" \"tcp_flags\" "
+                            + "   , \"flow_direction\" \"flowdirection\" "
+                            + "   , (CASE WHEN (CAST(\"traffic_path\" AS varchar) = '1') THEN 'ResourceInSameVPC' WHEN (CAST(\"traffic_path\" AS varchar) = '2') THEN 'IGW-OR-GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '3') THEN 'VirtualPrivateGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '4') THEN 'Intra-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '5') THEN 'Inter-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '6') THEN 'LocalGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '7') THEN 'GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '8') THEN 'InternetGateway' ELSE CAST(\"traffic_path\" AS varchar) END) \"trafficpath\" "
+                            + "   , \"traffic_path\" \"traffic_path\" "
+                            + "   , \"type\" \"iptype\" "
+                            + "   , CAST(\"date_format\"(\"from_unixtime\"(\"start\"), '%d') AS integer) \"startday\" "
+                            + "   , CAST(\"date_format\"(\"from_unixtime\"(\"start\"), '%m') AS integer) \"startmonth\" "
+                            + "   , CAST(\"date_format\"(\"from_unixtime\"(\"end\"), '%d') AS integer) \"endday\" "
+                            + "   , CAST(\"date_format\"(\"from_unixtime\"(\"end\"), '%m') AS integer) \"endmonth\" "
+                            + "   FROM " + vpc_table_name
+                            + " WHERE (((year = format_datetime(current_timestamp, 'YYYY')) AND (month = format_datetime(current_timestamp, 'MM'))) OR ((year = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'YYYY')) AND (month = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'MM')))) "
+                            + "GROUP BY \"account_id\", \"interface_id\", \"srcaddr\", \"dstaddr\", \"srcport\", \"dstport\", \"protocol\", \"start\", \"end\", \"action\", \"log_status\", \"vpc_id\", \"az_id\", \"pkt_srcaddr\", \"pkt_dstaddr\", \"region\", \"subnet_id\", \"tcp_flags\", \"flow_direction\", \"traffic_path\", \"type\" ORDER BY startmonth ASC, startday ASC;")
+                return query
+              
+            def enhanced_view_query(vpc_table_name):
+                query =str("CREATE OR REPLACE VIEW vpc_flow_logs_enhanced_view AS "
+                              + " SELECT "
+                              + "   \"account_id\" \"accountid\" "
+                              + " , \"srcaddr\" \"sourceaddress\" "
+                              + " , \"dstaddr\" \"destinationaddress\" "
+                              + " , \"sum\"(\"packets\") \"numpackets\" "
+                              + " , \"sum\"(\"bytes\") \"numbytes\" "
+                              + " , \"vpc_id\" \"vpcid\" "
+                              + " , \"az_id\" \"azid\" "
+                              + " , \"pkt_srcaddr\" \"packetsourceaddr\" "
+                              + " , \"pkt_dstaddr\" \"packetdestinationaddr\" "
+                              + " , \"region\" \"region\" "
+                              + " , \"subnet_id\" \"subnetid\" "
+                              + " , \"flow_direction\" \"flowdirection\" "
+                              + " , \"pkt_src_aws_service\" \"packetsrcawsservice\" "
+                              + " , \"pkt_dst_aws_service\" \"packetdstawsservice\" "
+                              + " , (CASE WHEN (CAST(\"traffic_path\" AS varchar) = '1') THEN 'ResourceInSameVPC' WHEN (CAST(\"traffic_path\" AS varchar) = '2') THEN 'IGW-OR-GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '3') THEN 'VirtualPrivateGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '4') THEN 'Intra-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '5') THEN 'Inter-RegionVPCPeering' WHEN (CAST(\"traffic_path\" AS varchar) = '6') THEN 'LocalGateway' WHEN (CAST(\"traffic_path\" AS varchar) = '7') THEN 'GatewayVPCEndpoint' WHEN (CAST(\"traffic_path\" AS varchar) = '8') THEN 'InternetGateway' ELSE CAST(\"traffic_path\" AS varchar) END) \"trafficpath\" "
+                              + " , \"traffic_path\" \"traffic_path\" "
+                              + " FROM " + vpc_table_name
+                              + " WHERE (((((year = format_datetime(current_timestamp, 'YYYY')) AND (month = format_datetime(current_timestamp, 'MM'))) OR ((year = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'YYYY')) AND (month = format_datetime((date_trunc('month', current_timestamp) - INTERVAL  '1' MONTH), 'MM')))) AND (((pkt_src_aws_service <> '') OR (pkt_dst_aws_service <> '')) OR (traffic_path >= 0))) AND ((pkt_src_aws_service <> '-') OR (pkt_dst_aws_service <> '-'))) "
+                              + " GROUP BY \"account_id\", \"srcaddr\", \"dstaddr\", \"dstport\", \"protocol\", \"vpc_id\", \"az_id\", \"pkt_srcaddr\", \"pkt_dstaddr\", \"region\", \"subnet_id\", \"flow_direction\", \"pkt_src_aws_service\", \"pkt_dst_aws_service\", \"traffic_path\";")
+                return query
         Tags:
           -
             Key: Name

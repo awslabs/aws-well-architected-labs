@@ -17,7 +17,12 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 2. Run CloudFormation stack to create Athena Database, Table, Lambda function and Cloudwatch rule.
 
  - Download CloudFormation Template:
- [vpc_athena_db_table_view_lambda.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_athena_db_table_view_lambda.yaml)
+    - **CSV file format**: [vpc_athena_db_table_view_lambda.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_athena_db_table_view_lambda.yaml) 
+    
+      **OR**
+    
+    - **Parquet file format**: [vpc_athena_db_table_view_lambda_parquet.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_athena_db_table_view_lambda_parquet.yaml)
+
 
     This cloudformation template creates
     - **Athena DataBase, an external table, VPC Flow Logs View:** To query and fetch data from S3 bucket for VPC Flow Logs.
@@ -29,7 +34,14 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 
 - Create stack page:
   1. In **Specify template** section, select **Upload a template** file. 
-  2. Then **Choose File** and upload the template **_vpc_athena_db_table_view_lambda.yaml_** (you have downloaded previously)
+  2. Then **Choose File** and upload the appropriate template below (you have downloaded previously)
+      
+      CSV file format: **_vpc_athena_db_table_view_lambda.yaml_**
+
+      **OR**
+
+      Parquet file format: **_vpc_athena_db_table_view_lambda_parquet.yaml_**
+
   3. Then **Click Next**
       
     ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
@@ -39,8 +51,10 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
      (Please read the description of each parameter carefully)
    2. **AthenaQueryResultBucketArn:** The ARN of the Amazon S3 bucket to which Athena query results are stored. e.g. 'arn:aws:s3:::aws-athena-query-results-us-east-1-XXXXXXXXXXXXXX'
    3. **AthenaResultsOutputLocation:** URI path of the Amazon S3 bucket where Athena query results are stored.
-   4. **HiveCompatibleS3prefix:** [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) Adds prefixes of partition keys in s3 object key (Hive-compatible S3 prefix)\
-        (Note: Please select false, since only this option is supported for now)
+   4. **HiveCompatibleS3prefix:** [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) Adds prefixes of partition keys in s3 object key (Hive-compatible S3 prefix)
+        
+        Note: Please select true for Parquet file format and false for CSV format.
+
    5. **S3BucketRegion:** Region of the S3 bucket created in the central account. e.g. _us-east-1_
    6. **VpcFlowLogsAthenaDatabaseName:** Only provide existing database name if it has a table with all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new DB.
    7. **VpcFlowLogsAthenaTableName:** Only provide existing table name if it has all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new table.
@@ -48,11 +62,23 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
    9. **VpcFlowLogsFilePrefix:** The log file prefix in Amazon S3 bucket that comes right after s3 bucket name e.g. _vpc-flow-logs_
    10. **VpcFlowLogsS3BucketLocation:** Please provide complete path **without log file name**, as shown below
 
-   e.g. **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs/AWSLogs/0123456789/vpcflowlogs/us-east-1/2021/11/01/_**
+   e.g.
+
+   - For CSV - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs/AWSLogs/0123456789/vpcflowlogs/us-east-1/2021/11/01/_**
+   
+   - For Parquet - **_s3://my-vpc-flow-logs-bucket/vpc-flow-logs-enh-parquet/AWSLogs/_**
 
 - Click **Next**
 
+{{%expand "Click here to see Parquet Stack parameters" %}}
+![Images/quicksight_dashboard_dt-10-1.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-10-1.png)
+{{%/expand%}}
+
+
+{{%expand "Click here to see CSV Stack parameters" %}}
 ![Images/quicksight_dashboard_dt-10.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-10.png)
+{{%/expand%}}
+
 4. Add tags **Name=VPCFlowLogs-Lambda-Stack** and **Purpose=WALabVPCFlowLogs**. Keep rest of the selections to **default** values. Click **Next**
 ![Images/quicksight_dashboard_dt-11.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-11.png)
 5. Review the Stack and click on **I acknowledge that AWS CloudFormation might create IAM resources.** checkbox, Click on **Create Stack**
@@ -64,9 +90,17 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
 
         SELECT * FROM vpc_flow_logs_custom_integration limit 10;
         
-   Athena View: 
+   Athena View for CSV: 
 
         SELECT * FROM vpc_flow_logs_view limit 10;
+
+   Athena Views for Parquet:
+
+        SELECT * FROM vpc_flow_logs_summary_view limit 10;
+
+        SELECT * FROM vpc_flow_logs_daily_view limit 10;
+
+        SELECT * FROM vpc_flow_logs_enhanced_view limit 10;
 
 
 Example screen shot:

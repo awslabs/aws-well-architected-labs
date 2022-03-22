@@ -18,14 +18,26 @@ We will now create the data sets in QuickSight from the Athena view and an analy
 
 2. Run CloudFormation stack to create QuickSight Athena dataset and a Dashboard.
 - Download CloudFormation Template:
-  [vpc_flowlogs_quicksight_template.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_flowlogs_quicksight_template.yaml)
+    
+    **CSV** file format - [vpc_flowlogs_quicksight_template.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_flowlogs_quicksight_template.yaml)
+
+    **OR**
+
+    **Parquet** file format - [vpc_flowlogs_quicksight_multi_view_template.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_flowlogs_quicksight_multi_view_template.yaml)
 
 - From AWS Console navigate to CloudFormation. Then click on **Create stack**
 ![Images/quicksight_dashboard_dt-8.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-08.png)
 
 - Create stack page:
   1. In **Specify template** section, select **Upload a template** file. 
-  2. Then **Choose File** and upload the template **_vpc_flowlogs_quicksight_template.yaml_** (you have downloaded previously)
+  2. Then **Choose File** and upload the appropriate template below (you have downloaded previously)
+      
+      **CSV file format**: **_vpc_flowlogs_quicksight_template.yaml_**
+
+      **OR**
+
+      **Parquet file format**: **_vpc_flowlogs_quicksight_multi_view_template.yaml_**
+
   3. Then **Click Next**
       
     ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
