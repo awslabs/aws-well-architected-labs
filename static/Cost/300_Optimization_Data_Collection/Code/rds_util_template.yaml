@@ -332,7 +332,7 @@ Resources:
                                       cwclient = boto3.client('cloudwatch', region_name = region['RegionName'])
                                       data = globals()[f['name']](cwclient, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id)
                           else:
-                              client=boto3.client(service)
+                              client=session.client(service)
                               for f in functions[service]['functions']:
                                   cwclient = boto3.client('cloudwatch', region_name = 'us-east-1')
                   
