@@ -446,7 +446,7 @@ Please follow the steps in [Optimization Data Collection lab](https://wellarchit
     ------------ | -------------
 {{% /expand%}}
 ### Prepare Athena
-If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Prepare Trusted Advisor Organizational View](prepare-ta-org-view.html).
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Enable Quicksight](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/1_prerequistes/#enable-quicksight) section below.
 
 To get Athena warmed up:
 
