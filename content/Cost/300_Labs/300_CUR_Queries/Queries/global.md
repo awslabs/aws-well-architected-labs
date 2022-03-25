@@ -29,7 +29,12 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
 ### Account
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
+
+**Notes:** 
+* Charges for the current billing month may differ slightly when comparing between Cost Explorer and CUR due to differences in how [current month charges are estimated](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html#how-cur-works). Charges will match between Cost Explorer and CUR once billing has been finalized at the close of the month.
+
+* This query expects that you have reserved instances purchased within at least one of the accounts.  Running this query as is without reserved instances in the CUR data set will result in an error. To use this query without reserved instances, remove or comment out lines containing `reservation_reservation_a_r_n`.
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -37,9 +42,9 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
 #### Cost Explorer Links
 These links are provided as an example to compare CUR report output to Cost Explorer output.
 
-Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=LinkedAccount&hasBlended=false&hasAmortized=false&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=LinkedAccount&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=false&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
-Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=LinkedAccount&hasBlended=false&hasAmortized=true&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=LinkedAccount&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
 #### Sample Output:
 ![Images/spendaccount.png](/Cost/300_CUR_Queries/Images/Global/spendaccount.png)
@@ -53,26 +58,29 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
       bill_payer_account_id,
       line_item_usage_account_id,
       DATE_FORMAT((line_item_usage_start_date),'%Y-%m-01') AS month_line_item_usage_start_date, 
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost
+        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
-        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
         WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
-        ELSE line_item_unblended_cost
+        ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
@@ -101,7 +109,12 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Region
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by region where the service is operating.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
+
+**Notes:** 
+* Charges for the current billing month may differ slightly when comparing between Cost Explorer and CUR due to differences in how [current month charges are estimated](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html#how-cur-works). Charges will match between Cost Explorer and CUR once billing has been finalized at the close of the month.
+
+* This query expects that you have reserved instances purchased within at least one of the accounts.  Running this query as is without reserved instances in the CUR data set will result in an error. To use this query without reserved instances, remove or comment out lines containing `reservation_reservation_a_r_n`.
 
 #### Pricing
 
@@ -110,9 +123,9 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
 #### Cost Explorer Links
 These links are provided as an example to compare CUR report output to Cost Explorer output.
 
-Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&hasBlended=false&hasAmortized=false&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=false&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
-Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&hasBlended=false&hasAmortized=true&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
 #### Sample Output:                                                                                                                              
 ![Images/spendregion.png](/Cost/300_CUR_Queries/Images/Global/spendregion.png)                                                                      
@@ -132,10 +145,7 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN 'global' THEN 'Global'
         ELSE product_region
       END AS product_region,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
@@ -146,12 +156,18 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
         ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost ) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost 
@@ -178,7 +194,12 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 ### Service
 
 #### Query Description
-This query will provide monthly unblended and amortized costs per linked account for all services by service.  We have additionally broken out Data Transfer for each service.  The query also includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the calculated difference between unblended and amortized costs.  Unblended = Amortized + True-up + Upfront Fees, the +/- logic has already been included for you in the columns.  We are showing in our example the exclusion of Route 53 Domains, as the monthly charges for these do not match between CUR and Cost Explorer.  Finally we are excluding discounts, credits, refunds and taxes.
+This query will provide monthly unblended and amortized costs per linked account for all services by service.  Data Transfer is also broken out for each service.  The query includes ri_sp_trueup and ri_sp_upfront_fees columns to allow you to visualize the difference between unblended and amortized costs.  Unblended cost equals usage plus upfront fees.  Amortized cost equals usage plus the portion of upfront fees applicable to the period (both used and unused). True-up therefore represents the difference between total upfront fees incurred in the period using an unblended/cash-based accounting model, and the smaller portion of upfront fees applicable to the period using an amortized/accrual-based accounting model. This query excludes discounts, credits, refunds and taxes, as well as Route 53 Domains usage type due to differences in how usage date is recorded between Cost Explorer and CUR. 
+
+**Notes:** 
+* Charges for the current billing month may differ slightly when comparing between Cost Explorer and CUR due to differences in how [current month charges are estimated](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html#how-cur-works). Charges will match between Cost Explorer and CUR once billing has been finalized at the close of the month.
+
+* This query expects that you have reserved instances purchased within at least one of the accounts.  Running this query as is without reserved instances in the CUR data set will result in an error. To use this query without reserved instances, remove or comment out lines containing `reservation_reservation_a_r_n`.
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
@@ -186,9 +207,9 @@ Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
 #### Cost Explorer Links
 These links are provided as an example to compare CUR report output to Cost Explorer output.
 
-Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Service&hasBlended=false&hasAmortized=false&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Service&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=false&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
-Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Service&hasBlended=false&hasAmortized=true&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last12Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&startDate=2019-12-01&endDate=2020-11-30&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Credit%22,%22Enterprise%20Discount%20Program%20Discount%22,%22Refund%22,%22SavingsPlanNegation%22,%22Tax%22%5D,%22include%22:false,%22children%22:null%7D%5D&forecastTimeRangeOption=None&usageAs=usageQuantity&chartStyle=Stack)
+Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Service&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
 #### Sample Output:                                                                                                                                     
 ![Images/spendservice.png](/Cost/300_CUR_Queries/Images/Global/spendservice.png)          
@@ -206,26 +227,29 @@ Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
         WHEN (line_item_line_item_type = 'Usage' AND product_product_family = 'Data Transfer') THEN CONCAT('DataTransfer-',line_item_product_code) 
         ELSE line_item_product_code 
       END AS service_line_item_product_code,
+      SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost,
       SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0 
-        ELSE line_item_unblended_cost 
-      END) AS sum_line_item_unblended_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost
+        WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
         WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
         WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
-        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost
+        WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
         WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
         ELSE line_item_unblended_cost 
       END) AS amortized_cost,
-      SUM(CASE
-        WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (-savings_plan_amortized_upfront_commitment_for_billing_period) 
-        WHEN (line_item_line_item_type = 'RIFee') THEN (-reservation_amortized_upfront_fee_for_billing_period)
-        WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN (-line_item_unblended_cost) 
-        ELSE 0 
-      END) AS ri_sp_trueup,
+      (SUM(line_item_unblended_cost)
+        - SUM(CASE
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanRecurringFee') THEN (savings_plan_total_commitment_to_date - savings_plan_used_commitment) 
+          WHEN (line_item_line_item_type = 'SavingsPlanNegation') THEN 0
+          WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN 0
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost  
+          WHEN (line_item_line_item_type = 'RIFee') THEN (reservation_unused_amortized_upfront_fee_for_billing_period + reservation_unused_recurring_fee)
+          WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN 0 
+          ELSE line_item_unblended_cost 
+        END)
+      ) AS ri_sp_trueup, 
       SUM(CASE
         WHEN (line_item_line_item_type = 'SavingsPlanUpfrontFee') THEN line_item_unblended_cost
         WHEN ((line_item_line_item_type = 'Fee') AND (reservation_reservation_a_r_n <> '')) THEN line_item_unblended_cost
