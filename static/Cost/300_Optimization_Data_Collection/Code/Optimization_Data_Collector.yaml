@@ -19,6 +19,7 @@ Metadata:
           - IncludeRightsizingModule
           - IncludeInventoryCollectorModule
           - IncludeComputeOptimizerModule
+          - ComputeOptimizerRegions
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
@@ -44,6 +45,8 @@ Metadata:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
         default: 'Include AWS Compute Optimizer Data Collection Module'
+      ComputeOptimizerRegions:
+        default: "AWS regions where AWS Compute Optimizer needs to collect info. Example: 'us-east-1,eu-west-1'"
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
