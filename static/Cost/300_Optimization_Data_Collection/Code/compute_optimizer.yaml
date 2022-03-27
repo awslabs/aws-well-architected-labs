@@ -160,6 +160,8 @@ Resources:
                   Id: Backup
                   Prefix: ''
                   Status: Enabled
+                  DeleteMarkerReplication:
+                    Status: Disabled
               VersioningConfiguration:
                 Status: Enabled
               LifecycleConfiguration:
@@ -243,14 +245,14 @@ Resources:
 
               sts_connection = boto3.client('sts')
               acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
-                     
+
               account_b_creds = {
                 "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
                 "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
                 "aws_session_token":     acct_b['Credentials']['SessionToken'],
               }
 
-              acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"] 
+              acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
 
               for region in [r.strip() for r in REGIONS.split(',')]:
                   # create service client using the assumed role credentials
@@ -266,7 +268,7 @@ Resources:
                   for name, func in export_funcs.items():
                       try:
                           res = func(
-                              includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS, 
+                              includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
                               s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
                           )
                           print(f"{region} {name} export queued. JobId: {res['jobId']}")
