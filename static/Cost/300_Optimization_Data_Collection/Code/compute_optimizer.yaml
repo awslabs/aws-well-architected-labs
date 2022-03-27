@@ -135,7 +135,6 @@ Resources:
                   Effect: 'Allow'
                 - Action:
                   - s3:ReplicateObject
-                  - s3:ReplicateDelete
                   - s3:ReplicateTags
                   - s3:GetObjectVersionTagging
                   Effect: 'Allow'
@@ -154,21 +153,24 @@ Resources:
               ReplicationConfiguration:
                 Role: !GetAtt [ReplicaRole, Arn]
                 Rules:
-                - Id: Replication to the main bucket
-                  Destination:
-                    Bucket: !Sub arn:aws:s3:::${DestinationBucket}
-                    StorageClass: STANDARD
-                  Prefix: ""
-                  Status: Enabled
+                  - Id: Replication to the main bucket
+                    Priority: 2
+                    Filter:
+                      Prefix: ''
+                    Destination:
+                      Bucket: !Sub arn:aws:s3:::${DestinationBucket}
+                      StorageClass: STANDARD
+                    DeleteMarkerReplication:
+                      Status: Disabled
+                    Status: Enabled
               VersioningConfiguration:
                 Status: Enabled
               LifecycleConfiguration:
                 Rules:
-                  - Id: Rule for cleanup
+                  - Id: Cleanup
                     Prefix: ''
                     Status: Enabled
-                    ExpirationInDays: 5
-
+                    ExpirationInDays: 1
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
