@@ -38,7 +38,7 @@ Parameters:
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
   DeployRegions:
     Type: CommaDelimitedList
-    Description: AWS regions where compute-optimizer needs to collect info
+    Description: AWS regions where compute-optimizer needs to collect info. Example 'us-east-1,eu-west-1'
 Outputs:
   LambdaARN:
     Description: Lambda Arn
@@ -77,7 +77,7 @@ Resources:
       StackSetName: !Sub "${BucketPrefix}-comp-opt-replication"
       TemplateBody: |
         AWSTemplateFormatVersion: '2010-09-09'
-        Description: This template creates a bucket in a given region and set up replication to the main bucket
+        Description: This template creates a bucket in a given region and sets a replication to the main bucket
         Parameters:
           Name:
             Type: String
@@ -199,10 +199,10 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: 
-                      - "compute-optimizer:ExportAutoScalingGroupRecommendations"
-                      - "compute-optimizer:ExportEBSVolumeRecommendations"
-                      - "compute-optimizer:ExportEC2InstanceRecommendations"
-                      - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
                 Resource: "*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
