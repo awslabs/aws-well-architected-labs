@@ -97,6 +97,9 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  ComputeOptimizerRegions:
+    Type: CommaDelimitedList
+    Description: AWS regions where compute-optimizer needs to collect info
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -349,6 +352,8 @@ Resources:
         CodeBucket: !Ref CodeBucket
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
+        BucketPrefix: !GetAtt S3Bucket.BucketName
+        DeployRegions: !Ref ComputeOptimizerRegions
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
