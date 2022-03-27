@@ -59,7 +59,7 @@ Parameters:
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket that needs to be created to hold information
-    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
     Default: costoptimizationdata
   ManagementAccountRole: 
     Type: String
@@ -321,7 +321,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: "https://aws-well-architected-labs-iakov.s3.amazonaws.com/Cost/300_Optimization_Data_Collection/Code/compute_optimizer.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
@@ -329,8 +329,8 @@ Resources:
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
-        BucketPrefix: !GetAtt S3Bucket.BucketName
-        DeployRegions: !Ref ComputeOptimizerRegions
+        BucketPrefix:  !Ref DestinationBucket
+        DeployRegions: !Join [ ',', !Ref ComputeOptimizerRegions ]
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule

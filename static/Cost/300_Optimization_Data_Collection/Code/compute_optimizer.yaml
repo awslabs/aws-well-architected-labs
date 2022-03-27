@@ -35,10 +35,10 @@ Parameters:
     Type: String
     Default: 'costoptimization'
     Description: This prefix will be used for buckets creation
-    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
   DeployRegions:
-    Type: CommaDelimitedList
-    Description: AWS regions where compute-optimizer needs to collect info. Example 'us-east-1,eu-west-1'
+    Type: String
+    Description: A comma separated list of AWS regions where compute-optimizer needs to collect info. Example 'us-east-1,eu-west-1'
 Outputs:
   LambdaARN:
     Description: Lambda Arn
@@ -58,26 +58,26 @@ Resources:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html
     Type: AWS::CloudFormation::StackSet
     Properties:
-      Description: S3 buckets in multiple regions replicating data to one.
+      Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
       PermissionModel: SELF_MANAGED # # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html
       #PermissionModel: SERVICE_MANAGED # Throws Resource handler returned message: "AutoDeployment is required
       Parameters:
         - ParameterKey: Name
-          ParameterValue: !Sub "${BucketPrefix}-${AWS::AccountId}"
+          ParameterValue: !Sub "${BucketPrefix}${AWS::AccountId}"
         - ParameterKey: DestinationBucket
           ParameterValue: !Ref DestinationBucket
       StackInstancesGroup:
         - DeploymentTargets:
             Accounts:
               - !Ref "AWS::AccountId"
-          Regions: !Ref DeployRegions
+          Regions: !Split [ ',', !Ref DeployRegions]
       Capabilities:
         - CAPABILITY_IAM
         - CAPABILITY_NAMED_IAM
-      StackSetName: !Sub "${BucketPrefix}-comp-opt-replication"
+      StackSetName: !Sub "${BucketPrefix}${AWS::AccountId}-comp-optim-buckets"
       TemplateBody: |
         AWSTemplateFormatVersion: '2010-09-09'
-        Description: This template creates a bucket in a given region and sets a replication to the main bucket
+        Description: This template creates a bucket in a given region and configure a replication to the main bucket
         Parameters:
           Name:
             Type: String
@@ -154,14 +154,12 @@ Resources:
               ReplicationConfiguration:
                 Role: !GetAtt [ReplicaRole, Arn]
                 Rules:
-                - Destination:
+                - Id: Replication to the main bucket
+                  Destination:
                     Bucket: !Sub arn:aws:s3:::${DestinationBucket}
                     StorageClass: STANDARD
-                  Id: Backup
-                  Prefix: ''
+                  Prefix: ""
                   Status: Enabled
-                  DeleteMarkerReplication:
-                    Status: Disabled
               VersioningConfiguration:
                 Status: Enabled
               LifecycleConfiguration:
@@ -207,7 +205,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
 
-
   LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
@@ -223,8 +220,8 @@ Resources:
           - Arn
       Environment:
         Variables:
-          REGIONS: !Join [ ',', !Ref DeployRegions ]
-          BUCKET_PREFIX: !Sub "${BucketPrefix}-${AWS::AccountId}"
+          REGIONS: !Ref DeployRegions
+          BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
           ROLE_ARN: !Ref RoleNameARN
           INCLUDE_MEMBER_ACCOUNTS: 'TRUE'
       Code:
