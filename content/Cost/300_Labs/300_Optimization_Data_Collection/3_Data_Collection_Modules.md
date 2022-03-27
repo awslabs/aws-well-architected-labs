@@ -198,22 +198,10 @@ Please make sure you enable Compute Optimizer following this [guide.](https://do
                   Statement:
                   - Effect: "Allow"
                     Action: 
-                      - "compute-optimizer:*"
-                      - "EC2:DescribeInstances"
-                      - "cloudwatch:GetMetricData"
-                      - "autoscaling:DescribeAutoScalingGroups"
-                      - "compute-optimizer:UpdateEnrollmentStatus"
-                      - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                      - "compute-optimizer:GetEC2InstanceRecommendations"
-                      - "compute-optimizer:GetEnrollmentStatus"
-                      - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                      - "compute-optimizer:GetRecommendationSummaries"
-                      - "organizations:ListAccounts"
-                      - "organizations:DescribeOrganization"
-                      - "organizations:DescribeAccount"
-                      - "lambda:ListFunctions"
-                      - "lambda:ListProvisionedConcurrencyConfigs"
-                      - "EC2:DescribeVolumes" 
+                      - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                      - "compute-optimizer:ExportEBSVolumeRecommendations"
+                      - "compute-optimizer:ExportEC2InstanceRecommendations"
+                      - "compute-optimizer:ExportLambdaFunctionRecommendations"
                       Resource: "*"    
 
 * CloudFormation Stack added to **OptimizationDataCollectionStack** :  
@@ -233,9 +221,7 @@ Please make sure you enable Compute Optimizer following this [guide.](https://do
 * Optional Parameters with current defaults:
 DataStackMulti
     - DatabaseName: optimization_data
-    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/coc.zip
     - CFDataName: ComputeOptimizer
-    - Prefix: COC
 
 AccountCollector
     - Suffix: ''
