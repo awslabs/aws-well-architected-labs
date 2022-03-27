@@ -251,31 +251,6 @@ Resources:
                 Rules:
                 - Name: prefix
                   Value: Compute_Optimizer/
-  ComputeOptimizerBucketPolicy:
-    Condition: DeployComputeOptimizerModule
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketPolicyStatus'
-            Effect: Allow
-            Resource: !GetAtt S3Bucket.Arn 
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-          - Action:
-              - 's3:PutObject'
-            Effect: Allow
-            Resource: !Sub "${S3Bucket.Arn}/*"
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-            Condition: {"StringEquals": {
-                    "s3:x-amz-acl":  "bucket-owner-full-control",
-                    "aws:SourceAccount": !Sub "${ManagementAccountID}",
-                    "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
-                }
-            } 
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
