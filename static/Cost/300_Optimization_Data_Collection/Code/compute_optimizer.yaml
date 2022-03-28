@@ -171,6 +171,64 @@ Resources:
                     Prefix: ''
                     Status: Enabled
                     ExpirationInDays: 1
+  LambdaCustomRessourceStackSetRolesRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}LambdaCustomRessourceStackSetRolesRole-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      Path: /
+      Policies:
+        - PolicyName: !Sub "${CFDataName}-Create-Stack"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: 
+                  - "cloudformation:CreateStack"
+                Resource: "*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+  LambdaCustomRessourceStackSetRoles:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${RolePrefix}${CFDataName}-Custom-Ressource-StackSet-Roles"
+      Description: !Sub "LambdaFunction to create AWSCloudFormationStackSetAdministrationRole and AWSCloudFormationStackSetExecutionRole"
+      Handler: index.lambda_handler
+      Runtime: python3.8
+      MemorySize: 2688
+      Timeout: 300
+      Role: !Fn::GetAtt: [LambdaCustomRessourceStackSetRolesRole, Arn]
+      Code:
+        ZipFile: |
+          import boto3
+
+          cf = boto3.client('cloudformation')
+          TEMPLATES = [
+              "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml",
+              "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml",
+          ] 
+
+          def lambda_handler(event, context):
+              for template_url in TEMPLATES:
+                  try:
+                      response = cf.create_stack(
+                          StackName=template_url.split('/')[-1].split('.')[0],
+                          TemplateUrl=template_url,
+                          DisableRollback=True,
+                          TimeoutInMinutes=2,
+                      )
+                      #FIXME: wait for the stack to be created
+                  except Exception as exc:
+                      print(f"ERROR: {exc} (if exists safely ignore)")
+
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
@@ -206,11 +264,10 @@ Resources:
                 Resource: "*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
-
   LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${RolePrefix}${CFDataName}-Lambda-Function"
+      FunctionName: !Sub "${RolePrefix}${CFDataName}-Trigger-Export"
       Description: !Sub "LambdaFunction to retrieve Compute_Optimizer"
       Handler: index.lambda_handler
       Runtime: python3.8
@@ -263,14 +320,14 @@ Resources:
                       'ebs_volume':   co.export_ebs_volume_recommendations,
                   }
                   bkt = BUCKET_PREFIX + '-' + region
-                  print(bkt)
+                  print(f"INFO: bucket={bkt}")
                   for name, func in export_funcs.items():
                       try:
                           res = func(
                               includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
                               s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
                           )
-                          print(f"{region} {name} export queued. JobId: {res['jobId']}")
+                          print(f"INFO: {region} {name} export queued. JobId: {res['jobId']}")
                       except Exception as exc:
                           print(f"ERROR: {region} {name} - {exc}")
   CloudWatchTrigger:
