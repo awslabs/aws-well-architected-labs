@@ -75,6 +75,8 @@ Resources:
         - CAPABILITY_IAM
         - CAPABILITY_NAMED_IAM
       StackSetName: !Sub "${BucketPrefix}${AWS::AccountId}-comp-optim-buckets"
+      DependsOn:
+        - StackSetRoles
       TemplateBody: |
         AWSTemplateFormatVersion: '2010-09-09'
         Description: This template creates a bucket in a given region and configure a replication to the main bucket
@@ -205,7 +207,7 @@ Resources:
       Runtime: python3.8
       MemorySize: 2688
       Timeout: 300
-      Role: !Fn::GetAtt: [LambdaCustomRessourceStackSetRolesRole, Arn]
+      Role: !GetAtt LambdaCustomRessourceStackSetRolesRole.Arn
       Code:
         ZipFile: |
           import boto3
@@ -214,8 +216,7 @@ Resources:
           TEMPLATES = [
               "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml",
               "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml",
-          ] 
-
+          ]
           def lambda_handler(event, context):
               for template_url in TEMPLATES:
                   try:
@@ -228,7 +229,10 @@ Resources:
                       #FIXME: wait for the stack to be created
                   except Exception as exc:
                       print(f"ERROR: {exc} (if exists safely ignore)")
-
+  StackSetRoles:
+    Type: "Custom::LambdaCustomRessourceStackSetRoles"
+    Properties:
+      ServiceToken: !GetAtt LambdaCustomRessourceStackSetRoles.Arn
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
