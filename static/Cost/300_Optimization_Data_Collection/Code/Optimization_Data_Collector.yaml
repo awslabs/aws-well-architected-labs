@@ -46,7 +46,7 @@ Metadata:
       IncludeComputeOptimizerModule:
         default: 'Include AWS Compute Optimizer Data Collection Module'
       ComputeOptimizerRegions:
-        default: "AWS regions where AWS Compute Optimizer needs to collect info. Example: 'us-east-1,eu-west-1'"
+        default: "Comma Delimited list of AWS regions where AWS Compute Optimizer data will be collected."
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
@@ -101,8 +101,9 @@ Parameters:
       - "yes"
       - "no" 
   ComputeOptimizerRegions:
+    Default: ""
     Type: CommaDelimitedList
-    Description: AWS regions where compute-optimizer needs to collect info. Example 'us-east-1,eu-west-1'
+    Description: "Ex: 'us-east-1,us-east-2,us-west-1,us-west-2,af-south-1,ap-east-1,ap-southeast-3,ap-south-1,ap-northeast-3,ap-northeast-2,ap-southeast-1,ap-southeast-2,ap-northeast-1,ca-central-1,eu-central-1,eu-west-1,eu-west-2,eu-south-1,eu-west-3,eu-north-1,me-south-1,sa-east-1'. Default=CURRENT_REGION"
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -199,6 +200,9 @@ Conditions:
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
+  ComputeOptimizerRegionsIsEmpty: !Equals
+    - !Join [ ",", !Ref ComputeOptimizerRegions ]
+    - ""
 #Reusable Resources:
 Resources:
   S3CrawlerQue: 
@@ -330,7 +334,11 @@ Resources:
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
         BucketPrefix:  !Ref DestinationBucket
-        DeployRegions: !Join [ ',', !Ref ComputeOptimizerRegions ]
+        DeployRegions: 
+          Fn::If:
+            - ComputeOptimizerRegionsIsEmpty
+            - !Sub "${AWS::Region}"
+            - !Join [ ",", !Ref ComputeOptimizerRegions ]
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
