@@ -53,19 +53,73 @@ Outputs:
         - CrawlerFunction
         - Arn
 Resources:
+  StackSetAdminRole:
+    Type: AWS::IAM::Role
+    DependsOn: StackSetExecutionRole
+    Properties:
+      RoleName:  StackSetAdminRole
+      Description: "This role is used by cloudformation to create StackSets in different regions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: StackSetAdminRolePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: sts:AssumeRole
+                Resource: !Sub "arn:aws:iam::*:role/${RolePrefix}StackSetExecutionRole"
+  StackSetExecutionRole:  #see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}StackSetExecutionRole"
+      Description: "This role is used by cloudformation to create StackSets in different regions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: StackSetParameterExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:CreateStack
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DeleteStack
+                  - cloudformation:UpdateStack
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - sns:*
+                Resource: '*'
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess #FIXME: Can it be more narrow than this? Stacksets needs to create buckets and roles
   ReplicaitonBucketsStackSet:
-    # This requires self-managed permissions
-    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html
     Type: AWS::CloudFormation::StackSet
+    DependsOn:
+      - StackSetExecutionRole
+      - StackSetAdminRole
     Properties:
       Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
-      PermissionModel: SELF_MANAGED # # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html
-      #PermissionModel: SERVICE_MANAGED # Throws Resource handler returned message: "AutoDeployment is required
+      PermissionModel: SELF_MANAGED
       Parameters:
         - ParameterKey: Name
           ParameterValue: !Sub "${BucketPrefix}${AWS::AccountId}"
         - ParameterKey: DestinationBucket
           ParameterValue: !Ref DestinationBucket
+        - ParameterKey: ManagementAccountID
+          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ]
       StackInstancesGroup:
         - DeploymentTargets:
             Accounts:
@@ -75,8 +129,8 @@ Resources:
         - CAPABILITY_IAM
         - CAPABILITY_NAMED_IAM
       StackSetName: !Sub "${BucketPrefix}${AWS::AccountId}-comp-optim-buckets"
-      DependsOn:
-        - StackSetRoles
+      AdministrationRoleARN: !GetAtt: StackSetAdminRole.Arn
+      ExecutionRoleName: !Sub "${RolePrefix}StackSetExecutionRole"
       TemplateBody: |
         AWSTemplateFormatVersion: '2010-09-09'
         Description: This template creates a bucket in a given region and configure a replication to the main bucket
@@ -84,6 +138,9 @@ Resources:
           Name:
             Type: String
             Description: Prefix of regional bucket name
+          ManagementAccountID:
+            Type: String
+            Description: Management Account ID that will send data to the bucket
           DestinationBucket:
             Type: String
             Description: A name of the main bucket where all data will be stored
@@ -106,11 +163,12 @@ Resources:
                   Principal:
                     Service: compute-optimizer.amazonaws.com
                   Action: s3:PutObject
-                  Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
                   Condition:
                     StringEquals:
-                      aws:SourceAccount: !Sub "${AWS::AccountId}"
-                      aws:SourceArn: !Sub "arn:aws:compute-optimizer:${AWS::Region}:${AWS::AccountId}:*"
+                          s3:x-amz-acl:  bucket-owner-full-control
+                          aws:SourceAccount: !Sub ${ManagementAccountID}
+                          aws:SourceArn: !Sub arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*
+                  Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role
             Properties:
@@ -173,66 +231,6 @@ Resources:
                     Prefix: ''
                     Status: Enabled
                     ExpirationInDays: 1
-  LambdaCustomRessourceStackSetRolesRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub "${RolePrefix}LambdaCustomRessourceStackSetRolesRole-Role-${CFDataName}"
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-        Version: 2012-10-17
-      Path: /
-      Policies:
-        - PolicyName: !Sub "${CFDataName}-Create-Stack"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action: 
-                  - "cloudformation:CreateStack"
-                Resource: "*"
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
-  LambdaCustomRessourceStackSetRoles:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: !Sub "${RolePrefix}${CFDataName}-Custom-Ressource-StackSet-Roles"
-      Description: !Sub "LambdaFunction to create AWSCloudFormationStackSetAdministrationRole and AWSCloudFormationStackSetExecutionRole"
-      Handler: index.lambda_handler
-      Runtime: python3.8
-      MemorySize: 2688
-      Timeout: 300
-      Role: !GetAtt LambdaCustomRessourceStackSetRolesRole.Arn
-      Code:
-        ZipFile: |
-          import boto3
-
-          cf = boto3.client('cloudformation')
-          TEMPLATES = [
-              "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml",
-              "https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml",
-          ]
-          def lambda_handler(event, context):
-              for template_url in TEMPLATES:
-                  try:
-                      response = cf.create_stack(
-                          StackName=template_url.split('/')[-1].split('.')[0],
-                          TemplateUrl=template_url,
-                          DisableRollback=True,
-                          TimeoutInMinutes=2,
-                      )
-                      #FIXME: wait for the stack to be created
-                  except Exception as exc:
-                      print(f"ERROR: {exc} (if exists safely ignore)")
-  StackSetRoles:
-    Type: "Custom::LambdaCustomRessourceStackSetRoles"
-    Properties:
-      ServiceToken: !GetAtt LambdaCustomRessourceStackSetRoles.Arn
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
