@@ -147,8 +147,6 @@ Resources:
       Code:
         ZipFile: |
           import boto3
-          import boto3.session
-          from boto3.session import Session
           from botocore.exceptions import ClientError
           import os
           from boto3.s3.transfer import S3Transfer
@@ -289,29 +287,31 @@ Resources:
                       datapoints.update({metric:results['Datapoints']})
                   rds["Datapoints"] = datapoints
                   store_data_to_s3(rds, s3client, region, service, path, 'rds_id', rds['DBInstanceIdentifier'], filename, accountID)
-          def assume_session(account_id):
-              role_name = os.environ['ROLENAME']
-              role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
-              sts_client = boto3.client('sts')
-              
-              try:
-                  #region = sts_client.meta.region_name
-                  assumedRoleObject = sts_client.assume_role(
-                      RoleArn=role_arn,
-                      RoleSessionName="AssumeRoleRoot"
-                      )
-                  
-                  credentials = assumedRoleObject['Credentials']
-                  session = Session(
-                      aws_access_key_id=credentials['AccessKeyId'],
-                      aws_secret_access_key=credentials['SecretAccessKey'],
-                      aws_session_token=credentials['SessionToken']
-                  )   
-                  return session
+          
+          def assume_role(account_id, service, region):
+            role_name = os.environ['ROLENAME']
+            role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" 
+            sts_client = boto3.client('sts')
+            
+            try:
+                assumedRoleObject = sts_client.assume_role(
+                    RoleArn=role_arn,
+                    RoleSessionName="AssumeRoleRoot"
+                    )
+                
+                credentials = assumedRoleObject['Credentials']
+                client = boto3.client(
+                    service,
+                    aws_access_key_id=credentials['AccessKeyId'],
+                    aws_secret_access_key=credentials['SecretAccessKey'],
+                    aws_session_token=credentials['SessionToken'],
+                    region_name = region
+                )
+                return client
 
-              except ClientError as e:
-                  logging.warning(f"Unexpected error Account {account_id}: {e}")
-                  return None
+            except ClientError as e:
+                logging.warning(f"Unexpected error Account {account_id}: {e}")
+                return None
 
 
           def lambda_handler(event, context):
@@ -322,21 +322,21 @@ Resources:
                       print(account_id)
                       s3client = boto3.client('s3')
                       regions = get_supported_regions('ec2')
-                      session = assume_session(account_id)      
+                      
                       
                       for service in functions.keys():
                           if functions[service]['regional']:
                               for region in regions:
-                                  client = session.client(functions[service]['api'], region_name = region['RegionName'])
+                                  client = assume_role(account_id, functions[service]['api'], region['RegionName'])
                                   for f in functions[service]['functions']:
-                                      cwclient = boto3.client('cloudwatch', region_name = region['RegionName'])
-                                      data = globals()[f['name']](cwclient, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id)
+                                      cw_client = boto3.client('cloudwatch', region_name = region['RegionName'])
+                                      data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id)
                           else:
                               client=boto3.client(service)
                               for f in functions[service]['functions']:
-                                  cwclient = boto3.client('cloudwatch', region_name = 'us-east-1')
+                                  cw_client = boto3.client('cloudwatch', region_name = 'us-east-1')
                   
-                                  data = globals()[f['name']](cwclient, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
+                                  data = globals()[f['name']](cw_client, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
                       start_crawler()
                       return "Successful"
               except Exception as e:
