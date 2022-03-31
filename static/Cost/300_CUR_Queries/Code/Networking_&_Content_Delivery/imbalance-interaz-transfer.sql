@@ -1,5 +1,5 @@
 -- modified: 2022-03-31
--- query_id: inbalance-interaz-transfer
+-- query_id: imbalance-interaz-transfer
 -- query_description: This query shows cost and usage of inbalance inter-az data transfer last month.  Resources returned by this query could be considered for rearchitecture to eliminate inter-az data transfers.
 -- query_columns: bill_billing_period_start_date, line_item_usage_account_id, product_region, line_item_resource_id, line_item_usage_type, line_item_unblended_cost, line_item_product_code
 -- query_link: /cost/300_labs/300_cur_queries/queries/networking__content_delivery/
