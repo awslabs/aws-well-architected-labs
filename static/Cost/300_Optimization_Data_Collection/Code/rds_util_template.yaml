@@ -147,8 +147,6 @@ Resources:
       Code:
         ZipFile: |
           import boto3
-          import boto3.session
-          from boto3.session import Session
           from botocore.exceptions import ClientError
           import os
           from boto3.s3.transfer import S3Transfer
