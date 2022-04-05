@@ -231,6 +231,12 @@ Resources:
                     Prefix: ''
                     Status: Enabled
                     ExpirationInDays: 1
+                  - Id: NoncurrentCleanup
+                    Prefix: ''
+                    Status: Enabled
+                    NoncurrentVersionExpiration:
+                      NoncurrentDays: 1
+                      NewerNoncurrentVersions: 1
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
