@@ -292,7 +292,7 @@ This view is dependent on having or historically having an RDS database instance
  To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. If you get the error that the column ‘product_cache_engine’ does not exist, then you do not have any ElastiCach cache instances running. To make this column show up in the CUR spin up an ElastiCache cache instance in the ElastiCache service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. You can verify this by running the Athena query: SHOW COLUMNS FROM tablename - and replace the tablename accordingly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
 
 ### Option 2
-Follow the below steps to remove the coloum. Be aware this will mean if you do add ElastiCache instances to your accounts you should put this back.
+Follow the below steps to remove the colum. Be aware this will mean if you do add ElastiCache instances to your accounts you should put this back.
 
 1. In Amazon Athena click 'Show Edit Query' for kpi_instance_all
 2. Remove *‘product_cache_engine’* and remove the last *Group by* number
