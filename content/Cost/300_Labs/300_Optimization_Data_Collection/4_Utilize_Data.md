@@ -236,26 +236,24 @@ Report to show costs associated with ECS Tasks leveraging EC2 instances within a
 {{%expand "Athena Configuration" %}}
 
 
-* Navigate to the Athena service
-* Select the appropriate "Data source" and "Database" containing your pre-existing CUR file
-	-- NOTE: The Database should be the same name as the "DatabaseName" parameter in the "management" YAML file 
-* Open a new query and paste in the SQL query from the file: **"cluster_metadata_view"**" located in the nested "Athena" folder housed in the same folder the yaml files reside.
-* Execute the query
-* Open a new query and paste in the SQL query from the file: **"ec2_cluster_costs_view"**" located in the nested "Athena" folder housed in the same folder the yaml files reside.
+1. Navigate to the Athena service
+2. Select the "optimization data" database
+
+3. In **Saved Queries** find **"cluster_metadata_view"**" Change 'BU' to the tag you wish to do chargeback for
+4. Execute the query
+5. In **Saved Queries** find **"ec2_cluster_costs_view"**" 
 	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
 	-- For example, "curdb"."ecs_services_clusters_data" 
-* Execute the query
-* Open a new query and paste in the SQL query from the file: **"bu_usage_view"**" located in the nested "Athena" folder housed in the same folder the yaml files reside.
+6. Execute the query
+7. In **Saved Queries** find **"bu_usage_view"**" 
 	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
 	-- For example, "curdb"."ecs_services_clusters_data"
 
+Now your views are created you can run your report
 
 #### Manually execute billing report
 
-* Login to your Analytics Account and navigate to the Athena service
-* Select the appropriate "Data source" and "Database" containing your pre-existing CUR file
-	-- NOTE: The Database should be the same name as the "DatabaseName" parameter in the "management" YAML file 
- * Open a new query and paste in the SQL query from the file: **"ecs_chargeback_report"** located in the nested "Athena" folder housed in the same folder the yaml files reside.
+* In **Saved Queries** find **"ecs_chargeback_report"** 
 	-- Replace "bu_usage_view.month" value with the appropriate month desired for the report
 	-- For example, a value of '2' returns the charges for February 
 * Execute the query
