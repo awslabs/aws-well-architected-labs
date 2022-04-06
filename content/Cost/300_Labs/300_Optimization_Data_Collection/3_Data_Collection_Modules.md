@@ -260,7 +260,7 @@ This module will enable you too automated report to show costs associated with E
 * Completion of  Well-Architected Lab: [100_1_aws_account_setup](https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/) or similar setup of the Cost and Usage Report (CUR) with resource Id enabled
 * A CUR file has been established for the existing Management/Payer account within the Billing Console. 
 * The ECS Cluster leveraging EC2 instances for compute resides in a Linked Account connected to the Management Account through the "Consolidated Billing" option within the Billing Console. 
-* AWS generated tag is active in Cost Allocation Tags *resource_tags_aws_ecs_service_Name*
+* AWS generated tag is active in Cost Allocation Tags **aws:ecs:serviceName**  this will appear in the CUR as resource_tags_aws_ecs_service_Name
 * User-defined cost allocation tags *Name* is active
 * You will need an S3 bucket in your Analytics account to upload source files into
 * Your Tasks **MUST** have the Name of the Service as a tag *Name*. This is best done with [Tag propagation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html) on service **creation**, see below:
