@@ -318,6 +318,8 @@ Resources:
 
               acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
 
+              result_messages = []
+              error_messages = []
               for region in [r.strip() for r in REGIONS.split(',')]:
                   # create service client using the assumed role credentials
                   co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
@@ -327,17 +329,21 @@ Resources:
                       'lambda':       co.export_lambda_function_recommendations,
                       'ebs_volume':   co.export_ebs_volume_recommendations,
                   }
-                  bkt = BUCKET_PREFIX + '-' + region
-                  print(f"INFO: bucket={bkt}")
+                  bkt = BUCKET_PREFIX +'-'+ region
+                  print(bkt)
                   for name, func in export_funcs.items():
                       try:
                           res = func(
                               includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
                               s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
                           )
-                          print(f"INFO: {region} {name} export queued. JobId: {res['jobId']}")
+                          result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
                       except Exception as exc:
-                          print(f"ERROR: {region} {name} - {exc}")
+                          error_messages.append(f"ERROR: {region} {name} - {exc}")
+              if result_messages:
+                  print("Success:\n"+"\n".join(result_messages))
+              if error_messages:
+                  raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
