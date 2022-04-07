@@ -238,16 +238,16 @@ Report to show costs associated with ECS Tasks leveraging EC2 instances within a
 
 1. Navigate to the Athena service
 2. Select the "optimization data" database
-
 3. In **Saved Queries** find **"cluster_metadata_view"**" Change 'BU' to the tag you wish to do chargeback for
-4. Execute the query
+4. Click the **Run** button
 5. In **Saved Queries** find **"ec2_cluster_costs_view"**" 
 	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
 	-- For example, "curdb"."ecs_services_clusters_data" 
-6. Execute the query
+6. Click the **Run** button
 7. In **Saved Queries** find **"bu_usage_view"**" 
 	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
 	-- For example, "curdb"."ecs_services_clusters_data"
+8. Click the **Run** button
 
 Now your views are created you can run your report
 
