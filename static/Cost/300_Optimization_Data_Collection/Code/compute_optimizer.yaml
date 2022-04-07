@@ -329,8 +329,8 @@ Resources:
                       'lambda':       co.export_lambda_function_recommendations,
                       'ebs_volume':   co.export_ebs_volume_recommendations,
                   }
-                  bkt = BUCKET_PREFIX +'-'+ region
-                  print(bkt)
+                  bkt = BUCKET_PREFIX + '-' + region
+                  print(f"INFO: bucket={bkt}")
                   for name, func in export_funcs.items():
                       try:
                           res = func(
