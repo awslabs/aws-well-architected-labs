@@ -63,8 +63,5 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
-                  - "compute-optimizer:ExportEBSVolumeRecommendations"
-                  - "compute-optimizer:ExportEC2InstanceRecommendations"
-                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "compute-optimizer:*"
                 Resource: "*"
