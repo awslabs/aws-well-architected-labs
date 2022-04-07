@@ -38,7 +38,7 @@ Parameters:
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
   DeployRegions:
     Type: String
-    Description: A comma separated list of AWS regions where compute-optimizer needs to collect info. Example 'us-east-1,eu-west-1'
+    Description: "A comma separated list of AWS regions where compute-optimizer needs to collect info. Example: us-east-1,eu-west-1"
 Outputs:
   LambdaARN:
     Description: Lambda Arn
