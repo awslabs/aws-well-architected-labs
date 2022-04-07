@@ -63,5 +63,17 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "compute-optimizer:*"
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "EC2:DescribeInstances" # Reguired for ExportEC2InstanceRecommendations
+                  - "EC2:DescribeVolumes" # Reguired for ExportEBSVolumeRecommendations
+                  - "autoscaling:DescribeAutoScalingGroups" # Reguired for ExportAutoScalingGroupRecommendations
+                  - "lambda:ListFunctions" # Reguired for ExportLambdaFunctionRecommendations
+                  - "lambda:ListProvisionedConcurrencyConfigs" # Reguired for ExportLambdaFunctionRecommendations
+                  - "compute-optimizer:GetEC2InstanceRecommendations" # Reguired for ExportEC2InstanceRecommendations
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations" # Reguired for ExportAutoScalingGroupRecommendations
+                  - "compute-optimizer:GetLambdaFunctionRecommendations" # Reguired for ExportLambdaFunctionRecommendations
+                  - "compute-optimizer:GetEBSVolumeRecommendations" # Reguired for ExportEBSVolumeRecommendations
                 Resource: "*"
