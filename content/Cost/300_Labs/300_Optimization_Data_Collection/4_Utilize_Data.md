@@ -256,7 +256,7 @@ Now your views are created you can run your report
 * In **Saved Queries** find **"ecs_chargeback_report"** 
 	-- Replace "bu_usage_view.month" value with the appropriate month desired for the report
 	-- For example, a value of '2' returns the charges for February 
-* Execute the query
+* Click the **Run** button
 
 
 #### Example Output
