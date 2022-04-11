@@ -7,6 +7,7 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
+
 November 2021
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
@@ -22,59 +23,61 @@ This scenario allows customers with multiple payer (management) accounts to depl
 
 #### Setup S3 CUR Bucket Replication
 
-1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
+1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html).
 2. Create an S3 bucket with enabled versioning.
 3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
 
-		{
-		"Version": "2008-10-17",
-		"Id": "PolicyForCombinedBucket",
-		"Statement": [
-    		{
-        		"Sid": "Set permissions for objects",
-        		"Effect": "Allow",
-        		"Principal": {
-            		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-    		},
-    		{
-        		"Sid": "Set permissions on bucket",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-         		   "s3:List*",
-         		   "s3:GetBucketVersioning",
-         		   "s3:PutBucketVersioning"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
-    		},
-    		{
-        		"Sid": "Set permissions to pass object ownership",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete",
-            		"s3:ObjectOwnerOverrideToBucketOwner",
-            		"s3:ReplicateTags",
-            		"s3:GetObjectVersionTagging",
-            		"s3:PutObject"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-    		}
-		]
-		}
+```json
+{
+  "Version": "2008-10-17",
+  "Id": "PolicyForCombinedBucket",
+  "Statement": [
+      {
+          "Sid": "Set permissions for objects",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+          },
+          "Action": [
+              "s3:ReplicateObject",
+              "s3:ReplicateDelete"
+          ],
+          "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+      },
+      {
+          "Sid": "Set permissions on bucket",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+          },
+          "Action": [
+              "s3:List*",
+              "s3:GetBucketVersioning",
+              "s3:PutBucketVersioning"
+          ],
+          "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
+      },
+      {
+          "Sid": "Set permissions to pass object ownership",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+          },
+          "Action": [
+              "s3:ReplicateObject",
+              "s3:ReplicateDelete",
+              "s3:ObjectOwnerOverrideToBucketOwner",
+              "s3:ReplicateTags",
+              "s3:GetObjectVersionTagging",
+              "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+      }
+  ]
+  }
+  ```
 
-This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
+This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see <https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html>
 
 #### Set up S3 bucket replication from each Payer (Management) account to S3 bucket in Governance account
 
@@ -101,11 +104,11 @@ This step should be done in each payer (management) account.
 
 Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
 
-	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
+ aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
 
 After performing this step in each payer (management) account S3 bucket in Governance account will contain CUR data from all payer accounts under respective prefixes.
 
-#### Prepare Glue Crawler 
+#### Prepare Glue Crawler
 
 These actions should be done in Governance account
 
@@ -116,7 +119,7 @@ These actions should be done in Governance account
 
 ![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
 
-5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **sql, **csv, **/cost_and_usage_data_status/*. Click Next
+5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip,**.json, **.gz,**.yml, **sql,**csv, **/cost_and_usage_data_status/*. Click Next
 
 ![Images/glue_2.png](/Cost/200_Cloud_Intelligence/Images/glue_2.png?classes=lab_picture_small)
 
@@ -128,7 +131,7 @@ These actions should be done in Governance account
 
 8. In Create a schedule for this crawler select Daily and specify Hour and Minute for crawler to run
 
-9. In Configure the crawler’s output choose Glue Database in which you’d like crawler to create a table or add new one. Select Create a single schema for each S3 path checkbox. Select Add new columns only and Ignore the change and don’t update the table in the data catalog in Configuration options. Click Next 
+9. In Configure the crawler’s output choose Glue Database in which you’d like crawler to create a table or add new one. Select Create a single schema for each S3 path checkbox. Select Add new columns only and Ignore the change and don’t update the table in the data catalog in Configuration options. Click Next
 
 *Please make sure Database name doesn’t include ‘-’ character*
 
@@ -136,11 +139,11 @@ These actions should be done in Governance account
 
 10. Crawler configuration should look as on the screenshot below. Click Finish
 
-11. Resume deployment methodoly of choice from previous page. 
+11. Resume deployment methodoly of choice from previous page.
 
 {{% /expand%}}
 
-## How do I limit access to the data in the Dashboards using row level security? 
+## How do I limit access to the data in the Dashboards using row level security?
 
 Do you want to give access to the dashboards to someone within your organization, but you only want them to see data from accounts or business units associated with their role or position? You can use row level seucirty in QuickSight to accomplish limiting access to data by user. In these steps below, we will define specific Linked Account IDs against individual users. Once the Row-Level Security is enabled, users will continue to load the same Dashboards and Analyses, but will have custom views that restrict the data to only the Linked Account IDs defined.
 
@@ -161,7 +164,7 @@ Do you want to give access to the dashboards to someone within your organization
 * If you add a rule for a user or group and leave all other columns with no value (NULL), you grant them access to all the data.
 
 * If you don't add a rule for a user or group, that user or group can't see any of the data.
-	* If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
+  * If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
 
 * The full set of rule records that are applied per user must not exceed 999. This applies to the total number of rules that are directly assigned to a user name plus any rules that are assigned to the user through group names.
 
@@ -171,11 +174,11 @@ Do you want to give access to the dashboards to someone within your organization
 
 Create a CSV file that looks something like this:
 
-	username,account_id
-	user1@amazon.co.uk,"123456123456"
-	user1@amazon.co.uk,"987654987654"
-	user2@amazon.fr,"123456123456"
-	user3@amazon.com,"789123456123"
+ username,account_id
+ user1@amazon.co.uk,"123456123456"
+ user1@amazon.co.uk,"987654987654"
+ user2@amazon.fr,"123456123456"
+ user3@amazon.com,"789123456123"
 
 Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Create a separate row for a single username having access to multiple account IDs. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
 
@@ -221,11 +224,11 @@ Upload your csv file to the Athena query location bucket. eg. aws-athena-query-r
 
 Create an S3 manifest file that looks something like this:
 
-	{
-  	"entries": [
-    	{"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv", 	"mandatory":true},
- 	 ]
-	}
+ {
+   "entries": [
+     {"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv",  "mandatory":true},
+   ]
+ }
 
 This manifest file can be saved locally, or uploaded to the same S3 bucket where the csv file is stored. Save this file as something similar to CUDOS_manifest.json.
 
@@ -268,19 +271,19 @@ Once you have applied the CUDOS_Dataset_rules S3 Dataset to all your CUDOS datas
 
 {{% /expand%}}
 
-## How do I fix the COLUMN_GEOGRAPHIC_ROLE_MISMATCH error? 
+## How do I fix the COLUMN_GEOGRAPHIC_ROLE_MISMATCH error?
 
-When attempting to deploy the dashboard manually, some users get an error that states COLUMN_GEOGRAPHIC_ROLE_MISMATCH. 
+When attempting to deploy the dashboard manually, some users get an error that states COLUMN_GEOGRAPHIC_ROLE_MISMATCH.
 {{%expand "Click here to expand answer" %}}
 
-This error is caused by there being too many [data source connectors](https://docs.aws.amazon.com/quicksight/latest/user/working-with-data-sources.html) in QuickSight with the same name. To check how many data source connectors you have, visit QuickSight datasets and click on **new datasets**. Scroll to the bottom and note how many Athena data connectors there are with the same name. 
+This error is caused by there being too many [data source connectors](https://docs.aws.amazon.com/quicksight/latest/user/working-with-data-sources.html) in QuickSight with the same name. To check how many data source connectors you have, visit QuickSight datasets and click on **new datasets**. Scroll to the bottom and note how many Athena data connectors there are with the same name.
 
 ![Images/Sduplicatedataset.png](/Cost/200_Cloud_Intelligence/Images/duplicatedataset.png?classes=lab_picture_small)
 
-Unless you know which datasets are tied to which data sources, it is faster to simply delete all the Cloud Intelligence Dashboards data sources and data sets from QuickSight, and start adding them again, this time only using a single data source. This is described in detail in [this lab under the manual deployment option](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2a_cost_intelligence_dashboard/) as step 22. You should only have one data source for all your Cloud Intelligence Dashboard datasets, including customer_all. If you wish to use separate data sources, they must not have the same name. 
+Unless you know which datasets are tied to which data sources, it is faster to simply delete all the Cloud Intelligence Dashboards data sources and data sets from QuickSight, and start adding them again, this time only using a single data source. This is described in detail in [this lab under the manual deployment option](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2a_cost_intelligence_dashboard/) as step 22. You should only have one data source for all your Cloud Intelligence Dashboard datasets, including customer_all. If you wish to use separate data sources, they must not have the same name.
 
 {{% /expand%}}
 
 {{% notice tip %}}
-This page will be updated regularly with new answers. If you have a FAQ you'd like answered here, please reach out to us here cloud-intelligence-dashboards@amazon.com. 
+This page will be updated regularly with new answers. If you have a FAQ you'd like answered here, please reach out to us here cloud-intelligence-dashboards@amazon.com.
 {{% /notice %}}
