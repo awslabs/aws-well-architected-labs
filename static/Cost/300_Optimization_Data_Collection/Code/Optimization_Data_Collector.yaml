@@ -102,8 +102,9 @@ Parameters:
       - "no" 
   ComputeOptimizerRegions:
     Default: ""
-    Type: CommaDelimitedList
+    Type: String
     Description: "Ex: us-east-1,us-east-2,us-west-1,us-west-2,eu-central-1,eu-west-1,eu-west-2,eu-west-3  if empty, the current region will be used. You can add regions later by updating the stack."
+    AllowedPattern: ([a-z0-9\-, ]*?$)
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -201,7 +202,7 @@ Conditions:
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
   ComputeOptimizerRegionsIsEmpty: !Equals
-    - !Join [ ",", !Ref ComputeOptimizerRegions ]
+    - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
     - ""
 #Reusable Resources:
 Resources:
@@ -338,7 +339,7 @@ Resources:
           Fn::If:
             - ComputeOptimizerRegionsIsEmpty
             - !Sub "${AWS::Region}"
-            - !Join [ ",", !Ref ComputeOptimizerRegions ]
+            - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
