@@ -283,23 +283,23 @@ Unless you know which datasets are tied to which data sources, it is faster to s
 
 ## How do I fix the ‘product_cache_engine’ cannot be resolved error? 
 
-When attempting to deploy the dashboard, some users get an error that states ‘product_cache_engine’ cannot be resolved. 
+When attempting to deploy the dashboard, some users get an error that states `product_cache_engine` cannot be resolved. 
 {{%expand "Click here to expand answer" %}}
 
-This view is dependent on having or historically having an RDS database instance and an ElastiCache cache instance run in your organization. If you get the error that the column ‘product_database_engine’ or product_deployment_option does not exist, then you do not have any RDS database instances running. There are two options to resolve this.
+This view is dependent on having or historically having an RDS database instance and an ElastiCache cache instance run in your organization. If you get the error that the column `product_database_engine` or `product_deployment_option` does not exist, then you do not have any RDS database instances running. There are two options to resolve this.
 
 ### Option 1
- To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. If you get the error that the column ‘product_cache_engine’ does not exist, then you do not have any ElastiCach cache instances running. To make this column show up in the CUR spin up an ElastiCache cache instance in the ElastiCache service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. You can verify this by running the Athena query: SHOW COLUMNS FROM tablename - and replace the tablename accordingly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
+ To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. If you get the error that the column `product_cache_engine` does not exist, then you do not have any ElastiCache cache instances running. To make this column show up in the CUR spin up an ElastiCache cache instance in the ElastiCache service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. You can verify this by running the Athena query: SHOW COLUMNS FROM tablename - and replace the tablename accordingly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
 
 ### Option 2
 Follow the below steps to remove the colum. Be aware this will mean if you do add ElastiCache instances to your accounts you should put this back.
 
-1. In Amazon Athena click 'Show Edit Query' for kpi_instance_all
-2. Remove *‘product_cache_engine’* and remove the last *Group by* number
+1. In Amazon Athena click 'Show Edit Query' for ``kpi_instance_all``
+2. Remove *`product_cache_engine`* and remove the last *Group by* number
 3. Run query
 4. IF you are running from CLoudShell re-run the deploy command
-5. Go to AWS Quicksight 
-6. Find the kpi_instance_all dataset
+5. Go to Amazon Quicksight 
+6. Find the ``kpi_instance_all`` dataset
 7. Click on *'Edit Dataset'* 
 8. on the top right of the screen click *'save and publish'*
 
