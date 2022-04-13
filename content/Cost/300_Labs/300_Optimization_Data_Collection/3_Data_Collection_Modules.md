@@ -189,7 +189,7 @@ The Compute Optimizer Service only shows current point in time recommendations l
 In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations.
 This Data will be separated by type service and partitioned by year, month. 
 Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
-Compute Optimizer is regional service and the Compute Optimizer Collector will deploy one bucket for each region. The user must specify **DeployRegions** - a comma separated list of regions with EC2, EBS, ASG and Lambda workloads. If blanc, the current region will be used.
+Compute Optimizer is regional service and the Compute Optimizer Collector will deploy one bucket for each region. The user must specify **DeployRegions** - a comma separated list of regions with EC2, EBS, ASG and Lambda workloads. If blank, the current region will be used.
 
 * IAM Policy added to  **OptimizationManagementDataRoleStack**:  
 
