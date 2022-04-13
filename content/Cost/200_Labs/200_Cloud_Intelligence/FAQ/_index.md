@@ -297,7 +297,7 @@ Follow the below steps to remove the colum. Be aware this will mean if you do ad
 1. In Amazon Athena click 'Show Edit Query' for ``kpi_instance_all``
 2. Remove *`product_cache_engine`* and remove the last *Group by* number
 3. Run query
-4. IF you are running from CLoudShell re-run the deploy command
+4. IF you are running from CloudShell re-run the deploy command
 5. Go to Amazon Quicksight 
 6. Find the ``kpi_instance_all`` dataset
 7. Click on *'Edit Dataset'* 
