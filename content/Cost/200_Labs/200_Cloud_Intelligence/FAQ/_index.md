@@ -301,7 +301,7 @@ Follow the below steps to remove the colum. Be aware this will mean if you do ad
 5. Go to Amazon Quicksight 
 6. Find the ``kpi_instance_all`` dataset
 7. Click on *'Edit Dataset'* 
-8. on the top right of the screen click *'save and publish'*
+8. On the top right of the screen click *'save and publish'*
 
 
 {{% /expand%}}
