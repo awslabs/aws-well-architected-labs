@@ -19,6 +19,7 @@ Metadata:
           - IncludeRightsizingModule
           - IncludeInventoryCollectorModule
           - IncludeComputeOptimizerModule
+          - ComputeOptimizerRegions
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
@@ -44,6 +45,8 @@ Metadata:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
         default: 'Include AWS Compute Optimizer Data Collection Module'
+      ComputeOptimizerRegions:
+        default: "Comma Delimited list of AWS regions where AWS Compute Optimizer data will be collected."
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
@@ -56,7 +59,7 @@ Parameters:
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket that needs to be created to hold information
-    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
     Default: costoptimizationdata
   ManagementAccountRole: 
     Type: String
@@ -97,6 +100,11 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  ComputeOptimizerRegions:
+    Default: ""
+    Type: String
+    Description: "Ex: us-east-1,us-east-2,us-west-1,us-west-2,eu-central-1,eu-west-1,eu-west-2,eu-west-3  if empty, the current region will be used. You can add regions later by updating the stack."
+    AllowedPattern: ([a-z0-9\-, ]*?$)
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -193,6 +201,9 @@ Conditions:
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
+  ComputeOptimizerRegionsIsEmpty: !Equals
+    - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
+    - ""
 #Reusable Resources:
 Resources:
   S3CrawlerQue: 
@@ -245,31 +256,6 @@ Resources:
                 Rules:
                 - Name: prefix
                   Value: Compute_Optimizer/
-  ComputeOptimizerBucketPolicy:
-    Condition: DeployComputeOptimizerModule
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketPolicyStatus'
-            Effect: Allow
-            Resource: !GetAtt S3Bucket.Arn 
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-          - Action:
-              - 's3:PutObject'
-            Effect: Allow
-            Resource: !Sub "${S3Bucket.Arn}/*"
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-            Condition: {"StringEquals": {
-                    "s3:x-amz-acl":  "bucket-owner-full-control",
-                    "aws:SourceAccount": !Sub "${ManagementAccountID}",
-                    "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
-                }
-            } 
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
@@ -340,15 +326,20 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: "https://aws-well-architected-labs-iakov.s3.amazonaws.com/Cost/300_Optimization_Data_Collection/Code/compute_optimizer.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
-        CodeBucket: !Ref CodeBucket
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
+        BucketPrefix:  !Ref DestinationBucket
+        DeployRegions: 
+          Fn::If:
+            - ComputeOptimizerRegionsIsEmpty
+            - !Sub "${AWS::Region}"
+            - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule

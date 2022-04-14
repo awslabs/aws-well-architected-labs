@@ -23,30 +23,6 @@ Parameters:
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
-  CodeBucket:
-      Type: String
-      Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs
-      AllowedValues:
-        - aws-well-architected-labs-ireland
-        - aws-well-architected-labs
-        - aws-well-architected-labs-ohio
-        - aws-well-architected-labs-virginia
-        - aws-well-architected-labs-california
-        - aws-well-architected-labs-oregon
-        - aws-well-architected-labs-singapore
-        - aws-well-architected-labs-frankfurt
-        - aws-well-architected-labs-london
-        - aws-well-architected-labs-stockholm
-        - aws-well-architected-labs-ap-sydney
-  CodeKey:
-    Type: String
-    Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/coc.zip
-  Prefix:
-    Type: String
-    Description: Service which the data collector is looking at
-    Default: COC
   GlueRoleARN:
     Type: String
   S3CrawlerQue:
@@ -55,18 +31,20 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  BucketPrefix:
+    Type: String
+    Default: 'costoptimization'
+    Description: This prefix will be used for buckets creation
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
+  DeployRegions:
+    Type: String
+    Description: "A comma separated list of AWS regions where compute-optimizer needs to collect info. Example: us-east-1,eu-west-1"
 Outputs:
-  LambdaRoleARN:
-    Description: Role for Lambda execution of lambda data.
-    Value:
-      Fn::GetAtt:
-        - LambdaRole
-        - Arn
   LambdaARN:
     Description: Lambda Arn
     Value: 
        Fn::GetAtt:
-        - LambdaFunction
+        - LambdaTriggerExport
         - Arn
   CrawlerFunctionARN:
     Description: Crawler Lambda Arn
@@ -75,7 +53,191 @@ Outputs:
         - CrawlerFunction
         - Arn
 Resources:
-  LambdaRole:
+  StackSetAdminRole:
+    Type: AWS::IAM::Role
+    DependsOn: StackSetExecutionRole
+    Properties:
+      RoleName:  StackSetAdminRole
+      Description: "This role is used by cloudformation to create StackSets in different regions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: StackSetAdminRolePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: sts:AssumeRole
+                Resource: !Sub "arn:aws:iam::*:role/${RolePrefix}StackSetExecutionRole"
+  StackSetExecutionRole:  #see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}StackSetExecutionRole"
+      Description: "This role is used by cloudformation to create StackSets in different regions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: StackSetParameterExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:CreateStack
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DeleteStack
+                  - cloudformation:UpdateStack
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - sns:*
+                Resource: '*'
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess #FIXME: Can it be more narrow than this? Stacksets needs to create buckets and roles
+  ReplicaitonBucketsStackSet:
+    Type: AWS::CloudFormation::StackSet
+    DependsOn:
+      - StackSetExecutionRole
+      - StackSetAdminRole
+    Properties:
+      Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
+      PermissionModel: SELF_MANAGED
+      Parameters:
+        - ParameterKey: Name
+          ParameterValue: !Sub "${BucketPrefix}${AWS::AccountId}"
+        - ParameterKey: DestinationBucket
+          ParameterValue: !Ref DestinationBucket
+        - ParameterKey: ManagementAccountID
+          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ]
+      StackInstancesGroup:
+        - DeploymentTargets:
+            Accounts:
+              - !Ref "AWS::AccountId"
+          Regions: !Split [ ',', !Ref DeployRegions]
+      Capabilities:
+        - CAPABILITY_IAM
+        - CAPABILITY_NAMED_IAM
+      StackSetName: !Sub "${BucketPrefix}${AWS::AccountId}-comp-optim-buckets"
+      AdministrationRoleARN: !GetAtt: StackSetAdminRole.Arn
+      ExecutionRoleName: !Sub "${RolePrefix}StackSetExecutionRole"
+      TemplateBody: |
+        AWSTemplateFormatVersion: '2010-09-09'
+        Description: This template creates a bucket in a given region and configure a replication to the main bucket
+        Parameters:
+          Name:
+            Type: String
+            Description: Prefix of regional bucket name
+          ManagementAccountID:
+            Type: String
+            Description: Management Account ID that will send data to the bucket
+          DestinationBucket:
+            Type: String
+            Description: A name of the main bucket where all data will be stored
+        Resources:
+          BucketPolicy:
+            Type: AWS::S3::BucketPolicy
+            Properties:
+              Bucket: !Ref S3Bucket
+              PolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                - Effect: Allow
+                  Principal:
+                    Service: compute-optimizer.amazonaws.com
+                  Action:
+                  - s3:GetBucketAcl
+                  - s3:GetBucketPolicyStatus
+                  Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}"
+                - Effect: Allow
+                  Principal:
+                    Service: compute-optimizer.amazonaws.com
+                  Action: s3:PutObject
+                  Condition:
+                    StringEquals:
+                          s3:x-amz-acl:  bucket-owner-full-control
+                          aws:SourceAccount: !Sub ${ManagementAccountID}
+                          aws:SourceArn: !Sub arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*
+                  Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
+          ReplicaRole:
+            Type: AWS::IAM::Role
+            Properties:
+              AssumeRolePolicyDocument:
+                Statement:
+                - Action: ['sts:AssumeRole']
+                  Effect: Allow
+                  Principal:
+                    Service: [s3.amazonaws.com]
+          ReplicaPolicy:
+            Type: AWS::IAM::Policy
+            Properties:
+              PolicyDocument:
+                Statement:
+                - Action:
+                  - s3:GetReplicationConfiguration
+                  - s3:ListBucket
+                  Resource: !Sub arn:aws:s3:::${Name}-${AWS::Region}
+                  Effect: 'Allow'
+                - Action:
+                  - s3:GetObjectVersionForReplication
+                  - s3:GetObjectVersionAcl
+                  Resource: !Sub arn:aws:s3:::${Name}-${AWS::Region}/*
+                  Effect: 'Allow'
+                - Action:
+                  - s3:ReplicateObject
+                  - s3:ReplicateTags
+                  - s3:GetObjectVersionTagging
+                  Effect: 'Allow'
+                  Resource: !Sub arn:aws:s3:::${DestinationBucket}/*
+              PolicyName: ReplicaPolicy
+              Roles: [!Ref 'ReplicaRole']
+          S3Bucket:
+            Type: AWS::S3::Bucket
+            DeletionPolicy: Delete
+            Properties:
+              BucketName: !Sub ${Name}-${AWS::Region}
+              BucketEncryption:
+                ServerSideEncryptionConfiguration:
+                  - ServerSideEncryptionByDefault:
+                      SSEAlgorithm: AES256
+              ReplicationConfiguration:
+                Role: !GetAtt [ReplicaRole, Arn]
+                Rules:
+                  - Id: Replication to the main bucket
+                    Priority: 2
+                    Filter:
+                      Prefix: ''
+                    Destination:
+                      Bucket: !Sub arn:aws:s3:::${DestinationBucket}
+                      StorageClass: STANDARD
+                    DeleteMarkerReplication:
+                      Status: Disabled
+                    Status: Enabled
+              VersioningConfiguration:
+                Status: Enabled
+              LifecycleConfiguration:
+                Rules:
+                  - Id: Cleanup
+                    Prefix: ''
+                    Status: Enabled
+                    ExpirationInDays: 1
+                  - Id: NoncurrentCleanup
+                    Prefix: ''
+                    Status: Enabled
+                    NoncurrentVersionExpiration:
+                      NoncurrentDays: 1
+                      NewerNoncurrentVersions: 1
+  LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
@@ -88,8 +250,6 @@ Resources:
               Service:
                 - lambda.amazonaws.com
         Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
       Path: /
       Policies:
         - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
@@ -98,103 +258,109 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  "*"
-        - PolicyName: !Sub "${CFDataName}-S3-Access"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "s3:PutObject"
-                Resource:
-                  !Ref DestinationBucketARN
-              - Effect: "Allow"
-                Action:
-                  - "glue:StartCrawler"
                 Resource: "*"
-        - PolicyName: "data"
+        - PolicyName: !Sub "Export-CO-Policy-${CFDataName}"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: "Allow"
                 Action: 
-                      - "s3:*"
-                      - "sqs:ReceiveMessage"
-                      - "sqs:DeleteMessage"
-                      - "sqs:GetQueueAttributes"
-                      - "compute-optimizer:*"
-                      - "EC2:DescribeInstances"
-                      - "cloudwatch:GetMetricData"
-                      - "autoscaling:DescribeAutoScalingGroups"
-                      - "compute-optimizer:UpdateEnrollmentStatus"
-                      - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                      - "compute-optimizer:GetEC2InstanceRecommendations"
-                      - "compute-optimizer:GetEnrollmentStatus"
-                      - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                      - "compute-optimizer:GetRecommendationSummaries"
-                      - "organizations:ListAccounts"
-                      - "organizations:DescribeOrganization"
-                      - "organizations:DescribeAccount"
-                      - "lambda:ListFunctions"
-                      - "lambda:ListProvisionedConcurrencyConfigs"
-                      - "EC2:DescribeVolumes"     
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
                 Resource: "*"
-  LambdaFunction:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+  LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
-      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      FunctionName: !Sub "${RolePrefix}${CFDataName}-Trigger-Export"
+      Description: !Sub "LambdaFunction to retrieve Compute_Optimizer"
+      Handler: index.lambda_handler
       Runtime: python3.8
-      Code:
-         S3Bucket: !Ref CodeBucket
-         S3Key: !Ref CodeKey
-         #ZipFile
-
-      Handler: 'COC.lambda_handler'
       MemorySize: 2688
       Timeout: 300
       Role:
         Fn::GetAtt:
-          - LambdaRole
+          - LambdaTriggerExportRole
           - Arn
       Environment:
         Variables:
-          REGION:
-            Ref: "AWS::Region"
-          BUCKET_NAME:
-            Ref: DestinationBucket
-          ROLE_ARN:
-            Ref: RoleNameARN
-          PATH:
-            Ref: CFDataName
-          EC2Crawler:
-            Ref: EC2Crawler
-          AUTOCrawler:
-            Ref: AUTOCrawler
-          EBSCrawler:
-            Ref: EBSCrawler
-          LambdaCrawler:
-            Ref: LambdaCrawler
-          PREFIX:
-            Ref: Prefix
+          REGIONS: !Ref DeployRegions
+          BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
+          ROLE_ARN: !Ref RoleNameARN
+          INCLUDE_MEMBER_ACCOUNTS: 'TRUE'
+      Code:
+        ZipFile: |
+          import os
+          import boto3
+          from datetime import date
+
+          BUCKET_PREFIX = os.environ["BUCKET_PREFIX"]
+          INCLUDE_MEMBER_ACCOUNTS = os.environ.get("INCLUDE_MEMBER_ACCOUNTS", 'TRUE').lower() == 'true'
+          REGIONS = os.environ["REGIONS"]
+          ROLE_ARN = os.environ['ROLE_ARN']
+
+          def lambda_handler(event, context):
+              today = date.today()
+              year = today.year
+              month = today.month
+
+              sts_connection = boto3.client('sts')
+              acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
+
+              account_b_creds = {
+                "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
+                "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
+                "aws_session_token":     acct_b['Credentials']['SessionToken'],
+              }
+
+              acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
+
+              result_messages = []
+              error_messages = []
+              for region in [r.strip() for r in REGIONS.split(',')]:
+                  # create service client using the assumed role credentials
+                  co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
+                  export_funcs = {
+                      'ec2_instance': co.export_ec2_instance_recommendations,
+                      'auto_scale':   co.export_auto_scaling_group_recommendations,
+                      'lambda':       co.export_lambda_function_recommendations,
+                      'ebs_volume':   co.export_ebs_volume_recommendations,
+                  }
+                  bkt = BUCKET_PREFIX + '-' + region
+                  print(f"INFO: bucket={bkt}")
+                  for name, func in export_funcs.items():
+                      try:
+                          res = func(
+                              includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
+                              s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
+                          )
+                          result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                      except Exception as exc:
+                          error_messages.append(f"ERROR: {region} {name} - {exc}")
+              if result_messages:
+                  print("Success:\n"+"\n".join(result_messages))
+              if error_messages:
+                  raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
-      Description: !Sub "Scheduler-For-${Prefix}"
-      Name: !Sub "Scheduler-For-${Prefix}"
+      Description: !Sub "Scheduler-For-${RolePrefix}${CFDataName}"
+      Name: !Sub "Scheduler-For-${RolePrefix}${CFDataName}"
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
         - Arn:
             Fn::GetAtt:
-              - LambdaFunction
+              - LambdaTriggerExport
               - Arn
           Id: TriggerForGetAccounts
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
+      FunctionName: !GetAtt LambdaTriggerExport.Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
@@ -202,7 +368,7 @@ Resources:
   CrawlerFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: "Compute-Optimizer-Crawler-Lambda-Function"
+      FunctionName: !Sub "${RolePrefix}Compute-Optimizer-Crawler-Lambda-Function"
       Description: "LambdaFunction to retrieve start CO Crawlers"
       Runtime: python3.8
       Code:
@@ -293,7 +459,7 @@ Resources:
   EC2Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: "ec2_Compute_Optimizer_crawler"
+      Name: !Sub "${RolePrefix}ec2_Compute_Optimizer_crawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -304,7 +470,7 @@ Resources:
   AUTOCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: "auto_scale_Compute_Optimizer_crawler"
+      Name: !Sub "${RolePrefix}auto_scale_Compute_Optimizer_crawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -315,7 +481,7 @@ Resources:
   EBSCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: "ebs_volume_Compute_Optimizer_crawler"
+      Name: !Sub "${RolePrefix}ebs_volume_Compute_Optimizer_crawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -326,7 +492,7 @@ Resources:
   LambdaCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: "lambda_Compute_Optimizer_crawler"
+      Name: !Sub "${RolePrefix}lambda_Compute_Optimizer_crawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -339,7 +505,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: !Sub ${CFDataName}-EC2-summary-view
+      Name: !Sub ${RolePrefix}${CFDataName}-EC2-summary-view
       QueryString: 
         "SELECT instancearn, split_part(replace(instancearn,'\"' ,''),'/',2) as instance_id ,
          try_cast(current_onDemandPrice AS DOUBLE) - try_cast(recommendationOptions_1_onDemandPrice AS DOUBLE) as recommendationOptions_1_Saving , 
@@ -351,7 +517,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: !Sub ${CFDataName}-EBS-summary-view
+      Name: !Sub ${RolePrefix}${CFDataName}-EBS-summary-view
       QueryString: 
         "SELECT split_part(replace(volumearn,'\"' ,''),'/',2) as volumeid,
         try_cast(
@@ -368,7 +534,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: !Sub ${CFDataName}-Lambda-summary-view
+      Name: !Sub ${RolePrefix}${CFDataName}-Lambda-summary-view
       QueryString: 
         "SELECT 
           split_part(replace(functionarn,'\"' ,''),':',7) as function_name, 
