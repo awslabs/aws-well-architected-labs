@@ -1,0 +1,25 @@
+---
+title: "Cleanup"
+date: 2020-11-18T09:16:09-04:00
+chapter: false
+weight: 9
+---
+
+To avoid incurring further cost for AWS resources, let’s delete the Redshift clusters in both regions. Login to AWS console, and go to Redshift service. Then follow the below steps in each region (each and west) to delete Producer (east region) and Consumer (west region) clusters:
+
+Select the cluster in respective region, and select Delete from Actions menu:
+
+![Delete Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/cleanup/images/delete_cluster.png?classes=lab_picture_small)
+
+
+To confirm deletion, type in “delete” in the field at the bottom (optionally, you can take snapshot if required before deleting the cluster – check the “Create final snapshot” button), and click “Delete cluster”.
+
+![Confirm Delete](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/cleanup/images/confirm_delete.png?classes=lab_picture_small)
+
+
+Follow above step for cluster in other region as well.
+
+{{< prev_next_button link_prev_url="../7_review_sustainability_kpi_optimization"  title="Congratulations!" final_step="true" >}}
+You should now have a firm understanding of how to use proxy metric, business metric, and sustainability KPI with AWS Services like Redshift Data Sharing for optimizing workload data patterns for evironmental sustainability improvements.
+{{< /prev_next_button >}}
+
