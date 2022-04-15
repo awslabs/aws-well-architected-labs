@@ -12,7 +12,7 @@ You will need the Amazon CloudFormation output parameter values from the **Activ
 
 {{< img pr-6.png >}}
 
-1.1 Using your favorite editor, create a new file named `config.json` file.  Initialize the document to the template provided below.  Next, set the **host** property equal to the **APIGURL** output value from the **Active-Primary** CloudFormation stack.  Remove the trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-east-1`.
+1.1 Using your favorite editor, create a new file named `config.json` file.  Initialize the document to the template provided below.  Next, set the **host** property equal to the **APIGURL** output value from the **Active-Primary** CloudFormation stack.  Remove the trailing slash (`/`) if one is present. Remove the curly braces. Finally, set the **region** property to `us-east-1`.
 
 ```json
 {
@@ -62,7 +62,7 @@ You will need the Amazon CloudFormation output parameter values from the **Passi
 
 {{< img sr-6.png >}}
 
-3.1 Using your favorite editor, open the `config.json` file you just created on your local machine.  Modify the document to set the **host** property equal to the **APIGURL** output value from the **Passive-Secondary** CloudFormation stack.  Remove the trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-west-1`.
+3.1 Using your favorite editor, open the `config.json` file you just created on your local machine.  Modify the document to set the **host** property equal to the **APIGURL** output value from the **Passive-Secondary** CloudFormation stack.  Remove the trailing slash (`/`) if one is present. Remove the curly braces. Finally, set the **region** property to `us-west-1`.
 
 ```json
 {
@@ -104,4 +104,4 @@ Your final **config.json** should look similar to this example.
 
 {{< img c-14.png >}}
 
-{{< prev_next_button link_prev_url="../enable-aurora-writefwd/" link_next_url="../verify-websites/" />}}
+{{< prev_next_button link_prev_url="../verify-aurora-writefwd/" link_next_url="../verify-websites/" />}}

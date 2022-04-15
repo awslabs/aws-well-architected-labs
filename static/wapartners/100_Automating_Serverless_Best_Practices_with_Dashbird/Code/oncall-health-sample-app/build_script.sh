@@ -61,6 +61,8 @@ git push
 echo "# Waiting for App to be deployed"
 sleep 1000
 APPID=$(aws cloudformation describe-stacks --stack-name oncall-health-amplify | jq '.Stacks[0].Outputs[] | select(.OutputKey == "OutputAppId") | .OutputValue' | sed -e 's/^"//' -e 's/"$//')
+APPURL=$(aws cloudformation describe-stacks --stack-name oncall-health-amplify | jq '.Stacks[0].Outputs[] | select(.OutputKey == "AppURL") | .OutputValue' | sed -e 's/^"//' -e 's/"$//')
+
 BACKEND_STACK=$(aws amplify list-backend-environments --app-id $APPID | jq '.backendEnvironments[0].stackName' | sed -e 's/^"//' -e 's/"$//')
 AUTH_CHILD_STACK_ARN=$(aws cloudformation describe-stack-resources --stack-name $BACKEND_STACK | jq '.StackResources[] | select(.LogicalResourceId == "authoncallhealth") | .PhysicalResourceId' | sed -e 's/^"//' -e 's/"$//')
 IFS='/'
@@ -73,14 +75,12 @@ echo "# Provision Amplify Auth >> Complete"
 
 echo "# Provision Amplify Api"
 cd ~/environment/aws-well-architected-labs/static/wapartners/100_Automating_Serverless_Best_Practices_with_Dashbird/Code/oncall-health-sample-app/
-#aws cloudformation create-stack --stack-name oncall-health-amplify-api --template-body file://amplify_api_template.yml --parameters ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN" --capabilities CAPABILITY_IAM 
-
 BUCKET_NAME="sam-artifact-${APPID}"
 echo $BUCKET_NAME
 aws s3 mb s3://$BUCKET_NAME
-sleep 1
+sleep 10
 sam package --s3-bucket $BUCKET_NAME --output-template-file out.yaml -t amplify_api_template.yml
-sam deploy --template-file out.yaml --capabilities CAPABILITY_IAM --stack-name oncall-health-amplify-api  --parameter-overrides ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN"
+sam deploy --template-file out.yaml --capabilities CAPABILITY_IAM --stack-name oncall-health-amplify-api  --parameter-overrides ParameterKey="CognitoUserPoolArn",ParameterValue="$COGNITO_USERPOOL_ARN" ParameterKey="AppUrl",ParameterValue="$APPURL" 
 
 aws cloudformation wait stack-create-complete --stack-name oncall-health-amplify-api
 

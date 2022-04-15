@@ -16,7 +16,7 @@ This step is used to edit parameters (CUR database name and table, SES sender an
 
 3. Configure the following parameters in **config.yml**:
     - **CUR_Output_Location**: Your S3 bucket created previously, i.e. S3://my-cur-bucket/out-put/
-    - **CUR_DB**: CUR database and table name defined in Athena, i.e. athenacurcfn_my_athena_report.myathenareport
+    - **CUR_DB**: CUR database and table name defined in Athena, i.e. '"athenacurcfn_my_athena_report"."myathenareport"'
     - **CUR_Report_Name**: Report filename that is sent with SES as an attachment, i.e. cost_utilization_report.xlsx
     - **Region**: The region where SES service is called, i.e. us-east-1
     - **Subject**: SES mail subject, i.e. Cost and Utilization Report
