@@ -42,13 +42,13 @@ Parameters:
 Outputs:
   LambdaARN:
     Description: Lambda Arn
-    Value: 
+    Value:
        Fn::GetAtt:
         - LambdaTriggerExport
         - Arn
   CrawlerFunctionARN:
     Description: Crawler Lambda Arn
-    Value: 
+    Value:
        Fn::GetAtt:
         - CrawlerFunction
         - Arn
@@ -259,17 +259,6 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource: "*"
-        - PolicyName: !Sub "Export-CO-Policy-${CFDataName}"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action: 
-                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
-                  - "compute-optimizer:ExportEBSVolumeRecommendations"
-                  - "compute-optimizer:ExportEC2InstanceRecommendations"
-                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
-                Resource: "*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
   LambdaTriggerExport:
@@ -404,7 +393,7 @@ Resources:
           EBSCrawler:
             Ref: EBSCrawler
           LambdaCrawler:
-            Ref: LambdaCrawler 
+            Ref: LambdaCrawler
   CrawlerLambdaIAMRole:
     Type: 'AWS::IAM::Role'
     Properties:
