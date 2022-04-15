@@ -129,7 +129,7 @@ Resources:
         - CAPABILITY_IAM
         - CAPABILITY_NAMED_IAM
       StackSetName: !Sub "${BucketPrefix}${AWS::AccountId}-comp-optim-buckets"
-      AdministrationRoleARN: !GetAtt: StackSetAdminRole.Arn
+      AdministrationRoleARN: !GetAtt [StackSetAdminRole, Arn]
       ExecutionRoleName: !Sub "${RolePrefix}StackSetExecutionRole"
       TemplateBody: |
         AWSTemplateFormatVersion: '2010-09-09'
