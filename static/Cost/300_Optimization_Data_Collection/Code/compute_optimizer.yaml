@@ -279,8 +279,10 @@ Resources:
       Description: !Sub "LambdaFunction to retrieve Compute_Optimizer"
       Handler: index.lambda_handler
       Runtime: python3.8
-      MemorySize: 2688
-      Timeout: 300
+      Architectures:
+      - arm64
+      MemorySize: 512
+      Timeout: 600
       Role:
         Fn::GetAtt:
           - LambdaTriggerExportRole
@@ -389,8 +391,10 @@ Resources:
                       logging.warning("%s" % e)
 
       Handler: 'index.lambda_handler'
-      MemorySize: 2688
-      Timeout: 300
+      Architectures:
+      - arm64
+      MemorySize: 512
+      Timeout: 600
       Role:
         Fn::GetAtt:
           - CrawlerLambdaIAMRole

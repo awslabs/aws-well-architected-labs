@@ -202,8 +202,10 @@ Resources:
                 logging.warning("%s" % e)
 
       Handler: 'index.lambda_handler'
-      MemorySize: 2688
-      Timeout: 300
+      Architectures:
+      - arm64
+      MemorySize: 512
+      Timeout: 600
       Role:
         Fn::GetAtt:
           - LambdaRole
@@ -257,7 +259,7 @@ Resources:
   TaskQueue: 
     Type: AWS::SQS::Queue
     Properties: 
-      VisibilityTimeout: 300
+      VisibilityTimeout: 600
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
