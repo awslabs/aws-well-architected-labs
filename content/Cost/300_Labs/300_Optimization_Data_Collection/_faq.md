@@ -18,6 +18,13 @@ We have set this up in the most common regions. If your region is not in the lis
 
 {{% /expand%}}
 
+
+### Compute Optimizer Module Failing 
+{{%expand "Click here to expand step by step instructions" %}}
+Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
+
+{{% /expand%}}
+
 ### New
 {{%expand "Click here to expand step by step instructions" %}}
 
