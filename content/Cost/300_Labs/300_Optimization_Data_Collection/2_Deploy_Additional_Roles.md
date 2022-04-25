@@ -64,11 +64,26 @@ Modules deployed in **OptimizationDataCollectionStack** (previous step) allow to
 9. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-10. This role will now be deployed to all linked accounts. If you wish to also access data in your management account, deploy the same CloudFormation stack as a normal stack in your management account as you did in the **Role for Management Account** step above. 
+10. This role will now be deployed to all linked accounts. 
 
-{{% notice tip %}}
-Note this role will not be deployed into the management account so if you wish to read data from this account too, deploy as a CloudFormation stack. 
-{{% /notice %}}
+
+### (Optional) Read Only roles in Management Account
+
+If you wish to also access data in your management account, deploy the same CloudFormation stack as a normal stack in your management account as you did in the **Role for Management Account** step above. 
+
+{{%expand "To do this follow these instructions" %}}
+
+1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml)
+
+2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
+
+4. Scroll to the bottom and click **Next**
+
+5. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
+
+
+{{% /expand%}}
 
 
 {{< prev_next_button link_prev_url="../1_deploy_main_resources/" link_next_url="../3_data_collection_modules" />}}
