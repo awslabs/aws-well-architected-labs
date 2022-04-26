@@ -26,53 +26,55 @@ This scenario allows customers with multiple payer (management) accounts to depl
 2. Create an S3 bucket with enabled versioning.
 3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
 
-		{
-		"Version": "2008-10-17",
-		"Id": "PolicyForCombinedBucket",
-		"Statement": [
-    		{
-        		"Sid": "Set permissions for objects",
-        		"Effect": "Allow",
-        		"Principal": {
-            		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-    		},
-    		{
-        		"Sid": "Set permissions on bucket",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-         		   "s3:List*",
-         		   "s3:GetBucketVersioning",
-         		   "s3:PutBucketVersioning"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
-    		},
-    		{
-        		"Sid": "Set permissions to pass object ownership",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete",
-            		"s3:ObjectOwnerOverrideToBucketOwner",
-            		"s3:ReplicateTags",
-            		"s3:GetObjectVersionTagging",
-            		"s3:PutObject"
-        		],
-        		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-    		}
-		]
-		}
+```json
+{
+"Version": "2008-10-17",
+"Id": "PolicyForCombinedBucket",
+"Statement": [
+	{
+		"Sid": "Set permissions for objects",
+		"Effect": "Allow",
+		"Principal": {
+    		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+    		"s3:ReplicateObject",
+    		"s3:ReplicateDelete"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+	},
+	{
+		"Sid": "Set permissions on bucket",
+		"Effect": "Allow",
+		"Principal": {
+		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+ 		   "s3:List*",
+ 		   "s3:GetBucketVersioning",
+ 		   "s3:PutBucketVersioning"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
+	},
+	{
+		"Sid": "Set permissions to pass object ownership",
+		"Effect": "Allow",
+		"Principal": {
+		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+    		"s3:ReplicateObject",
+    		"s3:ReplicateDelete",
+    		"s3:ObjectOwnerOverrideToBucketOwner",
+    		"s3:ReplicateTags",
+    		"s3:GetObjectVersionTagging",
+    		"s3:PutObject"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+	}
+]
+}
+```
 
 This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 

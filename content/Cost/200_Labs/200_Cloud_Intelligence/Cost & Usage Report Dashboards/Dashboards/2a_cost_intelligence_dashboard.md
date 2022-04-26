@@ -484,6 +484,10 @@ Now that you have your dashboard created you can share your dashboard with users
 	
 - [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
 	
+### Add your Account Names to your Dashboard
+Learn how to replace the Accound IDs with the Account Names for each of your linked accounts in AWS Organizations by following these steps. 
+
+- [Steps for adding account names](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
 
 ### Update Dashboard Template - Optional
 
