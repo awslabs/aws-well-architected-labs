@@ -34,4 +34,4 @@ This hands-on lab will guide you through a number of examples of how you could u
 
 ## Further Learning
 
-[AWS Security Incident Response Guide](https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)
+[AWS Security Incident Response Guide](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/welcome.html)
