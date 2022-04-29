@@ -115,11 +115,10 @@ Create the On-Demand Lambda function to get the pricing information, and extract
     # Lambda Function Code - SPTool_OD_pricing_Download
 
     import boto3
-    import gzip
     import urllib3
-    import os
     import json
-    import logging 
+    import logging
+
 
     def lambda_handler(event, context):
 
@@ -130,44 +129,18 @@ Create the On-Demand Lambda function to get the pricing information, and extract
         try:
             # Get the EC2 OnDemand pricing file, its huge >1GB
 
-            r = http.request('GET', f'{coreURL}/offers/v1.0/aws/AmazonEC2/current/region_index.json')
-            data = json.loads(r.data)
-
-            # Varaible to hold the OnDemand pricing data
-            pricing_output = ""
-
-            # read data from template
-            for region in data["regions"]:
-                logging.info(region)
-                region_code = "ec2pricedata/" + region + ".csv"
-                logging.info(region_code)
-                region_url = coreURL + data['regions'][region]["currentVersionUrl"].replace(".json", ".csv")
-                r = http.request('GET', region_url)
-
-                # Put the response data into a variable & split it into an array line by line
-                plaintext_content = r.data
-                plaintext_lines = plaintext_content.splitlines()
-
-
-                # Go through each of the pricing lines to find the ones we need
-                for line in plaintext_lines:
-
-                    # If the line contains 'OnDemand' or 'Compute Instance' then add it to the output string
-                    if ((str(line).find('OnDemand') != -1) and (str(line).find('RunInstances') != -1)):
-                        pricing_output += str(line.decode("utf-8")).replace('"', '')
-                        pricing_output += "\n"
-
-            # Add the output to a local temporary file & zip it
-            with gzip.open('/tmp/od_pricedata.txt.gz', 'wb') as f:
-                f.write(pricing_output.encode())
-
-            # Upload the zipped file to S3
+            r = http.request('GET', f'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv')
+            
             s3 = boto3.resource('s3')
+            file = r.data.decode('utf-8').splitlines()
 
-            # Specify the local file, the bucket, and the folder and object name - you MUST have a folder and object name
-            s3.meta.client.upload_file('/tmp/od_pricedata.txt.gz', 'bucket_name', 'od_pricedata/od_pricedata.txt.gz')
 
-            # Die if you cant get the pricing file     
+            with open('/tmp/temp.csv', 'w') as f:
+                for prices in file[5:]:
+                    f.write('%s\n' % prices)
+
+            s3.meta.client.upload_file(Filename='/tmp/temp.csv', Bucket='bucket_name', Key='od_pricedata/ec2_prices.csv')
+  
 
         except Exception as e:
             print(e)
@@ -363,9 +336,22 @@ We will setup a CloudWatch Event to periodically run the Lambda functions, this 
 You have now successfully configured a CloudWatch event, it will run the two Lambda functions and update the pricing information every 5 days.
 {{% /notice %}}
 
+### Prepare the Pricing Data Source - Classifer
+
+1. Go to the **Glue** Service page:
+![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
+
+2. Go to **Classifiers**  from the left menu:
+
+3. Click **Add classifier**:
+
+4. For input the following setting then click **Apply**:
+* Classifier name put **pricing** 
+* Classifier type **CSV**
+* Column headings **Has Headings**
 
 
-### Prepare the Pricing Data Source
+### Prepare the Pricing Data Source - Crawler
 We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront Savings Plans rates and join them to On-Demand pricing. You can modify this part to select 3 year or Partial or All-Upfront rates.
 
 1. Go to the **Glue** Service page:
@@ -377,10 +363,12 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 3. Click **Add crawler**:
 ![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
 
-4. Enter a crawler name of **OD_Pricing** and click **Next**:
+4. Enter a crawler name of **OD_Pricing** :
 ![Images/glue_crawlername.png](/Cost/200_Pricing_Model_Analysis/Images/glue_crawlername.png)
 
-5. Ensure **Data stores** is the source type, click **Next**:
+5a. Open **Tags, description, security configuration, and classifiers (optional)** and under Custom classifiers add the pricing one we just made by clicking **add** then click**Next**:
+
+5b. Ensure **Data stores** is the source type, click **Next**:
 ![Images/glue_sourcetype.png](/Cost/200_Pricing_Model_Analysis/Images/glue_sourcetype.png)
 
 6. Click the folder icon to list the S3 folders in your account:

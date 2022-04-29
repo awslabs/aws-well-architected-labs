@@ -19,9 +19,9 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
 		CREATE VIEW pricing.pricing AS SELECT
                 sp.location AS Region,
                 sp.discountedoperation AS OS,
-                od.col18 AS InstanceType,
-                od.col35 AS Tenancy,
-                od.col9 AS ODRate,
+                od."Instance Type" InstanceType,
+	        od.Tenancy Tenancy,
+	        od.priceperunit ODRate,
                 sp.discountedrate AS SPRate
 
                 FROM pricing.sp_pricedata sp
@@ -29,11 +29,11 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
                 ((sp.discountedusagetype = od.col46)
                 AND (sp.discountedoperation = od.col47))
 
-                WHERE  od.col9 IS NOT NULL AND
+                WHERE  od.priceperunit IS NOT NULL AND
                 sp.location NOT LIKE '%Any%'
                 AND sp.purchaseoption LIKE 'No Upfront'
                 AND sp.leasecontractlength = 1
-                and od.col3 = 'OnDemand'
+                and od.TermType = 'OnDemand'
                 group by 1,2,3,4,5,6
     </details>
 
