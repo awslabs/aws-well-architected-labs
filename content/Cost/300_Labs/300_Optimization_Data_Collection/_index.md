@@ -12,6 +12,7 @@ October 2021
 ## Authors
 - Stephanie Gooch, Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
+- Iakov Gan, Sr. Technical Account Manager (AWS)
 
 
 ## Feedback
