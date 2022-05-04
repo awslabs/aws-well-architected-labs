@@ -112,7 +112,7 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 
 * Track percent on-demand across all your teams.
 * See potential cost savings by meeting certain KPIs and goals for your organization.
-* Quickly locate cost-optimization opportunities such as infrequently used S3 buckets, old EBS snapshots, and Graviton eligible instance usage. .
+* Quickly locate cost-optimization opportunities such as infrequently used S3 buckets, old EBS snapshots, and Graviton eligible instance usage.
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
