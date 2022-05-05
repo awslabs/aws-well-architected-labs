@@ -42,9 +42,11 @@ SSM Agent is installed by default on:
    1. In the navigation pane, choose **Roles**.
    1. Then choose **Create role**.
    1. In the **Select type of trusted entity** section, verify that the default **AWS service** is selected.
-   1. In the **Choose the service that will use this role** section, scroll past the first reference to EC2 (**EC2 Allows EC2 instances to call AWS services on your behalf**) and choose **EC2** from within the field of services. This will open the **Select your use case** section further down the page.
-   1. In the **Select your use case** section, choose **EC2 Role for AWS Systems Manager** to select it.
-   1. Then choose **Next: Permissions**.
+   1. Select EC2 from the common cases option via its radio button, then next.
+   1. Search for the policy "AmazonSSMManagedInstanceCore". Select it and click next.
+   1. Assign role name, add tags if desired, and click create role.
+   1. Please note, if you now view this role from the roles console, and examine the summary, you should now see an instance profile ARN listed on the far right of the       role summary window. This will confirm that you should now be able to select the role from the "Modify IAM role" console.
+   1. return to the instance listing, enter the "Modify IAM role" console: Instances > tick instance in list > Actions > Security > Modify IAM role, and select the           desired role from the drop menu.
 1. Under **Attached permissions policy**, verify that **AmazonEC2RoleforSSM** is listed, and then choose **Next: Tags**.
 1. In the **Tags** section:
    1. Add one or more **keys** and **values**, then choose **Next: Review**.
