@@ -12,16 +12,20 @@ Now, let’s create Consumer Redshift cluster (we will refer this as Consumer cl
 
 ## Step-1: Create Redshift Consumer Cluster
 
-[Login into AWS Console](https://us-west-1.console.aws.amazon.com/redshiftv2/home?region=us-west-1#landing) (make sure _us-west-1_ region is selected in top right corner), and click **Create Cluster**..
+1. [Login into AWS Console](https://us-west-1.console.aws.amazon.com/redshiftv2/home?region=us-west-1#landing) (make sure _us-west-1_ region is selected in top right corner), and click **Create Cluster**..
 
-Provide Cluster name as _redshift-cluster-west_, and select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the ra3.16xlarge, ra3.4xlarge, and ra3.xlplus instance types for producer and consumer clusters. Redshift ra3 nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier.types.
+2. Provide Cluster name as _redshift-cluster-west_, and select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the ra3.16xlarge, ra3.4xlarge, and ra3.xlplus instance types for producer and consumer clusters. Redshift ra3 nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier.types.
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-3/images/create_cluster.png?classes=lab_picture_small)
 
-**Do not** select _“Load Sample data”_. Supply password for _Admin_ user. Click **Create Cluster** button – it will take few minutes to create cluster.
+3. **Do not** select _“Load Sample data”_. 
+
+4. Supply password for _Admin_ user. 
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-3/images/sample_data.png?classes=lab_picture_small)
+Other configuration settings can be left as default.
 
+5. Click **Create Cluster** button – it will take few minutes to create cluster.
 
 ## Step-2: Connect to database using query editor
 

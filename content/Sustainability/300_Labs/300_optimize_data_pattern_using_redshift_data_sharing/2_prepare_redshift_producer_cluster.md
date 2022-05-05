@@ -18,11 +18,15 @@ We will first create Producer Redshift cluster (we will refer this as Producer c
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-2/images/create_cluster.png?classes=lab_picture_small)
 
-3. Select **“Load Sample data”**, and supply password for _Admin_ user. Click _Create Cluster_ button – it will take few minutes to create cluster, and load sample data into database.
+3. Select **“Load Sample data”**.
+
+4. Supply password for _Admin_ user.
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-2/images/sample_data.png?classes=lab_picture_small)
 
 Other configuration settings can be left as default.
+
+5. Click **Create Cluster** button – it will take few minutes to create cluster, and load sample data into database.
 
 ## Step-2: Connect to database using query editor
 
@@ -50,7 +54,7 @@ CREATE TABLE lab_listing AS SELECT * FROM listing;
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-2/images/query_editor-3.png?classes=lab_picture_small)
 
-3. And then, drop the bootstrapped tables using below SQL commands. This will help with estimating data storage consumed, and comparison between Producer and Consumer databases.
+3. Once above **CREATE TABLE** commands are successfully completed, then drop the bootstrapped tables using below SQL commands. This will help with estimating data storage consumed, and comparison between Producer and Consumer databases.
 
 ```sql
 DROP TABLE users;

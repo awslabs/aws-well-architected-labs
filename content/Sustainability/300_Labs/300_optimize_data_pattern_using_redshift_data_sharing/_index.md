@@ -45,6 +45,14 @@ In this case, optimization areas include:
 ## Technical solution
 By introducing Amazon Redshift Data Sharing feature, Marketing department can optimize their implementation to make Sustainability impact, and avoid redundant storage & reduce data transfer over network between AWS regions. Data sharing enables instant, granular, and fast data access across Amazon Redshift clusters without the need to copy or move it. With data sharing, you have live access to data, so that your users can see the most up-to-date and consistent information as it's updated in Amazon Redshift clusters, and provides cost benefit.
 
+Redshift environment **before** implementing Data Sharing feature: Both, Producer and Consumer database size is 1252 MB
+![Before implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/before_redshift_data_sharing.png?classes=lab_picture_small)
+
+
+Redshift environment **after** implementing Data Sharing feature (both Producer and Consumer database size is 1252 MB):
+![After implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/after_redshift_data_sharing.png?classes=lab_picture_small)
+
+
 ## Sustainability Improvement Process
 The goals of your improvement process can be:
 * To eliminate waste, low utilization, and idle or unused resources
@@ -59,7 +67,7 @@ Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarch
 
   ![Proxy Metrics](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/proxy_metrics_type.png?classes=lab_picture_small)
 
-  For this lab, we will use below proxy metrics (provisioned resources) to find out how much storage is used for us-west-1 region Redshift cluster, and how much data is transferred over the network between us-east-1 and us-west-1 regions Redshift cluster replication:
+  For this lab, we will use below proxy metrics (provisioned resources) to find out how much storage is used for us-west-1 region Redshift cluster, and how much data is transferred over the network between Producer (us-east-1) and Consumer (us-west-1) clusters across regions for data replication:
     * Total data storage used (MB provisioned)
     * Total data transfer over network (MB transferred)
 
