@@ -8,7 +8,7 @@ pre: "<b>6. </b>"
 
 # Lab 6
 
-Connect to Consumer cluster in west region to perform below steps:
+Connect to Consumer cluster in us-west-1 region to perform below steps:
 
 ## Step-1: Validate _datashare_ is accessible
 
@@ -35,7 +35,7 @@ CREATE DATABASE consumer_marketing FROM DATASHARE MarketingShare of NAMESPACE <<
 ```
 
 ## Step-3: Optionally, grant permissions
-The Consumer cluster administrator then assigns permissions to appropriate users and groups in the consumer cluster:
+The Consumer cluster administrator then assigns permissions to appropriate users and groups in the Consumer cluster:
 ```
 GRANT USAGE ON DATABASE consumer_marketing TO <<user_or_group>>;
 ```
@@ -64,15 +64,16 @@ SELECT * FROM SVV_REDSHIFT_TABLES WHERE database_name = ‘consumer_marketing’
 ![svv_table](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-6/images/svv_table.png?classes=lab_picture_small)
 
 ## Step-5: Run queries
-You can now run queries on the data in Producer cluster, without having data stored locally. You can also run queries by joining tables from your local database, and tables shared from Producer cluster database.
+You can now run queries on the data in Producer cluster, without having data stored locally. You can also run queries by joining tables from your local database, and tables shared from Producer cluster.
 ```
 SELECT COUNT(*) FROM consumer_marketing.public.lab_event;
 ```
 ![Query LabEvent](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-6/images/query_labevent.png?classes=lab_picture_small)
 
-Above query, fetches the total events from lab_event table stored in Producer cluster in east region via the datashare created earlier. The table is not stored locally in Consumer cluster in west region, so it reduced the data storage by half. You can also join Consumer cluster locally stored tables with Producer cluster shared tables in SQL queries.
+Above query, fetches the total events from lab_event table stored in Producer cluster in us-east-1 region via the datashare created earlier. The table is not stored locally in Consumer cluster in us-west-1 region, so it reduced the data storage by half. You can also join Consumer cluster locally stored tables with Producer cluster shared tables in SQL queries.
 
 One key consideration is to note here is that, during the query execution, it did transfer the query processed result dataset over network, but limited to the result set (whereas current deployment transfer 10% data every night part of refresh cycle). Depending on use case, trade-off analysis should be performed comparing daily refresh data transfer vs. all queries execution dataset transfer over network.
 
+We have now validated that Consumer cluster can access the data shared by Producer cluster, and ran queries against Producer database. Next, we will revist metrics and KPIs to measure the Sustainability optimization achieved by implementing Redshift Data Sharing feature.
 
 {{< prev_next_button link_prev_url="../5_enable_data_sharing" link_next_url="../7_review_sustainability_kpi_optimization" />}}

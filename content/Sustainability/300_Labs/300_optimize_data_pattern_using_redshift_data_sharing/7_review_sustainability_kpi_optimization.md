@@ -10,7 +10,7 @@ pre: "<b>7. </b>"
 
 With above optimization steps, let’s follow below steps in Consumer cluster to measure the improvement on Sustainability KPI:
 
-Connect to Consumer cluster, and click/expand on “consumer_marketing”. You can see in the tool tip that it is a datashare which is connected to a Producer cluster. All the tables listed below are from Producer cluster.
+Connect to Consumer cluster in us-west-1 region, and click/expand on “consumer_marketing”. You can see in the tool tip that it is a datashare which is connected to a Producer cluster. All the tables listed below are from Producer cluster.
 
 ![View Producer Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-7/images/view_producer_cluster2.png?classes=lab_picture_small)
 
@@ -31,9 +31,10 @@ With, that below are revised (improved) metrics and KPI:
     * total data transfer over network = per use case, and amount of data processed by queries executed in Consumer cluster
     * per event daily data transfer = total data processed by query / 8798 events
 
-For per event data storage Sustainability KPI, we see there is 50% reduction (improvement) by using the Redshift data sharing feature.
+For per event data storage Sustainability KPI, we see there is 50% reduction (improvement) by using the Redshift Data Sharing feature.
 
 For per event data transfer KPI, trade-off analysis should be performed comparing daily refresh data transfer vs. all queries execution dataset transfer over network.
 
+With above comparison of baseline & revised metrics and KPI, we tested how Redshift Data Sharing feature helped to improve Sustainability KPI for AnyCompany's Marketing data warehouse environment. Next, we will cleanup the AWS resources created to make sure no further cost incurred.
 
 {{< prev_next_button link_prev_url="../6_consumer_validation" link_next_url="../cleanup" />}}

@@ -8,7 +8,7 @@ pre: "<b>1. </b>"
 
 # Lab 1
 
-**Let’s first understand some data sharing terms & concepts - for details, refer to [User Guide](https://docs.aws.amazon.com/redshift/latest/dg/concepts.html):**
+**Let’s first understand some data sharing terms & concepts - for details, refer to [Amazon Redshift User Guide](https://docs.aws.amazon.com/redshift/latest/dg/concepts.html):**
 
 * A _datashare_ is the unit of sharing data in Amazon Redshift. Use datashares to share data in the same AWS account or different AWS accounts.
 
@@ -22,5 +22,8 @@ pre: "<b>1. </b>"
 
 * _AWS accounts_ can be consumers for datashares and are each represented by a 12-digit AWS account ID. 
 
+Also, review [Data sharing considerations in Amazon Redshift](https://docs.aws.amazon.com/redshift/latest/dg/considerations.html).
+
+Now, let's start creating Redshift environment in AWS Account.
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_prepare_redshift_producer_cluster" />}}

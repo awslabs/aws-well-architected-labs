@@ -10,7 +10,7 @@ pre: "<b>4. </b>"
 
 Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. 
 
-Connect to _Producer_ cluster (**dev** database, _public_ schema) in east region, and follow below steps.
+Connect to _Producer_ cluster (**dev** database, _public_ schema) in us-east-1 region, and follow below steps.
 
 ## Step-1: Proxy metrics
 For this lab, we will use below proxy metrics (provisioned resources):
@@ -22,13 +22,13 @@ SELECT SUM(size) FROM SVV_TABLE_INFO WHERE "table" NOT LIKE '%auto%';
 
 ![Data Storage Used](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-4/images/data_storage_used.png?classes=lab_picture_small)
 
-Above query will return data storage size (in MB) of all tables provisioned for all events (business outcome) held (stored in lab_event table). Data storage consumed in _Producer_ Redshift cluster = 1252MB.
+Above query will return data storage size (in MB) of all tables provisioned for all events (business outcome) held (stored in lab_event table). Data storage consumed in _Producer_ cluster = 1252MB.
 
-We will assume that _Consumer_ Redshift cluster had same amount of storage consumed in current deployment, as it was built, and being refreshed from _Producer_ periodically. With that assumption, running above query against _Consumer_ cluster will provide similar result for data storage size (in MB).
+We will assume that _Consumer_ cluster had same amount of storage consumed in current deployment, as it was built, and being refreshed from _Producer_ cluster periodically. With that assumption, running above query against _Consumer_ cluster will provide similar result for data storage size (in MB).
 
 So, total data storage consumed (provisioned) by two clusters (_Producer_ and _Consumer_) = 1252+1252 = 2504MB
 
-**Total data transfer over network to nightly refresh _Consumer_ cluster in west region from _Producer_ cluster in east region:**
+**Total data transfer over network to nightly refresh _Consumer_ cluster in us-west-1 region from _Producer_ cluster in us-east-1 region:**
 
 Assuming 10% daily data change rate in _Producer_ cluster, Data transfer over network (every night) = 125MB (10% of 1252MB - _Producer_ cluster storage)
 
@@ -54,6 +54,5 @@ Our improvement goal is to reduce per event provisioned resources, and in this c
 * per event data transfer over network
 
 Now, let’s start optimizing this workload by implementing WA Sustainability Pillar best practices for Data Pattern, and Redshift Data Sharing feature. Our objective is to reduce the per event data storage, and data transfer between east & west region.
-
 
 {{< prev_next_button link_prev_url="../3_prepare_redshift_consumer_cluster" link_next_url="../5_enable_data_sharing" />}}
