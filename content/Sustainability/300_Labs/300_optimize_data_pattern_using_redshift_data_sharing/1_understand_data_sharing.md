@@ -24,6 +24,6 @@ pre: "<b>1. </b>"
 
 Also, review [Data sharing considerations in Amazon Redshift](https://docs.aws.amazon.com/redshift/latest/dg/considerations.html).
 
-Now, let's start creating Redshift environment in AWS Account.
+Now, let's start by creating an Amazon Redshift environment in AWS Account.
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_prepare_redshift_producer_cluster" />}}
