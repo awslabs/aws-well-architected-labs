@@ -1,5 +1,5 @@
 ---
-title: "Prepare Redshift Consumer Cluster"
+title: "Prepare Amazon Redshift Consumer Cluster"
 date: 2020-11-18T09:16:09-04:00
 chapter: false
 weight: 4

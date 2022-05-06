@@ -1,6 +1,6 @@
 ---
-title: "Level 300: Optimize Data Pattern using Redshift Data Sharing"
-menutitle: "Optimize Data Pattern using Redshift Data Sharing"
+title: "Level 300: Optimize Data Pattern using Amazon Redshift Data Sharing"
+menutitle: "Optimize Data Pattern using Amazon Redshift Data Sharing"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
 weight: 1

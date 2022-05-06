@@ -1,5 +1,5 @@
 ---
-title: "Understand Redshift Data Sharing"
+title: "Understand Amazon Redshift Data Sharing"
 date: 2020-11-18T09:16:09-04:00
 chapter: false
 weight: 2

@@ -1,5 +1,5 @@
 ---
-title: "Prepare Redshift Producer Cluster"
+title: "Prepare Amazon Redshift Producer Cluster"
 date: 2020-11-18T09:16:09-04:00
 chapter: false
 weight: 3
