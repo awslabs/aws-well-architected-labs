@@ -78,7 +78,7 @@ SELECT COUNT(*) FROM consumer_marketing.public.lab_event;
 ```
 ![Query LabEvent](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-6/images/query_labevent.png?classes=lab_picture_small)
 
-Above query, fetches the total events from lab_event table stored in Producer cluster in us-east-1 region via the datashare created earlier. The table is not stored locally in Consumer cluster in us-west-1 region, so it reduced the data storage by half. You can also join Consumer cluster locally stored tables with Producer cluster shared tables in SQL queries. 
+Above query, fetches the total events from lab_event table stored in Producer cluster in `us-east-1` region via the datashare created earlier. The table is not stored locally in Consumer cluster in `us-west-1` region, so it reduced the data storage by half. You can also join Consumer cluster locally stored tables with Producer cluster shared tables in SQL queries. 
 
 **This is in line with our Sustainability improvement goal for optimizing data pattern by removing unneeded or redundant date, and minimizing data movement across networks.**
 

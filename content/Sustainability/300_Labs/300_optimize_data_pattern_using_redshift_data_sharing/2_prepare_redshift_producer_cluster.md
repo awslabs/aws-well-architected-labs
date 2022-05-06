@@ -8,11 +8,11 @@ pre: "<b>2. </b>"
 
 # Lab 2
 
-We will first create Producer Redshift cluster (we will refer this as Producer cluster throughout the lab) in us-east-1 region, and will also load sample dataset which we will use for our Sustainability use case.
+We will first create Producer Redshift cluster (we will refer this as Producer cluster throughout the lab) in `us-east-1` region, and will also load sample dataset which we will use for our Sustainability use case.
 
 ## Step-1: Create Redshift Producer Cluster
 
-1. [Login into AWS Console](https://us-east-1.console.aws.amazon.com/redshiftv2/home?region=us-east-1#landing) (make sure _us-east-1_ region is selected in top right corner), and click **Create Cluster**.
+1. [Login into AWS Console](https://`us-east-1`.console.aws.amazon.com/redshiftv2/home?region=`us-east-1`#landing) (make sure _`us-east-1`_ region is selected in top right corner), and click **Create Cluster**.
 
 2. Provide Cluster name as _redshift-cluster-east_, and select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the ra3.16xlarge, ra3.4xlarge, and ra3.xlplus instance types for producer and consumer clusters. Redshift ra3 nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier.
 
@@ -68,6 +68,6 @@ DROP TABLE listing;
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-2/images/query_editor-4.png?classes=lab_picture_small)
 
-So far, we have installed & configured Producer cluster, and loaded sample dataset in Producer database in us-east-1 region. Next, we will install and configure Redshift Consumer cluster in us-west-1 region.
+So far, we have installed & configured Producer cluster, and loaded sample dataset in Producer database in `us-east-1` region. Next, we will install and configure Redshift Consumer cluster in `us-west-1` region.
 
 {{< prev_next_button link_prev_url="../1_understand_data_sharing" link_next_url="../3_prepare_redshift_consumer_cluster" />}}

@@ -8,11 +8,11 @@ pre: "<b>3. </b>"
 
 # Lab 3
 
-Now, let’s create Consumer Redshift cluster (we will refer this as Consumer cluster throughout the lab) in us-west-1 region, and remember, **we will not load sample dataset** in this cluster. 
+Now, let’s create Consumer Redshift cluster (we will refer this as Consumer cluster throughout the lab) in `us-west-1` region, and remember, **we will not load sample dataset** in this cluster. 
 
 ## Step-1: Create Redshift Consumer Cluster
 
-1. [Login into AWS Console](https://us-west-1.console.aws.amazon.com/redshiftv2/home?region=us-west-1#landing) (make sure _us-west-1_ region is selected in top right corner), and click **Create Cluster**..
+1. [Login into AWS Console](https://`us-west-1`.console.aws.amazon.com/redshiftv2/home?region=`us-west-1`#landing) (make sure _`us-west-1`_ region is selected in top right corner), and click **Create Cluster**..
 
 2. Provide Cluster name as _redshift-cluster-west_, and select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the ra3.16xlarge, ra3.4xlarge, and ra3.xlplus instance types for producer and consumer clusters. Redshift ra3 nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier.types.
 

@@ -11,7 +11,7 @@ pre: "<b>5. </b>"
 The _Producer_ cluster administrator, who wants to share data, first sets up the _Producer_ cluster for data sharing by running below commands in query editor:
 
 ## Step-1: Create a _datashare_ in Redshift Producer Cluster
-Make sure you are connected to Redshift _Producer_ cluster as _Admin_ in _us-east-1_ region, and then go to query editor to run below command:
+Make sure you are connected to Redshift _Producer_ cluster as _Admin_ in _`us-east-1`_ region, and then go to query editor to run below command:
 
 ```
 CREATE DATASHARE MarketingShare;

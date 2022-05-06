@@ -5,7 +5,7 @@ chapter: false
 weight: 9
 ---
 
-To avoid incurring further cost for AWS resources, let’s delete the Redshift clusters in both regions. Login to AWS console, and go to Redshift service. Then follow the below steps in each region to delete Producer (us-east-1 region) and Consumer (us-west-1 region) clusters:
+To avoid incurring further cost for AWS resources, let’s delete the Redshift clusters in both regions. Login to AWS console, and go to Redshift service. Then follow the below steps in each region to delete Producer (`us-east-1` region) and Consumer (`us-west-1` region) clusters:
 
 1. Select the cluster in respective region, and select _Delete_ from _Actions_ menu:
 

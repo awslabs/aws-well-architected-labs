@@ -10,7 +10,7 @@ pre: "<b>7. </b>"
 
 With optimization completed in previous steps, let’s follow below steps in **Consumer** cluster to measure the improvement on Sustainability KPI:
 
-1. Connect to **Consumer** cluster in us-west-1 region, and click/expand on “consumer_marketing”. You can see in the tool tip that it is a datashare which is connected to a **Producer** cluster. All the tables listed below are from **Producer** cluster.
+1. Connect to **Consumer** cluster in `us-west-1` region, and click/expand on “consumer_marketing”. You can see in the tool tip that it is a datashare which is connected to a **Producer** cluster. All the tables listed below are from **Producer** cluster.
 
 ![View Producer Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-7/images/view_producer_cluster2.png?classes=lab_picture_small)
 

@@ -14,7 +14,7 @@ Recall, our Sustainability improvement goal is:
 
 Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed - in this case, AWS resources provisioned (storage, network traffic) to support business outcome (number of events).
 
-**Connect to _Producer_ cluster** (_dev_ database, _public_ schema) in us-east-1 region, and follow below steps.
+**Connect to _Producer_ cluster** (_dev_ database, _public_ schema) in `us-east-1` region, and follow below steps.
 
 ## Step-1: Proxy metrics
 
@@ -33,7 +33,7 @@ We will assume that _Consumer_ cluster had same amount of storage consumed in cu
 
 So, total data storage consumed (provisioned) by two clusters (_Producer_ and _Consumer_) = 1252+1252 = 2504MB
 
-2. **Total data transfer over network to nightly refresh _Consumer_ cluster in us-west-1 region from _Producer_ cluster in us-east-1 region:**
+2. **Total data transfer over network to nightly refresh _Consumer_ cluster in `us-west-1` region from _Producer_ cluster in `us-east-1` region:**
 
 Assuming 10% daily data change rate in _Producer_ cluster, Data transfer over network (every night) = 125MB (10% of 1252MB - _Producer_ cluster storage)
 
@@ -58,6 +58,6 @@ Our improvement goal is to reduce per event provisioned resources, and in this c
 * per event total storage used
 * per event data transfer over network
 
-Now, let’s start optimizing this workload by implementing WA Sustainability Pillar best practices for Data Pattern, and Redshift Data Sharing feature. Our objective is to reduce the per event data storage, and data transfer between us-east-1 & us-west-1 region.
+Now, let’s start optimizing this workload by implementing WA Sustainability Pillar best practices for Data Pattern, and Redshift Data Sharing feature. Our objective is to reduce the per event data storage, and data transfer between `us-east-1` & `us-west-1` region.
 
 {{< prev_next_button link_prev_url="../3_prepare_redshift_consumer_cluster" link_next_url="../5_enable_data_sharing" />}}
