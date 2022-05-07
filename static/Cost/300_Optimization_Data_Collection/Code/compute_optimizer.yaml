@@ -113,6 +113,8 @@ Resources:
     Properties:
       Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
       PermissionModel: SELF_MANAGED
+      ManagedExecution:
+        Active: true
       Parameters:
         - ParameterKey: Name
           ParameterValue: !Sub "${BucketPrefix}${AWS::AccountId}"
