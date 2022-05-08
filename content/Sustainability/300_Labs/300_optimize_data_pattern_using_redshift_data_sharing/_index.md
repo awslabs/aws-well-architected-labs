@@ -47,11 +47,15 @@ In this case, optimization areas include:
 ## Technical solution
 By introducing Amazon Redshift Data Sharing feature, Marketing department can optimize their implementation to make Sustainability impact, and avoid redundant storage & reduce data transfer over network between AWS regions. Data sharing enables instant, granular, and fast data access across Amazon Redshift clusters without the need to copy or move it. With data sharing, you have live access to data, so that your users can see the most up-to-date and consistent information as it's updated in Amazon Redshift clusters, and provides cost benefit.
 
-Redshift environment **before** implementing Data Sharing feature: Both, Producer and Consumer database size is 1252 MB
+**Redshift environment _before_ implementing Data Sharing feature**
+
+Both, Producer and Consumer cluster size is 640 MB each - Total storage consumed is 1280 MB:
 ![Before implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/before_redshift_data_sharing.png?classes=lab_picture_small)
 
 
-Redshift environment **after** implementing Data Sharing feature (both Producer and Consumer database size is 1252 MB):
+**Redshift environment _after_ implementing Data Sharing feature**
+
+Producer cluster size is 640 MB whereas Consumer cluster size is 0 MB - Total storage consumed is 640 MB:
 ![After implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/after_redshift_data_sharing.png?classes=lab_picture_small)
 
 

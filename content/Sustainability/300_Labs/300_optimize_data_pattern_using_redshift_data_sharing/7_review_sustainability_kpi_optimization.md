@@ -25,13 +25,13 @@ Above query did not return any table size, which means that **Consumer** databas
 
 With, that below are revised (improved) metrics and KPI:
 * Data storage
-    * total data storage consumed (provisioned) by two clusters (Producer and Consumer) = 1252+0 = 1252MB
-    * per event data storage = 1252MB / 8798 events = 0.14MB
+    * total data storage consumed (provisioned) by two clusters (Producer and Consumer) = 640+0 = 640MB
+    * per event data storage = 640MB / 8798 events = 0.07MB
 * Data transfer
     * total data transfer over network = per use case, and amount of data processed by queries executed in Consumer cluster
     * per event daily data transfer = total data processed by query / 8798 events
 
-For per event data storage Sustainability KPI, we see there is 50% reduction (improvement) by using the Redshift Data Sharing feature.
+**For per event data storage Sustainability KPI, we see there is 50% reduction (improvement) by using the Redshift Data Sharing feature.**
 
 For per event data transfer KPI, trade-off analysis should be performed comparing daily refresh data transfer vs. all queries execution dataset transfer over network. One option is to analyze data transfer between regions is using AWS Cost Explorer. [Refer to this](https://aws.amazon.com/blogs/mt/using-aws-cost-explorer-to-analyze-data-transfer-costs/) Blog explaining how to use AWS Cost Explorer to analyze data transfer volume and cost.
 

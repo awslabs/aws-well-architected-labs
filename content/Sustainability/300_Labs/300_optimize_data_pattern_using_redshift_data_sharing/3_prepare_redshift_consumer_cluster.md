@@ -12,9 +12,9 @@ Now, let’s create Consumer Redshift cluster (we will refer this as Consumer cl
 
 ## Step-1: Create Redshift Consumer Cluster
 
-1. [Login into AWS Console](https://`us-west-1`.console.aws.amazon.com/redshiftv2/home?region=`us-west-1`#landing) (make sure _`us-west-1`_ region is selected in top right corner), and click **Create Cluster**..
+1. [Login into AWS Console](https://us-west-1.console.aws.amazon.com/redshiftv2/home?region=us-west-1#landing) (make sure _`us-west-1`_ region is selected in top right corner), and click **Create Cluster**..
 
-2. Provide Cluster name as _redshift-cluster-west_, and select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the ra3.16xlarge, ra3.4xlarge, and ra3.xlplus instance types for producer and consumer clusters. Redshift ra3 nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier.types.
+2. Provide Cluster name as _`redshift-cluster-west`_, and select _ra3.xlplus_ node type - if you get access error launching cluster with _ra3.xlplus_ node type, then select _ra3.4xlarge_ node type. Please note, Redshift Data Sharing feature is not supported for previous generation _dc2_ node types, and Amazon Redshift only supports data sharing on the _ra3.16xlarge_, _ra3.4xlarge_, and _ra3.xlplus_ instance types for producer and consumer clusters. Redshift _ra3_ nodes incurs cost as these nodes are not part of Redshift free trial, or AWS Free Tier types.
 
 ![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-3/images/create_cluster.png?classes=lab_picture_small)
 
@@ -36,7 +36,7 @@ Once cluster is created (_Status = Available_), using one of the Amazon Redshift
 ## Step-3: Validate database
 In query editor, click on newly created cluster, and it will establish connection to the database. You will then see two databases created automatically – **dev, sample_data_dev**. The **dev** database has one schema called _public_, which will not have any tables as we did not select _“Load Sample Data”_ during cluster creation, unlike _Producer_ cluster in east region. We will refer this Consumer database throughout the lab. Expand the _public_ schema under **dev** database:
 
-![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-3/images/query_editor-2.png?classes=lab_picture_small)
+![Create Cluster](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-3/images/query_editor-2.png)
 
 We now have both Producer and Consumer clusters installed, configured, and loaded sample dataset in Producer database. Next, we will baseline existing metrics and KPIs.
 

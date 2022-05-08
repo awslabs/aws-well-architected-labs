@@ -1,5 +1,5 @@
 ---
-title: "Redshift Consumer Cluster Validation"
+title: "Amazon Redshift Consumer Cluster Validation"
 date: 2020-11-18T09:16:09-04:00
 chapter: false
 weight: 7
@@ -10,7 +10,7 @@ pre: "<b>6. </b>"
 
 Now, let's validate **Consumer** cluster access to the **Producer** cluster datashare and objects. And then run query from **Consumer** cluster against objects stored in **Producer** cluster.
 
-Connect to **Consumer** cluster to perform below steps:
+Connect to **Consumer** cluster in `us-west-1` to perform below steps:
 
 ## Step-1: Validate _datashare_ is accessible
 
