@@ -591,7 +591,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 
 #### Query Preview
 ```tsql
-	SELECT
+    SELECT
       line_item_usage_account_id as "account", 
       product_region as "region",
       line_item_resource_id as "resource",
@@ -631,7 +631,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 
 #### Query Preview
 ```tsql
-	SELECT
+    SELECT
       line_item_usage_account_id as "account",
       product_region as "region",
       split_part(line_item_resource_id, ':', 6) as "resource",
