@@ -1,9 +1,14 @@
 baseURL = "https://wellarchitectedlabs.com/"
-languageCode = "en-us"
-title = "AWS Well-Architected Labs"
+defaultContentLanguage = "en"
 theme = "learn"
 
-
+[languages]
+  [languages.en]
+    title = 'AWS Well-Architected Labs'
+    weight = 1
+  [languages.es]
+    title = 'AWS Well-Architected Labs'
+    weight = 2
 [params]
 themeVariant = "walabs"
 disableShortcutsTitle = true
