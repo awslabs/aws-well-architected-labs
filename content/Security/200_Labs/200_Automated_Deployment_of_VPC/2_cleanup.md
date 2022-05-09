@@ -8,7 +8,7 @@ weight: 4
 
 The following instructions will remove the resources that you have created in this lab.
 
-Note: If you are planning on completing the lab [200_Automated_Deployment_of_EC2_Web_Application](/Security/200_Labs/200_Automated_Deployment_of_EC2_Web_Application/) we recommend you only tear down this lab after completing both, as there is a dependency on this VPC.
+Note: If you are planning on completing the lab [200_Automated_Deployment_of_EC2_Web_Application]({{< ref "/Security/200_Labs/200_Automated_Deployment_of_EC2_Web_Application" >}}) we recommend you only tear down this lab after completing both, as there is a dependency on this VPC.
 
 Delete the VPC CloudFormation stack:
 

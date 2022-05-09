@@ -230,4 +230,46 @@ If you wish to connect to your Cost and Usage report for snapshot costs please u
 {{% /expand%}}
 
 
+### ECS Chargeback
+
+Report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster
+{{%expand "Athena Configuration" %}}
+
+
+1. Navigate to the Athena service
+2. Select the "optimization data" database
+3. In **Saved Queries** find **"cluster_metadata_view"**" Change 'BU' to the tag you wish to do chargeback for
+4. Click the **Run** button
+5. In **Saved Queries** find **"ec2_cluster_costs_view"**" 
+	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
+	-- For example, "curdb"."ecs_services_clusters_data" 
+6. Click the **Run** button
+7. In **Saved Queries** find **"bu_usage_view"**" 
+	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
+	-- For example, "curdb"."ecs_services_clusters_data"
+8. Click the **Run** button
+
+Now your views are created you can run your report
+
+#### Manually execute billing report
+
+* In **Saved Queries** find **"ecs_chargeback_report"** 
+	-- Replace "bu_usage_view.month" value with the appropriate month desired for the report
+	-- For example, a value of '2' returns the charges for February 
+* Click the **Run** button
+
+
+#### Example Output
+
+
+![Images/Example_output.png](/Cost/300_Optimization_Data_Collection/Images/Example_output.png)
+Breakdown: 
+* task_usage: total memory resources reserved (in GBs) by all tasks over the billing period (i.e. – monthly)
+* percent: task_usage / total_usage
+* ec2_cost: monthly cost for EC2 instance in $
+* Services: Name of service 
+* servicearn: Arn of service
+* Value: Value of specified tag for the ECS service (could be App, TeamID, etc?)
+{{% /expand%}}
+
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}

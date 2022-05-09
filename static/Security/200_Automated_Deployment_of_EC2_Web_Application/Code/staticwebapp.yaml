@@ -143,23 +143,13 @@ Resources:
     Properties:
       HealthCheckPath: /index.html
       HealthCheckIntervalSeconds: 5
-      #HealthCheckPath: 
-      #HealthCheckPort: 
-      #HealthCheckProtocol:
       HealthCheckTimeoutSeconds: 3
       HealthyThresholdCount: 2
-      #Name: 
       Port: 80
       Protocol: HTTP
-      #Tags:
-        #-
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 10
-      UnhealthyThresholdCount: 3
-      # Targets:
-      #   - TargetDescription
-      # TargetType: String
       UnhealthyThresholdCount: 3
       VpcId: 
         Fn::ImportValue: !Sub '${VPCImportName}'
