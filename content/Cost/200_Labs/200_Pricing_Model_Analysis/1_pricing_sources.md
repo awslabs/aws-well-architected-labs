@@ -114,48 +114,35 @@ Create the On-Demand Lambda function to get the pricing information, and extract
     # Please reachout to costoptimization@amazon.com if there's any comments or suggestions
     # Lambda Function Code - SPTool_OD_pricing_Download
 
+    import json
     import boto3
     import urllib3
-    import json
-    import logging
-
-
+    import urllib.request
+    import os
+    
     def lambda_handler(event, context):
-
-        # Create the connection
-        http = urllib3.PoolManager()
-        coreURL = "https://pricing.us-east-1.amazonaws.com"
-
-        try:
-            # Get the EC2 OnDemand pricing file, its huge >1GB
-
-            r = http.request('GET', f'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv')
-            
-            s3 = boto3.resource('s3')
-            file = r.data.decode('utf-8').splitlines()
-
-
-            with open('/tmp/temp.csv', 'w') as f:
-                for prices in file[5:]:
-                    f.write('%s\n' % prices)
-
-            s3.meta.client.upload_file(Filename='/tmp/temp.csv', Bucket='bucket_name', Key='od_pricedata/ec2_prices.csv')
-  
-
-        except Exception as e:
-            print(e)
-            raise e
-
-        # Return happy
+        # TODO implement
+    
+        s3=boto3.resource('s3')
+        http=urllib3.PoolManager()
+    
+        url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv'
+        s3Bucket = <bucket_name>
+        key = 'od_pricedata/ec2_prices.csv'
+    
+        urllib.request.urlopen(url)   #Provide URL
+        s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
+    
         return {
-            'statusCode': 200
+            'statusCode': 200,
+            'body': json.dumps('YAY!')
         }
 
 
 </details>
 
 6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
-![Images/lambda_editcode.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcode.png)
+![Images/lambda_editcodeod.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcodeod.png)
 
 7. Click **Deploy** above the code
 
@@ -180,9 +167,6 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 {{% notice note %}}
 One of the most common reasons for this lab failing is the pricing files growing in size & Lambda times out. We have configured a balance between cost/performance with 4Gb memory, if the lab fails at some point - ensure the lambda has enough memory and passes this test.
 {{% /notice %}}
-
-13. Go to your S3 bucket and into the **od_pricedata** folder and you should see a gz file of non-zero size is in it:
-![Images/s3_verify.png](/Cost/200_Pricing_Model_Analysis/Images/s3_verify.png)
 
 
 ### Setup Savings Plan Pricing Lambda Function
@@ -336,20 +320,6 @@ We will setup a CloudWatch Event to periodically run the Lambda functions, this 
 You have now successfully configured a CloudWatch event, it will run the two Lambda functions and update the pricing information every 5 days.
 {{% /notice %}}
 
-### Prepare the Pricing Data Source - Classifer
-
-1. Go to the **Glue** Service page:
-![Images/home_glue.png](/Cost/200_Pricing_Model_Analysis/Images/home_glue.png)
-
-2. Go to **Classifiers**  from the left menu:
-
-3. Click **Add classifier**:
-
-4. For input the following setting then click **Apply**:
-* Classifier name put **pricing** 
-* Classifier type **CSV**
-* Column headings **Has Headings**
-
 
 ### Prepare the Pricing Data Source - Crawler
 We will prepare a pricing data source which we will use to join with the CUR. In this example we will take 1 year No Upfront Savings Plans rates and join them to On-Demand pricing. You can modify this part to select 3 year or Partial or All-Upfront rates.
@@ -363,22 +333,15 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 3. Click **Add crawler**:
 ![Images/glue_addcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addcrawler.png)
 
-4. Enter a crawler name of **OD_Pricing** :
-![Images/glue_crawlername.png](/Cost/200_Pricing_Model_Analysis/Images/glue_crawlername.png)
+4. Enter a crawler name of **SP_Pricing** :
+![Images/glue_crawlernamesp.png](/Cost/200_Pricing_Model_Analysis/Images/glue_crawlernamesp.png)
 
-5a. Open **Tags, description, security configuration, and classifiers (optional)** and under Custom classifiers add the pricing one we just made by clicking **add** then click**Next**:
-
-5b. Ensure **Data stores** is the source type, click **Next**:
+5. Ensure **Data stores** is the source type, click **Next**:
 ![Images/glue_sourcetype.png](/Cost/200_Pricing_Model_Analysis/Images/glue_sourcetype.png)
 
-6. Click the folder icon to list the S3 folders in your account:
-![Images/glue_includepath.png](/Cost/200_Pricing_Model_Analysis/Images/glue_includepath.png)
-
-7. Expand the bucket which contains your pricing folders, and select the folder name **od_pricedata**, click **Select**:
-![Images/glue_choosepath.png](/Cost/200_Pricing_Model_Analysis/Images/glue_choosepath.png)
-
-8. Click **Next**:
-![Images/glue_adddatastore.png](/Cost/200_Pricing_Model_Analysis/Images/glue_adddatastore.png)
+6. Click the folder icon to list the S3 folders in your account. Expand the bucket which contains your pricing folders, and select the folder name sp_pricedata, click Select. 
+Click **Next**:
+![Images/glue_adddatastoresp.png](/Cost/200_Pricing_Model_Analysis/Images/glue_adddatastoresp.png)
 
 9. Click **Next**:
 ![Images/glue_addanother.png](/Cost/200_Pricing_Model_Analysis/Images/glue_addanother.png)
@@ -401,68 +364,8 @@ We will prepare a pricing data source which we will use to join with the CUR. In
 15. Click **Finish**:
 ![Images/glue_finishcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_finishcrawler.png)
 
-16. Select the crawler **OD_Pricing** and click **Run crawler**:
-![Images/glue_runcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_runcrawler.png)
-
-17. Once its run, you should see tables created:
-![Images/glue_runsuccess.png](/Cost/200_Pricing_Model_Analysis/Images/glue_runsuccess.png)
-
-18. Repeat **Steps 3 through to 17** with the following details:
-    - Crawler name: **SP_Pricing**
-    - Include path: **s3://(pricing bucket)/sp_pricedata** (replace pricing bucket)
-    - IAM Role: **Choose an existing IAM role** and **AWSGlueServiceRole-SPToolPricing**
-    - Database: **pricing**
-
-19. Open the **IAM Console** in a new tab, click **Policies**:
-![Images/IAM_policy.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_policy.png)
-
-20. Click on the **AWSGlueServiceRole-SPToolPricing** role:
-![Images/IAM_selectrole.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_selectrole.png)
-
-21. Type in **SPTool** and click on the policy name **AWSGlueServiceRole-SPTool**:
-![Images/IAM_policy.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_policy.png)
-
-22. Click **Edit policy**:
-![Images/IAM_editpolicy.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_editpolicy.png)
-
-23. Click **JSON**:
-![Images/IAM_jsonpolicy.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_jsonpolicy.png)
-
-24. Edit the **Resource** line by removing the **od_pricedata** folder to leave the bucket:
-![Images/IAM_editjson.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_editjson.png)
-
-25. Click **Review policy**:
-![Images/IAM_reviewjson.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_reviewjson.png)
-
-26. Click **Save changes**:
-![Images/IAM_savejson.png](/Cost/200_Pricing_Model_Analysis/Images/IAM_savejson.png)
-
-27. Go back to the Glue console, select the **SP_Pricing** crawler, click **Run crawler**:
-![Images/glue_runspcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_runspcrawler.png)
-
-28. Click on **Databases**:
-![Images/glue_databases.png](/Cost/200_Pricing_Model_Analysis/Images/glue_databases.png)
-
-29. Click on **Pricing**:
-![Images/glue_databasepricing.png](/Cost/200_Pricing_Model_Analysis/Images/glue_databasepricing.png)
-
-30. Click **Tables in pricing**:
-![Images/glue_pricingtables.png](/Cost/200_Pricing_Model_Analysis/Images/glue_pricingtables.png)
-
-31. Click **od_pricedata**:
-![Images/glue_odpricing.png](/Cost/200_Pricing_Model_Analysis/Images/glue_odpricing.png)
-
-32. Click **Edit schema**:
-![Images/glue_editschema.png](/Cost/200_Pricing_Model_Analysis/Images/glue_editschema.png)
-
-33. Click **double** next to **col9**:
-![Images/glue_col9.png](/Cost/200_Pricing_Model_Analysis/Images/glue_col9.png)
-
-34. Select **string** and click **Update**:
-![Images/glue_col9string.png](/Cost/200_Pricing_Model_Analysis/Images/glue_col9string.png)
-
-35. Click **Save**:
-![Images/glue_schemasave.png](/Cost/200_Pricing_Model_Analysis/Images/glue_schemasave.png)
+16. Select the crawler **SP_Pricing** and click **Run crawler**:
+![Images/glue_runcrawler.png](/Cost/200_Pricing_Model_Analysis/Images/glue_runspcrawler.png)
 
 {{% /expand%}}
 
