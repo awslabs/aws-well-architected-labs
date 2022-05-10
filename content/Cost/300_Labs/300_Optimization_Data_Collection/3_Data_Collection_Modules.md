@@ -185,57 +185,86 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## Compute Optimizer
 
-The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
-In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations.
-This Data will be separated by type service and partitioned by year, month. 
+The Compute Optimizer Service by default only shows current point in time recommendations looking at the past 14 days of usage. In this module, the data will be collected together so you will access to all accounts and regions recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations. Also we recommend to install [Compute Optimizer Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/#comute-optimizer-dashboard) for visualizing. 
+
+Compute Optimizer Data will be separated by type service and partitioned by year, month. 
 Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
+
+Compute Optimizer is regional service and the Compute Optimizer Collector will deploy one bucket for each region. The user must specify **DeployRegions** - a comma separated list of regions with EC2, EBS, ASG and Lambda workloads. If blank, the current region will be used.
+
+![Images/Arc_compute_optimizer_data_collection.png](/Cost/300_Optimization_Data_Collection/Images/Arc_compute_optimizer_data_collection.png) 
+
 
 * IAM Policy added to  **OptimizationManagementDataRoleStack**:  
 
-              - PolicyName: "ComputeOptimizerPolicy"
-                PolicyDocument:
-                  Version: "2012-10-17"
-                  Statement:
-                  - Effect: "Allow"
-                    Action: 
-                      - "compute-optimizer:*"
-                      - "EC2:DescribeInstances"
-                      - "cloudwatch:GetMetricData"
-                      - "autoscaling:DescribeAutoScalingGroups"
-                      - "compute-optimizer:UpdateEnrollmentStatus"
-                      - "compute-optimizer:GetAutoScalingGroupRecommendations"
-                      - "compute-optimizer:GetEC2InstanceRecommendations"
-                      - "compute-optimizer:GetEnrollmentStatus"
-                      - "compute-optimizer:GetEC2RecommendationProjectedMetrics"
-                      - "compute-optimizer:GetRecommendationSummaries"
-                      - "organizations:ListAccounts"
-                      - "organizations:DescribeOrganization"
-                      - "organizations:DescribeAccount"
-                      - "lambda:ListFunctions"
-                      - "lambda:ListProvisionedConcurrencyConfigs"
-                      - "EC2:DescribeVolumes" 
-                      Resource: "*"    
+        - PolicyName: "ComputeOptimizer-ExportLambdaFunctionRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "compute-optimizer:GetLambdaFunctionRecommendations"
+                  - "lambda:ListFunctions"
+                  - "lambda:ListProvisionedConcurrencyConfigs"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportAutoScalingGroupRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEBSVolumeRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:GetEBSVolumeRecommendations"
+                  - "EC2:DescribeVolumes"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEC2InstanceRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:GetEC2InstanceRecommendations"
+                  - "EC2:DescribeInstances"
+                Resource: "*"
+
 
 * CloudFormation Stack added to **OptimizationDataCollectionStack** :  
 
-        COCDataStack:
+        ComputeOptimizerModule:
           Type: AWS::CloudFormation::Stack
+          Condition: DeployComputeOptimizerModule
           Properties:
             TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
-            TimeoutInMinutes: 2
             Parameters:
               DestinationBucketARN: !GetAtt S3Bucket.Arn 
               DestinationBucket: !Ref S3Bucket
               GlueRoleARN: !GetAtt GlueRole.Arn
-              RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${ManagementAccountRole}"
-              CodeBucket: !Ref CodeBucket
+              RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+              S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
+              RolePrefix: !Ref RolePrefix
+              BucketPrefix:  !Ref DestinationBucket
+              DeployRegions:
+                Fn::If:
+                  - ComputeOptimizerRegionsIsEmpty
+                  - !Sub "${AWS::Region}"
+                  - !Join [ ",", !Ref ComputeOptimizerRegions ]
 
 * Optional Parameters with current defaults:
 DataStackMulti
     - DatabaseName: optimization_data
-    - CodeKey:  Cost/Labs/300_Optimization_Data_Collection/coc.zip
     - CFDataName: ComputeOptimizer
-    - Prefix: COC
 
 AccountCollector
     - Suffix: ''
@@ -254,6 +283,19 @@ The AccountCollector module is reusable and only needs to be added once but mult
 ## ECS Chargeback
 
 This module will enable you too automated report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster. Instructions on how to use this data can be found [here.](https://github.com/aws-samples/ecs-chargeback-cloudformation) This Data will be partitioned by year, month, day. 
+
+### Pre-Requisites  
+
+* Completion of  Well-Architected Lab: [100_1_aws_account_setup](https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/) or similar setup of the Cost and Usage Report (CUR) with resource Id enabled
+* A CUR file has been established for the existing Management/Payer account within the Billing Console
+* The ECS Cluster leveraging EC2 instances for compute resides in a Linked Account connected to the Management Account through the "Consolidated Billing" option within the Billing Console
+* AWS generated tag is active in Cost Allocation Tags **aws:ecs:serviceName**  this will appear in the CUR as resource_tags_aws_ecs_service_Name
+* User-defined Cost Allocation Tags **Name** is active
+* You will need an S3 bucket in your Analytics account to upload source files into
+* Your Tasks **MUST** have the Name of the Service as a tag **Name**. This is best done with [Tag propagation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html) on service **creation**, see below:
+
+![Images/Example_output.png](/Cost/300_Optimization_Data_Collection/Images/Example_output.png)
+	- Note: If you cannot re-create your task using this the see the [source/tag.py](https://github.com/aws-samples/ecs-chargeback-cloudformation/blob/main/source/tag.py)
 
 
 * IAM Policy added to **OptimizationDataRoleStack** CloudFormation StackSet:  
@@ -463,7 +505,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 - **RDS Utilization Data module** module -> **AWS-Organization-Account-Collector** Lambda function
 - **AWS Budgets Export module** module -> **AWS-Organization-Account-Collector** Lambda function
 - **Cost Explorer Rightsizing Recommendations** module -> **aws-cost-explorer-rightsizing-recommendations-function** Lambda function
-- **Compute Optimizer Collector** module -> **ComputeOptimizer-Lambda-Function** Lambda function
+- **Compute Optimizer Collector** module -> **ComputeOptimizer-Trigger-Export** Lambda function
 - **AWS Organization Data Export** module -> **Lambda_Organization_Data_Collector** Lambda function
 
 
@@ -477,6 +519,8 @@ Once you have deployed your modules you will be able to test your Lambda functio
 4.	Click **Test**
 
 5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
+
+For **Compute Optimizer Collector** module processing can take up to 30 mins (15 mins for Compute Optimizer to produce exports requested by lambda, and then another 15 mins for the replication from region buckets to the main bucket)
 
 6. Go to the **Athena** service page
 
