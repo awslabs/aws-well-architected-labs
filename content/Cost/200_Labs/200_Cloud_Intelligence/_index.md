@@ -119,6 +119,15 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
 
 
+### Compute Optimizer Dashboard
+This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportinities for over provisionned ressources and also see the Operational risk from under provisioned ones.
+
+**Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
+
+- [Explore a sample Compute Optimizer Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
+
+
+
 ### Additional Dashboards
 In addition to the 3 foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.   
 
