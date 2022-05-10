@@ -28,9 +28,9 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
   * [AWS Transit Gateway](#aws-transit-gateway)
   * [Network Usage](#network-usage)
-  * [Inbalance Inter-Az Data Transfer](#imbalance-interaz-transfer)
-  * [Low Activity VPC Interface Endpoints](#interface-endpoint-idle)
-  * [Low Activity AWS Network Firewall](#network-firewall-idle)
+  * [Inbalance Inter-Az Data Transfer](#inbalance-inter-az-data-transfer)
+  * [Low Activity VPC Interface Endpoints](#low-activity-vpc-interface-endpoints)
+  * [Low Activity AWS Network Firewall](#low-activity-aws-network-firewall)
   
 ### Amazon API Gateway
 
@@ -584,7 +584,7 @@ This query shows cost and usage of inbalance inter-az data transfer last month. 
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
 #### Sample Output
-![Images/imbalance-interaz-transfer.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/imbalance-interaz-transfer.png)
+![Images/imbalance-inter-az-transfer.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/imbalance-inter-az-transfer.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/imbalance-interaz-transfer.sql)
@@ -624,7 +624,7 @@ This query shows cost and usage of Interface Endpoints which did not receive sig
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
 #### Sample Output
-![Images/interface-endpoint-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/interface-endpoint-idle.png)
+![Images/interface-endpoints-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/interface-endpoints-idle.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/interface-endpoint-idle.sql)
@@ -663,7 +663,7 @@ This query shows cost and usage of Network Firewall Endpoints which did not rece
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
 #### Sample Output
-![Images/network-firewall-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/network-firewall-idle.png)
+![Images/network-firewalls-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/network-firewalls-idle.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/network-firewall-idle.sql)
