@@ -108,9 +108,7 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 <summary> Click here to see the function code</summary>
 
     # Lambda Function Code - SPTool_OD_pricing_Download
-    # Function to download OnDemand pricing, get out the required lines & upload it to S3 as a zipped file
-    # It will find 'OnDemand' and 'Compute Instance', and write to a file
-    # Written by natbesh@amazon.com
+    # Function to download OnDemand pricing
     # Please reachout to costoptimization@amazon.com if there's any comments or suggestions
     # Lambda Function Code - SPTool_OD_pricing_Download
 
@@ -266,9 +264,10 @@ Create the Savings Plan Lambda function to get the pricing information, and extr
 7. Click **Deploy** above the code
 
 8. Edit Basic settings below:
-   - Memory: **2048MB**
-    - Timeout: **2min**
-    - Click **save**
+   - Memory: **10240MB**
+   - Ephemeral storage: **10240MB**
+   - Timeout: **10min**
+   - Click **save**
 ![Images/lambda_basicsettings2.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_basicsettings2.png)
 
 9. Scroll to the top and click **Test**

@@ -7,7 +7,11 @@ pre: "<b>2. </b>"
 ---
 
 
-**Notes If AWS updates pricing table with new column, values might get out of sync.
+
+{{% notice note %}}
+If AWS updates pricing table with new column, values might get out of sync. Please contact costoptimization@amazon.com if you encounter any problems
+{{% /notice %}}
+
 
 
 We will combine the pricing information with our Cost and Usage Report (CUR). This will give us a usage data source which contains a summary of your usage at an hourly level, with multiple pricing dimensions.
