@@ -2,11 +2,17 @@
 title: "Grant permissions to your accounts in your AWS Organization"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 2
+weight: 1
 pre: "<b>2. </b>"
 ---
 
-### Role for Management Account
+### Permissions
+
+We will need to install 2 things to ensure DataCollection account can collect information accross all accounts in the AWS Organization. 
+1. A Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. 
+2. A StackSet that will deploy a [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) in each Linked accout of Organization.
+
+### 1/2 Role for Management Account 
 
 Some of the data needed for the modules is in the **Management account** we will now create a read only role to assume into that account to get the data. 
 
@@ -26,7 +32,7 @@ Some of the data needed for the modules is in the **Management account** we will
 
 
 
-### Read Only roles for Data Collector modules
+### 2/2 Read Only roles for Data Collector modules
 
 Modules deployed in **OptimizationDataCollectionStack** (previous step) allow to collect data from all of the accounts in an AWS Organization we will use a CloudFormation StackSet to deploy a single read only role to all accounts. 
 
@@ -70,5 +76,4 @@ Modules deployed in **OptimizationDataCollectionStack** (previous step) allow to
 Note this role will not be deployed into the management account so if you wish to read data from this account too, deploy as a CloudFormation stack. 
 {{% /notice %}}
 
-
-{{< prev_next_button link_prev_url="../1_deploy_main_resources/" link_next_url="../3_data_collection_modules" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../2_deploy_main_resources" />}}

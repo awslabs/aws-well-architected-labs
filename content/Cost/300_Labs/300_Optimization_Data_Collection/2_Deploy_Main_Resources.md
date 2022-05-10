@@ -2,7 +2,7 @@
 title: "Deploy core infrastructure for data retrieval"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 1
+weight: 2
 pre: "<b>1. </b>"
 ---
 
@@ -35,4 +35,4 @@ For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-we
 5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
 ![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
 
-{{< prev_next_button link_prev_url="../" link_next_url="../2_deploy_additional_roles" />}}
+{{< prev_next_button link_prev_url="../1_grant_permissions/" link_next_url="../3_data_collection_modules" />}}
