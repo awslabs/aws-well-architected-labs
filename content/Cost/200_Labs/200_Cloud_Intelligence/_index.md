@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-April 2022
+May 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -43,6 +43,7 @@ In this lab, you will find step-by-step guides on how to implement some or all o
 - [**CUDOS Dashboard - Overview**](#cudos-dashboard)
 - [**Trusted Advisor Organizational (TAO) Dashboard - Overview**](#trusted-advisor-organizational-tao-dashboard)
 - [**KPI & Modernization Dashboard (KPI) - Overview**](#kpi-dashboard)
+- [**Compute Optimizer Dashboard (COD) - Overview**](#compute-optimizer-dashboard)
 - [**Additional Dashboards - Overview**](#additional-dashboards)
 
 The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
@@ -119,7 +120,7 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
 
 
-### Compute Optimizer Dashboard
+### Compute Optimizer Dashboard (COD)
 This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportinities for over provisionned ressources and also see the Operational risk from under provisioned ones.
 
 **Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
@@ -140,6 +141,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 ## Steps:
 - [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
+- [Get started with the COD](compute-optimizer-dashboards/)
 
 ## Authors
 
@@ -147,6 +149,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Iakov Gan, Senior Technical Account Manager
 
 ## Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
