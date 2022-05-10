@@ -28,9 +28,9 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
   * [AWS Transit Gateway](#aws-transit-gateway)
   * [Network Usage](#network-usage)
-  * [Inbalance Inter-Az Data Transfer] (#imbalance-interaz-transfer)
-  * [Low Activity VPC Interface Endpoints] (#interface-endpoint-idle)
-  * [Low Activity AWS Network Firewall] (#network-firewall-idle)
+  * [Inbalance Inter-Az Data Transfer](#imbalance-interaz-transfer)
+  * [Low Activity VPC Interface Endpoints](#interface-endpoint-idle)
+  * [Low Activity AWS Network Firewall](#network-firewall-idle)
   
 ### Amazon API Gateway
 
