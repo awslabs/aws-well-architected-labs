@@ -1,3 +1,4 @@
+---
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   This template is from: https://www.wellarchitectedlabs.com/
@@ -235,8 +236,8 @@ Resources:
       AvailabilityZone: !Select
         - 0
         - Fn::GetAZs: !Ref 'AWS::Region'
-      CidrBlock: !Select [ 1, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 1, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 1, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 1, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-ALB1-a'
@@ -251,8 +252,8 @@ Resources:
       AvailabilityZone: !Select
         - 1
         - Fn::GetAZs: !Ref 'AWS::Region'
-      CidrBlock: !Select [ 2, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 2, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 2, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 2, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-ALB1-b'
@@ -267,8 +268,8 @@ Resources:
       AvailabilityZone: !Select
         - 2
         - Fn::GetAZs: !Ref 'AWS::Region'
-      CidrBlock: !Select [ 3, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 3, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 3, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 3, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-ALB1-c'
@@ -372,7 +373,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -385,7 +386,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -398,7 +399,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -411,7 +412,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -424,7 +425,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -437,7 +438,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -476,7 +477,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -489,7 +490,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -502,7 +503,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -515,7 +516,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -528,7 +529,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -541,7 +542,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '80'
         To: '80'
@@ -554,7 +555,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -567,7 +568,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -580,7 +581,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -593,7 +594,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -606,7 +607,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -619,7 +620,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '443'
         To: '443'
@@ -654,8 +655,8 @@ Resources:
         - 0
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-App1-a'
@@ -669,8 +670,8 @@ Resources:
         - 1
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-App1-b'
@@ -684,8 +685,8 @@ Resources:
         - 2
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-App1-c'
@@ -1023,32 +1024,32 @@ Resources:
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIp: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+          CidrIp: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
         - 
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIpv6: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+          CidrIpv6: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
         - 
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIp: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+          CidrIp: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
         - 
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIpv6: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+          CidrIpv6: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
         - 
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIp: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+          CidrIp: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
         - 
           IpProtocol: "tcp"
           FromPort: '443'
           ToPort: '443'
-          CidrIpv6: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+          CidrIpv6: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Join
@@ -1232,8 +1233,8 @@ Resources:
         - 0
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 21, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 21, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 21, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 21, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-a'
@@ -1249,8 +1250,8 @@ Resources:
         - 1
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 22, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 22, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 22, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 22, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-b'
@@ -1266,8 +1267,8 @@ Resources:
         - 2
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 23, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 23, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 23, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 23, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-c'
@@ -1282,15 +1283,9 @@ Resources:
           - AllocationId
       SubnetId:
         Ref: Shared1Subnet1
-      Tags: 
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-a'
-  Shared1NAT1EIP:
-    Condition: Shared1Enabled
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
   Shared1NATGW2:
     Condition: Shared1Enabled
     Type: AWS::EC2::NatGateway
@@ -1301,15 +1296,9 @@ Resources:
           - AllocationId
       SubnetId:
         Ref: Shared1Subnet2
-      Tags: 
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-b'
-  Shared1NAT2EIP:
-    Condition: Shared1Enabled
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
   Shared1NATGW3:
     Condition: Shared1Enabled
     Type: AWS::EC2::NatGateway
@@ -1320,7 +1309,6 @@ Resources:
           - AllocationId
       SubnetId:
         Ref: Shared1Subnet3
-      Tags: 
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-Shared1-c'
@@ -1520,7 +1508,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1534,7 +1522,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1548,7 +1536,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1562,7 +1550,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1576,7 +1564,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1590,7 +1578,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '0'
         To: '65535'
@@ -1705,8 +1693,8 @@ Resources:
         - 0
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 31, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 31, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 31, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 31, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-DB1-a'
@@ -1722,8 +1710,8 @@ Resources:
         - 1
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 32, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 32, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 32, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 32, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-DB1-b'
@@ -1739,8 +1727,8 @@ Resources:
         - 2
         - Fn::GetAZs: !Ref 'AWS::Region'
       #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getavailabilityzones.html
-      CidrBlock: !Select [ 33, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
-      Ipv6CidrBlock: !Select [ 33, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      CidrBlock: !Select [ 33, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      Ipv6CidrBlock: !Select [ 33, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       Tags:
         - Key: Name
           Value: !Sub '${NamingPrefix}-DB1-c'
@@ -1824,7 +1812,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1837,7 +1825,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1850,7 +1838,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1863,7 +1851,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1876,7 +1864,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1889,7 +1877,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: !Ref DB1TCPPortNumber
         To: !Ref DB1TCPPortNumber
@@ -1902,7 +1890,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 11, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 11, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -1915,7 +1903,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 11, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 11, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -1928,7 +1916,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 12, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 12, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -1941,7 +1929,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 12, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 12, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -1954,7 +1942,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      CidrBlock: !Select [ 13, !Cidr [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
+      CidrBlock: !Select [ 13, Fn::Cidr: [ !GetAtt VPC.CidrBlock, !Ref VPCNumberOfIPv4Subnets, !Ref VPCSubnetIPv4Size ]]
       PortRange:
         From: '1024'
         To: '65535'
@@ -1967,7 +1955,7 @@ Resources:
       Protocol: '6'
       RuleAction: allow
       Egress: 'true'
-      Ipv6CidrBlock: !Select [ 13, !Cidr [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
+      Ipv6CidrBlock: !Select [ 13, Fn::Cidr: [ !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks], !Ref VPCNumberOfIPv6Subnets, !Ref VPCSubnetIPv6Size ]]
       PortRange:
         From: '1024'
         To: '65535'
