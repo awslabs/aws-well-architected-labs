@@ -297,7 +297,6 @@ Resources:
             CFDataName: "TA"
             GlueRoleARN: !GetAtt GlueRole.Arn
             MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-            CodeBucket: !Ref CodeBucket
             RolePrefix: !Ref RolePrefix
   RightsizeModule:
     Type: AWS::CloudFormation::Stack

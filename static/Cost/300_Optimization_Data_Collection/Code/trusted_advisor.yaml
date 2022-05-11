@@ -19,26 +19,6 @@ Parameters:
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
-  CodeBucket:
-      Type: String
-      Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs
-      AllowedValues:
-        - aws-well-architected-labs-ireland
-        - aws-well-architected-labs
-        - aws-well-architected-labs-ohio
-        - aws-well-architected-labs-virginia
-        - aws-well-architected-labs-california
-        - aws-well-architected-labs-oregon
-        - aws-well-architected-labs-singapore
-        - aws-well-architected-labs-frankfurt
-        - aws-well-architected-labs-london
-        - aws-well-architected-labs-stockholm
-        - aws-well-architected-labs-ap-sydney
-  CodeKey:
-    Type: String
-    Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/ta.zip
   Prefix:
     Type: String
     Description: Service which the data collector is looking at
@@ -112,8 +92,115 @@ Resources:
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
-         S3Bucket: !Ref CodeBucket
-         S3Key: !Ref CodeKey
+        ZipFile: |
+          import os
+          import json
+          from datetime import date, datetime
+
+          import boto3
+          from botocore.exceptions import ClientError
+          from botocore.client import Config
+
+          prefix = os.environ["PREFIX"]
+          bucket = os.environ["BUCKET_NAME"]
+          only_cost = os.environ['COSTONLY']
+          crawler = os.environ["CRAWLER_NAME"]
+
+          def lambda_handler(event, context):
+              try:
+                  for record in event['Records']:
+                      body = json.loads(record["body"])
+                      acc_id = body["account_id"]
+                      acc_name = body["account_name"]
+                      if prefix != 'ta':
+                          print(f"These aren't the datapoints you're looking for: {prefix}")
+                          continue
+                      main(acc_id, acc_name)
+                      upload_to_s3(prefix, acc_id)
+                      start_crawler()
+              except Exception as e:
+                  print(f'ERROR: {e}')
+
+          def upload_to_s3(prefix, acc_id):
+              if not os.path.getsize("/tmp/data.json"):
+                  print(f"No data in file for {prefix}")
+                  return
+              date_formatted = datetime.now().strftime("%d%m%Y-%H%M%S")
+              today = date.today()
+              path = f"optics-data-collector/{prefix}-data/year={today.year}/month={today.month}/{prefix}-{acc_id}-{date_formatted}.json"
+              try:
+                  s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+                  s3.upload_file("/tmp/data.json", bucket, path)
+                  print(f"Data {acc_id} in s3 - {bucket}/{path}")
+              except Exception as e:
+                  print(f'ERROR: upload - {e}')
+
+          def assume_role(acc_id, service, region):
+              role_name = os.environ['ROLENAME']
+              role_arn = f"arn:aws:iam::{acc_id}:role/{role_name}" #OrganizationAccountAccessRole
+              sts_client = boto3.client('sts')
+              try:
+                  #region = sts_client.meta.region_name
+                  assumed = sts_client.assume_role(
+                      RoleArn=role_arn,
+                      RoleSessionName="AssumeRoleRoot"
+                  )
+                  creds = assumed['Credentials']
+                  return boto3.client(
+                      service,
+                      aws_access_key_id=creds['AccessKeyId'],
+                      aws_secret_access_key=creds['SecretAccessKey'],
+                      aws_session_token=creds['SessionToken'],
+                      region_name=region
+                  )
+              except ClientError as e:
+                  print(f"Unexpected error Account {acc_id}: {e}")
+
+          def start_crawler():
+              try:
+                  boto3.client("glue").start_crawler(Name=crawler)
+              except Exception as e:
+                  print(f"ERROR: crawler start - {e}")
+
+          class DateTimeEncoder(json.JSONEncoder):
+              def default(self, obj):
+                  if isinstance(obj, (date, datetime)):
+                      return obj.isoformat()
+
+          def epoc(ts):
+              return int((datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ') - datetime(1970, 1, 1)).total_seconds())
+
+          def main(acc_id, account_name):
+              f = open("/tmp/data.json", "w")  # Saving in the temporay folder in the lambda
+              support = assume_role(acc_id, "support", "us-east-1")
+              resp = support.describe_trusted_advisor_checks(language="en")
+              for check in resp["checks"]:
+                  base = {"AccountId":acc_id, "Category": check["category"], "AccountName":account_name}
+                  try:
+                      meta = check["metadata"]
+                      if only_cost == 'yes' and check["category"] != 'cost_optimizing': continue
+                      id = check["id"]
+                      name = {"CheckName": check["name"], "CheckId": id}
+                      result = support.describe_trusted_advisor_check_result(checkId=id, language="en")['result']
+                      if result.get('status') == 'not_available':
+                          continue
+                      ts = result['timestamp']
+                      base.update({'DateTime':ts, 'Timestamp':epoc(ts)})
+                      for rsrc in result["flaggedResources"]:
+                          res = {}
+                          if "metadata" in rsrc:
+                              res = dict(zip(meta, rsrc["metadata"]))
+                              del rsrc['metadata']
+                          rsrc["Region"] = rsrc.pop("region", '-')
+                          rsrc["Status"] = rsrc.pop("status", '-')
+                          res.update(base)
+                          res.update(name)
+                          res.update(rsrc)
+                          f.write(json.dumps(res, cls=DateTimeEncoder) + "\n")
+                  except Exception as e:
+                      print(f"ERROR: {check.get('name')} - {e}")
+                      continue
+              f.close()
       Handler: 'main.lambda_handler'
       MemorySize: 2688
       Timeout: 300
