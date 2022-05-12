@@ -28,7 +28,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
   * [AWS Transit Gateway](#aws-transit-gateway)
   * [Network Usage](#network-usage)
-  * [Inbalance Inter-Az Data Transfer](#inbalance-inter-az-data-transfer)
+  * [Imbalance Inter-Az Data Transfer](#imbalance-inter-az-data-transfer)
   * [Low Activity VPC Interface Endpoints](#low-activity-vpc-interface-endpoints)
   * [Low Activity AWS Network Firewall](#low-activity-aws-network-firewall)
   
@@ -575,7 +575,7 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 
 
 
-### Inbalance Inter-Az Data Transfer
+### Imbalance Inter-Az Data Transfer
 
 #### Query Description
 This query shows cost and usage of inbalance inter-az data transfer last month.  These resources are commonly collectors or aggregators mostly receiving data from other resources in different Availability Zones.  Distributing the resource functionality to each of the Availability Zones and redirect the data transfer from sending sources to be within the same Availability Zone will eliminate the $0.01/GB data transfer charges between Availability Zones.
