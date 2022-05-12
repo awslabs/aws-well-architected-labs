@@ -26,6 +26,21 @@ hidden: false
 		- Image width MUST always be `>800px`, which stops images from being placed next to text. Create the image border and then resize with whitespace
 		- Ensure there is a black border around the images by formatting your images using the following structure `![Images/(your image.png)](/(shortpillarname)/(content folder for lab)/Images/(your image.png)?classes=lab_picture_small)`
 
+### Picture Formatting
+When you update a lab picture please ensure it had the following:
+* Black boarder
+* Orange box's to show the item the customer is looking for
+* Role/AccountID hidden using the same colour as the section 
+* Image width MUST always be `>800px`, which stops images from being placed next to text. Create the image border and then resize with whitespace
+* The description above the image much match the image e.g. if you say use 2688Mb then the picture must have 2688Mb
+
+An example can be seen below:
+
+**Step example** :
+1. Role name LambdaOrgRole, click Create role:
+![Images/create_role.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_role.png)
+
+
 ### Verify your edits and/or additions
 After making the changes or additions test and verify locally
  - Navigate back to the aws-well-architected-labs parent folder
