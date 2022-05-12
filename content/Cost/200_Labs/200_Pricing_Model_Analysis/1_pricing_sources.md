@@ -119,7 +119,6 @@ Create the On-Demand Lambda function to get the pricing information, and extract
     import os
     
     def lambda_handler(event, context):
-        # TODO implement
     
         s3=boto3.resource('s3')
         http=urllib3.PoolManager()
