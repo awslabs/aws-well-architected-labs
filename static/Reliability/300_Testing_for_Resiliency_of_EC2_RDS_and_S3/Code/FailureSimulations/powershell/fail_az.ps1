@@ -35,7 +35,7 @@ Get-ASAutoScalingGroup | ForEach-Object {
     $subnets | ForEach-Object {
         Write-Host "subnet used: " + $_.SubnetId
         If ($arrayasgs -contains $_.SubnetId) {
-            Write-Host "slected subnet id is: " + $_.SubnetId
+            Write-Host "selected subnet id is: " + $_.SubnetId
             $collection.Remove($_.SubnetId)
         }
     }
@@ -44,7 +44,7 @@ Get-ASAutoScalingGroup | ForEach-Object {
     $strcoll = [string]$collection
     Write-Host "asg name: " $asg
     Write-Host "subnets in string: " $strcoll
-    Write-Host "availanbility zones: " $az
+    Write-Host "availability zones: " $az
     Update-ASAutoScalingGroup -AutoScalingGroupName $asg -AvailabilityZone $az -VPCZoneIdentifier $strcoll
 }
 
