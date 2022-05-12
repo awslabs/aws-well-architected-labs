@@ -8,9 +8,9 @@ pre: "<b>2. </b>"
 
 ### Permissions
 
-We will need to install 2 things to ensure DataCollection account can collect information accross all accounts in the AWS Organization. 
-1. A Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. 
-2. A StackSet that will deploy a [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) in each Linked accout of Organization.
+We will need to install 2 IAM roles to ensure DataCollection account can collect information accross all accounts in the AWS Organization. 
+1. One Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. 
+2. A second [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) must be installed in each Linked accout of Organization via a StackSet.
 
 ### 1/2 Role for Management Account 
 
