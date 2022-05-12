@@ -25,16 +25,16 @@ This lab is designed to **enable you to collect utilization data from different 
 ## Modules
 The main sources of the data used in optional modules:
 
-* AWS Trusted Advisor Module collects [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/technology/trusted-advisor/) results.
-* Rightsizing Recommendations Module collects [Cost Explorer Rightsizing Recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html) (for EC2 only).
-* AWS Compute Optimizer Module. Collecst [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/) right sizing recommendations (EC2, ASG, EBS and Lambda)
-* Inventory Module collects [Amazon EC2](https://aws.amazon.com/ec2/) service inventories like Amazon EBS volumes, snapshots and AMIs
-* ECS Chargeback Module collects [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data
-* RDS Utilization Module collects [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
-* AWS Organization Module exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
-* AWS Budgets Collection Module uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
+* **Trusted Advisor Module** collects [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/technology/trusted-advisor/) results.
+* **Rightsizing Recommendations Module** collects [Cost Explorer Rightsizing Recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html) (for EC2 only).
+* **Compute Optimizer Module** collects [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/) right sizing recommendations (EC2, ASG, EBS and Lambda)
+* **Inventory Module** collects [Amazon EC2](https://aws.amazon.com/ec2/) service inventories like Amazon EBS volumes, snapshots and AMIs
+* **ECS Chargeback Module** collects [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data
+* **RDS Utilization Module** collects [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
+* **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
+* **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
 
-Modules in any combination and can be added on update of the CloudFormation stack. 
+Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. 
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:
