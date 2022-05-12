@@ -26,7 +26,7 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
 	
 ## Deployment Options
-There is currently only 2 option to deploy the KPI Dashboard. The CloudFormation template is coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
+There are 3 options to deploy the KPI Dashboard. The CloudFormation template is coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
 
 ### Option 1: Manual Deployment
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option to users who are new to Athena and QuickSight. 
