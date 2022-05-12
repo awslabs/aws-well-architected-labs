@@ -7,32 +7,34 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-October 2021
+May 2022
 
 ## Authors
 - Stephanie Gooch, Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
 
-
 ## Feedback
 If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
-
 
 ## Introduction
 Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, security and enterprise applications. These services help organizations move faster, lower IT costs and scale.
 
 This lab is designed to **enable you to collect utilization data from different AWS services to help you identify optimization opportunities**. This lab provides set of optional modules to automate data collection and explains how to create custom modules to pull additional data sets. 
 
+## Modules
 The main sources of the data used in optional modules:
-* [Cost Explorer Rightsizing Recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
-* [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/technology/trusted-advisor/)
-* [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/)
-* [Amazon EC2](https://aws.amazon.com/ec2/?ec2-whats-new.sort-by=item.additionalFields.postDateTime&ec2-whats-new.sort-order=desc) service inventories like Amazon EBS volumes, snapshots and AMIs
-* [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data 
-* [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
-* [AWS Organizations](https://aws.amazon.com/organizations/) data export 
-* [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/) data export
+
+* **Trusted Advisor Module** collects [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/technology/trusted-advisor/) results.
+* **Rightsizing Recommendations Module** collects [Cost Explorer Rightsizing Recommendations](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html) (for EC2 only).
+* **Compute Optimizer Module** collects [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/) right sizing recommendations (EC2, ASG, EBS and Lambda)
+* **Inventory Module** collects [Amazon EC2](https://aws.amazon.com/ec2/) service inventories like Amazon EBS volumes, snapshots and AMIs
+* **ECS Chargeback Module** collects [Amazon Elastic Container Service](https://aws.amazon.com/ecs/) chargeback data
+* **RDS Utilization Module** collects [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
+* **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
+* **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
+
+Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. 
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:
@@ -71,6 +73,8 @@ It is possible to deploy **Optimization Data Collection** Stack to organization'
 
 ## Prerequisites
 - Access to the Management AWS Account of the AWS Organization to deploy Cloudformation
+- Inventory, ECS Chargeback and Trusted Advisor Modules of this Lab require lambda code that only available in a limited number of regions (eu-west-1,us-west-2,us-east-2,us-east-1,us-west-1,us-west2,ap-southeast-1,eu-central-1,eu-west-2,eu-north-1,ap-southeast-2). Please make sure you choose to use these regions to install the Data Collection stack. 
+- Trusted Advisor Modules will require a Business, Enterprise On-Ramp, or Enterprise Support plan.
 - Access to a sub account within the Organization - referred to as **Cost Optimization Account**
 - Completed the [Account Setup Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
 - Completed the [Cost and Usage Analysis lab]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
@@ -80,7 +84,6 @@ It is possible to deploy **Optimization Data Collection** Stack to organization'
 We suggest you do not deploy the main resources and collectors into your management account and instead use the cost account created in [Account Setup Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}). However, Some IAM resources will be needed to read data from the management account. 
 
 ## Permissions required
-
 Be able to create the below in the management account:
 - IAM role and policy
 - Deploy CloudFormation
@@ -97,7 +100,6 @@ Be able to create the below in a sub account where your CUR data is accessible:
 
 ## Costs
 - Estimated costs should be <$5 a month for small Organization 
-
 
 ## Time to complete
 - 30 minutes
