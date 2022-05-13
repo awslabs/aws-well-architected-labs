@@ -24,6 +24,13 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi) 
 
 ![kpi_sample](/Cost/200_Cloud_Intelligence/Images/kpi/kpi_sample.png?classes=lab_picture_small)
+
+## Prerequisites
+KPI dashboard can be only be installed if following products are in billing history (CUR)
+- RDS
+- Elasticache
+If you do not have these products you can install and then delete instances of each product after 1 hour.
+
 	
 ## Deployment Options
 There are 3 options to deploy the KPI Dashboard. The CloudFormation template is coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
