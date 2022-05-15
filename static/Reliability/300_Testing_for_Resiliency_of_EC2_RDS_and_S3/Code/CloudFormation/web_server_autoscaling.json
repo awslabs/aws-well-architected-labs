@@ -200,7 +200,7 @@
         "MinSize" : "3",
         "MaxSize" : "3",
         "HealthCheckType" : "ELB",
-        "HealthCheckGracePeriod" : "90",
+        "HealthCheckGracePeriod" : "120",
         "LaunchConfigurationName" : {"Ref" : "WebServerLaunchConfiguration" },
         "VPCZoneIdentifier" :  { "Ref" : "WebServerSubnets" },
         "TargetGroupARNs" : [ {"Ref" : "WebLoadBalancerTargetGroup" } ],
