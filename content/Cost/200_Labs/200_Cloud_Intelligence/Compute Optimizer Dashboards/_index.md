@@ -15,7 +15,7 @@ May 2022
 
 + Iakov Gan, Senior Technical Account Manager, EMEA
 + Yuriy Prykhodko, Senior Technical Account Manager, EMEA
-+ Timur Tulyaganov, Senior Technical Account Manager, EMEA
++ Timur Tulyaganov, Principal Technical Account Manager, EMEA
 
 
 ## Feedback
