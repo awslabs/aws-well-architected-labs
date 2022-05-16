@@ -113,6 +113,8 @@ Resources:
     Properties:
       Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
       PermissionModel: SELF_MANAGED
+      ManagedExecution:
+        Active: true
       Parameters:
         - ParameterKey: Name
           ParameterValue: !Sub "${BucketPrefix}${AWS::AccountId}"
@@ -533,3 +535,132 @@ Resources:
           * 
           FROM optimization_data.compute_optimizer_lambda
           WHERE functionarn like '%arn%'"
+  CustomRessourceFunctionFinalize:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt 'FinalizeLambdaExecutionRole.Arn'
+      FunctionName: !Sub "${RolePrefix}Compute-Optimizer-FinalizeSetup-DoNotRun"
+      Description: "Lambda to Finalize Setup (call trigger lambda) or Start teardown (Cleanup buckets)"
+      Runtime: python3.8
+      Architectures: [ arm64 ]
+      Code:
+        ZipFile: |
+          import os
+          import uuid
+          import json
+          import boto3
+          import botocore
+          import urllib3
+
+          REGIONS = os.environ['REGIONS'].replace(' ', '').split(',')
+          BUCKET_PREFIX = os.environ['BUCKET_PREFIX']
+          LAMBDA_ARN = os.environ['TRIGGER_LAMBDA']
+
+          def lambda_handler(event, context):
+              print(event)
+              type_ = event.get('RequestType', 'Undef')
+              if type_ == 'Create': res = on_create()
+              elif type_ == 'Delete': res = on_delete()
+              else: res = (True, f"Not supported operation: {type_}")
+              response_data = {'Reason': res[1], 'uuid': str(uuid.uuid1()) }
+
+              url = event.get('ResponseURL')
+              body = {}
+              body['Status'] = 'SUCCESS' if res[0] else 'FAILED'
+              body['Reason'] = str(res[1]) + '\nSee the details in CloudWatch Log Stream: ' + context.log_stream_name
+              body['PhysicalResourceId'] = context.log_stream_name
+              body['StackId'] = event.get('StackId')
+              body['RequestId'] = event.get('RequestId')
+              body['LogicalResourceId'] = event.get('LogicalResourceId')
+              body['NoEcho'] = False
+              body['Data'] = response_data
+              print(body)
+              if not url: return
+              json_body=json.dumps(body)
+              try:
+                  http = urllib3.PoolManager()
+                  response = http.request('PUT', url, body=json_body, headers={'content-type' : '', 'content-length' : str(len(json_body))}, retries=False)
+                  print(f"Status code: {response}" )
+              except Exception as exc:
+                  print("send(..) failed executing requests.put(..): " + str(exc))
+
+          def on_create():
+              try:
+                  name = LAMBDA_ARN.split(':')[-1]
+                  boto3.client('lambda').invoke(FunctionName=name, InvocationType="RequestResponse", Payload='{}')
+                  return (True, f'INFO: Invoked {name}')
+              except Exception as exc:
+                  return (True, f'ERROR: error invoking lambda {exc}')
+
+          def on_delete():
+              # Delete all buckets (CF cannot delete if they are non-empty)
+              s3 = boto3.resource('s3')
+              log = []
+              for region in REGIONS:
+                  name = BUCKET_PREFIX + "-" + region
+                  try:
+                      bucket = s3.Bucket(name)
+                      bucket.object_versions.delete()
+                      #bucket.delete()
+                      log.append(f'INFO:  {name} is empty now')
+                  except botocore.exceptions.ClientError as exc:
+                      status = exc.response["ResponseMetadata"]["HTTPStatusCode"]
+                      errcode = exc.response["Error"]["Code"]
+                      if status == 404:
+                          log.append(f'INFO:  {name} - {errcode}')
+                      else:
+                          log.append(f'ERROR: {name} - {errcode}')
+                  except Exception as exc:
+                      log.append(f'ERROR: {name} Error: {exc}')
+              print('\n'.join(log))
+              return (True, '\n'.join(log))
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Environment:
+        Variables:
+          REGIONS: !Ref DeployRegions
+          BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
+          TRIGGER_LAMBDA:  !GetAtt LambdaTriggerExport.Arn
+  FinalizeLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeAsync
+                  - lambda:InvokeFunction
+                Resource: !GetAtt LambdaTriggerExport.Arn
+              - Effect: Allow
+                Action:
+                  - s3:DeleteObject
+                  - s3:DeleteObjectVersion
+                Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*/*'
+              - Effect: Allow
+                Action:
+                  - s3:ListBucketVersions
+                Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+  FinalizeSetup:
+    DependsOn:
+      - LambdaTriggerExport
+      - ReplicaitonBucketsStackSet
+      - FinalizeLambdaExecutionRole
+    Type: Custom::CustomResource
+    Properties:
+      ServiceToken: !GetAtt CustomRessourceFunctionFinalize.Arn
