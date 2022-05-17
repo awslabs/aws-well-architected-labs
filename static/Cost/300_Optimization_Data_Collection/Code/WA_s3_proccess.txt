@@ -5,7 +5,7 @@ In the bucket aws-well-architected-labs. These are then replicated to the other 
 To add a regional bucket follow these steps:
 * create bucket following the naming convention aws-well-architected-labs-<region>
 * 'Block all public access' Set to > Off
-* Access control list (ACL) Change from default
+* Access control list (ACL) Change from default to  ACLs enabled
 * add this to the role s3-replication-role
 * Add bucket policy below
 * create a replication role on the aws-well-architected-labs bucket on prefix Cost/Labs/300_Optimization_Data_Collection/
@@ -29,7 +29,7 @@ To add a regional bucket follow these steps:
 }
 
 aws s3 cp  Budgets.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml --acl public-read
-aws s3 cp  compute_optimizer.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml    --acl public-read
+aws s3 cp  compute_optimizer.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml  --acl public-read
 aws s3 cp  Management.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/Management.yaml --acl public-read
 aws s3 cp  lambda_s3_athen_cf_template.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/lambda_s3_athen_cf_template.yaml --acl public-read
 aws s3 cp  optimisation_read_only_role.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml --acl public-read
