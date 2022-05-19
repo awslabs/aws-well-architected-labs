@@ -36,7 +36,7 @@ The following diagram shows the updated architecture you will deploy. This archi
 
     * Click **Update stack**
 
-    ![CFNIamCapabilities](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNIamCapabilities.png?classes=lab_picture_auto)
+    ![CFNIamCapabilitiesUpdateStack](/Reliability/300_Fault_Isolation_with_Shuffle_Sharding/Images/CFNIamCapabilitiesUpdateStack.png?classes=lab_picture_auto)
 
 This will take you to the CloudFormation stack status page, showing the stack update in progress. The stack takes about 1 minute to go through all the updates. Periodically refresh the CloudFormation stack events until you see that the **Stack Status** is in **UPDATE_COMPLETE**.
 
