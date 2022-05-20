@@ -34,12 +34,12 @@ The main sources of the data used in optional modules:
 * **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
 * **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
 
-Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. 
+Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. Detailed description of each module can be found [here](../3_data_collection_modules).
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:
-1. **Optimization Data Collection** Stack deploys core resources for the lab and allows to choose which [data collection modules](../300_optimization_data_collection/3_data_collection_modules) to deploy. Each data collection module is optional. We recommend to deploy this stack in separate optimization data collection AWS account. 
-1. **Optimization Management Data Role** Stack deploys AWS IAM Role for AWS Lambda which allows read-only access to retrieve linked accounts information from AWS Organizations. This stack should be deployed in management AWS account
+1. **Optimization Data Collection** Stack deploys core resources for the lab and allows to choose which [data collection modules](../300_optimization_data_collection/3_data_collection_modules) to deploy. Each data collection module is optional. We recommend to deploy this stack in separate optimization data collection AWS account in order to limit number of assets in the Management account. 
+1. **Optimization Management Data Role** Stack deploys AWS IAM Role for AWS Lambda which allows read-only access to retrieve linked accounts information from AWS Organizations. This stack should be deployed in **Management AWS account** (some time also referenced as Governance, Master or Payer account).
 1. **Optimization Data Collection** StackSet deploys IAM role required for AWS Lambda to get optimization data for each module. StackSet should be deployed from either organization's management account or a delegated administrator account to all linked accounts in organization. 
 
 ![Images/Arc.png](/Cost/300_Optimization_Data_Collection/Images/Arc.png)
@@ -73,12 +73,11 @@ It is possible to deploy **Optimization Data Collection** Stack to organization'
 
 ## Prerequisites
 - Access to the Management AWS Account of the AWS Organization to deploy Cloudformation
-- Inventory, ECS Chargeback and Trusted Advisor Modules of this Lab require lambda code that only available in a limited number of regions (eu-west-1,us-west-2,us-east-2,us-east-1,us-west-1,us-west2,ap-southeast-1,eu-central-1,eu-west-2,eu-north-1,ap-southeast-2). Please make sure you choose to use these regions to install the Data Collection stack. 
-- Trusted Advisor Modules will require a Business, Enterprise On-Ramp, or Enterprise Support plan.
 - Access to a sub account within the Organization - referred to as **Cost Optimization Account**
 - Completed the [Account Setup Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
-- Completed the [Cost and Usage Analysis lab]({{< ref "/Cost/200_Labs/200_4_Cost_and_Usage_Analysis" >}})
-- Completed the [Cost Visualization Lab]({{< ref "/Cost/200_Labs/200_5_Cost_Visualization" >}}) 
+- Inventory, ECS Chargeback and Trusted Advisor Modules of this Lab require lambda code that only available in a limited number of regions (eu-west-1,us-west-2,us-east-2,us-east-1,us-west-1,us-west2,ap-southeast-1,eu-central-1,eu-west-2,eu-north-1,ap-southeast-2). Please make sure you choose to use these regions to install the Data Collection stack. 
+- Trusted Advisor Modules will require a Business, Enterprise On-Ramp, or Enterprise Support plan.
+
 
 ## Deployment Options
 We suggest you do not deploy the main resources and collectors into your management account and instead use the cost account created in [Account Setup Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}). However, Some IAM resources will be needed to read data from the management account. 
@@ -96,6 +95,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 - Amazon CloudWatch trigger
 - Amazon Athena Table
 - AWS Glue Crawler
+- Enroll into Compute Optimization
 
 
 ## Costs
