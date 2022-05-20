@@ -33,11 +33,16 @@ To get Athena warmed up:
 
     ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/Athena-S3.png?classes=lab_picture_small)
 
-1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+1. Validate your Athena primary workgroup has an output location by  
+    - Open a new tab or window and navigate to the **Athena** console
+    - Select **Workgroup: primary**
+![Images/cf_dash_athena_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_2.png?classes=lab_picture_small)
+    - Confirm your **Query result location** is configured with an S3 bucket path. 
+        - If not configured, continue to setting up by clicking **Edit workgroup**
+![Images/cf_dash_athena_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_4.png?classes=lab_picture_small)
+    - Add the **S3 bucket path** you have selected for your Query result location and click save
+![Images/cf_dash_athena_5.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_5.png?classes=lab_picture_small)
 
-{{% notice note %}}
-Configuration **MUST** be performed at the Athena workgroup level. 
-{{% /notice %}}
 
 ### 4/4 Enable QuickSight 
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps.
@@ -53,7 +58,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 1. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
 
-    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your TA report files.
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your CO report files.
 
         ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
     
