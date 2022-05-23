@@ -34,6 +34,23 @@ This can be found in your AWS Organizations part of the console.
 
 {{% /expand%}}
 
+### Why should I have a separate cost account?
+{{%expand "Click here to expand for more information" %}}
+
+There are two main reasons for this:
+
+1. We recommend customer avoid deploying workloads to the organization’s management account in general:
+
+"Since privileged operations can be performed within an organization’s management account and SCPs do not apply to the management account, we recommend that you limit access to an organization’s management account. You should also limit the cloud resources and data contained in the management account to only those that must be managed in the management account." from [here](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/design-principles-for-organizing-your-aws-accounts.html)
+ 
+
+2. As there are lambda function deployed in the account these could benefit from Compute Savings plans. This means that there could be higher savings missed in other accounts because they are used on the lambdas first:
+
+"In a Consolidated Billing Family, Savings Plans are applied first to the owner account's usage, and then to other accounts' usage. This occurs only if you have sharing enabled." from [Here](https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-applying.html)
+
+
+{{% /expand%}}
+
 
 
 {{% notice tip %}}
