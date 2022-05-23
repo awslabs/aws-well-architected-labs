@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-February 2022
+May 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -16,6 +16,11 @@ This Well Architected lab is a consolidation of labs and AWS workshops formerly 
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
+
+## Get Help
+[Ask your questions](https://0s62bmu3aj.execute-api.us-east-1.amazonaws.com/PROD/link/tracker?LinkID=270894ed-12b6-27bc-74f3-124130ceb403&URL=https%3A%2F%2Frepost.aws%2Ftags%2FTANKNkVH-tSUa2jYNx4F159g%2Fcloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
+
+[Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
 
 ## Introduction
 Do you know how much you’re spending per hour on AWS Lambda? How about per S3 bucket? How do you know buying Savings Plan or using Spot Instances is saving you money? Does your team know how much their application costs to run on AWS? Visualizing and understanding your cost and usage data is critical to good cloud financial management and accountability.
@@ -38,6 +43,7 @@ In this lab, you will find step-by-step guides on how to implement some or all o
 - [**CUDOS Dashboard - Overview**](#cudos-dashboard)
 - [**Trusted Advisor Organizational (TAO) Dashboard - Overview**](#trusted-advisor-organizational-tao-dashboard)
 - [**KPI & Modernization Dashboard (KPI) - Overview**](#kpi-dashboard)
+- [**Compute Optimizer Dashboard (COD) - Overview**](#compute-optimizer-dashboard)
 - [**Additional Dashboards - Overview**](#additional-dashboards)
 
 The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
@@ -107,11 +113,20 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 
 * Track percent on-demand across all your teams.
 * See potential cost savings by meeting certain KPIs and goals for your organization.
-* Quickly locate cost-optimization opportunities such as infrequently used S3 buckets, old EBS snapshots, and Graviton eligible instance usage. .
+* Quickly locate cost-optimization opportunities such as infrequently used S3 buckets, old EBS snapshots, and Graviton eligible instance usage.
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
+
+
+### Compute Optimizer Dashboard (COD)
+This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportinities for over provisionned ressources and also see the Operational risk from under provisioned ones.
+
+**Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
+
+- [Explore a sample Compute Optimizer Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
+
 
 
 ### Additional Dashboards
@@ -126,6 +141,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 ## Steps:
 - [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
+- [Get started with the COD](compute-optimizer-dashboards/)
 
 ## Authors
 
@@ -133,6 +149,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Iakov Gan, Senior Technical Account Manager
 
 ## Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)

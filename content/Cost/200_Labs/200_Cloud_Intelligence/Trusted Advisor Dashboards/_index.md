@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-December 2021
+April 2022
 
 ## Authors
 
@@ -22,11 +22,15 @@ December 2021
 
 
 ## Feedback
-
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
-## Introduction
+## Get Help
+[Ask your questions](https://0s62bmu3aj.execute-api.us-east-1.amazonaws.com/PROD/link/tracker?LinkID=270894ed-12b6-27bc-74f3-124130ceb403&URL=https%3A%2F%2Frepost.aws%2Ftags%2FTANKNkVH-tSUa2jYNx4F159g%2Fcloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
 
+[Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
+
+
+## Introduction
 Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve security and performance, reduce over all costs, and monitors service limits. Organizational view lets you view Trusted Advisor check for all accounts in your AWS Organizations. The only way to visualize the organizational view is to use the TAO dashboard. The TAO dashboard is a set of visualizations that provide comprehensive details and trends across your entire AWS Organization. Out-of-the-box benefits of the TAO dashboard include (but are not limited to):
 
 * Quickly locate accounts and users that haven't rotated their AWS IAM keys

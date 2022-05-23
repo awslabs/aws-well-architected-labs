@@ -38,3 +38,18 @@ Please write a descriptive commit message following [this](https://git-scm.com/b
 
   ![Images/gitcommit.png](/Contributing/Images/gitcommit.png?classes=lab_picture_small)
 All your changes will be in the remote repository in GitHub, which can now be merged into the Well-Architected Labs repository
+
+
+### Picture Updates
+When you update a lab picture please ensure it had the following:
+* Black boarder
+* Orange box's to show the item the customer is looking for
+* Role/AccountID hidden using the same colour as the section 
+* Image needs to be 800 wide to avoid wrap
+* The description above the image much match the image e.g. if you say use 2688Mb then the picture must have 2688Mb
+
+An example can be seen below:
+
+**Step example** :
+1. Role name LambdaOrgRole, click Create role:
+![Images/create_role.png](/Cost/300_Organization_Data_CUR_Connection/Images/create_role.png)

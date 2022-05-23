@@ -185,25 +185,60 @@ The AccountCollector module is reusable and only needs to be added once but mult
 
 ## Compute Optimizer
 
-The Compute Optimizer Service only shows current point in time recommendations looking at the past 14 days of usage.
-In this module, the data will be collected together so you will access to all accounts recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations.
-This Data will be separated by type service and partitioned by year, month. 
+The Compute Optimizer Service by default only shows current point in time recommendations looking at the past 14 days of usage. In this module, the data will be collected together so you will access to all accounts and regions recommendations in one place. This can be accessed through the Management Account. You can use the saved Athena queries as a view to query these results and track your recommendations. Also we recommend to install [Compute Optimizer Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/#comute-optimizer-dashboard) for visualizing. 
+
+Compute Optimizer Data will be separated by type service and partitioned by year, month. 
 Please make sure you enable Compute Optimizer following this [guide.](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-compute-optimizer.html)
+
 Compute Optimizer is regional service and the Compute Optimizer Collector will deploy one bucket for each region. The user must specify **DeployRegions** - a comma separated list of regions with EC2, EBS, ASG and Lambda workloads. If blank, the current region will be used.
+
+![Images/Arc_compute_optimizer_data_collection.png](/Cost/300_Optimization_Data_Collection/Images/Arc_compute_optimizer_data_collection.png) 
+
 
 * IAM Policy added to  **OptimizationManagementDataRoleStack**:  
 
-              - PolicyName: "ComputeOptimizerPolicy"
-                PolicyDocument:
-                  Version: "2012-10-17"
-                  Statement:
-                  - Effect: "Allow"
-                    Action: 
-                      - "compute-optimizer:ExportAutoScalingGroupRecommendations"
-                      - "compute-optimizer:ExportEBSVolumeRecommendations"
-                      - "compute-optimizer:ExportEC2InstanceRecommendations"
-                      - "compute-optimizer:ExportLambdaFunctionRecommendations"
-                      Resource: "*"    
+        - PolicyName: "ComputeOptimizer-ExportLambdaFunctionRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "compute-optimizer:GetLambdaFunctionRecommendations"
+                  - "lambda:ListFunctions"
+                  - "lambda:ListProvisionedConcurrencyConfigs"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportAutoScalingGroupRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEBSVolumeRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:GetEBSVolumeRecommendations"
+                  - "EC2:DescribeVolumes"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEC2InstanceRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:GetEC2InstanceRecommendations"
+                  - "EC2:DescribeInstances"
+                Resource: "*"
+
 
 * CloudFormation Stack added to **OptimizationDataCollectionStack** :  
 
@@ -470,7 +505,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 - **RDS Utilization Data module** module -> **AWS-Organization-Account-Collector** Lambda function
 - **AWS Budgets Export module** module -> **AWS-Organization-Account-Collector** Lambda function
 - **Cost Explorer Rightsizing Recommendations** module -> **aws-cost-explorer-rightsizing-recommendations-function** Lambda function
-- **Compute Optimizer Collector** module -> **ComputeOptimizer-Lambda-Function** Lambda function
+- **Compute Optimizer Collector** module -> **ComputeOptimizer-Trigger-Export** Lambda function
 - **AWS Organization Data Export** module -> **Lambda_Organization_Data_Collector** Lambda function
 
 
@@ -484,6 +519,8 @@ Once you have deployed your modules you will be able to test your Lambda functio
 4.	Click **Test**
 
 5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
+
+For **Compute Optimizer Collector** module processing can take up to 30 mins (15 mins for Compute Optimizer to produce exports requested by lambda, and then another 15 mins for the replication from region buckets to the main bucket)
 
 6. Go to the **Athena** service page
 
