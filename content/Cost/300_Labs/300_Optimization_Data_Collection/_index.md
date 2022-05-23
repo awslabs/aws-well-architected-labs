@@ -86,10 +86,10 @@ We suggest you do not deploy the main resources and collectors into your managem
 ## Permissions required
 Be able to create the below in the management account:
 - IAM role and policy
-- Deploy CloudFormation
+- Deploy CloudFormation Stacks and StackSets
 
 Be able to create the below in a sub account where your CUR data is accessible:
-- Deploy CloudFormation
+- Deploy CloudFormation Stacks and StackSets
 - Amazon S3 Bucket 
 - AWS Lambda function 
 - IAM role and policy
