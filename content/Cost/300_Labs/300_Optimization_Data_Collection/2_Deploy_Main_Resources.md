@@ -15,10 +15,6 @@ The first step is to create a set of reusable resources and respective data coll
 
 Or if you wish to keep this on your local machine please copy [CloudFormation template](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) locally and deploy with your preferred method of choice:
 
-{{% notice note %}}
-For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-well-architected-labs
-{{% /notice %}}
-
 2. Click **Next**.
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
