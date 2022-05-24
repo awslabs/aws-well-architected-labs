@@ -35,12 +35,17 @@ AWS Compute Optimizer recommends optimal AWS resources for your workloads to red
 * Identify potential savings across all payer accounts and regions.
 * Track optimization progress over time by AWS Account team or business unit.
 
+See also:
+- A basics of Compute Optimizer Right Sizing in a lab [200 Rightsizing with Compute Optimizer](/Cost/200_labs/200_aws_resource_optimization)
+- [AWS Compute Optimizer FAQ](https://aws.amazon.com/compute-optimizer/faqs/)
+
+
 ## Demo Dashboard
 
 
 ![Images](/Cost/200_Cloud_Intelligence/Images/cod/demo.png)
 
-Get more familiar with Dashboard using the live, interactive demo dashboard below or following this [link](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
+Get more familiar with Dashboard using the live, interactive demo dashboard following this [link](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
 
 
 {{% notice note %}}
@@ -61,6 +66,8 @@ This workshop can be deployed by any user who has permission to access the **AWS
 - A QuickSight Enterprise license starts at $18 per month. 
 - Incremental costs associated with AWS Glue, Amazon Athena, and Amazon S3. 
 - Estimated total cost for all Dashboards together in a large AWS deployment is $54 per month. 
+
+
 
 ## Time to Complete
 
