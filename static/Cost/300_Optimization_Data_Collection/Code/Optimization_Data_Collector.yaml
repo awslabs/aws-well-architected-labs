@@ -10,7 +10,6 @@ Metadata:
           - ManagementAccountRole
           - ManagementAccountID
           - MultiAccountRoleName
-          - CodeBucket
           - RolePrefix
       - Label:
           default: 'Available modules'
@@ -33,8 +32,6 @@ Metadata:
         default: 'Management account Id'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
-      CodeBucket:
-        default: "Code Bucket"
       RolePrefix:
         default: "Role Prefix"
       IncludeTAModule:
@@ -55,6 +52,24 @@ Metadata:
         default: 'Include AWS Organization Data Collection Module' 
       IncludeBudgetsModule:
         default: 'Include AWS Budgets Collection Module'
+Mappings:
+  RegionMap:
+       eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
+       us-east-2:        {CodeBucket: aws-well-architected-labs-ohio }
+       us-east-1:        {CodeBucket: aws-well-architected-labs-virginia }
+       us-west-1:        {CodeBucket: aws-well-architected-labs-california }
+       us-west-2:        {CodeBucket: aws-well-architected-labs-oregon }
+       ap-southeast-1:   {CodeBucket: aws-well-architected-labs-singapore }
+       eu-central-1:     {CodeBucket: aws-well-architected-labs-frankfurt }
+       eu-west-2:        {CodeBucket: aws-well-architected-labs-london }
+       eu-north-1:       {CodeBucket: aws-well-architected-labs-stockholm }
+       ap-southeast-2:   {CodeBucket: aws-well-architected-labs-ap-sydney }
+       ap-south-1:       {CodeBucket: aws-well-architected-labs-mumbai }
+       ap-northeast-3:   {CodeBucket: aws-well-architected-labs-osaka }
+       ap-northeast-2:   {CodeBucket: aws-well-architected-labs-seoul }
+       ap-northeast-1:   {CodeBucket: aws-well-architected-labs-tokyo }
+       ca-central-1:     {CodeBucket: aws-well-architected-labs-canada }
+       eu-west-3:        {CodeBucket: aws-well-architected-labs-paris }
 Parameters:
   DestinationBucket:
     Type: String
@@ -129,30 +144,6 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
-  
-  
-  CodeBucket:
-    Type: String
-    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region.
-    AllowedValues:
-      - aws-well-architected-labs-ireland
-      - aws-well-architected-labs-ohio
-      - aws-well-architected-labs-virginia
-      - aws-well-architected-labs-california
-      - aws-well-architected-labs-oregon
-      - aws-well-architected-labs-singapore
-      - aws-well-architected-labs-frankfurt
-      - aws-well-architected-labs-london
-      - aws-well-architected-labs-stockholm
-      - aws-well-architected-labs-ap-sydney
-      - aws-well-architected-labs-mumbai
-      - aws-well-architected-labs-osaka
-      - aws-well-architected-labs-seoul
-      - aws-well-architected-labs-tokyo
-      - aws-well-architected-labs-canada
-      - aws-well-architected-labs-milan
-      - aws-well-architected-labs-paris
-
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -305,7 +296,7 @@ Resources:
             CFDataName: "TA"
             GlueRoleARN: !GetAtt GlueRole.Arn
             MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-            CodeBucket: !Ref CodeBucket
+            CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
             RolePrefix: !Ref RolePrefix
   RightsizeModule:
     Type: AWS::CloudFormation::Stack
@@ -328,7 +319,7 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleARN: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !Ref CodeBucket
+        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
@@ -357,7 +348,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !Ref CodeBucket
+        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
   RDSUtilizationModule:
     Type: AWS::CloudFormation::Stack
