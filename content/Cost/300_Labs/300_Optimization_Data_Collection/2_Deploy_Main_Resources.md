@@ -6,7 +6,7 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-### Create Reusable Resource
+### Create Main Resources
 
 The first step is to create a set of reusable resources and respective data collection modules. 
 
@@ -23,16 +23,26 @@ For the CodeBucket Parameter, if deploying in Oregon leave as CodeBucket: aws-we
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
 3. Call the stack **OptimizationDataCollectionStack** and fill Deployment parameters. The Role mentioned in **Multi Account Role Name** parameter will be deployed in the next step.
- Select the **Code bucket** for the region you are deploying in and fill **Management account Id**. You have the option to change the name of your access roles, if you do please make the same changes in the **Role for Management Account** and the  **Read Only roles for Data Collector** deployments.
+ Select the **Code bucket** for the region you are deploying in and fill **Management Account Id**. You have the option to change the name of your access roles, if you do please make the same changes in the **Role for Management Account** and the  **Read Only roles for Data Collector** deployments.
  
  Under available modules section select modules which you would like to deploy. Detailed description of each module can be found [here](../3_data_collection_modules)
  Click **Next** and **Next again**
 ![Images/Main_CF_Parameters.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Parameters.png)
 
-4. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+When selecting Compute Optimizer module provide additionally a comma separted list of regions where need to collect Compute Optimizer data. Make sure you have a right to deploy S3 buckets in these regions.
+
+4. Tick the boxes and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
 5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
 ![Images/Main_CF_Deployed.png](/Cost/300_Optimization_Data_Collection/Images/Main_CF_Deployed.png)
+
+{{%expand "Troubleshooting" %}}
+
+### Troubleshooting
+
+If you see the an issue with stack creation please check the status of nested stacks, including StackSets created by Compute Optimizer module. In case of rollback these StackSets will disappear. 
+
+{{% /expand%}}
 
 {{< prev_next_button link_prev_url="../1_grant_permissions/" link_next_url="../3_data_collection_modules" />}}
