@@ -97,6 +97,7 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
             , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
             , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
             , timeunit
+            , account_id
             , budgettype budget_type
             , year budget_year
             , month budget_month
