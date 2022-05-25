@@ -27,6 +27,7 @@ def main(account_id):
                 for response in response_iterator:
                     data = response["Volumes"][0]
                     data['region']=region
+                    data['accountid']=account_id
                     dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
 
                     f.write(dataJSONData)

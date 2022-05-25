@@ -305,4 +305,25 @@ Resources:
           WHERE (((\"product family\" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND (\"location type\" = 'AWS Region'))
         )  snap_unit_price ON (s.regionname = snap_unit_price.location))"
 
-          
+  AthenaEBSTA:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: ebs-ta-query
+      QueryString: 
+        "CREATE OR REPLACE VIEW "ebs_view" AS
+        SELECT * FROM
+        optimization_data.ebs_data
+          LEFT JOIN 
+          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
+          from
+          optimization_data.ta_data ) ta
+          ON ebs_data.volumeid = ta."volume id" and ebs_data.year = ta.tayear and ebs_data.month = ta.tamonth
+      LEFT JOIN (
+        SELECT
+          region region_code
+        , regionname
+        FROM
+          optimization_data.region_names
+      )  region ON (ebs_data.region = region.region_code)"
