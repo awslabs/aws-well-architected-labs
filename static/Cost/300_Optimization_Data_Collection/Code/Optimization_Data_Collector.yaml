@@ -329,7 +329,6 @@ Resources:
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
-        GlueRoleARN: !GetAtt GlueRole.Arn
         RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
