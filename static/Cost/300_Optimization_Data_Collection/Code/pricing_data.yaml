@@ -96,10 +96,28 @@ Resources:
 
               urllib.request.urlopen(url)   #Provide URL
               s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
+
+              region_data(s3Bucket, s3)
+
               return {
                   'statusCode': 200,
                   'body': json.dumps('YAY!')
               }
+          def region_data(s3Bucket, s3):
+
+            #Create a Source Dictionary That Specifies Bucket Name and Key Name of the Object to Be Copied
+            copy_source = {
+                'Bucket': 'aws-well-architected-labs',
+                'Key': 'Cost/Labs/300_Optimization_Data_Collection/Region/regions.csv'
+            }
+            
+            bucket = s3.Bucket(s3Bucket)
+            
+            bucket.copy(copy_source, 'pricing/region/regions.csv')
+            
+            # Printing the Information That the File Is Copied.
+            print('Single File is copied')
+
 
       Handler: 'index.lambda_handler'
       MemorySize: 2880
@@ -138,6 +156,31 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
+  AthenaRegionTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: region_names
+      QueryString: !Sub
+        "CREATE EXTERNAL TABLE `region_names`(
+        `region` string, 
+        `regionname` string, 
+        `endpoint` string, 
+        `protocol` string)
+      ROW FORMAT DELIMITED 
+        FIELDS TERMINATED BY ',' 
+      STORED AS INPUTFORMAT 
+        'org.apache.hadoop.mapred.TextInputFormat' 
+      OUTPUTFORMAT 
+        'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+      LOCATION
+        's3://${DestinationBucket}/pricing/region'
+      TBLPROPERTIES (
+        'has_encrypted_data'='false', 
+        'skip.header.line.count'='1', 
+        'transient_lastDdlTime'='1611498146')"
+  
   AthenaEC2PricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
