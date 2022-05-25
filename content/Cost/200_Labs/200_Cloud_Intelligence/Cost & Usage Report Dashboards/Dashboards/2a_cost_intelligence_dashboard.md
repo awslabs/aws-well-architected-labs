@@ -26,9 +26,10 @@ pre: "<b>2a. </b>"
 
 
 ## Deployment Options
-There are 3 options to deploy the Cost Intelligence Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 3 options to deploy the Cost Intelligence Dashboard. If you are unsure what option to select, we recommend Option 2 Command Line Interface Deployment.
 
-### Option 1: Manual Deployment
+
+### Option 1: Manual Deployment (1 hour)
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight. 
 {{%expand "Click here to continue with the manual deployment" %}}
 
@@ -331,7 +332,7 @@ aws quicksight delete-dashboard --dashboard-id cost_intelligence_dashboard --reg
 
 {{% /expand%}}
 
-### Option 2: Command Line Interface Deployment
+### Option 2: Command Line Interface Deployment (15 mins)
 The CID command line tool is an optional way to create the Cloud Intelligence Dashboards. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
@@ -371,7 +372,7 @@ The CID command line tool is an optional way to create the Cloud Intelligence Da
 {{% /expand%}}
 
 
-### Option 3: CloudFormation Deployment
+### Option 3: CloudFormation Deployment (30 Mins)
 This section is **optional** and automates the creation of the Cost Intelligence Dashboard and CUDOS Dashboard using **CloudFormation templates**. The CloudFormation templates allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}

@@ -33,9 +33,9 @@ If you do not have these products you can install and then delete instances of e
 
 	
 ## Deployment Options
-There are 3 options to deploy the KPI Dashboard. The CloudFormation template is coming soon. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
+There are 3 options to deploy the KPI Dashboard. Bookmark the [KPI Dashboard Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md) for the latest version and updates. 
 
-### Option 1: Manual Deployment
+### Option 1: Manual Deployment (1 hour)
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option to users who are new to Athena and QuickSight. 
 {{%expand "Click here to continue with the manual deployment" %}}
 
@@ -260,7 +260,7 @@ aws quicksight delete-dashboard --dashboard-id kpi_dashboard --region <Region> -
 {{% /expand%}}
 
 
-### Option 2: Command Line Interface Deployment
+### Option 2: Command Line Interface Deployment (15 mins)
 The CID command line tool is an optional way to create the Cloud Intelligence Dashboards. The command line tool will allow you to complete the deployments in less than half the time as the standard manual setup.
 
 {{%expand "Click here to continue with the Automation Scripts Deployment" %}}
@@ -271,7 +271,7 @@ Once complete, visit the [account mapping page](https://wellarchitectedlabs.com/
 {{% /expand%}}
 
 
-### Option 3: CloudFormation Deployment
+### Option 3: CloudFormation Deployment (30 mins)
 This section is **optional** and automates the creation of the KPI Dashboard using **CloudFormation templates**. The CloudFormation templates allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
