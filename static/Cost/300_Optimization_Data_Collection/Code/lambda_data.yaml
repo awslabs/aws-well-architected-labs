@@ -316,9 +316,10 @@ Resources:
         SELECT * FROM
         optimization_data.ebs_data
           LEFT JOIN 
-          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
+          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\","status",	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
           from
-          optimization_data.ta_data ) ta
+          optimization_data.ta_data
+          where category = 'cost_optimizing' ) ta
           ON ebs_data.volumeid = ta."volume id" and ebs_data.year = ta.tayear and ebs_data.month = ta.tamonth
       LEFT JOIN (
         SELECT
