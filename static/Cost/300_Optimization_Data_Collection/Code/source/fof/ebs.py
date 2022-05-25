@@ -26,7 +26,7 @@ def main(account_id):
                 response_iterator = paginator.paginate()
                 for response in response_iterator:
                     data = response["Volumes"][0]
-
+                    data['region']=region
                     dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
 
                     f.write(dataJSONData)

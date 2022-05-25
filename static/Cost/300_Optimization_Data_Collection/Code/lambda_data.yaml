@@ -195,7 +195,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's
-      Name: snapshot-ami-query
+      Name: snapshot-ami-query-no-pricing
       QueryString: 
         "SELECT *,
         CASE
@@ -235,3 +235,74 @@ Resources:
             virtualizationtype
             FROM \"optimization_data\".\"ami_data\") AS ami
                 ON snapshots.snap_ami_id = ami.imageid )"
+  AthenaSnaphotAMIPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: snapshot-ami-query
+      QueryString: 
+        "CREATE OR REPLACE VIEW "snapshot_ami_quicksight_view" AS 
+        SELECT *,
+          CASE
+            WHEN snap_ami_id = imageid THEN 'AMI Avalible'
+            WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed' ELSE 'Not AMI'
+          END AS status, 
+          priceperunit*volumesize as est_snap_cost
+        FROM ((((
+            (
+              SELECT snapshotid AS snap_id,
+                volumeid as volume,
+                volumesize,
+                starttime,
+                Description AS snapdescription,
+                year,
+                month,
+                region,
+                ownerid,
+                CASE
+                  WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN split_part(Description, ' ', 5)
+                  WHEN substr(Description, 2, 11) = 'Copied snap' THEN split_part(Description, ' ', 9)
+                  WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN split_part(Description, ' ', 4) ELSE ''
+                END AS snap_ami_id
+              FROM optimization_data.snapshot_data
+            ) AS snapshots
+            LEFT JOIN (
+              SELECT imageid,
+                name,
+                description,
+                state,
+                rootdevicetype,
+                virtualizationtype, 
+                month as ami_month, 
+                year as ami_year
+              FROM optimization_data.ami_data) AS ami 
+            ON snapshots.snap_ami_id = ami.imageid and snapshots.month=ami.ami_month and snapshots.year = ami.ami_year
+          )
+          LEFT JOIN (
+          SELECT
+            region region_code
+          , regionname
+          FROM
+            optimization_data.region_names
+        )  region ON (snapshots.region = region.region_code))
+        LEFT JOIN (
+          SELECT DISTINCT
+            volumeid volume_mapping
+          , count(DISTINCT snapshotid) snap_count
+          FROM
+            optimization_data.snapshot_data
+          GROUP BY 1
+        )  mapping ON (mapping.volume_mapping = snapshots.volume)) s
+        LEFT JOIN (
+          SELECT
+            \"product family\"
+          , location
+          , priceperunit
+          , unit
+          FROM
+            optimization_data.ec2_pricing
+          WHERE (((\"product family\" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND (\"location type\" = 'AWS Region'))
+        )  snap_unit_price ON (s.regionname = snap_unit_price.location))"
+
+          
