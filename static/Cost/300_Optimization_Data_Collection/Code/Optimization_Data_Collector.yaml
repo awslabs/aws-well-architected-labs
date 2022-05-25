@@ -321,6 +321,16 @@ Resources:
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
+  PricingModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployInventoryCollectorModule
+    Properties:
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn 
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
