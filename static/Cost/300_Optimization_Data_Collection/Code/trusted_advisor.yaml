@@ -105,13 +105,13 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:*:*:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
               - Effect: "Allow"
                 Action:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: arn:aws:sqs:*:*:TrustedAdvisorModule-TaskQueue
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:TrustedAdvisorModule-TaskQueue
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
