@@ -78,7 +78,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:*:*:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
@@ -88,12 +88,12 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: arn:aws:sqs:*:*:BudgetsModule-TaskQueue
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:BudgetsModule-TaskQueue
               - Effect: "Allow"
                 Action:
                   - "budgets:ViewBudget"
                   - "budgets:Describe*"
-                Resource: "arn:aws:budgets:*:*:*"
+                Resource: !Sub "arn:aws:budgets:${AWS::Region}:${AWS::AccountId}:*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
