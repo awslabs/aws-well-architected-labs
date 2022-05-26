@@ -224,11 +224,11 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: "arn:aws:logs:*:*:log-group:/Lambda_Organization_Data_Collector*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: "arn:aws:glue:*:*:crawler/OrgGlueCrawler"
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
