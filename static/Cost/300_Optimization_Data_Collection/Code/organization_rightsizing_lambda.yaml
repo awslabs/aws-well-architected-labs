@@ -91,14 +91,14 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:*:*:crawler/${CFDataName}Crawler"
               - Effect: "Allow"
                 Action:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: "arn:aws:logs:*:*:log-group:/aws-cost-explorer-rightsizing-recommendations-function*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
