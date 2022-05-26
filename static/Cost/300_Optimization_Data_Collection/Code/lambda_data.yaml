@@ -104,10 +104,15 @@ Resources:
                 Resource: "*"
               - Effect: "Allow"
                 Action:
+                  - "lambda:InvokeFunction"
+                Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:pricing-Lambda-Function"
+              - Effect: "Allow"
+                Action:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
                 Resource: "*"
+                
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -242,7 +247,7 @@ Resources:
       Description: Identifies snapshots connected to AMI's with Pricing data 
       Name: snapshot-ami-query
       QueryString: 
-        "CREATE OR REPLACE VIEW "snapshot_ami_quicksight_view" AS 
+        "CREATE OR REPLACE VIEW snapshot_ami_quicksight_view AS 
         SELECT *,
           CASE
             WHEN snap_ami_id = imageid THEN 'AMI Avalible'
@@ -312,15 +317,15 @@ Resources:
       Description: Identifies snapshots connected to AMI's with Pricing data 
       Name: ebs-ta-query
       QueryString: 
-        "CREATE OR REPLACE VIEW "ebs_view" AS
+        "CREATE OR REPLACE VIEW ebs_view AS
         SELECT * FROM
         optimization_data.ebs_data
           LEFT JOIN 
-          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\","status",	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
+          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",status,	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
           from
           optimization_data.ta_data
           where category = 'cost_optimizing' ) ta
-          ON ebs_data.volumeid = ta."volume id" and ebs_data.year = ta.tayear and ebs_data.month = ta.tamonth
+          ON ebs_data.volumeid = ta.\"volume id\" and ebs_data.year = ta.tayear and ebs_data.month = ta.tamonth
       LEFT JOIN (
         SELECT
           region region_code
@@ -328,3 +333,57 @@ Resources:
         FROM
           optimization_data.region_names
       )  region ON (ebs_data.region = region.region_code)"
+  AthenaEBSTAPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: ebs-ta-query-pricing
+      QueryString: 
+        "CREATE OR REPLACE VIEW ebs_quicksight_view AS 
+          SELECT
+            volumeid
+          , volumetype
+          , size
+          , attachments
+          , iops
+          , region
+          , accountid
+          , TRY(date_parse(createtime, '%Y-%m-%d %H:%i:%s')) date_created
+          , year
+          , month
+          , CAST(concat(year, '-', month, '-01') AS date) billing_period
+          , concat(year, '-', month) date
+          , (CASE status WHEN 'warning' THEN 'Underutilised' ELSE 'Healthy' END) status
+          , priceperunit
+          , iop_price
+          , (priceperunit * size) ebs_gb_cost
+          , (priceperunit * size) ebs_cost
+          , (CASE WHEN (volumetype = 'io1') THEN (iop_price * CAST(iops AS integer)) WHEN (volumetype = 'io2') THEN (iop_price * CAST(iops AS integer)) ELSE 0 END) iop_cost
+          FROM
+            ((optimization_data.ebs_view
+          LEFT JOIN (
+            SELECT
+              \"volume api name\"
+            , location
+            , priceperunit
+            , unit
+            , \"product family\"
+            FROM
+              optimization_data.ec2_pricing
+            WHERE (\"product family\" = 'Storage')
+          )  ebs_price ON ((ebs_view.volumetype = ebs_price.\"volume api name\") AND (ebs_view.regionname = ebs_price.location)))
+          LEFT JOIN (
+            SELECT
+              \"volume api name\"
+            , location
+            , priceperunit iop_price
+            , unit
+            , \"product family\"
+            , usagetype
+            FROM
+              optimization_data.ec2_pricing
+            WHERE (((\"Product Family\" = 'System Operation') AND (\"volume api name\" IN ('io1', 'io2'))) AND ((usagetype LIKE '%EBS:VolumeP-IOPS.io2') OR (usagetype LIKE '%EBS:VolumeP-IOPS.piops')))
+          )  ebs_iops_price ON ((ebs_view.volumetype = ebs_iops_price.\"volume api name\") AND (ebs_view.regionname = ebs_iops_price.location)))
+          ORDER BY volumeid DESC
+          "
