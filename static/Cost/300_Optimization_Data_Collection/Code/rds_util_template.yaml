@@ -81,7 +81,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:*:*:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
@@ -91,7 +91,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: arn:aws:sqs:*:*:RDSUtilizationModule-TaskQueue
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:RDSUtilizationModule-TaskQueue
               - Effect: "Allow"
                 Action:
                   - "rds:DescribeDBProxyTargetGroups"
@@ -135,7 +135,7 @@ Resources:
                   - "rds:DescribeOptionGroups"
                   - "rds:DescribeDBClusterParameterGroups"
                   - "ec2:DescribeRegions"
-                Resource: "arn:aws:rds:*:*:*"
+                Resource: !Sub "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:*"
               - Effect: "Allow"
                 Action:
                   - "ec2:DescribeRegions"
