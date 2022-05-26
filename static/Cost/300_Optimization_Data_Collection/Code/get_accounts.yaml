@@ -60,7 +60,7 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: "arn:aws:logs:*:*:log-group:/AWS-Organization-Account-Collector*"
         - PolicyName: "Sqs-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -71,7 +71,12 @@ Resources:
                  - sqs:ReceiveMessage
                  - sqs:DeleteMessage
                  - sqs:GetQueueAttributes
-                Resource: "*"
+                Resource:
+                 - arn:aws:sqs:*:*:TrustedAdvisorModule-TaskQueue
+                 - arn:aws:sqs:*:*:InventoryCollectorModul-TaskQueue
+                 - arn:aws:sqs:*:*:EcsChargebackModule-TaskQueue
+                 - arn:aws:sqs:*:*:RDSUtilizationModule-TaskQueue
+                 - arn:aws:sqs:*:*:BudgetsModule-TaskQueue
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
