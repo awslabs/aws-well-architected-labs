@@ -317,8 +317,7 @@ Resources:
       Description: Identifies snapshots connected to AMI's with Pricing data 
       Name: ebs-ta-query
       QueryString: 
-        "CREATE OR REPLACE VIEW ebs_view AS
-        SELECT * FROM
+        "SELECT * FROM
         optimization_data.ebs_data
           LEFT JOIN 
           (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",status,	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth

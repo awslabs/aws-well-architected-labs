@@ -241,6 +241,7 @@ Resources:
             , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
             , timeunit
             , budgettype budget_type
+            , account_id
             , year budget_year
             , month budget_month
             FROM
