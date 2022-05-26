@@ -99,7 +99,7 @@ Resources:
                   - cloudformation:DeleteStack
                   - cloudformation:UpdateStack
                 Resource: !Sub
-                  - 'arn:aws:cloudformation:*:*:stack/${SelectValue}*' 
+                  - 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${SelectValue}*' 
                   - SelectValue: !Select [0, !Split ["-", !Ref AWS::StackName]]
               # - Effect: Allow  ## What does this used for ?
               #   Action:        ## there is no SNS usage throughout the whole solution.
@@ -425,14 +425,14 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
-                Resource: 'arn:aws:logs:*:*:*'
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
               - Effect: Allow
                 Action:
                   - "glue:StartCrawler"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: arn:aws:sqs:*:*:S3CrawlerQue
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue
   LambdaCrawlerInvokePermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
