@@ -104,7 +104,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: "arn:aws:sqs:*:*:EcsChargebackModule-TaskQueue"
+                Resource: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue"
               - Effect: "Allow"
                 Action:
                 - "ecs:ListAttributes"
@@ -123,11 +123,11 @@ Resources:
                 - "ecs:DescribeTasks"
                 - "ecs:ListTaskDefinitions"
                 - "ecs:ListClusters"
-                Resource: "arn:aws:ecs:*:*:*"
+                Resource: !Sub "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:*:*:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
 
   LambdaFunction:
     Type: AWS::Lambda::Function
