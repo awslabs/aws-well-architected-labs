@@ -13,6 +13,7 @@ May 2022
 - Stephanie Gooch, Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
+- Andy Brown, OPTICS Manager - Commercial Architects IBUs
 
 ## Feedback
 If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
