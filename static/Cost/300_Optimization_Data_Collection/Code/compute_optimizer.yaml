@@ -435,7 +435,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EC2Crawler
+                Resource: "*"
   LambdaCrawlerInvokePermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
