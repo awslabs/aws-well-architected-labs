@@ -278,17 +278,17 @@ aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
                 },
                                          {
                     "DataSetPlaceholder": "ec2_running_cost",
-                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
 
                 },
                                          {
                      "DataSetPlaceholder": "compute_savings_plan_eligible_spend",
-                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
 
                  },
                                          {
                      "DataSetPlaceholder": "s3_view",
-                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
 
                  }
              ],
