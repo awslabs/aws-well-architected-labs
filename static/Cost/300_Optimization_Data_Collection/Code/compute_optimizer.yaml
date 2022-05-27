@@ -428,11 +428,14 @@ Resources:
                 Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
               - Effect: Allow
                 Action:
-                  - "glue:StartCrawler"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
                 Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue
+              - Effect: Allow
+                Action:
+                  - "glue:StartCrawler"
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EC2Crawler
   LambdaCrawlerInvokePermission:
     Type: 'AWS::Lambda::Permission'
     Properties:

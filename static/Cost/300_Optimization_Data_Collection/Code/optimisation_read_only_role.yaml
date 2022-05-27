@@ -208,7 +208,7 @@ Resources:
               - "ec2:DescribeVolumes"
               - "ec2:DescribeSnapshots"
               - "ec2:DescribeSnapshotAttribute"
-            Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:*"
+            Resource: "*"
       Roles:
         - Ref: LambdaRole
   ECSChargebackPolicy:
@@ -237,7 +237,7 @@ Resources:
               - "ecs:DescribeTasks"
               - "ecs:ListTaskDefinitions"
               - "ecs:ListClusters"
-            Resource: !Sub "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
+            Resource: "*"
       Roles:
         - Ref: LambdaRole 
   RDSUtilizationPolicy:
@@ -292,7 +292,7 @@ Resources:
               - "rds:DescribeAccountAttributes"
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
-            Resource: !Sub "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:*"
+            Resource: "*"
           - Effect: "Allow"
             Action:
               - "ec2:DescribeRegions"
