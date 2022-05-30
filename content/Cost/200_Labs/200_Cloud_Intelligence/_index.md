@@ -121,7 +121,7 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 
 
 ### Compute Optimizer Dashboard (COD)
-This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportinities for over provisionned ressources and also see the Operational risk from under provisioned ones.
+This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportunities for over provisioned resources and also see the Operational risk from under provisioned ones.
 
 **Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
