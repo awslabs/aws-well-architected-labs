@@ -601,8 +601,9 @@ Resources:
                   try:
                       bucket = s3.Bucket(name)
                       bucket.object_versions.delete()
-                      #bucket.delete()
                       log.append(f'INFO:  {name} is empty now')
+                      bucket.delete()
+                      log.append(f'INFO:  {name} deleted')
                   except botocore.exceptions.ClientError as exc:
                       status = exc.response["ResponseMetadata"]["HTTPStatusCode"]
                       errcode = exc.response["Error"]["Code"]
@@ -653,6 +654,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - s3:ListBucketVersions
+                  - s3:DeleteBucket
                 Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
