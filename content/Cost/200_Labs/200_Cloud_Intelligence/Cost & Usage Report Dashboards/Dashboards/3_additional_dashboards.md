@@ -16,15 +16,16 @@ The Data Transfer Dashboard is an interactive, customizable and accessible Quick
 This dashboard contains data transfer breakdowns with the following visuals:
  - Amount and cost by service and region
  - Between regions
- - Internet data transfer 
+ - Internet data transfer, AWS Global Accelerator usage details for estimation
  - Regional Data transfer
+ - CloudFront cost and usage analysis
+
+## Authors
+- Chaitanya Shah, Sr. Technical Account Manager 
 
 {{%expand "Click here to continue with the  Data Transfer Dashboard deployment" %}}
 
 ![Images/quicksight_dashboard_dt_new_analysis.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt_new_analysis.png)
-
-## Authors
-- Chaitanya Shah, Sr. Technical Account Manager 
 
 ### FAQ
 The FAQ for this dashboard is [here.](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
@@ -80,15 +81,15 @@ We will now create the data sets in QuickSight from the Athena views.
 6. Select **SPICE** to change your Query mode:
 ![Images/quicksight_dataset_6.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-6.png)
 
-7. Click on **linked_account_id**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Int/Integer**:
+<!-- 7. Click on **linked_account_id**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Int/Integer**:
 ![Images/quicksight_dashboard_dt-7.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-7.png)
 
 8. Repeat **step 7** for:
 
-    - payer_account_id
-9. Click on **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
+    - payer_account_id -->
+7. Click on **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
 
-10. Click on **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
+<!-- 10. Click on **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
 ![Images/quicksight_dashboard_dt-7.1.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-7.1.png)
 
 11. Ensure the following fields are all **# Decimal**, repeat **step 10** if necessary for:
@@ -98,27 +99,27 @@ We will now create the data sets in QuickSight from the Athena views.
 	- public_cost
     - belnded_rate
     - unblended_rate
-    - public_ondemand_rate
+    - public_ondemand_rate -->
 
-12. Select **Save**:
+8. Select **Save & Publish** and then Click on **Cancel**:
 ![Images/quicksight_dashboard_dt-8.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-8.png)
 
-13. Select the **data_transfer_view** Data Set:
+9. Select the **data_transfer_view** Data Set:
 ![Images/quicksight_dashboard_dt-9.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-9.png)
 
-14. Click **Schedule refresh**:
+10. Click **Schedule refresh**:
 ![Images/quicksight_dashboard_dt-10.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-10.png)
 
-15. Click **Create**:
+11. Click **Create**:
 ![Images/quicksight_dataset_13.png)](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dataset_13.png)
 
-16. Enter a schedule, it needs to be refreshed daily, and click **Create**:
+12. Enter a schedule, it needs to be refreshed daily, and click **Create**:
 ![Images/quicksight_dashboard_dt-12.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-11.png)
 
-17. Click **Cancel** to exit:
+13. Click **Cancel** to exit:
 ![Images/quicksight_dashboard_dt-12.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-12.png)
 
-18. Click the **x** in the top corner:
+14. Click the **x** in the top corner:
 ![Images/qquicksight_dashboard_dt-13.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-13.png)
 
 {{% notice tip %}}
@@ -194,7 +195,7 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
 
                         }
                     ],
-                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-cost-analysis-template-enhanced"
+                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-aga-est-cost-analysis-template-enhanced-v1"
                 }
             },
             "VersionDescription": "1"
