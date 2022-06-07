@@ -140,7 +140,7 @@ Resources:
             Action:
               - "imagebuilder:ListImages"
               - "imagebuilder:GetImage"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   TAPolicy:
@@ -153,10 +153,15 @@ Resources:
         Statement:
           - Effect: "Allow"
             Action:
-              - "trustedadvisor:*"
+              - "trustedadvisor:Describe*"
+              - "trustedadvisor:List*"
+              - "trustedadvisor:GenerateReport"
+              - "trustedadvisor:IncludeCheckItems"
+              - "trustedadvisor:ExcludeCheckItems"
+              - "trustedadvisor:RefreshCheck"                   
               - "support:DescribeTrustedAdvisorChecks"
               - "support:DescribeTrustedAdvisorCheckResult"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   RightsizeReadOnlyPolicy:
@@ -170,7 +175,7 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ce:GetRightsizingRecommendation"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   BudgetsReadOnlyPolicy:
@@ -185,7 +190,7 @@ Resources:
             Action:
               - "budgets:ViewBudget"
               - "budgets:Describe*"
-            Resource: "*"
+            Resource: "arn:aws:budgets::*:budget/*"
       Roles:
         - Ref: LambdaRole
   InventoryCollectorPolicy:
@@ -287,8 +292,11 @@ Resources:
               - "rds:DescribeAccountAttributes"
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
               - "ec2:DescribeRegions"
               - "cloudwatch:GetMetricStatistics"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole

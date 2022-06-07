@@ -60,7 +60,7 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/AWS-Organization-Account-Collector*"
         - PolicyName: "Sqs-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -71,7 +71,12 @@ Resources:
                  - sqs:ReceiveMessage
                  - sqs:DeleteMessage
                  - sqs:GetQueueAttributes
-                Resource: "*"
+                Resource:
+                 - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:TrustedAdvisorModule-TaskQueue
+                 - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:InventoryCollectorModul-TaskQueue
+                 - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue
+                 - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:RDSUtilizationModule-TaskQueue
+                 - !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:BudgetsModule-TaskQueue
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
