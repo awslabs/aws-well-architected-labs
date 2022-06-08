@@ -81,25 +81,7 @@ We will now create the data sets in QuickSight from the Athena views.
 6. Select **SPICE** to change your Query mode:
 ![Images/quicksight_dataset_6.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-6.png)
 
-<!-- 7. Click on **linked_account_id**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Int/Integer**:
-![Images/quicksight_dashboard_dt-7.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-7.png)
-
-8. Repeat **step 7** for:
-
-    - payer_account_id -->
 7. Click on **region**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# String**
-
-<!-- 10. Click on **blended_cost**  to get the drop down arrow and click on it, then hover over **Change data type** then select **# Decimal**:
-![Images/quicksight_dashboard_dt-7.1.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-7.1.png)
-
-11. Ensure the following fields are all **# Decimal**, repeat **step 10** if necessary for:
-
-	- usage_quantity
-    - unblended_cost
-	- public_cost
-    - belnded_rate
-    - unblended_rate
-    - public_ondemand_rate -->
 
 8. Select **Save & Publish** and then Click on **Cancel**:
 ![Images/quicksight_dashboard_dt-8.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-8.png)
