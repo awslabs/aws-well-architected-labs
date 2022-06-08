@@ -14,7 +14,7 @@
     2. Opt-In Compute Optimizer
     3. Activate Business or Enterprise Support (for ta collection only)
     4. Create:
-        RDS instace, Budget, Unattached EBS, ECS cluster with at least 1 Service
+        RDS instace, Budget, Unattached EBS, ECS cluster with at least 1 Service,
     FIXME: add CFM for Prerequsites
 
 ## Install:
@@ -193,6 +193,7 @@ def update_nested_stacks():
                 if 'SQSUrl' == out['OutputKey']:
                     sqs_urls.append(out['OutputValue'])
     func_conf = boto3.client('lambda').get_function_configuration(FunctionName='AWS-Organization-Account-Collector')
+    logger.info(str(sqs_urls))
     func_conf['Environment']['Variables']['SQS_URL'] = ','.join(sqs_urls)
     response = boto3.client('lambda').update_function_configuration(
             FunctionName='AWS-Organization-Account-Collector',
@@ -200,26 +201,30 @@ def update_nested_stacks():
     )
 
 def clean_bucket():
-    logger.info('Empty the bucket')
-    s3.Bucket(f"costop-{account_id}").object_versions.delete()
+    try:
+        logger.info('Empty the bucket')
+        s3.Bucket(f"costop-{account_id}").object_versions.delete()
+    except Exception as exc:
+        logger.exception(exc)
 
 def trigger_update():
-    logger.info('Invoking lambda')
-    response = boto3.client('lambda').invoke(
-        FunctionName='AWS-Organization-Account-Collector',
-    )
-
+    for name in [
+        'AWS-Organization-Account-Collector',
+        'Lambda_Organization_Data_Collector',
+        'aws-cost-explorer-rightsizing-recommendations-function',
+        ]:
+        logger.info('Invoking ' + name)
+        response = boto3.client('lambda').invoke(FunctionName=name)
 
 def setup():
-    logger.info(res)
     initial_deploy_stacks()
     update_nested_stacks()
     clean_bucket()
     trigger_update()
     logger.info('Waiting 1 min')
-    time.sleep(1*60)
+    time.sleep(1 * 60)
     logger.info('and another 1 min')
-    time.sleep(1*60)
+    time.sleep(1 * 60)
 
 # TODO: move to utils.py?
 def athena_query(sql_query, sleep_duration=1, database: str=None, catalog: str='AwsDataCatalog', workgroup: str='primary'):
@@ -267,9 +272,13 @@ def test_ecs_services_clusters():
     ecs_services_clusters = athena_query('SELECT * FROM "optimization_data"."ecs_services_clusters_data" limit 10;')
     assert len(ecs_services_clusters)>0, 'table ecs_services_clusters is empty'
 
-def test_ecs_services_clusters():
-    ecs_services_clusters = athena_query('SELECT * FROM "optimization_data"."ecs_services_clusters_data" limit 10;')
-    assert len(ecs_services_clusters)>0, 'table ecs_services_clusters is empty'
+def test_ami():
+    ami_data = athena_query('SELECT * FROM "optimization_data"."ami_data" limit 10;')
+    assert len(ami_data)>0, 'table ami_data is empty'
+
+def test_ta():
+    ta_data = athena_query('SELECT * FROM "optimization_data"."ta_data" limit 10;')
+    assert len(ta_data)>0, 'table ta_data is empty'
 
 def teardown():
     clean_bucket()
@@ -305,6 +314,8 @@ def main():
                 test_snapshot_data,
                 test_rds_metrics,
                 test_budgets,
+                test_ami,
+                test_ta,
             ]:
             try:
                 logger.info('Testing ' +  f.__name__)
@@ -313,12 +324,14 @@ def main():
                 logger.exception(exc)
                 logger.error('Failed' + f.__name__)
             else:
-                logger.info(f.__name__, 'ok')
+                logger.info(f.__name__ +  ' ok')
 
     except Exception as exc:
         logger.exception(exc)
         raise
     finally:
+        logger.info('Press Ctr-C to stop before teardown')
+        time.sleep(30)
         logger.info('teardown')
         teardown()
 
