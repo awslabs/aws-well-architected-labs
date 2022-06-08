@@ -6,9 +6,7 @@ weight = 3
 
 ### EC2
 
-We have launched the RDS instance into our secondary region **N. California (us-wes-1)**.  
-
-Now we have to modify the application to use the new RDS instance endpoint 
+Now we have to modify the application in our secondary region **N. California (us-wes-1)**. 
 
 1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
@@ -16,19 +14,21 @@ Now we have to modify the application to use the new RDS instance endpoint
 
 {{< img BK-4.png >}}
 
-1.3 Select the **BackupAndRestoreSecondary** instance, then click the **Connect** button.
+1.3 In the search bar, paste the **Instance ID** that you copied from the [EC2 Section](../ec2/). This should start with **i-**.
 
-{{< img RS-44.png >}}
+1.4 Select the instance, copy the **Public IPv4 DNS** endpoint and then click the **Connect** button.
 
-1.4 Click the **Session Manager** link, then click the **Connect** button.
+{{< img bk-1.png >}}
+
+1.5 Click the **Session Manager** link, then click the **Connect** button.
 
 {{< img am-4.png >}}
 
-1.5 After a brief moment, a terminal prompt will display.
+1.6 After a brief moment, a terminal prompt will display.
 
 {{< img am-5.png >}}
 
-1.6 Let's connect to the database in the secondary **N. California (us-west-1)** region. 
+1.7 Let's connect to the database in the secondary **N. California (us-west-1)** region. 
 ```sh
 sudo su ec2-user
 cd /home/ec2-user
@@ -67,7 +67,7 @@ Type **exit** to return to the command prompt.
 MySQL [(none)]> exit
 ```
 
-1.7 Open the **unishopcfg.sh** file for editing with either nano or vi.
+1.8 Open the **unishopcfg.sh** file for editing with either nano or vi.
 
 ```sh
 sudo nano unishopcfg.sh
@@ -75,34 +75,23 @@ sudo nano unishopcfg.sh
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
-1.8 Replace the **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).  Change the ***AWS_DEFAULT_REGION** to `us-west-1`.  Add the `-dr` to the end of the **UI_RANDOM_NAME**.
+1.9 Replace the **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).  Change the ***AWS_DEFAULT_REGION** to `us-west-1`.  Change the **UI_RANDOM_NAME** to `backupandrestore-uibucket-secondary`.
 
 ```sh
 #!/bin/bash
 export Database=backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com
 export DB_ENDPOINT=backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com
 export AWS_DEFAULT_REGION=us-west-1
-export UI_RANDOM_NAME=backupandrestore-uibucket-xxxx-dr
+export UI_RANDOM_NAME=backupandrestore-uibucket-secondary
 ```
 
 Exit the editor, saving your changes.
 
-1.9 Lets use the source command which reads and executes commands from the unishopcfg.sh file
+1.10 Lets use the source command which reads and executes commands from the unishopcfg.sh file
 
 ```sh
 source unishopcfg.sh
 ```
-
-1.10 Let's copy the application files to the S3 buckets. 
-
-{{% notice note %}}
-If our S3 buckets contained application data then it would be necessary to schedule recurring backups to meet the target RPO. This could be done with Cross Region Replication. Since our buckets contains no data, only code, we will restore the contents from the EC2 instance.
-{{% /notice %}}
-
-```sh
-sudo aws s3 cp /home/ec2-user/UniShopUI s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-```
-
 1.11 Reboot the EC2 instance so our changes take effect.
 
 ```sh
@@ -111,7 +100,7 @@ sudo reboot
 
 ### Create application configuration file
 
-2.1 Using your favorite editor, create a new file named `config.json` file. Set the **host** property equal to the **EC2 public IPv4 DNS name** copied from [EC2 Section](../ec2/).  Add ('http://') and remove any trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-west-1`.
+2.1 Using your favorite editor, create a new file named `config.json` file. Set the **host** property equal to the **EC2 public IPv4 DNS name** copied **Step 1.4** above. Add ('http://') and remove any trailing slash (`/`) if one is present.  Finally, set the **region** property to `us-west-1`.
 
 ```json
 {
@@ -133,7 +122,7 @@ Your final `config.json` should look similar to this example.
 
 3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-3.2 Click the link for **backupandrestore-uibucket-xxxx-dr**.
+3.2 Click the link for **backupandrestore-uibucket-secondary**
 
 {{< img c-9.png >}}
 

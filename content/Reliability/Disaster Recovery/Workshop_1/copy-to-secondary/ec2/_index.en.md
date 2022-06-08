@@ -1,25 +1,28 @@
 +++
 title = "EC2"
 date =  2021-05-11T20:33:54-04:00
-weight = 2
+weight = 3
 +++
 
-### Copy the EC2 Amazon Machine Image (AMI)
+### Copy the EC2 backup
 
-1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
+1.1 Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-1.2 Click the **AMIs** link.
+1.2 Click the **Backup Vaults** link, then click the **Default** link.
 
-1.3 Verify the **BackupAndRestoreImage** has a status of **Available**.
+{{< img BK-24.png >}}
 
-{{< img BK-4.png >}}
+1.3 In the **Backups** section. Select the EC2 backup. Click **Copy** under the **Actions** dropdown.
 
-1.4 Select **BackupAndRestoreImage**.  Click **Copy AMI** under the **Actions** dropdown.
+{{< img BK-8.png >}}
 
-{{< img BK-6.png >}}
+{{% notice warning %}}
+If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
+{{% /notice %}}
 
-1.5 Select **US-West (N. California)** as the **Destination region**, then click the **Copy AMI** button.
+1.4 Select **US West (N. California)** as the **Copy to destination**, then click the **Copy** button.
 
-{{< img BK-7.png >}}
+{{< img BK-9.png >}}
+
 
 {{< prev_next_button link_prev_url="../rds/" link_next_url="../../verify-website/" />}}
