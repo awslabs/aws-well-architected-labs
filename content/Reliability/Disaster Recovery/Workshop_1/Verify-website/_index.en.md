@@ -4,9 +4,11 @@ date =  2021-05-11T11:33:17-04:00
 weight = 4
 +++
 
+Let's verify that everything is working as expected in our primary region **N. Virginia (us-east-1)**.
+
 ### Primary Region
 
-1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashbaord in the **N. Virginia (us-east-1)** region.
+1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Select **BackupAndRestore** under **Stacks**.
 

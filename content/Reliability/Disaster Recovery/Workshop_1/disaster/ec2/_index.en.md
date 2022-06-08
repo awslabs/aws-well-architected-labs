@@ -4,7 +4,9 @@ date =  2021-05-11T20:35:50-04:00
 weight = 1
 +++
 
-###  Launch an EC2 instance from AMI (Amazon Machine Image)
+We will now launch an EC2 instance from our Amazon Machine Image (AMI) that we copied into our secondary region **N. California (us-west-1)**.
+
+###  Launch EC2
 
 1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

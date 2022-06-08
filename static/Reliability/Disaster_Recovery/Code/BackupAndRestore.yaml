@@ -220,6 +220,8 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
+      VersioningConfiguration:
+        Status: Enabled        
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     DependsOn: DBInstance

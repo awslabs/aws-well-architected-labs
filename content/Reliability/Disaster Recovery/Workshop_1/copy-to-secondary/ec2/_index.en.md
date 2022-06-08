@@ -4,7 +4,7 @@ date =  2021-05-11T20:33:54-04:00
 weight = 2
 +++
 
-### Copy the EC2 AMI (Amazon Machine Image)
+### Copy the EC2 Amazon Machine Image (AMI)
 
 1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 

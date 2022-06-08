@@ -6,6 +6,10 @@ weight = 3
 
 ### EC2
 
+We have launched the RDS instance into our secondary region **N. California (us-wes-1)**.  
+
+Now we have to modify the application to use the new RDS instance endpoint 
+
 1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 1.2 Click the **Instances (running)** link.

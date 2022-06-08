@@ -8,13 +8,15 @@ pre = ""
 
 In this module, you will go through the Backup and Restore DR strategy. To learn more about this DR strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-ii-backup-and-restore-with-rapid-recovery/).
 
-Our test application is Unishop. It is a Spring Boot Java application connected to a MySQL database with a frontend written using bootstrap.
+Our test application is Unishop. It is a Spring Boot Java application deployed on a single EC2 instance using a public subnet.  Our datastore is an RDS MySQL database with a frontend written using bootstrap and hosted in S3.  Our application is currently deployed in our primary region **N. Virginia (us-east-1)**.
 
-The app is deployed on a single EC2 instance (t3.small) within a dedicated VPC using a single public subnet. Note that this is not the ideal infrastructure architecture for running highly available production applications but suffices for this workshop.
+{{% notice note %}}
+Note that this architecture does not meet the AWS Well Architected Framework best practices for running highly available production applications but suffices for this workshop.
+{{% /notice %}}
 
-To configure the infrastructure and deploy the application, we will use CloudFormation. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
+[CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
-We will initially deploy Unishop to the us-east-1 AWS region and verify functionality. Then we will use an AWS EC2 AMI and AWS Backup to create copies of the application server and database in the us-west-1 region. Finally, we will use the copies to create and test a fully functional application in the us-west-1 region.
+This module takes advantage of [AWS Backup](https://aws.amazon.com/backup/) to copy and restore our EC2 instance, RDS database and S3 bucket into the secondary region **N. California (us-west-1)**. 
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 

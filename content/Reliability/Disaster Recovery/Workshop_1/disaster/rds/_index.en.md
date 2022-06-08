@@ -10,6 +10,7 @@ weight = 2
 If you are running this workshop as part of an instructor led workshop, the RDS has already been restored to the **N. California (us-west-1)** region due to time constraints.  **Please review the steps in this section so you understand how the restore should work and then continue with the Configure Security Group Section below**.
 {{% /notice  %}}
 
+We will now launch an RDS instance from the backup that AWS Backup copied into our secondary region **N. California (us-west-1)**.
 
 1.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
