@@ -32,4 +32,4 @@ Change the **IsPrimary** parameter to value `no`.
 
 {{< img sr-6.png >}}
 
-{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../../enable-aurora-writefwd/" />}}
+{{< prev_next_button link_prev_url="../primary-region/" link_next_url="../../../verify-aurora-writefwd/" />}}
