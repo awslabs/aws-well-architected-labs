@@ -54,22 +54,43 @@ Metadata:
         default: 'Include AWS Budgets Collection Module'
 Mappings:
   RegionMap:
-       eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
-       us-east-2:        {CodeBucket: aws-well-architected-labs-ohio }
-       us-east-1:        {CodeBucket: aws-well-architected-labs-virginia }
-       us-west-1:        {CodeBucket: aws-well-architected-labs-california }
-       us-west-2:        {CodeBucket: aws-well-architected-labs-oregon }
-       ap-southeast-1:   {CodeBucket: aws-well-architected-labs-singapore }
-       eu-central-1:     {CodeBucket: aws-well-architected-labs-frankfurt }
-       eu-west-2:        {CodeBucket: aws-well-architected-labs-london }
-       eu-north-1:       {CodeBucket: aws-well-architected-labs-stockholm }
-       ap-southeast-2:   {CodeBucket: aws-well-architected-labs-ap-sydney }
-       ap-south-1:       {CodeBucket: aws-well-architected-labs-mumbai }
-       ap-northeast-3:   {CodeBucket: aws-well-architected-labs-osaka }
-       ap-northeast-2:   {CodeBucket: aws-well-architected-labs-seoul }
-       ap-northeast-1:   {CodeBucket: aws-well-architected-labs-tokyo }
-       ca-central-1:     {CodeBucket: aws-well-architected-labs-canada }
-       eu-west-3:        {CodeBucket: aws-well-architected-labs-paris }
+    # Some modules require code in s3 buckets located in the region. See the following list for supported regions.  
+    af-south-1:       {CodeBucket: not-supported-yet }
+    ap-east-1:        {CodeBucket: not-supported-yet }
+    ap-east-2:        {CodeBucket: not-supported-yet }
+    ap-northeast-1:   {CodeBucket: aws-well-architected-labs-tokyo }
+    ap-northeast-2:   {CodeBucket: aws-well-architected-labs-seoul }
+    ap-northeast-3:   {CodeBucket: aws-well-architected-labs-osaka }
+    ap-south-1:       {CodeBucket: aws-well-architected-labs-mumbai }
+    ap-south-2:       {CodeBucket: not-supported-yet }
+    ap-southeast-1:   {CodeBucket: aws-well-architected-labs-singapore }
+    ap-southeast-2:   {CodeBucket: aws-well-architected-labs-ap-sydney }
+    ap-southeast-3:   {CodeBucket: not-supported-yet }
+    ap-southeast-4:   {CodeBucket: not-supported-yet }
+    ap-southeast-5:   {CodeBucket: not-supported-yet }
+    ca-central-1:     {CodeBucket: aws-well-architected-labs-canada }
+    ca-west-1:        {CodeBucket: not-supported-yet }
+    cn-north-1:       {CodeBucket: not-supported-yet }
+    cn-northwest-1:   {CodeBucket: not-supported-yet }
+    eu-central-1:     {CodeBucket: aws-well-architected-labs-frankfurt }
+    eu-central-2:     {CodeBucket: not-supported-yet }
+    eu-isoe-west-1:   {CodeBucket: not-supported-yet }
+    eu-north-1:       {CodeBucket: aws-well-architected-labs-stockholm }
+    eu-south-1:       {CodeBucket: not-supported-yet }
+    eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
+    eu-west-2:        {CodeBucket: aws-well-architected-labs-london }
+    eu-west-3:        {CodeBucket: aws-well-architected-labs-paris }
+    il-central-1:     {CodeBucket: not-supported-yet }
+    me-central-1:     {CodeBucket: not-supported-yet }
+    me-south-1:       {CodeBucket: not-supported-yet }
+    mx-central-1:     {CodeBucket: not-supported-yet }
+    sa-east-1:        {CodeBucket: not-supported-yet }
+    us-east-1:        {CodeBucket: aws-well-architected-labs-virginia }
+    us-east-2:        {CodeBucket: aws-well-architected-labs-ohio }
+    us-gov-east-1:    {CodeBucket: not-supported-yet }
+    us-gov-west-1:    {CodeBucket: not-supported-yet }
+    us-west-1:        {CodeBucket: aws-well-architected-labs-california }
+    us-west-2:        {CodeBucket: aws-well-architected-labs-oregon }
 Parameters:
   DestinationBucket:
     Type: String
