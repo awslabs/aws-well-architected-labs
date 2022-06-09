@@ -109,4 +109,4 @@ Be able to create the below in a sub account where your CUR data is accessible:
 {{% children  /%}}
 
 
-{{< prev_next_button link_next_url="./1_deploy_main_resources/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_grant_permissions/" button_next_text="Start Lab" first_step="true" />}}

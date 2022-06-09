@@ -78,22 +78,22 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
-                Resource: "*"
+                Resource: "*"  ## only * can be used as a Resource for this action
               - Effect: "Allow"
                 Action:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: "*"
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:BudgetsModule-TaskQueue
               - Effect: "Allow"
                 Action:
                   - "budgets:ViewBudget"
                   - "budgets:Describe*"
-                Resource: "*"
+                Resource: !Sub "arn:aws:budgets:${AWS::Region}:${AWS::AccountId}:*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -264,6 +264,7 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'BudgetsModule-TaskQueue'
   EventSourceMapping:
     DependsOn:
       - EventPermission
