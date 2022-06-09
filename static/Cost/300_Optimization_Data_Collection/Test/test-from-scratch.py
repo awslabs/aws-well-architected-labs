@@ -21,10 +21,16 @@
     pip3 install cfn-flip boto3 pytest
 
 ## Run (expect 15 mins):
+Pytest:
+
     pytest static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py  \
        -o log_cli_format="%(asctime)s [%(levelname)8s] %(message)s"
        -o log_cli=true \
        --log-level=INFO -s \
+
+Python:
+    python3 static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py 
+
 
 """
 import os
