@@ -8,7 +8,7 @@ weight: 8
 
 Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag containing resource creator information. This is automatically applied to resources that are created, and allows you to view and allocate costs based on who created a resource.
 
-1. Log in to your **Master account** as an IAM user with the required permissions, and go to the **Billing** console:
+1. Log in to your **Management Account** as an IAM user with the required permissions, and go to the **Billing** console:
 ![Images/AWSBillTag0.png](/Cost/100_1_AWS_Account_Setup/Images/AWSBillTag0.png)
 
 2. Select **Cost Allocation Tags** from the left menu:
