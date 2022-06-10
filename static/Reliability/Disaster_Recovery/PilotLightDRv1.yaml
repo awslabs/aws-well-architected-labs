@@ -12,22 +12,22 @@ Parameters:
       - 'yes'
       - 'no'
     Description: 'Is primary region'
-  # IsPromote:
-  #   Type: String
-  #   Default: 'no'
-  #   AllowedValues:
-  #     - 'yes'
-  #     - 'no'
-  #   Description: 'Promote secondary'
+  IsPromote:
+    Type: String
+    Default: 'no'
+    AllowedValues:
+      - 'yes'
+      - 'no'
+    Description: 'Promote secondary'
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  # CreateApp: !Or
-  #   - !Equals ['pilot', 'warm']
-  #   - !Condition CreatePrimaryDB
-    # - !Equals [!Ref IsPromote, 'yes']
+  CreateApp: !Or
+    - !Equals ['pilot', 'warm']
+    - !Condition CreatePrimaryDB
+    - !Equals [!Ref IsPromote, 'yes']
   EnableWriteFwd: !And
     - !Equals ['pilot', 'warm']
     - !Condition CreateSecondaryDB
@@ -267,6 +267,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled                
   EC2Instance:
+    Condition: CreateApp
     Type: 'AWS::EC2::Instance'
     DependsOn: RDSDBInstance
     CreationPolicy:

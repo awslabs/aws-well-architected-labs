@@ -44,5 +44,5 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img d-9.png >}}
 
-{{< prev_next_button link_prev_url="../verify-website/" link_next_url="./ec2/" />}}
+{{< prev_next_button link_prev_url="../verify-website/" link_next_url="./rds/" />}}
 

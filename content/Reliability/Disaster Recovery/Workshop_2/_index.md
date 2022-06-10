@@ -8,13 +8,15 @@ pre = ""
 
 In this module, you will go through the Pilot-Light Disaster Recovery (DR) strategy. To learn more about this DR strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
 
-Our test application is Unishop. It is a Spring Boot Java application with a frontend written using bootstrap.
+Our test application is Unishop. It is a Spring Boot Java application deployed on a single Amazon EC2 instance using a public subnet.  Our datastore is an Amazon Aurora MySQL database with a frontend written using bootstrap and hosted in Amazon S3.  Our application is currently deployed in our primary region **N. Virginia (us-east-1)**.
 
-The app uses an Amazon S3 bucket to host a static web interface. A single EC2 instance serves as a proxy for API calls to an Amazon Aurora MySQL database.  The database contains mock user and product information.
+{{% notice note %}}
+Note that this architecture does not meet the AWS Well Architected Framework best practices for running highly available production applications but suffices for this workshop.
+{{% /notice %}}
 
-We will initially deploy the primary Unishop instance into the N. Virginia region.  Next, the N. California region will host the Pilot-Light DR instance.  To configure and deploy this infrastructure, we will use AWS CloudFormation.  CloudFormation enables Infrastructure as Code (IaC) automation to quickly provision cloud resources.
+[CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
-Afterward, we will verify the DR scenario. Meeting our [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) within 10s of minutes requires Amazon Aurora MySQL Cluster with the Amazon Aurora MySQL Global database feature enabled.  This feature adds cross-region database replication capabilities.
+This module takes advantage of [EC2 Image Builder](https://aws.amazon.com/image-builder/) to copy and restore our Amazon EC2 instance, [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data and [Amazon S3 Replication](https://aws.amazon.com/s3/features/replication/) to replicate our Amazon S3 objects into the secondary region **N. California (us-west-1)**. 
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 

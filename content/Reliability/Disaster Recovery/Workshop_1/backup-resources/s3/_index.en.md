@@ -12,7 +12,7 @@ weight = 1
 
 {{< img BK-22.png >}}
 
-1.3 Select **S3** as the **Resource type**, then select **backupandrestore-uibucket-xxxx** as the **Bucket name**. Click the **Create on-demand backup** button.
+1.3 Select **S3** as the **Resource type**, then select **backupandrestore-uibucket-xxxx** as the **Bucket name**. Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
 
 {{< img BK-34.png >}}
 

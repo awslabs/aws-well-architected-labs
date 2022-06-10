@@ -1,7 +1,7 @@
 +++
 title = "RDS"
 date =  2021-05-11T20:35:50-04:00
-weight = 2
+weight = 1
 +++
 
 ### Restore RDS Database
@@ -30,7 +30,7 @@ If you don't see your backup, check the status of the **Copy Job**. Click [AWS B
 
 {{< img RS-18.png >}}
 
-1.5 Click the **Restore backup** button.
+1.5 Select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Restore backup** button.
 
 {{< img RS-20.png >}}
 
@@ -84,4 +84,4 @@ Copy the name of the endpoint and port.  You will need this in a later step.
 
 {{< img RS-46.png >}}
 
-{{< prev_next_button link_prev_url="../ec2/" link_next_url="../modify-application/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../ec2/" />}}

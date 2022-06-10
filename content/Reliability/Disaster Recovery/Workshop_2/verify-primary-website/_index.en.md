@@ -18,19 +18,21 @@ weight = 3
 
 {{< img vw-2.png >}}
 
-## Play with the Primary application
+## Signup
 
-2.1 Register yourself into the application. You need to provide an e-mail address, which does not need to be valid. However, _be sure to remember this value_ to verify the data replication later.
+2.1 Register yourself into the application using the **Signup** link in the top menu. You need to provide an e-mail address, which does not need to be valid. However, **be sure to remember it** as you will need it to verify the data replication later.
 
 {{< img vw-3.png >}}
 
 2.2 You will see a confirmation message saying **Successfully Signed Up. You may now Login**.
 
-2.3 Log in to the application using your e-mail address from the previous step.
-
 {{< img vw-4.png >}}
 
-2.4 Add/remove items to your shopping cart by clicking on a Unicorn, followed by clicking the **Add to cart** button.
+2.3 Log in to the application using the **Login** link in the top menu, use your e-mail address from the previous step.  Also notice how the website is being hosted from your primary region **N. Virginia (us-east-1)**.
+
+{{< img vw-6.png >}}
+
+2.4 Add items to your shopping cart, verifying that the items in your shopping cart counter are being incremented.
 
 {{< img vw-5.png >}}
 

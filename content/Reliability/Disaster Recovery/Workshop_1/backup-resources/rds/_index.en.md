@@ -18,15 +18,9 @@ Backups can also protect against corruption or accidental deletion of data.
 
 {{< img BK-22.png >}}
 
-1.3 Select **RDS** as the **Resource type**, then select **unishopappv1dbbackupandrestore** as the **Database name**. Click the **Create on-demand backup** button.
+1.3 Select **RDS** as the **Resource type**, then select **unishopappv1dbbackupandrestore** as the **Database name**. Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
 
 {{< img BK-23.png >}}
-
-{{% notice warning %}}
-If you see this error, please **REPEAT** Steps 1.1 through 1.3 above making sure you start from Step 1.1.
-{{% /notice %}}
-
-{{< img BK-26.png >}}
 
 1.4 This will create a **Backup job**.
 

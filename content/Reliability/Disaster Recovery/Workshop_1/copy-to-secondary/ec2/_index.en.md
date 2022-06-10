@@ -20,9 +20,8 @@ weight = 3
 If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
 {{% /notice %}}
 
-1.4 Select **US West (N. California)** as the **Copy to destination**, then click the **Copy** button.
+1.4 Select **US West (N. California)** as the **Copy to destination**, then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
 
 {{< img BK-9.png >}}
-
 
 {{< prev_next_button link_prev_url="../rds/" link_next_url="../../verify-website/" />}}

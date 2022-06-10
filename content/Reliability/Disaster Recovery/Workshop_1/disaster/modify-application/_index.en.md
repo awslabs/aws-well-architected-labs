@@ -75,14 +75,14 @@ sudo nano unishopcfg.sh
 
 **Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
 
-1.9 Replace the **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).  Change the ***AWS_DEFAULT_REGION** to `us-west-1`.  Change the **UI_RANDOM_NAME** to `backupandrestore-uibucket-secondary`.
+1.9 Replace the **backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com** with the endpoint you copied from [RDS Section](../rds/).  Change the ***AWS_DEFAULT_REGION** to `us-west-1`.  Add the `-secondary` to the end of the UI_RANDOM_NAME.
 
 ```sh
 #!/bin/bash
 export Database=backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com
 export DB_ENDPOINT=backupandrestore-secondary-region.xxxx.us-west-1.rds.amazonaws.com
 export AWS_DEFAULT_REGION=us-west-1
-export UI_RANDOM_NAME=backupandrestore-uibucket-secondary
+export UI_RANDOM_NAME=backupandrestore-uibucket-1hl8wmtj28dzl-secondary
 ```
 
 Exit the editor, saving your changes.
@@ -122,7 +122,7 @@ Your final `config.json` should look similar to this example.
 
 3.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-3.2 Click the link for **backupandrestore-uibucket-secondary**
+3.2 Click the link for **backupandrestore-uibucket-xxxx-secondary**
 
 {{< img c-9.png >}}
 
@@ -166,5 +166,5 @@ Click the **Close** button.
 
 #### Congratulations !  You should see your application The Unicorn Shop in the **us-west-1** region.
 
-{{< prev_next_button link_prev_url="../rds/" link_next_url="../../cleanup/" />}}
+{{< prev_next_button link_prev_url="../ec2/" link_next_url="../../cleanup/" />}}
 

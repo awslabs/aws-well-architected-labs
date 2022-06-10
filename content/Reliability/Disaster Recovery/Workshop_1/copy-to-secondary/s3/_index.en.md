@@ -24,12 +24,14 @@ If you are using your own AWS account you may want to create a non-default vault
 If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your S3 backup is **Completed**.
 {{% /notice %}}
 
-1.4 In the **Settings** section. Select **Create new bucket** as the **Restore Destination**.
+1.4 In the **Settings** section. Select **Create new bucket** as the **Restore destination**.
 
-1.5 Enter `backupandrestore-uibucket-secondary` as the **New bucket name**.
-
-1.6 Click **Restore backup** button.
+1.5 Copy the **Resource ID** and paste it into the **New bucket name** adding in `-secondary` to the end.
 
 {{< img BK-2.png >}}
+
+1.6 Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click **Restore backup** button.
+
+{{< img BK-3.png >}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../rds/" />}}

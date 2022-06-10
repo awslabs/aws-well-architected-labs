@@ -12,7 +12,7 @@ weight = 3
 
 {{< img BK-22.png >}}
 
-1.3 Select **EC2** as the **Resource type**, then select **UniShopAppV1EC2BackupAndRestore** as the **Instance ID**. Click the **Create on-demand backup** button.
+1.3 Select **EC2** as the **Resource type**, then select **UniShopAppV1EC2BackupAndRestore** as the **Instance ID**.  Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
 
 {{< img BK-5.png >}}
 
