@@ -1,7 +1,7 @@
 +++
-title = "Promote App in Secondary Region"
+title = "Launch Instance"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 5
 +++
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
@@ -22,5 +22,5 @@ weight = 4
 
 {{< img da-5.png >}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../promote-aurora/" />}}
+{{< prev_next_button link_prev_url="../promote-aurora" link_next_url="../../verify-failover/" />}}
 

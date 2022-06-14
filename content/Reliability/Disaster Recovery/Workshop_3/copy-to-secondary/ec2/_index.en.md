@@ -32,4 +32,4 @@ In a real world scenario, the creation of an EC2 Amazon Machine Image (AMI) and 
 
 {{< img BK-6.png >}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../../verify-primary-website/" />}}
+{{< prev_next_button link_prev_url="../rds/" link_next_url="../../verify-website/" />}}

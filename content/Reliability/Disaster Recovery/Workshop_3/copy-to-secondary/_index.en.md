@@ -8,4 +8,4 @@ We are going to prepare our secondary region **N. California (us-west-1)** for a
 
 For the purpose of this lab we are going to 
 
-{{< prev_next_button link_prev_url="../backup-resources/s3/" link_next_url="./ec2/" />}}
+{{< prev_next_button link_prev_url="../backup-resources/s3/" link_next_url="./s3/" />}}

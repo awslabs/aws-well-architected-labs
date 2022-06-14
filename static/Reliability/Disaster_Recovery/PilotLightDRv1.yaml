@@ -180,6 +180,14 @@ Resources:
               - 's3:GetObjectAcl'
               - 's3:PutObject'
               - 's3:PutObjectAcl'
+              - 's3:GetReplicationConfiguration'
+              - 's3:ListBuckets'
+              - 's3:GetObjectVersion'
+              - 's3:GetObjectVersionAcl'
+              - 's3:GetObjectVersionTagging'
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'                            
             Resource:
               - !GetAtt
                 - UIBucket
@@ -190,6 +198,17 @@ Resources:
                     - UIBucket
                     - Arn
                   - /*
+              # - !Join
+              #   - ''
+              #   - - !GetAtt
+              #       - UIBucketSecondary
+              #       - Arn                                  
+              # - !Join
+              #   - ''
+              #   - - !GetAtt
+              #       - UIBucketSecondary
+              #       - Arn
+              #     - /*
       Roles:
         - !Ref S3Role
   S3Role:
@@ -258,14 +277,39 @@ Resources:
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
       DBInstanceIdentifier: !Sub 'UniShopAppV1DBpilot'
+  # UIBucketPrimary:
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     VersioningConfiguration:
+  #       Status: Enabled
+  #     ReplicationConfiguration:
+  #       Role: 
+  #         - !Ref S3Role
+  #       Rules:
+  #         - Status: Enabled
+  #           Prefix: ""
+  #           Destination:
+  #             Bucket: !Ref UIBucketSecondary
+  #     WebsiteConfiguration:
+  #       ErrorDocument: error.html
+  #       IndexDocument: index.html
+  # UIBucketSecondary:
+  #   Condition: CreateSecondaryDB
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     VersioningConfiguration:
+  #       Status: Enabled
+  #     WebsiteConfiguration:
+  #       ErrorDocument: error.html
+  #       IndexDocument: index.html
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
+      VersioningConfiguration:
+        Status: Enabled    
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
-      VersioningConfiguration:
-        Status: Enabled                
   EC2Instance:
     Condition: CreateApp
     Type: 'AWS::EC2::Instance'

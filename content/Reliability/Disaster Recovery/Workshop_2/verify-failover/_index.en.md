@@ -24,4 +24,4 @@ weight = 6
 
 {{< img vf-1.png >}}
 
-{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup" />}}
+{{< prev_next_button link_prev_url="../failover/promote-app/" link_next_url="../cleanup" />}}
