@@ -15,6 +15,14 @@ You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchite
 ### Visualization of Compute Optimizer data with Amazon QuickSight
 You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). 
 
+### AWS Organisation Data and The Cost Intelligence Dashboard
+
+This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organisation data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
 
@@ -83,6 +91,11 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
 
 In these labs we have a couple of amazing cost dashboards that can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/). If you would like to add your budget data into these dashboard please follow the below steps. Data must be collected and the crawler finished running before this query can be run. 
 There is a saved query called **aws_budgets** created in the CloudFormation. This is used when connecting to dashboard.
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2SFO4SF0WN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 
 {{%expand "Guide to add AWS Budgets into Cost Dashboard" %}}
 
