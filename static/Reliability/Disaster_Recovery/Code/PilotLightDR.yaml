@@ -12,22 +12,22 @@ Parameters:
       - 'yes'
       - 'no'
     Description: 'Is primary region'
-  # IsPromote:
-  #   Type: String
-  #   Default: 'no'
-  #   AllowedValues:
-  #     - 'yes'
-  #     - 'no'
-  #   Description: 'Promote secondary'
+  IsPromote:
+    Type: String
+    Default: 'no'
+    AllowedValues:
+      - 'yes'
+      - 'no'
+    Description: 'Promote secondary'
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  # CreateApp: !Or
-  #   - !Equals ['pilot', 'warm']
-  #   - !Condition CreatePrimaryDB
-    # - !Equals [!Ref IsPromote, 'yes']
+  CreateApp: !Or
+    - !Equals ['pilot', 'warm']
+    - !Condition CreatePrimaryDB
+    - !Equals [!Ref IsPromote, 'yes']
   EnableWriteFwd: !And
     - !Equals ['pilot', 'warm']
     - !Condition CreateSecondaryDB
@@ -180,6 +180,13 @@ Resources:
               - 's3:GetObjectAcl'
               - 's3:PutObject'
               - 's3:PutObjectAcl'
+              - 's3:GetReplicationConfiguration'
+              - 's3:GetObjectVersion'
+              - 's3:GetObjectVersionAcl'
+              - 's3:GetObjectVersionTagging'
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'     
             Resource:
               - !GetAtt
                 - UIBucket
@@ -190,6 +197,11 @@ Resources:
                     - UIBucket
                     - Arn
                   - /*
+          - Effect: Allow
+            Action:
+              - 's3:ListAllMyBuckets'
+            Resource:
+              - 'arn:aws:s3:::*'         
       Roles:
         - !Ref S3Role
   S3Role:
@@ -264,9 +276,8 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
-      VersioningConfiguration:
-        Status: Enabled                
   EC2Instance:
+    Condition: CreateApp
     Type: 'AWS::EC2::Instance'
     DependsOn: RDSDBInstance
     CreationPolicy:
