@@ -45,7 +45,7 @@ Parameters:
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/fof_dev.zip
   GlueRoleARN:
     Type: String
   RolePrefix:
@@ -111,12 +111,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-<<<<<<< HEAD
-                Resource: "*"
-                
-=======
                 Resource: arn:aws:sqs:*:*:InventoryCollectorModul-TaskQueue
->>>>>>> master
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:

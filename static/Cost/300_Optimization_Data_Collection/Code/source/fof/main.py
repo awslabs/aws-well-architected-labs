@@ -40,11 +40,6 @@ def lambda_handler(event, context):
             print(f"{DestinationPrefix} response gathered")
             s3(DestinationPrefix, account_id)
             start_crawler(os.environ["SnapshotCrawler"])
-
-            #Pricing
-            lambdaclient = boto3.client('lambda')
-            response = lambdaclient.invoke(FunctionName='pricing-Lambda-Function')
-            print('pricing lambda started')
                 
     except Exception as e:
         print(e)

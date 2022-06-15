@@ -28,7 +28,6 @@ This video shows you how to use the Optimization Data Collection Lab to pull in 
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
 
-
 {{%expand "Optimization Data Snapshots and AMIs Query" %}}
 
 
@@ -71,6 +70,20 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
           FROM "optimization_data"."ami_data") AS ami
               ON snapshots.snap_ami_id = ami.imageid )
     
+{{% /expand%}}
+
+There is an option to add pricing data to this query. The pricing data is already in your S3 bucket 
+
+{{%expand "Optimization Data Snapshots and AMIs with pricing data" %}}
+1. Go to AWS Athena
+2. Go to *Saved queries* at the top of the screen
+3. Run the *ec2_pricing* Query to create a pricing table
+4. In *Saved queries* Run the *region_names* Query to create a normalized region name table 
+5. In *Saved queries* run *snapshot-ami-query* to create a view 
+6. Run the below to see your data
+        
+        SELECT * FROM "optimization_data"."snapshot_ami_quicksight_view" limit 10;
+
 {{% /expand%}}
 
 ### EBS Volumes and Trusted Advisor Recommendations

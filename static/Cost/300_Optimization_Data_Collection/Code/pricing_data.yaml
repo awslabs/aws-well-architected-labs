@@ -179,8 +179,7 @@ Resources:
       TBLPROPERTIES (
         'has_encrypted_data'='false', 
         'skip.header.line.count'='1', 
-        'transient_lastDdlTime'='1611498146')"
-  
+        'transient_lastDdlTime'='1611498146')"  
   AthenaEC2PricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
@@ -305,3 +304,98 @@ Resources:
         'sizeKey'='2217375799',
         'skip.header.line.count'='6',
         'typeOfData'='file')"
+  CustomResourceFunctionFinalize:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt 'FinalizeLambdaExecutionRole.Arn'
+      FunctionName: !Sub "${RolePrefix}Compute-Optimizer-FinalizeSetup-DoNotRun"
+      Description: "Lambda to Finalize Setup (call trigger lambda)"
+      Runtime: python3.8
+      Architectures: [ arm64 ]
+      Code:
+        ZipFile: |
+          import os
+          import uuid
+          import json
+          import boto3
+          import botocore
+          import urllib3
+
+          LAMBDA_ARN = os.environ['TRIGGER_LAMBDA']
+
+          def lambda_handler(event, context):
+              print(event)
+              type_ = event.get('RequestType', 'Undef')
+              if type_ == 'Create': res = on_create()
+              elif type_ == 'Delete': res = on_delete()
+              else: res = (True, f"Not supported operation: {type_}")
+              response_data = {'Reason': res[1], 'uuid': str(uuid.uuid1()) }
+
+              url = event.get('ResponseURL')
+              body = {}
+              body['Status'] = 'SUCCESS' if res[0] else 'FAILED'
+              body['Reason'] = str(res[1]) + '\nSee the details in CloudWatch Log Stream: ' + context.log_stream_name
+              body['PhysicalResourceId'] = context.log_stream_name
+              body['StackId'] = event.get('StackId')
+              body['RequestId'] = event.get('RequestId')
+              body['LogicalResourceId'] = event.get('LogicalResourceId')
+              body['NoEcho'] = False
+              body['Data'] = response_data
+              print(body)
+              if not url: return
+              json_body=json.dumps(body)
+              try:
+                  http = urllib3.PoolManager()
+                  response = http.request('PUT', url, body=json_body, headers={'content-type' : '', 'content-length' : str(len(json_body))}, retries=False)
+                  print(f"Status code: {response}" )
+              except Exception as exc:
+                  print("send(..) failed executing requests.put(..): " + str(exc))
+
+          def on_create():
+              try:
+                  name = LAMBDA_ARN.split(':')[-1]
+                  boto3.client('lambda').invoke(FunctionName=name, InvocationType="RequestResponse", Payload='{}')
+                  return (True, f'INFO: Invoked {name}')
+              except Exception as exc:
+                  return (True, f'ERROR: error invoking lambda {exc}')
+
+          def on_delete():
+              print('Nothing')
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Environment:
+        Variables:
+          TRIGGER_LAMBDA:  !GetAtt LambdaFunction.Arn
+  FinalizeLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeAsync
+                  - lambda:InvokeFunction
+                Resource: !GetAtt LambdaFunction.Arn
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+  FinalizeSetup:
+    DependsOn:
+      - LambdaFunction
+      - FinalizeLambdaExecutionRole
+    Type: Custom::CustomResource
+    Properties:
+      ServiceToken: !GetAtt CustomResourceFunctionFinalize.Arn
