@@ -199,6 +199,7 @@ Resources:
         `unit` string,
         `priceperunit` double,
         `currency` string,
+        `relatedto` string,
         `leasecontractlength` string,
         `purchaseoption` string,
         `offeringclass` string,

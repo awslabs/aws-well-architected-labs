@@ -253,7 +253,7 @@ Resources:
             WHEN snap_ami_id = imageid THEN 'AMI Avalible'
             WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed' ELSE 'Not AMI'
           END AS status, 
-          priceperunit*volumesize as est_snap_cost
+         cast(priceperunit as decimal)*volumesize as est_snap_cost
         FROM ((((
             (
               SELECT snapshotid AS snap_id,
