@@ -24,6 +24,6 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 {{< img a-4.png >}}
 
-## Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+#### Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
 
 {{< prev_next_button link_prev_url="../" link_next_url="../promote-app/" />}}

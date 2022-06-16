@@ -40,7 +40,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPC
+          Value: UniShopAppV1VPCWarm
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:

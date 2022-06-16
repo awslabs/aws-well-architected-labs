@@ -24,6 +24,6 @@ Now, let us verify Amazon Aurora MySQL Read-Replica Write Forwarding on our Amaz
 
 {{< img a-4.png >}}
 
-## Congratulations! You have verified the Amazon Aurora Global Database supports Read-Replica Write Forwarding!
+#### Congratulations! You have verified the Amazon Aurora Global Database supports Read-Replica Write Forwarding!
 
 {{< prev_next_button link_prev_url="../prerequisites/" link_next_url="../verify-websites/" />}}

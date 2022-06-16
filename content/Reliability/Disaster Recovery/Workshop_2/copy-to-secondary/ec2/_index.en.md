@@ -6,7 +6,9 @@ weight = 1
 
 ### Create the EC2 Amazon Machine Image (AMI)
 
-In a real world scenario, the creation of an EC2 Amazon Machine Image (AMI) and copying to your secondary region would be handled as part of your CI/CD pipeline. You want to ensure that your primary region and your secondary region are configured the same and with the same artifacts to ensure if you need to failover to your secondary region, your workload will work as it does in your primary region. You should also be validating your disaster recovery mechanisms and scenarios with Game Days as an ongoing exercise.
+{{% notice note %}}
+For production workloads, these steps would be automated as part of your CI/CD pipeline. You want to ensure that your primary region and your secondary region are configured the same and with the same artifacts to ensure if you need to failover to your secondary region, your workload will work as it does in your primary region. You should also be validating your disaster recovery mechanisms and scenarios with Game Days as an ongoing exercise.
+{{% /notice %}}
 
 1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 

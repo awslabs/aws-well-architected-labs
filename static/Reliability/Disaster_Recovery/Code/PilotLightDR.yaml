@@ -41,7 +41,7 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPC
+          Value: UniShopAppV1VPCPilot
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -173,7 +173,8 @@ Resources:
       PolicyName: !Sub S3Policy-pilot
       PolicyDocument:
         Statement:
-          - Effect: Allow
+          - Sid: AllowForOther
+            Effect: Allow
             Action:
               - 's3:GetBucketLocation'
               - 's3:GetObject'
@@ -197,11 +198,18 @@ Resources:
                     - UIBucket
                     - Arn
                   - /*
-          - Effect: Allow
+          - Sid: AllowForListBucket
+            Effect: Allow
             Action:
               - 's3:ListAllMyBuckets'
             Resource:
               - 'arn:aws:s3:::*'         
+          - Sid: AllowForRDS
+            Effect: Allow
+            Action:
+              - 'rds:Describe*'
+            Resource:
+              - '*'                     
       Roles:
         - !Ref S3Role
   S3Role:
@@ -387,15 +395,15 @@ Resources:
                   - |
                     [Service]
                   - |
-                    Type=simple
+                    Type=forking
                   - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
+                    ExecStart=/home/ec2-user/unishopstart.sh
                   - |
-                    Restart=on-failure
+                    ExecReload=/home/ec2-user/unishoprestart.sh
                   - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
+                    ExecStop=/home/ec2-user/unishopstop.sh
+                  - |                                    
+                    PrivateTmp=true
                   - |+
 
                   - |
@@ -405,61 +413,80 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
             /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - export Database=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
                   - export DB_ENDPOINT=
                   - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+
-
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishoprun.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - java -jar
-                  - ' '
-                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
-                  - >
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh     
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
               mode: '000555'
               group: ec2-user
               user: ec2-user
+            /home/ec2-user/unishopstop.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; 
+                  - |
+                    then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
+            /home/ec2-user/unishoprestart.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh                                                        
+                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
             /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
               content: !Join
                 - ''
