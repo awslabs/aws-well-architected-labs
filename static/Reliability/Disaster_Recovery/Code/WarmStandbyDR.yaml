@@ -191,7 +191,7 @@ Resources:
                   - /*
           - Effect: Allow
             Action:
-              - 'rds:ModifyDBCluster',
+              - 'rds:ModifyDBCluster'
               - 'rds:Describe*'
             Resource:
               - '*'          
