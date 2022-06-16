@@ -309,7 +309,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Role: !GetAtt 'FinalizeLambdaExecutionRole.Arn'
-      FunctionName: !Sub "${RolePrefix}Compute-Optimizer-FinalizeSetup-DoNotRun"
+      FunctionName: !Sub "${RolePrefix}-Pricing-FinalizeSetup-DoNotRun"
       Description: "Lambda to Finalize Setup (call trigger lambda)"
       Runtime: python3.8
       Architectures: [ arm64 ]
