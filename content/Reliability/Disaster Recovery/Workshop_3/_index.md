@@ -12,7 +12,7 @@ Warm Standby Disaster Recovery strategy has [Recovery Point Objective(RPO) / Rec
 
 Our test application is Unishop. It is a Spring Boot Java application deployed across a fleet of Amazon EC2 instance using a public subnet and an Amazon Elastic Load Balancer to balance requests. Our datastore is an Amazon Aurora MySQL database with a frontend written using bootstrap and hosted in Amazon S3.
 
-Our application is currently deployed in our primary region N. Virginia (us-east-1) and we will use N. California (us-west-1) as our secondary region.
+Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
 
 [CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 

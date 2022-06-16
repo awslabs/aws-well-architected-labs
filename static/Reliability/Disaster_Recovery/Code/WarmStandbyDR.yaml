@@ -191,7 +191,8 @@ Resources:
                   - /*
           - Effect: Allow
             Action:
-              - 'rds:ModifyDBCluster'
+              - 'rds:ModifyDBCluster',
+              - 'rds:Describe*'
             Resource:
               - '*'          
       Roles:
@@ -288,7 +289,7 @@ Resources:
           Value: UniShopAppV1EC2Warm
           PropagateAtLaunch: true            
       LaunchConfigurationName: !Ref LaunchConfig
-      MinSize: !If [CreateFullApp, 3, 1]
+      MinSize: !If [CreateFullApp, 1, 1]
       MaxSize: !If [CreateFullApp, 5, 3]
       LoadBalancerNames:
         - !Ref ElasticLoadBalancer
@@ -316,7 +317,6 @@ Resources:
             - update
             - install
             - configure
-            - create-tables
             - create-service-files
             - start-service
           secondary:
@@ -380,22 +380,11 @@ Resources:
                     
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
-
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
-        create-tables:
-          commands:
-            1-create-tables:
-              command: !Join
-                - ''
-                - - 'sudo mysql -u UniShopAppV1User -h '
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |2
-                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
         configure-global-db:
           commands:
             1-enable-write-forwarding:
               command: sudo aws rds modify-db-cluster --db-cluster-identifier dr-immersionday-secondary-warm --region us-west-1 --enable-global-write-forwarding
+
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:
@@ -405,7 +394,7 @@ Resources:
                 - - |
                     [Unit]
                   - |
-                    Description=UniShop
+                    Description=Restart UniShop
                   - |
                     Wants=network.target
                   - >
@@ -416,15 +405,15 @@ Resources:
                   - |
                     [Service]
                   - |
-                    Type=simple
+                    Type=forking
                   - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
+                    ExecStart=/home/ec2-user/unishopstart.sh
                   - |
-                    Restart=on-failure
+                    ExecReload=/home/ec2-user/unishoprestart.sh
                   - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
+                    ExecStop=/home/ec2-user/unishopstop.sh
+                  - |                                    
+                    PrivateTmp=true
                   - |+
 
                   - |
@@ -434,50 +423,41 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
             /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - export Database=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
                   - export DB_ENDPOINT=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+
-
+                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !If [CreateFullApp, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]]
+                  - |+                  
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishoprun.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh     
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+                  - >
                   - java -jar
                   - ' '
                   - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
@@ -489,6 +469,51 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
+            /home/ec2-user/unishopstop.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; 
+                  - |
+                    then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
+            /home/ec2-user/unishoprestart.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh   
+                  - >
+                  - java -jar
+                  - ' '
+                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
+                  - >
+                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
+                    &>
+                    /home/ec2-user/app.log
+                    &
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
             /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
               content: !Join
                 - ''
@@ -600,6 +625,90 @@ Resources:
         UnhealthyThreshold: '5'
         Interval: '30'
         Timeout: '5'
+  EC2Instance:
+    Condition: CreatePrimaryDB
+    Type: 'AWS::EC2::Instance'
+    DependsOn: RDSDBInstance
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT30M
+    Metadata:
+      'AWS::CloudFormation::Init':
+        configSets:
+          default:
+            - update
+            - install
+            - configure
+            - create-tables
+        update:
+          commands:
+            update:
+              command: sudo yum update -y
+        install:
+          packages:
+            rpm:
+              'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm': []
+            yum:
+              amazon-cloudwatch-agent: []
+              mariadb: []
+              java-1.8.0-openjdk-devel: []
+        configure:
+          commands:
+            0-populate-buckets:
+              command: !Join
+                - ''
+                - - |
+                    #!/bin/bash      
+
+                  - |
+                    sudo mkdir /home/ec2-user/UniShopUI/                                            
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
+ 
+        create-tables:
+          commands:
+            1-create-tables:
+              command: !Join
+                - ''
+                - - 'sudo mysql -u UniShopAppV1User -h '
+                  - !GetAtt RDSClusterPrimary.Endpoint.Address
+                  - |2
+                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+    Properties:
+      InstanceType: t3.small
+      ImageId: !Ref LatestAmiId
+      SubnetId: !Ref UniShopAppV1Subnet1
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      IamInstanceProfile: !Ref S3InstanceProfile
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash
+            - |
+              sudo yum install -y aws-cfn-bootstrap
+            - /opt/aws/bin/cfn-init -v
+            - '         --stack '
+            - !Ref 'AWS::StackName'
+            - '         --resource EC2Instance '
+            - '         --region '
+            - !Ref 'AWS::Region'
+            - '         --configsets default '
+            - |+
+
+            - /opt/aws/bin/cfn-signal -e $?
+            - ' --stack '
+            - !Ref 'AWS::StackName'
+            - ' --resource EC2Instance'
+            - ' --region '
+            - !Ref 'AWS::Region'
+            - |+
+
+      Tags:
+        - Key: Name
+          Value: UniShopAppV1EC2Build
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL
