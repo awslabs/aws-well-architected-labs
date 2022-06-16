@@ -12,7 +12,7 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
-**Continue to the [Verify Aurora Write Forwarding](../verify-aurora-writefwd/) section of the workshop.**
+**Continue to the [Verify Websites](../verify-websites/) section of the workshop.**
 
 ### Using your own AWS account
 

@@ -405,7 +405,7 @@ Resources:
                 - - |
                     [Unit]
                   - |
-                    Description=Restart UniShop
+                    Description=UniShop
                   - |
                     Wants=network.target
                   - >

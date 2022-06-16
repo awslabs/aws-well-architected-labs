@@ -363,7 +363,12 @@ Resources:
         create-tables:
           commands:
             1-create-tables:
-              command: sudo mysql -u UniShopAppV1User -h !GetAtt RDSClusterPrimary.Endpoint.Address -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+              command: !Join
+                - ''
+                - - 'sudo mysql -u UniShopAppV1User -h '
+                  - !GetAtt RDSClusterPrimary.Endpoint.Address
+                  - |2
+                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:
@@ -408,7 +413,9 @@ Resources:
                 - ''
                 - - |
                     #!/bin/bash
-                  - export DB_ENDPOINT=!GetAtt RDSClusterPrimary.Endpoint.Address
+                  - export DB_ENDPOINT=
+                  - !GetAtt RDSClusterPrimary.Endpoint.Address
+                  - |+                  
               mode: '000555'
               group: ec2-user
               user: ec2-user

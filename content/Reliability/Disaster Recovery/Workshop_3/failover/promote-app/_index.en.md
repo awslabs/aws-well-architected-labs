@@ -1,8 +1,10 @@
 +++
-title = "Promote App in Secondary Region"
+title = "Scale Out"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 5
 +++
+
+## Launch Instance 
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
