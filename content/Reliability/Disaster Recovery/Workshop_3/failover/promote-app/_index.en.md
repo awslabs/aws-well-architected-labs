@@ -24,5 +24,9 @@ weight = 5
 
 {{< img da-5.png >}}
 
+## Update Auto Scaling Group (ASG)
+
+
+
 {{< prev_next_button link_prev_url="../" link_next_url="../promote-aurora/" />}}
 

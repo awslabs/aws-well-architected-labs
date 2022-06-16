@@ -24,9 +24,7 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 
 {{< img a-6.png >}}
 
-1.5 Grab a snack! It takes few minutes for the operation to complete.
-
-#### Congratulations! Your Amazon Aurora Secondary Database is now a standalone database and can become a primary database!
+#### Congratulations! You have completed the Managed Planned Failover.
 
 {{< prev_next_button link_prev_url="../promote-app/" link_next_url="../../verify-failover/" />}}
 

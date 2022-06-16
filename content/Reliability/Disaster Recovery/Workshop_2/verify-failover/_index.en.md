@@ -16,6 +16,10 @@ weight = 6
 
 1.4 Click on the **WebsiteURL** output link.
 
+{{% notice warning %}}
+You will have to wait a few minutes while the EC2 instance is launched and bootstrapped.  EC2 instance is running when you see the Unishop webpage with all the products.
+{{% /notice %}}
+
 ## Verify the Website
 
 2.1 Log in to the application. You need to provide the registered email from the **Pre-requisites > Primary Region** section.
