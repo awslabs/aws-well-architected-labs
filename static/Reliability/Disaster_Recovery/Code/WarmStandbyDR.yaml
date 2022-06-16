@@ -430,7 +430,7 @@ Resources:
                 - - |
                     #!/bin/bash
                   - export DB_ENDPOINT=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !If [CreateFullApp, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]]
+                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !If [CreateFullApp, !GetAtt RDSClusterSecondary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]]
                   - |+                  
               mode: '000555'
               group: ec2-user

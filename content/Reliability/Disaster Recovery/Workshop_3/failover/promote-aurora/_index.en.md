@@ -26,5 +26,5 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 
 #### Congratulations! You have completed the Managed Planned Failover.
 
-{{< prev_next_button link_prev_url="../promote-app/" link_next_url="../../verify-failover/" />}}
+{{< prev_next_button link_prev_url="../../verify-websites/" link_next_url="../promote-app/" />}}
 

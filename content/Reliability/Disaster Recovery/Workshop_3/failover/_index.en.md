@@ -10,4 +10,4 @@ When a regional service event affects the Unishop application in the primary reg
 For production workloads, these steps would be automated as part of your failover process. You may also be using Amazon Route53 or other DNS (Domain Name Services) to handle routing for a fail over event.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../verify-websites/" link_next_url="./promote-app/" />}}
+{{< prev_next_button link_prev_url="../verify-websites/" link_next_url="./promote-aurora/" />}}
