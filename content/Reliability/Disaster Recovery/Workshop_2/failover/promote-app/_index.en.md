@@ -6,13 +6,9 @@ weight = 5
 
 ### Launch EC2 
 
-{{% notice note %}}
-For production workloads, this step would be be automated and handled as part of your failover process. 
-{{% /notice %}}
+1.1 Click [AMIs](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Images:visibility=owned-by-me) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
-
-1.2 Click the **AMIs** link. Select **UniShopAppV1EC2PilotAMI**.  Click the **Launch instance from AMI** button.
+1.2 Select **UniShopAppV1EC2PilotAMI**.  Click the **Launch instance from AMI** button.
 
 {{< img pa-1.png >}}
 

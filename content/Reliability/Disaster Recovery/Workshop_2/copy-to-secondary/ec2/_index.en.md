@@ -26,11 +26,17 @@ For production workloads, these steps would be automated as part of your CI/CD p
 
 ### Copy the EC2 Amazon Machine Image (AMI)
 
-2.1 Select **UnishopPilotLightEC2AMI**. Click **Copy AMI** under the **Actions** dropdown.
+2.1 Click [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) to navigate to the dashboard.
+
+{{% notice warning %}}
+Your AMI status must be **Ready** for you to continue to the next step.
+{{% /notice %}}
+
+2.2 Select **UnishopPilotLightEC2AMI**. Click **Copy AMI** under the **Actions** dropdown.
 
 {{< img BK-5.png >}}
 
-2.2 Select **US West (N. California)** as the **Destination Region**.
+2.3 Select **US West (N. California)** as the **Destination Region**.
 
 {{< img BK-6.png >}}
 

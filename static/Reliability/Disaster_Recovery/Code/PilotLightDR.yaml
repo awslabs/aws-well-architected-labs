@@ -12,25 +12,25 @@ Parameters:
       - 'yes'
       - 'no'
     Description: 'Is primary region'
-  IsPromote:
-    Type: String
-    Default: 'no'
-    AllowedValues:
-      - 'yes'
-      - 'no'
-    Description: 'Promote secondary'
+  # IsPromote:
+  #   Type: String
+  #   Default: 'no'
+  #   AllowedValues:
+  #     - 'yes'
+  #     - 'no'
+  #   Description: 'Promote secondary'
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  CreateApp: !Or
-    - !Equals ['pilot', 'warm']
-    - !Condition CreatePrimaryDB
-    - !Equals [!Ref IsPromote, 'yes']
-  EnableWriteFwd: !And
-    - !Equals ['pilot', 'warm']
-    - !Condition CreateSecondaryDB
+  # CreateApp: !Or
+  #   - !Equals ['pilot', 'warm']
+  #   - !Condition CreatePrimaryDB
+  #   - !Equals [!Ref IsPromote, 'yes']
+  # EnableWriteFwd: !And
+  #   - !Equals ['pilot', 'warm']
+  #   - !Condition CreateSecondaryDB
 Resources:
   UniShopAppV1VPC:
     Type: 'AWS::EC2::VPC'
@@ -285,7 +285,7 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
   EC2Instance:
-    Condition: CreateApp
+    Condition: CreatePrimaryDB
     Type: 'AWS::EC2::Instance'
     DependsOn: RDSDBInstance
     CreationPolicy:
@@ -300,12 +300,6 @@ Resources:
             - install
             - configure
             - create-tables
-            - create-service-files
-            - start-service
-          secondary:
-            - update
-            - install
-            - configure
             - create-service-files
             - start-service
         update:
@@ -369,12 +363,7 @@ Resources:
         create-tables:
           commands:
             1-create-tables:
-              command: !Join
-                - ''
-                - - 'sudo mysql -u UniShopAppV1User -h '
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |2
-                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+              command: sudo mysql -u UniShopAppV1User -h !GetAtt RDSClusterPrimary.Endpoint.Address -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:
@@ -419,8 +408,7 @@ Resources:
                 - ''
                 - - |
                     #!/bin/bash
-                  - export DB_ENDPOINT=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
+                  - export DB_ENDPOINT=!GetAtt RDSClusterPrimary.Endpoint.Address
               mode: '000555'
               group: ec2-user
               user: ec2-user
@@ -569,7 +557,7 @@ Resources:
             - '         --resource EC2Instance '
             - '         --region '
             - !Ref 'AWS::Region'
-            - !If [CreatePrimaryDB, '         --configsets default','         --configsets secondary']
+            - '         --configsets default '
             - |+
 
             - /opt/aws/bin/cfn-signal -e $?

@@ -1,5 +1,5 @@
 +++
-title = "Verify Website"
+title = "Verify Websites"
 date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
@@ -18,7 +18,7 @@ weight = 3
 
 {{< img vw-2.png >}}
 
-## Signup
+### Signup
 
 2.1 Register yourself into the application using the **Signup** link in the top menu. You need to provide an e-mail address, which does not need to be valid. However, **be sure to remember it** as you will need it to verify the data replication later.
 
@@ -35,5 +35,25 @@ weight = 3
 2.4 Add items to your shopping cart, verifying that the items in your shopping cart counter are being incremented.
 
 {{< img vw-5.png >}}
+
+## Secondary Region
+
+Our secondary region should be unavailable. In a pilot light disaster recovery strategy there are no compute instances.
+
+3.1 Navigate to  [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
+
+3.2 Choose the **Pilot-Secondary** stack.
+
+3.3 Navigate to the **Outputs** tab.
+
+{{< img vw-7.png >}}
+
+3.4 Click on the **WebsiteURL** output link. 
+
+{{< img vw-8.png >}}
+
+3.5 You should see an error.
+
+{{< img vw-9.png >}}
 
 {{< prev_next_button link_prev_url="../prerequisites/" link_next_url="../failover/" />}}

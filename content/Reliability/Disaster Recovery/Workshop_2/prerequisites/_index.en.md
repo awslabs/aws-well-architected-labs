@@ -12,7 +12,7 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
-**Continue to the [Verify Website](../verify-primary-website/) section of the workshop.**
+**Continue to the [Configure Secondary Region](../copy-to-secondary/) section of the workshop.**
 
 ### Using your own AWS account
 
