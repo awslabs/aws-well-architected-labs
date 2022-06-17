@@ -45,5 +45,5 @@ We now want to scale out our compute capacity to match that of our primary regio
 {{< img asg-4.png >}}
 
 
-{{< prev_next_button link_prev_url="../promote-aurora" link_next_url="../verify-failover/" />}}
+{{< prev_next_button link_prev_url="../promote-aurora" link_next_url="../../verify-failover/" />}}
 
