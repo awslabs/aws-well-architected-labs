@@ -26,5 +26,5 @@ Because this workload has only **one** EC2 instance that is deployed in only **o
 
 {{< img BackupAndRestore.png >}}
 
-{{< prev_next_button link_next_url="./prerequisites/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
 

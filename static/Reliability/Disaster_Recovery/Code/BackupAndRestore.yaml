@@ -147,13 +147,21 @@ Resources:
       PolicyName: S3Policy
       PolicyDocument:
         Statement:
-          - Effect: Allow
+          - Sid: AllowForOther
+            Effect: Allow
             Action:
               - 's3:GetBucketLocation'
               - 's3:GetObject'
               - 's3:GetObjectAcl'
               - 's3:PutObject'
               - 's3:PutObjectAcl'
+              - 's3:GetReplicationConfiguration'
+              - 's3:GetObjectVersion'
+              - 's3:GetObjectVersionAcl'
+              - 's3:GetObjectVersionTagging'
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'     
             Resource:
               - !GetAtt
                 - UIBucket
@@ -169,13 +177,27 @@ Resources:
                 - - !GetAtt
                     - UIBucket
                     - Arn
-                  - -dr
+                  - -secondary
               - !Join
                 - ''
                 - - !GetAtt
                     - UIBucket
                     - Arn
-                  - -dr/*
+                  - -secondary/*
+          - Sid: AllowForListBucket
+            Effect: Allow
+            Action:
+              - 's3:ListAllMyBuckets'
+              - 's3:CreateBucket'
+              - 's3:Put*'
+            Resource:
+              - 'arn:aws:s3:::*'         
+          - Sid: AllowForRDS
+            Effect: Allow
+            Action:
+              - 'rds:Describe*'
+            Resource:
+              - '*'                                
       Roles:
         - !Ref S3Role
   S3Role:
@@ -296,6 +318,8 @@ Resources:
 
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
+                  - >
+                    aws s3api create-bucket --acl bucket-owner-full-control --bucket $UI_RANDOM_NAME-secondary --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
         create-tables:
           commands:
             1-create-tables:
@@ -327,15 +351,15 @@ Resources:
                   - |
                     [Service]
                   - |
-                    Type=simple
+                    Type=forking
                   - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
+                    ExecStart=/home/ec2-user/unishopstart.sh
                   - |
-                    Restart=on-failure
+                    ExecReload=/home/ec2-user/unishoprestart.sh
                   - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
+                    ExecStop=/home/ec2-user/unishopstop.sh
+                  - |                                    
+                    PrivateTmp=true
                   - |+
 
                   - |
@@ -345,63 +369,83 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
             /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - export Database=
-                  - !GetAtt
-                    - DBInstance
-                    - Endpoint.Address
-                  - |+
-
                   - export DB_ENDPOINT=
                   - !GetAtt
                     - DBInstance
                     - Endpoint.Address
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+                
-
+                  - |+               
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishoprun.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - >
-                    java -jar
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh     
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
               mode: '000555'
               group: ec2-user
               user: ec2-user
+            /home/ec2-user/unishopstop.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; 
+                  - |
+                    then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
+            /home/ec2-user/unishoprestart.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh                                                        
+                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
             /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
               content: !Join
                 - ''
@@ -464,7 +508,6 @@ Resources:
                     sudo amazon-cloudwatch-agent-ctl -a fetch-config -s -m ec2
                     -c
                     file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
-
     Properties:
       InstanceType: t3.small
       ImageId: !Ref LatestAmiId
