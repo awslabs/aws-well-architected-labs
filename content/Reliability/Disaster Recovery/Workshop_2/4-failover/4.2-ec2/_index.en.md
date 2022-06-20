@@ -1,0 +1,65 @@
++++
+title = "EC2"
+date =  2021-05-11T11:43:28-04:00
+weight = 2
++++
+
+### Launch EC2 
+
+1.1 Click [AMIs](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Images:visibility=owned-by-me) to navigate to the dashboard in the **N. California (us-west-1)** region.
+
+1.2 Select **UniShopAppV1EC2PilotAMI**.  Click the **Launch instance from AMI** button.
+
+{{< img pa-1.png >}}
+
+1.3 Enter `UniShopAppV1EC2Pilot` as the **Name**.
+
+{{< img pa-2.png >}}
+
+1.4 In the **Key pair (login)** section. Select **ee-default-keypair** as the **Key pair name**.
+
+{{< img pa-3.png >}}
+
+1.5 In the **Network settings** section click the **Edit** button. 
+
+{{< img pa-6.png >}}
+
+1.6 Select **UniShopAppV1VPCPilot** as the **VPC**. Select **Select existing security group** for the **Firewall (security groups)** and then select **Pilot-Secondary-EC2SecurityGroup-xxx** as the **Common security groups**.
+
+{{< img pa-7.png >}}
+
+1.6 In the **Advanced details** section.  Select **Pilot-Secondary-S3InstanceProfile-xxx** as the **IAM instance profile**.
+
+{{< img pa-4.png >}}
+
+1.7 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
+We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) to achieve this.
+
+Copy and paste the below script as the **User data**, then click the **Launch instance** button.
+
+**User Data Script**:
+{{% expand "Click here to see the user data:" %}}
+
+```bash
+#!/bin/bash     
+sudo su ec2-user                        
+export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?contains(Name, `pilot-secondary-uibucket`) == `true`]'.Name)
+export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
+sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                                       
+echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
+sudo aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request     
+export DATABASE=$(aws rds describe-db-clusters --region $AWS_DEFAULT_REGION --db-cluster-identifier dr-immersionday-secondary-pilot --query 'DBClusters[*].[Endpoint]' --output text)
+sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF
+#!/bin/bash
+export DB_ENDPOINT=$DATABASE
+EOF
+sudo systemctl restart unishop
+```
+{{% /expand %}}
+
+{{< img pa-5.png >}}
+
+{{< prev_next_button link_prev_url="../4.1-aurora" link_next_url="../../5-verify-secondary/" />}}
+

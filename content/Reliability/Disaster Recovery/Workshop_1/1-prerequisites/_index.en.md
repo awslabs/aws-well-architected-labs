@@ -12,7 +12,7 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
-**Continue to the [Verify Primary Region](../2-verify-primary/) section of the workshop.**
+**Continue to the [S3 Cross-Region Replication](../2-s3-crr/) section of the workshop.**
 
 
 #### Using your own AWS account

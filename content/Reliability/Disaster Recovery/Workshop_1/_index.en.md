@@ -14,7 +14,9 @@ Our application is currently deployed in our primary region **N. Virginia (us-ea
 
 Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet.  Our datastore is an [Amazon RDS](https://aws.amazon.com/rds/) MySQL database with a frontend written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
 
-This module takes advantage of [AWS Backup](https://aws.amazon.com/backup/) which will be our single pane of glass to copy and restore our Amazon EC2 instance, Amazon RDS database and Amazon S3 bucket into the secondary region.
+This module takes advantage of [AWS Backup](https://aws.amazon.com/backup/) which will be our single pane of glass to backup, copy and restore our Amazon EC2 instance and Amazon RDS database to the secondary region.
+
+We will use [Amazon S3 Cross-Region Replication (CRR)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html#crr-scenario) to replicate our S3 objects to the secondary region.
 
 [CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
