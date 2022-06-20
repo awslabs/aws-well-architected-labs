@@ -359,7 +359,10 @@ Resources:
                     aws s3api create-bucket --acl bucket-owner-full-control --bucket $UI_RANDOM_NAME-secondary --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
 
                   - >
-                    aws s3api put-bucket-versioning --bucket $UI_RANDOM_NAME-secondary --versioning-configuration Status=Enabled                                     
+                    aws s3api put-bucket-versioning --bucket $UI_RANDOM_NAME-secondary --versioning-configuration Status=Enabled      
+
+                  - >
+                    aws s3 website s3://$UI_RANDOM_NAME-secondary/ --index-document index.html --error-document error.html                  
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/
