@@ -20,8 +20,6 @@ Ahora, promovamos la base de datos secundaria de Amazon Aurora MySQL a una insta
 
 1.4 Oprima **Remote and promote** para confirmar la promoción del servidor. (Esta parte de la consola no está traducida)
 
-{{< img a-4.png >}}
-
 1.5 Busca algo de comer! La operación se tomará un par de minutos en completarse.
 
 ## Felicitaciones! Su base de datos secundaria de Amazon Aurora ahora es una base de datos independiente y puede convertirse en su base de datos primaria!
