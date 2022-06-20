@@ -1,10 +1,10 @@
 +++
 title = "Failover"
 date =  2021-05-11T11:43:28-04:00
-weight = 4
+weight = 3
 +++
 
-In the event a disaster affects our primary region **N. Virginia (us-east-1)**, we want to bring up the resources in the secondary region **N. California (us-west-1)**.
+When a regional service event affects the Unishop application in the primary region **N. Virginia (us-east-1)**, we want to fail over to the secondary region **N. California (us-west-1)**.
 
 {{% notice note %}}
 We will **manually** perform a series of tasks to failover our workload to our secondary region **N. California (us-west-1)**.  
@@ -45,5 +45,4 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img d-9.png >}}
 
-
-{{< prev_next_button link_prev_url="../3-prepare-secondary/3.1-ec2" link_next_url="./4.1-aurora/" />}}
+{{< prev_next_button link_prev_url="../2-verify-websites/" link_next_url="./3.1-aurora/" />}}

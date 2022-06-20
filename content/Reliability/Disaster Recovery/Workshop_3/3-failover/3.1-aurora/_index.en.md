@@ -8,22 +8,23 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 
 With an Aurora global database, there are two different approaches to failover depending on the scenario.  
 
-For this workshop we will be doing a [Managed Unplanned Failover](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html).
+For this workshop we will be doing a [Managed Planned Failover](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html).
 
 ### Promote Aurora
 
-1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+1.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
 1.2 Click into **DB Instances**.
 
 {{< img a-2.png >}}
 
-1.3 Select **dr-immersionday-secondary-pilot** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
+1.3 Select **dr-immersionday-global-warm** select **Fail over global database** from the **Actions** link.
 
-{{< img a-3.png >}}
+{{< img a-5.png >}}
 
-1.4 Click **Remove and Promote** to confirm the server promotion.
+1.4 Select **dr-immersionday-secondary-warm** as the **Choose a secondary cluster to become primary cluster**, then click the **Fail over global database** button.
 
-{{< img a-4.png >}}
+{{< img a-6.png >}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../3.2-ec2/" />}}
+

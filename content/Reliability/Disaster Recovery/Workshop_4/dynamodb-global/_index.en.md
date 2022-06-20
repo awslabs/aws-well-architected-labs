@@ -38,6 +38,4 @@ This might take a few minutes, feel free to move onto the next step.  Just ensur
 
 {{< img dd-6.png >}}
 
-#### Congratulations! Your DynamoDB Global Tables have been created!
-
 {{< prev_next_button link_prev_url="../prerequisites/cfn-outputs/" link_next_url="../verify-aurora-writefwd/" />}}
