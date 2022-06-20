@@ -129,4 +129,6 @@ sudo systemctl restart unishop
 ```
 {{% /expand %}}
 
+{{< img rs-22.png >}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="../../6-verify-secondary/" />}}
