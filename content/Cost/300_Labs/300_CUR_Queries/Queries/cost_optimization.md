@@ -357,7 +357,7 @@ ORDER BY
 #### Helpful Links
 [Data Transfer Costs Explained](https://github.com/open-guides/og-aws#aws-data-transfer-costs)
 
-{{< email_button category_text="Cost Optimization" service_text="Elastic Load Balancing - Idle ELB" query_text="Elastic Load Balancing - Idle ELB query 1" button_text="Help & Feedback" >}}
+{{< email_button category_text="Cost Optimization" service_text="NAT Gateway - Idle NATGW" query_text="NAT Gateway - Idle NATGW" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
