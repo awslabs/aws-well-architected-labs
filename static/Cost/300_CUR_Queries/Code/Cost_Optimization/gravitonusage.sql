@@ -3,7 +3,7 @@
 -- query_description: AWS Graviton processors are designed by AWS to deliver the best price performance ratio for cloud workloads, delivering up to 40% improvement over comparable current gen x86 processors. Due to the improved price performance, many organizations track Graviton usage as a KPI to drive cost-savings for their cloud workloads. Graviton-based EC2 instances are available, and many other AWS services such as Amazon Relational Database Service, Amazon ElastiCache, Amazon EMR, and Amazon OpenSearch also support Graviton-based instance types. This query provides detail on Graviton-based usage. Amortized cost, usage hours, and a count of unique resources are summed. Output is grouped by day, payer account ID, linked account ID, service, instance type, and region. Output is sorted by day (descending) and amortized cost (descending).
 
 SELECT 
-  DATE_TRUNC('day',line_item_usage_start_date) as day_line_item_usage_start_date,
+  DATE_TRUNC('day',line_item_usage_start_date) AS day_line_item_usage_start_date,
   bill_payer_account_id,
   line_item_usage_account_id,
   line_item_product_code,
@@ -16,7 +16,7 @@ SELECT
     ELSE 0 
   END) AS sum_amortized_cost, 
   SUM(line_item_usage_amount) as sum_line_item_usage_amount, 
-  COUNT(DISTINCT(line_item_resource_id)) as count_line_item_resource_id
+  COUNT(DISTINCT(line_item_resource_id)) AS count_line_item_resource_id
 FROM 
   ${table_name}
 WHERE 
