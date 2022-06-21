@@ -303,45 +303,52 @@ Besides deleting idle NATGWs you should also consider the following tips:
 
 #### Copy Query
 {{%expand "Click here - to expand the query" %}}
-Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/nat-gateway-idle.sql) 
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/natgateway_idle_wrid.sql) 
 
 ```tsql
-SELECT 
+SELECT
   bill_payer_account_id,
   line_item_usage_account_id,
-  DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
-  CASE
-	WHEN line_item_resource_id LIKE 'arn%' THEN CONCAT(SPLIT_PART(line_item_resource_id,'/',2),' - ',product_location)
-	ELSE CONCAT(line_item_resource_id,' - ',product_location)
-  END AS line_item_resource_id,
-  product_location,
-  product_attachment_type,
+  SPLIT_PART(line_item_resource_id, ':', 6) AS split_line_item_resource_id,
+  product_region,
   pricing_unit,
-  CASE
-	WHEN pricing_unit = 'hour' THEN 'Hourly charges'
-	WHEN pricing_unit = 'GigaBytes' THEN 'Data processing charges'
-  END AS pricing_unit,
-  SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
-  SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
-FROM 
-  ${table_name}
-WHERE
-  ${date_filter}
-  AND product_group = 'AWSTransitGateway' 
-  AND line_item_line_item_type IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
-GROUP BY
-  bill_payer_account_id, 
-  line_item_usage_account_id,
-  DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
-  line_item_resource_id,
-  product_location,
-  product_attachment_type,
-  pricing_unit
-ORDER BY
-  sum_line_item_unblended_cost DESC,
-  month_line_item_usage_start_date,
   sum_line_item_usage_amount,
-  product_attachment_type;
+  CAST(cost_per_resource AS DECIMAL(16, 8)) AS sum_line_item_unblended_cost
+FROM
+  (
+    SELECT
+      line_item_resource_id,
+      product_region,
+      pricing_unit,
+      line_item_usage_account_id,
+      bill_payer_account_id,
+      SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+      SUM(SUM(line_item_unblended_cost)) OVER (PARTITION BY line_item_resource_id) AS cost_per_resource,
+      SUM(SUM(line_item_usage_amount)) OVER (PARTITION BY line_item_resource_id, pricing_unit) AS usage_per_resource_and_pricing_unit,
+      COUNT(pricing_unit) OVER (PARTITION BY line_item_resource_id) AS pricing_unit_per_resource
+    FROM
+      ${table_name}
+    WHERE
+      line_item_product_code = 'AmazonEC2'
+      AND line_item_usage_type LIKE '%Nat%'
+      -- get previous month
+      AND month = CAST(month(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+      -- get year for previous month
+      AND year = CAST(year(current_timestamp + -1 * INTERVAL '1' MONTH) AS VARCHAR)
+      AND line_item_line_item_type = 'Usage'
+    GROUP BY
+      line_item_resource_id,
+      product_region,
+      pricing_unit,
+      line_item_usage_account_id,
+      bill_payer_account_id
+    )
+WHERE
+  -- filter only resources which ran more than half month (336 hrs)
+  usage_per_resource_and_pricing_unit > 336
+  AND pricing_unit_per_resource = 1
+ORDER BY
+  cost_per_resource DESC;
 ```
 
 {{% /expand%}}
