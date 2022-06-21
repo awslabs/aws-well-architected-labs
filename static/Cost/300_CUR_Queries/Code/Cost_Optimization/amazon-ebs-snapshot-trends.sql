@@ -86,4 +86,5 @@ SELECT
   ebs_snapshots_under_1yr_cost,
   ebs_snapshots_over_1yr_cost
 FROM
-  snapshot_usage_all_time_before_map;
+  snapshot_usage_all_time_before_map
+;

@@ -38,4 +38,4 @@ GROUP BY
 ORDER BY 
   day_line_item_usage_start_date DESC,
   sum_amortized_cost DESC
-  ;
+;

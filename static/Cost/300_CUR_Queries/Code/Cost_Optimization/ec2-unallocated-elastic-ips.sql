@@ -26,4 +26,3 @@ ORDER BY
   sum_line_item_unblended_cost DESC,
   sum_line_item_usage_amount DESC
 ;
-

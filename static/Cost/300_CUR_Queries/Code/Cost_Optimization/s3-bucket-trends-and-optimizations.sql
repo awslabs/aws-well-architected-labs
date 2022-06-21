@@ -352,4 +352,4 @@ SELECT DISTINCT
   s3_glacier_instant_retrieval_retrieval_cost		
 FROM 
   month_usage
-;	
+;

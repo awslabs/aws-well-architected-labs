@@ -67,4 +67,4 @@ ORDER BY
   line_item_usage_account_id,
   product_operating_system,
   pricing_unit
-  ;
+;

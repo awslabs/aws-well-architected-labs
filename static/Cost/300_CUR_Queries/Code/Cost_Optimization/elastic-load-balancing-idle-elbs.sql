@@ -45,4 +45,5 @@ WHERE
   usage_per_resource_and_pricing_unit > 336
   AND pricing_unit_per_resource = 1
 ORDER BY
-  cost_per_resource DESC;
+  cost_per_resource DESC
+;
