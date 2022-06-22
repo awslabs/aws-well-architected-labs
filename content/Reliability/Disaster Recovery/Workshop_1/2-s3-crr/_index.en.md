@@ -53,7 +53,7 @@ In a production environment, we would **automate** these steps as part of our CI
 
 3.2 If you have never used CloudShell you will be prompted with a **Welcome to AWS CloudShell** message, click the **Close** button.
 
-3.3 At the prompt - paste the following AWS CLI command replacing **<<bucket-name>>** with your **backupandrestore-uibucket-xxx** bucket name. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
+3.3 At the prompt - paste the following AWS CLI command replacing **<<bucket-name>>** with your **backupandrestore-uibucket-xxx** bucket name. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button. Make sure you use the bucket that is in the primary region **N. Virginia (us-east-1)**.
 
 ```sh
 aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ s3://<bucket-name>/ --exclude "config.json" --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers    
