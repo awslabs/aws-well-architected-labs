@@ -708,7 +708,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2Build
+          Value: UniShopAppV1EC2WarmBuild
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL

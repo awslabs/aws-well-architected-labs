@@ -327,18 +327,12 @@ Resources:
 
                   - export ASSETS_RANDOM_NAME=
                   - !Ref AssetBucket
-                  - |+                                         
-
-                  - export JSON_STRING=
-                  - $(echo '{"host":"<APIGATEWAY-URL>","region":"'"$AWS_DEFAULT_REGION"'"}')    
-                  - |+        
+                  - |+                            
 
                   - >
-                    aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
-                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                                    
-
-                  - |
-                    echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json                          
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
+                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive  --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                                                                
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/
@@ -392,15 +386,15 @@ Resources:
                   - |
                     [Service]
                   - |
-                    Type=simple
+                    Type=forking
                   - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
+                    ExecStart=/home/ec2-user/unishopstart.sh
                   - |
-                    Restart=on-failure
+                    ExecReload=/home/ec2-user/unishoprestart.sh
                   - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
+                    ExecStop=/home/ec2-user/unishopstop.sh
+                  - |                                    
+                    PrivateTmp=true
                   - |+
 
                   - |
@@ -410,54 +404,41 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
             /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - export Database=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
                   - export DB_ENDPOINT=
                   - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+
-
-                  - export ASSETS_RANDOM_NAME=
-                  - !Ref AssetBucket
                   - |+                  
-
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishoprun.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh     
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+                  - >
                   - java -jar
                   - ' '
                   - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
@@ -469,6 +450,51 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
+            /home/ec2-user/unishopstop.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; 
+                  - |
+                    then echo "$APP_NAME is not running"
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
+            /home/ec2-user/unishoprestart.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh   
+                  - >
+                  - java -jar
+                  - ' '
+                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
+                  - >
+                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
+                    &>
+                    /home/ec2-user/app.log
+                    &
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
             /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
               content: !Join
                 - ''
@@ -532,7 +558,6 @@ Resources:
                     -c
                     file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
     Properties:
-      #      KeyName: dr-key
       InstanceType: t3.small
       ImageId: !Ref LatestAmiId
       SubnetId: !Ref UniShopAppV1Subnet1
@@ -1183,13 +1208,105 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
+  BuildEC2Instance:
+    DependsOn: ApiDeployment
+    Type: 'AWS::EC2::Instance'
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT30M
+    Metadata:
+      'AWS::CloudFormation::Init':
+        configSets:
+          default:
+            - update
+            - install
+            - configure
+        update:
+          commands:
+            update:
+              command: sudo yum update -y
+        install:
+          packages:
+            rpm:
+              'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm': []
+            yum:
+              amazon-cloudwatch-agent: []
+              mariadb: []
+              java-1.8.0-openjdk-devel: []
+        configure:
+          commands:
+            0-populate-buckets:
+              command: !Join
+                - ''
+                - - |
+                    #!/bin/bash      
+
+                  - |
+                    sudo mkdir /home/ec2-user/UniShopUI/                              
+                
+                  - export AWS_DEFAULT_REGION=
+                  - !Ref 'AWS::Region'
+                  - |+
+
+                  - export UI_RANDOM_NAME=
+                  - !Ref UIBucket
+                  - |+                        
+
+                  - export APIGW=
+                  - !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
+                  - |+                 
+
+                  - export JSON_STRING=
+                  - $(echo '{"host":"'"$APIGW"'","region":"'"$AWS_DEFAULT_REGION"'"}')    
+                  - |+                                                 
+
+                  - |
+                    echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json                          
+
+                  - >
+                    aws s3 cp /home/ec2-user/UniShopUI/config.json
+                    s3://$UI_RANDOM_NAME/ --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+ 
+    Properties:
+      InstanceType: t3.small
+      ImageId: !Ref LatestAmiId
+      SubnetId: !Ref UniShopAppV1Subnet1
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      IamInstanceProfile: !Ref S3InstanceProfile
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash
+            - |
+              sudo yum install -y aws-cfn-bootstrap
+            - /opt/aws/bin/cfn-init -v
+            - '         --stack '
+            - !Ref 'AWS::StackName'
+            - '         --resource BuildEC2Instance '
+            - '         --region '
+            - !Ref 'AWS::Region'
+            - '         --configsets default '
+            - |+
+
+            - /opt/aws/bin/cfn-signal -e $?
+            - ' --stack '
+            - !Ref 'AWS::StackName'
+            - ' --resource BuildEC2Instance'
+            - ' --region '
+            - !Ref 'AWS::Region'
+            - |+
+
+      Tags:
+        - Key: Name
+          Value: UniShopAppV1EC2HotBuild
 Outputs:
-  APIGURL:
-    Value: !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
-    Description: API Gatway URL
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL
     Description: Website URL
-  WebsiteBuckt:
+  WebsiteBucket:
     Value: !Ref UIBucket
     Description: S3 Bucket containing the UniShop website    
