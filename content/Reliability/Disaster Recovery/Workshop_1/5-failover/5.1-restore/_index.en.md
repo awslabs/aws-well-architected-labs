@@ -7,7 +7,7 @@ weight = 1
 ### Restore RDS Database
 
 {{% notice info %}}
-If you are running this workshop as part of an instructor led workshop, the RDS has already been restored to the **N. California (us-west-1)** region due to time constraints.  **Please review the steps in this section so you understand how the restore should work and then continue with the Configure Security Group Section below**. This means that you will not be able to verify your cart items were successfully restored to the secondary region when we get to that section.
+If you are running this workshop as part of an instructor led workshop, the RDS has already been restored to the **N. California (us-west-1)** region due to time constraints.  **Please review the steps in this section so you understand how the restore should work and then continue with the Launch EC2 Section below**. This means that you will not be able to verify your cart items were successfully restored to the secondary region when we get to that section.
 {{% /notice  %}}
 
 1.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
@@ -84,11 +84,13 @@ Copy the name of the endpoint and port.  You will need this in a later step.
 
 ### Launch EC2
 
-4.1 Click the **Backup Vaults** link, then click the **Default** link.
+4.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+
+4.2 Click the **Backup Vaults** link, then click the **Default** link.
 
 {{< img rs-1.png >}}
 
-4.2 In the **Backups** section. Select the EC2 backup. Click **Restore** under the **Actions** dropdown.
+4.3 In the **Backups** section. Select the EC2 backup. Click **Restore** under the **Actions** dropdown.
 
 {{< img rs-19.png >}}
 
@@ -96,15 +98,15 @@ Copy the name of the endpoint and port.  You will need this in a later step.
 If you don't see your backup, check the status of the **Copy Job**. Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in **N. Virginia (us-east-1)** region. Click the **Jobs** link, then click the **Copy jobs** link.  Verify the **Status** of your EC2 copy job is **Completed**.
 {{% /notice %}}
 
-4.3 In the **Network settings** section, select **BackupAndRestoreDB-EC2SecurityGroup-xxxx** as the **Security groups**.
+4.4 In the **Network settings** section, select **BackupAndRestoreDB-EC2SecurityGroup-xxxx** as the **Security groups**.
 
 {{< img rs-20.png >}}
 
-4.4 Select **Choose an IAM Role** and select **Team Role** as the **Role name**. 
+4.5 Select **Choose an IAM Role** and select **Team Role** as the **Role name**. 
 
 {{< img rs-21.png >}}
 
-4.5 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
+4.6 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
 We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) to achieve this.
 
 Copy and paste the below script as the **User data**, then click the **Restore backup** button.
@@ -130,5 +132,9 @@ sudo systemctl restart unishop
 {{% /expand %}}
 
 {{< img rs-22.png >}}
+
+{{% notice warning %}}
+The restore job(s) must have a status of **Completed**, before you can move to the next step. This may take approximately **5-20** minutes.
+{{% /notice %}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../../6-verify-secondary/" />}}

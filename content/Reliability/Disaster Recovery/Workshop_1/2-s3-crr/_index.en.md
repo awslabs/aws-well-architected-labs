@@ -18,7 +18,7 @@ As part of the CloudFormation Template, the primary region and secondary region 
 
 ### Create Replication rule
 
-2.1 Click the link for **backupandrestore-uibucket-xxxx-**.
+2.1 Click the link for **backupandrestore-uibucket-xxxx**.
 
 {{< img crr-2.png >}}
 
@@ -51,9 +51,9 @@ In a production environment, we would **automate** these steps as part of our CI
 
 3.1 Click [AWS Cloudshell](https://us-east-1.console.aws.amazon.com/cloudshell/home?region=us-east-1) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-3.2 If you have never used CloudShell you will be prompted to continue.
+3.2 If you have never used CloudShell you will be prompted with a **Welcome to AWS CloudShell** message, click the **Close** button.
 
-3.3 At the prompt - paste the following AWS CLI command replacing **<<bucket-name>>** with your **backupandrestore-uibucket-xxx** bucket name.
+3.3 At the prompt - paste the following AWS CLI command replacing **<<bucket-name>>** with your **backupandrestore-uibucket-xxx** bucket name. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
 
 ```sh
 aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ s3://<bucket-name>/ --exclude "config.json" --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers    
