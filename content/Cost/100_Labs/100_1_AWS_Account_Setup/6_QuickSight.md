@@ -32,17 +32,48 @@ This will setup Amazon QuickSight, so that users in the Cost Optimization Accoun
 
 1. Go to the **IAM Dashboard**
 
-2. Click **Policies** and search for the **AWSQuickSightS3Policy**, click on the **AWSQuickSightS3Policy** policy:
+2. Click **Policies** and select **Create Policy**:
 ![Images/IAMPolicy_editQS.png](/Cost/100_1_AWS_Account_Setup/Images/IAMPolicy_editQS.png)
 
-3. Click **Edit policy**, 
+3. Go to **JSON Editor**. We will add the s3 resource **arn:aws:s3:::cost\*** below the existing s3 bucket. This will allow QuickSight to access any S3 bucket starting with **cost**, so Cost Optimization users can easily create new datasets without requiring additional QuickSight privileges. Copy the policy given below into JSON editor and Click **Next**: 
+
+{{%expand "Click here for Custom permissions policy" %}}
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": "arn:aws:s3:::cost*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": "*"
+        }
+    ]
+}
+{{% /expand%}}
 ![Images/IAMPolicy_editpolicy.png](/Cost/100_1_AWS_Account_Setup/Images/IAMPolicy_editpolicy.png)
 
-4. We will add the s3 resource **arn:aws:s3:::cost\*** below the existing s3 bucket. This will allow QuickSight to access any S3 bucket starting with **cost**, so Cost Optimization users can easily create new datasets without requiring additional QuickSight privileges. Click **Review policy**:
+4. Name your policy to **AWSQuickSightS3Policy**, add **Description** and click **Create Policy**:
 ![Images/IAMPolicy_editreview.png](/Cost/100_1_AWS_Account_Setup/Images/IAMPolicy_editreview.png)
 
-5. Click **Save changes**:
-![Images/IAMPolicy_save.png](/Cost/100_1_AWS_Account_Setup/Images/IAMPolicy_save.png)
+5. Click **AWSQuickSightS3Policy** policy to attach it to QuickSight role:
+![Images/awsQSIAM1.png](/Cost/100_1_AWS_Account_Setup/Images/awsQSIAM1.png)
+
+6. Go to **Policy Usage** tab and click **Attach**:
+![Images/AWSQSIAM2.png](/Cost/100_1_AWS_Account_Setup/Images/AWSQSIAM2.png)
+
+7. Select AWS QuickSight Service role and click **Attach Policy**:
+![Images/AWSQSIAM3.png](/Cost/100_1_AWS_Account_Setup/Images/AWSQSIAM3.png)
+
 
 {{% notice tip %}}
 Congratulations - QuickSight is now setup for your users. The Cost Optimization team can self manage QuickSight, and access to data sets in S3 with the correct bucket name.
