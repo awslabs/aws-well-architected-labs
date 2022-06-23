@@ -12,25 +12,11 @@ Parameters:
       - 'yes'
       - 'no'
     Description: 'Is primary region'
-  # IsPromote:
-  #   Type: String
-  #   Default: 'no'
-  #   AllowedValues:
-  #     - 'yes'
-  #     - 'no'
-  #   Description: 'Promote secondary'
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  # CreateApp: !Or
-  #   - !Equals ['pilot', 'warm']
-  #   - !Condition CreatePrimaryDB
-  #   - !Equals [!Ref IsPromote, 'yes']
-  # EnableWriteFwd: !And
-  #   - !Equals ['pilot', 'warm']
-  #   - !Condition CreateSecondaryDB
 Resources:
   UniShopAppV1VPC:
     Type: 'AWS::EC2::VPC'
