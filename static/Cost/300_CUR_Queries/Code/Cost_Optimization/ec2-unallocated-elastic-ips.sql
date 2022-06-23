@@ -4,25 +4,25 @@
 
 -- query_link: /cost/300_labs/300_cur_queries/queries/cost_optimization
 
-	SELECT
-		line_item_usage_account_id,
-		line_item_usage_type,
-		product_location,
-		line_item_line_item_description,
-		SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
-		SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
-	FROM
-		${table_name}
-	WHERE
-		${date_filter}
-		AND line_item_product_code = 'AmazonEC2'
-		AND line_item_usage_type LIKE '%ElasticIP:IdleAddress'
-	GROUP BY
-		line_item_usage_account_id,
-		line_item_usage_type,
-		product_location,
-		line_item_line_item_description
-	ORDER BY
-		sum_line_item_unblended_cost DESC,
-		sum_line_item_usage_amount DESC;
-
+SELECT
+  line_item_usage_account_id,
+  line_item_usage_type,
+  product_location,
+  line_item_line_item_description,
+  SUM(line_item_usage_amount) AS sum_line_item_usage_amount,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
+FROM
+  ${table_name}
+WHERE
+  ${date_filter}
+  AND line_item_product_code = 'AmazonEC2'
+  AND line_item_usage_type LIKE '%ElasticIP:IdleAddress'
+GROUP BY
+  line_item_usage_account_id,
+  line_item_usage_type,
+  product_location,
+  line_item_line_item_description
+ORDER BY
+  sum_line_item_unblended_cost DESC,
+  sum_line_item_usage_amount DESC
+;
