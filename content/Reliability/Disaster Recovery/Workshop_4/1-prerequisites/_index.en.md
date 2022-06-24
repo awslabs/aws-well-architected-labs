@@ -12,7 +12,7 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
-**Continue to the [Verify Websites](../2-verify-websites/) section of the workshop.**
+**Continue to the [DynamoDB](../2-dynamodb/) section of the workshop.**
 
 #### Using your own AWS account
 

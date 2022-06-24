@@ -15,13 +15,13 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPCBackupAndRestore
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
-          Value: UniShopAppV1IGW
+          Value: !Ref 'AWS::StackName'
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -39,7 +39,7 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet1
+          Value: !Sub '${AWS::StackName}-1'
   UniShopAppV1Subnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -52,14 +52,14 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet2
+          Value: !Sub '${AWS::StackName}-2'
   UniShopAppV1PublicRoutTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref UniShopAppV1VPC
       Tags:
         - Key: Name
-          Value: UniShopAppV1PublicRoute
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1PublicRout:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
@@ -89,7 +89,7 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
@@ -122,7 +122,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -248,7 +248,7 @@ Resources:
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-BackupAndRestore-${AWS::Region}'
+      RoleName: !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -272,8 +272,8 @@ Resources:
     Type: 'AWS::RDS::DBInstance'
     DeletionPolicy: Delete
     Properties:
-      DBName: unishopappv1dbbackupandrestore
-      DBInstanceIdentifier: unishopappv1dbbackupandrestore
+      DBName: unishop
+      DBInstanceIdentifier: !Ref 'AWS::StackName'
       Engine: MySQL
       DBInstanceClass: db.t2.micro
       Port: '3306'
@@ -286,7 +286,7 @@ Resources:
       MultiAZ: 'false'
       Tags:
         - Key: Name
-          Value: UniShopAppV1DB
+          Value: !Ref 'AWS::StackName'
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -341,7 +341,11 @@ Resources:
 
                   - export UI_RANDOM_NAME=
                   - !Ref UIBucket
-                  - |+                                          
+                  - |+       
+
+                  - export SECONDARY_BUCKET=
+                  - $(echo "$UI_RANDOM_NAME" | sed 's/primary/secondary/')                                  
+                  - |+
 
                   - export HOSTNAME=
                   - "http://"
@@ -356,13 +360,13 @@ Resources:
                     echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json    
 
                   - >
-                    aws s3api create-bucket --acl bucket-owner-full-control --bucket $UI_RANDOM_NAME-secondary --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
+                    aws s3api create-bucket --acl bucket-owner-full-control --bucket $SECONDARY_BUCKET --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
 
                   - >
-                    aws s3api put-bucket-versioning --bucket $UI_RANDOM_NAME-secondary --versioning-configuration Status=Enabled      
+                    aws s3api put-bucket-versioning --bucket $SECONDARY_BUCKET --versioning-configuration Status=Enabled      
 
                   - >
-                    aws s3 website s3://$UI_RANDOM_NAME-secondary/ --index-document index.html --error-document error.html                  
+                    aws s3 website s3://$SECONDARY_BUCKET/ --index-document index.html --error-document error.html                  
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/
@@ -444,7 +448,21 @@ Resources:
                 - ''
                 - - |
                     #!/bin/bash
-                  - |                    
+                  - |          
+                    export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+                  - |
+                    export AWS_INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+                  - |
+                    export EC2_NAME=$(aws ec2 describe-tags --region $AWS_DEFAULT_REGION --filters "Name=resource-id,Values=$AWS_INSTANCE_ID" "Name=key,Values=Name" --output text | cut -f5)
+                  - |
+                    export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?starts_with(Name, `'$EC2_NAME'`) == `true`]'.Name)
+                  - |
+                    export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
+                  - |
+                    echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
+                  - |
+                    sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                  - |
                     source /home/ec2-user/unishopcfg.sh     
                   - |
                     APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
@@ -496,8 +514,24 @@ Resources:
                 - - |
                     #!/bin/bash
                   - |                    
-                    source /home/ec2-user/unishopcfg.sh                                                        
+                    export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+                  - |
+                    export AWS_INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+                  - |
+                    export EC2_NAME=$(aws ec2 describe-tags --region $AWS_DEFAULT_REGION --filters "Name=resource-id,Values=$AWS_INSTANCE_ID" "Name=key,Values=Name" --output text | cut -f5)
+                  - |
+                    export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?starts_with(Name, `'$EC2_NAME'`) == `true`]'.Name)
+                  - |
+                    export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
+                  - |
+                    echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
+                  - |
+                    sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                  - |   
+                    source /home/ec2-user/unishopcfg.sh  
+                  - |                                                      
                   - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
+                  - |+
               mode: '000555'
               group: ec2-user
               user: ec2-user              
@@ -596,7 +630,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2BackupAndRestore
+          Value: !Ref 'AWS::StackName'
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL

@@ -18,7 +18,7 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -44,7 +44,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -85,7 +85,7 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       DBName: unishop
-      DBInstanceIdentifier: backupandrestore-secondary-region
+      DBInstanceIdentifier: !Ref 'AWS::StackName'
       Engine: MySQL
       DBInstanceClass: db.t2.micro
       Port: '3306'
@@ -97,7 +97,7 @@ Resources:
       MultiAZ: 'false'
       Tags:
         - Key: Name
-          Value: UniShopAppV1DB
+          Value: !Ref 'AWS::StackName'
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     DependsOn: DBInstance
@@ -177,4 +177,4 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: DBSnapshotBackupAndRestore
+          Value: !Ref 'AWS::StackName'

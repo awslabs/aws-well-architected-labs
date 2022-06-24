@@ -8,7 +8,7 @@ weight = 7
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-1.2 Select the bucket with prefix **backupandrestore-uibucket-xxxx** and click the **Empty** button.
+1.2 Select the bucket with prefix **backupandrestore-primary-uibucket-xxxx** and click the **Empty** button.
 
 {{< img cl-1.png >}}
 
@@ -22,7 +22,7 @@ weight = 7
 
 {{% notice note %}}
 Please repeat steps **1.1** through **1.4** for the following buckets:</br>
-`backupandrestore-uibucket-xxxx-secondary`
+`backupandrestore-secondary-uibucket-xxxx`
 {{% /notice %}}
 
 #### Amazon CloudFormation

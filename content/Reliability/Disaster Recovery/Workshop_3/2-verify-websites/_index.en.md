@@ -46,7 +46,7 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 3.3 Then navigate to the **Outputs** tab.
 
-{{< img vw-6.png >}}
+{{< img vw-11.png >}}
 
 3.4 Click on the **WebsiteURL** output link.
 

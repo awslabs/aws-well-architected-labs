@@ -20,15 +20,15 @@ Si no tiene su **Nombre de dominio de CloudFront**, puede recuperarlo en el **Pa
 
 1.2 Oprima el botón **Signup**.
 
-{{< img d-1.png >}}
+
 
 1.3 Registrese en su aplicación. Debe proveer una dirección de correo electrónico, que no debe ser válida.
 
-{{< img d-2.png >}}
+
 
 1.4 Inicie sesión en la aplicación utilizando el correo electrónico del anterior paso.
 
-{{< img d-3.png >}}
+
 
 1.5 Añada/remueva objetos de su carrito de compras oprimiendo un Unicornio, y, posteriormente, oprima el botón **Add to cart**.
 

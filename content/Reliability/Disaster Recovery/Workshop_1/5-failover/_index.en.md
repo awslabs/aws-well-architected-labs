@@ -12,9 +12,9 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-1.2 Click on the **backupandrestore-uibucket-xxxx** link.
+1.2 Click on the **backupandrestore-primary-uibucket-xxxx** link.
 
-{{< img f-1.png >}}
+{{< img crr-2.png >}}
 
 1.3 Click the **Permissions** link. In the **Block public access (bucket settings)** section, click the **Edit** button.
 

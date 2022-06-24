@@ -6,7 +6,9 @@ weight = 6
 
 Amazon Aurora Global Database is designed for globally distributed applications, allowing a single Amazon Aurora database to span multiple AWS regions. It replicates your data with no impact on database performance, enables fast local reads with low latency in each region, and provides disaster recovery from region-wide outages. In disaster recovery situations, you can promote a secondary region to take full read-write responsibilities in under a minute.
 
-Now let us promote the Amazon Aurora MySQL Secondary instance to a standalone instance.
+With an Aurora global database, there are two different approaches to failover depending on the scenario.  
+
+For this workshop we will be doing a [Managed Unplanned Failover](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html).
 
 ### Promote Aurora secondary database
 

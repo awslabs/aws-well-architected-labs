@@ -14,7 +14,7 @@ We are going to backup the resources in our primary region **N. Virginia (us-eas
 
 {{< img bk-1.png >}}
 
-1.3 Select **RDS** as the **Resource type**, then select **unishopappv1dbbackupandrestore** as the **Database name**. Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
+1.3 Select **RDS** as the **Resource type**, then select **backupandrestore-primary** as the **Database name**. Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
 
 {{< img bk-5.png >}}
 
@@ -24,7 +24,7 @@ We are going to backup the resources in our primary region **N. Virginia (us-eas
 
 2.1 Click the **Protected resources** link, then click the **Create an on-demand backup** button.
 
-2.2 Select **EC2** as the **Resource type**, then select **UniShopAppV1EC2BackupAndRestore** as the **Instance ID**.  Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
+2.2 Select **EC2** as the **Resource type**, then select **backupandrestore-primary** as the **Instance ID**.  Select **Choose an IAM role**, then select **Team Role** as the **Role name**. Click the **Create on-demand backup** button.
 
 {{< img bk-8.png >}}
 

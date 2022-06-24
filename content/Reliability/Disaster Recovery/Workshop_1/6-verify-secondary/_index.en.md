@@ -8,9 +8,9 @@ weight = 6
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-1.2 Click the link for **backupandrestore-uibucket-xxxx-secondary**
+1.2 Click the link for **backupandrestore-secondary-uibucket-xxxx**
 
-{{< img vf-1.png >}}
+{{< img crr-8.png >}}
 
 1.3 Click the **Properties** link.  
 

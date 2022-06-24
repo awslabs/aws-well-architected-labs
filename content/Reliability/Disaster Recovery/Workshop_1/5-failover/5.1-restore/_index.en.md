@@ -46,10 +46,6 @@ Copy and paste the below script as the **User data**, then click the **Restore b
 #!/bin/bash     
 sudo su ec2-user                        
 export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
-export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?ends_with(Name, `-secondary`) == `true`]'.Name)
-export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
-echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
-sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
 export DATABASE=$(aws rds describe-db-instances --region $AWS_DEFAULT_REGION --db-instance-identifier backupandrestore-secondary-region --query 'DBInstances[*].[Endpoint.Address]' --output text)
 sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF
 #!/bin/bash

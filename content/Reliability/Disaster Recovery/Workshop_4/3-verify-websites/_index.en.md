@@ -1,7 +1,7 @@
 +++
 title = "Verify Websites"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 3
 +++
 
 ## Primary Region
@@ -66,5 +66,5 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 {{< img vw-10.png >}}
 
-{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-dynamodb/" />}}
+{{< prev_next_button link_prev_url="../2-dynamodb/" link_next_url="../4-cloudfront/" />}}
 

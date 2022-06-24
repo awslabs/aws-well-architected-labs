@@ -19,7 +19,7 @@ Simularemos un evento regional de servicio que afecte la página web estática a
 
 1.1 Oprima [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) para navegar a la consola.
 
-1.2 Oprima el link **backupandrestore-uibucket-xxxx**.
+1.2 Oprima el link **backupandrestore-primary-uibucket-xxxx**.
 
 {{< img c-9-ES.png >}}
 

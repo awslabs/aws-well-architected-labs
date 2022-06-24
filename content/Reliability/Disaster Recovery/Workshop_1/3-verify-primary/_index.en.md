@@ -10,7 +10,7 @@ Let's verify that everything is working as expected in our primary region **N. V
 
 1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-1.2 Select **BackupAndRestore** under **Stacks**.
+1.2 Select **backupandrestore-primary** under **Stacks**.
 
 1.3 Click on the **Outputs** link.
 

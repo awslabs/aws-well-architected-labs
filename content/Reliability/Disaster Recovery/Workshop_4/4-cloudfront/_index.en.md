@@ -4,13 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 4
 +++
 
-You can improve resiliency and increase availability for specific scenarios by setting up CloudFront with origin failover. To get started, you create an origin group in which you designate a primary origin for CloudFront plus a second origin. CloudFront automatically switches to the second origin when the primary origin returns specific HTTP status code failure responses.  
-
-We are going to configure CloudFront with origin failover in the below steps using our **active-primary-uibucket-xxx** S3 static website as our primary origin and our **passive-secondary-uibucket-xxxx** S3 static website as our failover origin.
-
-{{% notice note %}}
-You will need the Amazon CloudFormation output parameter values from the **Primary-Active** and **Passive-Secondary** stacks to complete this section. For help, refer to the [CloudFormation Outputs](../prerequisites/cfn-outputs/) section of the workshop.
-{{% /notice %}}
+You can improve resiliency and increase availability for specific scenarios by setting up CloudFront with origin failover.
 
 ### Create the Amazon CloudFront Distribution
 
@@ -21,18 +15,14 @@ You will need the Amazon CloudFormation output parameter values from the **Prima
 {{< img cf-16.png >}}
 
 {{% notice warning %}}
-In Step 1.3, **DO NOT** choose the Amazon S3 **active-primary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
+In Step 1.3, **DO NOT** choose the Amazon S3 **hot-primary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-1.3 Enter the **WebsiteURL** value from the **Active-Primary** output values as the **Origin Domain**.
+1.3 Enter the [Hot-Primary CloudFormation Stack Output WebsiteURL](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-east-1%3A571676911619%3Astack%2FHot-Primary%2F00475f30-f30b-11ec-a6e2-0a1eef7faa85) value as the **Origin Domain**.
 
 {{< img cf-17.png >}}
 
 One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
-
-{{% notice warning %}}
-The next section **Failover to Secondary**, will not work without completing Step 1.4.
-{{% /notice %}}
 
 1.4 In the **Cache key and origin requests** section, select **CachingDisabled** for the **Cache Policy** to disable CloudFront caching. 
 
@@ -44,17 +34,17 @@ The next section **Failover to Secondary**, will not work without completing Ste
 
 ### Configure an Additional Origin 
 
-We will now add an additional **Origin** and use our **secondary-passive-uibucket-xxxx**.
+We will now add an additional **Origin** and use our **hot-secondary-uibucket-xxxx**.
 
 2.1 Click the **Origins** link, then click the **Create origin** button.
 
 {{< img cf-19.png >}}
 
 {{% notice warning %}}
-In Step 2.2,  **DO NOT** choose the Amazon S3 **passive-secondary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
+In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-2.2 Enter the **WebsiteURL** value from the **Passive-Secondary** output values as the **Origin Domain**.  Click the **Create origin** button.
+2.2 Enter the [Hot-Secondary CloudFormation Stack Output WebsiteURL](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-west-1%3A571676911619%3Astack%2FHot-Secondary%2F869cc1a0-f30c-11ec-847d-06ec1b07324b) value as the **Origin Domain**. Click the **Create origin** button.
 
 {{< img cf-20.png >}}
 
@@ -64,17 +54,9 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **passive-secondary-uibucket-xxxx*
 
 {{< img cf-21.png >}}
 
-3.2 Select **active-primary-uibucket-xxxx** as the **Origins**, then click the **Add** button.
+3.2 Select **hot-primary-uibucket-xxxx** as the **Origins**, then click the **Add** button. Select **hot-secondary-uibucket-xxxx** as the **Origins**, then click the **Add** button. Enter `hot-standby-origin-group` as the **Name**.  Enable all checkboxes for **Failover criteria**, then click the **Create origin group**.
 
 {{< img cf-28.png >}}
-
-3.3 Select **passive-secondary-uibucket-xxxx** as the **Origins**, then click the **Add** button.
-
-{{< img cf-29.png >}}
-
-3.4 Enter `hot-standby-origin-group` as the **Name**.  Enable all checkboxes for **Failover criteria**, then click the **Create origin group**.
-
-{{< img cf-30.png >}}
 
 ### Configure Behaviors
 

@@ -26,4 +26,4 @@ Change the **IsPrimary** parameter to value `no`.
 
 {{< img sr-5.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.2-s3-access/" link_next_url="../../2-verify-websites/" />}}
+{{< prev_next_button link_prev_url="../1.1.2-s3-access/" link_next_url="../../2-dynamodb/" />}}
