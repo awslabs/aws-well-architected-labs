@@ -10,7 +10,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Open database for access
-      VpcId: '{{resolve:ssm:/deployer/BackupAndRestoreDB/default-vpc:1}}'
+      VpcId: '{{resolve:ssm:/deployer/backupandrestore-secondary/default-vpc:1}}'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 3306
@@ -23,7 +23,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Open App access
-      VpcId: '{{resolve:ssm:/deployer/BackupAndRestoreDB/default-vpc:1}}'
+      VpcId: '{{resolve:ssm:/deployer/backupandrestore-secondary/default-vpc:1}}'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
