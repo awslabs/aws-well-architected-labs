@@ -53,7 +53,7 @@ In a production environment, we would **automate** these steps as part of our CI
 
 3.2 If you have never used CloudShell you will be prompted with a **Welcome to AWS CloudShell** message, click the **Close** button.
 
-3.3 At the prompt - paste the following AWS CLI command. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button. Make sure you use the bucket that is in the primary region **N. Virginia (us-east-1)**.
+3.3 At the prompt - paste the following AWS CLI command. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
 
 ```sh
 export S3_BUCKET=$(aws s3api list-buckets --region us-east-1 --output text --query 'Buckets[?starts_with(Name, `backupandrestore-primary-uibucket`) == `true`]'.Name)

@@ -39,11 +39,11 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
 {{% /notice %}}
 
-{{< img cp-2.png >}}
+{{< img cp-4.png >}}
 
 2.3 Select **US West (N. California)** as the **Copy to destination**, then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
 
-{{< img cp-3.png >}}
+{{< img cp-5.png >}}
 
 2.4 This will create a **Copy job**.
 

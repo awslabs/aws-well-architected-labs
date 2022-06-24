@@ -26,7 +26,7 @@ The RDS instance has already been restored to the **N. California (us-west-1)** 
 If you don't see your backup, check the status of the **Copy Job**. Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in **N. Virginia (us-east-1)** region. Click the **Jobs** link, then click the **Copy jobs** link.  Verify the **Status** of your EC2 copy job is **Completed**.
 {{% /notice %}}
 
-1.4 In the **Network settings** section, select **BackupAndRestoreDB-EC2SecurityGroup-xxxx** as the **Security groups**.
+1.4 In the **Network settings** section, select **backupadnrestore-secondary-EC2SecurityGroup-xxxx** as the **Security groups**.
 
 {{< img rs-20.png >}}
 
@@ -46,7 +46,7 @@ Copy and paste the below script as the **User data**, then click the **Restore b
 #!/bin/bash     
 sudo su ec2-user                        
 export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
-export DATABASE=$(aws rds describe-db-instances --region $AWS_DEFAULT_REGION --db-instance-identifier backupandrestore-secondary-region --query 'DBInstances[*].[Endpoint.Address]' --output text)
+export DATABASE=$(aws rds describe-db-instances --region $AWS_DEFAULT_REGION --db-instance-identifier backupandrestore-secondary --query 'DBInstances[*].[Endpoint.Address]' --output text)
 sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF
 #!/bin/bash
 export DB_ENDPOINT=$DATABASE
