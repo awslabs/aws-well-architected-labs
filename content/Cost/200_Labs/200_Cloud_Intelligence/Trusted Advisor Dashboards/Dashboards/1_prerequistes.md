@@ -42,28 +42,36 @@ Please follow the steps in [Optimization Data Collection lab](https://wellarchit
     ------------ | -------------
 {{% /expand%}}
 ### Prepare Athena
-If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Enable Quicksight](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/1_prerequistes/#enable-quicksight) section below.
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Enable Quicksight](#enable-quicksight) section below.
 
 To get Athena warmed up:
 
 1. From the services list, choose **S3**
 
-1. Create a new S3 bucket for Athena queries to be logged to. Keep to the same region as the S3 bucket created for your Trusted Advisor Organizational View reports.
+1. Create a new S3 bucket for Athena queries to be logged to. Keep to the same region as the S3 bucket created for the data (ex: athena-query-result-REGION-ACCOUTID ).
 
 1. From the services list, choose **Athena**
 
 1. Select **Get Started** to enable Athena and start the basic configuration
     ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/Athena-GetStarted.png?classes=lab_picture_small)
 
-1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+1. You need to set up a query result location both in Ahena editor AND your primary workgroup. 
 
-    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/Athena-S3.png?classes=lab_picture_small)
+If it is your first time in Athena, then at the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3**
 
-1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
 
-{{% notice note %}}
-Configuration **MUST** be performed at the Athena workgroup level. 
-{{% /notice %}}
+Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+1. Validate your Athena primary workgroup has an output location by  
+    - Open a new tab or window and navigate to the **Athena** console
+    - Select **Workgroup: primary**
+![Images/cf_dash_athena_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_2.png?classes=lab_picture_small)
+    - Confirm your **Query result location** is configured with an S3 bucket path. 
+        - If not configured, continue to setting up by clicking **Edit workgroup**
+![Images/cf_dash_athena_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_4.png?classes=lab_picture_small)
+    - Add the **S3 bucket path** you have selected for your Query result location and click save
+![Images/cf_dash_athena_5.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_5.png?classes=lab_picture_small)
 
 ### Enable QuickSight 
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. You will require QuickSight Enterprise Edition. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
