@@ -218,7 +218,7 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
+      GlobalClusterIdentifier: !Sub 'warm-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
@@ -237,7 +237,7 @@ Resources:
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName:  !Ref 'AWS::StackName'
+      DatabaseName:  unishop
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
     DeletionPolicy: Delete
@@ -245,7 +245,7 @@ Resources:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
     Properties:
-      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
+      GlobalClusterIdentifier: !Sub 'warm-global'
       DBClusterIdentifier: !Sub 'warm-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -262,7 +262,7 @@ Resources:
       PubliclyAccessible: 'true'
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
-      DBInstanceIdentifier: !Sub 'UniShopAppV1DBwarm'
+      DBInstanceIdentifier: unishop
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:

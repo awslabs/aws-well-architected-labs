@@ -6,12 +6,12 @@ weight = 1
 
 ## Deploying the Amazon CloudFormation Template
 
-1.1 Create application in primary region **N. Virginia (us-east-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Pilot-Primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/PilotLightDR.yaml).
+1.1 Create application in primary region **N. Virginia (us-east-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=pilot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/PilotLightDR.yaml).
 
 1.2  Specify stack details.
 
 {{% notice info %}}
-**Leave IsPrimary, IsPromote, and LatestAmiId as the default values**
+**Leave IsPrimary and LatestAmiId as the default values**
 {{% /notice %}}
 
 1.3 Click **Next** to continue.

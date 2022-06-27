@@ -219,7 +219,7 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
+      GlobalClusterIdentifier: !Sub 'pilot-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
@@ -238,7 +238,7 @@ Resources:
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName: !Ref 'AWS::StackName'
+      DatabaseName: unishop
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
     DependsOn:
@@ -246,7 +246,7 @@ Resources:
     Type: 'AWS::RDS::DBCluster'
     DeletionPolicy: Delete
     Properties:
-      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
+      GlobalClusterIdentifier: !Sub 'pilot-global'
       DBClusterIdentifier: !Sub 'pilot-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -263,7 +263,7 @@ Resources:
       PubliclyAccessible: 'true'
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
-      DBInstanceIdentifier: !Sub 'UniShopAppV1DBpilot'
+      DBInstanceIdentifier: unishop
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -424,7 +424,7 @@ Resources:
                   - |
                     sudo aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
                   - |
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request      
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request                   
                   - |
                     source /home/ec2-user/unishopcfg.sh     
                   - |
@@ -489,7 +489,7 @@ Resources:
                   - |
                     sudo aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
                   - |
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request                          
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request                                               
                   - |                    
                     source /home/ec2-user/unishopcfg.sh            
                   - |                                            

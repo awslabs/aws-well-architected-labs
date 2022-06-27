@@ -18,7 +18,7 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 {{< img a-2.png >}}
 
-1.3 Select **dr-immersionday-secondary-pilot** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
+1.3 Select **pilot-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
 
 {{< img a-3.png >}}
 

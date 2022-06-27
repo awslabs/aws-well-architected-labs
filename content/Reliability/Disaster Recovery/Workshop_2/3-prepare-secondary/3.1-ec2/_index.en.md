@@ -8,11 +8,11 @@ weight = 1
 
 1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-1.2 Select **UniShopAppV1EC2Pilot**.  Click **Create image** under the **Actions -> Images and Templates** dropdown.
+1.2 Select **pilot-primary**.  Click **Create image** under the **Actions -> Images and Templates** dropdown.
 
 {{< img BK-2.png >}}
 
-1.3 Enter `UniShopAppV1EC2PilotAMI` as the **Image name**, then click the **Create Image** button.
+1.3 Enter `pilotAMI` as the **Image name**, then click the **Create Image** button.
 
 {{< img BK-3.png >}}
 
@@ -24,7 +24,7 @@ weight = 1
 Your AMI status must be **Ready** for you to continue to the next step.
 {{% /notice %}}
 
-2.2 Select **UnishopPilotLightEC2AMI**. Click **Copy AMI** under the **Actions** dropdown.
+2.2 Select **pilotAMI**. Click **Copy AMI** under the **Actions** dropdown.
 
 {{< img BK-5.png >}}
 

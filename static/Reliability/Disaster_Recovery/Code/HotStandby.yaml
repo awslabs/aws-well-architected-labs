@@ -215,7 +215,7 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: 'hot-standby-global'
+      GlobalClusterIdentifier: 'hot-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
@@ -234,7 +234,7 @@ Resources:
       VpcSecurityGroupIds:
         - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName: UniShopAppV1HotStandbyDB
+      DatabaseName: unishop
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
     DeletionPolicy: Delete    
@@ -242,7 +242,7 @@ Resources:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
     Properties:
-      GlobalClusterIdentifier: 'hot-standby-global'
+      GlobalClusterIdentifier: 'hot-global'
       DBClusterIdentifier: 'hot-standby-passive-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
