@@ -6,7 +6,7 @@ weight = 3
 
 ## Deploying the Amazon CloudFormation Template
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=BackupAndRestore-Secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/BackupAndRestoreDB.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=backupandrestore-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/BackupAndRestoreDB.yaml).
 
 1.2 Click the **Next** button.
 
