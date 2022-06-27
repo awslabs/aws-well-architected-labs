@@ -20,11 +20,9 @@ Para conectar la aplicación a la base de datos Aurora recientemente promovida e
 
 1.4 Oprima el link **Administrador de sesiones**, después oprima el botón **Conectar**.
 
-{{< img am-4-es.png >}}
 
 1.5 Tras unos minutos, aparecerá un terminal.
 
-{{< img am-5.png >}}
 
 1.6 Cambie el directorio actual a la carpeta home del usuario ec2-user.
 

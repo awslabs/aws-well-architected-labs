@@ -8,7 +8,7 @@ weight = 3
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
-1.2 Choose the **Hot-Primary** stack.
+1.2 Choose the **hot-primary** stack.
 
 1.3 Then navigate to the **Outputs** tab.
 
@@ -42,7 +42,7 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 3.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
-3.2 Choose the **Hot-Secondary** stack.
+3.2 Choose the **hot-secondary** stack.
 
 3.3 Then navigate to the **Outputs** tab.
 

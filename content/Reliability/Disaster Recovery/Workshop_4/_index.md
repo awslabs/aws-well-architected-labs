@@ -20,6 +20,6 @@ This module takes advantage of [Amazon CloudFront](https://aws.amazon.com/cloudf
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
-{{< img workshop-4-arch.png >}}
+{{< img HotStandby.png >}}
 
 {{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}

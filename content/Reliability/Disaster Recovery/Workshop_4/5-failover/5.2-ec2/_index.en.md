@@ -4,56 +4,25 @@ date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-To connect the application to the newly promoted Aurora Database in the us-west-1 region, we need to modify the `Passive-Secondary` web application's configuration.
+### Launch EC2 Instance 
 
-### Connecting the Application
+1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
-1.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+1.2 Select the **hot-secondary** stack and click **Update**.
 
-1.2 Click the **Instances (running)** link.
+{{< img da-2.png >}}
 
-{{< img am-2.png >}}
+1.3 Chose **Use current template** and click **Next** to continue.
 
-1.3 Select **UniShopAppV1EC2HotStandby**, then click the **Connect** button.
+{{< img da-3.png >}}
 
-{{< img am-3.png >}}
+1.4 Update the **IsPromote** parameter to `yes` and click **Next** to continue.
 
-1.4 Click the **Session Manager** link, then click the **Connect** button.
+{{< img da-4.png >}}
 
-{{< img am-4.png >}}
+1.5 Scroll to the bottom of the page, click the checkbox to acknowledge IAM role creation, and then click **Update stack**.
 
-1.5 After a brief moment, a terminal prompt will display.
+{{< img da-5.png >}}
 
-{{< img am-5.png >}}
-
-1.6 Change the current directory to the ec2-user's home folder.
-
-```sh
-sudo su ec2-user
-cd /home/ec2-user/
-```
-
-1.7 Open the **unishoprun.sh** file for editing with either nano or vi.
-
-```sh
-sudo nano unishoprun.sh
-```
-
-**Tip:** You can use the vi ([Debian ManPage]((https://manpages.debian.org/buster/vim/vi.1.en.html))) or nano command ([Debian ManPage](https://manpages.debian.org/stretch/nano/nano.1.en.html)) to edit the document.
-
-1.8 Delete the previous file contents.  Then copy and paste this script into the **unishoprun.sh** script.
-
-```sh
-#!/bin/bash
-java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
-```
-
-1.9 Save the modifications (CTRL+O) and close the editor (CTRL+X).
-
-1.10 Reboot the EC2 instance so our changes take effect.
-
-```sh
-sudo reboot
-```
 {{< prev_next_button link_prev_url="../5.1-aurora/" link_next_url="../../6-verify-secondary/" />}}
 

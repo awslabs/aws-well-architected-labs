@@ -18,7 +18,7 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 {{< img a-2.png >}}
 
-1.3 Select **hot-standby-passive-secondary** then click **Remove from global database** in the **Actions** dropdown.
+1.3 Select **hot-secondary** then click **Remove from global database** in the **Actions** dropdown.
 
 {{< img a-3.png >}}
 
