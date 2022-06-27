@@ -27,13 +27,13 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPCPilot
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
-          Value: UniShopAppV1IGW
+          Value: !Ref 'AWS::StackName'
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -51,7 +51,7 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet1
+          Value:  !Sub '${AWS::StackName}-1'
   UniShopAppV1Subnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -64,14 +64,14 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet2
+          Value:  !Sub '${AWS::StackName}-2'
   UniShopAppV1PublicRoutTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref UniShopAppV1VPC
       Tags:
         - Key: Name
-          Value: UniShopAppV1PublicRoute
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1PublicRout:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
@@ -101,7 +101,7 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
@@ -134,7 +134,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -201,7 +201,7 @@ Resources:
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-pilot-${AWS::Region}'
+      RoleName:  !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -219,7 +219,7 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: !Sub 'dr-immersionday-global-pilot'
+      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
@@ -230,7 +230,7 @@ Resources:
     Properties:
       MasterUsername: UniShopAppV1User
       MasterUserPassword: UniShopAppV1Password
-      DBClusterIdentifier: !Sub 'dr-immersionday-primary-pilot'
+      DBClusterIdentifier: !Ref 'AWS::StackName'
       Port: 3306
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -238,7 +238,7 @@ Resources:
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName: !Sub 'UniShopAppV1DBpilot'
+      DatabaseName: !Ref 'AWS::StackName'
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
     DependsOn:
@@ -246,8 +246,8 @@ Resources:
     Type: 'AWS::RDS::DBCluster'
     DeletionPolicy: Delete
     Properties:
-      GlobalClusterIdentifier: !Sub 'dr-immersionday-global-pilot'
-      DBClusterIdentifier: !Sub 'dr-immersionday-secondary-pilot'
+      GlobalClusterIdentifier: !Sub '${AWS::StackName}-global'
+      DBClusterIdentifier: !Sub 'pilot-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
       EngineVersion: 5.7.mysql_aurora.2.09.2
@@ -563,7 +563,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2Pilot
+          Value:  !Ref 'AWS::StackName'
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL

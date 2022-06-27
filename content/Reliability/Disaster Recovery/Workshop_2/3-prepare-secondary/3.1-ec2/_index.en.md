@@ -6,11 +6,7 @@ weight = 1
 
 ### Create the EC2 Amazon Machine Image (AMI)
 
-1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
-
-1.2 Click the **Instances (running)** link.
-
-{{< img BK-4.png >}}
+1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Select **UniShopAppV1EC2Pilot**.  Click **Create image** under the **Actions -> Images and Templates** dropdown.
 
