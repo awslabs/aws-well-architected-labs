@@ -10,7 +10,7 @@ Resources:
       Name: !Sub '${AWS::StackName}-Cloud9-IDE'
       Description: 'Cloud9 Environment for WA Lab'
       AutomaticStopTimeMinutes: 30
-      InstanceType: 't2.micro'
+      InstanceType: 't3.small'
       Repositories:
         - PathComponent: /aws-well-architected-labs
           RepositoryUrl: 'https://github.com/awslabs/aws-well-architected-labs.git'
