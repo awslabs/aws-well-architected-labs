@@ -25,29 +25,11 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 {{% /notice %}}
 
-## Database Clean up
-
-{{% notice note %}}
-This step is required as we did manual promotion for the Aurora Database.
-{{% /notice %}}
-
-2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
-
-2.2 Select database under **dr-immersionday-secondary-warm** cluster and delete the instance.
-
-{{< img cl-11.png >}}
-
-2.3 De-select Create final snapshot option, Select "I acknowledge.." option. Click **Delete** button.
-
-{{< img cl-12.png >}}
-
-2.4 Wait until Amazon Aurora Database Cluster is deleted.
-
 ## CloudFormation Secondary Region Cleanup
 
 3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
-3.2 Select the **Warm-Secondary** stack and click **Delete**.
+3.2 Select the **warm-secondary** stack and click **Delete**.
 
 {{< img cl-8.png >}}
 
@@ -59,23 +41,11 @@ This step is required as we did manual promotion for the Aurora Database.
 **Wait for the stack deletion to complete**.
 {{% /notice %}}
 
-3.4 CloudFormation stack deletion fails due to the manual deletion of Aurora Database.
-
-{{< img cl-10.png >}}
-
-3.5 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
-
-3.6 Select the **Pilot-Secondary** stack and click **Delete**.
-
-3.7 Select all **Resources to retain** (this is OK because they were manually deleted in the prior section) and click **Delete stack**.
-
-{{< img cl-13.png >}}
-
 ## AWS CloudFormation Primary Region Cleanup
 
 4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
-4.2 Select **Warm-Primary** stack.  Next click the **Delete** button to remove it.
+4.2 Select **warm-primary** stack.  Next click the **Delete** button to remove it.
 
 {{< img cl-6.png >}}
 

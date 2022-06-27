@@ -18,11 +18,11 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 
 {{< img a-2.png >}}
 
-1.3 Select **dr-immersionday-global-warm** select **Fail over global database** from the **Actions** link.
+1.3 Select **warm-global** select **Fail over global database** from the **Actions** link.
 
 {{< img a-5.png >}}
 
-1.4 Select **dr-immersionday-secondary-warm** as the **Choose a secondary cluster to become primary cluster**, then click the **Fail over global database** button.
+1.4 Select **warm-secondary** as the **Choose a secondary cluster to become primary cluster**, then click the **Fail over global database** button.
 
 {{< img a-6.png >}}
 

@@ -200,7 +200,7 @@ Resources:
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-warm-${AWS::Region}'
+      RoleName:  !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -262,7 +262,7 @@ Resources:
       PubliclyAccessible: 'true'
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
-      DBInstanceIdentifier: unishop
+      DBInstanceIdentifier: unishop-warm
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -289,7 +289,7 @@ Resources:
           Value:  !Ref 'AWS::StackName'
           PropagateAtLaunch: true            
       LaunchConfigurationName: !Ref LaunchConfig
-      MinSize: !If [CreateFullApp, 1, 1]
+      MinSize: !If [CreateFullApp, 3, 1]
       MaxSize: !If [CreateFullApp, 5, 3]
       LoadBalancerNames:
         - !Ref ElasticLoadBalancer
@@ -383,7 +383,7 @@ Resources:
         configure-global-db:
           commands:
             1-enable-write-forwarding:
-              command: sudo aws rds modify-db-cluster --db-cluster-identifier dr-immersionday-secondary-warm --region us-west-1 --enable-global-write-forwarding
+              command: sudo aws rds modify-db-cluster --db-cluster-identifier warm-secondary --region us-west-1 --enable-global-write-forwarding
 
         create-service-files:
           files:
@@ -605,6 +605,7 @@ Resources:
             - ' --region '
             - !Ref 'AWS::Region'
             - |+
+            
   ElasticLoadBalancer:
     DependsOn: AttachGateway
     Type: 'AWS::ElasticLoadBalancing::LoadBalancer'

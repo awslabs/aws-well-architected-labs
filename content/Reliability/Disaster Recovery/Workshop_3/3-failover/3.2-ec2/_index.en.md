@@ -8,7 +8,7 @@ weight = 2
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
-1.2 Select the **Warm-Secondary** stack and click **Update**.
+1.2 Select the **warm-secondary** stack and click **Update**.
 
 {{< img da-2.png >}}
 
@@ -30,7 +30,7 @@ We now want to scale out our compute capacity to match that of our primary regio
 
 2.1 Navigate to [Auto Scaling Groups](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#AutoScalingGroups:) in **N. California (us-west-1)** region.
 
-2.2 Select **Warm-Secondary-WebServerGroup-xxx**, then click the **Edit** button.
+2.2 Select **warm-secondary-WebServerGroup-xxx**, then click the **Edit** button.
 
 {{< img asg-1.png >}}
 

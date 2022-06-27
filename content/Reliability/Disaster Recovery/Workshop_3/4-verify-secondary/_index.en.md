@@ -8,7 +8,7 @@ weight = 4
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
-1.2 Choose the **Warm-Secondary** stack.
+1.2 Choose the **warm-secondary** stack.
 
 1.3 Then navigate to the **Outputs** tab.
 

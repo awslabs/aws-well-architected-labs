@@ -20,7 +20,7 @@ This module takes advantage of [Auto Scaling Groups (ASG)](https://docs.aws.amaz
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
-{{< img arch-3.png >}}
+{{< img WarmStandby.png >}}
 
 {{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
 

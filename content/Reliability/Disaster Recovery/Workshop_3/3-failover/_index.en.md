@@ -17,7 +17,7 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
-1.2 Click on the **pilot-primary-uibucket-xxxx** link.
+1.2 Click on the **warm-primary-uibucket-xxxx** link.
 
 {{< img f-1.png >}}
 
