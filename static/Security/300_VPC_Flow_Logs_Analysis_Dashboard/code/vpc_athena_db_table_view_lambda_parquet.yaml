@@ -306,7 +306,7 @@ Resources:
               frequency = event["ResourceProperties"]["frequency"] if event.get("ResourceProperties") != None else event["frequency"]
               s3_buckcet_flow_log = event["ResourceProperties"]["VpcFlowLogsBucketName"] if event.get("ResourceProperties") != None else event["VpcFlowLogsBucketName"]
               s3_ouput = event["ResourceProperties"]["s3Output"] if event.get("ResourceProperties") != None else event["s3Output"]
-              s3_account_prefix=event["ResourceProperties"]["VpcFlowLogsFilePrefix"] + "/AWSLogs/" if event.get("ResourceProperties") != None else event["VpcFlowLogsFilePrefix"] + "/AWSLogs/"
+              s3_account_prefix=event["ResourceProperties"]["VpcFlowLogsFilePrefix"] + "AWSLogs/" if event.get("ResourceProperties") != None else event["VpcFlowLogsFilePrefix"] + "/AWSLogs/"
               hive_compatible_s3_prefix = event["ResourceProperties"]["HiveCompatibleS3prefix"] if event.get("ResourceProperties") != None else event["HiveCompatibleS3prefix"]
               account_result = s3.list_objects(Bucket=s3_buckcet_flow_log,Prefix=s3_account_prefix, Delimiter='/')
 
