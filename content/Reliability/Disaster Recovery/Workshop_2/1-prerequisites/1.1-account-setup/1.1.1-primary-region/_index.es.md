@@ -1,12 +1,12 @@
 +++
 title = "Región primaria"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 1
 +++
 
 ## Desplegando la plantilla de Amazon CloudFormation
 
-1.1 Crear la aplicación en la región primaria **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Pilot-Primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/PilotLightDR.yaml).
+1.1 Crear la aplicación en la región primaria **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=pilot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/PilotLightDR.yaml).
 
 1.2  Especifíque los detalles de la pila.
 
