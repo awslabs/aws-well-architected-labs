@@ -68,7 +68,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
         ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
     
-    + Enable the Amazon S3 option and select the bucket where your **Cost & Usage Report** is stored, as well as your **Athena** query bucket. QuickSight will require write permissions for Athena query location bucket.
+    + Enable the Amazon S3 option and select the bucket where your report is stored, as well as your **Athena** query bucket. QuickSight will require write permissions for Athena query location bucket.
 
         ![Image of s3 buckets that are linked to the QuickSight account. Enable bucket and give Athena Write permission to it.](/Cost/200_Cloud_Intelligence/Images/QS-s3-bucket.png?classes=lab_picture_small)
 
