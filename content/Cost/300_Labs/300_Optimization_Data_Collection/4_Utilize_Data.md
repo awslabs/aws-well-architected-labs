@@ -70,10 +70,17 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
     
 {{% /expand%}}
 
-There is an option to add pricing data to this query. The pricing data is already in your S3 bucket 
+There is an option to add pricing data to this query. This assumes you have already run the accounts collector lambda. 
 
 {{%expand "Optimization Data Snapshots and AMIs with pricing data" %}}
 
+**Lambda**
+1. Go to AWS Lambda 
+2. Find the **pricing-Lambda-Function** function
+3. Test the function
+
+
+**Athena**
 1. Go to AWS Athena
 2. Go to *Saved queries* at the top of the screen
 3. Run the *ec2_pricing* Query to create a pricing table
@@ -93,7 +100,7 @@ This section requires you to have the **Inventory Module** and the **Trusted Adv
 
 {{%expand "Optimization Data EBS Volumes and Trusted Advisors Query" %}}
 
-        SELECT *FROM
+        SELECT * FROM
             "optimization_data"."ebs_data"
         LEFT JOIN 
         (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid, category, region, year,month
@@ -103,34 +110,23 @@ This section requires you to have the **Inventory Module** and the **Trusted Adv
 
 {{% /expand%}}
 
-There is an option to add pricing data to this query. The pricing data is already in your S3 bucket 
+There is an option to add pricing data to this query.
 
 {{%expand "Optimization Data EBS Volumes and Trusted Advisor with pricing data" %}}
 
-1. Go to AWS Athena and run the below
-      
-        CREATE OR REPLACE VIEW "ebs_view" AS 
-        SELECT * FROM
-                    "optimization_data"."ebs_data"
-                LEFT JOIN 
-                (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid as ta_accountid, status, category, region as ta_region, year as ta_year ,month as ta_month
-                from
-                "optimization_data".ta_data
-                where category = 'cost_optimizing') ta
-                ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."ta_year" and "ebs_data"."month" = "ta"."ta_month"
-                LEFT JOIN (
-          SELECT
-            "region" "region_code"
-          , "regionname"
-          FROM
-            storage.region_names
-        )  region ON ("ebs_data"."region" = "region"."region_code")
+**Lambda**
+1. Go to AWS Lambda 
+2. Find the **pricing-Lambda-Function** function
+3. Test the function
 
+**Athena** 
+1. Go to AWS Athena and run the below
 2. Go to **Saved queries** at the top of the screen
-3. Run the **ec2_pricing** Query to create a pricing table
-4. In **Saved queries** run the **region_names** Query to create a normalized region name table 
-5. In **Saved queries** run **ebs-ta-query-pricing** to create a view 
-6. Run the below to see your data
+3. Run the **ec2-view** Query to create a view of ebs and ta data
+4. Run the **ec2_pricing** Query to create a pricing table
+5. In **Saved queries** run the **region_names** Query to create a normalized region name table 
+6. In **Saved queries** run **ebs-ta-query-pricing** to create a view 
+7. Run the below to see your data
         
         SELECT * FROM "optimization_data"."ebs_quicksight_view" limit 10;
 
@@ -141,28 +137,11 @@ The section below will bring in opportunities to move EBS volumes to gp3
 {{%expand "EBS Volumes and Trusted Advisor moving to gp3" %}}
 
 1. Go to AWS Athena and run the below
-      
-        CREATE OR REPLACE VIEW "ebs_view" AS 
-        SELECT * FROM
-                    "optimization_data"."ebs_data"
-                LEFT JOIN 
-                (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid as ta_accountid, status, category, region as ta_region, year as ta_year ,month as ta_month
-                from
-                "optimization_data".ta_data
-                where category = 'cost_optimizing') ta
-                ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."ta_year" and "ebs_data"."month" = "ta"."ta_month"
-                LEFT JOIN (
-          SELECT
-            "region" "region_code"
-          , "regionname"
-          FROM
-            storage.region_names
-        )  region ON ("ebs_data"."region" = "region"."region_code")
-
 2. Go to **Saved queries** at the top of the screen
-3. Run the **ec2_pricing** Query to create a pricing table
-4. In **Saved queries** run the **region_names** Query to create a normalized region name table 
-5. In **Saved queries** run **gp3-opportunity** to create a view 
+3. Run the **ec2-view** Query to create a view of ebs and ta data
+4. Run the **ec2_pricing** Query to create a pricing table
+5. In **Saved queries** run the **region_names** Query to create a normalized region name table 
+6. In **Saved queries** run **gp3-opportunity** to create a view 
 
 
 {{% /expand%}}
