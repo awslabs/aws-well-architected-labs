@@ -359,6 +359,11 @@ Resources:
                   - |
                     sudo mkdir /home/ec2-user/UniShopUI/                                                                 
                   - >
+                  - export ASSETS_RANDOM_NAME=
+                  - !Ref AssetBucket
+                  - |+      
+
+                  - >                  
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
                   - >                       
                     aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
