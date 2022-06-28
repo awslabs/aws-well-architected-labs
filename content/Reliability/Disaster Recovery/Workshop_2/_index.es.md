@@ -7,18 +7,24 @@ pre = ""
 +++
 
 
-En este módulo, analizaremos la estrategia de recuperación de desastres Pilot-Light. Para aprender más sobre esta estrategia de DR, puede revisar este [blog de Recuperación de Desastres](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
+En este módulo analizaremos la estrategia de recuperación de desastres Pilot-Light. Para aprender más sobre esta estrategia de DR, puede revisar éste [blog de Recuperación de Desastres](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
 
-Nuestra aplicación de prueba es Unishop. Es una aplicación en Java sobre Spring Boot conectada a una base de datos MySQL con un frontend escrito en bootstrap.
+La estrategia de recuperación de desastres Pilot-Light tiene [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _medidos en decenas de minutos_.
 
-La aplicación utiliza un bucket de Amazon S3 para alojar una interfaz web estática. Una única instancia EC2 sirve como un proxy para las llamadas API hacia una base de datos Aurora MySQL. La base de datos contiene datos de prueba en cuanto a usuarios y productos.
+Nuestra aplicación se encuentra desplegada en nuestra región primaria **N. Virginia (us-east-1)** y utilizaremos **N. California (us-west-1)** como nuestra región secundaria.
 
-Inicialmente, desplegaremos la instancia primaria de Unishop en la región N. Virginia. Posteriormente, la región N.California alojará la instancia de tipo Pilot-Light. Para configurar y desplegar esta infraestructura, utilizaremos AWS CloudFormation. CloudFormation permite la automatización de creación de infraestructura como código, agilizando el aprovisionamiento de recursos en la nube.
+Nuestra aplicación de prueba es Unishop. Es una aplicación en Java sobre Spring Boot desplegada en una sola instancia de [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/es/ec2/) utilizando una subred pública. Nuestro almacén de datos es una base de datos [Amazon RDS](https://aws.amazon.com/es/rds/) MySQL con una interfaz escrita en bootstrap alojada en [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).
 
-Posteriormente, verificaremos el escenario de DR. Para alcanzar nuestro objetivos de [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) en decenas de minutos requiere un Cluster de Amazon Aurora MySQL con la función de Global database habilitada. Esta función añade capacidades de replicación a través de regiones a la base de datos.
+Éste módulo hace uso de [Imágenes de máquina de Amazon (AMI)](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/AMIs.html) para desplegar nuestra instancia de cómputos EC2 y [Bases de datos globales de Amazon Aurora](https://aws.amazon.com/es/rds/aurora/global-database/) para replicar la data en Amazon Aurora MySQL a nuestra segunda región.
 
-Se recomienda experiencia previa con la consola de AWS y la linea de comandos de Linux, pero no es requerido.
+Utilizaremos [CloudFormation](https://aws.amazon.com/es/cloudformation/) para configurar la infraestructura y desplegar nuestra aplicación. El aprovisionamiento de la infraestructura utilizando metodologías de infraestructura como código (IaC) es considerado como una buena práctica. CloudFormation es una manera fácil de agilizar el aprovisionamiento en la nube con infraestructura como código.
 
-{{< img arch-2.png >}}
+Se recomienda experiencia previa con la consola de AWS y la línea de comandos de Linux, pero no es requerido.
 
-{{< prev_next_button link_next_url="./prerequisites/" button_next_text="Empezar lab" first_step="true" />}}
+{{% notice note %}}
+Debido a que ésta aplicación solo tiene **una** instancia EC2 desplegada en **una** zona de disponibilidad, ésta arquitectura no cumple con los requisitos de mejores prácticas del _AWS Well Architected Framework_ para operar aplicaciones altamente disponibles, pero es suficiente para propósitos de demostración en éste workshop.
+{{% /notice %}}
+
+{{< img PilotLight.png >}}
+
+{{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Empezar lab" first_step="true" />}}
