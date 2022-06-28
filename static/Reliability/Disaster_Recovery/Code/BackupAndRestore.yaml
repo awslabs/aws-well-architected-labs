@@ -442,39 +442,17 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishopstart.sh:
+            /home/ec2-user/unishoprestart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
                   - |          
-                    export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+                      source /home/ec2-user/unishopstop.sh      
                   - |
-                    export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?starts_with(Name, `backupandrestore-secondary-`) == `true`]'.Name)
-                  - |
-                    export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
-                  - |
-                    echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
-                  - |
-                    sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
-                  - |
-                    source /home/ec2-user/unishopcfg.sh     
-                  - |
-                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
-                  - | 
-                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
-                  - |
-                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
-                  - |
-                    else
-                  - |
-                    echo "kill thread...$pid"
-                  - |
-                    kill -9 $pid                  
-                  - |
-                    fi
-                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
+                    source /home/ec2-user/unishopstart.sh                
+                  - |+
               mode: '000555'
               group: ec2-user
               user: ec2-user
@@ -491,7 +469,7 @@ Resources:
                   - |
                     if [ -z "${pid}" ]; 
                   - |
-                    then echo "$APP_NAME is not running"
+                    then echo ""
                   - |
                     else
                   - |
@@ -503,7 +481,7 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user              
-            /home/ec2-user/unishoprestart.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''

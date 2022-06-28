@@ -26,7 +26,7 @@ Conditions:
     !Equals [!Ref IsPrimary, 'no']
   CreateFullApp: !Or
     - !Equals [!Ref IsPromote, 'yes']
-    - !Condition CreatePrimaryDB    
+    - !Condition CreatePrimaryDB
   EnableWriteFwd: !And
     - !Not [!Equals [!Ref IsPromote, 'yes']]
     - !Condition CreateSecondaryDB
@@ -281,29 +281,60 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
       VersioningConfiguration:
-        Status: Enabled                
-  EC2Instance:
-    Type: 'AWS::EC2::Instance'
+        Status: Enabled          
+  WebServerGroup:
     DependsOn: RDSDBInstance
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    Properties:
+      AvailabilityZones:
+        - !Select
+          - '0'
+          - !GetAZs
+            Ref: 'AWS::Region'
+        - !Select
+          - '1'
+          - !GetAZs
+            Ref: 'AWS::Region'
+      Tags:
+        - Key: Name
+          Value:  !Ref 'AWS::StackName'
+          PropagateAtLaunch: true            
+      LaunchConfigurationName: !Ref LaunchConfig
+      MinSize: !If [CreateFullApp, 1, 1]
+      MaxSize: !If [CreateFullApp, 5, 3]
+      LoadBalancerNames:
+        - !Ref ElasticLoadBalancer
+      VPCZoneIdentifier:
+        - !Ref UniShopAppV1Subnet1
+        - !Ref UniShopAppV1Subnet2
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 60
     CreationPolicy:
       ResourceSignal:
-        Count: 1
-        Timeout: PT30M
+        Timeout: PT15M
+        Count: '1'
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: '1'
+        MaxBatchSize: '1'
+        PauseTime: PT15M
+        WaitOnResourceSignals: 'true'
+  LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
     Metadata:
       'AWS::CloudFormation::Init':
         configSets:
           default:
             - update
             - install
-            - configure       
-            - create-tables
+            - configure
             - create-service-files
             - start-service
           secondary:
             - update
             - install
             - configure
-            - configure-global-db                 
+            - configure-global-db            
             - create-service-files
             - start-service
         update:
@@ -319,65 +350,28 @@ Resources:
               java-1.8.0-openjdk-devel: []
               mariadb: []
         configure:
-          commands:    
+          commands:
             0-populate-buckets:
               command: !Join
                 - ''
                 - - |
                     #!/bin/bash      
-
                   - |
-                    sudo mkdir /home/ec2-user/UniShopUI/                              
-                
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+     
-
-                  - export ASSETS_RANDOM_NAME=
-                  - !Ref AssetBucket
-                  - |+                            
-
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
-                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive  --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                                                                
-
-                  - >
-                    aws s3 cp /home/ec2-user/UniShopUI/
-                    s3://$UI_RANDOM_NAME/ --recursive --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
-                    
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
-
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
-
+                    sudo mkdir /home/ec2-user/UniShopUI/                                                                 
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
-
                   - >                       
                     aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
                     s3://$ASSETS_RANDOM_NAME/ --grants
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-
-        create-tables:
-          commands:
-            1-create-tables:
-              command: !Join
-                - ''
-                - - 'sudo mysql -u UniShopAppV1User -h '
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |2
-                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers      
+                  - >                  
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
+                    
         configure-global-db:
           commands:
             1-enable-write-forwarding:
-              command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding                     
+              command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding
+
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:
@@ -428,37 +422,17 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishopstart.sh:
+            /home/ec2-user/unishoprestart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
                   - |                    
-                    source /home/ec2-user/unishopcfg.sh     
+                    source /home/ec2-user/unishopstop.sh
                   - |
-                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
-                  - | 
-                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
-                  - |
-                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
-                  - |
-                    else
-                  - |
-                    echo "kill thread...$pid"
-                  - |
-                    kill -9 $pid                  
-                  - |
-                    fi
-                  - >
-                  - java -jar
-                  - ' '
-                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
-                  - >
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
+                    source /home/ec2-user/unishopstart.sh     
+                  - |+
               mode: '000555'
               group: ec2-user
               user: ec2-user
@@ -475,7 +449,7 @@ Resources:
                   - |
                     if [ -z "${pid}" ]; 
                   - |
-                    then echo "$APP_NAME is not running"
+                    then echo ""
                   - |
                     else
                   - |
@@ -487,7 +461,7 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user              
-            /home/ec2-user/unishoprestart.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
@@ -572,8 +546,7 @@ Resources:
     Properties:
       InstanceType: t3.small
       ImageId: !Ref LatestAmiId
-      SubnetId: !Ref UniShopAppV1Subnet1
-      SecurityGroupIds:
+      SecurityGroups:
         - !Ref EC2SecurityGroup
       IamInstanceProfile: !Ref S3InstanceProfile
       UserData: !Base64
@@ -586,7 +559,7 @@ Resources:
             - /opt/aws/bin/cfn-init -v
             - '         --stack '
             - !Ref 'AWS::StackName'
-            - '         --resource EC2Instance '
+            - '         --resource LaunchConfig '
             - '         --region '
             - !Ref 'AWS::Region'
             - !If [CreatePrimaryDB, '         --configsets default','         --configsets secondary']
@@ -595,14 +568,31 @@ Resources:
             - /opt/aws/bin/cfn-signal -e $?
             - ' --stack '
             - !Ref 'AWS::StackName'
-            - ' --resource EC2Instance'
+            - ' --resource WebServerGroup'
             - ' --region '
             - !Ref 'AWS::Region'
             - |+
-
-      Tags:
-        - Key: Name
-          Value:  !Ref 'AWS::StackName'
+            
+  ElasticLoadBalancer:
+    DependsOn: AttachGateway
+    Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
+    Properties:
+      CrossZone: 'true'
+      SecurityGroups:
+        - !Ref EC2SecurityGroup
+      Subnets:
+        - !Ref UniShopAppV1Subnet1
+        - !Ref UniShopAppV1Subnet2
+      Listeners:
+        - LoadBalancerPort: '80'
+          InstancePort: '80'
+          Protocol: HTTP
+      HealthCheck:
+        Target: 'HTTP:80/unicorns'
+        HealthyThreshold: '3'
+        UnhealthyThreshold: '5'
+        Interval: '30'
+        Timeout: '5'
   DynamoDBTable:
     Condition: CreatePrimaryDB
     Type: AWS::DynamoDB::Table
@@ -644,9 +634,9 @@ Resources:
                   - dynamodb:UpdateItem
                   - dynamodb:Query
                   - dynamodb:Scan
-                Resource: !If [CreatePrimaryDB, !GetAtt DynamoDBTable.Arn, !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/unishophotstandby']
+                Resource: !If [CreatePrimaryDB, !GetAtt DynamoDBTable.Arn, !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/unishop']
   AddUnicornToBasketlambdaFunction:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -665,7 +655,7 @@ Resources:
         - Key: Name
           Value: !Sub '${AWS::StackName}-AddUnicornToBasket'
   RemoveUnicornFromBasketlambdaFunction:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -684,14 +674,14 @@ Resources:
         - Key: Name
           Value: !Sub '${AWS::StackName}-RemoveUnicornFromBasket'
   GetUnicornsBasketlambdaFunction:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket: !Ref AssetBucket
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
-      Description: Service to get unicorn baseket
+      Description: Service to get unicorn basket
       #      FunctionName: RemoveUnicornFromBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::getUnicornsBasket
       MemorySize: 512
@@ -853,7 +843,7 @@ Resources:
       ParentId: !Ref UserRestApiResource
       PathPart: login
   UnicornsRestApiRequestGET:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -866,8 +856,8 @@ Resources:
           - '/'
           - - 'http:/'
             - !GetAtt
-              - EC2Instance
-              - PublicDnsName
+              - ElasticLoadBalancer
+              - DNSName
             - 'unicorns'
         PassthroughBehavior: WHEN_NO_MATCH
         IntegrationResponses:
@@ -917,7 +907,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
   UnicornsBasketRestApiRequestPOST:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -953,7 +943,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
   UnicornsBasketRestApiRequestDELETE:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -1017,7 +1007,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
   UnicornsBasketUUIDRestApiRequestGET:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -1092,7 +1082,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
   UserRestApiRequestPOST:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -1105,8 +1095,8 @@ Resources:
           - '/'
           - - 'http:/'
             - !GetAtt
-              - EC2Instance
-              - PublicDnsName
+              - ElasticLoadBalancer
+              - DNSName
             - 'user'
         PassthroughBehavior: WHEN_NO_MATCH
         IntegrationResponses:
@@ -1156,7 +1146,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
   UserLoginRestApiRequestPOST:
-    DependsOn: EC2Instance
+    DependsOn: WebServerGroup
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -1169,8 +1159,8 @@ Resources:
           - '/'
           - - 'http:/'
             - !GetAtt
-              - EC2Instance
-              - PublicDnsName
+              - ElasticLoadBalancer
+              - DNSName
             - 'user'
             - 'login'
         PassthroughBehavior: WHEN_NO_MATCH
@@ -1263,8 +1253,26 @@ Resources:
 
                   - export UI_RANDOM_NAME=
                   - !Ref UIBucket
-                  - |+                        
+                  - |+       
 
+                  - export ASSETS_RANDOM_NAME=
+                  - !Ref AssetBucket
+                  - |+                            
+
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
+                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive  --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                                                                
+
+                  - >
+                    aws s3 cp /home/ec2-user/UniShopUI/
+                    s3://$UI_RANDOM_NAME/ --recursive --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                             
+
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
+
+                  - >            
                   - export APIGW=
                   - !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
                   - |+                 

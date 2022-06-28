@@ -26,5 +26,9 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 
 {{< img a-6.png >}}
 
+{{% notice note %}}
+You need to wait for the database to failover before moving on to the next step.
+{{% /notice %}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="../3.2-ec2/" />}}
 

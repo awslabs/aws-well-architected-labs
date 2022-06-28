@@ -289,7 +289,7 @@ Resources:
           Value:  !Ref 'AWS::StackName'
           PropagateAtLaunch: true            
       LaunchConfigurationName: !Ref LaunchConfig
-      MinSize: !If [CreateFullApp, 3, 1]
+      MinSize: !If [CreateFullApp, 1, 1]
       MaxSize: !If [CreateFullApp, 5, 3]
       LoadBalancerNames:
         - !Ref ElasticLoadBalancer
@@ -435,37 +435,17 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishopstart.sh:
+            /home/ec2-user/unishoprestart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
                   - |                    
-                    source /home/ec2-user/unishopcfg.sh     
+                    source /home/ec2-user/unishopstop.sh
                   - |
-                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
-                  - | 
-                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
-                  - |
-                    if [ -z "${pid}" ]; then echo "$APP_NAME is not running"
-                  - |
-                    else
-                  - |
-                    echo "kill thread...$pid"
-                  - |
-                    kill -9 $pid                  
-                  - |
-                    fi
-                  - >
-                  - java -jar
-                  - ' '
-                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
-                  - >
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
+                    source /home/ec2-user/unishopstart.sh     
+                  - |+
               mode: '000555'
               group: ec2-user
               user: ec2-user
@@ -482,7 +462,7 @@ Resources:
                   - |
                     if [ -z "${pid}" ]; 
                   - |
-                    then echo "$APP_NAME is not running"
+                    then echo ""
                   - |
                     else
                   - |
@@ -494,7 +474,7 @@ Resources:
               mode: '000555'
               group: ec2-user
               user: ec2-user              
-            /home/ec2-user/unishoprestart.sh:
+            /home/ec2-user/unishopstart.sh:
               encoding: plain
               content: !Join
                 - ''
