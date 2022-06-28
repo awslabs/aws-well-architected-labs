@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
-November 2021
+June 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
