@@ -11,7 +11,12 @@ pre: "<b>1. </b>"
 To get right sizing recommendations you need to [Enroll all accounts to Compute Optmizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/getting-started.html#account-opt-in). You can use free version that provides recommendations based on 14 days of look-back period.
 
 
-### 2/4 Prepare Athena
+### 2/4 Install Compute Optimizer Data Collection
+
+Before installing Dashboard please install Compute Optimizer module of **[Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)** - this provides an automated way to collect Compute Optimizer recommendations for all accounts in your AWS Organizations and AWS Regions. This will take 20-30 mins to configure.
+
+
+### 3/4 Prepare Athena
 If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Enable Quicksight](#enable-quicksight) section below.
 
 To get Athena warmed up:
@@ -45,7 +50,7 @@ Enter the path of the bucket created for Athena queries, it is recommended that 
 
 
 
-### 3/4 Enable QuickSight 
+### 4/4 Enable QuickSight 
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. You will require QuickSight Enterprise Edition. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
 {{%expand "Click here - to setup QuickSight" %}}
@@ -59,7 +64,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 1. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
 
-    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your Cost & Usage Report files.
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your Report files.
 
         ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
     
@@ -78,10 +83,6 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
     ![Image](/Cost/200_Cloud_Intelligence/Images/QS-enterprise.png?classes=lab_picture_small)
 
 {{% /expand%}}
-
-### 4/4 Install Compute Optimizer Data Collection
-
-Before installing Dashboard please install Compute Optimizer module of **[Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)** - this provides an automated way to collect Compute Optimizer recommendations for all accounts in your AWS Organizations and AWS Regions. This will take 20-30 mins to configure.
 
 
 {{< prev_next_button link_prev_url="../../" link_next_url="../2_deployment/" />}}
