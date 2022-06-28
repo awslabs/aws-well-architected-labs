@@ -8,7 +8,10 @@ pre: "<b>1. </b>"
 
 
 ### (Required for automated Installation with cid-cmd tool) Python 3.9+
-For automatic installation you will require Python 3.9+ and PIP installed.
+For automatic installation you will require Python 3.9+ and PIP installed. This can be AWS CloudShell in your AWS account.
+
+### (Required for manual install only) AWSCLI
+For manual deployements you will need and environment with [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions). This can be AWS CloudShell in your AWS account.
 
 ### Enable Trusted Advisor Data Collection
 There are 2 supported data collection methods:

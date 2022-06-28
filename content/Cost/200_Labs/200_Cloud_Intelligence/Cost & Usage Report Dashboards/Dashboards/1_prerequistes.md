@@ -8,7 +8,10 @@ pre: "<b>1. </b>"
 
 
 ### (Required for automated Installation with cid-cmd tool) Python 3.9+
-For automatic installation you will require Python 3.9+ and PIP installed.
+For automatic installation you will require Python 3.9+ and PIP installed. This can be AWS CloudShell in your AWS account.
+
+### (Required for manual install only) AWSCLI
+For manual deployements you will need and environment with [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions). This can be AWS CloudShell in your AWS account.
 
 
 ### Prepare Cost & Usage Report
@@ -108,7 +111,7 @@ Enter the path of the bucket created for Athena queries, it is recommended that 
     - Select **Workgroup: primary**
 ![Images/cf_dash_athena_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_2.png?classes=lab_picture_small)
     - Confirm your **Query result location** is configured with an S3 bucket path. 
-        - If not configured, continue to setting up by clicking **Edit workgroup**
+        - If not configured, continue set by clicking **Edit workgroup**
 ![Images/cf_dash_athena_4.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_4.png?classes=lab_picture_small)
     - Add the **S3 bucket path** you have selected for your Query result location and click save
 ![Images/cf_dash_athena_5.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_athena_5.png?classes=lab_picture_small)
