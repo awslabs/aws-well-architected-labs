@@ -22,7 +22,7 @@ Apply the following best practices when using tags:
   * **AWS console organization**
 * Implement automated tools to help manage resource tags. [The Resource Groups Tagging API](https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html) enables programmatic control of tags, making it easier to automatically manage, search, and filter tags and resources.
 * Err on the side of using too many tags rather than too few tags.
-* [Develop a tagging strategy](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
+* [Develop a tagging strategy](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html).
 
 >**Note** It is easy to modify tags to accommodate changing business requirements; however, consider the consequences of future changes, especially in relation to tag-based access control, automation, or upstream billing reports.
 
