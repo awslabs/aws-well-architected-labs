@@ -26,6 +26,6 @@ Modify the following SQL query for View0 - Account Map:
 
 - Confirm the view is working, run the following Athena query and you should receive 10 rows of data:
 
-        select * from costmaster.customer_all
+        select * from (database).customer_all
         limit 10
 		

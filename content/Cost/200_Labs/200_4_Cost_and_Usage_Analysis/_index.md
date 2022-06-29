@@ -15,6 +15,7 @@ July 2021
 
 ## Contributors
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS) 
+- Duncan Bell, Solutions Architect, Well-Architected
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com

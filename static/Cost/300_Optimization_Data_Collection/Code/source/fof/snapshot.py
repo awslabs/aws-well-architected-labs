@@ -25,6 +25,7 @@ def main(account_id):
                 response_iterator = paginator.paginate(OwnerIds=["self"])
                 for response in response_iterator:
                     for image in response["Snapshots"]:
+                        image['region']=region
                         dataJSONData = json.dumps(image, cls=DateTimeEncoder)
                         f.write(dataJSONData)
                         f.write("\n")

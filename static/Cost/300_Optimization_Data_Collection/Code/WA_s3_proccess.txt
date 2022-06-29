@@ -5,7 +5,7 @@ In the bucket aws-well-architected-labs. These are then replicated to the other 
 To add a regional bucket follow these steps:
 * create bucket following the naming convention aws-well-architected-labs-<region>
 * 'Block all public access' Set to > Off
-* Access control list (ACL) Change from default
+* Access control list (ACL) Change from default to  ACLs enabled
 * add this to the role s3-replication-role
 * Add bucket policy below
 * create a replication role on the aws-well-architected-labs bucket on prefix Cost/Labs/300_Optimization_Data_Collection/
@@ -27,3 +27,20 @@ To add a regional bucket follow these steps:
         }
     ]
 }
+
+aws s3 cp  Budgets.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml --acl public-read
+aws s3 cp  compute_optimizer.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml  --acl public-read
+aws s3 cp  Management.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/Management.yaml --acl public-read
+aws s3 cp  lambda_s3_athen_cf_template.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/lambda_s3_athen_cf_template.yaml --acl public-read
+aws s3 cp  optimisation_read_only_role.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml --acl public-read
+aws s3 cp  ecs_data.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml --acl public-read
+aws s3 cp  rds_util_template.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml --acl public-read
+aws s3 cp Optimization_Data_Collector.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml --acl public-read
+aws s3 cp  get_accounts.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml --acl public-read
+aws s3 cp  organization_data.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml --acl public-read
+aws s3 cp lambda_data.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml --acl public-read
+aws s3 cp  organization_rightsizing_lambda.yaml s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml --acl public-read
+aws s3 cp trusted_advisor.yaml  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml --acl public-read
+aws s3 cp ecs.zip  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/ecs.zip --acl public-read
+aws s3 cp  fof.zip s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/fof.zip --acl public-read
+aws s3 cp ta.zip  s3://aws-well-architected-labs/Cost/Labs/300_Optimization_Data_Collection/ta.zip --acl public-read
