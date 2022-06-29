@@ -291,7 +291,6 @@ Resources:
               - install
               - configure
               - configure-global-db        
-              - configure-app-script    
               - create-service-files
               - start-service
           update:
@@ -343,31 +342,7 @@ Resources:
           configure-global-db:
             commands:
               1-enable-write-forwarding:
-                command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding
-          configure-app-script:
-            commands:
-              1-configure-script:
-                command: !Join
-                  - ''
-                  - - |
-                      #!/bin/bash      
-                    - |
-                      export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
-                    - |
-                      export DATABASE=$(aws rds describe-db-clusters --region $AWS_DEFAULT_REGION --db-cluster-identifier pilot-secondary --query 'DBClusters[*].[Endpoint]' --output text)
-                    - |+
-                      sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF \n
-                      #!/bin/bash \n
-                      export DB_ENDPOINT=$DATABASE \n
-                      EOF \n
-                    - |+
-                      sudo bash -c "cat >/home/ec2-user/unishopstart.sh" <<EOF \n
-                      #!/bin/bash \n
-                      source /home/ec2-user/unishopcfg.sh \n
-                      java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log & \n
-                      EOF \n
-                    - |+
-                      sudo systemctl restart unishop                                      
+                command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding                                  
           create-service-files:
             files:
               /etc/systemd/system/unishop.service:
