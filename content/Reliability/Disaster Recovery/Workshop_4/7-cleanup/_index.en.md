@@ -35,7 +35,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img dd-2.png >}}
 
-2.3 Click **unishop**.
+2.3 Click **unishophotstandby**.
 
 {{< img dd-3.png >}}
 
