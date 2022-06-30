@@ -12,9 +12,9 @@ En éste _workshop_ seguiremos[Recuperación de una base de datos global Amazon 
 
 ### Promover Aurora
 
-1.1 Navegue a [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) en la región **N. California (us-west-1)**.
+1.1 Oprima [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) para navegar a la consola en la región **N. California (us-west-1)**.
 
-1.2 Oprima **Instancias de base de datos**.
+1.2 Fijese la base de datos global **pilot-global** y note como tenemos un **Clúster principal** en **us-east-1** que contiene nuestra **instancia de escritor** y un **Clúster scundario** en **us-west-1** que contiene nuestar **instancia de lectura**.
 
 {{< img a-2-ES.png >}}
 
@@ -25,6 +25,14 @@ En éste _workshop_ seguiremos[Recuperación de una base de datos global Amazon 
 1.4 Oprima **Remove and promote** para confirmar la promoción del servidor. (No está traducido en la consola)
 
 {{< img a-4.png >}}
+
+{{% notice warning %}}
+Debe esperar a que la base de datos sea promovida antes de continuar con el paso siguiente. Esto peude demorar varios minutos.
+{{% /notice %}}
+
+1.5 Note los cambios. La instancia **pilot-secondary** ha sido removida de la  **Base de datos global** y ahora es un **Clúster regional** con su propia **instancia de escritor**.
+
+{{< img a-6-ES.png >}}
 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}

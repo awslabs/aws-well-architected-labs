@@ -14,7 +14,7 @@ weight = 2
 
 {{< img vw-1.png >}}
 
-1.4 Oprima en el link de salida **WebsiteURL**.
+1.4 Oprima en el link de salida **WebsiteURL** y abra en una nueva pestaña o ventana del navegador.
 
 {{< img vw-2.png >}}
 
@@ -49,7 +49,7 @@ La región secundaria no debe estar disponible. En una estrategia de DR _pilot l
 
 {{< img vw-7-ES.png >}}
 
-3.4 Haga click en el enlace **WebsiteURL** ubicado en el sección de Salidas.
+3.4 Haga click en el enlace **WebsiteURL** ubicado en el sección de Salidas y abra en una nueva pestaña o ventana del navegador.
 
 {{< img vw-8-ES.png >}}
 

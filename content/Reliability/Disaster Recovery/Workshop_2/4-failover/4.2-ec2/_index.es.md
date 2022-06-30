@@ -28,11 +28,11 @@ weight = 2
 
 {{< img pa-7-ES.png >}}
 
-1.6 Bajo **Detalles avanzados** seleccione **pilot-secondary-S3InstanceProfile-xxx** como **Perfil de instancia de IAM**.
+1.7 Bajo **Detalles avanzados** seleccione **pilot-secondary-S3InstanceProfile-xxx** como **Perfil de instancia de IAM**.
 
 {{< img pa-4-ES.png >}}
 
-1.7 Vamos a _bootstrap_ la instancia de EC2 para que tenga todas las configuraciones necesarias para nuestra aplicación Unishop en la región de **N. California (us-west-1)**. Utilizaremos los [datos de usuario](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/user-data.html) para inicializar la instancia.
+1.8 Vamos a _bootstrap_ la instancia de EC2 para que tenga todas las configuraciones necesarias para nuestra aplicación Unishop en la región de **N. California (us-west-1)**. Utilizaremos los [datos de usuario](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/user-data.html) para inicializar la instancia.
 
 Copie y pegue el siguiente _script_ como **datos de usuario**, luego oprima **Lanzar instancia**.
 
@@ -53,6 +53,10 @@ sudo systemctl restart unishop
 {{% /expand %}}
 
 {{< img pa-5-ES.png >}}
+
+{{% notice warning %}}
+Debe esperar que la instancia haya sido desplegada exitosamente. Navegue a la consola de EC2 para ver todas las instancias y  verifique que **pilot-secondary** esté en **Estado ejecución** bajo **Estado de la instancia**. Ésto puede demorar varios minutos. 
+{{% /notice %}}
 
 
 {{< prev_next_button link_prev_url="../4.1-aurora" link_next_url="../../5-verify-secondary/"  button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}

@@ -6,7 +6,7 @@ weight = 4
 
 En el evento que un desastre afecte nuestra región primaria en **N. Virginia (us-east-1)**, querremos buscar habilitar nuestros recursos en la región secundaria  **N. California (us-west-1)**.
 
-{{% notice note %}}
+{{% notice info %}}
 Tomaremos una serie de acciones **manuales** para failover nuestros recursos a nuestra región secundaria **N California (us-west-1)**.
 En un ambiente de producción éstas acciones serian automatizadas como parte del proceso de failover.
 {{% /notice %}}
@@ -44,6 +44,10 @@ Simularemos que un evento regional de servicio ha ocurrido y está afectando nue
 1.8 Debe recibir el error **403 Forbidden**.
 
 {{< img d-9.png >}}
+
+{{% notice note %}}
+Si no recibe el error **403 Forbidden** puede ser debido a _caching_. Intente refrescar la página, utilizar otro browser o modo incognito para ver el error.
+{{% /notice  %}}
 
 
 {{< prev_next_button link_prev_url="../3-prepare-secondary/3.1-ec2" link_next_url="./4.1-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
