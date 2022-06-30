@@ -58,7 +58,7 @@ sudo systemctl restart unishop
 {{< img rs-22.png >}}
 
 {{% notice warning %}}
-The restore job(s) must have a status of **Completed**, before you can move to the next step. This may take approximately **5** minutes.
+You will need to wait for the restore job to have a status of **Completed** before moving on to the next step. This can take several minutes.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../../6-verify-secondary/" />}}

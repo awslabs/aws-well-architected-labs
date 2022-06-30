@@ -14,7 +14,11 @@ weight = 4
 
 {{< img vw-6.png >}}
 
-1.4 Click on the **WebsiteURL** output link.
+1.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
+
+{{% notice warning %}}
+If you still have the website opened from a previous step you will need to **Logout** before performing the next steps.
+{{% /notice %}}
 
 ## Verify the Website
 

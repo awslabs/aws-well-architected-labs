@@ -20,7 +20,6 @@ We are going to backup the resources in our primary region **N. Virginia (us-eas
 
 1.4 This will create a **Backup job**.
 
-
 ### Backup the RDS database
 
 2.1 Click the **Protected resources** link, then click the **Create an on-demand backup** button.
@@ -33,7 +32,7 @@ We are going to backup the resources in our primary region **N. Virginia (us-eas
 
 2.3 This will create a **Backup job**.
 
-{{% notice note %}}
+{{% notice info %}}
 Backups can also protect against corruption or accidental deletion of data.
 {{% /notice %}}
 
@@ -42,7 +41,7 @@ You should see your two backup jobs.
 {{< img bk-10.png >}}
 
 {{% notice warning %}}
-As each job moves into a status of **Completed**, you can move onto **Copy**. This may take approximately **5** minutes.
+As each job moves into a status of **Completed**, you can move onto **Copy**. This may take several minutes.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../4.2-copy/" />}}

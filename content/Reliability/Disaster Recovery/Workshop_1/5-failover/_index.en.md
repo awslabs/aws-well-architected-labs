@@ -6,6 +6,12 @@ weight = 5
 
 In the event a disaster affects our primary region **N. Virginia (us-east-1)**, we want to bring up the resources in the secondary region **N. California (us-west-1)**.
 
+{{% notice info %}}
+We will **manually** perform a series of tasks to failover our workload to our secondary region **N. California (us-west-1)**.  
+In a production environment, we would **automate** these tasks as part of our failover process.
+{{% /notice %}}
+
+
 ### Simulating a Regional Service Event
 
 We will now simulate a regional service event affecting the Unishop website in **N. Virginia (us-east-1)**.  We are going to achieve this by blocking public access to the S3 bucket that is hosting the website making the Unishop website unavailable.

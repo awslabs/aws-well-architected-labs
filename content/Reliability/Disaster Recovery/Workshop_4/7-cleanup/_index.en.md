@@ -1,10 +1,14 @@
 +++
-title = "Cleanup Resources"
+title = "Cleanup"
 date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-### Amazon S3
+{{% notice info %}}
+If you are running this workshop via an instructor led training, you do **NOT** need to complete this section.
+{{% /notice %}}
+
+#### S3 Cleanup
 
 1.1 Click [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
@@ -27,7 +31,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 **hot-secondary-assetbucket-xxxx**
 {{% /notice %}}
 
-### Amazon DynamoDB 
+#### DynamoDB Cleanup
 
 2.1 Click [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
@@ -61,7 +65,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-13.png >}}
 
-### Amazon CloudFormation
+#### CloudFormation Cleanup
 
 3.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

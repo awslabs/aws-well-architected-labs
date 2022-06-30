@@ -6,7 +6,7 @@ weight = 1
 
 ### Create the EC2 Amazon Machine Image (AMI)
 
-1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
+1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Select **pilot-primary**.  Click **Create image** under the **Actions -> Images and Templates** dropdown.
 
@@ -16,13 +16,13 @@ weight = 1
 
 {{< img BK-3.png >}}
 
+{{% notice warning %}}
+You will need to wait for the AMI status to be **Ready** before moving on to the next step.  This can take several minutes.
+{{% /notice %}}
+
 ### Copy the EC2 Amazon Machine Image (AMI)
 
 2.1 Click [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) to navigate to the dashboard.
-
-{{% notice warning %}}
-Your AMI status must be **Ready** for you to continue to the next step.
-{{% /notice %}}
 
 2.2 Select **pilotAMI**. Click **Copy AMI** under the **Actions** dropdown.
 
