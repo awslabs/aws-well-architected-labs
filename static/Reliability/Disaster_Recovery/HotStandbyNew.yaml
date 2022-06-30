@@ -11,14 +11,14 @@ Parameters:
     AllowedValues:
       - 'yes'
       - 'no'
-    Description: 'Is primary region'
+    Description: 'Is primary region' 
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  EnableWriteFwd:
-    !Equals [!Ref IsPrimary, 'no']
+  EnableWriteFwd: 
+    !Equals [!Ref IsPrimary, 'no'] 
 Resources:
   UniShopAppV1VPC:
     Type: 'AWS::EC2::VPC'
@@ -158,7 +158,7 @@ Resources:
   S3Policy:
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: S3Policy
+      PolicyName: S3Policy-hot
       PolicyDocument:
         Statement:
           - Effect: Allow
@@ -227,7 +227,7 @@ Resources:
     Properties:
       MasterUsername: UniShopAppV1User
       MasterUserPassword: UniShopAppV1Password
-      DBClusterIdentifier: !Ref 'AWS::StackName'
+      DBClusterIdentifier:  !Ref 'AWS::StackName'
       Port: 3306
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -269,6 +269,8 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
+      VersioningConfiguration:
+        Status: Enabled         
   EC2Instance:
       Type: 'AWS::EC2::Instance'
       DependsOn: RDSDBInstance
@@ -290,7 +292,7 @@ Resources:
               - update
               - install
               - configure
-              - configure-global-db        
+              - configure-global-db            
               - create-service-files
               - start-service
           update:
@@ -327,8 +329,6 @@ Resources:
                       read=uri=http://acs.amazonaws.com/groups/global/AllUsers      
                     - >                  
                       sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
-                    - >
-                      sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request                        
                       
           create-tables:
             commands:
@@ -338,11 +338,12 @@ Resources:
                   - - 'sudo mysql -u UniShopAppV1User -h '
                     - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
                     - |2
-                       -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql                     
+                      -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql                     
           configure-global-db:
             commands:
               1-enable-write-forwarding:
-                command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding                                  
+                command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding
+
           create-service-files:
             files:
               /etc/systemd/system/unishop.service:
@@ -552,7 +553,7 @@ Resources:
     Condition: CreatePrimaryDB
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: unishophotstandby
+      TableName: unishop
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: uuid
@@ -562,7 +563,7 @@ Resources:
           KeyType: HASH
       Tags:
         - Key: Name
-          Value: !Ref 'AWS::StackName'
+          Value:  !Ref 'AWS::StackName'
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -589,7 +590,7 @@ Resources:
                   - dynamodb:UpdateItem
                   - dynamodb:Query
                   - dynamodb:Scan
-                Resource: !If [CreatePrimaryDB, !GetAtt DynamoDBTable.Arn, !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/unishophotstandby']
+                Resource: !If [CreatePrimaryDB, !GetAtt DynamoDBTable.Arn, !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/unishop']
   AddUnicornToBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
@@ -599,6 +600,7 @@ Resources:
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
       Description: Service to add unicorns to basket from POST API call
+      #      FunctionName: AddUnicornToBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::addUnicornToBasket
       MemorySize: 512
       Role: !GetAtt
@@ -607,7 +609,7 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: AddUnicornToBasket
+          Value: !Sub '${AWS::StackName}-AddUnicornToBasket'
   RemoveUnicornFromBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
@@ -617,6 +619,7 @@ Resources:
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
       Description: Service to remove unicorns from basket from POST API call
+      #      FunctionName: RemoveUnicornFromBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::removeUnicornFromBasket
       MemorySize: 512
       Role: !GetAtt
@@ -625,7 +628,7 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: RemoveUnicornFromBasket
+          Value: !Sub '${AWS::StackName}-RemoveUnicornFromBasket'
   GetUnicornsBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
@@ -635,6 +638,7 @@ Resources:
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
       Description: Service to get unicorn basket
+      #      FunctionName: RemoveUnicornFromBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::getUnicornsBasket
       MemorySize: 512
       Role: !GetAtt
@@ -643,7 +647,7 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: GetUnicornsBasket
+          Value: !Sub '${AWS::StackName}-GetUnicornsBasket'
   UnicornsRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
@@ -652,7 +656,7 @@ Resources:
       FailOnWarnings: true
       Tags:
         - Key: Name
-          Value: !Ref 'AWS::StackName'
+          Value: !Sub '${AWS::StackName}-RestApi'
   LambdaPermissionPOST:
     Type: 'AWS::Lambda::Permission'
     Properties:
@@ -803,6 +807,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: GET
         Type: HTTP
+        #        Uri: http://ec2-54-211-223-8.compute-1.amazonaws.com/unicorns
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -1041,6 +1046,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP
+#                Uri: http://ec2-3-89-195-86.compute-1.amazonaws.com/user
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -1104,6 +1110,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP
+          # Uri: http://ec2-3-89-195-86.compute-1.amazonaws.com/user/login
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -1214,6 +1221,9 @@ Resources:
                     s3://$UI_RANDOM_NAME/ --recursive --grants 
                     read=uri=http://acs.amazonaws.com/groups/global/AllUsers                             
 
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
+
                   - >            
                   - export APIGW=
                   - !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
@@ -1264,7 +1274,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}-build'          
+          Value: !Sub '${AWS::StackName}-build'
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL

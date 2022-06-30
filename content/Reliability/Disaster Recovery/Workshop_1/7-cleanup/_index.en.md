@@ -4,6 +4,10 @@ date =  2021-05-11T20:41:47-04:00
 weight = 7
 +++
 
+{{% notice info %}}
+If you are running this workshop via an instructor led training, you do **NOT** need to complete this section.
+{{% /notice %}}
+
 #### Amazon S3
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.

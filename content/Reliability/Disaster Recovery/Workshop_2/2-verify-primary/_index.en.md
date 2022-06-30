@@ -14,7 +14,7 @@ weight = 2
 
 {{< img vw-1.png >}}
 
-1.4 Click on the **WebsiteURL** output link.
+1.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
 {{< img vw-2.png >}}
 
@@ -48,7 +48,7 @@ Our secondary region should be unavailable. In a pilot light disaster recovery s
 
 {{< img vw-7.png >}}
 
-3.4 Click on the **WebsiteURL** output link. 
+3.4 Click on the **WebsiteURL** output link and open in a new browser tab or window. 
 
 {{< img vw-8.png >}}
 

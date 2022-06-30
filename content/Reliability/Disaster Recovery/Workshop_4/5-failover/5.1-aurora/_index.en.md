@@ -26,5 +26,9 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 {{< img a-4.png >}}
 
+{{% notice note %}}
+Wait for the secondary cluster to be promoted before moving on to the next step.
+{{% /notice %}}
+
 {{< prev_next_button link_prev_url="../" link_next_url="../5.2-ec2/" />}}
 

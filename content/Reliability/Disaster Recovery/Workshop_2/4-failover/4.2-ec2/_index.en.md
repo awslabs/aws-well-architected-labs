@@ -28,11 +28,11 @@ weight = 2
 
 {{< img pa-7.png >}}
 
-1.6 In the **Advanced details** section.  Select **pilot-secondary-S3InstanceProfile-xxx** as the **IAM instance profile**.
+1.7 In the **Advanced details** section.  Select **pilot-secondary-S3InstanceProfile-xxx** as the **IAM instance profile**.
 
 {{< img pa-4.png >}}
 
-1.7 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
+1.8 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
 We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) to achieve this.
 
 Copy and paste the below script as the **User data**, then click the **Launch instance** button.
@@ -54,6 +54,10 @@ sudo systemctl restart unishop
 {{% /expand %}}
 
 {{< img pa-5.png >}}
+
+{{% notice warning %}}
+You will need to wait for the instance to be successfully launched. You can click the **View all instances** button to navigate to the EC2 dashboard. Verify **pilot-secondary** has an **Instance state** of **Running**. This can take several minutes.
+{{% /notice %}}
 
 {{< prev_next_button link_prev_url="../4.1-aurora" link_next_url="../../5-verify-secondary/" />}}
 

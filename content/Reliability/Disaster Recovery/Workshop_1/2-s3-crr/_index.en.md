@@ -6,7 +6,7 @@ weight = 2
 
 ### Verify S3 buckets
 
-{{% notice note %}}
+{{% notice info %}}
 As part of the CloudFormation Template, the primary region and secondary region Amazon S3 buckets were created.
 {{% /notice %}}
 
@@ -44,7 +44,7 @@ As part of the CloudFormation Template, the primary region and secondary region 
 
 ### Replicate S3 bucket
 
-{{% notice note %}}
+{{% notice info %}}
 We will **manually** copy objects into our **backupandrestore-primary-uibucket-xxxx** in our **primary region** so we can observe the replication into our **backupandrestore-secondary-uibucket-xxxx** bucket in our **secondary region**.
 In a production environment, we would **automate** these steps as part of our CI/CD pipeline.
 {{% /notice %}}
@@ -70,7 +70,7 @@ aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733
 
 {{< img crr-9.png >}}
 
-{{% notice note %}}
+{{% notice info %}}
 It might take a couple of minutes to replicate objects.
 {{% /notice %}}
 

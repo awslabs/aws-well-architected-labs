@@ -14,7 +14,7 @@ Our application is currently deployed in our primary region **N. Virginia (us-ea
 
 Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet.  Our datastore is an [Amazon RDS](https://aws.amazon.com/rds/) MySQL database with a frontend written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
 
-This module takes advantage of [Amazon Machine Images (AMI)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html/) which we will use to launch our Amazon EC2 instance and [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data to our secondary region. 
+This module takes advantage of [Amazon Machine Images (AMI)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) which we will use to launch our Amazon EC2 instance and [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data to our secondary region. 
 
 [CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 

@@ -8,7 +8,7 @@ weight = 4
 
 You can find a list of AWS Backup supported resources [here](https://aws.amazon.com/backup/?whats-new-cards.sort-by=item.additionalFields.postDateTime&whats-new-cards.sort-order=desc.).
 
-{{% notice note %}}
+{{% notice info %}}
 We will **manually** perform a series of tasks to backup, copy and restore our application in the secondary region **N. California (us-west-1)**.  
 In a production environment, we would **automate** these steps by creating a [backup plan](https://docs.aws.amazon.com/aws-backup/latest/devguide/creating-a-backup-plan.html) to schedule recurring backups to meet your target RPO.
 {{% /notice %}}

@@ -14,10 +14,10 @@ weight = 5
 
 {{< img vf-2.png >}}
 
-1.4 Click on the **WebsiteURL** output link.
+1.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
-{{% notice warning %}}
-You will have to wait a few minutes while the EC2 instance is launched and bootstrapped.  EC2 instance is running when you see the Unishop webpage with all the products.
+{{% notice note %}}
+If you do not see the Unishop webpage with all the products, it could be that the EC2 instance has not completed running the bootstrapping scripts. Continue to refresh the page until you see the Unishop webpage with all the products loaded.
 {{% /notice %}}
 
 ## Verify the Website

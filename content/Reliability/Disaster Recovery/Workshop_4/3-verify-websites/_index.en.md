@@ -14,7 +14,7 @@ weight = 3
 
 {{< img vw-1.png >}}
 
-1.4 Click on the **WebsiteURL** output link.
+1.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
 {{< img vw-2.png >}}
 
@@ -48,7 +48,7 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 {{< img vw-6.png >}}
 
-3.4 Click on the **WebsiteURL** output link.
+3.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
 {{< img vw-7.png >}}
 

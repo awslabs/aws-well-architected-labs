@@ -12,11 +12,11 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 ### Promote Aurora
 
-1.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Click into **DB Instances**.
+1.2 Look at the **pilot-global** Global database. Notice how we have a **Primary cluster** in **us-east-1** which has our **Writer instance** and a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
 
-{{< img a-2.png >}}
+{{< img a-5.png >}}
 
 1.3 Select **pilot-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
 
@@ -25,5 +25,13 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 1.4 Click **Remove and Promote** to confirm the server promotion.
 
 {{< img a-4.png >}}
+
+{{% notice warning %}}
+You will need to wait for the database to be successfully promoted before moving on to the next step.  This can take several minutes.
+{{% /notice %}}
+
+1.5 Notice the changes. The **pilot-secondary** has been removed from the **Global database** and is now a **Regional cluster** with its own **Writer instance**.
+
+{{< img a-6.png >}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" />}}

@@ -22,7 +22,7 @@ We will use [Amazon S3 Cross-Region Replication (CRR)](https://docs.aws.amazon.c
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
-{{% notice note %}}
+{{% notice info %}}
 Because this workload has only **one** EC2 instance that is deployed in only **one** Availability Zone, this architecture does not meet the AWS Well Architected Framework best practices for running highly available production applications but suffices for this workshop.
 {{% /notice %}}
 

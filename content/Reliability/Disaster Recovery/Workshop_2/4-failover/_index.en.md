@@ -6,7 +6,7 @@ weight = 4
 
 In the event a disaster affects our primary region **N. Virginia (us-east-1)**, we want to bring up the resources in the secondary region **N. California (us-west-1)**.
 
-{{% notice note %}}
+{{% notice info %}}
 We will **manually** perform a series of tasks to failover our workload to our secondary region **N. California (us-west-1)**.  
 In a production environment, we would **automate** these tasks as part of our failover process.
 {{% /notice %}}
@@ -37,7 +37,7 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img f-4.png >}}
 
-1.7 In the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
+1.7 Scroll down to the **Static website hosting** section.  Click on the **Bucket website endpoint** link.
 
 {{< img f-5.png >}}
 
@@ -45,5 +45,8 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img d-9.png >}}
 
+{{% notice note %}}
+If you do not get a 403 Forbidden error, this might be due to caching.  Please try refreshing the page or opening the website in a different browser or incognito mode to see the error.
+{{% /notice  %}}
 
 {{< prev_next_button link_prev_url="../3-prepare-secondary/3.1-ec2" link_next_url="./4.1-aurora/" />}}

@@ -12,7 +12,7 @@ Let's verify that everything is working as expected in our primary region **N. V
 
 1.2 Select **backupandrestore-primary** under **Stacks**.
 
-1.3 Click on the **Outputs** link.
+1.3 Click on the **Outputs** link and open in a new browser tab or window.
 
 {{< img vf-1.png >}}
 

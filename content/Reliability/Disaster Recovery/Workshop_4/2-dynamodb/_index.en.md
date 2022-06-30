@@ -14,7 +14,7 @@ When you create a DynamoDB global table, it consists of multiple replica tables 
 
 {{< img dd-2.png >}}
 
-1.3 Click the **unishop** link.
+1.3 Click the **unishophotstandby** link.
 
 {{< img dd-3.png >}}
 
@@ -27,9 +27,7 @@ When you create a DynamoDB global table, it consists of multiple replica tables 
 {{< img dd-5.png >}}
 
 {{% notice note %}}
-This might take a few minutes, feel free to move onto the next step.  Just ensure the status is showing **Active** before moving on to the next step.
+Wait for the status to show **Active** before moving on to the next step.
 {{% /notice %}}
-
-{{< img dd-6.png >}}
 
 {{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-verify-websites/" />}}
