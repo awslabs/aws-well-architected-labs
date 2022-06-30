@@ -21,7 +21,7 @@ weight = 2
 ### Inscripción
 #### Interactúe con la aplicación primaria (La aplicación está en inglés)
 
-2.1 Registrese en la aplicación. Debe proveer su dirección e-mail, que no tiene que ser válida. Aun así, _asegúrese de recordar este valor_ para verificar la replicación de datos posteriormente.
+2.1 Registrese en la aplicación. Debe proveer su dirección e-mail, que no tiene que ser válida. Aun así, **asegúrese de recordar este valor** para verificar la replicación de datos posteriormente.
 
 {{< img vw-3.png >}}
 

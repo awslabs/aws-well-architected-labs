@@ -16,13 +16,13 @@ weight = 1
 
 {{< img bk-3-ES.png >}}
 
-### Copiar la AMI (Imagen de máquina de Amazon) de EC2
-
-2.1 Oprima [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) para navegar a la consola.
-
 {{% notice warning %}}
 La AMI debe mostrar estado **Disponible** antes de continuar al próximo paso. Puede demorar varios minutos.
 {{% /notice %}}
+
+### Copiar la AMI (Imagen de máquina de Amazon) de EC2
+
+2.1 Oprima [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) para navegar a la consola.
 
 2.2 Seleccione **pilotAMI**. Oprima **Copiar AMI** dentro del menú de **Acciones**.
 

@@ -31,7 +31,7 @@ Por favor repitas los pasos **1.1** a **1.4** para los siguientes buckets:
 
 #### Limpieza de base de datos
 
-{{% notice note %}}
+{{% notice info %}}
 Este paso es requerido ya que promovimos manualmente la base de datos Aurora.
 {{% /notice %}}
 
@@ -49,7 +49,7 @@ Este paso es requerido ya que promovimos manualmente la base de datos Aurora.
 Espere a que la eliminación de la base de datos termine antes de continuar al siguiente paso.
 {{% /notice %}}
 
-## Limpieza de la región secundaria en CloudFormation
+#### Limpieza de la región secundaria en CloudFormation
 
 3.1 Navegue a [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) en la región **N. California (us-west-1)**.
 
@@ -61,7 +61,7 @@ Espere a que la eliminación de la base de datos termine antes de continuar al s
 
 {{< img cl-9-ES.png >}}
 
-{{% notice info %}}
+{{% notice warning %}}
 Espere a que termine la eliminación de la pila antes de continuar al próximo paso.
 {{% /notice %}}
 
@@ -77,6 +77,6 @@ Espere a que termine la eliminación de la pila antes de continuar al próximo p
 
 {{< img cl-7-ES.png >}}
 
-{{< prev_next_button link_prev_url="../5-verify-secondary/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5-verify-secondary/" title="¡Felicidades!" final_step="true" >}}
 Este laboratorio ayuda le ayuda con las mejores prácticas cubiertas en la preguntas [REL 13  Como planear para recuperación de desastres (DR)](https://docs.aws.amazon.com/es_es/wellarchitected/latest/framework/a-failure-management.html)
 {{< /prev_next_button >}}

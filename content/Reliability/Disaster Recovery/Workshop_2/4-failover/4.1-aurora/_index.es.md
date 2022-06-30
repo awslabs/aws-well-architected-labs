@@ -1,5 +1,5 @@
 +++
-title = "Promover Aurora"
+title = "Aurora"
 date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
@@ -16,7 +16,7 @@ En éste _workshop_ seguiremos[Recuperación de una base de datos global Amazon 
 
 1.2 Fijese la base de datos global **pilot-global** y note como tenemos un **Clúster principal** en **us-east-1** que contiene nuestra **instancia de escritor** y un **Clúster scundario** en **us-west-1** que contiene nuestar **instancia de lectura**.
 
-{{< img a-2-ES.png >}}
+{{< img a-5.png >}}
 
 1.3 Encuentre la instancia **pilot-secondary** y oprima **Acciones**. Después oprima la opción **Eliminar de la base de datos global** para promover la instancia a una base de datos independiente.
 

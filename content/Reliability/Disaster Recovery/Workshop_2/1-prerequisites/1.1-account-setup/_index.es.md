@@ -8,7 +8,7 @@ weight = 1
 
 {{% notice note %}}
 
-Si está usando una cuenta personal de AWS, sea consciente que los recursos desplegados en este taller incurirrán en gastos. Tras completar este taller, recuerde completar la sección [Limpiar los recursos](../../cleanup/) y remueva recursos de AWS innecesarios.
+Si está usando una cuenta personal de AWS, sea consciente que los recursos desplegados en este taller incurirrán en gastos. Tras completar este taller, recuerde completar la sección [Limpiar los recursos](../../6-cleanup/) y remueva recursos de AWS innecesarios.
 
 {{% /notice %}}
 
