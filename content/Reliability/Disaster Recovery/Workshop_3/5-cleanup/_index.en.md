@@ -45,6 +45,15 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
+2.4 Select **warm-primary** cluster and select **Remove from global database** under **Actions**.
+
+{{< img cl-14.png >}}
+
+{{% notice note %}}
+Please repeat steps **2.2** through **2.4** for the following:
+- `warm-secondary cluster`
+{{% /notice %}}
+
 {{% notice warning %}}
 Wait for the database deletion to complete before moving to the next step.
 {{% /notice %}}
