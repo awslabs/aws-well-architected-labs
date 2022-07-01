@@ -28,8 +28,8 @@ weight = 3
 
 {{< img pr-5.png >}}
 
-{{% notice info %}}
-**Wait for the Primary Region stack and Secondary Region stack to complete before moving to the next step**.
+{{% notice warning %}}
+You will need to wait for the **BackupAndRestore Primary Region** stack to have a status of **Completed** before moving on to the next step. This will take approximately 15 minutes.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../1.1.2-s3/" link_next_url="../../../2-s3-crr/" />}}

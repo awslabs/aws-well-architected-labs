@@ -24,11 +24,5 @@ weight = 1
 
 {{< img pr-5.png >}}
 
-{{% notice info %}}
-**Wait for the stack creation to complete.**
-{{% /notice %}}
-
-{{< img pr-6.png >}}
-
 {{< prev_next_button link_prev_url="../" link_next_url="../1.1.2-s3-access/" />}}
 
