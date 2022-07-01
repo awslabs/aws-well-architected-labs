@@ -595,7 +595,7 @@ Resources:
           InstancePort: '80'
           Protocol: HTTP
       HealthCheck:
-        Target: 'HTTP:80/unicorns'
+        Target: 'TCP:80'
         HealthyThreshold: '3'
         UnhealthyThreshold: '5'
         Interval: '30'
