@@ -123,7 +123,7 @@ def initial_deploy_stacks():
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml').read(),
             Parameters=[
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
-                {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costop-"},
+                {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costoptimizationdata"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeComputeOptimizerModule',   'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
@@ -209,7 +209,7 @@ def update_nested_stacks():
 def clean_bucket():
     try:
         logger.info('Empty the bucket')
-        s3.Bucket(f"costop-{account_id}").object_versions.delete()
+        s3.Bucket(f"costoptimizationdata{account_id}").object_versions.delete()
     except Exception as exc:
         logger.exception(exc)
 
