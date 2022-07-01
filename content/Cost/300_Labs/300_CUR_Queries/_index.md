@@ -9,7 +9,7 @@ hidden: false
 
 ## Last Updated
 
-March 2021
+June 2022
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: curquery@amazon.com

@@ -22,7 +22,7 @@ In this lab, the last failure mode - **Loss of connectivity** will be simulated.
 
     ![VPCEditRoute](/Operations/100_Dependency_Monitoring/Images/VPCEditRoute.png)
 
-1. On the Edit routes page, find the route with the destination of 0.0.0.0/0 and click on the **X** at the end of that row
+1. On the Edit routes page, find the route with the destination of 0.0.0.0/0 and click on the **REMOVE** button at the end of that row
 1. Click on **Save routes**
 
     ![VPCDeleteRoute](/Operations/100_Dependency_Monitoring/Images/VPCDeleteRoute.png)

@@ -98,13 +98,16 @@ Resources:
                   - cloudformation:DescribeStacks
                   - cloudformation:DeleteStack
                   - cloudformation:UpdateStack
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - sns:*
-                Resource: '*'
+                Resource: !Sub
+                  - 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${SelectValue}*' 
+                  - SelectValue: !Select [0, !Split ["-", !Ref AWS::StackName]]
+              # - Effect: Allow  ## What does this used for ?
+              #   Action:        ## there is no SNS usage throughout the whole solution.
+              #     - sns:*
+              #   Resource: '*'
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess #FIXME: Can it be more narrow than this? Stacksets needs to create buckets and roles
+        ## Bucket names are ultimately : costoptimizationdata*
   ReplicaitonBucketsStackSet:
     Type: AWS::CloudFormation::StackSet
     DependsOn:
@@ -424,14 +427,17 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
-                Resource: 'arn:aws:logs:*:*:*'
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
               - Effect: Allow
                 Action:
-                  - "glue:StartCrawler"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: '*'
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:S3CrawlerQue
+              - Effect: Allow
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
   LambdaCrawlerInvokePermission:
     Type: 'AWS::Lambda::Permission'
     Properties:

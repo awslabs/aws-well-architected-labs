@@ -28,11 +28,8 @@ def main(account_id):
                 response = client.describe_images(Owners=["self"])
 
                 for image in response["Images"]:
-
+                    image['region']=region
                     dataJSONData = json.dumps(image, cls=DateTimeEncoder)  # indent=4,
-
-                    # jsondata = json.dumps(data) #converts datetime to be able to placed in json
-
                     f.write(dataJSONData)
                     f.write("\n")
             except Exception as e:
