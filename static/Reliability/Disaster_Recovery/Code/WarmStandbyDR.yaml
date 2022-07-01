@@ -290,7 +290,7 @@ Resources:
           PropagateAtLaunch: true            
       LaunchConfigurationName: !Ref LaunchConfig
       MinSize: !If [CreateFullApp, 2, 1]
-      MaxSize: !If [CreateFullApp, 5, 3]
+      MaxSize: !If [CreateFullApp, 5, 5]
       LoadBalancerNames:
         - !Ref ElasticLoadBalancer
       VPCZoneIdentifier:
