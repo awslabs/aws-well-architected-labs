@@ -12,13 +12,13 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 
 ### Promote Aurora
 
-1.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
+1.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases:) in **N. Virginia (us-east-1)** region.
 
-1.2 Click into **DB Instances**.
+1.2 Look at the **warm-global** Global database. Notice how we have a **Primary cluster** in **us-east-1** which has our **Writer instance** and a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
 
-{{< img a-2.png >}}
+{{< img a-8.png >}}
 
-1.3 Select **warm-global** select **Fail over global database** from the **Actions** link.
+1.3 Select **warm-global**, then select **Fail over global database** from the **Actions** link.
 
 {{< img a-5.png >}}
 
@@ -29,6 +29,10 @@ For this workshop we will be doing a [Managed Planned Failover](https://docs.aws
 {{% notice warning %}}
 You will need to wait for the database to failover before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
+
+1.5 Notice the changes. The **Primary cluster** is now in **us-west-1** which has our **Writer instance** and the **Secondary Cluster** is now in **us-east-1** which has our **Reader instance**.
+
+{{< img a-7.png >}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../3.2-ec2/" />}}
 

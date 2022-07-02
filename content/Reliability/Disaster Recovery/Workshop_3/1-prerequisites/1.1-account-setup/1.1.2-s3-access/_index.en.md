@@ -14,15 +14,15 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 
 {{< img pr-1.png >}}
 
-1.3 If you see that "Block all public access" is "On," then click on the "Edit" button to get to the next screen.
+1.3 If you see that **Block all public access** is **On**, click the **Edit** button to get to the next screen.
 
 {{< img pr-2.png >}}
 
-1.4 Uncheck "Block all public access," including any child selections. Click the "Save Changes" button. You will be required to confirm the changes.
+1.4 De-select **Block all public access**, including any child selections. Click the **Save changes** button.
 
 {{< img pr-3.png >}}
 
-1.5 Enter **confirm** and Click the **Confirm** button.
+1.5 Enter `confirm` then click the **Confirm** button.
 
 {{< img pr-4.png >}}
 

@@ -16,7 +16,7 @@ weight = 2
 
 {{< img da-3.png >}}
 
-1.4 Update the **IsPromote** parameter to `yes` and click **Next** to continue.
+1.4 Update the **IsPromote** parameter to **yes** and click **Next** to continue.
 
 {{< img da-4.png >}}
 

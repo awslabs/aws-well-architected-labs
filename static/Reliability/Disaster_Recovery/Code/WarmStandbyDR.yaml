@@ -255,7 +255,7 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
   RDSDBInstance:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       Engine: aurora-mysql
       DBClusterIdentifier: !If [CreatePrimaryDB, !Ref RDSClusterPrimary, !Ref RDSClusterSecondary]

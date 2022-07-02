@@ -10,11 +10,11 @@ weight = 3
 You will need to wait for the **Warm Primary Region** stack to have a status of **Completed** before moving on to this section. This will take approximately 15 minutes.
 {{% /notice %}}
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=Warm-Secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/WarmStandbyDR.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=warm-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/WarmStandbyDR.yaml).
 
 1.2  Specify stack details.
 
-Change the **IsPrimary** parameter to value `no`.
+Change the **IsPrimary** parameter to value **no**.
 
 {{% notice info %}}
 **Leave IsPromote and LatestAmiId as the default values**
