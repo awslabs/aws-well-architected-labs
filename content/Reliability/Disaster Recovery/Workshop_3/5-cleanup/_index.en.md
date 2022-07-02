@@ -49,7 +49,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-14.png >}}
 
-2.5 Select **warm-primary** cluster and select **Delete** under **Actions**.
+2.5 Select **warm-primary** cluster and select **Delete** under **Actions**.  **(You must wait for the unishop-warm database to delete before deleting the cluster)**.
 
 {{< img cl-16.png >}}
 
@@ -67,7 +67,7 @@ Please repeat steps **2.2** through **2.4** for the following:  **(You must wait
 {{< img cl-15.png >}}
 
 {{% notice warning %}}
-Wait for the database deletion to complete before moving to the next step.
+Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
 #### CloudFormation Secondary Region Cleanup
