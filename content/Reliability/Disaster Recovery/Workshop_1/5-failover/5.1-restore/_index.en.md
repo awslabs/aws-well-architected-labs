@@ -26,18 +26,18 @@ The RDS instance has already been restored to the **N. California (us-west-1)** 
 If you don't see your backup, check the status of the **Copy Job**. Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in **N. Virginia (us-east-1)** region. Click the **Jobs** link, then click the **Copy jobs** link.  Verify the **Status** of your EC2 copy job is **Completed**.
 {{% /notice %}}
 
-1.4 In the **Network settings** section, select **backupadnrestore-secondary-EC2SecurityGroup-xxxx** as the **Security groups**.
+1.4 In the **Network settings** section, select **backupadnrestore-secondary-EC2SecurityGroup-xxxx** as the **Security groups** and de-select **default**.
 
 {{< img rs-20.png >}}
 
-1.5 Select **Choose an IAM Role** and select **Team Role** as the **Role name**. 
+1.5 In the **Restore Role** section, select **Choose an IAM Role** and select **Team Role** as the **Role name**. 
 
 {{< img rs-21.png >}}
 
 1.6 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
 We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) to achieve this.
 
-Copy and paste the below script as the **User data**, then click the **Restore backup** button.
+Expand the **Advanced settings** section and copy and paste the below script as the **User data**, then click the **Restore backup** button.
 
 **User Data Script**:
 {{% expand "Click here to see the user data:" %}}
