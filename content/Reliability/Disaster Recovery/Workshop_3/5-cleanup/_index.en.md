@@ -62,7 +62,7 @@ Please repeat steps **2.2** through **2.4** for the following:  **(You must wait
 - `warm-secondary cluster`
 {{% /notice %}}
 
-2.7 Select **warm-global** and select **delete** under **Actions** and then confirm deletion.
+2.7 Select **warm-global** and select **Delete** under **Actions** and then confirm deletion.
 
 {{< img cl-15.png >}}
 

@@ -6,7 +6,7 @@ weight = 5
 
 When a regional service event affects the Unishop application in the primary region **N. Virginia (us-east-1)**, we want to fail over to the secondary region **N. California (us-west-1)**.
 
-{{% notice note %}}
+{{% notice info %}}
 We will **manually** perform a series of tasks to failover our workload to our secondary region **N. California (us-west-1)**.  
 In a production environment, we would **automate** these tasks as part of our failover process.
 {{% /notice %}}
@@ -45,9 +45,9 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img d-9.png >}}
 
-{{% notice info %}}
-Your Amazon S3 bucket that hosts the Hot-Primary website is now inaccessible.  When CloudFront attempts to route the user’s request to the primary region, it will receive an HTTP 403 status error (Forbidden).  The Distribution will automatically handle this scenario by failing over to the Hot-Secondary region.
-{{% /notice %}}
+{{% notice note %}}
+If you do not get a 403 Forbidden error, this might be due to caching.  Please try refreshing the page or opening the website in a different browser or incognito mode to see the error.
+{{% /notice  %}}
 
 {{< prev_next_button link_prev_url="../4-cloudfront/" link_next_url="./5.1-aurora/" />}}
 

@@ -12,23 +12,27 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 #### Promote Aurora secondary database
 
-1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Click the **DB Instances** link.
+1.2 Look at the **hot-global** Global database. Notice how we have **hot-primary** a **Primary cluster** in **us-east-1** which has our **Writer instance** and **hot-secondary** a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
 
-{{< img a-2.png >}}
+{{< img a-5.png >}}
 
-1.3 Select **hot-secondary** then click **Remove from global database** in the **Actions** dropdown.
+1.3 Select **hot-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
 
 {{< img a-3.png >}}
 
-1.4 Click the **Remove and Promote** button.
+1.4 Click **Remove and Promote** to confirm the database promotion.
 
 {{< img a-4.png >}}
 
-{{% notice note %}}
-Wait for the secondary cluster to be promoted before moving on to the next step.
+{{% notice warning %}}
+You will need to wait for the database to be successfully promoted before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
+
+1.5 Notice the changes. **Hot-secondary** has been removed from the **Global database** and is now a **Regional cluster** with its own **Writer instance**. You may need to click the **Refresh** button to see the changes.
+
+{{< img a-6.png >}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../5.2-ec2/" />}}
 

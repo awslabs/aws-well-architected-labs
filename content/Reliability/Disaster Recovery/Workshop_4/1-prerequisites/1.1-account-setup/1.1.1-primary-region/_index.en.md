@@ -11,7 +11,7 @@ weight = 1
 1.2  Specify the stack parameters.
 
 {{% notice info %}}
-**Leave isPrimary, isPromote and LatestAmiId as the default values**
+**Leave isPrimary and LatestAmiId as the default values**
 {{% /notice %}}
 
 1.3 Click **Next** to continue.

@@ -18,7 +18,7 @@ You can improve resiliency and increase availability for specific scenarios by s
 In Step 1.3, **DO NOT** choose the Amazon S3 **hot-primary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-1.3 Enter the [Hot-Primary CloudFormation Stack Output WebsiteURL](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-east-1%3A571676911619%3Astack%2FHot-Primary%2F00475f30-f30b-11ec-a6e2-0a1eef7faa85) value as the **Origin Domain**.
+1.3 Enter the **hot-primary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**.
 
 {{< img cf-17.png >}}
 
@@ -44,7 +44,7 @@ We will now add an additional **Origin** and use our **hot-secondary-uibucket-xx
 In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-2.2 Enter the [Hot-Secondary CloudFormation Stack Output WebsiteURL](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-west-1%3A571676911619%3Astack%2FHot-Secondary%2F869cc1a0-f30c-11ec-847d-06ec1b07324b) value as the **Origin Domain**. Click the **Create origin** button.
+2.2 Enter the **hot-secondary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**. Click the **Create origin** button.
 
 {{< img cf-20.png >}}
 

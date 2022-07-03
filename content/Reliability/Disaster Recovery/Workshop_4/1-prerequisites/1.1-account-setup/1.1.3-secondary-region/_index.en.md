@@ -17,7 +17,7 @@ You will need to wait for the **Hot Primary Region** stack to have a status of *
 Change the **IsPrimary** parameter to value `no`.
 
 {{% notice info %}}
-**Leave IsPromote and LatestAmiId as the default values**
+**Leave LatestAmiId as the default values**
 {{% /notice %}}
 
 1.3 Click **Next** to continue.

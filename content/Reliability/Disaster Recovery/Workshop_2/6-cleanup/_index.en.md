@@ -45,7 +45,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
-2.4 Change the region to **N. Virginia** then select **unishop** database under **pilot-primary** cluster and select **Delete** under **Actions**.
+2.4 Change the region to **N. Virginia** using  the Region Selector in the upper right corner, then select **unishop** database under **pilot-primary** cluster and select **Delete** under **Actions**.
 
 {{< img cl-14.png >}}
 
@@ -53,7 +53,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
-2.6 Select **pilot-global** and select **delete** under **Actions** and then confirm deletion.
+2.6 Select **pilot-global** and select **Delete** under **Actions** and then confirm deletion.
 
 {{< img cl-15.png >}}
 
@@ -61,27 +61,35 @@ This step is required as we did manual promotion for the Aurora Database.
 Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
+#### EC2 Cleanup
+
+3.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances:instanceState=running) in the **N. California (us-west-1)** region.
+
+3.2 Select the **pilot-secondary** instance and click **Terminate instance** under **Instance State**.
+
+{{< img cl-16.png >}}
+
 #### CloudFormation Secondary Region Cleanup
 
-3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+4.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
-3.2 Select the **pilot-secondary** stack and click **Delete**.
+4.2 Select the **pilot-secondary** stack and click **Delete**.
 
 {{< img cl-8.png >}}
 
-3.3 Click **Delete stack** to confirm the removal.
+4.3 Click **Delete stack** to confirm the removal.
 
 {{< img cl-9.png >}}
 
 #### CloudFormation Primary Region Cleanup
 
-4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
+5.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
-4.2 Select **pilot-primary** stack.  Next click the **Delete** button to remove it.
+5.2 Select **pilot-primary** stack.  Next click the **Delete** button to remove it.
 
 {{< img cl-6.png >}}
 
-4.3 Click **Delete stack** to confirm the deletion.
+5.3 Click **Delete stack** to confirm the deletion.
 
 {{< img cl-7.png >}}
 
