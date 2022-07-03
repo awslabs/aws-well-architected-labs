@@ -4,9 +4,9 @@ date =  2021-05-11T11:33:17-04:00
 weight = 3
 +++
 
-### Verify Primary Region Website 
+#### Verify Primary Region Website 
 
-Let's verify that everything is working as expected in our primary region **N. Virginia (us-east-1)**.  Our Unishop website is being hosted as a static website from an Amazon S3 bucket.
+Let's verify that everything is working as expected in our primary region **N. Virginia (us-east-1)**. 
 
 1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 

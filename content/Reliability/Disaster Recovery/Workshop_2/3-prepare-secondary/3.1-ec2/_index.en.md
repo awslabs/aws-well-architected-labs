@@ -4,7 +4,7 @@ date =  2021-05-11T20:33:54-04:00
 weight = 1
 +++
 
-### Create the EC2 Amazon Machine Image (AMI)
+#### Create the EC2 Amazon Machine Image (AMI)
 
 1.1 Click [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
@@ -20,7 +20,7 @@ weight = 1
 You will need to wait for the AMI status to be **Ready** before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
 
-### Copy the EC2 Amazon Machine Image (AMI)
+#### Copy the EC2 Amazon Machine Image (AMI)
 
 2.1 Click [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) to navigate to the dashboard.
 

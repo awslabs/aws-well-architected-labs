@@ -4,13 +4,13 @@ date =  2021-05-11T20:33:54-04:00
 weight = 1
 +++
 
-### Restore RDS Database
+#### Restore RDS Database
 
 {{% notice info %}}
 The RDS instance has already been restored to the **N. California (us-west-1)** region due to time constraints.  Please review [RDS Restore](https://docs.aws.amazon.com/aws-backup/latest/devguide/restoring-rds.html) for AWS Backup RDS restore steps.
 {{% /notice %}}
 
-### Launch EC2
+#### Launch EC2
 
 1.1 Click [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

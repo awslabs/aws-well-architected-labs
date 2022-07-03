@@ -12,7 +12,7 @@ In a production environment, we would **automate** these tasks as part of our fa
 {{% /notice %}}
 
 
-### Simulating a Regional Service Event
+#### Simulating a Regional Service Event
 
 We will now simulate a regional service event affecting the Unishop website in **N. Virginia (us-east-1)**.  We are going to achieve this by blocking public access to the S3 bucket that is hosting the website making the Unishop website unavailable.
 

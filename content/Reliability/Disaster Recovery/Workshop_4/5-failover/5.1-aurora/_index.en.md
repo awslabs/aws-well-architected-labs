@@ -10,7 +10,7 @@ With an Aurora global database, there are two different approaches to failover d
 
 For this workshop we will be doing a [Managed Unplanned Failover](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html).
 
-### Promote Aurora secondary database
+#### Promote Aurora secondary database
 
 1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

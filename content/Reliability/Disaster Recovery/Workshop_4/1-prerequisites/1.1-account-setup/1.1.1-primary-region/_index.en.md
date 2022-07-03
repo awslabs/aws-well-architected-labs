@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
 
-### Deploying the Amazon CloudFormation Template
+#### Deploying the Amazon CloudFormation Template
 
 1.1 Deploy the application to the primary region **N. Virginia (us-east-1)** by launching this [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/HotStandby.yaml).
 

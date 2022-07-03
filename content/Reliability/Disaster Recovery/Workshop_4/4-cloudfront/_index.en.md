@@ -6,7 +6,7 @@ weight = 4
 
 You can improve resiliency and increase availability for specific scenarios by setting up CloudFront with origin failover.
 
-### Create the Amazon CloudFront Distribution
+#### Create the Amazon CloudFront Distribution
 
 1.1 Click [CloudFront](https://console.aws.amazon.com/cloudfront/home?region=us-east-1#/) to navigate to the dashboard.
 
@@ -32,7 +32,7 @@ One of the purposes of using CloudFront is to reduce the number of requests that
 
 {{< img cf-27.png >}}
 
-### Configure an Additional Origin 
+#### Configure an Additional Origin 
 
 We will now add an additional **Origin** and use our **hot-secondary-uibucket-xxxx**.
 
@@ -48,7 +48,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bu
 
 {{< img cf-20.png >}}
 
-### Configure the Origin Group 
+#### Configure the Origin Group 
 
 3.1 Click the **Create Origin Group** link.
 
@@ -58,7 +58,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bu
 
 {{< img cf-28.png >}}
 
-### Configure Behaviors
+#### Configure Behaviors
 
 4.1 Click the **Behaviors** link.  Select **Default (*)**, then click the **Edit** button.
 
@@ -78,7 +78,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bu
 
 {{< img cf-25.png >}}
 
-### Verify the Distribution
+#### Verify the Distribution
 
 5.1 Copy the CloudFront Distribution's **Domain Name** into a new browser window.
 

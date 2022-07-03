@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 2
 +++
 
-### Launch EC2 
+#### Launch EC2 
 
 1.1 Click [AMIs](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Images:visibility=owned-by-me) to navigate to the dashboard in the **N. California (us-west-1)** region.
 

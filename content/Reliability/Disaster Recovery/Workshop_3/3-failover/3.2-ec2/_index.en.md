@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 2
 +++
 
-### Launch EC2 Instance 
+#### Launch EC2 Instance 
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
@@ -24,7 +24,7 @@ weight = 2
 
 {{< img da-5.png >}}
 
-### Update Auto Scaling Group (ASG)
+#### Update Auto Scaling Group (ASG)
 
 We now want to scale out our compute capacity to match that of our primary region.  This way we know when we fail over, our secondary region can handle the request traffic.
 

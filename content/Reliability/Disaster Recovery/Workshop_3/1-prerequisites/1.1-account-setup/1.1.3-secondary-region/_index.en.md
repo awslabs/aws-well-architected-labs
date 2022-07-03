@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-## Deploying the Amazon CloudFormation Template
+#### Deploying the Amazon CloudFormation Template
 
 {{% notice warning %}}
 You will need to wait for the **Warm Primary Region** stack to have a status of **Completed** before moving on to this section. This will take approximately 15 minutes.
