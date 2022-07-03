@@ -6,7 +6,7 @@ weight = 3
 
 ### Desplegando la plantilla de Amazon CloudFormation
 
-1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando esta [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=Passive-Secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando esta [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
 
 1.2  Especifique los parámetros de la pila.
 

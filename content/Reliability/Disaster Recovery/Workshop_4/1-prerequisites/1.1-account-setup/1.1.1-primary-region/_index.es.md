@@ -6,7 +6,7 @@ weight = 2
 
 ### Despliegue de la plantilla de CloudFormation
 
-1.1 Despliegue la aplicación en la región primaria **N. Virginia (us-east-1)** lanzando esta [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Active-Primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.1 Despliegue la aplicación en la región primaria **N. Virginia (us-east-1)** lanzando esta [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
 
 1.2  Especifique los parámetros de pila.
 
