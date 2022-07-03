@@ -14,7 +14,7 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 1.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-1.2 Look at the **pilot-global** Global database. Notice how we have a **Primary cluster** in **us-east-1** which has our **Writer instance** and a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
+1.2 Look at the **pilot-global** Global database. Notice how we have **pilot-primary** a **Primary cluster** in **us-east-1** which has our **Writer instance** and **pilot-secondary** a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
 
 {{< img a-5.png >}}
 
@@ -22,7 +22,7 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 
 {{< img a-3.png >}}
 
-1.4 Click **Remove and Promote** to confirm the server promotion.
+1.4 Click **Remove and Promote** to confirm the database promotion.
 
 {{< img a-4.png >}}
 
@@ -30,7 +30,7 @@ For this workshop we will be doing a [Managed Unplanned Failover](https://docs.a
 You will need to wait for the database to be successfully promoted before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
 
-1.5 Notice the changes. The **pilot-secondary** has been removed from the **Global database** and is now a **Regional cluster** with its own **Writer instance**.
+1.5 Notice the changes. **Pilot-secondary** has been removed from the **Global database** and is now a **Regional cluster** with its own **Writer instance**. You may need to click the **Refresh** button to see the changes.
 
 {{< img a-6.png >}}
 

@@ -6,7 +6,7 @@ weight = 1
 
 ## Desplegando la plantilla de Amazon CloudFormation
 
-1.1 Cree la aplicación en la región **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Warm-Primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/WarmStandbyDR.yaml).
+1.1 Cree la aplicación en la región **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=Warm-Primary&templateURL=https://ee-assets-prod-us-east-1/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/WarmStandbyDR.yaml).
 
 1.2  Especifique los detalles de la pila.
 

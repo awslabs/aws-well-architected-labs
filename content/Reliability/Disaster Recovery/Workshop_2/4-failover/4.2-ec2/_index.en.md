@@ -8,6 +8,10 @@ weight = 2
 
 1.1 Click [AMIs](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Images:visibility=owned-by-me) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
+{{% notice warning %}}
+You will need to wait for the pilotAMI to have a status of **Available** before moving on to the next step.  This can take several minutes.
+{{% /notice %}}
+
 1.2 Select **pilotAMI**.  Click the **Launch instance from AMI** button.
 
 {{< img pa-1.png >}}
@@ -28,7 +32,7 @@ weight = 2
 
 {{< img pa-7.png >}}
 
-1.7 In the **Advanced details** section.  Select **pilot-secondary-S3InstanceProfile-xxx** as the **IAM instance profile**.
+1.7 Expand the **Advanced details** section.  Select **pilot-secondary-S3InstanceProfile-xxx** as the **IAM instance profile**.
 
 {{< img pa-4.png >}}
 

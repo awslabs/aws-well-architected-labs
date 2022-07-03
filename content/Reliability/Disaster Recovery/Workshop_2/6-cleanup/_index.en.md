@@ -35,9 +35,9 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
 
-2.2 Select **unishop** database under **pilot-secondary** cluster and delete the instance.
+2.2 Select **unishop** database under **pilot-secondary** cluster and select **Delete** under **Actions**.
 
 {{< img cl-11.png >}}
 
@@ -45,8 +45,20 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
+2.4 Change the region to **N. Virginia** then select **unishop** database under **pilot-primary** cluster and select **Delete** under **Actions**.
+
+{{< img cl-14.png >}}
+
+2.5 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
+
+{{< img cl-12.png >}}
+
+2.6 Select **pilot-global** and select **delete** under **Actions** and then confirm deletion.
+
+{{< img cl-15.png >}}
+
 {{% notice warning %}}
-Wait for the database deletion to complete before moving to the next step.
+Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
 #### CloudFormation Secondary Region Cleanup
@@ -60,10 +72,6 @@ Wait for the database deletion to complete before moving to the next step.
 3.3 Click **Delete stack** to confirm the removal.
 
 {{< img cl-9.png >}}
-
-{{% notice warning %}}
-Wait for the stack deletion to complete before moving to the next step.
-{{% /notice %}}
 
 #### CloudFormation Primary Region Cleanup
 
