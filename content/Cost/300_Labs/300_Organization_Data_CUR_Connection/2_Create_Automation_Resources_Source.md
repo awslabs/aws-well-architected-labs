@@ -150,8 +150,8 @@ Create the On-Demand AWS Lambda function to get the AWS Organizations informatio
             iterator  = paginator.paginate(ParentId=parent_id)
             for page in iterator:
                 for acc in page['Accounts']:
-                print(acc['Id'])
-                full_result.append(acc['Id'])
+                    print(acc['Id'])
+                    full_result.append(acc['Id'])
             return full_result
 
 

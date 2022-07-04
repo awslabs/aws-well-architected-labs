@@ -224,11 +224,11 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/Lambda_Organization_Data_Collector*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/OrgGlueCrawler"
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
@@ -250,3 +250,15 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
+  AthenaQuery:
+      Type: AWS::Athena::NamedQuery
+      Properties:
+        Database: optimization_data
+        Description: Provides a summary view of the budgets
+        Name: org_cur
+        QueryString:  
+          CREATE OR REPLACE VIEW org_cur AS
+          SELECT *
+          FROM ("managementcur"."cur" cur
+          INNER JOIN "managementcur"."organisation_data"
+            ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 

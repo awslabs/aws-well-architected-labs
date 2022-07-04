@@ -189,6 +189,11 @@ Resources:
                     - UIBucket
                     - Arn
                   - /*
+          - Effect: Allow
+            Action:
+              - 'rds:ModifyDBCluster'
+            Resource:
+              - '*'          
       Roles:
         - !Ref S3Role
   S3Role:
@@ -312,6 +317,7 @@ Resources:
             - update
             - install
             - configure
+            - configure-global-db            
             - create-service-files
             - start-service
         update:
@@ -380,6 +386,10 @@ Resources:
                   - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
                   - |2
                      -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
+        configure-global-db:
+          commands:
+            1-enable-write-forwarding:
+              command: sudo aws rds modify-db-cluster --db-cluster-identifier dr-immersionday-secondary-warm --region us-west-1 --enable-global-write-forwarding
         create-service-files:
           files:
             /etc/systemd/system/unishop.service:
@@ -565,6 +575,7 @@ Resources:
             - !Ref 'AWS::Region'
             - |+
   ElasticLoadBalancer:
+    DependsOn: AttachGateway
     Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
     Properties:
       CrossZone: 'true'

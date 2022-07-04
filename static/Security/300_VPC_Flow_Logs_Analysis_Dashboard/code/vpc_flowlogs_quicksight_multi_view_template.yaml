@@ -1,0 +1,403 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Template creates Athena Database, View, QuickSight Athena Datasource, Dataset and Dashboard for VPC Flow Logs'
+Parameters:
+  VpcFlowLogsAthenaDatabaseName:
+    Type: String
+    Description: Athena database name where external table for VPC flow logs is created
+  QuickSightUserArn:
+    Type: String
+    Description: Amazon QuickSight current logged in user's ARN
+    Default: ''
+Resources:
+  # Creates a datasource for athena.
+  VpcFlowLogsAthenaDatasource:
+    Type: AWS::QuickSight::DataSource
+    Properties:
+      Type: ATHENA
+      DataSourceId: myathena-datasource-01
+      AwsAccountId: !Ref AWS::AccountId
+      DataSourceParameters: 
+          AthenaParameters:
+            "WorkGroup": "primary"
+      Name: VPCFlowLogsDataset
+      SslProperties: 
+        DisableSsl: false
+  # Creates Athena dataset for VPC Flow Logs
+  VpcFlowLogsAthenaSummaryDataset:
+    Type: AWS::QuickSight::DataSet
+    Properties: 
+      AwsAccountId: !Ref AWS::AccountId
+      Name: vpc_flow_logs_summary_view
+      DataSetId: vpcflathena-summary-datasetid-01
+      ImportMode: SPICE
+      PhysicalTableMap:
+        VPCFlowLogsPhysicalTableMap123:
+          RelationalTable:
+            DataSourceArn: !GetAtt VpcFlowLogsAthenaDatasource.Arn
+            Catalog: "AwsDataCatalog"
+            Schema: !Ref VpcFlowLogsAthenaDatabaseName
+            Name: "vpc_flow_logs_summary_view"
+            InputColumns:
+              - Name: accountid
+                Type: STRING
+              - Name: interfaceid
+                Type: STRING
+              - Name: sourceaddress
+                Type: STRING
+              - Name: destinationaddress
+                Type: STRING
+              - Name: sourceport
+                Type: INTEGER
+              - Name: destinationport
+                Type: INTEGER
+              - Name: protocol
+                Type: INTEGER
+              - Name: numpackets
+                Type: INTEGER
+              - Name: numbytes
+                Type: INTEGER
+              - Name: action
+                Type: STRING
+              - Name: action_count
+                Type: INTEGER
+              - Name: logstatus
+                Type: STRING
+              - Name: log_status_count
+                Type: INTEGER
+              - Name: vpcid
+                Type: STRING
+              - Name: azid
+                Type: STRING
+              - Name: packetsourceaddr
+                Type: STRING
+              - Name: packetdestinationaddr
+                Type: STRING
+              - Name: region
+                Type: STRING
+              - Name: subnetid
+                Type: STRING
+              - Name: tcpflags
+                Type: STRING
+              - Name: tcp_flags
+                Type: INTEGER  
+              - Name: tcp_flags_count
+                Type: INTEGER
+              - Name: flowdirection
+                Type: STRING
+              - Name: packetsrcawsservice
+                Type: STRING
+              - Name: packetdstawsservice
+                Type: STRING
+              - Name: trafficpath
+                Type: STRING
+              - Name: traffic_path
+                Type: INTEGER
+              - Name: iptype
+                Type: STRING
+      LogicalTableMap:
+        VPCFlowLogsLogicalTableMap123:
+          Alias: "vpc_flow_logs_summary_view"
+          Source: 
+            PhysicalTableId: VPCFlowLogsPhysicalTableMap123
+          DataTransforms:
+            - TagColumnOperation:
+                ColumnName: 'region'
+                Tags:
+                  - ColumnGeographicRole: STATE
+            - ProjectOperation:
+                ProjectedColumns:
+                  - accountid
+                  - interfaceid
+                  - sourceaddress
+                  - destinationaddress
+                  - sourceport
+                  - destinationport
+                  - protocol
+                  - numpackets
+                  - numbytes
+                  - action
+                  - action_count
+                  - logstatus
+                  - log_status_count
+                  - vpcid
+                  - azid
+                  - packetsourceaddr
+                  - packetdestinationaddr
+                  - region
+                  - subnetid
+                  - tcpflags
+                  - tcp_flags
+                  - tcp_flags_count
+                  - flowdirection
+                  - packetsrcawsservice
+                  - packetdstawsservice
+                  - trafficpath
+                  - traffic_path
+                  - iptype
+      Permissions:
+        - Principal: !Ref QuickSightUserArn
+          Actions:
+            - "quicksight:UpdateDataSetPermissions"
+            - "quicksight:DescribeDataSet"
+            - "quicksight:DescribeDataSetPermissions"
+            - "quicksight:PassDataSet"
+            - "quicksight:DescribeIngestion"
+            - "quicksight:ListIngestions"
+            - "quicksight:UpdateDataSet"
+            - "quicksight:DeleteDataSet"
+            - "quicksight:CreateIngestion"
+            - "quicksight:CancelIngestion"
+  # Creates Athena dataset for VPC Flow Logs
+  VpcFlowLogsAthenaDailyDataset:
+    Type: AWS::QuickSight::DataSet
+    Properties: 
+      AwsAccountId: !Ref AWS::AccountId
+      Name: vpc_flow_logs_daily_view
+      DataSetId: myathena-daily-datasetid-01
+      ImportMode: DIRECT_QUERY
+      PhysicalTableMap:
+        VPCFlowLogsPhysicalTableMap123:
+          RelationalTable:
+            DataSourceArn: !GetAtt VpcFlowLogsAthenaDatasource.Arn
+            Catalog: "AwsDataCatalog"
+            Schema: !Ref VpcFlowLogsAthenaDatabaseName
+            Name: "vpc_flow_logs_daily_view"
+            InputColumns:
+              - Name: accountid
+                Type: STRING
+              - Name: interfaceid
+                Type: STRING
+              - Name: sourceaddress
+                Type: STRING
+              - Name: destinationaddress
+                Type: STRING
+              - Name: sourceport
+                Type: INTEGER
+              - Name: destinationport
+                Type: INTEGER
+              - Name: protocol
+                Type: INTEGER
+              - Name: numpackets
+                Type: INTEGER
+              - Name: numbytes
+                Type: INTEGER
+              - Name: starttime
+                Type: INTEGER
+              - Name: endtime
+                Type: INTEGER
+              - Name: action
+                Type: STRING
+              - Name: action_count
+                Type: INTEGER
+              - Name: logstatus
+                Type: STRING
+              - Name: vpcid
+                Type: STRING
+              - Name: azid
+                Type: STRING
+              - Name: packetsourceaddr
+                Type: STRING
+              - Name: packetdestinationaddr
+                Type: STRING
+              - Name: region
+                Type: STRING
+              - Name: subnetid
+                Type: STRING
+              - Name: tcpflags
+                Type: STRING
+              - Name: tcp_flags
+                Type: INTEGER  
+              - Name: flowdirection
+                Type: STRING
+              - Name: trafficpath
+                Type: STRING
+              - Name: traffic_path
+                Type: INTEGER
+              - Name: iptype
+                Type: STRING
+              - Name: startday
+                Type: INTEGER
+              - Name: startmonth
+                Type: INTEGER
+              - Name: endday
+                Type: INTEGER
+              - Name: endmonth
+                Type: INTEGER
+      LogicalTableMap:
+        VPCFlowLogsLogicalTableMap123:
+          Alias: "vpc_flow_logs_daily_view"
+          Source: 
+            PhysicalTableId: VPCFlowLogsPhysicalTableMap123
+          DataTransforms:
+            - TagColumnOperation:
+                ColumnName: 'region'
+                Tags:
+                  - ColumnGeographicRole: STATE
+            - ProjectOperation:
+                ProjectedColumns:
+                  - accountid
+                  - interfaceid
+                  - sourceaddress
+                  - destinationaddress
+                  - sourceport
+                  - destinationport
+                  - protocol
+                  - numpackets
+                  - numbytes
+                  - starttime
+                  - endtime
+                  - action
+                  - action_count
+                  - logstatus
+                  - vpcid
+                  - azid
+                  - packetsourceaddr
+                  - packetdestinationaddr
+                  - region
+                  - subnetid
+                  - tcpflags
+                  - tcp_flags
+                  - flowdirection
+                  - trafficpath
+                  - traffic_path
+                  - iptype
+                  - startday
+                  - startmonth
+                  - endday
+                  - endmonth
+      Permissions:
+        - Principal: !Ref QuickSightUserArn
+          Actions:
+            - "quicksight:UpdateDataSetPermissions"
+            - "quicksight:DescribeDataSet"
+            - "quicksight:DescribeDataSetPermissions"
+            - "quicksight:PassDataSet"
+            - "quicksight:DescribeIngestion"
+            - "quicksight:ListIngestions"
+            - "quicksight:UpdateDataSet"
+            - "quicksight:DeleteDataSet"
+            - "quicksight:CreateIngestion"
+            - "quicksight:CancelIngestion"
+  # Creates Athena dataset for VPC Flow Logs
+  VpcFlowLogsAthenaEnhancedDataset:
+    Type: AWS::QuickSight::DataSet
+    Properties: 
+      AwsAccountId: !Ref AWS::AccountId
+      Name: vpc_flow_logs_enhanced_view
+      DataSetId: myathena-enh-datasetid-01
+      ImportMode: DIRECT_QUERY
+      PhysicalTableMap:
+        VPCFlowLogsPhysicalTableMap123:
+          RelationalTable:
+            DataSourceArn: !GetAtt VpcFlowLogsAthenaDatasource.Arn
+            Catalog: "AwsDataCatalog"
+            Schema: !Ref VpcFlowLogsAthenaDatabaseName
+            Name: "vpc_flow_logs_enhanced_view"
+            InputColumns:
+              - Name: accountid
+                Type: STRING
+              - Name: sourceaddress
+                Type: STRING
+              - Name: destinationaddress
+                Type: STRING
+              - Name: numpackets
+                Type: INTEGER
+              - Name: numbytes
+                Type: INTEGER
+              - Name: vpcid
+                Type: STRING
+              - Name: azid
+                Type: STRING
+              - Name: packetsourceaddr
+                Type: STRING
+              - Name: packetdestinationaddr
+                Type: STRING
+              - Name: region
+                Type: STRING
+              - Name: subnetid
+                Type: STRING
+              - Name: flowdirection
+                Type: STRING
+              - Name: packetsrcawsservice
+                Type: STRING
+              - Name: packetdstawsservice
+                Type: STRING
+              - Name: trafficpath
+                Type: STRING
+              - Name: traffic_path
+                Type: INTEGER
+      LogicalTableMap:
+        VPCFlowLogsLogicalTableMap123:
+          Alias: "vpc_flow_logs_enhanced_view"
+          Source: 
+            PhysicalTableId: VPCFlowLogsPhysicalTableMap123
+          DataTransforms:
+            - TagColumnOperation:
+                ColumnName: 'region'
+                Tags:
+                  - ColumnGeographicRole: STATE
+            - ProjectOperation:
+                ProjectedColumns:
+                  - accountid
+                  - sourceaddress
+                  - destinationaddress
+                  - numpackets
+                  - numbytes
+                  - vpcid
+                  - azid
+                  - packetsourceaddr
+                  - packetdestinationaddr
+                  - region
+                  - subnetid
+                  - flowdirection
+                  - packetsrcawsservice
+                  - packetdstawsservice
+                  - trafficpath
+                  - traffic_path
+      Permissions:
+        - Principal: !Ref QuickSightUserArn
+          Actions:
+            - "quicksight:UpdateDataSetPermissions"
+            - "quicksight:DescribeDataSet"
+            - "quicksight:DescribeDataSetPermissions"
+            - "quicksight:PassDataSet"
+            - "quicksight:DescribeIngestion"
+            - "quicksight:ListIngestions"
+            - "quicksight:UpdateDataSet"
+            - "quicksight:DeleteDataSet"
+            - "quicksight:CreateIngestion"
+            - "quicksight:CancelIngestion"
+  # creates QuickSight VPC FLow Logs dashboard
+  VPCFlowLogsQuickSightDashboard:
+    Type: AWS::QuickSight::Dashboard
+    DependsOn: VpcFlowLogsAthenaSummaryDataset
+    Properties:
+      AwsAccountId: !Ref AWS::AccountId
+      DashboardId: 'vpc_flow_logs_analysis_dashboard'
+      Name: 'VPC Flow Logs Analysis Dashboard integrated with AWS VPC Service'
+      Permissions:
+        - Principal: !Ref QuickSightUserArn
+          Actions:
+            - "quicksight:DescribeDashboard"
+            - "quicksight:ListDashboardVersions"
+            - "quicksight:UpdateDashboardPermissions"
+            - "quicksight:QueryDashboard"
+            - "quicksight:UpdateDashboard"
+            - "quicksight:DeleteDashboard"
+            - "quicksight:DescribeDashboardPermissions"
+            - "quicksight:UpdateDashboardPublishedVersion"
+      SourceEntity:
+        SourceTemplate:
+          DataSetReferences:
+            - DataSetPlaceholder: 'vpc_flow_logs_summary_view'
+              DataSetArn: !GetAtt 'VpcFlowLogsAthenaSummaryDataset.Arn'
+            - DataSetPlaceholder: 'vpc_flow_logs_daily_view'
+              DataSetArn: !GetAtt 'VpcFlowLogsAthenaDailyDataset.Arn'
+            - DataSetPlaceholder: 'vpc_flow_logs_enhanced_view'
+              DataSetArn: !GetAtt 'VpcFlowLogsAthenaEnhancedDataset.Arn'
+          Arn: 'arn:aws:quicksight:us-east-1:869004330191:template/vpc-flow-logs-analysis-enhanced-template-v7'
+      VersionDescription: 'VPC Flow Logs Dashboard reInvent 2022- v7'
+Outputs:
+  StackName:
+    Description: 'Stack name'
+    Value: !Sub '${AWS::StackName}'

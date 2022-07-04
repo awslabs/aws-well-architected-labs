@@ -27,7 +27,7 @@ We will use Athena to access and view our CUR files via SQL. Athena is a serverl
 
 6. Ensure you select **Specified path in another account**, and enter the S3 path of your bucket **s3://(CUR bucket)**, expand **Exclude patterns**, enter the following patterns one line at a time and click next:
 
-            **.json, **.yml, **.sql, **.csv **.gz, **.zip, **/cost_and_usage_data_status/*
+            **.json, **.yml, **.sql, **.csv, **.gz, **.zip, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object
 
 {{% notice note %}}
 If you replicated the objects to the Cost Management Account or if using in the same account select **Specified path my account** instead of Specified path in another account.

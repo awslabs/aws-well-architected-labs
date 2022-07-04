@@ -23,24 +23,24 @@ def lambda_handler(event, context):
             #AMI Data
             DestinationPrefix = 'ami'
             ami.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
+            print(f"{DestinationPrefix} response gathered")
             s3(DestinationPrefix, account_id)
             start_crawler(os.environ["AMICrawler"])
 
             #EBS Data
             DestinationPrefix = 'ebs'
             ebs.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
+            print(f"{DestinationPrefix} response gathered")
             s3(DestinationPrefix, account_id)
             start_crawler(os.environ["EBSCrawler"])
 
             #Snapshot Data
             DestinationPrefix = 'snapshot'
             snapshot.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
+            print(f"{DestinationPrefix} response gathered")
             s3(DestinationPrefix, account_id)
             start_crawler(os.environ["SnapshotCrawler"])
-           
+                
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )

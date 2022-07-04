@@ -36,6 +36,13 @@ Parameters:
       - aws-well-architected-labs-london
       - aws-well-architected-labs-stockholm
       - aws-well-architected-labs-ap-sydney
+      - aws-well-architected-labs-mumbai
+      - aws-well-architected-labs-osaka
+      - aws-well-architected-labs-seoul
+      - aws-well-architected-labs-tokyo
+      - aws-well-architected-labs-canada
+      - aws-well-architected-labs-milan
+      - aws-well-architected-labs-paris
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
@@ -97,7 +104,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: "*"
+                Resource: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue"
               - Effect: "Allow"
                 Action:
                 - "ecs:ListAttributes"
@@ -116,11 +123,11 @@ Resources:
                 - "ecs:DescribeTasks"
                 - "ecs:ListTaskDefinitions"
                 - "ecs:ListClusters"
-                Resource: "*"
+                Resource: !Sub "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
 
   LambdaFunction:
     Type: AWS::Lambda::Function
@@ -172,6 +179,7 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'EcsChargebackModule-TaskQueue'      
   EventSourceMapping:
     DependsOn:
       - EventPermission

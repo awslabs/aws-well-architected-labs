@@ -1,19 +1,19 @@
 ---
 title: "FAQ"
-#menutitle: "Lab #1"
+#menutitle: "FAQs"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
 ---
 #### Last Updated
-November 2021
+June 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
 ## How do I setup the dashboards on top of multiple payer accounts?
 
-This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up CUR S3 bucket replication to S3 bucket in separate Governance account.
+This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Governance Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Governance account.
 {{%expand "Click here to expand step by step instructions" %}}
 
 ![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
@@ -22,56 +22,59 @@ This scenario allows customers with multiple payer (management) accounts to depl
 
 #### Setup S3 CUR Bucket Replication
 
-1. Create S3 bucket with enabled versioning in the **region where QuickSight is available.**
-2. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} and {BucketName}. You can add more payer accounts to the policy if needed.
+1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
+2. Create an S3 bucket with enabled versioning.
+3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
 
-		{
-		"Version": "2008-10-17",
-		"Id": "PolicyForCombinedBucket",
-		"Statement": [
-    		{
-        		"Sid": "Set permissions for objects",
-        		"Effect": "Allow",
-        		"Principal": {
-            		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete"
-        		],
-        		"Resource": "arn:aws:s3:::{BucketName}/*"
-    		},
-    		{
-        		"Sid": "Set permissions on bucket",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-         		   "s3:List*",
-         		   "s3:GetBucketVersioning",
-         		   "s3:PutBucketVersioning"
-        		],
-        		"Resource": "arn:aws:s3:::{BucketName}"
-    		},
-    		{
-        		"Sid": "Set permissions to pass object ownership",
-        		"Effect": "Allow",
-        		"Principal": {
-        		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-        		},
-        		"Action": [
-            		"s3:ReplicateObject",
-            		"s3:ReplicateDelete",
-            		"s3:ObjectOwnerOverrideToBucketOwner",
-            		"s3:ReplicateTags",
-            		"s3:GetObjectVersionTagging",
-            		"s3:PutObject"
-        		],
-        		"Resource": "arn:aws:s3:::{bucket name}/*"
-    		}
-		]
-		}
+```json
+{
+"Version": "2008-10-17",
+"Id": "PolicyForCombinedBucket",
+"Statement": [
+	{
+		"Sid": "Set permissions for objects",
+		"Effect": "Allow",
+		"Principal": {
+    		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+    		"s3:ReplicateObject",
+    		"s3:ReplicateDelete"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+	},
+	{
+		"Sid": "Set permissions on bucket",
+		"Effect": "Allow",
+		"Principal": {
+		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+ 		   "s3:List*",
+ 		   "s3:GetBucketVersioning",
+ 		   "s3:PutBucketVersioning"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
+	},
+	{
+		"Sid": "Set permissions to pass object ownership",
+		"Effect": "Allow",
+		"Principal": {
+		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
+		},
+		"Action": [
+    		"s3:ReplicateObject",
+    		"s3:ReplicateDelete",
+    		"s3:ObjectOwnerOverrideToBucketOwner",
+    		"s3:ReplicateTags",
+    		"s3:GetObjectVersionTagging",
+    		"s3:PutObject"
+		],
+		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+	}
+]
+}
+```
 
 This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 
@@ -79,16 +82,16 @@ This policy supports objects encrypted with either SSE-S3 or not encrypted objec
 
 This step should be done in each payer (management) account.
 
-1. Open S3 bucket with CUR
-2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled
+1. Open S3 bucket in Payer account with CUR.
+2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled.
 3. On Management tab under Replication rules click on Create replication rule.
-4. Specify rule name 
+4. Specify rule name.
 
 ![Images/s3_bucket_replication_1.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_1.png?classes=lab_picture_small)
 
-5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account
-6. Select Change object ownership to destination bucket owner checkbox
-7. Select Create new role under IAM Role section 
+5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account.
+6. Select Change object ownership to destination bucket owner checkbox.
+7. Select Create new role under IAM Role section.
 
 ![Images/s3_bucket_replication_2.png.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_2.png?classes=lab_picture_small)
 
@@ -98,7 +101,7 @@ This step should be done in each payer (management) account.
 
 This step should be done in each payer (management) account.
 
-Sync existing objects from CUR S3 bucket to S3 bucket in Governance account
+Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
 
 	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
 
@@ -115,7 +118,7 @@ These actions should be done in Governance account
 
 ![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
 
-5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **sql, **csv, **/cost_and_usage_data_status/*. Click Next
+5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **.sql, **.csv, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object. Click Next
 
 ![Images/glue_2.png](/Cost/200_Cloud_Intelligence/Images/glue_2.png?classes=lab_picture_small)
 
@@ -141,7 +144,14 @@ These actions should be done in Governance account
 
 ## How do I limit access to the data in the Dashboards using row level security? 
 
-Do you want to give access to the dashboards to someone within your organization, but you only want them to see data from accounts or business units associated with their role or position? You can use row level seucirty in QuickSight to accomplish limiting access to data by user. In these steps below, we will define specific Linked Account IDs against individual users. Once the Row-Level Security is enabled, users will continue to load the same Dashboards and Analyses, but will have custom views that restrict the data to only the Linked Account IDs defined. 
+Do you want to give access to the dashboards to someone within your organization, but you only want them to see data from accounts or business units associated with their role or position? You can use row level seucirty in QuickSight to accomplish limiting access to data by user. In these steps below, we will define specific Linked Account IDs against individual users. Once the Row-Level Security is enabled, users will continue to load the same Dashboards and Analyses, but will have custom views that restrict the data to only the Linked Account IDs defined.
+
+**Video Tutorial**
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EFyWEyeXQlE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 {{%expand "Click here to expand step by step instructions" %}}
 
 **Considerations:**
@@ -270,6 +280,31 @@ This error is caused by there being too many [data source connectors](https://do
 ![Images/Sduplicatedataset.png](/Cost/200_Cloud_Intelligence/Images/duplicatedataset.png?classes=lab_picture_small)
 
 Unless you know which datasets are tied to which data sources, it is faster to simply delete all the Cloud Intelligence Dashboards data sources and data sets from QuickSight, and start adding them again, this time only using a single data source. This is described in detail in [this lab under the manual deployment option](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2a_cost_intelligence_dashboard/) as step 22. You should only have one data source for all your Cloud Intelligence Dashboard datasets, including customer_all. If you wish to use separate data sources, they must not have the same name. 
+
+{{% /expand%}}
+
+## How do I fix the ‘product_cache_engine’ cannot be resolved error? 
+
+When attempting to deploy the dashboard, some users get an error that states `product_cache_engine` cannot be resolved. 
+{{%expand "Click here to expand answer" %}}
+
+This view is dependent on having or historically having an RDS database instance and an ElastiCache cache instance run in your organization. If you get the error that the column `product_database_engine` or `product_deployment_option` does not exist, then you do not have any RDS database instances running. There are two options to resolve this.
+
+### Option 1
+ To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. If you get the error that the column `product_cache_engine` does not exist, then you do not have any ElastiCache cache instances running. To make this column show up in the CUR spin up an ElastiCache cache instance in the ElastiCache service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. You can verify this by running the Athena query: SHOW COLUMNS FROM tablename - and replace the tablename accordingly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
+
+### Option 2
+Follow the below steps to remove the colum. Be aware this will mean if you do add ElastiCache instances to your accounts you should put this back.
+
+1. In Amazon Athena click 'Show Edit Query' for ``kpi_instance_all``
+2. Remove *`product_cache_engine`* and remove the last *Group by* number
+3. Run query
+4. If you are running from CloudShell re-run the deploy command
+5. Go to Amazon Quicksight 
+6. Find the ``kpi_instance_all`` dataset
+7. Click on *'Edit Dataset'* 
+8. On the top right of the screen click *'save and publish'*
+
 
 {{% /expand%}}
 

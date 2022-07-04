@@ -43,7 +43,7 @@ An example amazon-cloudwatch-agent.json file is provided and automatically downl
 - An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
 - Permissions to create resources in CloudFormation, EC2, VPC, IAM, Elastic Load Balancing, CloudWatch, Aurora RDS, KMS, Secrets Manager, Systems Manager.
 - Basic understanding of [AWS CloudFormation](https://aws.amazon.com/cloudformation/), visit the [Getting Started](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html) section of the user guide.
-- Deployed the CloudFormation VPC stack in the lab [Automated Deployment of VPC](../200_Automated_Deployment_of_VPC/README.md).
+- Deployed the CloudFormation VPC stack in the lab [Automated Deployment of VPC]({{< ref "/Security/200_Labs/200_Automated_Deployment_of_VPC" >}}).
 
 ## Costs
 

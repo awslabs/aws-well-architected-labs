@@ -23,12 +23,13 @@ This dashboard contains breakdowns with the following visuals. Available views a
 
 Supported flow log record formats:
 - CSV
-- _Parquet format coming soon.._
+- Parquet
 
 Supported Glue Partitions:
  - Non Hive-compatible S3 prefix
+ - Hive-compatible S3 prefix
 
-Note: This lab currently does not support **Hive-compatible S3 prefix**
+Note: We recommend creating **Parquet** file format with **Hive-compatible S3 prefix** for better performance and reducing cost for querying data from S3
 
 ## Architecture
 ![images/qs-vpcl-architecture_v3.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcl-architecture_v3.png)

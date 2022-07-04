@@ -10,7 +10,7 @@ pre: "<b>1. </b>"
 To allow access to your billing information without using the root credentials you need to enable IAM access. This allows other users (non-root) to access billing information in the management account. This approach provides individual sign-in information for each user, and you can grant each user only the permissions they need to work with your account. For example, you can grant your financial teams access to the billing information only, and ensure they dont have access to resources in the account. 
 
 
-1. Log in to your management account as the root user, Click on the account name in the top right, and click on **My Account** from the menu:
+1. Log in to your management account as the root user, Click on the account name in the top right, and click on **Account** from the menu:
 ![Images/AWSAcct4.png](/Cost/100_1_AWS_Account_Setup/Images/AWSAcct4.png)
 
 2. Scroll down to **IAM User and Role Access to Billing Information**, and click **Edit**:

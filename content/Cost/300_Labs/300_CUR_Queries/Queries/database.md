@@ -162,7 +162,7 @@ WHERE
 GROUP BY 
   bill_payer_account_id,
   line_item_usage_account_id,
-  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date, 
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'), 
   product_instance_type, 
   line_item_operation, 
   line_item_usage_type, 
@@ -173,8 +173,8 @@ GROUP BY
   product_database_engine
 ORDER BY 
   day_line_item_usage_start_date, 
-  usage_quantity, 
-  unblended_cost; 
+  sum_line_item_usage_amount, 
+  sum_amortized_cost; 
 ```
 
 {{< email_button category_text="Database" service_text="Amazon RDS" query_text="Amazon RDS Query1" button_text="Help & Feedback" >}}

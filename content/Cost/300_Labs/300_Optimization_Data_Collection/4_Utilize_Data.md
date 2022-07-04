@@ -12,9 +12,19 @@ Now you have pulled together optimization data there different ways in which you
 ### Visualization of Trusted Advisor data with Amazon QuickSight
 You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) To deploy [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) please follow either [automated](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/3_auto_deployment/) or [manual](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/4_manual-deployment-prepare/) deployment steps and specify organizational data collection bucket created in this lab as a source
 
+### Visualization of Compute Optimizer data with Amazon QuickSight
+You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). 
+
+### AWS Organisation Data and The Cost Intelligence Dashboard
+
+This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organisation data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
-
 
 {{%expand "Optimization Data Snapshots and AMIs Query" %}}
 
@@ -60,13 +70,37 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
     
 {{% /expand%}}
 
+There is an option to add pricing data to this query. This assumes you have already run the accounts collector lambda. 
+
+{{%expand "Optimization Data Snapshots and AMIs with pricing data" %}}
+
+**Lambda**
+1. Go to AWS Lambda 
+2. Find the **pricing-Lambda-Function** function
+3. Test the function
+
+
+**Athena**
+1. Go to AWS Athena
+2. Go to *Saved queries* at the top of the screen
+3. Run the *ec2_pricing* Query to create a pricing table
+4. In *Saved queries* Run the *region_names* Query to create a normalized region name table 
+5. In *Saved queries* run *snapshot-ami-query* to create a view 
+6. Run the below to see your data
+        
+        SELECT * FROM "optimization_data"."snapshot_ami_quicksight_view" limit 10;
+
+{{% /expand%}}
+
 ### EBS Volumes and Trusted Advisor Recommendations
 
 Trusted advisor identifies idle and underutilized volumes. This query joins together the data so you can see what portion of your volumes are flagged. Data must be collected and the crawler finished running before this query can be run. 
 
+This section requires you to have the **Inventory Module** and the **Trusted Advisor Module** deployed.
+
 {{%expand "Optimization Data EBS Volumes and Trusted Advisors Query" %}}
 
-        SELECT *FROM
+        SELECT * FROM
             "optimization_data"."ebs_data"
         LEFT JOIN 
         (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid, category, region, year,month
@@ -76,10 +110,79 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
 
 {{% /expand%}}
 
+There is an option to add pricing data to this query.
+
+{{%expand "Optimization Data EBS Volumes and Trusted Advisor with pricing data" %}}
+
+**Lambda**
+1. Go to AWS Lambda 
+2. Find the **pricing-Lambda-Function** function
+3. Test the function
+
+**Athena** 
+1. Go to AWS Athena and run the below
+2. Go to **Saved queries** at the top of the screen
+3. Run the **ec2-view** Query to create a view of ebs and ta data
+4. Run the **ec2_pricing** Query to create a pricing table
+5. In **Saved queries** run the **region_names** Query to create a normalized region name table 
+6. In **Saved queries** run **ebs-ta-query-pricing** to create a view 
+7. Run the below to see your data
+        
+        SELECT * FROM "optimization_data"."ebs_quicksight_view" limit 10;
+
+{{% /expand%}}
+
+The section below will bring in opportunities to move EBS volumes to gp3
+
+{{%expand "EBS Volumes and Trusted Advisor moving to gp3" %}}
+
+1. Go to AWS Athena and run the below
+2. Go to **Saved queries** at the top of the screen
+3. Run the **ec2-view** Query to create a view of ebs and ta data
+4. Run the **ec2_pricing** Query to create a pricing table
+5. In **Saved queries** run the **region_names** Query to create a normalized region name table 
+6. In **Saved queries** run **gp3-opportunity** to create a view 
+
+
+{{% /expand%}}
+
+
+### EBS Volumes and Trusted Advisor Recommendations
+
+Trusted advisor identifies idle and underutilized volumes. This query joins together the data so you can see what portion of your volumes are flagged. Data must be collected and the crawler finished running before this query can be run. 
+
+This section requires you to have the **Inventory Module** and the **Trusted Advisor Module** deployed.
+
+{{%expand "Optimization Data EBS Volumes and Trusted Advisors Query" %}}
+        
+        CREATE OR REPLACE VIEW "ebs_view" AS 
+        SELECT *FROM
+                    "optimization_data"."ebs_data"
+                LEFT JOIN 
+                (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid as ta_accountid, status, category, region as ta_region, year as ta_year ,month as ta_month
+                from
+                "optimization_data".ta_data
+                where category = 'cost_optimizing') ta
+                ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."ta_year" and "ebs_data"."month" = "ta"."ta_month"
+                LEFT JOIN (
+          SELECT
+            "region" "region_code"
+          , "regionname"
+          FROM
+            storage.region_names
+        )  region ON ("ebs_data"."region" = "region"."region_code")
+
+{{% /expand%}}
+
 ### AWS Budgets into Cost Dashboard
 
 In these labs we have a couple of amazing cost dashboards that can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/). If you would like to add your budget data into these dashboard please follow the below steps. Data must be collected and the crawler finished running before this query can be run. 
 There is a saved query called **aws_budgets** created in the CloudFormation. This is used when connecting to dashboard.
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2SFO4SF0WN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 
 {{%expand "Guide to add AWS Budgets into Cost Dashboard" %}}
 
@@ -94,6 +197,7 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
             , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
             , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
             , timeunit
+            , account_id
             , budgettype budget_type
             , year budget_year
             , month budget_month
@@ -229,5 +333,47 @@ If you wish to connect to your Cost and Usage report for snapshot costs please u
 
 {{% /expand%}}
 
+
+### ECS Chargeback
+
+Report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster
+{{%expand "Athena Configuration" %}}
+
+
+1. Navigate to the Athena service
+2. Select the "optimization data" database
+3. In **Saved Queries** find **"cluster_metadata_view"**" Change 'BU' to the tag you wish to do chargeback for
+4. Click the **Run** button
+5. In **Saved Queries** find **"ec2_cluster_costs_view"**" 
+	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
+	-- For example, "curdb"."ecs_services_clusters_data" 
+6. Click the **Run** button
+7. In **Saved Queries** find **"bu_usage_view"**" 
+	-- Replace ${CUR} in the "FROM" clause with your CUR table name 
+	-- For example, "curdb"."ecs_services_clusters_data"
+8. Click the **Run** button
+
+Now your views are created you can run your report
+
+#### Manually execute billing report
+
+* In **Saved Queries** find **"ecs_chargeback_report"** 
+	-- Replace "bu_usage_view.month" value with the appropriate month desired for the report
+	-- For example, a value of '2' returns the charges for February 
+* Click the **Run** button
+
+
+#### Example Output
+
+
+![Images/Example_output.png](/Cost/300_Optimization_Data_Collection/Images/Example_output.png)
+Breakdown: 
+* task_usage: total memory resources reserved (in GBs) by all tasks over the billing period (i.e. – monthly)
+* percent: task_usage / total_usage
+* ec2_cost: monthly cost for EC2 instance in $
+* Services: Name of service 
+* servicearn: Arn of service
+* Value: Value of specified tag for the ECS service (could be App, TeamID, etc?)
+{{% /expand%}}
 
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}

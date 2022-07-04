@@ -10,7 +10,6 @@ Metadata:
           - ManagementAccountRole
           - ManagementAccountID
           - MultiAccountRoleName
-          - CodeBucket
           - RolePrefix
       - Label:
           default: 'Available modules'
@@ -19,6 +18,7 @@ Metadata:
           - IncludeRightsizingModule
           - IncludeInventoryCollectorModule
           - IncludeComputeOptimizerModule
+          - ComputeOptimizerRegions
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
@@ -32,8 +32,6 @@ Metadata:
         default: 'Management account Id'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
-      CodeBucket:
-        default: "Code Bucket"
       RolePrefix:
         default: "Role Prefix"
       IncludeTAModule:
@@ -44,6 +42,8 @@ Metadata:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
         default: 'Include AWS Compute Optimizer Data Collection Module'
+      ComputeOptimizerRegions:
+        default: "Comma Delimited list of AWS regions where AWS Compute Optimizer data will be collected."
       IncludeECSChargebackModule:
         default: 'Include ECS Chargeback Data Collection Module'
       IncludeRDSUtilizationModule:
@@ -52,11 +52,29 @@ Metadata:
         default: 'Include AWS Organization Data Collection Module' 
       IncludeBudgetsModule:
         default: 'Include AWS Budgets Collection Module'
+Mappings:
+  RegionMap:
+       eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
+       us-east-2:        {CodeBucket: aws-well-architected-labs-ohio }
+       us-east-1:        {CodeBucket: aws-well-architected-labs-virginia }
+       us-west-1:        {CodeBucket: aws-well-architected-labs-california }
+       us-west-2:        {CodeBucket: aws-well-architected-labs-oregon }
+       ap-southeast-1:   {CodeBucket: aws-well-architected-labs-singapore }
+       eu-central-1:     {CodeBucket: aws-well-architected-labs-frankfurt }
+       eu-west-2:        {CodeBucket: aws-well-architected-labs-london }
+       eu-north-1:       {CodeBucket: aws-well-architected-labs-stockholm }
+       ap-southeast-2:   {CodeBucket: aws-well-architected-labs-ap-sydney }
+       ap-south-1:       {CodeBucket: aws-well-architected-labs-mumbai }
+       ap-northeast-3:   {CodeBucket: aws-well-architected-labs-osaka }
+       ap-northeast-2:   {CodeBucket: aws-well-architected-labs-seoul }
+       ap-northeast-1:   {CodeBucket: aws-well-architected-labs-tokyo }
+       ca-central-1:     {CodeBucket: aws-well-architected-labs-canada }
+       eu-west-3:        {CodeBucket: aws-well-architected-labs-paris }
 Parameters:
   DestinationBucket:
     Type: String
     Description: Name of the S3 Bucket that needs to be created to hold information
-    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9\-])$)
     Default: costoptimizationdata
   ManagementAccountRole: 
     Type: String
@@ -97,6 +115,11 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  ComputeOptimizerRegions:
+    Default: ""
+    Type: String
+    Description: "Ex: us-east-1,us-east-2,us-west-1,us-west-2,eu-central-1,eu-west-1,eu-west-2,eu-west-3  if empty, the current region will be used. You can add regions later by updating the stack."
+    AllowedPattern: ([a-z0-9\-, ]*?$)
   IncludeECSChargebackModule:
     Type: String
     Description: Collects data which shows costs associated with ECS Tasks leveraging EC2 instances within a Cluster
@@ -121,22 +144,6 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
-  
-  
-  CodeBucket:
-    Type: String
-    Description: An AWS owned S3 Bucket that exists and holds code for the modules. Please choose from the list below depending on your region.
-    AllowedValues:
-      - aws-well-architected-labs-ireland
-      - aws-well-architected-labs-ohio
-      - aws-well-architected-labs-virginia
-      - aws-well-architected-labs-california
-      - aws-well-architected-labs-oregon
-      - aws-well-architected-labs-singapore
-      - aws-well-architected-labs-frankfurt
-      - aws-well-architected-labs-london
-      - aws-well-architected-labs-stockholm
-      - aws-well-architected-labs-ap-sydney
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -193,6 +200,9 @@ Conditions:
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
+  ComputeOptimizerRegionsIsEmpty: !Equals
+    - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
+    - ""
 #Reusable Resources:
 Resources:
   S3CrawlerQue: 
@@ -245,31 +255,6 @@ Resources:
                 Rules:
                 - Name: prefix
                   Value: Compute_Optimizer/
-  ComputeOptimizerBucketPolicy:
-    Condition: DeployComputeOptimizerModule
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketPolicyStatus'
-            Effect: Allow
-            Resource: !GetAtt S3Bucket.Arn 
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-          - Action:
-              - 's3:PutObject'
-            Effect: Allow
-            Resource: !Sub "${S3Bucket.Arn}/*"
-            Principal: {"Service": "compute-optimizer.amazonaws.com"}
-            Condition: {"StringEquals": {
-                    "s3:x-amz-acl":  "bucket-owner-full-control",
-                    "aws:SourceAccount": !Sub "${ManagementAccountID}",
-                    "aws:SourceArn": !Sub "arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*"
-                }
-            } 
   GlueRole:
     Type: AWS::IAM::Role
     Properties:
@@ -311,7 +296,7 @@ Resources:
             CFDataName: "TA"
             GlueRoleARN: !GetAtt GlueRole.Arn
             MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-            CodeBucket: !Ref CodeBucket
+            CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
             RolePrefix: !Ref RolePrefix
   RightsizeModule:
     Type: AWS::CloudFormation::Stack
@@ -334,7 +319,16 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleARN: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !Ref CodeBucket
+        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
+        RolePrefix: !Ref RolePrefix
+  PricingModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployInventoryCollectorModule
+    Properties:
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn 
         RolePrefix: !Ref RolePrefix
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
@@ -346,9 +340,14 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
-        CodeBucket: !Ref CodeBucket
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         RolePrefix: !Ref RolePrefix
+        BucketPrefix:  !Ref DestinationBucket
+        DeployRegions: 
+          Fn::If:
+            - ComputeOptimizerRegionsIsEmpty
+            - !Sub "${AWS::Region}"
+            - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
@@ -358,7 +357,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !Ref CodeBucket
+        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
   RDSUtilizationModule:
     Type: AWS::CloudFormation::Stack

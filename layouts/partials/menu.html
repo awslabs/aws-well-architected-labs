@@ -10,7 +10,6 @@
         {{ partial "search.html" . }}
     {{end}}
   </div>
-
     <div class="highlightable">
     <ul class="topics">
 
@@ -94,14 +93,17 @@
 {{ define "section-tree-nav" }}
 {{ $showvisitedlinks := .showvisitedlinks }}
 {{ $currentNode := .currentnode }}
+{{ $currentFileUniqueID := "" }}
+{{ with $currentNode.File }}{{ $currentFileUniqueID = .UniqueID }}{{ end }}
  {{with .sect}}
-  {{if .IsSection}}
+  {{if and .IsSection (or (not .Params.hidden) $.showhidden)}}
     {{safeHTML .Params.head}}
     {{ $isParent := or (.IsAncestor $currentNode) (.Params.alwaysopen) }}
     {{ $numberOfPages := (add (len .Pages) (len .Sections)) }}
-    <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item
-    {{if $isParent }}parent{{end}}
-        {{if eq .File.UniqueID $currentNode.File.UniqueID}}active{{end}}
+    <li data-nav-id="{{.RelPermalink}}" title="{{.Title}}" class="dd-item
+        {{if .IsAncestor $currentNode }}parent{{end}}
+        {{if eq .File.UniqueID $currentFileUniqueID}}active{{end}}
+        {{if .Params.alwaysopen}}parent{{end}}
         ">
       <a href="{{.RelPermalink}}">
           {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
@@ -116,6 +118,7 @@
             <i class="fas read-icon"></i>
           {{ end }}
       </a>
+      {{ $numberOfPages := (add (len ( where .Pages "Params.hidden" "ne" true )) (len ( where .Sections "Params.hidden" "ne" true ))) }}
       {{ if ne $numberOfPages 0 }}
         <ul>
           {{ $currentNode.Scratch.Set "pages" .Pages }}
@@ -144,7 +147,7 @@
     </li>
   {{else}}
     {{ if not .Params.Hidden }}
-      <li data-nav-id="{{.RelPermalink}}" title="{{.Title}}" class="dd-item {{if eq .File.UniqueID $currentNode.File.UniqueID}}active{{end}}">
+      <li data-nav-id="{{.RelPermalink}}" title="{{.Title}}" class="dd-item {{if eq .File.UniqueID $currentFileUniqueID}}active{{end}}">
         <a href="{{ .RelPermalink}}">
         {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
         {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
