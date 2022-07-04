@@ -57,21 +57,13 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 3.1 Click [CloudFront](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions) to navigate to the dashboard.
 
-3.2 Click the **Tables** link.
+3.2 Select the CloudFront distribution, then click the **Disable** button and confirm disable.
 
-{{< img dd-2.png >}}
+{{< img cl-17.png >}}
 
-3.3 Click **unishophotstandby**.
+3.3 Wait for the CloudFront distribution to have a status of **Disabled**, then select the CloudFront distribution and click the **Delete** button and confirm deletion.
 
-{{< img dd-3.png >}}
-
-3.4 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
-
-{{< img cl-10.png >}}
-
-3.5 Enter `delete` then click the **Delete** button.
-
-{{< img cl-11.png >}}
+{{< img cl-18.png >}}
 
 #### Database Cleanup
 
@@ -111,7 +103,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 5.2 Select **hot-secondary**, then click the **Delete** button.
 
-{{< img cl-8.png >}}
+{{< img cl-16.png >}}
 
 5.3 Click the **Delete stack** button.
 
