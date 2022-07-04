@@ -40,7 +40,6 @@ EOF
 sudo systemctl restart unishop
 
 ```
-1.6 Click the **Terminate** button and confirm termination.
 
 {{< prev_next_button link_prev_url="../5.1-aurora/" link_next_url="../../6-verify-secondary/" />}}
 

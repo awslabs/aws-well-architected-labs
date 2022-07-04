@@ -14,7 +14,7 @@ With an Aurora global database, there are two different approaches to failover d
 
 In a true disaster scenario you will most likely use **Managed unplanned failover**, which are showcased in **Module 2: Pilot Light** and **Module 4: Hot Standby**. 
 
-For this workshop we will be doing a [Managed Planned Failover](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html).
+For this workshop we will be doing a **Managed Planned Failover**.
 
 #### Promote Aurora
 

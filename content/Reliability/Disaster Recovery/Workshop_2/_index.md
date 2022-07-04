@@ -8,7 +8,7 @@ pre = ""
 
 In this module, you will go through the Pilot Light disaster recovery strategy. To learn more about this disaster recovery strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
 
-Pilot Light disaster recovery strategy has [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _within tens of minutes_.
+Pilot Light disaster recovery strategy has [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _within tens of minutes_. For the pilot light strategy secondary region, the data is live and core infrastructure is provisioned, but the services are either idle or absent.
 
 Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
 

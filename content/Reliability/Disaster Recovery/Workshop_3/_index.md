@@ -8,7 +8,7 @@ pre = ""
 
 In this module, you will go through the Warm Standby disaster recovery strategy. To learn more about this disaster recovery strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
 
-Warm Standby disaster recovery strategy has [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _within minutes_.
+Warm Standby disaster recovery strategy has [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _within minutes_. For the warm standby strategy secondary region, the data is live and core infrastructure is provisioned and the services are running at a reduced capacity.
 
 Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
 

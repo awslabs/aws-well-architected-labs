@@ -22,11 +22,13 @@ In Step 1.3, **DO NOT** choose the Amazon S3 **hot-primary-uibucket-xxxx** bucke
 
 {{< img cf-17.png >}}
 
-One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
-
 1.4 In the **Cache key and origin requests** section, select **CachingDisabled** for the **Cache Policy** to disable CloudFront caching. 
 
 {{< img cf-18.png >}}
+
+{{% notice note %}}
+One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
+{{% /notice %}}
 
 1.5 Click the **Create Distribution** button.  
 

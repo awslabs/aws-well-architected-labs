@@ -53,31 +53,51 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 {{< img cl-11.png >}}
 
+#### CloudFront Cleanup
+
+3.1 Click [CloudFront](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions) to navigate to the dashboard.
+
+3.2 Click the **Tables** link.
+
+{{< img dd-2.png >}}
+
+3.3 Click **unishophotstandby**.
+
+{{< img dd-3.png >}}
+
+3.4 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
+
+{{< img cl-10.png >}}
+
+3.5 Enter `delete` then click the **Delete** button.
+
+{{< img cl-11.png >}}
+
 #### Database Cleanup
 
 {{% notice info %}}
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-3.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
+4.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
 
-3.2 Select **unishop-hot** database under **hot-secondary** cluster and select **Delete** under **Actions**.
+4.2 Select **unishop-hot** database under **hot-secondary** cluster and select **Delete** under **Actions**.
 
 {{< img cl-11.png >}}
 
-3.3 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
+4.3 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
 
 {{< img cl-12.png >}}
 
-3.4 Change the region to **N. Virginia** using the Region Selector in the upper right corner, then select **unishop-hot** database under **hot-primary** cluster and select **Delete** under **Actions**.
+4.4 Change the region to **N. Virginia** using the Region Selector in the upper right corner, then select **unishop-hot** database under **hot-primary** cluster and select **Delete** under **Actions**.
 
 {{< img cl-14.png >}}
 
-3.5 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
+4.5 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
 
 {{< img cl-12.png >}}
 
-3.6 Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
+4.6 Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
 
 {{< img cl-15.png >}}
 
@@ -87,23 +107,23 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### CloudFormation Cleanup
 
-4.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+5.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-4.2 Select **hot-secondary**, then click the **Delete** button.
+5.2 Select **hot-secondary**, then click the **Delete** button.
 
 {{< img cl-8.png >}}
 
-4.3 Click the **Delete stack** button.
+5.3 Click the **Delete stack** button.
 
 {{< img cl-9.png >}}
 
-4.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+5.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-4.5 Select **hot-primary**, then click the **Delete** button.
+5.5 Select **hot-primary**, then click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-4.6 Click the **Delete stack** button.
+5.6 Click the **Delete stack** button.
 
 {{< img cl-7.png >}}
 
