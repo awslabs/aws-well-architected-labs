@@ -12,7 +12,7 @@ Pilot Light disaster recovery strategy has [Recovery Point Objective(RPO) / Reco
 
 Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
 
-Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet.  Our datastore is an [Amazon RDS](https://aws.amazon.com/rds/) MySQL database with a frontend written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
+Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet.   Our datastore is an [Amazon Aurora](https://aws.amazon.com/rds/aurora/) MySQL database with a frontend written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
 
 This module takes advantage of [Amazon Machine Images (AMI)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) which we will use to launch our Amazon EC2 instance and [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data to our secondary region. 
 
