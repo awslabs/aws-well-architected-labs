@@ -226,7 +226,7 @@ Resources:
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       MasterUsername: UniShopAppV1User
       MasterUserPassword: UniShopAppV1Password
@@ -244,7 +244,7 @@ Resources:
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       GlobalClusterIdentifier: !Sub 'pilot-global'
       DBClusterIdentifier: !Sub 'pilot-secondary'
@@ -256,7 +256,7 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
   RDSDBInstance:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       Engine: aurora-mysql
       DBClusterIdentifier: !If [CreatePrimaryDB, !Ref RDSClusterPrimary, !Ref RDSClusterSecondary]

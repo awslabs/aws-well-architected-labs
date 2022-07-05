@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 7
 +++
 
-### Reconfigure Application
+#### Reconfigure Application
 
 We are going to want to change the application that is running in the secondary region to point to the newly promoted Amazon Aurora cluster.
 

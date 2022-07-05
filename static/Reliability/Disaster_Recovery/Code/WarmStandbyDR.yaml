@@ -255,7 +255,7 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
   RDSDBInstance:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       Engine: aurora-mysql
       DBClusterIdentifier: !If [CreatePrimaryDB, !Ref RDSClusterPrimary, !Ref RDSClusterSecondary]
@@ -290,7 +290,7 @@ Resources:
           PropagateAtLaunch: true            
       LaunchConfigurationName: !Ref LaunchConfig
       MinSize: !If [CreateFullApp, 2, 1]
-      MaxSize: !If [CreateFullApp, 5, 3]
+      MaxSize: !If [CreateFullApp, 5, 5]
       LoadBalancerNames:
         - !Ref ElasticLoadBalancer
       VPCZoneIdentifier:
@@ -595,7 +595,7 @@ Resources:
           InstancePort: '80'
           Protocol: HTTP
       HealthCheck:
-        Target: 'HTTP:80/unicorns'
+        Target: 'TCP:80'
         HealthyThreshold: '3'
         UnhealthyThreshold: '5'
         Interval: '30'

@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 2
 +++
 
-## Primary Region
+### Primary Region
 
 1.1 Navigate to  [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
@@ -18,7 +18,7 @@ weight = 2
 
 {{< img vw-2.png >}}
 
-### Signup
+#### Signup
 
 2.1 Register yourself into the application using the **Signup** link in the top menu. You need to provide an e-mail address, which does not need to be valid. However, **be sure to remember it** as you will need it to verify the data replication later.
 
@@ -36,7 +36,7 @@ weight = 2
 
 {{< img vw-5.png >}}
 
-## Secondary Region
+### Secondary Region
 
 Our secondary region should be unavailable. In a pilot light disaster recovery strategy there are no compute instances.
 

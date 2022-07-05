@@ -4,9 +4,9 @@ date =  2021-05-11T20:33:54-04:00
 weight = 2
 +++
 
-We are going to copy the resources to our secondary region **N. California (us-west-1)**.
+We are going to **copy** the resources to our secondary region **N. California (us-west-1)**.
 
-###  Copy EC2 Backup
+####  Copy EC2 Backup
 
 1.1 Click the **Backup Vaults** link, then click the **Default** link.
 
@@ -26,7 +26,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 
 1.4 This will create a **Copy job**.
 
-### Copy the RDS backup
+#### Copy the RDS backup
 
 2.1 Click the **Backup Vaults** link, then click the **Default** link.
 

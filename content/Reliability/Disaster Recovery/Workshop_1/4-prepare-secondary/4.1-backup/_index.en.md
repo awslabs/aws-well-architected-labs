@@ -4,9 +4,9 @@ date =  2021-05-11T20:33:54-04:00
 weight = 1
 +++
 
-We are going to backup the resources in our primary region **N. Virginia (us-east-1)**.
+We are going to **backup** the resources in our primary region **N. Virginia (us-east-1)**.
 
-### Backup the EC2 instance
+#### Backup the EC2 instance
 
 1.1 Click [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
@@ -20,7 +20,7 @@ We are going to backup the resources in our primary region **N. Virginia (us-eas
 
 1.4 This will create a **Backup job**.
 
-### Backup the RDS database
+#### Backup the RDS database
 
 2.1 Click the **Protected resources** link, then click the **Create an on-demand backup** button.
 

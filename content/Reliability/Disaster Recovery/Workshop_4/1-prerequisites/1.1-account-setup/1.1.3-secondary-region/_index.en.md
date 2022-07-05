@@ -4,20 +4,20 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-### Deploying the Amazon CloudFormation Template
+#### Deploying the Amazon CloudFormation Template
 
 {{% notice warning %}}
 You will need to wait for the **Hot Primary Region** stack to have a status of **Completed** before moving on to this section. This will take approximately 15 minutes.
 {{% /notice %}}
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/HotStandby.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
 
 1.2  Specify stack parameters.
 
 Change the **IsPrimary** parameter to value `no`.
 
 {{% notice info %}}
-**Leave IsPromote and LatestAmiId as the default values**
+**Leave LatestAmiId as the default values**
 {{% /notice %}}
 
 1.3 Click **Next** to continue.

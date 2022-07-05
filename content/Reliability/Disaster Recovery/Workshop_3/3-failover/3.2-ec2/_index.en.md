@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 2
 +++
 
-### Launch EC2 Instance 
+#### Launch EC2 Instance 
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
 
@@ -16,7 +16,7 @@ weight = 2
 
 {{< img da-3.png >}}
 
-1.4 Update the **IsPromote** parameter to `yes` and click **Next** to continue.
+1.4 Update the **IsPromote** parameter to **yes** and click **Next** to continue.
 
 {{< img da-4.png >}}
 
@@ -24,21 +24,17 @@ weight = 2
 
 {{< img da-5.png >}}
 
-### Update Auto Scaling Group (ASG)
+#### Auto Scaling Group (ASG)
 
-We now want to scale out our compute capacity to match that of our primary region.  This way we know when we fail over, our secondary region can handle the request traffic.
+The update to the CloudFormation template was to change the Auto Scaling Group in the secondary region **N. California (us-west-1)** to **scale out** our EC2 capacity to match our primary region **N. Virginia (us-east-1)**. This way we know when we fail over, our secondary region can handle the request traffic.
 
 2.1 Navigate to [Auto Scaling Groups](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#AutoScalingGroups:) in **N. California (us-west-1)** region.
 
-2.2 Select **warm-secondary-WebServerGroup-xxx**, then click the **Edit** button.
+2.2 Click on the **warm-secondary-WebServerGroup-xxx** link.
 
 {{< img asg-1.png >}}
 
-2.3 In the **Group size** section, increase the **Desired capacity** to **3**, then scroll to the bottom and click the **Update** button.
-
-{{< img asg-2.png >}}
-
-2.4 Click the **Activity** link, then scroll down to the **Activity History** section.  You should see new instances launching in response to your update desired quantity request.
+2.3 Click the **Activity** link, then scroll down to the **Activity History** section.  You should see new instances launching in response to your CloudFormation update.
 
 {{< img asg-3.png >}}
 
