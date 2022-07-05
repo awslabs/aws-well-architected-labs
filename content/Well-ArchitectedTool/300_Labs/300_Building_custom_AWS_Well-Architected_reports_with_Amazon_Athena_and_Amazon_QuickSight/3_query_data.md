@@ -35,7 +35,7 @@ SELECT workload_id,
          workload_name,
          workload_owner,
 CAST(from_iso8601_timestamp(workload_lastupdated) AS timestamp) AS "timestamp",
-         answers.questionid
+         answers.questionid,
          answers.QuestionTitle,
          answers.LensAlias,
          answers.pillarid,
