@@ -12,14 +12,14 @@ Si está realizando este taller como parte de un taller liderado por un instruct
 
 Todos los recursos para este taller han sido provisionados con anterioridad.
 
-**Continue a la sección [Crear Recursos para el respaldo](../backup-resources/) del taller.**
+**Continue a la sección [Replicación entre regiones en S3](../2-s3-crr/) del taller.**
 
 
 ##### Utilizando su cuenta de AWS
 
 Inicie sesión a la consola de AWS como un usuario IAM que tenga los permisos "PowerUserAccess" o "AdministratorAccess" para asegurar la ejecución exitosa de este taller.
 
-**Continue a la sección [Configuración de la cuenta](./account-setup/) de este taller.**
+**Continue a la sección [Configuración de la cuenta](./1.1-account-setup/) de este taller.**
 
 
 

@@ -1,88 +1,65 @@
 +++
-title = "RDS"
+title = "Restauración"
 date =  2021-05-11T20:35:50-04:00
 weight = 2
 +++
 
-#### Restore RDS Database
+#### Restauración de la base de datos RDS
 
 {{% notice info %}}
-Si está realizando este taller como parte de un taller liderado por un instructor, la instancia RDS ya fue restaurada en la región **N. California (us-west-1)** debido a restricciones de tiempo.  **Por favor revise los pasos de esta sección para que entienda como funcionaría una restauración y posteriormente continue con la configuración del grupo de seguridad**.
+La instancia RDS ya fue restaurada en la región **N. California (us-west-1)** debido a restricciones de tiempo.  Por favor revise [Restaurar una base de datos de RDS](https://docs.aws.amazon.com/es_es/aws-backup/latest/devguide/restoring-rds.html) para los pasos de restauración para RDS en AWS Backup..
 {{% /notice  %}}
 
+### Despliegue de EC2
 
 1.1 Oprima [AWS Backup](https://us-west-1.console.aws.amazon.com/backup/home?region=us-west-1#/) para navegar a la consola en la región **N. California (us-west-1)**.
 
 1.2 Oprima el link **Almacenes de copia de seguridad**, después oprima el link **Default**.
 
-{{< img BK-24-ES.png >}}
+{{< img rs-1-es.png >}}
 
-1.3 En la sección **Copias de seguridad**, seleccione el backup. Oprima **Restaurar** bajo el desplegable **Acciones**.
+En la sección **Backups**. Seleccione la copia de respaldo de EC2. Oprima **Restaurar** bajo el menú desplegable **Acciones**.
 
-{{< img BK-27-ES.png >}}
+{{< img rs-19-es.png >}}
 
 {{% notice warning %}}
-Si no ve su backup, revise el estado de su **Trabajo de copia**. Oprima [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) para navegar a la consola en la región **N. Virginia (us-east-1)**. Oprima el link **Trabajos** después oprima el link **Trabajos de copia**.  Verifique que el **Estado** de su backup es **Completado**.
+Si no ve su copia de respaldo, revise el estado del **trabajo de copia de seguridad**. Oprima [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) para navegar a la consola en la región **N. Virginia (us-east-1)**. Oprima el link **Trabajos**. después oprima el link **Trabajos de copia de seguridad**. Verifique que el estado de su copia de seguridad de EC2 sea **Completado**
 {{% /notice %}}
 
-{{< img BK-26-ES.png >}}
+1.4 En la sección **Configuración de red**, seleccione **backupadnrestore-secondary-EC2SecurityGroup-xxxx** como el **Grupo de seguridad**.
 
-1.4 En la sección **Configuración**, escriba `backupandrestore-secondary-region` como el **Identificador de instancia de base de datos**. En la sección **Redes y seguridad**, seleccione **us-west-xx** como la **Zona de disponibilidad**.
+{{< img rs-20-es.png >}}
 
-{{< img RS-18-ES.png >}}
+1.5 Seleccione **Escoger el rol de IAM** y seleccione **Team Role** como el **Nombre del rol**. 
 
-1.5 Oprima el botón **Restaurar copia de segurdad**.
+{{< img rs-21-es.png >}}
 
-{{< img RS-20-ES.png >}}
+1.6 Vamos a hacer que la instancia tenga tras su creación la configuración necesaria para la aplicación Unishop application en la región  **N. California (us-west-1)*.
+Usaremos [Datos de usuario](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) para lograr esto.
 
-#### Configure el grupo de segurdad
+Copie y pegue el siguiente script como *Datos de usuario**, después oprima el botón **Restaurar copia de seguridad**
 
-2.1 Oprima [VPC](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#/) para navegar a la consola en la región **N. California (us-west-1)**.
+**Script de datos de usuario**:
+{{% expand "Click here to see the user data:" %}}
 
-2.2 Oprima el link **Grupos de seguridad**, después oprima el botón **Crear grupo de seguridad**.
+```bash
+#!/bin/bash     
+sudo su ec2-user                        
+export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+export DATABASE=$(aws rds describe-db-instances --region $AWS_DEFAULT_REGION --db-instance-identifier backupandrestore-secondary --query 'DBInstances[*].[Endpoint.Address]' --output text)
+sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF
+#!/bin/bash
+export DB_ENDPOINT=$DATABASE
+EOF
+sudo systemctl restart unishop
+```
+{{% /expand %}}
 
-{{< img RS-23-ES.png >}}
+{{< img rs-22-es.png >}}
 
-2.3 En la sección **Detalles básicos**, escriba `backupandrestore-us-west-rds-SG` como el **Nombre del grupo de seguridad** y **Descripción**.
-
-{{< img RS-24-ES.png >}}
-
-2.4 En la sección **Reglas de entrada**, oprima el botón **Agregar regla**.  Seleccione **MYSQL/Aurora** como el **Tipo**.  Seleccione **Personalizada** como la **Fuente** y escoja **backupandrestore-us-west-ec2-SG**. Esto permitirá la comunicación entre su instancia EC2 y su instancia RDS. Oprima el botón **Crear grupo de seguridad**.
-
-{{< img RS-40-ES.png >}}
-
-#### Modifique RDS 
-
-3.1 Oprima [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) para navegar a la consola en la región **N. California (us-west-1)**.
-
-3.2 Oprima el link **Instancias de base de datos**.
-
-{{< img BK-1-ES.png >}}
-
-3.3 Seleccione **backupandrestore-secondary-region**, después oprima el botón **Modificar**.
-
-{{% notice note %}}
-La bse de datos debe tener un **Estado** de **Disponible**.
+{{% notice warning %}}
+Debe esperar que el trabajo de restauración tenga un estado de **Completado** antes de moverse al siguiente paso. Esto puede tomar varios minutos.
 {{% /notice %}}
 
-{{< img RS-25-ES.png >}}
+{{< prev_next_button link_prev_url="../" link_next_url="../../6-verify-secondary/" />}}
 
-3.4 En la sección **Connectividad**, seleccione **backupandrestore-us-west-rds-SG** como el **Grupo de seguridad**. Oprima el botón **Continuar**.
-
-{{< img RS-27-ES.png >}}
-
-3.5 Seleccione **Aplicar inmediatamente** y después oprima el botón **Modificar instancia de BD**..
-
-{{< img RS-43-ES.png >}}
-
-3.6 Oprima el link **backupandrestore-secondary-region**.
-
-{{< img RS-26-ES.png >}}
-
-{{% notice note %}}
-Copie el nombre del punto de enlace y puerto. Necesitará esto en un paso más adelante.
-{{% /notice %}}
-
-{{< img RS-46-ES.png >}}
-
-{{< prev_next_button link_prev_url="../ec2/" link_next_url="../modify-application/" button_next_text="Siguiente paso" button_prev_text="Paso anterior">}}
