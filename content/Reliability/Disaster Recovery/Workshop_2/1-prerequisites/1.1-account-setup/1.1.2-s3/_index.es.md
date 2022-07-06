@@ -6,7 +6,7 @@ weight = 1
 
 #### Permita acceso público a Amazon S3
 
-Nuestra aplicación emplea alojamiento de sitios web estáticos en AWS Simple Storage Service (S3). Para hacer que la aplicación sea disponible para usuarios a través del internet, debemos deshabilitar la política de cuenta de AWS que bloquea el acceso público.
+Nuestra aplicación emplea alojamiento de sitios web estáticos en AWS Simple Storage Service (S3). Para que la aplicación esté disponible para usuarios a través del internet, debemos deshabilitar la política de cuenta de AWS que bloquea el acceso público.
 
 1.1 Oprima [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) para navegar a la consola.
 

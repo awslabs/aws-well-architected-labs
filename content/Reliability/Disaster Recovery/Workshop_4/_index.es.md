@@ -1,5 +1,5 @@
 +++
-title = "Módulo 4: Espera caliente"
+title = "Módulo 4: Espera activa"
 date = 2021-05-06T09:52:56-04:00
 weight = 140
 chapter = false
@@ -12,7 +12,7 @@ Inicialmente desplegaremos la instancia primaria de Unishop a la región us-east
 
 Posteriormente, verificaremos el escenario de DR. Cumplir con nuestros objetivos de [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _de forma virtualmente instantánea_, requiere una distribución de CloudFront con una política de failover de origen. Adicionalmente, el workshop despliega un Cluster de Amazon RDS Aurora MySQL en cada región, y habilita **1/** Reenvio de escritura para replicas de lectura y **2/** Tablas globales de Amazon Aurora MySQL habilitada. Estas funcionalidades permiten replicar cambios a la base de datos de cualquier región. Finalmente, configuraremos las tablas globales de DynamoDB que replicarán la información entre regiones.
 
-Se recomiendo experiencia previa con la consola de AWS y la línea de comandos de Linux, pero no es requerido.
+Se recomienda experiencia previa con la consola de AWS y la línea de comandos de Linux, pero no es requerido.
 
 {{< img workshop-4-arch.png >}}
 

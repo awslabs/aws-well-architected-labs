@@ -6,7 +6,7 @@ weight = 7
 
 Cuando un evento regional de servicio afecta la aplicación en su región primaria **N. Virginia (us-east-1)**, usted querrá hacer fail-over hacia la región segundaria, **N. California (us-west-1)**.
 
-Asumiremos que ocurrió un evento regional de servicio. En esta sección, haremos el fail over de forma manual de la aplicación a la región secundaria, **N. California (us-west-1)**. La distribución de CloudFront detectará la interrupción de servicio y automáticamente empezará en enrutar peticiones de la página web **Primary-Active** a la página web **Passive-Secondary** de forma transparente.
+Asumiremos que ocurrió un evento regional de servicio. En esta sección, haremos el fail over de forma manual de la aplicación a la región secundaria, **N. California (us-west-1)**. La distribución de CloudFront detectará la interrupción de servicio y automáticamente empezará a enrutar peticiones de la página web **Primary-Active** a la página web **Passive-Secondary** de forma transparente.
 
 Antes de simular el desastre, debemos crear datos de prueba a lo largo de la aplicación web. Este paso requiere crear una cuenta en la tienda, para después añadir objetos al carrito de compras. Tras el desastre, la sesión del usuario debe permanecer activa e ininterrumpida.
 
