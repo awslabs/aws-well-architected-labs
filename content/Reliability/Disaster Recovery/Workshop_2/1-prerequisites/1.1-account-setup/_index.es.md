@@ -4,11 +4,11 @@ date =  2021-05-11T11:43:28-04:00
 weight = 1
 +++
 
-### Utilizando su cuenta de AWS
+#### Utilizando su cuenta de AWS
 
 {{% notice note %}}
 
-Si está usando una cuenta personal de AWS, sea consciente que los recursos desplegados en este taller conllevan a gastos. Tras completar este taller, recuerde completar la sección [Limpiar los recursos](../../cleanup/) y remueva recursos de AWS innecesarios.
+Si está usando una cuenta personal de AWS, sea consciente que los recursos desplegados en este taller incurirrán en gastos. Tras completar este taller, recuerde completar la sección [Limpiar los recursos](../../6-cleanup/) y remueva recursos de AWS innecesarios.
 
 {{% /notice %}}
 
