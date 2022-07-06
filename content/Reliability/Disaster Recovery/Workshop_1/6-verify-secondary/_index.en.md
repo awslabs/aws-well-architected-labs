@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 6
 +++
 
-### Verify Secondary Region Website
+#### Verify Secondary Region Website
 
 1.1 Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 

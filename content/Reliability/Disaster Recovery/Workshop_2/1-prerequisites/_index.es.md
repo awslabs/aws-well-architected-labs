@@ -14,7 +14,7 @@ Todos los recursos para este taller han sido provisionados con anterioridad.
 
 **Continue a la sección [Verificar página web](../2-verify-primary/) del taller.**
 
-### Utilizando su propia cuenta de AWS
+#### Utilizando su propia cuenta de AWS
 
 Si está corriendo este taller en su propia cuenta, oprima **Siguiente paso**.
 

@@ -6,7 +6,7 @@ weight = 4
 
 You can improve resiliency and increase availability for specific scenarios by setting up CloudFront with origin failover.
 
-### Create the Amazon CloudFront Distribution
+#### Create the Amazon CloudFront Distribution
 
 1.1 Click [CloudFront](https://console.aws.amazon.com/cloudfront/home?region=us-east-1#/) to navigate to the dashboard.
 
@@ -18,21 +18,23 @@ You can improve resiliency and increase availability for specific scenarios by s
 In Step 1.3, **DO NOT** choose the Amazon S3 **hot-primary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-1.3 Enter the [Hot-Primary CloudFormation Stack Output WebsiteURL](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-east-1%3A571676911619%3Astack%2FHot-Primary%2F00475f30-f30b-11ec-a6e2-0a1eef7faa85) value as the **Origin Domain**.
+1.3 Enter the **hot-primary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**.
 
 {{< img cf-17.png >}}
-
-One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
 
 1.4 In the **Cache key and origin requests** section, select **CachingDisabled** for the **Cache Policy** to disable CloudFront caching. 
 
 {{< img cf-18.png >}}
 
+{{% notice note %}}
+One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
+{{% /notice %}}
+
 1.5 Click the **Create Distribution** button.  
 
 {{< img cf-27.png >}}
 
-### Configure an Additional Origin 
+#### Configure an Additional Origin 
 
 We will now add an additional **Origin** and use our **hot-secondary-uibucket-xxxx**.
 
@@ -44,11 +46,11 @@ We will now add an additional **Origin** and use our **hot-secondary-uibucket-xx
 In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
 {{% /notice %}}
 
-2.2 Enter the [Hot-Secondary CloudFormation Stack Output WebsiteURL](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/outputs?filteringStatus=active&filteringText=&viewNested=true&hideStacks=false&stackId=arn%3Aaws%3Acloudformation%3Aus-west-1%3A571676911619%3Astack%2FHot-Secondary%2F869cc1a0-f30c-11ec-847d-06ec1b07324b) value as the **Origin Domain**. Click the **Create origin** button.
+2.2 Enter the **hot-secondary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**. Click the **Create origin** button.
 
 {{< img cf-20.png >}}
 
-### Configure the Origin Group 
+#### Configure the Origin Group 
 
 3.1 Click the **Create Origin Group** link.
 
@@ -58,7 +60,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bu
 
 {{< img cf-28.png >}}
 
-### Configure Behaviors
+#### Configure Behaviors
 
 4.1 Click the **Behaviors** link.  Select **Default (*)**, then click the **Edit** button.
 
@@ -78,7 +80,7 @@ In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bu
 
 {{< img cf-25.png >}}
 
-### Verify the Distribution
+#### Verify the Distribution
 
 5.1 Copy the CloudFront Distribution's **Domain Name** into a new browser window.
 

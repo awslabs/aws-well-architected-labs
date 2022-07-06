@@ -4,9 +4,9 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-## Deploying the Amazon CloudFormation Template
+#### Deploying the Amazon CloudFormation Template
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=backupandrestore-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/630039b9022d4b46bb6cbad2e3899733/v1/BackupAndRestoreDB.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=backupandrestore-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/BackupAndRestoreDB.yaml).
 
 1.2 Click the **Next** button.
 
@@ -28,8 +28,8 @@ weight = 3
 
 {{< img pr-5.png >}}
 
-{{% notice info %}}
-**Wait for the Primary Region stack and Secondary Region stack to complete before moving to the next step**.
+{{% notice warning %}}
+You will need to wait for the **BackupAndRestore Primary Region** stack to have a status of **Completed** before moving on to the next step. This will take approximately 15 minutes.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../1.1.2-s3/" link_next_url="../../../2-s3-crr/" />}}

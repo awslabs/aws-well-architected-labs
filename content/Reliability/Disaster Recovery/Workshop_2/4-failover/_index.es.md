@@ -11,7 +11,7 @@ Tomaremos una serie de acciones **manuales** para failover nuestros recursos a n
 En un ambiente de producción éstas acciones serian automatizadas como parte del proceso de failover.
 {{% /notice %}}
 
-### Simulando un evento regional de servicio
+#### Simulando un evento regional de servicio
 
 Simularemos que un evento regional de servicio ha ocurrido y está afectando nuestro sitio web de Unishop en **N. Virginia (us-east-1)**. Ésto será logrado deshabilitando el acceso público a nuestro bucket de S3 que sirve nuestro sitio web, rindiendolo inaccesible.
 
@@ -21,7 +21,7 @@ Simularemos que un evento regional de servicio ha ocurrido y está afectando nue
 
 {{< img f-1-ES.png >}}
 
-1.3 Oprima el enlace **Permisos**. Oprima **Ediatr** en la sección **Bloquear acceso público (configuración del bucket)** .
+1.3 Oprima el enlace **Permisos**. Oprima **Editar** en la sección **Bloquear acceso público (configuración del bucket)** .
 
 {{< img f-2-ES.png >}}
 
