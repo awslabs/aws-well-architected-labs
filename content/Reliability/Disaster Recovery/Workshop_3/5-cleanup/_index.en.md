@@ -37,7 +37,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 2.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
-2.2 Select **unishop-warm** database under **warm-primary** cluster and delete the instance.
+2.2 Select **unishop-warm** database under **warm-primary** cluster and select **Delete** under **Actions**.
 
 {{< img cl-11.png >}}
 
@@ -45,28 +45,40 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
-2.4 Select **warm-primary** cluster and select **Remove from global database** under **Actions**.
+2.4 Select **warm-primary** cluster and select **Remove from global database** under **Actions** and then confirm promotion.
 
 {{< img cl-14.png >}}
 
+2.5 Select **warm-primary** cluster and select **Delete** under **Actions**.  **(You must wait for the unishop-warm database to delete before deleting the cluster)**.
+
+{{< img cl-16.png >}}
+
+2.6 Select **No** for **Create final snapshot?**, select **I acknowledge...**, then click **Delete DB cluster**.
+
+{{< img cl-17.png >}}
+
 {{% notice note %}}
-Please repeat steps **2.2** through **2.4** for the following:
+Please repeat steps **2.2** through **2.4** for the following:  **(You must wait for the primary database to finish deleting before you do this)**
 - `warm-secondary cluster`
 {{% /notice %}}
 
+2.7 Select **warm-global** and select **Delete** under **Actions** and then confirm deletion.
+
+{{< img cl-15.png >}}
+
 {{% notice warning %}}
-Wait for the database deletion to complete before moving to the next step.
+Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
 #### CloudFormation Secondary Region Cleanup
 
 3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
 
-3.2 Select the **warm-secondary** stack and click **Delete**.
+3.2 Select the **warm-secondary** stack then click the **Delete** button.
 
 {{< img cl-8.png >}}
 
-3.3 Click **Delete stack** to confirm the removal.
+3.3 Click **Delete stack** button.
 
 {{< img cl-9.png >}}
 
@@ -78,11 +90,11 @@ Wait for the stack deletion to complete before moving to the next step.
 
 4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
 
-4.2 Select **warm-primary** stack.  Next click the **Delete** button to remove it.
+4.2 Select **warm-primary** stack then click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-4.3 Click **Delete stack** to confirm the deletion.
+3.3 Click **Delete stack** button.
 
 {{< img cl-7.png >}}
 

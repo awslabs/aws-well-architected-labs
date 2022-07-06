@@ -25,10 +25,12 @@ If you are running this workshop via an instructor led training, you do **NOT** 
 {{< img cl-4.png >}}
 
 {{% notice note %}}
-Please repeat steps **1.1** through **1.4** for the following buckets:</br>
-**hot-secondary-uibucket-xxxx**</br>
-**hot-primary-assetbucket-xxxx**</br>
-**hot-secondary-assetbucket-xxxx**
+Please repeat steps **1.1** through **1.4** for the following buckets:
+
+- **hot-secondary-uibucket-xxxx**
+- **hot-primary-assetbucket-xxxx**
+- **hot-secondary-assetbucket-xxxx**
+
 {{% /notice %}}
 
 #### DynamoDB Cleanup
@@ -43,7 +45,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img dd-3.png >}}
 
-2.4 Click the **Global Tables** link.  Select **N. California (us-west-1)**, then click the **Delete region** button.
+2.4 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
 
 {{< img cl-10.png >}}
 
@@ -51,42 +53,71 @@ Please repeat steps **1.1** through **1.4** for the following buckets:</br>
 
 {{< img cl-11.png >}}
 
-2.6 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+#### CloudFront Cleanup
 
-2.7 Click the **DB Instances** link.
+3.1 Click [CloudFront](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions) to navigate to the dashboard.
 
-{{< img a-2.png >}}
+3.2 Select the CloudFront distribution, then click the **Disable** button and confirm disable.
 
-2.8  Select **unishop-hot**, then click **Delete** under the **Actions** dropdown.
+{{< img cl-17.png >}}
+
+3.3 Wait for the CloudFront distribution to have a status of **Disabled**, then select the CloudFront distribution and click the **Delete** button and confirm deletion.
+
+{{< img cl-18.png >}}
+
+#### Database Cleanup
+
+{{% notice info %}}
+This step is required as we did manual promotion for the Aurora Database.
+{{% /notice %}}
+
+4.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
+
+4.2 Select **unishop-hot** database under **hot-secondary** cluster and select **Delete** under **Actions**.
+
+{{< img cl-11.png >}}
+
+4.3 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
 
 {{< img cl-12.png >}}
 
-2.9  Disable the **Create final snapshot** checkbox. Enable the **I acknowledgement ...** checkbox.  Enter `delete me` and click the **Delete** button.
+4.4 Change the region to **N. Virginia** using the Region Selector in the upper right corner, then select **unishop-hot** database under **hot-primary** cluster and select **Delete** under **Actions**.
 
-{{< img cl-13.png >}}
+{{< img cl-14.png >}}
+
+4.5 De-select **Create final snapshot**, select **I acknowledge...**, enter `delete me` then click **Delete** button.
+
+{{< img cl-12.png >}}
+
+4.6 Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
+
+{{< img cl-15.png >}}
+
+{{% notice warning %}}
+Wait for all the databases and clusters to finish deleting before moving to the next step.
+{{% /notice %}}
 
 #### CloudFormation Cleanup
 
-3.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+5.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-3.2 Select **hot-secondary**, then click the **Delete** button.
+5.2 Select **hot-secondary**, then click the **Delete** button.
 
-{{< img cl-8.png >}}
+{{< img cl-16.png >}}
 
-3.3 Click the **Delete stack** button.
+5.3 Click the **Delete stack** button.
 
 {{< img cl-9.png >}}
 
-3.4 Change your [console](https://us-east-1.console.aws.amazon.com/console)’s region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+5.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-3.5 Select **hot-primary**, then click the **Delete** button.
+5.5 Select **hot-primary**, then click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-3.6 Click the **Delete stack** button.
+5.6 Click the **Delete stack** button.
 
 {{< img cl-7.png >}}
-
 
 {{< prev_next_button link_prev_url="../6-verify-secondary/" title="Congratulations!" final_step="true" >}}
 This lab specifically helps you with the best practices covered in question [REL 13  How do you plan for disaster recovery (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)

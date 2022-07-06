@@ -1,10 +1,10 @@
 +++
 title = "Verificar página web"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 3
 +++
 
-## Región primaria
+### Región primaria
 
 1.1 Navegue a [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) en la región **N. Virginia (us-east-1)**.
 
@@ -18,8 +18,8 @@ weight = 2
 
 {{< img vw-2.png >}}
 
-### Inscripción
-#### Interactúe con la aplicación primaria (La aplicación está en inglés)
+#### Inscripción
+##### Interactúe con la aplicación primaria (La aplicación está en inglés)
 
 2.1 Registrese en la aplicación. Debe proveer su dirección e-mail, que no tiene que ser válida. Aun así, **asegúrese de recordar este valor** para verificar la replicación de datos posteriormente.
 
@@ -37,7 +37,7 @@ weight = 2
 
 {{< img vw-5.png >}}
 
-## Región secundaria
+### Región secundaria
 
 La región secundaria no debe estar disponible. En una estrategia de DR _pilot light_ no hay recursos computacionales en la región secundaria.
 

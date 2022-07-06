@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 3
 +++
 
-## Primary Region
+### Primary Region
 
 1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
 
@@ -14,11 +14,11 @@ weight = 3
 
 {{< img vw-1.png >}}
 
-1.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
+1.4 Copy and paste the **WebsiteURL** value to your clipboard you will need it in the CloudFront section. Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
 {{< img vw-2.png >}}
 
-### Signup
+#### Signup
 
 2.1 Register yourself into the application using the **Signup** link in the top menu. You need to provide an email address, which does not need to be valid. However, **be sure to remember it** as you will need it to verify the data replication later.
 
@@ -36,7 +36,7 @@ weight = 3
 
 {{< img vw-5.png >}}
 
-## Secondary Region
+### Secondary Region
 
 We are taking advantage of Amazon Aurora read replica [write forwarding](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-write-forwarding.html). With this feature enabled, writes can be sent to a read replica in a secondary region, and will be seamlessly forwarded to the writer in the primary region over a secure communication channel. It is considered a best practice to enable write forwarding in your secondary region for Warm Standby disaster recovery strategy for testing purposes.
 
@@ -48,7 +48,7 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 {{< img vw-6.png >}}
 
-3.4 Click on the **WebsiteURL** output link and open in a new browser tab or window.
+3.4 Copy and paste the **WebsiteURL** value to your clipboard you will need it in the CloudFront section. Click on the **WebsiteURL** output link and open in a new browser tab or window.
 
 {{< img vw-7.png >}}
 

@@ -1,12 +1,16 @@
 +++
 title = "EC2"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 4
 +++
 
-### Desplegar EC2 
+#### Desplegar EC2 
 
 1.1 Oprima [AMIs](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Images:visibility=owned-by-me) para navegar a la consola en la región **N. California (us-west-1)**.
+
+{{% notice warning %}}
+Debe esperar a que pilotAMI cambie a estado **Disponible** antes de comenzar el próximo paso. Ésto peude tomar varios minutos.
+{{% /notice %}}
 
 1.2 Seleccione la pila **pilotAMI** y oprima **Lanzar instancia a partir de una AMI**.
 

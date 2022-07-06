@@ -1,10 +1,10 @@
 +++
 title = "EC2"
 date =  2021-05-11T20:33:54-04:00
-weight = 1
+weight = 2
 +++
 
-### Crear la AMI (Imagen de máquina de Amazon) de EC2
+#### Crear la AMI (Imagen de máquina de Amazon) de EC2
 
 1.1 Oprima [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running) para navegar a la consola en la región **N. Virginia (us-east-1)**.
 
@@ -20,7 +20,7 @@ weight = 1
 La AMI debe mostrar estado **Disponible** antes de continuar al próximo paso. Puede demorar varios minutos.
 {{% /notice %}}
 
-### Copiar la AMI (Imagen de máquina de Amazon) de EC2
+#### Copiar la AMI (Imagen de máquina de Amazon) de EC2
 
 2.1 Oprima [AMIs](https://us-east-1.console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=owned-by-me) para navegar a la consola.
 

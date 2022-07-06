@@ -4,7 +4,7 @@ date =  2021-05-11T20:33:54-04:00
 weight = 2
 +++
 
-### Verify S3 buckets
+#### Verify S3 buckets
 
 {{% notice info %}}
 As part of the CloudFormation Template, the primary region and secondary region Amazon S3 buckets were created.
@@ -16,7 +16,7 @@ As part of the CloudFormation Template, the primary region and secondary region 
 
 {{< img crr-1.png >}}
 
-### Create Replication rule
+#### Create Replication rule
 
 2.1 Click the link for **backupandrestore-primary-uibucket-xxxx**.
 
@@ -42,7 +42,7 @@ As part of the CloudFormation Template, the primary region and secondary region 
 
 {{< img crr-7.png >}}
 
-### Replicate S3 bucket
+#### Replicate S3 bucket
 
 {{% notice info %}}
 We will **manually** copy objects into our **backupandrestore-primary-uibucket-xxxx** in our **primary region** so we can observe the replication into our **backupandrestore-secondary-uibucket-xxxx** bucket in our **secondary region**.
@@ -53,20 +53,22 @@ In a production environment, we would **automate** these steps as part of our CI
 
 3.2 If you have never used CloudShell you will be prompted with a **Welcome to AWS CloudShell** message, click the **Close** button.
 
-3.3 At the prompt - paste the following AWS CLI command. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
+3.3 Once you see the prompt, paste the following AWS CLI command. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
 
 ```sh
 export S3_BUCKET=$(aws s3api list-buckets --region us-east-1 --output text --query 'Buckets[?starts_with(Name, `backupandrestore-primary-uibucket`) == `true`]'.Name)
 aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ s3://$S3_BUCKET/ --exclude "config.json" --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers    
 ```
 
-### Verify Replication
+#### Verify Replication
 
-4.1 Click the link for **backupandrestore-secondary-uibucket-xxxx**.
+4.1 Click [Amazon S3](https://s3.console.aws.amazon.com/s3/home) to navigate back to the dashboard. 
+
+4.2 Click the link for **backupandrestore-secondary-uibucket-xxxx**.
 
 {{< img crr-8.png >}}
 
-4.2 You should see the replicated objects.
+4.3 You should see the replicated objects.
 
 {{< img crr-9.png >}}
 

@@ -4,9 +4,9 @@ date =  2021-05-11T20:33:54-04:00
 weight = 2
 +++
 
-We are going to copy the resources to our secondary region **N. California (us-west-1)**.
+We are going to **copy** the resources to our secondary region **N. California (us-west-1)**.
 
-###  Copy EC2 Backup
+####  Copy EC2 Backup
 
 1.1 Click the **Backup Vaults** link, then click the **Default** link.
 
@@ -15,7 +15,7 @@ We are going to copy the resources to our secondary region **N. California (us-w
 1.2 In the **Backups** section. Select the EC2 backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
-If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
+If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
 {{% /notice %}}
 
 {{< img cp-4.png >}}
@@ -26,7 +26,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 
 1.4 This will create a **Copy job**.
 
-### Copy the RDS backup
+#### Copy the RDS backup
 
 2.1 Click the **Backup Vaults** link, then click the **Default** link.
 
@@ -35,7 +35,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 2.2 In the **Backups** section. Select the RDS backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
-If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
+If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
 {{% /notice %}}
 
 {{< img cp-2.png >}}

@@ -1,10 +1,10 @@
 +++
 title = "Acceso a S3"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 1
 +++
 
-### Permita acceso público a Amazon S3
+#### Permita acceso público a Amazon S3
 
 Nuestra aplicación emplea alojamiento de sitios web estáticos en AWS Simple Storage Service (S3). Para hacer que la aplicación sea disponible para usuarios a través del internet, debemos deshabilitar la política de cuenta de AWS que bloquea el acceso público.
 

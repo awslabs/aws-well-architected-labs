@@ -25,8 +25,10 @@ If you are running this workshop via an instructor led training, you do **NOT** 
 {{< img cl-4.png >}}
 
 {{% notice note %}}
-Please repeat steps **1.1** through **1.4** for the following buckets:</br>
-`backupandrestore-secondary-uibucket-xxxx`
+Please repeat steps **1.1** through **1.4** for the following buckets:
+
+- `backupandrestore-secondary-uibucket-xxxx`
+
 {{% /notice %}}
 
 #### Amazon CloudFormation
@@ -57,7 +59,7 @@ Please repeat steps **2.1** through **2.3** for the `backupandrestore-secondary`
 
 {{< img BK-27.png >}}
 
-3.4 Click the **Delete** button.
+3.4 Enter `delete` then click the **Delete recovery points** button.
 
 {{< img BK-28.png >}}
 
@@ -67,7 +69,7 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 #### Amazon EC2
 
-4.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+4.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#Instances:instanceState=running) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 4.2 Select the instance that has a **Security group name** of **backupandrestore-secondary-EC2SecurityGroup-xxxx** and click **Instance State**, then click **Terminate instance**.
 
