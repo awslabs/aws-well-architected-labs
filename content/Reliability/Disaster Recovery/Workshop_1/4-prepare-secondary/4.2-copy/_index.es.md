@@ -1,49 +1,53 @@
 +++
-title = "Copiar a una región secundaria"
+title = "Copiar"
 date =  2021-05-11T20:33:54-04:00
 weight = 3
 +++
 
-####  Copiar Backup de RDS
+Ahora, copiará los recursos a la región secundaria **N. California (us-west-1)**.
 
-1.1 Oprima [AWS Backup](https://us-east-1.console.aws.amazon.com/backup/home?region=us-east-1#/) para navegar a la consola en la región **N. Virginia (us-east-1)**.
+###  Copiar la copia de respaldo de EC2
 
-1.2 Oprima el link **Almacenes de copia de seguridad** , después oprima el link **Default**.
+1.1 Oprima el link **Almacenes de copia de seguridad**, después oprima el link **Default**.
 
-{{< img cp-1-ES.png >}}
+{{< img cp-1-es.png >}}
 
-{{% notice note %}}
-Si está usando su cuenta de AWS propia puede que quiera crear un almacén de copias de seguridad personalizado para este taller. Esto evitará juntar las copias de seguridad del taller con otras copias de seguridad en el almacén por defecto. Las instrucciones se pueden encontrar en: [documentación del servicio](https://docs.aws.amazon.com/aws-backup/latest/devguide/vaults.html).
-{{% /notice %}}
-
-1.3 En la sección **Copias de seguridad**, seleccione el backup. Oprima **Copiar** bajo el menú desplegable **Acciones**.
-
-{{< img cp-2-ES.png >}}
+1.2 En la sección **Backups**. Seleccione la copia de respaldo de EC2. Oprima **Copiar** bajo el menú desplegable **Acciones**.
 
 {{% notice warning %}}
-Si no ve su backup, revise el estado del **Trabajo de Backup**. Oprima el link **Trabajos**, después oprima el link **Trabajos de copia de seguridad**. Verifique que el **Estado** de su backup sea **Completado**.
+Si no ve su copia de respaldo, revise el estado del **trabajo de copia de seguridad**. Oprima el link **Trabajos**. después oprima el link **Trabajos de copia de seguridad**. Verifique que el estado de su copia de seguridad de EC2 sea **Completado**
 {{% /notice %}}
 
-{{< img cp-3-ES.png >}}
+{{< img cp-4-es.png >}}
 
-1.4 Seleccione **US West (N. California)** como **Copiar en el destino**, después oprima el botón **Copiar**.
+1.3 Seleccione **US West (N. California)** como **Copiar en el destino**, después seleccione **Elegir un rol de IAM** y seleccione **Team Role** como el **nombre de rol**. Oprima el botón **Copiar**.
 
-#### Copiar la AMI (Amazon Machine Image) de EC2
+{{< img cp-5-es.png >}}
 
-1.1 Oprima [EC2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#/) para navegar a la consola en la región **N. Virginia (us-east-1)**.
+1.4 Esto creará un **Trabajo de copiado**.
 
-1.2 Oprima el link **AMIs**.
+### Copiar la copia de respaldo de RDS backup
 
-1.3 Verifique que la imagen **BackupAndRestoreImage** tenga un estado de **Disponible**.
+2.1 Oprima el link **Almacenes de copia de seguridad**, después oprima el link **Default**.
 
+{{< img cp-1-es.png >}}
 
+2.2 En la sección **Backups**. Seleccione la copia de respaldo de RDS. Oprima **Copiar** bajo el menú desplegable **Acciones**.
 
-1.4 Seleccione **BackupAndRestoreImage**.  Oprima **Copiar AMI** en el desplegable **Acciones**.
+{{% notice warning %}}
+Si no ve su copia de respaldo, revise el estado del **trabajo de copia de seguridad**. Oprima el link **Trabajos**. después oprima el link **Trabajos de copia de seguridad**. Verifique que el estado de su copia de seguridad de RDS sea **Completado**
+{{% /notice %}}
 
+{{< img cp-2-es.png >}}
 
+2.3 Seleccione **US West (N. California)** como **Copiar en el destino**, después seleccione **Elegir un rol de IAM** y seleccione **Team Role** como el **nombre de rol**. Oprima el botón **Copiar**.
 
-1.5 Seleccione **US-West (N. California)** como la **Región de destino**, después oprima el botón **Copiar AMI**.
+{{< img cp-3-es.png >}}
 
+2.4 Esto creará un **Trabajo de copia**.
 
+Debe ver ahora sus dos trabajos de copia
 
-{{< prev_next_button link_prev_url="../backup-resources/s3/" link_next_url="./rds/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< img cp-6-es.png >}}
+
+{{< prev_next_button link_prev_url="../4.1-backup/" link_next_url="../../5-failover/" />}}

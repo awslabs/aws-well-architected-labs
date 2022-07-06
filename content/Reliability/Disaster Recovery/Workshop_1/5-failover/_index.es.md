@@ -6,16 +6,14 @@ weight = 5
 
 Cuando un evento de servicio regional afecta la aplicación Unicornio en la región primaria **N. Virginia (us-east-1)**, querremos activar sus recursos en la región secundaria **N. California (us-west-1)**.
 
-Asumiremos que un evento de servicio regional ha ocurrida. Es esta sección, llevaremos a cabo una serie de tareas manuales para recuperar el funcionamiento de la aplicación en la región secundaria **N. California (us-west-1)**.  En un ambiente de producción, automatizariamos estos pasos utilizando una plantilla de AWS CloudFormation o herramientas de terceros.
-
-Haremos lo siguiente:
-- Iniciar una instancia EC2 a partir de una AMI (Amazon Machine Image)
-- Restaurar la base de datos RDS a partir de una copia de seguridad
-- Configurar la aplicación
+{{% notice info %}}
+Haremos **manualmente** una serie de tareas para hacer el proceso de failover a la región secundaria **N. California (us-west-1)**.  
+En un ambiente de producción, se automatizarian estas tareas como parte del proceso de failover.
+{{% /notice %}}
 
 ### Simulando un evento de servicio regional
 
-Simularemos un evento regional de servicio que afecte la página web estática alojada en S3 en la región  **N. Virginia (us-east-1)** correspondiente al portal de The Unicorn Shop.
+Simularemos un evento regional de servicio que afecte la página web estática alojada en S3 en la región  **N. Virginia (us-east-1)** correspondiente al portal de The Unicorn Shop. Esto se logrará bloqueando el acceso pu4blico al bucket de S3 que aloja The Unicorn Shop.
 
 1.1 Oprima [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) para navegar a la consola.
 
@@ -47,5 +45,9 @@ Simularemos un evento regional de servicio que afecte la página web estática a
 
 {{< img f-7.png >}}
 
-{{< prev_next_button link_prev_url="../verify-website/" link_next_url="./ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{% notice note %}}
+Si no recibe un error 403 Forbidden, puede ser causado por el cache. Por favor intente recargando la página ,abriendo la página en un navegador diferente o en modo incógnito para ver este error.
+{{% /notice  %}}
+
+{{< prev_next_button link_prev_url="../4-prepare-secondary/4.2-copy" link_next_url="./5.1-restore/" />}}
 
