@@ -29,7 +29,7 @@ Por favor repita los pasos **1.1** a **1.4** para los siguientes buckets:</br>
 
 2.1 Oprima [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) para navegar a la consola en la región **N. Virginia (us-east-1)**.
 
-2.2 Seleccione la pila **BackupAndRestore** y oprima el botón **Eliminar**.
+2.2 Seleccione la pila **backupandrestore-primary** y oprima el botón **Eliminar**.
 
 {{< img cl-8-ES.png >}}
 
@@ -72,18 +72,6 @@ Si tiene más de una instancia corriendo puede verificar que está seleccionando
 {{% /notice %}}
 
 {{< img CL-26-ES.png >}}
-
-#### Amazon RDS
-
-4.1 Oprima [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#/) para navegar a la consola en la región **N. California (us-west-1)**.
-
-4.2 Seleccione la base de datos **backupandrestore-secondary-region**.  Seleccione **Acciones**, después seleccione **Eliminar**.
-
-{{< img CL-21-ES.png >}}
-
-4.3  Deshabilite las casillas de verificación  **Create final snapshot?** y **Retain automated backups**. Posteriormente, habilite la casilla de verificación **I acknowledge that ...**.  Escriba `delete me` en la caja de confirmación. Oprima el botón **Delete**. (Esta parte de la consola no está disponible en español)
-
-{{< img cl-13.png >}}
 
 {{< prev_next_button link_prev_url="../disaster/modify-application/" title="Felicitaciones!" button_next_text="Complete este lab" button_prev_text="Paso anterior" final_step="true" >}}
 Este laboratorio le ayuda a cumplir con las mejores prácticas cubiertas en la pregunta [REL 13  Como planeo para recuperación de desastres (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)

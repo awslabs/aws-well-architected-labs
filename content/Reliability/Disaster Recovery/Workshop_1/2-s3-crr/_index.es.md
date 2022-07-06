@@ -14,33 +14,33 @@ Como parte de la plantilla de CloudFormation, se crearon buckets de Amazon S3 en
 
 1.2 Los dos buckets de S3 tienen el prefijo `backupandrestore-`. Note la región para cada bucket de S3.
 
-{{< img crr-1.png >}}
+{{< img crr-1-es.png >}}
 
 ### Cree la regla de replicación
 
 2.1 Oprima el link de **backupandrestore-primary-uibucket-xxxx**.
 
-{{< img crr-2.png >}}
+{{< img crr-2-es.png >}}
 
 2.2 Oprima el link **Administración**. En la sección **Regla de replicación**, oprima el botón **Crear regla de replicación**.
 
-{{< img crr-3.png >}}
+{{< img crr-3-es.png >}}
 
-2.3 Escriba `PrimaryToSecondary` como el **Nombre de la regla de replicación** y seleccione **Aplicar a todos los objetos en el bucket**.
+2.3 Escriba `PrimaryToSecondary` como el **Nombre de la regla de replicación** y seleccione **Aplicar a todos los objetos del bucket**.
 
-{{< img crr-4.png >}}
+{{< img crr-4-es.png >}}
 
-2.4 Seleccione **Escoger un bucket en esta cuenta** y después selecionne **backupandrestore-secondary-uibucket-xxxx** como el **Nombre del Bucket**. Seleccione **Team Role** como el **rol de IAM**.
+2.4 Seleccione **Elegir un bucket en esta cuenta** y después selecionne **backupandrestore-secondary-uibucket-xxxx** como el **Nombre del Bucket**. Seleccione **Team Role** como el **rol de IAM**.
 
-{{< img crr-5.png >}}
+{{< img crr-5-es.png >}}
 
 2.5 Habilite la casilla **Control de tiempo de replicación (RTC)**, después oprima el botón **Guardar**.
 
-{{< img crr-6.png >}}
+{{< img crr-6-es.png >}}
 
-2.6 El bucket está (casi) vacio y no se quiere replicar los objetos existentes, oprima el botón **Submit**.
+2.6 El bucket está (casi) vacio y no se quiere replicar los objetos existentes, oprima el botón **Enviar**.
 
-{{< img crr-7.png >}}
+{{< img crr-7-es.png >}}
 
 ### Replicación del bucket de S3
 
@@ -53,7 +53,7 @@ En un ambiente de producción, estos pasos de automatizarion como parte del pipe
 
 3.2 Si nunca ha utilizado CloudShell, se mostrará un mensaje de **Bienvenida a AWS CloudShell**, oprima el botón **Cerrar**.
 
-3.3 En la ventana emergente - pegue el siguiente comando de la CLI de AWS. Se mostratá el mensaje **Pegado seguro para un texto multi-linea**, oprima el botón **Pegar**.
+3.3 En la ventana emergente - pegue el siguiente comando de la CLI de AWS. Se mostratá el mensaje **Safe Paste for multiline text**, oprima el botón **Paste**.
 
 ```sh
 export S3_BUCKET=$(aws s3api list-buckets --region us-east-1 --output text --query 'Buckets[?starts_with(Name, `backupandrestore-primary-uibucket`) == `true`]'.Name)
@@ -64,11 +64,11 @@ aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733
 
 4.1 Oprima el link **backupandrestore-secondary-uibucket-xxxx**.
 
-{{< img crr-8.png >}}
+{{< img crr-8-es.png >}}
 
 4.2 Debería ver los objetos replicados.
 
-{{< img crr-9.png >}}
+{{< img crr-9-es.png >}}
 
 {{% notice info %}}
 Puede tomar un par de minutos en reflejarse los objetos replicados.

@@ -8,9 +8,9 @@ weight = 3
 
 Ahora, verifique que todo está funcionando como se esperar en la región primaria **N. Virginia (us-east-1)**. La página web Unishop está siendo alojada como un sitio web estático en un bucket de S3.
 
-1.1 Oprima [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) para navegar a la consola en la región **N. Virginia (us-east-1)**.
+1.1 Oprima [Pilas de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) para navegar a la consola en la región **N. Virginia (us-east-1)**.
 
-1.2 Seleccione **BackupAndRestore** bajo la opción **Pilas**.
+1.2 Seleccione **backupandrestore-primary** bajo la opción **Pilas**.
 
 1.3 Oprima en el link **Salidas**.
 
