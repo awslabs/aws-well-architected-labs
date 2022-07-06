@@ -15,7 +15,7 @@ We are going to **copy** the resources to our secondary region **N. California (
 1.2 In the **Backups** section. Select the EC2 backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
-If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
+If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
 {{% /notice %}}
 
 {{< img cp-4.png >}}
@@ -35,7 +35,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 2.2 In the **Backups** section. Select the RDS backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
-If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
+If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
 {{% /notice %}}
 
 {{< img cp-2.png >}}
