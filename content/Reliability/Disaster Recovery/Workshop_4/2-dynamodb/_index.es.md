@@ -6,7 +6,7 @@ weight = 2
 
 Cuando crea una tabla global de DynamoDB, crea múltiples replicas de tablas (Una por región de AWS) que DynamoDB trata como una única unidad. Cada replica tiene el mismo nombre de tabla y el mismo esquema de llaves primarias. Cuando una aplicación escribe información a una replica en una región, DynamoDB propaga la escritura a las otras replicas (tablas) en otras regiones de AWS de forma automática.
 
-Vamos a configurar las tablas globales de DynamoDb replicando de la región **AWS Region N. Virginia (us-east-1)** a **AWS Region N. California (us-west-1)**.
+Vamos a configurar las tablas globales de DynamoDB replicando de la región **AWS Region N. Virginia (us-east-1)** a **AWS Region N. California (us-west-1)**.
 
 {{% notice note %}}
 **Si está utilizando su propia cuenta de AWS, debe esperar a que la pila de la región primaria se cree de forma exitosa antes de moverse a este paso.**

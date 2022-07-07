@@ -11,7 +11,7 @@ weight = 5
 {{% /notice %}}
 
 {{% notice note %}}
-Necesitará los valores de los parámetros de salida de Amazon CloudFormation de las pila **Primary-Active** para completar esta sección. Para ayuda sobre este paso, revise la sección [Salidas de CloudFormation](../prerequisites/cfn-outputs/) del taller.
+Necesitará los valores de los parámetros de salida de Amazon CloudFormation de la pila **Primary-Active** para completar esta sección. Para ayuda sobre este paso, revise la sección [Salidas de CloudFormation](../prerequisites/cfn-outputs/) del taller.
 {{% /notice %}}
 
 {{< img pr-6-es.png >}}

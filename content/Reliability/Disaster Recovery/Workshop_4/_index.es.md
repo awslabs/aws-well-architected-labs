@@ -1,5 +1,5 @@
 +++
-title = "Módulo 4: Espera caliente"
+title = "Módulo 4: Espera activa"
 date = 2021-05-06T09:52:56-04:00
 weight = 140
 chapter = false

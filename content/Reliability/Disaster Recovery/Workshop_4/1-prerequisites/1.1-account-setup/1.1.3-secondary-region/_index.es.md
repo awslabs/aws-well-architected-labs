@@ -22,7 +22,7 @@ Cambie el valor del parámetro **IsPrimary** a `no`.
 
 1..4 Deje los valores predeterminados en la página **Configurar opciones de pila** y oprima **Siguiente** para continuar.
 
-1.5 Desplacedse al fondo de la página y oprima la **casilla de verificación** para aceptar la creación de roles IAM, posteriormente oprima **Crear pila**.
+1.5 Desplacese al fondo de la página y oprima la **casilla de verificación** para aceptar la creación de roles IAM, posteriormente oprima **Crear pila**.
 
 {{< img sr-5-es.png >}}
 

@@ -21,6 +21,7 @@ weight = 2
 1.4 Deje los valores predeterminados en la página **Configurar opciones de pila** y oprima **Siguiente** para continuar.
 
 1.5 Desplacedse al fondo de la página y oprima la **casilla de verificación** para aceptar la creación de recursos de IAM, posteriormente oprima **Crear pila**.
+1.5 Desplacese al fondo de la página y oprima la **casilla de verificación** para aceptar la creación de recursos de IAM, posteriormente oprima **Crear pila**.
 
 {{< img pr-5-es.png >}}
 
