@@ -24,6 +24,10 @@ You will create two Amazon S3 buckets in two different AWS regions. The **Ohio**
 
 You will deploy the infrastructure for two Amazon S3 buckets. Since these will be in two different regions, you will need to create an AWS CloudFormation stack in each region. You will use the same CloudFormation template for both regions.
 
+{{% notice note %}}
+You must use the same **NamingPrefix** parameter for **both** CloudFormation templates in **both** regions, or replication will fail!
+{{% /notice %}}
+
 * Download the [_s3_bucket.yaml_](/Reliability/200_Bidirectional_Replication_for_S3/Code/CloudFormation/s3_bucket.yaml) CloudFormation template
 
 #### 1.2.1 Deploy _east_ S3 bucket

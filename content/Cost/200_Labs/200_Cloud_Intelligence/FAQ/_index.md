@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
-November 2021
+June 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
@@ -118,7 +118,7 @@ These actions should be done in Governance account
 
 ![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
 
-5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **sql, **csv, **/cost_and_usage_data_status/*. Click Next
+5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **.sql, **.csv, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object. Click Next
 
 ![Images/glue_2.png](/Cost/200_Cloud_Intelligence/Images/glue_2.png?classes=lab_picture_small)
 

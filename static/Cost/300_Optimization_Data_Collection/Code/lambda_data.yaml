@@ -104,6 +104,10 @@ Resources:
                 Resource: "*"
               - Effect: "Allow"
                 Action:
+                  - "lambda:InvokeFunction"
+                Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:pricing-Lambda-Function"
+              - Effect: "Allow"
+                Action:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
@@ -196,7 +200,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's
-      Name: snapshot-ami-query
+      Name: snapshot-ami-query-no-pricing
       QueryString: 
         "SELECT *,
         CASE
@@ -236,3 +240,275 @@ Resources:
             virtualizationtype
             FROM \"optimization_data\".\"ami_data\") AS ami
                 ON snapshots.snap_ami_id = ami.imageid )"
+  AthenaSnaphotAMIPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: snapshot-ami-query
+      QueryString: 
+        "CREATE OR REPLACE VIEW snapshot_ami_quicksight_view AS 
+        SELECT *,
+          CASE
+            WHEN snap_ami_id = imageid THEN 'AMI Avalible'
+            WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed' ELSE 'Not AMI'
+          END AS status, 
+         cast(priceperunit as decimal)*volumesize as est_snap_cost
+        FROM ((((
+            (
+              SELECT snapshotid AS snap_id,
+                volumeid as volume,
+                volumesize,
+                starttime,
+                Description AS snapdescription,
+                year,
+                month,
+                region,
+                ownerid,
+                CASE
+                  WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN split_part(Description, ' ', 5)
+                  WHEN substr(Description, 2, 11) = 'Copied snap' THEN split_part(Description, ' ', 9)
+                  WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN split_part(Description, ' ', 4) ELSE ''
+                END AS snap_ami_id
+              FROM optimization_data.snapshot_data
+            ) AS snapshots
+            LEFT JOIN (
+              SELECT imageid,
+                name,
+                description,
+                state,
+                rootdevicetype,
+                virtualizationtype, 
+                month as ami_month, 
+                year as ami_year
+              FROM optimization_data.ami_data) AS ami 
+            ON snapshots.snap_ami_id = ami.imageid and snapshots.month=ami.ami_month and snapshots.year = ami.ami_year
+          )
+          LEFT JOIN (
+          SELECT
+            region region_code
+          , regionname
+          FROM
+            optimization_data.region_names
+        )  region ON (snapshots.region = region.region_code))
+        LEFT JOIN (
+          SELECT DISTINCT
+            volumeid volume_mapping
+          , count(DISTINCT snapshotid) snap_count
+          FROM
+            optimization_data.snapshot_data
+          GROUP BY 1
+        )  mapping ON (mapping.volume_mapping = snapshots.volume)) s
+        LEFT JOIN (
+          SELECT
+            \"product family\"
+          , location
+          , priceperunit
+          , unit
+          FROM
+            optimization_data.ec2_pricing
+          WHERE (((\"product family\" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND (\"location type\" = 'AWS Region'))
+        )  snap_unit_price ON (s.regionname = snap_unit_price.location))"
+
+  AthenaEBSTA:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: ebs-ta-query
+      QueryString: 
+        "SELECT * FROM
+        optimization_data.ebs_data
+          LEFT JOIN 
+          (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",status,	\"monthly storage cost\" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
+          from
+          optimization_data.ta_data
+          where category = 'cost_optimizing' ) ta
+          ON ebs_data.volumeid = ta.\"volume id\" and ebs_data.year = ta.tayear and ebs_data.month = ta.tamonth
+      LEFT JOIN (
+        SELECT
+          region region_code
+        , regionname
+        FROM
+          optimization_data.region_names
+      )  region ON (ebs_data.region = region.region_code)"
+  AthenaEBSView:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: ebs-view
+      QueryString: 
+        "CREATE OR REPLACE VIEW ebs_view AS 
+        SELECT * FROM
+                    optimization_data.ebs_data
+                LEFT JOIN 
+                (select \"volume id\",\"volume name\", \"volume type\",\"volume size\",	\"monthly storage cost\" ,accountid as ta_accountid, status, category, region as ta_region, year as ta_year ,month as ta_month
+                from
+                optimization_data.ta_data
+                where category = 'cost_optimizing') ta
+                ON ebs_data.volumeid = ta.\"volume id\" and ebs_data.year = ta.ta_year and ebs_data.month = ta.ta_month
+                LEFT JOIN (
+          SELECT
+            \"region\" \"region_code\"
+          , regionname
+          FROM
+            storage.region_names
+        )  region ON (ebs_data.region = region.region_code)"
+  AthenaEBSTAPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: ebs-ta-query-pricing
+      QueryString: 
+        "CREATE OR REPLACE VIEW ebs_quicksight_view AS 
+          SELECT
+            volumeid
+          , volumetype
+          , size
+          , attachments
+          , iops
+          , region
+          , accountid
+          , TRY(date_parse(createtime, '%Y-%m-%d %H:%i:%s')) date_created
+          , year
+          , month
+          , CAST(concat(year, '-', month, '-01') AS date) billing_period
+          , concat(year, '-', month) date
+          , (CASE status WHEN 'warning' THEN 'Underutilised' ELSE 'Healthy' END) status
+          , priceperunit
+          , iop_price
+          , (priceperunit * size) ebs_gb_cost
+          , (priceperunit * size) ebs_cost
+          , (CASE WHEN (volumetype = 'io1') THEN (iop_price * CAST(iops AS integer)) WHEN (volumetype = 'io2') THEN (iop_price * CAST(iops AS integer)) ELSE 0 END) iop_cost
+          FROM
+            ((optimization_data.ebs_view
+          LEFT JOIN (
+            SELECT
+              \"volume api name\"
+            , location
+            , priceperunit
+            , unit
+            , \"product family\"
+            FROM
+              optimization_data.ec2_pricing
+            WHERE (\"product family\" = 'Storage')
+          )  ebs_price ON ((ebs_view.volumetype = ebs_price.\"volume api name\") AND (ebs_view.regionname = ebs_price.location)))
+          LEFT JOIN (
+            SELECT
+              \"volume api name\"
+            , location
+            , priceperunit iop_price
+            , unit
+            , \"product family\"
+            , usagetype
+            FROM
+              optimization_data.ec2_pricing
+            WHERE (((\"Product Family\" = 'System Operation') AND (\"volume api name\" IN ('io1', 'io2'))) AND ((usagetype LIKE '%EBS:VolumeP-IOPS.io2') OR (usagetype LIKE '%EBS:VolumeP-IOPS.piops')))
+          )  ebs_iops_price ON ((ebs_view.volumetype = ebs_iops_price.\"volume api name\") AND (ebs_view.regionname = ebs_iops_price.location)))
+          ORDER BY volumeid DESC
+          "
+  AthenaGp3Opportunity:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies gp2, io1, io2 that could move to gp3
+      Name: gp3-opportunity
+      QueryString: 
+        "WITH raw_ebs_pricedata AS (
+        SELECT 
+            region,
+            map_agg(
+                CASE WHEN \"volume api name\" = 'io1' AND unit = 'GB-Mo' THEN 'io1_GB-Mo'
+                    WHEN \"volume api name\" = 'io2' AND unit = 'GB-month' THEN 'io2_GB-Mo'
+                    WHEN \"volume api name\" = 'gp3' AND unit = 'GB-Mo' THEN 'gp3_GB-Mo'
+                    WHEN \"volume api name\" = 'gp2' AND unit = 'GB-Mo' THEN 'gp2_GB-Mo'
+                    WHEN \"volume api name\" = 'io1' AND unit = 'IOPS-Mo' THEN 'io1_IOPS-Mo'
+                    WHEN \"volume api name\" = 'io2' AND unit = 'IOPS-Mo' AND \"group\" = 'EBS IOPS' THEN 'io2_IOPS-Mo_tier1'
+                    WHEN \"volume api name\" = 'io2' AND unit = 'IOPS-Mo' AND \"group\" = 'EBS IOPS Tier 2' THEN 'io2_IOPS-Mo_tier2'
+                    WHEN \"volume api name\" = 'io2' AND unit = 'IOPS-Mo' AND \"group\" = 'EBS IOPS Tier 3' THEN 'io2_IOPS-Mo_tier3'
+                    WHEN \"volume api name\" = 'gp3' AND unit = 'IOPS-Mo' THEN 'gp3_IOPS-Mo'
+                    WHEN \"volume api name\" = 'gp3' AND unit = 'GiBps-mo' THEN 'gp3_GiBps-mo'
+                    ELSE unit
+                END, priceperunit) kv1
+        FROM optimization_data.ec2_pricing
+        JOIN optimization_data.region_names ON region_names.regionname = ec2_pricing.location
+        WHERE \"volume api name\" IN ('io1','io2','gp3','gp2')
+        GROUP BY region
+        ),
+        pivoted_ebs_pricedata AS (
+            SELECT region,
+                  kv1['io1_GB-Mo'] as io1_gb_unit_cost,
+                  kv1['io2_GB-Mo'] as io2_gb_unit_cost,
+                  kv1['gp2_GB-Mo'] as gp2_gb_unit_cost,
+                  kv1['gp3_GB-Mo'] AS gp3_gb_unit_cost,
+                  kv1['io1_IOPS-Mo'] as io1_iops_unit_cost,
+                  kv1['io2_IOPS-Mo_tier1'] as io2_iops_t1_unit_cost,
+                  kv1['io2_IOPS-Mo_tier2'] as io2_iops_t2_unit_cost,
+                  kv1['io2_IOPS-Mo_tier3'] as io2_iops_t3_unit_cost,
+                  kv1['gp3_IOPS-Mo'] as gp3_iops_unit_cost,
+                  kv1['gp3_GiBps-mo']/1000. AS gp3_throughput_unit_cost
+            FROM raw_ebs_pricedata
+        ),
+        ebs_data AS (
+            SELECT
+                volumeid,
+                \"volume name\",
+                \"volume type\",
+                size,
+                attachments,
+                iops,
+                ebs_view.region,
+                accountid,
+                year, 
+                month,
+                CASE status
+                    WHEN 'warning' THEN 'Underutilised'
+                    ELSE 'Healthy'
+                END AS status,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_gb_unit_cost
+                    WHEN volumetype = 'io2' THEN io2_gb_unit_cost
+                    WHEN volumetype = 'gp2' THEN gp2_gb_unit_cost
+                END as gb_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_gb_unit_cost * size
+                    WHEN volumetype = 'io2' THEN io2_gb_unit_cost * size
+                    WHEN volumetype = 'gp2' THEN gp2_gb_unit_cost * size
+                END as current_gb_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_iops_unit_cost
+                    WHEN volumetype = 'io2' THEN io2_iops_t1_unit_cost
+                    WHEN volumetype = 'gp2' THEN 0.0
+                END as iops_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_iops_unit_cost * CAST(iops AS double)
+                    WHEN volumetype = 'io2' THEN io2_iops_t1_unit_cost * CAST(iops AS double)
+                    WHEN volumetype = 'gp2' THEN 0.0
+                END as current_iops_cost,
+                gp3_gb_unit_cost,
+                gp3_gb_unit_cost * size AS gp3_gb_cost,
+                gp3_iops_unit_cost,
+                CASE 
+                    WHEN cast(iops as integer) <= 3000 THEN 0.0
+                    ELSE (CAST(iops AS double) - 3000.) * gp3_iops_unit_cost
+                END as gp3_iops_cost,
+                gp3_throughput_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN gp3_throughput_unit_cost * 500
+                    WHEN volumetype = 'io2' THEN gp3_throughput_unit_cost * 500
+                    WHEN volumetype = 'gp2' AND size <= 170 THEN gp3_throughput_unit_cost * (128.0 - 125.0)
+                    WHEN volumetype = 'gp2' AND size > 170 THEN gp3_throughput_unit_cost * (250.0 - 125.0)
+                END AS gp3_throughput_cost
+            FROM optimization_data.ebs_view
+            LEFT JOIN pivoted_ebs_pricedata ON pivoted_ebs_pricedata.region = ebs_view.region            
+            WHERE 
+                volumetype in('io1', 'io2', 'gp2')
+                and cast(iops as integer) < 16000 )
+          Select
+              *,
+              current_gb_cost + current_iops_cost AS current_total_cost,
+              gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost AS gp3_total_cost,
+              (current_gb_cost + current_iops_cost) - (gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost) as gp3_saving
+          from ebs_data"

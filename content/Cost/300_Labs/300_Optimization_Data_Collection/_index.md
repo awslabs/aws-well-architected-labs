@@ -13,6 +13,7 @@ May 2022
 - Stephanie Gooch, Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
+- Andy Brown, OPTICS Manager - Commercial Architects IBUs
 
 ## Feedback
 If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
@@ -75,7 +76,7 @@ It is possible to deploy **Optimization Data Collection** Stack to organization'
 - Access to the Management AWS Account of the AWS Organization to deploy Cloudformation
 - Access to a sub account within the Organization - referred to as **Cost Optimization Account**
 - Completed the [Account Setup Lab]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
-- Inventory, ECS Chargeback and Trusted Advisor Modules of this Lab require lambda code that only available in a limited number of regions (eu-west-1,us-west-2,us-east-2,us-east-1,us-west-1,us-west2,ap-southeast-1,eu-central-1,eu-west-2,eu-north-1,ap-southeast-2). Please make sure you choose to use these regions to install the Data Collection stack. 
+- Inventory, ECS Chargeback and Trusted Advisor Modules of this Lab require lambda code that only available in a limited number of regions (eu-west-1,us-west-2,us-east-2,us-east-1,us-west-1,us,ap-southeast-1,eu-central-1,eu-west-2,eu-north-1,ap-southeast-2). Please make sure you choose to use these regions to install the Data Collection stack. 
 - Trusted Advisor Modules will require a Business, Enterprise On-Ramp, or Enterprise Support plan.
 
 

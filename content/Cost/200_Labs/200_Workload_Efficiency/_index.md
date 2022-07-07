@@ -34,7 +34,7 @@ The first time you perform this lab it is recommended to use the sample files su
 ![Images/AWSReadme.png](/Cost/200_Workload_Efficiency/Images/AWSReadme.png)
 
 ## Goals
-- Setup the applicaion data source
+- Setup the application data source
 - Combine the application and cost data sources
 - Create the visualization for efficiency
 
