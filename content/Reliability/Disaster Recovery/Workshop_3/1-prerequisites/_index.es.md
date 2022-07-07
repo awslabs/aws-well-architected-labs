@@ -12,7 +12,7 @@ Si está realizando este taller como parte de un taller liderado por un instruct
 
 Todos los recursos para este taller han sido provisionados con anterioridad.
 
-**Continue a la sección [Verifique el reenvio de escritura de Aurora](../verify-aurora-writefwd/) del taller.**
+**Continue a la sección [Verifique los sitios Web](../2-verify-websites/) del taller.**
 
 ### Utilizando su propia cuenta de AWS
 

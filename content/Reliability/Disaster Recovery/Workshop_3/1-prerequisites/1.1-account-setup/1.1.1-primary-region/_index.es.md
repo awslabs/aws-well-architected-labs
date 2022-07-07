@@ -6,7 +6,7 @@ weight = 1
 
 ## Desplegando la plantilla de Amazon CloudFormation
 
-1.1 Cree la aplicación en la región **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=warm-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/WarmStandbyDR.yaml).
+1.1 Cree la aplicación en la región primaria **N. Virginia (us-east-1)** lanzando la [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=warm-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/WarmStandbyDR.yaml).
 
 1.2  Especifique los detalles de la pila.
 
@@ -20,7 +20,7 @@ weight = 1
 
 1.4 Deje los valores por defecto en la página **Configurar las opciones de la pila** y oprima el botón **Siguiente** para continuar.
 
-1.5 Desplacese al fondo de la página y oprima la **casilla de verificación** para aceptar la creación de recursos de IAM, después oprima **Crear pila**.
+1.5 Desplacese al final de la página y oprima la **casilla de verificación** para aceptar la creación de recursos de IAM, después oprima **Crear pila**.
 
 {{< img pr-5-es.png >}}
 

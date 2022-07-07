@@ -16,6 +16,10 @@ weight = 4
 
 1.4 Oprima el link de salida **WebsiteURL**.
 
+{{% notice warning %}}
+Si aún tienes el sitio web abierto desde un paso anterior, tendrás que **Logout** antes de realizar los siguientes pasos.
+{{% /notice %}}
+
 ## Verifique la página web
 
 2.1 Inicie sesión en la aplicación. Tendrá que usar el email registrado en la sección **Pre-requisitos > Región primaria**.
@@ -24,5 +28,5 @@ weight = 4
 
 {{< img vf-1.png >}}
 
-{{< prev_next_button link_prev_url="../failover/promote-aurora/" link_next_url="../cleanup" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../3-failover/3.2-ec2/" link_next_url="../5-cleanup" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
 
