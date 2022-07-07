@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 2
 +++
 
-#### Launch EC2 Instance 
+#### Update Launch Configuration and Auto Scaling Group (ASG)
 
 1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
@@ -26,7 +26,11 @@ weight = 2
 
 #### Auto Scaling Group (ASG)
 
-The update to the CloudFormation template was to change the Auto Scaling Group in the secondary region **N. California (us-west-1)** to **scale out** our EC2 capacity to match our primary region **N. Virginia (us-east-1)**. This way we know when we fail over, our secondary region can handle the request traffic.
+The following changes were made when we updated our CloudFormation template:
+- Launch Configuration was modified in order to connect our application to the newly promoted Aurora cluster.
+- Auto Scaling Group was modified in order to scale out our EC2 capacity from 1 instance to 2 instances to match our primary region **N. Virginia (us-east-1)** EC2 capacity.
+
+We can now be confident that when we failover, our secondary region **N. California (us-west-1)** can handle production level request traffic.
 
 2.1 CLick [Auto Scaling Groups](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#AutoScalingGroups:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
@@ -34,7 +38,7 @@ The update to the CloudFormation template was to change the Auto Scaling Group i
 
 {{< img asg-1.png >}}
 
-2.3 Click the **Activity** link, then scroll down to the **Activity History** section.  You should see new instances launching in response to your CloudFormation update.
+2.3 Click the **Activity** link, then scroll down to the **Activity History** section.  You should see the existing instance terminated in response to the Launch Configuration update and two instances launching in response to the Auto Scaling Group update.
 
 {{< img asg-3.png >}}
 
