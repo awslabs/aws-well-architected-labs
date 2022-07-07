@@ -9,7 +9,7 @@ hidden: false
 
 ## Authors
 - **Jang Whan Han**, Solutions Architect, AWS Well-Architected
-- **Phong Le**, Solutions Architect, AWS Well-Architected
+- **Phong Le**, Geo Solutions Architect, AWS Well-Architected
 
 ## Introduction
 
