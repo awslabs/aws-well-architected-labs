@@ -40,7 +40,6 @@ We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data
 Expand the **Advanced settings** section and copy and paste the below script as the **User data**, then click the **Restore backup** button.
 
 **User Data Script**:
-{{% expand "Click here to see the user data:" %}}
 
 ```bash
 #!/bin/bash     
@@ -53,7 +52,6 @@ export DB_ENDPOINT=$DATABASE
 EOF
 sudo systemctl restart unishop
 ```
-{{% /expand %}}
 
 {{< img rs-22.png >}}
 

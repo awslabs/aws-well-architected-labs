@@ -31,6 +31,12 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 {{% /notice %}}
 
+1.5 Select the bucket with the prefix **backupandrestore-secondary-uibucket-xxxx** and click the **Delete** button.
+
+{{< img cl-11.png >}}
+
+1.6 Confirm deletion.
+
 #### Amazon CloudFormation
 
 2.1 Click [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
@@ -55,7 +61,7 @@ Please repeat steps **2.1** through **2.3** for the `backupandrestore-secondary`
 
 {{< img BK-24.png >}}
 
-3.3 Select all the backups and select **Actions**, then select **Delete**.
+3.3 Select all the backups and select **Delete** under **Actions**.
 
 {{< img BK-27.png >}}
 
@@ -71,9 +77,10 @@ Please repeat steps **3.1** through **3.3** for [AWS Backup](https://us-west-1.c
 
 4.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#Instances:instanceState=running) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-4.2 Select the instance that has a **Security group name** of **backupandrestore-secondary-EC2SecurityGroup-xxxx** and click **Instance State**, then click **Terminate instance**.
+4.2 Select the restored instance which will NOT have a **Name** and will has a **Security group name** of **backupandrestore-secondary-EC2SecurityGroup-xxxx** and click **Instance State**, then click **Terminate instance**.
 
 {{< img cl-10.png >}}
+
 
 {{< prev_next_button link_prev_url="../6-verify-secondary/" title="Congratulations!" final_step="true" >}}
 This lab specifically helps you with the best practices covered in question [REL 13  How do you plan for disaster recovery (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)

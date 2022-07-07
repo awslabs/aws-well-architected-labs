@@ -40,7 +40,6 @@ Usaremos [Datos de usuario](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/
 Copie y pegue el siguiente script como *Datos de usuario**, después oprima el botón **Restaurar copia de seguridad**
 
 **Script de datos de usuario**:
-{{% expand "Click here to see the user data:" %}}
 
 ```bash
 #!/bin/bash     
@@ -53,7 +52,6 @@ export DB_ENDPOINT=$DATABASE
 EOF
 sudo systemctl restart unishop
 ```
-{{% /expand %}}
 
 {{< img rs-22-es.png >}}
 

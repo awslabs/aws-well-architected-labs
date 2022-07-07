@@ -41,7 +41,6 @@ Debe esperar a que pilotAMI cambie a estado **Disponible** antes de comenzar el 
 Copie y pegue el siguiente _script_ como **datos de usuario**, luego oprima **Lanzar instancia**.
 
 **Script Datos de usuario**:
-{{% expand "Click here to see the user data:" %}}
 
 ```bash
 #!/bin/bash     
@@ -54,7 +53,6 @@ export DB_ENDPOINT=$DATABASE
 EOF
 sudo systemctl restart unishop
 ```
-{{% /expand %}}
 
 {{< img pa-5-ES.png >}}
 
