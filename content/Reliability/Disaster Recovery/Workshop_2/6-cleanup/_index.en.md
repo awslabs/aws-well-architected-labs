@@ -10,7 +10,7 @@ If you are running this workshop via an instructor led training, you do **NOT** 
 
 #### S3 Cleanup
 
-1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 CLick [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard..
 
 1.2 Select the **pilot-primary-uibucket-xxxx** and click **Empty**.
 
@@ -35,7 +35,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-2.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
+2.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) to navigate to the dashboard in **N. California (us-west-1)** region.
 
 2.2 Select **unishop** database under **pilot-secondary** cluster and select **Delete** under **Actions**.
 
@@ -63,7 +63,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### EC2 Cleanup
 
-3.1 Navigate to [EC2](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances:instanceState=running) in the **N. California (us-west-1)** region.
+3.1 Click [EC2](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances:instanceState=running) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 3.2 Select the **pilot-secondary** instance and click **Terminate instance** under **Instance State**.
 
@@ -71,7 +71,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### CloudFormation Secondary Region Cleanup
 
-4.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+4.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 4.2 Select the **pilot-secondary** stack and click **Delete**.
 
@@ -83,7 +83,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### CloudFormation Primary Region Cleanup
 
-5.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
+5.1 Click [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 5.2 Select **pilot-primary** stack.  Next click the **Delete** button to remove it.
 

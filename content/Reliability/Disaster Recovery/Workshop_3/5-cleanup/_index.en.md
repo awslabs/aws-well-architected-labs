@@ -10,7 +10,7 @@ If you are running this workshop via an instructor led training, you do **NOT** 
 
 #### S3 Cleanup
 
-1.1 Navigate to [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1 Click [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Select the **warm-primary-uibucket-xxxx** and click **Empty**.
 
@@ -35,7 +35,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-2.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
+2.1 Click [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 2.2 Select **unishop-warm** database under **warm-primary** cluster and select **Delete** under **Actions**.
 
@@ -72,7 +72,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### CloudFormation Secondary Region Cleanup
 
-3.1 Navigate to [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) in **N. California (us-west-1)** region.
+3.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 3.2 Select the **warm-secondary** stack then click the **Delete** button.
 
@@ -88,7 +88,7 @@ Wait for the stack deletion to complete before moving to the next step.
 
 #### CloudFormation Primary Region Cleanup
 
-4.1 Navigate to [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) in **N. Virginia (us-east-1)** region.
+4.1 Click [CloudFormation](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 4.2 Select **warm-primary** stack then click the **Delete** button.
 

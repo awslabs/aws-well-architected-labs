@@ -18,7 +18,7 @@ For this workshop we will be doing a **Managed Planned Failover**.
 
 #### Promote Aurora
 
-1.1 Navigate to [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases:) in **N. Virginia (us-east-1)** region.
+1.1 Click [RDS](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases:) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Look at the **warm-global** Global database. Notice how we have a **Primary cluster** in **us-east-1** which has our **Writer instance** and a **Secondary cluster** in **us-west-1** which has our **Reader instance**.
 

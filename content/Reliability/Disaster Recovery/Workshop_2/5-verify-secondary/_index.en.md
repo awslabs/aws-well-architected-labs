@@ -6,11 +6,11 @@ weight = 5
 
 #### Secondary Region
 
-1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
+1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) to navigate to the dashboard in **N. California (us-west-1)** region.
 
 1.2 Choose the **pilot-secondary** stack.
 
-1.3 Then navigate to the **Outputs** tab.
+1.3 Click the **Outputs** link.
 
 {{< img vf-2.png >}}
 

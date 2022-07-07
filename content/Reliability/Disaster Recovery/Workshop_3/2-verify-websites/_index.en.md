@@ -6,11 +6,11 @@ weight = 2
 
 ### Primary Region
 
-1.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) in **N. Virginia (us-east-1)** region.
+1.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
 1.2 Choose the **warm-primary** stack.
 
-1.3 Then navigate to the **Outputs** tab.
+1.3 Click the **Outputs** link.
 
 {{< img vw-1.png >}}
 
@@ -40,11 +40,11 @@ weight = 2
 
 We are taking advantage of Amazon Aurora read replica [write forwarding](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-write-forwarding.html). With this feature enabled, writes can be sent to a read replica in a secondary region, and will be seamlessly forwarded to the writer in the primary region over a secure communication channel. It is considered a best practice to enable write forwarding in your secondary region for Warm Standby disaster recovery strategy for testing purposes.
 
-3.1 Navigate to [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) in **N. California (us-west-1)** region.
+3.1 Click [CloudFormation Stacks](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 3.2 Choose the **warm-secondary** stack.
 
-3.3 Then navigate to the **Outputs** tab.
+3.3 Click the **Outputs** link.
 
 {{< img vw-11.png >}}
 

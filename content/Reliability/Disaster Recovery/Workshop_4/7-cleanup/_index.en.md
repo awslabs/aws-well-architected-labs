@@ -71,7 +71,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 This step is required as we did manual promotion for the Aurora Database.
 {{% /notice %}}
 
-4.1 Navigate to [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) in **N. California (us-west-1)** region.
+4.1 Click [RDS](https://us-west-1.console.aws.amazon.com/rds/home?region=us-west-1#databases:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 4.2 Select **unishop-hot** database under **hot-secondary** cluster and select **Delete** under **Actions**.
 

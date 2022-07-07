@@ -25,7 +25,7 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img f-2.png >}}
 
-1.4 Enable the **Block all public access** checkbox, then click the **Save** button.
+1.4 Enable the **Block all public access** checkbox, then click the **Save changes** button.
 
 {{< img f-3.png >}}
 

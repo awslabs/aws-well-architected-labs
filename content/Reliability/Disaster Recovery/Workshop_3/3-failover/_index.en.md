@@ -15,7 +15,7 @@ In a production environment, we would **automate** these tasks as part of our fa
 
 We will now simulate a regional service event affecting the Unishop website in **N. Virginia (us-east-1)**.  We are going to achieve this by blocking public access to the S3 bucket that is hosting the website making the Unishop website unavailable.
 
-1.1  Navigate to [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/).
+1.1  Click [S3](https://console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
 1.2 Click on the **warm-primary-uibucket-xxxx** link.
 
@@ -25,7 +25,7 @@ We will now simulate a regional service event affecting the Unishop website in *
 
 {{< img f-2.png >}}
 
-1.4 Enable the **Block all public access** checkbox, then click the **Save** button.
+1.4 Enable the **Block all public access** checkbox, then click the **Save changes** button.
 
 {{< img f-3.png >}}
 
