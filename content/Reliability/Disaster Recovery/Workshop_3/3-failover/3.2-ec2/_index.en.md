@@ -28,11 +28,11 @@ weight = 2
 
 The following changes were made when we updated our CloudFormation template:
 - Launch Configuration was modified in order to connect our application to the newly promoted Aurora cluster.
-- Auto Scaling Group was modified in order to scale out our EC2 capacity from 1 instance to 2 instances to match our primary region **N. Virginia (us-east-1)** EC2 capacity.
+- [Auto Scaling Group](https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html) was modified in order to scale out our EC2 capacity from 1 instance to 2 instances to match our primary region **N. Virginia (us-east-1)** EC2 capacity.
 
 We can now be confident that when we failover, our secondary region **N. California (us-west-1)** can handle production level request traffic.
 
-2.1 CLick [Auto Scaling Groups](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#AutoScalingGroups:) to navigate to the dashboard in the **N. California (us-west-1)** region.
+2.1 Click [Auto Scaling Groups](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#AutoScalingGroups:) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
 2.2 Click on the **warm-secondary-WebServerGroup-xxx** link.
 
