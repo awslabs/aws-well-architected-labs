@@ -14,5 +14,5 @@ As a young startup Unishop built a great service which was focused on customers 
 
 The CTO has asked you to ensure the system architecture is sufficiently resilient to recover from a disaster. A number of Disaster Recovery (DR) strategies are available from Amazon Web Services (AWS) representing various Recovery Point Objectives (RPO) and Recovery Time Objectives (RTO).
 
-{{< img intro-1.png >}}
+{{< img strategies.png >}}
 
