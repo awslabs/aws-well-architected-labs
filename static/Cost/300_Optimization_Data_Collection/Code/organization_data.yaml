@@ -72,12 +72,12 @@ Resources:
 
               root_id    = client.list_roots()['Roots'][0]['Id']
               ou_id_list = get_ou_ids(root_id, client)
-              with open('ou-org.json', 'w') as f:
+              with open('/tmp/ou-org.json', 'w') as f:
                   for ou in ou_id_list.keys():
                       account_data(f, ou, ou_id_list[ou][0], client, ou_id_list[ou][1])
               s3_upload('ou-org')
 
-              with open('acc-org.json', 'w') as f:
+              with open('/tmp/acc-org.json', 'w') as f:
                   account_data(f, root_id, root_id, client,'')
               s3_upload('acc-org')
               start_crawler(os.environ["CRAWLER"])
