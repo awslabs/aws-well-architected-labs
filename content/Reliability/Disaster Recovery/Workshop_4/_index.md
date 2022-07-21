@@ -6,18 +6,22 @@ chapter = false
 pre = ""
 +++
 
+In this module, you will go through the Hot Standby disaster recovery strategy. To learn more about this disaster recovery strategy, you can review this [Disaster Recovery blog](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/).
 
-Our test application is Unishop. It is a Spring Boot Java application with a frontend written using bootstrap.
-The app uses an Amazon S3 bucket to host a static web interface. A single EC2 instance serves as a proxy for API calls to an Amazon Aurora MySQL database.  The database contains mock user and product information. Amazon API Gateway is used to connect via AWS Lambda to a DynamoDB database storing shopping cart and session information.
+Hot Standby disaster recovery strategy has [Recovery Point Objective(RPO) / Recovery Time Objective (RTO)](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _in almost real time_. For the hot standby strategy secondary region, the data is live, core infrastructure is provisioned and the services are running at full production capacity.
 
-To configure the infrastructure and deploy the application we will use CloudFormation. CloudFormation enables Infrastructure as Code (IaC) automation to quickly provision cloud resources.
+Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
 
-We will initially deploy the primary Unishop instance into the us-east-1 (N. Virginia) region.  Next, the us-west-1 (N. California) region will host the Hot-Standby Disaster Recovery (DR) instance.  To configure and deploy this infrastructure, we will use AWS CloudFormation.
+Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet. Our datastore is an [Amazon Aurora](https://aws.amazon.com/rds/aurora/) MySQL database which has user data. Our test application is also deployed using [Amazon API Gateway](https://aws.amazon.com/api-gateway/) and [AWS Lambda](https://aws.amazon.com/lambda/). Our datastore is [Amazon DynamoDB](https://aws.amazon.com/dynamodb) which has shopping cart data. The frontend is written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
 
-Afterward, we will verify the DR scenario. Meeting our [RPO / RTO](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html) _virtually instantaneously_, requires an Amazon CloudFront distribution with Orgin Failover policy.  Additionally, the workshop deploys an Amazon RDS Aurora MySQL Cluster in each region, and enables **1/** Read-Replica Write Forwarding and **2/** Amazon Aurora MySQL Global tables. These features support replicating database changes from either region. Finally we will configure DynamoDB Global Tables which will replicate data between regions.
+Our test application is using two datastores, Amazon Aurora and DynamoDB to showcase the Disaster Recovery features of each. For your workloads, you would choose the right datastore for your use case.
+
+This module takes advantage of [Amazon CloudFront](https://aws.amazon.com/cloudfront/) which we will use as our content delivery network. We are also taking advantage of [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data to our secondary region and [Amazon DynamoDB Global Tables](https://aws.amazon.com/dynamodb/global-tables/) to replicate our DynamoDB data to our secondary region. 
+
+[CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
-{{< img workshop-4-arch.png >}}
+{{< img HotStandby.png >}}
 
-{{< prev_next_button link_next_url="./prerequisites/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
