@@ -144,8 +144,15 @@ Resources:
             Fn::GetAtt:
               - EC2LambdaFunction
               - Arn
-          Id: WeeklyTriggerForEBSUtilization
-  EventPermission:
+          Id: WeeklyTriggerForEC2Pricing
+        - Arn:
+            Fn::GetAtt:
+              - RDSLambdaFunction
+              - Arn
+          Id: WeeklyTriggerForRDSPricing
+
+
+  EC2EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName:  
@@ -156,6 +163,18 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
+  RDSEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - RDSLambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  
   AthenaRegionTable:
     Type: AWS::Athena::NamedQuery
     Properties:
