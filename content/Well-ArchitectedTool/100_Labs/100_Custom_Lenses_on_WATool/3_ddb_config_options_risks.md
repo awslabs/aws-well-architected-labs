@@ -1,0 +1,86 @@
+---
+title: "Structure of a custom lens - Risk and Rule"
+date: 2020-04-24T11:16:09-04:00
+chapter: false
+weight: 3
+pre: "<b>3. </b>"
+---
+
+
+### Choices for question and the log for Risk level:
+
+In the previous step, we already setup a question and the options. We had collected all the necessary resources like developer guide and blog posts as guidance reference. Our next step is to create a logical rule for these options, to indicate the risk level if the best practices was not applied.
+
+
+
+#### Rule Collections
+
+Reference to [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the RiskRule are combinations of "choice id" and operators - 
+
+As a result, we list out all the options we defined in the previous step, as well as the risk level we want the operating team to be aware of. Also, we assigned an unique **"choice id"** for each best practice option.
+
+||Choice|Risk Level if not applied.|Choices[]["id"]|
+| ----------- | ----------- | ----------- | ----------- |
+|1|`Manually trigger Amazon DynamoDB Backup process`|High|ddbops1_1|
+|2|`Enable Amazon DynamoDB PITR Feature`|Medium, if covered by other backup process.|ddbops1_2|
+|3|`Use AWS Backup for Amazon DynamoDB tabls`|Medium, if covered by other backup process.|ddbops1_3|
+|4|`Export DynamoDB to other storage media`|Medium, if covered by other backup process.|ddbops1_4|
+|5|`None of Above`|High|ddbops1_5|
+
+#### Rule Conditions:
+
+Now, we need a logic rule for this question:
+
+* If to apply every choice in the question is a must, the rule will include all options be selected, and then **"NO_RISK"** as result. The **"AND"** operator **"&&"** will be applied.
+
+```
+	{	
+     "condition":"ddbops1_1 && ddbops1_2 && ddbops1_3 && ddbops1_4",
+     "risk":"NO_RISK"
+     }
+```
+
+For some case, one of the option been applied will be good enough, then we can design our rule as follow:
+
+```
+	{	
+     "condition":"ddbops1_1 || ddbops1_2 || ddbops1_3 || ddbops1_4",
+     "risk":"NO_RISK"
+     }
+```
+
+* When we want to put some rule into higher priority, use the "OR" operator can cover more cases. 
+
+In common design, the "None of Above" is one frequent option of question we can see. Here if "None of Above" (ddbops1_5) was checked, we should setup it as "HIGH_RISK".
+
+```
+
+	{ 
+	"condition":"(!ddbops1_1) || ddbops1_5",
+    "risk":"HIGH_RISK"
+	}
+```
+#### Aggregate into one rule set
+
+After we listed out all the different risk conditions, we can put it all together and go to next step. 
+
+```
+               "riskRules":[
+                  {
+                     "condition":"ddbops1_1 && ddbops1_2 && ddbops1_3 && ddbops1_4",
+                     "risk":"NO_RISK"
+                  },
+                  {
+                     "condition":"(!ddbops1_1) || ddbops1_5",
+                     "risk":"HIGH_RISK"
+                  },
+                  {
+                     "condition":"default",
+                     "risk":"MEDIUM_RISK"
+                  }
+               ]
+
+```
+
+
+{{< prev_next_button link_prev_url="../2_ddb_config_questions/" link_next_url="../4_ddb_config_publish/" />}}
