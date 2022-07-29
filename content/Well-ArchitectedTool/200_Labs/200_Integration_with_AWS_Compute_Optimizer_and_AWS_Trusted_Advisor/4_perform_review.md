@@ -30,4 +30,4 @@ For **COST 6** question, there are the best practices that you are following fro
 
 ![Section4 Notes](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Notes.png)
 
-{{< prev_next_button link_prev_url="../3_create_workload/" link_next_url="../5_cleanup/" />}}
+{{< prev_next_button link_prev_url="../3_create_workload/" link_next_url="../5_expand_review/" />}}

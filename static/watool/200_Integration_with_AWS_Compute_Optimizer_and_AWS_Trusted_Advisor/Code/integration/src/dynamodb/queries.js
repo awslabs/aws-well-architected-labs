@@ -3,16 +3,14 @@ const currentRegion = process.env.AWS_REGION;
 const dynamodb = new AWS.DynamoDB({ region: currentRegion });
 const documentClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
 
-async function mappingEngineQueries(event){
+async function mappingEngineQueries(){
     try{
-        const PillarNumber = event;
-        //console.log("PillarNumber: ", PillarNumber);
-        const result = await documentClient.get({
-            TableName : process.env.DatabaseTable,
-            Key: { PillarNumber } ,
+        const result = await documentClient.scan({
+            TableName : process.env.DatabaseTable
         }).promise();
-
-        return result.Item;
+        
+        console.log("Table Items: ", result);
+        return result;
 
     } catch(err){
         console.error(err);

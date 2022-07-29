@@ -2,8 +2,8 @@
 title: "Teardown"
 date: 2021-01-15T11:16:09-04:00
 chapter: false
-pre: "<b>5. </b>"
-weight: 5
+pre: "<b>6. </b>"
+weight: 6
 ---
 
 ## Summary

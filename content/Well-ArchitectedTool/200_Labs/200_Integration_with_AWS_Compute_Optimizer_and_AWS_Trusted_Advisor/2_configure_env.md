@@ -36,7 +36,7 @@ Note the following:
 
 To deploy the template for the base infrastructure complete the following steps:
 
-### 1.1. Get the CloudFormation Template and deploy Clou9.
+### 1.1. Get the CloudFormation Template and deploy Cloud9.
 
 You can get the CloudFormation template [here.](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Code/templates/section1/section1-base.yaml "Section1 template")
 
