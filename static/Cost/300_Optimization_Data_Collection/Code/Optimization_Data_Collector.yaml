@@ -415,7 +415,7 @@ Resources:
           GlueRoleArn: !GetAtt GlueRole.Arn 
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/transit_gateway.yaml"
+      TemplateURL: "https://cost-aws-lab-organisation.s3.amazonaws.com/transit_gateway.yaml" #"https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/transit_gateway.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector

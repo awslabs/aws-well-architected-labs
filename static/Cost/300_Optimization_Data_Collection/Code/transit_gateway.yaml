@@ -13,6 +13,7 @@ Parameters:
   DatabaseName:
     Type:  String
     Description: Default CUR database name
+    Default: optimization_data
     MinLength: 1
   DestinationBucketARN:
     Type: String
@@ -27,28 +28,14 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
-  
-  
+
 
 
 Resources:
-  CloudWatchTrigger:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: Lambda TGW Data trigger
-      Name: LambdaTGWData
-      ScheduleExpression: "cron(15 10 * * ? *)"
-      State: ENABLED
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-            - LambdaTGWData
-            - Arn
-          Id: WeeklyTriggerForTGWdata
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-     RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -87,7 +74,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:BudgetsModule-TaskQueue
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:TransitGatewayModule-TaskQueue
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:*"
@@ -99,156 +86,156 @@ Resources:
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
                 Resource: "arn:aws:logs:*:*:*"
-  LambdaTGWData:
+  LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       Architectures: [arm64]
-      FunctionName: LambdaTGWData
+      FunctionName: !Sub "${CFDataName}-Lambda-Function"
       Description: LambdaFunction of python3.9.
       Runtime: python3.9
       #how to set arm64 
       Code:
         ZipFile: |
-        import json
-        import boto3
-        from datetime import datetime
-        from botocore.client import Config
-        from datetime import date, timedelta
-        import os 
-        import logging
+          import json
+          import boto3
+          from datetime import datetime
+          from botocore.client import Config
+          from datetime import date, timedelta
+          import os 
+          import logging
 
-        region_name = os.environ['REGION']
-        bucket = os.environ['BUCKET_NAME']
+          region_name = os.environ['REGION']
+          bucket = os.environ['BUCKET_NAME']
 
-        last_day_of_prev_month = date.today().replace(day=1) - timedelta(days=1)
-        start_day_of_prev_month = date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)
-
-
-        ec2_client = boto3.client('ec2', region_name=region_name)
-        s3_client = boto3.client('s3', region_name=region_name)
-        cw_client2 = boto3.client('cloudwatch', region_name=region_name)
+          last_day_of_prev_month = date.today().replace(day=1) - timedelta(days=1)
+          start_day_of_prev_month = date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)
 
 
+          ec2_client = boto3.client('ec2', region_name=region_name)
+          s3_client = boto3.client('s3', region_name=region_name)
+          cw_client2 = boto3.client('cloudwatch', region_name=region_name)
 
-        def lambda_handler(event, context):
-            for record in event['Records']:
-              body = json.loads(record["body"])
-              account_id = body["account_id"]
-              account_name = body["account_name"]
-              print(account_id)
-              cw_client = assume_role('cloudwatch', account_id)
-              ec2_client = assume_role('ec2', account_id)
-              tgw_attachment_results = []
-              final_result = []
-              list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
-              for item in list_tgw_attachments['TransitGatewayAttachments']:
-                  tgw_attachment_results.append(item)
+
+
+          def lambda_handler(event, context):
+              for record in event['Records']:
+                body = json.loads(record["body"])
+                account_id = body["account_id"]
+                account_name = body["account_name"]
+                print(account_id)
+                cw_client = assume_role('cloudwatch', account_id)
+                ec2_client = assume_role('ec2', account_id)
+                tgw_attachment_results = []
+                final_result = []
+                list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
+                for item in list_tgw_attachments['TransitGatewayAttachments']:
+                    tgw_attachment_results.append(item)
+                
+                cw_result = []
+                for item in tgw_attachment_results:
+                    response_in = metrics(cw_client, 'BytesIn', item)
+                    
+                    with open("/tmp/data.json", "w") as f:
+                        
+                        for cwitem in response_in['MetricDataResults']:
+                            cw_results = {
+                                    'TGW': item['TransitGatewayId'],
+                                    'NetworkingAccount': item['TransitGatewayOwnerId'],
+                                    'CustomerAccount': item['ResourceOwnerId'],
+                                    'TGW-Attachment': item['TransitGatewayAttachmentId'],
+                                    'BytesIn': cwitem['Values'],
+                                    'Year': last_day_of_prev_month.strftime('%Y'),
+                                    'Month': last_day_of_prev_month.strftime('%m')
+                                }
+                    
+                        response_out = metrics(cw_client, 'BytesOut', item)
+                            
+                        for cwitemout in response_out['MetricDataResults']:
+                            cw_results['BytesOut']= cwitemout['Values']
+                            print (cw_results)
+                            jsondata = json.dumps(cw_results) 
+                            f.write(jsondata)
+                            f.write('\n')
+                        
+                        
+                    s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+                    s3.upload_file(
+                        "/tmp/data.json",
+                        bucket,
+                        f"tgw/tgw-{item['TransitGatewayAttachmentId']}.json")
+                    
+                    #start_crawler()
+                    print("Done")
+
+          def metrics(cw_client, byte, item):
+              cw_data = cw_client.get_metric_data(
+                      MetricDataQueries=[
+                              {
+                                  'Id': 'tgwMetric',
+                                  'MetricStat': {
+                                      'Metric': {
+                                          'Namespace': 'AWS/TransitGateway',
+                                          'MetricName': f'{byte}',
+                                          'Dimensions': [
+                                              {
+                                                  'Name': 'TransitGatewayAttachment',
+                                                  'Value': item['TransitGatewayAttachmentId']
+                                              },
+                                              {
+                                                  'Name': 'TransitGateway',
+                                                  'Value': item['TransitGatewayId']
+                                              },
+                                          ]
+                                      },
+                                      'Period': 2592000,
+                                      'Stat': 'Sum',
+                                  },
+                                  'ReturnData': True},
+                          ],
+                          StartTime=start_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          EndTime=last_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          ScanBy='TimestampDescending'
+                      )
+
+              return cw_data
+
+          def assume_role(service, account_id):
+
+              role_name = os.environ['ROLENAME']
+              #account_id = os.environ['ACCOUNT_ID']
+              role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
+              sts_client = boto3.client('sts')
               
-              cw_result = []
-              for item in tgw_attachment_results:
-                  response_in = metrics(cw_client, 'BytesIn', item)
-                  
-                  with open("/tmp/data.json", "w") as f:
-                      
-                      for cwitem in response_in['MetricDataResults']:
-                          cw_results = {
-                                  'TGW': item['TransitGatewayId'],
-                                  'NetworkingAccount': item['TransitGatewayOwnerId'],
-                                  'CustomerAccount': item['ResourceOwnerId'],
-                                  'TGW-Attachment': item['TransitGatewayAttachmentId'],
-                                  'BytesIn': cwitem['Values'],
-                                  'Year': last_day_of_prev_month.strftime('%Y'),
-                                  'Month': last_day_of_prev_month.strftime('%m')
-                              }
-                  
-                      response_out = metrics(cw_client, 'BytesOut', item)
-                          
-                      for cwitemout in response_out['MetricDataResults']:
-                          cw_results['BytesOut']= cwitemout['Values']
-                          print (cw_results)
-                          jsondata = json.dumps(cw_results) 
-                          f.write(jsondata)
-                          f.write('\n')
-                      
-                      
-                  s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-                  s3.upload_file(
-                      "/tmp/data.json",
-                      bucket,
-                      f"tgw/tgw-{item['TransitGatewayAttachmentId']}.json")
-                  
-                  #start_crawler()
-                  print("Done")
-
-        def metrics(cw_client, byte, item):
-            cw_data = cw_client.get_metric_data(
-                    MetricDataQueries=[
-                            {
-                                'Id': 'tgwMetric',
-                                'MetricStat': {
-                                    'Metric': {
-                                        'Namespace': 'AWS/TransitGateway',
-                                        'MetricName': f'{byte}',
-                                        'Dimensions': [
-                                            {
-                                                'Name': 'TransitGatewayAttachment',
-                                                'Value': item['TransitGatewayAttachmentId']
-                                            },
-                                            {
-                                                'Name': 'TransitGateway',
-                                                'Value': item['TransitGatewayId']
-                                            },
-                                        ]
-                                    },
-                                    'Period': 2592000,
-                                    'Stat': 'Sum',
-                                },
-                                'ReturnData': True},
-                        ],
-                        StartTime=start_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        EndTime=last_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        ScanBy='TimestampDescending'
+              try:
+                assumedRoleObject = sts_client.assume_role(
+                    RoleArn=role_arn,
+                    RoleSessionName="cross_acct_lambda"
                     )
-
-            return cw_data
-
-        def assume_role(service, account_id):
-
-            role_name = os.environ['ROLENAME']
-            #account_id = os.environ['ACCOUNT_ID']
-            role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
-            sts_client = boto3.client('sts')
-            
-            try:
-              assumedRoleObject = sts_client.assume_role(
-                  RoleArn=role_arn,
-                  RoleSessionName="cross_acct_lambda"
-                  )
+                
+                credentials = assumedRoleObject['Credentials']
+                client = boto3.client(
+                    service, 
+                    region_name=region_name,
+                    aws_access_key_id=credentials['AccessKeyId'],
+                    aws_secret_access_key=credentials['SecretAccessKey'],
+                    aws_session_token=credentials['SessionToken']
+                )
+                print(f"role retrived {service}")
+                return client
               
-              credentials = assumedRoleObject['Credentials']
-              client = boto3.client(
-                  service, 
-                  region_name=region_name,
-                  aws_access_key_id=credentials['AccessKeyId'],
-                  aws_secret_access_key=credentials['SecretAccessKey'],
-                  aws_session_token=credentials['SessionToken']
-              )
-              print(f"role retrived {service}")
-              return client
-            
-            except ClientError as e:
-              logging.warning(f"Unexpected error Account {account_id}: {e}")
-              return None
+              except ClientError as e:
+                logging.warning(f"Unexpected error Account {account_id}: {e}")
+                return None
 
-        def start_crawler():
-          glue_client = boto3.client("glue")
-          Crawler_Name = os.environ["CRAWLER_NAME"]
-          try:
-              glue_client.start_crawler(Name=Crawler_Name)
-              print(f"{Crawler_Name} has been started")
-          except Exception as e:
-              # Send some context about this error to Lambda Logs
-              logging.warning("%s" % e)
+          def start_crawler():
+            glue_client = boto3.client("glue")
+            Crawler_Name = os.environ["CRAWLER_NAME"]
+            try:
+                glue_client.start_crawler(Name=Crawler_Name)
+                print(f"{Crawler_Name} has been started")
+            except Exception as e:
+                # Send some context about this error to Lambda Logs
+                logging.warning("%s" % e)
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688
@@ -279,11 +266,27 @@ Resources:
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt LambdaTGWData.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
       Action: lambda:InvokeFunction
-      Principal: events.amazonaws.com
+      Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt CloudWatchTrigger.Arn
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'TransitGatewayModule-TaskQueue'
+  EventSourceMapping:
+    DependsOn:
+      - EventPermission
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
+
   AthenaQueryCUR:
     Type: AWS::Athena::NamedQuery
     Properties:
