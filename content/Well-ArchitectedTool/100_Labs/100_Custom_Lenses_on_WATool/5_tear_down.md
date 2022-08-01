@@ -8,7 +8,7 @@ weight: 5
 
 In order to take down the lab environment, you simply delete the workload and the custom lense you created.
 
-To delete the **Workload**, please refer to [Here](../../../100_labs/100_walkthrough_of_the_well-architected_tool/6_tear_down/). Please be aware if the custom lens already been used by a specific workload, it cannot be deleted until all the workload already been deleted. 
+To delete the **Workload**, please refer to [Here](../../../100_labs/100_walkthrough_of_the_well-architected_tool/6_tear_down/). Please be aware if the custom lens has already been used by a workload review, it cannot be deleted until the workload review has been deleted first. 
 
 1. Select **Custom Lenses** on the left navigation:
 ![SelectWorkloads](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT24.png)

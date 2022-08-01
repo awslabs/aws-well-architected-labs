@@ -16,7 +16,7 @@ https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-pr
 3. Create a workload with a Custom lens. 
 
 ### Download Custom Lenses Template:
-1. Sign in to the AWS Management Console and open the AWS Well-Architected Tool console at https://console.aws.amazon.com/wellarchitected/.
+1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console](https://console.aws.amazon.com/wellarchitected/).
 2. In the left navigation pane, choose Custom lenses.
 3. Choose Create custom lens.
 4. Choose Download file to download the JSON template file.

@@ -15,7 +15,7 @@ In the previous step, we already setup a question and the options. We had collec
 
 #### Rule Collections
 
-Reference to [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the RiskRule are combinations of "choice id" and operators - 
+Reference to [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and operators - 
 
 As a result, we list out all the options we defined in the previous step, as well as the risk level we want the operating team to be aware of. Also, we assigned an unique **"choice id"** for each best practice option.
 
@@ -31,7 +31,7 @@ As a result, we list out all the options we defined in the previous step, as wel
 
 Now, we need a logic rule for this question:
 
-* If to apply every choice in the question is a must, the rule will include all options be selected, and then **"NO_RISK"** as result. The **"AND"** operator **"&&"** will be applied.
+* If every choice in the questions must be applied in order to result in **"NO_RISK"**, the conditional rule must include all options. The **"AND"** operator **"&&"** need to be applied.
 
 ```
 	{	
@@ -40,7 +40,7 @@ Now, we need a logic rule for this question:
      }
 ```
 
-For some case, one of the option been applied will be good enough, then we can design our rule as follow:
+For some cases, one of the options being applied will be good enough. We can then design our rule as follows:
 
 ```
 	{	
@@ -49,7 +49,7 @@ For some case, one of the option been applied will be good enough, then we can d
      }
 ```
 
-* When we want to put some rule into higher priority, use the "OR" operator can cover more cases. 
+* When we want to put certain rules into higher priority, use the "OR" operator to cover more cases. 
 
 In common design, the "None of Above" is one frequent option of question we can see. Here if "None of Above" (ddbops1_5) was checked, we should setup it as "HIGH_RISK".
 

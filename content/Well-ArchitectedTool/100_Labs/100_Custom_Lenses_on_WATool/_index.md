@@ -20,13 +20,13 @@ This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](http
 ## Goals:
 
 * Learn how to build custom lenses for domain-specific reviews.
-* Use the example to understand the from difference between a Well-Architected Framework Review and a Custom Lenses Review.
+* Use the example to understand the difference between a Well-Architected Framework Review and a Custom Lenses Review.
 
 ## Prerequisites:
 
 * An
 [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use Well-Architected Tool (WellArchitectedConsoleFullAccess managed policy).
+* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use the AWS Well-Architected Tool [**(WellArchitectedConsoleFullAccess managed policy)**](https://docs.aws.amazon.com/wellarchitected/latest/userguide/iam-auth-access.html).
 
 ## Costs:
 * There are no costs for this lab

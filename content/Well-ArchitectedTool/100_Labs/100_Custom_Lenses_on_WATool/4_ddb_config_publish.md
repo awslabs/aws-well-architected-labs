@@ -9,27 +9,29 @@ pre: "<b>4. </b>"
 
 ### Create a Custom Lens
 
-In previous steps, we demostrated how to draft a question and option, collect and link the refernce resource to each best practice option, with completed logic condition for risk level. Repeat this process to cover all the question in pillar and then extend to all the pillar we want to cover, then we can get our custom lens full covered. 
+In previous steps, we demonstrated how to draft a question and options, collect and link the reference resource to each best practice option, and create conditional logic for risk level. We will repeat this process to cover all the questions in the pillar and then again for all the pillars we want to include in our custom lens.
 
 #### Upload to AWS Console and Publish
 Now, we created a full scope custom lens in JSON format. It's time to publish this custom lens on to our AWS Well-Architected Tool.
 
 * Open AWS Console > Well-Architected Tool > Custom Lenses
 
-* Click "**Create Custom Lens**" > upload the finalized JSON we produced from step3. Or you can try with [sample files](#sample-json-files).
+* Click "**Create Custom Lens**" > upload the finalized JSON we produced from step 3. Or you can try with [sample files](#sample-json-files).
 
 * For more detail on how to publish a custom lens, please refer to [this blog](
 https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/)).
 
-* After the custom lense created, to [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) for custom lense [review](../../100_walkthrough_of_the_well-architected_tool/3_perform_review/) will all goes the same way as Well-Architected Framework Review.
+* After you have created your custom lens, follow these steps to [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) and run a [review](../../100_walkthrough_of_the_well-architected_tool/3_perform_review/) of the workload using your newly created custom lens.
 
-#### Test the RiskRule and check all the information is ready
+#### Test the **riskRules** and check all the information is ready
 
-* After we created a custom lens and workload, we can start to check if the RiskRule works correctly as expected.
+* After we created a custom lens and workload review, we can start to check if the **riskRules** works correctly as expected.
 
-* Check all the related information in the "HelpfulResource" for each choice, for giving better reference and guidance to reviewers. Like what we see the option indicating "Amazon DynamoDB Point-In-Time Recovery feature", it helps to gain readability if we put a brief text on the **"displayText"** attribute. 
+* Make sure **"helpfulResource"** for each choice is providing clear guidance to reviewers. 
 
-* In each **"helpfulResource"**, the ***"url"*** can point to external page like service documentation or developer guide, etc.
+* In this example we see the option indicating "Amazon DynamoDB Point-In-Time Recovery feature". 
+It also helps to gain readability if we put a brief text on the **"displayText"** attribute. 
+The **"url"** can point to external page like service documentation or developer guide.
 
 ```
 "choices": [
