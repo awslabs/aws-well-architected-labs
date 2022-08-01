@@ -23,6 +23,11 @@ https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-pr
 
 * After you have created your custom lens, follow these steps to [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) and run a [review](../../100_walkthrough_of_the_well-architected_tool/3_perform_review/) of the workload using your newly created custom lens.
 
+* A workload with custom lens review:
+
+![create-a-workload-with-custom-lens](/watool/100_Custom_Lenses_on_WATool/images/4_1_create_workload_with_custom_lens.png)
+
+
 #### Test the **riskRules** and check all the information is ready
 
 * After we created a custom lens and workload review, we can start to check if the **riskRules** works correctly as expected.
@@ -56,7 +61,7 @@ The **"url"** can point to external page like service documentation or developer
 
 * Assume all the resource attributes are ready in the JSON, it will build the linkage between the review discussion to recommended best practices, also give a real time detailed explanations, and provide a reference link. 
 
-![CheckBPInfo](/watool/100_Custom_Lenses_on_WATool/images/WACL41.jpg)
+![check-best-practices](/watool/100_Custom_Lenses_on_WATool/images/4_2_check_best_practices_info.jpg)
 
 #### JSON Example:
 
@@ -161,6 +166,7 @@ The **"url"** can point to external page like service documentation or developer
 }
 ```
 
+#### Sample JSON files ####
 And for the 
 [Custom lenses sample - Dynamodb Configuration Check](https://github.com/aws-samples/custom-lens-wa-sample/tree/main/dynamodb), please check the latest update in aws-samples [repository](https://github.com/aws-samples/custom-lens-wa-sample/). 
 

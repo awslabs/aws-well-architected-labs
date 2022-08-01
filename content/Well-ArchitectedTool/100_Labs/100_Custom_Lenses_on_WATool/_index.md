@@ -7,9 +7,9 @@ weight: 2
 hidden: false
 ---
 ## Authors
-- Bob Yeh, Well-Architected Geo SA
+- Bob Yeh, AWS Well-Architected Geo SA
+- Duncan Bell, AWS Well-Architected Geo SA
 - Ray Wang, Solutions Architect, Analytics SME 
-- Cathy Lai, Database GTM Specialist, Database SME
 
 ## Introduction
 
@@ -34,6 +34,10 @@ This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](http
 
 ## Time to complete
 - The lab should take approximately 30 minutes to complete 
+
+## References:
+* AWS News Blog: [AWS Well-Architected Custom Lenses: Extend the Well-Architected Framework with Your Internal Best Practices](https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/)
+* AWS Architecture Blog: [Implementing the AWS Well-Architected Custom Lens lifecycle in your organization](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/)
 
 ## Steps:
 {{% children /%}}

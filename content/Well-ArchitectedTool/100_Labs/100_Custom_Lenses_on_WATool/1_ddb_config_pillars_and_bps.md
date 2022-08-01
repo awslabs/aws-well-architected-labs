@@ -9,11 +9,13 @@ pre: "<b>1. </b>"
 
 ### Prerequisites:
 
-Read through [this blog](
-https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/), it has step-by-step instructions as:
-1. Download a JSON template from AWS Console - Well-Architected Tool.
-2. Create a Custom lens and publish it.
-3. Create a workload with a Custom lens. 
+1. Read through this blog, ["AWS Well-Architected Custom Lenses: Extend the Well-Architected Framework with Your Internal Best Practices"](
+https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/), which has step-by-step instructions:
+* Download a JSON template from AWS Console - Well-Architected Tool.
+* Create a Custom lens and publish it.
+* Create a workload with a Custom lens. 
+
+2. Read through this blog, ["Implementing the AWS Well-Architected Custom Lens lifecycle in your organization"](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/), which present a lifecycle that helps you build, validate, and improve your custom lens, in order to roll it out across your whole organization.
 
 ### Download Custom Lenses Template:
 1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console](https://console.aws.amazon.com/wellarchitected/).
