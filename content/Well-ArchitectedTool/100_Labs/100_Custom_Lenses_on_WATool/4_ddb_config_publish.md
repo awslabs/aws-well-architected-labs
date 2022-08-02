@@ -171,4 +171,4 @@ And for the
 [Custom lenses sample - Dynamodb Configuration Check](https://github.com/aws-samples/custom-lens-wa-sample/tree/main/dynamodb), please check the latest update in aws-samples [repository](https://github.com/aws-samples/custom-lens-wa-sample/). 
 
 
-{{< prev_next_button link_prev_url="../3_ddb_config_options_risks/" link_next_url="../5_tear_down/" />}}
+{{< prev_next_button link_prev_url="../3_ddb_config_options_risks/" link_next_url="../5_ddb_config_share_and_update/" />}}

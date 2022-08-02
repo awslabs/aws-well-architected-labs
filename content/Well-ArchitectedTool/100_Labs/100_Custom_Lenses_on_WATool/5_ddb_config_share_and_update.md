@@ -1,5 +1,5 @@
 ---
-title: "Share my Custom Lens and Update"
+title: "Share my Custom Lens"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 5
@@ -38,4 +38,4 @@ Choose Create to send a lens share invitation to the specified AWS account or IA
 
 
 
-{{< prev_next_button link_prev_url="../3_ddb_config_options_risks/" link_next_url="../5_tear_down/" />}}
+{{< prev_next_button link_prev_url="../4_ddb_config_publish/" link_next_url="../6_tear_down/" />}}
