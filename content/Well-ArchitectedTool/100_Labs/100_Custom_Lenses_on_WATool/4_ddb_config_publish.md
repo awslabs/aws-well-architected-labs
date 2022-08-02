@@ -18,8 +18,7 @@ Now, we created a full scope custom lens in JSON format. It's time to publish th
 
 * Click "**Create Custom Lens**" > upload the finalized JSON we produced from step 3. Or you can try with [sample files](#sample-json-files).
 
-* For more detail on how to publish a custom lens, please refer to [this blog](
-https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/)).
+* For more detail on how to publish a custom lens, please refer to [this blog](https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/).
 
 * After you have created your custom lens, follow these steps to [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) and run a [review](../../100_walkthrough_of_the_well-architected_tool/3_perform_review/) of the workload using your newly created custom lens.
 
