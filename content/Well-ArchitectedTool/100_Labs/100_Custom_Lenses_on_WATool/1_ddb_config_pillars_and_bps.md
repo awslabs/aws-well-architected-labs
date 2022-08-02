@@ -5,17 +5,12 @@ chapter: false
 weight: 1
 pre: "<b>1. </b>"
 ---
+     
 
 
-### Prerequisites:
+### Get Started:
 
-1. Read through this blog, ["AWS Well-Architected Custom Lenses: Extend the Well-Architected Framework with Your Internal Best Practices"](
-https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/), which has step-by-step instructions:
-* Download a JSON template from AWS Console - Well-Architected Tool.
-* Create a Custom lens and publish it.
-* Create a workload with a Custom lens. 
-
-2. Read through this blog, ["Implementing the AWS Well-Architected Custom Lens lifecycle in your organization"](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/), which present a lifecycle that helps you build, validate, and improve your custom lens, in order to roll it out across your whole organization.
+Lenses are defined using a specific JSON format. When you start to create a custom lens, you have the option to download a template JSON file. 
 
 ### Download Custom Lenses Template:
 1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console](https://console.aws.amazon.com/wellarchitected/).
@@ -23,9 +18,9 @@ https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-pr
 3. Choose Create custom lens.
 4. Choose Download file to download the JSON template file.
 
-### Get Started:
+### Lens Structure
 
-In this lab, we will explain how to draft and create a custom lens hierarchically. Each custom lens should be aligned with structure of AWS Well-Architected Tool.
+You can use the template file as the basis for your custom lenses as it defines the basic structure for the pillars, questions, best practices, and improvement plan. For more detail please read [Lens format specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html).
 
 ```
 - Pillars
@@ -92,7 +87,7 @@ As shown in the map hierarchy, each question includes **“choices”** and **�
 }
 ```
 
-Take Amazon DynamoDB configuration as an example, we want to build a configuration standard review with following ***custom pillars***(example) :
+Taking Amazon DynamoDB configuration as an example, we want to build a configuration standard review with following ***custom pillars***(example) :
 * *Operating Readiness*
 * *Security* 
 * *Application Performance*

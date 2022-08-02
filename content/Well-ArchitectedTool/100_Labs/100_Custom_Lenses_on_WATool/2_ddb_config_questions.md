@@ -36,7 +36,7 @@ Follow the JSON syntex, we assigned an unique id to this question, and put the q
 
 ```
 
-Reference on [Amazon DynamoDB Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/), we found a clear guidance on [Backing Up a DynamoDB Table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Backup.Tutorial.html) providing two options: *Create a table backup from Console* and *Create a Table backup from CLI*. These two options were both require manual process. 
+After reading the [Amazon DynamoDB Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/), we found clear guidance on [Backing Up a DynamoDB Table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Backup.Tutorial.html) providing two options: *Create a table backup from Console* and *Create a Table backup from CLI*. These two options were both require manual process. 
 So here we have one "Choice" been appended:
 
 `Manually trigger Amazon DynamoDB Backup process` - *Means backup process been handled by it's native backup feature, a full backup.*
