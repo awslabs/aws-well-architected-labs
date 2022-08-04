@@ -13,20 +13,20 @@ hidden: false
 
 ## Introduction
 
-The AWS Well-Architected Tool supports [Custom lenses](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html) in Nov 2021, providing a consolidated view and a consistent way to measure and improve workloads on AWS without relying on spreadsheets or third-party systems.
+The AWS Well-Architected Tool supports [Custom lenses](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html) in Nov 2021 to compliment to default six pillars of the Well-Architected Framework. Within a custom lens, customers can create their own pillars, questions, best practices, helpful resources, and improvement plans. They also can specify rules to determine which options, when not followed, result in high or medium risk issues being flagged. Customers then provide their own guidance for resolving the risk. Custom lenses can be shared across multiple AWS accounts for more visibility.
+
 
 This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html). Using [Amazon DynamoDB Configuration Checks as the example](https://github.com/aws-samples/custom-lens-wa-sample), we demonstrate how a self-defined pillar and questions structure can be used for a domain-specific review.
 
 ## Goals:
 
 * Learn how to build custom lenses for domain-specific reviews.
-* Use the example to understand the difference between a Well-Architected Framework Review and a Custom Lenses Review.
+* Understand the difference between a Well-Architected Framework Review and a Custom Lens Review.
 
 ## Prerequisites:
 
-* An
-[AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use the AWS Well-Architected Tool [**(WellArchitectedConsoleFullAccess managed policy)**](https://docs.aws.amazon.com/wellarchitected/latest/userguide/iam-auth-access.html).
+* An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
+* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to access the AWS Well-Architected Tool with the [**WellArchitectedConsoleFullAccess**](https://docs.aws.amazon.com/wellarchitected/latest/userguide/iam-auth-access.html) managed policy.
 
 ## Costs:
 * There are no costs for this lab
@@ -35,9 +35,9 @@ This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](http
 ## Time to complete
 - The lab should take approximately 30 minutes to complete 
 
-## References:
-* AWS News Blog: [AWS Well-Architected Custom Lenses: Extend the Well-Architected Framework with Your Internal Best Practices](https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/)
-* AWS Architecture Blog: [Implementing the AWS Well-Architected Custom Lens lifecycle in your organization](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/)
+## References & Blogs:
+* [AWS Well-Architected Custom Lenses: Extend the Well-Architected Framework with Your Internal Best Practices](https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/)
+* [Implementing the AWS Well-Architected Custom Lens lifecycle in your organization](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/)
 
 ## Steps:
 {{% children /%}}

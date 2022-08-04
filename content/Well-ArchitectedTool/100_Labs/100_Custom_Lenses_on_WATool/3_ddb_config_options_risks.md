@@ -6,18 +6,16 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-
 ### Choices for question and the log for Risk level:
 
-In the previous step, we already setup a question and the options. We had collected all the necessary resources like developer guide and blog posts as guidance reference. Our next step is to create a logical rule for these options, to indicate the risk level if the best practices was not applied.
-
+In the previous step, we setup a question and the best praciticess. We collected all the necessary resources like developer guide and blog posts as guidance reference. Our next step is to create a logical rule for these options to indicate the risk level if the best practices was not applied.
 
 
 #### Rule Collections
 
-Reference to [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and operators - 
+Referencing the [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and operators - 
 
-As a result, we list out all the options we defined in the previous step, as well as the risk level we want the operating team to be aware of. Also, we assigned an unique **"choice id"** for each best practice option.
+As a result, we list out all the options we defined in the previous step as well as the risk level we want the operating team to be aware of. We also need to assign a unique **"choice id"** for each best practice option.
 
 ||Choice|Risk Level if not applied.|Choices[]["id"]|
 | ----------- | ----------- | ----------- | ----------- |
@@ -29,7 +27,7 @@ As a result, we list out all the options we defined in the previous step, as wel
 
 #### Rule Conditions:
 
-Now, we need a logic rule for this question:
+We now need to design our rule logic for this question:
 
 * If every choice in the questions must be applied in order to result in **"NO_RISK"**, the conditional rule must include all options. The **"AND"** operator **"&&"** need to be applied.
 
@@ -49,9 +47,9 @@ For some cases, one of the options being applied will be good enough. We can the
      }
 ```
 
-* When we want to put certain rules into higher priority, use the "OR" operator to cover more cases. 
+* When we want certain rules to be higher priority, use the "OR" operator to cover more cases. 
 
-In common design, the "None of Above" is one frequent option of question we can see. Here if "None of Above" (ddbops1_5) was checked, we should setup it as "HIGH_RISK".
+Usually the "None of Above" answer is one frequent option of question we can see. Here if "None of Above" (ddbops1_5) was checked, we should set it as "HIGH_RISK".
 
 ```
 

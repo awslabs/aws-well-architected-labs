@@ -1,26 +1,24 @@
 ---
-title: "Structure of a custom lenses - Pillars, Questions, and Best Practices"
+title: "Structure of a custom lens - Pillars, Questions, and Best Practices"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 1
 pre: "<b>1. </b>"
 ---
-     
-
 
 ### Get Started:
 
-Lenses are defined using a specific JSON format. When you start to create a custom lens, you have the option to download a template JSON file. 
+Custom lenses are defined using a specific JSON format. To ensure you follow the required data structure, you have the option to download a template JSON file from the AWS Well-Architected Tool in the AWS console.
 
 ### Download Custom Lenses Template:
 1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console](https://console.aws.amazon.com/wellarchitected/).
-2. In the left navigation pane, choose Custom lenses.
-3. Choose Create custom lens.
-4. Choose Download file to download the JSON template file.
+2. In the left navigation pane, choose `Custom lenses`.
+3. Choose `Create custom lens`.
+4. Choose `Download file` to download the JSON template file.
 
 ### Lens Structure
 
-You can use the template file as the basis for your custom lenses as it defines the basic structure for the pillars, questions, best practices, and improvement plan. For more detail please read [Lens format specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html).
+You can use the JSON template file as the basis for your custom lens as it defines the basic structure for the pillars, questions, best practices, and improvement plan. For more detail please read the [Lens format specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html) documentation.
 
 ```
 - Pillars
@@ -28,7 +26,7 @@ You can use the template file as the basis for your custom lenses as it defines 
         +- Choices
 ```
 
-The first thing to consider when drafting a custom lens is how many **"pillars"** it will cover. According to the JSON template, there will be pillars and questions within each pillar.
+The first thing to consider when drafting a custom lens is how many **"pillars"** it will cover. According to the JSON template, there should one or more pillars and questions within each pillar.
 
 As shown in the map hierarchy, each question includes **“choices”** and **“riskRules”** that correspond directly to each area of best practices we would like to cover.
 
@@ -86,14 +84,13 @@ As shown in the map hierarchy, each question includes **“choices”** and **�
     ]
 }
 ```
-
-Taking Amazon DynamoDB configuration as an example, we want to build a configuration standard review with following ***custom pillars***(example) :
+As an example, we are going to use the best practices for configuring an Amazon DynamoDB Database for our custom lens, and are going to use the following configuration categories as our ***custom pillars***:
 * *Operating Readiness*
-* *Security* 
+* *Security*
 * *Application Performance*
-* *Cost Model Optimization* 
+* *Cost Model Optimization*
 
-Under this definition, the JSON structure now looks like this:
+Using these categories as our custom pillars, the JSON structure now looks like this:
 ```
 {
     "schemaVersion": "2021-11-01",
@@ -123,7 +120,6 @@ Under this definition, the JSON structure now looks like this:
 }
 ```
 
-After we have our pillars defined, we move on to next level in the pillar. 
-
+After we have our pillars defined, we move on to next level in the lens data structure. 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_ddb_config_questions/" />}}

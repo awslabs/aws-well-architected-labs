@@ -6,9 +6,7 @@ pre: "<b>6. </b>"
 weight: 6
 ---
 
-In order to take down the lab environment, you simply delete the workload and the custom lense you created.
-
-
+In order to tear down the lab environment, you simply delete the workload and the custom lens you created.
 
 1. Select **Custom Lenses** on the left navigation:
 ![SelectWorkloads](/watool/100_Custom_Lenses_on_WATool/images/6_0_select_custom_lenses.jpg)
@@ -31,11 +29,11 @@ In order to take down the lab environment, you simply delete the workload and th
 
 ![warning-message-lens-been-deleted](/watool/100_Custom_Lenses_on_WATool/images/6_3_unapply_deleted_lens_from_workload.png)
 
-And input the full name of the lens for the confirmation, then you will able to unapply a custom lens for this workload review. 
+Input the full name of the lens for the confirmation, then you will able to unapply a custom lens for this workload review. 
 
 ![warning-message-lens-been-deleted](/watool/100_Custom_Lenses_on_WATool/images/6_4_confirm_input_full_lens_name.png)
 
-7. Unapply the delete lens will not delete the workload from your Well-Architected Tool. Your workload will still contain the default AWS Well-Architected Framework Review:
+7. Unapplying the deleted lens will not delete the workload from your Well-Architected Tool. Your workload will still contain the default AWS Well-Architected Framework Review:
 
 ![workload-custom-lens-been-unapplied](/watool/100_Custom_Lenses_on_WATool/images/6_5_workload_custom_lens_unapplied.png)
 
