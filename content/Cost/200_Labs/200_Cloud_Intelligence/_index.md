@@ -93,7 +93,7 @@ The CUDOS Dashboard is an in-depth, granular, and recommendation-driven dashboar
 
 ### Trusted Advisor Organizational (TAO) Dashboard
 
-Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve security and performance, reduce overall costs, and monitors service limits. Organizational view lets you view Trusted Advisor checks for all accounts in your AWS Organizations. The only way to visualize the organizational view is to use the TAO dashboard. The TAO dashboard is a set of visualizations that provide comprehensive details and trends across your entire AWS Organization. Out-of-the-box benefits of the CUDOS dashboard include (but are not limited to):
+Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve security and performance, reduce overall costs, and monitors service limits. Organizational view lets you view Trusted Advisor checks for all accounts in your AWS Organizations. The only way to visualize the organizational view is to use the TAO dashboard. The TAO dashboard is a set of visualizations that provide comprehensive details and trends across your entire AWS Organization. Out-of-the-box benefits of the TAO dashboard include (but are not limited to):
 
 
 * Quickly locate accounts that haven't rotated their AWS IAM keys.
