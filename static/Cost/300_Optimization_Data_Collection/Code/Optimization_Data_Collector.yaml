@@ -420,7 +420,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+          TemplateURL: "https://cost-aws-lab-organisation.s3.amazonaws.com/get_accounts.yaml"
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
             RolePrefix: !Ref RolePrefix

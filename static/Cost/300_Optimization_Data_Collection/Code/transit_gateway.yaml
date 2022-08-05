@@ -28,7 +28,10 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
-
+Outputs:
+  SQSUrl:
+    Description: TaskQueue URL the account collector lambda
+    Value: !Ref TaskQueue
 
 
 Resources:
@@ -100,6 +103,7 @@ Resources:
           import boto3
           from datetime import datetime
           from botocore.client import Config
+          from botocore.exceptions import ClientError
           from datetime import date, timedelta
           import os 
           import logging
@@ -114,7 +118,9 @@ Resources:
           ec2_client = boto3.client('ec2', region_name=region_name)
           s3_client = boto3.client('s3', region_name=region_name)
           cw_client2 = boto3.client('cloudwatch', region_name=region_name)
-
+          today = datetime.date.today()
+          year = today.year
+          month = today.month
 
 
           def lambda_handler(event, context):
@@ -162,7 +168,7 @@ Resources:
                     s3.upload_file(
                         "/tmp/data.json",
                         bucket,
-                        f"tgw/tgw-{item['TransitGatewayAttachmentId']}.json")
+                        f"{os.environ['TABLE']}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}.json")
                     
                     #start_crawler()
                     print("Done")
