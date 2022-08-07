@@ -1,0 +1,209 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for an encrypted Amazon S3 bucket with CloudTrail logging.
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+
+# Parameters
+
+Parameters:
+
+  # NamingPrefix is used to create S3 bucket names, and to name other resources such as IAM Roles
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template including S3 buckets (minimum 5 characters)
+    AllowedPattern: '(?=^.{5,40}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)'
+    ConstraintDescription: minimum 5 characters; must contain only lowercase letters, numbers, periods (.), and dashes (-)
+
+Resources:
+
+  # ###########
+  # The S3 bucket with encryption that we will use for replication.
+  # and the IAM permissions necessary for replication
+  # ###########
+
+  S3BucketWithEncryption:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: Private
+      BucketEncryption: 
+          ServerSideEncryptionConfiguration: 
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: "AES256"
+      BucketName: !Sub '${NamingPrefix}-crrlab-${AWS::Region}'
+      PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Enabled
+
+  # see https://docs.aws.amazon.com/AmazonS3/latest/dev/setting-repl-config-perm-overview.html for an explanation of this IAM policy
+  S3ReplicationPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: 'Policy used S3 for replication rules'
+      ManagedPolicyName: !Sub '${NamingPrefix}-S3-Replication-Policy-${AWS::Region}'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+            # Source S3 Bucket
+          - Effect: Allow
+            Action: 
+              - 's3:Get*'
+              - 's3:ListBucket'
+            Resource:
+              - !Sub 'arn:aws:s3:::${NamingPrefix}-crrlab-${AWS::Region}'
+              - !Sub 'arn:aws:s3:::${NamingPrefix}-crrlab-${AWS::Region}/*'
+            # Destination S3 Bucket
+          - Effect: Allow
+            Action:
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'
+              - 's3:GetObjectVersionTagging'
+            Resource: !Sub 'arn:aws:s3:::${NamingPrefix}-crrlab-*/*'
+
+  S3ReplicationRole:
+    Type: AWS::IAM::Role
+    DependsOn: S3ReplicationPolicy
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-S3-Replication-Role-${AWS::Region}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref S3ReplicationPolicy
+
+  # ###########
+  # Resources necessary to enable CloudTrail logging on the S3 bucket
+  # This includes an S3 bucket and CloudWatch Log Group that will receive the logs
+  # and IAM permissions for CloudTrail to access to
+  # write to the S3 and CloudWatch destinations
+  # ###########
+
+  # CloudTrail trail - enables ongoing delivery of events as log files
+  # Specifically includes events from the S3BucketWithEncryption
+  CloudTrailForLogs:
+    Type: AWS::CloudTrail::Trail
+    DependsOn: 
+      # This must be done first or Trail will fail because it does not have access to the S3 bucket
+      - CloudTrailWriteToS3Policy
+    Properties: 
+      CloudWatchLogsLogGroupArn: !Sub '${CloudWatchLogGroup.Arn}'
+      CloudWatchLogsRoleArn: !Sub '${CloudTrailWriteToLogGroupRole.Arn}'
+      EnableLogFileValidation: false
+      EventSelectors: 
+        - DataResources:
+          - Type: AWS::S3::Object
+            Values:
+              - !Sub 'arn:aws:s3:::${NamingPrefix}-crrlab-${AWS::Region}/'
+          IncludeManagementEvents: false
+          ReadWriteType: WriteOnly
+      IncludeGlobalServiceEvents: false
+      IsLogging: true
+      IsMultiRegionTrail: false
+      S3BucketName: !Ref LoggingBucket
+
+  # S3 bucket to which CloudTrail will send logs
+  LoggingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: LogDeliveryWrite
+      BucketName: !Sub 'logging-${NamingPrefix}-${AWS::Region}'
+
+  # CloudWatch Log Group to which CloudTrail will send logs
+  CloudWatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    # Delete the Log Group when the stack is deleted
+    DeletionPolicy: Delete
+    Properties: 
+      LogGroupName: !Sub 'CloudTrail/logs/${NamingPrefix}'
+      RetentionInDays: 30
+
+  # Bucket policy gives CloudTrail permission to write to destination S3 bucket
+  CloudTrailWriteToS3Policy:
+    Type: AWS::S3::BucketPolicy
+    Properties: 
+      Bucket: !Ref LoggingBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: AWSCloudTrailAclCheck
+          Effect: Allow
+          Principal:
+            Service: 'cloudtrail.amazonaws.com'
+          Action: 's3:GetBucketAcl'
+          Resource: !Sub 'arn:aws:s3:::${LoggingBucket}'
+        - Sid: AWSCloudTrailWrite
+          Effect: Allow
+          Principal:
+            Service: 'cloudtrail.amazonaws.com'
+          Action: 's3:PutObject'
+          Resource: !Sub 'arn:aws:s3:::${LoggingBucket}/AWSLogs/${AWS::AccountId}/*'
+          Condition:
+            StringEquals:
+              's3:x-amz-acl': 'bucket-owner-full-control'
+
+  # IAM Role gives CloudTrail permission to write to destination CloudWatch Log Group
+  CloudTrailWriteToLogGroupRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-CloudTrailWriteToLogGroupRole-${AWS::Region}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html
+        - PolicyName: writeToLogGroup
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AWSCloudTrailCreateLogStream20141101
+                Effect: Allow
+                Action:
+                  - 'logs:CreateLogStream'
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:CloudTrail/logs/${NamingPrefix}:log-stream:*'
+              - Sid: AWSCloudTrailPutLogEvents20141101
+                Effect: Allow
+                Action:
+                  - 'logs:PutLogEvents'
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:CloudTrail/logs/${NamingPrefix}:log-stream:*'
+
+# Outputs
+
+Outputs:
+  S3BucketName:
+    Value: !Ref S3BucketWithEncryption
+    Description: S3 Bucket Name

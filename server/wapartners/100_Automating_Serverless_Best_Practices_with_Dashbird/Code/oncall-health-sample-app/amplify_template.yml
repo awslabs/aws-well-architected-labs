@@ -1,0 +1,192 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  AmplifyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - amplify.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
+      Policies:
+        - PolicyName: cognito
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'cognito-identity:CreateIdentityPool'
+                - 'cognito-identity:SetIdentityPoolRoles'
+                - 'cognito-idp:CreateUserPool'
+                - 'cognito-identity:DescribeIdentityPool'
+                - 'cognito-idp:CreateUserPoolClient'
+                - 'cognito-idp:DeleteUserPoolClient'
+                - 'cognito-idp:DeleteUserPool'
+                Resource: "*"
+        - PolicyName: amplify
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'amplify:ListApps'
+                - 'amplify:CreateBackendEnvironment'
+                - 'amplify:GetApp'
+                - 'amplify:GetBackendEnvironment'
+                - 'amplify:UpdateBranch'
+                Resource: "*"
+        - PolicyName: iam
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                - 'iam:CreateRole'
+                - 'iam:GetRole'
+                - 'iam:GetRolePolicy'
+                - 'iam:PutRolePolicy'
+                - 'iam:PassRole'
+                - 'iam:DeleteRolePolicy'
+                - 'iam:DeleteRole'
+                Resource: "*"
+        - PolicyName: kms
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'kms:Decrypt'
+                  Resource: "*"
+        - PolicyName: lambda
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'lambda:CreateFunction'
+                  - 'lambda:GetFunction'
+                  - 'lambda:GetFunctionCodeSigningConfig'
+                  - 'lambda:InvokeFunction'
+                  - 'lambda:DeleteFunction'
+                  Resource: "*"
+        - PolicyName: AmplifyStorageSDKCalls
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 's3:CreateBucket'
+                  - 's3:DeleteBucket'
+                  - 's3:DeleteBucketPolicy'
+                  - 's3:DeleteBucketWebsite'
+                  - 's3:DeleteObject'
+                  - 's3:DeleteObjectVersion'
+                  - 's3:GetBucketLocation'
+                  - 's3:GetObject'
+                  - 's3:ListAllMyBuckets'
+                  - 's3:ListBucket'
+                  - 's3:ListBucketVersions'
+                  - 's3:PutBucketAcl'
+                  - 's3:PutBucketCORS'
+                  - 's3:PutBucketNotification'
+                  - 's3:PutBucketPolicy'
+                  - 's3:PutBucketVersioning'
+                  - 's3:PutBucketWebsite'
+                  - 's3:PutEncryptionConfiguration'
+                  - 's3:PutLifecycleConfiguration'
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                  Resource: "*"
+        - PolicyName: ssm
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'ssm:GetParametersByPath'
+                  Resource: "*"
+        - PolicyName: cloudformation
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                  - 'cloudformation:DescribeStackResources'
+                  - 'cloudformation:DescribeStackResource'
+                  - 'cloudformation:DescribeStackEvents'
+                  - 'cloudformation:DescribeStacks'
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:UpdateStack'
+                  - 'cloudformation:ListStackResources'
+                  Resource: "*"
+  AmplifyApp:
+    Type: "AWS::Amplify::App"
+    Properties:
+      Name: oncall-health
+      Repository: 
+        Fn::ImportValue:
+          !Sub "oncall-health-repo-CloneUrlHttp"
+      Description: Oncall Health Vue App
+      EnvironmentVariables:
+        - Name: "_LIVE_UPDATES" 
+          Value: "[{\"name\":\"Amplify CLI\",\"pkg\":\"@aws-amplify/cli\",\"type\":\"npm\",\"version\":\"latest\"}]"
+      CustomRules:
+        - Status: "404-200"
+          Source: "/<*>"
+          Target: "/index.html"
+        - Status: "200"
+          Source: "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>"
+          Target: "/index.html"
+      BuildSpec: |-
+        version: 1
+        backend:
+          phases:
+            build:
+              commands:
+                - '# Execute Amplify CLI with the helper script'
+                - amplifyPush --simple
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm install
+            build:
+              commands:
+                - npm run build
+          artifacts:
+            baseDirectory: dist
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+      IAMServiceRole: !GetAtt AmplifyRole.Arn
+
+  AmplifyBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      BranchName: master
+      AppId: !GetAtt AmplifyApp.AppId
+      Description: Master Branch
+      EnableAutoBuild: true
+      EnvironmentVariables:
+        - Name: USER_BRANCH
+          Value: prod
+      Stage: PRODUCTION
+
+        
+Outputs:
+  OutputAppId:
+    Value: !GetAtt AmplifyApp.AppId
+  AppURL:
+      Description: oncall-health-sample-app URL
+      Value: !Sub
+        - "https://master.${AppId}.amplifyapp.com"
+        - AppId: !GetAtt AmplifyApp.AppId

@@ -1,0 +1,257 @@
+Resources:
+  #------------------------------------------------------------
+  # Create a VPC with a public and private subnet across two AZs
+  #------------------------------------------------------------
+  Pattern3VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      Tags:
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+  
+  Pattern3PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      AvailabilityZone: ap-southeast-2a
+      CidrBlock: 172.31.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "PublicSubnet1"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+  
+  Pattern3PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      AvailabilityZone: ap-southeast-2b
+      CidrBlock: 172.31.3.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "PublicSubnet2"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      AvailabilityZone: ap-southeast-2a
+      CidrBlock: 172.31.2.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "PrivateSubnet1"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3PrivateSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      AvailabilityZone: ap-southeast-2b
+      CidrBlock: 172.31.4.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "PrivateSubnet2"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  #-------------------------------------------------------------
+  # Create an IGW and attach to the created VPC
+  # Create a NAT GW with an associated public IP address.
+  #------------------------------------------------------------- 
+
+  Pattern3IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "igw"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3IGWAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      InternetGatewayId: !Ref Pattern3IGW
+  
+  Pattern3NatGateway:
+    Type: "AWS::EC2::NatGateway"
+    DependsOn: Pattern3NatPublicIP
+    Properties: 
+      AllocationId: !GetAtt Pattern3NatPublicIP.AllocationId
+      SubnetId: !Ref Pattern3PublicSubnet1
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "nat"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3NatPublicIP:
+    Type: "AWS::EC2::EIP"
+    DependsOn: Pattern3VPC
+    Properties:
+      Domain: vpc
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref Pattern3VPC, "NatPublicIP"]]
+      - Key: ResourceType
+        Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+      
+  #-------------------------------------------------------------
+  # Create public route table and attach to the public subnets
+  #-------------------------------------------------------------
+
+  Pattern3PublicRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      Tags:
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join [ "-", [ !Ref Pattern3VPC, "PublicRouteTable1"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+  
+  Pattern3PublicRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      Tags:
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join [ "-", [ !Ref Pattern3VPC, "PublicRouteTable2"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+  
+  Pattern3PublicRoute1:
+    Type: 'AWS::EC2::Route'
+    DependsOn: 
+      - Pattern3IGW
+      - Pattern3IGWAttach
+    Properties:
+      RouteTableId: !Ref Pattern3PublicRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref Pattern3IGW
+
+  Pattern3PublicRoute2:
+    Type: 'AWS::EC2::Route'
+    DependsOn: 
+      - Pattern3IGW
+      - Pattern3IGWAttach
+    Properties:
+      RouteTableId: !Ref Pattern3PublicRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref Pattern3IGW
+  
+  Pattern3PublicSubnet1RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pattern3PublicSubnet1
+      RouteTableId: !Ref Pattern3PublicRouteTable1
+
+  Pattern3PublicSubnet1RouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pattern3PublicSubnet2
+      RouteTableId: !Ref Pattern3PublicRouteTable2
+
+  #-------------------------------------------------------------
+  # Create public route table and attach to the public subnets
+  #-------------------------------------------------------------
+
+  Pattern3PrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      Tags:
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join [ "-", [ !Ref Pattern3VPC, "PrivateRouteTable1"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+  
+  Pattern3PrivateRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Pattern3VPC
+      Tags:
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join [ "-", [ !Ref Pattern3VPC, "PrivateRouteTable2"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3"
+
+  Pattern3PrivateRoute1:
+    Type: 'AWS::EC2::Route'
+    DependsOn: Pattern3IGW
+    Properties:
+      RouteTableId: !Ref Pattern3PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref Pattern3NatGateway
+
+  Pattern3PrivateRoute2:
+    Type: 'AWS::EC2::Route'
+    DependsOn: Pattern3IGW
+    Properties:
+      RouteTableId: !Ref Pattern3PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref Pattern3NatGateway
+
+  Pattern3PrivateSubnet1RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pattern3PrivateSubnet1
+      RouteTableId: !Ref Pattern3PrivateRouteTable1
+
+  Pattern3PrivateSubnet1RouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Pattern3PrivateSubnet2
+      RouteTableId: !Ref Pattern3PrivateRouteTable2
+#---------------------------------------------------------
+# Output section
+#---------------------------------------------------------
+Outputs:
+  OutputPatternStackName:
+    Description: Stack name
+    Value: !Ref AWS::StackName
+  OutputPattern3VPC:
+    Description: Baseline VPC
+    Value: !Ref Pattern3VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VpcId"
+  OutputPattern3PublicSubnet1:
+    Description: Public Subnet 1 VPC
+    Value: !Ref Pattern3PublicSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet1"
+  OutputPattern3PublicSubnet2:
+    Description: Public Subnet 2 VPC
+    Value: !Ref Pattern3PublicSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet2"
+  OutputPattern3PrivateSubnet1:
+    Description: Private Subnet 1 VPC
+    Value: !Ref Pattern3PrivateSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet1"
+  OutputPattern3PrivateSubnet2:
+    Description: Private Subnet 2 VPC
+    Value: !Ref Pattern3PrivateSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet2"
+  OutputPatternStackName:
+    Description: Stack name
+    Value: !Ref AWS::StackName

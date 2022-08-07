@@ -1,0 +1,569 @@
+﻿AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for a static web app. This template installs a highly-available, scalable web application deployment.
+  It demonstrates using the AWS CloudFormation bootstrap scripts to deploy a stateless web application.
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+  
+########################################################################
+
+Parameters:
+  #General:
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template.
+    Default: WebApp1
+  #Imports:
+  VPCImportName:
+    Type: String
+    Description: 'The CloudFormation name of the VPC stack to import'
+    Default: 'WebApp1-VPC'
+    MinLength: '3'
+    MaxLength: '32'
+  VPCImportApp1Instance1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 1'
+    Default: 'App1Subnet1'
+  VPCImportApp1Instance1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 2'
+    Default: 'App1Subnet2'
+  VPCImportApp1Instance1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 3'
+    Default: 'App1Subnet3'
+  VPCImportALB1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet1'
+  VPCImportALB1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet2'
+  VPCImportALB1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet3'
+  #Application Tier
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t3.micro
+    AllowedValues:
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - m5.medium
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.12xlarge
+      - m5.24xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  ServerCodeUrl:
+    Type: String
+    Default: 'https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Code/server_basic.py'
+    AllowedPattern: '^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
+    ConstraintDescription: URL where server code can be downloaded, such as S3 or GitHub.
+  ALBSGSource:
+    Description: The IP address range that can be used to access the web app
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  Web1AutoScaleDesired:
+    Default: '3'
+    Description: The desired number of web instances in auto scaling group
+    Type: Number
+    MinValue: '3'
+    MaxValue: '6'
+    ConstraintDescription: must be between 3 and 6 EC2 instances. 
+    
+########################################################################
+
+# "Conditions" would go here, but this CloudFormation Template does not 
+# make use of them
+
+
+########################################################################
+
+Resources:
+
+  DynamoDBServiceMockTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties: 
+      TableName: 'RecommendationService'
+      AttributeDefinitions: 
+        - 
+          AttributeName: 'ServiceAPI'
+          AttributeType: 'S'
+        - 
+          AttributeName: 'UserID'
+          AttributeType: 'N'
+      KeySchema: 
+        - 
+          AttributeName: 'ServiceAPI'
+          KeyType: 'HASH'
+        - 
+          AttributeName: 'UserID'
+          KeyType: 'RANGE'
+      ProvisionedThroughput: 
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5'
+      SSESpecification: 
+        SSEEnabled: 'true'
+
+  ALB1SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 to the allowed CIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: !Ref ALBSGSource
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref ALBSGSource
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Load Balancer
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+
+  ALB1LoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html
+    Properties:
+      SecurityGroups:
+        - Ref: ALB1SecurityGroup
+      Subnets:
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet1}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet2}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet3}'
+
+  ALB1Listener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
+    Properties:
+      #  Certificates:
+        #- Certificate
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALB1TargetGroup
+      LoadBalancerArn: !Ref ALB1LoadBalancer
+      Port: '80'
+      Protocol: HTTP
+
+  ALB1TargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
+    Properties:
+      HealthCheckPath: /healthcheck
+      HealthCheckIntervalSeconds: 15
+      #HealthCheckPort: 
+      #HealthCheckProtocol:
+      HealthCheckTimeoutSeconds: 3
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      # A short drain time helps speed up the lab
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 10
+      UnhealthyThresholdCount: 3
+      VpcId: 
+        Fn::ImportValue: !Sub '${VPCImportName}'
+
+  Web1InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 restricted to the load balancer
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Instance
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+
+  WebAppAutoScalingGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
+    Properties:
+      # To make it faster to update the server during the lab,
+      # we will be replacing the AutoScalingGroup. Therefore
+      # we must let CloudFormation name it
+      # AutoScalingGroupName: !Sub '${NamingPrefix}'
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet2'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet3'
+      LaunchConfigurationName: !Ref Web1LaunchConfig
+      MinSize: '3'
+      MaxSize: !Ref Web1AutoScaleDesired
+      DesiredCapacity: !Ref Web1AutoScaleDesired
+      TargetGroupARNs:
+        - !Ref ALB1TargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}'
+          PropagateAtLaunch: true
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: 'true'
+
+  Web1LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
+    Properties:
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref Web1InstanceSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum -y update
+          sleep 30 # prevent "Error: Rpmdb changed underneath us"
+          yum install python3 python-virtualenv python-pip -y
+          python3 -m venv /home/ec2-user/venv
+          source /home/ec2-user/venv/bin/activate
+          pip install boto3
+          pip install ec2_metadata
+          wget -O server.py ${ServerCodeUrl}
+          python3 server.py -p 80 -r ${AWS::Region}
+
+  WebInstancePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: 'Policy used by EC2 WebServers'
+      ManagedPolicyName: !Sub '${NamingPrefix}-EC2-Policy-${AWS::StackName}'
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ec2:DescribeInstanceStatus'
+            Resource: '*'
+            # VPC Flow Logs: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html
+          - Effect: Allow
+            Action: 
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+              - 'logs:DescribeLogStreams'
+            Resource: 'arn:aws:logs:*:*:*'
+            # CloudWatch: Required to create metrics" https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/permissions-reference-cw.html
+          - Effect: Allow
+            Action:
+              - 'cloudwatch:PutMetricData'
+            Resource: '*'
+            # SSM: Our web app code on EC2 reads an SSM Parameter as part of this lab
+          - Effect: Allow
+            Action: 
+              - 'ssm:GetParameter'
+            Resource: '*'
+
+  # IAM Role for EC2 servers including access to DynamoDB (DDB)
+  Web1InstanceRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn: WebInstancePolicy
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref WebInstancePolicy
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      # In addition to the ManagedPolicy, give it access to DDB
+      Policies:
+        - PolicyName: ddbReadOnly
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:BatchGetItem'
+                  - 'dynamodb:Describe*'
+                  - 'dynamodb:List*'
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:Query'
+                  - 'dynamodb:Scan'
+                Resource: 'arn:aws:dynamodb:*:*:table/*'
+
+  # IAM Role for EC2 servers WITHOUT access to DynamoDB (DDB)
+  Web2InstanceRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn: WebInstancePolicy
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-noDDB-Role-${AWS::StackName}'
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref WebInstancePolicy
+        - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+
+  Web1InstanceInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      InstanceProfileName: !Sub '${NamingPrefix}-EC2-Role-${AWS::StackName}'
+      Path: /Web1InstanceEc2Role/
+      Roles:
+        - !Ref Web1InstanceRole
+
+  Web2InstanceInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      InstanceProfileName: !Sub '${NamingPrefix}-EC2-noDDB-Role-${AWS::StackName}'
+      Path: /Web2InstanceEc2Role/
+      Roles:
+        - !Ref Web2InstanceRole
+
+  LoadDynamoDBLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-Lambda-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: ddbFull
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:BatchWriteItem'
+                Resource: 'arn:aws:dynamodb:*:*:table/RecommendationService'
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogStreams'
+                Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - 'cloudwatch:PutMetricData'
+                Resource: '*'
+
+  LoadDynamoDBLambda:
+      Type: 'AWS::Lambda::Function'
+      Properties:
+        FunctionName: 'LoadDynamoDBLambda'
+        Handler: 'index.handler'
+        Runtime: 'python3.6'
+        Timeout: '30'
+        Role: !GetAtt LoadDynamoDBLambdaRole.Arn
+        Code:
+          ZipFile: !Sub |
+            import boto3
+            import urllib.request
+            import cfnresponse
+            import logging
+            import signal
+            import json
+            import traceback
+
+            LOGGER = logging.getLogger()
+            LOGGER.setLevel(logging.INFO)
+
+            def populate_ddb_table():
+                # Get the service resource.
+                LOGGER.info('create client')
+                client = boto3.client('dynamodb', '${AWS::Region}')
+                
+                # @TODO, make bucket/object configurable
+                LOGGER.info('open file')
+                file = urllib.request.urlopen("https://aws-well-architected-labs-ohio.s3.us-east-2.amazonaws.com/Healthcheck/Data/RecommendationService.json")
+                LOGGER.info('read file')
+                text = file.read()
+                LOGGER.info(text)
+                LOGGER.info('convert to JSON')
+                request_items = json.loads(text)
+                LOGGER.info('write to DDB')
+                response = client.batch_write_item(RequestItems=request_items)
+                LOGGER.info('DONE')
+                
+                # @TODO add error handling 
+                
+                # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#DynamoDB.Client.batch_write_item
+
+
+            def handler(event, context):
+                signal.alarm(int((context.get_remaining_time_in_millis() / 1000) - 1))
+                # Setup alarm for remaining runtime minus a second
+                try:
+                    LOGGER.info('EVENT RECEIVED: %s', event)
+                    LOGGER.info('CONTEXT RECEIVED: %s', context)
+                    if event['RequestType'] == 'Create':
+                        LOGGER.info('CREATE')
+                        populate_ddb_table()
+                        cfnresponse.send(event, context, cfnresponse.SUCCESS,
+                            {'Message': 'Resource creation successful!'})
+                    elif event['RequestType'] == 'Update':
+                        LOGGER.info('UPDATE')
+                        populate_ddb_table()
+                        cfnresponse.send(event, context, cfnresponse.SUCCESS,
+                            {'Message': 'Resource update successful!'})
+                    elif event['RequestType'] == 'Delete':
+                        LOGGER.info('DELETE')
+                        # do nothing, table will be deleted anyway
+                        cfnresponse.send(event, context, cfnresponse.SUCCESS,
+                            {'Message': 'Resource deletion successful!'})
+                    else:
+                        LOGGER.info('FAILED!')
+                        cfnresponse.send(event, context, cfnresponse.FAILED,
+                            {'Message': 'Unexpected event received from CloudFormation'})
+                except Exception as e:
+                    LOGGER.info(str(traceback.format_exception_only(e.__class__, e)))
+                    LOGGER.info('FAILED!')
+                    cfnresponse.send(event, context, cfnresponse.FAILED, {
+                        'Message': 'Exception during processing'})
+
+            def timeout_handler(_signal, _frame):
+                raise Exception('Time exceeded')
+
+            signal.signal(signal.SIGALRM, timeout_handler)
+
+  CustomResource:
+    Type: 'Custom::LoadDynamoDB'
+    DependsOn: DynamoDBServiceMockTable
+    Properties:
+      ServiceToken: !GetAtt LoadDynamoDBLambda.Arn
+      DynamoTableName: !Ref DynamoDBServiceMockTable
+
+  RecommendationServiceEnabled:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      AllowedPattern: '^(true|false)$'
+      Description: 'switch used to enable/disable the mocked RecommendationService'
+      Name: 'RecommendationServiceEnabled'
+      Tier: 'Standard'
+      Type: 'String'
+      Value: 'true'
+
+########################################################################
+
+Outputs:
+  WebsiteURL:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - ALB1LoadBalancer
+          - DNSName
+        - /
+    Description: Static Website
+    
+########################################################################
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "General Configuration"
+        Parameters: 
+          - NamingPrefix
+      - 
+        Label: 
+          default: "VPC Stack Imports"
+        Parameters: 
+          - VPCImportName
+          - VPCImportApp1Instance1Subnet1
+          - VPCImportApp1Instance1Subnet2
+          - VPCImportApp1Instance1Subnet3
+          - VPCImportALB1Subnet1
+          - VPCImportALB1Subnet2
+          - VPCImportALB1Subnet3
+      - 
+        Label: 
+          default: "Application Tier Configuration"
+        Parameters: 
+          - InstanceType
+          - LatestAmiId
+          - ServerCodeUrl
+          - Web1AutoScaleDesired
+          - ALBSGSource
+

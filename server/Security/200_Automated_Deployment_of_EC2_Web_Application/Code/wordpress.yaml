@@ -1,0 +1,589 @@
+﻿AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for WordPress. This template installs a highly-available, scalable WordPress deployment using a multi-az
+  Amazon RDS database instance for storage. It demonstrates using the AWS CloudFormation bootstrap scripts to deploy WordPress.
+
+  **WARNING** You will be billed for the AWS resources created if you create a stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+Parameters:
+  #General:
+  NamingPrefix:
+    Type: String
+    Description: The naming prefix for resources created by this template.
+    Default: WebApp1
+  #Imports:
+  VPCImportName:
+    Type: String
+    Description: 'The CloudFormation name of the VPC stack to import'
+    Default: 'WebApp1-VPC'
+    MinLength: '3'
+    MaxLength: '32'
+  VPCImportApp1Instance1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 1'
+    Default: 'App1Subnet1'
+  VPCImportApp1Instance1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 2'
+    Default: 'App1Subnet2'
+  VPCImportApp1Instance1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import for subnet 3'
+    Default: 'App1Subnet3'
+  VPCImportALB1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet1'
+  VPCImportALB1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet2'
+  VPCImportALB1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'ALB1Subnet3'
+  VPCImportDB1Subnet1:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'DB1Subnet1'
+  VPCImportDB1Subnet2:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'DB1Subnet2'
+  VPCImportDB1Subnet3:
+    Type: String
+    Description: 'The name of the subnet from VPC stack to import'
+    Default: 'DB1Subnet3'
+  #Application Tier
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t3.micro
+    AllowedValues:
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+    ConstraintDescription: must be a valid EC2 instance type.
+  ALBSGSource:
+    Description: Your IP address range that will be used to access the WordPress instance behing the ALB.
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  Web1AutoScaleDesired:
+    Default: '1'
+    Description: The desired number of web instances in auto scaling group
+    Type: Number
+    MinValue: '1'
+    MaxValue: '6'
+    ConstraintDescription: must be between 1 and 6 EC2 instances.
+  #Database Tier
+  DB1Name:
+    Default: wordpressdb
+    Description: The WordPress database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
+
+Resources:
+  ALB1SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 to the allowed CIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: !Ref ALBSGSource
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: !Ref ALBSGSource
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Load Balancer
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  ALB1LoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html
+    Properties:
+      #IpAddressType:
+      # Name: String
+      # Scheme: String
+      SecurityGroups:
+        - Ref: ALB1SecurityGroup
+      # SubnetMappings:
+      #   - SubnetMapping      
+      Subnets:
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet1}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet2}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportALB1Subnet3}'
+      # Tags:
+      #   - Resource Tag
+  ALB1Listener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
+    Properties:
+      #  Certificates:
+        #- Certificate
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALB1TargetGroup
+      LoadBalancerArn: !Ref ALB1LoadBalancer
+      Port: '80'
+      Protocol: HTTP
+      #SslPolicy: String
+  ALB1TargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
+    Properties:
+      HealthCheckPath: /wordpress/wp-admin/install.php
+      HealthCheckIntervalSeconds: 10
+      #HealthCheckPath: 
+      #HealthCheckPort: 
+      #HealthCheckProtocol:
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: 
+      Port: 80
+      Protocol: HTTP
+      #Tags:
+        #-
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: 'true'
+        - Key: stickiness.type
+          Value: lb_cookie
+        - Key: stickiness.lb_cookie.duration_seconds
+          Value: '30'
+      # Targets:
+      #   - TargetDescription
+      # TargetType: String
+      UnhealthyThresholdCount: 5
+      VpcId: 
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  Web1InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP access via port 80 and 443 restricted to the load balancer
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          SourceSecurityGroupId: !Select 
+            - 0
+            - !GetAtt 
+              - ALB1LoadBalancer
+              - SecurityGroups
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Instance
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  Web1InstanceAutoScalingGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
+    Properties:
+      AutoScalingGroupName: !Sub '${NamingPrefix}'
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet1'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet2'
+        - Fn::ImportValue: !Sub '${VPCImportName}-App1Subnet3'
+      LaunchConfigurationName: !Ref Web1LaunchConfig
+      MinSize: '1'
+      MaxSize: '5'
+      DesiredCapacity: !Ref Web1AutoScaleDesired
+      TargetGroupARNs:
+        - !Ref ALB1TargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${NamingPrefix}'
+          PropagateAtLaunch: true
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: '1'
+        MaxBatchSize: '1'
+        PauseTime: PT15M
+        WaitOnResourceSignals: 'true'
+  Web1LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
+    Metadata:
+      'AWS::CloudFormation::Init':
+        configSets:
+          wordpress_install:
+            - install_cfn
+            - install_wordpress
+        install_cfn:
+          files:
+            /etc/cfn/cfn-hup.conf:
+              content: !Sub |
+                [main]
+                stack= ${AWS::StackId}
+                region=${AWS::Region}
+              mode: '000400'
+              owner: root
+              group: root
+            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+              content:  !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.WebServer.Metadata.AWS::CloudFormation::Init
+                action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Web1LaunchConfig --configsets wordpress_install --region ${AWS::Region}
+              mode: '000400'
+              owner: root
+              group: root
+          services:
+            sysvinit:
+              cfn-hup:
+                enabled: true
+                ensureRunning: true
+                files:
+                  - /etc/cfn/cfn-hup.conf
+                  - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+        install_wordpress:
+          packages:
+            yum:
+              jq: []
+              awslogs: []
+              httpd: []
+              php: []
+              php-mysql: []
+          sources:
+            /var/www/html: 'https://wordpress.org/wordpress-5.1.1.tar.gz'
+          files:
+            /tmp/create-wp-config:
+              content: !Sub |
+                #!/bin/bash -xe
+                echo "Installing Amazon CloudWatch Agent"
+                wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+                wget https://www.wellarchitectedlabs.com/Security/200_Automated_Deployment_of_EC2_Web_Application/Code/amazon-cloudwatch-agent.json -P /opt/aws/amazon-cloudwatch-agent/etc/
+                rpm -U ./amazon-cloudwatch-agent.rpm
+                /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s 
+                cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+                sed -i "s/'database_name_here'/'${DB1Name}'/g" wp-config.php
+                sed -i "s/'username_here'/'admin'/g" wp-config.php
+                secret="$(aws secretsmanager get-secret-value --secret-id ${DB1Secret} --region ${AWS::Region} --query SecretString --output text |jq '.password' |sed -e 's/^\"//g' |sed -e 's/\"$//g')"
+                sed -i "s/password_here/$secret/g" wp-config.php
+                sed -i "s/'localhost'/'${DB1Cluster.Endpoint.Address}'/g" wp-config.php
+                chown -R apache /var/www
+                chgrp -R apache /var/www
+                chmod 2775 /var/www
+                find /var/www -type d -exec sudo chmod 2775 {} \;
+                find /var/www -type f -exec sudo chmod 0664 {} \;
+              mode: '000500'
+              owner: root
+              group: root
+          commands:
+            01_configure_wordpress:
+              command: /tmp/create-wp-config
+              cwd: /var/www/html/wordpress
+          services:
+            sysvinit:
+              httpd:
+                enabled: 'true'
+                ensureRunning: 'true'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref Web1InstanceInstanceProfile
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref Web1InstanceSecurityGroup
+      #KeyName: A best practice is to use Systems Manager instead of directly accessing instances manually 
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          #yum update -y
+          echo "Installing aws-cfn-bootstrap"
+          yum install -y aws-cfn-bootstrap
+          echo "Executing cfn-init..." 
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Web1LaunchConfig --configsets wordpress_install --region ${AWS::Region}
+          echo "Executing cfn-signal..."
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource Web1InstanceAutoScalingGroup --region ${AWS::Region}
+          echo "Restarting httpd..."
+          service httpd restart
+          echo "UserData Complete"
+  Web1InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${NamingPrefix}-EC2-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: ec2
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:DescribeInstanceStatus'
+                Resource: '*'
+        - PolicyName: cloudwatch
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogStreams'
+                Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - 'cloudwatch:PutMetricData'
+                Resource: '*'
+        - PolicyName: s3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:GetObject'
+                Resource:
+                - !Sub 'arn:aws:s3:::aws-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::aws-windows-downloads-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::amazon-ssm-packages-${AWS::Region}/*'
+                - !Sub 'arn:aws:s3:::${AWS::Region}-birdwatcher-prod/*'
+                - !Sub 'arn:aws:s3:::patch-baseline-snapshot-${AWS::Region}/*'
+        - PolicyName: ssm
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ssm:DescribeAssociation'
+                  - 'ssm:GetDeployablePatchSnapshotForInstance'
+                  - 'ssm:GetDocument'
+                  - 'ssm:DescribeDocument'
+                  - 'ssm:GetManifest'
+                  - 'ssm:GetParameters'
+                  - 'ssm:ListAssociations'
+                  - 'ssm:ListInstanceAssociations'
+                  - 'ssm:PutInventory'
+                  - 'ssm:PutComplianceItems'
+                  - 'ssm:PutConfigurePackageResult'
+                  - 'ssm:UpdateAssociationStatus'
+                  - 'ssm:UpdateInstanceAssociationStatus'
+                  - 'ssm:UpdateInstanceInformation'
+                  - 'ssmmessages:CreateControlChannel'
+                  - 'ssmmessages:CreateDataChannel'
+                  - 'ssmmessages:OpenControlChannel'
+                  - 'ssmmessages:OpenDataChannel'
+                Resource: '*'
+        - PolicyName: ec2messages
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:DeleteMessage'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:SendReply'
+                Resource: '*'
+        - PolicyName: Web1InstanceSecretsManager
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                #Action: 'secretsmanager:GetSecretValue'
+                Action: 'secretsmanager:*'
+                Resource: '*'
+  Web1InstanceInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /Web1InstanceEc2Role/
+      Roles:
+        - !Ref Web1InstanceRole
+  DB1Secret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: 'This is the secret for my RDS instance'
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "admin"}'
+        GenerateStringKey: 'password'
+        PasswordLength: 16
+        ExcludePunctuation: true
+  DB1SecretAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref DB1Secret
+      TargetId: !Ref DB1Cluster
+      TargetType: AWS::RDS::DBCluster
+  DB1EC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Database access from web tier
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !Ref Web1InstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - Database
+      VpcId:
+        Fn::ImportValue: !Sub '${VPCImportName}'
+  DB1SubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbsubnet-group.html
+    Properties: 
+      DBSubnetGroupDescription: !Sub '${NamingPrefix}-SubnetGroup'
+      DBSubnetGroupName: !Sub 'dbsubnetgroupwp'
+      SubnetIds:
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportDB1Subnet1}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportDB1Subnet2}'
+        - Fn::ImportValue: !Sub '${VPCImportName}-${VPCImportDB1Subnet3}'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref NamingPrefix
+              - SubnetGroup
+  DB1Cluster:
+    Type: AWS::RDS::DBCluster
+    DeletionPolicy: Delete
+    Properties:
+      DatabaseName: !Ref DB1Name
+      MasterUsername: !Join ['', ['{{resolve:secretsmanager:', !Ref DB1Secret, ':SecretString:username}}' ]]
+      MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref DB1Secret, ':SecretString:password}}' ]]
+      StorageEncrypted: true
+      Engine: aurora
+      EngineMode: serverless
+      KmsKeyId: !Ref DB1KMSKey
+      VpcSecurityGroupIds:
+        - !Ref DB1EC2SecurityGroup
+      DBSubnetGroupName: !Ref DB1SubnetGroup
+      DBClusterParameterGroupName: !Ref DB1ClusterParameterGroup
+      DBClusterIdentifier: !Ref AWS::StackName
+      ScalingConfiguration:
+        AutoPause: true
+        MaxCapacity: 16
+        MinCapacity: 2
+        SecondsUntilAutoPause: 300
+  DB1ClusterParameterGroup:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Properties:
+      Description: Sample Aurora Cluster Parameter Group
+      Family: aurora5.6
+      Parameters:
+        time_zone: UTC
+  DB1KMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub '${NamingPrefix}-Key'
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: key-iam-permission
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Join 
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref 'AWS::AccountId'
+                  - ':root'
+            Action: 'kms:*'
+            Resource: '*'
+
+Outputs:
+  WebsiteURL:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - ALB1LoadBalancer
+          - DNSName
+        - /wordpress
+    Description: WordPress Website
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "General Configuration"
+        Parameters: 
+          - NamingPrefix
+      - 
+        Label: 
+          default: "Application Tier Configuration"
+        Parameters: 
+          - InstanceType
+          - Web1AutoScaleDesired
+          - ALBSGSource
+      - 
+        Label: 
+          default: "Database Tier Configuration"
+        Parameters:
+          - DB1Name
+      - 
+        Label: 
+          default: "VPC Stack Imports"
+        Parameters: 
+          - VPCImportName
+          - VPCImportApp1Instance1Subnet1
+          - VPCImportApp1Instance1Subnet2
+          - VPCImportApp1Instance1Subnet3
+          - VPCImportALB1Subnet1
+          - VPCImportALB1Subnet2
+          - VPCImportALB1Subnet3
+          - VPCImportDB1Subnet1
+          - VPCImportDB1Subnet2
+          - VPCImportDB1Subnet3
+

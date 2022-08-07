@@ -1,0 +1,37 @@
+{
+    "AwsAccountId": "{account}",
+    "DashboardId": "ta-organizational-view",
+    "Name": "Trusted Advisor Organizational View",
+    "Permissions": [
+        {
+          "Principal": "{user_arn}",
+          "Actions": [
+            "quicksight:DescribeDashboard",
+            "quicksight:ListDashboardVersions",
+            "quicksight:UpdateDashboardPermissions",
+            "quicksight:QueryDashboard",
+            "quicksight:UpdateDashboard",
+            "quicksight:DeleteDashboard",
+            "quicksight:DescribeDashboardPermissions",
+            "quicksight:UpdateDashboardPublishedVersion"
+          ]
+        }
+      ],
+      "DashboardPublishOptions": {
+        "AdHocFilteringOption": {
+          "AvailabilityStatus": "DISABLED"
+        }
+      },
+    "SourceEntity": {
+        "SourceTemplate": {
+            "DataSetReferences": [
+                {
+                    "DataSetPlaceholder": "ta-organizational-view",
+                    "DataSetArn": "arn:aws:quicksight:{region}:{account}:dataset/ta-organizational-view"
+                }
+            ],
+            "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/ta-organizational-view"
+        }
+    },
+    "VersionDescription": "1"
+}

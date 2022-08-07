@@ -1,0 +1,243 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template to create lab resources. Creates an EC2
+  Instance, an SNS Topic, and a Lambda Function in a new VPC.
+
+  **WARNING** You will be billed for the AWS resources created if you create a
+  stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License"). You may not
+  use this file except in compliance with the License. A copy of the License is
+  located at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  or in the "license" file accompanying this file. This file is distributed  on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+  or implied. See the License for the specific language governing permissions
+  and limitations under the License.
+Parameters:
+  NotificationEmail:
+    Type: String
+    Description: The email address to which backup and restore notifications are published.
+  AvailabilityZone:
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: The Availability Zone in which resources are launched.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: WA-Lab-VPC
+  Subnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Subnet
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: WA-Lab-InternetGateway
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: WA-Lab-RouteTable
+  Route:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Inbound HTTP access
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '80'
+          IpProtocol: tcp
+          ToPort: '80'
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: '-1'
+      VpcId: !Ref VPC
+  Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      SubnetId: !Ref Subnet
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              yum install httpd -y
+            - >
+              echo '<h1>AWS Backup is Awesome!!</h1>' >>
+              /var/www/html/index.html
+            - |
+              systemctl start httpd.service
+            - systemctl enable httpd.service
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Instance
+        - Key: workload
+          Value: myapp
+  SNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: !Join
+        - '-'
+        - - BackupNotificationTopic
+          - !Ref 'AWS::StackName'
+      Subscription:
+        - Endpoint: !Ref NotificationEmail
+          Protocol: email
+  LambdaFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: !Join
+        - '-'
+        - - RestoreTestFunction
+          - !Ref 'AWS::StackName'
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt
+        - LambdaRole
+        - Arn
+      Runtime: python3.8
+      Timeout: '60'
+      Code:
+        S3Bucket: aws-well-architected-labs-virginia
+        S3Key: Reliability/200_Testing_Backup_and_Restore_of_Data/lambda_function.zip
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AWSBackupOperatorAccess'
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: !Join
+            - '-'
+            - - LambdaPolicy
+              - !Ref 'AWS::StackName'
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - 'ec2:DescribeInstances'
+                  - 'ec2:TerminateInstances'
+                Resource: '*'
+              - Sid: VisualEditor1
+                Effect: Allow
+                Action: 'sns:Publish'
+                Resource: !Ref SNSTopic
+  LambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref LambdaFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref SNSTopic
+  SNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Endpoint: !GetAtt
+        - LambdaFunction
+        - Arn
+      Protocol: lambda
+      TopicArn: !Ref SNSTopic
+  SNSTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      Topics:
+        - !Ref SNSTopic
+      PolicyDocument:
+        Version: 2008-10-17
+        Id: __default_policy_ID
+        Statement:
+          - Sid: __default_statement_ID
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'SNS:GetTopicAttributes'
+              - 'SNS:SetTopicAttributes'
+              - 'SNS:AddPermission'
+              - 'SNS:RemovePermission'
+              - 'SNS:DeleteTopic'
+              - 'SNS:Subscribe'
+              - 'SNS:ListSubscriptionsByTopic'
+              - 'SNS:Publish'
+              - 'SNS:Receive'
+            Resource: !Ref SNSTopic
+            Condition:
+              StringEquals:
+                'AWS:SourceOwner': !Ref 'AWS::AccountId'
+          - Sid: backup
+            Effect: Allow
+            Principal:
+              Service: backup.amazonaws.com
+            Action: 'SNS:Publish'
+            Resource: !Ref SNSTopic
+          - Sid: lambda
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'SNS:Publish'
+            Resource: !Ref SNSTopic
+Outputs:
+  InstanceID:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+  ApplicationURL:
+    Description: URL for the application running on the EC2 Instance
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt
+          - Instance
+          - PublicIp
+  SNSTopicARN:
+    Description: SNS Topic ARN
+    Value: !Ref SNSTopic

@@ -1,0 +1,1116 @@
+<html lang="en">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <title>
+   How do you detect and investigate security events? - AWS Well-Architected Framework
+  </title>
+  <meta charset="utf-8"/>
+  <link href="./nav_shim.js" rel="script"/>
+  <link href="https://a0.awsstatic.com/main/css/1/style.css" rel="stylesheet"/>
+  <link href="https://a0.awsstatic.com/main/images/site/fav/favicon.ico" rel="icon" type="image/ico"/>
+  <link href="https://a0.awsstatic.com/main/images/site/fav/favicon.ico" rel="shortcut icon" type="image/ico"/>
+  <link href="https://docs.aws.amazon.com/css/awsdocs.css?v=20170615" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" rel="stylesheet"/>
+  <style type="text/css">
+   #pre, #main, #nav, #post { width: 80%; margin-left: 10%; margin-right: 10%; float: inherit; } #pre { margin-top: 80px; } #nav { margin-top: 90px; } #main * { font-size: x-large; text-rendering: optimizelegibility; } @media (max-width: 800px) { #main * { font-size: xx-large; } } .collapsible { background-color: #777; color: white; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; } .active, .collapsible:hover { background-color: #555; } p { line-height: 1.5em; } b { font-weight: bold; } .glossref { color: #444444; text-decoration: none; border-bottom: 1px dotted green; } .glossref:link, .glossref:visited { color: #444444; } .glossref:hover { color: green; } .waTable td:first-child { width: 15pc; } .waTable thead > tr { background-color: #EAF3FE; } .waTable td { padding: 5pt; border: 1pt solid black; } .waQuestionTableRef { width: 100%; margin-top: 1pc; padding: 5pt; border: 1pt solid black; background-color: #EEEEEE; } .waQuestionTableRef td { padding: 5pt; } .waQuestionTable { margin-top: 1pc; padding: 5pt; border: 1pt solid black; } .waQuestionTable tr:nth-child(3n+1) { background-color: #EAF3FE; } .stretchtext { margin-left: 1pt; margin-right: 1pt; padding-left: 8pt; padding-right: 8pt; background-color: #EAF3FE; border-radius: 10pt; } .stretchtext span:nth-child(1) { display: none; background-color: #EAF3FE; } .stretchtext :nth-child(1):target { display: inline; } .stretchtext :nth-child(1):target + a:not(target) { display: none; } #nav-breadcrumbs a, #nav-breadcrumbs span { margin: 0 10px } .toc, .toc li { list-style: none; } #walogo { width: 180px; float: right; } :target:before { content:" "; display:block; height:90px; margin:-90px 0 0; } ul.itemizedlist { margin-left: 2.5em }
+  </style>
+ </head>
+ <body>
+  <header class="awsm m-page-header" id="aws-page-header" role="banner">
+  </header>
+  <div id="main" role="main">
+   <h1>
+    Python Well-Architected Report v0.1
+    <br/>
+   </h1>
+  </div>
+  <div id="main" role="main">
+   <h1>
+    Workload Properties
+   </h1>
+   <ul class="itemizedlist" type="disc">
+    <br/>
+    <li class="listitem">
+     <b>
+      Workload Name:
+     </b>
+     WA Lab Test Workload
+    </li>
+    <li class="listitem">
+     <b>
+      ARN:
+     </b>
+     arn:aws:wellarchitected:us-east-1:222222222222:workload/c896b2b1142f6ea8dc22874674400002
+    </li>
+    <li class="listitem">
+     <b>
+      Description:
+     </b>
+     Test Workload for WA Lab
+    </li>
+    <li class="listitem">
+     <b>
+      Review Owner:
+     </b>
+     WA Python Script
+    </li>
+    <br/>
+   </ul>
+  </div>
+  <div id="main" role="main">
+   <h1>
+    Table of Contents
+   </h1>
+   <ul class="itemizedlist" type="disc">
+    <br/>
+    <li class="listitem">
+     <b>
+      <a href="#operationalExcellence">
+       Operational Excellence
+      </a>
+     </b>
+    </li>
+    <li class="listitem">
+     <b>
+      <a href="#security">
+       Security
+      </a>
+     </b>
+    </li>
+    <li class="listitem">
+     <b>
+      <a href="#reliability">
+       Reliability
+      </a>
+     </b>
+    </li>
+    <li class="listitem">
+     <b>
+      <a href="#performance">
+       Performance Efficiency
+      </a>
+     </b>
+    </li>
+    <li class="listitem">
+     <b>
+      <a href="#costOptimization">
+       Cost Optimization
+      </a>
+     </b>
+    </li>
+    <br/>
+   </ul>
+  </div>
+  <div id="main" role="main">
+   <h1 id="operationalExcellence">
+    Operational Excellence Improvement Plans
+   </h1>
+   <h2>
+    <b>
+     OPS 5 - How do you reduce defects, ease remediation, and improve flow into production?
+    </b>
+   </h2>
+   <h2>
+    <b>
+     Current Risk: HIGH
+    </b>
+   </h2>
+   <p>
+    <b id="step2">
+     Test and validate changes
+    </b>
+    <br>
+     <li class="listitem">
+      Test and validate changes:                       Changes should be tested and the results validated at all lifecycle               stages (for example, development, test, and production).                      Use               testing results to confirm new features and mitigate the risk and impact of failed               deployments.                      Automate testing and validation                               to ensure
+  consistency
+  of review, to reduce errors caused by manual processes, and reduce the level of effort.
+      <br>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html?ref=wellarchitected">
+        What is AWS CodeBuild?
+       </a>
+       <br>
+        <span class="fas fa-rss-square fa-fw" title="AWS Blog">
+        </span>
+        <a href="https://aws.amazon.com/blogs/devops/announcing-local-build-support-for-aws-codebuild/?ref=wellarchitected">
+         Local build support for AWS CodeBuild
+        </a>
+       </br>
+      </br>
+     </li>
+    </br>
+   </p>
+   <p>
+    <b id="step6">
+     Share design standards
+    </b>
+    <br>
+     <li class="listitem">
+      Share design standards:                       Share existing
+  best practices
+  , design standards, checklists, operating procedures, and guidance and governance               requirements across teams                       to reduce complexity and maximize               the benefits from development efforts.                       Ensure that procedures               exist to request changes, additions, and exceptions to design standards                         to support continual improvement and innovation.                      Ensure that               teams are aware of published content                       so that they can take advantage               of content, and limit rework and wasted effort.
+      <br>
+       <span class="fab fa-youtube fa-fw" title="Video">
+       </span>
+       <a href="https://www.youtube.com/watch?v=0zJuULHFS6A&amp;t=849s&amp;ref=wellarchitected">
+        Delegating access to your AWS environment
+       </a>
+       <br/>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-share-repository.html?ref=wellarchitected">
+        Share an AWS CodeCommit repository
+       </a>
+       <br/>
+       <span class="fas fa-rss-square fa-fw" title="AWS Blog">
+       </span>
+       <a href="https://aws.amazon.com/blogs/compute/easy-authorization-of-aws-lambda-functions/?ref=wellarchitected">
+        Easy authorization of AWS Lambda functions
+       </a>
+       <br/>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-explicit.html?ref=wellarchitected">
+        Sharing an AMI with specific AWS accounts
+       </a>
+       <br/>
+       <span class="fas fa-rss-square fa-fw" title="AWS Blog">
+       </span>
+       <a href="https://aws.amazon.com/blogs/devops/speed-template-sharing-with-an-aws-cloudformation-designer-url/?ref=wellarchitected">
+        Speed template sharing with an AWS CloudFormation designer URL
+       </a>
+       <br/>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sns-example.html?ref=wellarchitected">
+        Using AWS Lambda with Amazon SNS
+       </a>
+      </br>
+     </li>
+    </br>
+   </p>
+   <p>
+    <b id="step7">
+     Implement practices to improve code quality
+    </b>
+    <br/>
+    <li class="listitem">
+     Implement practices to improve code quality:                       Implement practices to improve code quality to minimize defects               and the risk of their being deployed.                      For example, test-driven               development, pair programming, code reviews, and standards adoption.
+    </li>
+   </p>
+   <p>
+    <b id="step9">
+     Make frequent, small, reversible changes
+    </b>
+    <br/>
+    <li class="listitem">
+     Make frequent, small, reversible changes:                       Frequent, small, and reversible changes reduce the scope and               impact of a change.                      This eases troubleshooting, enables faster               remediation, and provides the option to roll back a change.                      It               also increases the rate at which you can deliver value to the business.
+    </li>
+   </p>
+   <p>
+    <b id="step1">
+     Use version control
+    </b>
+    <br/>
+    <li class="listitem">
+     Use version control:                       Maintain assets in version controlled repositories.                       Doing so supports tracking changes, deploying new versions, detecting changes to existing               versions,                       and reverting to prior versions (for example, rolling               back to a known good state in the
+  event
+  of a failure).                      Integrate the version control capabilities of               your configuration management systems into your procedures.
+     <br/>
+     <span class="fab fa-youtube fa-fw" title="Video">
+     </span>
+     <a href="https://youtu.be/46PRLMW8otg?ref=wellarchitected">
+      Introduction to AWS CodeCommit
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html?ref=wellarchitected">
+      What is AWS CodeCommit?
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step10">
+     Fully automate integration and deployment
+    </b>
+    <br/>
+    <li class="listitem">
+     Use build and deployment management systems:                       Use build and deployment management systems                               to track and implement change, to reduce errors caused by manual processes, and reduce               the level of effort.                      Fully automate the integration and deployment               pipeline from code check-in through build, testing, deployment, and validation.                 This reduces lead time, enables increased frequency of change, and reduces the level               of effort.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html?ref=wellarchitected">
+      What is AWS CodeBuild?
+     </a>
+     <br/>
+     <span class="fab fa-youtube fa-fw" title="Video">
+     </span>
+     <a href="https://www.youtube.com/watch?v=GEPJ7Lo346A&amp;ref=wellarchitected">
+      Continuous integration best practices for software development
+     </a>
+     <br/>
+     <span class="fab fa-youtube fa-fw" title="Video">
+     </span>
+     <a href="https://www.youtube.com/watch?v=tEpx5VaW4WE&amp;ref=wellarchitected">
+      Slalom: CI/CD for serverless applications on AWS
+     </a>
+     <br/>
+     <span class="fab fa-youtube fa-fw" title="Video">
+     </span>
+     <a href="https://www.youtube.com/watch?v=Wx-ain8UryM&amp;ref=wellarchitected">
+      Introduction to AWS CodeDeploy - automated software deployment with Amazon Web Services
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html?ref=wellarchitected">
+      What is AWS CodeDeploy?
+     </a>
+    </li>
+   </p>
+   <h1 id="security">
+    Security Improvement Plans
+   </h1>
+   <h2>
+    <b>
+     SEC 2 - How do you manage identities for people and machines?
+    </b>
+   </h2>
+   <h2>
+    <b>
+     Current Risk: HIGH
+    </b>
+   </h2>
+   <p>
+    <b id="step2">
+     Use temporary credentials
+    </b>
+    <br/>
+    <li class="listitem">
+     Implement least privilege policies: Assign access policies with least privilege to
+  IAM
+  groups and roles to reflect the user's role or function that you have defined.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html?ref=wellarchitected#grant-least-privilege">
+      Grant least privilege
+     </a>
+    </li>
+    <li class="listitem">
+     Remove unnecessary permissions: Implement least privilege by removing permissions that are unnecessary.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html?ref=wellarchitected">
+      Reducing policy scope by viewing user activity
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_manage_delete.html?ref=wellarchitected#roles-delete_prerequisites">
+      View role access
+     </a>
+    </li>
+    <li class="listitem">
+     Consider permissions boundaries: A permissions boundary is an advanced feature for using a managed policy that sets               the maximum permissions that an identity-based policy can grant to an
+  IAM
+  entity. An entity's permissions boundary allows it to perform only the actions that               are allowed by both its identity-based policies and its permissions boundaries.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://wellarchitectedlabs.com/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/README.html?ref=wellarchitected">
+      Lab: IAM permissions boundaries delegating role creation
+     </a>
+    </li>
+    <li class="listitem">
+     Consider resource
+  tags
+  for permissions: You can use
+  tags
+  to control access to your AWS resources that support
+  tagging
+  . You can also
+  tag
+  IAM
+  users and roles to control what they can access.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://wellarchitectedlabs.com/Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html?ref=wellarchitected">
+      Lab: IAM tag based access control for EC2
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html?ref=wellarchitected">
+      Attribute-based access control (ABAC)
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step3">
+     Store and use secrets securely
+    </b>
+    <br/>
+    <li class="listitem">
+     Use AWS Secrets Manager: AWS Secrets Manager is an AWS service that makes it easier for you to manage secrets.               Secrets can be database credentials, passwords, third-party API keys, and even arbitrary               text.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html?ref=wellarchitected">
+      AWS Secrets Manager
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step4">
+     Rely on a centralized identity provider
+    </b>
+    <br/>
+    <li class="listitem">
+     Centralize administrative access: Create an
+  IAM
+  identity provider entity to establish a trust relationship between your AWS account               and your identity provider (IdP).
+  IAM
+  supports IdPs that are compatible with OpenID Connect (OIDC) or SAML 2.0 (
+  Security
+  Assertion Markup Language 2.0).
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html?ref=wellarchitected">
+      Identity Providers and Federation
+     </a>
+    </li>
+    <li class="listitem">
+     Centralize application access: Consider
+  Amazon Cognito
+  for centralizing application access. It lets you add user sign-up, sign-in, and access               control to your web and mobile apps quickly and easily.
+  Amazon Cognito
+  scales to millions of users and supports sign-in with social identity providers,               such as Facebook, Google, and Amazon, and enterprise identity providers via SAML 2.0.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://aws.amazon.com/cognito/?ref=wellarchitected">
+      Amazon Cognito
+     </a>
+    </li>
+    <li class="listitem">
+     Remove old
+  IAM
+  users and groups: After you start using an identity provider (IdP), remove
+  IAM
+  users and groups that are no longer required.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html?ref=wellarchitected">
+      Finding unused credentials
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_delete.html?ref=wellarchitected">
+      Deleting an IAM group
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step5">
+     Audit and rotate credentials periodically
+    </b>
+    <br/>
+    <li class="listitem">
+     Regularly audit credentials: Use credential reports, and
+  IAM
+  Access Analyzer to audit
+  IAM
+  credentials and permissions.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html?ref=wellarchitected">
+      IAM Access Analyzer
+     </a>
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html?ref=wellarchitected">
+      Getting credential report
+     </a>
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://wellarchitectedlabs.com/Security/200_Automated_IAM_User_Cleanup/README.html?ref=wellarchitected-tool&amp;ref=wellarchitected">
+      Lab: Automated IAM user cleanup
+     </a>
+    </li>
+    <li class="listitem">
+     Use Access Levels to Review
+  IAM
+  Permissions: To improve the
+  security
+  of your AWS account, regularly review and monitor each of your
+  IAM
+  policies. Make sure that your policies grant the least privilege that is needed to               perform only the necessary actions.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html?ref=wellarchitected#use-access-levels-to-review-permissions">
+      Use access levels to review IAM permissions
+     </a>
+    </li>
+    <li class="listitem">
+     Consider automating
+  IAM
+  resource creation and updates:
+  AWS CloudFormation
+  can be used to automate the deployment of
+  IAM
+  resources including roles and policies, to reduce human error, as the templates can               be verified and version controlled.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://wellarchitectedlabs.com/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/README.html?ref=wellarchitected">
+      Lab: Automated deployment of IAM groups and roles
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step6">
+     Leverage user groups and attributes
+    </b>
+    <br/>
+    <li class="listitem">
+     If you are using
+  AWS Single Sign-On
+  (SSO), configure groups: AWS SSO provides you with the ability to configure groups of users, and assign groups               the desired level of permission.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source-sso.html?ref=wellarchitected">
+      AWS Single Sign-On - Manage Identities
+     </a>
+    </li>
+    <li class="listitem">
+     Learn about attribute-based access control (ABAC): Attribute-based access control (ABAC) is an authorization strategy that defines permissions               based on attributes.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html?ref=wellarchitected">
+      What Is ABAC for AWS?
+     </a>
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS website">
+     </span>
+     <a href="https://www.wellarchitectedlabs.com/Security/300_IAM_Tag_Based_Access_Control_for_EC2/README.html?ref=wellarchitected">
+      Lab: IAM Tag Based Access Control for EC2
+     </a>
+    </li>
+   </p>
+   <h1 id="reliability">
+    Reliability Improvement Plans
+   </h1>
+   <h2>
+    <b>
+     REL 2 - How do you plan your network topology?
+    </b>
+   </h2>
+   <h2>
+    <b>
+     Current Risk: HIGH
+    </b>
+   </h2>
+   <p>
+    <b id="step2">
+     Provision redundant connectivity between private networks in the cloud and on-premises               environments
+    </b>
+    <br/>
+    <li class="listitem">
+     Ensure that you have highly available connectivity between AWS and on-premises                  environment: Use multiple
+  AWS Direct Connect
+  (DX) connections or VPN tunnels between separately deployed private networks. Use               multiple DX locations for high
+  availability
+  . If using multiple
+  AWS Regions
+  , ensure redundancy in at least two of them. You might want to evaluate
+  AWS Marketplace
+  appliances that terminate VPNs. If you use
+  AWS Marketplace
+  appliances, deploy redundant instances for high
+  availability
+  in different
+  Availability Zones
+  .
+     <ul class="itemizedlist" type="disc">
+      <li class="listitem">
+       Ensure that you have a redundant connection to your on-premises                                       environment: You may need redundant connections to multiple
+    AWS Regions
+    to achieve your
+    availability
+    needs.
+       <br/>
+       <span class="fab fa-aws fa-fw" title="AWS website">
+       </span>
+       <a href="https://aws.amazon.com/directconnect/resiliency-recommendation/?ref=wellarchitected">
+        AWS Direct Connect Resiliency Recommendations
+       </a>
+       <br/>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNConnections.html?ref=wellarchitected">
+        Using Redundant Site-to-Site VPN Connections to Provide Failover
+       </a>
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to identify correct use of Direct Connect circuits
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeConnections.html?ref=wellarchitected">
+          DescribeConnections
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeConnectionsOnInterconnect.html?ref=wellarchitected">
+          DescribeConnectionsOnInterconnect
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGatewayAssociations.html?ref=wellarchitected">
+          DescribeDirectConnectGatewayAssociations
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGatewayAttachments.htmll?ref=wellarchitected">
+          DescribeDirectConnectGatewayAttachments
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGateways.html?ref=wellarchitected">
+          DescribeDirectConnectGateways
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeHostedConnections.html?ref=wellarchitected">
+          DescribeHostedConnections
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeInterconnects.html?ref=wellarchitected">
+          DescribeInterconnects
+         </a>
+        </li>
+        <li class="listitem">
+         If only one Direct Connect connection exists or you have none, set up                                       redundant VPN tunnels to your virtual private gateways
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html?ref=wellarchitected">
+          What is AWS Site-to-Site VPN?
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="listitem">
+       Capture your current connectivity (for example, Direct Connect,                                       virtual private gateways,
+    AWS Marketplace
+    appliances)
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to query configuration of Direct Connect connections
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeConnections.html?ref=wellarchitected">
+          DescribeConnections
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeConnectionsOnInterconnect.html?ref=wellarchitected">
+          DescribeConnectionsOnInterconnect
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGatewayAssociations.html?ref=wellarchitected">
+          DescribeDirectConnectGatewayAssociations
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGatewayAttachments.htmll?ref=wellarchitected">
+          DescribeDirectConnectGatewayAttachments
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeDirectConnectGateways.html?ref=wellarchitected">
+          DescribeDirectConnectGateways
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeHostedConnections.html?ref=wellarchitected">
+          DescribeHostedConnections
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_DescribeInterconnects.html?ref=wellarchitected">
+          DescribeInterconnects
+         </a>
+        </li>
+        <li class="listitem">
+         Use service API
+      operations
+      to collect virtual private gateways where route tables use                                                 them
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnGateways.html?ref=wellarchitected">
+          DescribeVpnGateways
+         </a>
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRouteTables.html?ref=wellarchitected">
+          DescribeRouteTables
+         </a>
+        </li>
+        <li class="listitem">
+         Use service API
+      operations
+      to collect
+      AWS Marketplace
+      applications where                            route tables use them
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRouteTables.html?ref=wellarchitected">
+          DescribeRouteTables
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+   </p>
+   <p>
+    <b id="step3">
+     Ensure IP subnet allocation accounts for expansion and availability
+    </b>
+    <br/>
+    <li class="listitem">
+     Plan your network to accommodate for growth, regulatory compliance,                             and integration with others: Growth can be underestimated, regulatory compliance can change, and acquisitions                or private network connections can be difficult to implement without proper planning.
+     <ul class="itemizedlist" type="disc">
+      <li class="listitem">
+       Select relevant AWS accounts and Regions based on your service                                        requirements,
+    latency
+    , regulatory, and disaster recovery (DR) requirements
+      </li>
+      <li class="listitem">
+       Identify your needs for regional VPC deployments
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Determine if you are going to deploy multi-VPC connectivity
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html?ref=wellarchitected">
+          What Is a Transit Gateway?
+         </a>
+         <br/>
+         <span class="fas fa-bullseye fa-fw" title="Answers">
+         </span>
+         <a href="https://aws.amazon.com/answers/networking/aws-single-region-multi-vpc-connectivity/?ref=wellarchitected">
+          Single Region Multi-VPC Connectivity
+         </a>
+        </li>
+        <li class="listitem">
+         Determine if you need segregated networking for regulatory                                                  requirements
+        </li>
+       </ul>
+      </li>
+      <li class="listitem">
+       Identify the size of the VPCs
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Make VPCs as large as possible. The initial VPC
+      CIDR block
+      allocated to your VPC cannot be changed or deleted, but you can add additional non-overlapping
+      CIDR blocks
+      to the VPC. This however may fragment your address ranges
+        </li>
+        <li class="listitem">
+         Allow for use of Elastic Load Balancers, Auto Scaling groups,                                               concurrent
+      AWS Lambda
+      invocations, and service endpoints
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+   </p>
+   <p>
+    <b id="step4">
+     Prefer hub-and-spoke topologies over many-to-many mesh
+    </b>
+    <br/>
+    <li class="listitem">
+     Prefer hub-and-spoke topologies over many-to-many mesh: If more than two network address spaces (VPCs, on-premises networks) are connected               via VPC peering,
+  AWS Direct Connect
+  , or VPN, then use a hub-and-spoke model like that provided by AWS Transit Gateway.
+     <ul class="itemizedlist" type="disc">
+      <li class="listitem">
+       For only two such networks, you can simply connect them to each other, but as the                     number of networks grows, the complexity of such meshed connections becomes untenable.                     AWS Transit Gateway provides an easy to maintain hub-and-spoke model, allowing routing                     of traffic across your multiple networks.
+       <br/>
+       <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+       </span>
+       <a href="https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html?ref=wellarchitected">
+        What Is a Transit Gateway?
+       </a>
+      </li>
+     </ul>
+    </li>
+   </p>
+   <p>
+    <b id="step5">
+     Enforce non-overlapping private IP address ranges in all private address spaces where               they are connected
+    </b>
+    <br/>
+    <li class="listitem">
+     Monitor and manage your CIDR use: Evaluate your potential usage on AWS, add CIDR ranges to existing VPCs,                         and create VPCs to allow planned growth in usage.
+     <ul class="itemizedlist" type="disc">
+      <li class="listitem">
+       Capture current CIDR consumption (for example, VPCs, subnets,                                         etc.)
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to collect current CIDR consumption
+        </li>
+       </ul>
+      </li>
+      <li class="listitem">
+       Capture your current subnet usage
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to collect subnets per VPC in each                            Region
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html?ref=wellarchitected">
+          DescribeSubnets
+         </a>
+        </li>
+        <li class="listitem">
+         Record the current usage
+        </li>
+        <li class="listitem">
+         Determine if you created any overlapping IP                            ranges
+        </li>
+        <li class="listitem">
+         Calculate the spare capacity
+        </li>
+        <li class="listitem">
+         Note overlapping IP ranges: You can either migrate to a new range of addresses                             or                           use Network and Port Translation (NAT) appliances from
+      AWS Marketplace
+      if                             you need to connect the overlapping ranges.
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+   </p>
+   <p>
+    <b id="step5">
+     Enforce non-overlapping private IP address ranges in all private address spaces where               they are connected
+    </b>
+    <br/>
+    <li class="listitem">
+     Monitor and manage your CIDR use: Evaluate your potential usage on AWS, add CIDR ranges to existing VPCs,                         and create VPCs to allow planned growth in usage.
+     <ul class="itemizedlist" type="disc">
+      <li class="listitem">
+       Capture current CIDR consumption (for example, VPCs, subnets,                                         etc.)
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to collect current CIDR consumption
+        </li>
+       </ul>
+      </li>
+      <li class="listitem">
+       Capture your current subnet usage
+       <ul class="itemizedlist" type="disc">
+        <li class="listitem">
+         Use service API
+      operations
+      to collect subnets per VPC in each                            Region
+         <br/>
+         <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+         </span>
+         <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html?ref=wellarchitected">
+          DescribeSubnets
+         </a>
+        </li>
+        <li class="listitem">
+         Record the current usage
+        </li>
+        <li class="listitem">
+         Determine if you created any overlapping IP                            ranges
+        </li>
+        <li class="listitem">
+         Calculate the spare capacity
+        </li>
+        <li class="listitem">
+         Note overlapping IP ranges: You can either migrate to a new range of addresses                             or                           use Network and Port Translation (NAT) appliances from
+      AWS Marketplace
+      if                             you need to connect the overlapping ranges.
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </li>
+   </p>
+   <h1 id="performance">
+    Performance Efficiency Improvement Plans
+   </h1>
+   <h2>
+    <b>
+     PERF 2 - How do you select your compute solution?
+    </b>
+   </h2>
+   <h2>
+    <b>
+     Current Risk: HIGH
+    </b>
+   </h2>
+   <p>
+    <b id="step2">
+     Understand the available compute configuration options
+    </b>
+    <br/>
+    <li class="listitem">
+     Learn about available configuration options: For your selected compute option, use the available configuration options to optimize               for your
+  performance
+  requirements.Utilize AWS Nitro Systems to enable full consumption of the compute and
+  memory
+  resources of the host hardware. Dedicated Nitro Cards enable high speed networking,               high speed EBS, and I/O acceleration.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS Product">
+     </span>
+     <a href="https://aws.amazon.com/ec2/nitro/?ref=wellarchitected">
+      AWS Nitro System
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step3">
+     Collect compute-related metrics
+    </b>
+    <br/>
+    <li class="listitem">
+     Collect compute-related metrics:
+  Amazon CloudWatch
+  can collect metrics across the compute resources in your environment. Use a combination               of
+  CloudWatch
+  and other metrics-recording tools to track the system-level metrics within your
+  workload
+  . Record data such as CPU usage levels,
+  memory
+  , disk I/O, and network to gain insight into utilization levels or bottlenecks. This               data is crucial to understand how the
+  workload
+  is performing and how effectively it is using resources. Use these metrics as part               of a data-driven approach to actively tune and optimize your
+  workload
+  's resources.
+     <br/>
+     <span class="fab fa-aws fa-fw" title="AWS Product">
+     </span>
+     <a href="https://aws.amazon.com/cloudwatch/?ref=wellarchitected">
+      Amazon CloudWatch
+     </a>
+    </li>
+   </p>
+   <p>
+    <b id="step4">
+     Determine the required configuration by right-sizing
+    </b>
+    <br/>
+    <li class="listitem">
+     Modify your
+  workload
+  configuration by right sizing:                      To optimize both
+  performance
+  and overall efficiency, determine which resources your
+  workload
+  needs. Choose
+  memory
+  -optimized instances for systems that require more
+  memory
+  than CPU, or compute-optimized instances for
+  components
+  that do data processing that is not
+  memory
+  -intensive. Right sizing enables your
+  workload
+  to perform as well as possible while only using the required resources
+    </li>
+   </p>
+   <p>
+    <b id="step5">
+     Use the available elasticity of resources
+    </b>
+    <br/>
+    <li class="listitem">
+     Take advantage of
+  elasticity
+  :
+  Elasticity
+  matches the supply of resources you have against the demand for those resources.               Instances, containers, and functions provide mechanisms for
+  elasticity
+  either in combination with automatic scaling or as a feature of the service. Use
+  elasticity
+  in your
+  architecture
+  to ensure that you have sufficient capacity to meet
+  performance
+  requirements at all scales of use.                                         Ensure that the metrics for scaling up or down elastic resources               are validated against the type of
+  workload
+  being deployed. If you are deploying a video transcoding application, 100% CPU is               expected and should not be your primary metric. Alternatively, you can measure against               the queue depth of transcoding jobs waiting to scale your instance types.                                             Ensure that
+  workload
+  deployments can handle both scale up and scale down
+  events
+  . Scaling down
+  workload
+  components
+  safely is as critical as scaling up resources when demand dictates. Create test scenarios               for scale-down
+  events
+  to ensure that the
+  workload
+  behaves as expected.
+    </li>
+   </p>
+   <p>
+    <b id="step6">
+     Re-evaluate compute needs based on metrics
+    </b>
+    <br/>
+    <li class="listitem">
+     Use a data-driven approach to optimize resources:                       To achieve maximum
+  performance
+  and efficiency, use the data gathered over time from your
+  workload
+  to tune and optimize your resources. Look at the trends in your
+  workload
+  's usage of current resources and determine where you can make changes to better match               your
+  workload
+  's needs. When resources are over-committed, system
+  performance
+  degrades, whereas underutilization results in a less efficient use of resources and               higher
+  cost
+  .
+    </li>
+   </p>
+   <h1 id="costOptimization">
+    Cost Optimization Improvement Plans
+   </h1>
+   <h2>
+    <b>
+     COST 4 - How do you decommission resources?
+    </b>
+   </h2>
+   <h2>
+    <b>
+     Current Risk: HIGH
+    </b>
+   </h2>
+   <p>
+    <b id="step2">
+     Implement a decommissioning process
+    </b>
+    <br/>
+    <li class="listitem">
+     Create and implement a decommissioning process. :  Working with the
+  workload
+  developers and owners, build a decommissioning process for the
+  workload
+  and its resources. The                      process should cover the method to verify               if the
+  workload
+  is in use, and also if each of the
+  workload
+  resources are in use. The process                      also covers the steps necessary               to decommission the resource, removing them from service while ensuring compliance               with any                       regulatory requirements. Any associated resources are               also covered, such as licenses or attached storage. Finally the process                         provides notification to the
+  workload
+  owners that the decommissioning process has been executed.
+    </li>
+   </p>
+   <p>
+    <b id="step3">
+     Decommission resources
+    </b>
+    <br/>
+    <li class="listitem">
+     Decommission resources :  Using the decommissioning process, decommission each of the resources that have been               identified as orphaned.
+    </li>
+   </p>
+   <p>
+    <b id="step4">
+     Decommission resources automatically
+    </b>
+    <br/>
+    <li class="listitem">
+     Implement
+  AWS Auto Scaling
+  :  For resources that are supported, configure them with
+  AWS Auto Scaling
+  .
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html?ref=wellarchitected">
+      Getting Started with Amazon EC2 Auto Scaling
+     </a>
+    </li>
+    <li class="listitem">
+     Configure
+  CloudWatch
+  to Terminate Instances :  Instances can be configured to terminate using
+  CloudWatch
+  alarms. Using the metrics from the decommissioning process, implement an alarm with               an EC2 action.                      Ensure you verify the operation in a non-production               environment before rolling out.
+     <br/>
+     <span class="far fa-file-alt fa-fw" title="AWS Documentation">
+     </span>
+     <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/UsingAlarmActions.html?ref=wellarchitected">
+      Create Alarms to Stop, Terminate, Reboot, or Recover an Instance
+     </a>
+    </li>
+    <li class="listitem">
+     Implement code within the
+  workload
+  :  You can use the AWS SDK or
+  AWS CLI
+  to decommission
+  workload
+  resources. Implement code within the application that integrates with AWS and terminates               or removes                      resources that are no longer used.
+    </li>
+   </p>
+  </div>
+ </body>
+</html>

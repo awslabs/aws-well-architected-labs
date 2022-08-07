@@ -1,0 +1,141 @@
+Parameters:
+  BaselineVpcStack:
+    Type: String
+  MasterAMI:
+    Type: String
+    Default: ami-0f96495a064477ffb
+  Ver:
+    Type: String
+    Default: "1.0.0"
+
+Resources:
+
+  #############
+  # COMPONENTS
+  #############
+
+  ComponentConfigureOS:
+    Type: 'AWS::ImageBuilder::Component'
+    Properties:
+      Name: !Sub "${AWS::StackName}-ConfigureOSComponent"
+      Platform: 'Linux'
+      Version: !Ref Ver
+      Description: 'Configure Operating System Patches'
+      Tags:
+        Name: !Join [ "-", [ !Ref AWS::StackName, "ConfigureOS"]]
+        ResourceType: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3" 
+      Data: |
+        name: ConfigureOS
+        schemaVersion: 1.0
+        phases:
+          - name: build
+            steps:
+              - name: UpdateOS
+                action: UpdateOS
+
+
+  #############
+  # RECIPE
+  #############
+  Pattern3ImageRecipe:
+    Type: 'AWS::ImageBuilder::ImageRecipe'
+    Properties:
+      Name: !Sub "${AWS::StackName}-ImageRecipe"
+      Version: !Ref Ver
+      ParentImage: !Ref MasterAMI
+      Description: !Sub "${AWS::StackName}-ImageRecipe"
+      Components:
+        - ComponentArn: !GetAtt ComponentConfigureOS.Arn
+      Tags:
+        Name: !Join [ "-", [ !Ref AWS::StackName, "Pattern3ImageRecipe"]]
+        ResourceType: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3" 
+
+  ##############
+  # INFRA CONFIG
+  ##############
+
+  Pattern3InfraConfig:
+    Type: 'AWS::ImageBuilder::InfrastructureConfiguration'
+    Properties:
+      Name: !Sub "${AWS::StackName}-InfraConfig" 
+      InstanceProfileName: !Ref Pattern3InstancePfl
+      InstanceTypes:
+        - 'm5.large'
+      TerminateInstanceOnFailure: True
+      SecurityGroupIds:
+        - !Ref Pattern3InstanceSG
+      SubnetId: 
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-PrivateSubnet1"
+      Logging:
+        S3Logs:
+          S3BucketName: !Ref Pattern3LoggingBucket
+          S3KeyPrefix: !Join [ "/", [ 'Pattern3ImagePipeline', !Ref Ver ]]
+      Tags:
+        Name: !Join [ "-", [ !Ref AWS::StackName, "Pattern3InfraConfig"]]
+        ResourceType: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3" 
+
+  Pattern3LoggingBucket:
+    Type: AWS::S3::Bucket
+
+  Pattern3InstanceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access and HTTP from the load balancer only
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${BaselineVpcStack}-VpcId"
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ !Ref AWS::StackName, "BuildAMIInstanceSecurityGroup"]]
+        - Key: ResourceType
+          Value: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3" 
+
+  Pattern3InstancePfl: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - !Ref Pattern3InstanceRole
+
+  Pattern3InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ ec2.amazonaws.com ]
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  ##############
+  # PIPELINE
+  ##############
+
+  Pattern3ImagePipeline:
+    Type: 'AWS::ImageBuilder::ImagePipeline'
+    Properties:
+      Name: !Sub "${AWS::StackName}-ImagePipeline"
+      Description: 'Pipeline to build Golden AMI - Re:Invent 2020 Lab'
+      ImageRecipeArn: !Ref Pattern3ImageRecipe
+      InfrastructureConfigurationArn: !Ref Pattern3InfraConfig
+      ImageTestsConfiguration:
+        ImageTestsEnabled: false
+        TimeoutMinutes: 90
+      Status: 'ENABLED'
+      Tags:
+        Name: !Join [ "-", [ !Ref AWS::StackName, "Pattern3ImagePipeline"]]
+        ResourceType: "ReInvent2020-SecurityTheWellArchitectedWay-Pattern3" 
+
+Outputs:
+  Pattern3ImagePipeline:
+    Description: Image Builder Pipeline
+    Value: !Ref Pattern3ImagePipeline
+    Export:
+      Name: !Sub "${AWS::StackName}-ImageBuilderPipeline"

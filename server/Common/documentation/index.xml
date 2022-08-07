@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Common Documentation on AWS Well-Architected Labs</title><link>https://wellarchitectedlabs.com/common/documentation/</link><description>Recent content in Common Documentation on AWS Well-Architected Labs</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 24 Apr 2020 11:16:08 -0400</lastBuildDate><atom:link href="https://wellarchitectedlabs.com/common/documentation/index.xml" rel="self" type="application/rss+xml"/><item><title>Create new S3 bucket and add objects to it</title><link>https://wellarchitectedlabs.com/common/documentation/createnews3bucketandaddobjects/</link><pubDate>Fri, 24 Apr 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/common/documentation/createnews3bucketandaddobjects/</guid><description>Create new S3 bucket These steps will guide you to create a bucket
+Go to the S3 console at https://console.aws.amazon.com/s3 Click Create bucket
+For Bucket name supply a name. This must be unique across all buckets in AWS
+Tip: Name the bucket &amp;lt;first_name&amp;gt;&amp;lt;last_initial&amp;gt;_&amp;lt;date in yyyymmdd format&amp;gt; (do NOT include the angle brackets) Click Next three times
+Review screen: click Create bucket
+Add object(s) to an S3 bucket Use these instructions to add one or more objects to an S3 bucket</description></item><item><title>Setup AWS credentials and configuration</title><link>https://wellarchitectedlabs.com/common/documentation/aws_credentials/</link><pubDate>Fri, 24 Apr 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/common/documentation/aws_credentials/</guid><description>You will supply configuration and credentials used by the AWS CLI and AWS SDK to access your AWS account. Choose an option Select the appropriate option for configuration of your AWS credentials:
+Option 1 - Using AWS instructor supplied accounts with Linux-style environment variables Option 2 - Using AWS CLI Option 3 - Creating configuration files manually Option 4 - Using PowerShell commands for Windows Option 1 For instructor supplied AWS accounts If BOTH of the following are true then you may use Option 1</description></item><item><title>Software Install</title><link>https://wellarchitectedlabs.com/common/documentation/software_install/</link><pubDate>Fri, 24 Apr 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/common/documentation/software_install/</guid><description>This reference will help you install software necessary to setup your workshop environment
+AWS CLI jq Install AWS CLI The AWS Command Line Interface (AWS CLI) is a unified tool that provides a consistent interface for interacting with all parts of AWS.
+Linux This includes:
+AWS CloudShell
+All native Linux installs
+MacOS
+Windows Subsystem for Linux (WSL)
+Run the following command
+$ aws --version aws-cli/1.16.249 Python/3.6.8... AWS CLI version 1.0 or higher is fine</description></item></channel></rss>

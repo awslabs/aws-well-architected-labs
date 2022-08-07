@@ -1,0 +1,26 @@
+﻿Region,Region Name,Endpoint,Protocol
+us-east-2,US East (Ohio),rds.us-east-2.amazonaws.com,HTTPS
+us-east-1,US East (N. Virginia),rds.us-east-1.amazonaws.com,HTTPS
+us-west-1,US West (N. California),rds.us-west-1.amazonaws.com,HTTPS
+us-west-2,US West (Oregon),rds.us-west-2.amazonaws.com,HTTPS
+af-south-1,Africa (Cape Town),rds.af-south-1.amazonaws.com,HTTPS
+ap-east-1,Asia Pacific (Hong Kong),rds.ap-east-1.amazonaws.com,HTTPS
+ap-south-1,Asia Pacific (Mumbai),rds.ap-south-1.amazonaws.com,HTTPS
+ap-northeast-3,Asia Pacific (Osaka-Local),rds.ap-northeast-3.amazonaws.com,HTTPS
+ap-northeast-2,Asia Pacific (Seoul),rds.ap-northeast-2.amazonaws.com,HTTPS
+ap-southeast-1,Asia Pacific (Singapore),rds.ap-southeast-1.amazonaws.com,HTTPS
+ap-southeast-2,Asia Pacific (Sydney),rds.ap-southeast-2.amazonaws.com,HTTPS
+ap-northeast-1,Asia Pacific (Tokyo),rds.ap-northeast-1.amazonaws.com,HTTPS
+ca-central-1,Canada (Central),rds.ca-central-1.amazonaws.com,HTTPS
+cn-north-1,China (Beijing),rds.cn-north-1.amazonaws.com.cn,HTTPS
+cn-northwest-1,China (Ningxia),rds.cn-northwest-1.amazonaws.com.cn,HTTPS
+eu-central-1,EU (Frankfurt),rds.eu-central-1.amazonaws.com,HTTPS
+eu-west-1,EU (Ireland),rds.eu-west-1.amazonaws.com,HTTPS
+eu-west-2,EU (London),rds.eu-west-2.amazonaws.com,HTTPS
+eu-south-1,EU (Milan),rds.eu-south-1.amazonaws.com,HTTPS
+eu-west-3,EU (Paris),rds.eu-west-3.amazonaws.com,HTTPS
+eu-north-1,EU (Stockholm),rds.eu-north-1.amazonaws.com,HTTPS
+me-south-1,Middle East (Bahrain),rds.me-south-1.amazonaws.com,HTTPS
+sa-east-1,South America (São Paulo),rds.sa-east-1.amazonaws.com,HTTPS
+us-gov-east-1,AWS GovCloud (US-East),rds.us-gov-east-1.amazonaws.com,HTTPS
+us-gov-west-1,AWS GovCloud (US),rds.us-gov-west-1.amazonaws.com,HTTPS

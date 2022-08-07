@@ -1,0 +1,596 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template for enabling CloudTrail, Config and GuardDuty. 
+  **WARNING** You will be billed for the AWS resources created if you create a 
+  stack from this template.
+
+  Copyright 2019-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  A copy of the License is located at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  or in the "license" file accompanying this file. This file is distributed 
+  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+  express or implied. See the License for the specific language governing 
+  permissions and limitations under the License.
+Parameters:
+  #General
+  Config:
+    Type: String
+    Description: 'Configure AWS Config. If you have previously enabled Config select No.'
+    Default: 'Yes'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  GuardDuty:
+    Type: String
+    Description: 'Configure Amazon GuardDuty. If you have previously enabled GuardDuty select No.'
+    Default: 'Yes'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  S3BucketPolicyExplicitDeny:
+    Type: String
+    Description: 'Optional: Explicitly deny destructive actions to buckets created in this stack. Note: you will need to login as root to remove the bucket policy'
+    Default: 'No'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  S3AccessLogsBucketName:
+    Type: String
+    Description: 'Optional: The name of an existing S3 bucket for storing S3 Access Logs. Leave blank for no S3 access logs.'
+    Default: ''
+  #CloudTrail
+  CloudTrailBucketName:
+    Type: String
+    Description: The name of the new S3 bucket to create for CloudTrail to send logs to. Can contain only lower-case characters, numbers, periods, and dashes.Each label in the bucket name must start with a lowercase letter or number.
+    MinLength: '3'
+    MaxLength: '63'
+    AllowedPattern: '([a-zA-Z0-9]){1}([a-zA-Z0-9-])*'
+  CloudTrailCWLogsRetentionTime:
+    Type: Number
+    Description: 'Number of days to retain logs in CloudWatch Logs. 0=Forever. Default 1 year, note logs are stored in S3 default 10 years'
+    Default: '365'
+  CloudTrailS3RetentionTime:
+    Type: Number
+    Description: Number of days to retain logs in the S3 Bucket before they are automatically deleted. Default is ~ 10 years
+    Default: '3650'
+  CloudTrailEncryptS3Logs:
+    Type: String
+    Description: 'OPTIONAL: Use KMS to enrypt logs stored in S3. A new key will be created'
+    Default: 'No'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  CloudTrailLogS3DataEvents:
+    Type: String
+    Description: 'OPTIONAL: These events provide insight into the resource operations performed on or within S3'
+    Default: 'No'
+    AllowedValues:
+      - 'No'
+      - 'Yes'
+  #Config
+  ConfigBucketName:
+    Type: String
+    Description: >-
+      The name of the S3 bucket Config Service will store configuration
+      snapshots in. Each label in the bucket name must start with a lowercase letter or number.
+  ConfigSnapshotFrequency:
+    Type: String
+    Description: AWS Config configuration snapshot frequency
+    Default: One_Hour
+    AllowedValues:
+      - One_Hour
+      - Three_Hours
+      - Six_Hours
+      - Twelve_Hours
+      - TwentyFour_Hours
+  ConfigS3RetentionTime:
+    Type: Number
+    Description: Number of days to retain logs in the S3 Bucket before they are automatically deleted. Default is ~ 10 years
+    Default: '3650'
+  #GuardDuty
+  GuardDutyEmailAddress:
+    Type: String
+    Default: 'someone@example.com'
+    Description: Enter the email address that will receive the alerts
+
+Conditions:
+  ConfigEnabled: !Equals
+    - !Ref Config
+    - 'Yes'
+  GuardDutyEnabled: !Equals
+    - !Ref GuardDuty
+    - 'Yes'
+  S3BucketExplicitDenyEnabled: !Equals 
+    - !Ref S3BucketPolicyExplicitDeny
+    - 'Yes'
+  CloudTrailEncryptS3LogsEnabled: !Equals
+    - !Ref CloudTrailEncryptS3Logs
+    - 'Yes'
+  BucketLoggingEnabled: !Not 
+    - !Equals 
+      - !Ref S3AccessLogsBucketName
+      - ''
+  CloudTrailLogS3DataEventsEnabled: !Equals
+    - !Ref CloudTrailLogS3DataEvents
+    - 'Yes'
+
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: General
+        Parameters:
+          - CloudTrail
+          - Config
+          - GuardDuty
+          - S3BucketPolicyExplicitDeny
+          - S3AccessLogsBucketName
+      - Label:
+          default: CloudTrail
+        Parameters:  
+          - CloudTrailBucketName
+          - CloudTrailCWLogsRetentionTime
+          - CloudTrailS3RetentionTime
+          - CloudTrailEncryptS3Logs
+          - CloudTrailLogS3DataEvents
+      - Label:
+          default: Config
+        Parameters:    
+          - ConfigBucketName
+          - ConfigSnapshotFrequency
+          - ConfigS3RetentionTime
+      - Label:
+          default: GuardDuty
+        Parameters:    
+          - GuardDutyEmailAddress
+
+Resources:
+  #CloudTrail
+  CloudTrailKMSKey:
+    Type: 'AWS::KMS::Key'
+    DeletionPolicy: Delete
+    Condition: CloudTrailEncryptS3LogsEnabled
+    Properties:
+      Description: KMS Key for Cloudtrail to use to encrypt logs stored in S3
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: Key policy created by CloudTrail
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Join 
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref 'AWS::AccountId'
+                    - ':root'
+            Action: 'kms:*'
+            Resource: '*'
+          - Sid: Allow CloudTrail to encrypt logs
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+            Action: 'kms:GenerateDataKey*'
+            Resource: '*'
+            Condition:
+              StringLike:
+                'kms:EncryptionContext:aws:cloudtrail:arn': !Join 
+                  - ''
+                  - - 'arn:aws:cloudtrail:*:'
+                    - !Ref 'AWS::AccountId'
+                    - ':trail/*'
+          - Sid: Allow CloudTrail to describe key
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+            Action: 'kms:DescribeKey'
+            Resource: '*'
+          - Sid: Allow principals in the account to decrypt log files
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'kms:Decrypt'
+              - 'kms:ReEncryptFrom'
+            Resource: '*'
+            Condition:
+              StringEquals:
+                'kms:CallerAccount': !Ref 'AWS::AccountId'
+              StringLike:
+                'kms:EncryptionContext:aws:cloudtrail:arn': !Join 
+                  - ''
+                  - - 'arn:aws:cloudtrail:*:'
+                    - !Ref 'AWS::AccountId'
+                    - ':trail/*'
+          - Sid: Allow alias creation during setup
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action: 'kms:CreateAlias'
+            Resource: '*'
+            Condition:
+              StringEquals:
+                'kms:ViaService': !Join 
+                  - ''
+                  - - ec2.
+                    - !Ref 'AWS::Region'
+                    - .amazonaws.com
+                'kms:CallerAccount': !Ref 'AWS::AccountId'
+          - Sid: Enable cross account log decryption
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'kms:Decrypt'
+              - 'kms:ReEncryptFrom'
+            Resource: '*'
+            Condition:
+              StringEquals:
+                'kms:CallerAccount': !Ref 'AWS::AccountId'
+              StringLike:
+                'kms:EncryptionContext:aws:cloudtrail:arn': !Join 
+                  - ''
+                  - - 'arn:aws:cloudtrail:*:'
+                    - !Ref 'AWS::AccountId'
+                    - ':trail/*'
+  CloudTrailDestinationBucket:
+    Type: 'AWS::S3::Bucket'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
+    Properties:
+      BucketName: !Ref CloudTrailBucketName
+      LoggingConfiguration: !If 
+        - BucketLoggingEnabled
+        - DestinationBucketName: !Ref S3AccessLogsBucketName
+          LogFilePrefix: !Join 
+            - ''
+            - - !Ref CloudTrailBucketName
+              - /
+        - !Ref 'AWS::NoValue'
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: Delete
+            Status: Enabled
+            ExpirationInDays: !Ref CloudTrailS3RetentionTime
+    DeletionPolicy: Delete
+  CloudTrailBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
+    DependsOn:
+      - CloudTrailDestinationBucket
+    Properties:
+      Bucket: !Ref CloudTrailDestinationBucket
+      PolicyDocument:
+        Id: CloudTrailService
+        Statement:
+          - !If 
+            - S3BucketExplicitDenyEnabled
+            - Action:
+                - 's3:DeleteBucket'
+                - 's3:DeleteBucketPolicy'
+                - 's3:DeleteBucketWebsite'
+                - 's3:DeleteObject'
+                - 's3:DeleteObjectVersion'
+                - 's3:PutAccelerateConfiguration'
+                - 's3:PutBucketAcl'
+                - 's3:PutBucketCORS'
+                - 's3:PutBucketLogging'
+                - 's3:PutBucketPolicy'
+                - 's3:PutBucketRequestPayment'
+                - 's3:PutBucketVersioning'
+                - 's3:PutBucketWebsite'
+                - 's3:PutLifecycleConfiguration'
+                - 's3:PutReplicationConfiguration'
+                - 's3:ReplicateDelete'
+                - 's3:ReplicateObject'
+                - 's3:RestoreObject'
+              Effect: Deny
+              Principal: '*'
+              Resource:
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref CloudTrailDestinationBucket
+                    - /*
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref CloudTrailDestinationBucket
+              Sid: DenyDestructiveActions
+            - !Ref 'AWS::NoValue'
+          - Action:
+              - 's3:GetBucketAcl'
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Effect: Allow
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref CloudTrailDestinationBucket
+            Sid: AllowCloudTrailServiceGetAcl
+          - Action:
+              - 's3:PutObject'
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Effect: Allow
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': bucket-owner-full-control
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref CloudTrailDestinationBucket
+                  - /*
+            Sid: AllowCloudTrailServicePut
+          - Action:
+             - 's3:PutObject'
+            Principal: 
+              AWS: 
+                - '981588356137'
+                - '129689185312'
+            Effect: Allow
+            Resource:
+             - !Join
+               - ''
+               - - 'arn:aws:s3:::'
+                 - !Ref CloudTrailDestinationBucket
+                 - /*
+            Sid: AllowManagedAccountsCloudtrail
+        Version: 2012-10-17
+  CloudTrailDestinationTrail:
+    Type: 'AWS::CloudTrail::Trail'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html
+    DependsOn:
+      - CloudTrailBucketPolicy
+      - CloudTrailCWLogsGroup
+      - CloudTrailCloudWatchLogsRole
+    Properties:
+      TrailName: default
+      S3BucketName: !Ref CloudTrailDestinationBucket
+      #S3KeyPrefix:
+      CloudWatchLogsLogGroupArn: !Sub '${CloudTrailCWLogsGroup.Arn}'
+      CloudWatchLogsRoleArn: !Sub '${CloudTrailCloudWatchLogsRole.Arn}'
+      #CloudWatchLogsRoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/aws-service-role/cloudtrail.amazonaws.com/AWSServiceRoleForCloudTrail'
+      EnableLogFileValidation: true
+      EventSelectors: #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-eventselector.html
+        - IncludeManagementEvents: true
+        - ReadWriteType: All
+        - !If 
+          - CloudTrailLogS3DataEventsEnabled
+          - DataResources:
+            - Type: AWS::S3::Object
+              Values:
+                - "arn:aws:s3:::"
+          - !Ref 'AWS::NoValue'
+      IncludeGlobalServiceEvents: true
+      IsMultiRegionTrail: true
+      IsLogging: true
+      KMSKeyId: !If 
+        - CloudTrailEncryptS3LogsEnabled
+        - !Ref CloudTrailKMSKey
+        - !Ref 'AWS::NoValue'
+  CloudTrailCWLogsGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      RetentionInDays: !Ref CloudTrailCWLogsRetentionTime
+  CloudTrailCloudWatchLogsRole:
+    Type: 'AWS::IAM::Role'
+    DependsOn:
+      - CloudTrailCWLogsGroup
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+        Version: 2012-10-17
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 'logs:CreateLogStream'
+                Effect: Allow
+                Resource: !Sub '${CloudTrailCWLogsGroup.Arn}'
+              - Action:
+                  - 'logs:PutLogEvents'
+                Effect: Allow
+                Resource: !Sub '${CloudTrailCWLogsGroup.Arn}'
+            Version: 2012-10-17
+          PolicyName: CloudtrailInteractionPolicy
+  #Config
+  ConfigRole:
+    Type: 'AWS::IAM::Role'
+    Condition: ConfigEnabled
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: config.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSConfigRole'
+      Path: /service-role/
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                Resource: !Sub 'arn:aws:s3:::${ConfigBucket}/*'
+              - Effect: Allow
+                Action:
+                  - 's3:GetBucketAcl'
+                Resource: !Sub 'arn:aws:s3:::${ConfigBucket}'
+            Version: 2012-10-17
+          PolicyName: ConfigServiceS3
+  ConfigDeliveryChannel:
+    Type: 'AWS::Config::DeliveryChannel'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-deliverychannel.html
+    Condition: ConfigEnabled
+    Properties:
+      Name: default
+      ConfigSnapshotDeliveryProperties:
+        DeliveryFrequency: !Ref ConfigSnapshotFrequency
+      S3BucketName: !Ref ConfigBucket
+  ConfigRecorder:
+    Type: 'AWS::Config::ConfigurationRecorder'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html
+    Condition: ConfigEnabled
+    Properties:
+      Name: default
+      RecordingGroup:
+        AllSupported: 'true'
+        IncludeGlobalResourceTypes: 'true'
+      RoleARN: !Sub '${ConfigRole.Arn}'
+  ConfigBucket:
+    Type: 'AWS::S3::Bucket'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
+    Condition: ConfigEnabled
+    Properties:
+      BucketName: !Ref ConfigBucketName
+      LoggingConfiguration: !If 
+        - BucketLoggingEnabled
+        - DestinationBucketName: !Ref S3AccessLogsBucketName
+          LogFilePrefix: !Join 
+            - ''
+            - - !Ref ConfigBucketName
+              - /
+        - !Ref 'AWS::NoValue'
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: Delete
+            Status: Enabled
+            ExpirationInDays: !Ref ConfigS3RetentionTime
+    DeletionPolicy: Delete
+  ConfigBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
+    Condition: ConfigEnabled
+    DependsOn:
+      - ConfigBucket
+    Properties:
+      Bucket: !Ref ConfigBucket
+      PolicyDocument:
+        Id: ConfigService
+        Statement:
+          - !If 
+            - S3BucketExplicitDenyEnabled
+            - Action:
+                - 's3:DeleteBucket'
+                - 's3:DeleteBucketPolicy'
+                - 's3:DeleteBucketWebsite'
+                - 's3:DeleteObject'
+                - 's3:DeleteObjectVersion'
+                - 's3:PutAccelerateConfiguration'
+                - 's3:PutBucketAcl'
+                - 's3:PutBucketCORS'
+                - 's3:PutBucketLogging'
+                - 's3:PutBucketPolicy'
+                - 's3:PutBucketRequestPayment'
+                - 's3:PutBucketVersioning'
+                - 's3:PutBucketWebsite'
+                - 's3:PutLifecycleConfiguration'
+                - 's3:PutReplicationConfiguration'
+                - 's3:ReplicateDelete'
+                - 's3:ReplicateObject'
+                - 's3:RestoreObject'
+              Effect: Deny
+              Principal: '*'
+              Resource:
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+                    - /*
+                - !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ConfigBucket
+              Sid: DenyDestructiveActions
+            - !Ref 'AWS::NoValue'
+          - Action: 's3:GetBucketAcl'
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref ConfigBucket
+            Sid: ConfigServiceACLCheck
+          - Action: 's3:PutObject'
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': bucket-owner-full-control
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Resource:
+              - !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ConfigBucket
+                  - /*
+            Sid: ConfigServiceWrite
+        Version: 2012-10-17
+  #GuardDuty
+  GuardDutyDetector:
+    Type: 'AWS::GuardDuty::Detector'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-detector.html
+    Condition: GuardDutyEnabled
+    Properties:
+      Enable: true
+      FindingPublishingFrequency: FIFTEEN_MINUTES
+  GuardDutySNSTopic:
+    Type: 'AWS::SNS::Topic'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-topic.html
+    Condition: GuardDutyEnabled
+    Properties:
+      TopicName: GuardDuty-Email
+  GuardDutyCWEvent:
+    Type: 'AWS::Events::Rule'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-events-rule-target.html
+    Condition: GuardDutyEnabled
+    Properties:
+      Description: GuardDuty Email Event
+      EventPattern:
+        source:
+          - aws.guardduty
+        detail-type:
+          - GuardDuty Finding
+      State: ENABLED
+      Targets:
+        - Arn: !Ref GuardDutySNSTopic
+          Id: GuardDuty-Email
+  GuardDutySNSSubscription:
+    Type: 'AWS::SNS::Subscription'
+    #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html
+    Condition: GuardDutyEnabled
+    Properties:
+      Endpoint: !Ref GuardDutyEmailAddress
+      Protocol: email
+      TopicArn: !Ref GuardDutySNSTopic
+
+Outputs:
+  CloudTrailBucketName:
+    Description: S3 bucket for CloudTrail logs
+    Value: !Ref CloudTrailDestinationBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudTrailBucketName'

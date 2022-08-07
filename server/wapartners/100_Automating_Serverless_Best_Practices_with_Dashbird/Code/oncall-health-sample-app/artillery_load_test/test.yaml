@@ -1,0 +1,18 @@
+config:
+  target: '<Your API Invoke URL>'
+  phases:
+    - duration: 10
+      arrivalRate: 200
+  processor: "./loadTestFunction.js"
+  defaults:
+    headers:
+      Authorization: 'Bearer <Your Auth Token>'
+scenarios:
+  - flow:
+    - function: "generateRandomData"
+    - post:
+        url: "/ride"
+        json:
+          PickupLocation:
+            Latitude: {{ lat }}
+            Longitude: {{ lng }}

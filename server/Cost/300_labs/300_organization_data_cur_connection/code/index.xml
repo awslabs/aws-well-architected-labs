@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AWS Well-Architected Labs</title><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/</link><description>Recent content on AWS Well-Architected Labs</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 26 Jul 2020 11:16:08 -0400</lastBuildDate><atom:link href="https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/index.xml" rel="self" type="application/rss+xml"/><item><title>Bonus Infrastructure as Code</title><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/6_bonus_infrastructure_as_code/</link><pubDate>Sun, 26 Jul 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/6_bonus_infrastructure_as_code/</guid><description>Bonus Infrastructure as Code Optional: Advanced Setup using a CloudFormation Template This section is optional and automates the creation of the AWS organizations data collection using a CloudFormation template. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates, create an IAM role, create an S3 Bucket, and create an Glue Grawler. If you do not have the required permissions skip over this section to continue using the standard setup.</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/6_view6/</link><pubDate>Thu, 06 Aug 2020 10:00:02 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/6_view6/</guid><description>Data Transfer View This view will be used to create the main Data Transfer Cost Analysis dashboard page.
+We recommend large customers with over 500 linked accounts, or more than $5M a month in invoiced cost, display 1 or 2 months previous data instead of 3. Modify the INTERVAL in the statements below to less than 3 months for improved performance.
+Click here - to expand data transfer view query OR Modify the following SQL query for data_transfer_view:</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/1_view1/</link><pubDate>Sun, 26 Jul 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/1_view1/</guid><description>View 1 - Summary View This view will be used to create the main Usage Cost Summary dashboard page. Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
+We recommend large customers with over 500 linked accounts or more than $10M a month in invoiced cost update the usage date field in the query from &amp;lsquo;day&amp;rsquo; to &amp;lsquo;month&amp;rsquo; for improved performance
+Click here - if you have both Savings Plans and Reserved Instances Modify the following SQL query for View1:</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/2_view2/</link><pubDate>Sun, 26 Jul 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/2_view2/</guid><description>View 2 - EC2 Running Costs This view will be used to create the EC2 Running Costs dashboard page. Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
+Click here - if you have both Savings Plans and Reserved Instances Modify the following SQL query for View2 - EC2_Running_Cost:
+Update line 17 replace (database).(tablename) with your CUR database and table name
+CREATE OR REPLACE VIEW &amp;quot;ec2_running_cost&amp;quot; AS SELECT DISTINCT
+&amp;quot;year&amp;quot;
+, &amp;quot;month&amp;quot;
+, &amp;quot;bill_billing_period_start_date&amp;quot; &amp;quot;billing_period&amp;quot;
+, &amp;quot;date_trunc&amp;quot;('hour', &amp;quot;line_item_usage_start_date&amp;quot;) &amp;quot;usage_date&amp;quot;
+, &amp;quot;bill_payer_account_id&amp;quot; &amp;quot;payer_account_id&amp;quot;
+, &amp;quot;line_item_usage_account_id&amp;quot; &amp;quot;linked_account_id&amp;quot;
+, (CASE WHEN (&amp;quot;savings_plan_savings_plan_a_r_n&amp;quot; &amp;lt;&amp;gt; '') THEN 'SavingsPlan' WHEN (&amp;quot;reservation_reservation_a_r_n&amp;quot; &amp;lt;&amp;gt; '') THEN 'Reserved' WHEN (&amp;quot;line_item_usage_type&amp;quot; LIKE '%Spot%') THEN 'Spot' ELSE 'OnDemand' END) &amp;quot;purchase_option&amp;quot;
+, &amp;quot;sum&amp;quot;(CASE
+WHEN &amp;quot;line_item_line_item_type&amp;quot; = 'SavingsPlanCoveredUsage' THEN &amp;quot;savings_plan_savings_plan_effective_cost&amp;quot;
+WHEN &amp;quot;line_item_line_item_type&amp;quot; = 'DiscountedUsage' THEN &amp;quot;reservation_effective_cost&amp;quot;
+WHEN &amp;quot;line_item_line_item_type&amp;quot; = 'Usage' THEN &amp;quot;line_item_unblended_cost&amp;quot;
+ELSE 0 END) &amp;quot;amortized_cost&amp;quot;
+, &amp;quot;round&amp;quot;(&amp;quot;sum&amp;quot;(&amp;quot;line_item_usage_amount&amp;quot;), 2) &amp;quot;usage_quantity&amp;quot;
+FROM
+(ADD YOUR CUR TABLE NAME)
+WHERE ((((((&amp;quot;bill_billing_period_start_date&amp;quot; &amp;gt;= (&amp;quot;date_trunc&amp;quot;('month', current_timestamp) - INTERVAL '1' MONTH)) AND (&amp;quot;line_item_product_code&amp;quot; = 'AmazonEC2')) AND (&amp;quot;product_servicecode&amp;quot; &amp;lt;&amp;gt; 'AWSDataTransfer')) AND (&amp;quot;line_item_operation&amp;quot; LIKE '%RunInstances%')) AND (&amp;quot;line_item_usage_type&amp;quot; NOT LIKE '%DataXfer%')) AND (((&amp;quot;line_item_line_item_type&amp;quot; = 'Usage') OR (&amp;quot;line_item_line_item_type&amp;quot; = 'SavingsPlanCoveredUsage')) OR (&amp;quot;line_item_line_item_type&amp;quot; = 'DiscountedUsage')))
+GROUP BY 1, 2, 3, 4,5,6,7
+Click here - if you have Savings Plans, but do not have Reserved Instances The query is the same as the first query, except some of lines have been commented out.</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/3_view3/</link><pubDate>Sun, 26 Jul 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/3_view3/</guid><description>View 3 - Compute Savings Plan Eligible Spend This view will be used to create the Compute Savings Plan Eligible Spend dashboard page. Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
+Click here - if you have both Savings Plans and Reserved Instances Modify the following SQL query for View3 - Compute Savings PlaneEligible spend:
+Update line 23, replace (database).(tablename) with your CUR database and table name</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/4_view4/</link><pubDate>Sun, 26 Jul 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/4_view4/</guid><description>View 4 - S3 This view will be used to create the S3 dashboard page. Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
+Click here - if you have both Savings Plans and Reserved Instances Modify the following SQL query for View4 - S3:
+Update line 22, replace (database).(tablename) with your CUR database and table name
+CREATE OR REPLACE VIEW &amp;quot;s3_view&amp;quot; AS SELECT DISTINCT
+&amp;quot;year&amp;quot;
+, &amp;quot;month&amp;quot;
+, &amp;quot;bill_billing_period_start_date&amp;quot; &amp;quot;billing_period&amp;quot;
+, &amp;quot;date_trunc&amp;quot;('day', &amp;quot;line_item_usage_start_date&amp;quot;) &amp;quot;usage_date&amp;quot;
+, &amp;quot;bill_payer_account_id&amp;quot; &amp;quot;payer_account_id&amp;quot;
+, &amp;quot;line_item_usage_account_id&amp;quot; &amp;quot;linked_account_id&amp;quot;
+, &amp;quot;line_item_resource_id&amp;quot; &amp;quot;resource_id&amp;quot;
+, &amp;quot;line_item_product_code&amp;quot; &amp;quot;product_code&amp;quot;
+, &amp;quot;line_item_operation&amp;quot; &amp;quot;operation&amp;quot;
+, &amp;quot;product_region&amp;quot; &amp;quot;region&amp;quot;
+, &amp;quot;line_item_line_item_type&amp;quot; &amp;quot;charge_type&amp;quot;
+, &amp;quot;pricing_unit&amp;quot; &amp;quot;pricing_unit&amp;quot;
+, &amp;quot;sum&amp;quot;(CASE
+WHEN (&amp;quot;line_item_line_item_type&amp;quot; = 'Usage') THEN &amp;quot;line_item_usage_amount&amp;quot;
+ELSE 0
+END) &amp;quot;usage_quantity&amp;quot;
+, &amp;quot;sum&amp;quot;(&amp;quot;line_item_unblended_cost&amp;quot;) &amp;quot;unblended_cost&amp;quot;
+, &amp;quot;sum&amp;quot;(&amp;quot;pricing_public_on_demand_cost&amp;quot;) &amp;quot;public_cost&amp;quot;
+FROM (ADD YOUR CUR TABLE NAME)
+WHERE ((((&amp;quot;bill_billing_period_start_date&amp;quot; &amp;gt;= (&amp;quot;date_trunc&amp;quot;('month', current_timestamp) - INTERVAL '3' MONTH)) AND (&amp;quot;line_item_usage_start_date&amp;quot; &amp;lt; (&amp;quot;date_trunc&amp;quot;('day', current_timestamp) - INTERVAL '1' DAY))) AND (&amp;quot;line_item_operation&amp;quot; LIKE '%Storage%')) AND ((&amp;quot;line_item_product_code&amp;quot; LIKE '%AmazonGlacier%') OR (&amp;quot;line_item_product_code&amp;quot; LIKE '%AmazonS3%')))
+GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12
+Click here - if you have Savings Plans, but do not have Reserved Instances If your usage changes you can delete and recreate the required view with Savings Plans or Reserved Instance usage.</description></item><item><title/><link>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/5_view5/</link><pubDate>Fri, 24 Apr 2020 11:16:08 -0400</pubDate><guid>https://wellarchitectedlabs.com/cost/300_labs/300_organization_data_cur_connection/code/5_view5/</guid><description>View 5 - RI SP Mapping This view will be used to create the RI SP Mapping dashboard page. Use one of the following queries depending on whether you have Reserved Instances, or Savings Plans.
+Click here - if you have both Savings Plans and Reserved Instances Modify the following SQL query for View5 - RI SP Mapping:
+Update lines 23 and 44, replace (database).(tablename) with your CUR database and table name</description></item></channel></rss>

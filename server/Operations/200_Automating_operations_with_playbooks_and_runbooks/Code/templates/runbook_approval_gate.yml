@@ -1,0 +1,102 @@
+Parameters:
+  PlaybookIAMRole:
+    Type: String
+
+Resources:
+  AutomaticApproveWithTimer: 
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Name: Approval-Timer
+      Content: 
+        schemaVersion: '0.3'
+        assumeRole: !Ref PlaybookIAMRole
+        parameters:
+          AutomationExecutionId:
+            type: String
+          Timer:
+            type: String
+            default: PT10M
+        mainSteps:
+          - name: SleepTimer
+            action: 'aws:sleep'
+            inputs:
+              Duration: '{{Timer}}'
+          - name: ApproveExecution
+            action: 'aws:executeAwsApi'
+            inputs:
+              Api: SendAutomationSignal
+              Service: ssm
+              Payload:
+                Comment: 
+                  - 'Automatic Approved by Automatic-Approval-With-Timer'
+              AutomationExecutionId: '{{AutomationExecutionId}}'
+              SignalType: Approve
+  ApprovalGateWithTimer: 
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Name: Approval-Gate
+      Content: 
+        schemaVersion: '0.3'
+        assumeRole: !Ref PlaybookIAMRole
+        parameters:        
+          Timer:
+            type: String
+            default: PT10M
+          NotificationTopicArn:
+            type: String
+          NotificationMessage:
+            type: String
+          ApproverArn:
+            type: String
+        outputs:
+          - getApprovalStatus.approvalStatusVariable            
+        mainSteps:
+          - name: executeAutoApproveTimer
+            action: 'aws:executeScript'
+            inputs:
+              Runtime: python3.6
+              Handler: handler
+              InputPayload:
+                AutomationExecutionId: '{{automation:EXECUTION_ID}}'
+                Timer: '{{Timer}}'
+              Script: |-
+                import boto3
+                def handler(event, context):
+                  client = boto3.client('ssm')
+                  response = client.start_automation_execution(
+                      DocumentName='Approval-Timer',
+                      Parameters={
+                          'Timer': [ event['Timer'] ],
+                          'AutomationExecutionId' : [ event['AutomationExecutionId'] ]
+                      }
+                  )
+                  return None
+          - name: ApproveOrDeny
+            action: 'aws:approve'
+            onFailure: Continue
+            isCritical: false
+            inputs:
+              NotificationArn: '{{NotificationTopicArn}}'
+              Message: '{{NotificationMessage}}'
+              MinRequiredApprovals: 1
+              Approvers:
+                - '{{ApproverArn}}'
+                - !Ref PlaybookIAMRole
+          - name: getApprovalStatus
+            action: 'aws:executeAwsApi'
+            maxAttempts: 1
+            inputs:
+              Service: ssm
+              Api: DescribeAutomationStepExecutions
+              AutomationExecutionId: '{{automation:EXECUTION_ID}}'
+              Filters:
+                - Key: StepName
+                  Values:
+                    - requestApproval
+            outputs:
+              - Name: approvalStatusVariable
+                Selector: '$.StepExecutions[0].Outputs.ApprovalStatus[0]'
+                Type: String
+            

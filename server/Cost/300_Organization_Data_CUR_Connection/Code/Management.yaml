@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploys IAM role to collect organizations data
+Parameters:
+  DeploymentetAccountID:
+    Type: String
+    Description: AccountId of where the collector is deployed
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "OrganizationLambdaAccessRole"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub "arn:aws:iam::${DeploymentetAccountID}:role/LambdaOrgRole" 
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "organizations-permissons"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "organizations:ListAccountsForParent"
+                  - "organizations:ListRoots"
+                  - "organizations:ListCreateAccountStatus"
+                  - "organizations:ListAccounts"
+                  - "organizations:ListTagsForResource"
+                  - "organizations:DescribeOrganization"
+                  - "organizations:DescribeOrganizationalUnit"
+                  - "organizations:DescribeAccount"
+                  - "organizations:ListParents"
+                  - "organizations:ListOrganizationalUnitsForParent"
+                  - "organizations:ListChildren"
+                Resource: "*"

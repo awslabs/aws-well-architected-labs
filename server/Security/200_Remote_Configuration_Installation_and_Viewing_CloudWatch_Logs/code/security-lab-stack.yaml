@@ -1,0 +1,285 @@
+# Creator: Pavan Baloo
+# Date Created: 07/10/2020
+# Date Last Modified: 07/10/2020
+# Creates a PHP web application hosted on Apache Web Server
+
+# This is the only valid template version
+AWSTemplateFormatVersion: "2010-09-09"
+
+# Tester template for CFN practice
+Description: Testing a basic CFN template
+      
+# Parameters used: InstanceType, DisplayedName, LatestAmiId
+Parameters: 
+  
+  # Uses public Systems Manager Parameter for latest AMI
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  
+  # DisplayedName: String to be displayed on sample web page
+  DisplayedName: 
+    Description: Name displayed on web page
+    Type: String
+    Default: Pavan
+    AllowedPattern: "[a-zA-Z]*"
+  
+  # BucketName: Name of S3 bucket for CW Logs
+  BucketName:
+    Type: String
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
+    ConstraintDescription: Bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-).
+    Description: S3 bucket for log files
+
+
+Resources:
+
+  # EC2 instance for webserver
+  EC2Instance: 
+    Type: AWS::EC2::Instance
+    # EC2 instance metadata
+    Metadata:
+      # Used to include EC2 metadata for cfn-init helper script
+      'AWS::CloudFormation::Init':
+        # configset for this cfn
+        config:
+          # install HTTPD (apache web server) and PHP for this instance using yum
+          packages:
+            yum:
+              httpd: []
+              php: []
+          # creates a file in tmp called test.php that is a simple "hello world"
+          files:
+            /var/www/html/index.php:
+              content: !Join 
+                - ''
+                - - |
+                    <?php
+                  - |
+                    echo '<h1>This website is made by     
+                  - !Ref DisplayedName
+                  -  </h1>';
+                  - |
+                    ?>
+              mode: '000644'
+              owner: apache
+              group: apache
+          services:
+            sysvinit:
+              httpd:
+                enabled: 'true'
+                ensureRunning: 'true'
+
+    # EC2 instance properties 
+    Properties:
+      # gets type of instance from parameters
+      InstanceType: t2.micro
+      # adds instance profile to enable CloudWatch and SSM
+      IamInstanceProfile: !Ref InstanceProfile
+      # find instance AMI based on mapping of regions to AMIs
+      ImageId: !Ref LatestAmiId
+      # uses the security group defined in this template as the security group for this instance
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          GroupSet: 
+            - !Ref InstanceSecurityGroup
+          SubnetId: !Ref LabPublicSubnet
+          DeviceIndex:  '0'
+          DeleteOnTermination: true
+      # Tag for the EC2 Instance
+      Tags:
+          - Key: Workload
+            Value: Security-CW-Lab
+          - Key: Name
+            Value: Security-CW-Lab-Instance
+      # user data segment contains data held on creation by user
+      UserData: !Base64 
+        'Fn::Join':
+          - ''
+          # #! used to start script
+          - - |
+              #!/bin/bash -xe
+            - |
+              # installs cfn-bootstrap using yum
+              yum install -y aws-cfn-bootstrap
+            - |
+              # Install the files and packages from the metadata
+            - '/opt/aws/bin/cfn-init -v '
+            - '         --stack '
+            - !Ref 'AWS::StackName'
+            - '         --resource EC2Instance '
+            - '         --region '
+            - !Ref 'AWS::Region'
+            - |+
+
+            - |
+              # Signal the status from cfn-init
+            - '/opt/aws/bin/cfn-signal -e $? '
+            - '         --stack '
+            - !Ref 'AWS::StackName'
+            - '         --resource EC2Instance '
+            - '         --region '
+            - !Ref 'AWS::Region'
+            - |+
+
+    # Don't mark as complete until cfn-init done
+    CreationPolicy:
+      ResourceSignal: 
+        Timeout: PT5M
+
+  # SSH Security Group for that instance
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enables SSH via port 22, HTTP via port 80
+      VpcId: !Ref LabVPC
+      # defines inbound rules as accepting SSH connections from the parameterized ssh location via port 22 using TCP protocol
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          
+  CloudWatchIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: IAM role used to enable CloudWatch Agent and SSM usage for the EC2 Instance
+      # Allows EC2 to  assume this role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      # Adds policies to the role (CloudWatchAgentAdminPolicy, CloudWatchAgentServerPolicy, AmazonSSMManagedInstanceCore)
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  #  IAM instance profile to pass the IAM role to the instance on startup
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref CloudWatchIAMRole
+
+  # S3 Bucket for long-term storage and archival of logs
+  S3LogBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      Tags:
+          - Key: Workload
+            Value: Security-CW-Lab
+  
+  # S3 Bucket Policy that allows CW to export logs
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3LogBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Action: s3:GetBucketAcl 
+            Effect: Allow
+            Resource: !GetAtt S3LogBucket.Arn
+            Principal: 
+              Service: !Join
+                - ""
+                - 
+                  - "logs."
+                  - !Ref AWS::Region
+                  - ".amazonaws.com"
+          -
+            Action: s3:PutObject
+            Effect: Allow
+            Resource: !Join
+              - ""
+              - 
+                - !GetAtt S3LogBucket.Arn
+                - "/lablogs/*"
+            Principal:
+              Service: !Join
+                - ""
+                - 
+                  - "logs."
+                  - !Ref AWS::Region
+                  - ".amazonaws.com"
+  
+  ############################
+  ###### VPC RESOURCES #######
+  ############################
+
+  # VPC for container networking
+  LabVPC: 
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      # DNS resolution will be supported for this VPC
+      EnableDnsSupport: true
+      # Instances launched in this VPC get DNS hostnames by default
+      EnableDnsHostnames: true
+      Tags:
+        - Key : Workload
+          Value : Security-CW-Lab
+  
+  ##### PUBLIC NETWORKING #####
+  # Public subnet for the VPC
+  LabPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: '10.0.0.0/24'
+      VpcId: !Ref 'LabVPC'
+      # Instances in this subnet will receive a public IPv4
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select
+        - 0 
+        - !GetAZs 
+      Tags:
+        - Key : Workload
+          Value : Security-CW-Lab 
+  # Internet Gateway and attachment
+  LabIGW:
+    Type: AWS::EC2::InternetGateway
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'LabVPC'
+      InternetGatewayId: !Ref 'LabIGW'
+  # Public route table and route to move traffic from  0.0.0.0/0 to the IGW
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'LabVPC'
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachment
+    Properties:
+      RouteTableId: !Ref 'PublicRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'LabIGW'
+  PublicSubnetOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref LabPublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+    
+
+
+Outputs:
+  WebsiteURL:
+    Description: Application URL
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - EC2Instance
+          - PublicDnsName
+  EC2InstanceID:
+      Description: ID of the EC2 Instance
+      Value: !Ref EC2Instance

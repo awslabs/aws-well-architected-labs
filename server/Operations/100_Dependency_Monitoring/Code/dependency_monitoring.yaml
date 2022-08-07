@@ -1,0 +1,303 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation Sample Template to create lab resources. Creates a VPC and
+  subnet, an S3 Bucket, an SNS Topic, an EC2 Instance, and a Lambda Function.
+
+  **WARNING** You will be billed for the AWS resources created if you create a
+  stack from this template.
+
+  Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License"). You may not
+  use this file except in compliance with the License. A copy of the License is
+  located at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  or in the "license" file accompanying this file. This file is distributed  on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied. See the License for the specific language governing
+  permissions and limitations under the License.
+Parameters:
+  AvailabilityZone: 
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: The Availability Zone in which resources are launched.
+  BucketName:
+    Type: String
+    Description: >-
+      A name for the S3 bucket that is created. Note that the namespace for S3
+      buckets is global so the bucket name you enter here has to be globally
+      unique.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  NotificationEmail:
+    Type: String
+    Description: The email address to which CloudWatch Alarm notifications are published.
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: WA-Lab-VPC
+  Subnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Subnet
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: WA-Lab-InternetGateway
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: WA-Lab-RouteTable
+  Route:
+    Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet
+  Instance:
+    Type: 'AWS::EC2::Instance'
+    DependsOn: DataReadFunction
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref InstanceProfile
+      SubnetId: !Ref Subnet
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -x
+            - |
+              echo "test" >> /home/ec2-user/data.txt
+            - |
+              echo "#!/bin/bash" >> /home/ec2-user/data-write.sh
+            - |
+              echo "while true" >> /home/ec2-user/data-write.sh
+            - |
+              echo "do" >> /home/ec2-user/data-write.sh
+            - 'echo "aws s3api put-object --bucket '
+            - !Ref BucketName
+            - |2
+               --key data.txt --body /home/ec2-user/data.txt" >> /home/ec2-user/data-write.sh
+            - |
+              echo "sleep 50" >> /home/ec2-user/data-write.sh
+            - |
+              echo "done" >> /home/ec2-user/data-write.sh
+            - |
+              chmod +x /home/ec2-user/data-write.sh
+            - |
+              sh /home/ec2-user/data-write.sh &
+      Tags:
+        - Key: Name
+          Value: WA-Lab-Instance
+  InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      InstanceProfileName: WA-Lab-Instance-Profile
+      Roles:
+        - !Ref InstanceRole
+  InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: WA-Lab-InstanceRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: S3PutObject
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 's3:PutObject'
+                Resource: !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref BucketName
+                    - /*
+  Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:Put'
+            Function: !GetAtt
+              - DataReadFunction
+              - Arn
+  SNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: WA-Lab-Dependency-Notification
+      Subscription:
+        - Endpoint: !Ref NotificationEmail
+          Protocol: email
+  DataReadFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: WA-Lab-DataReadFunction
+      Handler: index.lambda_handler
+      Role: !GetAtt
+        - DataReadLambdaRole
+        - Arn
+      Runtime: python3.7
+      Code:
+        ZipFile: !Sub |
+          import os
+          import boto3
+
+          def lambda_handler(context, event):
+            s3 = boto3.client('s3')
+            response = s3.delete_object(
+            Bucket='${BucketName}',
+            Key='data.txt'
+            )
+
+            print(response)
+
+            print('success')
+            return "File deleted"
+  OpsItemFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: WA-Lab-OpsItemFunction
+      Handler: index.lambda_handler
+      Role: !GetAtt
+        - OpsItemLambdaRole
+        - Arn
+      Runtime: python3.7
+      Code:
+        ZipFile: !Sub |
+          import json
+          import boto3
+
+          def lambda_handler(event, context):
+              print(event)
+
+              client = boto3.client('ssm')
+
+              create_opsitem = client.create_ops_item(
+              Description='Datawrite service is failing to write data to S3',
+              OperationalData={
+                  '/aws/resources': {
+                      'Value': '[{\"arn\":\"arn:aws:s3:::${BucketName}\"}]',
+                      'Type': 'SearchableString'
+                  }
+              },
+              Source='Lambda',
+              Category='Availability',
+              Title='S3 Data Writes failing',
+              Severity='2'
+          )
+
+              print(create_opsitem)
+
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('OpsItem Created!')
+              }
+  DataReadLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: WA-Lab-DataReadLambdaRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action: 's3:DeleteObject'
+                Resource: !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref BucketName
+                    - /*
+  OpsItemLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: WA-Lab-OpsItemLambdaRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: LambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action: 'ssm:CreateOpsItem'
+                Resource: '*'
+  DataReadLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref DataReadFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Join
+        - ''
+        - - 'arn:aws:s3:::'
+          - !Ref BucketName
+Outputs:
+  SNSTopic:
+    Description: The SNS Topic you subscribed to.
+    Value: !Ref SNSTopic
+  DataReadFunction:
+    Description: The Lambda function that gets invoked when an object is uploaded to S3.
+    Value: !Ref DataReadFunction
+  OpsItemFunction:
+    Description: >-
+      The Lambda function that gets invoked when the CloudWatch Alarm is
+      triggered.
+    Value: !GetAtt
+      - OpsItemFunction
+      - Arn

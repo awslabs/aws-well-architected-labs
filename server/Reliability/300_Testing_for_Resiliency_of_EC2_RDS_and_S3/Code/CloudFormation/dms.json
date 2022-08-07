@@ -1,0 +1,247 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "Creates an DMS between a MySQL 5.7 Read Replica instance and RDS",
+
+  "Parameters" : {
+
+    "WorkshopName": {
+      "Type": "String"
+    },
+
+    "SourceDatabaseServer" : {
+      "Description" : "Name of the source RDS server",
+      "Type" : "String"
+    },
+
+    "DestDatabaseServer" : {
+      "Description" : "Name of the dest RDS server",
+      "Type" : "String"
+    },
+
+    "DatabaseName" : {
+      "Description" : "Name of database to be migrated",
+      "Type" : "String",
+      "Default" : "iptracker"
+    },
+
+    "MigrationSubnetIds" : {
+      "Description" : "Comma separated list of private subnet ids",
+      "Type" : "List<AWS::EC2::Subnet::Id>"
+    },
+
+    "MigrationSecurityGroups" : {
+      "Description" : "Comma separated list of security groups ids to run the migration instance within",
+      "Type" : "List<AWS::EC2::SecurityGroup::Id>"
+    },
+
+    "MigrationInstanceClass" : {
+      "Description" : "DB Instance Class",
+      "Type": "String",
+      "AllowedValues": [
+          "dms.t2.micro",
+          "dms.t3.micro",
+          "dms.t3.small",
+          "dms.t3.medium",
+          "dms.t3.large",
+          "dms.t3.xlarge",
+          "dms.t3.2xlarge",
+          "dms.m5.large",
+          "dms.m5.xlarge",
+          "dms.m5.2xlarge",
+          "dms.m5.4xlarge",
+          "dms.m5.12xlarge",
+          "dms.m5.24xlarge"
+      ],
+      "Default": "dms.t2.micro",
+      "ConstraintDescription": "must select a valid database instance type."
+    },
+
+    "SourceDBUser": {
+      "Description" : "DB admin account username",
+      "Type" : "String",
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z][a-zA-Z0-9]*",
+      "Default" : "admin",
+      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
+    },
+
+    "SourceDBPassword": {
+      "Description" : "password for Read Replica in this region",
+      "Type" : "String",
+      "NoEcho" : "true",
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
+      "ConstraintDescription" : "must contain only alphanumeric characters."
+    },
+
+    "DestDBUser": {
+      "Description" : "DB admin account username",
+      "Type" : "String",
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z][a-zA-Z0-9]*",
+      "Default" : "admin",
+      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric characters."
+    },
+
+    "DestDBPassword": {
+      "Description" : "password for primary DB in this region",
+      "Type" : "String",
+      "NoEcho" : "true",      
+      "MinLength" : "1",
+      "MaxLength" : "16",
+      "AllowedPattern" : "[a-zA-Z0-9]*",      
+      "ConstraintDescription" : "must contain only alphanumeric characters."
+    }
+  },
+
+  "Resources" : {
+    "DMSVPCServiceRole" : {
+      "Metadata" : {
+        "License" : "MIT No Attribution:  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+      },
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "dms-vpc-role",
+        "AssumeRolePolicyDocument" : {
+          "Statement" : [ {
+             "Effect" : "Allow",
+             "Principal" : { "Service": [ "dms.amazonaws.com" ] },
+             "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole" ]
+      }
+    },
+
+    "DMSCloudWatchServiceRole" : {
+      "Type" : "AWS::IAM::Role",
+      "Properties" : {
+        "RoleName" : "dms-cloudwatch-logs-role",
+        "AssumeRolePolicyDocument" : {
+          "Statement" : [ {
+             "Effect" : "Allow",
+             "Principal" : { "Service": [ "dms.amazonaws.com" ] },
+             "Action" : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/service-role/AmazonDMSCloudWatchLogsRole" ]
+      }
+    },
+
+    "DMSSourceEndpoint" : {
+      "Type" : "AWS::DMS::Endpoint",
+      "Properties" : {
+        "DatabaseName" : { "Ref" : "DatabaseName" },
+        "ServerName" : { "Ref" : "SourceDatabaseServer" },
+        "Port" : "3306",
+        "EndpointType" : "source",
+        "EngineName" : "MYSQL",
+        "Username": { "Ref": "SourceDBUser" },
+        "Password": { "Ref" : "SourceDBPassword" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-MigrationToolSource"
+	  }
+        ]
+      }
+    },
+
+    "DMSDestinationEndpoint" : {
+      "Type" : "AWS::DMS::Endpoint",
+      "Properties" : {
+        "DatabaseName" : { "Ref" : "DatabaseName" },
+        "ServerName" : { "Ref" : "DestDatabaseServer" },
+        "Port" : "3306",
+        "EndpointType" : "target",
+        "EngineName" : "MYSQL",
+        "Username": { "Ref": "DestDBUser" },
+        "Password": { "Ref" : "DestDBPassword"},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-MigrationToolDestination"
+	  }
+        ]
+      }
+    },
+
+    "MigrationSubnetGroup" : {
+      "Type" : "AWS::DMS::ReplicationSubnetGroup",
+      "DependsOn" : [ "DMSVPCServiceRole", "DMSCloudWatchServiceRole" ],
+      "Properties" : {
+	"ReplicationSubnetGroupDescription" : "Subnets that the DMS can operate within",
+	"SubnetIds" : { "Ref" : "MigrationSubnetIds" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-MigrationToolSubnetGroup"
+	  }
+        ]
+      }
+    },
+
+    "MigrationInstance" : {
+      "Type" : "AWS::DMS::ReplicationInstance",
+      "Properties" : {
+        "AllocatedStorage" : "100",
+        "AutoMinorVersionUpgrade" : "true",
+        "MultiAZ" : "true",
+        "ReplicationInstanceClass" : { "Ref" : "MigrationInstanceClass" },
+        "ReplicationSubnetGroupIdentifier" : { "Ref" : "MigrationSubnetGroup" },
+        "VpcSecurityGroupIds" : { "Ref" : "MigrationSecurityGroups" },
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-MySQLMigration"
+	  }
+        ]
+      }
+    },
+
+    "MigrationTask" : {
+      "Type" : "AWS::DMS::ReplicationTask",
+      "Properties" : {
+        "MigrationType" : "full-load-and-cdc",
+        "ReplicationInstanceArn" : { "Ref" : "MigrationInstance" },
+        "SourceEndpointArn" : { "Ref" : "DMSSourceEndpoint" },
+        "TargetEndpointArn" : { "Ref" : "DMSDestinationEndpoint" },
+	"TableMappings" : { "Fn::Join" : ["", [
+	  "{\n",
+	    "\"rules\" : [\n",
+              "{\n",
+                "\"rule-type\" : \"selection\",\n",
+	        "\"rule-id\" : \"1\",\n",
+	        "\"rule-name\" : \"1\",\n",
+	        "\"object-locator\" : {\n",
+                  "\"schema-name\" : \"iptracker\",\n",
+		  "\"table-name\" : \"hits\"\n",
+	        "},\n",
+	        "\"rule-action\" : \"include\"\n",
+	      "}\n",
+	    "]\n",
+	  "}\n"
+          ]]
+	},
+        "Tags" : [
+          {
+            "Key" : "Name",
+	    "Value" : "ResiliencyVPC-MigrationTask"
+	  }
+        ]
+      }
+    }  
+  },
+
+  "Outputs" : {
+
+    "MigrationInstanceARN" : {
+      "Description" : "ARN of the replication instance",
+      "Value" : { "Ref" : "MigrationInstance" }
+    }
+  }
+}

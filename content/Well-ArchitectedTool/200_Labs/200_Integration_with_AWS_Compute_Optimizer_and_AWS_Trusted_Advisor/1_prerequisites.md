@@ -8,8 +8,8 @@ weight: 1
 ---
 
 ## Opt in for AWS Compute Optimizer
-[Opt in for AWS Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/getting-started.html) if you have not done so. 
-You will need to opt in for AWS Compute Optimizer if you have not done so. AWS Compute Optimizer analyzes metrics from the past 14 days to generate recommendations.
+[Opt in for AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) if you have not done so. 
+Enable AWS Compute Optimizer at no additional cost. After AWS Compute Optimizer is enabled it may take up to 12 hours to fully analyze the AWS resources in your account.
 
 ![Section1 AWS Compute Optimizer](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section1/ComputeOptimizer.png)
 
