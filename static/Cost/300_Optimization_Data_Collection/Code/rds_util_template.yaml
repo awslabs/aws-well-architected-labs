@@ -331,7 +331,7 @@ Resources:
                               for region in regions:
                                   client = assume_role(account_id, functions[service]['api'], region['RegionName'])
                                   for f in functions[service]['functions']:
-                                      cw_client = boto3.client('cloudwatch', region_name = region['RegionName'])
+                                      cw_client = assume_role(account_id, 'cloudwatch', region['RegionName']) #boto3.client('cloudwatch', region_name = region['RegionName'])
                                       data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id)
                           else:
                               client=boto3.client(service)
