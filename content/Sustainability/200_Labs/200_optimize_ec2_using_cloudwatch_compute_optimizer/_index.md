@@ -16,54 +16,47 @@ hidden: false
 
 ## Introduction
 
-This lab focuses on optimizing data patterns for sustainability, specifically focused on removing unneeded or redundant data, and minimizing data movement across networks.
+This lab focuses on how you can improve the efficiency of your workload by using the fewest number of compute resources and achieving a high utilization, specifically focused on rightsizing vCPU, Memory, and EBS volumes based on recommendations that AWS Compute Optimizer analyzed. Also, we will learn how Amazon CloudWatch Logs and Metrics will be able to simply help you measure business metrics as well as calcuate Key performance indicators.
 
 ## Goals
 At the end of this lab you will:
 
 * Understand how to identify optimization areas using AWS Well-Architected Sustainability Pillar best practices
-* Baseline and optimize workloads by identifying sustainability key performance indicators (KPIs)
-* Learn how to use the Amazon Redshift Data Sharing feature to implement [data management best practices](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/data-patterns.html) described in [AWS Well-Architected Sustainability Pillar](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html)
+* Baseline and optimize workloads by identifying sustainability key performance indicators (KPIs) using **Proxy metric for provisioned resource** and **Business metric for outcome**.
+* Learn how to use [Amazon CloutWatch metric math](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html) feature to calculate **Resources provisioned per unit of work**. 
+* Learn how to use [AWS Compute Optimizer](https://aws.amazon.com/aws-cost-management/aws-cost-optimization/right-sizing/) for right sizing to optimize resources of Amazon EC2 Instnace.
 
 ## Prerequisites
 
-* The lab is designed to run in your own AWS account
-* You can launch an Amazon Redshift cluster in the AWS `us-east-1` and AWS `us-west-1` regions (referred to _`us-east-1`_ region, and _`us-west-1`_ region throughout the lab) using [Redshift ra3 nodes](https://aws.amazon.com/redshift/features/ra3/)
-  * This lab is written and tested in `us-east-1` and `us-west-1` regions. You may be able to run this in other AWS regions of your choice [where Redshift ra3 nodes are available](https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#ra3-regions), but results may vary.
+* The lab is designed to run in your own AWS account.
+* Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/)
+* We will deploy a sample web application and will automatically generate a worklaod to simulate requets from users.
+
+## Costs
+* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from c4.xlarge to **c7g.large** to reduce idle resources.
 
 {{% notice note %}}
-**NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). Amazon Redshift ra3 nodes are not part of Amazon Redshift Free trial, or AWS Free Tier. When you decide to stop the lab at any point in time, please revisit the [clean up]({{< ref "content/Sustainability/300_Labs/300_optimize_data_pattern_using_redshift_data_sharing/cleanup.md" >}}) instructions at the end so you stop incuring cost (e.g. for storage in Amazon S3).
+**NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
+* [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Lab duration
-Estimated time required to complete this lab is 90 minutes.
+Estimated time required to complete this lab is 40 minutes.
 
-## Workload details
+## Workload details (TBD)
 AnyCompany (an fictional event management organization) is running a central data warehouse environment on Amazon Redshift in `us-east-1` region, which is used by various departments in the organization for their respective storage, analytical processing, and reporting. The marketing department is the top consumer of the data warehouse, and have data engineers, analysts, and scientists based out of US west coast. The marketing team has implemented their own Amazon Redshift cluster in `us-west-1` (consumer) region, which refreshes nightly using an Amazon Redshift snapshot received from `us-east-1` region (producer) and uploading to the `us-west-1` (consumer) region Amazon Redshift cluster. Since the marketing team analytical processing consumes lots of resources & integrated with their west coast based on-premise hosted downstream applications, they perform their analytical processing in `us-west-1` region, and other departments use `us-east-1` region hosted data warehouse. This requires storing a redundant dataset in `us-west-1` region, and transferring huge amounts of data (via nightly ETL feed) over the network between AWS regions.
 
 This is not a sustainability friendly implementation, and can be optimized using AWS Well-Architected Sustainability Pillar best practices for data patterns. Also, with this approach, the insights generated by the Marketing department are not based on live data.
 
-## Workload optimization for sustainability
+## Workload optimization for sustainability (TBD)
 In this case, optimization areas include:
 * Marketing team using only data which is required for their analytical processing, whereas currently they use the full dataset. This reduces storage requirements in `us-west-1`.
 * By reducing the amount of data copied between `us-east-1` and `us-west-1` regions, this reduces network traffic.
 
-## Technical solution
+## Technical solution (TBD)
 By introducing Amazon Redshift Data Sharing feature, the marketing department can optimize their implementation for sustainability, avoiding redundant storage & reducing data transfer between AWS regions. Data sharing enables instant, granular, and fast data access across Amazon Redshift clusters without the need to copy or move it. With data sharing, you have live access to data, so that your users can see the most up-to-date and consistent information as it's updated in Amazon Redshift clusters.
 
-**Redshift environment _before_ implementing Data Sharing feature**
-
-Both, producer and consumer cluster size is 640 MB each - Total storage consumed is 1280 MB:
-![Before implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/before_redshift_data_sharing.png?classes=lab_picture_small)
-
-
-**Redshift environment _after_ implementing Data Sharing feature**
-
-Producer cluster size is 640 MB whereas consumer cluster size is 0 MB - Total storage consumed is 640 MB:
-![After implementing Redshift Data Sharing](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/after_redshift_data_sharing.png?classes=lab_picture_small)
-
-
-## Sustainability improvement process
+## Sustainability improvement process (TBD)
 The improvement goals of this lab are to:
 * To eliminate waste, low utilization, and idle or unused resources
 * To maximize the value from resources consumed
