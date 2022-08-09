@@ -14,7 +14,7 @@ May 2022
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
 
-## Contributers 
+## Contributors  
 - Andy Brown, OPTICS Manager - Commercial Architects IBUs
 
 ## Feedback
