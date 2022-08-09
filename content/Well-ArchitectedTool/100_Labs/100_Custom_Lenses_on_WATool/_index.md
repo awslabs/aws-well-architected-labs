@@ -13,8 +13,7 @@ hidden: false
 
 ## Introduction
 
-The AWS Well-Architected Tool supports [Custom lenses](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html) in Nov 2021 to compliment to default six pillars of the Well-Architected Framework. Within a custom lens, customers can create their own pillars, questions, best practices, helpful resources, and improvement plans. They also can specify rules to determine which options, when not followed, result in high or medium risk issues being flagged. Customers then provide their own guidance for resolving the risk. Custom lenses can be shared across multiple AWS accounts for more visibility.
-
+Since November 2021, the Well-Architected Tool has included the ability to create [custom lenses,](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html) which are capable of tailoring a review to a customers specific needs. Within a custom lens, customers can create their own pillars, questions, best practices, helpful resources and improvement plans. Custom lenses can also specify rules which are used to determine if a high or medium risk issues is flagged. Customers can then provide their own guidance for resolving the risk. Custom lenses can be shared across multiple AWS accounts for more visibility.
 
 This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-custom.html). Using [Amazon DynamoDB Configuration Checks as the example](https://github.com/aws-samples/custom-lens-wa-sample), we demonstrate how a self-defined pillar and questions structure can be used for a domain-specific review.
 
@@ -26,7 +25,7 @@ This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](http
 ## Prerequisites:
 
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-* An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to access the AWS Well-Architected Tool with the [**WellArchitectedConsoleFullAccess**](https://docs.aws.amazon.com/wellarchitected/latest/userguide/iam-auth-access.html) managed policy.
+* An Identity and Access Management (IAM) user or federated credentials that have permissions to access the AWS Well-Architected Tool with the [**WellArchitectedConsoleFullAccess**](https://docs.aws.amazon.com/wellarchitected/latest/userguide/iam-auth-access.html) managed policy.
 
 ## Costs:
 * There are no costs for this lab
