@@ -13,6 +13,7 @@ hidden: false
 
 ## Contributor
 - **Stephen Salim**, Well-Architected Geo Solutions Architect.
+- **Sam Mokhtari**, Sr Sustainability Lead SA Well-Architected.
 
 ## Introduction
 
