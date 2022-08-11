@@ -28,4 +28,4 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 
 {{< img pr-5.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.1-primary-region" link_next_url="..//1.1.3-secondary-region" />}}
+{{< prev_next_button link_prev_url="../1.1.1-primary-region" link_next_url="../1.1.3-secondary-region" />}}

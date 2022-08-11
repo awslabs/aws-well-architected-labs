@@ -12,10 +12,12 @@ The secondary region CloudFormation Template is utilizing the default VPC. We ne
 
 1.2 If you have never used CloudShell you will be prompted with a **Welcome to AWS CloudShell** message, click the **Close** button.
 
-1.3 Once you see the prompt, paste the following AWS CLI command. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
+1.3 Once you see the prompt, paste the following AWS CLI commands. You will be prompted with a **Safe Paste for multiline text** message, click the **Paste** button.
 
 ```sh
-export DEFAULT_VPC=aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query "Vpcs[].VpcId" --region us-west-1 --output text 
+export DEFAULT_VPC=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query "Vpcs[].VpcId" --region us-west-1 --output text) 
+```
+```sh
 aws ssm put-parameter --name "/deployer/backupandrestore-secondary/default-vpc" --value $DEFAULT_VPC --type "String"  --overwrite --region us-west-1
 ```
 
