@@ -10,7 +10,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Open database for access
-      VpcId: '{{resolve:ssm:/deployer/BackupAndRestoreDB/default-vpc:1}}'
+      VpcId: '{{resolve:ssm:/deployer/backupandrestore-secondary/default-vpc:1}}'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 3306
@@ -18,12 +18,12 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Open App access
-      VpcId: '{{resolve:ssm:/deployer/BackupAndRestoreDB/default-vpc:1}}'
+      VpcId: '{{resolve:ssm:/deployer/backupandrestore-secondary/default-vpc:1}}'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -44,7 +44,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -66,7 +66,7 @@ Resources:
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-BackupAndRestore-${AWS::Region}'
+      RoleName: !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -85,7 +85,7 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       DBName: unishop
-      DBInstanceIdentifier: backupandrestore-secondary-region
+      DBInstanceIdentifier: !Ref 'AWS::StackName'
       Engine: MySQL
       DBInstanceClass: db.t2.micro
       Port: '3306'
@@ -97,7 +97,7 @@ Resources:
       MultiAZ: 'false'
       Tags:
         - Key: Name
-          Value: UniShopAppV1DB
+          Value: !Ref 'AWS::StackName'
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     DependsOn: DBInstance
@@ -177,4 +177,4 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: DBSnapshotBackupAndRestore
+          Value: !Ref 'AWS::StackName'

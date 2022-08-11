@@ -379,7 +379,6 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
-        Tags: "Env"
         RolePrefix: !Ref RolePrefix
   BudgetsModule:
     Type: AWS::CloudFormation::Stack
