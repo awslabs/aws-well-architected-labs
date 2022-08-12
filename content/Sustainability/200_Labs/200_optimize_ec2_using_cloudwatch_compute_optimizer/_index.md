@@ -1,6 +1,6 @@
 ---
-title: "Level 200: Optimize Hardware Patterns using AWS Compute Optimizer and Observe Sustainability kpis using Amazon CloudWatch"
-menutitle: "Optimize Hardware Patterns using AWS Compute Optimizer and Amazon CloudWatch"
+title: "Level 200: Optimize Hardware Patterns and Observe Sustainability KPIs"
+menutitle: "Optimize Hardware Patterns and Observe Sustainability KPIs"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
 weight: 1
@@ -50,7 +50,7 @@ For more details, refer to [Sustainability Pillar Whitepaper](https://docs.aws.a
 
 In this lab we shall illustrate each step of the Sustainability improvement process to achieve sustainability goals by following hardware pattern best practices for sustainability in the cloud. 
 
-We shall learn how you can improve the sustanability goals by using the fewest number of compute resources and achieving a high utilization, specifically focused on rightsizing AWS infrastructure based on recommendations that AWS Compute Optimizer analyzed. Also, we will learn how Amazon CloudWatch Logs and Metrics will be able to simply help you measure Proxy metric for provisioned resource, business metrics as well as calculate Key performance indicators for Sustainability to quantify your success.
+We shall learn how you can improve the sustanability goals by using the fewest number of compute resources and achieving a high utilization, specifically focused on rightsizing AWS infrastructure based on recommendations that AWS Compute Optimizer analyzed. We shall also learn how Amazon CloudWatch Logs and Metrics can be used to measure Proxy metric for provisioned resource, business metrics as well as calculate Key performance indicators for Sustainability to quantify your success.
 
 Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/evaluate-specific-improvements.html) for detailed understanding around evaluating specific improvements. At high level:
 * Use Proxy metrics to measure the resources provisioned to achieve business outcomes. For this lab, we will use vCPU minutes proxy metrics for Compute resource
@@ -62,6 +62,10 @@ Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarch
 * To calculate a sustainability key performance indicator (KPI), we will use the following formula, divide the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work:
 
     ![Sustainability KPI](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/sustainability_kpi2.png?classes=lab_picture_small)
+
+* Estimate improvement as both the quantitative reduction in resources provisioned (as indicated by your proxy metrics) and the percentage change from your baseline resources provisioned per unit of work:
+
+    ![Estimate Improvement](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section0/EstimateImprovement.png?classes=lab_picture_small)
 
 
 ## Example Scenario

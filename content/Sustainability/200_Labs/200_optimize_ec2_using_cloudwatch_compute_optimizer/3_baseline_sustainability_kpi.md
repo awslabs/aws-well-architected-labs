@@ -8,7 +8,7 @@ pre: "<b>3. </b>"
 
 ## Overview
 
-Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed - in this case, we will create metrics to monitor a total number of vCPU of Amazon EC2 Instance provisioned to support the business outcome that is the number of requests to a particualr website.
+Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this case, we will create proxy metrics to monitor a total number of vCPU of Amazon EC2 Instance, business metrics for outcome that is number of API calls served (business outcome) and also sustainability key performance indicator (KPI) which is resources provisioned per unit of work.
 
 ### 3.1. Understand what you have provisioned in AWS (Proxy metrics)
 
@@ -32,7 +32,7 @@ Let’s baseline the metrics which we can use to measure sustainability improvem
     ```
     "GET /load.php"
     ```
-    Select log as **your_EC2_instance_id/var/log/httpd/access_log** to test and click **Test pattern** button. You should be able to see 3 requests par a minute.
+    Select log as **your_EC2_instance_id/var/log/httpd/access_log** to test and click **Test pattern** button. You should be able to see 3 requests per minute.
 
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/define_pattern.png)
 
@@ -72,8 +72,7 @@ Scroll down to the bottom to click **Next**.
 
 ### 3.3. Create Sustainability Key Performance Indicator Baseline
 
-Let's evaluate specific improvement and our objective is to optimize per event provisioned resources. 
-* per request total vCPU provisioned
+Let's evaluate specific improvement and our KPI is vCPU minutes per transaction and remember our improvement goal is to Maximize utilization of provisioned resources.
 
 1. Click **Dashboards** 
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_dashboard.png)
@@ -109,18 +108,19 @@ Let's evaluate specific improvement and our objective is to optimize per event p
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/statistic_period.png)
 
     We are going to use [CloudWatch metrics with metric math function](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html).
-    1. For total numer of vCPI, change statistic from Average to **Maximum**. 
+    1. For total numer of vCPU, change statistic from Average to **Maximum**. 
     2. Let's set period to 1 minute. 
     3. For Business Metrics, change statistic from Average to **Sum**.
     4. Let's set period to 1 minute.
     5. Click **Add math**.
     6. Select **Start with empty expression**.
 
-12. Using the following formula, divide the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work.formula
+12. Using the following formula, divide the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work. 
+**Formula:**
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/formula.png)
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi.png)
     
-    Devide total number of vCPU by the number of requests per a minute to achieve business outcome. 
+    Divide total number of vCPU by the number of requests per a minute to achieve business outcome. 
     Update math expression as follows and click **Apply**.
     ```
     m1/m2
@@ -128,12 +128,15 @@ Let's evaluate specific improvement and our objective is to optimize per event p
 13. Click **Expression** and use **Resources provisioned per unit of work**. Click **Apply** and **Create widget**.
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/expression.png)
     
-14. Click **Save** button to continuously monitor KPI after reducing idle resources and maximizing utilization. We will use Resources provisioned per unit of work as sustainability KPI. It appears to be **1.33333**.
+14. Click **Save** button to continuously monitor KPI after reducing idle resources and maximizing utilization in next step. We will use Resources provisioned per unit of work as sustainability KPI.
 
     With, that below are baseline metrics and KPI:
-    * vCPUs
-        * Total number of vCPUs = 4
-        * Per request vCPU = 4 / 3 requests = 1.333
+
+        * Proxy Metric - Total number of vCPUs = 4
+        * Business Metric - Total number of APIs = 3
+        * KPI - Per request vCPU = 4 / 3 requests = 1.333
+    
+    Baseline value appears to be **1.33333**
 ![Section3 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_baseline.png)
     
 
