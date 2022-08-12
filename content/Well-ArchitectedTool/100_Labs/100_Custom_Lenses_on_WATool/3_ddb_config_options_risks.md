@@ -15,7 +15,7 @@ In the previous step, we setup a question and the best pracitices. We collected 
 
 Referencing the [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and **operators** - 
 
-As a result, we list out all the options we defined in the previous step as well as the risk level we want the operating team to be aware of. We also need to assign a unique **"choice id"** for each best practice option.
+As a result, we list out all the options defined in the previous step as well as the risk level we want the operating team to be aware of. We also need to assign a unique **"choice id"** for each best practice option.
 
 ||Choice|Risk Level if not applied.|Choices[]["id"]|
 | ----------- | ----------- | ----------- | ----------- |

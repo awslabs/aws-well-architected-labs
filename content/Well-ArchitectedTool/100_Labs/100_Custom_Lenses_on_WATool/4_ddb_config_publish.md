@@ -9,18 +9,18 @@ pre: "<b>4. </b>"
 
 ### Create a Custom Lens
 
-In previous steps, we demonstrated how to draft a question and options, collect and link the reference resource to each best practice option, and create conditional logic for risk level. We will repeat this process to cover all the questions in the pillar and then again for all the pillars we want to include in our custom lens.
+In previous steps, we demonstrated how to draft a question and options, collect and link the reference resource to each best practice option and create conditional logic for risk level. We will repeat this process to cover all the questions in the pillar and then again for all the pillars we want to include in our custom lens.
 
 #### Upload to AWS Console and Publish
 Now we have the full scope of the custom lens in JSON format. It's time to publish this custom lens into the AWS Well-Architected Tool.
 
 * Open AWS Console > Well-Architected Tool > Custom Lenses
 
-* Click "**Create Custom Lens**" > upload the finalized JSON we produced from step 3. Or if you have not created your own lens, you can try with [sample files](#sample-json-files).
+* Click "**Create Custom Lens**" > upload the finalized JSON we produced from step 3.
 
 * For more detail on best practices for publishing a custom lens, please refer to [this blog](https://aws.amazon.com/blogs/aws/well-architected-custom-lenses-internal-best-practices/).
 
-* After you have created your custom lens, follow these steps to [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) and run a [Well-Architected Framework Review](../../100_walkthrough_of_the_well-architected_tool/3_perform_review/) of the workload using your newly created custom lens.
+* After you have published your custom lens, [create a workload](../../100_walkthrough_of_the_well-architected_tool/2_create_workload/) on the tool, then you can select the custom lens for your workload.
 
 * A workload with custom lens review:
 
@@ -31,7 +31,7 @@ Now we have the full scope of the custom lens in JSON format. It's time to publi
 
 * After we created a custom lens and workload review, we can start to check if the **riskRules** work as expected.
 
-* During this review cycle we can make sure the **"helpfulResource"** for each choice is providing clear guidance to reviewers. 
+* We want to make sure all the **"helpfulResource"** is providing clear and accurate guidance to reviewers. 
 
 * In this example we see the option indicating "Amazon DynamoDB Point-In-Time Recovery feature". 
 It also helps to gain readability if we put a brief text on the **"displayText"** attribute. 
