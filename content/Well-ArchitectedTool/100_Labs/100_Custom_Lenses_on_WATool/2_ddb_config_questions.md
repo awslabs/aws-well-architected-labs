@@ -9,21 +9,21 @@ pre: "<b>2. </b>"
 
 ### Questions in Custom Pillars:
 
-After our pillars have been defined, we start to work on related key items and best practices we want to focus in each pillar. We aggregate different options for a best practices, and design the logic behind the question, to identify if not selecting that option would result in a potential high risk or medium risk issue.
+After our pillars have been defined, we start to work on related key items and best practices we want to focus in each pillar. For each best practice, we can define the logic associated with each question and associate a particular answer with the creation of either a high or medium risk.
 
-We go to the first custom pillar - *Operating Readiness*.
+Lets go to the first custom pillar – Operational Readiness.*
 
-From operation aspect, we should spend time collecting feedback from key stakeholders who hold an operational role in the organization, like cloud operators, DevOps engineers, managers and tech leads. If these domain sponsors indicated a valid backup for DynamoDB table is extremely important, we should start from this as a check point. From operational excellence perspective, we will deep dive into the flow related to this table backup.
+We can start by collecting feedback from key stakeholders who hold an operational role in the organization, like cloud operators, DevOps engineers, managers and tech leads. If these domain sponsors indicated that a valid backup for their DynamoDB table is extremely important, we should start from this as a check point. From operational excellence perspective, we will deep dive into the process flow related to this table backup asking questions such as:
 - Do we have backup?
 - Do we have standard process of backup?
 - Do we have a validation process of each backup?
 - Do we ever test it, or recover from a backup?
 
-Then we aggregate all the related questions and information into a bigger question:
+Then we aggregate all the related questions and information into a bigger question which in this case would be ‘How Do you backup your DynamoDB tables?’
 
 #### How do you backup your DynamoDB tables?
 
-Follow the JSON syntex, we assigned an unique id to this question, and put the question sentense into **Title** of **"question"** in JSON structure.
+Using JSON syntax, we assigned an unique id to this question and put the question into the **Title** field of our **"question"** in JSON structure.
 
 ```
 ...
@@ -88,9 +88,7 @@ After researching and collecting all the relevant options for this question, the
 
 ```
 
-Here you can see we assigned a ***unique choice id*** for each choice in this question. The id cannot be duplicated in this whole lens data structure. 
-
-In next step we will explain how to setup the conditional logic for the risk level for AWS Well-Architected Tool.
+Here you can see we assigned a ***unique choice id*** for each choice in this question. The id represents a primary key and cannot be duplicated within the JSON document.
 
 We need to setup a default option if none of the options have been selected. Adding a choice with a suffix of _no will act as a None of these choice for the question.
 
@@ -101,5 +99,7 @@ We need to setup a default option if none of the options have been selected. Add
                             ...
                         }
 ```
+
+In next step we will explain how to setup the conditional logic for the risk level for AWS Well-Architected Tool.
 
 {{< prev_next_button link_prev_url="../1_ddb_config_pillars_and_bps/" link_next_url="../3_ddb_config_options_risks/" />}}
