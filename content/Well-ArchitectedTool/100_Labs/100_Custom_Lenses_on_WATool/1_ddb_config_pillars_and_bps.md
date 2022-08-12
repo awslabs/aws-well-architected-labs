@@ -1,5 +1,5 @@
 ---
-title: "Structure of a custom lens - Pillars, Questions, and Best Practices"
+title: "Structure of a custom lens - Pillars, Questions and the Best Practices"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 1
@@ -18,7 +18,7 @@ Custom lenses are defined using a specific JSON format. To ensure you follow the
 
 ### Lens Structure
 
-You can use the JSON template file as the basis for your custom lens as it defines the basic structure for the pillars, questions, best practices, and improvement plan. For more detail please read the [Lens format specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html) documentation.
+You can use the JSON template file as the basis for your custom lens as it defines the basic structure for the pillars, questions, best practices and improvement plan. For more detail please read the [Lens format specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html) documentation.
 
 ```
 - Pillars
