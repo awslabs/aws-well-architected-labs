@@ -1,7 +1,7 @@
 +++
 title = "Primary Region"
 date =  2021-05-11T11:43:28-04:00
-weight = 1
+weight = 2
 +++
 
 #### Deploying the Amazon CloudFormation Template
@@ -28,4 +28,4 @@ weight = 1
 
 {{< img pr-5.png >}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../1.1.2-s3-access/" />}}
+{{< prev_next_button link_prev_url="../1.1.1-s3-access" link_next_url="../1.1.3-secondary-region" />}}

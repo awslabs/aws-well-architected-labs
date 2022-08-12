@@ -17,9 +17,9 @@ All resources for this workshop have been pre-provisioned.
 
 #### Using your own AWS account
 
-Sign in to the AWS Management Console as an IAM user who has PowerUserAccess or AdministratorAccess permissions, to ensure successful execution of this lab.
+If you are running this workshop in your own account, click **Next Step**.
 
-**Continue to the [Account Setup](./1.1-account-setup/) section of the workshop.**
+{{< prev_next_button link_prev_url="../" link_next_url="./1.1-account-setup/" />}}
 
 
 
