@@ -6,10 +6,6 @@ weight = 3
 
 #### Deploying the Amazon CloudFormation Template
 
-{{% notice warning %}}
-You will need to wait for the **Hot Primary Region** stack to have a status of **Completed** before moving on to this section. This will take approximately 15 minutes.
-{{% /notice %}}
-
 1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
 
 1.2  Specify stack parameters.
@@ -34,4 +30,4 @@ Change the **IsPrimary** parameter to value `no`.
 You will need to wait for the **Hot Secondary Region** stack to have a status of **Completed** before moving on to the next step. This will take approximately 15 minutes.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1.1.2-s3-access/" link_next_url="../../../2-dynamodb/" />}}
+{{< prev_next_button link_prev_url="../1.1.2-primary-region/" link_next_url="../../../2-dynamodb/" />}}

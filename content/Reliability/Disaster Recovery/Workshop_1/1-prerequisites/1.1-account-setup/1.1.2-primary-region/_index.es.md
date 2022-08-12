@@ -1,7 +1,7 @@
 +++
 title = "Región primaria"
 date =  2021-05-11T11:43:28-04:00
-weight = 1
+weight = 2
 +++
 
 #### Desplegando la plantilla de CloudFormation
@@ -34,4 +34,4 @@ weight = 1
 
 {{< img cf-8-ES.png >}}
 
-{{< prev_next_button link_prev_url="../s3-access/" link_next_url="../1.1.2-s3-access" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
+{{< prev_next_button link_prev_url="../1.1.1-s3-access" link_next_url="../1.1.3-secondary-region" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}

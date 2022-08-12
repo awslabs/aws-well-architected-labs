@@ -1,7 +1,7 @@
 +++
 title = "S3 Access"
 date =  2021-05-11T11:43:28-04:00
-weight = 2
+weight = 1
 +++
 
 #### Allow Amazon S3 Public Access
@@ -14,18 +14,20 @@ Our application employs AWS Simple Storage Service (S3) Static website hosting. 
 
 {{< img pr-1.png >}}
 
-1.3 If you see that "Block all public access" is "On," then click on the "Edit" button to get to the next screen.
+1.3 If you see that **Block all public access** is **On**, click the **Edit** button to get to the next screen.
 
 {{< img pr-2.png >}}
 
-1.4 Uncheck "Block all public access," including any child selections. Click the "Save Changes" button. You will be required to confirm the changes.
+1.4 De-select **Block all public access**, including any child selections. Click the **Save changes** button.
 
 {{< img pr-3.png >}}
 
-1.5 Enter `confirm` and click the **Confirm** button.
+1.5 Enter `confirm` then click the **Confirm** button.
 
 {{< img pr-4.png >}}
 
 {{< img pr-5.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.1-primary-region" link_next_url="../1.1.3-secondary-region/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../1.1.2-primary-region/" />}}
+
+
