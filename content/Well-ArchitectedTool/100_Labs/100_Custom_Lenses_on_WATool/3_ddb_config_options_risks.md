@@ -8,12 +8,12 @@ pre: "<b>3. </b>"
 
 ### Choices for question and the log for Risk level:
 
-In the previous step, we setup a question and the best praciticess. We collected all the necessary resources like developer guide and blog posts as guidance reference. Our next step is to create a logical rule for these options to indicate the risk level if the best practices was not applied.
+In the previous step, we setup a question and the best pracitices. We collected all the necessary resources like developer guide and blog posts as guidance reference. Our next step is to create a logical rule for these options to indicate the risk level if the best practices was not applied.
 
 
 #### Rule Collections
 
-Referencing the [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and operators - 
+Referencing the [Custom Lenses Format Specification](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), we can see all the **"riskRules"** are combinations of **"choice id"** and **operators** - 
 
 As a result, we list out all the options we defined in the previous step as well as the risk level we want the operating team to be aware of. We also need to assign a unique **"choice id"** for each best practice option.
 
@@ -38,7 +38,7 @@ We now need to design our rule logic for this question:
      }
 ```
 
-For some cases, one of the options being applied will be good enough. We can then design our rule as follows:
+For some cases, one of the options being applied will be good enough. We can design our rule by using **"OR"** operator (**"||"**):
 
 ```
 	{	

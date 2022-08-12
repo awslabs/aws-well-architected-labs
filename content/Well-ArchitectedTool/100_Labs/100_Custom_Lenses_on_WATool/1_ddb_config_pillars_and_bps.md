@@ -11,7 +11,7 @@ pre: "<b>1. </b>"
 Custom lenses are defined using a specific JSON format. To ensure you follow the required data structure, you have the option to download a template JSON file from the AWS Well-Architected Tool in the AWS console.
 
 ### Download Custom Lenses Template:
-1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console](https://console.aws.amazon.com/wellarchitected/).
+1. Sign in to the AWS Management Console and open the [AWS Well-Architected Tool console.](https://console.aws.amazon.com/wellarchitected/)
 2. In the left navigation pane, choose `Custom lenses`.
 3. Choose `Create custom lens`.
 4. Choose `Download file` to download the JSON template file.
@@ -26,7 +26,7 @@ You can use the JSON template file as the basis for your custom lens as it defin
         +- Choices
 ```
 
-The first thing to consider when drafting a custom lens is how many **"pillars"** it will cover. According to the JSON template, there should one or more pillars and questions within each pillar.
+The first thing to consider when drafting a custom lens is how many **"pillars"** it will cover. Depending on your requirements, you can include one or more pillars, each containing one or more questions.
 
 As shown in the map hierarchy, each question includes **“choices”** and **“riskRules”** that correspond directly to each area of best practices we would like to cover.
 
@@ -84,7 +84,7 @@ As shown in the map hierarchy, each question includes **“choices”** and **�
     ]
 }
 ```
-As an example, we are going to use the best practices for configuring an Amazon DynamoDB Database for our custom lens, and are going to use the following configuration categories as our ***custom pillars***:
+As an example, we are going to use the best practices for configuring an Amazon DynamoDB Database for our custom lens and are going to use the following configuration categories as our ***custom pillars***:
 * *Operating Readiness*
 * *Security*
 * *Application Performance*
@@ -120,6 +120,6 @@ Using these categories as our custom pillars, the JSON structure now looks like 
 }
 ```
 
-After we have our pillars defined, we move on to next level in the lens data structure. 
+After we have pillars defined, we move on to the next step in the lab which will cover question creation in the lens. 
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_ddb_config_questions/" />}}
