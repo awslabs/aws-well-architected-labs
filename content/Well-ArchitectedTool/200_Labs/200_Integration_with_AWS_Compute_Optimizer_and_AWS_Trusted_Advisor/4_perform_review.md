@@ -6,7 +6,7 @@ pre: "<b>4. </b>"
 weight: 4
 ---
 
-![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Integration.png)
+![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/TA_Aco_integration.png)
 
 ## Overview
 Now that we have defined a workload, we will review the question **COST 6. How do you meet cost targets when you select resource type, size and number**. 
@@ -17,8 +17,8 @@ Defining a workload generates an event called **CreateWorkload** that Amazon Eve
 ![Section4 WAFR](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/WAFR.png)
 
 2. Choose **Cost Optimization** pillar and click question **COST 6. How do you meet cost targets when you select resource type, size and number?** 
-For **COST 6** question, the following best practices are what a reviewer is going to validate with customers. Now you assume that you are a reviewer and may create your own question to evaluate if customers have impletemented them. 
-* Perform cost modeling
+For **COST 6** question, the following best practices are what a reviewer is going to validate with customers. Now you assume that you are a reviewer and may create your own question to evaluate if customers have implemented them. 
+* Perform cost modelling
 * Select resource type, size, and number based on data
 * Select resource type, size, and number automatically based on metrics
 
@@ -30,10 +30,9 @@ To answer this question, customer should have collected the historical utilizati
 
 ![Section4 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/COST6.png)
 
-
 3. Scroll down to the bottom of Well-Architected Tool. 
 
-Now data is automatically available for the reviwer and customers. The reviewer can rephrase the previous question based on the data thta AWS Compute Optimizer and AWS Trusted Advisor provided.
+Now data which contains the CPU, network, disk and volume metrics is automatically available for the reviewer and customers. The reviewer can rephrase the previous question based on the data that AWS Compute Optimizer and AWS Trusted Advisor provided.
 Rather than asking how do you know if your resources are currently optimized, reviewer can have a data-driven cost optimization review with customer. 
 
 The reviewer may ask **"Your largest instance is CPU over-provisioned and we could potentially save you 74% cost on that with t4g.xlarge instance type. Customer, how do you feel about us working with you to make it happen?"**. 

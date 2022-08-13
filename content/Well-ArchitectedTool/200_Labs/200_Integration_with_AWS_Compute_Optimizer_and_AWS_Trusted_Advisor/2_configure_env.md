@@ -13,10 +13,9 @@ When we successfully complete our initial stage template deployment, our deploye
 
 ![Section2 Base Architecture](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Architecture-Cost.png)
 
-
 Note the following:
 
-1. Amazon API Gateway has been provided with a role to invoke AWS Lambda function with mapping table that contains AWS Trusted Advisor Cheeck IDs and Qustion ID of questions in Well-Architected Tool.
+1. Amazon API Gateway has been provided with a role to invoke AWS Lambda function with mapping table that contains AWS Trusted Advisor Check IDs and Question ID of questions in Well-Architected Tool.
 
 2. AWS Lambda function has been provided with a role to put items in AWS DynamoDB.
 
@@ -26,15 +25,15 @@ Note the following:
 
 5. This AWS Lambda function collects finding, reason, recommended instance type for the rightsizing from **AWS Compute Optimizer**. It also gathers the details of "**Low Utilization Amazon EC2 Instances**" check from **AWS Trusted Advisor** such as Estimated Monthly Savings and Average CPU Utilization.
 
-6. The AWS Lambda function also will be able to retrieve Qustion ID of questions in Well-Architected Tool associated with Cheeck ID of AWS Trusted Advisor as Qustion ID is a required parameter to update notes.
+6. The AWS Lambda function also will be able to retrieve Question ID of questions in Well-Architected Tool associated with Check ID of AWS Trusted Advisor as Question ID is a required parameter to update notes.
 
-7. The AWS Lambda function eventually update data points related to rightsizing into notes in Well-Architected Tool so that the reviewer can have a data-driven cost optimization review with customers. 
+7. The AWS Lambda function eventually updates data points related to rightsizing into notes in Well-Architected Tool so that the reviewer can have a data-driven cost optimization review with customers. 
 
 {{% notice note %}}
 **Note:** Please select the region in which your EC2 Instances that you would like to run cost optimization review against are running.
 {{% /notice %}}
 
-To deploy the template for the base infrastructure complete the following steps:
+To deploy the template for the base infrastructure, complete the following steps:
 
 ### 1.1. Get the CloudFormation Template and deploy Cloud9.
 
@@ -49,7 +48,6 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 
 1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select the region in which your existing Amazon EC2 Instances running.
 
-
 ![Section2 CFStack](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/CFStack.png)
 
 2. Select the stack template which you downloaded earlier, and create a stack. Click **Choose file** to upload **section1-base.yaml** and click **Next**.
@@ -59,7 +57,7 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 For the stack name use any stack name you can identify and click **Next**.
 ![Section2 StackName](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/StackName.png)
 
-3. Skip stack options and and click **Next**.
+3. Skip stack options and click **Next**.
 
 ![Section2 StackOptions](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/StackOptions.png)
 
@@ -72,12 +70,11 @@ For the stack name use any stack name you can identify and click **Next**.
 ![Section2 StackOptions](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Cloud9.png)
 
 
-
 {{% /expand%}}
 
 ### 1.2. Application Deployment using SAM(AWS Serverless Application Model).
 
-1. In Cloud9, repo will be autimatically cloned and go to a working directory called **integration** to execute **sam build**. The sam build command processes your AWS SAM template file, application code, and any applicable language-specific files and dependencies.
+1. In Cloud9, repo will be automatically cloned and go to a working directory called **integration** to execute **sam build**. The sam build command processes your AWS SAM template file, application code, and any applicable language-specific files and dependencies.
 
 ** janghan, change aws-well-architected-labs-1 to aws-well-architected-labs before this lab is published **
 
@@ -100,7 +97,7 @@ sam deploy --guided
 
 ![Section2 APIGWUrl](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/APIGWUrl.png)
 
-4. Now we are going to update AWS DynamoDB table with a sample mapping table in json file through API Gateway. This mapping table has Qustion ID of Well-Architected question associated with AWS Trusted Advisor check ID and AWS Lambda function will retrive Qustion ID to update findings related to cost optimization into notes in Well-Architected Tool.
+4. Now we are going to update AWS DynamoDB table with a sample mapping table in json file through API Gateway. This mapping table has Question ID of Well-Architected question associated with AWS Trusted Advisor check ID and AWS Lambda function will retrieve Question ID to update findings related to cost optimization into notes in Well-Architected Tool.
 
 * Replace **APIGWUrl** with your APIGWUrl that you copied from Outputs.
 ```
@@ -118,7 +115,7 @@ curl --header "Content-Type: application/json" -d @mappings/wa-mapping.json -v P
 
 ![Section2 Explore](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Explore.png)
 
-7. There are 2 Qustion IDs of Well-Architected questions and 2 AWS Trusted Advisor checks.
+7. There are 2 Question IDs of Well-Architected questions and 2 AWS Trusted Advisor checks.
 ![Section2 Items](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Items.png)
 
 ___

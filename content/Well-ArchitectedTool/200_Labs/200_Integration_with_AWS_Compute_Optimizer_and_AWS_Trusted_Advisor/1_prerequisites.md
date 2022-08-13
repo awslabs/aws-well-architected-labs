@@ -24,3 +24,4 @@ Amazon EC2 Instances must have AWS Tags. If you have not associated AWS Tags wit
 ![Section1 AWS Trusted Advisor](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section1/Tags.png)
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_configure_env/" />}}
+

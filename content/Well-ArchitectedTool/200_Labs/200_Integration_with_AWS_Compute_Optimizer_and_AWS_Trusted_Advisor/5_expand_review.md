@@ -17,7 +17,7 @@ In this section, we will learn how to include checks from AWS Compute Optimizer 
 ![WorkloadId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/workloadID.png?classes=lab_picture_auto)
 As an example, you can see that the WorkloadID for the workload called **myapplication** is **f2f0bb92d2c9a0818d7254c71c516e98** (highlighted in the screenshot)
 
-1. With the workloadID, we can now retrieve the questionID using the [ListAnswers API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_ListAnswers.html).  
+2. With the workloadID, we can now retrieve the questionID using the [ListAnswers API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_ListAnswers.html).  
 ![QuestionId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/questionID.png?classes=lab_picture_auto)
 
 ## Update DynamoDB Mapping Table
@@ -74,6 +74,7 @@ I created workload called **demo3** and when i clicked on **Continue reviewing**
 ![Section5 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST6.png)
 ![Section5 COST7](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST7.png)
 
-1. Throughout this lab, you have learned how to include AWS Compute Optimizer and AWS Trusted Advisor to prepare data before the review. This can be expanded further to prepare data for more questions and from more data sources 
+2. Throughout this lab, you have learned how to include AWS Compute Optimizer and AWS Trusted Advisor to prepare data before the review. This can be expanded further to prepare data for more questions and from more data sources 
 
 {{< prev_next_button link_prev_url="../4_perform_review/" link_next_url="../6_cleanup/" />}}
+

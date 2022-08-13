@@ -18,14 +18,14 @@ Well-Architected Reviews are conducted per workload. A workload identifies a set
 
 The following are the required workload properties:
 
-* workload-name - This is a uniquie identifier for the workload. Must be between 3 and 100 characters.
+* workload-name - This is a unique identifier for the workload. Must be between 3 and 100 characters.
 * description - A brief description of the workload to document its scope and intended purpose. Must be between 3 and 250 characters.
 * review-owner - The name, email address, or identifier for the primary individual or group that owns the review process. Must be between 3 and 255 characters.
 * environment - The environment in which your workload runs. This must either be PRODUCTION or PREPRODUCTION
 * aws-regions - The aws-regions in which your workload runs (us-east-1, etc).
 * lenses - The list of lenses associated with the workload. All workloads must include the "wellarchitected" lens as a base, but can include additional lenses. 
 
-3. We will need a mechanism to allow a user to complete a true workload focused Well-Architected Framework Review rather than all resources in AWS account. When AWS lambda function retrieve cost optimizato data, it will also validate if Amazon EC2 Instances are being used for the particular workload that you defined in Well-Architected tool using Amazon Tags before ingesting data points into notes in Well-Architected Tool. Therefore, a reviewer can focus on EC2 Instances used for only the particular workload. Attach the same tags we have attached to Amazon EC2 Instances to this workload. Use **workload** as Key and **wademo** as Value.
+3. We will need a mechanism to allow a user to complete a true workload focused Well-Architected Framework Review rather than all resources in AWS account. When AWS lambda function retrieve cost optimization data, it will also validate if Amazon EC2 Instances are being used for the particular workload that you defined in Well-Architected tool using Amazon Tags before ingesting data points into notes in Well-Architected Tool. Therefore, a reviewer can focus on EC2 Instances used for only the particular workload. Attach the same tags we have attached to Amazon EC2 Instances to this workload. Use **workload** as Key and **wademo** as Value.
 AWS Lambda functions will verify if cost optimization data from AWS Compute Optimizer and AWS Trusted Advisor has the same tags as the following tags to ensure Amazon EC2 Instances are being used for this workload.
     ```
     Key = workload
@@ -38,3 +38,4 @@ AWS Lambda functions will verify if cost optimization data from AWS Compute Opti
 ![Section3 Lenses](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section3/Lenses.png)
 
 {{< prev_next_button link_prev_url="../2_configure_env/" link_next_url="../4_perform_review/" />}}
+
