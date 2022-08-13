@@ -157,7 +157,8 @@ Resources:
             /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
             
             #memory monitoring  (update github repo)
-            wget https://raw.githubusercontent.com/awswa/sdknodejs/master/config.json
+            cd /opt/aws/amazon-cloudwatch-agent/bin/
+            wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sssalim/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/config.json
             /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
 
             # Put vCPU custom metrics
