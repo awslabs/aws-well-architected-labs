@@ -76,10 +76,8 @@ For the stack name use any stack name you can identify and click **Next**.
 
 1. In Cloud9, repo will be automatically cloned and go to a working directory called **integration** to execute **sam build**. The sam build command processes your AWS SAM template file, application code, and any applicable language-specific files and dependencies.
 
-** janghan, change aws-well-architected-labs-1 to aws-well-architected-labs before this lab is published **
-
 ```
-cd /home/ec2-user/environment/aws-well-architected-labs-1/static/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Code/integration
+cd /home/ec2-user/environment/aws-well-architected-labs/static/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Code/integration
 sam build
 ```
 
