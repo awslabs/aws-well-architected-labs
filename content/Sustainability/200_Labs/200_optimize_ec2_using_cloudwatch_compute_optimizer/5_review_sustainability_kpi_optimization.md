@@ -28,9 +28,9 @@ With, that below are revised (improved) metrics and KPI:
 
         * Proxy Metric - Total number of vCPUs = 2
         * Business Metric - Total number of APIs = 3
-        * KPI - Per request vCPU = 2 / 3 requests = 1.333  
+        * KPI - Per request vCPU = 2 / 3 requests = 0.66666 
 
-Improved value appears to be **.66666**.
+Improved value appears to be **0.66666**.
 
 For better adotion across organization, you have these cloudwatch dashboards available across teams and publish this data as a continuing success story.
 
