@@ -12,7 +12,9 @@ Recall, our sustainability improvement goal is:
 - To eliminate waste, low utilization, and idle or unused resources.
 - To maximize the value from resources you consume.
 
-AWS Compute Optimizer for rightsizing - TBD
+We shall achieve this by optimizing hardware patterns:
+- Right-size workloads by using AWS Compute Optimizer recommendations
+- Continually monitor and evaluate new, more efficient hardware and software offerings
 
 {{% notice note %}}
 **Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account,which will incur costs in your account.You may refer to the follwing screenshots instead to minimize the cost for this lab. 
