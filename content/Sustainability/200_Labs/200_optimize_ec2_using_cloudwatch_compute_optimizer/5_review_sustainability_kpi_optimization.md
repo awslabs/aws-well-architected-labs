@@ -12,16 +12,16 @@ With optimization completed in the previous lab, let’s see if you maximized ut
 
 ### 5.1. Applying Hardware Patterns best practices for sustainability in the cloud
 
-1. Graviton3 processors helps you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. 
-![Section5 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/cpu_utilization.png)
+1. As discussed earlier, AWS Graviton3 processors helps you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. With c7g.large instance, CPU utilization appears to be 85%, which means we maximized compute resources. 
+![Section5 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/cpu_utilization.png)
 
-2. Optimal compute resources to reduces idle resources and to meet performance requirement to deliver your business outcomes
+2. Optimal compute resources to reduces idle resources and to meet performance requirements to deliver your business outcomes
 
 
 ### 5.2. Review Sustainability KPI Optimization
 
 1. Now, let evaluate the improvements by checking KPIs again:
-![Section5 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/revised_kpi_metrics.png)
+![Section5 revised_kpi_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/revised_kpi_metrics.png)
 
 
 With, that below are revised (improved) metrics and KPI:
@@ -30,11 +30,12 @@ With, that below are revised (improved) metrics and KPI:
         * Business Metric - Total number of APIs = 3
         * KPI - Per request vCPU = 2 / 3 requests = 0.66666 
 
-Improved value appears to be **0.66666**.
+Improved Sustainability KPI value appears to be **0.66666**.
+Your workload shows an initial improvement of 50% reduction in compute resource requirements after changing Amazon EC2 instance type from t4g.xlarge to c7g.large.
 
-For better adotion across organization, you have these cloudwatch dashboards available across teams and publish this data as a continuing success story.
+For better adoption across organization, you have these CloudWatch dashboards available across teams and publish this data as a continuing success story.
 
-Next, we will cleanup the AWS resources created to make sure no further costs are incurred.
+Next, we will clean up the AWS resources created to make sure no further costs are incurred.
 
 {{< prev_next_button link_prev_url="../4_reducing_idle_resources_and_maximizing_utilization" link_next_url="../cleanup" />}}
 

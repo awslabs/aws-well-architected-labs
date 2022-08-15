@@ -123,7 +123,7 @@ Resources:
             chkconfig httpd on
             systemctl start httpd
 
-            # Install the web pages for our lab
+            # Install the web pages for our lab (update github repo)
             if [ ! -f /var/www/html/immersion-day-app-php7.zip ]; then
               cd /var/www/html
               wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sssalim/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/immersion-day-app-php7.zip
@@ -150,11 +150,16 @@ Resources:
 
             amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-linux -s
 
-            #send access_log to CloudWatch
+            #send access_log to CloudWatch (update github repo)
             cd /opt/aws/amazon-cloudwatch-agent/etc
-            wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sssalim/static/Sustainability/300_EC2_TBD/app/amazon-cloudwatch-agent.json
+            wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sssalim/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/amazon-cloudwatch-agent.json
             amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
             /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
+            
+            #memory monitoring  (update github repo)
+            cd /opt/aws/amazon-cloudwatch-agent/bin/
+            wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sssalim/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/config.json
+            /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
 
             # Put vCPU custom metrics
             mkdir /project
@@ -174,7 +179,7 @@ Resources:
             EOF
             crontab /project/cron.tab
 
-            # 3 request per a minute
+            # 6request per a minute
             screen -d -m watch -n 20 "curl 'http://127.0.0.1/load.php'"
 
       Tags:

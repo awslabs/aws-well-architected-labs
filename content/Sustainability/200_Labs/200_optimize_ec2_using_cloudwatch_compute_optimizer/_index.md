@@ -25,13 +25,13 @@ At the end of this lab you will:
 * Understand [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar 
 * Understand [best practices for hardware patterns](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/hardware-patterns.html) in AWS Well-Architected Sustainability Pillar
 * Learn how to optimize your architecture for minimum amount of hardware usage using [AWS Compute Optimizer](https://aws.amazon.com/aws-cost-management/aws-cost-optimization/right-sizing/)
-* Learn how to use [Amazon CloutWatch metric math](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html) feature to observe **sustainability key performance indicators (KPIs)**. 
+* Learn how to use [Amazon CloudWatch  metric math](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html) feature to observe **sustainability key performance indicators (KPIs)**. 
 
 ## Prerequisites
 
 * The lab is designed to run in your own AWS account.
 * Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/)
-* We will deploy a sample web application and will automatically generate a worklaod to simulate requests from users.
+* We will deploy a sample web application and will automatically generate a workload  to simulate requests from users.
 
 ## Costs
 * **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from c4.xlarge to **c7g.large** to use the minimum amount of hardware to meet our business requirements.
@@ -51,7 +51,7 @@ For more details, refer to [Sustainability Pillar Whitepaper](https://docs.aws.a
 
 In this lab we shall illustrate each step of the Sustainability improvement process to achieve sustainability goals by following hardware pattern best practices for sustainability in the cloud. 
 
-We shall learn how you can improve the sustanability goals by using the fewest number of compute resources and achieving a high utilization, specifically focused on rightsizing AWS infrastructure based on recommendations that AWS Compute Optimizer analyzed. We shall also learn how Amazon CloudWatch Logs and Metrics can be used to measure Proxy metric for provisioned resource, business metrics as well as calculate Key performance indicators for Sustainability to quantify your success.
+We shall learn how you can improve the sustainability goals by using the fewest number of compute resources and achieving a high utilization, specifically focused on rightsizing AWS infrastructure based on recommendations that AWS Compute Optimizer analyzed. We shall also learn how Amazon CloudWatch Logs and Metrics can be used to measure Proxy metric for provisioned resource, business metrics as well as calculate Key performance indicators for Sustainability to quantify your success.
 
 Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/evaluate-specific-improvements.html) for detailed understanding around evaluating specific improvements. At high level:
 * Use Proxy metrics to measure the resources provisioned to achieve business outcomes. For this lab, we will use vCPU minutes proxy metrics for Compute resource

@@ -10,10 +10,10 @@ To avoid incurring further costs for AWS resources, let’s delete all resources
 1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select the correct region you used to deploy this lab.
 
     Select the previous CloudFormation stack you used and click **Delete**.
-![Section6 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_stack.png)
+![Section6 delete_stack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_stack.png)
 
 2. To confirm deletion, type in “delete” in the field at the bottom (make sure, you **do not** check _Create final snapshot_ button as it will incur cost for the storage of the snapshot), and click **Delete cluster**.
-![Section6 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_dashboard.png)
+![Section6 delete_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_dashboard.png)
 
 
 {{< prev_next_button link_prev_url="../5_review_sustainability_kpi_optimization"  title="Congratulations!" final_step="true" >}}
