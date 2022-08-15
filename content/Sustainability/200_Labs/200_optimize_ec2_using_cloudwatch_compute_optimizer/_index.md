@@ -22,7 +22,8 @@ This lab focuses on optimizing hardware patterns for sustainability by minimizin
 ## Goals
 At the end of this lab you will:
 
-* Understand AWS Well-Architected Sustainability Pillar [best practices for hardware patterns](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/hardware-patterns.html)
+* Understand [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar 
+* Understand [best practices for hardware patterns](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/hardware-patterns.html) in AWS Well-Architected Sustainability Pillar
 * Learn how to optimize your architecture for minimum amount of hardware usage using [AWS Compute Optimizer](https://aws.amazon.com/aws-cost-management/aws-cost-optimization/right-sizing/)
 * Learn how to use [Amazon CloutWatch metric math](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html) feature to observe **sustainability key performance indicators (KPIs)**. 
 
@@ -33,7 +34,7 @@ At the end of this lab you will:
 * We will deploy a sample web application and will automatically generate a worklaod to simulate requests from users.
 
 ## Costs
-* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from c4.xlarge to **c7g.large** to reduce idle resources.
+* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from c4.xlarge to **c7g.large** to use the minimum amount of hardware to meet our business requirements.
 
 {{% notice note %}}
 **NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
