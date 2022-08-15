@@ -425,7 +425,7 @@ Resources:
         ROW FORMAT SERDE
         'org.apache.hadoop.hive.serde2.OpenCSVSerde'
         WITH SERDEPROPERTIES (
-        'quoteChar'='\\"',
+        'quoteChar'='\"',
         'separatorChar'=',')
         STORED AS INPUTFORMAT
         'org.apache.hadoop.mapred.TextInputFormat'
