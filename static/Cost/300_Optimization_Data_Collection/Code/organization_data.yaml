@@ -6,9 +6,6 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that is created to hold org data
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  Tags:
-    Type: String
-    Description: List of tags from your Organization you would like to include separated by a comma.
   ManagementAccountRole:
     Type: String
     Description:  ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
@@ -47,7 +44,6 @@ Resources:
           #!/usr/bin/env python3
           #Gets org data, grouped by ous and tags from management accounts in json
           #Author Stephanie Gooch 2020
-          import argparse
           import boto3
           import logging
           from botocore.exceptions import ClientError
@@ -72,7 +68,7 @@ Resources:
               SESSION_TOKEN = acct_b['Credentials']['SessionToken']
               client = boto3.client(
                   "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
-                  aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN,)
+                  aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
               root_id    = client.list_roots()['Roots'][0]['Id']
               ou_id_list = get_ou_ids(root_id, client)
@@ -111,23 +107,21 @@ Resources:
               return test
 
           def account_data(f, parent, parent_name, client, parent_tags):
-              tags_check = os.environ["TAGS"]
               account_id_list = get_acc_ids(parent, client)
               for account_id in account_id_list:
                   response = client.describe_account(AccountId=account_id)
                   account  = response["Account"]          
-                  if tags_check != '':
-                      tags_list = list_tags(client, account["Id"])
-                      for tag in os.environ.get("TAGS").split(","):
-                          for org_tag in tags_list:
-                              if tag == org_tag['Key']: 
-                                  value = org_tag['Value']
-                                  kv = {tag : value}
-                                  account.update(kv)
+                  tags_list = list_tags(client, account["Id"])
+                  for org_tag in tags_list:
+                      tag = org_tag['Key']
+                      value = org_tag['Value']
+                      kv = {tag : value}
+                      account.update(kv)
                   account.update({'Parent' : parent_name, 'Parent_Tags':parent_tags})        
                   data = json.dumps(account, default = timeconverter) 
                   f.write(data)
                   f.write('\n')
+                  
 
           def get_acc_ids(parent_id,  client):
               full_result = []
@@ -174,8 +168,6 @@ Resources:
           - Arn
       Environment:
         Variables:
-          TAGS:
-            Fn::Sub: ${Tags}
           BUCKET_NAME: !Ref DestinationBucket
           REGION: !Ref "AWS::Region"
           MANAGMENTARN: !Ref ManagementAccountRole

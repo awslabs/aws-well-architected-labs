@@ -29,13 +29,13 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPCHotStandby
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
-          Value: UniShopAppV1IGW
+          Value: !Ref 'AWS::StackName'
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -53,7 +53,7 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet1
+          Value: !Sub '${AWS::StackName}-1'
   UniShopAppV1Subnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -66,14 +66,14 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet2
+          Value: !Sub '${AWS::StackName}-2'
   UniShopAppV1PublicRoutTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref UniShopAppV1VPC
       Tags:
         - Key: Name
-          Value: UniShopAppV1PublicRoute
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1PublicRout:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
@@ -103,7 +103,7 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
@@ -136,7 +136,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -190,6 +190,7 @@ Resources:
           - Effect: Allow
             Action:
               - 'rds:ModifyDBCluster'
+              - 'rds:Describe*'
             Resource:
               - '*'                        
       Roles:
@@ -197,7 +198,7 @@ Resources:
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-Hot-Standby-${AWS::Region}'
+      RoleName: !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -215,18 +216,18 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: 'hot-standby-global'
+      GlobalClusterIdentifier: 'hot-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
-    DeletionPolicy: Delete    
+    DeletionPolicy: Retain    
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
     Properties:
       MasterUsername: UniShopAppV1User
       MasterUserPassword: UniShopAppV1Password
-      DBClusterIdentifier: 'hot-standby-active-primary'
+      DBClusterIdentifier: !Ref 'AWS::StackName'
       Port: 3306
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -234,16 +235,16 @@ Resources:
       VpcSecurityGroupIds:
         - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName: UniShopAppV1HotStandbyDB
+      DatabaseName: unishop
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
-    DeletionPolicy: Delete    
+    DeletionPolicy: Retain    
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
     Properties:
-      GlobalClusterIdentifier: 'hot-standby-global'
-      DBClusterIdentifier: 'hot-standby-passive-secondary'
+      GlobalClusterIdentifier: 'hot-global'
+      DBClusterIdentifier: 'hot-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
       EngineVersion: 5.7.mysql_aurora.2.09.2
@@ -252,14 +253,14 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
   RDSDBInstance:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       Engine: aurora-mysql
       DBClusterIdentifier: !If [CreatePrimaryDB, !Ref RDSClusterPrimary, !Ref RDSClusterSecondary]
       PubliclyAccessible: 'true'
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
-      DBInstanceIdentifier: UniShopAppV1DB
+      DBInstanceIdentifier: unishop-hot
   AssetBucket:
     Type: 'AWS::S3::Bucket'      
   UIBucket:
@@ -269,301 +270,284 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
   EC2Instance:
-    Type: 'AWS::EC2::Instance'
-    DependsOn: RDSDBInstance
-    CreationPolicy:
-      ResourceSignal:
-        Count: 1
-        Timeout: PT30M
-    Metadata:
-      'AWS::CloudFormation::Init':
-        configSets:
-          default:
-            - update
-            - install
-            - configure       
-            - create-tables
-            - create-service-files
-            - start-service
-          secondary:
-            - update
-            - install
-            - configure
-            - configure-global-db                 
-            - create-service-files
-            - start-service
-        update:
-          commands:
-            update:
-              command: sudo yum update -y
-        install:
-          packages:
-            rpm:
-              'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm': []
-            yum:
-              amazon-cloudwatch-agent: []
-              java-1.8.0-openjdk-devel: []
-              mariadb: []
-        configure:
-          commands:    
-            0-populate-buckets:
-              command: !Join
-                - ''
-                - - |
-                    #!/bin/bash      
+      Type: 'AWS::EC2::Instance'
+      DependsOn: RDSDBInstance
+      CreationPolicy:
+        ResourceSignal:
+          Count: 1
+          Timeout: PT30M        
+      Metadata:
+        'AWS::CloudFormation::Init':
+          configSets:
+            default:
+              - update
+              - install
+              - configure
+              - create-tables              
+              - create-service-files
+              - start-service
+            secondary:
+              - update
+              - install
+              - configure
+              - configure-global-db        
+              - create-service-files
+              - start-service
+          update:
+            commands:
+              update:
+                command: sudo yum update -y
+          install:
+            packages:
+              rpm:
+                'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm': []
+              yum:
+                amazon-cloudwatch-agent: []
+                java-1.8.0-openjdk-devel: []
+                mariadb: []
+          configure:
+            commands:
+              0-populate-buckets:
+                command: !Join
+                  - ''
+                  - - |
+                      #!/bin/bash      
+                    - |
+                      sudo mkdir /home/ec2-user/UniShopUI/                                                                 
+                    - >
+                    - export ASSETS_RANDOM_NAME=
+                    - !Ref AssetBucket
+                    - |+      
 
-                  - |
-                    sudo mkdir /home/ec2-user/UniShopUI/                              
-                
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
+                    - >                  
+                      sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
+                    - >                       
+                      aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
+                      s3://$ASSETS_RANDOM_NAME/ --grants
+                      read=uri=http://acs.amazonaws.com/groups/global/AllUsers      
+                    - >                  
+                      sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
+                    - >
+                      sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request                        
+                      
+          create-tables:
+            commands:
+              1-create-tables:
+                command: !Join
+                  - ''
+                  - - 'sudo mysql -u UniShopAppV1User -h '
+                    - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
+                    - |2
+                       -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql                     
+          configure-global-db:
+            commands:
+              1-enable-write-forwarding:
+                command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-secondary --region us-west-1 --enable-global-write-forwarding                                  
+          create-service-files:
+            files:
+              /etc/systemd/system/unishop.service:
+                encoding: plain
+                content: !Join
+                  - ''
+                  - - |
+                      [Unit]
+                    - |
+                      Description=Restart UniShop
+                    - |
+                      Wants=network.target
+                    - >
+                      After=syslog.target network-online.target
+                      amazon-cloudwatch-agent.target
+                    - |+
 
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+     
+                    - |
+                      [Service]
+                    - |
+                      Type=forking
+                    - |
+                      ExecStart=/home/ec2-user/unishopstart.sh
+                    - |
+                      ExecReload=/home/ec2-user/unishoprestart.sh
+                    - |
+                      ExecStop=/home/ec2-user/unishopstop.sh
+                    - |                                    
+                      PrivateTmp=true
+                    - |+
 
-                  - export ASSETS_RANDOM_NAME=
-                  - !Ref AssetBucket
-                  - |+                                         
+                    - |
+                      [Install]
+                    - |
+                      WantedBy=multi-user.target
+                mode: '000644'
+                group: root
+                user: root
+              /home/ec2-user/unishopcfg.sh:
+                encoding: plain
+                content: !Join
+                  - ''
+                  - - |
+                      #!/bin/bash
+                    - export DB_ENDPOINT=
+                    - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
+                    - |+                  
+                mode: '000555'
+                group: ec2-user
+                user: ec2-user
+              /home/ec2-user/unishoprestart.sh:
+                encoding: plain
+                content: !Join
+                  - ''
+                  - - |
+                      #!/bin/bash
+                    - |                    
+                      source /home/ec2-user/unishopstop.sh
+                    - |
+                      source /home/ec2-user/unishopstart.sh     
+                    - |+
+                mode: '000555'
+                group: ec2-user
+                user: ec2-user
+              /home/ec2-user/unishopstop.sh:
+                encoding: plain
+                content: !Join
+                  - ''
+                  - - |
+                      #!/bin/bash
+                    - |
+                      APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                    - | 
+                      pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                    - |
+                      if [ -z "${pid}" ]; 
+                    - |
+                      then echo ""
+                    - |
+                      else
+                    - |
+                      echo "kill thread...$pid"
+                    - |
+                      kill -9 $pid                  
+                    - |
+                      fi
+                mode: '000555'
+                group: ec2-user
+                user: ec2-user              
+              /home/ec2-user/unishopstart.sh:
+                encoding: plain
+                content: !Join
+                  - ''
+                  - - |
+                      #!/bin/bash
+                    - |                    
+                      source /home/ec2-user/unishopcfg.sh   
+                    - >
+                    - java -jar
+                    - ' '
+                    - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
+                    - >
+                      /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
+                      &>
+                      /home/ec2-user/app.log
+                      &
+                mode: '000555'
+                group: ec2-user
+                user: ec2-user              
+              /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
+                content: !Join
+                  - ''
+                  - - |
+                      {
+                    - |2
+                          "logs": {
+                    - |2
+                              "logs_collected": {
+                    - |2
+                                  "files": {
+                    - |2
+                                      "collect_list": [
+                    - |2
+                                          {
+                    - |2
+                                              "file_path": "/home/ec2-user/app.log",
+                    - !Join
+                      - ''
+                      - - '                        "log_group_name":'
+                        - '"'
+                        - !Ref InstanceLogGroup
+                        - |
+                          ",
+                    - !Join
+                      - ''
+                      - - '                        "log_stream_name":'
+                        - '"'
+                        - !Ref InstanceLogGroup
+                        - |
+                          -app",
+                    - |2
+                                              "timezone": "Local"
+                    - |2
+                                          }
+                    - |2
+                                      ]
+                    - |2
+                                  }
+                    - |2
+                              }
+                    - |2
+                          }
+                    - '}'
+                mode: '000444'
+                group: ec2-user
+                user: ec2-user
+          start-service:
+            commands:
+              0-start-service:
+                command: !Join
+                  - ''
+                  - - |
+                      sudo systemctl daemon-reload
+                    - |
+                      sudo systemctl enable unishop
+                    - |
+                      sudo systemctl start unishop
+                    - >
+                      sudo amazon-cloudwatch-agent-ctl -a fetch-config -s -m ec2
+                      -c
+                      file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+      Properties:
+        InstanceType: t3.small
+        ImageId: !Ref LatestAmiId
+        SubnetId: !Ref UniShopAppV1Subnet1
+        SecurityGroupIds:
+          - !Ref EC2SecurityGroup
+        IamInstanceProfile: !Ref S3InstanceProfile
+        UserData: !Base64
+          'Fn::Join':
+            - ''
+            - - |
+                #!/bin/bash
+              - |
+                sudo yum install -y aws-cfn-bootstrap
+              - /opt/aws/bin/cfn-init -v
+              - '         --stack '
+              - !Ref 'AWS::StackName'
+              - '         --resource EC2Instance '
+              - '         --region '
+              - !Ref 'AWS::Region'
+              - !If [CreatePrimaryDB, '         --configsets default','         --configsets secondary']
+              - |+
 
-                  - export JSON_STRING=
-                  - $(echo '{"host":"<APIGATEWAY-URL>","region":"'"$AWS_DEFAULT_REGION"'"}')    
-                  - |+        
+              - /opt/aws/bin/cfn-signal -e $?
+              - ' --stack '
+              - !Ref 'AWS::StackName'
+              - ' --resource EC2Instance'
+              - ' --region '
+              - !Ref 'AWS::Region'
+              - |+
 
-                  - >
-                    aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
-                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                                    
-
-                  - |
-                    echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json                          
-
-                  - >
-                    aws s3 cp /home/ec2-user/UniShopUI/
-                    s3://$UI_RANDOM_NAME/ --recursive --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
-                    
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
-
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/create_tables.sql /home/ec2-user/ --no-sign-request    
-
-                  - >
-                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
-
-                  - >                       
-                    aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
-                    s3://$ASSETS_RANDOM_NAME/ --grants
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-
-        create-tables:
-          commands:
-            1-create-tables:
-              command: !Join
-                - ''
-                - - 'sudo mysql -u UniShopAppV1User -h '
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |2
-                     -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
-        configure-global-db:
-          commands:
-            1-enable-write-forwarding:
-              command: sudo aws rds modify-db-cluster --db-cluster-identifier hot-standby-passive-secondary --region us-west-1 --enable-global-write-forwarding                     
-        create-service-files:
-          files:
-            /etc/systemd/system/unishop.service:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    [Unit]
-                  - |
-                    Description=Restart UniShop
-                  - |
-                    Wants=network.target
-                  - >
-                    After=syslog.target network-online.target
-                    amazon-cloudwatch-agent.target
-                  - |+
-
-                  - |
-                    [Service]
-                  - |
-                    Type=simple
-                  - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
-                  - |
-                    Restart=on-failure
-                  - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
-                  - |+
-
-                  - |
-                    [Install]
-                  - |
-                    WantedBy=multi-user.target
-              mode: '000644'
-              group: root
-              user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
-            /home/ec2-user/unishopcfg.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - export Database=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export DB_ENDPOINT=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+
-
-                  - export ASSETS_RANDOM_NAME=
-                  - !Ref AssetBucket
-                  - |+                  
-
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
-            /home/ec2-user/unishoprun.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - java -jar
-                  - ' '
-                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
-                  - >
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
-            /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
-              content: !Join
-                - ''
-                - - |
-                    {
-                  - |2
-                        "logs": {
-                  - |2
-                            "logs_collected": {
-                  - |2
-                                "files": {
-                  - |2
-                                    "collect_list": [
-                  - |2
-                                        {
-                  - |2
-                                            "file_path": "/home/ec2-user/app.log",
-                  - !Join
-                    - ''
-                    - - '                        "log_group_name":'
-                      - '"'
-                      - !Ref InstanceLogGroup
-                      - |
-                        ",
-                  - !Join
-                    - ''
-                    - - '                        "log_stream_name":'
-                      - '"'
-                      - !Ref InstanceLogGroup
-                      - |
-                        -app",
-                  - |2
-                                            "timezone": "Local"
-                  - |2
-                                        }
-                  - |2
-                                    ]
-                  - |2
-                                }
-                  - |2
-                            }
-                  - |2
-                        }
-                  - '}'
-              mode: '000444'
-              group: ec2-user
-              user: ec2-user
-        start-service:
-          commands:
-            0-start-service:
-              command: !Join
-                - ''
-                - - |
-                    sudo systemctl daemon-reload
-                  - |
-                    sudo systemctl enable unishop
-                  - |
-                    sudo systemctl start unishop
-                  - >
-                    sudo amazon-cloudwatch-agent-ctl -a fetch-config -s -m ec2
-                    -c
-                    file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
-    Properties:
-      #      KeyName: dr-key
-      InstanceType: t3.small
-      ImageId: !Ref LatestAmiId
-      SubnetId: !Ref UniShopAppV1Subnet1
-      SecurityGroupIds:
-        - !Ref EC2SecurityGroup
-      IamInstanceProfile: !Ref S3InstanceProfile
-      UserData: !Base64
-        'Fn::Join':
-          - ''
-          - - |
-              #!/bin/bash
-            - |
-              sudo yum install -y aws-cfn-bootstrap
-            - /opt/aws/bin/cfn-init -v
-            - '         --stack '
-            - !Ref 'AWS::StackName'
-            - '         --resource EC2Instance '
-            - '         --region '
-            - !Ref 'AWS::Region'
-            - !If [CreatePrimaryDB, '         --configsets default','         --configsets secondary']
-            - |+
-
-            - /opt/aws/bin/cfn-signal -e $?
-            - ' --stack '
-            - !Ref 'AWS::StackName'
-            - ' --resource EC2Instance'
-            - ' --region '
-            - !Ref 'AWS::Region'
-            - |+
-
-      Tags:
-        - Key: Name
-          Value: UniShopAppV1EC2HotStandby
+        Tags:
+          - Key: Name
+            Value: !Ref 'AWS::StackName'
   DynamoDBTable:
     Condition: CreatePrimaryDB
     Type: AWS::DynamoDB::Table
@@ -578,7 +562,7 @@ Resources:
           KeyType: HASH
       Tags:
         - Key: Name
-          Value: UniShopAppV1DDB
+          Value: !Ref 'AWS::StackName'
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -606,7 +590,7 @@ Resources:
                   - dynamodb:Query
                   - dynamodb:Scan
                 Resource: !If [CreatePrimaryDB, !GetAtt DynamoDBTable.Arn, !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/unishophotstandby']
-  AddUnicornToBasketlambdaFunction:
+  AddUnicornToBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
     Properties:
@@ -615,7 +599,6 @@ Resources:
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
       Description: Service to add unicorns to basket from POST API call
-      #      FunctionName: AddUnicornToBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::addUnicornToBasket
       MemorySize: 512
       Role: !GetAtt
@@ -624,8 +607,8 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: UniShopAppV1LambdaFunctionAddUnicornToBasket
-  RemoveUnicornFromBasketlambdaFunction:
+          Value: AddUnicornToBasket
+  RemoveUnicornFromBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
     Properties:
@@ -634,7 +617,6 @@ Resources:
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
       Description: Service to remove unicorns from basket from POST API call
-      #      FunctionName: RemoveUnicornFromBasketDR
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::removeUnicornFromBasket
       MemorySize: 512
       Role: !GetAtt
@@ -643,8 +625,8 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: UniShopAppV1LambdaFunctionRemoveUnicornFromBasket
-  GetUnicornsBasketlambdaFunction:
+          Value: RemoveUnicornFromBasket
+  GetUnicornsBasket:
     DependsOn: EC2Instance
     Type: AWS::Lambda::Function
     Properties:
@@ -652,8 +634,7 @@ Resources:
         S3Bucket: !Ref AssetBucket
         S3Key: 'UniShopLambda-0.0.1.jar'
       Runtime: java8
-      Description: Service to get unicorn baseket
-      #      FunctionName: RemoveUnicornFromBasketDR
+      Description: Service to get unicorn basket
       Handler: com.uniShopApp.Lambda.UnicornBasketImpl::getUnicornsBasket
       MemorySize: 512
       Role: !GetAtt
@@ -662,7 +643,7 @@ Resources:
       Timeout: 15
       Tags:
         - Key: Name
-          Value: UniShopAppV1LambdaFunctionGetUnicornsBasket
+          Value: GetUnicornsBasket
   UnicornsRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
@@ -671,13 +652,13 @@ Resources:
       FailOnWarnings: true
       Tags:
         - Key: Name
-          Value: UniShopAppV1RestApi
+          Value: !Ref 'AWS::StackName'
   LambdaPermissionPOST:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:invokeFunction'
       FunctionName: !GetAtt
-        - AddUnicornToBasketlambdaFunction
+        - AddUnicornToBasket
         - Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Join
@@ -694,7 +675,7 @@ Resources:
     Properties:
       Action: 'lambda:invokeFunction'
       FunctionName: !GetAtt
-        - RemoveUnicornFromBasketlambdaFunction
+        - RemoveUnicornFromBasket
         - Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Join
@@ -711,7 +692,7 @@ Resources:
     Properties:
       Action: 'lambda:invokeFunction'
       FunctionName: !GetAtt
-        - GetUnicornsBasketlambdaFunction
+        - GetUnicornsBasket
         - Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Join
@@ -822,7 +803,6 @@ Resources:
       Integration:
         IntegrationHttpMethod: GET
         Type: HTTP
-        #        Uri: http://ec2-54-211-223-8.compute-1.amazonaws.com/unicorns
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -892,7 +872,7 @@ Resources:
             - !Ref 'AWS::Region'
             - ':lambda:path/2015-03-31/functions/'
             - !GetAtt
-              - AddUnicornToBasketlambdaFunction
+              - AddUnicornToBasket
               - Arn
             - /invocations
         IntegrationResponses:
@@ -928,7 +908,7 @@ Resources:
             - !Ref 'AWS::Region'
             - ':lambda:path/2015-03-31/functions/'
             - !GetAtt
-              - RemoveUnicornFromBasketlambdaFunction
+              - RemoveUnicornFromBasket
               - Arn
             - /invocations
         IntegrationResponses:
@@ -996,7 +976,7 @@ Resources:
             - !Ref 'AWS::Region'
             - ':lambda:path/2015-03-31/functions/'
             - !GetAtt
-              - GetUnicornsBasketlambdaFunction
+              - GetUnicornsBasket
               - Arn
             - /invocations
         RequestTemplates:
@@ -1061,7 +1041,6 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP
-#                Uri: http://ec2-3-89-195-86.compute-1.amazonaws.com/user
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -1125,7 +1104,6 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP
-          # Uri: http://ec2-3-89-195-86.compute-1.amazonaws.com/user/login
         Uri: !Join
           - '/'
           - - 'http:/'
@@ -1181,13 +1159,113 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
+  BuildEC2Instance:
+    DependsOn: ApiDeployment
+    Type: 'AWS::EC2::Instance'
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT30M
+    Metadata:
+      'AWS::CloudFormation::Init':
+        configSets:
+          default:
+            - update
+            - install
+            - configure
+        update:
+          commands:
+            update:
+              command: sudo yum update -y
+        install:
+          packages:
+            rpm:
+              'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm': []
+            yum:
+              amazon-cloudwatch-agent: []
+              mariadb: []
+              java-1.8.0-openjdk-devel: []
+        configure:
+          commands:
+            0-populate-buckets:
+              command: !Join
+                - ''
+                - - |
+                    #!/bin/bash      
+
+                  - |
+                    sudo mkdir /home/ec2-user/UniShopUI/                              
+                
+                  - export AWS_DEFAULT_REGION=
+                  - !Ref 'AWS::Region'
+                  - |+
+
+                  - export UI_RANDOM_NAME=
+                  - !Ref UIBucket
+                  - |+                                
+
+                  - >
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
+                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive  --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                                                                
+
+                  - >
+                    aws s3 cp /home/ec2-user/UniShopUI/
+                    s3://$UI_RANDOM_NAME/ --recursive --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                             
+
+                  - >            
+                  - export APIGW=
+                  - !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
+                  - |+                 
+
+                  - export JSON_STRING=
+                  - $(echo '{"host":"'"$APIGW"'","region":"'"$AWS_DEFAULT_REGION"'"}')    
+                  - |+                                                 
+
+                  - |
+                    echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json                          
+
+                  - >
+                    aws s3 cp /home/ec2-user/UniShopUI/config.json
+                    s3://$UI_RANDOM_NAME/ --grants 
+                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                  
+ 
+    Properties:
+      InstanceType: t3.small
+      ImageId: !Ref LatestAmiId
+      SubnetId: !Ref UniShopAppV1Subnet1
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      IamInstanceProfile: !Ref S3InstanceProfile
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash
+            - |
+              sudo yum install -y aws-cfn-bootstrap
+            - /opt/aws/bin/cfn-init -v
+            - '         --stack '
+            - !Ref 'AWS::StackName'
+            - '         --resource BuildEC2Instance '
+            - '         --region '
+            - !Ref 'AWS::Region'
+            - '         --configsets default '
+            - |+
+
+            - /opt/aws/bin/cfn-signal -e $?
+            - ' --stack '
+            - !Ref 'AWS::StackName'
+            - ' --resource BuildEC2Instance'
+            - ' --region '
+            - !Ref 'AWS::Region'
+            - |+
+
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-build'          
 Outputs:
-  APIGURL:
-    Value: !Sub "https://${UnicornsRestApi}.execute-api.${AWS::Region}.amazonaws.com/${UnicornsRestApiStage}/"
-    Description: API Gatway URL
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL
     Description: Website URL
-  WebsiteBuckt:
-    Value: !Ref UIBucket
-    Description: S3 Bucket containing the UniShop website    
