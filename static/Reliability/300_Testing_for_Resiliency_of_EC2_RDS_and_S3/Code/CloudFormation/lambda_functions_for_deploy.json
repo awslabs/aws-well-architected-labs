@@ -144,7 +144,8 @@
                 "lambda:CreateFunction",
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration",
-                "lambda:GetFunction"
+                "lambda:GetFunction",
+                "lambda:TagResource"
               ],
               "Resource" : "*"
             }
