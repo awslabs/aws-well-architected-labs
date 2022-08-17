@@ -144,7 +144,8 @@
                 "lambda:CreateFunction",
                 "lambda:InvokeFunction",
                 "lambda:GetFunctionConfiguration",
-                "lambda:GetFunction"
+                "lambda:GetFunction",
+                "lambda:TagResource"
               ],
               "Resource" : "*"
             }
@@ -166,7 +167,7 @@
         "Handler" : "deploy_vpc_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "VPCLambdaRole", "Arn" ] },
-        "Runtime" : "python3.6",
+        "Runtime" : "python3.9",
         "Timeout" : "120"
       }
     },
@@ -219,7 +220,7 @@
         "Handler" : "wait_for_stack_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "WaitForStackLambdaRole", "Arn" ] },
-        "Runtime" : "python3.6",
+        "Runtime" : "python3.9",
         "Timeout" : "600"
       }
     },
@@ -319,7 +320,7 @@
         "Handler" : "deploy_rds_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
-        "Runtime" : "python3.6",
+        "Runtime" : "python3.9",
         "Timeout" : "120"
       }
     },
@@ -336,7 +337,7 @@
         "Handler" : "update_multi_az_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "RDSLambdaRole", "Arn" ] },
-        "Runtime" : "python3.6",
+        "Runtime" : "python3.9",
         "Timeout" : "630"
       }
     },
@@ -483,7 +484,7 @@
         "Handler" : "deploy_web_lambda.lambda_handler",
         "MemorySize" :  "128",
         "Role" : { "Fn::GetAtt" : [ "WebAppLambdaRole", "Arn" ] },
-        "Runtime" : "python3.6",
+        "Runtime" : "python3.9",
         "Timeout" : "120"
       }
     },
@@ -864,7 +865,7 @@
             "Handler" : "StartStateMachine.lambda_handler",
             "MemorySize" :  "128",
             "Role" : { "Fn::GetAtt" : [ "StartStateMachineLambdaRole", "Arn" ] },
-            "Runtime" : "python3.6",
+            "Runtime" : "python3.9",
             "Timeout" : "30"
         }
     },
