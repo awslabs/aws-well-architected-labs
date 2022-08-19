@@ -27,7 +27,7 @@ We shall achieve this by optimizing hardware patterns:
 We are going to use AWS Compute Optimizer that recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. 
 
 {{% notice note %}}
-**Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account, which will incur costs in your account. You may refer to the following screenshots instead to minimize the cost for this lab. 
+**Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account, which will incur costs in your account. You may refer to the following screenshots instead to minimize your cost for this lab. 
 {{% /notice %}}
 
 1. Search compute optimizer and select AWS Compute Optimizer from Services.
@@ -37,15 +37,19 @@ We are going to use AWS Compute Optimizer that recommends optimal AWS resources 
 ![Section4 dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/dashboard.png)
 ![Section4 dashboard2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/dashboard2.png)
 
-3. [UPDATE SCREENSHOT] EC2 instance for SustainabilityApp was considered over-provisioned, which can be sized down while still meeting the performance requirements of your workload. Click **Over-provisioned** to see more details.
+3. EC2 instance for SustainabilityApp was considered over-provisioned, which can be sized down while still meeting the performance requirements of your workload. Click **Over-provisioned** to see more details.
 
     Please see three finding classifications [here](https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-ec2-recommendations.html#ec2-recommendations-findings).
 ![Section4 finding](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/finding.png)
 
-4. [UPDATE SCREENSHOT] Based on the workload for the past 12 hours, AWS Compute Optimizer recommends that **2 vCPUs with 4 GiB memory** are optimal compute resources to meet performance requirements as well as to deliver your business outcomes. One thing you need to carefully look into this recommended options is **CPU architecture** in **Platform differences** before you select as you will need additional migration efforts to change instance type. 
+4. Based on the workload for the past 12 hours, AWS Compute Optimizer recommends that **2 vCPUs with 4 GiB memory** are optimal compute resources to meet performance requirements as well as to deliver your business outcomes. One thing you need to carefully look into this recommended options is **CPU Architecture** in **Platform differences** before you select. You will need additional migration efforts to change instance type if CPU Architecture is different. 
 For this case, the current **t4g.xlarge** instance is AWS Graviton2 processor based on the Arm64 architecture. We can simply change instance type as option 1,2, and 3 are all the same AWS Graviton2 processors.
 **c6g.large** seems to be the best instance type from performance and cost efficiency perspective.
 ![Section4 recommendations](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/recommendations.png)
+
+5. The CPU utilization graph includes a comparison of the CPU utilization data of your current instance type against that of the selected recommended instance type.
+![Section4 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/cpu_utilization.png)
+
 
     Remind you of "**Anticipate and adopt new, more efficient hardware and software offerings**" design principle in Sustainability pillar. **c6g.large** is AWS Graviton2 processors that deliver up to 40% better price performance over comparable current generation x86-based instances for a variety of workloads. However, AWS also announced Graviton3 processors that deliver up to 25 percent higher performance, up to 2x higher floating-point performance, and 50 percent faster memory access based on leading-edge DDR5 memory technology compared with Graviton2 processors. 
 
@@ -53,12 +57,7 @@ For this case, the current **t4g.xlarge** instance is AWS Graviton2 processor ba
     You can see [Amazon EC2 instance types](https://aws.amazon.com/ec2/instance-types/#Compute_Optimized) and click [here](https://aws.amazon.com/ec2/pricing/on-demand/) to see its On-Demand price.
 ![Section4 ec2_types](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/ec2_types.png) 
 
-    We will select **c7g.large** instead of c6g.large as AWS Graviton3 processors instance use up to **60 percent less energy** for the same performance as comparable EC2 instances, which helps you **reduce your carbon footprint**. Also, it's more cost-effective with the same hardware specifications. 
-
-
-5. [UPDATE SCREENSHOT] The CPU utilization graph includes a comparison of the CPU utilization data of your current instance type against that of the selected recommended instance type.
-![Section4 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/cpu_utilization.png)
-
+    We will select **c7g.large** instead of c6g.large as AWS Graviton3 processors instance use up to **60 percent less energy** for the same performance as comparable EC2 instances, which helps you **reduce your carbon footprint**. 
 
 ### 4.2. Optimizing the compute layer of your AWS Infrastructure
 
