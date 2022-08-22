@@ -65,8 +65,8 @@ Refer to the [previous section](../3_create_workload/) to create new Well-Archit
 I created workload called **demo3** and when i clicked on **Continue reviewing**, choose  **Cost Optimization** pillar. I can see that both **COST 6. How do you meet cost targets when you select resource type, size and number?** and **COST 7. How do you use pricing models to reduce cost?** have been updated with the checks from AWS Compute Optimizer and AWS Trusted Advisor
  
 1. With the mapping table updated, we can create a new review click **Continue reviewing** and select **AWS Well-Architected Framework Lens**.
-![Section5 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST6.png)
-![Section5 COST7](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST7.png)
+![Section5 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST6.png?classes=lab_picture_auto)
+![Section5 COST7](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST7.png?classes=lab_picture_auto)
  
 2. Throughout this lab, you have learned how to include AWS Compute Optimizer and AWS Trusted Advisor to prepare data before the review. This can be expanded further to prepare data for more questions and from more data sources 
  
