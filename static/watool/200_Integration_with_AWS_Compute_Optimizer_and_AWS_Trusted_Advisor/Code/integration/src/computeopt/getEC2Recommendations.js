@@ -5,9 +5,8 @@ const computeoptimizer = new AWS.ComputeOptimizer({ apiVersion: '2019-11-01', re
 const { date } = require('../libraries/date');
 const { describe } = require('../ec2/describe');
 const { checkTag } = require('../ec2/checkTag');
-const { updateNotes } = require('../wellarchitected/updateNotes');
-const { getTA } = require('../trustedadvisor/getTA');
 const queries = require('../dynamodb/queries');
+const { question6 , question7 } = require('../questions/costQuestion');
 
 async function getEC2Recommendations(event) {
     try {
@@ -32,79 +31,17 @@ async function getEC2Recommendations(event) {
 
             console.log("questionID: ", questionId);
             console.log("TACheckID: ", taCheckId);
+            console.log("Tag: ",workloadTagKey,workloadTagValue);
 
-            const params = {
-                accountIds: [
-                    this.accountIds, /* AWS Account ID */
-                ],
-            };
-            // new updates in notes in Well-Architected Tool
-            let notes = '     ================= ' + 'Updated at ' + currentDate + '=================     ' + '\n';
-            notes += '[AWS Compute Optimizer]' + '\n';
-            let name = '';
-            let instanceType = '';
-            let finding = '';
-            let reason = '';
-
-            //get EC2 Instance Recommendations from AWS Compute Optimizer
-            const EC2InstanceRecommendations = await computeoptimizer.getEC2InstanceRecommendations(params).promise();
-
-            console.log("Compute Optimizer Recommendations: ", EC2InstanceRecommendations);
-
-            for (const EC2InstanceRecommendation in EC2InstanceRecommendations.instanceRecommendations) {
-                console.log("EC2 Loop:");
-                const recommendations = EC2InstanceRecommendations.instanceRecommendations[EC2InstanceRecommendation];
-                //console.log(recommendations);
-                //Make sure if EC2 instance is being used for the particular workload using tag
-                const arn = 'arn: ' + recommendations.instanceArn;
-                const instanceId = arn.split('instance/').pop();
-                //get all tags attached to EC2
-                const ec2Tags = await describe(instanceId);
-                let recommendedInstanceType = 'recommendedInstanceType: ';
-
-                console.log("ARN: ", arn);
-                //comparison between a tag of ec2 and a tag of workload in Well-Architected tool
-                const tagResult = await checkTag(ec2Tags, workloadTagKey, workloadTagValue);
-
-                //only update notes when EC2 instance has the tag that workload has
-                if (tagResult) {
-                    //results for notes in WA tool
-                    name = 'name: ' + recommendations.instanceName;
-                    instanceType = 'instanceType: ' + recommendations.currentInstanceType;
-                    finding = 'finding: ' + recommendations.finding;
-                    reason = 'reason: ' + recommendations.findingReasonCodes;
-                    for (const recommendationOption in recommendations.recommendationOptions) {
-                        recommendedInstanceType += recommendations.recommendationOptions[recommendationOption].instanceType + ' ';
-                    }
-                    notes += arn + '\n' + name + '\n' + instanceType + '\n' + finding + '\n' + reason + '\n' + recommendedInstanceType + '\n';
-                }
-                console.log("TagResult:", tagResult);
-                
+            if(questionId == 'type-size-number-resources'){
+                const questio6Response = await question6(accountId, workloadId, workloadTagKey, workloadTagValue, questionId, taCheckId);
+                return questio6Response
+            } else if(questionId == 'pricing-model'){
+                const questio7Response = await question7(accountId, workloadId, questionId, taCheckId);
+                return questio7Response
+            } else{
+                console.log("Implementation of this question is needed.")
             }
-
-
-            //get EC2 Instance Recommendations from AWS Trusted Advisor
-            const trustedAdvisor = await getTA(taCheckId, workloadTagKey, workloadTagValue);
-            notes += trustedAdvisor;
-            //const reasonCodes = await findingReasonCodes(EC2InstanceRecommendations);
-            notes += '     ============================ Done ============================     ' + '\n';
-            
-            console.log("Notes:", notes);
-            
-            //update notes 
-            const noteParams = {
-                currentDate,
-                accountId,
-                workloadId,
-                questionId,
-                notes,
-            };
-            
-            console.log("Notes Params", noteParams);
-            
-            const updateNote = await updateNotes(noteParams);
-
-            console.log(updateNote);
         }
         return responses;
 

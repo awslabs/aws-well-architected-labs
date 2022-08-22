@@ -17,7 +17,7 @@ Resources:
 
 Outputs:
   Cloud9URL:
-    Description: Cloud9 Environment
+    Description: Cloud9 EnvironmentSp
     Value:
       Fn::Join:
       - ''

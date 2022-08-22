@@ -5,10 +5,10 @@ chapter: false
 pre: "<b>6. </b>"
 weight: 6
 ---
-
+ 
 ## Summary
 You have learned how to use the various AWS CLI commands to work with the AWS Well-Architected Tool.
-
+ 
 ## Remove all the resources
 1. Delete the stack
     ```
@@ -23,8 +23,7 @@ You have learned how to use the various AWS CLI commands to work with the AWS We
 * [AWS Well-Architected Tool Documentation](https://docs.aws.amazon.com/wellarchitected/)
 * [AWS Well-Architected Boto3 Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/wellarchitected.html)
 * [AWS Well-Architected API Reference](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/Welcome.html)
-
+ 
 {{< prev_next_button link_prev_url="../4_perform_review/"  title="Congratulations!" final_step="true" >}}
 {{< /prev_next_button >}}
-
-
+ 

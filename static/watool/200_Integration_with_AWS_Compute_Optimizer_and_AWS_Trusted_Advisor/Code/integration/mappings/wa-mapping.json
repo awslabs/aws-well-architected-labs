@@ -9,15 +9,6 @@
             "ChoiceTitle": "Select resource type, size, and number based on data",
             "ChoiceId": "cost_type_size_number_resources_data",
             "TACheckId": "Qch7DwouX1"
-        },
-        {            
-            "PillarNumber": "COST-7",
-            "PillarId": "costOptimization",
-            "QuestionTitle": "How do you use pricing models to reduce cost?",
-            "QuestionId": "pricing-model",
-            "ChoiceTitle": "Perform pricing model analysis at the master account level",
-            "ChoiceId": "cost_pricing_model_master_analysis",
-            "TACheckId": "cX3c2R1chu"
         }
     ]
 }
