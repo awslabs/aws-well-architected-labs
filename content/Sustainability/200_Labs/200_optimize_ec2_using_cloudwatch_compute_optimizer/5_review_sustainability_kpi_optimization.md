@@ -12,7 +12,7 @@ With optimization completed in the previous lab, let’s see if you maximized ut
 
 ### 5.1. Applying Hardware Patterns best practices for sustainability in the cloud
 
-1. As discussed earlier, AWS Graviton3 processors helps you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. With c6g.large instance, CPU utilization appears to be 26%, which means we maximized compute resources. 
+1. As mentioned earlier, AWS Graviton3 processors helps you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. With c6g.large instance, CPU utilization appears to be 26%, which means we maximized compute resources. 
 ![Section5 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/cpu_utilization.png)
 
 2. Optimal compute resources to reduces idle resources and to meet performance requirements to deliver your business outcomes
