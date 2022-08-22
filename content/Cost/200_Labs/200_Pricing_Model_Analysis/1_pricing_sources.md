@@ -124,7 +124,7 @@ Create the On-Demand Lambda function to get the pricing information, and extract
         http=urllib3.PoolManager()
     
         url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv'
-        s3Bucket = <bucket_name>
+        s3Bucket = '<bucket_name>'
         key = 'od_pricedata/ec2_prices.csv'
     
         urllib.request.urlopen(url)   #Provide URL
@@ -138,7 +138,7 @@ Create the On-Demand Lambda function to get the pricing information, and extract
 
 </details>
 
-6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
+6. Edit the pasted code, replacing **<bucket_name>** with the name of your bucket:
 ![Images/lambda_editcodeod.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcodeod.png)
 
 7. Click **Deploy** above the code
