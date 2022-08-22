@@ -223,8 +223,11 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Join
+          - '-'
+          - - !Ref CFDataName
+            - 'Crawler'
+            - !Select [2, !Split ['/', !Ref AWS::StackId]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
