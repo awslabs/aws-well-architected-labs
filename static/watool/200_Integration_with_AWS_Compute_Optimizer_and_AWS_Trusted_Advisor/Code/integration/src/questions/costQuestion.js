@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const currentRegion = process.env.AWS_REGION;
 const computeoptimizer = new AWS.ComputeOptimizer({ apiVersion: '2019-11-01', region: currentRegion });
 //const computeoptimizer = new AWS.ComputeOptimizer({ apiVersion: '2019-11-01', region: 'us-east-1' });
 const { date } = require('../libraries/date');

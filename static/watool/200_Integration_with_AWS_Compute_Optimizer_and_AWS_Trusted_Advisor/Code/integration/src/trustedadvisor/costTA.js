@@ -62,7 +62,7 @@ async function getTAQ6( taCheckId, workloadTagKey, workloadTagValue,taCheckId){
 async function getTAQ7( taCheckId ){
     try{
         //console.log("questionId, taCheckId: ", questionId, taCheckId);
-        let notes = '[AWS Trusted Advisor]';
+        let notes = '[AWS Trusted Advisor]'+ '\n';
         const id = taCheckId;
         let name = '';
         //get check's name 

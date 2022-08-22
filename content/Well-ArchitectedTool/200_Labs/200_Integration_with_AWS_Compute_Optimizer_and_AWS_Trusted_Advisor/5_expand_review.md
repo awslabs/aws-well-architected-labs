@@ -6,7 +6,7 @@ pre: "<b>5. </b>"
 weight: 5
 ---
  
-![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Integration.png)
+![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/TA_Aco_integration.png)
  
 ## Overview
 Now that we understood how to integrate AWS Compute Optimizer and AWS Trusted Advisor checks to review the question **COST 6. How do you meet cost targets when you select resource type, size and number**. 
@@ -19,6 +19,9 @@ As an example, you can see that the WorkloadID for the workload called **myappli
  
 2. With the workloadID, we can now retrieve the questionID using the [ListAnswers API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_ListAnswers.html).  
 ![QuestionId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/questionID.png?classes=lab_picture_auto)
+
+3. Get AWS Trusted Advisor check ID that provides pricing model recommendations from [here](https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#amazon-ec2-reserved-instances-optimization). **cX3c2R1chu** covers recommendations based on Standard Reserved Instances with the partial upfront payment option.
+![TACheckId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/TACheckId.png?classes=lab_picture_auto)
  
 ## Update DynamoDB Mapping Table
 1. The next step is to update the mapping table with the questionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, i'm going to include the Amazon EC2 Reserved Instance Optimzation check, this has check ID value as **cX3c2R1chu**
@@ -29,15 +32,6 @@ With that, I will navigate to **wa-mapping.json** and update the mapping table a
 {
     "tableName": "wa-mapping",
     "mappings": [
-        {
-            "PillarNumber": "COST-6",
-            "PillarId": "costOptimization",
-            "QuestionTitle": "How do you meet cost targets when you select resource type, size and number?",
-            "QuestionId": "type-size-number-resources",
-            "ChoiceTitle": "Select resource type, size, and number based on data",
-            "ChoiceId": "cost_type_size_number_resources_data",
-            "TACheckId": "Qch7DwouX1"
-        },
         {            
             "PillarNumber": "COST-7",
             "PillarId": "costOptimization",
@@ -53,7 +47,7 @@ With that, I will navigate to **wa-mapping.json** and update the mapping table a
 Now we are going to update AWS DynamoDB table with the updated json file through API Gateway provision in the the [previous step](../2_configure_env/).
 * Replace **APIGWUrl** with your APIGWUrl that you deployed previously.
 ```
-curl --header "Content-Type: application/json" -d @mappings/wa-mapping.json -v POST {APIGWUrl}
+curl --header "Content-Type: application/json" -d @mappings/wa-mapping-new-question.json -v POST {APIGWUrl} 
  
 ```
 Confirm that UnprocessedItems appear to be empty, which means you successfully put items into AWS DynamoDB. 
@@ -62,7 +56,7 @@ In AWS DynamoDB console, click **wa-mapping** you just deployed and click **Expl
 ![Section2 Table](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Table.png)
 ![Section2 Explore](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Explore.png)
 There are 2 Question IDs of Well-Architected questions and 2 AWS Trusted Advisor checks.
-![Section2 Items](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Items.png)
+![Section2 Items](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/Items.png)
  
 ## Create a Well-Architected Workload with Tags
 Refer to the [previous section](../3_create_workload/) to create new Well-Architected Workload With Tags
