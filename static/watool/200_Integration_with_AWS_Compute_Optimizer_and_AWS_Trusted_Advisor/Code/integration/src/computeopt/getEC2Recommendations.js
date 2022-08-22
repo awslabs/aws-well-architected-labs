@@ -35,10 +35,8 @@ async function getEC2Recommendations(event) {
 
             if(questionId == 'type-size-number-resources'){
                 const questio6Response = await question6(accountId, workloadId, workloadTagKey, workloadTagValue, questionId, taCheckId);
-                return questio6Response
             } else if(questionId == 'pricing-model'){
                 const questio7Response = await question7(accountId, workloadId, questionId, taCheckId);
-                return questio7Response
             } else{
                 console.log("Implementation of this question is needed.")
             }

@@ -42,6 +42,7 @@ async function question6(accountId, workloadId, workloadTagKey, workloadTagValue
             //get all tags attached to EC2
             const ec2Tags = await describe(instanceId);
             let recommendedInstanceType = 'recommendedInstanceType: ';
+            let savingsOpportunity = 'savingsOpportunity: ';
 
             console.log("ARN: ", arn);
             //comparison between a tag of ec2 and a tag of workload in Well-Architected tool
@@ -55,13 +56,19 @@ async function question6(accountId, workloadId, workloadTagKey, workloadTagValue
                 instanceType = 'instanceType: ' + recommendations.currentInstanceType;
                 finding = 'finding: ' + recommendations.finding;
                 reason = 'reason: ' + recommendations.findingReasonCodes;
+
                 for (const recommendationOption in recommendations.recommendationOptions) {
                     recommendedInstanceType += recommendations.recommendationOptions[recommendationOption].instanceType + ' ';
+                    
+                    if(recommendations.finding = 'OVER_PROVISIONED'){
+                        savingsOpportunity += JSON.stringify(recommendations.recommendationOptions[recommendationOption].savingsOpportunity.savingsOpportunityPercentage) + ' ';
+                        //console.log(savingsOpportunity);
+                    }
                 }
-                notes += arn + '\n' + name + '\n' + instanceType + '\n' + finding + '\n' + reason + '\n' + recommendedInstanceType + '\n';
+                notes += arn + '\n' + name + '\n' + instanceType + '\n' + finding + '\n' + reason + '\n' + recommendedInstanceType + '\n' + savingsOpportunity +'\n';
+
             }
-            //console.log("TagResult:", tagResult);
-            
+            //console.log("TagResult:", tagResult);            
         }
         //get EC2 Instance Recommendations from AWS Trusted Advisor
         const trustedAdvisor = await getTAQ6(taCheckId, workloadTagKey, workloadTagValue,taCheckId);
