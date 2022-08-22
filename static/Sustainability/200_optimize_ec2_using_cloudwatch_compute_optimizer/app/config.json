@@ -1,7 +1,7 @@
 {
     "agent": {
             "metrics_collection_interval": 60,
-            "run_as_user": "cwagent"
+            "run_as_user": "root"
     },
     "logs": {
             "force_flush_interval": 5,
