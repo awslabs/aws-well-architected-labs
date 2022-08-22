@@ -8,19 +8,19 @@ pre: "<b>3. </b>"
 
 ## Overview
 
-Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this case, we will create proxy metrics to monitor a total number of vCPU of Amazon EC2 Instance, business metrics for outcome that is number of API calls served (business outcome) and also sustainability key performance indicator (KPI) which is resources provisioned per unit of work.
+Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will create proxy metrics to monitor a total number of vCPU of Amazon EC2 Instance, business metrics for outcome that is number of API calls served (business outcome) and also sustainability key performance indicator (KPI) which is resources provisioned per unit of work.
 
 You will learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar:
 * Understand your impact
 * Establish sustainability goals
 
 ### 3.1. Understand what you have provisioned in AWS (Proxy metrics)
-The resources provisioned to support your workload include compute, storage, and network resources. Evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
+Lets' understand the resources provisioned to support your workload include compute, storage, and network resources. Evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
 
 1. Expand **Metrics** and click **All metrics**. In Custom namespaces, there will be a new namespace named **Sustainability**. Click Sustainability.
 ![Section3 custom_namespace](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/custom_namespace.png)
 
-2. Tick a box to see if you see total number of vCPU of Amazon EC2 Instance you just deployed. It will be **4** as expected. This will be used for proxy metrics that best reflect the type of improvement you are evaluating and the resources targeted by improvement.
+2. Tick a box to see if you see total number of vCPU of Amazon EC2 Instance you just deployed. It will be **4** as expected. This will be used for proxy metrics that best reflect the type of improvement you are accessing and the resources targeted for improvement.
 ![Section3 totalvcpu](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/totalvcpu.png)
 
 ### 3.2. Create Business Metrics

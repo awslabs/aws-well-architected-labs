@@ -8,16 +8,16 @@ pre: "<b>2. </b>"
 
 ## Overview
 
-In this section we will deploy our base lab infrastructure using AWS CloudFormation as follows: 
+In this section, we will deploy our base lab infrastructure using AWS CloudFormation as follows: 
 ![Section2 Architecture](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/lab_architecture.png)
 
 Note the following:
 
-1. As part of deployment steps, **3 API calls per a minute** will be continuously generated and you will use memory metrics using the CloudWatch agent. This will allow you to see metrics in AWS Compute Optimizer. 
+1. As part of deployment steps, **3 API calls per a minute** will be generated continuously and you will collect memory metrics using the CloudWatch agent. This will allow you to analyze metrics in AWS Compute Optimizer. 
 
-2. **Access log** will be automatically sent to log group in Amazon CloudWatch. 
+2. **Access log** will automatically be sent to log group in Amazon CloudWatch. 
 
-3. There will be a new custom metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use this metrics as **proxy metrics** when we calculate sustainability KPI.
+3. There will be a new customized metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use these metrics as **proxy metrics** when we calculate sustainability KPI.
 
 4. You will analyze the configuration and resource utilization of a workload to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**. You will make changes based on the recommendations AWS Compute Optimizer analyzed for right-sizing Amazon EC2 instances.
 
@@ -61,7 +61,7 @@ For the stack name use any stack name you can identify and click **Next**. For t
 1. Search EC2 and click EC2 from Services.
 ![Section2 ec2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/ec2.png)
 
-2. There will be Amazon EC2 Instance named **SustainabilityApp**. Instance type should appear to be **t4g.xlarge** powered by **Arm-based Amazon Graviton2** processors and CPU Utilization will be 39~40% if you click **Monitoring** tab.
+2. There will be Amazon EC2 Instance named **SustainabilityApp**. Instance type should appear to be **t4g.xlarge** powered by **Arm-based Amazon Graviton2** processors and CPU Utilization will be 13~14% if you click **Monitoring** tab.
 ![Section2 utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/utilization.png)
 
 3. Search CloudWatch and click CloudWatch from Services.
