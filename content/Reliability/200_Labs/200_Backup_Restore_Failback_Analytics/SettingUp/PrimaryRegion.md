@@ -10,7 +10,7 @@ In this section we'll deploy the workload to the primary region.
 
 ### Create a prefix list for ingress
 
-Follow the [instructions](https://docs.aws.amazon.com/vpc/latest/userguide/managed-prefix-lists.html#working-with-managed-prefix-lists) to create a VPC prefix list that specifes the CIDR ranges for ingress.  We use this prefix list to control access to lab resources from an approved network block.  If you are using an Event Engine account, you can create a prefix list that just contains `0.0.0.0/0`.
+Follow the [instructions](https://docs.aws.amazon.com/vpc/latest/userguide/managed-prefix-lists.html#working-with-managed-prefix-lists) to create a VPC prefix list that specifies the CIDR ranges for ingress.  We use this prefix list to control access to lab resources from an approved network block.  If you are using an Event Engine account, you can create a prefix list that just contains `0.0.0.0/0`.
 
 ### Download and review scripts and templates
 

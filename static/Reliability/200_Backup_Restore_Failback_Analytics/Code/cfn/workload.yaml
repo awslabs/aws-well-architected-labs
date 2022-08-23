@@ -702,7 +702,7 @@ Resources:
   ProcessedLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 5
       Handler: index.handler
       Role: !GetAtt LambdaFunctionRole.Arn
@@ -991,7 +991,7 @@ Resources:
   BackupLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 5
       Handler: index.handler
       Role: !GetAtt BackupLambdaFunctionRole.Arn

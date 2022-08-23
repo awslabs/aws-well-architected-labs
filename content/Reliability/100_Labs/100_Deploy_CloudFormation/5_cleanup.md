@@ -16,7 +16,7 @@ If you are already familiar with how to delete an AWS CloudFormation stack, then
 #### Delete workshop CloudFormation stacks
 
 1. First delete the **CloudFormationLab** CloudFormation stack
-1. Wait for the **CloudFormationLab** CloudFormation stack to complete (it will no longer be shown on the list of actice stacks)
+1. Wait for the **CloudFormationLab** CloudFormation stack to complete (it will no longer be shown on the list of active stacks)
 1. Then delete the **WebApp1-VPC** CloudFormation stack
 
 ---
