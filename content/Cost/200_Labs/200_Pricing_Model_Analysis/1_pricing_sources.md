@@ -258,7 +258,8 @@ Create the Savings Plan Lambda function to get the pricing information, and extr
 
 
 6. Edit the pasted code, replacing **bucket_name** with the name of your bucket:
-![Images/lambda_editcode2.png](/Cost/200_Pricing_Model_Analysis/Images/lambda_editcode2.png)
+<img width="1611" alt="lambda_replace_bucket_name" src="https://user-images.githubusercontent.com/111742644/186099777-9418f7d8-e8b7-4a3c-ae01-fe0bbc3662b1.png">
+
 
 7. Click **Deploy** above the code
 
