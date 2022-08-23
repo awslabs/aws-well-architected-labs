@@ -22,7 +22,7 @@ For **COST 6** question, the following best practices are what a reviewer will v
 * Select resource type, size, and number based on data
 * Select resource type, size, and number automatically based on metrics
 
-For example, let’s take a scenario of right-sizing an Amazon EC2 Instance and we assume we do not have 
+For example, let’s take a scenario of right-sizing an Amazon EC2 Instance and we assume we do not have enough data that supports your answer. 
 ![Section4 Review1](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Review1.png)
 
 The methodology that customer used to determine the size of EC2 Instance is not too bad approach but it does not tell whether the current resources are optimized based on the actual usage from a cost and performance standpoint. Then, the reviewer will try to identify if vCPU, memory, and storage are the most cost optimized by asking a follow-up question as follows:
