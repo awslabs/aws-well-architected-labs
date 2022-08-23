@@ -112,7 +112,7 @@ curl --header "Content-Type: application/json" -d @mappings/wa-mapping.json -v P
  
 ![Section2 Explore](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Explore.png)
  
-7. There are 2 Question IDs of Well-Architected questions and 2 AWS Trusted Advisor checks.
+7. There are 1 Question IDs of Well-Architected questions and 1 AWS Trusted Advisor checks.
 ![Section2 Items](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Items.png)
  
 ___
