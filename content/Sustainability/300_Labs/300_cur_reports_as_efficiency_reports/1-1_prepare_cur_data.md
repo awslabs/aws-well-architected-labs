@@ -45,6 +45,7 @@ If you **do not** have cost usage reporting currently enabled in your account, f
 **Warning:** If you decide to use an existing bucket, the wizard will overwrite any existing bucket policy.
 {{% /notice %}}
 ![Configure Bucket](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/configure_bucket.png?classes=lab_picture_small)
+
 7. Review and accept the bucket policy (for newly created bucket)
 ![Verify Policy](/Sustainability/300_cur_reports_as_efficiency_reports/lab1-1/images/verify_policy.png?classes=lab_picture_small)
 8. Set a **Report path prefix**, e.g. `cur-data/hourly`. AWS Cost & Usage Report require a prefix on creation, please set a prefix here.
