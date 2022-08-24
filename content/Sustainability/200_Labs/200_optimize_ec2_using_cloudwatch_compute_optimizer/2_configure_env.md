@@ -17,16 +17,16 @@ Note the following:
 
 2. **Access log** will automatically be sent to log group in Amazon CloudWatch. You will use this log when you define **business metrics**. 
 
-3. There will be a new customized metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use these metrics as **proxy metrics** when we calculate sustainability KPI.
+3. There will be a new customized metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use this metrics as **proxy metrics** when we calculate sustainability KPI.
 
-4. You will analyze the configuration and resource utilization of a workload to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**. You will make changes based on the recommendations AWS Compute Optimizer analyzed for right-sizing Amazon EC2 instances.
+4. You will analyze a workload's configuration and resource utilization to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**.You will make changes based on AWS Compute Optimizer's recommendations for right-sizing Amazon EC2 instances.
 
 
 ### 2.1. Get the CloudFormation Template and deploy it.
 
 You can get the CloudFormation template [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
 
-The first CloudFormation template will deploy Amazon EC2 Instance, log group, metrics in Amazon CloudWatch. You can create CloudFormation Stack directly via the AWS console.
+The first CloudFormation template will deploy Amazon EC2 Instance, log group, and metrics in Amazon CloudWatch. You can create CloudFormation Stack directly via the AWS console.
 
 {{%expand "Click here for CloudFormation console deployment steps"%}}
 #### Console:

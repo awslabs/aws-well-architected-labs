@@ -8,23 +8,23 @@ pre: "<b>3. </b>"
 
 ## Overview
 
-Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will create proxy metrics to monitor a total number of vCPU of Amazon EC2 Instance, business metrics for outcome that is number of API calls served (business outcome) and also sustainability key performance indicator (KPI) which is resources provisioned per unit of work.
+Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will create proxy metrics to monitor the total number of vCPU of Amazon EC2 Instance, business metrics for the outcome that is number of API calls served (business outcome) and sustainability key performance indicator (KPI), which is resources provisioned per unit of work.
 
 You will learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar:
 * Understand your impact
 * Establish sustainability goals
 
 ### 3.1. Understand what you have provisioned in AWS (Proxy metrics)
-Lets' understand the resources provisioned to support your workload include compute, storage, and network resources. Evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
+Lets' understand the resources provisioned to support your workload include compute, storage, and network resources. Then, evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
 
 1. Expand **Metrics** and click **All metrics**. In Custom namespaces, there will be a new namespace named **Sustainability**. Click Sustainability.
 ![Section3 custom_namespace](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/custom_namespace.png)
 
-2. Tick a box to see if you see total number of vCPU of Amazon EC2 Instance you just deployed. It will be **4** as expected. This will be used for proxy metrics that best reflect the type of improvement you are accessing and the resources targeted for improvement.
+2. Tick a box to see if you see a total number of vCPU of Amazon EC2 Instance you just deployed. It will be **4** as expected. It will be used for proxy metrics that best reflect the type of improvement you are accessing and the resources targeted for improvement.
 ![Section3 totalvcpu](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/totalvcpu.png)
 
 ### 3.2. Create Business Metrics
-Your business metrics should reflect the value provided by your workload, for example, the number of simultaneous active users, API calls served, or the number of transactions completed. 
+Your business metrics should reflect the value provided by your workload, for example, the number of simultaneously active users, API calls served, or the number of transactions completed. 
 
 1. Click **Log groups** and click **httpd_access_log** that records all inbound requests handled by HTTP endpoints. 
 ![Section3 httpd_access_log](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/httpd_access_log.png)
@@ -32,7 +32,7 @@ Your business metrics should reflect the value provided by your workload, for ex
 2. Click **Metric filters** tab. 
 ![Section3 metric_filter](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/metric_filter.png)
 
-3. You are going to define business metrics to quantify the achievement of business outcome. Click **Create metric filter** to monitor a specific pattern in access log. 
+3. You will define business metrics to quantify the achievement of business outcome. Click **Create metric filter** to monitor a specific pattern in access log. 
 ![Section3 create_metric_filter](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_metric_filter.png)
 
 4. Define pattern to monitor the number of requests of **load.php** page that is a critical for your business. Specify **"GET /load.php"** as filter pattern to match it in access log.
@@ -79,7 +79,7 @@ Scroll down to the bottom to click **Next**.
 
 ### 3.3. Create Sustainability Key Performance Indicator Baseline
 
-Let's evaluate specific improvement and our KPI is vCPU minutes per transaction and remember our improvement goal is to Maximize utilization of provisioned resources.
+Let's evaluate specific improvement and our KPI is vCPU minutes per transaction. Remember our improvement goal is to Maximize utilization of provisioned resources.
 
 1. Click **Dashboards** 
 ![Section3 kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_dashboard.png)
@@ -122,13 +122,12 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction 
     5. Click **Add math**.
     6. Select **Start with empty expression**.
 
-12. Using the following formula, divide the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work. 
+12. The following formula divides the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work.
 **Formula:**
 ![Section3 formula](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/formula.png)
 ![Section3 kpi](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi.png)
     
-    Divide total number of vCPU by the number of requests per a minute to achieve business outcome. 
-    Update math expression as follows and click **Apply**.
+    Divide the total number of vCPU by the number of requests per minute to achieve business outcomes. Then, update math expression as follows and click **Apply**.
     ```
     m1/m2
     ```
@@ -140,7 +139,7 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction 
     3. Click **Apply**.
     4. Click **Create widget**.
 
-14. Click **Save** button to continuously monitor KPI after reducing idle resources and maximizing utilization in next step. We will use Resources provisioned per unit of work as sustainability KPI.
+14. Click **Save** button to continuously monitor KPI after reducing idle resources and maximizing utilization in the next step. We will use Resources provisioned per unit of work as a sustainability KPI.
 
     With, that below are baseline metrics and KPI:
 

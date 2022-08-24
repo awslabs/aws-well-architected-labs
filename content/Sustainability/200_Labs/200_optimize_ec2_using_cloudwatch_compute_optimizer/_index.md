@@ -17,7 +17,7 @@ hidden: false
 
 ## Introduction
 
-This lab focuses on optimizing hardware patterns for sustainability by minimizing the amount of hardware needed to provision and deploy, and select the most efficient hardware for your individual workload.
+This lab focuses on optimizing hardware patterns for sustainability by minimizing the amount of hardware needed to provision and deploy, and select the most efficient hardware for your workload.
 
 ## Goals
 At the end of this lab you will:
