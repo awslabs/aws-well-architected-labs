@@ -52,7 +52,7 @@ Scroll down to the bottom to click **Next**.
 
     1. Create a filter name as **load.php**. 
     ```
-    load.php
+    businessapi.php
     ```
     2. **Click radio slider** as you will select the existing metric namespace.  
     3. Use **Sustainability** as Metric namespace.

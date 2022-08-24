@@ -18,7 +18,7 @@ With optimization completed in the previous lab, let’s see if you maximized ut
 2. Optimal compute resources to reduces idle resources and to meet performance requirements to deliver your business outcomes
 
 {{% notice note %}}
-**Note** - As mentioned earlier, AWS Graviton3 processors helps you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. 
+**Note** - As mentioned earlier, AWS Graviton3 processors help you reduce your carbon footprint as it uses up to 60 % less energy for the same performance comparable to EC2 instances. 
 {{% /notice %}}
 
 ### 5.2. Review Sustainability KPI Optimization
