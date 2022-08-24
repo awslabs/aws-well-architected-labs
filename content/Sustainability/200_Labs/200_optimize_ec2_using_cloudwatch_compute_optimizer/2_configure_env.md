@@ -13,9 +13,9 @@ In this section, we will deploy our base lab infrastructure using AWS CloudForma
 
 Note the following:
 
-1. As part of deployment steps, **3 API calls per a minute** will be generated continuously and you will collect memory metrics using the CloudWatch agent. This will allow you to analyze metrics in AWS Compute Optimizer. 
+1. As part of deployment steps, **3 API calls per minute** will be generated continuously and will be logged these activities into access_log /var/log/httpd.
 
-2. **Access log** will automatically be sent to log group in Amazon CloudWatch. 
+2. **Access log** will automatically be sent to log group in Amazon CloudWatch. You will use this log when you define **business metrics**. 
 
 3. There will be a new customized metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use these metrics as **proxy metrics** when we calculate sustainability KPI.
 
