@@ -68,7 +68,11 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Join
+          - '-'
+          - - !Ref CFDataName
+            - 'Lambda-Function'
+            - !Select [2, !Split ['/', !Ref AWS::StackId]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Architectures: [arm64]

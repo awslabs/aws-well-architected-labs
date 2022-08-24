@@ -128,11 +128,14 @@ Resources:
                 Action:
                   - "glue:StartCrawler"
                 Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
-
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Join
+          - '-'
+          - - !Ref CFDataName
+            - 'Lambda-Function'
+            - !Select [2, !Split ['/', !Ref AWS::StackId]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -157,8 +160,11 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Join
+          - ''
+          - - !Ref CFDataName
+            - 'Crawler-'
+            - !Select [2, !Split ['/', !Ref AWS::StackId]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -179,7 +185,11 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
-      QueueName: 'EcsChargebackModule-TaskQueue'      
+      QueueName: !Join
+          - '-'
+          - - !Ref CFDataName
+            - 'TaskQueue'
+            - !Select [2, !Split ['/', !Ref AWS::StackId]]
   EventSourceMapping:
     DependsOn:
       - EventPermission
