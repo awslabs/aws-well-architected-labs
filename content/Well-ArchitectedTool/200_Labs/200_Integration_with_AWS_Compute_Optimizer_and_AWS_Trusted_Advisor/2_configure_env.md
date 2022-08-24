@@ -7,9 +7,9 @@ pre: "<b>2. </b>"
 ---
  
 ## Overview
-In this section we will deploy our base lab infrastructure using [AWS Serverless Application Model (AWS SAM)](https://aws.amazon.com/serverless/sam/) in [AWS Cloud9](https://aws.amazon.com/cloud9/) environment. This will consist of a public [Amazon API Gateway](https://aws.amazon.com/api-gateway/) which connects to [AWS Lambda](https://aws.amazon.com/lambda/) that puts items in AWS DynamoDB. We will also create a rule in [Amazon EventBridge](https://aws.amazon.com/eventbridge/) and another AWS Lambda that will retrieve data related to cost optimzation from [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer) and [AWS Trusted Advisor](https://aws.amazon.com/trusted).
+In this section, we will deploy our base lab infrastructure using [AWS Serverless Application Model (AWS SAM)](https://aws.amazon.com/serverless/sam/) in [AWS Cloud9](https://aws.amazon.com/cloud9/) environment. This will consist of a public [Amazon API Gateway](https://aws.amazon.com/api-gateway/) which connects to [AWS Lambda](https://aws.amazon.com/lambda/) that puts items in AWS DynamoDB. We will also create a rule in [Amazon EventBridge](https://aws.amazon.com/eventbridge/) and another AWS Lambda that will retrieve data related to cost optimization from [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer) and [AWS Trusted Advisor](https://aws.amazon.com/trusted).
  
-When we successfully complete our initial stage of template deployment, our deployed workload should reflect the following diagram:
+When we complete our initial stage of template deployment, our deployed workload should reflect the following diagram:
  
 ![Section2 Base Architecture](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Architecture-Cost.png)
  
@@ -94,7 +94,7 @@ sam deploy --guided
  
 ![Section2 APIGWUrl](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/APIGWUrl.png)
  
-4. Now we are going to update AWS DynamoDB table with a sample mapping table in json file through API Gateway. This mapping table has Question ID of Well-Architected question associated with AWS Trusted Advisor check ID and AWS Lambda function will retrieve Question ID to update findings related to cost optimization into notes in Well-Architected Tool.
+4. Now we will update the AWS DynamoDB table with a sample mapping table in json file through API Gateway. This mapping table has Question ID of Well-Architected question associated with AWS Trusted Advisor check ID and AWS Lambda function would retrieve Question ID to update findings related to cost optimization into notes in Well-Architected Tool.
  
 * Replace **APIGWUrl** with your APIGWUrl that you copied from Outputs.
 ```

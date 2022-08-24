@@ -9,7 +9,7 @@ weight: 5
 ![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/TA_Aco_integration.png)
  
 ## Overview
-Now that we understood how to integrate AWS Compute Optimizer and AWS Trusted Advisor checks to review the question **COST 6. How do you meet cost targets when you select resource type, size and number**. 
+Now we understand how to integrate AWS Compute Optimizer and AWS Trusted Advisor checks to review the question **COST 6. How do you meet cost targets when you select resource type, size, and number**. 
 In this section, we will learn how to include checks from AWS Compute Optimizer and AWS Trusted Advisor to another question. For example, **COST 7. How do you use pricing models to reduce cost**
  
 ## Finding your WorkloadID and QuestionID
@@ -24,7 +24,7 @@ As an example, you can see that the WorkloadID for the workload called **myappli
 ![TACheckId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/TACheckId.png?classes=lab_picture_auto)
  
 ## Update DynamoDB Mapping Table
-1. The next step is to update the mapping table with the questionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, i'm going to include the Amazon EC2 Reserved Instance Optimzation check, this has check ID value as **cX3c2R1chu**
+1. The next step is to update the mapping table with the questionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, I'm going to include the Amazon EC2 Reserved Instance Optimization check, this has check ID value as **cX3c2R1chu**
 You can find more about the other Trusted Advisor checks [here](https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor-check-reference.html)
 With that, I will navigate to **wa-mapping.json** and update the mapping table as follows:
 ![MappingTable](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/mappingTable.png?classes=lab_picture_auto)
