@@ -1,33 +1,32 @@
 ---
-title: "Integrate AWS Compute Optimizer and Trusted Advisor to Another Question"
+title: "(Optional Step) Integrate AWS Compute Optimizer and Trusted Advisor to Another Question"
 date: 2020-12-17T11:16:09-04:00
 chapter: false
 pre: "<b>5. </b>"
 weight: 5
 ---
+
+Now we understand how to integrate AWS Compute Optimizer and AWS Trusted Advisor checks to review the question [COST 6](https://wa.aws.amazon.com/wat.question.COST_6.en.html). 
+In this section, we will learn how to add trusted advisor check to provide data for [COST 7](https://wa.aws.amazon.com/wat.question.COST_7.en.html).
  
-![Section4 Integration](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/TA_Aco_integration.png)
+## Find QuestionID using your WorkloadID
+1. You can navigate to the Well-Architected Tool and select the workload created previously to retrieve the WorkloadId. WorkloadID can be found in the **Properties** Tab as part of the ARN.
+![WorkloadId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/workloadID.png)
+As an example, you can see that the WorkloadID for the workload called **wademo** is **46ff48ca1be93355e799201469dee0fd**.
  
-## Overview
-Now we understand how to integrate AWS Compute Optimizer and AWS Trusted Advisor checks to review the question **COST 6. How do you meet cost targets when you select resource type, size, and number**. 
-In this section, we will learn how to include checks from AWS Compute Optimizer and AWS Trusted Advisor to another question. For example, **COST 7. How do you use pricing models to reduce cost**
- 
-## Finding your WorkloadID and QuestionID
-1. You can navigate to the Well-Architected Tool and select the workload created previously to retrieve the WorkloadId. WorkloadID can be found in the Properties Tab as part of the ARN.
-![WorkloadId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/workloadID.png?classes=lab_picture_auto)
-As an example, you can see that the WorkloadID for the workload called **myapplication** is **f2f0bb92d2c9a0818d7254c71c516e98** (highlighted in the screenshot)
- 
-2. With the workloadID, we can now retrieve the questionID using the [ListAnswers API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_ListAnswers.html).  
+2. With the workloadID, we can now retrieve the QuestionID using the [ListAnswers API](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_ListAnswers.html). Replace **Workload_ID** with your workload id.
+    ```
+    aws wellarchitected list-answers --workload-id {Workload_ID} --lens-alias "wellarchitected" --pillar-id "costOptimization" --query 'AnswerSummaries[?starts_with(QuestionTitle, `How do you use pricing models to reduce cost`) == `true`].QuestionId'
+    ```
 ![QuestionId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/questionID.png?classes=lab_picture_auto)
 
 3. Get AWS Trusted Advisor check ID that provides pricing model recommendations from [here](https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#amazon-ec2-reserved-instances-optimization). **cX3c2R1chu** covers recommendations based on Standard Reserved Instances with the partial upfront payment option.
 ![TACheckId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/TACheckId.png?classes=lab_picture_auto)
  
 ## Update DynamoDB Mapping Table
-1. The next step is to update the mapping table with the questionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, I'm going to include the Amazon EC2 Reserved Instance Optimization check, this has check ID value as **cX3c2R1chu**
+1. The next step is to update the mapping table with the QuestionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, I'm going to include the **Amazon EC2 Reserved Instance Optimization** check, this has check ID value as **cX3c2R1chu**
 You can find more about the other Trusted Advisor checks [here](https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor-check-reference.html)
-With that, I will navigate to **wa-mapping.json** and update the mapping table as follows:
-![MappingTable](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/mappingTable.png?classes=lab_picture_auto)
+With that, I will navigate to **wa-mapping-new-question.json** and update the mapping table as follows:
 ```
 {
     "tableName": "wa-mapping",
@@ -50,7 +49,7 @@ Now we are going to update AWS DynamoDB table with the updated json file through
 curl --header "Content-Type: application/json" -d @mappings/wa-mapping-new-question.json -v POST {APIGWUrl} 
  
 ```
-Confirm that UnprocessedItems appear to be empty, which means you successfully put items into AWS DynamoDB. 
+Confirm that **UnprocessedItems** appear to be empty, which means you successfully put items into AWS DynamoDB. 
 ![Section2 Confirm](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Confirm.png)
 In AWS DynamoDB console, click **wa-mapping** you just deployed and click **Explore table items**. 
 ![Section2 Table](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Table.png)

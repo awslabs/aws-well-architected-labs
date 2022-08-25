@@ -17,8 +17,7 @@ hidden: false
  
 ## Introduction
  
-AWS Well-Architected Framework Review is a constructive conversation about architectural decisions. One of the best ways to maximize the impact of the review is to be equipped with the preliminary review analysis data points. Once data is available for the review, the reviewer can specifically ask pillar-aligned questions, and customers can authoritatively answer those questions based on the data. In this lab, we will focus on **cost optimization** review utilizing insights to support **Rightsizing** decision-making to align the size of your service to your actual workload demand. This allows customers to see an immediate cost reduction benefit using insights from the data. The purpose of this lab is to walk you through one of many integration examples with Well-Architected Tool to conduct a data-driven Cost Optimization review using [AWS Cloud Financial Management Services](https://aws.amazon.com/aws-cost-management/). 
-This lab enables you to automatically have cost optimization data that AWS Compute Optimizer and AWS Trusted Advisor analyzed for **COST 6** question in Cost Optimization Pillar as soon as you define a workload in Well-Architected Tool.
+The AWS Well-Architected Framework Review gives the opportunity for architects to discuss key architectural decisions with customers. One of the best ways to maximize the impact of the review is to be equipped with the necessary data points aligned to the workload. A reviewer can then use this collected data within their customer discussion to provide insight into areas of improvement providing a data driven experience for the customer. In this lab, we will focus on **rightsizing EC2 instances** in alignment with workload demand to provide data for a **cost optimization** review. This allows customers to see an immediate cost reduction benefit using insights from the data within the review. The purpose of this lab is to walk you through one of many integration examples with the Well-Architected Tool to conduct a data-driven Cost Optimization review using [AWS Cloud Financial Management Services](https://aws.amazon.com/aws-cost-management/). 
  
 ## Goals
  
@@ -29,24 +28,19 @@ This lab enables you to automatically have cost optimization data that AWS Compu
 * Select the Best Pricing Model
  
 ## Prerequisites
-Now that we retrieve cost optimization data from AWS Cloud Financial Management Services, there are a couple of prerequisites required.
+To retrieve cost optimization data from AWS Compute Optimizer and AWS Trusted Advisor, there are a couple of prerequisites required.
  
 * An [AWS Account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you can use for testing, that is not used for production or other purposes.
+
+* We assume that you already have Amazon EC2 instances up and running. We will not provision new EC2 instances to minimize your cost. 
  
 * An Identity and Access Management (IAM) user or federated credentials into that account that has permissions to use Well-Architected Tool ([WellArchitectedConsoleFullAccess managed policy](https://docs.aws.amazon.com/wellarchitected/latest/userguide/security_iam_id-based-policy-examples.html#security_iam_id-based-policy-examples-full-access)).
  
-* [Opt in for AWS Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/getting-started.html) You will need to opt in for AWS Compute Optimizer if you have not done so. AWS Compute Optimizer analyzes metrics from the past 14 days to generate recommendations.
+* [Opt in for AWS Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/getting-started.html). You will need to opt in for AWS Compute Optimizer if you have not done so. 
  
 * [AWS Trusted Advisor](https://aws.amazon.com/premiumsupport/knowledge-center/trusted-advisor-intro/) Amazon Trusted Advisor provides best practices (or checks) in four categories: cost optimization, security, fault tolerance, and performance improvement. This demo will use "Low Utilization Amazon EC2 Instances" check in Cost Optimization.
  
-* Attach AWS Tags to your existing AWS resources that you want to review against if you have not done so. We will attach the same AWS Tags to a workload that you will define through Well-Architected Tool later. If there are no AWS Tags attached to your AWS resources, please attach the following AWS Tags to your existing Amazon EC2 Instances as follows:
-    ```
-    Key = workload
-    Value = wademo
-    ```
-{{% notice note %}}    
-**NOTE:** If you attached your own key and value to AWS resources, please use the same key and value when defining a workload later.
-{{% /notice %}}
+* [Attach AWS Tags](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html) to your existing AWS resources that you want to review against if you have not done so. 
  
 ## Costs
 {{% notice note %}}

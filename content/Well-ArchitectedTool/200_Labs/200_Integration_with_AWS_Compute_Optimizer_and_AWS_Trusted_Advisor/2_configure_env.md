@@ -6,31 +6,30 @@ weight: 2
 pre: "<b>2. </b>"
 ---
  
-## Overview
-In this section, we will deploy our base lab infrastructure using [AWS Serverless Application Model (AWS SAM)](https://aws.amazon.com/serverless/sam/) in [AWS Cloud9](https://aws.amazon.com/cloud9/) environment. This will consist of a public [Amazon API Gateway](https://aws.amazon.com/api-gateway/) which connects to [AWS Lambda](https://aws.amazon.com/lambda/) that puts items in AWS DynamoDB. We will also create a rule in [Amazon EventBridge](https://aws.amazon.com/eventbridge/) and another AWS Lambda that will retrieve data related to cost optimization from [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer) and [AWS Trusted Advisor](https://aws.amazon.com/trusted).
+In this section, we will deploy our base lab infrastructure using [AWS Serverless Application Model (AWS SAM)](https://aws.amazon.com/serverless/sam/) in [AWS Cloud9](https://aws.amazon.com/cloud9/) environment. This will consist of a public [Amazon API Gateway](https://aws.amazon.com/api-gateway/) which connects to [AWS Lambda function](https://aws.amazon.com/lambda/) that puts items in AWS DynamoDB. We will also create a rule in [Amazon EventBridge](https://aws.amazon.com/eventbridge/) and another AWS Lambda that will retrieve data related to cost optimization from [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer) and [AWS Trusted Advisor](https://aws.amazon.com/trusted).
  
-When we complete our initial stage of template deployment, our deployed workload should reflect the following diagram:
- 
+Our initial deployment should reflect the following diagram:
+
 ![Section2 Base Architecture](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Architecture-Cost.png)
  
 Note the following:
  
-1. Amazon API Gateway has been provided and IAM role to invoke AWS Lambda function with mapping table that contains AWS Trusted Advisor Check IDs and Question ID of questions in Well-Architected Tool.
+1. AWS SAM deployment includes an Amazon API gateway with an IAM role to invoke our Lambda function. This function references a JSON mapping file that contains trusted advisor check IDs allowing for mapping to the appropriate questions within the Well-Architected tool.
  
-2. AWS Lambda function has been provided and IAM role to put items in AWS DynamoDB.
+2. AWS Lambda function puts items in AWS DynamoDB.
  
-3. In Well-Architected Tool, a reviewer will define a workload which is a collection of resources and applications that delivers business value. 
+3. In the Well-Architected Tool, a reviewer will define a workload which is a collection of resources and applications that delivers business value. 
  
-4. Defining a workload in Well-Architected Tool generates an event called **CreateWorkload** that Amazon EventBridge receives, which will invoke another AWS Lambda function. 
+4. Defining a workload in the Well-Architected Tool generates an API event called **CreateWorkload** that Amazon EventBridge receives. This will invoke the second AWS Lambda function. 
  
-5. This AWS Lambda function collects finding, reason, and recommended instance type for the rightsizing from **AWS Compute Optimizer**. It also gathers the details of "**Low Utilization Amazon EC2 Instances**" check from **AWS Trusted Advisor** such as Estimated Monthly Savings and Average CPU Utilization.
+5. This AWS Lambda function collects usage data and recommends an appropriate instance type based on rightsizing information from **AWS Compute Optimizer** and **AWS Trusted Advisor**.
  
-6. The AWS Lambda function also will be able to retrieve Question ID of questions in Well-Architected Tool associated with Check ID of AWS Trusted Advisor as Question ID is a required parameter to update notes.
+6. The AWS Lambda function will be able to retrieve Question ID from AWS DynamoDB.
  
-7. The AWS Lambda function eventually updates data points related to rightsizing into notes in Well-Architected Tool so that the reviewer can have a data-driven cost optimization review with customers. 
+7. The AWS Lambda function eventually updates data points into **Notes** in Well-Architected Tool.
  
 {{% notice note %}}
-**Note:** Please select the region in which your EC2 Instances that you would like to run cost optimization review against are running.
+**Note:** Select the region in which your EC2 Instances are running.
 {{% /notice %}}
  
 To deploy the template for the base infrastructure, complete the following steps:
@@ -86,7 +85,7 @@ sam build
 ```
 sam deploy --guided
 ```
-* Answer **y** for LambdaPutDynamoDB may not have authorization defined, Is this ok?
+* Answer **y** to lambda authorization question. (**LambdaPutDynamoDB may not have authorization defined, Is this ok?**)
  
 ![Section2 SAMDeploy](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/SAMDeploy.png)
  
@@ -94,7 +93,7 @@ sam deploy --guided
  
 ![Section2 APIGWUrl](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/APIGWUrl.png)
  
-4. Now we will update the AWS DynamoDB table with a sample mapping table in json file through API Gateway. This mapping table has Question ID of Well-Architected question associated with AWS Trusted Advisor check ID and AWS Lambda function would retrieve Question ID to update findings related to cost optimization into notes in Well-Architected Tool.
+4. Now you will update the AWS DynamoDB table with a sample mapping table in json file via API Gateway. This mapping table contains the association between the Well-Architected Question ID and AWS Trusted Advisor check ID.
  
 * Replace **APIGWUrl** with your APIGWUrl that you copied from Outputs.
 ```
@@ -104,17 +103,23 @@ curl --header "Content-Type: application/json" -d @mappings/wa-mapping.json -v P
  
 ![Section2 MappingTable](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/MappingTable.png)
  
-5. Confirm that UnprocessedItems appear to be empty, which means you successfully put items into AWS DynamoDB. 
+5. Confirm that **UnprocessedItems** appear to be empty, which means you successfully put items into AWS DynamoDB. 
 ![Section2 Confirm](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Confirm.png)
  
-6. In AWS DynamoDB console, click **wa-mapping** you just deployed and click **Explore table items**. 
+6. In AWS DynamoDB console, click **wa-mapping** which you just deployed and click **Explore table items**. 
 ![Section2 Table](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Table.png)
  
 ![Section2 Explore](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Explore.png)
  
-7. There are 1 Question IDs of Well-Architected questions and 1 AWS Trusted Advisor checks.
+7. As per the screenshot below, you should be able to see 1 Question ID listed, together with 1 AWS Trusted Advisor check ID.
 ![Section2 Items](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section2/Items.png)
- 
+
+## Congratulations! 
+
+You have now completed the first section of the Lab.
+
+Click on **Next Step** to continue to the next section.
+
 ___
 **END OF SECTION 1**
 ___
