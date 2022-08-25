@@ -7,9 +7,14 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
-June 2022
+August 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
+
+## How do I setup the dashboards on top of multiple payer accounts?
+
+This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. 
+To setup the dashboards on top of multi payer accounts, please review [multi-account setup]({{< ref "Cost/200_Labs/200_Cloud_Intelligence/Cost & Usage Report Dashboards/Dashboards/4_multi_account_setup.md" >}}) deployment options and instructions.
 
 ## How do I limit access to the data in the Dashboards using row level security? 
 
