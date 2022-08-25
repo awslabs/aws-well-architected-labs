@@ -18,10 +18,10 @@ As an example, you can see that the WorkloadID for the workload called **wademo*
     ```
     aws wellarchitected list-answers --workload-id {Workload_ID} --lens-alias "wellarchitected" --pillar-id "costOptimization" --query 'AnswerSummaries[?starts_with(QuestionTitle, `How do you use pricing models to reduce cost`) == `true`].QuestionId'
     ```
-![QuestionId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/questionID.png?classes=lab_picture_auto)
+![QuestionId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/questionID.png)
 
 3. Get AWS Trusted Advisor check ID that provides pricing model recommendations from [here](https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#amazon-ec2-reserved-instances-optimization). **cX3c2R1chu** covers recommendations based on Standard Reserved Instances with the partial upfront payment option.
-![TACheckId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/TACheckId.png?classes=lab_picture_auto)
+![TACheckId](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/TACheckId.png)
  
 ## Update DynamoDB Mapping Table
 1. The next step is to update the mapping table with the QuestionID we've just retrieved and the Trusted Advisor Check ID that we would like to include in this question note. In this example, I'm going to include the **Amazon EC2 Reserved Instance Optimization** check, this has check ID value as **cX3c2R1chu**
@@ -64,8 +64,8 @@ Refer to the [previous section](../3_create_workload/) to create new Well-Archit
 I created workload called **demo3** and when i clicked on **Continue reviewing**, choose  **Cost Optimization** pillar. I can see that both **COST 6. How do you meet cost targets when you select resource type, size and number?** and **COST 7. How do you use pricing models to reduce cost?** have been updated with the checks from AWS Compute Optimizer and AWS Trusted Advisor
  
 1. With the mapping table updated, we can create a new review click **Continue reviewing** and select **AWS Well-Architected Framework Lens**.
-![Section5 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST6.png?classes=lab_picture_auto)
-![Section5 COST7](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST7.png?classes=lab_picture_auto)
+![Section5 COST6](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST6.png)
+![Section5 COST7](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section5/COST7.png)
  
 2. Throughout this lab, you have learned how to include AWS Compute Optimizer and AWS Trusted Advisor to prepare data before the review. This can be expanded further to prepare data for more questions and from more data sources 
  
