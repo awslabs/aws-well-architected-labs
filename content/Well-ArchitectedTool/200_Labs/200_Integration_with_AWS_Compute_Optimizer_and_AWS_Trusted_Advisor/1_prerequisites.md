@@ -36,4 +36,6 @@ Attach the following tags to your existing EC2 Instances as follows:
 **NOTE:** Use the same tags when defining a workload later.
 {{% /notice %}}
 
+Click on **Next Step** to continue to the next section.
+
 {{< prev_next_button link_prev_url="../" link_next_url="../2_configure_env/" />}}
