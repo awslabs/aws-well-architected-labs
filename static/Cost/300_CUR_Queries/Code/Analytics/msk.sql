@@ -1,4 +1,6 @@
 SELECT 
+ bill_payer_account_id,
+ line_item_usage_account_id,
  line_item_product_code, 
  line_item_line_item_description, 
  line_item_operation,
@@ -10,8 +12,6 @@ WHERE
  AND line_item_product_code = 'AmazonMSK'
  AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
 GROUP BY
- line_item_product_code, 
- line_item_line_item_description, 
- line_item_operation
+ 1,2,3,4,5
 ORDER BY 
  sum_line_item_unblended_cost DESC;

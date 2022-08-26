@@ -369,7 +369,7 @@ ORDER BY
 This query will provide monthly unblended and usage information per linked account for Amazon MSK.  The output will include detailed information about the usage type and its usage amount. The cost will be summed and in descending order.
 
 #### Pricing
-Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/*****/pricing/).
+Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing/).
 
 #### Sample Output
 ![Images/msk.png](/Cost/300_CUR_Queries/Images/Analytics/msk.png)
@@ -381,6 +381,8 @@ Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/*****/prici
 #### Copy Query
 ```tsql
 SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id, 
   line_item_product_code, 
   line_item_line_item_description, 
   line_item_operation,
@@ -391,10 +393,7 @@ WHERE
   ${date_filter} 
   AND line_item_product_code = 'AmazonMSK'
   AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
-GROUP BY
-  line_item_product_code, 
-  line_item_line_item_description, 
-  line_item_operation
+GROUP BY 1,2,3,4,5
   ORDER BY 
   sum_line_item_unblended_cost DESC;
 ```
