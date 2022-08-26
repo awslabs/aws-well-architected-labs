@@ -8,32 +8,32 @@ pre: "<b>2. </b>"
 
 ## Overview
 
-In this section, we will deploy our base lab infrastructure using AWS CloudFormation as follows: 
+In this section, we will deploy our base lab infrastructure using AWS CloudFormation as follows:
 ![Section2 Architecture](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/lab_architecture.png)
 
 Note the following:
 
 1. As part of deployment steps, **3 API calls per minute** will be generated continuously and will be logged these activities into access_log /var/log/httpd.
 
-2. **Access log** will automatically be sent to log group in Amazon CloudWatch. You will use this log when you define **business metrics**. 
+2. **Access log** will automatically be sent to log group in Amazon CloudWatch. You will use this log when you define **business metrics**.
 
-3. There will be a new customized metrics created to monitor **total number of vCPU of Amazon EC2 instance** in Sustainability namespace in Amazon CloudWatch. You will use this metrics as **proxy metrics** when we calculate sustainability KPI.
+3. There will be a new customized metric created to monitor **total number of vCPU of Amazon EC2 instance** in the Sustainability namespace in Amazon CloudWatch. You will use this metric as **proxy metric** to inform the sustainability KPI.
 
-4. You will analyze a workload's configuration and resource utilization to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**.You will make changes based on AWS Compute Optimizer's recommendations for right-sizing Amazon EC2 instances.
+4. You will analyze a workload's configuration and resource utilization to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**. You will make changes based on AWS Compute Optimizer's recommendations for right-sizing Amazon EC2 instances.
 
 
 ### 2.1. Get the CloudFormation Template and deploy it.
 
-You can get the CloudFormation template [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
+You can get the first CloudFormation template used in this lab [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
 
-The first CloudFormation template will deploy Amazon EC2 Instance, log group, and metrics in Amazon CloudWatch. You can create CloudFormation Stack directly via the AWS console.
+The first CloudFormation template will deploy an Amazon EC2 Instance, log group, and metrics in Amazon CloudWatch. You can create CloudFormation Stack directly via the AWS console.
 
 {{%expand "Click here for CloudFormation console deployment steps"%}}
 #### Console:
 
 If you need detailed instructions on how to deploy CloudFormation stacks from within the console, please follow this [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
-1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select any region you would like to use. 
+1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select any region you would like to use.
 ![Section2 CFStack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/CFStack.png)
 
 2. Select the stack template which you downloaded earlier, and create a stack. Click **Choose file** to upload **SustainabilityDemo.yaml** and click **Next**.
@@ -51,7 +51,7 @@ For the stack name use any stack name you can identify and click **Next**. For t
 5. Click **sustainability-demo** and go to the **Outputs** section of the CloudFormation stack. Then, click **WebsiteURL** to make sure this deployment has been successfully completed.
 ![Section2 output](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/output.png)
 
-6. It may take 2~3 minutes to see the following website. The script in UserData will automatically generate 3 API calls per a minute continuously. No action is required here. 
+6. It may take 2~3 minutes to see the following website. The script in UserData will automatically generate 3 API calls per a minute continuously. No action is required here.
 ![Section2 website](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/website.png)
 
 {{% /expand%}}
@@ -61,7 +61,7 @@ For the stack name use any stack name you can identify and click **Next**. For t
 1. Search EC2 and click EC2 from Services.
 ![Section2 ec2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/ec2.png)
 
-2. There will be Amazon EC2 Instance named **SustainabilityApp**. Instance type should appear to be **t4g.xlarge** powered by **Arm-based Amazon Graviton2** processors and CPU Utilization will be 13~14% if you click **Monitoring** tab.
+2. There will be an Amazon EC2 Instance named **SustainabilityApp**. Instance type should appear to be **t4g.xlarge** powered by **Arm-based Amazon Graviton2** processors and CPU Utilization will be 13~14% if you click **Monitoring** tab. Note: It may take a few minutes for CPU metrics to be shown in the monitoring tab.
 ![Section2 utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/utilization.png)
 
 3. Search CloudWatch and click CloudWatch from Services.

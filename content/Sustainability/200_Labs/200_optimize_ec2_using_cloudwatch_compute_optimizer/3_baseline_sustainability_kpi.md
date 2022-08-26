@@ -6,31 +6,35 @@ weight: 4
 pre: "<b>3. </b>"
 ---
 
-Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will create proxy metrics to monitor the total number of vCPU of Amazon EC2 Instance, business metrics for the outcome that is number of API calls served (business outcome) and sustainability key performance indicator (KPI), which is resources provisioned per unit of work.
+Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will identify:
+
+1. Metric to monitor the total number of vCPU of Amazon EC2 Instance which we can use as a proxy metric for sustainability.
+2. Business outcome metric, the number of API calls served
+3. Sustainability key performance indicator (KPI), which is resources provisioned per unit of work.
 
 You will learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar:
 * Understand your impact
 * Establish sustainability goals
 
 ### 3.1. Understand what you have provisioned in AWS (Proxy metrics)
-Lets' understand the resources provisioned to support your workload include compute, storage, and network resources. Then, evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
+Lets' understand the resources provisioned to support your workload including compute, storage, and network resources. Then, evaluate the resources provisioned using your proxy metrics to see how those resources are consumed.
 
-1. Expand **Metrics** and click **All metrics**. In Custom namespaces, there will be a new namespace named **Sustainability**. Click Sustainability.
+1. From the AWS CloudWatch console, expand **Metrics** and click **All metrics**. In Custom namespaces, there will be a new namespace named **Sustainability**. Click Sustainability.
 ![Section3 custom_namespace](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/custom_namespace.png)
 
 2. Tick a box to see if you see a total number of vCPU of Amazon EC2 Instance you just deployed. It will be **4** as expected. It will be used for proxy metrics that best reflect the type of improvement you are accessing and the resources targeted for improvement.
 ![Section3 totalvcpu](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/totalvcpu.png)
 
 ### 3.2. Create Business Metrics
-Your business metrics should reflect the value provided by your workload, for example, the number of simultaneously active users, API calls served, or the number of transactions completed. 
+Your business metrics should reflect the value provided by your workload, for example, the number of simultaneously active users, API calls served, or the number of transactions completed.
 
-1. Click **Log groups** and click **httpd_access_log** that records all inbound requests handled by HTTP endpoints. 
+1. Within the AWS CloudWatch console, click **Log groups** and click **httpd_access_log** that records all inbound requests handled by HTTP endpoints.
 ![Section3 httpd_access_log](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/httpd_access_log.png)
 
-2. Click **Metric filters** tab. 
+2. Click **Metric filters** tab.
 ![Section3 metric_filter](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/metric_filter.png)
 
-3. You will define business metrics to quantify the achievement of business outcome. Click **Create metric filter** to monitor a specific pattern in access log. 
+3. You will define business metrics to quantify the achievement of business outcome. Click **Create metric filter** to monitor a specific pattern in access log.
 ![Section3 create_metric_filter](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_metric_filter.png)
 
 4. Define pattern to monitor the number of requests of **load.php** page that is a critical for your business. Specify **"GET /load.php"** as filter pattern to match it in access log.
@@ -48,7 +52,7 @@ Scroll down to the bottom to click **Next**.
 
 5. Provide Metric details.
 
-    1. Create a filter name as **load.php**. 
+    1. Create a filter name as **load.php**.
     ```
     businessapi.php
     ```
@@ -65,13 +69,13 @@ Scroll down to the bottom to click **Next**.
 6. Review all values and click **Create metric filter**.
 ![Section3 review](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/review.png)
 
-7. Click **BusinessMetrics** to see the metrics you just created. 
+7. Click **BusinessMetrics** to see the metrics you just created.
 ![Section3 business_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/business_metrics.png)
 
 8. Click **Sustainability > Metrics with no dimensions**.
 ![Section3 sustainability_meteics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/sustainability_meteics.png)
 
-9. Tick a box to see the number of units of "GET /load.php" is being monitored. 
+9. Tick a box to see the number of units of "GET /load.php" is being monitored.
 ![Section3 check_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/check_metrics.png)
 
 
@@ -79,10 +83,10 @@ Scroll down to the bottom to click **Next**.
 
 Let's evaluate specific improvement and our KPI is vCPU minutes per transaction. Remember our improvement goal is to Maximize utilization of provisioned resources.
 
-1. Click **Dashboards** 
+1. Click **Dashboards**
 ![Section3 kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_dashboard.png)
 
-2. Click **Create dashboard**. 
+2. Click **Create dashboard**.
 ![Section3 create_kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_kpi_dashboard.png)
 
 3. For Dashboard name, use **SustainabilityApp-KPI** and click **Create dashboard**.
@@ -100,21 +104,21 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction.
 7. Select **Instance**.
 ![Section3 instance](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/instance.png)
 
-8. Tick a box to select EC2 Instance ID in which SustainabilityApp is running and click **Sustainatility** to go back. 
+8. Tick a box to select EC2 Instance ID in which SustainabilityApp is running and click **Sustainatility** to go back.
 ![Section3 instance_id](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/instance_id.png)
 
-9. Click **Metrics with no dimensions**. 
+9. Click **Metrics with no dimensions**.
 ![Section3 metrics_no_dimensions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/metrics_no_dimensions.png)
 
 10. Tick a box to select **BusinessMetrics** at step 3.2 and select **Graphed metrics** tab.
 ![Section3 graphed_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/graphed_metrics.png)
 
-11. Let's change **Statistic** and **Period**. 
+11. Let's change **Statistic** and **Period**.
 ![Section3 statistic_period](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/statistic_period.png)
 
     We are going to use [CloudWatch metrics with metric math function](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html).
-    1. For total number of vCPU, change statistic from Average to **Maximum**. 
-    2. Let's set period to **1 minute**. 
+    1. For total number of vCPU, change statistic from Average to **Maximum**.
+    2. Let's set period to **1 minute**.
     3. For Business Metrics, change statistic from Average to **Sum**.
     4. Let's set period to **1 minute**.
     5. Click **Add math**.
@@ -124,7 +128,7 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction.
 **Formula:**
 ![Section3 formula](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/formula.png)
 ![Section3 kpi](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi.png)
-    
+
     Divide the total number of vCPU by the number of requests per minute to achieve business outcomes. Then, update math expression as follows and click **Apply**.
     ```
     m1/m2
@@ -144,9 +148,9 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction.
         * Proxy Metric - Total number of vCPUs = 4
         * Business Metric - Total number of APIs = 3
         * KPI - Per request vCPU = 4 / 3 requests = 1.333
-    
+
     Sustainability KPI Baseline value appears to be **1.33333**
 ![Section3 kpi_baseline](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_baseline.png)
-    
+
 
 {{< prev_next_button link_prev_url="../2_configure_env" link_next_url="../4_reducing_idle_resources_and_maximizing_utilization" />}}
