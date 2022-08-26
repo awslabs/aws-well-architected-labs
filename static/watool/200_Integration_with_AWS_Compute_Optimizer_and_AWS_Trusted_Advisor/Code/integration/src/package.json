@@ -1,0 +1,14 @@
+{
+  "name": "wellarchitected-integration",
+  "version": "1.0.0",
+  "description": "wellarchitected-integration with AWS Compute Optimizer and AWS Trusted Advisor",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jang whan han",
+  "license": "MIT-0",
+  "dependencies": {
+    "aws-sdk": "^2.1034.0"
+  }
+}
