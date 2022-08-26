@@ -45,7 +45,7 @@ However, with our automation implementation we can simply refer to the notes sec
 {{% /notice %}}
 
 Now Data that contains the CPU, network, disk and volume metrics is automatically available for the reviewer and customers. Reviewer can have a data-driven cost optimization review with customer as follows:
-![Section4 Review3](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Review3.png)
+![Section4 Review3](/watool/200_Integration_with_AWS_Compute_Optimizer_and_AWS_Trusted_Advisor/Images/section4/Review2.png)
 
 
 
