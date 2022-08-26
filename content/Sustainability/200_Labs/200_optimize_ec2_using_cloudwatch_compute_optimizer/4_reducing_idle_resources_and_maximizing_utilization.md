@@ -6,8 +6,6 @@ weight: 5
 pre: "<b>4. </b>"
 ---
 
-# Overview
-
 Recall, our sustainability improvement goal is:
 - To eliminate waste, low utilization, and idle or unused resources.
 - To maximize the value from resources you consume.
@@ -100,11 +98,6 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 {{% notice note %}}
 **Note** - Remind you of "**Anticipate and adopt new, more efficient hardware and software offerings**" design principle in Sustainability pillar. AWS Graviton3 processors instance use up to **60 percent less energy** for the same performance as comparable EC2 instances, which helps you **reduce your carbon footprint**. AWS Compute Optimizer will recommend Graviton3 instance types soon.
 {{% /notice %}}
-c6g.large is **AWS Graviton2** processors that deliver up to 40% better price performance over comparable current generation x86-based instances for various workloads. AWS also announced **AWS Graviton3** processors that deliver up to 25 percent higher performance, up to 2x higher floating-point performance, and 50 percent faster memory access based on leading-edge DDR5 memory technology compared with Graviton2 processors. 
-
-Let's see which AWS Graviton3 processors instance type has **2 vCPUs with 4 GiB memory**. 
-You can see [Amazon EC2 instance types](https://aws.amazon.com/ec2/instance-types/#Compute_Optimized) and click [here](https://aws.amazon.com/ec2/pricing/on-demand/) to see its On-Demand price.
-![Section4 ec2_types](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/ec2_types.png) 
 
 
 {{< prev_next_button link_prev_url="../3_baseline_sustainability_kpi" link_next_url="../5_review_sustainability_kpi_optimization" />}}

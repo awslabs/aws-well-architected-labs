@@ -6,8 +6,6 @@ weight: 6
 pre: "<b>5. </b>"
 ---
 
-# Overview
-
 With optimization completed in the previous lab, let’s see if you maximized utilization and improved our sustainability KPI:
 
 ### 5.1. Applying Hardware Patterns best practices for sustainability in the cloud

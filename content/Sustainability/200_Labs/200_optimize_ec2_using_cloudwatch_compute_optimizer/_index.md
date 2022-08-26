@@ -34,7 +34,7 @@ At the end of this lab you will:
 * We will deploy a sample web application and will automatically generate a workload  to simulate requests from users.
 
 ## Costs
-* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from t4g.xlarge to **c6g.large** to use the minimum amount of hardware to meet our business requirements.
+* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from t4g.xlarge to **c6g.large** to use the appropriate amount of hardware to meet our business requirements.
 
 {{% notice note %}}
 **NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).

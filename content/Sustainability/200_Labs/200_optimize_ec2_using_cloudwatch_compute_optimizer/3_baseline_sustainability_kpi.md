@@ -6,8 +6,6 @@ weight: 4
 pre: "<b>3. </b>"
 ---
 
-## Overview
-
 Let’s baseline the metrics which we can use to measure sustainability improvement once workload optimization is completed. In this section, we will create proxy metrics to monitor the total number of vCPU of Amazon EC2 Instance, business metrics for the outcome that is number of API calls served (business outcome) and sustainability key performance indicator (KPI), which is resources provisioned per unit of work.
 
 You will learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar:
