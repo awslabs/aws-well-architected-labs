@@ -49,13 +49,12 @@ We will use AWS Compute Optimizer that recommends optimal AWS resources for your
 5. The CPU utilization graph compares the CPU utilization data of your current instance type against the selected recommended instance type. It appears to be 13% CPU Utilization with current t4g.xlarge instance. If you replaced t4g.xlarge with c6g.large, you would estimate 28% of the CPU utilization.
 ![Section4 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/cpu_utilization.png)
 
-### 4.2. Optimizing the compute layer of your AWS Infrastructure
+### 4.2. Replace **t4g.xlarge** with **c6g.large**
 
 You can get the CloudFormation template [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo-c6g.yaml "Section4 CFTemplate")
 
 The second CloudFormation template will replace **t4g.xlarge** with **c6g.large**. You can create CloudFormation Stack directly via the AWS console.
 
-{{%expand "Click here for CloudFormation console deployment steps"%}}
 #### Console:
 
 If you need detailed instructions on how to deploy CloudFormation stacks from within the console, please follow this [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
@@ -72,7 +71,7 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
 ![Section4 stack_details](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/stack_details.png)
 
 4. Scroll down to the bottom to click **Next**.
-![Section4 advanced_options](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/advanced_options.png)
+![Section2 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/stackOptions.png)
 
 5. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting all the check boxes. Then click **Update stack**. It may take 3 minutes to replace EC2 instance.
 ![Section4 IAM](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/IAM.png)
@@ -92,12 +91,17 @@ If you need detailed instructions on how to deploy CloudFormation stacks from wi
     ```
 ![Section4 workloads](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/workloads.png)
     Wait for 5~10 minutes to see Sustainability KPI metrics in Amazon CloudWatch.
-{{% /expand%}}
+
 
 
 {{% notice note %}}
 **Note** - Remind you of "**Anticipate and adopt new, more efficient hardware and software offerings**" design principle in Sustainability pillar. AWS Graviton3 processors instance use up to **60 percent less energy** for the same performance as comparable EC2 instances, which helps you **reduce your carbon footprint**. AWS Compute Optimizer will recommend Graviton3 instance types soon.
 {{% /notice %}}
 
+
+You have completed this section of the lab. 
+In this section, you successfully replaced t4g.xlarge with c6g.large using the second AWS CloudFormation template of the lab. You generated API calls in a replaced Amazon EC2 instance.
+
+Click on **Next Step** to continue to the next section.
 
 {{< prev_next_button link_prev_url="../3_baseline_sustainability_kpi" link_next_url="../5_review_sustainability_kpi_optimization" />}}

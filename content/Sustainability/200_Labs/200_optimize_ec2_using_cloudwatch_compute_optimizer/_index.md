@@ -30,11 +30,11 @@ At the end of this lab you will:
 ## Prerequisites
 
 * The lab is designed to run in your own AWS account.
-* Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/)
+* Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/) and it may take up to 12 hours to fully analyze the AWS resources in your account. If you want to complete this lab without enabling Compute Optimizer, you can refer to the screenshots in this lab.
 * We will deploy a sample web application and will automatically generate a workload  to simulate requests from users.
 
 ## Costs
-* **t4g.xlarge** instance will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from t4g.xlarge to **c6g.large** to use the appropriate amount of hardware to meet our business requirements.
+* **t4g.xlarge** instance (On-Demand hourly rate $0.1344) will be deployed as a baseline Amazon EC2 instance. We will change Amazon EC2 instance type from t4g.xlarge to **c6g.large** (On-Demand hourly rate $0.068) to use the appropriate amount of hardware to meet our business requirements.
 
 {{% notice note %}}
 **NOTE:** You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
@@ -42,7 +42,8 @@ At the end of this lab you will:
 * [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Lab duration
-Estimated time required to complete this lab is 40 minutes.
+Estimated time required to complete this lab is 40 minutes using screenshots of AWS Compute Optimizer.
+It may take 12 hours if you want to see recommendations from AWS Compute Optimizer in your account. 
 
 ## Sustainability improvement process
 The improvement process includes understanding what you have and what you can do to improve, selecting targets for improvement, testing improvements, adopting successful improvements, quantifying your success and sharing what you have learned so that it can be replicated elsewhere, and then repeating the cycle.
@@ -62,21 +63,13 @@ Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarch
 
 * To calculate a sustainability key performance indicator (KPI), we will use the following formula, divide the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work:
 
-    ![Sustainability KPI](/Sustainability/300_optimize_data_pattern_using_redshift_data_sharing/lab-0/images/sustainability_kpi2.png?classes=lab_picture_small)
+    ```
+    Resources provisioned per unit of work = Total number of vCPU minutes / The number of API requests per minute
+    ```
 
 * Estimate improvement as both the quantitative reduction in resources provisioned (as indicated by your proxy metrics) and the percentage change from your baseline resources provisioned per unit of work:
 
     ![Estimate Improvement](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section0/EstimateImprovement.png?classes=lab_picture_small)
-
-
-## Example Scenario
-The following example scenario is referenced in this lab:
-
-Your company has a workload running on Amazon EC2 instance. You have number of API calls served and measured as business metrics to quantify the achievement of business outcomes.
-
-  Our improvement goal is to:
-  * To eliminate waste, low utilization, and idle or unused resources
-  * To maximize the value from resources you consume
 
 
 {{< prev_next_button link_next_url="./1_prerequisites/" button_next_text="Start Lab" first_step="true" />}}

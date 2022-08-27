@@ -6,14 +6,18 @@ weight: 3
 pre: "<b>2. </b>"
 ---
 
+
 ## Overview
+The following example scenario is referenced in this lab:
+
+Your company has a workload running on Amazon EC2 instance. You have number of API calls served and measured as business metrics to quantify the achievement of business outcomes.
 
 In this section, we will deploy our base lab infrastructure using AWS CloudFormation as follows:
 ![Section2 Architecture](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/lab_architecture.png)
 
 Note the following:
 
-1. As part of deployment steps, **3 API calls per minute** will be generated continuously and will be logged these activities into access_log /var/log/httpd.
+1. As part of deployment steps, **3 API calls per minute** will be generated continuously and these activities will be logged to access_log in /var/log/httpd.
 
 2. **Access log** will automatically be sent to log group in Amazon CloudWatch. You will use this log when you define **business metrics**.
 
@@ -28,7 +32,6 @@ You can get the first CloudFormation template used in this lab [here.](/Sustaina
 
 The first CloudFormation template will deploy an Amazon EC2 Instance, log group, and metrics in Amazon CloudWatch. You can create CloudFormation Stack directly via the AWS console.
 
-{{%expand "Click here for CloudFormation console deployment steps"%}}
 #### Console:
 
 If you need detailed instructions on how to deploy CloudFormation stacks from within the console, please follow this [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
@@ -48,13 +51,12 @@ For the stack name use any stack name you can identify and click **Next**. For t
 4. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting **all the check boxes**. Then launch the stack. It may take 5 minutes to complete the baseline deployment.
 ![Section2 IAM](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/IAM.png)
 
-5. Click **sustainability-demo** and go to the **Outputs** section of the CloudFormation stack. Then, click **WebsiteURL** to make sure this deployment has been successfully completed.
+5. Now go to your newly created stack and go to the **Outputs** section of the CloudFormation stack. Then, click **WebsiteURL** to make sure this deployment has been successfully completed.
 ![Section2 output](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/output.png)
 
 6. It may take 2~3 minutes to see the following website. The script in UserData will automatically generate 3 API calls per a minute continuously. No action is required here.
 ![Section2 website](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/website.png)
 
-{{% /expand%}}
 
 ### 2.2. Verify baseline infrastructure.
 
@@ -75,7 +77,8 @@ For the stack name use any stack name you can identify and click **Next**. For t
 
 
 ### Congratulations!
-You have now completed the first section of the Lab.
+You have completed this section of the lab. In this section you successfully deployed the first AWS CloudFormation template of the lab and confirmed the relevant resources were created using the AWS Console.
+
 Click on **Next Step** to continue to the next section.
 
 {{< prev_next_button link_prev_url="../1_prerequisites" link_next_url="../3_baseline_sustainability_kpi" />}}

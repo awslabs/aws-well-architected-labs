@@ -52,11 +52,12 @@ Scroll down to the bottom to click **Next**.
 
 5. Provide Metric details.
 
-    1. Create a filter name as **load.php**.
+    1. Create a filter name as **businessapi.php**.
     ```
     businessapi.php
     ```
     2. **Click radio slider** as you will select the existing metric namespace.  
+![Section3 mectic_details](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/radio_slider.png)
     3. Use **Sustainability** as Metric namespace.
     4. Specify **BusinessMetrics** as metric name.
     ```
@@ -75,7 +76,7 @@ Scroll down to the bottom to click **Next**.
 8. Click **Sustainability > Metrics with no dimensions**.
 ![Section3 sustainability_meteics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/sustainability_meteics.png)
 
-9. Tick a box to see the number of units of "GET /load.php" is being monitored.
+9. Tick a box to see the number of units of "GET /load.php" is being monitored. It may take a few minutes for metrics to be displayed on the graph.
 ![Section3 check_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/check_metrics.png)
 
 
@@ -125,11 +126,14 @@ Let's evaluate specific improvement and our KPI is vCPU minutes per transaction.
     6. Select **Start with empty expression**.
 
 12. The following formula divides the provisioned resources by the business outcomes achieved to determine the provisioned resources per unit of work.
-**Formula:**
-![Section3 formula](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/formula.png)
+
+    **Formula:**
+    ```
+    Resources provisioned per unit of work = Total number of vCPU minutes / The number of API requests per minute
+    ```
 ![Section3 kpi](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi.png)
 
-    Divide the total number of vCPU by the number of requests per minute to achieve business outcomes. Then, update math expression as follows and click **Apply**.
+    Divide the total number of vCPU by the number of API requests per minute to achieve business outcomes. Then, update math expression as follows and click **Apply**.
     ```
     m1/m2
     ```

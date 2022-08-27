@@ -12,7 +12,7 @@ To avoid incurring further costs for AWS resources, let’s delete all resources
     Select the previous CloudFormation stack you used and click **Delete**.
 ![Section6 delete_stack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_stack.png)
 
-2. To confirm deletion, type in “delete” in the field at the bottom (make sure, you **do not** check _Create final snapshot_ button as it will incur cost for the storage of the snapshot), and click **Delete cluster**.
+2. Click **Dashboards** and select your newly created dashboard. Click **Delete**.  
 ![Section6 delete_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section6/delete_dashboard.png)
 
 
