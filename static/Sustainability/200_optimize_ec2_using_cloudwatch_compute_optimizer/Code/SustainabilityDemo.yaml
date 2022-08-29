@@ -113,6 +113,26 @@ Resources:
       UserData:
         Fn::Base64:
           !Sub |
+            Content-Type: multipart/mixed; boundary="//"
+            MIME-Version: 1.0
+
+            --//
+            Content-Type: text/cloud-config; charset="us-ascii"
+            MIME-Version: 1.0
+            Content-Transfer-Encoding: 7bit
+            Content-Disposition: attachment; filename="cloud-config.txt"
+
+            #cloud-config
+            cloud_final_modules:
+            - [scripts-user, always]
+
+            --//
+            Content-Type: text/x-shellscript; charset="us-ascii"
+            MIME-Version: 1.0
+            Content-Transfer-Encoding: 7bit
+            Content-Disposition: attachment; filename="userdata.txt"
+
+            #!/bin/sh
             #!/bin/sh
 
             # Install a LAMP stack
@@ -155,7 +175,7 @@ Resources:
             sudo wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sustainability-hardware-pattern-opt/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/amazon-cloudwatch-agent.json
             sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
             sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
-            
+
             #memory monitoring  (update github repo)
             sudo cd /opt/aws/amazon-cloudwatch-agent/bin/
             sudo wget https://raw.githubusercontent.com/awswa/aws-well-architected-labs-1/sustainability-hardware-pattern-opt/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/config.json
@@ -179,7 +199,7 @@ Resources:
             EOF
             crontab /project/cron.tab
 
-            # 6request per a minute
+            # 3 request per a minute
             screen -d -m watch -n 20 "curl 'http://127.0.0.1/load.php'"
 
       Tags:

@@ -6,13 +6,13 @@ weight: 2
 pre: "<b>1. </b>"
 ---
 
-AWS Compute Optimizer provides Amazon EC2 instance recommendations to help you improve performance, save money, or both. You can use these recommendations to decide whether to move to a new instance type. Ensure if you enabled AWS Compute Optimizer in your AWS account. 
+AWS Compute Optimizer provides Amazon EC2 instance recommendations to help you improve performance and save money. You can use these recommendations to decide whether to move to a new instance type. Ensure that you have enabled AWS Compute Optimizer.
 
 ## Opt in for AWS Compute Optimizer
 [Enable AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/getting-started/) at no additional cost if you have not done so. After After AWS Compute Optimizer is enabled, it may take up to 12 hours to fully analyze the AWS resources in your account. AWS Compute Optimizer analyzes the configuration and utilization metrics of your Amazon EC2 Instances. It reports whether your resources are optimal and generates optimization recommendations to reduce the cost and improve the performance of your workloads. Our objective is to optimize the energy efficiency of the underlying hardware through rightsizing.
 
 {{% notice note %}}
-**Note** - To see recommendations from the AWS Compute Optimizer dashboard, you will need to let Amazon EC2 Instance run for 12 hours, which will incur costs generated from EC2(t4g.xlarge) in your AWS account. You can refer to the screenshots in this lab to monimize costs from EC2.
+**Note** - To see recommendations from the AWS Compute Optimizer dashboard, you will need to let your Amazon EC2 Instance run for 12 hours, which will incur costs generated from EC2(t4g.xlarge) in your AWS account. You can refer to the screenshots in this lab to minimize costs from EC2.
 {{% /notice %}}
 
 Once AWS Compute Optimizer completes the analysis, you will see saving opportunities and recommendations as follows:
