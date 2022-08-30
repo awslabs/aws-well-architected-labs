@@ -78,28 +78,26 @@ Scroll down to the bottom to click **Next**.
 9. Tick a box to see the number of units of "GET /load.php" is being monitored. It may take a few minutes for metrics to be displayed on the graph.
 ![Section3 check_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/check_metrics.png)
 
-### Resume reviewing from here 2022-08-30
-
 ### 3.3. Create Sustainability Key Performance Indicators Baseline
 
 Our improvement goal is to maximize utilization of provisioned resources. Let's create the metrics for KPIs to evaluate ways to improve productivity and estimate the impact of proposed changes over time.
 
-1. Click **Dashboards**
+1. Click **Dashboards** 
 ![Section3 kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_dashboard.png)
 
 2. Click **Create dashboard** button.
 ![Section3 create_kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_kpi_dashboard.png)
 
-3. For Dashboard name, use **SustainabilityApp-KPI** and click **Create dashboard** button.
+3. For the dashboard name, use **SustainabilityApp-KPI** and click the **Create dashboard** button.
 ![Section3 create_kpi_dashboard2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_kpi_dashboard2.png)
 
-4. Select **Line** as s widget type.
+4. Select **Line** as a widget type.
 ![Section3 select_line](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/select_line.png)
 
 5. Select **Metrics**.
 ![Section3 select_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/select_metrics.png)
 
-6. Select **Sustainability** in Custom napespaces.
+6. Select **Sustainability** in custom namespaces.
 ![Section3 mectics_name](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/mectics_name.png)
 
 7. Select **Instance**.
@@ -114,14 +112,14 @@ Our improvement goal is to maximize utilization of provisioned resources. Let's 
 10. Tick a box to select **BusinessMetrics** at step 3.2 and select **Graphed metrics** tab.
 ![Section3 graphed_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/graphed_metrics.png)
 
-11. Let's change **Statistic** and **Period**.
+11. Let's change the **statistic** and **seriod** setting as shown:
 ![Section3 statistic_period](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/statistic_period.png)
 
-    We are going to use [CloudWatch metrics with metric math function](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html).
+    We are going to use [CloudWatch metrics with metric math function.](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html)
     1. For the total number of vCPUs, change statistic from Average to **Maximum**. This will be m1.
-    2. Let's set period to **1 minute**.
+    2. For the vCPU period, change the setting to **1 minute**.
     3. For Business Metrics, change statistic from Average to **Sum**. We will need to add the number of API requests per minute. This will be m2.
-    4. Let's set period to **1 minute**.
+    4. For Business Metrics period, change the setting to **1 minute**.
     5. Click **Add math**.
     6. Select **Start with empty expression**.
 

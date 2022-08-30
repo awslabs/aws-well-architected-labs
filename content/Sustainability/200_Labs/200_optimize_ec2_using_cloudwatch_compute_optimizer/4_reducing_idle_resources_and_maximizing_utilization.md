@@ -6,50 +6,50 @@ weight: 5
 pre: "<b>4. </b>"
 ---
 
-Recall, our sustainability improvement goals are:
+As per the previous section of the lab, our sustainability improvement goals are:
 - To eliminate waste, low utilization, and idle or unused resources.
 - To maximize the value from resources you consume.
 
-You will learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in AWS Well-Architected Sustainability Pillar:
+
+This section of the lab will allow you to learn more about the following [design principles](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/design-principles-for-sustainability-in-the-cloud.html) in the AWS Well-Architected Sustainability Pillar documentation:
 * Maximize utilization
 * Anticipate and adopt new, more efficient hardware and software offerings
 
-You will improve the sustainability KPIs by optimizing hardware patterns:
+You will improve the sustainability KPIs by optimizing the following hardware patterns:
 * Right-size Amazon EC2 Instance using AWS Compute Optimizer recommendations.
 * Continually monitor and evaluate more efficient hardware offerings.
 
 
 
-### 4.1. Optimizing the compute layer of your AWS Infrastructure
+### 4.1. Optimizing the Compute Layer of your AWS Infrastructure
 
-You will use AWS Compute Optimizer that recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. 
+We will now use the AWS Compute Optimizer service to rightsize your EC2 resources. AWS Compute Optimizer uses a combination of machine learning and historical trend information to provide efficiency recommendations for your workload. Follow the steps below to rightsize your compute environment:
 
 {{% notice note %}}
-**Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account, which will incur your costs. Refer to the following screenshots to minimize your cost for this lab. 
+**Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account, which will incur costs.
 {{% /notice %}}
 
 1. Search for compute optimizer in AWS console and select AWS Compute Optimizer from Services.
 ![Section4 compute_optimizer](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/compute_optimizer.png)
 
-2. In AWS Compute Optimizer dashboard, savings opportunity, performance improvement opportunity, and recommendations for your resources are displayed. Scroll down to the bottom and click **View recommendations**.
+2. Scroll down to the bottom of the dashboard and click **View Recommendations** as shown:
 ![Section4 dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/dashboard.png)
 ![Section4 dashboard2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/dashboard2.png)
 
-3. Your EC2 instance for SustainabilityApp was considered over-provisioned, which can be sized down while still meeting the performance requirements of your workload. Click **Over-provisioned** to see more details.
+3. As you can see, AWS Compute Optimizer has evaluated the EC2 instance for SustainabilityApp as over-provisioned. It is therefore possible to rightsize the instance while still meeting the performance requirements of your workload. Click **Over-provisioned** to see more details.
 
     Please see three finding classifications [here](https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-ec2-recommendations.html#ec2-recommendations-findings).
 ![Section4 finding](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/finding.png)
 
-4. Based on the workload for the past 12 hours, AWS Compute Optimizer recommends that **2 vCPUs with 4 GiB memory** are optimal compute resources to deliver your business outcomes. One thing you need to carefully look into is **CPU architecture** in **platform differences column** before you select recommended instance type. You will need additional migration efforts to change instance type if CPU architecture is different. 
-    
-    For this case, all recommended options are the same CPU architecture. **c6g.large** seems to be the best instance type in terms of performance and cost efficiency.
-
+4. Based on the workload for the past 12 hours, AWS Compute Optimizer recommends that **2 vCPUs with 4 GiB memory** are optimal compute resources to deliver your business outcomes.
 ![Section4 recommendations](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/recommendations.png)
 
-5. The CPU utilization graph compares the CPU utilization data of your current instance type against the selected recommended instance type. It appears to be 13% CPU utilization with current t4g.xlarge instance. If you replaced it with c6g.large, you would estimate 28% of the CPU utilization.
+5. The CPU utilization graph compares the CPU utilization data of your current instance type against the recommended instance type. It appears to be 13% CPU utilization with current t4g.xlarge instance. If you replaced it with c6g.large, you would estimate 28% of the CPU utilization.
 ![Section4 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/cpu_utilization.png)
 
-### 4.2. Replace **t4g.xlarge** with **c6g.large**
+### 4.2. Rightsize Instance Type
+
+We will now action the recommendations which were given to us by the AWS Compute Optimizer, changing our existing t4g.xlarge instance type for a c6g.large. Complete the following steps to action the instance type change:
 
 You can get the CloudFormation template [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo-c6g.yaml "Section4 CFTemplate")
 
@@ -79,19 +79,18 @@ If you need detailed instructions on how to deploy a CloudFormation stack from w
 6. Search for EC2 service in AWS console and click EC2 from Services.
 ![Section4 ec2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/ec2.png)
 
-7. Now you successfully replaced **t4g.xlarge** with **c6g.xlarge**. The same workloads will be automatically generated to evaluate sustainability KPIs we previously created. Tick a box to **select SustainabilityApp** and click **Connect**.
+7. You have now actioned the recommended changes from AWS Compute Optimizer, replacing your existing **t4g.xlarge** instance with **c6g.large**. The previous sustainability KPIs which we calculated will now have been automatically updated.
 ![Section4 ec2_details](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/ec2_details.png)
 
 8. Wait for 5~10 minutes to see CPU utilization.
 
-{{% notice note %}}
-**Note** - Remind you of "**Anticipate and adopt new, more efficient hardware and software offerings**" design principle in Sustainability pillar. AWS Graviton3 processors instance use up to **60 percent less energy** for the same performance as comparable EC2 instances, which helps you **reduce your carbon footprint**. AWS Compute Optimizer will recommend Graviton3 instance types soon.
-{{% /notice %}}
+### 4.3. Applying Hardware Patterns Best Practices for Sustainability in the cloud
+
+1. With our new c6g.large instance, CPU utilization appears to be running at ~26% compared to the previous utilization levels of ~13%. This has dramatically reduced the amount of our idle resources and allowed us to still meet our performance requirements.
+![Section5 cpu_utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/cpu_utilization.png)
 
 
-You have completed this section of the lab.
- 
-In this section, you successfully replaced t4g.xlarge with c6g.large using the second AWS CloudFormation template of the lab. You generated API calls in a replaced Amazon EC2 instance.
+In this section, you successfully replaced t4g.xlarge with c6g.large using the second AWS CloudFormation template of the lab. You generated API calls in a replaced Amazon EC2 instance. We will use these newer metrics next to review the improvements against our sustainability KPI.
 
 Click on **Next Step** to continue to the next section.
 
