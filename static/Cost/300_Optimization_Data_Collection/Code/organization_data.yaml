@@ -36,10 +36,9 @@ Resources:
   LambdaOrgData:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Join
-          - '-'
-          - - 'Lambda_Organization_Data_Collector'
-            - !Select [2, !Split ['/', !Ref AWS::StackId]]
+      FunctionName: !Sub
+        - 'Lambda_Organization_Data_Collector-${Id}'
+        - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:

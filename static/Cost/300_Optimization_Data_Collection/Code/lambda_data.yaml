@@ -115,11 +115,9 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Join
-          - '-'
-          - - !Ref CFDataName
-            - 'Lambda-Function'
-            - !Select [2, !Split ['/', !Ref AWS::StackId]]
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -150,7 +148,9 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub "${CFDataName}AMICrawler"
+        !Sub
+          - '${CFDataName}-AMICrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -160,7 +160,9 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub "${CFDataName}SnapshotCrawler"
+        !Sub
+          - '${CFDataName}-SnapshotCrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -170,7 +172,9 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub "${CFDataName}EBSCrawler"
+        !Sub
+          - '${CFDataName}-EBSCrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -191,10 +195,7 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
-      QueueName: !Join
-          - '-'
-          - - 'InventoryCollectorModule-TaskQueue'
-            - !Select [2, !Split ['/', !Ref AWS::StackId]]
+      QueueName: 'InventoryCollectorModule-TaskQueue'
   EventSourceMapping:
     DependsOn:
       - EventPermission
