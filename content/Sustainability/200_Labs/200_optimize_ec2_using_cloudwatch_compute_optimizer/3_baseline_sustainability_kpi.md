@@ -50,23 +50,23 @@ Scroll down to the bottom to click **Next**.
 
 ![Section3 next](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/next.png)
 
-5. Provide the Metric details.
+5. Provide the metric details.
     ![Section3 mectic_details](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/mectic_details.png)
 
     1. Create a filter name as **businessapi.php**.
     ```
     businessapi.php
     ```
-    2. **Click radio slider** as you will select the existing metric namespace.  
+    2. Click the **radio slider** as you will select the existing metric namespace.  
 ![Section3 mectic_details](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/radio_slider.png)
-    3. Use **Sustainability** as Metric namespace.
+    3. Select **Sustainability** as Metric namespace.
     4. Specify **BusinessMetrics** as metric name.
     ```
     BusinessMetrics
     ```
     5. Set the Metric value to **1** and click **Next**.
 
-6. Review all values and click **Create metric filter**.
+6. Review all values and click **create metric filter**.
 ![Section3 review](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/review.png)
 
 7. Click **BusinessMetrics** to see the metrics you created previously.
@@ -85,7 +85,7 @@ Our improvement goal is to maximize utilization of provisioned resources. Let's 
 1. Click **Dashboards** 
 ![Section3 kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_dashboard.png)
 
-2. Click **Create dashboard** button.
+2. Click **create dashboard** button.
 ![Section3 create_kpi_dashboard](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_kpi_dashboard.png)
 
 3. For the dashboard name, use **SustainabilityApp-KPI** and click the **Create dashboard** button.

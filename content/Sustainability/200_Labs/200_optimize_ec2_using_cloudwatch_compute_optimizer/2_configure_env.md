@@ -17,7 +17,7 @@ In this section, we will deploy our base lab infrastructure using AWS CloudForma
 
 Note the following:
 
-1. As part of the deployment steps, **3 API calls per minute** will be generated continuously and these activities will be logged to **access_log* in **/var/log/httpd**.
+1. As part of the deployment steps, **3 API calls per minute** will be generated continuously and these activities will be logged to **access_log** in **/var/log/httpd**.
 
 2. **Access log data** will automatically be forwarded to log group in Amazon CloudWatch. You will use this log when you define your **business metrics**.
 
@@ -26,7 +26,7 @@ Note the following:
 4. You will analyze a workload's configuration and resource utilization to identify Amazon EC2 instances that might be **overprovisioned or underprovisioned**. You will make changes based on AWS Compute Optimizer's recommendations for right-sizing Amazon EC2 instances.
 
 
-### 2.1. Get the CloudFormation Template and deploy it.
+### 2.1. Get the CloudFormation Template and Deploy it.
 
 You can get the first CloudFormation template used in this lab [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
 
@@ -36,13 +36,13 @@ The first CloudFormation template will deploy an Amazon EC2 Instance, log group 
 
 If you need detailed instructions on how to deploy a CloudFormation stack from within the console, please follow this [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
-1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select any region you would like to use.
+1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select any region you would like to use. Click **create a stack**. 
 ![Section2 CFStack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/CFStack.png)
 
-2. Select the stack template which you downloaded earlier, and create a stack. Click **Choose file** to upload **SustainabilityDemo.yaml** and click **Next**.
+2. Select the stack template which you downloaded earlier, and click **choose file** to upload **SustainabilityDemo.yaml** and click **Next**.
 ![Section2 Upload_CFStack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/upload_CFStack.png)
 
-For the stack name use any stack name you can identify and click **Next**. For this case, I used sustainability-demo as Stack name.
+For the stack name use any stack name you can identify and click **Next**. For this case, I used sustainability-demo as a stack name.
 ![Section2 StackName](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/stackName.png)
 
 3. Skip stack options and click **Next**.

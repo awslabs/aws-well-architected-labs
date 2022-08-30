@@ -61,7 +61,7 @@ If you need detailed instructions on how to deploy a CloudFormation stack from w
 
 1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select the correct region you used to deploy this lab.
 
-    Select the previous CloudFormation stack you used and click **Update**.
+    Select the previous CloudFormation stack you deployed and click **Update**.
 ![Section4 update_stack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section4/update_stack.png)
 
 2. Select **Replace current template** and **Upload a template file**. Click **Choose file** to upload **SustainabilityDemo-c6g.yaml**. Then Click **Next**.
