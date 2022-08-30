@@ -180,7 +180,6 @@ Resources:
       Name:  !Join
           - '-'
           - - 'OrgGlueCrawler'
-            - 'Crawler'
             - !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
