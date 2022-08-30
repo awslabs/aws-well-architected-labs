@@ -13,15 +13,15 @@ With our EC2 instance optimization completed, let’s evaluate our utilization l
 1. Go back to the dashboard for Sustainability KPIs Baseline in the Amazon CloudWatch.
 ![Section5 revised_kpi_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/dashboard.png)
 
-2. These are the improved metrics and KPIs:
+2. Let's evaluate the sustainability KPIs. 
 ![Section5 revised_kpi_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/revised_kpi_metrics.png)
 
 
-With, that below are improved metrics and KPIs:
+These are the improved metrics and KPIs:
 
         * Proxy Metric - Total number of vCPUs = 2
         * Business Metric - Total number of APIs = 3
-        * KPI - Per request vCPU = 2 / 3 requests = 0.66666 
+        * KPIs - Resources provisioned per unit of work = 2 / 3 requests = 0.66666 
 
 The improved Sustainability KPIs appear to be **0.66666**. Your workload shows an initial improvement of 50% reduction in compute resource requirements after changing your Amazon EC2 instance type from t4g.xlarge to c6g.large.
 

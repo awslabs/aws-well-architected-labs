@@ -37,9 +37,9 @@ Your business metrics should reflect the value provided by your workload, for ex
 3. You will define business metrics to quantify the achievement of business outcome. Click **Create metric filter** button to monitor a specific pattern in the access log.
 ![Section3 create_metric_filter](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/create_metric_filter.png)
 
-4. You now need to define the pattern to monitor the number of requests of **load.php** page that is a critical for your business. Specify **"GET /load.php"** as a filter pattern to match it in the access log as shown.
+4. You now need to define the pattern to monitor the number of requests of **businessapi.php** page that is a critical for your business. Specify **"GET /businessapi.php"** as a filter pattern to match it in the access log as shown.
     ```
-    "GET /load.php"
+    "GET /businessapi.php"
     ```
     Select log as **your_EC2_instance_id/var/log/httpd/access_log** to test and click **Test pattern** button. You should be able to see 3 http requests per minute.
 
@@ -75,7 +75,7 @@ Scroll down to the bottom to click **Next**.
 8. Click **Sustainability > Metrics with no dimensions**.
 ![Section3 sustainability_meteics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/sustainability_meteics.png)
 
-9. Tick a box to see the number of units of "GET /load.php" is being monitored. It may take a few minutes for metrics to be displayed on the graph.
+9. Tick a box to see the number of units of "GET /businessapi.php" is being monitored. It may take a few minutes for metrics to be displayed on the graph.
 ![Section3 check_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/check_metrics.png)
 
 ### 3.3. Create Sustainability Key Performance Indicators Baseline
@@ -148,11 +148,11 @@ Then, edit math expression as follows and click **Apply**.
 
 14. Click **Save** button to continuously monitor KPIs after reducing idle resources and maximizing utilization in the next step. You will use Resources provisioned per unit of work as sustainability KPIs.
 
-    With, that below are baseline metrics and KPI:
+    These are the improved metrics and KPIs:
 
         * Proxy Metric - Total number of vCPUs = 4
         * Business Metric - Total number of APIs = 3
-        * KPIs - Per request vCPU = 4 / 3 requests = 1.333
+        * KPIs - Resources provisioned per unit of work = 4 / 3 requests = 1.333
 
     Sustainability KPIs Baseline appears to be **1.33333**
 ![Section3 kpi_baseline](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/kpi_baseline.png)
