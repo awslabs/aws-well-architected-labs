@@ -148,9 +148,7 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub
-          - '${CFDataName}-AMICrawler-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+        !Sub "${CFDataName}AMICrawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -160,9 +158,7 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub
-          - '${CFDataName}-SnapshotCrawler-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+        !Sub "${CFDataName}SnapshotCrawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -172,9 +168,7 @@ Resources:
     Type: AWS::Glue::Crawler
     Properties:
       Name:
-        !Sub
-          - '${CFDataName}-EBSCrawler-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+        !Sub "${CFDataName}EBSCrawler"
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -195,7 +189,7 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
-      QueueName: 'InventoryCollectorModule-TaskQueue'
+      QueueName: 'InventoryCollectorModul-TaskQueue'
   EventSourceMapping:
     DependsOn:
       - EventPermission
