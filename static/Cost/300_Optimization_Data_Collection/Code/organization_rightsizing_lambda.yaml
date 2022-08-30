@@ -98,7 +98,7 @@ Resources:
     Properties:
       FunctionName: !Sub
           - '${CFDataName}-Lambda-Function-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction to retreive list of organization
       Runtime: python3.8
       Code:
@@ -257,7 +257,7 @@ Resources:
     Properties:
       Name: !Sub
           - '${CFDataName}-Crawler-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:

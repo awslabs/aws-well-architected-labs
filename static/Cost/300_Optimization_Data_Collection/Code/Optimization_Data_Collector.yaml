@@ -288,7 +288,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTAModule
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor_dev.yaml"
           Parameters:
             DestinationBucket: !Ref S3Bucket
             DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -308,12 +308,12 @@ Resources:
           RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
           GlueRoleARN: !GetAtt GlueRole.Arn
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda_dev.yaml"
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -325,7 +325,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -352,7 +352,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
@@ -363,7 +363,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRDSUtilizationModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -374,7 +374,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
@@ -390,12 +390,12 @@ Resources:
           GlueRoleArn: !GetAtt GlueRole.Arn 
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets_dev.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts_dev.yaml"
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
             RolePrefix: !Ref RolePrefix

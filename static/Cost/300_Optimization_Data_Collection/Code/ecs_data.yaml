@@ -8,7 +8,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: 'ecs-services-clusters'
+    Default: 'ecs-chargeback'
   DatabaseName:
     Type: String
     Description: Name of the Athena database to hold lambada information
@@ -133,7 +133,7 @@ Resources:
     Properties:
       FunctionName: !Sub
           - '${CFDataName}-Lambda-Function-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -160,7 +160,7 @@ Resources:
     Properties:
       Name: !Sub
           - '${CFDataName}-Crawler-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:

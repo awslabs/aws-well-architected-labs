@@ -81,8 +81,8 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub
-          - 'AWS-Organization-Account-Collector-Lambda-Function-${Id}'
-          - Id: !Select [0, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+          - 'AWS-Organization-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
