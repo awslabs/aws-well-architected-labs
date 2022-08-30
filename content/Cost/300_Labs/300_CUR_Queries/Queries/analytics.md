@@ -366,7 +366,7 @@ ORDER BY
 ### Amazon MSK
 
 #### Query Description
-This query will provide monthly unblended and usage information per linked account for Amazon MSK.  The output will include detailed information about the usage type and its usage amount. The cost will be summed and in descending order.
+This query will provide monthly unblended and usage information per linked account for all types of Amazon MSK, including OD and Serverless.  The output will include detailed information about the usage type and its usage amount. The cost will be summed and in descending order.
 
 #### Pricing
 Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing/).
