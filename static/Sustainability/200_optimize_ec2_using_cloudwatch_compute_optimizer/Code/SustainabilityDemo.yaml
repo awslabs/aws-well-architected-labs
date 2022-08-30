@@ -200,7 +200,7 @@ Resources:
             crontab /project/cron.tab
 
             # 3 request per a minute
-            screen -d -m watch -n 20 "curl 'http://127.0.0.1/load.php'"
+            screen -d -m watch -n 20 "curl 'http://127.0.0.1/businessapi.php'"
 
       Tags:
       - Key: Name
