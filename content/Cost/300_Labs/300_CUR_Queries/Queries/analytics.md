@@ -371,10 +371,6 @@ This query will provide monthly unblended and usage information per linked accou
 #### Pricing
 Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing/).
 
-#### Sample Output
-![Images/msk.png](/Cost/300_CUR_Queries/Images/Analytics/msk.png)
-
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/msk.sql)
 
