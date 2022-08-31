@@ -587,7 +587,7 @@ Resources:
   ProcessedLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 5
       Handler: index.handler
       Role: !GetAtt LambdaFunctionRole.Arn
@@ -809,7 +809,7 @@ Resources:
   RestoreOndemandLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 5
       Handler: index.handler
       Role: !GetAtt RestoreOndemandLambdaFunctionRole.Arn
@@ -875,7 +875,7 @@ Resources:
   RestorePITRLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 5
       Handler: index.handler
       Role: !GetAtt RestorePITRLambdaFunctionRole.Arn

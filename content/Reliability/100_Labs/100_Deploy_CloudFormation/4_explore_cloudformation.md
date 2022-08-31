@@ -23,7 +23,7 @@ Look through the template. You will notice several sections:
 * The [Parameters section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) is used to prompt for inputs that can be used elsewhere in the template. The template is asking for several inputs, but also provides default values for each one. 
    * Look through these and start to reason about what some are used for.
    * For example `InstanceType` is a parameter where the user can choose that Amazon EC2 instance type to deploy for the servers used in this Web App.
-   * Search the file for `!Ref InstanceType`.  `!Ref!` is a built-in function that refrences the value of a parameter.  Here you can see it is used to provide a value to the Auto Scaling Launch Configuration, which is used to launch new EC2 instances.
+   * Search the file for `!Ref InstanceType`.  `!Ref!` is a built-in function that references the value of a parameter.  Here you can see it is used to provide a value to the Auto Scaling Launch Configuration, which is used to launch new EC2 instances.
 
 * The [Conditions section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html) is where you can setup _if/then_-like control of what happens during template deployment. It defines the circumstances under which entities are created or configured.
 

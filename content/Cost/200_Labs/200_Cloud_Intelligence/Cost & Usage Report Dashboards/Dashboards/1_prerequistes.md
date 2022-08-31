@@ -445,10 +445,8 @@ It can take up to 24 hours for AWS to start delivering reports to your Amazon S3
 1. For **Report name**, enter a name for your report.
 
 1. Under **Additional report details**, select **Include resource IDs** to include the IDs of each individual resource in the report.
-
 **Note:** Including resource IDs will create individual line items for each of your resources. This can increase the size of your Cost and Usage Reports files significantly, based on your AWS usage.
     ------------ | -------------
-
 1. For **Data refresh settings**, select whether you want the AWS Cost and Usage Reports to refresh if AWS applies refunds, credits, or support fees to your account after finalizing your bill. When a report refreshes, a new report is uploaded to Amazon S3.
 
 1. Choose **Next**.
@@ -462,9 +460,9 @@ It can take up to 24 hours for AWS to start delivering reports to your Amazon S3
     + Enter a bucket name and the Region where you want to create a new bucket and choose **Next**.
 
 1. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
-
 1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report.
-
+**Note:** Make sure that report path prefix doesn't include a double slash (//) as Athena doesn't support such table location.
+    ------------ | -------------
 1. For **Time granularity**, choose **Hourly**.
 
 1. For **Report versioning**, choose **Overwrite existing report**.
@@ -514,7 +512,7 @@ To streamline and automate integration of your Cost and Usage Reports with Athen
 
 1. Navigate to the S3 bucket where the **Cost & Usage Report** was saved
 
-1. Select the Object named after the **prefix** defined when your Cost & Usage Report was created (Step 11 in [Prepare Cost & Usage Report](prepare-cur.html))
+1. Select the Object named after the **prefix** defined when your Cost & Usage Report was created (Step 11 in [Prepare Cost & Usage Report](#prepare-cost--usage-report) --> Configure Cur)
 
 1. Select the Object named after the **Cost & Usage Report**
 

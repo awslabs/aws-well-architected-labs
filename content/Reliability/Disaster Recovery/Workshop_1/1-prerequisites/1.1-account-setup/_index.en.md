@@ -10,4 +10,4 @@ If you are using a personal AWS account, be aware that you will incur costs for 
 
 This workshop takes about 90 minutes to complete. 
 
-{{< prev_next_button link_prev_url="../" link_next_url="./1.1.1-primary-region/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="./1.1.1-s3-access/" />}}

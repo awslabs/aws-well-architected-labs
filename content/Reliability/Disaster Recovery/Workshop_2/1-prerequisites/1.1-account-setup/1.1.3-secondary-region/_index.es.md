@@ -36,4 +36,4 @@ Debe esperar que la pila **Pilot Secondary Region** tenga el estado **Completado
 
 {{< img sr-6-ES.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.2-s3/" link_next_url="../../../2-verify-primary/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../1.1.2-primary-region/"  link_next_url="../../../2-verify-primary/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}

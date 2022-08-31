@@ -36,7 +36,9 @@ Resources:
   LambdaOrgData:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: Lambda_Organization_Data_Collector
+      FunctionName: !Sub
+        - 'Lambda_Organization_Data_${Id}'
+        - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction of python3.8.
       Runtime: python3.8
       Code:
@@ -175,7 +177,10 @@ Resources:
   OrgCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: OrgGlueCrawler
+      Name:  !Join
+          - '-'
+          - - 'OrgGlueCrawler'
+            - !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
