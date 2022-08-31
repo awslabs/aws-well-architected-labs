@@ -9,7 +9,7 @@ hidden: false
 ## Author
 
 - **Neha Garg**, Enterprise Solutions Architect.
-- **Jang Whan Han**, Well-Architected Geo Solutions Architect.
+- **Jang Whan Han**, Solutions Architect, AWS Well-Architected.
 
 ## Contributor
 - **Stephen Salim**, Well-Architected Geo Solutions Architect.
