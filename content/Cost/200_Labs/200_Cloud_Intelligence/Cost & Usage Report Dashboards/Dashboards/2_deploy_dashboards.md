@@ -1159,7 +1159,14 @@ If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-fra
 To pull the latest version of the dashboard from the public template please use the following steps.
 
 #### Option 1: Command Line Tool
-Visit the [GitHub repository](https://github.com/aws-samples/aws-cudos-framework-deployment/) to download and install the CID Command Line Tool and follow the instructions for running the `update` command. 
+
+1. In your Terminal application write the following command and press enter. 
+
+```bash
+cid-cmd update
+```
+
+1. Choose the dashboard you wish to update and press enter.  
 
 #### Option 2: Manual Update
 
@@ -1232,4 +1239,4 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
 - Visit our [customizations lab](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/customizations/) to learn some ways to customize your dashboards. 
 - Having trouble? Visit [our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/). 
 
-{{< prev_next_button link_prev_url="../1_prerequistes/" link_next_url="../2b_cudos_dashboard/" />}}
+{{< prev_next_button link_prev_url="../1_prerequistes/" link_next_url="../3_additional_dashboard/" />}}

@@ -146,9 +146,9 @@ These actions should be done in Governance account
 
 For very large CUR files, Athena may time out trying to query the data for summary_view. In Athena, find the summary_view view, click the three dots next to it and select show/edit query. Modify the following:
 
-- Request an Athena rate limit increase.
-- Or, adjust the granularity to monthly, by changing 'day' to 'month' in row 6 
-- Or, adjust the look back from '7' months to desired time-frame in row 75
+- [Request Athena](https://docs.amazonaws.cn/en_us/athena/latest/ug/service-limits.html?) DML query timeout increase via support case. 
+- Or, adjust the granularity to monthly, by changing 'day' to 'month' in row 6. 
+- Or, adjust the look back from '7' months to desired time-frame in row 75.
 - In QuickSight, refresh your dataset. 
 
 ## I am getting the error StartQueryExecution operation: No output location provided. How do I fix this?
