@@ -1,12 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
 Parameters:
-  CrawlerName:
-    Type: String
-    Default: crawl-rightsizing-recommendations
-    Description: Name of the AWS crawler to be created
-    AllowedPattern: ^.*[^0-9]$
-    ConstraintDescription: Must end with non-numeric character.
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
@@ -102,7 +96,9 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: aws-cost-explorer-rightsizing-recommendations-function
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction to retreive list of organization
       Runtime: python3.8
       Code:
@@ -256,12 +252,12 @@ Resources:
           CRAWLER_NAME:
             Ref: RightsizingCrawler
           RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
-
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        Ref: CrawlerName
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
