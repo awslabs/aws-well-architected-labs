@@ -112,7 +112,7 @@ Our improvement goal is to maximize utilization of provisioned resources. Let's 
 10. Tick a box to select **BusinessMetrics** at step 3.2 and select **Graphed metrics** tab.
 ![Section3 graphed_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/graphed_metrics.png)
 
-11. Let's change the **statistic** and **seriod** setting as shown:
+11. Let's change the **statistic** and **period** setting as shown:
 ![Section3 statistic_period](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section3/statistic_period.png)
 
     We are going to use [CloudWatch metrics with metric math function.](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html)
