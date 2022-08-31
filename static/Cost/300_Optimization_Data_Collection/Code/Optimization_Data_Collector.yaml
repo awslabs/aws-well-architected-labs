@@ -34,7 +34,7 @@ Metadata:
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
       Schedule:
-        default: "Schedule"
+        default: "Schedule swap to cron(0 8 1 * ? *) for 1st day of the month"
       RolePrefix:
         default: "Role Prefix"
       IncludeTAModule:

@@ -206,7 +206,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: ec2_pricing_table2
+      Name: ec2_pricing_table
       QueryString: !Sub
         "CREATE EXTERNAL TABLE ec2_pricing(
         sku string, 
