@@ -512,7 +512,7 @@ To streamline and automate integration of your Cost and Usage Reports with Athen
 
 1. Navigate to the S3 bucket where the **Cost & Usage Report** was saved
 
-1. Select the Object named after the **prefix** defined when your Cost & Usage Report was created (Step 11 in [Prepare Cost & Usage Report](prepare-cur.html))
+1. Select the Object named after the **prefix** defined when your Cost & Usage Report was created (Step 11 in [Prepare Cost & Usage Report](#prepare-cost--usage-report) --> Configure Cur)
 
 1. Select the Object named after the **Cost & Usage Report**
 
