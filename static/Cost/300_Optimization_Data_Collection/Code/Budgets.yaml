@@ -160,7 +160,7 @@ Resources:
                               for budget in budgets['Budgets']:
                                   print(budget)
                                   budget.update({'Account_ID': account_id, 'Account_Name': account_name})
-                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0:
+                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0 or 'PlannedBudgetLimits' not in budget:
                                     budget.update({'CostFilters': {'Filter': ['None']}})
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
