@@ -74,7 +74,7 @@ cid-cmd deploy
 
     ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_exit_refresh.png?classes=lab_picture_small)
 
-17.	Repeat these steps with the KPI datasets. No refresh is required for customer_all.
+17.	Repeat these steps with all other SPICE datasets (including the KPI datasets). No refresh is required for customer_all.
 
 18. [Share or edit your dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight/) 
 
@@ -190,7 +190,9 @@ To validate your QuickSight complete the tasks below:
 
 ### Create the KPI Dashboard using a CloudFormation Template
 
-1. Login via SSO in your Cost Optimization account
+Note: This will only work if you **have not** deployed CID and CUDOS using the CloudFormation template above. 
+
+1. Login in to your Cost Optimization account
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
