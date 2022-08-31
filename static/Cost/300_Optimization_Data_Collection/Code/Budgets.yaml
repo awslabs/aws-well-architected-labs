@@ -219,7 +219,8 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: !Sub "${CFDataName}Crawler"
+      Name: 
+        !Sub "${CFDataName}Crawler"
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
