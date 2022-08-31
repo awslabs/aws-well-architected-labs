@@ -1,17 +1,17 @@
 ---
 title: "FAQ"
 #menutitle: "FAQs"
-date: 2020-09-07T11:16:08-04:00
+date: 2022-08-31T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
 ---
 #### Last Updated
-June 2022
+August 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
-## How do I setup the dashboards on top of multiple payer accounts?
+## How do I setup the dashboards in an account other than my payer account or on top of multiple payer accounts?
 
 This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Governance Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Governance account.
 {{%expand "Click here to expand step by step instructions" %}}
@@ -139,6 +139,33 @@ These actions should be done in Governance account
 10. Crawler configuration should look as on the screenshot below. Click Finish
 
 11. Resume deployment methodoly of choice from previous page. 
+
+{{% /expand%}}
+
+## I'm getting an error in QuickSight that is saying Athena timed out?
+
+For very large CUR files, Athena may time out trying to query the data for summary_view. In Athena, find the summary_view view, click the three dots next to it and select show/edit query. Modify the following:
+
+- Adjust the granularity to monthly, by changing 'day' to 'month' in row 6 
+- Or, adjust the look back from '7' months to desired time-frame in row 75
+- In QuickSight, refresh your dataset. 
+
+## I am getting the error StartQueryExecution operation: No output location provided. How do I fix this?
+
+An output location is required either through the Workgroup result configuration setting or as an API input. 
+{{%expand "Click here to expand step by step instructions" %}}
+
+1. Visit Athena and click on the three line hamburger icon on the top left. 
+
+![images/athenahelp1.png](/Cost/200_Cloud_Intelligence/Images/athenahelp1.png?classes=lab_picture_verysmall)
+
+1. Select Workgroups. Click on primary (or the workgroup you wish to use), and from the actions menu select edit. 
+
+![images/athenahelp15.png](/Cost/200_Cloud_Intelligence/Images/athenahelp15.png?classes=lab_picture_verysmall)
+
+1. Find the Query results configuration section, designate a bucket for your query results, and click save. 
+
+![images/athenahelp2.png](/Cost/200_Cloud_Intelligence/Images/athenahelp2.png?classes=lab_picture_verysmall)
 
 {{% /expand%}}
 
