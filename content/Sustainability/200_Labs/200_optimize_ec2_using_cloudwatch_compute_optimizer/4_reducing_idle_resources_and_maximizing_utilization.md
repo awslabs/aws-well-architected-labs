@@ -26,7 +26,7 @@ You will improve the sustainability KPIs by optimizing the following hardware pa
 We will now use the AWS Compute Optimizer service to rightsize your EC2 resources. AWS Compute Optimizer uses a combination of machine learning and historical trend information to provide efficiency recommendations for your workload. Follow the steps below to rightsize your compute environment:
 
 {{% notice note %}}
-**Note** - It may take up to 12 hours for AWS Compute Optimizer to fully analyze the AWS resources in your account, which will incur costs.
+**Note** - To see recommendations from the AWS Compute Optimizer dashboard, you will need to let your Amazon EC2 Instance run for 42 hours, which will incur costs generated from EC2(t4g.xlarge) in your AWS account. You can refer to the screenshots in this lab to minimize costs from EC2.
 {{% /notice %}}
 
 1. Search for compute optimizer in AWS console and select AWS Compute Optimizer from Services.

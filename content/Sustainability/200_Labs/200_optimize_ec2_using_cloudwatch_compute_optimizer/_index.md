@@ -30,7 +30,7 @@ At the end of this lab you will:
 ## Prerequisites
 
 * The lab is designed to run in your own AWS account.
-* Enable [AWS Compute Optimizer](https://aws.amazon.com/compute-optimizer/) and it may take up to 12 hours to fully analyze the AWS resources in your account. If you want to complete this lab without enabling Compute Optimizer, you can refer to the screenshots in this lab.
+* Enable [AWS Compute Optimizer.](https://aws.amazon.com/compute-optimizer/) 
 * We will deploy a sample web application and will automatically generate a workload  to simulate requests from users.
 
 ## Costs
