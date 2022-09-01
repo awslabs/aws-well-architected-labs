@@ -1,0 +1,13 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [{
+					"file_path": "/var/log/httpd/access_log",
+					"log_group_name": "httpd_access_log",
+					"log_stream_name": "{instance_id}/var/log/httpd/access_log"
+				}]
+			}
+		}
+	}
+}
