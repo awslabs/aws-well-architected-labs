@@ -69,7 +69,7 @@ Refer to [Evaluate specific improvements in Sustainability Pillar](https://docs.
 
 * Estimate improvement as both the quantitative reduction in resources provisioned (as indicated by your proxy metrics) and the percentage change from your baseline resources provisioned per unit of work:
 
-    ![Estimate Improvement](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section0/EstimateImprovement.png?classes=lab_picture_small)
+    ![Estimate Improvement](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section0/EstimateImprovement.png?classes=lab_picture_small)
 
 
 {{< prev_next_button link_next_url="./1_prerequisites/" button_next_text="Start Lab" first_step="true" />}}

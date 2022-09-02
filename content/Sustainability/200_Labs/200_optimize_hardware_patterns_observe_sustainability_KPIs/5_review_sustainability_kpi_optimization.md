@@ -11,10 +11,10 @@ With our EC2 instance optimization completed, let’s evaluate our utilization l
 ### 5.1. Review Sustainability KPIs Optimization
 
 1. Go back to the dashboard for Sustainability KPIs Baseline in the Amazon CloudWatch.
-![Section5 revised_kpi_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/dashboard.png)
+![Section5 revised_kpi_metrics](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section5/dashboard.png)
 
 2. Let's evaluate the sustainability KPIs. 
-![Section5 revised_kpi_metrics](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section5/revised_kpi_metrics.png)
+![Section5 revised_kpi_metrics](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section5/revised_kpi_metrics.png)
 
 
 These are the improved metrics and KPIs:

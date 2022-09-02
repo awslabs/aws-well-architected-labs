@@ -13,7 +13,7 @@ The following example scenario is referenced in this lab:
 Your company has a workload running on an Amazon EC2 instance. You have a number of API calls served and measured as metrics to quantify the achievement of business outcomes.
 
 In this section, we will deploy our base lab infrastructure using AWS CloudFormation as follows:
-![Section2 Architecture](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/lab_architecture.png)
+![Section2 Architecture](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/lab_architecture.png)
 
 Note the following:
 
@@ -28,7 +28,7 @@ Note the following:
 
 ### 2.1. Get the CloudFormation Template and Deploy it.
 
-You can get the first CloudFormation template used in this lab [here.](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
+You can get the first CloudFormation template used in this lab [here.](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Code/SustainabilityDemo.yaml "Section2 CFTemplate")
 
 The first CloudFormation template will deploy an Amazon EC2 Instance, log group and metrics in Amazon CloudWatch. You can create a CloudFormation Stack directly via the AWS console.
 
@@ -37,46 +37,46 @@ The first CloudFormation template will deploy an Amazon EC2 Instance, log group 
 If you need detailed instructions on how to deploy a CloudFormation stack from within the console, please follow this [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
 1. Open the CloudFormation console at [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/) and select any region you would like to use. Click **create a stack**. 
-![Section2 CFStack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/CFStack.png)
+![Section2 CFStack](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/CFStack.png)
 
 2. Select the stack template which you downloaded earlier, and click **choose file** to upload **SustainabilityDemo.yaml** and click **Next**.
-![Section2 Upload_CFStack](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/upload_CFStack.png)
+![Section2 Upload_CFStack](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/upload_CFStack.png)
 
 For the stack name use any stack name you can identify and click **Next**. For this case, I used sustainability-demo as a stack name.
-![Section2 StackName](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/stackName.png)
+![Section2 StackName](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/stackName.png)
 
 3. Skip stack options and click **Next**.
-![Section2 StackOptions](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/stackOptions.png)
+![Section2 StackOptions](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/stackOptions.png)
 
 4. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting **all the check boxes**. Then launch the stack. It may take 5 minutes to complete the baseline deployment.
-![Section2 IAM](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/IAM.png)
+![Section2 IAM](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/IAM.png)
 
 5. Now go to your newly created stack and go to the **Outputs** section of the CloudFormation stack. Then, click **WebsiteURL** to make sure this deployment has been successfully completed.
-![Section2 output](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/output.png)
+![Section2 output](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/output.png)
 
 6. It may take 2~3 minutes to see the following website. The script in UserData will automatically generate 3 API calls per a minute continuously. No action is required here.
-![Section2 website](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/website.png)
+![Section2 website](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/website.png)
 
 
 ### 2.2. Verify Baseline Infrastructure.
 
 1. Search for EC2 service in AWS Console and click EC2 from Services.
-![Section2 ec2](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/ec2.png)
+![Section2 ec2](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/ec2.png)
 
 2. The EC2 service will show an Amazon EC2 Instance called **SustainabilityApp**. The instance type will show as **t4g.xlarge** powered by **Arm-based Amazon Graviton2 processors**. If you select the **Monitoring** tab, you will notice the CPU utilization will be ~12-13%.
 {{% notice note %}}
 **Note** - It may take 5~10 minutes for CPU metrics to be shown in the monitoring tab.
 {{% /notice %}}
-![Section2 utilization](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/utilization.png)
+![Section2 utilization](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/utilization.png)
 
 3. Search for CloudWatch in AWS Console and click CloudWatch from Services.
-![Section2 cloudwatch](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/cloudwatch.png)
+![Section2 cloudwatch](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/cloudwatch.png)
 
 4. Click **Log groups** and make sure there is log group called **httpd_access_log**.
-![Section2 httpd_access_log](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/httpd_access_log.png)
+![Section2 httpd_access_log](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/httpd_access_log.png)
 
 5. Expand **Metrics** and click **All metrics**. In Custom namespaces, there will be a namespace named **Sustainability**. Click Sustainability.
-![Section2 custom_namespace](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section2/custom_namespace.png)
+![Section2 custom_namespace](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section2/custom_namespace.png)
 
 
 ### Congratulations!
