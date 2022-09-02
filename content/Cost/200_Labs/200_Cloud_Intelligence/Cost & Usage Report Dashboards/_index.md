@@ -1,7 +1,7 @@
 ---
 title: "Cost & Usage Report Dashboards"
 #menutitle: "Lab #2"
-date: 2020-09-07T11:16:08-04:00
+date: 2022-08-30T11:16:08-04:00
 chapter: false
 weight: 1
 hidden: false
@@ -63,7 +63,7 @@ Detailed permissions are shared in the next step
 
 - A QuickSight Enterprise license starts at $18 per month. 
 - Incremental costs associated with AWS Glue, Amazon Athena, and Amazon S3. 
-- Estimated total cost for all Dashboards together in a large AWS deployment is $54 per month. 
+- Estimated total cost for all Dashboards together in a large AWS deployment is $100 per month. 
 
 ## Time to complete
 

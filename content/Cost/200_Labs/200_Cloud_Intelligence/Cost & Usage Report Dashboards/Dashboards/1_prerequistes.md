@@ -508,6 +508,8 @@ Before you can use the AWS CloudFormation template to automate an Athena integra
 
 To streamline and automate integration of your Cost and Usage Reports with Athena, AWS provides an AWS CloudFormation template with several key resources along with the reports you setup for Athena integration. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
 
+If you are not deploying the CIDs in your payer acacount, or wish to deploy them on top of multiple payer accounts, please follow [these instructions](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/) in lieu of the below. Come back for the QuickSight prerequisites.
+
 1. From the services list, choose **S3**
 
 1. Navigate to the S3 bucket where the **Cost & Usage Report** was saved
