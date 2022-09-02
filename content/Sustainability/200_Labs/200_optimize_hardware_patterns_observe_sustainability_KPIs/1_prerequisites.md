@@ -18,6 +18,6 @@ For more information, see Viewing the [AWS Compute Optimizer dashboard](https://
 {{% /notice %}}
 
 Once AWS Compute Optimizer completes the analysis, you will see saving opportunities and recommendations as follows:
-![Section1 AWS Compute Optimizer](/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/Images/section1/ComputeOptimizer.png)
+![Section1 AWS Compute Optimizer](/Sustainability/200_optimize_hardware_patterns_observe_sustainability_KPIs/Images/section1/ComputeOptimizer.png)
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_configure_env" />}}
