@@ -225,7 +225,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/OrgGlueCrawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${OrgCrawler}"
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
