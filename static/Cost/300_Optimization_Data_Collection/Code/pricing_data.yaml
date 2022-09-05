@@ -152,8 +152,6 @@ Resources:
               - RDSLambdaFunction
               - Arn
           Id: WeeklyTriggerForRDSPricing
-
-
   EC2EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -176,7 +174,6 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
-  
   AthenaRegionTable:
     Type: AWS::Athena::NamedQuery
     Properties:
@@ -315,12 +312,12 @@ Resources:
           'has_encrypted_data'='false', 
           'skip.header.line.count'='6', 
           'transient_lastDdlTime'='1625832980')"
-
-
   RDSLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-RDS-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-RDS-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve RDS ${CFDataName}"
       Runtime: python3.8
       Architectures: [arm64]
@@ -367,7 +364,6 @@ Resources:
             !Ref DestinationBucket
           ACCOUNT_ID: AWS::AccountId
           DEST_PREFIX: !Ref CFDataName
-  
   AthenaRDSPricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
