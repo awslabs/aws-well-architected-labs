@@ -34,7 +34,7 @@ Metadata:
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
       Schedule:
-        default: "Schedule"
+        default: "Schedule swap to cron(0 8 1 * ? *) for 1st day of the month"
       RolePrefix:
         default: "Role Prefix"
       IncludeTAModule:
@@ -200,6 +200,9 @@ Conditions:
   DeployBudgetsModule: !Equals
     - !Ref IncludeBudgetsModule
     - "yes"
+  DeployPricingModule: !Or
+    - !Condition DeployInventoryCollectorModule
+    - !Condition DeployRDSUtilizationModule
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
@@ -330,9 +333,9 @@ Resources:
         RolePrefix: !Ref RolePrefix
   PricingModule:
     Type: AWS::CloudFormation::Stack
-    Condition: DeployInventoryCollectorModule
+    Condition: DeployPricingModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data_dev.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
