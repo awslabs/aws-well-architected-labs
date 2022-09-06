@@ -489,7 +489,7 @@ To get Athena warmed up:
 
 1. From the services list, choose **S3**
 
-1. Create a new S3 bucket for Athena queries to be logged to. Keep to the same region as the S3 bucket created for your Cost & Usage Report.
+1. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
 
 1. From the services list, choose **Athena**
 
@@ -500,6 +500,8 @@ To get Athena warmed up:
     ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
 
 1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+1. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
 
 ##### 2. Prepare CUR & Athena Integration
 {{% notice note %}}
