@@ -40,7 +40,7 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
 
 #### Copy Query
 ```tsql
-    SELECT
+SELECT
   product_region,
   bill_payer_account_id,
   line_item_usage_account_id,
