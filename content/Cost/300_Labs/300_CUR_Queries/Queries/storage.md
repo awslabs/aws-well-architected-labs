@@ -41,9 +41,9 @@ Please refer to the [S3 pricing page](https://aws.amazon.com/s3/pricing/).  Plea
 #### Copy Query
 ```tsql
 SELECT
-  product_region,
   bill_payer_account_id,
   line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d') AS day_line_item_usage_start_date,
   line_item_resource_id,
   line_item_operation,
   CASE
@@ -123,7 +123,7 @@ WHERE
 GROUP BY
   bill_payer_account_id,
   line_item_usage_account_id,
-  product_region,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m-%d'),
   line_item_resource_id,
   line_item_operation,
   6 --refers to case_line_item_usage_type
