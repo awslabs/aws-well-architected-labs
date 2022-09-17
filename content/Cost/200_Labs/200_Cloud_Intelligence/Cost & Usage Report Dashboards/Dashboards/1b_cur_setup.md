@@ -31,7 +31,7 @@ AWS Customers can have many AWS Accounts and even multiple management (payer) ac
 
 If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small. Please find the automated and manual instructions bellow in the section [#Multi-Account-use-cases]({{< ref "#Multi-Account-use-cases" >}}).
 
-![Images/glue_4.png](/Cost/200_Cloud_Intelligence/Images//multi-account/Architecture1.png?classes=lab_picture_small)
+![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_small)
 
 If you have just one payer account, a dedicated account for dashboards is still a recommended option. 
 
