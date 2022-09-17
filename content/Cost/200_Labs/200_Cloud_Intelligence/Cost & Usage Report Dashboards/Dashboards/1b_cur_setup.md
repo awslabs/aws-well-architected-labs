@@ -1,5 +1,5 @@
 ---
-title: "Multi-Account Setup"
+title: "Cost And Usage Report Setup"
 date: 2022-05-20T11:16:08-04:00
 chapter: false
 weight: 5
@@ -8,51 +8,164 @@ pre: "<b>4. </b>"
 
 ## Authors
 - Thomas Buatois, AWS Cloud Infrastructure Architect (ProServe)
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
 
-## Contributors 
+## Contributors
 - Iakov Gan, AWS Sr. Technical Account Manager
-- Yuriy Prykhodko, AWS Sr. Technical Account Manager
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
 
-## Prerequisites
 
-- [Install or Update the AWS CLI]({{< ref "1_prerequistes/#install-or-update-the-aws-cli" >}})
-- [Enable QuickSight]({{< ref "1_prerequistes/#enable-quicksight" >}})
+## Cost and Usage Report
+The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for these dashboards. 
 
-## Multi-Account use cases 
+## Deployment options
+AWS Customers can have many AWS Accounts and even multiple Payer accounts. Cost Intelligence Dashboards are build to give a visblilty across many accounts. 
 
-In addition to a simple setup that we covered in the previous chapters of this lab, some customer can require a more complex solution to use a dashboard in a multi-payer or multi-account setup. This chapter will cover several typical use cases and provide deep dive on automated way to aggregate the Cost and Usage Report data across multiple accounts. 
+If you have __one or several management (payer) accounts__ we recommend to setup Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small. Please find the automated and manual instructions bellow in the section [#Multi-Account-use-cases]({{< ref "#Multi-Account-use-cases" >}}).
 
-There are several options to deploy the Cost Intelligence Dashboard (CID) in a multi-account setup.
+If you want to set up CUR and dashboards in a __single account__ or in management (payer) account, it is also possible, but in this case make sure you apply systematically [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege). For deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report" >}}).
 
-For each deployment scenario there will be two main section: 
-#### 1. Deployment of the CUR Aggregation stack across multiple accounts
+Another frequent use case is __multi linked account__ setup. When AWS customer has a set on AWS Accounts but no access to management (payer) account, then it is possible to configie CUR in each account and set up a replication to one account that will be used for dashboards.
 
-Typicaly there are __CUR Aggregation account__ (destination) where all the CUR information will be consolidated and __CUR Replication account__ (source) from where CUR orginated data will be replicated to the CUR Aggregation account. 
+## Cost and Usage Report Format
+For dashboards you must have a Cost & Usage Report created with the following format
+- Additional report details: Include **Resource IDs**
+- Time Granularity: **Hourly**
+- Report Versioning: **Overwrite existing report**
+- Report data integration for: **Amazon Athena**
+- Compression type: **Parquet**
 
-In this section of the lab, creation of resources needed for CUR Aggregation will be automated with **CloudFormation templates**. However, if you are not confortable with CloudFormation you can see [manual deployment steps]({{< ref "#manual-deployment" >}}) 
 
-#### 2. Deployment of the Dashboards
+If you do not have a Cost & Usage Report that meets this criteria you can use it, if not, you can create a new CUR and request a backfill. 
 
-{{% notice warning %}}
-It can take up to __24 hours__ for AWS to start delivering reports to your Amazon S3 bucket. After delivery starts, AWS updates the AWS Cost and Usage Reports files at least once a day.
-__You will need to wait for CUR files delivery before following this steps.__
+
+## Manual setup of Cost and Usage Report
+
+This option is the simplest way to deploy Cost and Usage Report. In this case aggregation and dashboards will be deployed in the payer account. If you have a payer account, due to AWS Organization consolidated billing feature, the CUR of payer account contains report of all linked accounts. In this case, the deployment of CUR Aggregation is only necessary in the payer account of your organization.
+
+However, we do not recommend this option, please consider aggregate CUR in a dedicated account. This way you can effectivly managed the access and avoid having unnecessary users in your payer account. If you still want to use this option, please apply least priviledge access to your payer account.
+
+
+{{%expand "Click here see steps for preparing your Cost & Usage report and Athena integraton manually" %}}
+#### Configure CUR
+1. [Sign in](https://console.aws.amazon.com/billing/home#/) to the Billing and Cost Management console.
+
+1. On the navigation pane, choose **Cost & Usage Reports**.
+
+1. Choose **Create report**.
+
+1. For **Report name**, enter a name for your report.
+
+1. Under **Additional report details**, select **Include resource IDs** to include the IDs of each individual resource in the report.
+**Note:** Including resource IDs will create individual line items for each of your resources. This can increase the size of your Cost and Usage Reports files significantly, based on your AWS usage.
+    ------------ | -------------
+1. For **Data refresh settings**, select whether you want the AWS Cost and Usage Reports to refresh if AWS applies refunds, credits, or support fees to your account after finalizing your bill. When a report refreshes, a new report is uploaded to Amazon S3.
+
+1. Choose **Next**.
+
+1. For S3 bucket, choose **Configure**.
+
+1. In the Configure **S3 Bucket** dialog box, do one of the following:
+
+    + Select an existing bucket from the drop down list and choose **Next**.
+
+    + Enter a bucket name and the Region where you want to create a new bucket and choose **Next**.
+
+1. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
+1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report.
+**Note:** Make sure that report path prefix doesn't include a double slash (//) as Athena doesn't support such table location.
+    ------------ | -------------
+1. For **Time granularity**, choose **Hourly**.
+
+1. For **Report versioning**, choose **Overwrite existing report**.
+
+1. For **Enable report data integration for**, select **Amazon Athena**.
+
+1. Now CUR will be set to **Parquet** format, this format is **mandatory** for the workshop completion.
+
+1. Choose **Next**.
+
+1. After you have reviewed the settings for your report, choose **Review and Complete**.
+
+{{% notice note %}}
+It can take up to 24 hours for AWS to start delivering reports to your Amazon S3 bucket. After delivery starts, AWS updates the AWS Cost and Usage Reports files at least once a day. You can create AWS Support ticket requesting a backfill for the last 6 months of your data.
 {{% /notice %}}
 
-After deployment of CUR Aggregation you can deploy Dashboards using __CID command line tool__ or with __CloudFormation__ according the per dashboard deployment documentation. 
 
-## Deployment
-### Option 1: From Payer Account
+### Enable your Cost & Usage Reports in Athena
+The dashboards use Athena as the QuickSight data source for generating your dashboards. If you do not have your Cost & Usage Report enabled in Athena please click to expand the setup guide below. 
 
-This option is the simplest way to deploy Cost and Usage Report Aggregation for multi account on the __*Payer Account*__ of an AWS Organization. In this case aggregation and dashboards will be deployed in the payer account. 
+#### Configure Athena
+##### 1. Prepare Athena
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to step 2 **Prepare CUR & Athena Integration** 
 
-Due to AWS Organization consolidated billing feature, the CUR of payer account contains report of linked accounts. In this case, the deployment of CUR Aggregation is __only__  necessary in the payer account of your organization. 
+To get Athena warmed up:
 
-However, we do not recommend this option, please consider aggregate CUR in a dedicated account (option 2). This way you can effectivly managed the access and avoid having unnecessary users in your payer account. If you still want to use this option, please apply least priviledge access to your payer account.
+1. From the services list, choose **S3**
 
-#### Multiple Payer Accounts
+1. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
 
-If you have __multiple payer accounts__, you can follow these steps to configure CUR aggregation for this payer account and use the [add or delete account section]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) steps to add CUR aggregation for other payer accounts.
+1. From the services list, choose **Athena**
+
+1. Select **Get Started** to enable Athena and start the basic configuration
+
+1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
+
+1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+1. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
+
+##### 2. Prepare CUR & Athena Integration
+{{% notice note %}}
+Before you can use the AWS CloudFormation template to automate an Athena integration, you must wait for the first Cost and Usage Report to be delivered to your Amazon S3 bucket.
+{{% /notice %}}
+
+To streamline and automate integration of your Cost and Usage Reports with Athena, AWS provides an AWS CloudFormation template with several key resources along with the reports you setup for Athena integration. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
+
+If you are not deploying the CIDs in your payer acacount, or wish to deploy them on top of multiple payer accounts, please follow [these instructions](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/) in lieu of the below. Come back for the QuickSight prerequisites.
+
+1. From the services list, choose **S3**
+
+1. Navigate to the S3 bucket where the **Cost & Usage Report** was saved
+
+1. Select the Object named after the **prefix** defined when your Cost & Usage Report was created (Step 11 in [Prepare Cost & Usage Report](#prepare-cost--usage-report) --> Configure Cur)
+
+1. Select the Object named after the **Cost & Usage Report**
+
+1. Download the **crawler-cfn.yml** file
+
+1. Navigate to the **CloudFormation** service
+
+1. Ensure you are in the same Region as your Cost & Usage Report S3 bucket
+
+1. Deploy the CloudFormation template by clicking **Create stack - With new resources (standard)**
+
+1. Select **Upload a template file**
+
+1. Click **Choose file** and locate your `crawler-cfn.yml` file
+
+1. Click **Next**
+
+1. Enter a Stack Name to identify this as part of your CUDOS Dashboard setup
+
+1. Click **Next**
+
+1. Define Stack options including tags, permissions and rollback configurations.
+
+1. Click **Next**
+
+1. Enable **"I acknowledge that AWS CloudFormation might create IAM resources."** and click **Create Stack**
+
+{{% /expand%}}
+
+
+## Multi-Account use cases
+
+AWS Customers often use dashboards in a multi-payer or multi-account setup. This section will cover several typical use cases and provide deep dive on automated way to aggregate the Cost and Usage Report data across multiple accounts.
+
+If you have multiple payer accounts or if you just want to transfer CUR from payer to a deducated account, you can follow these steps to configure CUR aggregation. Also you can [add or delete account]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) after the initial setup.
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
@@ -264,35 +377,6 @@ For __each__ account you would like to enable cur replication, follow this steps
 10.  You will need to wait __24 hours__ for the first CUR delivery before starting deployment of the dashboards. Please refer to the [deploy dashboard section]({{< ref "#deploy-dashboards-via-cli" >}}) of the lab. Entreprise Support customers can reach out to their TAM and ask for a backfill of their CUR data.
 
 {{% /expand%}}
-## Deploy Dashboards via CLI
-
-{{% notice warning %}}
-It can take up to __24 hours__ for AWS to start delivering reports to your Amazon S3 bucket. After delivery starts, AWS updates the AWS Cost and Usage Reports files at least once a day.
-__You will need to wait for CUR files delivery before following this steps.__
-{{% /notice %}}
-
-The CID command line tool is way to deploy Dasboards.
-
-1. Navigate to the [Cloud Intelligence Dashboards automation repo]("https://github.com/aws-samples/aws-cudos-framework-deployment#how-to-use") and follow the instructions to install the command line tool..
-
-2. Run the `deploy` command with specific named resources. If you change the default value ResourcePrefix template, please update command accordingly.
-
-```bash
-cid-cmd deploy \
-  --athena-database centralized-cur-db \
-  --athena-workgroup centralized-cur-wk
-```
-
-You can re launch this tool with the same parameters to add, update or delete dashboards.
-
-1. Once complete, visit the [account mapping page](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/) and follow the steps there to get your account names into the dashboard. 
-
-### Saving and Sharing your Dashboard in QuickSight
-
-Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard
-	
-- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)	
-
 ## Advanced
 
 ### Add or delete accounts to an existing multi-account deployment
@@ -594,5 +678,7 @@ These actions should be done in Governance account
 {{% /expand%}}
 
 
+
+{{< prev_next_button link_prev_url="../1a_prerequistes" link_next_url="../1c_quicksight" />}}
 
 

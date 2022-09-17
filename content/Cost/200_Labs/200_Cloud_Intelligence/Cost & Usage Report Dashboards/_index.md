@@ -77,4 +77,4 @@ Approximately 45-60 minutes to onboard all CUR dashboards in this section manual
 Additional Dashboards include the **Data Transfer Dashboard** and **Trends Dashboard** 
 {{% /notice %}} 
 
-{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1_prerequistes/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1a_prerequistes/" button_next_text="Start Lab" first_step="true" />}}

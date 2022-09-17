@@ -1239,4 +1239,4 @@ aws quicksight update-dashboard-published-version --region <region> --aws-accoun
 - Visit our [customizations lab](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/customizations/) to learn some ways to customize your dashboards. 
 - Having trouble? Visit [our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/). 
 
-{{< prev_next_button link_prev_url="../1_prerequistes/" link_next_url="../3_additional_dashboards/" />}}
+{{< prev_next_button link_prev_url="../1c_quicksight/" link_next_url="../3_additional_dashboards/" />}}
