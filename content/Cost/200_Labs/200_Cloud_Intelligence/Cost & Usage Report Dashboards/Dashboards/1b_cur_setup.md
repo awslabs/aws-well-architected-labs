@@ -14,7 +14,6 @@ pre: "<b>1b. </b>"
 - Iakov Gan, AWS Sr. Technical Account Manager
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
 
-
 ## Cost and Usage Report
 The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for multiple CID Dashboards. CID requires Cost & Usage Report to be created with the following format:
 - Additional report details: Include **Resource IDs**
@@ -35,7 +34,7 @@ If you have __one or several management (payer) accounts__ we recommend to insta
 
 If you have just one payer account, a dedicated account for dashboards is still a recommended option. 
 
-If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report" >}}).
+If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report-and-athena-integration" >}}).
 
 Another frequent use case is __multi linked account__ setup. When AWS Customer has a set on AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is close to replication from payer account on the schema above, but you will need to make sure that the target account also has a CUR activated and pointing to the same S3 folders structure.
 
