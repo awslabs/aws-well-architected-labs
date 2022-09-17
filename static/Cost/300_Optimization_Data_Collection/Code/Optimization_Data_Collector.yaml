@@ -10,6 +10,7 @@ Metadata:
           - ManagementAccountRole
           - ManagementAccountID
           - MultiAccountRoleName
+          - Schedule
           - RolePrefix
       - Label:
           default: 'Available modules'
@@ -32,6 +33,8 @@ Metadata:
         default: 'Management account Id'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
+      Schedule:
+        default: "Schedule swap to cron(0 8 1 * ? *) for 1st day of the month"
       RolePrefix:
         default: "Role Prefix"
       IncludeTAModule:
@@ -87,6 +90,10 @@ Parameters:
     Type: String
     Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
     Default: "Optimization-Data-Multi-Account-Role"
+  Schedule:
+    Type: String
+    Description: Cron job to trigger the lambda using cloudwatch event
+    Default: "rate(14 days)"
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
@@ -193,6 +200,9 @@ Conditions:
   DeployBudgetsModule: !Equals
     - !Ref IncludeBudgetsModule
     - "yes"
+  DeployPricingModule: !Or
+    - !Condition DeployInventoryCollectorModule
+    - !Condition DeployRDSUtilizationModule
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
@@ -246,6 +256,11 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+            BlockPublicAcls : true
+            BlockPublicPolicy : true
+            IgnorePublicAcls : true
+            RestrictPublicBuckets : true
       NotificationConfiguration:
         QueueConfigurations:
           - Event: s3:ObjectCreated:*
@@ -323,7 +338,7 @@ Resources:
         RolePrefix: !Ref RolePrefix
   PricingModule:
     Type: AWS::CloudFormation::Stack
-    Condition: DeployInventoryCollectorModule
+    Condition: DeployPricingModule
     Properties:
       TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
       Parameters:
@@ -341,6 +356,7 @@ Resources:
         GlueRoleARN: !GetAtt GlueRole.Arn
         RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
+        Schedule: !Ref Schedule
         RolePrefix: !Ref RolePrefix
         BucketPrefix:  !Ref DestinationBucket
         DeployRegions: 
@@ -378,6 +394,7 @@ Resources:
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
+        Schedule: !Ref Schedule
         ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         RolePrefix: !Ref RolePrefix
   BudgetsModule:
@@ -399,6 +416,7 @@ Resources:
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
             RolePrefix: !Ref RolePrefix
+            Schedule: !Ref Schedule
             TaskQueuesUrl: 
               Fn::Join:
                 - ','

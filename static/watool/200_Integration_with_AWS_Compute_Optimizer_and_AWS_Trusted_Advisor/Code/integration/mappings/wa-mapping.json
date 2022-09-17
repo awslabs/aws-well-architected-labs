@@ -1,0 +1,14 @@
+{
+    "tableName": "wa-mapping",
+    "mappings": [
+        {
+            "PillarNumber": "COST-6",
+            "PillarId": "costOptimization",
+            "QuestionTitle": "How do you meet cost targets when you select resource type, size and number?",
+            "QuestionId": "type-size-number-resources",
+            "ChoiceTitle": "Select resource type, size, and number based on data",
+            "ChoiceId": "cost_type_size_number_resources_data",
+            "TACheckId": "Qch7DwouX1"
+        }
+    ]
+}

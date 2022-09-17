@@ -9,10 +9,12 @@ hidden: false
 ## Last Updated
 May 2022
 
-## Authors
+## Owners
 - Stephanie Gooch, Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
+
+## Contributors  
 - Andy Brown, OPTICS Manager - Commercial Architects IBUs
 
 ## Feedback
