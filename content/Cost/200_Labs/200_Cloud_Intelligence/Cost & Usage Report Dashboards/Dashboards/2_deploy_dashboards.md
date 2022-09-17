@@ -2,7 +2,7 @@
 title: "CID CUDOS and the KPI Dashboards"
 date: 2021-08-30T11:16:08-04:00
 chapter: false
-weight: 2
+weight: 4
 pre: "<b>2. </b>"
 ---
 The Cost Intelligence Dashboard (CID), CUDOS, and the KPI dashboard are all strongly recommended to be deployed together. These three dashboards are based on the Cost & Usage report and will help you address a wide range of FinOps use cases. The following steps will help you deploy all three dashboards into your account. If you just want to deploy one or two of these dashboards instead, please review the manual deployment section.
