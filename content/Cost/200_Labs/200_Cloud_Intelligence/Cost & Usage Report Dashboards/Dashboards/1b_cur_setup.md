@@ -54,14 +54,22 @@ The CloudFormation template must be installed:
 
 CFN will result to S3 bucket with following structure
 
-	s3://cur-<target-account-id>/
-		cost-usage-reports/
-	 		<account1-id>/<account1-id>/
+```html
+s3://cur-<target-account>/
+	cost-usage-reports/
+ 		<src-account1>/
+ 			<src-account1>/
 	 			year=XXXX/
-	 				month=YY/
-	 		<account2-id>/<account2-id>/
+	 				month=YY/*.parquet
+ 		<src-account2>/
+ 			<src-account2>/
 	 			year=XXXX/
-	 				month=YY/
+	 				month=YY/*.parquet
+ 		<src-account3>/
+ 			<src-account3>/
+	 			year=XXXX/
+	 				month=YY/*.parquet
+```
 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
@@ -582,51 +590,60 @@ This scenario allows customers with multiple management (payer) accounts to depl
 
 ```json
 {
-"Version": "2008-10-17",
-"Id": "PolicyForCombinedBucket",
-"Statement": [
-	{
-		"Sid": "Set permissions for objects",
-		"Effect": "Allow",
-		"Principal": {
-    		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
-    		"s3:ReplicateObject",
-    		"s3:ReplicateDelete"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-	},
-	{
-		"Sid": "Set permissions on bucket",
-		"Effect": "Allow",
-		"Principal": {
-		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
- 		   "s3:List*",
- 		   "s3:GetBucketVersioning",
- 		   "s3:PutBucketVersioning"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
-	},
-	{
-		"Sid": "Set permissions to pass object ownership",
-		"Effect": "Allow",
-		"Principal": {
-		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
-    		"s3:ReplicateObject",
-    		"s3:ReplicateDelete",
-    		"s3:ObjectOwnerOverrideToBucketOwner",
-    		"s3:ReplicateTags",
-    		"s3:GetObjectVersionTagging",
-    		"s3:PutObject"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-	}
-]
+    "Version": "2008-10-17",
+    "Id": "PolicyForCombinedBucket",
+    "Statement": [
+        {
+            "Sid": "Set permissions for objects",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "{PayerAccountA}",
+                    "{PayerAccountB}"
+                ]
+            },
+            "Action": [
+                "s3:ReplicateObject",
+                "s3:ReplicateDelete"
+            ],
+            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+        },
+        {
+            "Sid": "Set permissions on bucket",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "{PayerAccountA}",
+                    "{PayerAccountB}"
+                ]
+            },
+            "Action": [
+                "s3:List*",
+                "s3:GetBucketVersioning",
+                "s3:PutBucketVersioning"
+            ],
+            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
+        },
+        {
+            "Sid": "Set permissions to pass object ownership",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "{PayerAccountA}",
+                    "{PayerAccountB}"
+                ]
+            },
+            "Action": [
+                "s3:ReplicateObject",
+                "s3:ReplicateDelete",
+                "s3:ObjectOwnerOverrideToBucketOwner",
+                "s3:ReplicateTags",
+                "s3:GetObjectVersionTagging",
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+        }
+    ]
 }
 ```
 
