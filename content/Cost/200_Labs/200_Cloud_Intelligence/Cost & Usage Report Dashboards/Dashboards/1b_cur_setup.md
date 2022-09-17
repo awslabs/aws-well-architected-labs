@@ -16,7 +16,7 @@ pre: "<b>1b. </b>"
 
 
 ## Cost and Usage Report
-The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for these dashboards. For dashboards you must have a Cost & Usage Report created with the following format:
+The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for multiple CID Dashboards. CID requires Cost & Usage Report to be created with the following format:
 - Additional report details: Include **Resource IDs**
 - Time Granularity: **Hourly**
 - Report Versioning: **Overwrite existing report**
