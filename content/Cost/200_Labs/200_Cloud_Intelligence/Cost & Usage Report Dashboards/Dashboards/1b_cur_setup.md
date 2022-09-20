@@ -28,7 +28,7 @@ If you have a Cost & Usage Report that meets this criteria you can use it, if no
 ## Deployment options
 AWS Customers can have many AWS Accounts and even multiple management (payer) accounts. Cost Intelligence Dashboards are build to give AWS Customers a visblilty across multiple accounts.
 
-If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small. Please find the automated and manual instructions bellow in the section [#Multi-Account-use-cases]({{< ref "#Multi-Account-use-cases" >}}).
+If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small.
 
 ![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_small)
 
@@ -36,7 +36,7 @@ If you have just one payer account, a dedicated account for dashboards is still 
 
 If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report-and-athena-integration" >}}).
 
-Another frequent use case is __multi linked account__ setup. When AWS Customer has a set on AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is close to replication from payer account on the schema above, but you will need to make sure that the destination account also has a CUR activated and pointing to the same S3 folders structure.
+Another frequent use case is __multi linked account__ setup. When AWS Customer has a number of AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is similar to the schema with multi-payer described on the schema above. An only difference is that in this case a local CUR must be activated in the destination account.
 
 
 ## Automatic Deployment of CUR and CUR Replication with CloudFormation
@@ -47,8 +47,8 @@ If you have multiple management(payer) accounts or if you just want to transfer 
 
 The CloudFormation template must be installed:
 
-1. In one or more **Source Accounts**, where CFN will activate a new CUR, bucket and create a replication rule.
-2. In the **Destination** or data collection account, where CFN will create a bucket for CUR aggregation.
+1. In one or more **Source Accounts**, where CFN will activate a new CUR, an S3 bucket and a replication rule.
+2. In the **Destination** or data collection account, where CFN will create an S3 bucket for CUR aggregation.
 
 If you use just one account, CFN also can be used to create a CUR, in this case please follow guidance for **Destination Account** and choose to activate local CUR.
 
@@ -73,8 +73,8 @@ s3://<prefix>cur-<destination-accountid>/
 ```
 
 
-### Enable CUR in Source Account using CloudFormation
-{{%expand "Click here to continue with the CloudFormation Deployment" %}}
+### Create CUR in Source Account using CloudFormation
+{{%expand "Click here to continue" %}}
 
 1. Login to the Source Account (can be management account or linked account depending what you what to replicate).
 
@@ -105,8 +105,8 @@ s3://<prefix>cur-<destination-accountid>/
 {{% /expand%}}
 
 
-### Enable CUR Aggregation in a Destination Account using CloudFormation
-{{%expand "Click here to continue with the CloudFormation Deployment" %}}
+### Configure Destination Account using CloudFormation
+{{%expand "Click here to continue" %}}
 
 1. Login to the __account you choose for CUR Aggregation__ (Destination account) in the region of your choice. I can be any account inside or outside your AWS Organization.
    
@@ -116,7 +116,7 @@ s3://<prefix>cur-<destination-accountid>/
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter your **current** AWS Account Id. 
+4. Enter your **Destination** Account Id. 
    
 ![Images/multi-account/cfn_dash_param_dst_dedicated_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_1.png?classes=lab_picture_small)
 
@@ -146,7 +146,7 @@ s3://<prefix>cur-<destination-accountid>/
 
 ### Add or delete accounts
 
-{{%expand "Click here to continue with the CloudFormation Deployment" %}}
+{{%expand "Click here to continue" %}}
 This section is only available if you already deployed CUR Replication with CloudFormation.
 
 
