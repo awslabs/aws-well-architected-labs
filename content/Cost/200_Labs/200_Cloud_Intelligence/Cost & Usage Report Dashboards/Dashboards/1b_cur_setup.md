@@ -387,9 +387,9 @@ This scenario allows customers with multiple management (payer) accounts to depl
 
 This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 
-#### Set up S3 bucket replication from each Payer (Management) account to S3 bucket in Governance account
+#### Set up S3 bucket replication from each Management (Payer) account to S3 bucket in Governance account
 
-This step should be done in each payer (management) account.
+This step should be done in each management (payer) account.
 
 1. Open S3 bucket in Payer account with CUR.
 2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled.
@@ -408,13 +408,13 @@ This step should be done in each payer (management) account.
 
 #### Copy existing objects from CUR S3 bucket to S3 bucket in Governance account
 
-This step should be done in each payer (management) account.
+This step should be done in each management (payer) account.
 
 Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
 
 	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
 
-After performing this step in each payer (management) account S3 bucket in Governance account will contain CUR data from all payer accounts under respective prefixes.
+After performing this step in each management (payer) account S3 bucket in Governance account will contain CUR data from all payer accounts under respective prefixes.
 
 #### Prepare Glue Crawler 
 
