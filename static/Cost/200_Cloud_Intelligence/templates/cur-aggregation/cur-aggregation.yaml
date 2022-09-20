@@ -6,34 +6,22 @@ Metadata:
         Label: 
           default: "Common Parameters Configuration"
         Parameters: 
-          - GovernanceAccountId
+          - DestinationAccountId
           - ResourcePrefix
+          - CreateCUR
       - 
         Label: 
-          default: "Governance Account specific parameters (fill only on Governance Account)"
+          default: "Destination Account specific parameters (fill only on Destination Account)"
         Parameters: 
           - SourceAccountIds
-      - 
-        Label: 
-          default: "[ADVANCED] for deployment outside us-east-1"
-        Parameters: 
-          - BucketRegion
-      - 
-        Label: 
-          default: "[ADVANCED][US-EAST-1 ONLY] for deployment in dedicated Governance Account"
-        Parameters: 
-          - CreateCUR
+
     ParameterLabels:
-      GovernanceAccountId:
+      DestinationAccountId:
         default: "Enter the AWS Account Id where CID Quicksight Dashboard will be deployed"
       ResourcePrefix:
         default: "Prefix used for all named resources, including S3 Bucket."
-      BucketRegion:
-        default: >
-          Please specify the region where you want the bucket to be deployed. 
-          Two deployment of this cfn is mendatory, first on the region of the bucket and then on us-east-1 region.
       SourceAccountIds: 
-        default: "List all Linked Account / Payer Account you whant to group CUR Data from as a comma separated list 12345678912,98745612312,...."
+        default: "List all source accounts you whant to group CUR Data from as a comma separated list 12345678912,98745612312,...."
       
 Parameters:
 
@@ -41,29 +29,25 @@ Parameters:
   # Common params
   ##
 
-  GovernanceAccountId:
+  DestinationAccountId:
     Type: String
-    Description: Governance account id
+    Description: CUR Destination account id
     AllowedPattern: '\d{12}'
   ResourcePrefix:
     Type: String
     Default: "centralized-cur"
     Description: "resource prefix"
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]{1,61}[a-z0-9]+$"
-  BucketRegion:
-    Type: String
-    Description: Bucket region where you want your CUR data to be store.
-    Default: us-east-1
   CreateCUR:
     Type: String
-    Description: ONLY AVAILABLE ON US-EAST-1 - Whenever or not create LocalCUR
+    Description: Whenever or not create Local CUR
     AllowedValues:
       - "True"
       - "False"
     Default: "True"
   
   ##
-  # Governance specific params
+  # Destination specific params
   ##
 
   SourceAccountIds:
@@ -72,16 +56,16 @@ Parameters:
 
 Conditions:
   
-  IsGovernanceAccount: 
+  IsDestinationAccount: 
     Fn::Equals: 
-      - Ref: GovernanceAccountId 
+      - Ref: DestinationAccountId 
       - Ref: AWS::AccountId
   
-  IsLinkedAccount:
+  IsSourceAccount:
     Fn::Not:
      - 
       Fn::Equals: 
-        - Ref: GovernanceAccountId 
+        - Ref: DestinationAccountId 
         - Ref: AWS::AccountId
 
   IsNorthVirginia:
@@ -89,67 +73,43 @@ Conditions:
       - Ref: AWS::Region
       - 'us-east-1'
 
-  IsBucketRegion:
-    Fn::Equals:
-      - Ref: AWS::Region
-      - Ref: BucketRegion
-
-  DeployLinked: 
-    Fn::And:
-      - !Condition IsLinkedAccount
-      - !Condition IsBucketRegion
-      
-  DeployGovernance:
-    Fn::And:
-      - !Condition IsGovernanceAccount
-      - !Condition IsBucketRegion
-
-  DeployAnalytics:
-    Fn::Or:
-      - !Condition DeployLinked
-      - !Condition DeployGovernance
-
   CUREnable:
     Fn::Equals:
       - Ref: CreateCUR
       - "True"
 
-  DeployCUR:
+  DeployCURCFN:
     Fn::And:
       - !Condition CUREnable
       - !Condition IsNorthVirginia
+ 
+  DeployCURLambda:
+    Fn::And:
+      - !Condition CUREnable
+      - !Not 
+        - 
+          Fn::Equals:
+            - Ref: AWS::Region
+            - 'us-east-1'
 
 Resources:
 
-###
-# Variables
-##
-#
-# GovernanceBucketName: ${GovernanceAccountId}-${ResourcePrefix}-shared
-# GlueDatabaseName: ${ResourcePrefix}-db
-# AthenaWorkGroup: ${ResourcePrefix}-wk
-#
-# LinkedBucketName: ${AWS::AccountId}-${ResourcePrefix}-local
-#
-#
-#  LambdaAnalytics: ${ResourcePrefix}-CID-Analytics
-#
-
-
 ###########################################################################
-# Governance Account Part
+# Destination Account Resources
 ###########################################################################
 
 ####
 # S3 Bucket which store all CUR from Accounts 
 ####
 
-  S3:
+  DestinationS3:
     Type: AWS::S3::Bucket
-    Condition: DeployGovernance
+    Condition: IsDestinationAccount
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       BucketName:
-        Fn::Sub: "${GovernanceAccountId}-${ResourcePrefix}-shared"
+        Fn::Sub: "${ResourcePrefix}-${AWS::AccountId}-shared"
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -170,14 +130,15 @@ Resources:
           - Id: Object&Version Expiration
             Status: Enabled
             NoncurrentVersionExpirationInDays: 32 # 1 month 
-
-              
+         
   S3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
-    Condition: DeployGovernance
+    Condition: IsDestinationAccount
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Delete
     Properties:
       Bucket: 
-        Ref: S3
+        Ref: DestinationS3
       PolicyDocument:
         Id: CrossAccessPolicy
         Version: "2012-10-17"
@@ -187,8 +148,8 @@ Resources:
             Principal: "*"
             Action: s3:*
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}'
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/*'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
             Condition:
               NumericLessThan:
                 s3:TlsVersion: 1.2
@@ -197,8 +158,8 @@ Resources:
             Principal: "*"
             Action: s3:*
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}'
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/*'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
             Condition:
               Bool:
                 aws:SecureTransport: false
@@ -210,8 +171,8 @@ Resources:
               - s3:GetBucketAcl
               - s3:GetBucketPolicy
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}'
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/*'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
           - Sid: AllowWriteBilling
             Effect: Allow
             Principal:
@@ -219,7 +180,7 @@ Resources:
             Action: 
               - s3:PutObject
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/*'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
 
           - Sid: AllowReplicationWrite
             Effect: Allow
@@ -230,7 +191,7 @@ Resources:
               - s3:ReplicateDelete
               - s3:ReplicateObject
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/*'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
           - Sid: AllowReplicationRead
             Effect: Allow
             Principal:
@@ -241,148 +202,25 @@ Resources:
               - s3:GetBucketVersioning
               - s3:PutBucketVersioning
             Resource:
-              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}'
+              - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}'
 
-
-####
-# Glue
-####
-
-  GlueDatabase:
-    Type: "AWS::Glue::Database"
-    Condition: DeployGovernance
-    Properties:
-      DatabaseInput:
-        Name: 
-          Fn::Sub: "${ResourcePrefix}-db"
-      CatalogId: !Ref AWS::AccountId
-
-  GlueCrawler:
-    Type: 'AWS::Glue::Crawler'
-    Condition: DeployGovernance
-    Properties:
-      Name: 
-        Fn::Sub: "${ResourcePrefix}-datacrawler"
-      Description: A recurring crawler that keeps your CUR table in Athena up-to-date.
-      Role: 
-        Fn::GetAtt: CrawlerRole.Arn
-      DatabaseName: 
-        Ref: GlueDatabase
-      Targets:
-        S3Targets:
-          - Path: 
-              Fn::Sub: 's3://${S3}/cost-usage-reports/'
-            Exclusions:
-              - '**.json'
-              - '**.yml'
-              - '**.sql'
-              - '**.csv'
-              - '**.gz'
-              - '**.zip'
-              - '**/cost_and_usage_data_status/*'
-              - aws-programmatic-access-test-object
-      SchemaChangePolicy:
-        DeleteBehavior: DELETE_FROM_DATABASE
-      RecrawlPolicy:
-        RecrawlBehavior: CRAWL_EVERYTHING
-      Schedule:
-        ScheduleExpression: cron(0 2 * * ? *)
-      Configuration: "{
-          \"Version\":1.0,
-          \"Grouping\":{\"TableGroupingPolicy\": \"CombineCompatibleSchemas\" },
-          \"CrawlerOutput\":{\"Tables\":{\"AddOrUpdateBehavior\":\"MergeNewColumns\"}}
-        }"
-
-  CrawlerRole:
-    Type: 'AWS::IAM::Role'
-    Condition: DeployGovernance
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - glue.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      Path:
-        Fn::Sub: /${ResourcePrefix}/
-      ManagedPolicyArns:
-        - Fn::Sub: 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole'
-      Policies:
-        - PolicyName: AWSCURCrawlerComponentFunction
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                Resource: 
-                  Fn::Sub: "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-glue/crawlers/*"
-              - Effect: Allow
-                Action:
-                  - 'glue:UpdateDatabase'
-                  - 'glue:UpdatePartition'
-                  - 'glue:CreateTable'
-                  - 'glue:UpdateTable'
-                  - 'glue:ImportCatalogToGlue' # TODO
-                Resource:
-                  # Catalog Access
-                  - Fn::Sub: arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:catalog
-                  # Database Access
-                  - Fn::Sub: arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:database/${GlueDatabase}
-                  # Tables Access
-                  - Fn::Sub: arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:table/${GlueDatabase}/*
-              
-              - Effect: Allow
-                Action:
-                  - 's3:GetObject'
-                  - 's3:PutObject'
-                Resource: 
-                  Fn::Sub: 'arn:${AWS::Partition}:s3:::${S3}/cost-usage-reports/*'
-
-
-####
-# Athena
-####
-
-  AthenaWorkGroup:
-    Type: AWS::Athena::WorkGroup
-    Condition: DeployGovernance
-    Properties:
-      Name: 
-        Fn::Sub: "${ResourcePrefix}-wk"
-      Description: 
-        Fn::Sub: Used for ${ResourcePrefix}
-      State: ENABLED
-      WorkGroupConfiguration:
-        #BytesScannedCutoffPerQuery: 200000000
-        EnforceWorkGroupConfiguration: true
-        #PublishCloudWatchMetricsEnabled: false
-        #RequesterPaysEnabled: true
-        ResultConfiguration:
-          EncryptionConfiguration:
-            EncryptionOption: SSE_S3
-          OutputLocation:
-            Fn::Sub: 's3://${S3}/athena-query-results/'
 
 ###########################################################################
-# Linked Account Part
+# Source Account Resources
 ###########################################################################
 
 ####
 # S3 Bucket with replication 
 ####
 
-  LinkedS3:
+  SourceS3:
     Type: AWS::S3::Bucket
-    Condition: DeployLinked
+    Condition: IsSourceAccount
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       BucketName:
-        Fn::Sub: ${AWS::AccountId}-${ResourcePrefix}-local
+        Fn::Sub: ${ResourcePrefix}-${AWS::AccountId}-local
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -404,7 +242,7 @@ Resources:
           -
             Destination:
               Bucket:
-                Fn::Sub: "arn:${AWS::Partition}:s3:::${GovernanceAccountId}-${ResourcePrefix}-shared"
+                Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared"
               StorageClass: STANDARD
             Id: ReplicationRule1
             Prefix: ""
@@ -416,11 +254,13 @@ Resources:
             NoncurrentVersionExpirationInDays: 32 # 1 month 
             ExpirationInDays: 64 # 2 months
               
-  LinkedS3BucketPolicy:
+  SourceS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
-    Condition: DeployLinked
+    Condition: IsSourceAccount
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
-      Bucket: !Ref LinkedS3
+      Bucket: !Ref SourceS3
       PolicyDocument:
         Id: CrossAccessPolicy
         Version: "2012-10-17"
@@ -430,8 +270,8 @@ Resources:
             Principal: "*"
             Action: s3:*
             Resource:
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local'
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local/*'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}/*'
             Condition:
               NumericLessThan:
                 s3:TlsVersion: 1.2
@@ -440,8 +280,8 @@ Resources:
             Principal: "*"
             Action: s3:*
             Resource:
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local'
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local/*'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}/*'
             Condition:
               Bool:
                 aws:SecureTransport: false
@@ -453,8 +293,8 @@ Resources:
               - s3:GetBucketAcl
               - s3:GetBucketPolicy
             Resource:
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local'
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local/*'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}/*'
           - Sid: AllowWriteBilling
             Effect: Allow
             Principal:
@@ -462,10 +302,10 @@ Resources:
             Action: 
               - s3:PutObject
             Resource:
-              - !Sub 'arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local/*'
+              - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}/*'
   
   CrossRegionReplicationRole:
-    Condition: DeployLinked
+    Condition: IsSourceAccount
     Type: AWS::IAM::Role
     Properties:
       Path:
@@ -489,12 +329,12 @@ Resources:
                 Action:
                   - s3:GetReplicationConfiguration
                   - s3:ListBucket
-                Resource: !Sub "arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local"
+                Resource: !Sub "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${AWS::AccountId}-local"
               - Effect: Allow
                 Action:
                   - s3:GetObjectVersionForReplication
                   - s3:GetObjectVersionAcl
-                Resource: !Sub "arn:${AWS::Partition}:s3:::${AWS::AccountId}-${ResourcePrefix}-local/*"
+                Resource: !Sub "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${AWS::AccountId}-local/*"
               - Effect: Allow
                 Action:
                   - s3:ReplicateObject
@@ -502,15 +342,16 @@ Resources:
                   - s3:ReplicateTags
                   - s3:GetObjectVersionTagging
                 Resource: 
-                  Fn::Sub: "arn:${AWS::Partition}:s3:::${GovernanceAccountId}-${ResourcePrefix}-shared/cost-usage-reports/${AWS::AccountId}*"
+                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared/cost-usage-reports/${AWS::AccountId}*"
 
 ####
 # Local CUR 
 ####
 
+  ## Deploy CUR nativly if we are in us-east-1
   LocalCur:
     Type: AWS::CUR::ReportDefinition
-    Condition: DeployCUR
+    Condition: DeployCURCFN
     Properties:
       AdditionalArtifacts:
         - ATHENA
@@ -524,40 +365,64 @@ Resources:
       ReportVersioning: OVERWRITE_REPORT
       S3Bucket:
         Fn::If:
-          - IsGovernanceAccount
+          - IsDestinationAccount
           - Fn::If:
-            - DeployGovernance
-            - Ref: S3
-            - Fn::Sub: ${GovernanceAccountId}-${ResourcePrefix}-shared
+            - IsDestinationAccount
+            - Ref: DestinationS3
+            - Fn::Sub: ${ResourcePrefix}-${DestinationAccountId}-shared
           - Fn::If:
-              - DeployLinked
-              - Ref: LinkedS3
-              - Fn::Sub: ${AWS::AccountId}-${ResourcePrefix}-local
+              - IsSourceAccount
+              - Ref: SourceS3
+              - Fn::Sub: ${ResourcePrefix}-${AWS::AccountId}-local
       S3Prefix: "cost-usage-reports"
       S3Region: 
-        Ref: BucketRegion
+        Ref: AWS::Region
       TimeUnit: HOURLY
 
 
-###########################################################################
-# Analytics: used by CID team to track adoption, by retrieving AWS AccountId
-###########################################################################
-
-
-  LambdaCIDAnalyticsLogGroup:
-    Type: AWS::Logs::LogGroup
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+  # Deploy CUR via lambda due to missing cfn resource definition
+  # AWS::CUR::ReportDefinition outside us-east-1
+  CURinUSEAST1:  
+    Type: Custom::CURCreator
+    Condition: DeployCURLambda
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${ResourcePrefix}-CID-Analytics"
-  
-  CIDLambdaAnalyticsRole: #Execution role for the custom resource CIDLambdaAnalyticsExecutor
+      ServiceToken: !GetAtt CIDLambdaCURCreator.Arn
+      BucketPolicyWait: 
+         Fn::If:
+            - IsDestinationAccount
+            - Ref: S3BucketPolicy
+            - Ref: SourceS3BucketPolicy
+      ReportDefinition:
+        AdditionalArtifacts:
+          - ATHENA
+        AdditionalSchemaElements: 
+          - RESOURCES
+        Compression: Parquet
+        Format: Parquet
+        RefreshClosedReports: True
+        ReportName: 
+          Ref: AWS::AccountId
+        ReportVersioning: OVERWRITE_REPORT
+        S3Bucket:
+          Fn::If:
+            - IsDestinationAccount
+            - Ref: DestinationS3
+            - Ref: SourceS3
+        S3Prefix: "cost-usage-reports"
+        S3Region: 
+          Ref: AWS::Region
+        TimeUnit: HOURLY
+
+###########################################################################
+# Lambda CUR Creator: used to create cur from outside us-east-1
+###########################################################################
+
+  CIDLambdaCURCreatorRole: #Execution role for the custom resource CIDLambdaAnalyticsExecutor
     Type: AWS::IAM::Role
-    Condition: DeployAnalytics
+    Condition: DeployCURLambda
     Properties:
       Path: 
         Fn::Sub: /${ResourcePrefix}/
-      RoleName: CID-Analytics
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -576,6 +441,145 @@ Resources:
               Action:
               - logs:CreateLogStream
               - logs:PutLogEvents
+              - logs:CreateLogGroup
+              Resource:
+              - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-CURCreator"
+              - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-CURCreator:*"
+              - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-CURCreator:*:*"
+        - PolicyName: "ExecutionSpecific"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - cur:PutReportDefinition
+              - cur:ModifyReportDefinition
+              - cur:DeleteReportDefinition
+              Resource:
+                - Fn::Sub: arn:${AWS::Partition}:cur:us-east-1:${AWS::AccountId}:definition/*
+  
+  CIDLambdaCURCreator: 
+    Type: AWS::Lambda::Function
+    Condition: DeployCURLambda
+    Properties:
+      Runtime: python3.9
+      FunctionName:
+        Fn::Sub: ${ResourcePrefix}-CID-CURCreator
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role: 
+        Fn::GetAtt: CIDLambdaCURCreatorRole.Arn
+      Timeout: 15
+      Code:
+        ZipFile: |
+          import boto3
+          import cfnresponse
+          import uuid
+          import json 
+
+          # Create a cur client in us-east-1 region
+          client = boto3.client('cur', region_name='us-east-1')
+
+          def lambda_handler(event, context):
+            
+            print(event)
+            reason = ""
+            
+            physicalResourceId = str(uuid.uuid1())
+            try: 
+                physicalResourceId=event['ResourceProperties']['ReportDefinition']['ReportName']
+            except: 
+                pass
+              
+            try:
+              report = event['ResourceProperties']['ReportDefinition']
+              report_name = event['ResourceProperties']['ReportDefinition']['ReportName']
+
+              refresh_closed_report = event['ResourceProperties']['ReportDefinition']["RefreshClosedReports"]
+              if refresh_closed_report in ["True", "true"]:
+                  report["RefreshClosedReports"] = True
+              elif refresh_closed_report in ["False", "false"]:
+                  report["RefreshClosedReports"] = False
+              else:
+                  raise Exception("RefreshClosedReports is not a boolean")
+
+              if event['RequestType'] == 'Create':
+                  res = client.put_report_definition(
+                      ReportDefinition=report
+                  )
+
+              elif event['RequestType'] == 'Update':
+                  old_report_name = event['OldResourceProperties']['ReportDefinition']['ReportName']
+                  if report["ReportName"] != old_report_name:
+                      res = client.put_report_definition(
+                          ReportDefinition=report
+                      )
+                      print(res)
+                  else:
+                      res = client.modify_report_definition(
+                              ReportName=old_report_name,
+                              ReportDefinition=report
+                          )
+                      print(res)
+              elif event['RequestType'] == 'Delete':
+                      # Do not block deletion
+                  try:
+                      res = client.delete_report_definition(
+                          ReportName=report_name
+                      )
+                      print(res)
+                  except:
+                      pass
+              else:
+                  raise Exception("Unknown operation: " + event['RequestType'])
+            except Exception as e:
+              reason = str(e)
+              print(e)
+              
+              try: 
+                  physicalResourceId=event['ResourceProperties']['ReportDefinition']['ReportName']
+              except: 
+                  pass
+            
+            if reason:
+                print("FAILURE")
+                cfnresponse.send(event, context, cfnresponse.FAILED, {"Data": reason }, physicalResourceId)
+            else:
+              print("SUCCESS")
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, physicalResourceId)
+
+
+
+###########################################################################
+# Analytics: used by CID team to track adoption, by retrieving AWS AccountId
+###########################################################################
+
+  
+  CIDLambdaAnalyticsRole: #Execution role for the custom resource CIDLambdaAnalyticsExecutor
+    Type: AWS::IAM::Role
+    Properties:
+      Path: 
+        Fn::Sub: /${ResourcePrefix}/
+      #RoleName: CID-Analytics
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: "ExecutionDefault"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - logs:CreateLogGroup
               Resource:
               - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-Analytics"
               - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-Analytics:*"
@@ -583,7 +587,6 @@ Resources:
 
   CIDLambdaAnalytics: 
     Type: AWS::Lambda::Function
-    Condition: DeployAnalytics
     Properties:
       Runtime: python3.9
       FunctionName:
@@ -661,12 +664,11 @@ Resources:
 
   CIDLambdaAnalyticsExecutor:  
     Type: Custom::CIDLambdaAnalyticsExecutor
-    Condition: DeployAnalytics
     Properties:
       ServiceToken: !GetAtt CIDLambdaAnalytics.Arn
       DeploymentType:
         - Fn::If:
-          - DeployGovernance
+          - IsDestinationAccount
           - "cid-cur-aggregator"
           - "cid-cur-replication"
 
@@ -674,16 +676,8 @@ Outputs:
   GovernanceBucketName:
     Description: Bucket where to store and aggregate CUR
     Value: 
-      Fn::Sub: ${GovernanceAccountId}-${ResourcePrefix}-shared
-  GlueDatabaseName:
-    Description: Glue Database referencing CUR File
-    Value: 
-      Fn::Sub: ${ResourcePrefix}-db
-  AthenaWorkGroup:
-    Description: Athena WorkGroup which is used to query GlueDB
-    Value: 
-      Fn::Sub: ${ResourcePrefix}-wk
+      Fn::Sub: ${ResourcePrefix}-${DestinationAccountId}-shared
   LocalAccountBucket:
     Description: Local Bucket Name which replicate objects to centralized bucket
     Value: 
-      Fn::Sub: ${AWS::AccountId}-${ResourcePrefix}-local
+      Fn::Sub: ${ResourcePrefix}-${AWS::AccountId}-local
