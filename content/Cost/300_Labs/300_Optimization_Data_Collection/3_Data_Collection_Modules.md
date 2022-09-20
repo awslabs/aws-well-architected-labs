@@ -497,14 +497,14 @@ AWS Budgets allows you to set custom budgets to track your cost and usage from t
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
 1. Depending on the module which you would like to test the following Lambda functions should be triggered:
-- **Inventory Collector** module -> **AWS-Organization-Account-Collector** Lambda function
-- **Trusted Advisor** module -> **AWS-Organization-Account-Collector** Lambda function
-- **ECS Chargeback Data** module -> **AWS-Organization-Account-Collector** Lambda function
-- **RDS Utilization Data module** module -> **AWS-Organization-Account-Collector** Lambda function
-- **AWS Budgets Export module** module -> **AWS-Organization-Account-Collector** Lambda function
-- **Cost Explorer Rightsizing Recommendations** module -> **aws-cost-explorer-rightsizing-recommendations-function** Lambda function
+- **Inventory Collector** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **Trusted Advisor** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **ECS Chargeback Data** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **RDS Utilization Data module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **AWS Budgets Export module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **Cost Explorer Rightsizing Recommendations** module -> **Rightsize-Data-Lambda-Function-OptimizationDataCollectionStack** Lambda function
 - **Compute Optimizer Collector** module -> **ComputeOptimizer-Trigger-Export** Lambda function
-- **AWS Organization Data Export** module -> **Lambda_Organization_Data_Collector** Lambda function
+- **AWS Organization Data Export** module -> **Lambda_Organization_Data_OptimizationDataCollectionStack** Lambda function
 
 
 2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
