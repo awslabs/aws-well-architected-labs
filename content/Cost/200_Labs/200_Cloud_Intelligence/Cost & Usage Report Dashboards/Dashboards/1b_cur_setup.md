@@ -75,86 +75,85 @@ s3://cur-<target-account>/
 
 ### Enable CUR Aggregation using a CloudFormation Template
 
-1. Login to the __**Payer Account**__  of your AWS Organization.
-2. Change your console region to __N. Virginia__ - __us-east-1__. This is needed because CUR Definition resource is only available on `us-east-1` region. If you need another region, please refer to [advanced section]({{< ref "#outside-north-virginia---us-east-1-region-deployment" >}}).
+1. Login to the __**Payer Account**__  of your AWS Organization in the region of your choice.
 
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
+2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter a **Stack name** for your template such as **CID-SinglePayerDeployment**.
-![Images/multi-account/cfn_dash_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param.png?classes=lab_picture_small)
+3. Enter a **Stack name** for your template such as **CID-SinglePayerDeployment**.
+![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
 
-5. Enter your **current** AWS Account Id parameter.
+4. Enter your **current** AWS Account Id parameter.
    
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
+![Images/multi-account/cfn_dash_param_dst_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_1.png?classes=lab_picture_small)
 
-6. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
-7.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 ![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
 
-8. You will see the stack will start in **CREATE_IN_PROGRESS** .
+7. You will see the stack will start in **CREATE_IN_PROGRESS** .
 **NOTE:** This step can take 5-15mins
     ------------ | -------------
 
-9.  Once complete, the stack will show **CREATE_COMPLETE**.
-10. You will need to wait __24 hours__ for the first CUR delivery before starting deployment of the dashboards. Please refer to the [deploy dashboard section]({{< ref "#deploy-dashboards-via-cli" >}}) of the lab. Entreprise Support customers can reach out to their TAM and ask for a backfill of their CUR data.
-
+8.  Once complete, the stack will show **CREATE_COMPLETE**.
+   
 {{% /expand%}}
 
-### Option 2: (Recomended) From Payer Account(s) to a Dedicated CUR Aggregation Account 
+### Option 2: (Recomended) Dedicated CUR Aggregation Account 
 
-This option is the recommanded way to deploy Cost and Usage Report (CUR) Aggregation for multiple account on a dedicated __**CUR Aggregation Account**__.
+This option is the recommanded way to deploy Cost and Usage Report (CUR) Aggregation for multiple accounts on a dedicated __**CUR Aggregation Account**__.
 
-Due to AWS Organization consolidated billing feature, all billing information is consolidated inside the CUR of the __**Payer Account**__. To enable CUR aggregation on a dedicated account, we need to replicate CUR data from payer account to the CUR aggregation account. 
+You will have to chosse one of the account to act as a __CUR Aggregation Account__ (destination) and other accounts will act as __CUR Replication Account__ (source). 
 
 #### Multiple Payer Accounts
 
-If you have __multiple payer accounts__, you can follow these steps to configure CUR replication in a dedicated aggregation account and use the [add or delete account section]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) steps to add CUR aggregation for other payer accounts.
- **NOTE:** In case of a mutliple payer setup, due to consolidated billing feature of AWS Organization, you only need to reference (and deploy replication) on the payer accounts. 
-    ------------ | -------------
+If you have __multiple payer accounts__, you can follow these steps to configure CUR replication in a dedicated aggregation account for and use the [add or delete account section]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) steps to add CUR aggregation for other payer accounts.
+
+Due to AWS Organization consolidated billing feature, all billing information is consolidated inside the CUR of the __**Payer Account**__. To enable CUR aggregation on a dedicated account, we need to replicate CUR data from payer account to the CUR aggregation account. 
+
+#### Multiple Linked Accounts
+
+If you have __multiple linked accounts__ from an organization and want to aggregate cur data for only those accounts, you can follow these steps to configure CUR replication in a dedicated aggregation account and use the [add or delete account section]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) steps to add CUR aggregation for all linked accounts.
+
+This type of deployment is particulary useful for organization with a lot of account where sub-organization or business unit are responsible for a sub-set of account and wants to enable 
+CUR aggregation and vizualization only for this sub-set of accounts. 
 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
-### Deploy CUR Collection on CUR Aggregation Account 
+### Deploy CUR Collection on CUR Aggregation Account (Destination) 
 
-1. Login to the __account you choose for CUR Aggregation__. I can be any account inside or outside your  AWS Organization.
+1. Login to the __account you choose for CUR Aggregation__ in the region of your choice. I can be any account inside or outside your AWS Organization.
    
-2. Change your console region to __N. Virginia__ - __us-east-1__. This is needed because CUR Definition resource is only available on `us-east-1` region. If you need another region, please refer to [advanced section]({{< ref "#outside-north-virginia---us-east-1-region-deployment" >}}).
-
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
+2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter a **Stack name** for your template such as **CID-DedicatedDataCollectionAccount**
-![Images/multi-account/cfn_dash_param_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_2.png?classes=lab_picture_small)
+3. Enter a **Stack name** for your template such as **CID-DedicatedDataCollectionAccount**
+![Images/multi-account/cfn_dash_param_dst_dedicated.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated.png?classes=lab_picture_small)
 
-5. Enter your **current** AWS Account Id. 
+4. Enter your **current** AWS Account Id. 
    
-![Images/multi-account/cfn_dash_param_6.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_6.png?classes=lab_picture_small)
+![Images/multi-account/cfn_dash_param_dst_dedicated_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_1.png?classes=lab_picture_small)
 
 **NOTE:** Please note this Account Id, we will need it later when we will deploy stack in replication account.
 
-6. Enter your **Payer Account** AWS Account Id as parameter value. 
+5. Disable CUR creation by entering **False** as parameter value. 
    
-![Images/multi-account/cfn_dash_param_3.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_3.png?classes=lab_picture_small)
+![Images/multi-account/cfn_dash_param_dst_dedicated_3.png.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_3.png?classes=lab_picture_small)
 
-7. Disable CUR creation by entering **False**  as parameter value. 
+6. Enter your **Source(s) Account** AWS Account Id as parameter value. 
    
-![Images/multi-account/cfn_dash_param_4.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_4.png?classes=lab_picture_small)
+![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
 
-8. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
+7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
-9.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 ![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
 
 10. You will see the stack will start in **CREATE_IN_PROGRESS**.
@@ -163,24 +162,24 @@ If you have __multiple payer accounts__, you can follow these steps to configure
 
 11. Once complete, the stack will show **CREATE_COMPLETE**.
 
-### Deploy CUR Replication on Organization Payer Account 
+### Deploy CUR Replication on CUR Replication Account (Source)
 
-1. Login to the __**Payer Account**__ of your AWS Organization.
-2. Change your console region to __N. Virginia__ - __us-east-1__. This is needed because CUR Definition resource is only available on `us-east-1` region. If you need another region, please refer to [advanced section]({{< ref "#outside-north-virginia---us-east-1-region-deployment" >}}).
+**NOTE:** In case of a mutli payer setup, due to consolidated billing feature of AWS Organization, you only need to deploy this on the payer accounts. 
+    ------------ | -------------
 
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
+1. Login to the __**Source Account**__ in the region of your choice.
 
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
+2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter a **Stack name** for your template such as **CID-CURReplication**.
-![Images/multi-account/cfn_dash_param_5.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_5.png?classes=lab_picture_small)
+3. Enter a **Stack name** for your template such as **CID-CURReplication**.
+![Images/multi-account/cfn_dash_param_src_dedicated.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_src_dedicated.png?classes=lab_picture_small)
 
-5. Enter your __**CUR Aggregation**__ AWS Account Id. 
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
+4. Enter your __**CUR Aggregation**__ AWS Account Id. 
+![Images/multi-account/cfn_dash_param_src_dedicated_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_src_dedicated_1.png?classes=lab_picture_small)
 
 6. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
@@ -192,95 +191,9 @@ If you have __multiple payer accounts__, you can follow these steps to configure
     ------------ | -------------
 
 9.  Once complete, the stack will show **CREATE_COMPLETE**.
-10. You will need to wait __24 hours__ for the first CUR delivery before starting deployment of the dashboards. Please refer to the [deploy dashboard section]({{< ref "#deploy-dashboards-via-cli" >}}) of the lab. Entreprise Support customers can reach out to their TAM and ask for a backfill of their CUR data.
 
 {{% /expand%}}
- 
-### Option 3: From Multiple Linked Account to a Dedicated CUR Aggregation Account 
 
-This option is a way to deploy Cost and Usage Report CUR Aggregation for __multiple linked accounts__. 
-
-You will have to chosse one of the account to act as a __CUR Aggregation Account__ (destination) and other accounts will act as __CUR Replication Account__ (source). 
-
-This type of deployment is particulary useful for organization with a lot of account where sub-organization or business unit are responsible for a sub-set of account and wants to enable 
-CUR aggregation and vizualization only for this sub-set of accounts. 
-
-{{%expand "Click here to continue with the CloudFormation Deployment" %}}
-### Deploy CUR Aggregation
-
-1. Login to the choosen __CUR Aggregation Account__. Remember, this account will aggregate CUR data for all accounts we will list at step 6, including itself.
-   
-2. Change your console region to __N. Virginia__ - __us-east-1__. This is needed because CUR Definition resource is only available on `us-east-1` region. If you need another region, please refer to [advanced section]({{< ref "#outside-north-virginia---us-east-1-region-deployment" >}}).
-
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-4. Enter a **Stack name** for your template such as **CID-DedicatedDataCollectionAccount**.
-![Images/multi-account/cfn_dash_param_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_2.png?classes=lab_picture_small)
-
-5. Enter your **current** AWS Account Id. 
-   
-![Images/multi-account/cfn_dash_param_6.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_6.png?classes=lab_picture_small)
-
-**NOTE:** Please note this Account Id, we will need it later.
-
-6. Enter **all other accounts** AWS Account Id as parameter value seperated by a comma `,`. 
-
-![Images/multi-account/cfn_dash_param_3.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_3.png?classes=lab_picture_small)
-
-7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-9. You will see the stack will start in **CREATE_IN_PROGRESS** 
-**NOTE:** This step can take 5-15mins
-    ------------ | -------------
-
-10.  Once complete, the stack will show **CREATE_COMPLETE**
-
-### Deploy CUR Replication on Other Accounts
-
-For __each__ account you would like to enable cur replication, follow this steps:
-
-**NOTE:** In case of a mutli payer setup, due to consolidated billing feature of AWS Organization, you only need to deploy this on the payer accounts. 
-    ------------ | -------------
-
-1. Login to the __**Account**__ you like to enable cur replication for.
-2. Change your console region to __N. Virginia__ - __us-east-1__. This is needed because CUR Definition resource is only available on `us-east-1` region. If you need another region, please refer to [advanced section]({{< ref "#outside-north-virginia---us-east-1-region-deployment" >}}).
-
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-4. Enter a **Stack name** for your template such as **CID-CURReplication**.
-![Images/multi-account/cfn_dash_param_5.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_5.png?classes=lab_picture_small)
-
-5. Enter your __CUR Aggregation Account__ AWS Account Id. 
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
-
-6. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-7.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-8. You will see the stack will start in **CREATE_IN_PROGRESS** 
-**NOTE:** This step can take up to 5mins
-    ------------ | -------------
-
-9.  Once complete, the stack will show **CREATE_COMPLETE**
-10.  You will need to wait __24 hours__ for the first CUR delivery before starting deployment of the dashboards. Please refer to the [deploy dashboard section]({{< ref "#deploy-dashboards-via-cli" >}}) of the lab. Entreprise Support customers can reach out to their TAM and ask for a backfill of their CUR data.
-
-{{% /expand%}}
 ### Advanced steps
 
 #### Add or delete accounts to an existing multi-account deployment
@@ -293,164 +206,72 @@ You may need to add or delete existing account from your CUR Aggregation.
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
+
 1. Login to the __CUR Aggregation__ Account.
    
-2. Change your region to __N. Virginia__ - __us-east-1__
-   
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Find your existing template and chosse __Update__
+2. Find your existing template and chosse __Update__
 
 ![Images/multi-account/cfn_dash_param_10.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_10.png?classes=lab_picture_small)
 
-4. Check __Use current template__ then choose __Next__
+3. Check __Use current template__ then choose __Next__
 
 ![Images/multi-account/cfn_dash_param_11.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_11.png?classes=lab_picture_small)
 
-5. Update AWS Account Ids list to modify CUR aggregation
+4. Update AWS Account Ids list to modify CUR aggregation (ADD or DELETE)
     
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
+![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
 
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-6. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
-
-7.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 ![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
 
-8. You will see the stack will start in **UPDATE_IN_PROGRESS** 
+7. You will see the stack will start in **UPDATE_IN_PROGRESS** 
 **NOTE:** This step can take up to 5mins
     ------------ | -------------
 
-9.  Once complete, the stack will show **UPDATE_COMPLETE**
+8.  Once complete, the stack will show **UPDATE_COMPLETE**
 
-**NOTE:** Deleting an account means that cur data will not flow to your CUR aggregation account anymore. However, historical data will be retain. To delete them, go to the `${payer-account-id}-cur-centralizer-shared` S3 Bucket and manualy delete account data. 
-    ------------ | -------------
 #### On Deletion
+
+**NOTE:** Deleting an account means that cur data will not flow to your CUR aggregation account anymore. However, historical data will be retain. To delete them, go to the `${resource-prefix}-${payer-account-id}--shared` S3 Bucket and manualy delete account data. 
+    ------------ | -------------
 
 1. Login to the Account you want to delete.
    
-2. Change your region to __N. Virginia__ - __us-east-1__
-   
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Find your existing template and chosse __Delete__
+2. Find your existing template and chosse __Delete__
 
 ![Images/multi-account/cfn_dash_param_12.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_12.png?classes=lab_picture_small)
 
 
 #### On Addition
 
-1. Login to the __**Account**__ you like to enable cur collection for
-2. Change your region to __N. Virginia__ - __us-east-1__
+1. Login to the __**Source Account**__ in the region of your choice.
 
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
+2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter a **Stack name** for your template such as **CID-CURReplication**
-![Images/multi-account/cfn_dash_param_5.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_5.png?classes=lab_picture_small)
+3. Enter a **Stack name** for your template such as **CID-CURReplication**.
+![Images/multi-account/cfn_dash_param_src_dedicated.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_src_dedicated.png?classes=lab_picture_small)
 
-1. Enter your __**CUR Aggregation**__ AWS Account Id . 
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
+4. Enter your __**CUR Aggregation**__ AWS Account Id. 
+![Images/multi-account/cfn_dash_param_src_dedicated_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_src_dedicated_1.png?classes=lab_picture_small)
 
-6. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-7.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 ![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
 
-8. You will see the stack will start in **CREATE_IN_PROGRESS** 
+7. You will see the stack will start in **CREATE_IN_PROGRESS** 
 **NOTE:** This step can take up to 5mins
     ------------ | -------------
 
-9.  Once complete, the stack will show **CREATE_COMPLETE**
+8.  Once complete, the stack will show **CREATE_COMPLETE**
 
 {{% /expand%}}
-
-#### Outside North Virginia - `us-east-1` region deployment
-
-You may want to deploy resources in an other region than `us-east-1`, for security or governance reasons.
-
-{{% notice tip %}}
-AWS CloudFormation deploy resources regionaly, this means that if we need to deploy resources in multiple region we need to deploy multiple CloudFormation templates. This is our case here, collection resources are available in many different region but CUR definition `AWS::CUR::ReportDefinition` however is only available in `us-east-1`.
-{{% /notice %}}
-
-
-The following step shows how to deploy CUR Aggregation resources on the region of your choosing. Lets say here `eu-west-1`
-
-
-{{%expand "Click here to continue with the CloudFormation Deployment" %}}
-#### Enable CUR Aggregation
-
-1. Login to the __**Payer Account**__  of your AWS Organization
-2. Change your region to __Europe (Ireland) - eu-west-1__
-
-![Images/multi-account/cf_dash_choose_region_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_2.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-4. Enter a **Stack name** for your template such as **CID-SinglePayerDeployment**
-![Images/multi-account/cfn_dash_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param.png?classes=lab_picture_small)
-
-5. Enter your **current** AWS Account Id parameter
-   
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
-
-6. Change the bucket region to your __current region__, here `eu-west-1`
-
-![Images/multi-account/cfn_dash_param_7.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_7.png?classes=lab_picture_small)
-
-7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
-
-8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-9. You will see the stack will start in **CREATE_IN_PROGRESS** 
-**NOTE:** This step can take 5-15mins
-    ------------ | -------------
-10.  Once complete, the stack will show **CREATE_COMPLETE**
- 
-### Enable Cost and Usage report on `us-east-1`
-
-1. Login to the __**Payer Account**__ of your AWS Organization
-2. Change your region to __N. Virginia__ - __us-east-1__
-
-![Images/multi-account/cf_dash_1_choose_region.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_choose_region_1.png?classes=lab_picture_small)
-
-3. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-4. Enter a **Stack name** for your template such as **CID-CURDefinition**
-![Images/multi-account/cfn_dash_param_8.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_8.png?classes=lab_picture_small)
-
-5. Enter your __current__ AWS Account Id . 
-![Images/multi-account/cfn_dash_param_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_1.png?classes=lab_picture_small)
-
-6. Change the bucket region to region of the CUR aggregation deployment, here `eu-west-1`
-
-![Images/multi-account/cfn_dash_param_9.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_9.png?classes=lab_picture_small)
-
-7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
-
-8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-9. You will see the stack will start in **CREATE_IN_PROGRESS** 
-**NOTE:** This step can take up to 5 mins
-    ------------ | -------------
-10.  Once complete, the stack will show **CREATE_COMPLETE**
-{{% /expand%}}
-
 ## Manual setup of Cost and Usage Report and Athena Integration
 
 You can set up CUR in billing console and configure Athena integration from a CloudFormation template (provided with your CUR)[https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html] (in the same S3 bucket as your CUR).
