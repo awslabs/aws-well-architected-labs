@@ -1,0 +1,465 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda to collect Org data and store in S3 
+Parameters:
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that is created to hold org data
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  ManagementAccountRole:
+    Type: String
+    Description:  ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
+  DatabaseName:
+    Type: String
+    Description: Athena Database name where you table will be created
+    Default: optimization_data
+  GlueRoleARN:
+    Type: String
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  Schedule:
+    Type: String
+    Description: Cron job to trigger the lambda using cloudwatch event
+    Default: "rate(14 days)"
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: commitments
+Outputs:
+  LambdaFunctionName:
+    Value:
+      Ref: Lambda
+  LambdaFunctionARN:
+    Description: Lambda function ARN.
+    Value:
+      Fn::GetAtt:
+        - Lambda
+        - Arn
+Resources:
+  Lambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+        - '${CFDataName}-Lambda-Function-${Id}'
+        - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: LambdaFunction of python3.8.
+      Runtime: python3.8
+      Code:
+        ZipFile: |
+          #!/usr/bin/env python3
+          import json
+          import boto3
+          import os
+          import io
+          import csv
+          import time 
+          import gzip
+          import urllib3
+          import datetime
+
+          BUCKET_NAME = os.environ["S3"]
+          S3 = boto3.client('s3')
+          AWS_ACCOUNT_ID = boto3.client('sts').get_caller_identity()['Account']
+          PaymentOption = os.environ.get('PaymentOption', 'NO_UPFRONT')
+          TermInYears = os.environ.get('TermInYears', 'ONE_YEAR')
+          LookbackPeriodInDays = os.environ.get('LookbackPeriodInDays', 'SEVEN_DAYS')
+          offeringclass = os.environ.get('offeringclass', 'CONVERTIBLE')
+          SavingsPlansType = os.environ.get('SavingsPlansType', 'COMPUTE_SP')
+          today = datetime.date.today()
+          year = today.year
+          month = today.month
+
+
+          def lambda_handler(event, context):
+              management_role_arn = os.environ["MANAGMENTARN"]
+              sts_connection = boto3.client('sts')
+              acct_b = sts_connection.assume_role(
+                  RoleArn=management_role_arn,
+                  RoleSessionName="cross_acct_lambda"
+              )
+              ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+              SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+              SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+              ce_client = boto3.client("ce", 
+                  aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
+
+              savings_plan = fetch_savingsplan(ce_client)
+              save_s3(savings_plan, BUCKET_NAME, "savingsplan/year={year}/month={month}/data.csv")
+              print('Savings Plans Uploaded')
+              start_crawler(os.environ["SPCRAWLER"])
+
+              riRecommendation = fetch_rirecommendation(ce_client)
+              save_s3(riRecommendation, BUCKET_NAME, "reserveinstance/year={year}/month={month}/data.csv")
+              print('Reserve Instance Uploaded')
+              start_crawler(os.environ["RICRAWLER"])
+
+
+          def start_crawler(Crawler_Name):
+              glue_client = boto3.client("glue")
+              try:
+                  glue_client.start_crawler(Name=Crawler_Name)
+                  print(f"{Crawler_Name} has been started")
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+
+          def fetch_rirecommendation(client):
+
+              response_ec2 = client.get_reservation_purchase_recommendation(
+                  LookbackPeriodInDays=LookbackPeriodInDays,
+                  TermInYears=TermInYears,
+                  PaymentOption=PaymentOption,
+                  Service="Amazon Elastic Compute Cloud - Compute",
+                  ServiceSpecification={
+                      'EC2Specification': {
+                          'OfferingClass': offeringclass
+                      }
+                  }
+              )
+
+              response_rds = client.get_reservation_purchase_recommendation(
+                  # AccountId='string', May use for Linked view
+                  LookbackPeriodInDays=LookbackPeriodInDays,
+                  TermInYears=TermInYears,
+                  PaymentOption=PaymentOption,
+                  Service="Amazon Relational Database Service"
+              )
+
+              response_ec = client.get_reservation_purchase_recommendation(
+                  # AccountId='string', May use for Linked view
+                  LookbackPeriodInDays=LookbackPeriodInDays,
+                  TermInYears=TermInYears,
+                  PaymentOption=PaymentOption,
+                  Service="Amazon ElastiCache"
+              )
+
+              response_es = client.get_reservation_purchase_recommendation(
+                  # AccountId='string', May use for Linked view
+                  LookbackPeriodInDays=LookbackPeriodInDays,
+                  TermInYears=TermInYears,
+                  PaymentOption=PaymentOption,
+                  Service="Amazon Elasticsearch Service"
+              )
+
+              response_redshift = client.get_reservation_purchase_recommendation(
+                  # AccountId='string', May use for Linked view
+                  LookbackPeriodInDays=LookbackPeriodInDays,
+                  TermInYears=TermInYears,
+                  PaymentOption=PaymentOption,
+                  Service="Amazon Redshift"
+              )
+
+              ri_recommendations = []
+              ri_recommendations = parse_riresponse(response_ec2, ri_recommendations, "Amazon Elastic Compute Cloud - Compute")
+              ri_recommendations = parse_riresponse(response_rds, ri_recommendations, "Amazon Relational Database Service")
+              ri_recommendations = parse_riresponse(response_ec, ri_recommendations, "Amazon ElastiCache")
+              ri_recommendations = parse_riresponse(response_es, ri_recommendations, "Amazon Elasticsearch Service")
+              ri_recommendations = parse_riresponse(response_redshift, ri_recommendations, "Amazon Redshift")
+              return ri_recommendations
+
+          def parse_riresponse(response,ri_recommendations,service):
+              #print(json.dumps(response))
+              if(len(response['Recommendations'])>0):
+                  list_ri_purchase_recommendation = response['Recommendations'][0]['RecommendationDetails']
+                  recommendation = response['Recommendations'][0]
+                  for ri_purchase_recommendation in list_ri_purchase_recommendation:
+                      row = dict()
+                      row['AccountId'] = ri_purchase_recommendation.get('AccountId', '')
+                      row['Service'] = service
+                      row['RecommendationId'] = response['Metadata']['RecommendationId']
+                      row['GenerationTimestamp'] = response['Metadata']['GenerationTimestamp']
+                      row['AccountScope'] = recommendation['AccountScope']
+                      row['TermInYears'] = recommendation['TermInYears']
+                      row['PaymentOption'] = recommendation['PaymentOption']
+                      row['RecommendedNumberOfInstancesToPurchase'] = ri_purchase_recommendation.get(
+                          'RecommendedNumberOfInstancesToPurchase', '')
+                      row['RecommendedNormalizedUnitsToPurchase'] = ri_purchase_recommendation.get(
+                          'RecommendedNormalizedUnitsToPurchase', '')
+                      row['MinimumNumberOfInstancesUsedPerHour'] = ri_purchase_recommendation.get(
+                          'MinimumNumberOfInstancesUsedPerHour', '')
+                      row['MinimumNormalizedUnitsUsedPerHour'] = ri_purchase_recommendation.get('MinimumNormalizedUnitsUsedPerHour',
+                                                                                                '')
+                      row['MaximumNumberOfInstancesUsedPerHour'] = ri_purchase_recommendation.get(
+                          'MaximumNumberOfInstancesUsedPerHour', '')
+                      row['MaximumNormalizedUnitsUsedPerHour'] = ri_purchase_recommendation.get('MaximumNormalizedUnitsUsedPerHour',
+                                                                                                '')
+                      row['AverageNumberOfInstancesUsedPerHour'] = ri_purchase_recommendation.get(
+                          'AverageNumberOfInstancesUsedPerHour', '')
+                      row['AverageNormalizedUnitsUsedPerHour'] = ri_purchase_recommendation.get('AverageNormalizedUnitsUsedPerHour',
+                                                                                                '')
+                      row['AverageUtilization'] = ri_purchase_recommendation.get('AverageUtilization', '')
+                      row['EstimatedBreakEvenInMonths'] = ri_purchase_recommendation.get('EstimatedBreakEvenInMonths', '')
+                      row['CurrencyCode'] = ri_purchase_recommendation.get('CurrencyCode', '')
+                      row['EstimatedMonthlySavingsAmount'] = ri_purchase_recommendation.get('EstimatedMonthlySavingsAmount', '')
+                      row['EstimatedMonthlySavingsPercentage'] = ri_purchase_recommendation.get('EstimatedMonthlySavingsPercentage',
+                                                                                                '')
+                      row['EstimatedMonthlyOnDemandCost'] = ri_purchase_recommendation.get('EstimatedMonthlyOnDemandCost', '')
+                      row['EstimatedReservationCostForLookbackPeriod'] = ri_purchase_recommendation.get(
+                          'EstimatedReservationCostForLookbackPeriod', '')
+                      row['UpfrontCost'] = ri_purchase_recommendation.get('UpfrontCost', '')
+                      row['RecurringStandardMonthlyCost'] = ri_purchase_recommendation.get('RecurringStandardMonthlyCost', '')
+                      instance_details = ri_purchase_recommendation['InstanceDetails']
+                      if(service == "Amazon Elastic Compute Cloud - Compute"):
+                          #print(json.dumps(instance_details['EC2InstanceDetails']))
+                          row['Family'] = instance_details['EC2InstanceDetails']['Family']
+                          row['InstanceType'] = instance_details['EC2InstanceDetails']['InstanceType']
+                          row['Region'] = instance_details['EC2InstanceDetails']['Region']
+                          row['CurrentGeneration'] = instance_details['EC2InstanceDetails']['CurrentGeneration']
+                          row['SizeFlexEligible'] = instance_details['EC2InstanceDetails']['SizeFlexEligible']
+                          row['Platform'] = instance_details['EC2InstanceDetails']['Platform']
+                          row['Tenancy'] = instance_details['EC2InstanceDetails']['Tenancy']
+                          row['DatabaseEngine'] = ''
+                          row['DatabaseEdition'] = ''
+                          row['DeploymentOption'] = ''
+                          row['LicenseModel'] = ''
+                          row['NodeType'] = ''
+                          row['ProductDescription'] = ''
+                          row['InstanceClass'] = ''
+                          row['InstanceSize'] = ''
+
+                      if(service == "Amazon Relational Database Service"):
+                          row['Family'] = instance_details['RDSInstanceDetails']['Family']
+                          row['InstanceType'] = instance_details['RDSInstanceDetails']['InstanceType']
+                          row['Region'] = instance_details['RDSInstanceDetails']['Region']
+                          row['CurrentGeneration'] = instance_details['RDSInstanceDetails']['CurrentGeneration']
+                          row['SizeFlexEligible'] = instance_details['RDSInstanceDetails']['SizeFlexEligible']
+                          row['Platform'] = ''
+                          row['Tenancy'] = ''
+                          row['NodeType'] = ''
+                          row['ProductDescription'] = ''
+                          row['InstanceClass'] = ''
+                          row['InstanceSize'] = ''
+                          row['DatabaseEngine'] = instance_details['RDSInstanceDetails']['DatabaseEngine']
+                          row['DatabaseEdition'] = instance_details['RDSInstanceDetails']['DatabaseEdition']
+                          row['DeploymentOption'] = instance_details['RDSInstanceDetails']['DeploymentOption']
+                          row['LicenseModel'] = instance_details['RDSInstanceDetails']['LicenseModel']
+
+                      if (service == "Amazon ElastiCache"):
+                          row['Family'] = instance_details['ElastiCacheInstanceDetails']['Family']
+                          row['InstanceType'] = ''
+                          row['Region'] = instance_details['ElastiCacheInstanceDetails']['Region']
+                          row['CurrentGeneration'] = instance_details['ElastiCacheInstanceDetails']['CurrentGeneration']
+                          row['SizeFlexEligible'] = instance_details['ElastiCacheInstanceDetails']['SizeFlexEligible']
+                          row['Platform'] = ''
+                          row['Tenancy'] = ''
+                          row['DatabaseEngine'] = ''
+                          row['DatabaseEdition'] = ''
+                          row['DeploymentOption'] = ''
+                          row['LicenseModel'] = ''
+                          row['InstanceClass'] = ''
+                          row['InstanceSize'] = ''
+                          row['NodeType'] = instance_details['ElastiCacheInstanceDetails']['NodeType']
+                          row['ProductDescription'] = instance_details['ElastiCacheInstanceDetails']['ProductDescription']
+
+                      if (service == "Amazon Elasticsearch Service"):
+                          row['Family'] = ''
+                          row['InstanceType'] = ''
+                          row['Region'] = instance_details['ESInstanceDetails']['Region']
+                          row['CurrentGeneration'] = instance_details['ESInstanceDetails']['CurrentGeneration']
+                          row['SizeFlexEligible'] = instance_details['ESInstanceDetails']['SizeFlexEligible']
+                          row['Platform'] = ''
+                          row['Tenancy'] = ''
+                          row['DatabaseEngine'] = ''
+                          row['DatabaseEdition'] = ''
+                          row['DeploymentOption'] = ''
+                          row['LicenseModel'] = ''
+                          row['NodeType'] = ''
+                          row['ProductDescription'] = ''
+                          row['InstanceClass'] = instance_details['ESInstanceDetails']['InstanceClass']
+                          row['InstanceSize'] = instance_details['ESInstanceDetails']['InstanceSize']
+
+
+                      if (service == "Amazon Redshift"):
+                          row['Family'] = instance_details['RedshiftInstanceDetails']['Family']
+                          row['InstanceType'] = ''
+                          row['Region'] = instance_details['RedshiftInstanceDetails']['Region']
+                          row['CurrentGeneration'] = instance_details['RedshiftInstanceDetails']['CurrentGeneration']
+                          row['SizeFlexEligible'] = instance_details['RedshiftInstanceDetails']['SizeFlexEligible']
+                          row['Platform'] = ''
+                          row['Tenancy'] = ''
+                          row['DatabaseEngine'] = ''
+                          row['DatabaseEdition'] = ''
+                          row['DeploymentOption'] = ''
+                          row['LicenseModel'] = ''
+                          row['ProductDescription'] = ''
+                          row['InstanceClass'] = ''
+                          row['InstanceSize'] = ''
+                          row['NodeType'] = instance_details['RedshiftInstanceDetails']['NodeType']
+
+
+                      ri_recommendations.append(row)
+              return ri_recommendations
+
+          def fetch_savingsplan(client):
+              # Get Details for savings plan
+              response1 = client.get_savings_plans_purchase_recommendation(SavingsPlansType= SavingsPlansType,
+                                                                          TermInYears= TermInYears,
+                                                                          PaymentOption= PaymentOption,
+                                                                          LookbackPeriodInDays=LookbackPeriodInDays)
+              savings_plan_recommendations = []
+              savings_plan_recommendations = parse_response(response1, savings_plan_recommendations)
+              return savings_plan_recommendations
+
+
+          def parse_response(response,savings_plan_recommendations):
+              #print(json.dumps(response))
+              list_savings_plan_purchase_recommendation = response['SavingsPlansPurchaseRecommendation'].get(
+                  'SavingsPlansPurchaseRecommendationDetails', [])
+              for savings_plan_purchase_recommendation in list_savings_plan_purchase_recommendation:
+                  ##print(json.dumps(savings_plan_purchase_recommendation))
+                  savings_plan_details = savings_plan_purchase_recommendation.get('SavingsPlansDetails')
+                  row = dict()
+                  savings_plan_details = savings_plan_purchase_recommendation.get('SavingsPlansDetails')
+                  row['RecommendationId'] = response['Metadata']['RecommendationId']
+                  row['GenerationTimestamp'] = response['Metadata']['GenerationTimestamp']
+                  row['AdditionalMetadata'] = response['Metadata']['AdditionalMetadata']
+                  row['AccountScope'] = response['SavingsPlansPurchaseRecommendation']['AccountScope']
+                  row['SavingsPlansType'] = response['SavingsPlansPurchaseRecommendation']['SavingsPlansType']
+                  row['TermInYears'] = response['SavingsPlansPurchaseRecommendation']['TermInYears']
+                  row['PaymentOption'] = response['SavingsPlansPurchaseRecommendation']['PaymentOption']
+                  row['LookbackPeriodInDays'] = response['SavingsPlansPurchaseRecommendation']['LookbackPeriodInDays']
+                  row['region'] = savings_plan_details.get('Region')
+                  row['instance_type'] = savings_plan_details.get('InstanceFamily')
+                  row['offering_id'] = savings_plan_details.get('OfferingId')
+                  row['account_id'] = savings_plan_purchase_recommendation.get('AccountId')
+                  row['UpfrontCost'] = savings_plan_purchase_recommendation.get('UpfrontCost')
+                  row['EstimatedROI'] = savings_plan_purchase_recommendation.get('EstimatedROI')
+                  row['CurrencyCode'] = savings_plan_purchase_recommendation.get('CurrencyCode')
+                  row['EstimatedSPCost'] = savings_plan_purchase_recommendation.get('EstimatedSPCost')
+                  row['EstimatedOnDemandCost'] = savings_plan_purchase_recommendation.get('EstimatedOnDemandCost')
+                  row['EstimatedOnDemandCostWithCurrentCommitment'] = savings_plan_purchase_recommendation.get(
+                      'EstimatedOnDemandCostWithCurrentCommitment')
+                  row['EstimatedSavingsAmount'] = savings_plan_purchase_recommendation.get('EstimatedSavingsAmount')
+                  row['EstimatedSavingsPercentage'] = savings_plan_purchase_recommendation.get('EstimatedSavingsPercentage')
+                  row['HourlyCommitmentToPurchase'] = savings_plan_purchase_recommendation.get('HourlyCommitmentToPurchase')
+                  row['EstimatedAverageUtilization'] = savings_plan_purchase_recommendation.get('EstimatedAverageUtilization')
+                  row['EstimatedMonthlySavingsAmount'] = savings_plan_purchase_recommendation.get('EstimatedMonthlySavingsAmount')
+                  row['CurrentMinimumHourlyOnDemandSpend'] = savings_plan_purchase_recommendation.get(
+                      'CurrentMinimumHourlyOnDemandSpend')
+                  row['CurrentMaximumHourlyOnDemandSpend'] = savings_plan_purchase_recommendation.get(
+                      'CurrentMaximumHourlyOnDemandSpend')
+                  row['CurrentAverageHourlyOnDemandSpend'] = savings_plan_purchase_recommendation.get(
+                      'CurrentAverageHourlyOnDemandSpend')
+                  savings_plan_recommendations.append(row)
+
+              return savings_plan_recommendations
+
+
+          def save_s3(savings_plan, se_bucket_name,s3filename):
+              # Save in savings plan details in s3 bucket
+
+              sp_data = open('/tmp/data.csv', 'w')
+              csvwriter = csv.writer(sp_data)
+              count = 0
+
+              for sp in savings_plan:
+                  if count == 0:
+                      header = sp.keys()
+                      csvwriter.writerow(header)
+                      count += 1
+                  csvwriter.writerow(sp.values())
+              sp_data.close()
+
+              S3.upload_file('/tmp/data.csv', se_bucket_name, s3filename)
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 600
+      Role: 
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DestinationBucket
+          MANAGMENTARN: !Ref ManagementAccountRole
+          SPCRAWLER: !Ref SPCrawler
+          RICRAWLER: !Ref RICrawler
+          
+  SPCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:  !Sub
+          - '${CFDataName}-SPCrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/savingsplan/"
+  RICrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:  !Sub
+          - '${CFDataName}-RICrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/reserveinstance/"
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource:
+                  Ref: ManagementAccountRole
+        - PolicyName: "S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: [!Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${SPCrawler}",
+                !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${RICrawler}"]
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Monthly
+      Name: !Sub
+          - '${CFDataName}-schedule-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - Lambda
+              - Arn
+          Id: WeeklyTriggerForGetAccounts
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt Lambda.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
