@@ -73,38 +73,6 @@ s3://<prefix>cur-<destination-accountid>/
 ```
 
 
-### Create CUR in Source Account using CloudFormation
-{{%expand "Click here to continue" %}}
-
-1. Login to the Source Account (can be management account or linked account depending what you what to replicate).
-
-2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Source)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-3. Enter a **Stack name** for your template such as **CID-CUR**.
-![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
-
-4. Enter your **Desitnation** AWS Account Id parameter.
-   
-![Images/multi-account/cfn_dash_param_dst_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_1.png?classes=lab_picture_small)
-
-5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-7. You will see the stack will start in **CREATE_IN_PROGRESS** .
-**NOTE:** This step can take 5-15mins
-    ------------ | -------------
-
-8.  Once complete, the stack will show **CREATE_COMPLETE**.
-   
-{{% /expand%}}
-
-
 ### Configure Destination Account using CloudFormation
 {{%expand "Click here to continue" %}}
 
@@ -141,6 +109,37 @@ s3://<prefix>cur-<destination-accountid>/
 
 11. Once complete, the stack will show **CREATE_COMPLETE**.
 
+{{% /expand%}}
+
+### Create CUR in Source Account using CloudFormation
+{{%expand "Click here to continue" %}}
+
+1. Login to the Source Account (can be management account or linked account depending what you what to replicate).
+
+2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
+
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Source)
+	
+![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
+
+3. Enter a **Stack name** for your template such as **CID-CUR**.
+![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
+
+4. Enter your **Desitnation** AWS Account Id parameter.
+   
+![Images/multi-account/cfn_dash_param_dst_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_1.png?classes=lab_picture_small)
+
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
+
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
+
+7. You will see the stack will start in **CREATE_IN_PROGRESS** .
+**NOTE:** This step can take 5-15mins
+    ------------ | -------------
+
+8.  Once complete, the stack will show **CREATE_COMPLETE**.
+   
 {{% /expand%}}
 
 
