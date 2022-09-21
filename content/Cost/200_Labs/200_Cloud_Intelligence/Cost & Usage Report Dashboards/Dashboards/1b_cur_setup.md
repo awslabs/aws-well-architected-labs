@@ -26,7 +26,9 @@ If you have a Cost & Usage Report that meets this criteria you can use it, if no
 
 
 ## Deployment options
-AWS Customers can have many AWS Accounts and even multiple management (payer) accounts. Cost Intelligence Dashboards are build to give AWS Customers a visblilty across multiple accounts.
+Please follow one of the options bellow
+### Option 1. Multi account deployment (Suggested)
+{{%expand "Click here to continue with Cloud Formation Deployment" %}}
 
 If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small.
 
@@ -34,12 +36,7 @@ If you have __one or several management (payer) accounts__ we recommend to insta
 
 If you have just one payer account, a dedicated account for dashboards is still a recommended option. 
 
-If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report-and-athena-integration" >}}).
-
 Another frequent use case is __multi linked account__ setup. When AWS Customer has a number of AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is similar to the schema with multi-payer described on the schema above. An only difference is that in this case a local CUR must be activated in the destination account.
-
-
-## Automatic Deployment of CUR and CUR Replication with CloudFormation
 
 This section provide deep dive on automated way to aggregate the Cost and Usage Report data across multiple accounts.
 
@@ -73,8 +70,37 @@ s3://<prefix>cur-<destination-accountid>/
 ```
 
 
+### Create CUR in Source Account using CloudFormation
+
+1. Login to the Source Account (can be management account or linked account depending what you what to replicate).
+
+2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
+
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Source)
+	
+![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
+
+3. Enter a **Stack name** for your template such as **CID-CUR**.
+![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
+
+4. Enter your **Desitnation** AWS Account Id parameter.
+   
+![Images/multi-account/cfn_dash_param_dst_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_1.png?classes=lab_picture_small)
+
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
+
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
+
+7. You will see the stack will start in **CREATE_IN_PROGRESS** .
+**NOTE:** This step can take 5-15mins
+    ------------ | -------------
+
+8.  Once complete, the stack will show **CREATE_COMPLETE**.
+   
+
+
 ### Configure Destination Account using CloudFormation
-{{%expand "Click here to continue" %}}
 
 1. Login to the __account you choose for CUR Aggregation__ (Destination account) in the region of your choice. I can be any account inside or outside your AWS Organization.
    
@@ -109,7 +135,6 @@ s3://<prefix>cur-<destination-accountid>/
 
 11. Once complete, the stack will show **CREATE_COMPLETE**.
 
-{{% /expand%}}
 
 ### Create CUR in Source Account using CloudFormation
 {{%expand "Click here to continue" %}}
@@ -143,9 +168,8 @@ s3://<prefix>cur-<destination-accountid>/
 {{% /expand%}}
 
 
-### Add or delete accounts
+### Add or delete accounts (Optional)
 
-{{%expand "Click here to continue" %}}
 This section is only available if you already deployed CUR Replication with CloudFormation.
 
 
@@ -173,10 +197,8 @@ This section is only available if you already deployed CUR Replication with Clou
     ------------ | -------------
 
 8.  Once complete, the stack will show **UPDATE_COMPLETE**
-{{% /expand%}}
 
-### Teardown of CloudFormation deployment
-{{%expand "Click here to continue" %}}
+### Teardown of CloudFormation deployment (Optional)
 
 **NOTE:** Deleting an account means that cur data will not flow to your CUR aggregation account anymore. However, historical data will be retain. To delete them, go to the `${resource-prefix}-${payer-account-id}--shared` S3 Bucket and manualy delete account data. 
     ------------ | -------------
@@ -189,13 +211,16 @@ This section is only available if you already deployed CUR Replication with Clou
 {{% /expand%}}
 
 
-## Manual setup of Cost and Usage Report and Athena Integration
+### Option 2. Single account deployment
+{{%expand "Click here see steps for preparing your Cost & Usage report and Athena integraton manually" %}}
+
+If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report-and-athena-integration" >}}).
+
 
 You can set up CUR in billing console and configure Athena integration from a CloudFormation template (provided with your CUR)[https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html] (in the same S3 bucket as your CUR).
 
 You can also use it for dashboards directly, however, we do not recommend this option. Please consider replicating CUR to a dedicated account. This way you can effectivly managed the access and avoid having unnecessary users in your payer account. If you still want to use this option, please apply least priviledge access to your payer account.
 
-{{%expand "Click here see steps for preparing your Cost & Usage report and Athena integraton manually" %}}
 #### Configure CUR
 1. [Sign in](https://console.aws.amazon.com/billing/home#/) to the Billing and Cost Management console.
 
@@ -308,6 +333,10 @@ If you are not deploying the CIDs in your payer acacount, or wish to deploy them
 1. Enable **"I acknowledge that AWS CloudFormation might create IAM resources."** and click **Create Stack**
 
 {{% /expand%}}
+
+
+
+
 
 
 ## Manual configuration of cross account replication
