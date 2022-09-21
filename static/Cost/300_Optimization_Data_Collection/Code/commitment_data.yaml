@@ -58,7 +58,7 @@ Resources:
           import urllib3
           import datetime
 
-          BUCKET_NAME = os.environ["S3"]
+          BUCKET_NAME = os.environ["BUCKET_NAME"]
           S3 = boto3.client('s3')
           AWS_ACCOUNT_ID = boto3.client('sts').get_caller_identity()['Account']
           PaymentOption = os.environ.get('PaymentOption', 'NO_UPFRONT')
@@ -85,12 +85,12 @@ Resources:
                   aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
               savings_plan = fetch_savingsplan(ce_client)
-              save_s3(savings_plan, BUCKET_NAME, "savingsplan/year={year}/month={month}/data.csv")
+              save_s3(savings_plan, BUCKET_NAME, f"savingsplan/year={year}/month={month}/data.csv")
               print('Savings Plans Uploaded')
               start_crawler(os.environ["SPCRAWLER"])
 
               riRecommendation = fetch_rirecommendation(ce_client)
-              save_s3(riRecommendation, BUCKET_NAME, "reserveinstance/year={year}/month={month}/data.csv")
+              save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/year={year}/month={month}/data.csv")
               print('Reserve Instance Uploaded')
               start_crawler(os.environ["RICRAWLER"])
 
@@ -375,8 +375,7 @@ Resources:
           BUCKET_NAME: !Ref DestinationBucket
           MANAGMENTARN: !Ref ManagementAccountRole
           SPCRAWLER: !Ref SPCrawler
-          RICRAWLER: !Ref RICrawler
-          
+          RICRAWLER: !Ref RICrawler          
   SPCrawler:
     Type: AWS::Glue::Crawler
     Properties:
