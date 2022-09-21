@@ -24,6 +24,7 @@ Metadata:
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
           - IncludeBudgetsModule
+          - IncludeCommitmentsModule
     ParameterLabels:
       DestinationBucket:
         default: 'Destination S3 bucket'
@@ -55,6 +56,8 @@ Metadata:
         default: 'Include AWS Organization Data Collection Module' 
       IncludeBudgetsModule:
         default: 'Include AWS Budgets Collection Module'
+      IncludeCommitmentsModule:
+        default: 'Include AWS Commitments Collection Module'
 Mappings:
   RegionMap:
        eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
@@ -151,6 +154,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  IncludeCommitmentsModule: 
+    Type: String
+    Description: Collects Reserved Instance and Savings Plans recommendations 
+    AllowedValues:
+      - "yes"
+      - "no"
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -199,6 +208,9 @@ Conditions:
     - "yes" 
   DeployBudgetsModule: !Equals
     - !Ref IncludeBudgetsModule
+    - "yes"
+  DeployCommitmentsModule: !Equals
+    - !Ref IncludeCommitmentsModule
     - "yes"
   DeployPricingModule: !Or
     - !Condition DeployInventoryCollectorModule
@@ -408,6 +420,17 @@ Resources:
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
+  CommitmentsModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployCommitmentsModule
+    Properties:
+      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/commitment_data.yaml"
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        Schedule: !Ref Schedule
+        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+        RolePrefix: !Ref RolePrefix
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
