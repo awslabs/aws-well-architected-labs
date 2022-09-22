@@ -26,8 +26,8 @@ If you have a Cost & Usage Report that meets this criteria you can use it, if no
 
 
 ## Deployment options
-Please follow one of the options bellow
-### Option 1. Multi account deployment (Suggested)
+Please follow one of the options bellow.
+### Option 1. Multi account deployment with CloudFormation (Suggested)
 {{%expand "Click here to continue with Cloud Formation Deployment" %}}
 
 If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account. The replicaiton data volume is relatively small.
@@ -53,14 +53,15 @@ If you use just one account, CFN also can be used to create a CUR, in this case 
 CFN will result to S3 bucket with following structure in the **Destination Account**
 
 ```html
-s3://<prefix>cur-<destination-accountid>/
-	cur/<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
+s3://<prefix>-<destination-accountid>-shared/
+	cur/source_account_id=<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/source_account_id=<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/source_account_id=<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
 ```
 
+In this case crawler can create a reasonable partitions Strh
 
-### Create CUR in Source Account using CloudFormation
+### Step1. Create CUR in Source Account(s) using CloudFormation
 
 1. Login to your Source Account (can be management account or linked account depending what you what to replicate).
 
@@ -89,9 +90,11 @@ s3://<prefix>cur-<destination-accountid>/
 8.  Once complete, the stack will show **CREATE_COMPLETE**.
 
 
-### Configure Destination Account using CloudFormation
+### Step2. Configure Destination Account using CloudFormation
 
-1. Login to the __account you choose for CUR Aggregation__ (Destination account) in the region of your choice. I can be any account inside or outside your AWS Organization.
+At this step we will deplpoy the same CFN Template but with parameters for Destination Account.
+
+1. Login to the Destination account in the region of your choice. I can be any account inside or outside your AWS Organization.
    
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
@@ -157,7 +160,7 @@ s3://<prefix>cur-<destination-accountid>/
 {{% /expand%}}
 
 
-### Add or delete accounts (Optional)
+### Step3. Add or delete accounts (Optional)
 
 This section is only available if you already deployed CUR Replication with CloudFormation.
 
@@ -189,7 +192,7 @@ This section is only available if you already deployed CUR Replication with Clou
 
 ### Teardown of CloudFormation deployment (Optional)
 
-**NOTE:** Deleting an account means that cur data will not flow to your CUR aggregation account anymore. However, historical data will be retain. To delete them, go to the `${resource-prefix}-${payer-account-id}--shared` S3 Bucket and manualy delete account data. 
+**NOTE:** Deleting an account means that cur data will not flow to your CUR aggregation account anymore. However, historical data will be retain. To delete them, go to the `${resource-prefix}-${payer-account-id}-shared` S3 Bucket and manualy delete account data.
     ------------ | -------------
 
 1. Login to the Account you want to delete.
@@ -203,10 +206,9 @@ This section is only available if you already deployed CUR Replication with Clou
 ### Option 2. Single account deployment
 {{%expand "Click here see steps for preparing your Cost & Usage report and Athena integraton manually" %}}
 
-If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) systematically. For the deployment of CUR see [Manual setup of a CUR]({{< ref "#manual-setup-of-cost-and-usage-report-and-athena-integration" >}}).
+If you want to set up CUR and dashboards in a __single account__ or in a __management (payer) account__ directly, it is possible, but in this case you need to make sure you apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege/) systematically.
 
-
-You can set up CUR in billing console and configure Athena integration from a CloudFormation template (provided with your CUR)[https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html] (in the same S3 bucket as your CUR).
+You can set up CUR in billing console and configure Athena integration from a CloudFormation template [provided with your CUR](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html) (in the same S3 bucket as your CUR).
 
 You can also use it for dashboards directly, however, we do not recommend this option. Please consider replicating CUR to a dedicated account. This way you can effectivly managed the access and avoid having unnecessary users in your payer account. If you still want to use this option, please apply least priviledge access to your payer account.
 
@@ -217,7 +219,7 @@ You can also use it for dashboards directly, however, we do not recommend this o
 
 1. Choose **Create report**.
 
-1. For **Report name**, enter a name for your report. ex: 'CID'.
+1. For **Report name**, enter a name for your report. ex: **cid**
 
 1. Under **Additional report details**, select **Include resource IDs** to include the IDs of each individual resource in the report.
 **Note:** Including resource IDs will create individual line items for each of your resources. This can increase the size of your Cost and Usage Reports files significantly, based on your AWS usage.
@@ -235,9 +237,10 @@ You can also use it for dashboards directly, however, we do not recommend this o
     + Enter a bucket name and the Region where you want to create a new bucket and choose **Next**.
 
 1. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
-1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compativle with multi-account scenarions, you can choose prefix as 'cur/{account_id}'
+1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/source_account_id={current_account_id}** (replacing current_account_id with the right value).
 **Note:** Make sure that report path prefix doesn't include a double slash (//) as Athena doesn't support such table location.
     ------------ | -------------
+
 1. For **Time granularity**, choose **Hourly**.
 
 1. For **Report versioning**, choose **Overwrite existing report**.
@@ -325,13 +328,10 @@ If you are not deploying the CIDs in your payer acacount, or wish to deploy them
 
 
 
+### Option3. Multi account deployement with manual configuration
 
-
-
-## Manual configuration of cross account replication
-
-This scenario allows customers with multiple management (payer) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Governance Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Governance account.
 {{%expand "Click here to expand step by step instructions" %}}
+This scenario allows customers with multiple management (payer) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Data Collection Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Data Collection account.
 
 ![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
 
@@ -339,9 +339,9 @@ This scenario allows customers with multiple management (payer) accounts to depl
 
 #### Setup S3 CUR Bucket Replication
 
-1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
+1. Create or go to the console of your Data Collection account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
 2. Create an S3 bucket with enabled versioning.
-3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
+3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {DataCollectionAccountBucketName}. You can add more payer accounts to the policy later if needed.
 
 ```json
 {
@@ -361,7 +361,7 @@ This scenario allows customers with multiple management (payer) accounts to depl
                 "s3:ReplicateObject",
                 "s3:ReplicateDelete"
             ],
-            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+            "Resource": "arn:aws:s3:::{DataCollectionAccountBucketName}/*"
         },
         {
             "Sid": "Set permissions on bucket",
@@ -377,7 +377,7 @@ This scenario allows customers with multiple management (payer) accounts to depl
                 "s3:GetBucketVersioning",
                 "s3:PutBucketVersioning"
             ],
-            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
+            "Resource": "arn:aws:s3:::{DataCollectionAccountBucketName}"
         },
         {
             "Sid": "Set permissions to pass object ownership",
@@ -396,7 +396,7 @@ This scenario allows customers with multiple management (payer) accounts to depl
                 "s3:GetObjectVersionTagging",
                 "s3:PutObject"
             ],
-            "Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
+            "Resource": "arn:aws:s3:::{DataCollectionAccountBucketName}/*"
         }
     ]
 }
@@ -404,7 +404,7 @@ This scenario allows customers with multiple management (payer) accounts to depl
 
 This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 
-#### Set up S3 bucket replication from each Management (Payer) account to S3 bucket in Governance account
+#### Set up S3 bucket replication from each Management (Payer) account to S3 bucket in Data Collection Account
 
 This step should be done in each management (payer) account.
 
@@ -415,7 +415,7 @@ This step should be done in each management (payer) account.
 
 ![Images/s3_bucket_replication_1.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_1.png?classes=lab_picture_small)
 
-5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account.
+5. Select Specify a bucket in another account and provide Data Collection Account id and bucket name in Data Collection Account.
 6. Select Change object ownership to destination bucket owner checkbox.
 7. Select Create new role under IAM Role section.
 
@@ -423,19 +423,23 @@ This step should be done in each management (payer) account.
 
 8. Leave rest of the settings by default and click Save.
 
-#### Copy existing objects from CUR S3 bucket to S3 bucket in Governance account
+#### Copy existing objects from CUR S3 bucket to S3 bucket in Data Collection Account
 
 This step should be done in each management (payer) account.
 
-Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
+Sync existing objects from CUR S3 bucket to S3 bucket in Data Collection Account.
 
-	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
+	aws s3 sync s3://{curBucketName} s3://{DataCollectionAccountBucketName} --acl bucket-owner-full-control
 
-After performing this step in each management (payer) account S3 bucket in Governance account will contain CUR data from all payer accounts under respective prefixes.
+After performing this step in each management (payer) account S3 bucket in Data Collection Account will contain CUR data from all payer accounts under respective prefixes.
+{{% /expand%}}
 
-#### Prepare Glue Crawler 
+## Prepare Glue Crawler
+You will need to do this in Data Collection Account only if you choose Manual or Automated multi-account option. The latest version of cloud formation deployment do not require this step.
 
-These actions should be done in Governance account
+{{%expand "Click here to expand step by step instructions" %}}
+
+These actions should be done in Data Collection Account
 
 1. Open AWS Glue Service in AWS Console in the same region where S3 bucket with aggregated CUR data is located and go to Crawlers section
 2. Click Add Crawler
