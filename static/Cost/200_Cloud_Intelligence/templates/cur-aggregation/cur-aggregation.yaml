@@ -1,96 +1,66 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Metadata: 
-  AWS::CloudFormation::Interface: 
-    ParameterGroups: 
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
       - 
-        Label: 
+        Label:
           default: "Common Parameters Configuration"
-        Parameters: 
+        Parameters:
           - DestinationAccountId
           - ResourcePrefix
           - CreateCUR
       - 
-        Label: 
+        Label:
           default: "Destination Account specific parameters (fill only on Destination Account)"
-        Parameters: 
+        Parameters:
           - SourceAccountIds
 
     ParameterLabels:
       DestinationAccountId:
-        default: "Enter the AWS Account Id where CID Quicksight Dashboard will be deployed"
+        default: "AWS Account Id where CID Quicksight Dashboard will be deployed"
       ResourcePrefix:
         default: "Prefix used for all named resources, including S3 Bucket."
-      SourceAccountIds: 
-        default: "List all source accounts you whant to group CUR Data from as a comma separated list 12345678912,98745612312,...."
-      
+      SourceAccountIds:
+        default: "A comma separated list of all Source accounts that will replicate CUR Data. Ex:  12345678912,98745612312,...."
+
+
 Parameters:
 
   ##
   # Common params
   ##
-
   DestinationAccountId:
     Type: String
     Description: CUR Destination account id
     AllowedPattern: '\d{12}'
   ResourcePrefix:
     Type: String
-    Default: "centralized-cur"
-    Description: "resource prefix"
+    Default: "cid"
+    Description: "Resource prefix. Will be used as a prefix for bucket and a name of a CUR"
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]{1,61}[a-z0-9]+$"
   CreateCUR:
     Type: String
-    Description: Whenever or not create Local CUR
+    Description: Whenever or not create Local CUR. Put it to False on Destination only if the management (payer) account of Destiation is used as CUR Source.
     AllowedValues:
       - "True"
       - "False"
     Default: "True"
-  
+
   ##
   # Destination specific params
   ##
 
   SourceAccountIds:
     Type: CommaDelimitedList
-    Description: List of AWS AccountId authorizing s3 replication
+    Description: List of AWS AccountId's for authorizing s3 replication
 
 Conditions:
-  
-  IsDestinationAccount: 
-    Fn::Equals: 
-      - Ref: DestinationAccountId 
-      - Ref: AWS::AccountId
-  
-  IsSourceAccount:
-    Fn::Not:
-     - 
-      Fn::Equals: 
-        - Ref: DestinationAccountId 
-        - Ref: AWS::AccountId
-
-  IsNorthVirginia:
-    Fn::Equals:
-      - Ref: AWS::Region
-      - 'us-east-1'
-
-  CUREnable:
-    Fn::Equals:
-      - Ref: CreateCUR
-      - "True"
-
-  DeployCURCFN:
-    Fn::And:
-      - !Condition CUREnable
-      - !Condition IsNorthVirginia
- 
-  DeployCURLambda:
-    Fn::And:
-      - !Condition CUREnable
-      - !Not 
-        - 
-          Fn::Equals:
-            - Ref: AWS::Region
-            - 'us-east-1'
+  IsDestinationAccount: !Equals [!Ref DestinationAccountId, !Ref AWS::AccountId]
+  IsSourceAccount: !Not [!Condition IsDestinationAccount]
+  IsNorthVirginia: !Equals [!Ref AWS::Region, 'us-east-1']
+  CUREnable: !Equals [!Ref CreateCUR, 'True']
+  DeployCURViaCFN: !And [!Condition CUREnable, !Condition IsNorthVirginia]
+  DeployCURViaLambda: !And [!Condition CUREnable, !Not [!Condition IsNorthVirginia]]
 
 Resources:
 
@@ -99,7 +69,7 @@ Resources:
 ###########################################################################
 
 ####
-# S3 Bucket which store all CUR from Accounts 
+# S3 Bucket which store all CUR from Accounts
 ####
 
   DestinationS3:
@@ -130,14 +100,14 @@ Resources:
           - Id: Object&Version Expiration
             Status: Enabled
             NoncurrentVersionExpirationInDays: 32 # 1 month 
-         
-  S3BucketPolicy:
+
+  DestinationS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Condition: IsDestinationAccount
     DeletionPolicy: Retain
     UpdateReplacePolicy: Delete
     Properties:
-      Bucket: 
+      Bucket:
         Ref: DestinationS3
       PolicyDocument:
         Id: CrossAccessPolicy
@@ -167,7 +137,7 @@ Resources:
             Effect: Allow
             Principal:
               Service: billingreports.amazonaws.com
-            Action: 
+            Action:
               - s3:GetBucketAcl
               - s3:GetBucketPolicy
             Resource:
@@ -177,7 +147,7 @@ Resources:
             Effect: Allow
             Principal:
               Service: billingreports.amazonaws.com
-            Action: 
+            Action:
               - s3:PutObject
             Resource:
               - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
@@ -187,7 +157,7 @@ Resources:
             Principal:
               AWS:
                 Ref: SourceAccountIds
-            Action: 
+            Action:
               - s3:ReplicateDelete
               - s3:ReplicateObject
             Resource:
@@ -197,7 +167,7 @@ Resources:
             Principal:
               AWS:
                 Ref: SourceAccountIds
-            Action: 
+            Action:
               - s3:List*
               - s3:GetBucketVersioning
               - s3:PutBucketVersioning
@@ -251,9 +221,9 @@ Resources:
         Rules:
           - Id: Object&Version Expiration
             Status: Enabled
-            NoncurrentVersionExpirationInDays: 32 # 1 month 
+            NoncurrentVersionExpirationInDays: 32 # 1 month
             ExpirationInDays: 64 # 2 months
-              
+
   SourceS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Condition: IsSourceAccount
@@ -289,7 +259,7 @@ Resources:
             Effect: Allow
             Principal:
               Service: billingreports.amazonaws.com
-            Action: 
+            Action:
               - s3:GetBucketAcl
               - s3:GetBucketPolicy
             Resource:
@@ -299,11 +269,11 @@ Resources:
             Effect: Allow
             Principal:
               Service: billingreports.amazonaws.com
-            Action: 
+            Action:
               - s3:PutObject
             Resource:
               - !Sub 'arn:${AWS::Partition}:s3:::${SourceS3}/*'
-  
+
   CrossRegionReplicationRole:
     Condition: IsSourceAccount
     Type: AWS::IAM::Role
@@ -341,76 +311,58 @@ Resources:
                   - s3:ReplicateDelete
                   - s3:ReplicateTags
                   - s3:GetObjectVersionTagging
-                Resource: 
-                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared/cost-usage-reports/${AWS::AccountId}*"
+                Resource:
+                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared/cur/source_account_id=${AWS::AccountId}/*"
 
 ####
 # Local CUR 
 ####
 
-  ## Deploy CUR nativly if we are in us-east-1
+  ## Deploy CUR nativly via CFN resource if we are in us-east-1
   LocalCur:
     Type: AWS::CUR::ReportDefinition
-    Condition: DeployCURCFN
+    Condition: DeployCURViaCFN
     Properties:
       AdditionalArtifacts:
         - ATHENA
-      AdditionalSchemaElements: 
+      AdditionalSchemaElements:
         - RESOURCES
       Compression: Parquet
       Format: Parquet
       RefreshClosedReports: True
-      ReportName: 
-        Ref: AWS::AccountId
+      ReportName: !Ref ResourcePrefix
       ReportVersioning: OVERWRITE_REPORT
-      S3Bucket:
-        Fn::If:
-          - IsDestinationAccount
-          - Fn::If:
-            - IsDestinationAccount
-            - Ref: DestinationS3
-            - Fn::Sub: ${ResourcePrefix}-${DestinationAccountId}-shared
-          - Fn::If:
-              - IsSourceAccount
-              - Ref: SourceS3
-              - Fn::Sub: ${ResourcePrefix}-${AWS::AccountId}-local
-      S3Prefix: "cost-usage-reports"
-      S3Region: 
-        Ref: AWS::Region
+      S3Bucket: !If [ IsDestinationAccount, !Ref DestinationS3, !Ref SourceS3 ]
+      S3Prefix: !Sub "cur/source_account_id=${AWS::AccountId}"
+      S3Region: !Ref AWS::Region
       TimeUnit: HOURLY
 
 
   # Deploy CUR via lambda due to missing cfn resource definition
   # AWS::CUR::ReportDefinition outside us-east-1
-  CURinUSEAST1:  
+  CURinUSEAST1:
     Type: Custom::CURCreator
-    Condition: DeployCURLambda
+    Condition: DeployCURViaLambda
     Properties:
       ServiceToken: !GetAtt CIDLambdaCURCreator.Arn
-      BucketPolicyWait: 
+      BucketPolicyWait:
          Fn::If:
             - IsDestinationAccount
-            - Ref: S3BucketPolicy
+            - Ref: DestinationS3BucketPolicy
             - Ref: SourceS3BucketPolicy
       ReportDefinition:
         AdditionalArtifacts:
           - ATHENA
-        AdditionalSchemaElements: 
+        AdditionalSchemaElements:
           - RESOURCES
         Compression: Parquet
         Format: Parquet
         RefreshClosedReports: True
-        ReportName: 
-          Ref: AWS::AccountId
+        ReportName: !Ref ResourcePrefix
         ReportVersioning: OVERWRITE_REPORT
-        S3Bucket:
-          Fn::If:
-            - IsDestinationAccount
-            - Ref: DestinationS3
-            - Ref: SourceS3
-        S3Prefix: "cost-usage-reports"
-        S3Region: 
-          Ref: AWS::Region
+        S3Bucket: !If [ IsDestinationAccount, !Ref DestinationS3, !Ref SourceS3 ]
+        S3Prefix: !Sub "cur/source_account_id=${AWS::AccountId}"
+        S3Region: !Ref AWS::Region
         TimeUnit: HOURLY
 
 ###########################################################################
@@ -419,9 +371,9 @@ Resources:
 
   CIDLambdaCURCreatorRole: #Execution role for the custom resource CIDLambdaAnalyticsExecutor
     Type: AWS::IAM::Role
-    Condition: DeployCURLambda
+    Condition: DeployCURViaLambda
     Properties:
-      Path: 
+      Path:
         Fn::Sub: /${ResourcePrefix}/
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -457,17 +409,17 @@ Resources:
               - cur:DeleteReportDefinition
               Resource:
                 - Fn::Sub: arn:${AWS::Partition}:cur:us-east-1:${AWS::AccountId}:definition/*
-  
-  CIDLambdaCURCreator: 
+
+  CIDLambdaCURCreator:
     Type: AWS::Lambda::Function
-    Condition: DeployCURLambda
+    Condition: DeployCURViaLambda
     Properties:
       Runtime: python3.9
       FunctionName:
         Fn::Sub: ${ResourcePrefix}-CID-CURCreator
       Handler: index.lambda_handler
       MemorySize: 128
-      Role: 
+      Role:
         Fn::GetAtt: CIDLambdaCURCreatorRole.Arn
       Timeout: 15
       Code:
@@ -475,22 +427,16 @@ Resources:
           import boto3
           import cfnresponse
           import uuid
-          import json 
+          import json
 
           # Create a cur client in us-east-1 region
           client = boto3.client('cur', region_name='us-east-1')
 
           def lambda_handler(event, context):
-            
-            print(event)
+
+            print(json.dumps(event))
             reason = ""
-            
-            physicalResourceId = str(uuid.uuid1())
-            try: 
-                physicalResourceId=event['ResourceProperties']['ReportDefinition']['ReportName']
-            except: 
-                pass
-              
+
             try:
               report = event['ResourceProperties']['ReportDefinition']
               report_name = event['ResourceProperties']['ReportDefinition']['ReportName']
@@ -507,58 +453,52 @@ Resources:
                   res = client.put_report_definition(
                       ReportDefinition=report
                   )
-
+                  print(json.dumps(res))
               elif event['RequestType'] == 'Update':
                   old_report_name = event['OldResourceProperties']['ReportDefinition']['ReportName']
                   if report["ReportName"] != old_report_name:
                       res = client.put_report_definition(
                           ReportDefinition=report
                       )
-                      print(res)
+                      print(json.dumps(res))
                   else:
                       res = client.modify_report_definition(
-                              ReportName=old_report_name,
-                              ReportDefinition=report
-                          )
-                      print(res)
+                          ReportName=old_report_name,
+                          ReportDefinition=report
+                      )
+                      print(json.dumps(res))
               elif event['RequestType'] == 'Delete':
-                      # Do not block deletion
                   try:
                       res = client.delete_report_definition(
                           ReportName=report_name
                       )
-                      print(res)
+                      print(json.dumps(res))
                   except:
-                      pass
+                      pass # Do not block deletion
               else:
                   raise Exception("Unknown operation: " + event['RequestType'])
-            except Exception as e:
-              reason = str(e)
-              print(e)
-              
-              try: 
-                  physicalResourceId=event['ResourceProperties']['ReportDefinition']['ReportName']
-              except: 
-                  pass
-            
-            if reason:
-                print("FAILURE")
-                cfnresponse.send(event, context, cfnresponse.FAILED, {"Data": reason }, physicalResourceId)
-            else:
-              print("SUCCESS")
-              cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, physicalResourceId)
 
+            except Exception as e:
+                reason = str(e)
+                print(e)
+            finally:
+                physicalResourceId = event.get('ResourceProperties',{}).get('ReportDefinition').get('ReportName', None) or str(uuid.uuid1())
+                if reason:
+                    print("FAILURE")
+                    cfnresponse.send(event, context, cfnresponse.FAILED, {"Data": reason }, physicalResourceId)
+                else:
+                    print("SUCCESS")
+                    cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, physicalResourceId)
 
 
 ###########################################################################
 # Analytics: used by CID team to track adoption, by retrieving AWS AccountId
 ###########################################################################
 
-  
   CIDLambdaAnalyticsRole: #Execution role for the custom resource CIDLambdaAnalyticsExecutor
     Type: AWS::IAM::Role
     Properties:
-      Path: 
+      Path:
         Fn::Sub: /${ResourcePrefix}/
       #RoleName: CID-Analytics
       AssumeRolePolicyDocument:
@@ -585,7 +525,7 @@ Resources:
               - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-Analytics:*"
               - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${ResourcePrefix}-CID-Analytics:*:*"
 
-  CIDLambdaAnalytics: 
+  CIDLambdaAnalytics:
     Type: AWS::Lambda::Function
     Properties:
       Runtime: python3.9
@@ -593,7 +533,7 @@ Resources:
         Fn::Sub: ${ResourcePrefix}-CID-Analytics
       Handler: index.lambda_handler
       MemorySize: 128
-      Role: 
+      Role:
         Fn::GetAtt: CIDLambdaAnalyticsRole.Arn
       Timeout: 15
       Environment:
@@ -611,7 +551,7 @@ Resources:
           http = urllib3.PoolManager()
           endpoint=os.environ["API_ENDPOINT"]
           account_id=boto3.client("sts").get_caller_identity()["Account"]
-              
+
           def execute_request(action,dashboard_id,via_key):
               try:
                   message=None
@@ -623,7 +563,7 @@ Resources:
               except urllib3.exceptions.HTTPError as e:
                 message=f"Issue logging action {action}  for dashboard {dashboard_id} and account {account_id}, due to a urllib3 exception {str(e)} . This issue will be ignored"
               return message
-              
+
 
           def register_deployment(action,dashboards):
               message=f"Succesfully logged  {action} for {dashboards}"
@@ -650,19 +590,19 @@ Resources:
               else:
                   res = False
                   reason = "Unknown operation: " + event['RequestType']
-              
+
               response_data = {'Reason': reason}
               print(response_data)
               if 'PhysicalResourceId' in event.keys() and event['PhysicalResourceId'] is not None:
                   physicalResourceId=event['PhysicalResourceId']
-              else: 
+              else:
                   physicalResourceId=str(uuid.uuid1())
               if res:
                   cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, physicalResourceId )
               else:
                   cfnresponse.send(event, context, cfnresponse.FAILED, response_data, physicalResourceId )
 
-  CIDLambdaAnalyticsExecutor:  
+  CIDLambdaAnalyticsExecutor:
     Type: Custom::CIDLambdaAnalyticsExecutor
     Properties:
       ServiceToken: !GetAtt CIDLambdaAnalytics.Arn
@@ -675,9 +615,10 @@ Resources:
 Outputs:
   GovernanceBucketName:
     Description: Bucket where to store and aggregate CUR
-    Value: 
+    Value:
       Fn::Sub: ${ResourcePrefix}-${DestinationAccountId}-shared
   LocalAccountBucket:
+    Condition: IsSourceAccount
     Description: Local Bucket Name which replicate objects to centralized bucket
-    Value: 
+    Value:
       Fn::Sub: ${ResourcePrefix}-${AWS::AccountId}-local

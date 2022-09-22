@@ -34,15 +34,15 @@ If you have __one or several management (payer) accounts__ we recommend to insta
 
 ![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_small)
 
-If you have just one payer account, a dedicated account for dashboards is still a recommended option. 
+If you have just one management (payer) account, a dedicated account for dashboards is still a recommended option. 
 
 Another frequent use case is __multi linked account__ setup. When AWS Customer has a number of AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is similar to the schema with multi-payer described on the schema above. An only difference is that in this case a local CUR must be activated in the destination account.
 
 This section provide deep dive on automated way to aggregate the Cost and Usage Report data across multiple accounts.
 
-If you have multiple management(payer) accounts or if you just want to transfer CUR from payer to a deducated account, you can follow these steps to configure CUR aggregation. Also you can [add or delete account]({{< ref "#add-or-delete-accounts-to-an-existing-multi-account-deployment" >}}) later.
+If you have multiple management(payer) accounts or if you just want to transfer CUR from management(payer) to a deducated account, you can follow these steps to configure CUR aggregation. Also you can add or delete account later.
 
-The CloudFormation template must be installed:
+The same CloudFormation template must be installed in:
 
 1. In one or more **Source Accounts**, where CFN will activate a new CUR, an S3 bucket and a replication rule.
 2. In the **Destination** or data collection account, where CFN will create an S3 bucket for CUR aggregation.
@@ -50,33 +50,23 @@ The CloudFormation template must be installed:
 If you use just one account, CFN also can be used to create a CUR, in this case please follow guidance for **Destination Account** and choose to activate local CUR.
 
 
-CFN will result to S3 bucket with following structure in the **Destination Account** 
+CFN will result to S3 bucket with following structure in the **Destination Account**
 
 ```html
 s3://<prefix>cur-<destination-accountid>/
-	cost-usage-reports/
- 		<src-account1>/
- 			<src-account1>/
-	 			year=XXXX/
-	 				month=YY/*.parquet
- 		<src-account2>/
- 			<src-account2>/
-	 			year=XXXX/
-	 				month=YY/*.parquet
- 		<src-account3>/
- 			<src-account3>/
-	 			year=XXXX/
-	 				month=YY/*.parquet
+	cur/<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
 ```
 
 
 ### Create CUR in Source Account using CloudFormation
 
-1. Login to the Source Account (can be management account or linked account depending what you what to replicate).
+1. Login to your Source Account (can be management account or linked account depending what you what to replicate).
 
 2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Source)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Replication)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
@@ -97,7 +87,6 @@ s3://<prefix>cur-<destination-accountid>/
     ------------ | -------------
 
 8.  Once complete, the stack will show **CREATE_COMPLETE**.
-   
 
 
 ### Configure Destination Account using CloudFormation
@@ -228,7 +217,7 @@ You can also use it for dashboards directly, however, we do not recommend this o
 
 1. Choose **Create report**.
 
-1. For **Report name**, enter a name for your report.
+1. For **Report name**, enter a name for your report. ex: 'CID'.
 
 1. Under **Additional report details**, select **Include resource IDs** to include the IDs of each individual resource in the report.
 **Note:** Including resource IDs will create individual line items for each of your resources. This can increase the size of your Cost and Usage Reports files significantly, based on your AWS usage.
@@ -246,7 +235,7 @@ You can also use it for dashboards directly, however, we do not recommend this o
     + Enter a bucket name and the Region where you want to create a new bucket and choose **Next**.
 
 1. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
-1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report.
+1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compativle with multi-account scenarions, you can choose prefix as 'cur/{account_id}'
 **Note:** Make sure that report path prefix doesn't include a double slash (//) as Athena doesn't support such table location.
     ------------ | -------------
 1. For **Time granularity**, choose **Hourly**.
@@ -481,6 +470,6 @@ These actions should be done in Governance account
 
 
 
-{{< prev_next_button link_prev_url="../1a_prerequistes" link_next_url="../1c_quicksight" />}}
+{{< prev_next_button link_prev_url=".." link_next_url="../1b_quicksight" />}}
 
 

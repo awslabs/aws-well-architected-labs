@@ -281,8 +281,10 @@ To validate your QuickSight complete the tasks below:
 
 {{% /expand%}}
 
-### Option 3: Manual Deployment (1 hour)
+### Option 3: Manual Deployment (DEPRECATED)
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight.
+
+You will require AWS CLI environment. We recommend using CloudShell in your account, but you also can [install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) on your working environment.
 
 {{%expand "Click here to continue with the manual deployment for the CID" %}}
 

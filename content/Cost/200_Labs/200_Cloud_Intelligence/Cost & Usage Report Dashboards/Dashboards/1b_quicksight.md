@@ -40,4 +40,4 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 
 
-{{< prev_next_button link_prev_url="../1b_cur_setup" link_next_url="../2_deploy_dashboards" />}}
+{{< prev_next_button link_prev_url="../1a_cur_setup" link_next_url="../2_deploy_dashboards" />}}
