@@ -18,7 +18,7 @@ This Well Architected lab is a consolidation of labs and AWS workshops formerly 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
 ## Get Help
-[Ask your questions](https://0s62bmu3aj.execute-api.us-east-1.amazonaws.com/PROD/link/tracker?LinkID=270894ed-12b6-27bc-74f3-124130ceb403&URL=https%3A%2F%2Frepost.aws%2Ftags%2FTANKNkVH-tSUa2jYNx4F159g%2Fcloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
+[Ask your questions](https://repost.aws/tags/TANKNkVH-tSUa2jYNx4F159g/cloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
 
 [Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
 
@@ -152,7 +152,7 @@ Trusted Advisor Organizational (TAO) requires the management account in your org
 - Oleksandr Moskalenko, Sr. AWS Technical Account Manager
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yash Bindlish, AWS Technical Account Manager
-- Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
 
 The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent OnDemand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. Out-of-the-box benefits of the KPI dashboard include (but are not limited to):
 
@@ -193,7 +193,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Aaron Edell, Global Head of Business and GTM (Cloud Intelligence Dashboards)
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 - Timur Tulyaganov, AWS Principal Technical Account Manager
-- Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
 - Iakov Gan, Senior Technical Account Manager
 
 ## Contributors
@@ -203,10 +203,11 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Cristian Popa, Sr. Technical Account Manager
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 - Lakhvinder Singh Gill, Enterprise Support Lead
-- Manik Chopra, Senior Technical Account Manager
+- Manik Chopra, Principal Technical Account Manager
 - Meredith Holborn, Technical Account Manager
-- Nisha Notani, Technical Account Manager
-- Oleksandr Moskalenko, Technical Account Manager
-- William Hughes, Technical Account Manager
+- Nisha Notani, Sr. Technical Account Manager
+- Oleksandr Moskalenko, Sr. Technical Account Manager
+- William Hughes, Sr. Solutions Architect
+- Thomas Buatois, Cloud Infrastructure Architect
 
 {{< prev_next_button link_next_url="./cost-usage-report-dashboards/" button_next_text="Next" first_step="true" />}}
