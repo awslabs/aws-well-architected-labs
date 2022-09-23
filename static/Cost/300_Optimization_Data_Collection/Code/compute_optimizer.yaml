@@ -281,6 +281,8 @@ Resources:
           BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
           ROLE_ARN: !Ref RoleNameARN
           INCLUDE_MEMBER_ACCOUNTS: 'TRUE'
+          ROLE: !Ref ManagementRoleName
+          MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
       Code:
         ZipFile: |
           import os
