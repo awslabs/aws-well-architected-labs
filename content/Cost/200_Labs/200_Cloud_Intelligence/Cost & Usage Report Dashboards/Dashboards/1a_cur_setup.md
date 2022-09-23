@@ -14,7 +14,7 @@ pre: "<b>1a. </b>"
 - Iakov Gan, AWS Sr. Technical Account Manager
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
 
-## Cost and Usage Report
+## Cost and Usage Report (CUR)
 The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for multiple CID Dashboards. CID requires Cost & Usage Report to be created with the following format:
 - Additional report details: Include **Resource IDs**
 - Time Granularity: **Hourly**
@@ -25,7 +25,7 @@ The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-
 If you have a Cost & Usage Report that meets this criteria you can use it, if not, you can create a new CUR and request a [backfill](https://docs.aws.amazon.com/cur/latest/userguide/troubleshooting.html#backfill-data).
 
 
-## Deployment options
+## CUR Deployment
 Please follow one of the options bellow.
 ### Option 1. Multi account deployment with CloudFormation (Suggested)
 {{%expand "Click here to continue with Cloud Formation Deployment" %}}
@@ -34,7 +34,7 @@ If you have __one or several management (payer) accounts__ we recommend to insta
 
 ![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_small)
 
-If you have just one management (payer) account, a dedicated account for dashboards is still a recommended option. 
+If you have just one management (payer) account, a dedicated account for dashboards is still a recommended option.
 
 Another frequent use case is __multi linked account__ setup. When AWS Customer has a number of AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is similar to the schema with multi-payer described on the schema above. An only difference is that in this case a local CUR must be activated in the destination account.
 
@@ -67,7 +67,7 @@ In this case crawler can create a reasonable partitions Strh
 
 2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Replication)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Replication)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
@@ -98,7 +98,7 @@ At this step we will deplpoy the same CFN Template but with parameters for Desti
    
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml&stackName=CID-CUR-Destination)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination)
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
@@ -328,7 +328,7 @@ If you are not deploying the CIDs in your payer acacount, or wish to deploy them
 
 
 
-### Option3. Multi account deployement with manual configuration
+### Option3. Multi account deployment with manual configuration
 
 {{%expand "Click here to expand step by step instructions" %}}
 This scenario allows customers with multiple management (payer) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Data Collection Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Data Collection account.
@@ -434,8 +434,39 @@ Sync existing objects from CUR S3 bucket to S3 bucket in Data Collection Account
 After performing this step in each management (payer) account S3 bucket in Data Collection Account will contain CUR data from all payer accounts under respective prefixes.
 {{% /expand%}}
 
+
+## Configure Athena
+You will need to do this in Data Collection Account, and only if you choose Manual or Automated multi-account option of CUR Deployment. The latest version of CID CloudFormation does not require this step.
+
+{{%expand "Click here to expand step by step instructions" %}}
+
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. 
+
+To get Athena warmed up:
+
+1. From the services list, choose **S3**
+
+1. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
+
+1. From the services list, choose **Athena**
+
+1. Select **Get Started** to enable Athena and start the basic configuration
+
+1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
+
+1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+1. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
+
+1. This s3 bucket results location must be available for QuickSight. Please note this bucket name, you will need it on the next step.
+
+{{% /expand%}}
+
+
 ## Prepare Glue Crawler
-You will need to do this in Data Collection Account only if you choose Manual or Automated multi-account option. The latest version of cloud formation deployment does not require this step.
+You will need to do this in Data Collection Account, and only if you choose Manual or Automated multi-account option of CUR Deployment. The latest version of CID CloudFormation does not require this step.
 
 {{%expand "Click here to expand step by step instructions" %}}
 

@@ -11,7 +11,6 @@ pre: "<b>1b. </b>"
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
 {{%expand "Click here - to setup QuickSight" %}}
-#### Enable QuickSight:
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services
 

@@ -14,7 +14,7 @@ The Cost Intelligence Dashboard (CID), CUDOS, and the KPI dashboard are all stro
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cid-cfn.yaml)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards)
 	
 3. Enter a **Stack name** for your template such as **CID**
 4. Review **Readme Sectons** parameter to confirm prerequisites before specifying the other parameters. You must answer 'yes' to all.
