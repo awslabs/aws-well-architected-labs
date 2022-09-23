@@ -404,13 +404,7 @@ After performing this step in each management (payer) account S3 bucket in Data 
 
 
 ## 2/3 Configure Athena
-You will need to do this in Data Collection Account, and only if you choose Manual or Automated multi-account option of CUR Deployment. The latest version of CID CloudFormation does not require this step.
-
-
-###  Option 1. Use automatic setup with Cloud Formation
-No actions needed, just use cid-cfn.yaml on the next step.
-
-###  Option 2. Manual setup of Athena
+If you used Option 2 you can skip this step.
 
 {{%expand "Click here to expand step by step instructions" %}}
 
@@ -439,13 +433,8 @@ To get Athena warmed up:
 {{% /expand%}}
 
 ## 3/3 Prepare Glue Crawler
-You will need to do this in Data Collection Account, and only if you choose Manual or Automated multi-account option of CUR Deployment. The latest version of CID CloudFormation does not require this step.
+If you used Option 2 you can skip this step.
 
-
-###  Option 1. Use automatic setup with Cloud Formation
-No actions needed, just use cid-cfn.yaml on the next step.
-
-###  Option 2. Manual setup of Clue Crawler
 {{%expand "Click here to expand step by step instructions" %}}
 
 These actions should be done in Data Collection Account
