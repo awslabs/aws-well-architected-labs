@@ -72,7 +72,7 @@ At this step we will deplpoy the CFN Template but with parameters for Destinatio
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination)
 	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
+![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
 4. Enter your **Destination** Account Id. 
    
@@ -107,7 +107,7 @@ At this step we will deplpoy the CFN Template but with parameters for Destinatio
 
 	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Replication)
 	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images//multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
+![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
 3. Enter a **Stack name** for your template such as **CID-CUR**.
 ![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
