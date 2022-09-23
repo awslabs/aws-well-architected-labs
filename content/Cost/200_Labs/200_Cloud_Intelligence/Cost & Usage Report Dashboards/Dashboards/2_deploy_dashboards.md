@@ -8,6 +8,10 @@ pre: "<b>2. </b>"
 The Cost Intelligence Dashboard (CID), CUDOS, and the KPI dashboard are all strongly recommended to be deployed together. These three dashboards are based on the Cost & Usage report and will help you address a wide range of FinOps use cases. The following steps will help you deploy all three dashboards into your account. If you just want to deploy one or two of these dashboards instead, please review the manual deployment section.
 
 ## (New) Experimental CloudFormation deployment
+In this option we use CloudFormation template that deploy all needed resources taking the minimum of parameters (An S3 path to CUR data and A QuickSight user that will be the owner of QuickSight assets). User can also choose dashboards that will be installed.
+
+All other objects are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, Dastasets and Dasbhoards. The template uses a custom resource ( a Lambda with cid-cmd tool ) to create delete or update assets.
+
 {{%expand "Click here to continue" %}}
 
 1. Login into your Data Collection Account
