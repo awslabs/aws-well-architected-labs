@@ -2,7 +2,7 @@
 title: "Prerequisites: QuickSight"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
-weight: 
+weight: 2
 pre: "<b>1b. </b>"
 ---
 

@@ -2,8 +2,8 @@
 title: "Prerequisites: Cost And Usage Report Setup"
 date: 2022-05-20T11:16:08-04:00
 chapter: false
-weight: 2
-pre: "<b>1b. </b>"
+weight: 1
+pre: "<b>1a. </b>"
 ---
 
 ## Authors
@@ -435,7 +435,7 @@ After performing this step in each management (payer) account S3 bucket in Data 
 {{% /expand%}}
 
 ## Prepare Glue Crawler
-You will need to do this in Data Collection Account only if you choose Manual or Automated multi-account option. The latest version of cloud formation deployment do not require this step.
+You will need to do this in Data Collection Account only if you choose Manual or Automated multi-account option. The latest version of cloud formation deployment does not require this step.
 
 {{%expand "Click here to expand step by step instructions" %}}
 
