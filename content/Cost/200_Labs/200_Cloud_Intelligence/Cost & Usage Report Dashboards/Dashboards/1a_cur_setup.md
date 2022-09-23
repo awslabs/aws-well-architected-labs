@@ -30,27 +30,26 @@ Please follow one of the options bellow.
 ### Option 1. Multi account deployment with CloudFormation (Suggested)
 {{%expand "Click here to continue with Cloud Formation Deployment" %}}
 
-If you have __one or several management (payer) accounts__ we recommend to install Dashboads in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to S3 in each management (payer) account and then configure an S3 replication to the dedicated account.
+**Use case 1:** If you have __one or several management (payer) accounts__ we recommend to install Dashboards in a dedicated AWS Account. In this case you will need to create Cost & Usage Reports to export data to Amazon S3 bucket in each management (payer) account and then configure S3 bucket replication to the dedicated account.
 
 ![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_small)
 
-If you have just one management (payer) account, a dedicated account for dashboards is still a recommended option.
+If you have only one management (payer) account, a dedicated account for dashboards is still a recommended option.
 
-Another use case is __multi linked account__ setup. When AWS Customer has a number of AWS Accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up a replication to one account that will be used for dashboards. Thus the replication architecture is similar to the schema with multi-payer described on the schema above. An only difference is that in this case a local CUR must be activated in the destination account.
+**Use case 2:** Deployment for __multiple linked accounts__ when you have multiple AWS linked-accounts but no access to management (payer) account. In this case it is possible to configure CUR in each account and set up S3 bucket replication to the destination account that will be used for dashboards. The replication architecture is similar to the multi-payer described on the diagram above. An only difference is that in this case a local CUR must be activated in the destination account.
 
-This section provide deep dive on automated way to aggregate the Cost and Usage Report data across multiple accounts.
+This section provides a deep dive on automated way to create and aggregate the Cost and Usage Reports data across multiple accounts.
 
-If you have multiple management(payer) accounts or if you just want to transfer CUR from management(payer) to a deducated account, you can follow these steps to configure CUR aggregation. Also you can add or delete account later.
+If you have multiple management(payer) accounts or if you just want to transfer CUR from management(payer) to a dedicated account, you can follow these steps to configure CUR aggregation. Also you can add or delete account later.
 
-The same CloudFormation template must be installed in:
+In deployment instructions below we provide CloudFormation template which should be installed in:
 
-1. In one or more **Source Accounts**, where CFN will activate a new CUR, an S3 bucket and a replication rule.
-2. In the **Destination** or data collection account, where CFN will create an S3 bucket for CUR aggregation.
+1. In the **Destination** or data collection account, where CloudFormation(CFN) template will create an S3 bucket for CUR aggregation.
+2. In one or more **Source Accounts**, where CFN template will create a new CUR, an S3 bucket and a replication rule.
 
-If you use just one account, CFN also can be used to create a CUR, in this case please follow guidance for **Destination Account** and choose to activate local CUR.
+If you use just one account, CFN template also can be used to create a CUR, in this case please follow guidance for **Destination Account** and choose to activate local CUR.
 
-
-CFN will result to S3 bucket with following structure in the **Destination Account**
+CFN template will result to S3 bucket with following structure in the **Destination Account**
 
 ```html
 s3://<prefix>-<destination-accountid>-shared/
@@ -59,12 +58,12 @@ s3://<prefix>-<destination-accountid>-shared/
 	cur/source_account_id=<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
 ```
 
-In this case crawler can create a reasonable partitions Strh
+In this case Glue crawler will create partitions source_account_id, year and month.
 
 
 ### Step1. Configure Destination Account using CloudFormation
 
-At this step we will deplpoy the CFN Template but with parameters for Destination Account.
+At this step we will deploy the CFN template but with parameters for Destination Account.
 
 1. Login to the Destination account in the region of your choice. I can be any account inside or outside your AWS Organization.
    
@@ -404,7 +403,7 @@ After performing this step in each management (payer) account S3 bucket in Data 
 
 
 ## 2/3 Configure Athena
-If you used Option 2 you can skip this step.
+If you used Option 2 you can skip this step. This step is also not required if you use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment
 
 {{%expand "Click here to expand step by step instructions" %}}
 
@@ -433,7 +432,7 @@ To get Athena warmed up:
 {{% /expand%}}
 
 ## 3/3 Prepare Glue Crawler
-If you used Option 2 you can skip this step.
+If you used Option 2 you can skip this step. This step is also not required if you use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment
 
 {{%expand "Click here to expand step by step instructions" %}}
 
