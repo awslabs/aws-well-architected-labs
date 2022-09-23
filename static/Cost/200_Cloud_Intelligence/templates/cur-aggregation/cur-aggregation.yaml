@@ -17,11 +17,12 @@ Metadata:
 
     ParameterLabels:
       DestinationAccountId:
-        default: "AWS Account Id where CID Quicksight Dashboard will be deployed"
+        default: "Destination Account Id"
       ResourcePrefix:
-        default: "Prefix used for all named resources, including S3 Bucket."
+        default: "Prefix used for all named resources, including S3 Bucket"
       SourceAccountIds:
-        default: "A comma separated list of all Source accounts that will replicate CUR Data. Ex:  12345678912,98745612312,...."
+        default: "Source Account Ids"
+
 
 
 Parameters:
@@ -31,7 +32,7 @@ Parameters:
   ##
   DestinationAccountId:
     Type: String
-    Description: CUR Destination account id
+    Description: "AWS Account Id where CID Quicksight Dashboard will be deployed"
     AllowedPattern: '\d{12}'
   ResourcePrefix:
     Type: String
@@ -52,7 +53,7 @@ Parameters:
 
   SourceAccountIds:
     Type: CommaDelimitedList
-    Description: List of AWS AccountId's for authorizing s3 replication
+    Description: "A comma separated list of all Source accounts that will replicate CUR Data. Ex:  12345678912,98745612312,...."
 
 Conditions:
   IsDestinationAccount: !Equals [!Ref DestinationAccountId, !Ref AWS::AccountId]
