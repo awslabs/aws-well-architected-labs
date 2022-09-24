@@ -53,9 +53,9 @@ CFN template will result to S3 bucket with following structure in the **Destinat
 
 ```html
 s3://<prefix>-<destination-accountid>-shared/
-	cur/source_account_id=<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/source_account_id=<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/source_account_id=<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
+	cur/<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
 ```
 
 In this case Glue crawler will create partitions source_account_id, year and month.
@@ -204,7 +204,7 @@ You can also use it for dashboards directly, however, we do not recommend this o
     + Enter a bucket name and the Region where you want to create a new bucket and choose **Next**.
 
 1. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
-1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/source_account_id={current_account_id}** (replacing current_account_id with the right value).
+1. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/{current_account_id}** (replacing current_account_id with the right value).
 **Note:** Make sure that report path prefix doesn't include a double slash (//) as Athena doesn't support such table location.
     ------------ | -------------
 
