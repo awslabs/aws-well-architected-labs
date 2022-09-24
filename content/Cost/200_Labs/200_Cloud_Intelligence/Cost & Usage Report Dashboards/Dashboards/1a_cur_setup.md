@@ -9,9 +9,9 @@ pre: "<b>1a. </b>"
 ## Authors
 - Thomas Buatois, AWS Cloud Infrastructure Architect (ProServe)
 - Yuriy Prykhodko, AWS Principal Technical Account Manager
+- Iakov Gan, AWS Sr. Technical Account Manager
 
 ## Contributors
-- Iakov Gan, AWS Sr. Technical Account Manager
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
 
 ## Cost and Usage Report (CUR)
