@@ -52,7 +52,9 @@ Parameters:
   ##
 
   SourceAccountIds:
-    Type: CommaDelimitedList
+    Type: String
+    AllowedPattern: "^[0-9,]*$"
+    Default: ''
     Description: "A comma separated list of all Source accounts that will replicate CUR Data. Ex:  12345678912,98745612312,...."
 
 Conditions:
@@ -60,8 +62,10 @@ Conditions:
   IsSourceAccount: !Not [!Condition IsDestinationAccount]
   IsNorthVirginia: !Equals [!Ref AWS::Region, 'us-east-1']
   CUREnable: !Equals [!Ref CreateCUR, 'True']
-  DeployCURViaCFN: !And [!Condition CUREnable, !Condition IsNorthVirginia]
+  DeployCURViaCFNInSource: !And [!Condition CUREnable, !Condition IsSourceAccount, !Condition IsNorthVirginia]
+  DeployCURViaCFNInDestination: !And [!Condition CUREnable, !Condition IsDestinationAccount, !Condition IsNorthVirginia]
   DeployCURViaLambda: !And [!Condition CUREnable, !Not [!Condition IsNorthVirginia]]
+  EmptySourceAccountIds: !Equals [ !Ref SourceAccountIds, '']
 
 Resources:
 
@@ -152,12 +156,14 @@ Resources:
               - s3:PutObject
             Resource:
               - Fn::Sub: 'arn:${AWS::Partition}:s3:::${DestinationS3}/*'
-
           - Sid: AllowReplicationWrite
             Effect: Allow
             Principal:
               AWS:
-                Ref: SourceAccountIds
+                Fn::If:
+                  - EmptySourceAccountIds
+                  - !Ref AWS::AccountId
+                  - !Split [',', !Ref SourceAccountIds]
             Action:
               - s3:ReplicateDelete
               - s3:ReplicateObject
@@ -167,7 +173,10 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                Ref: SourceAccountIds
+                Fn::If:
+                  - EmptySourceAccountIds
+                  - !Ref AWS::AccountId
+                  - !Split [',', !Ref SourceAccountIds]
             Action:
               - s3:List*
               - s3:GetBucketVersioning
@@ -313,16 +322,18 @@ Resources:
                   - s3:ReplicateTags
                   - s3:GetObjectVersionTagging
                 Resource:
-                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared/cur/source_account_id=${AWS::AccountId}/*"
+                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ResourcePrefix}-${DestinationAccountId}-shared/cur/${AWS::AccountId}/*"
 
 ####
 # Local CUR 
 ####
 
   ## Deploy CUR nativly via CFN resource if we are in us-east-1
-  LocalCur:
+  LocalCurInSource:
     Type: AWS::CUR::ReportDefinition
-    Condition: DeployCURViaCFN
+    Condition: DeployCURViaCFNInSource
+    DependsOn:
+      - SourceS3BucketPolicy
     Properties:
       AdditionalArtifacts:
         - ATHENA
@@ -334,7 +345,27 @@ Resources:
       ReportName: !Ref ResourcePrefix
       ReportVersioning: OVERWRITE_REPORT
       S3Bucket: !If [ IsDestinationAccount, !Ref DestinationS3, !Ref SourceS3 ]
-      S3Prefix: !Sub "cur/source_account_id=${AWS::AccountId}"
+      S3Prefix: !Sub "cur/${AWS::AccountId}"
+      S3Region: !Ref AWS::Region
+      TimeUnit: HOURLY
+
+  LocalCurInDestination:
+    Type: AWS::CUR::ReportDefinition
+    Condition: DeployCURViaCFNInDestination
+    DependsOn:
+      - DestinationS3BucketPolicy # Conditional DependsOn is not supported, so we need 2 resources
+    Properties:
+      AdditionalArtifacts:
+        - ATHENA
+      AdditionalSchemaElements:
+        - RESOURCES
+      Compression: Parquet
+      Format: Parquet
+      RefreshClosedReports: True
+      ReportName: !Ref ResourcePrefix
+      ReportVersioning: OVERWRITE_REPORT
+      S3Bucket: !If [ IsDestinationAccount, !Ref DestinationS3, !Ref SourceS3 ]
+      S3Prefix: !Sub "cur/${AWS::AccountId}"
       S3Region: !Ref AWS::Region
       TimeUnit: HOURLY
 
@@ -346,11 +377,7 @@ Resources:
     Condition: DeployCURViaLambda
     Properties:
       ServiceToken: !GetAtt CIDLambdaCURCreator.Arn
-      BucketPolicyWait:
-         Fn::If:
-            - IsDestinationAccount
-            - Ref: DestinationS3BucketPolicy
-            - Ref: SourceS3BucketPolicy
+      BucketPolicyWait: !If [ IsDestinationAccount, !Ref DestinationS3BucketPolicy, !Ref SourceS3BucketPolicy ]
       ReportDefinition:
         AdditionalArtifacts:
           - ATHENA
@@ -362,7 +389,7 @@ Resources:
         ReportName: !Ref ResourcePrefix
         ReportVersioning: OVERWRITE_REPORT
         S3Bucket: !If [ IsDestinationAccount, !Ref DestinationS3, !Ref SourceS3 ]
-        S3Prefix: !Sub "cur/source_account_id=${AWS::AccountId}"
+        S3Prefix: !Sub "cur/${AWS::AccountId}"
         S3Region: !Ref AWS::Region
         TimeUnit: HOURLY
 
