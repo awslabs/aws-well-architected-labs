@@ -55,8 +55,8 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  Ref: RoleARN
+                Resource: "*"
+                  #Ref: RoleARN
         - PolicyName: "S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
