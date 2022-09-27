@@ -321,7 +321,7 @@ Resources:
       Parameters:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
-          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+          MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
           ManagementAccountID: !Ref ManagementAccountID
           GlueRoleARN: !GetAtt GlueRole.Arn

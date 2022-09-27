@@ -292,50 +292,53 @@ Resources:
           BUCKET_PREFIX = os.environ["BUCKET_PREFIX"]
           INCLUDE_MEMBER_ACCOUNTS = os.environ.get("INCLUDE_MEMBER_ACCOUNTS", 'TRUE').lower() == 'true'
           REGIONS = os.environ["REGIONS"]
-          ROLE_ARN = os.environ['ROLE_ARN']
+          ROLE_NAME = os.environ['ROLE_NAME']
 
           def lambda_handler(event, context):
               today = date.today()
               year = today.year
               month = today.month
 
-              sts_connection = boto3.client('sts')
-              acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{ROLE_NAME}"
+                  sts_connection = boto3.client('sts')
+                  acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
 
-              account_b_creds = {
-                "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
-                "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
-                "aws_session_token":     acct_b['Credentials']['SessionToken'],
-              }
-
-              acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
-
-              result_messages = []
-              error_messages = []
-              for region in [r.strip() for r in REGIONS.split(',')]:
-                  # create service client using the assumed role credentials
-                  co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
-                  export_funcs = {
-                      'ec2_instance': co.export_ec2_instance_recommendations,
-                      'auto_scale':   co.export_auto_scaling_group_recommendations,
-                      'lambda':       co.export_lambda_function_recommendations,
-                      'ebs_volume':   co.export_ebs_volume_recommendations,
+                  account_b_creds = {
+                    "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
+                    "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
+                    "aws_session_token":     acct_b['Credentials']['SessionToken'],
                   }
-                  bkt = BUCKET_PREFIX + '-' + region
-                  print(f"INFO: bucket={bkt}")
-                  for name, func in export_funcs.items():
-                      try:
-                          res = func(
-                              includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
-                              s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
-                          )
-                          result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
-                      except Exception as exc:
-                          error_messages.append(f"ERROR: {region} {name} - {exc}")
-              if result_messages:
-                  print("Success:\n"+"\n".join(result_messages))
-              if error_messages:
-                  raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
+
+                  acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
+
+                  result_messages = []
+                  error_messages = []
+                  for region in [r.strip() for r in REGIONS.split(',')]:
+                      # create service client using the assumed role credentials
+                      co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
+                      export_funcs = {
+                          'ec2_instance': co.export_ec2_instance_recommendations,
+                          'auto_scale':   co.export_auto_scaling_group_recommendations,
+                          'lambda':       co.export_lambda_function_recommendations,
+                          'ebs_volume':   co.export_ebs_volume_recommendations,
+                      }
+                      bkt = BUCKET_PREFIX + '-' + region
+                      print(f"INFO: bucket={bkt}")
+                      for name, func in export_funcs.items():
+                          try:
+                              res = func(
+                                  includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
+                                  s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
+                              )
+                              result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                          except Exception as exc:
+                              error_messages.append(f"ERROR: {region} {name} - {exc}")
+                  if result_messages:
+                      print("Success:\n"+"\n".join(result_messages))
+                  if error_messages:
+                      raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
