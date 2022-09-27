@@ -1,0 +1,5 @@
+All yaml are files are in the account 87******** - well-architected-content@amazon.com 
+
+In the bucket aws-well-architected-labs. These are then replicated to the other regional buckets.
+
+aws s3 cp cur-aggregation.yaml s3://aws-well-architected-labs/Cost/Labs/200-cloud-intelligence-dashboards/cur-aggregation.yaml --acl public-read
