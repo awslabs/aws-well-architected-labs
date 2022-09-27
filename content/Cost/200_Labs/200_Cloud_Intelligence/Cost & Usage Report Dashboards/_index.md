@@ -17,7 +17,7 @@ April 2022
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
 ## Get Help
-[Ask your questions](https://0s62bmu3aj.execute-api.us-east-1.amazonaws.com/PROD/link/tracker?LinkID=270894ed-12b6-27bc-74f3-124130ceb403&URL=https%3A%2F%2Frepost.aws%2Ftags%2FTANKNkVH-tSUa2jYNx4F159g%2Fcloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
+[Ask your questions](https://repost.aws/tags/TANKNkVH-tSUa2jYNx4F159g/cloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
 
 [Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
 
@@ -51,19 +51,16 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 ## Permissions
 
-- Permission to access Amazon Athena, AWS Glue, the Amazon S3 bucket where the CUR lives, and Amazon QuickSight via both the console and the Command Line Tool. 
-- Permissions for CloudFormation is helpful but not required. 
+- Permission to access Amazon Athena, AWS Glue, the Amazon S3 bucket where the CUR lives, and Amazon QuickSight via both the console and the Command Line Tool.
+- Permissions for CloudFormation is helpful but not required.
 - You can download and apply to IAM this set of minimal permissions (https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/assets/minimal_permissions.json)
 
-{{% notice note %}}
-Detailed permissions are shared in the next step
-{{% /notice %}}
 
 ## Costs
 
-- A QuickSight Enterprise license starts at $18 per month. 
-- Incremental costs associated with AWS Glue, Amazon Athena, and Amazon S3. 
-- Estimated total cost for all Dashboards together in a large AWS deployment is $100 per month. 
+- A QuickSight Enterprise license starts at $18 per month.
+- Incremental costs associated with AWS Glue, Amazon Athena, and Amazon S3.
+- Estimated total cost for all Dashboards together in a large AWS deployment is $100 per month.
 
 ## Time to complete
 
@@ -74,7 +71,7 @@ Approximately 45-60 minutes to onboard all CUR dashboards in this section manual
 {{% children  /%}}
 
 {{% notice note %}}
-Additional Dashboards include the **Data Transfer Dashboard** and **Trends Dashboard** 
+Additional Dashboards include the **Data Transfer Dashboard** and **Trends Dashboard**
 {{% /notice %}} 
 
-{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1_prerequistes/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1a_cur_setup/" button_next_text="Start Lab" first_step="true" />}}
