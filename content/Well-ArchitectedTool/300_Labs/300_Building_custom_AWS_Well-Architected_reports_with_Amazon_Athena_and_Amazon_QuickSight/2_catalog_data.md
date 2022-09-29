@@ -11,14 +11,15 @@ AWS Glue is a fully managed extract, transform, and load (ETL) service that make
 #### Create the Crawler
 
 1.  Open the AWS Glue console, and from the left navigation pane, choose **Crawlers**.
-2.  Select **Add crawler** and name the crawler `well-architected-reporting,` select **Next**.
-3.  Select **Next** to accept the defaults for **Specify crawler source type**.
-4.  Add the S3 path of the where you will store the extracted AWS Well-Architected data e.g. `s3://well-architected-reporting-blog`. Select
-5.  Select **No** and then **Next** to on the Add another data store step.
-6.  Select **Create an IAM role** and provide a name, e.g. `well-architected-reporting` , select **Next**.
-7.  Select **Run on demand** as the schedule frequency. Select **Next**.
-8.  Next select **Add database**, and fill-in a name e.g. `war-reports`. Select **Create** and then **Next**.
-9.  Review the configuration and select **Finish** to create the Crawler.
+2.  Select **Add crawler** and name the crawler `well-architected-reporting` select **Next**.
+3.  Select **Add a data source**.
+    1.  Under **S3 path** Click **Browse** and select the S3 bucket where you will store the extracted AWS Well-Architected data e.g. `s3://well-architected-reporting-blog`. Select the radio button next to the path where you stored the workload data e.g. `WorkloadReports` and select **Choose**
+
+4.  Select **Add S3 data source** and then **Next** on **Choose data sources**.
+5.  Select **Create an IAM role** and provide a name, e.g. `well-architected-reporting` , select **Next**.
+6.  Select **Run on demand** as the schedule frequency. Select **Next**.
+7.  Next select **Add database**, and fill-in a name e.g. `war-reports`. Select **Create** and then **Next**.
+8.  Review the configuration and select **Finish** to create the Crawler.
 
 ![Image of Crawler configuration.](/Well-ArchitectedTool/300_Labs/300_Building_custom_AWS_Well-Architected_reports_with_Amazon_Athena_and_Amazon_QuickSight/Images/fig-5-glue-crawler-config.png)
 
