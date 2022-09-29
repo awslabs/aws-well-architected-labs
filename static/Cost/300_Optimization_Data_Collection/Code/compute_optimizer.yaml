@@ -127,7 +127,7 @@ Resources:
         - ParameterKey: DestinationBucket
           ParameterValue: !Ref DestinationBucket
         - ParameterKey: ManagementAccountID
-          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ]
+          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ] # this stack is the problem as it only looks at one place
       StackInstancesGroup:
         - DeploymentTargets:
             Accounts:
@@ -286,9 +286,8 @@ Resources:
         Variables:
           REGIONS: !Ref DeployRegions
           BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
-          ROLE_ARN: !Ref RoleNameARN
           INCLUDE_MEMBER_ACCOUNTS: 'TRUE'
-          ROLE: !Ref ManagementRoleName
+          ROLE_NAME: !Ref ManagementRoleName
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
       Code:
         ZipFile: |
