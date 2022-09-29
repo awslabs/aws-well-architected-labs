@@ -15,6 +15,10 @@ Parameters:
     Description: Default CUR database name
     Default: optimization_data
     MinLength: 1
+  CURTable:
+    Type: String
+    Description: The name of your Cost and Usage Report table in Athena
+    Default: test_usage
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
@@ -96,7 +100,6 @@ Resources:
       FunctionName: !Sub "${CFDataName}-Lambda-Function"
       Description: LambdaFunction of python3.9.
       Runtime: python3.9
-      #how to set arm64 
       Code:
         ZipFile: |
           import json
@@ -118,7 +121,7 @@ Resources:
           ec2_client = boto3.client('ec2', region_name=region_name)
           s3_client = boto3.client('s3', region_name=region_name)
           cw_client2 = boto3.client('cloudwatch', region_name=region_name)
-          today = datetime.date.today()
+          today = date.today()
           year = today.year
           month = today.month
 
@@ -149,9 +152,7 @@ Resources:
                                     'NetworkingAccount': item['TransitGatewayOwnerId'],
                                     'CustomerAccount': item['ResourceOwnerId'],
                                     'TGW-Attachment': item['TransitGatewayAttachmentId'],
-                                    'BytesIn': cwitem['Values'],
-                                    'Year': last_day_of_prev_month.strftime('%Y'),
-                                    'Month': last_day_of_prev_month.strftime('%m')
+                                    'BytesIn': cwitem['Values']
                                 }
                     
                         response_out = metrics(cw_client, 'BytesOut', item)
@@ -170,7 +171,7 @@ Resources:
                         bucket,
                         f"{os.environ['TABLE']}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}.json")
                     
-                    #start_crawler()
+                    start_crawler()
                     print("Done")
 
           def metrics(cw_client, byte, item):
@@ -208,7 +209,7 @@ Resources:
           def assume_role(service, account_id):
 
               role_name = os.environ['ROLENAME']
-              #account_id = os.environ['ACCOUNT_ID']
+              account_id = os.environ['ACCOUNT_ID']
               role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
               sts_client = boto3.client('sts')
               
@@ -296,7 +297,7 @@ Resources:
   AthenaQueryCUR:
     Type: AWS::Athena::NamedQuery
     Properties:
-      Database: !Ref DatabaseName #
+      Database: !Ref DatabaseName 
       Description: Provides a chargeback view of the transit gateway
       Name: tgw_chargeback_cur
       QueryString: !Sub
@@ -305,8 +306,7 @@ Resources:
                       cur_all AS (
                       SELECT *
                       FROM
-                        "athenacurcfn_athena_c_u_r_data"."athena_cur_data"
-                      WHERE (("year"(bill_billing_period_start_date) = 2022) AND ("month"(bill_billing_period_start_date) = 6))
+                      ${CURTable}
                     ) 
                     , customer_tgw_data AS (
                       SELECT
@@ -319,7 +319,7 @@ Resources:
                       , line_item_product_code
                       , line_item_usage_type
                       , line_item_operation
-                      , line_item_line_item_description
+                      , line_item_line_item_description 
                       , product_product_name
                       , product_operation
                       , product_product_family
@@ -328,22 +328,32 @@ Resources:
                       , product_location
                       , year
                       , month
-                      , "sum"(CAST(line_item_usage_amount AS decimal(16,8))) "usage_amount"
-                      , CAST(("sum"(line_item_usage_amount) / "sum"("sum"(line_item_usage_amount)) OVER (PARTITION BY product_location)) AS decimal(5,2)) "Percentage"
+                      , sum(CAST(line_item_usage_amount AS decimal(16,8))) as usage_amount
+                      , CAST((sum(line_item_usage_amount) / sum(sum(line_item_usage_amount)) OVER (PARTITION BY product_location)) AS decimal(5,2)) as percentage
                       FROM
                         cur_all
-                      WHERE ((((line_item_usage_account_id <> '288376155752') AND (product_location LIKE '%US%')) AND (product_group = 'AWSTransitGateway')) AND (pricing_unit = 'GigaBytes'))
+                      WHERE line_item_usage_account_id <> '${AWS::AccountId}'
+                      AND product_location LIKE '%US%'
+                      AND product_group = 'AWSTransitGateway' 
+                      AND pricing_unit = 'GigaBytes'
                       GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
                     ) 
                     , network_all AS (
                       SELECT
                         bill_payer_account_id
                       , bill_billing_period_start_date
-                      , CAST("sum"((CASE WHEN (line_item_line_item_type = 'EdpDiscount') THEN line_item_unblended_cost ELSE 0 END)) AS decimal(5,2)) "EDP Discounts"
-                      , CAST("sum"((CASE WHEN ((((line_item_usage_type = 'VPN-Usage-Hours:ipsec.1') OR (line_item_usage_type = 'USE1-TransitGateway-Bytes')) OR (line_item_usage_type = 'USE1-TransitGateway-Hours')) OR (product_group = 'AWSTransitGateway')) THEN line_item_unblended_cost ELSE 0 END)) AS decimal(5,2)) "Total_Cost"
+                      , CAST(sum(CASE WHEN (line_item_line_item_type = 'EdpDiscount') THEN line_item_unblended_cost ELSE 0 END) AS decimal(5,2)) as EDP_Discounts
+                      , CAST(sum(CASE WHEN (product_group = 'AWSTransitGateway') THEN line_item_unblended_cost ELSE 0 END) AS decimal(5,2)) as Total_Cost
                       FROM
                         cur_all
-                      WHERE (((((line_item_line_item_type <> 'Tax') AND (line_item_usage_account_id = '288376155752')) AND (line_item_product_code = 'AmazonVPC')) AND ((((line_item_operation = 'CreateVpnConnection') OR (line_item_operation = 'TransitGatewayVPC')) OR (line_item_operation = 'TransitGatewayVPN')) OR (line_item_operation = 'TransitGatewayPeering'))) AND (((line_item_usage_type = 'VPN-Usage-Hours:ipsec.1') OR (line_item_usage_type = 'USE1-TransitGateway-Bytes')) OR (line_item_usage_type = 'USE1-TransitGateway-Hours')))
+                      WHERE 
+                      line_item_line_item_type <> 'Tax' 
+                      AND line_item_usage_account_id = '${AWS::AccountId}'
+                      AND line_item_product_code = 'AmazonVPC' 
+                      AND (line_item_operation = 'CreateVpnConnection' 
+                      OR line_item_operation = 'TransitGatewayVPC' 
+                      OR line_item_operation = 'TransitGatewayVPN'
+                      OR line_item_operation = 'TransitGatewayPeering') 
                       GROUP BY 1, 2
                     ) 
                     SELECT
@@ -362,14 +372,16 @@ Resources:
                     , product_product_family
                     , product_servicecode
                     , product_servicename
-                    , Percentage "Chargeback Proportion"
-                    , Total_Cost "Total Networking Cost"
-                    , (Total_Cost * Percentage) "Chargeback cost"
+                    , Percentage as chargeback_proportion
+                    , Total_Cost as total_Networking_cost
+                    , (Total_Cost * Percentage) as chargeback_cost
                     , Year
                     , Month
                     FROM
-                      (customer_tgw_data
-                    LEFT JOIN network_all ON ((customer_tgw_data.bill_billing_period_start_date = network_all.bill_billing_period_start_date) AND (network_all.bill_payer_account_id = customer_tgw_data.bill_payer_account_id)))
+                    customer_tgw_data
+                    LEFT JOIN network_all ON 
+                    customer_tgw_data.bill_billing_period_start_date = network_all.bill_billing_period_start_date 
+                    AND network_all.bill_payer_account_id = customer_tgw_data.bill_payer_account_id
                     ORDER BY Percentage DESC
 
   AthenaQueryCW:
@@ -384,17 +396,17 @@ Resources:
                       summary AS (
                       SELECT
                         *
-                      , ("sum"(bytesin[1]) + "sum"(bytesout[1]) OVER (PARTITION BY "bill_payer_account_id")) total_data_transfer
-                      , ("sum"(bytesin[1]) + "sum"(bytesout[1])) usage_account_dx_total
+                      , (sum(bytesin[1]) + sum(bytesout[1]) OVER (PARTITION BY "bill_payer_account_id")) as total_data_transfer
+                      , (sum(bytesin[1]) + sum(bytesout[1])) as usage_account_dx_total
                       FROM
-                        (tgw.tgw_chargeback a
-                      LEFT JOIN tgw.tgw b ON ((a.line_item_usage_account_id = b.customeraccount) AND (a.year = b.year)))
+                        optimization_data.${CFDataName} a
+                      LEFT JOIN ${CURTable}.tgw_chargeback b ON a.customeraccount = b.line_item_usage_account_id AND a.year = b.year
                       GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
                       ORDER BY bytesIn DESC
                     ) 
                     SELECT
                       *
-                    , (usage_account_dx_total / total_data_transfer) chargeback_percentage
-                    , ("total networking cost" * (usage_account_dx_total / total_data_transfer)) chargeback_cost
+                    , (usage_account_dx_total / total_data_transfer) as chargeback_percentage
+                    , ("total_Networking_cost" * (usage_account_dx_total / total_data_transfer)) as chargeback_cost_final
                     FROM
                       summary
