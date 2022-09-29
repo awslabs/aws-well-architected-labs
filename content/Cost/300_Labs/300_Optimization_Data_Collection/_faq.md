@@ -51,6 +51,24 @@ There are two main reasons for this:
 
 {{% /expand%}}
 
+### My Athena database has tables in call ed year and payer
+{{%expand "Click here to expand step by step instructions" %}}
+
+We have upgraded the lab to work for multi-payers. For this we added a new partition of payer_id=your_payer_id which can upset the crawler.
+
+To fix please follow the steps below:
+
+1. Ensure your costoptimization bucket does have the new **payer_id=your_payer_id** folder in your data. 
+2. Delete your new tables with names that have long hashs attached to them and start with payer or year
+3. Run the following python script [Link to Code](/Cost/300_Optimization_Data_Collection/Code/source/s3_backwards_comp.py) 
+
+   ```python3 s3_backwards_comp.py <payer_id> <ODC_your_bucket_name> ```
+   
+   This will move all current files into the new format
+4. Run your crawlers to update your tables
+
+{{% /expand%}}
+
 
 
 {{% notice tip %}}
