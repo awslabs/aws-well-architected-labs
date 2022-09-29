@@ -173,7 +173,6 @@ Resources:
               
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
                   ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{role_name}"
-
                   try:
                       assumed_role = sts_connection.assume_role(
                                       RoleArn=ROLE_ARN,
@@ -245,7 +244,7 @@ Resources:
                   except Exception as e:
                       # Send some context about this error to Lambda Logs
                       logging.warning("%s" % e)
-                      return "Failed"
+                      continue 
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688

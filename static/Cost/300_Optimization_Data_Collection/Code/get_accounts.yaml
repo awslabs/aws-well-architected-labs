@@ -150,25 +150,30 @@ Resources:
                 role_name = os.environ['ROLE']
                 MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
                 for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
-                    account_info = org_accounts(role_name, payer_id)
-                    
-                    for account in account_info:
-                        if  account['Status'] == 'ACTIVE':
-                            try:
-                                account_id = account['Id']
-                                account_name = account['Name']
-                                payer_id = payer_id #check format of show this sends to que, need to have in sqs for data output
-                                account_data = (account_id, account_name, payer_id)
-                                for que in os.environ.get("SQS_URL").split(","):
-                                    print(que)
-                                    sqs_message(account_data, que)
-                                    logging.info(f"SQS message sent for {account_id}:{account_name} to TA")
+                    try: 
+                        account_info = org_accounts(role_name, payer_id)
+                        
+                        for account in account_info:
+                            if  account['Status'] == 'ACTIVE':
+                                try:
+                                    account_id = account['Id']
+                                    account_name = account['Name']
+                                    payer_id = payer_id #check format of show this sends to que, need to have in sqs for data output
+                                    account_data = (account_id, account_name, payer_id)
+                                    for que in os.environ.get("SQS_URL").split(","):
+                                        print(que)
+                                        sqs_message(account_data, que)
+                                        logging.info(f"SQS message sent for {account_id}:{account_name} from {payer_id} to {que}")
 
-                            except Exception as e:
-                                pass
-                                logging.warning("%s" % e)
-                        else:
-                            logging.info(f"account {account['Id']} is not active")
+                                except Exception as e:
+                                    pass
+                                    logging.warning("%s" % e)
+                            else:
+                                logging.info(f"account {account['Id']} is not active")
+                    except Exception as e:
+                        # Send some context about this error to Lambda Logs
+                        logging.warning("%s" % e)
+                        continue 
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688

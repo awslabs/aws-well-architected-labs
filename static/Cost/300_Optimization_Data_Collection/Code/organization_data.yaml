@@ -6,9 +6,6 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that is created to hold org data
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  ManagementAccountRole:
-    Type: String
-    Description:  ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
   ManagementRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
@@ -71,30 +68,35 @@ Resources:
               MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
               
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
-                  management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
-                  sts_connection = boto3.client('sts')
-                  acct_b = sts_connection.assume_role(
-                      RoleArn=management_role_arn,
-                      RoleSessionName="cross_acct_lambda"
-                  )
-                  ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
-                  SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
-                  SESSION_TOKEN = acct_b['Credentials']['SessionToken']
-                  client = boto3.client(
-                      "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
-                      aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
+                  try:
+                      management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                      sts_connection = boto3.client('sts')
+                      acct_b = sts_connection.assume_role(
+                          RoleArn=management_role_arn,
+                          RoleSessionName="cross_acct_lambda"
+                      )
+                      ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+                      SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+                      SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+                      client = boto3.client(
+                          "organizations", region_name="us-east-1", #Using the Organizations client to get the data. This MUST be us-east-1 regardless of region you have the Lamda in
+                          aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
-                  root_id    = client.list_roots()['Roots'][0]['Id']
-                  ou_id_list = get_ou_ids(root_id, client)
-                  with open('/tmp/ou-org.json', 'w') as f:
-                      for ou in ou_id_list.keys():
-                          account_data(f, ou, ou_id_list[ou][0], client, ou_id_list[ou][1])
-                  s3_upload('ou-org', payer_id)
+                      root_id    = client.list_roots()['Roots'][0]['Id']
+                      ou_id_list = get_ou_ids(root_id, client)
+                      with open('/tmp/ou-org.json', 'w') as f:
+                          for ou in ou_id_list.keys():
+                              account_data(f, ou, ou_id_list[ou][0], client, ou_id_list[ou][1])
+                      s3_upload('ou-org', payer_id)
 
-                  with open('/tmp/acc-org.json', 'w') as f:
-                      account_data(f, root_id, root_id, client,'')
-                  s3_upload('acc-org', payer_id)
-                  start_crawler(os.environ["CRAWLER"])
+                      with open('/tmp/acc-org.json', 'w') as f:
+                          account_data(f, root_id, root_id, client,'')
+                      s3_upload('acc-org', payer_id)
+                      start_crawler(os.environ["CRAWLER"])
+                  except Exception as e:
+                      # Send some context about this error to Lambda Logs
+                      logging.warning("%s" % e)
+                      continue 
 
           def get_ou_ids(parent_id, client):
               full_result = {}
@@ -184,7 +186,6 @@ Resources:
         Variables:
           BUCKET_NAME: !Ref DestinationBucket
           REGION: !Ref "AWS::Region"
-          MANAGMENTARN: !Ref ManagementAccountRole
           CRAWLER: !Ref OrgCrawler
           ROLE: !Ref ManagementRoleName
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
