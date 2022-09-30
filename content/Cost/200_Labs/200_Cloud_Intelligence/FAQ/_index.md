@@ -240,27 +240,11 @@ Edit your Glue crawler to refresh the metadata from the partitions by following 
 
 {{% /expand%}}
 
-##  I am getting the following error when attempting to update the dashboards using the cid-cmd tool; An error occurred (InvalidParameterValueException) when calling the UpdateDashboard operation: Given placeholders [cudos_cur] are not part of template. 
-
-{{%expand "Click here to expand answer" %}}
-
-Rename your QuickSight dataset for your raw CUR to customer_all, click save and publish, and let it refresh. Try updating the dashboards again. 
-
-{{% /expand%}}
-
 ##  What columns are in the CUR, what do they mean?
 
 {{%expand "Click here to expand answer" %}}
 
 More detail about [the CUR here.](https://docs.aws.amazon.com/cur/latest/userguide/cur-user-guide.pdf)
-
-{{% /expand%}}
-
-##  Can I do cross-account queries in Athena instead of replicating CUR buckets?
-
-{{%expand "Click here to expand answer" %}}
-
-CUR bucket replication is the preferred method because it is tested and documented. Technically you can use cross-account methods but it is untested. It is true that CUR bucket replication will create more cost as the you will have to store the CUR twice, although you could think of it as a backup in case something happens to the payer accounts. We recommend CUR bucket replication also because the Athena tables are created/updated via a Glue crawler where you get all CUR schema changes handled. Glue crawlers don’t support cross account set up. It also gets significantly more complicated if KMS encryption is used.
 
 {{% /expand%}}
 

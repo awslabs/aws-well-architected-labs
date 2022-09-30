@@ -83,7 +83,7 @@ cid-cmd deploy
 
 ## Option 2: All-in-one CloudFormation deployment (10 min)
 
-This option does not require any pre-requisites other than the CUR having been created and available in an S3 bucket. 
+This option does not require any pre-requisites other than the CUR having been created (and available in an S3 bucket) and QuickSight being setup. 
 
 {{%expand "Click here to continue" %}}
 
@@ -105,40 +105,38 @@ To find your QuickSight username:
 	- Find your username in the top right navigation bar
 ![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
-1. Update your **CURBuketPath** with the S3 path where your **partitions of CUR data** starts. If you have just one CUR in this bucket, put the path to the folder where the year folders are. For example `s3://cid-accountid-shared/cur/accountid/cid/cid/`. If you have more than on CUR in the bucket from multiple accounts, you will put an S3 path that just takes you to the account level of one of your CURs (doesn't matter which one), for example `s3://cid-accountid-shared/cur/177834886075/`. 
+1. Update your **CURBuketPath** with the S3 path where your **partitions of CUR data** starts. If you have just one CUR in this bucket, put the path to the folder where the year folders are. For example `s3://cid-accountid-shared/cur/accountid/cid/cid/`. If you have more than on CUR in the bucket from multiple accounts, you will put an S3 path that just takes you to the account level of one of your CURs (doesn't matter which one), for example `s3://cid-accountid-shared/cur/accountID/`. 
 2. Set CURisAggregated to `yes` if you used the CloudFormation template in the [pre-requisite steps in Option 1.](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/1a_cur_setup/#option-1-deploy-cur-and-cids-into-dedicated-linked-account-suggested) Otherwise set it to `no`. 
 
-3. Update your **QuicksightIdentityRegion** with your **QuickSight region** 
+3. Select the Dashboards you want to install. We recommend deploying all three. 
 
-4. Select the Dashboards you want to install. We recommend deploying all three. 
+4. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+5.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
-6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-
-7.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+6.  You will see the stack will start in **CREATE_IN_PROGRESS** 
 
 **NOTE:** This step can take 5mins
     ------------ | -------------
 
-12. While this is working, head back to QuickSight and click on manage Quicksight from the person icon on the top right. 
+7. Click on Select S3 buckets and add your Athena Query results output bucket as a read only source. Click save. Return to CloudFormation. 
+
+8. Once complete, the stack will show **CREATE_COMPLETE**
+
+9. While this is working, head back to QuickSight and click on manage Quicksight from the person icon on the top right. 
 
 ![quicksightpermissionss3_1](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_1.png?classes=lab_picture_small)
 
-13. Select Security and permissions. Under QuickSight access to AWS services click manage. 
+10. Select Security and permissions. Under QuickSight access to AWS services click manage. 
 
 ![quicksightpermissionss3_2](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_2.png?classes=lab_picture_small)
 
-14. Click on Select S3 buckets and add your Athena Query results output bucket as a read only source. Click save. Return to CloudFormation. 
-
-14. Once complete, the stack will show **CREATE_COMPLETE**
-
-15. Navigate to the **Output of the Stack** tab and check dashboards URLS. Click on a URL to open the dashboards. 
+11. Navigate back to CloudFormation and to the **Output of the Stack** tab and check dashboards URLS. Click on a URL to open the dashboards. 
 
 If you see no data please check the following:
  1) Double check that QuickSight has permissions to read from your CUR bucket **and** your Query Results location bucket. 
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors. 
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. 
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. Query results bucket name will be something like `aws-athena-query-results-cid-accountID-us-east-1`
  4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night. 
 
 
