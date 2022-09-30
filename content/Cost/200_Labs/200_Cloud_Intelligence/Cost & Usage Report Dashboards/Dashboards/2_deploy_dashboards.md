@@ -111,6 +111,7 @@ To find your QuickSight username:
       2. **CURisAggregated** = `yes`
    2. If you did *not* use the CFN automated CUR setup process in the prior lab step and have just one CUR you setup manually then;
       1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-accountid-shared/prefix/name/name/` (double check this path, you must see year=xxxx partitions in there)
+      2. 2. **CURisAggregated** = `no`
 
 2. Select the Dashboards you want to install. We recommend deploying all three. 
 
