@@ -357,7 +357,6 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
-        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
         ManagementAccountID: !Ref ManagementAccountID
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
