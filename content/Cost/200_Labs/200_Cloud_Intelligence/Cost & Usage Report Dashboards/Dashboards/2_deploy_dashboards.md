@@ -105,16 +105,20 @@ To find your QuickSight username:
 	- Find your username in the top right navigation bar
 ![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
-1. Update your **CURBuketPath** with the S3 path where your **partitions of CUR data** starts. If you have just one CUR in this bucket, put the path to the folder where the year folders are. For example `s3://cid-accountid-shared/cur/accountid/cid/cid/`. If you have more than on CUR in the bucket from multiple accounts, you will put an S3 path that just takes you to the account level of one of your CURs (doesn't matter which one), for example `s3://cid-accountid-shared/cur/accountID/`. 
-2. Set CURisAggregated to `yes` if you used the CloudFormation template in the [pre-requisite steps in Option 1.](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/1a_cur_setup/#option-1-deploy-cur-and-cids-into-dedicated-linked-account-suggested) Otherwise set it to `no`. 
+1. Update your **CURBuketPath** and set the **CURisAggregated** flag;
+   1. If you used the CFN Template in the CUR setup process earlier in this lab ([option 1)](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/1a_cur_setup/)then;
+      1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
+      2. **CURisAggregated** = `yes`
+   2. If you did *not* use the CFN automated CUR setup process in the prior lab step and have just one CUR you setup manually then;
+      1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-accountid-shared/prefix/name/name/` (double check this path, you must see year=xxxx partitions in there)
 
-3. Select the Dashboards you want to install. We recommend deploying all three. 
+2. Select the Dashboards you want to install. We recommend deploying all three. 
 
-4. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+3. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-5.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+4.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
-6.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+5.  You will see the stack will start in **CREATE_IN_PROGRESS** 
 
 **NOTE:** This step can take 5mins
     ------------ | -------------
