@@ -172,9 +172,6 @@ Resources:
                     StringEquals:
                           s3:x-amz-acl:  bucket-owner-full-control
                           aws:SourceAccount: !Split [',', !Ref ManagementAccountID]
-                    StringLike:
-                          aws:SourceArn: !Sub 'arn:aws:compute-optimizer:${AWS::Region}'
-
                   Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role
