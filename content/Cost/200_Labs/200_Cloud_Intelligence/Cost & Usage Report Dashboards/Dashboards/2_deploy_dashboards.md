@@ -9,11 +9,11 @@ The Cost Intelligence Dashboard (CID), CUDOS, and the KPI dashboard are all stro
 
 
 ## Option 1: Express Deployment (15 minutes)
-The following is the **recommended method** for deploying the CUR-based Cloud Intelligence Dashboards (CID, CUDOS, and KPI). For the CloudFormation method or the manual method, please see options 2 or 3.
-
-If you run into error, please [visit our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/) to see if we can provide a quick answer. 
+The following is the **recommended method** for deploying the CUR-based Cloud Intelligence Dashboards (CID, CUDOS, and KPI). **This step requires** that you've gone through the prerequisites in the previous steps in this lab to; create the CUR, setup Athena and its connection to the CUR, and enabled QuickSight. 
 
 {{%expand "Click here to continue" %}}
+
+If you run into an error, please [visit our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/) to see if we can provide a quick answer. 
 
 1. Open up a terminal application with permissions to run API requests against your AWS account. We recommend [CloudShell](https://console.aws.amazon.com/cloudshell).
 
@@ -81,17 +81,17 @@ cid-cmd deploy
 
 {{% /expand%}}
 
-## Option 2: CloudFormation deployment
+## Option 2: All-in-one CloudFormation deployment (10 min)
 
-### All-in-one CloudFormation deployment (10 min)
-
-In this option we use CloudFormation template that deploy all needed resources taking the minimum of parameters (An S3 path to CUR data and A QuickSight user that will be the owner of QuickSight assets). User can also choose dashboards that will be installed.
-
-All other objects are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, Dastasets and Dasbhoards. The template uses a custom resource ( a Lambda with cid-cmd tool ) to create delete or update assets.
+This option does not require any pre-requisites other than the CUR having been created and available in an S3 bucket. 
 
 {{%expand "Click here to continue" %}}
 
-1. Login into your Data Collection Account
+In this option we use guide you through using a CloudFormation template that will deploy **all needed resources**. You will cut and paste some parameters (An S3 path to CUR data, A QuickSight user that will be the owner of the QuickSight assets, and which dashboards you want to deploy) into the template and click run. 
+
+All other resources are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, and finally the dashboards. The template uses a custom resource (a Lambda with [this CLI tool](https://github.com/aws-samples/aws-cudos-framework-deployment/)) to create, delete, or update assets. 
+
+1. Login into your Linked (Data Collection) Account
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
@@ -99,45 +99,57 @@ All other objects are created automatically: Athena Workgroup and bucket, Glue t
 	
 3. Enter a **Stack name** for your template such as **CID**
 4. Review **Readme Sectons** parameter to confirm prerequisites before specifying the other parameters. You must answer 'yes' to all.
-5. Set **QuicksightUserName** parameter
-To validate your QuickSight complete the tasks below:
+5. Copy and paste your **QuicksightUserName** into the parameter text box
+To find your QuickSight username:
 	- Open a new tab or window and navigate to the **QuickSight** console
 	- Find your username in the top right navigation bar
 ![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
+1. Update your **CURBuketPath** with the S3 path where your **partitions of CUR data** starts. If you have just one CUR in this bucket, put the path to the folder where the year folders are. For example `s3://cid-accountid-shared/cur/accountid/cid/cid/`. If you have more than on CUR in the bucket from multiple accounts, you will put an S3 path that just takes you to the account level of one of your CURs (doesn't matter which one), for example `s3://cid-accountid-shared/cur/177834886075/`. 
+2. Set CURisAggregated to `yes` if you used the CloudFormation template in the [pre-requisite steps in Option 1.](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/1a_cur_setup/#option-1-deploy-cur-and-cids-into-dedicated-linked-account-suggested) Otherwise set it to `no`. 
 
-6. Update your **CURBuketPath** with the S3 path where your **partitions of CUR data** starts. For single account deployment it will be a path where year=xxxx partitions starts, for multiaccount cur it will be the path to account partition. 
+3. Update your **QuicksightIdentityRegion** with your **QuickSight region** 
 
-8. Update your **QuicksightIdentityRegion** with your **QuickSight region** 
+4. Select the Dashboards you want to install. We recommend deploying all three. 
 
-5. Select Dashboards you want to install.
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
 
-9. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
-10. Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-
-11. You will see the stack will start in **CREATE_IN_PROGRESS** 
+7.  You will see the stack will start in **CREATE_IN_PROGRESS** 
 
 **NOTE:** This step can take 5mins
     ------------ | -------------
 
-12. Once complete, the stack will show **CREATE_COMPLETE**
+12. While this is working, head back to QuickSight and click on manage Quicksight from the person icon on the top right. 
 
-13. Navigate to **Output of the Stack** and check dashboars URLS.
+![quicksightpermissionss3_1](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_1.png?classes=lab_picture_small)
 
-If you see no data please check following:
- 1) Check if QuckSight has permissions to access Athena, S3 bucket with CUR and S3 bucket with athena results. 
- 2) Check the status of datasets. If they are being updated
- 3) Check if CUR data arrived to S3 bucket (If you just created CUR you will need to wait 24 hours before the first data arrives).
+13. Select Security and permissions. Under QuickSight access to AWS services click manage. 
+
+![quicksightpermissionss3_2](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_2.png?classes=lab_picture_small)
+
+14. Click on Select S3 buckets and add your Athena Query results output bucket as a read only source. Click save. Return to CloudFormation. 
+
+14. Once complete, the stack will show **CREATE_COMPLETE**
+
+15. Navigate to the **Output of the Stack** tab and check dashboards URLS. Click on a URL to open the dashboards. 
+
+If you see no data please check the following:
+ 1) Double check that QuickSight has permissions to read from your CUR bucket **and** your Query Results location bucket. 
+ 2) In QuickSight, go to Datasets and click on Summary View. Check for errors. 
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. 
+ 4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night. 
 
 
 {{% /expand%}}
 
 
-### Legacy CloudFormation Deployment (30 Mins)
-This section is **optional** and automates the creation of the Cost Intelligence Dashboard and CUDOS Dashboard using **CloudFormation templates**. If you choose this method to also deploy the KPI Dashboard, it will not reuse the same resources. Therefor it is recommended to use the CLI tool method above for the KPI dashboard after using this method to deploy the CID and CUDOS. The CloudFormation templates allows you to complete the lab in less than half the time as the manual setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
+## Option 3: Legacy CloudFormation Deployment (30 Mins)
+This section is **optional** and will be deprecated soon in favor of the CloudFormation template above. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment for CID and CUDOS" %}}
+This guide will walk through using automation to create the Cost Intelligence Dashboard and CUDOS Dashboard using **CloudFormation templates**. If you choose this method to also deploy the KPI Dashboard, it will not reuse the same resources. Therefor it is recommended to use the CLI tool method above for the KPI dashboard after using this method to deploy the CID and CUDOS. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual Deployment**. 
 
 **NOTE:** An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team.
     ------------ | -------------
@@ -335,7 +347,7 @@ To validate your QuickSight complete the tasks below:
 
 {{% /expand%}}
 
-## Option 3: Manual Deployment (DEPRECATED)
+## Option 4: Manual Deployment (deprecated)
 This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight.
 
 You will require AWS CLI environment. We recommend using CloudShell in your account, but you also can [install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) on your working environment.
