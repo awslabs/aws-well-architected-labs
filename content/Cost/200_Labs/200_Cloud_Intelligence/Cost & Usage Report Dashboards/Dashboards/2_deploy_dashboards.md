@@ -132,17 +132,17 @@ To find your QuickSight username:
 
 ![quicksightpermissionss3_1](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_1.png?classes=lab_picture_small)
 
-10. Select Security and permissions. Under QuickSight access to AWS services click manage. 
+10. Select Security and permissions. Under QuickSight access to AWS services click manage. Select Athena, S3, and in S3 select both your CUR bucket **and** Query results bucket (Ex: will be something like `aws-athena-query-results-cid-1234567890123-us-east-1`). If you do not see this bucket, please check if it is created by the CloudFormation stack.
 
 ![quicksightpermissionss3_2](/Cost/200_Cloud_Intelligence/Images/quicksightpermissionss3_2.png?classes=lab_picture_small)
 
-11. Navigate back to CloudFormation and to the **Output of the Stack** tab and check dashboards URLS. Click on a URL to open the dashboards. 
+11. Navigate back to CloudFormation and to the **Output of the Stack** tab and check dashboards URLS. Click on a URL to open the dashboards.
 
 If you see no data please check the following:
- 1) Double check that QuickSight has permissions to read from your CUR bucket **and** your Query Results location bucket. 
- 2) In QuickSight, go to Datasets and click on Summary View. Check for errors. 
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. Query results bucket name will be something like `aws-athena-query-results-cid-accountID-us-east-1`
- 4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night. 
+ 1) Double check that QuickSight has permissions to read from your CUR bucket **and** your Query Results location bucket. Query results bucket name will be something like `aws-athena-query-results-cid-1234567890123-us-east-1`
+ 2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives.
+ 4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night.
 
 
 {{% /expand%}}
