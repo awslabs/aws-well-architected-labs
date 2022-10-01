@@ -174,14 +174,14 @@ This option allows your to bring in your AWS Organizations data including OU gro
 
 - {{%expand "Click here - to create using your AWS Organization Data" %}}
 
-#### Option1: Complete Level 300: Optimization Data Collection Lab (recommended)
+#### Option3-A: Complete Level 300: Optimization Data Collection Lab (recommended)
 
 This Lab can collects multiple types of data across accounts and AWS Organization, including Trusted Advisor and Compute Optimizer Data. For Account Names you will need only one module **AWS Organization Module**, but we recommend to explore other modules of this lab as well.
 
 - [Click to navigate to Level 300 Optimization Data Collection/]({{< ref "/Cost/300_Labs/300_optimization_data_collection" >}})
 
 
-#### Option2: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
+#### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
 
 - [Click to navigate to Level 300 Organization CUR connection steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
 
