@@ -7,10 +7,10 @@ hidden: FALSE
 
 
 ## View 0 - Account Map
-The Cost & Usage Report data doesn't contain account names and other business or organization specific mapping so the first view you will create is a view that enhances your CUR data. There are a few options you can leverage to create your account_map view to provide opportunities to leverage your existing mapping tables. organization information, or other business mappings allows for deeper insights and additional  This view will be used to create the **Account_Map** for your dashboards.
+The Cost & Usage Report data doesn't contain account names and other business or organization specific mapping so the first view you will create is a view that enhances your CUR data. There are a few options you can leverage to create your account_map view to provide opportunities to leverage your existing mapping tables, organization information, or other business mappings allows for deeper insights.  This view will be used to create the **Account_Map** for your dashboards.
 
 {{% notice tip %}}
-You can update your account_map view or change options at a future time. If you are unsure of what option to use we suggest starting with Option 1
+You can update your account_map view or change options at a future time. If you are unsure of what option to use we suggest starting with Option 1. If you are creating AWS Accounts frequently, we suggest using Option 3-A   
 {{% /notice %}}
 
 ### Option 1: Placeholder Account Map data
@@ -163,16 +163,16 @@ Modify the following SQL query with your table names:
 
 {{% /expand%}}
 
-### Option 3: Leverage your existing AWS Organizations account mapping
-This option allows your to bring in your AWS Organizations data including OU grouping
-
 - {{%expand "Click here - to one-time update account map from AWS Organizations data data with cid-cmd tool" %}}
 
 		cid-cmd map --account-map-source organization
 
 {{% /expand%}}
 
-- {{%expand "Click here - to create using your AWS Organization Data" %}}
+### Option 3: Leverage your existing AWS Organizations account mapping
+This option allows your to bring in your AWS Organizations data including OU grouping
+
+- {{%expand "Click here - to set up auto-update of Account Names using your AWS Organization Data (recommended)" %}}
 
 #### Option3-A: Complete Level 300: Optimization Data Collection Lab (recommended)
 
