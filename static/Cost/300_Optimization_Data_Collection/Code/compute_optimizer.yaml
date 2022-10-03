@@ -9,9 +9,6 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket to be created to hold data information
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  RoleNameARN:
-    Type: String
-    Description: ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
   ManagementRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
@@ -127,7 +124,7 @@ Resources:
         - ParameterKey: DestinationBucket
           ParameterValue: !Ref DestinationBucket
         - ParameterKey: ManagementAccountID
-          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ] # this stack is the problem as it only looks at one place
+          ParameterValue: !Ref ManagementAccountID
       StackInstancesGroup:
         - DeploymentTargets:
             Accounts:
@@ -148,7 +145,7 @@ Resources:
             Description: Prefix of regional bucket name
           ManagementAccountID:
             Type: String
-            Description: Management Account ID that will send data to the bucket
+            Description: Comma separated IDs of Management Accounts that will send data to the bucket
           DestinationBucket:
             Type: String
             Description: A name of the main bucket where all data will be stored
@@ -174,8 +171,7 @@ Resources:
                   Condition:
                     StringEquals:
                           s3:x-amz-acl:  bucket-owner-full-control
-                          aws:SourceAccount: !Sub ${ManagementAccountID}
-                          aws:SourceArn: !Sub arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*
+                          aws:SourceAccount: !Split [',', !Ref ManagementAccountID]
                   Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role

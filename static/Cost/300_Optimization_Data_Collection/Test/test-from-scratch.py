@@ -153,7 +153,7 @@ def initial_deploy_stacks():
 
 def update_nested_stacks():
     """ update all nested stacks with the leatest versions from git """
-
+    main_stack_name = 'OptimizationDataCollectionStack'
     logger.info('Analyzing nested stacks')
     cfn = load_yaml(open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml'))
     nested_stack_file_names = {}
@@ -179,30 +179,33 @@ def update_nested_stacks():
                     logger.info(f'No updates are to be performed in {stack_name}')
                 else:
                     raise
+            except FileNotFoundError:
+                logger.info(f'No file for {stack_name}')
             else:
                 logger.info(f'Updated {stack_name}')
 
     nested_stacks = []
-    for r in cloudformation.describe_stack_resources(StackName='OptimizationDataCollectionStack')['StackResources']:
+    for r in cloudformation.describe_stack_resources(StackName=main_stack_name)['StackResources']:
         if r['ResourceType'] == 'AWS::CloudFormation::Stack':
             nested_stacks.append(r['PhysicalResourceId'].split('/')[1])
 
+    time.sleep(5)
     watch_stacks(nested_stacks)
 
     logger.info('Patching SQS urls in AWS-Organization-Account-Collector')
     sqs_urls = []
-    for r in cloudformation.describe_stack_resources(StackName='OptimizationDataCollectionStack')['StackResources']:
+    for r in cloudformation.describe_stack_resources(StackName=main_stack_name)['StackResources']:
         if r['ResourceType'] == 'AWS::CloudFormation::Stack':
             stack_name = r['PhysicalResourceId'].split('/')[1]
             current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
             for out in current_stack['Outputs']:
                 if 'SQSUrl' == out['OutputKey']:
                     sqs_urls.append(out['OutputValue'])
-    func_conf = boto3.client('lambda').get_function_configuration(FunctionName='AWS-Organization-Account-Collector')
+    func_conf = boto3.client('lambda').get_function_configuration(FunctionName=f'Accounts-Collector-Function-{main_stack_name}')
     logger.info(str(sqs_urls))
     func_conf['Environment']['Variables']['SQS_URL'] = ','.join(sqs_urls)
     response = boto3.client('lambda').update_function_configuration(
-            FunctionName='AWS-Organization-Account-Collector',
+            FunctionName=f'Accounts-Collector-Function-{main_stack_name}',
             Environment=func_conf['Environment']
     )
 
@@ -214,8 +217,9 @@ def clean_bucket():
         logger.exception(exc)
 
 def trigger_update():
+    main_stack_name = 'OptimizationDataCollectionStack'
     for name in [
-        'AWS-Organization-Account-Collector',
+        f'Accounts-Collector-Function-{main_stack_name}',
         'Lambda_Organization_Data_Collector',
         'aws-cost-explorer-rightsizing-recommendations-function',
         ]:
