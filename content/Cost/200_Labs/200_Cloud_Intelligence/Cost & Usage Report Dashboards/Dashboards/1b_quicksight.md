@@ -33,8 +33,10 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 1. Click **Finish** and wait for the congratulations screen to display
 
 1. Click **Go to Amazon QuickSight**
-
 ![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
+1. Click on the persona icon on the top right and select manage QuickSight. 
+2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+
 {{% /expand%}}
 
 

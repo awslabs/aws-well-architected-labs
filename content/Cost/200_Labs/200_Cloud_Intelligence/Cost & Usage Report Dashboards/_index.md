@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-April 2022
+September 2022
 
 
 ## Feedback
@@ -64,7 +64,7 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 ## Time to complete
 
-Approximately 45-60 minutes to onboard all CUR dashboards in this section manually. If using the optional automation steps, setup should take approximately 15-30 minutes to complete.
+Approximately 45-60 minutes to onboard all CUR dashboards in this section manually. If using automation steps, setup should take approximately 15-30 minutes to complete.
 
 ## Steps:
 
