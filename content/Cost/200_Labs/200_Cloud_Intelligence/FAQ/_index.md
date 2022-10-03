@@ -1,144 +1,46 @@
 ---
 title: "FAQ"
 #menutitle: "FAQs"
-date: 2020-09-07T11:16:08-04:00
+date: 2022-08-31T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
 ---
 #### Last Updated
-June 2022
+September 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
-## How do I setup the dashboards on top of multiple payer accounts?
+## How do I setup the dashboards in an account other than my payer account or on top of multiple payer accounts?
 
-This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To fulfill prerequisites customers should set up or have setup a new Governance Account. The payer account CUR S3 buckets will have S3 replication enabled, and will replicate to a new S3 bucket in your separate Governance account.
+This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. 
+To setup the dashboards on top of multi payer accounts, please review [multi-account setup]({{< ref "Cost/200_Labs/200_Cloud_Intelligence/Cost & Usage Report Dashboards/Dashboards/1a_cur_setup.md" >}}) deployment options and instructions.
+
+## I'm getting an error in QuickSight that is saying Athena timed out?
+
+For very large CUR files, Athena may time out trying to query the data for summary_view. In Athena, find the summary_view view, click the three dots next to it and select show/edit query. Modify the following:
+
+- [Request Athena](https://docs.amazonaws.cn/en_us/athena/latest/ug/service-limits.html?) DML query timeout increase via support case. 
+- Or, adjust the granularity to monthly, by changing 'day' to 'month' in row 6. 
+- Or, adjust the look back from '7' months to desired time-frame in row 75.
+- In QuickSight, refresh your dataset. 
+
+## I am getting the error StartQueryExecution operation: No output location provided. How do I fix this?
+
+An output location is required either through the Workgroup result configuration setting or as an API input. 
 {{%expand "Click here to expand step by step instructions" %}}
 
-![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
+1. Visit Athena and click on the three line hamburger icon on the top left. 
 
-**NOTE: These steps assume you've already setup the CUR to be delivered in each payer (management) account.**
+![images/athenahelp1.png](/Cost/200_Cloud_Intelligence/Images/athenahelp1.png?classes=lab_picture_verysmall)
 
-#### Setup S3 CUR Bucket Replication
+1. Select Workgroups. Click on primary (or the workgroup you wish to use), and from the actions menu select edit. 
 
-1. Create or go to the console of your Governance account. This is where the Cloud Intelligence Dashboards will be deployed. Your payer account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
-2. Create an S3 bucket with enabled versioning.
-3. Open S3 bucket and apply following S3 bucket policy with replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {GovernanceAccountBucketName}. You can add more payer accounts to the policy later if needed.
+![images/athenahelp15.png](/Cost/200_Cloud_Intelligence/Images/athenahelp15.png?classes=lab_picture_verysmall)
 
-```json
-{
-"Version": "2008-10-17",
-"Id": "PolicyForCombinedBucket",
-"Statement": [
-	{
-		"Sid": "Set permissions for objects",
-		"Effect": "Allow",
-		"Principal": {
-    		"AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
-    		"s3:ReplicateObject",
-    		"s3:ReplicateDelete"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-	},
-	{
-		"Sid": "Set permissions on bucket",
-		"Effect": "Allow",
-		"Principal": {
-		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
- 		   "s3:List*",
- 		   "s3:GetBucketVersioning",
- 		   "s3:PutBucketVersioning"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}"
-	},
-	{
-		"Sid": "Set permissions to pass object ownership",
-		"Effect": "Allow",
-		"Principal": {
-		    "AWS": ["{PayerAccountA}","{PayerAccountB}"]
-		},
-		"Action": [
-    		"s3:ReplicateObject",
-    		"s3:ReplicateDelete",
-    		"s3:ObjectOwnerOverrideToBucketOwner",
-    		"s3:ReplicateTags",
-    		"s3:GetObjectVersionTagging",
-    		"s3:PutObject"
-		],
-		"Resource": "arn:aws:s3:::{GovernanceAccountBucketName}/*"
-	}
-]
-}
-```
+1. Find the Query results configuration section, designate a bucket for your query results, and click save. 
 
-This policy supports objects encrypted with either SSE-S3 or not encrypted objects. For SSE-KMS encrypted objects additional policy statements and replication configuration will be needed: see https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
-
-#### Set up S3 bucket replication from each Payer (Management) account to S3 bucket in Governance account
-
-This step should be done in each payer (management) account.
-
-1. Open S3 bucket in Payer account with CUR.
-2. On Properties tab under Bucket Versioning section click Edit and set bucket versioning to Enabled.
-3. On Management tab under Replication rules click on Create replication rule.
-4. Specify rule name.
-
-![Images/s3_bucket_replication_1.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_1.png?classes=lab_picture_small)
-
-5. Select Specify a bucket in another account and provide Governance account id and bucket name in Governance account.
-6. Select Change object ownership to destination bucket owner checkbox.
-7. Select Create new role under IAM Role section.
-
-![Images/s3_bucket_replication_2.png.png](/Cost/200_Cloud_Intelligence/Images/s3_bucket_replication_2.png?classes=lab_picture_small)
-
-8. Leave rest of the settings by default and click Save.
-
-#### Copy existing objects from CUR S3 bucket to S3 bucket in Governance account
-
-This step should be done in each payer (management) account.
-
-Sync existing objects from CUR S3 bucket to S3 bucket in Governance account.
-
-	aws s3 sync s3://{curBucketName} s3://{GovernanceAccountBucketName} --acl bucket-owner-full-control
-
-After performing this step in each payer (management) account S3 bucket in Governance account will contain CUR data from all payer accounts under respective prefixes.
-
-#### Prepare Glue Crawler 
-
-These actions should be done in Governance account
-
-1. Open AWS Glue Service in AWS Console in the same region where S3 bucket with aggregated CUR data is located and go to Crawlers section
-2. Click Add Crawler
-3. Specify Crawler name and click Next
-4. In Specify crawler source type leave settings by default. Click Next
-
-![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
-
-5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **.sql, **.csv, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object. Click Next
-
-![Images/glue_2.png](/Cost/200_Cloud_Intelligence/Images/glue_2.png?classes=lab_picture_small)
-
-6. In Add another data store leave No by default. Click Next
-
-7. In Choose an IAM role select Create an IAM role and provide role name. Click Next
-
-![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
-
-8. In Create a schedule for this crawler select Daily and specify Hour and Minute for crawler to run
-
-9. In Configure the crawler’s output choose Glue Database in which you’d like crawler to create a table or add new one. Select Create a single schema for each S3 path checkbox. Select Add new columns only and Ignore the change and don’t update the table in the data catalog in Configuration options. Click Next 
-
-*Please make sure Database name doesn’t include ‘-’ character*
-
-![Images/glue_4.png](/Cost/200_Cloud_Intelligence/Images/glue_4.png?classes=lab_picture_small)
-
-10. Crawler configuration should look as on the screenshot below. Click Finish
-
-11. Resume deployment methodoly of choice from previous page. 
+![images/athenahelp2.png](/Cost/200_Cloud_Intelligence/Images/athenahelp2.png?classes=lab_picture_verysmall)
 
 {{% /expand%}}
 
@@ -163,7 +65,7 @@ Do you want to give access to the dashboards to someone within your organization
 * If you add a rule for a user or group and leave all other columns with no value (NULL), you grant them access to all the data.
 
 * If you don't add a rule for a user or group, that user or group can't see any of the data.
-	* If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
+    * If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
 
 * The full set of rule records that are applied per user must not exceed 999. This applies to the total number of rules that are directly assigned to a user name plus any rules that are assigned to the user through group names.
 
@@ -173,11 +75,11 @@ Do you want to give access to the dashboards to someone within your organization
 
 Create a CSV file that looks something like this:
 
-	username,account_id
-	user1@amazon.co.uk,"123456123456"
-	user1@amazon.co.uk,"987654987654"
-	user2@amazon.fr,"123456123456"
-	user3@amazon.com,"789123456123"
+    username,account_id
+    user1@amazon.co.uk,"123456123456"
+    user1@amazon.co.uk,"987654987654"
+    user2@amazon.fr,"123456123456"
+    user3@amazon.com,"789123456123"
 
 Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Create a separate row for a single username having access to multiple account IDs. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
 
@@ -223,11 +125,11 @@ Upload your csv file to the Athena query location bucket. eg. aws-athena-query-r
 
 Create an S3 manifest file that looks something like this:
 
-	{
-  	"entries": [
-    	{"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv", 	"mandatory":true},
- 	 ]
-	}
+    {
+    "entries": [
+        {"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv",  "mandatory":true},
+     ]
+    }
 
 This manifest file can be saved locally, or uploaded to the same S3 bucket where the csv file is stored. Save this file as something similar to CUDOS_manifest.json.
 
@@ -307,6 +209,83 @@ Follow the below steps to remove the colum. Be aware this will mean if you do ad
 
 
 {{% /expand%}}
+
+## Cost values or other numbers in the Cloud Intelligence Dashboards don't match what I see in my invoices or in Cost Explorer - what do I do? 
+
+{{%expand "Click here to expand answer" %}}
+
+1. Check the QuickSight dataset refreshes – sometimes they error out. They should be scheduled for once a day at least.
+1. Cost Explorer does round cost values, so we’ve seen these rounding errors propagate to noticeable differences between Cost Explorer and the CUR/CloudIntelligenceDashboards. The CUR has more accurate cost values.
+1. Double check your settings in Cost Explorer for unblended, amortized, net amortized etc. to make sure you're comparing to the same cost values in the dashboards. 
+1. A lot of visuals in CUDOS and our other dashboards are about usage, for example S3 costs will be filtered to exclude API requests and data transfers and JUST show the cost of storing those GBs. 
+1. In the Cloud Intelligence Dashboards you can always break a spend amount down into its parts, like grouping by operation or usage type, then comparing it to Cost Explorer or your invoices to see what is different.
+1. Enterprise Support fees arrive after the 15th of the next month. Exclude ES charges in your comparison. 
+2. Taxes, refunds, and credits are excluded from many visuals in CUDOS and the other dashboards. 
+
+{{% /expand%}}
+
+## I've deployed the Compute Optimizer Dashboard. If a new linked account is created after deployment, can the dashboard collect the data from the newly created linked account automatically?
+
+{{%expand "Click here to expand answer" %}}
+
+[If the stackset deployment is made via Organizations](https://medium.com/swlh/automatically-deploy-cloudformation-stacks-into-newly-created-accounts-in-aws-organization-a0b80b2fc43e) it will be present on newly created accounts. 
+
+{{% /expand%}}
+
+##  I am getting the following error from my tables associated with the optimization data collection lab; "HIVE_PARTITION_SCHEMA_MISMATCH: There is a mismatch between the table and partition schemas. The types are incompatible and cannot be coerced". 
+
+{{%expand "Click here to expand answer" %}}
+
+Edit your Glue crawler to refresh the metadata from the partitions by following [these steps.](https://aws.amazon.com/premiumsupport/knowledge-center/athena-hive-partition-schema-mismatch/) 
+
+{{% /expand%}}
+
+##  What columns are in the CUR, what do they mean?
+
+{{%expand "Click here to expand answer" %}}
+
+More detail about [the CUR here.](https://docs.aws.amazon.com/cur/latest/userguide/cur-user-guide.pdf)
+
+{{% /expand%}}
+
+##  Can I do cross-account queries in Athena instead of replicating CUR buckets?
+
+{{%expand "Click here to expand answer" %}}
+
+CUR bucket replication is the preferred method because it is tested and documented. Technically you can use cross-account methods but it is untested. It is true that CUR bucket replication will create more cost as the you will have to store the CUR twice, although you could think of it as a backup in case something happens to the payer accounts. We recommend CUR bucket replication also because the Athena tables are created/updated via a Glue crawler where you get all CUR schema changes handled. Glue crawlers don’t support cross account set up. It also gets significantly more complicated if KMS encryption is used.
+
+{{% /expand%}}
+
+##  Can I encrypt my CUR buckets in S3?
+
+{{%expand "Click here to expand answer" %}}
+
+For a KMS encrypted bucket, KEY and ROLE policies need to be modified to allow you to use the KMS key that encrypts the S3 bucket. Additional security features like SCP can also be applied in your Organization. For troubleshooting IAM permissions you can use CloudTrail and open support tickets with cloud support engineers. Here is a sample KMS key policy that should be added in cases where the CUR bucket is KMS encrypted. The policy allows QuickSight and Glue roles to decrypt the data encrypted with that KMS key.
+
+IMPORTANT: This statement is to be added to an existing kms key policy and not to replace it, the key could have other policies in place used by other services, like key administrators policy.
+
+ - replace `region` with your region
+ - replace `account` with account number
+ - replace `crawler-rone` with cur glue crawler IAM role (can be found in crawler config/Service role)
+ - replace `key-id` with the id of your KMS key or alias (or use `*`)
+
+    {
+        "Sid": "Allow Quicksight and Glue",
+        "Action": "kms:Decrypt",
+        "Effect": "Allow",
+        "Principal":
+        {
+            "AWS":
+            [
+                "arn:aws:iam::{account}:role/service-role/aws-quicksight-service-role-v0",
+                "arn:aws:iam::{account}:role/{CRAWLER-ROLE}"
+            ]
+        },
+        "Resource": ""arn:aws:kms:{region}:{account}:key/{key-id or *}"
+    }
+
+{{% /expand%}}
+
 
 {{% notice tip %}}
 This page will be updated regularly with new answers. If you have a FAQ you'd like answered here, please reach out to us here cloud-intelligence-dashboards@amazon.com. 

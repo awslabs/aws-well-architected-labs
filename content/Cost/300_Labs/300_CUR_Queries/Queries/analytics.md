@@ -23,6 +23,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Amazon Elasticsearch](#amazon-elasticsearch)
   * [Amazon EMR](#amazon-emr)
   * [Amazon QuickSight](#amazon-quicksight)
+  * [Amazon MSK](#amazon-msk)
   
 ### Amazon Athena
 
@@ -358,6 +359,45 @@ ORDER BY
 {{< email_button category_text="Analytics" service_text="Amazon QuickSight" query_text="QuickSight Query1" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+
+
+
+### Amazon MSK
+
+#### Query Description
+This query will provide monthly unblended and usage information per linked account for all types of Amazon MSK, including OD and Serverless.  The output will include detailed information about the usage type and its usage amount. The cost will be summed and in descending order.
+
+#### Pricing
+Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing/).
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Analytics/msk.sql)
+
+#### Copy Query
+```tsql
+SELECT 
+  bill_payer_account_id,
+  line_item_usage_account_id, 
+  line_item_product_code, 
+  line_item_line_item_description, 
+  line_item_operation,
+  SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost 
+FROM 
+  ${table_name}  
+WHERE
+  ${date_filter} 
+  AND line_item_product_code = 'AmazonMSK'
+  AND line_item_line_item_type NOT IN ('Tax','Refund','Credit')
+GROUP BY 1,2,3,4,5
+  ORDER BY 
+  sum_line_item_unblended_cost DESC;
+```
+
+{{< email_button category_text="Analytics" service_text="Amazon MSK" query_text="MSK Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: <a href="mailto:curquery@amazon.com?subject=Cur Query Library Request - Analytics">curquery@amazon.com</a>

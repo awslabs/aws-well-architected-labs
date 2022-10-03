@@ -101,7 +101,9 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Architectures: [arm64]
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction of python3.9.
       Runtime: python3.9
       Code:
@@ -273,8 +275,9 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name: 
-        !Sub "${CFDataName}Crawler"
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -344,7 +347,6 @@ Resources:
                         cur_all
                       WHERE line_item_usage_account_id <> '${AWS::AccountId}'
                       AND product_location LIKE '%US%'
-                      #add in region filter if needed
                       AND product_group = 'AWSTransitGateway' 
                       AND pricing_unit = 'GigaBytes'
                       GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
@@ -411,7 +413,7 @@ Resources:
                       , (sum(bytesin[1]) + sum(bytesout[1])) as usage_account_dx_total
                       FROM
                         optimization_data.${CFDataName} a
-                      LEFT JOIN <CURDatabase>.tgw_chargeback b ON a.customeraccount = b.line_item_usage_account_id AND a.year = b.year AND a.month = b.year.month
+                      LEFT JOIN <CURDatabase>.tgw_chargeback b ON a.customeraccount = b.line_item_usage_account_id AND a.year = b.year AND a.month = b.month
                       GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
                       ORDER BY bytesIn DESC
                     ) 

@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Organization Data CUR Connection"
+title: "Level 300: Add Organization Data to CUR"
 #menutitle: "Lab #1"
 date: 2020-10-22T11:16:08-04:00
 chapter: false

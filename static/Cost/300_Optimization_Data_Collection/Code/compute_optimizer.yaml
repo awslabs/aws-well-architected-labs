@@ -101,10 +101,6 @@ Resources:
                 Resource: !Sub
                   - 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${SelectValue}*' 
                   - SelectValue: !Select [0, !Split ["-", !Ref AWS::StackName]]
-              # - Effect: Allow  ## What does this used for ?
-              #   Action:        ## there is no SNS usage throughout the whole solution.
-              #     - sns:*
-              #   Resource: '*'
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess #FIXME: Can it be more narrow than this? Stacksets needs to create buckets and roles
         ## Bucket names are ultimately : costoptimizationdata*

@@ -22,6 +22,15 @@ Resources:
     Properties:
       BucketName:
         Ref: DestinationBucket
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+            BlockPublicAcls : true
+            BlockPublicPolicy : true
+            IgnorePublicAcls : true
+            RestrictPublicBuckets : true
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
