@@ -13,16 +13,15 @@ hidden: false
 ## Introduction
 AWS Graviton is a custom CPU with 64-bit ARM processor cores
 
-Graviton CPUs have excellent energy efficiency, up to 3.5x better performance/watt than x86 instances.
+Graviton CPUs have excellent energy efficiency, switching to Graviton EC2 instances can reduce energy usage by as much as 60% for the same performance as x86 instances.
 
 Amazon control the end to end lifecycle of the chip from design to consumption enhancing efficiency
 
 [Read more here](https://aws.amazon.com/ec2/graviton/)
 
 ## RDS on Graviton
-
 * Up to 35% faster than non-Graviton
-* Up to 53% better price/performance vs non-Graviton
+* Up to 53% better price/performance than non-Graviton
 * Almost zero effort migration from X86
 * Supported for RDS databases MySQL, PostgreSQL, MariaDB and for Amazon Aurora
 * Not currently supported for commercial databases Oracle and SQL Server
