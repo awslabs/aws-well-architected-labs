@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 #### Last Updated
-August 2022
+September 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
@@ -65,7 +65,7 @@ Do you want to give access to the dashboards to someone within your organization
 * If you add a rule for a user or group and leave all other columns with no value (NULL), you grant them access to all the data.
 
 * If you don't add a rule for a user or group, that user or group can't see any of the data.
-	* If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
+    * If the userbase of QuickSight will be changing frequently, consider storing your csv in S3 rather than a local file.
 
 * The full set of rule records that are applied per user must not exceed 999. This applies to the total number of rules that are directly assigned to a user name plus any rules that are assigned to the user through group names.
 
@@ -75,11 +75,11 @@ Do you want to give access to the dashboards to someone within your organization
 
 Create a CSV file that looks something like this:
 
-	username,account_id
-	user1@amazon.co.uk,"123456123456"
-	user1@amazon.co.uk,"987654987654"
-	user2@amazon.fr,"123456123456"
-	user3@amazon.com,"789123456123"
+    username,account_id
+    user1@amazon.co.uk,"123456123456"
+    user1@amazon.co.uk,"987654987654"
+    user2@amazon.fr,"123456123456"
+    user3@amazon.com,"789123456123"
 
 Any Account IDs that you wish the given user to see should be defined in the account_id field of the CSV. Create a separate row for a single username having access to multiple account IDs. Ensure there are no spaces after your final quote character. Name this file something similar to CUDOS_Dataset_rules.csv
 
@@ -125,11 +125,11 @@ Upload your csv file to the Athena query location bucket. eg. aws-athena-query-r
 
 Create an S3 manifest file that looks something like this:
 
-	{
-  	"entries": [
-    	{"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv", 	"mandatory":true},
- 	 ]
-	}
+    {
+    "entries": [
+        {"url":"s3://aws-athena-query-results-123456123456-us-east-1/CUDOS_Dataset_rules.csv",  "mandatory":true},
+     ]
+    }
 
 This manifest file can be saved locally, or uploaded to the same S3 bucket where the csv file is stored. Save this file as something similar to CUDOS_manifest.json.
 
@@ -209,6 +209,83 @@ Follow the below steps to remove the colum. Be aware this will mean if you do ad
 
 
 {{% /expand%}}
+
+## Cost values or other numbers in the Cloud Intelligence Dashboards don't match what I see in my invoices or in Cost Explorer - what do I do? 
+
+{{%expand "Click here to expand answer" %}}
+
+1. Check the QuickSight dataset refreshes – sometimes they error out. They should be scheduled for once a day at least.
+1. Cost Explorer does round cost values, so we’ve seen these rounding errors propagate to noticeable differences between Cost Explorer and the CUR/CloudIntelligenceDashboards. The CUR has more accurate cost values.
+1. Double check your settings in Cost Explorer for unblended, amortized, net amortized etc. to make sure you're comparing to the same cost values in the dashboards. 
+1. A lot of visuals in CUDOS and our other dashboards are about usage, for example S3 costs will be filtered to exclude API requests and data transfers and JUST show the cost of storing those GBs. 
+1. In the Cloud Intelligence Dashboards you can always break a spend amount down into its parts, like grouping by operation or usage type, then comparing it to Cost Explorer or your invoices to see what is different.
+1. Enterprise Support fees arrive after the 15th of the next month. Exclude ES charges in your comparison. 
+2. Taxes, refunds, and credits are excluded from many visuals in CUDOS and the other dashboards. 
+
+{{% /expand%}}
+
+## I've deployed the Compute Optimizer Dashboard. If a new linked account is created after deployment, can the dashboard collect the data from the newly created linked account automatically?
+
+{{%expand "Click here to expand answer" %}}
+
+[If the stackset deployment is made via Organizations](https://medium.com/swlh/automatically-deploy-cloudformation-stacks-into-newly-created-accounts-in-aws-organization-a0b80b2fc43e) it will be present on newly created accounts. 
+
+{{% /expand%}}
+
+##  I am getting the following error from my tables associated with the optimization data collection lab; "HIVE_PARTITION_SCHEMA_MISMATCH: There is a mismatch between the table and partition schemas. The types are incompatible and cannot be coerced". 
+
+{{%expand "Click here to expand answer" %}}
+
+Edit your Glue crawler to refresh the metadata from the partitions by following [these steps.](https://aws.amazon.com/premiumsupport/knowledge-center/athena-hive-partition-schema-mismatch/) 
+
+{{% /expand%}}
+
+##  What columns are in the CUR, what do they mean?
+
+{{%expand "Click here to expand answer" %}}
+
+More detail about [the CUR here.](https://docs.aws.amazon.com/cur/latest/userguide/cur-user-guide.pdf)
+
+{{% /expand%}}
+
+##  Can I do cross-account queries in Athena instead of replicating CUR buckets?
+
+{{%expand "Click here to expand answer" %}}
+
+CUR bucket replication is the preferred method because it is tested and documented. Technically you can use cross-account methods but it is untested. It is true that CUR bucket replication will create more cost as the you will have to store the CUR twice, although you could think of it as a backup in case something happens to the payer accounts. We recommend CUR bucket replication also because the Athena tables are created/updated via a Glue crawler where you get all CUR schema changes handled. Glue crawlers don’t support cross account set up. It also gets significantly more complicated if KMS encryption is used.
+
+{{% /expand%}}
+
+##  Can I encrypt my CUR buckets in S3?
+
+{{%expand "Click here to expand answer" %}}
+
+For a KMS encrypted bucket, KEY and ROLE policies need to be modified to allow you to use the KMS key that encrypts the S3 bucket. Additional security features like SCP can also be applied in your Organization. For troubleshooting IAM permissions you can use CloudTrail and open support tickets with cloud support engineers. Here is a sample KMS key policy that should be added in cases where the CUR bucket is KMS encrypted. The policy allows QuickSight and Glue roles to decrypt the data encrypted with that KMS key.
+
+IMPORTANT: This statement is to be added to an existing kms key policy and not to replace it, the key could have other policies in place used by other services, like key administrators policy.
+
+ - replace `region` with your region
+ - replace `account` with account number
+ - replace `crawler-rone` with cur glue crawler IAM role (can be found in crawler config/Service role)
+ - replace `key-id` with the id of your KMS key or alias (or use `*`)
+
+    {
+        "Sid": "Allow Quicksight and Glue",
+        "Action": "kms:Decrypt",
+        "Effect": "Allow",
+        "Principal":
+        {
+            "AWS":
+            [
+                "arn:aws:iam::{account}:role/service-role/aws-quicksight-service-role-v0",
+                "arn:aws:iam::{account}:role/{CRAWLER-ROLE}"
+            ]
+        },
+        "Resource": ""arn:aws:kms:{region}:{account}:key/{key-id or *}"
+    }
+
+{{% /expand%}}
+
 
 {{% notice tip %}}
 This page will be updated regularly with new answers. If you have a FAQ you'd like answered here, please reach out to us here cloud-intelligence-dashboards@amazon.com. 

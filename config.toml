@@ -83,3 +83,4 @@ weight = 10
 name = "<i class='fas fa-bookmark'></i>&nbsp;&nbsp;Amazon Free Tier"
 url = "https://aws.amazon.com/free/"
 weight = 20
+theme = "learn"
