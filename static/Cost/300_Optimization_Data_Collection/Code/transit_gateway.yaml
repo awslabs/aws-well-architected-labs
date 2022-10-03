@@ -75,7 +75,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
               - Effect: "Allow"
                 Action:
                   - "sqs:ReceiveMessage"
@@ -135,6 +135,7 @@ Resources:
                   print(account_id)
                   regions = get_supported_regions()
                   for region_name in regions: 
+                      print(region_name)
                       try:
                           cw_client = assume_role('cloudwatch', account_id, region_name['RegionName'])
                           ec2_client = assume_role('ec2', account_id, region_name['RegionName'])
@@ -156,7 +157,8 @@ Resources:
                                               'NetworkingAccount': item['TransitGatewayOwnerId'],
                                               'CustomerAccount': item['ResourceOwnerId'],
                                               'TGW-Attachment': item['TransitGatewayAttachmentId'],
-                                              'BytesIn': cwitem['Values']
+                                              'BytesIn': cwitem['Values'],
+                                              'Region': region_name['RegionName']
                                           }
                               
                                   response_out = metrics(cw_client, 'BytesOut', item)
@@ -233,7 +235,6 @@ Resources:
                       aws_secret_access_key=credentials['SecretAccessKey'],
                       aws_session_token=credentials['SessionToken']
                   )
-                  print(f"role retrived {service}")
                   return client
               
               except ClientError as e:
@@ -266,8 +267,6 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME: !Ref DestinationBucket
-          REGION: !Ref "AWS::Region"
-          ACCOUNT_ID: AWS::AccountId
           ROLENAME: !Ref MultiAccountRoleName
           CRAWLER_NAME: !Ref Crawler
           TABLE: !Ref CFDataName

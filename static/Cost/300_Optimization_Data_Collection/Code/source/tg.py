@@ -29,10 +29,10 @@ def lambda_handler(event, context):
         regions = get_supported_regions()
         for region_name in regions: 
             print(region_name)
-            #import pdb; pdb.set_trace()
+            
             try:
                 cw_client = assume_role('cloudwatch', account_id, region_name['RegionName'])
-                ec2_client = assume_role('ec2', account_id, region_name['RegionName'])
+                ec2_client = assume_role('ec2', account_id, )
                 tgw_attachment_results = []
                 final_result = []
                 list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
@@ -46,14 +46,15 @@ def lambda_handler(event, context):
                     print(response_in)
                     
                     with open("/tmp/data.json", "w") as f:
-                        
+                        region_name['RegionName']
                         for cwitem in response_in['MetricDataResults']:
                             cw_results = {
                                     'TGW': item['TransitGatewayId'],
                                     'NetworkingAccount': item['TransitGatewayOwnerId'],
                                     'CustomerAccount': item['ResourceOwnerId'],
                                     'TGW-Attachment': item['TransitGatewayAttachmentId'],
-                                    'BytesIn': cwitem['Values']
+                                    'BytesIn': cwitem['Values'],
+                                    'Region': region_name['RegionName']
                                 }
                     
                         response_out = metrics(cw_client, 'BytesOut', item)
