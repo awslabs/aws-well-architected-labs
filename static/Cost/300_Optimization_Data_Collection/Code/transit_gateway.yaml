@@ -174,7 +174,7 @@ Resources:
                               s3.upload_file(
                                   "/tmp/data.json",
                                   bucket,
-                                  f"{os.environ['TABLE']}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name}.json")
+                                  f"{os.environ['TABLE']}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
 
                       except Exception as e:
                           # Send some context about this error to Lambda Logs
