@@ -34,6 +34,10 @@ cid-cmd -vv deploy \
   --view-compute-optimizer-ec2-instance-lines-s3FolderPath 's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_ec2_instance'
 ```
 
+After deployment you will need to set up a daily refresh of following dataset:
+* [compute_optimizer_all_options](https://quicksight.aws.amazon.com/sn/data-sets/compute_optimizer_all_options/view) 
+Go to Refresh tab, click 'Add New Schedule' and hit 'Save'
+
 
 ### Update via CID tool
 
