@@ -9,7 +9,7 @@ your_bucket_name = sys.argv[2]
 
 client = boto3.client('s3')
 
-mods = ["ecs-chargeback-data/", "rds_metrics/rds_stats/", "budgets/", "rightsizing/","optics-data-collector/ami-data/","optics-data-collector/ebs-data/", "optics-data-collector/snapshot-data/","optics-data-collector/ta-data/", "Compute_Optimizer/Compute_Optimizer_ec2_instance/", "Compute_Optimizer/Compute_Optimizer_auto_scale/", "Compute_Optimizer/Compute_Optimizer_lambda/", "Compute_Optimizer/Compute_Optimizer_ebs_volume/", "reserveinstance/", "savingsplan/"]
+mods = ["ecs-chargeback-data/", "rds_metrics/rds_stats/", "budgets/", "rightsizing/","optics-data-collector/ami-data/","optics-data-collector/ebs-data/", "optics-data-collector/snapshot-data/","optics-data-collector/ta-data/", "Compute_Optimizer/Compute_Optimizer_ec2_instance/", "Compute_Optimizer/Compute_Optimizer_auto_scale/", "Compute_Optimizer/Compute_Optimizer_lambda/", "Compute_Optimizer/Compute_Optimizer_ebs_volume/", "reserveinstance/", "savingsplan/", "transitgateway/"]
 
 for mod in mods:
     print(mod)
