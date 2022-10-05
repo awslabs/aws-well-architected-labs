@@ -12,7 +12,7 @@ Parameters:
     Default: transitgateway
   DatabaseName:
     Type:  String
-    Description: Default CUR database name
+    Description: Name of the Athena database to hold lambada information
     Default: optimization_data
     MinLength: 1
   CURTable:
@@ -24,8 +24,7 @@ Parameters:
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
   GlueRoleArn:
     Type: String
-    Default: "cron(30 12 1 * ? *)"
-    Description: Cloud watch event Schedule to trigger the lambda
+    Description: ARN of the IAM role deployed to use for glue.
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
