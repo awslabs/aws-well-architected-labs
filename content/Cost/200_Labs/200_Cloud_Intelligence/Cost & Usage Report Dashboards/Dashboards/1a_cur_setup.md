@@ -27,8 +27,11 @@ If you have a Cost & Usage Report that meets this criteria you can use it, if no
 
 ## CUR Deployment
 Please follow one of the options bellow.
-### Option 1. Deploy CUR and CIDs into dedicated Linked Account with Automation (Suggested)
-Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards in an account other than your management (payer) account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). You will need a dedicated Linked (data collection) Account setup and ready to go.
+### Option 1. Deploy CUR with CFN template (Suggested)
+This option supports creation of CUR in multiple usecases:
+1. Deploying CUR in a single account.
+2. Deploying CUR in One account (linked or management/payer) and replication to another account where you want to install CUR-based Cloud Intelligence Dashboards. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). You will need a dedicated Linked (data collection) Account setup and ready to go.
+3. Deploying CUR in multiple linked account and aggregation into one. This option is useful when you do not have access to Management (payer) account and you want to have a dashboard for multiple linked accounts belonging to one Buisiness Unit. 
 {{%expand "Click here to continue with Cloud Formation Deployment" %}}
 
 We recommend that you install the Dashboards in a dedicated AWS Account that is not your management (payer) account(s). You will still create a Cost & Usage Report (CUR) in each management (payer) account which will be delivered to an S3 bucket in that account. The CloudFormation templates below will setup S3 replication to the linked account (data collection account) where you will deploy the dashboards. This works whether you have one or many management (payer) accounts.
@@ -448,6 +451,77 @@ Sync existing objects from CUR S3 bucket to S3 bucket in Data Collection Account
 After performing this step in each management (payer) account S3 bucket in Data Collection Account will contain CUR data from all payer accounts under respective prefixes.
 
 Proceed to the next step to setup QuickSight in your linked (data collection) account.
+{{% /expand%}}
+
+
+{{% /expand%}}
+
+
+## Additional Steps
+These steps are not required if you will use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment on the next step.
+
+### Configure Athena
+{{%expand "Click here to expand step by step instructions" %}}
+
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. 
+
+To get Athena warmed up:
+
+1. From the services list, choose **S3**
+
+1. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
+
+1. From the services list, choose **Athena**
+
+1. Select **Get Started** to enable Athena and start the basic configuration
+
+1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
+
+1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+1. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
+
+1. This s3 bucket results location must be available for QuickSight. Please note this bucket name, you will need it on the next step.
+
+{{% /expand%}}
+
+## Prepare Glue Crawler
+If you configured the crawler already using Option 2 on this page, you can skip this step. This step is also not required if you use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment
+
+{{%expand "Click here to expand step by step instructions" %}}
+
+These actions should be done in Data Collection Account
+
+1. Open AWS Glue Service in AWS Console in the same region where S3 bucket with aggregated CUR data is located and go to Crawlers section
+2. Click Add Crawler
+3. Specify Crawler name and click Next
+4. In Specify crawler source type leave settings by default. Click Next
+
+![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
+
+5. In Add a data store select S3 bucket name with aggregated CUR data and add following exclusions **.zip, **.json, **.gz, **.yml, **.sql, **.csv, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object. Click Next
+
+![Images/glue_2.png](/Cost/200_Cloud_Intelligence/Images/glue_2.png?classes=lab_picture_small)
+
+6. In Add another data store leave No by default. Click Next
+
+7. In Choose an IAM role select Create an IAM role and provide role name. Click Next
+
+![Images/glue_1.png](/Cost/200_Cloud_Intelligence/Images/glue_1.png?classes=lab_picture_small)
+
+8. In Create a schedule for this crawler select Daily and specify Hour and Minute for crawler to run
+
+9. In Configure the crawler’s output choose Glue Database in which you’d like crawler to create a table or add new one. Select Create a single schema for each S3 path checkbox. Select Add new columns only and Ignore the change and don’t update the table in the data catalog in Configuration options. Click Next 
+
+*Please make sure Database name doesn’t include ‘-’ character*
+
+![Images/glue_4.png](/Cost/200_Cloud_Intelligence/Images/glue_4.png?classes=lab_picture_small)
+
+10. Crawler configuration should look as on the screenshot below. Click Finish
+
+11. Resume deployment methodoly of choice from previous page. 
 {{% /expand%}}
 
 
