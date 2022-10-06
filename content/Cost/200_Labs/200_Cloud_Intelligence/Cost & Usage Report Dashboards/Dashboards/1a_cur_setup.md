@@ -454,9 +454,6 @@ Proceed to the next step to setup QuickSight in your linked (data collection) ac
 {{% /expand%}}
 
 
-{{% /expand%}}
-
-
 ## Additional Steps
 These steps are not required if you will use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment on the next step.
 
