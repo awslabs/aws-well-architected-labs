@@ -492,6 +492,15 @@ AWS Budgets allows you to set custom budgets to track your cost and usage from t
 
 * [Test your Lambda](#testing-your-deployment) 
 {{% /expand%}}
+
+{{%expand "AWS Transit Gateway Chargeback" %}}
+## AWS Transit Gateway
+
+AWS Transit Gateway allows you to connect Cloud Watch data and Cost and Usage Report data to chargeback AWS Transit Gateway charges to the usage accounts. allocating cost from central networking account. This module will get AWS Transit Gateway data transfer bytes in and bytes out for all the regions and calculate proportion of the data usage. The proportion is used to chargeback the total cost calculated at networking account level. Data will be separated by AWS Transit Gateway attachment, and partitioned by year, month. Saved queries are available to create views for dashboard. 
+
+* [Test your Lambda](#testing-your-deployment) 
+{{% /expand%}}
+
 ## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -502,6 +511,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 - **ECS Chargeback Data** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
 - **RDS Utilization Data module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
 - **AWS Budgets Export module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
+- **AWS Transit Gateway Chargeback module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
 - **Cost Explorer Rightsizing Recommendations** module -> **Rightsize-Data-Lambda-Function-OptimizationDataCollectionStack** Lambda function
 - **Compute Optimizer Collector** module -> **ComputeOptimizer-Trigger-Export** Lambda function
 - **AWS Organization Data Export** module -> **Lambda_Organization_Data_OptimizationDataCollectionStack** Lambda function

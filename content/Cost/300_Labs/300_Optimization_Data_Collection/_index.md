@@ -10,12 +10,14 @@ hidden: false
 May 2022
 
 ## Owners
-- Stephanie Gooch, Commercial Architect (AWS)
+- Stephanie Gooch, Sr. Commercial Architect (AWS)
 - Yuriy Prykhodko, Sr. Technical Account Manager (AWS)
 - Iakov Gan, Sr. Technical Account Manager (AWS)
 
 ## Contributors  
 - Andy Brown, OPTICS Manager - Commercial Architects IBUs
+- Xianshu Zeng, OPTICS Commercial Architect
+
 
 ## Feedback
 If you wish to provide feedback on this lab, report an error, or you have a suggestion, please email: costoptimization@amazon.com
@@ -36,6 +38,8 @@ The main sources of the data used in optional modules:
 * **RDS Utilization Module** collects [Amazon Relational Database Service](https://aws.amazon.com/rds/) utilization data
 * **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
 * **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
+* **AWS Transit Gateway Chargeback Module** uses [AWS Transit Gateway Chargeback Module](https://aws.amazon.com/transit-gateway/)
+
 
 Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. Detailed description of each module can be found [here](../3_data_collection_modules).
 

@@ -24,6 +24,7 @@ Metadata:
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
           - IncludeBudgetsModule
+          - IncludeTransitGatewayModule
     ParameterLabels:
       DestinationBucket:
         default: 'Destination S3 bucket'
@@ -55,6 +56,8 @@ Metadata:
         default: 'Include AWS Organization Data Collection Module' 
       IncludeBudgetsModule:
         default: 'Include AWS Budgets Collection Module'
+      IncludeTransitGatewayModule:
+        default: 'Include AWS TransitGateway Collection Module'
 Mappings:
   RegionMap:
        eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
@@ -151,6 +154,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no" 
+  IncludeTransitGatewayModule: 
+    Type: String
+    Description: Collects AWS TransitGateway data
+    AllowedValues:
+      - "yes"
+      - "no" 
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -175,6 +184,7 @@ Outputs:
           - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployTransitGatewayModule, !Sub "${TransitGatewayModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals 
     - !Ref IncludeTAModule
@@ -200,6 +210,9 @@ Conditions:
   DeployBudgetsModule: !Equals
     - !Ref IncludeBudgetsModule
     - "yes"
+  DeployTransitGatewayModule: !Equals
+    - !Ref IncludeTransitGatewayModule
+    - "yes"
   DeployPricingModule: !Or
     - !Condition DeployInventoryCollectorModule
     - !Condition DeployRDSUtilizationModule
@@ -210,6 +223,7 @@ Conditions:
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
     - !Condition DeployRDSUtilizationModule
+    - !Condition DeployTransitGatewayModule
   ComputeOptimizerRegionsIsEmpty: !Equals
     - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
     - ""
@@ -408,6 +422,17 @@ Resources:
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
+  TransitGatewayModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployTransitGatewayModule
+    Properties:
+      Parameters:
+          DestinationBucket: !Ref S3Bucket
+          DestinationBucketARN: !GetAtt S3Bucket.Arn 
+          GlueRoleArn: !GetAtt GlueRole.Arn 
+          MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
+          RolePrefix: !Ref RolePrefix
+      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/transit_gateway_dev.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
@@ -425,5 +450,6 @@ Resources:
                   - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+                  - !If [DeployTransitGatewayModule, !Sub "${TransitGatewayModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
   
 
