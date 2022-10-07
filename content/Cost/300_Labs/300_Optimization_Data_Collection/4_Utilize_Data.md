@@ -364,8 +364,6 @@ Now your views are created you can run your report
 
 
 #### Example Output
-
-
 ![Images/Example_output.png](/Cost/300_Optimization_Data_Collection/Images/Example_output.png)
 Breakdown: 
 * task_usage: total memory resources reserved (in GBs) by all tasks over the billing period (i.e. – monthly)
@@ -374,6 +372,30 @@ Breakdown:
 * Services: Name of service 
 * servicearn: Arn of service
 * Value: Value of specified tag for the ECS service (could be App, TeamID, etc?)
+{{% /expand%}}
+
+### AWS Transit Gateway Chargeback
+AWS Transit Gateway data transfer cost billed at the central networking account is allocated proportionally to the end usage accounts. The proportion is calculated by connecting with AWS CloudWatch bytes in bytes out data at each Transit Gateway attachement level. The total central data transfer cost is calculated at the central networking account with Cost and Usage Report. The chargeback amount is the corresponding proportional cost of the total central amount. 
+
+
+{{%expand "Athena Configuration" %}}
+
+1. Navigate to the Athena service and open **Saved Queries**. 
+2. Select your database where you have your Cost and Usage Report 
+3. In **Saved Queries** find **"tgw_chargeback_cur"**" 
+4. Replace **< CURDatabase >** with your database name in the tgw_chargeback_cur. For example: 
+
+``` "cur"."cost_and_usage_report" ```
+
+The Cloud Watch data collection is automated for all the regions. However, if you are destined to only chargeback to a subset of selected regions, you need to specify it in "product_location LIKE '%US%'" line. 
+
+5. Click the **Run** button
+6. In **Saved Queries** find **"tgw_chargeback_cw"**" 
+7. Select the "optimization data" database
+8. Replace **< CURDatabase >**  with your database name in the tgw_chargeback_cw.
+9. Click the **Run** button
+
+Now your views are created and you can run your report
 {{% /expand%}}
 
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
