@@ -18,7 +18,7 @@ You will use the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-applicatio
 Skills learned will help you secure your AWS account in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 The AWS Lambda function is triggered by a regular scheduled event in Amazon CloudWatch Events.
-Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent the designated email contact via Amazon SNS. A check is also performed for unused roles and unused permissions identifed by IAM Access Analyzer.
+Once the Lambda function runs to check the status of the AWS IAM Users and associated IAM Access Keys the results are sent to the designated email contact via Amazon SNS. A check is also performed for unused roles and unused permissions identifed by IAM Access Analyzer.
 The logs from the AWS Lambda function are captured in Amazon CloudWatch Logs for review and trouble shooting purposes.
 
 ![architecture](/Security/200_Automated_IAM_User_Cleanup/Images/architecture.png)
