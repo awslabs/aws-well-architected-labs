@@ -51,7 +51,7 @@ There are two main reasons for this:
 
 {{% /expand%}}
 
-### My Athena database has tables in call ed year and payer
+### My Athena database has tables in called year and payer
 {{%expand "Click here to expand step by step instructions" %}}
 
 We have upgraded the lab to work for multi-payers. For this we added a new partition of payer_id=your_payer_id which can upset the crawler.
