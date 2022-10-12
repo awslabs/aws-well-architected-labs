@@ -230,7 +230,6 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
-      #Configuration: "{\"Version\":1.0,\"Grouping\":{\"TableGroupingPolicy\":\"CombineCompatibleSchemas\"}}"
   AthenaQuery:
       Type: AWS::Athena::NamedQuery
       Properties:
