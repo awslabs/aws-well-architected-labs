@@ -14,7 +14,6 @@ mods = ["ecs-chargeback-data/", "rds_metrics/rds_stats/", "budgets/", "rightsizi
 for mod in mods:
     print(mod)
     response = client.list_objects_v2(Bucket= your_bucket_name, Prefix = mod)
-    #import pdb; pdb.set_trace()
     try:
         for key in response['Contents']:
             source_key = key["Key"]

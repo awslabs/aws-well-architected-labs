@@ -31,7 +31,7 @@ Metadata:
       ManagementAccountRole:
         default: 'Management account role'
       ManagementAccountID:
-        default: 'Comma Delimited list ofAccount IDs for all Management Account IDs'
+        default: 'Comma Delimited list of Account IDs for all Management Account IDs'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
       Schedule:

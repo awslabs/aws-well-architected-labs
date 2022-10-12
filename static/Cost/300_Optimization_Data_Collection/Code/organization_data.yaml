@@ -225,7 +225,6 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource: "*"
-                  #Ref: ManagementAccountRole
         - PolicyName: "S3-Access"
           PolicyDocument:
             Version: "2012-10-17"

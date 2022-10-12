@@ -123,7 +123,6 @@ Resources:
           BENEFITS_CONSIDERED = True
           GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
           BUCKET = os.environ['S3_BUCKET']
-          #ROLE_ARN = os.environ['ROLE_ARN']
           PATH = os.environ['PATH']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
 
