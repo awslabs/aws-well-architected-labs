@@ -112,7 +112,7 @@ To find your QuickSight username:
 
 1. Update your **CURBucketPath** and set the **CURisAggregated** flag to `yes`;
    
-2. Select the Dashboards you want to install. We recommend deploying all three.
+2. Select the Dashboards you want to install. We recommend deploying all three CUR-based dashboards; Cost Intelligence Dashboard, CUDOS, and the KPI Dashboard.
 
 3. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
@@ -120,7 +120,7 @@ To find your QuickSight username:
 
 5.  You will see the stack will start in **CREATE_IN_PROGRESS** 
 
-**NOTE:** This step can take 5mins
+**NOTE:** This step can take up to 7 minutes. 
     ------------ | -------------
 
 1. Once complete, the stack will show **CREATE_COMPLETE**
@@ -144,7 +144,7 @@ If you see no data please check the following:
 {{% /expand%}}
 
 ## Advanced Setup
-If you want to deploy the Cloud Intelligence Dashboards in an account other than your Management (Payer) Account, or wish to deploy the Cloud Intelligence Dashboards on top of multiple Management (Payer) Accounts, use this method. 
+If you want to deploy the Cloud Intelligence Dashboards in an account other than your Management (Payer) Account, or wish to deploy the Cloud Intelligence Dashboards on top of multiple Management (Payer) Accounts or multiple linked accounts, use this method. 
 
 {{%expand "Click here to continue with Advanced Setup" %}}
 
@@ -285,7 +285,7 @@ The guide in this section will only work if you have already deployed the CUR re
 ## Enable QuickSight 
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
-1. Log into your AWS Account and search for **QuickSight** in the list of Services
+1. Log into your Destination Linked Account and search for **QuickSight** in the list of Services
 
 2. You will be asked to **sign up** before you will be able to use it
 

@@ -12,7 +12,7 @@ If you are unable to deploy using the CloudFormation automation steps earlier in
 ### Option 1: Deploy CIDs with Command Line Tool
 {{%expand "Click here to continue with command line tool deployment" %}}
 
-This option walks you through setting up a CUR file in the Management (payer) Account and configuring the account to have the CIDs deployed there. This option will create a new Cost & Usage Report (CUR) or reuse one you already have. 
+This option walks you through setting up a CUR file in the Management (payer) Account and configuring the prerequisites to have the CIDs deployed there. This option will create a new Cost & Usage Report (CUR) or reuse one you already have. 
 
 This option is okay for testing but we recommend you deploy the Cloud Intelligence Dashboards in a dedicated acount other than the management (payer) account (option 1 above). This way you can effectivly managed the access and avoid having unnecessary users in your management (payer) account. If you still want to use this option, please apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege/) access to your payer account.
 
@@ -97,7 +97,7 @@ To get Athena warmed up:
 Before you can deploy the CIDs, you must wait for the first Cost and Usage Report to be delivered to your Amazon S3 bucket.
 {{% /notice %}}
 
-To streamline and automate integration of your Cost and Usage Reports with Athena, AWS provides an AWS CloudFormation template with several key resources along with the reports you setup for Athena integration. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
+In this step, we will be using an AWS provided CloudFormation template that automated integrating your CUR with Athena. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
 
 1. From the services list, choose **S3**
 
