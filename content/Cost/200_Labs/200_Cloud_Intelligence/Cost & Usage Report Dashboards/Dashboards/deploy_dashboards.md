@@ -13,6 +13,10 @@ pre: "<b>1 </b>"
 
 ## Contributors
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
+---
+
+## Introduction
+There are two primary method for deploying the Cloud Intelligence Dashboard listed below; *basic* and *advanced*. Both methods use CloudFormation templates to automate the setup. If you wish to use a command line tool or to deploy manually, see the alternative deployment methods section. 
 
 ## Basic Setup
 If you want to deploy the Cloud Intelligence Dashboards into your Management (Payer) Account, follow these steps. 
@@ -368,6 +372,12 @@ If you see no data please check the following:
 
 {{% /expand%}}
 
+## Alternative Setup
+If you do not want to use CloudFormation to setup your dashboards, you have the option of using our command line tool or deploying manually. 
+
+{{% button href="../alternative_deployments" %}}Visit Guide{{% /button %}}
+
+---
 
 
 

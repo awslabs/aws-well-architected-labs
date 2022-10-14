@@ -34,7 +34,7 @@ To pull the latest version of the dashboard from the public template please use 
 - Visit our [customizations lab](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/customizations/) to learn some ways to customize your dashboards. 
 - Having trouble? Visit [our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/). 
 
-
+---
 
 {{< prev_next_button link_prev_url="../deploy_dashboards" link_next_url="../alternative_deployments" />}}
 
