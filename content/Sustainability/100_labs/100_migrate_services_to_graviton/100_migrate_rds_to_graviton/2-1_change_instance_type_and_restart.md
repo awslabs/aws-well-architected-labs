@@ -6,11 +6,11 @@ weight: 3
 pre: "<b>2.1 </b>"
 ---
 ---
-- [ ] [Migration Methodologies]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/1_migration_methodologies.md" >}})
-- [x] [Lab 1 - Change Database Instance Type]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-1_change_instance_type_and_restart.md" >}})
-- [ ] [Lab 2 - Promote Read Replica]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-2_promote_read_replica.md" >}})
-- [ ] [Lab 3 - Failover to Read Replica]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-3_failover_to_read_replica.md" >}})
-- [ ] [Cleanup]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/cleanup.md" >}})
+- [ ] [Migration Methodologies]({{< ref "./1_migration_methodologies.md" >}})
+- [x] [Lab 1 - Change Database Instance Type]({{< ref "./2-1_change_instance_type_and_restart.md" >}})
+- [ ] [Lab 2 - Promote Read Replica]({{< ref "./2-2_promote_read_replica.md" >}})
+- [ ] [Lab 3 - Failover to Read Replica]({{< ref "./2-3_failover_to_read_replica.md" >}})
+- [ ] [Cleanup]({{< ref "./cleanup.md" >}})
 
 ## Overview
 
@@ -36,7 +36,7 @@ Go to the [RDS Console](https://console.aws.amazon.com/rds/) and create a MySQL 
 
 It will take a few minutes to create the database and for it to become available, click the refresh button in the AWS RDS console to get the latest status.
 
-![Lab 1 Database Creation](/Sustainability/100_migrate_rds_to_graviton/lab-1/lab-1_create_database.png)
+![Lab 1 Database Creation](./lab-1/lab-1_create_database.png)
 
 
 ## Change the instance type from X86 to Graviton
