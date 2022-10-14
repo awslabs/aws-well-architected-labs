@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 ---
 
 ## Deployment Options
-There are 2 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 2 options to deploy the TAO Dashboard.
 
 ### Option 1: Automation Scripts Deployment
 The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
