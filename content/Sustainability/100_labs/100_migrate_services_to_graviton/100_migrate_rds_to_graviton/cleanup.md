@@ -6,11 +6,11 @@ weight: 6
 pre: "<b>3 </b>"
 ---
 
-- [ ] [Migration Methodologies]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/1_migration_methodologies.md" >}})
-- [ ] [Lab 1 - Change Database Instance Type]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-1_change_instance_type_and_restart.md" >}})
-- [ ] [Lab 2 - Promote Read Replica]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-2_promote_read_replica.md" >}})
-- [ ] [Lab 3 - Failover to Read Replica]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/2-3_failover_to_read_replica.md" >}})
-- [x] [Cleanup]({{< ref "content/Sustainability/100_Labs/100_migrate_rds_to_graviton/cleanup.md" >}})
+- [ ] [Migration Methodologies]({{< ref "./1_migration_methodologies.md" >}})
+- [ ] [Lab 1 - Change Database Instance Type]({{< ref "./2-1_change_instance_type_and_restart.md" >}})
+- [ ] [Lab 2 - Promote Read Replica]({{< ref "./2-2_promote_read_replica.md" >}})
+- [ ] [Lab 3 - Failover to Read Replica]({{< ref "./2-3_failover_to_read_replica.md" >}})
+- [x] [Cleanup]({{< ref "./cleanup.md" >}})
 
 
 ## In the RDS Console delete all the created databases
@@ -38,7 +38,7 @@ Normally it would be highly recommended to create a final snapshot.
 
 ![Delete Aurora X86](/Sustainability/100_migrate_rds_to_graviton/clean-up/clean-up_delete_aurora_x86.png)
 
-### Delete the Lb 3 Aurora Graviton database
+### Delete the Lab 3 Aurora Graviton database
 
 ![Delete Aurora Graviton](/Sustainability/100_migrate_rds_to_graviton/clean-up/clean-up_delete_aurora_graviton.png)
 
