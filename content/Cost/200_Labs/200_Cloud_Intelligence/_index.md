@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-May 2022
+August 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -18,9 +18,17 @@ This Well Architected lab is a consolidation of labs and AWS workshops formerly 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
 ## Get Help
-[Ask your questions](https://0s62bmu3aj.execute-api.us-east-1.amazonaws.com/PROD/link/tracker?LinkID=270894ed-12b6-27bc-74f3-124130ceb403&URL=https%3A%2F%2Frepost.aws%2Ftags%2FTANKNkVH-tSUa2jYNx4F159g%2Fcloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
+[Ask your questions](https://repost.aws/tags/TANKNkVH-tSUa2jYNx4F159g/cloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
 
 [Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
+
+## Leadership
+The Cloud Intelligence Dashboards are managed by:
+
+- Yuriy Prykhodko, AWS Principal Technical Account Manager (founder)
+- Aaron Edell, Global Head of Business, Cloud Intelligence Dashboards (founder)
+- Iakov Gan, AWS Sr. Technical Account Manager
+- Oleksandr Moskalenko, AWS Sr. Technical Account Manager
 
 ## Introduction
 Do you know how much you’re spending per hour on AWS Lambda? How about per S3 bucket? How do you know buying Savings Plan or using Spot Instances is saving you money? Does your team know how much their application costs to run on AWS? Visualizing and understanding your cost and usage data is critical to good cloud financial management and accountability.
@@ -70,7 +78,25 @@ The Cloud Intelligence Dashboards include (but are not limited to) the following
 
 ### Cost Intelligence Dashboard (CID)
 
-The Cost Intelligence Dashboard is a customizable and accessible dashboard to help create the foundation of your own cost management and optimization tool. Executives, directors, and other individuals within the CFO's line of business or who manage cloud financials for an organization will find the Cloud Intelligence Dashboard easy to use and relevant to their use cases. Little to no technical knowledge or understanding of AWS Services is required. Out-of-the-box benefits of the CID include (but are not limited to):
+## Authors
+- Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
+
+## Contributors 
+- Arun Santhosh, Specialist SA (Amazon QuickSight)
+- Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
+- Aaron Edell, Global Head of Business - Cloud Intelligence Dashboards
+- Timur Tulyaganov, AWS Principal Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
+- Aidin Khosrowshahi, AWS Sr. Technical Account Manager
+
+{{< rawhtml >}}
+<video width="600" height="450" controls>
+  <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/DashboardCostIntelligence.mp4" type="video/mp4">
+  Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
+</video>
+{{< /rawhtml >}}
+
+The Cost Intelligence Dashboard is a customizable and accessible dashboard to help create the foundation of your own cost management and optimization (FinOps) tool. Executives, directors, and other individuals within the CFO's line of business or who manage cloud financials for an organization will find the Cloud Intelligence Dashboard easy to use and relevant to their use cases. Little to no technical knowledge or understanding of AWS Services is required. Out-of-the-box benefits of the CID include (but are not limited to):
 
 * Create chargeback or showback reports for internal business units, accounts, or cost centers.
 * Track how Savings Plans (SP), Reserved Instances (RI), and Spot Instance usage has impacted your unit metrics such as your average hourly cost of Amazon EC2.
@@ -81,6 +107,12 @@ The Cost Intelligence Dashboard is a customizable and accessible dashboard to he
 - [Explore a sample Cost Intelligence Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cid) 
 
 ### CUDOS Dashboard
+
+## Authors
+
+- Timur Tulyaganov, AWS Principal Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
+
 The CUDOS Dashboard is an in-depth, granular, and recommendation-driven dashboard to help customers dive deep into cost and usage and to fine-tune efficiency. Executives, directors, and other individuals within the CIO or CTO line of business or who manage DevOps and IT organizations will find the CUDOS Dashboard highly detailed and tailored to solve their use cases. Out-of-the-box benefits of the CUDOS dashboard include (but are not limited to):
 
 * Use the built-in tag explorer to group and filter cost and usage by your tags.
@@ -109,6 +141,19 @@ Trusted Advisor Organizational (TAO) requires the management account in your org
 - [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
 ### KPI Dashboard
+
+## Authors
+- Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
+
+## Contributors 
+- Aaron Edell, Global Head of Business - Cloud Intelligence Dashboards
+- Alex Head, OPTICS Manager 
+- Georgios Rozakis, AWS Technical Account Manager
+- Oleksandr Moskalenko, Sr. AWS Technical Account Manager
+- Timur Tulyaganov, AWS Principal Technical Account Manager
+- Yash Bindlish, AWS Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
+
 The KPI and Modernization Dashboard helps your organization combine DevOps and IT infrastructure with Finance and the C-Suite to grow more efficiently and effectively on AWS. This dashboard lets you set and track modernization and optimization goals such as percent OnDemand, Spot adoption, and Graviton usage. By enabling every line of business to create and track usage goals, and your cloud center of excellence to make recommendations organization-wide, you can grow more efficiently and innovate more quickly on AWS. Out-of-the-box benefits of the KPI dashboard include (but are not limited to):
 
 * Track percent on-demand across all your teams.
@@ -148,7 +193,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Aaron Edell, Global Head of Business and GTM (Cloud Intelligence Dashboards)
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 - Timur Tulyaganov, AWS Principal Technical Account Manager
-- Yuriy Prykhodko, AWS Sr. Technical Account Manager
+- Yuriy Prykhodko, AWS Principal Technical Account Manager
 - Iakov Gan, Senior Technical Account Manager
 
 ## Contributors
@@ -158,10 +203,11 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Cristian Popa, Sr. Technical Account Manager
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 - Lakhvinder Singh Gill, Enterprise Support Lead
-- Manik Chopra, Senior Technical Account Manager
+- Manik Chopra, Principal Technical Account Manager
 - Meredith Holborn, Technical Account Manager
-- Nisha Notani, Technical Account Manager
-- Oleksandr Moskalenko, Technical Account Manager
-- William Hughes, Technical Account Manager
+- Nisha Notani, Sr. Technical Account Manager
+- Oleksandr Moskalenko, Sr. Technical Account Manager
+- William Hughes, Sr. Solutions Architect
+- Thomas Buatois, Cloud Infrastructure Architect
 
 {{< prev_next_button link_next_url="./cost-usage-report-dashboards/" button_next_text="Next" first_step="true" />}}

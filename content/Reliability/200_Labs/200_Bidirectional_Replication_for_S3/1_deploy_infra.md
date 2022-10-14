@@ -45,7 +45,7 @@ You must use the same **NamingPrefix** parameter for **both** CloudFormation tem
       * Must be string consisting of lowercase letters, numbers, periods (.), and dashes (-) between five and 40 characters
       * This will be part of your Amazon S3 bucket name, which must be unique across all of S3.
       * Record this value in an accessible place -- you will need it again later in the lab.
-1. Click **Next** until the last page
+1. Click **Next** on the following pages until the page that requires you to acknowledge IAM resouces
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 1. You can go ahead and create the _west_ bucket before this CloudFormation stack completes
@@ -70,7 +70,7 @@ You must use the same **NamingPrefix** parameter for **both** CloudFormation tem
 1. For **Stack name** use **`S3-CRR-lab-west`**
 1. Under **Parameters** enter a **NamingPrefix**
       * You must use the _same_ value as you did previously
-1. Click **Next** until the last page
+1. Click **Next** on the following pages until the page that requires you to acknowledge IAM resouces
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 

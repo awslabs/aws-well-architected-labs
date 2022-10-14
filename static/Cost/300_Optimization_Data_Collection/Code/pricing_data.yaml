@@ -65,10 +65,12 @@ Resources:
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
                 Resource: "arn:aws:logs:*:*:*"
-  LambdaFunction:
+  EC2LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Architectures: [arm64]
@@ -142,15 +144,31 @@ Resources:
       Targets:
         - Arn:
             Fn::GetAtt:
-              - LambdaFunction
+              - EC2LambdaFunction
               - Arn
-          Id: WeeklyTriggerForEBSUtilization
-  EventPermission:
+          Id: WeeklyTriggerForEC2Pricing
+        - Arn:
+            Fn::GetAtt:
+              - RDSLambdaFunction
+              - Arn
+          Id: WeeklyTriggerForRDSPricing
+  EC2EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName:  
           Fn::GetAtt:
-              - LambdaFunction
+              - EC2LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  RDSEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - RDSLambdaFunction
               - Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
@@ -163,11 +181,11 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: region_names
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE `region_names`(
-        `region` string, 
-        `regionname` string, 
-        `endpoint` string, 
-        `protocol` string)
+        "CREATE EXTERNAL TABLE 'region_names'(
+        'region' string, 
+        'regionname' string, 
+        'endpoint' string, 
+        'protocol' string)
       ROW FORMAT DELIMITED 
         FIELDS TERMINATED BY ',' 
       STORED AS INPUTFORMAT 
@@ -187,98 +205,221 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: ec2_pricing_table
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE `ec2_pricing`(
-        `sku` string,
-        `offertermcode` string,
-        `ratecode` string,
-        `termtype` string,
-        `pricedescription` string,
-        `effectivedate` string,
-        `startingrange` string,
-        `endingrange` string,
-        `unit` string,
-        `priceperunit` double,
-        `currency` string,
-        `relatedto` string,
-        `leasecontractlength` string,
-        `purchaseoption` string,
-        `offeringclass` string,
-        `product family` string,
-        `servicecode` string,
-        `location` string,
-        `location type` string,
-        `instance type` string,
-        `current generation` string,
-        `instance family` string,
-        `vcpu` string,
-        `physical processor` string,
-        `clock speed` string,
-        `memory` string,
-        `storage` string,
-        `network performance` string,
-        `processor architecture` string,
-        `storage media` string,
-        `volume type` string,
-        `max volume size` string,
-        `max iops/volume` string,
-        `max iops burst performance` string,
-        `max throughput/volume` string,
-        `provisioned` string,
-        `tenancy` string,
-        `ebs optimized` string,
-        `operating system` string,
-        `license model` string,
-        `group` string,
-        `group description` string,
-        `transfer type` string,
-        `from location` string,
-        `from location type` string,
-        `to location` string,
-        `to location type` string,
-        `usagetype` string,
-        `operation` string,
-        `availabilityzone` string,
-        `capacitystatus` string,
-        `classicnetworkingsupport` string,
-        `dedicated ebs throughput` string,
-        `ecu` string,
-        `elastic graphics type` string,
-        `enhanced networking supported` string,
-        `from region code` string,
-        `gpu` string,
-        `gpu memory` string,
-        `instance` string,
-        `instance capacity - 10xlarge` string,
-        `instance capacity - 12xlarge` string,
-        `instance capacity - 16xlarge` string,
-        `instance capacity - 18xlarge` string,
-        `instance capacity - 24xlarge` string,
-        `instance capacity - 2xlarge` string,
-        `instance capacity - 32xlarge` string,
-        `instance capacity - 4xlarge` string,
-        `instance capacity - 8xlarge` string,
-        `instance capacity - 9xlarge` string,
-        `instance capacity - large` string,
-        `instance capacity - medium` string,
-        `instance capacity - metal` string,
-        `instance capacity - xlarge` string,
-        `instancesku` string,
-        `intel avx2 available` string,
-        `intel avx available` string,
-        `intel turbo available` string,
-        `marketoption` string,
-        `normalization size factor` string,
-        `physical cores` string,
-        `pre installed s/w` string,
-        `processor features` string,
-        `product type` string,
-        `region code` string,
-        `resource type` string,
-        `servicename` string,
-        `snapshotarchivefeetype` string,
-        `to region code` string,
-        `volume api name` string,
-        `vpcnetworkingsupport` string)
+        "CREATE EXTERNAL TABLE ec2_pricing(
+        sku string, 
+        offertermcode string, 
+        ratecode string, 
+        termtype string, 
+        pricedescription string, 
+        effectivedate string, 
+        startingrange string, 
+        endingrange string, 
+        unit string, 
+        priceperunit string, 
+        currency string, 
+        leasecontractlength string, 
+        purchaseoption string, 
+        offeringclass string, 
+        productfamily string, 
+        servicecode string, 
+        location string, 
+        locationtype string, 
+        instancetype string, 
+        currentgeneration string, 
+        instancefamily string, 
+        vcpu string, 
+        physicalprocessor string, 
+        clockspeed string, 
+        memory string, 
+        storage string, 
+        networkperformance string, 
+        processorarchitecture string, 
+        storagemedia string, 
+        volumetype string, 
+        maxvolumesize string, 
+        maxiopsvolume string, 
+        maxiopsburstperformance string, 
+        maxthroughputvolume string, 
+        provisioned string, 
+        tenancy string, 
+        ebsoptimized string, 
+        operatingsystem string, 
+        licensemodel string, 
+        groups string, 
+        groupdescription string, 
+        transfertype string, 
+        fromlocation string, 
+        fromlocationtype string, 
+        tolocation string, 
+        tolocationtype string, 
+        usagetype string, 
+        operation string, 
+        availabilityzone string, 
+        capacitystatus string, 
+        classicnetworkingsupport string, 
+        dedicatedebsthroughput string, 
+        ecu string, 
+        elasticgraphicstype string, 
+        enhancednetworkingsupported string, 
+        fromregion string, 
+        gpu string, 
+        gpumemory string, 
+        instance string, 
+        instancecapacity10xlarge string, 
+        instancecapacity12xlarge string, 
+        instancecapacity16xlarge string, 
+        instancecapacity18xlarge string, 
+        instancecapacity24xlarge string, 
+        instancecapacity2xlarge string, 
+        instancecapacity32xlarge string, 
+        instancecapacity4xlarge string, 
+        instancecapacity8xlarge string, 
+        instancecapacity9xlarge string, 
+        instancecapacitylarge string, 
+        instancecapacitymedium string, 
+        instancecapacitymetal string, 
+        instancecapacityxlarge string, 
+        instancesku string, 
+        intelavxavailable string, 
+        intelavx2available string, 
+        intelturboavailable string, 
+        marketoption string, 
+        normalizationsizefactor string, 
+        physicalcores string, 
+        preinstalledsw string, 
+        processorfeatures string, 
+        producttype string, 
+        regioncode string, 
+        resourcetype string, 
+        servicename string, 
+        snapshotarchivefeetype string, 
+        toregioncode string, 
+        volumeapiname string, 
+        vpcnetworkingsupport string)
+        ROW FORMAT SERDE 
+          'org.apache.hadoop.hive.serde2.OpenCSVSerde' 
+        WITH SERDEPROPERTIES ( 
+          'escapeChar'='\\', 
+          'quoteChar'='\"', 
+          'separatorChar'=',') 
+        STORED AS INPUTFORMAT 
+          'org.apache.hadoop.mapred.TextInputFormat' 
+        OUTPUTFORMAT 
+          'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        LOCATION
+          's3://${DestinationBucket}/${CFDataName}/ec2'
+        TBLPROPERTIES (
+          'has_encrypted_data'='false', 
+          'skip.header.line.count'='6', 
+          'transient_lastDdlTime'='1625832980')"
+  RDSLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+          - '${CFDataName}-RDS-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: !Sub "LambdaFunction to retrieve RDS ${CFDataName}"
+      Runtime: python3.8
+      Architectures: [arm64]
+      Code:
+        ZipFile: |
+          #Author Stephanie Gooch 2021
+          # Function to download RDS pricing
+          # Please reachout to costoptimization@amazon.com if there's any comments or suggestions
+
+          import json
+          import boto3
+          import urllib3
+          import urllib.request
+          import os
+          import logging
+
+          def lambda_handler(event, context):
+
+              s3=boto3.resource('s3')
+              http=urllib3.PoolManager()
+
+              url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/index.csv'
+              s3Bucket =  os.environ["BUCKET_NAME"]
+              key = f'{os.environ["DEST_PREFIX"]}/rds/rds_prices.csv'
+
+              urllib.request.urlopen(url)   #Provide URL
+              s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
+
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('YAY!')
+              }
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2880
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            !Ref DestinationBucket
+          ACCOUNT_ID: AWS::AccountId
+          DEST_PREFIX: !Ref CFDataName
+  AthenaRDSPricingTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: rds_pricing_table
+      QueryString: !Sub  
+        "CREATE EXTERNAL TABLE rds_pricing(
+        sku string, 
+        offertermcode string, 
+        ratecode string, 
+        termtype string, 
+        pricedescription string, 
+        effectivedate string, 
+        startingrange string, 
+        endingrange string, 
+        unit string, 
+        priceperunit string, 
+        currency string, 
+        relatedto string, 
+        leasecontractlength string, 
+        purchaseoption string, 
+        offeringclass string, 
+        productfamily string, 
+        servicecode string, 
+        location string, 
+        locationtype string, 
+        instancetype string, 
+        currentgeneration string, 
+        instancefamily string, 
+        vcpu string, 
+        physicalprocessor string, 
+        clockspeed string, 
+        memory string, 
+        storage string, 
+        networkperformance string, 
+        processorarchitecture string, 
+        storagemedia string, 
+        volumetype string, 
+        minvolumesize string, 
+        maxvolumesize string, 
+        enginecode string, 
+        databaseengine string, 
+        databaseedition string, 
+        licensemodel string, 
+        deploymentoption string, 
+        group string, 
+        groupdescription string, 
+        usagetype string, 
+        operation string, 
+        dedicatedebsthroughput string, 
+        enhancednetworkingsupported string, 
+        instancetypefamily string, 
+        normalizationsizefactor string, 
+        processorfeatures string, 
+        servicename string)
         ROW FORMAT SERDE
         'org.apache.hadoop.hive.serde2.OpenCSVSerde'
         WITH SERDEPROPERTIES (
@@ -289,7 +430,7 @@ Resources:
         OUTPUTFORMAT
         'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
         LOCATION
-        's3://${DestinationBucket}/${CFDataName}/ec2'
+        's3://${DestinationBucket}/${CFDataName}/rds'
         TBLPROPERTIES (
         'CrawlerSchemaDeserializerVersion'='1.0',
         'CrawlerSchemaSerializerVersion'='1.0',

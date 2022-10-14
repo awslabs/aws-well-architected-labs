@@ -19,31 +19,24 @@ Replication is configured via _rules_. There is no rule for bi-directional repli
 1. Click on the name of the _east_ bucket
       * if you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
 1. Click on the **Management** tab (Step A in screenshot)
-1. Click **Replication** (Step B in screenshot)
-1. Click **+ Add Rule** (Step C in screenshot)
+1. Click **Create replication rule** (Step B in screenshot)
 
       ![AddRule](/Reliability/200_Bidirectional_Replication_for_S3/Images/AddRule.png)
 
-1. For **Set source** select **Entire bucket**
-1. For **Replication criteria** leave **Replicate objects encrypted with AWS KMS** _not_ selected
-      * Our objects are encrypted using server-side encryption
-      * However since you used SSE-S3 encryption, you do not need to select this option and do not need to provide a KMS key
-      * SSE-S3 uses KMS keys, but these managed by Amazon S3 for the user
-      * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
-1. Click **Next**
-1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _west_ bucket from the drop-down
+1. For **Replication rule name** enter `east to west`
+1. Leave **Status** set to **enabled**
+1. For **Choose a rule scope** select **Apply to all objects in the bucket**
+1. For **Destination** leave **Choose a bucket in this account** selected, click **Browse S3** and select the name of the _west_ bucket from the drop-down
       * If you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
-1. Click **Next**
-1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-east-2** from the search results box
+1. For **IAM Role** leave **Choose from existing IAM roles** selected, and select **\<your-naming-prefix\>-S3-Replication-Role-us-east-2** from the search results box
       * (If you chose a different region as your _east_ region, then look for that region at the end of the IAM role name)
-1. For **Rule name** enter `east to west`
-1. Leave **Status** set to **enabled**
-1. Click **Next**
-1. Review the configuration
+1. For **Encryption**, select **Replicate objects encrypted with AWS KMS** and leave **AWS managed key (aws/s3)** selected.
 1. Click **Save**
 
-The screen should say **Replication configuration updated successfully.** and display the Source, Destination, and Permissions of your replication rule
+The screen will ask **Replicate existing objects?**, leave **No, do not replicate existing objects** selected and click **Submit**
+
+The screen should now display Replication Rules with the Replication Rule Name, Status, Destination bucket and Region, and other configuration of your replication rule
 
 ![RuleOneCreated](/Reliability/200_Bidirectional_Replication_for_S3/Images/RuleOneCreated.png)
 
@@ -86,28 +79,20 @@ After setting up the second rule, you will have completed configuration of bi-di
 1. Click on the name of the _west_ bucket
       * if you used **Oregon** the name will be `<your_naming_prefix>-crrlab-us-west-2`
 1. Click on the **Management** tab
-1. Click **Replication**
-1. Click **+ Add Rule**
-1. For **Set source** select **Entire bucket**
-1. For **Replication criteria** leave **Replicate objects encrypted with AWS KMS** _not_ selected
-      * Our objects are encrypted using server-side encryption
-      * However since you used SSE-S3 encryption, you do not need to select this option and do not need to provide a KMS key
-      * SSE-S3 uses KMS keys, but these managed by Amazon S3 for the user
-      * For more detail see [What Does Amazon S3 Replicate?](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html)
-1. Click **Next**
-1. For **Destination bucket** leave **Buckets in this account** selected, and select the name of the _east_ bucket from the drop-down
+1. Click **Create replication rule**
+1. For **Rule name** enter `west to east`
+1. For **Choose a rule scope** select **Apply to all objects in the bucket**
+1. For **Destination** leave **Choose a bucket in this account** selected, and select the name of the _east_ bucket from the drop-down
       * If you used **Ohio** the name will be `<your_naming_prefix>-crrlab-us-east-2`
       * **Troubleshooting**: If you get an error saying _The bucket doesn’t have versioning enabled_ then you have chosen the wrong bucket. Double check the bucket name.
-1. Click **Next**
-1. For **IAM Role** select **\<your-naming-prefix\>-S3-Replication-Role-us-west-2** from the search results box
+1. For **IAM Role** leave **Choose from existing IAM roles** selected, and select **\<your-naming-prefix\>-S3-Replication-Role-us-west-2** from the search results box
       * (If you chose a different region as your _west_ region, then look for that region at the end of the IAM role name)
-1. For **Rule name** enter `west to east`
-1. Leave **Status** set to **enabled**
-1. Click **Next**
-1. Review the configuration
+1. For **Encryption**, select **Replicate objects encrypted with AWS KMS** and leave **AWS managed key (aws/s3)** selected.
 1. Click **Save**
 
-The screen should say **Replication configuration updated successfully.** and display the Source, Destination, and Permissions of your replication rule
+The screen will ask **Replicate existing objects?**, leave **No, do not replicate existing objects** selected and click **Submit**
+
+The screen should say **Replication configuration successfully updated.** and display the Source, Destination, and Permissions of your replication rule (you may need to refresh)
 
 ![RuleTwoCreated](/Reliability/200_Bidirectional_Replication_for_S3/Images/RuleTwoCreated.png)
 

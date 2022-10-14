@@ -9,9 +9,13 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket to be created to hold data information
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  RoleNameARN:
+  ManagementRoleName:
     Type: String
-    Description: ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+  ManagementAccountID:
+    Type: String
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -120,7 +124,7 @@ Resources:
         - ParameterKey: DestinationBucket
           ParameterValue: !Ref DestinationBucket
         - ParameterKey: ManagementAccountID
-          ParameterValue: !Select [ "4", !Split [":", !Ref RoleNameARN] ]
+          ParameterValue: !Ref ManagementAccountID
       StackInstancesGroup:
         - DeploymentTargets:
             Accounts:
@@ -141,7 +145,7 @@ Resources:
             Description: Prefix of regional bucket name
           ManagementAccountID:
             Type: String
-            Description: Management Account ID that will send data to the bucket
+            Description: Comma separated IDs of Management Accounts that will send data to the bucket
           DestinationBucket:
             Type: String
             Description: A name of the main bucket where all data will be stored
@@ -167,8 +171,7 @@ Resources:
                   Condition:
                     StringEquals:
                           s3:x-amz-acl:  bucket-owner-full-control
-                          aws:SourceAccount: !Sub ${ManagementAccountID}
-                          aws:SourceArn: !Sub arn:aws:compute-optimizer:${AWS::Region}:${ManagementAccountID}:*
+                          aws:SourceAccount: !Split [',', !Ref ManagementAccountID]
                   Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role
@@ -279,8 +282,9 @@ Resources:
         Variables:
           REGIONS: !Ref DeployRegions
           BUCKET_PREFIX: !Sub "${BucketPrefix}${AWS::AccountId}"
-          ROLE_ARN: !Ref RoleNameARN
           INCLUDE_MEMBER_ACCOUNTS: 'TRUE'
+          ROLE_NAME: !Ref ManagementRoleName
+          MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
       Code:
         ZipFile: |
           import os
@@ -290,50 +294,58 @@ Resources:
           BUCKET_PREFIX = os.environ["BUCKET_PREFIX"]
           INCLUDE_MEMBER_ACCOUNTS = os.environ.get("INCLUDE_MEMBER_ACCOUNTS", 'TRUE').lower() == 'true'
           REGIONS = os.environ["REGIONS"]
-          ROLE_ARN = os.environ['ROLE_ARN']
+          ROLE_NAME = os.environ['ROLE_NAME']
 
           def lambda_handler(event, context):
               today = date.today()
               year = today.year
               month = today.month
 
-              sts_connection = boto3.client('sts')
-              acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  try: 
+                      ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{ROLE_NAME}"
+                      sts_connection = boto3.client('sts')
+                      acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
 
-              account_b_creds = {
-                "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
-                "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
-                "aws_session_token":     acct_b['Credentials']['SessionToken'],
-              }
+                      account_b_creds = {
+                        "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
+                        "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
+                        "aws_session_token":     acct_b['Credentials']['SessionToken'],
+                      }
 
-              acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
+                      acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
 
-              result_messages = []
-              error_messages = []
-              for region in [r.strip() for r in REGIONS.split(',')]:
-                  # create service client using the assumed role credentials
-                  co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
-                  export_funcs = {
-                      'ec2_instance': co.export_ec2_instance_recommendations,
-                      'auto_scale':   co.export_auto_scaling_group_recommendations,
-                      'lambda':       co.export_lambda_function_recommendations,
-                      'ebs_volume':   co.export_ebs_volume_recommendations,
-                  }
-                  bkt = BUCKET_PREFIX + '-' + region
-                  print(f"INFO: bucket={bkt}")
-                  for name, func in export_funcs.items():
-                      try:
-                          res = func(
-                              includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
-                              s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/year={year}/month={month}'}
-                          )
-                          result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
-                      except Exception as exc:
-                          error_messages.append(f"ERROR: {region} {name} - {exc}")
-              if result_messages:
-                  print("Success:\n"+"\n".join(result_messages))
-              if error_messages:
-                  raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
+                      result_messages = []
+                      error_messages = []
+                      for region in [r.strip() for r in REGIONS.split(',')]:
+                          # create service client using the assumed role credentials
+                          co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
+                          export_funcs = {
+                              'ec2_instance': co.export_ec2_instance_recommendations,
+                              'auto_scale':   co.export_auto_scaling_group_recommendations,
+                              'lambda':       co.export_lambda_function_recommendations,
+                              'ebs_volume':   co.export_ebs_volume_recommendations,
+                          }
+                          bkt = BUCKET_PREFIX + '-' + region
+                          print(f"INFO: bucket={bkt}")
+                          for name, func in export_funcs.items():
+                              try:
+                                  res = func(
+                                      includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
+                                      s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
+                                  )
+                                  result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                              except Exception as exc:
+                                  error_messages.append(f"ERROR: {region} {name} - {exc}")
+                      if result_messages:
+                          print("Success:\n"+"\n".join(result_messages))
+                      if error_messages:
+                          raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
+                  except Exception as e:
+                      # Send some context about this error to Lambda Logs
+                      logging.warning("%s" % e)
+                      continue
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
