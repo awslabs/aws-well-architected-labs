@@ -14,7 +14,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## How do I setup the dashboards in an account other than my payer account or on top of multiple payer accounts?
 
 This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. 
-To setup the dashboards on top of multi payer accounts, please review [multi-account setup]({{< ref "Cost/200_Labs/200_Cloud_Intelligence/Cost & Usage Report Dashboards/Dashboards/1a_cur_setup.md" >}}) deployment options and instructions.
+To setup the dashboards on top of multi payer accounts, please review [multi-account setup]({{< ref "Cost/200_Labs/200_Cloud_Intelligence/Cost & Usage Report Dashboards/Dashboards/deploy_dashboards.md" >}}) deployment options and instructions.
 
 ## I'm getting an error in QuickSight that is saying Athena timed out?
 

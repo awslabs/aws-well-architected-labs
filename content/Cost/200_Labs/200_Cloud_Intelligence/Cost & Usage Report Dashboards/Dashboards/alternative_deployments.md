@@ -1,183 +1,18 @@
 ---
-title: "Prerequisites: Cost And Usage Report Setup"
+title: "Alternative Deployment Methods"
 date: 2022-05-20T11:16:08-04:00
 chapter: false
-weight: 1
-pre: "<b>1a. </b>"
+weight: 3
+pre: "<b>3 </b>"
 ---
 
-## Authors
-- Thomas Buatois, AWS Cloud Infrastructure Architect (ProServe)
-- Yuriy Prykhodko, AWS Principal Technical Account Manager
-- Iakov Gan, AWS Sr. Technical Account Manager
+## Alternative Methods for Deploying the CUR-based Cloud Intelligence Dashboards
+If you are unable to deploy using the CloudFormation automation steps earlier in this lab, here are two alternative methods. Pre-requisites are included in each step. 
 
-## Contributors
-- Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
+### Option 1: Deploy CIDs with Command Line Tool
+{{%expand "Click here to continue with command line tool deployment" %}}
 
-## Cost and Usage Report (CUR)
-The [Cost & Usage Report](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) is the foundation for multiple CID Dashboards. CID requires Cost & Usage Report to be created with the following format:
-- Additional report details: Include **Resource IDs**
-- Time Granularity: **Hourly**
-- Report Versioning: **Overwrite existing report**
-- Report data integration for: **Amazon Athena**
-- Compression type: **Parquet**
-
-If you have a Cost & Usage Report that meets this criteria you can use it, if not, you can create a new CUR and request a [backfill](https://docs.aws.amazon.com/cur/latest/userguide/troubleshooting.html#backfill-data).
-
-
-## CUR Deployment
-Please follow one of the options bellow.
-### Option 1. Deploy CUR with CFN template (Suggested)
-This option supports creation of CUR in multiple usecases:
-1. Deploying CUR in a single account.
-2. Deploying CUR in One account (linked or management/payer) and replication to another account where you want to install CUR-based Cloud Intelligence Dashboards. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). You will need a dedicated Linked (data collection) Account setup and ready to go.
-3. Deploying CUR in multiple linked account and aggregation into one. This option is useful when you do not have access to Management (payer) account and you want to have a dashboard for multiple linked accounts belonging to one Buisiness Unit. 
-{{%expand "Click here to continue with Cloud Formation Deployment" %}}
-
-We recommend that you install the Dashboards in a dedicated AWS Account that is not your management (payer) account(s). You will still create a Cost & Usage Report (CUR) in each management (payer) account which will be delivered to an S3 bucket in that account. The CloudFormation templates below will setup S3 replication to the linked account (data collection account) where you will deploy the dashboards. This works whether you have one or many management (payer) accounts.
-
-![Images/multi-account/Architecture1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/Architecture1.png?classes=lab_picture_verysmall)
-
-If you have __no access to your management (payer) account__, you can still use this method. Instead of creating CURs in the management (payer) account you will be creating [member CURs]([https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/]) for each linked account and replicating them to the account (data collection account) where you will be deploying the dashboards. 
-
-Below find the steps for creating a single dedicated S3 bucket within your linked account (data collection account) where the dashboards will be deployed that will aggregate any and all CURs from other accounts.
-
-You will be able to add or delete more source account CURs after the fact as well. 
-
-You will be deploying the same CloudFormation(CFN) template into two different types of places (your **source accounts** and your **destination data collection account**):
-
-1. In the **Destination** or data collection account, the CloudFormation(CFN) template will create an S3 bucket for CUR aggregation.
-2. In one or more **Source Accounts**, the CFN template will create a new CUR, an S3 bucket, and a replication rule.
-
-If your management/source (payer) account is the same as your destination account (where you want to deploy the dashboards) and you want this CFN template to create a new CUR, follow the steps for **Destination Account** only, and choose to activate local CUR in the CFN parameter.
-
-This CFN template will create an S3 bucket with the following structure in the **Destination Account**
-
-```html
-s3://<prefix>-<destination-accountid>-shared/
-	cur/<src-account1>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/<src-account2>/cid/cid/year=XXXX/month=YY/*.parquet
-	cur/<src-account3>/cid/cid/year=XXXX/month=YY/*.parquet
-```
-
-The Glue crawler will create the partitions source_account_id, year, and month.
-
-
-### Step1. Configure Destination Account (data collection account where you will deploy your dashboards) using CloudFormation
-
-Here we will deploy the CFN template but setting the CFN parameters for a Destination Account.
-
-1. Login to the Destination account in the region of your choice. I can be any account inside or outside your AWS Organization.
-   
-2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-4. Enter your **Destination** Account Id. 
-   
-**NOTE:** Please note this Account ID, we will need it later when we will deploy this same stack in your management (payer)/source accounts.
-
-5. Disable CUR creation by entering **False** as the parameter value if you are replicating CURs from management (payer) accounts. You will only need to activate this if you are replicating CURs from linked accounts (not management payer accounts) and you want to have cost and usage data for this Destination account as well.
-   
-![Images/multi-account/cfn_dash_param_dst_dedicated_3.png.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_3.png?classes=lab_picture_small)
-
-1. Enter your **Source Account(s)** IDs, using commas to separate multiple Account IDs. 
-   
-![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
-
-7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-10. You will see the stack will start with **CREATE_IN_PROGRESS**.
-**NOTE:** This step can take 5-15mins
-    ------------ | -------------
-
-11. Once complete, the stack will show **CREATE_COMPLETE**.
-
-
-
-### Step2. Create CUR in Source Account(s) using CloudFormation
-
-1. Login to your Source Account (can be management account or linked account if you're using [member CURs](https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/)).
-
-2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
-
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Replication)
-	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
-
-3. Enter a **Stack name** for your template such as **CID-CUR**.
-![Images/multi-account/cfn_dash_dst_param.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst.png?classes=lab_picture_small)
-
-4. Enter your **Desitnation** AWS Account ID as a parameter.
-   
-![Images/multi-account/cfn_dash_param_dst_1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_1.png?classes=lab_picture_small)
-
-5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-7. You will see the stack will start with **CREATE_IN_PROGRESS** .
-**NOTE:** This step can take 5-15mins
-    ------------ | -------------
-
-8.  Once complete, the stack will show **CREATE_COMPLETE**.
-
-**NOTE:** It takes 24 hours for your first CUR to be delivered
-    ------------ | -------------
-
-9. It will take about 24 hours for your CUR to populate and replicate to your destination (data collection) account where you will deploy the dashboards. Return to this step after 24 hours. 
-     
-### Add or delete accounts (Optional)
-
-This section is only available if you have already deployed the CUR replication setup using the CloudFormation template above.
-
-1. Login to the __Destination__ Account.
-   
-2. Find your existing template and choose __Update__
-
-![Images/multi-account/cfn_dash_param_10.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_10.png?classes=lab_picture_small)
-
-3. Check __Use current template__ then choose __Next__
-
-![Images/multi-account/cfn_dash_param_11.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_11.png?classes=lab_picture_small)
-
-4. Update the AWS Account IDs list to modify CUR aggregation (ADD or DELETE)
-    
-![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
-
-5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
-
-6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-7. You will see the stack will start with **UPDATE_IN_PROGRESS** 
-**NOTE:** This step can take up to 5mins
-    ------------ | -------------
-
-8.  Once complete, the stack will show **UPDATE_COMPLETE**
-
-### Teardown of CloudFormation deployment (Optional)
-
-**NOTE:** Deleting an account means that CUR data will not flow to your destionat (data collection) account anymore. However, historical data will be retained in destination account. To delete the CURs, go to the `${resource-prefix}-${payer-account-id}-shared` S3 Bucket and manualy delete account data.
-    ------------ | -------------
-
-1. Login to the Account you want to delete.
-   
-2. Find your existing template and choose __Delete__
-
-![Images/multi-account/cfn_dash_param_12.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_12.png?classes=lab_picture_small)
-{{% /expand%}}
-
-
-### Option 2. Deploy CUR and CIDs into a single Management (Payer) Account
-This option walks you through setting up a CUR file in the Management (payer) Account and configuring the account to have the CIDs deployed there. This option will create a new Cost & Usage Report (CUR) or reuse one you already have. 
-{{%expand "Click here see steps for preparing your Cost & Usage report and Athena integraton manually" %}}
+This option walks you through setting up a CUR file in the Management (payer) Account and configuring the prerequisites to have the CIDs deployed there. This option will create a new Cost & Usage Report (CUR) or reuse one you already have. 
 
 This option is okay for testing but we recommend you deploy the Cloud Intelligence Dashboards in a dedicated acount other than the management (payer) account (option 1 above). This way you can effectivly managed the access and avoid having unnecessary users in your management (payer) account. If you still want to use this option, please apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege/) access to your payer account.
 
@@ -262,7 +97,7 @@ To get Athena warmed up:
 Before you can deploy the CIDs, you must wait for the first Cost and Usage Report to be delivered to your Amazon S3 bucket.
 {{% /notice %}}
 
-To streamline and automate integration of your Cost and Usage Reports with Athena, AWS provides an AWS CloudFormation template with several key resources along with the reports you setup for Athena integration. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
+In this step, we will be using an AWS provided CloudFormation template that automated integrating your CUR with Athena. The AWS CloudFormation template includes an AWS Glue crawler, an AWS Glue database, and an AWS Lambda event.
 
 1. From the services list, choose **S3**
 
@@ -296,15 +131,109 @@ To streamline and automate integration of your Cost and Usage Reports with Athen
 
 16. Enable **"I acknowledge that AWS CloudFormation might create IAM resources."** and click **Create Stack**
 
+### Enable QuickSight
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
+
+1. Log into your AWS Account and search for **QuickSight** in the list of Services
+
+2. You will be asked to **sign up** before you will be able to use it
+
+    ![QuickSight Sign up Workflow Image](https://wellarchitectedlabs.com/Cost/200_Cloud_Intelligence/Images/QS-signup.png?classes=lab_picture_small)
+
+3. After pressing the **Sign up** button you will be presented with 2 options, please ensure you select the **Enterprise Edition** during this step
+
+4. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
+
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your Cost & Usage Report file.
+
+        ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
+    
+    + Enable the Amazon S3 option and select the bucket where your **Cost & Usage Report** is stored, as well as your **Athena** query bucket
+
+        ![Image of s3 buckets that are linked to the QuickSight account. Enable bucket and give Athena Write permission to it.](/Cost/200_Cloud_Intelligence/Images/QS-bucket.png?classes=lab_picture_small)
+
+5. Click **Finish** and wait for the congratulations screen to display
+
+6. Click **Go to Amazon QuickSight**
+![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
+1. Click on the persona icon on the top right and select manage QuickSight. 
+2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+
+### Deploy Dashboards
+If you run into an error, please [visit our FAQ](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/faq/) to see if we can provide a quick answer. 
+
+1. Open up a terminal application with permissions to run API requests against your AWS account. We recommend [CloudShell](https://console.aws.amazon.com/cloudshell).
+
+2. We will be following the steps outlined in the [Cloud Intelligence Dashboards automation GitHub repo.](https://github.com/aws-samples/aws-cudos-framework-deployment/) For more information on the CLI tool, please visit the repo. 
+
+3. In your Terminal type the following and hit return. This will make sure you have the latest pip package installed.
+
+```bash
+python3 -m ensurepip --upgrade
+```
+
+4. In your Terminal type the following and hit return. This will download and install the CID CLI tool.
+
+```bash
+pip3 install --upgrade cid-cmd
+```
+
+5. In your Terminal, type the following and hit return. You are now starting the process of deploying the dashboards. 
+
+```bash
+cid-cmd deploy
+```
+
+6. Select the CUDOS dashboard first. 
+
+    ![cmd1](/Cost/200_Cloud_Intelligence/Images/cmd1.png?classes=lab_picture_verysmall)
+
+7. The CLI may prompt you to select a QuickSight data source (use the data source you used for any previous CID delpoyments), an Athena workgroup (select primary if unsure), or an Athena database (select the one created by your Glue crawler for your CUR).
+
+8. You will also be prompted to select the method you would like to use to get account names into the Cloud Intelligence Dashboards. It is recommended you choose "Retreive AWS Organizations account" if you use AWS Organizations. This will pull your account names as they are today. To setup automation to add new account names after deployment, follow [this lab.](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) If you don't have AWS Organizations or you get an error when you select this option, select Dummy Account Mapping instead. For help on other ways of adding your account names, visit [this page dedicated to account mapping.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
+
+9. Once complete, you should see a message with a link to your newly deployed dashboard.
+
+    ![cmd2](/Cost/200_Cloud_Intelligence/Images/cmd1.png?classes=lab_picture_verysmall)
+
+10. Run cid-cmd deploy again and select the Cloud Intelligence Dashboards. Once that is completed, run it one more time and select the KPI dashboard. Note that the KPI dashboard will use more SPICE capacity than the CID and CUDOS dashboards so please make sure you've [purchased enough](https://docs.aws.amazon.com/quicksight/latest/user/managing-spice-capacity.html). 
+
+11.	Visit QuickSight and go to Datasets. Select the **summary_view** dataset
+
+    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
+
+12.	Click **Schedule refresh**
+
+    ![qs_schedule_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_schedule_refresh.png?classes=lab_picture_small)
+
+13.	Click **Create**
+
+    ![qs_create_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_refresh.png?classes=lab_picture_small)
+
+14.	Enter a daily schedule, in the appropriate time zone and click **Create**
+
+    ![qs_daily_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_daily_refresh.png?classes=lab_picture_small)
+
+15.	Click **Cancel** to exit
+
+    ![qs_cancel_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_cancel_refresh.png?classes=lab_picture_small)
+
+16.	Click **x** to exit
+
+    ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_exit_refresh.png?classes=lab_picture_small)
+
+17.	Repeat these steps with all other SPICE datasets (including the KPI datasets). No refresh is required for customer_all.
+
+18. [Share or edit your dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight/) 
+
 {{% /expand%}}
 
 
 
-### Option 3. Deploy CUR and CIDs into dedicated Linked Account manually
-Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards in an account other than your management (payer) account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). This guide will walk you through setting up the management (payer) account CUR S3 buckets to have replication enabled pointing to your linked (data collection) account manually.
-
+### Option 2: Manual Deployment
 {{%expand "Click here to expand step by step instructions" %}}
 
+Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards in an account other than your management (payer) account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). This guide will walk you through setting up the management (payer) account CUR S3 buckets to have replication enabled pointing to your linked (data collection) account manually.
 
 ![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
 
@@ -440,7 +369,7 @@ This step should be done in each management (payer) account.
 
 8. Leave rest of the settings by default and click Save.
 
-#### Copy existing objects from CUR S3 bucket to S3 bucket in Data Collection Account
+#### Copy existing objects from CUR S3 bucket to S3 bucket in Linked (Data Collection) Account
 
 This step should be done in each management (payer) account.
 
@@ -450,15 +379,7 @@ Sync existing objects from CUR S3 bucket to S3 bucket in Data Collection Account
 
 After performing this step in each management (payer) account S3 bucket in Data Collection Account will contain CUR data from all payer accounts under respective prefixes.
 
-Proceed to the next step to setup QuickSight in your linked (data collection) account.
-{{% /expand%}}
-
-
-## Additional Steps
-These steps are not required if you will use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment on the next step.
-
 ### Configure Athena
-{{%expand "Click here to expand step by step instructions" %}}
 
 If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. 
 
@@ -466,28 +387,25 @@ To get Athena warmed up:
 
 1. From the services list, choose **S3**
 
-1. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
+2. Create a new S3 bucket for Athena queries to be logged to (ex: `aws-athena-query-results-cid-${AWS::AccountId}-${AWS::Region}` ). Keep to the same region as the S3 bucket created for your Cost & Usage Report.
 
-1. From the services list, choose **Athena**
+3. From the services list, choose **Athena**
 
-1. Select **Get Started** to enable Athena and start the basic configuration
+4. Select **Get Started** to enable Athena and start the basic configuration
 
-1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+5. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
 
     ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/AthenaS3.png?classes=lab_picture_small)
 
-1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+6. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
 
-1. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
+7. Make sure you configured s3 bucket results location for both Athena Query Editor and the 'Primary' Workgroup.
 
-1. This s3 bucket results location must be available for QuickSight. Please note this bucket name, you will need it on the next step.
-
-{{% /expand%}}
+8. This s3 bucket results location must be available for QuickSight. Please note this bucket name, you will need it on the next step.
 
 ## Prepare Glue Crawler
 If you configured the crawler already using Option 2 on this page, you can skip this step. This step is also not required if you use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment
 
-{{%expand "Click here to expand step by step instructions" %}}
 
 These actions should be done in Data Collection Account
 
@@ -519,9 +437,38 @@ These actions should be done in Data Collection Account
 10. Crawler configuration should look as on the screenshot below. Click Finish
 
 11. Resume deployment methodoly of choice from previous page. 
+
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
+
+1. Log into your AWS Account and search for **QuickSight** in the list of Services
+
+2. You will be asked to **sign up** before you will be able to use it
+
+    ![QuickSight Sign up Workflow Image](https://wellarchitectedlabs.com/Cost/200_Cloud_Intelligence/Images/QS-signup.png?classes=lab_picture_small)
+
+3. After pressing the **Sign up** button you will be presented with 2 options, please ensure you select the **Enterprise Edition** during this step
+
+4. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
+
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your Cost & Usage Report file.
+
+        ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
+    
+    + Enable the Amazon S3 option and select the bucket where your **Cost & Usage Report** is stored, as well as your **Athena** query bucket
+
+        ![Image of s3 buckets that are linked to the QuickSight account. Enable bucket and give Athena Write permission to it.](/Cost/200_Cloud_Intelligence/Images/QS-bucket.png?classes=lab_picture_small)
+
+5. Click **Finish** and wait for the congratulations screen to display
+
+6. Click **Go to Amazon QuickSight**
+![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
+1. Click on the persona icon on the top right and select manage QuickSight. 
+2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+
 {{% /expand%}}
 
+---
 
-{{< prev_next_button link_prev_url=".." link_next_url="../1b_quicksight" />}}
+{{< prev_next_button link_prev_url="../post_deployment_steps" link_next_url="../3_additional_dashboards" />}}
 
 
