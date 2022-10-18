@@ -1,12 +1,12 @@
 ---
-title: "Create and implement an AWS Budget for EC2 actual cost"
+title: "Create and Implement an AWS Budget for EC2 Actual Cost"
 date: 2020-04-24T11:16:09-04:00
 chapter: false
 weight: 2
 pre: "<b>2. </b>"
 ---
 
-We will create a monthly EC2 actual cost budget, which will notify if the actual costs of EC2 instances exceeds the specified amount.
+We will create a monthly EC2 actual cost budget, which will notify us if/when the actual costs of EC2 instances exceeds the specified budgeted amount.
 
 1. Click **Create budget**:
 ![Images/EC2Budget1.png](/Cost/100_2_Cost_and_Usage_Governance/Images/EC2Budget1.png?classes=lab_picture_small)
@@ -25,7 +25,9 @@ We will create a monthly EC2 actual cost budget, which will notify if the actual
 ![Images/EC2Budget3.png](/Cost/100_2_Cost_and_Usage_Governance/Images/EC2Budget3.png?classes=lab_picture_small)
 
 4. Create a filter to only include EC2 instances in the budget:
-    - Scrool down and under **Filters** select the **Add filter** button:
+    -  Scroll down and under **Budget Scope** select the **Filter Specific AWS Cost Dimensions** button:
+![Images/EC2BudgetScope.png](/Cost/100_2_Cost_and_Usage_Governance/Images/EC2Budget4.png?classes=lab_picture_small)
+    - Scroll down and under **Filters** select the **Add filter** button:
 ![Images/EC2Budget4.png](/Cost/100_2_Cost_and_Usage_Governance/Images/EC2Budget4.png?classes=lab_picture_small)
 
 5. Select the filter options:
@@ -34,7 +36,7 @@ We will create a monthly EC2 actual cost budget, which will notify if the actual
     - Select the **Apply filter** button:
 ![Images/EC2Budget5.png](/Cost/100_2_Cost_and_Usage_Governance/Images/EC2Budget5.png?classes=lab_picture_small)
 
-6. Finish the budet details:
+6. Finish the budget details:
     - Remove **Upfront reservation fees** by selecting the **X** to the right of the name
     - **Budget name**: EC2_actual
     - Select the **Next** button:

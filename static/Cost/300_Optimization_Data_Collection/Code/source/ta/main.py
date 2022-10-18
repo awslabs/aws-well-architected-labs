@@ -1,8 +1,8 @@
 import boto3
 import logging
 from datetime import date, datetime
-import json
 import os
+import json
 from botocore.exceptions import ClientError
 from botocore.client import Config
 
@@ -16,43 +16,48 @@ def lambda_handler(event, context):
     DestinationPrefix = os.environ["PREFIX"]
     try:
         for record in event['Records']:
-            account_id = record["body"]
-            print(account_id)
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
+            account_name = body["account_name"]
+            payer_id = body["payer_id"]
             if DestinationPrefix == 'ta':
-                ta.main(account_id)
+                ta.main(account_id,account_name)
             else:
                 print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
             print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix, account_id)
+            upload_to_s3(DestinationPrefix, account_id, payer_id)
             start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def s3(DestinationPrefix, account_id):
-
-    d = datetime.now()
-    month = d.strftime("%m")
-    year = d.strftime("%Y")
-    dt_string = d.strftime("%d%m%Y-%H%M%S")
+def upload_to_s3(DestinationPrefix, account_id, payer_id):
 
 
-    bucket = os.environ[
-        "BUCKET_NAME"
-    ]  # Using enviroment varibles below the lambda will use your S3 bucket
-    today = date.today()
-    year = today.year
-    month = today.month
-    try:
-        s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-        s3.upload_file(
-            "/tmp/data.json",
-            bucket,
-            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
-        )  # uploading the file with the data to s3
-        print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
-    except Exception as e:
-        print(e)
+    fileSize = os.path.getsize("/tmp/data.json")
+    if fileSize == 0:  
+        print(f"No data in file for {DestinationPrefix}")
+    else:
+        d = datetime.now()
+        month = d.strftime("%m")
+        year = d.strftime("%Y")
+        date_formatted = d.strftime("%d%m%Y-%H%M%S")
+
+        # Using environment variables below the lambda will use your S3 bucket
+        bucket = os.environ["BUCKET_NAME"]  
+        today = date.today()
+        year = today.year
+        month = today.month
+        try:
+            s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+            s3.upload_file(
+                "/tmp/data.json",
+                bucket,
+                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{date_formatted}.json",
+            )  # uploading the file with the data to s3
+            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
+        except Exception as e:
+            print(e)
 
 
 def assume_role(account_id, service, region):

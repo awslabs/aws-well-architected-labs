@@ -8,7 +8,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: 'ecs-services-clusters'
+    Default: 'ecs-chargeback'
   DatabaseName:
     Type: String
     Description: Name of the Athena database to hold lambada information
@@ -35,13 +35,24 @@ Parameters:
       - aws-well-architected-labs-frankfurt
       - aws-well-architected-labs-london
       - aws-well-architected-labs-stockholm
+      - aws-well-architected-labs-ap-sydney
+      - aws-well-architected-labs-mumbai
+      - aws-well-architected-labs-osaka
+      - aws-well-architected-labs-seoul
+      - aws-well-architected-labs-tokyo
+      - aws-well-architected-labs-canada
+      - aws-well-architected-labs-milan
+      - aws-well-architected-labs-paris
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/ecs.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/ecs_dev.zip
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -62,7 +73,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Lambda-Role-${CFDataName}"
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -93,7 +104,7 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: "*"
+                Resource: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue"
               - Effect: "Allow"
                 Action:
                 - "ecs:ListAttributes"
@@ -112,12 +123,17 @@ Resources:
                 - "ecs:DescribeTasks"
                 - "ecs:ListTaskDefinitions"
                 - "ecs:ListClusters"
-                Resource: "*"
-
+                Resource: !Sub "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -137,11 +153,14 @@ Resources:
           PREFIX:
             Ref: CFDataName
           ROLENAME : !Ref MultiAccountRoleName
+          CRAWLER_NAME:
+            Ref: Crawler
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -162,7 +181,10 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'EcsChargebackModule-TaskQueue'
   EventSourceMapping:
+    DependsOn:
+      - EventPermission
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
@@ -173,7 +195,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: cluster_metadata_view
-      QueryString: !Sub
+      QueryString:
         "CREATE OR REPLACE VIEW cluster_metadata_view AS 
           SELECT
             *

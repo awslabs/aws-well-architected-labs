@@ -1,9 +1,16 @@
 baseURL = "https://wellarchitectedlabs.com/"
-languageCode = "en-us"
-title = "AWS Well-Architected Labs"
+defaultContentLanguage = "en"
 theme = "learn"
 
-
+[languages]
+  [languages.en]
+    languageName = 'English'
+    title = 'AWS Well-Architected Labs'
+    weight = 1
+  [languages.es]
+    languageName = 'Español'
+    title = 'AWS Well-Architected Labs'
+    weight = 2
 [params]
 themeVariant = "walabs"
 disableShortcutsTitle = true
@@ -17,6 +24,8 @@ ordersectionsby = "weight"
     # 4000 - Performance Efficiency
     # 5000 - Cost Optimization
     # 6000 - Well Architected Tool
+    # 7000 - Well Architected Partners
+    # 8000 - Contributing Guide
 editURL = "https://github.com/awslabs/aws-well-architected-labs/blob/master/content/"
 description = "Hands on labs and real world design scenarios for Well-Architected workloads"
 author = "Well-Architected Team"
@@ -74,3 +83,4 @@ weight = 10
 name = "<i class='fas fa-bookmark'></i>&nbsp;&nbsp;Amazon Free Tier"
 url = "https://aws.amazon.com/free/"
 weight = 20
+theme = "learn"

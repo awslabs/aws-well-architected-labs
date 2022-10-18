@@ -19,21 +19,27 @@ Users who are dashboard **viewers** can view and filter the dashboard data. Any 
 
 2. From the left hand menu, choose **Dashboards**
 
-3. On the dashboard page, choose **Share** on the application bar.
+3. On the dashboard page, **select the dashboard you wish to share**. 
 
-4. Do one of the following:
+4. Select **Share** on the application bar.
+    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/share_dashboard.png?classes=lab_picture_small)
 
-    + Check what permissions already exist by choosing **Manage dashboard access**. Then choose **Add users** to return to this screen.
+5. Select **Share dashboard**
+    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/select_share.png?classes=lab_picture_small)
+	
+6. Do one of the following:
 
-    + You have the option to share with all the users in your Amazon QuickSight subscription. To do this, select the option **Share with all users in this account**. When you manage dashboard access through the Managed dashboard permissions screen, you see that the option Share with all users in this account is enabled. The individual users aren't listed in this screen.
+    + A. Check what permissions already exist by choosing **Manage dashboard access**. Then choose **Add users** to return to this screen.
 
-    + To share with an individual user or group, type the user or group into the search box. Then choose the user or group from the list that appears. Only active users and groups appear in the list.
+    + B. You have the option to share with all the users in your Amazon QuickSight subscription. To do this, select the option **Share with all users in this account**. When you manage dashboard access through the Managed dashboard permissions screen, you see that the option Share with all users in this account is enabled. The individual users aren't listed in this screen.
 
-    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/share_dashboard_with_users.png)
+    + C. To share with an individual user or group, type the user or group into the search box. Then choose the user or group from the list that appears. Only active users and groups appear in the list.
 
-5. After you have entered all the users that you want to share with, choose **Share** to confirm your choices. In the next screen, you can see the username, email, permission level, user role, and privileges. You can also remove a user by using the delete icon.
+    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/share_dashboard_with_users.png?classes=lab_picture_small)
 
-6. Choose permissions for each user. **Note:** Users in the Reader role cannot have permissions modified from Viewer, and cannot have Save as privileges.
+7. After you have entered all the users that you want to share with, choose **ADD** and select the permission of **Viewer** or **Co-owner** to confirm your choices. You can see the username, email, permission level, user role, and privileges. You can also remove a user by using the delete icon.
+
+8. Choose permissions for each user. **Note:** Users in the Reader role cannot have permissions modified from Viewer, and cannot have Save as privileges.
 
 + **Viewer**
 
@@ -45,7 +51,7 @@ Co-owners can edit and share the dashboard. You have the option to provide them 
 
 ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/manage_dashboard_sharing.png?classes=lab_picture_small)
 
-7. Choose whether to enable a user's privilege to **Save as** in order to create a new dashboard from a copy of this one. This privilege grants read-only access to the datasets, so the user or group can create new analyses from it.
+8. Choose whether to enable a user's privilege to **Save as** in order to create a new dashboard from a copy of this one. This privilege grants read-only access to the datasets, so the user or group can create new analyses from it.
 
 [AWS Documentation For These Steps](https://docs.aws.amazon.com/quicksight/latest/user/sharing-a-dashboard.html)
 
@@ -56,25 +62,39 @@ Co-owners can edit and share the dashboard. You have the option to provide them 
 ### Customize your Dashboard by saving your Dashboard as an Analysis
 {{%expand "Click here to continue saving your dashboard as a customizable analysis " %}}
 
-2. Click **Share**, click **Share dashboard**:,
-![Images/quicksight_dashboard_7.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_7.png)
+1. Go to the **QuickSight** service homepage inside your account. Be sure to select the correct region from the top right user menu or you will not see your expected tables
 
-3. Click **Manage dashboard access**:
-![Images/quicksight_dashboard_8.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_8.png)
+2. From the left hand menu, choose **Dashboards**
 
-4. Add the required users, or share with all users, ensure you check **Save as** for each user, then click the **x** to close the window:
-![Images/quicksight_dashboard_9.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_9.png)
+3. On the dashboard page, **select the dashboard you wish to share**. 
+
+4. Select **Share** on the application bar.
+    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/share_dashboard.png?classes=lab_picture_small)
+
+5. Select **Share dashboard**
+    ![Share Dashboard](/Cost/200_Cloud_Intelligence/Images/select_share.png?classes=lab_picture_small)
+	
+6. Add the required users, or share with all users, ensure you check **Save as** for each user.
+![Images/quicksight_save_dashboard.png](/Cost/200_Cloud_Intelligence/Images/save_dashboard.png?classes=lab_picture_small)
+
+7. Select Confirm
+![Images/quicksight_comfirm save_dashboard.png](/Cost/200_Cloud_Intelligence/Images/confirm_save_as.png?classes=lab_picture_small)
+
+8. Select **Go back <'Your Dashboard'>
+![Images/quicksight_go_back_to_dashboard.png](/Cost/200_Cloud_Intelligence/Images/go_back_to_dashboard.png?classes=lab_picture_small)
+
 
 5. Refresh your web page and you will now see a **Save as** option in the upper right
 
+
 6. Click **Save as**:
-![Images/quicksight_dashboard_10.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_10.png)
+![Images/quicksight_save_as.png](/Cost/200_Cloud_Intelligence/Images/quicksight_save_as.png?classes=lab_picture_small)
 
 7. Enter an **Analysis name** and click **Create**:
-![Images/quicksight_dashboard_11.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_11.png)
+![Images/quicksight_analysis_name.png](/Cost/200_Cloud_Intelligence/Images/quicksight_analysis_name.png?classes=lab_picture_small)
 
 8. You will now have an analysis created from the template that you can edit and modify:
-![Images/quicksight_dashboard_12.png](/Cost/200_Cloud_Intelligence/Images/quicksight_dashboard_12.png)
+![Images/quicksight_analysis.png](/Cost/200_Cloud_Intelligence/Images/quicksight_analysis.png?classes=lab_picture_small)
 
 {{% notice tip %}}
 You have successfully created the analysis from a template

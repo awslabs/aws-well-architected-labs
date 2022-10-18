@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  Repository:
+    Type: AWS::CodeCommit::Repository
+    Properties: 
+      RepositoryDescription: Oncall Health Repo
+      RepositoryName: oncall-health
+
+Outputs:
+  OutputRepository:
+    Value: !GetAtt Repository.CloneUrlHttp
+    Export: 
+      Name: !Sub oncall-health-repo-CloneUrlHttp

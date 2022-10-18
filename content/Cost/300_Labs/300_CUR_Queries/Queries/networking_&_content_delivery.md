@@ -28,6 +28,9 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [NAT Gateway - Idle NATGW](#nat-gateway---idle-natgw)
   * [AWS Transit Gateway](#aws-transit-gateway)
   * [Network Usage](#network-usage)
+  * [Imbalance Inter-Az Data Transfer](#imbalance-inter-az-data-transfer)
+  * [Low Activity VPC Interface Endpoints](#low-activity-vpc-interface-endpoints)
+  * [Low Activity AWS Network Firewall](#low-activity-aws-network-firewall)
   
 ### Amazon API Gateway
 
@@ -564,6 +567,124 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
       day_line_item_usage_start_date ASC,
       sum_line_item_usage_amount DESC,
       sum_line_item_unblended_cost DESC;
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
+
+### Imbalance Inter-Az Data Transfer
+
+#### Query Description
+This query shows cost and usage of inbalance inter-az data transfer last month.  These resources are commonly collectors or aggregators mostly receiving data from other resources in different Availability Zones.  Distributing the resource functionality to each of the Availability Zones and redirect the data transfer from sending sources to be within the same Availability Zone will eliminate the $0.01/GB data transfer charges between Availability Zones.
+
+#### Pricing
+The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
+
+#### Sample Output
+![Images/imbalance-inter-az-transfer.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/imbalance-inter-az-transfer.png)
+
+#### Download SQL File
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/imbalance-interaz-transfer.sql)
+
+#### Query Preview
+```tsql
+    SELECT
+      line_item_usage_account_id as "account", 
+      product_region as "region",
+      line_item_resource_id as "resource",
+      round (sum (IF ((line_item_operation = 'InterZone-In'), line_item_unblended_cost, 0)), 2) as "interaz_in_cost",
+      round (sum (IF ((line_item_operation = 'InterZone-Out'), line_item_unblended_cost, 0)), 2) as "interaz_out_cost"
+    FROM $(table_name)
+    WHERE (line_item_usage_type LIKE '%DataTransfer-Regional-Bytes%') 
+      and (line_item_line_item_type = 'Usage')
+      and ((line_item_operation = 'InterZone-In') or (line_item_operation = 'InterZone-Out')) 
+      and (month(bill_billing_period_start_date) = month((current_date) - INTERVAL '1' month))
+      and (year(bill_billing_period_start_date) = year((current_date) - INTERVAL '1' month))
+    GROUP BY line_item_usage_account_id, product_region, line_item_resource_id
+    HAVING  ((round (sum (IF ((line_item_operation LIKE 'InterZone-In'), line_item_unblended_cost, 0)), 2) / (round (sum (IF ((line_item_operation LIKE 'InterZone-Out'), line_item_unblended_cost, 0)), 2))) > 20)
+      and ((round (sum (IF ((line_item_operation LIKE 'InterZone-In'), line_item_unblended_cost, 0)), 2)) > 1000)
+    ORDER BY "interaz_in_cost" DESC, "interaz_out_cost" DESC, account ASC, region ASC, resource ASC
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
+
+### Low Activity VPC Interface Endpoints
+
+#### Query Description
+This query shows cost and usage of Interface Endpoints which did not receive significant traffic last month.  Resources returned by this query could be considered for deletion or rearchitecture for centralized deployment.
+
+#### Pricing
+The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
+
+#### Sample Output
+![Images/interface-endpoints-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/interface-endpoints-idle.png)
+
+#### Download SQL File
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/interface-endpoint-idle.sql)
+
+#### Query Preview
+```tsql
+    SELECT
+      line_item_usage_account_id as "account",
+      product_region as "region",
+      split_part(line_item_resource_id, ':', 6) as "resource",
+      round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2) as "hourly_cost",
+      round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Bytes%'), line_item_blended_cost, 0)), 2) as "traffic_cost"
+    FROM ${table_name}
+    WHERE (line_item_product_code = 'AmazonVPC') 
+      and (line_item_line_item_type = 'Usage')
+      and ((line_item_usage_type LIKE '%Endpoint-Hour%') or (line_item_usage_type LIKE '%Endpoint-Byte%'))
+      and (month(bill_billing_period_start_date) = month((current_date) - INTERVAL '1' month))
+      and (year(bill_billing_period_start_date) = year((current_date) - INTERVAL '1' month))
+    GROUP BY line_item_usage_account_id, product_region, line_item_resource_id
+    HAVING ((round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2) / (round (sum (IF   ((line_item_usage_type LIKE '%Endpoint-Bytes%'), line_item_blended_cost, 0)), 2))) > 20)
+    ORDER BY "hourly_cost" DESC, "traffic_cost" DESC, account ASC, region ASC, resource ASC
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
+
+### Low Activity AWS Network Firewall
+
+#### Query Description
+This query shows cost and usage of Network Firewall Endpoints which did not receive significant traffic last month.  Resources returned by this query could be considered for deletion or rearchitecture for centralized deployment.
+
+#### Pricing
+The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
+
+#### Sample Output
+![Images/network-firewalls-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/network-firewalls-idle.png)
+
+#### Download SQL File
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/network-firewall-idle.sql)
+
+#### Query Preview
+```tsql
+    SELECT
+      line_item_usage_account_id as "account",
+      product_region as "region",
+      split_part(line_item_resource_id, ':', 6) as "resource",
+      round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2) as "hourly_cost",
+      round (sum (IF ((line_item_usage_type LIKE '%Traffic-GB%'), line_item_unblended_cost, 0)), 2) as "traffic_cost"
+    FROM ${table_name}
+    WHERE (line_item_product_code = 'AWSNetworkFirewall')
+      and (line_item_line_item_type = ('Usage'))
+      and ((line_item_usage_type LIKE '%Endpoint-Hour%') or (line_item_usage_type LIKE '%Traffic-GB%'))
+      and (month(bill_billing_period_start_date) = month((current_date) - INTERVAL '1' month))
+      and (year(bill_billing_period_start_date) = year((current_date) - INTERVAL '1' month))
+    GROUP BY line_item_usage_account_id, product_region, line_item_resource_id
+    HAVING (round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2)/round (sum (IF   ((line_item_usage_type LIKE '%Traffic-GB%'), line_item_unblended_cost, 0)), 2) > 20)
+    ORDER BY "hourly_cost" DESC, "traffic_cost" DESC, account ASC, region ASC, resource ASC
 ```
 
 {{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}

@@ -246,6 +246,15 @@ Resources:
     #https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
     Properties:
       BucketName: !Ref CloudTrailBucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+            BlockPublicAcls : true
+            BlockPublicPolicy : true
+            IgnorePublicAcls : true
+            RestrictPublicBuckets : true
       LoggingConfiguration: !If 
         - BucketLoggingEnabled
         - DestinationBucketName: !Ref S3AccessLogsBucketName
@@ -464,6 +473,15 @@ Resources:
     Condition: ConfigEnabled
     Properties:
       BucketName: !Ref ConfigBucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+            BlockPublicAcls : true
+            BlockPublicPolicy : true
+            IgnorePublicAcls : true
+            RestrictPublicBuckets : true
       LoggingConfiguration: !If 
         - BucketLoggingEnabled
         - DestinationBucketName: !Ref S3AccessLogsBucketName

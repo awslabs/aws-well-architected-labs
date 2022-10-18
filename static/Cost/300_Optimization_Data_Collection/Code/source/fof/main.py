@@ -10,58 +10,69 @@ from botocore.client import Config
 import ami
 import ebs
 import snapshot
-import ta
 
 def lambda_handler(event, context):
-    # Read from accounts collector?
-    # Use same seyup as mult ecs
     # pass in account id 
-    DestinationPrefix = os.environ["PREFIX"]
-    #import pdb; pdb.set_trace()
+
     try:
         for record in event['Records']:
-            account_id = record["body"]
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
+            payer_id = body["payer_id"]
             print(account_id)
-            if DestinationPrefix == 'ami':
-                ami.main(account_id)
-            elif DestinationPrefix == 'ebs':
-                ebs.main(account_id)
-            elif DestinationPrefix == 'snapshot':
-                snapshot.main(account_id)
-            elif DestinationPrefix == 'ta':
-                ta.main(account_id)
-            else:
-                print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
-            print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix, account_id)
-            start_crawler()
+
+            #AMI Data
+            DestinationPrefix = 'ami'
+            ami.main(account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
+            start_crawler(os.environ["AMICrawler"])
+
+            #EBS Data
+            DestinationPrefix = 'ebs'
+            ebs.main(account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
+            start_crawler(os.environ["EBSCrawler"])
+
+            #Snapshot Data
+            DestinationPrefix = 'snapshot'
+            snapshot.main(account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
+            start_crawler(os.environ["SnapshotCrawler"])
+                
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def s3(DestinationPrefix, account_id):
+def s3(DestinationPrefix, account_id, payer_id):
+    
+    fileSize = os.path.getsize("/tmp/data.json")
+    if fileSize == 0:  
+        print(f"No data in file for {DestinationPrefix}")
+    else:
+        d = datetime.now()
+        month = d.strftime("%m")
+        year = d.strftime("%Y")
+        dt_string = d.strftime("%d%m%Y-%H%M%S")
 
-    d = datetime.now()
-    month = d.strftime("%m")
-    year = d.strftime("%Y")
-    dt_string = d.strftime("%d%m%Y-%H%M%S")
-
-    bucket = os.environ[
-        "BUCKET_NAME"
-    ]  # Using enviroment varibles below the lambda will use your S3 bucket
-    today = date.today()
-    year = today.year
-    month = today.month
-    try:
-        s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-        s3.upload_file(
-            "/tmp/data.json",
-            bucket,
-            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
-        )  # uploading the file with the data to s3
-        print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
-    except Exception as e:
-        print(e)
+        bucket = os.environ[
+            "BUCKET_NAME"
+        ]  # Using enviroment varibles below the lambda will use your S3 bucket
+        today = date.today()
+        year = today.year
+        month = today.month
+        try:
+            s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+            s3.upload_file(
+                "/tmp/data.json",
+                bucket,
+                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
+            )  # uploading the file with the data to s3
+            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}")
+        except Exception as e:
+            print(e)
 
 
 def assume_role(account_id, service, region):
@@ -90,10 +101,10 @@ def assume_role(account_id, service, region):
         return None
 
 
-def start_crawler():
+def start_crawler(CrawlerName):
     glue_client = boto3.client("glue")
     try:
-        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        glue_client.start_crawler(Name=CrawlerName)
     except Exception as e:
         # Send some context about this error to Lambda Logs
         logging.warning("%s" % e)

@@ -16,13 +16,14 @@ This repository contains documentation and code in the format of hands-on labs t
 The labs _cannot_ be run from GitHub. Please continue to use GitHub to [log issues](https://github.com/awslabs/aws-well-architected-labs/issues) or make pull requests. To run the labs please use https://wellarchitectedlabs.com/
 
 ## Labs:
-The labs are structured around the five pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
+The labs are structured around the six pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
 
 - [Operational Excellence](http://wellarchitectedlabs.com/operational-excellence/)
 - [Security](http://wellarchitectedlabs.com/security/)
 - [Reliability](http://wellarchitectedlabs.com/reliability/)
 - [Performance Efficiency](http://wellarchitectedlabs.com/performance-efficiency/)
 - [Cost Optimization](http://wellarchitectedlabs.com/cost/)
+- [Sustainability](http://wellarchitectedlabs.com/sustainability/)
 - [Well-Architected Tool](http://wellarchitectedlabs.com/well-architectedtool/)
 
 
@@ -74,5 +75,3 @@ The instructions below is how I built the skeleton site.
 1. **Until https://github.com/matcornic/hugo-theme-learn/pull/355 gets resolved, I have implemented the fix in these 2 files:**
     1. layouts/partials/menu.html
     1. static/css/theme-walabs.css
-
-

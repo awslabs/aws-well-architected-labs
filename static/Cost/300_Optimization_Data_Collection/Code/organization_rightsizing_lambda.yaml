@@ -1,12 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
 Parameters:
-  CrawlerName:
-    Type: String
-    Default: crawl-rightsizing-recommendations
-    Description: Name of the AWS crawler to be created
-    AllowedPattern: ^.*[^0-9]$
-    ConstraintDescription: Must end with non-numeric character.
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
@@ -22,9 +16,16 @@ Parameters:
     Type: String
     Description: Name of the folder/prefix for rightsizing information to be stored in
     Default: rightsizing
-  RoleName:
+  ManagementRoleName:
     Type: String
-    Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Cost Explorer rightsizing information.
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+  ManagementAccountID:
+    Type: String
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -33,6 +34,11 @@ Parameters:
     Type: String
     Default: "cron(30 12 L * ? *)"
     Description: Cloud watch event Schedule to trigger the lambda 
+  GlueRoleARN:
+    Type: String
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 Outputs:
   CostExplorerRightsizingLambdaRoleARN:
     Description: Role for Lambda execution of AWS Cost Explorer Rightsizing recommendations.
@@ -49,17 +55,11 @@ Outputs:
   GlueCrawler:
     Value:
       Ref: RightsizingCrawler
-  GlueCrawlerRoleARN:
-    Value:
-      Fn::GetAtt:
-        - RightsizingGlueRole
-        - Arn
 Resources:
-
   RightsizingLambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: AWS-Cost-Explorer-Rightsizing-Execute-Lambda
+      RoleName: !Sub "${RolePrefix}AWS-Cost-Explorer-Rightsizing-Execute-Lambda"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -79,8 +79,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  Ref: RoleName
+                Resource: "*"
         - PolicyName: "Rightsizing-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -92,44 +91,20 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${RightsizingCrawler}"
               - Effect: "Allow"
                 Action:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
-  RightsizingGlueRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: AWS-Cost-Explorer-Rightsizing-Glue-Crawler
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - glue.amazonaws.com
-        Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
-      Path: /
-      Policies:
-        - PolicyName: "Get-Rightsizing-Recommendation-S3"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "s3:PutObject"
-                  - "s3:GetObject"
-                Resource: !Sub "${DestinationBucketARN}*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-cost-explorer-rightsizing-recommendations-function*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: aws-cost-explorer-rightsizing-recommendations-function
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction to retreive list of organization
       Runtime: python3.8
       Code:
@@ -145,11 +120,9 @@ Resources:
 
           AWS_REGION = "us-east-1"
           AWS_COST_EXPLORER_SERVICE_KEY = "ce"
-          RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
           BENEFITS_CONSIDERED = True
           GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
           BUCKET = os.environ['S3_BUCKET']
-          ROLE_ARN = os.environ['ROLE_ARN']
           PATH = os.environ['PATH']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
 
@@ -168,20 +141,23 @@ Resources:
               print('file upload successful')
 
 
-          def store_data_to_s3(data, s3client, path, filename):
-
+          def store_data_to_s3(data, s3client, path, filename, payer_id):
               today = date.today()
               year = today.year
               month = today.strftime('%m')
               day = today.day
-
               filepath = '/tmp/%s-%s' % (today, filename)
+
               with open(filepath, 'w') as f:
                   json.dump(data, f, default=str)
                   f.write('\n')
-              upload_file_to_s3(s3client, BUCKET, filepath,
-                                "%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
-                                % (path, year, month, day, year, month, day, filename))
+              fileSize = os.path.getsize(filepath)
+              if fileSize == 0:  
+                  print(f"No data in file for {DestinationPrefix}")
+              else:
+                upload_file_to_s3(s3client, BUCKET, filepath,
+                                  "%s/payer_id=%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
+                                  % (path, payer_id, year, month, day, year, month, day, filename))
 
           def lambda_handler(event, context):
 
@@ -190,57 +166,88 @@ Resources:
 
               sts_connection = boto3.client('sts')
               s3client = boto3.client('s3')
-              try:
-                  assumed_role = sts_connection.assume_role(
-                                  RoleArn=ROLE_ARN,
-                                  RoleSessionName="cross_acct_lambda"
-                              )
-                  ACCESS_KEY = assumed_role['Credentials']['AccessKeyId']
-                  SECRET_KEY = assumed_role['Credentials']['SecretAccessKey']
-                  SESSION_TOKEN = assumed_role['Credentials']['SessionToken']
 
-                  assumed_role_session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
-                                                               aws_secret_access_key=SECRET_KEY,
-                                                               aws_session_token=SESSION_TOKEN)
+              role_name = os.environ['ROLE']
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                  try:
+                      assumed_role = sts_connection.assume_role(
+                                      RoleArn=ROLE_ARN,
+                                      RoleSessionName="cross_acct_lambda"
+                                  )
+                      ACCESS_KEY = assumed_role['Credentials']['AccessKeyId']
+                      SECRET_KEY = assumed_role['Credentials']['SecretAccessKey']
+                      SESSION_TOKEN = assumed_role['Credentials']['SessionToken']
 
-                  cost_explorer = assumed_role_session.client(AWS_COST_EXPLORER_SERVICE_KEY, AWS_REGION)
+                      assumed_role_session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
+                                                                  aws_secret_access_key=SECRET_KEY,
+                                                                  aws_session_token=SESSION_TOKEN)
 
-                  today = date.today()
-                  datestr = today.strftime('%Y') + '-' + today.strftime('%m') + '-' + today.strftime('%d')
+                      cost_explorer = assumed_role_session.client(AWS_COST_EXPLORER_SERVICE_KEY, AWS_REGION)
 
-                  token = None
-                  result = {"RecommendationDate": datestr,
-                            "RightsizingRecommendations":[]}
-                  while True:
-                      kwargs = {}
-                      if token:
-                          kwargs = {"NextPageToken": token}
-                      response = cost_explorer.get_rightsizing_recommendation(
-                              Service='AmazonEC2',
-                              Configuration={
-                                  'RecommendationTarget': RECOMMENDATION_TARGET,
-                                  'BenefitsConsidered': BENEFITS_CONSIDERED
-                              },
-                              PageSize=5000,
-                              **kwargs)
-                      #print response
-                      result["RightsizingRecommendations"] += response["RightsizingRecommendations"]
-                      #print response["RightsizingRecommendations"]
-                      token = response.get("NextPageToken", None)
-                      if not token:
-                          break
-                  store_data_to_s3(result, s3client, PATH, GENERIC_FILENAME)
-                  start_crawler()
-                  return "Successful"
+                      today = date.today()
+                      datestr = today.strftime('%Y') + '-' + today.strftime('%m') + '-' + today.strftime('%d')
+                      
+                      RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
+                      
+                      token = None
+                      result = {"RecommendationDate": datestr,
+                                          "RightsizingRecommendationsSameFamily":[],
+                                          "RightsizingRecommendationsCrossFamily":[]
+                                  }
+                      while True:
+                          kwargs = {}
+                          if token:
+                              kwargs = {"NextPageToken": token}
+                          response = cost_explorer.get_rightsizing_recommendation(
+                                  Service='AmazonEC2',
+                                  Configuration={
+                                      'RecommendationTarget': RECOMMENDATION_TARGET,
+                                      'BenefitsConsidered': BENEFITS_CONSIDERED
+                                  },
+                                  PageSize=5000,
+                                  **kwargs)
+                          print("Same family Data")
+                          print(response)
+                          result["RightsizingRecommendationsSameFamily"] += response["RightsizingRecommendations"]
+                          print(response["RightsizingRecommendations"])
+                          
+                          RECOMMENDATION_TARGET = 'CROSS_INSTANCE_FAMILY'
+                          token = None
+                          kwargs = {}
+                          if token:
+                              kwargs = {"NextPageToken": token}
+                          response = cost_explorer.get_rightsizing_recommendation(
+                                  Service='AmazonEC2',
+                                  Configuration={
+                                      'RecommendationTarget': RECOMMENDATION_TARGET,
+                                      'BenefitsConsidered': BENEFITS_CONSIDERED
+                                  },
+                                  PageSize=5000,
+                                  **kwargs)
+                          print("Cross family Data")
+                          print(response)
+                          result["RightsizingRecommendationsCrossFamily"] += response["RightsizingRecommendations"]
+                          print(response["RightsizingRecommendations"])
 
-              except Exception as e:
-                  # Send some context about this error to Lambda Logs
-                  logging.warning("%s" % e)
-                  return "Failed"
+                          token = response.get("NextPageToken", None)
+                          if not token:
+                              break
+                      store_data_to_s3(result, s3client, PATH, GENERIC_FILENAME, payer_id)
+                      start_crawler()
+                      return "Successful"
+
+
+                  except Exception as e:
+                      # Send some context about this error to Lambda Logs
+                      logging.warning("%s" % e)
+                      continue 
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688
-      Timeout: 300
+      Timeout: 600
       Role:
         Fn::GetAtt:
           - RightsizingLambdaRole
@@ -249,28 +256,33 @@ Resources:
         Variables:
           S3_BUCKET:
             Ref: DestinationBucket
-          ROLE_ARN:
-            Ref: RoleName
           PATH:
             Ref: DestinationPrefix
           CRAWLER_NAME:
             Ref: RightsizingCrawler
+          RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
+          ROLE: 
+            Ref: MultiAccountRoleName
+          MANAGEMENT_ACCOUNT_IDS: 
+            Ref: ManagementAccountID
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        Ref: CrawlerName
-      Role: !GetAtt RightsizingGlueRole.Arn
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/${DestinationPrefix}/"
-  AthenaQuery:
+  
+  AthenaQuerySameFamilyRightSizing:
     Type: AWS::Athena::NamedQuery
     Properties:
-      Database: rightsizing
-      Description: Provides a summary view of the rightsizing recommendations
-      Name: rightsizing-summary-view
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the rightsizing recommendations for same family
+      Name: same-familyrightsizing-summary-view
       QueryString:
         --  Click Create as view then you can run from that
 
@@ -279,14 +291,14 @@ Resources:
                 , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
                 , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
                 , count(*)                                                  AS "frequency"
-            FROM (rightsizing.rightsizing
-                CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
+            FROM (optimization_data.rightsizing
+                CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t(recommendations))
             GROUP BY 1
         ),
             data AS (
                 SELECT recommendations
-                FROM (rightsizing.rightsizing
-                    CROSS JOIN UNNEST("rightsizingrecommendations") t(recommendations))
+                FROM (optimization_data.rightsizing
+                    CROSS JOIN UNNEST("rightsizingrecommendationssamefamily") t(recommendations))
                 WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
 
             ),
@@ -329,19 +341,158 @@ Resources:
                                   ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage"
                             END) AS double)                                                                     AS "max_disk_utilization"
                     , "recommendations"."rightsizingtype"                                                       AS "recommended_action"
-                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
                                 THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype"
                             ELSE ''
                         END)                                                                                     AS "recommended_instance_type_1"
                     , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
-                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
                 "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double)
                             ELSE 0.0
-                        END)                                                                                     AS "estimated_monthly_cost"
-                    , (CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                        END)                                                                                     AS "estimated_monthly_cost_type_1"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
                 "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double)
                             ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
-                        END)                                                                                     AS "estimated_monthly_savings"
+                        END)                                                                                     AS "estimated_monthly_savings_type_1"
+                      , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_2"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost_type_2"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings_type_2"
+                , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_3"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost_type_3"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings_type_3"
+                FROM data
+            )
+        SELECT recs.*
+            , rightsizing_dates.earliest_date
+            , rightsizing_dates.latest_date
+            , rightsizing_dates.frequency
+            , chosen_tags.name
+        FROM recs
+            JOIN      rightsizing_dates ON ("rightsizing_dates"."instance_id" = "recs"."instance_id")
+            LEFT JOIN chosen_tags ON ("chosen_tags"."instance_id" = "recs"."instance_id")
+  AthenaQueryCrossFamilyRightSizing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the rightsizing recommendations for cross family
+      Name: cross-familyrightsizing-summary-view
+      QueryString:
+        --  Click Create as view then you can run from that
+
+        WITH rightsizing_dates AS (
+            SELECT "recommendations"."currentinstance"."resourceid"          AS "instance_id"
+                , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
+                , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
+                , count(*)                                                  AS "frequency"
+            FROM (optimization_data.rightsizing
+                CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
+            GROUP BY 1
+        ),
+            data AS (
+                SELECT recommendations
+                FROM (optimization_data.rightsizing
+                    CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
+                WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
+
+            ),
+            all_tags AS (
+                SELECT "recommendations"."currentinstance"."resourceid" AS "instance_id"
+                    , tags.key
+                    , "tags"."values"[1]                               as "value"
+                FROM data
+                    CROSS JOIN UNNEST("recommendations"."currentinstance"."tags") AS t(tags)
+            ),
+            chosen_tags AS (
+
+                SELECT instance_id
+                    , kv['user:Name'] AS "Name"
+                FROM (
+                    SELECT instance_id
+                        , map_agg(key, value) AS kv
+                    FROM all_tags
+                    GROUP BY instance_id
+                )
+            ),
+            recs AS (
+                SELECT "recommendations"."currentinstance"."resourceid"                                          AS "instance_id"
+                    , "recommendations"."currentinstance"."instancename"                                        AS "instance_name"
+                    , "recommendations"."accountid"                                                             AS "account_id"
+                    , "recommendations"."currentinstance"."resourcedetails"."ec2resourcedetails"."instancetype" AS "instance_type"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxcpuutilizationpercentage"
+                            END) AS double)                                                                     AS "max_cpu_utilization"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxmemoryutilizationpercentage"
+                            END) AS double)                                                                     AS "max_memory_utilization"
+                    , CAST((CASE WHEN (
+                        "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage" =
+                        '') THEN null
+                                  ELSE "recommendations"."currentinstance"."resourceutilization"."ec2resourceutilization"."maxstorageutilizationpercentage"
+                            END) AS double)                                                                     AS "max_disk_utilization"
+                    , "recommendations"."rightsizingtype"                                                       AS "recommended_action"
+                                        , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_1"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost_type_1"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[1]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings_type_1"
+                      , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_2"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost_type_2"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[2]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings_type_2"
+                , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify')
+                                THEN "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."resourcedetails"."ec2resourcedetails"."instancetype"
+                            ELSE ''
+                        END)                                                                                     AS "recommended_instance_type_3"
+                    , CAST("recommendations"."currentinstance"."monthlycost" AS double)                         AS "current_monthly_cost"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlycost" AS double)
+                            ELSE 0.0
+                        END)                                                                                     AS "estimated_monthly_cost_type_3"
+                    , Try(CASE WHEN ("recommendations"."rightsizingtype" = 'Modify') THEN CAST(
+                "recommendations"."modifyrecommendationdetail"."targetinstances"[3]."estimatedmonthlysavings" AS double)
+                            ELSE CAST("recommendations"."currentinstance"."monthlycost" AS double)
+                        END)                                                                                     AS "estimated_monthly_savings_type_3"
                 FROM data
             )
         SELECT recs.*

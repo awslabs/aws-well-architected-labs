@@ -1,0 +1,448 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves Pricing data
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: pricing
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  Schedule:
+    Type: String
+    Default: "cron(30 12 L * ? *)"
+    Description: Cloud watch event Schedule to trigger the lambda 
+Outputs:
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: !Sub "${CFDataName}-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:ListBucket"
+                  - "s3:GetBucketLocation"
+                Resource: !Ref  DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: "arn:aws:logs:*:*:*"
+  EC2LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Architectures: [arm64]
+      Code:
+        ZipFile: |
+          #Author Stephanie Gooch 2021
+          # Function to download EC2 pricing
+          # Please reachout to costoptimization@amazon.com if there's any comments or suggestions
+
+          import json
+          import boto3
+          import urllib3
+          import urllib.request
+          import os
+          import logging
+
+          def lambda_handler(event, context):
+
+              s3=boto3.resource('s3')
+              http=urllib3.PoolManager()
+
+              url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv'
+              s3Bucket =  os.environ["BUCKET_NAME"]
+              key = f'{os.environ["DEST_PREFIX"]}/ec2/ec2_prices.csv'
+
+              urllib.request.urlopen(url)   #Provide URL
+              s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
+
+              region_data(s3Bucket, s3)
+
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('YAY!')
+              }
+          def region_data(s3Bucket, s3):
+
+            #Create a Source Dictionary That Specifies Bucket Name and Key Name of the Object to Be Copied
+            copy_source = {
+                'Bucket': 'aws-well-architected-labs',
+                'Key': 'Cost/Labs/300_Optimization_Data_Collection/Region/regions.csv'
+            }
+            
+            bucket = s3.Bucket(s3Bucket)
+            
+            bucket.copy(copy_source, 'pricing/region/regions.csv')
+            
+            # Printing the Information That the File Is Copied.
+            print('Single File is copied')
+
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2880
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            !Ref DestinationBucket
+          ACCOUNT_ID: AWS::AccountId
+          DEST_PREFIX: !Ref CFDataName
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Weekly Notification Event for lambda data
+      Name: !Sub "${CFDataName}-Weekly-Scheduler"
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - EC2LambdaFunction
+              - Arn
+          Id: WeeklyTriggerForEC2Pricing
+        - Arn:
+            Fn::GetAtt:
+              - RDSLambdaFunction
+              - Arn
+          Id: WeeklyTriggerForRDSPricing
+  EC2EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - EC2LambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  RDSEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:  
+          Fn::GetAtt:
+              - RDSLambdaFunction
+              - Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  AthenaRegionTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: region_names
+      QueryString: !Sub
+        "CREATE EXTERNAL TABLE 'region_names'(
+        'region' string, 
+        'regionname' string, 
+        'endpoint' string, 
+        'protocol' string)
+      ROW FORMAT DELIMITED 
+        FIELDS TERMINATED BY ',' 
+      STORED AS INPUTFORMAT 
+        'org.apache.hadoop.mapred.TextInputFormat' 
+      OUTPUTFORMAT 
+        'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+      LOCATION
+        's3://${DestinationBucket}/pricing/region'
+      TBLPROPERTIES (
+        'has_encrypted_data'='false', 
+        'skip.header.line.count'='1', 
+        'transient_lastDdlTime'='1611498146')"  
+  AthenaEC2PricingTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: ec2_pricing_table
+      QueryString: !Sub
+        "CREATE EXTERNAL TABLE ec2_pricing(
+        sku string, 
+        offertermcode string, 
+        ratecode string, 
+        termtype string, 
+        pricedescription string, 
+        effectivedate string, 
+        startingrange string, 
+        endingrange string, 
+        unit string, 
+        priceperunit string, 
+        currency string, 
+        leasecontractlength string, 
+        purchaseoption string, 
+        offeringclass string, 
+        productfamily string, 
+        servicecode string, 
+        location string, 
+        locationtype string, 
+        instancetype string, 
+        currentgeneration string, 
+        instancefamily string, 
+        vcpu string, 
+        physicalprocessor string, 
+        clockspeed string, 
+        memory string, 
+        storage string, 
+        networkperformance string, 
+        processorarchitecture string, 
+        storagemedia string, 
+        volumetype string, 
+        maxvolumesize string, 
+        maxiopsvolume string, 
+        maxiopsburstperformance string, 
+        maxthroughputvolume string, 
+        provisioned string, 
+        tenancy string, 
+        ebsoptimized string, 
+        operatingsystem string, 
+        licensemodel string, 
+        groups string, 
+        groupdescription string, 
+        transfertype string, 
+        fromlocation string, 
+        fromlocationtype string, 
+        tolocation string, 
+        tolocationtype string, 
+        usagetype string, 
+        operation string, 
+        availabilityzone string, 
+        capacitystatus string, 
+        classicnetworkingsupport string, 
+        dedicatedebsthroughput string, 
+        ecu string, 
+        elasticgraphicstype string, 
+        enhancednetworkingsupported string, 
+        fromregion string, 
+        gpu string, 
+        gpumemory string, 
+        instance string, 
+        instancecapacity10xlarge string, 
+        instancecapacity12xlarge string, 
+        instancecapacity16xlarge string, 
+        instancecapacity18xlarge string, 
+        instancecapacity24xlarge string, 
+        instancecapacity2xlarge string, 
+        instancecapacity32xlarge string, 
+        instancecapacity4xlarge string, 
+        instancecapacity8xlarge string, 
+        instancecapacity9xlarge string, 
+        instancecapacitylarge string, 
+        instancecapacitymedium string, 
+        instancecapacitymetal string, 
+        instancecapacityxlarge string, 
+        instancesku string, 
+        intelavxavailable string, 
+        intelavx2available string, 
+        intelturboavailable string, 
+        marketoption string, 
+        normalizationsizefactor string, 
+        physicalcores string, 
+        preinstalledsw string, 
+        processorfeatures string, 
+        producttype string, 
+        regioncode string, 
+        resourcetype string, 
+        servicename string, 
+        snapshotarchivefeetype string, 
+        toregioncode string, 
+        volumeapiname string, 
+        vpcnetworkingsupport string)
+        ROW FORMAT SERDE 
+          'org.apache.hadoop.hive.serde2.OpenCSVSerde' 
+        WITH SERDEPROPERTIES ( 
+          'escapeChar'='\\', 
+          'quoteChar'='\"', 
+          'separatorChar'=',') 
+        STORED AS INPUTFORMAT 
+          'org.apache.hadoop.mapred.TextInputFormat' 
+        OUTPUTFORMAT 
+          'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        LOCATION
+          's3://${DestinationBucket}/${CFDataName}/ec2'
+        TBLPROPERTIES (
+          'has_encrypted_data'='false', 
+          'skip.header.line.count'='6', 
+          'transient_lastDdlTime'='1625832980')"
+  RDSLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+          - '${CFDataName}-RDS-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: !Sub "LambdaFunction to retrieve RDS ${CFDataName}"
+      Runtime: python3.8
+      Architectures: [arm64]
+      Code:
+        ZipFile: |
+          #Author Stephanie Gooch 2021
+          # Function to download RDS pricing
+          # Please reachout to costoptimization@amazon.com if there's any comments or suggestions
+
+          import json
+          import boto3
+          import urllib3
+          import urllib.request
+          import os
+          import logging
+
+          def lambda_handler(event, context):
+
+              s3=boto3.resource('s3')
+              http=urllib3.PoolManager()
+
+              url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/index.csv'
+              s3Bucket =  os.environ["BUCKET_NAME"]
+              key = f'{os.environ["DEST_PREFIX"]}/rds/rds_prices.csv'
+
+              urllib.request.urlopen(url)   #Provide URL
+              s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
+
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('YAY!')
+              }
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2880
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            !Ref DestinationBucket
+          ACCOUNT_ID: AWS::AccountId
+          DEST_PREFIX: !Ref CFDataName
+  AthenaRDSPricingTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: rds_pricing_table
+      QueryString: !Sub  
+        "CREATE EXTERNAL TABLE rds_pricing(
+        sku string, 
+        offertermcode string, 
+        ratecode string, 
+        termtype string, 
+        pricedescription string, 
+        effectivedate string, 
+        startingrange string, 
+        endingrange string, 
+        unit string, 
+        priceperunit string, 
+        currency string, 
+        relatedto string, 
+        leasecontractlength string, 
+        purchaseoption string, 
+        offeringclass string, 
+        productfamily string, 
+        servicecode string, 
+        location string, 
+        locationtype string, 
+        instancetype string, 
+        currentgeneration string, 
+        instancefamily string, 
+        vcpu string, 
+        physicalprocessor string, 
+        clockspeed string, 
+        memory string, 
+        storage string, 
+        networkperformance string, 
+        processorarchitecture string, 
+        storagemedia string, 
+        volumetype string, 
+        minvolumesize string, 
+        maxvolumesize string, 
+        enginecode string, 
+        databaseengine string, 
+        databaseedition string, 
+        licensemodel string, 
+        deploymentoption string, 
+        group string, 
+        groupdescription string, 
+        usagetype string, 
+        operation string, 
+        dedicatedebsthroughput string, 
+        enhancednetworkingsupported string, 
+        instancetypefamily string, 
+        normalizationsizefactor string, 
+        processorfeatures string, 
+        servicename string)
+        ROW FORMAT SERDE
+        'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+        WITH SERDEPROPERTIES (
+        'quoteChar'='\"',
+        'separatorChar'=',')
+        STORED AS INPUTFORMAT
+        'org.apache.hadoop.mapred.TextInputFormat'
+        OUTPUTFORMAT
+        'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        LOCATION
+        's3://${DestinationBucket}/${CFDataName}/rds'
+        TBLPROPERTIES (
+        'CrawlerSchemaDeserializerVersion'='1.0',
+        'CrawlerSchemaSerializerVersion'='1.0',
+        'UPDATED_BY_CRAWLER'='Pricing CSV',
+        'areColumnsQuoted'='true',
+        'averageRecordSize'='1061',
+        'classification'='csv',
+        'columnsOrdered'='true',
+        'compressionType'='none',
+        'delimiter'=',',
+        'objectCount'='1',
+        'recordCount'='2089892',
+        'sizeKey'='2217375799',
+        'skip.header.line.count'='6',
+        'typeOfData'='file')"

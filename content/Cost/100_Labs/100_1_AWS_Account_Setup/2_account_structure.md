@@ -21,14 +21,12 @@ You will create an AWS Organization with the management account.
 2. Click on **Create organization**:
 ![Images/AWSOrg2.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg2.png)
 
-3. To create a fully featured organization, Click on **Create organization**
+
+3. You will receive a verification email, click on **Verify your email address** to verify your account:
 ![Images/AWSOrg3.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg3.png)
 
-4. You will receive a verification email, click on **Verify your email address** to verify your account:
+4. You will then see a verification message in the console for your organization:
 ![Images/AWSOrg4.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg4.png)
-
-5. You will then see a verification message in the console for your organization:
-![Images/AWSOrg5.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg5.png)
 
 You now have an organization that you can join other accounts to.
 
@@ -36,37 +34,34 @@ You now have an organization that you can join other accounts to.
 You will now join other accounts to your organization. You need to create and join an account that will be used to perform Cost Optimization work, as well as other member accounts used to run workloads.
 
 1. From the AWS Organizations console click on **Add account**:
+![Images/AWSOrg5.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg5.png)
+
+2. Click on **Invite an existing AWS Account**:
 ![Images/AWSOrg6.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg6.png)
 
-2. Click on **Invite account**:
+3. Enter in the **Email or account ID**, enter in any relevant **Notes** and click **Send invitation**:
 ![Images/AWSOrg7.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg7.png)
 
-3. Enter in the **Email or account ID**, enter in any relevant **Notes** and click **Invite**:
-![Images/AWSOrg8.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg8.png)
-
 4. You will then have an open request:
-![Images/AWSOrg9.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg9.png)
+![Images/AWSOrg8.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg8.png)
 
 5. Log in to your **member account**, and go to **AWS Organizations**:
 ![Images/AWSOrg1.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg1.png)
 
 6. You will see an invitation in the menu, click on **Invitations**:
+![Images/AWSOrg9.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg9.png)
+
+7. Verify the details in the request (they are hidden here), and click on **Accept**:
 ![Images/AWSOrg10.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg10.png)
 
-7. Verify the details in the request (they are blacked out here), and click on **Accept**:
+8. You are shown that the account is now part of your organization:
 ![Images/AWSOrg11.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg11.png)
 
-8. Verify the Organization ID (blacked out here), and click **Confirm**:
+10. The member account will receive an email showing success:
 ![Images/AWSOrg12.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg12.png)
 
-9. You are shown that the account is now part of your organization:
-![Images/AWSOrg13.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg13.png)
-
-10. The member account will receive an email showing success:
-![Images/AWSOrg14.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg14.png)
-
 11. The management account will also receive email notification of success:
-![Images/AWSOrg15.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg15.png)
+![Images/AWSOrg13.png](/Cost/100_1_AWS_Account_Setup/Images/AWSOrg13.png)
 
 Repeat the steps above for each additional member account in your organization.
 

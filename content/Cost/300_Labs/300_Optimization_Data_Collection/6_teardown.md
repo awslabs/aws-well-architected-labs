@@ -8,9 +8,13 @@ pre: "<b>6. </b>"
 
 The following resources were created in this lab:
 
-- CloudFormation stack in the Management account - OptimizationDataRoleStack
 - CloudFormation stack in the Cost account - OptimizationDataCollectionStack
+- CloudFormation stack in the Management account - OptimizationManagementDataRoleStack
+- CloudFormation stackset in the Management account - OptimizationDataRoleStack
 
+Before deleting Stacks and StackSet please make sure all related buckets are empty.
+
+When deleting the OptimizationDataRoleStack stackset, if you deployed to all accounts in your organization then add your AWS Organization id where it asks for **AWS OU ID**. Please make sure you empty s3 buckets before deletion of OptimizationDataCollectionStack. 
 
 {{< prev_next_button link_prev_url="../5_utilize_data/"  title="Congratulations!" final_step="true" >}}
 

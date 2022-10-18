@@ -1,0 +1,187 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  CognitoUserPoolArn:
+    Type: String
+  AppUrl:
+    Type: String
+
+Resources:
+  AppTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Rides
+      AttributeDefinitions:
+        -
+          AttributeName: "RideId"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "RideId"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  AppLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBWriteAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'dynamodb:PutItem'
+                Resource: !GetAtt AppTable.Arn
+        - PolicyName: XRayWriteAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - 'xray:PutTraceSegments'
+                  - 'xray:PutTelemetryRecords'
+                Resource: "*"
+
+  AppLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      Role: !GetAtt AppLambdaExecutionRole.Arn
+      Handler: index.handler
+      Tracing: Active
+      Layers:
+        - !Ref XraySdk
+      CodeUri: ./lambda/app
+      Description: Backend API
+      Environment:
+        Variables:
+          APP_URL: !Ref AppUrl
+
+  XraySdk:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: XraySdk
+      Description: XraySdk
+      ContentUri: ./layers/xray-sdk
+      CompatibleRuntimes:
+        - nodejs12.x
+
+  ApplambdaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt AppLambda.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${AppRestApi}/*/POST/ride
+
+  AppRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: "BlueCarHealth"
+
+  AppRestApiAuthorizer:
+    Type: 'AWS::ApiGateway::Authorizer'
+    Properties:
+      Type: COGNITO_USER_POOLS
+      ProviderARNs: [ !Ref CognitoUserPoolArn ]
+      IdentitySource: method.request.header.Authorization
+      Name: "BlueCarHealth"
+      RestApiId: !Ref AppRestApi
+
+  AppRestApiRideResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref AppRestApi
+      ParentId: !GetAtt
+        - AppRestApi
+        - RootResourceId
+      PathPart: ride
+
+  AppRestApiRidePostMethod:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref AppRestApi
+      ResourceId: !Ref AppRestApiRideResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref AppRestApiAuthorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub >-
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AppLambda.Arn}/invocations
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+              method.response.header.Access-Control-Allow-Origin:  !Sub 
+                                                                    - "'${ORIGIN}'"
+                                                                    - ORIGIN: !Ref AppUrl
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+            StatusCode: '204'
+        RequestTemplates:
+          application/json: '{ statusCode: 200 }'
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+          StatusCode: '204'
+          ResponseModels:
+            application/json: Empty
+
+  #Added OPTIONS method that can respond to the OPTIONS preflight request
+  AppRestApiOPTIONSMethod:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref AppRestApi
+      ResourceId: !Ref AppRestApiRideResource
+      HttpMethod: OPTIONS #added
+      AuthorizationType: NONE
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+              method.response.header.Access-Control-Allow-Origin:  !Sub 
+                                                                    - "'${ORIGIN}'"
+                                                                    - ORIGIN: !Ref AppUrl
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+            StatusCode: '204'
+        RequestTemplates:
+          application/json: '{ statusCode: 200 }'
+        Type: MOCK
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+          StatusCode: '204'
+
+  AppRestApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - AppRestApiRidePostMethod
+      - AppRestApiOPTIONSMethod
+    Properties:
+      RestApiId: !Ref AppRestApi
+      StageName: prod
+
+Outputs:
+  ApiEndpoint:
+    Value: !Sub 'https://${AppRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod'
+

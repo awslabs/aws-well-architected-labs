@@ -1,4 +1,5 @@
 import boto3
+from boto3.session import Session
 import logging
 from datetime import date
 import json
@@ -15,15 +16,17 @@ def lambda_handler(event, context):
     try:
         for record in event['Records']:
            
-            account_id = record["body"]
-            
+            body = json.loads(record["body"])
+            account_id = body["account_id"]
+            payer_id = body["payer_id"]
             print(account_id)
             list_region = lits_regions()
             with open(
                     "/tmp/data.json", "w"
                 ) as f:  # Saving in the temporay folder in the lambda
+                session = assume_session(account_id)
                 for region in list_region:
-                    client = assume_role(account_id, "ecs", region)
+                    client = session.client("ecs",region_name = region)
                     
                     paginator = client.get_paginator(
                         "list_clusters"
@@ -51,7 +54,7 @@ def lambda_handler(event, context):
                                     for service in services["services"]:
                                         data = {
                                             "cluster": cluster.split("/")[1],
-                                            "service": service.get("serviceName"),
+                                            "services": service.get("serviceName"),
                                             "servicesARN": i, #.split("/")[2]
                                             "tags": service.get("tags"),
                                             "account_id":account_id
@@ -70,24 +73,30 @@ def lambda_handler(event, context):
                         pass
                 
             print("respose gathered")
-            today = date.today()
-            year = today.year
-            month = today.month
-            
-            client = boto3.client("s3")
-            client.upload_file(
-                "/tmp/data.json",
-                bucket,
-                f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
-            )  # uploading the file with the data to s3
-            print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
+
+            fileSize = os.path.getsize("/tmp/data.json")
+            if fileSize == 0:  
+                print(f"No data in file for {DestinationPrefix}")
+            else:
+                today = date.today()
+                year = today.year
+                month = today.month
+                
+                client = boto3.client("s3")
+                client.upload_file(
+                    "/tmp/data.json",
+                    bucket,
+                    f"{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
+                )  # uploading the file with the data to s3
+                print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
+                start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
         
 
 
-def assume_role(account_id, service, region):
+def assume_session(account_id):
     role_name = os.environ['ROLENAME']
     role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
     sts_client = boto3.client('sts')
@@ -100,22 +109,27 @@ def assume_role(account_id, service, region):
             )
         
         credentials = assumedRoleObject['Credentials']
-        client = boto3.client(
-            service,
+        session = Session(
             aws_access_key_id=credentials['AccessKeyId'],
             aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken'],
-            region_name = region
+            aws_session_token=credentials['SessionToken']
         )
-        return client
+        return session
 
     except ClientError as e:
         logging.warning(f"Unexpected error Account {account_id}: {e}")
         return None
 
 def lits_regions():
-    from boto3.session import Session
-
     s = Session()
     ecs_regions = s.get_available_regions('ecs')
     return ecs_regions
+
+def start_crawler():
+    glue_client = boto3.client("glue")
+    try:
+        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        print("Crawler Started")
+    except Exception as e:
+        # Send some context about this error to Lambda Logs
+        logging.warning("%s" % e)
