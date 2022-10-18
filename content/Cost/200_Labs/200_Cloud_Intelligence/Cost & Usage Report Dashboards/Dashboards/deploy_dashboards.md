@@ -48,10 +48,8 @@ This step will create a new CUR for you. You can request a [backfill](https://do
 4. Enter your Management (Payer) Account Id. 
 
 5. Set CreateCUR to **true**.
-   
-![Images/multi-account/cfn_dash_param_dst_dedicated_3.png.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_3.png?classes=lab_picture_small)
 
-1. Enter your Management (Payer) Account IDs. 
+6. Leave Source account empty 
    
 ![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
 
