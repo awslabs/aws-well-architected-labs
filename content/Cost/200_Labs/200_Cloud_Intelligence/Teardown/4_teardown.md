@@ -7,7 +7,22 @@ pre: "<b> </b>"
 ---
 
 
-To perform a teardown for this lab, perform the following steps:
+### Teardown of CloudFormation deployment (Automated)
+{{%expand "Click here to use the same CFN templates you used to deploy the dashboards to tear down the environment" %}}
+
+**NOTE:** Deleting an account means that CUR data will not flow to your destionat (data collection) account anymore. However, historical data will be retained in destination account. To delete the CURs, go to the `${resource-prefix}-${payer-account-id}-shared` S3 Bucket and manualy delete account data.
+    ------------ | -------------
+
+1. Login to the Account you want to delete.
+   
+2. Find your existing template and choose __Delete__
+
+![Images/multi-account/cfn_dash_param_12.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_12.png?classes=lab_picture_small)
+
+{{% /expand%}}
+
+### Manual Teardown
+{{%expand "To perform a teardown manually for this lab, perform the following steps:" %}}
 
 1. Remove QuickSight email reports
     - Go into **QuickSight**
@@ -58,7 +73,7 @@ To perform a teardown for this lab, perform the following steps:
 6. To disable Trusted Advisor Organizational View
     - [Follow the documentation](https://docs.aws.amazon.com/awssupport/latest/user/organizational-view.html#disable-organizational-view)
 
-
+{{% /expand%}}
 {{< prev_next_button link_prev_url="../4_distribute_dashboards/"  title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with

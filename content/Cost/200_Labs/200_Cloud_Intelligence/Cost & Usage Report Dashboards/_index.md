@@ -1,7 +1,7 @@
 ---
 title: "Cost & Usage Report Dashboards"
 #menutitle: "Lab #2"
-date: 2022-08-30T11:16:08-04:00
+date: 2022-10-10T11:16:08-04:00
 chapter: false
 weight: 1
 hidden: false
@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-September 2022
+October 2022
 
 
 ## Feedback
@@ -74,4 +74,6 @@ Approximately 45-60 minutes to onboard all CUR dashboards in this section manual
 Additional Dashboards include the **Data Transfer Dashboard** and **Trends Dashboard**
 {{% /notice %}} 
 
-{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/1a_cur_setup/" button_next_text="Start Lab" first_step="true" />}}
+---
+
+{{< prev_next_button link_next_url="../cost-usage-report-dashboards/dashboards/deploy_dashboards/" button_next_text="Start Lab" first_step="true" />}}

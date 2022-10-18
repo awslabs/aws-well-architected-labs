@@ -14,7 +14,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ### General
 
-
 #### Which dashboards are available for installation?
 We have several dashboards- CUDOS, KPI, CID, Compute Optimizer, Trusted Advisor (TAO) and Trends, Full documentation can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/#cost-intelligence-dashboard-cid)
 
@@ -68,7 +67,8 @@ You can see an example on [this](https://www.youtube.com/watch?v=dzRKDSXCtAs) vi
 
 
 #### How do I setup the dashboards in an account other than my payer account or on top of multiple payer accounts?
-This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. To setup the dashboards on top of multi payer accounts, please review multi-account [setup](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/1a_cur_setup/) deployment options and instructions.
+This scenario allows customers with multiple payer (management) accounts to deploy all the CUR dashboards on top of the aggregated data from multiple payers. 
+To setup the dashboards on top of multi payer accounts, please review [multi-account setup]({{< ref "Cost/200_Labs/200_Cloud_Intelligence/Cost & Usage Report Dashboards/Dashboards/deploy_dashboards.md" >}}) deployment options and instructions.
 
 #### What are the solution limitations?
 Amazon QuickSight supports up to 30 visuals in a single sheet, and a limit of 20 sheets per analysis. QuickSight SPICE capacity for Enterprise edition is up to 500 million rows or 500 GB per dataset. Amazon Athena DML query timeout is max 4 hours.
