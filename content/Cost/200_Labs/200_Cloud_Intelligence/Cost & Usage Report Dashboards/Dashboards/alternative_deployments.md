@@ -132,7 +132,9 @@ In this step, we will be using an AWS provided CloudFormation template that auto
 16. Enable **"I acknowledge that AWS CloudFormation might create IAM resources."** and click **Create Stack**
 
 ### Enable QuickSight
-QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
+
+**If you are already a regular QuickSight user** you will need to make sure you have an enterprise license and add permissions for QuickSight to read your CUR bucket. You can accomplish this by going to the persona icon in the upper right hand corner of QuickSight, clicking Manage Quicksight, clicking on Security and Permissions, clicking on managing QuickSight access to AWS Service, selecting S3, then selecting the CUR bucket from the list of S3 buckets. If you are new to QuickSight, complete the steps below.
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services
 
@@ -233,7 +235,7 @@ cid-cmd deploy
 ### Option 2: Manual Deployment
 {{%expand "Click here to expand step by step instructions" %}}
 
-Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards in an account other than your management (payer) account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go for this step. This option will create new Cost & Usage Reports (CUR). This guide will walk you through setting up the management (payer) account CUR S3 buckets to have replication enabled pointing to your linked (data collection) account manually.
+Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards into your management (payer) account or a separate linked account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go if you want to deploy the CIDs into a linked account other than your management (payer) account. This guide will walk you through creating a new Cost & Usage Reports (CUR), and if you're deploying into a linked account; setting up the management (payer) account CUR S3 buckets to have replication enabled pointing to your linked (data collection) account. 
 
 ![Images/CUDOS_multi_payer.png](/Cost/200_Cloud_Intelligence/Images/CUDOS_multi_payer.png?classes=lab_picture_small)
 
@@ -283,7 +285,7 @@ Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards 
 It can take up to 24 hours for AWS to start delivering CURs to your Amazon S3 bucket. After delivery starts, AWS updates the AWS Cost and Usage Reports files at least once a day. You can create AWS Support ticket requesting a backfill for the last 6 months of your data.
 {{% /notice %}}
 
-#### Setup S3 CUR Bucket Replication
+#### Setup S3 CUR Bucket Replication (skip if you're deploying the dashboards into your management payer account)
 
 1. Log into and go to the console of your Linked (Data Collection) account. This is where the Cloud Intelligence Dashboards will be deployed. Your management (payer) account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
 2. Create an S3 bucket with enabled versioning.
@@ -404,10 +406,8 @@ To get Athena warmed up:
 8. This s3 bucket results location must be available for QuickSight. Please note this bucket name, you will need it on the next step.
 
 ## Prepare Glue Crawler
-If you configured the crawler already using Option 2 on this page, you can skip this step. This step is also not required if you use [All-in-one CloudFormation deployment](http://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/2_deploy_dashboards/#all-in-one-cloudformation-deployment-10-min) for CID deployment
 
-
-These actions should be done in Data Collection Account
+These actions should be done in the account where you are deploying the dashboards, either the Management (payer) Account or a Linked (data collection) Account. 
 
 1. Open AWS Glue Service in AWS Console in the same region where S3 bucket with aggregated CUR data is located and go to Crawlers section
 2. Click Add Crawler
@@ -434,11 +434,12 @@ These actions should be done in Data Collection Account
 
 ![Images/glue_4.png](/Cost/200_Cloud_Intelligence/Images/glue_4.png?classes=lab_picture_small)
 
-10. Crawler configuration should look as on the screenshot below. Click Finish
+10.  Click Finish. Select the crawler and from the action menu choose 'run crawler'. 
 
-11. Resume deployment methodoly of choice from previous page. 
+### Setup QuickSight 
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
 
-QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
+**If you are already a regular QuickSight user** you will need to make sure you have an enterprise license and add permissions for QuickSight to read your CUR bucket. You can accomplish this by going to the persona icon in the upper right hand corner of QuickSight, clicking Manage Quicksight, clicking on Security and Permissions, clicking on managing QuickSight access to AWS Service, selecting S3, then selecting the CUR bucket from the list of S3 buckets. If you are new to QuickSight, complete the steps below.
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services
 
@@ -464,6 +465,765 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 ![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
 1. Click on the persona icon on the top right and select manage QuickSight. 
 2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+
+This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight.
+
+You will require AWS CLI environment. We recommend using CloudShell in your account, but you also can [install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) on your working environment.
+
+### Create Athena Views
+
+The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances, if not you will need to create the alternate views.
+
+1. Login via SSO in your Cost Optimization account, go into the **Athena** console:
+
+2. Modify and run the following queries to confirm if you have Savings Plans, and Reserved Instances in your usage. If no lines are returned, you have no Savings Plans or Reserved Instances. Replace (database).(tablename) and run the following:
+
+    Savings Plans:
+
+        select * from (database).(tablename)
+        where savings_plan_savings_plan_a_r_n not like ''
+        limit 10
+
+    Reserved Instances:
+
+        select * from (database).(tablename)
+        where reservation_reservation_a_r_n not like ''
+        limit 10
+		
+
+**NOTE:** Unless you already have Savings Plans and Reserved Instances both already adopted as your savings options, **recreate Athena Views** corresponding with your savings profile whenever you onboard a new savings option (like Savings Plans or Reserved Instances) **for the first time**.
+    ------------ | -------------
+
+3. Create the **account_map  view** by modifying the following code, and executing it in Athena:
+	- [View0 - account_map](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
+
+4. Create the **Summary view** by modifying the following code, and executing it in Athena:
+	- [View1 - Summary View](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/1_view1/)
+	
+
+5. Create the **EC2_Running_Cost view** by modifying the following code, and executing it in Athena:
+	- [View2 - EC2_Running_Cost](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/2_view2/)
+
+6. Create the **Compute savings plan eligible spend view** by modifying the following code, and executing it in Athena:
+	- [View3 - compute savings plan eligible spend](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/3_view3/)	
+
+7. Create the **s3 view** by modifying the following code, and executing it in Athena:
+	- [View4 - s3](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/4_view4/)	
+
+8. Create the **RI SP Mapping view** by modifying the following code, and executing it in Athena:
+	- [View5 - RI SP Mapping](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/5_view5/)
+
+**NOTE:** The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to June 1, 2021 you will want to update to the latest views.
+    ------------ | -------------
+
+
+
+### Create QuickSight Data Sets
+#### Create Datasets
+
+1. Go to the **QuickSight** service homepage inside your account. Be sure to select the correct region from the top right user menu or you will not see your expected tables
+
+    ![qs_region](/Cost/200_Cloud_Intelligence/Images/cur/qs_region.png?classes=lab_picture_small)
+
+1.	From the left hand menu, choose **Datasets**
+
+    ![qs_dataset_sidebar](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset_sidebar.png?classes=lab_picture_small)
+	
+1.	Click **New dataset** displayed in the top right corner
+
+    ![qs_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset.png?classes=lab_picture_small)
+
+1.	Choose **Athena** as your Data Source
+
+    ![qs_datasource](/Cost/200_Cloud_Intelligence/Images/cur/qs_datasource.png?classes=lab_picture_small)
+
+1.	Enter a data source name of **Cost_Dashboard** and click **Create data source**
+
+    ![qs_create_datasource](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_datasource.png?classes=lab_picture_small)
+
+1.	Select the database which holds the views you created (reference Athena if you’re unsure which one to select), and the **summary_view** table, then click **Edit/Preview data**
+
+    ![qs_select_datasource](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_datasource.png?classes=lab_picture_small)
+
+1.	Select **SPICE** to change your Query mode
+
+    ![qs_dataset_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset_summary.png?classes=lab_picture_small)
+	
+1.	Click **Add Data**
+
+    ![qs_add_data](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data.png?classes=lab_picture_small)
+	
+1.  Select **Data source**	
+  
+  ![qs_add_data_source](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_source.png?classes=lab_picture_small)
+	
+10. Choose your **Cost_Dashboard** view and click **Select**
+
+    ![qs_select_data_source_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_data_source_add.png?classes=lab_picture_small)
+
+1.  Select the **database** which holds the CUR views you created
+
+   ![qs_select_database_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_database_add.png?classes=lab_picture_small)
+	
+12.  Choose your **account_map** view and click **Select** 
+	![qs_add_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_account_map.png?classes=lab_picture_small)
+
+13.	Click the two circles to open the **Join conﬁguration**, then select **Left** to change your join type
+
+    ![qs_join_account_map_left](/Cost/200_Cloud_Intelligence/Images/cur/qs_join_account_map_left.png?classes=lab_picture_small)
+	
+1.	Configure the join clause to **linked_account_id = account_id**, then click **Apply**
+
+    ![qs_join_account_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_join_account_map.png?classes=lab_picture_small)
+	
+1.	Select **Save**
+
+    ![qs_save_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_save_summary.png?classes=lab_picture_small)
+
+1.	Select the **summary_view** dataset
+
+    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
+
+1.	Click **Schedule refresh**
+
+    ![qs_schedule_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_schedule_refresh.png?classes=lab_picture_small)
+
+1.	Click **Create**
+
+    ![qs_create_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_refresh.png?classes=lab_picture_small)
+
+1.	Enter a daily schedule, in the appropriate time zone and click **Create**
+
+    ![qs_daily_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_daily_refresh.png?classes=lab_picture_small)
+
+1.	Click **Cancel** to exit
+
+    ![qs_cancel_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_cancel_refresh.png?classes=lab_picture_small)
+
+1.	Click **x** to exit
+
+    ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_exit_refresh.png?classes=lab_picture_small)
+
+1.	Repeat **steps 3-21**, creating data sets with the remaining Athena views. You will reuse your existing **Cost_Dashboard** data source, and select the following views as the table:
+
+ - s3_view
+ - ec2_running_cost
+ - compute_savings_plan_eligible_spend
+
+
+	**NOTE:** Make sure to reuse the existing Athena data source by scrolling to the bottom of the Data source create/select page when creating a new Dataset instead of creating a new data source  
+		------------ | -------------
+			![qs_data_source_scroll](/Cost/200_Cloud_Intelligence/Images/cur/qs_data_source_scroll.png?classes=lab_picture_small)
+
+	When this step is complete, your Datasets tab should have **4 new SPICE Datasets**
+	
+23.	Select the **summary_view** dataset
+
+    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_summary.png?classes=lab_picture_small)
+
+1.	Click **Edit Data Set**
+
+    ![qs_edit_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_edit_dataset.png?classes=lab_picture_small)
+
+1.	Click **Add Data**
+
+    ![qs_add_data_2](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_2.png?classes=lab_picture_small)
+
+1. Select **Data source**	
+    ![qs_add_data_source](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_data_source.png?classes=lab_picture_small)
+	
+1.	Choose your **Cost_Dashboard** view and click **Select**
+
+    ![qs_select_data_source_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_data_source_add.png?classes=lab_picture_small)
+
+1.  Select the **database** which holds the CUR views you created
+
+   ![qs_select_database_add](/Cost/200_Cloud_Intelligence/Images/cur/qs_select_database_add.png?classes=lab_picture_small)	
+	
+29.	Choose your **ri_sp_mapping view** and click **Select**
+
+    ![qs_add_ri_sp](/Cost/200_Cloud_Intelligence/Images/cur/qs_add_ri_sp.png?classes=lab_picture_small)
+
+1.	Click the two circles to open the **Join conﬁguration**, then select **Left** to change your join type
+
+    ![qs_ri_sp_left](/Cost/200_Cloud_Intelligence/Images/cur/qs_ri_sp_left.png?classes=lab_picture_small)
+
+1.	Click **Add a new join clause** twice so you have 3 join clauses to configure in total. Configure the 3 join clauses as below, then click **Apply**
+    * **ri_sp_arn = ri_sp_arn_mapping**
+	* **payer_account_id = payer_account_id_mapping**
+    * **billing_period = billing_period_mapping**
+
+    ![qs_ri_sp_join](/Cost/200_Cloud_Intelligence/Images/cur/qs_ri_sp_join.png?classes=lab_picture_small)
+	
+1.	Click **Save**
+
+    ![qs_ri_sp_save](/Cost/200_Cloud_Intelligence/Images/cur/qs_ri_sp_save.png?classes=lab_picture_small)
+
+
+**NOTE:** This completes the QuickSight Data Preparation section. Next up is the Import process to generate the QuickSight Dashboard.
+    ------------ | -------------
+
+### Deploy Cost Intelligence Dashboard
+We will now use the CLI to create the dashboard from the Cost Intelligence Dashboard template.
+
+1. Edit and Run `list-users` and make a note of your **User ARN**:
+```
+aws quicksight list-users --aws-account-id <Account_ID> --namespace default --region <Region>
+```
+
+2. Edit and Run `list-data-sets` and make a note of the **Name** and **Arn** for the **5 Datasets ARNs**:
+```
+aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
+```
+
+3. Create an **cid_import.json** file using the below sample
+```
+{
+    "AwsAccountId": "<Account_ID>",
+    "DashboardId": "cost_intelligence_dashboard",
+    "Name": "Cost Intelligence Dashboard",
+    "Permissions": [
+         {
+                "Principal": "<User ARN>",
+        "Actions": [
+                     "quicksight:DescribeDashboard",
+                     "quicksight:ListDashboardVersions",
+                     "quicksight:UpdateDashboardPermissions",
+                     "quicksight:QueryDashboard",
+                     "quicksight:UpdateDashboard",
+                     "quicksight:DeleteDashboard",
+                     "quicksight:DescribeDashboardPermissions",
+                     "quicksight:UpdateDashboardPublishedVersion"
+            ]
+        }
+    ],
+"DashboardPublishOptions": {
+"AdHocFilteringOption": {
+"AvailabilityStatus": "DISABLED"
+}
+},
+    "SourceEntity": {
+        "SourceTemplate": {
+            "DataSetReferences": [
+                {
+                    "DataSetPlaceholder": "summary_view",
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+
+                },
+                                         {
+                    "DataSetPlaceholder": "ec2_running_cost",
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                },
+                                         {
+                     "DataSetPlaceholder": "compute_savings_plan_eligible_spend",
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                 },
+                                         {
+                     "DataSetPlaceholder": "s3_view",
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                 }
+             ],
+                     "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/Cost_Intelligence_Dashboard"
+         }
+     },
+     "VersionDescription": "1"
+}
+```
+
+4. Update the **cid_import.json** to match your details by replacing the following placeholders:
+
+    Placeholder | Replace with
+    ------------ | -------------
+    \<Account_ID> | AWS Account ID where the dashboard will be deployed
+    \<Region> | [Region Code](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) where the dashboard will be deployed (Example eu-west-1)
+    \<User ARN> | ARN of your user
+    \<DataSetId> | Replace with Dataset ID's from the data sets you created in the Preparing Quicksight section **NOTE:** There are 4 unique Dataset IDs
+
+5. Run the import
+```
+aws quicksight create-dashboard --cli-input-json file://cid_import.json --region <Region> --dashboard-id cost_intelligence_dashboard
+```
+
+6. Check the status of your deployment
+```
+aws quicksight describe-dashboard --dashboard-id cost_intelligence_dashboard --region <Region> --aws-account-id <Account_ID>
+```
+
+If you encounter no errors, open **QuickSight** from the AWS Console, and navigate to **Dashboards**. You should now see **Cost Intelligence Dashboard** available. This dashboard can be shared with other users, but is otherwise ready for viewing and customizing.
+
+If something goes wrong in the dashboard creation step, correct the issue then delete the failed deployment before re-deploying
+
+```
+aws quicksight delete-dashboard --dashboard-id cost_intelligence_dashboard --region <Region> --aws-account-id <Account_ID>
+```
+
+**NOTE:** You have successfully created the Cost Intelligence Dashboard. For a detailed description of the dashboard read the [FAQ](/Cost/200_Cloud_Intelligence/Cost_Intelligence_Dashboard_ReadMe.pdf)
+    ------------ | -------------
+
+
+### Deploy CUDOS
+
+1. Create the **customer_all view** by modifying the following code, and executing it in Athena:
+	- [View6 - customer_all](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/6_view6/)	
+
+
+**NOTE:** The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to June 1, 2021 you will want to update to the latest views.
+    ------------ | -------------
+
+
+### Create QuickSight Data Sets
+#### Create Datasets
+
+1.  Go to QuickSight and then datasets. 
+
+1.	Click **New dataset** displayed in the top right corner of QuickSight
+
+    ![qs_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset.png?classes=lab_picture_small)
+
+1.	Select your existing **Cost_Dashboard** as your Data Source
+   
+   ![qs_datasource_dup](/Cost/200_Cloud_Intelligence/Images/cur/qs_datasource_dup.png?classes=lab_picture_small)
+   
+29.	Select **Create dataset**
+
+   ![qs_create_customer_all](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_customer_all.png?classes=lab_picture_small)
+
+30.	Select the database which holds your **customer_all** view and select that view then click **Edit/Preview data**
+
+   ![qs_customer_all_view](/Cost/200_Cloud_Intelligence/Images/cur/qs_customer_all_view.png?classes=lab_picture_small)
+
+31.	Keep the Query mode as **Direct query**
+
+    ![qs_direct_query](/Cost/200_Cloud_Intelligence/Images/cur/qs_direct_query.png?classes=lab_picture_small)
+
+32.	Click **Add data**, select the **Cost Dashboard** data source, and select **account_map**. Edit the join clauses with a left join type as such;
+    **line_item_usage_account_id** = **account_id**
+
+    ![qs_customer_all_map](/Cost/200_Cloud_Intelligence/Images/cur/qs_customer_all_map.png?classes=lab_picture_small)
+
+33. Click Save & Publish. 
+
+**NOTE:** This completes the QuickSight Data Preparation section. Next up is the Import process to generate the QuickSight Dashboard.
+    ------------ | -------------
+
+### Import Dashboard Template
+We will now use the CLI to create the dashboard from the CUDOS Dashboard template.
+
+1. Edit and Run `list-users` and make a note of your **User ARN**:
+```
+aws quicksight list-users --aws-account-id <Account_ID> --namespace default --region <Region>
+```
+
+2. Edit and Run `list-data-sets` and make a note of the **Name** and **Arn** for the **5 Datasets ARNs**:
+```
+aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
+```
+
+3. Create an **import.json** file using the below sample
+```
+{
+    "AwsAccountId": "<Account_ID>",
+    "DashboardId": "cudos",
+    "Name": "CUDOS",
+    "Permissions": [
+         {
+                "Principal": "<User ARN>",
+        "Actions": [
+                     "quicksight:DescribeDashboard",
+                     "quicksight:ListDashboardVersions",
+                     "quicksight:UpdateDashboardPermissions",
+                     "quicksight:QueryDashboard",
+                     "quicksight:UpdateDashboard",
+                     "quicksight:DeleteDashboard",
+                     "quicksight:DescribeDashboardPermissions",
+                     "quicksight:UpdateDashboardPublishedVersion"
+            ]
+        }
+    ],
+"DashboardPublishOptions": {
+"AdHocFilteringOption": {
+"AvailabilityStatus": "DISABLED"
+}
+},
+    "SourceEntity": {
+        "SourceTemplate": {
+            "DataSetReferences": [
+                {
+                    "DataSetPlaceholder": "summary_view",
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                },
+                                         {
+                    "DataSetPlaceholder": "ec2_running_cost",
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                },
+                                         {
+                     "DataSetPlaceholder": "compute_savings_plan_eligible_spend",
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                 },
+                                         {
+                     "DataSetPlaceholder": "s3_view",
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+
+                 },
+                              {
+                 "DataSetPlaceholder": "customer_all",
+                 "DataSetArn": "arn:aws:quicksight:<Region>:<Account_ID>:dataset/<DatasetID>"
+             }
+             ],
+                     "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/cudos_dashboard_v3"
+         }
+     },
+     "VersionDescription": "1"
+}
+```
+
+4. Update the **import.json** to match your details by replacing the following placeholders:
+
+    Placeholder | Replace with
+    ------------ | -------------
+    \<Account_ID> | AWS Account ID where the dashboard will be deployed
+    \<Region> | [Region Code](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) where the dashboard will be deployed (Example eu-west-1)
+    \<User ARN> | ARN of your user
+    \<DataSetId> | Replace with Dataset ID's from the data sets you created in the Preparing Quicksight section **NOTE:** There are 5 unique Dataset IDs
+
+5. Run the import
+```
+aws quicksight create-dashboard --cli-input-json file://import.json --region <Region> --dashboard-id cudos
+```
+
+6. Check the status of your deployment
+```
+aws quicksight describe-dashboard --dashboard-id cudos --region <Region> --aws-account-id <Account_ID>
+```
+
+If you encounter no errors, open **QuickSight** from the AWS Console, and navigate to **Dashboards**. You should now see **CUDOS** available. This dashboard can be shared with other users, but is otherwise ready for viewing and customizing.
+
+If something goes wrong in the dashboard creation step, correct the issue then delete the failed deployment before re-deploying
+
+```
+aws quicksight delete-dashboard --dashboard-id cudos --region <Region> --aws-account-id <Account_ID>
+```
+
+### Deploy the KPI Dashboard
+
+**NOTE:** This dashboard uses the account_map and summary_view as shown in the CID/CUDOS dashboards. If you have not created these dashboards, you will need to create one or both of the dashboards prior to creating the KPI Dashboard 
+    ------------ | -------------
+
+The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). The default dashboard assumes you have both Savings Plans and Reserved Instances. If you do not have both, follow the instructions within each view below to adjust the query accordingly. 
+
+1. Login via SSO in your Cost Optimization account, go into the **Athena** console:
+
+
+2. Create the **KPI Instance Mapping view** by modifying the following code, and executing it in Athena:
+	- [KPI Instance Mapping](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_instance_mapping_view/)
+
+3. Create the **KPI Instance All view** by modifying the following code, and executing it in Athena:
+	- [KPI Instance All](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_instance_all_view/)
+
+4. Create the **KPI S3 Storage All view** by modifying the following code, and executing it in Athena:
+	- [KPI S3 Storage All](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_s3_storage_all_view/)	
+
+5. Create the **KPI EBS Storage All view** by modifying the following code, and executing it in Athena:
+	- [KPI EBS Storage All](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_ebs_storage_all_view/)
+
+6. Create the **KPI EBS Snap view** by modifying the following code, and executing it in Athena:
+	- [KPI EBS Snap](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_ebs_snap_view/)	
+
+7. Create the **KPI Tracker view** by modifying the following code, and executing it in Athena:
+	- [KPI Tracker](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/kpi_tracker_view/)	
+
+
+
+**NOTE:** The Athena Views are updated to reflect any additions in the cost and usage report. If you created your dashboard prior to January 18, 2022 you will want to update to the latest views above.
+    ------------ | -------------
+
+
+
+### Create QuickSight Data Sets
+
+#### Create Datasets
+
+1. Go to the **QuickSight** service homepage inside your account. Be sure to select the correct region from the top right user menu or you will not see your expected tables
+
+    ![qs_region](/Cost/200_Cloud_Intelligence/Images/cur/qs_region.png?classes=lab_picture_small)
+
+2.	From the left hand menu, choose **Datasets**
+
+    ![qs_dataset_sidebar](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset_sidebar.png?classes=lab_picture_small)
+	
+3.	Click **New dataset** displayed in the top right corner
+
+    ![qs_dataset](/Cost/200_Cloud_Intelligence/Images/cur/qs_dataset.png?classes=lab_picture_small)
+	
+    
+4.	Select your existing **data source** you created for your CID and/or CUDOS dashboard 
+
+**NOTE:** Your existing data sources are at the bottom of the page 
+    ------------ | -------------
+	
+![qs_data_source_scroll](/Cost/200_Cloud_Intelligence/Images/cur/qs_data_source_scroll.png?classes=lab_picture_small)
+
+
+5.	Select the database which holds the views you created (reference Athena if you’re unsure which one to select), and select the **kpi_tracker** view then click **Edit/Preview data**
+
+    ![qs_select_datasource](/Cost/200_Cloud_Intelligence/Images/kpi/qs_select_kpi_datasource.png?classes=lab_picture_small)
+
+6.	Select **SPICE** to change your Query mode
+
+    ![qs_dataset_summary](/Cost/200_Cloud_Intelligence/Images/kpi/qs_dataset_kpi.png?classes=lab_picture_small)
+	
+7.	Select **Save & Publish**
+
+    ![qs_save_summary](/Cost/200_Cloud_Intelligence/Images/kpi/qs_save_kpi.png?classes=lab_picture_small)
+
+8.	Select **Cancel**
+
+    ![qs_save_summary](/Cost/200_Cloud_Intelligence/Images/kpi/qs_cancel_kpi.png?classes=lab_picture_small)	
+
+9.	Select the **kpi_tracker** dataset
+
+    ![qs_select_summary](/Cost/200_Cloud_Intelligence/Images/kpi/qs_select_kpi.png?classes=lab_picture_small)
+
+10.	Click **Schedule refresh**
+
+    ![qs_schedule_refresh](/Cost/200_Cloud_Intelligence/Images/kpi/qs_schedule_refresh.png?classes=lab_picture_small)
+
+11.	Click **Create**
+
+    ![qs_create_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_create_refresh.png?classes=lab_picture_small)
+
+12.	Enter a daily schedule, in the appropriate time zone and click **Create**
+
+    ![qs_daily_refresh](/Cost/200_Cloud_Intelligence/Images/kpi/qs_daily_refresh.png?classes=lab_picture_small)
+
+13.	Click **Cancel** to exit
+
+    ![qs_cancel_refresh](/Cost/200_Cloud_Intelligence/Images/cur/qs_cancel_refresh.png?classes=lab_picture_small)
+
+14.	Click **x** to exit
+
+    ![qs_exit_refresh](/Cost/200_Cloud_Intelligence/Images/kpi/qs_exit_refresh.png?classes=lab_picture_small)
+
+15.	Repeat **steps 3-14**, creating data sets with the remaining Athena views. You will reuse your existing **Cost_Dashboard** data source, and select the following views as the table:
+
+ - kpi_instance_all
+ - kpi_s3_storage_all
+ - kpi_ebs_storage_all
+ - kpi_ebs_snap_view
+
+
+	**NOTE:** Make sure to reuse the existing Athena data source by scrolling to the bottom of the Data source create/select page when creating a new Dataset instead of creating a new data source  
+		------------ | -------------
+			![qs_data_source_scroll](/Cost/200_Cloud_Intelligence/Images/cur/qs_data_source_scroll.png?classes=lab_picture_small)
+
+	When this step is complete, your Datasets tab should have **5 new SPICE Datasets** as well as your **existing summary_view dataset** and any existing datasets 
+	
+
+**NOTE:** This completes the QuickSight Data Preparation section. Next up is the Import process to generate the QuickSight Dashboard.
+    ------------ | -------------
+
+### Import Dashboard Template
+We will now use the AWS CLI to create the dashboard from the KPI Dashboard template.
+
+1. Edit and Run `list-users` and make a note of your **User ARN**:
+```
+aws quicksight list-users --aws-account-id <Account_ID> --namespace default --region <Region>
+```
+
+2. Edit and Run `list-data-sets` and make a note of the **Name** and **Arn** for the **5 Datasets ARNs**:
+```
+aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
+```
+
+3. Create an **kpi_import.json** file using the below sample
+```
+{
+    "AwsAccountId": "<Account_ID>",
+    "DashboardId": "kpi_dashboard",
+    "Name": "KPI Dashboard",
+    "Permissions": [
+         {
+                "Principal": "<User ARN>",
+        "Actions": [
+                     "quicksight:DescribeDashboard",
+                     "quicksight:ListDashboardVersions",
+                     "quicksight:UpdateDashboardPermissions",
+                     "quicksight:QueryDashboard",
+                     "quicksight:UpdateDashboard",
+                     "quicksight:DeleteDashboard",
+                     "quicksight:DescribeDashboardPermissions",
+                     "quicksight:UpdateDashboardPublishedVersion"
+            ]
+        }
+    ],
+"DashboardPublishOptions": {
+"AdHocFilteringOption": {
+"AvailabilityStatus": "DISABLED"
+}
+},
+    "SourceEntity": {
+        "SourceTemplate": {
+            "DataSetReferences": [
+                {
+                     "DataSetPlaceholder": "kpi_tracker", 
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 },
+                {
+                    "DataSetPlaceholder": "summary_view", 
+                    "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 },
+                 {
+                     "DataSetPlaceholder": "kpi_instance_all", 
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 },
+                 {
+                     "DataSetPlaceholder": "kpi_s3_storage_all", 
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 },				 
+                 {
+                     "DataSetPlaceholder": "kpi_ebs_storage_all", 
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 },
+                 {
+                     "DataSetPlaceholder": "kpi_ebs_snap", 
+                     "DataSetArn": "arn:aws:quicksight:<Region>:<Account ID>:dataset/<DatasetID>"
+                 }				 						 			 				 
+             ],
+                     "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/kpi_dashboard"
+         }
+     },
+     "VersionDescription": "1"
+}
+```
+
+4. Update the **kpi_import.json** to match your details by replacing the following placeholders:
+
+    Placeholder | Replace with
+    ------------ | -------------
+    \<Account_ID> | AWS Account ID where the dashboard will be deployed
+    \<Region> | [Region Code](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) where the dashboard will be deployed (Example eu-west-1)
+    \<User ARN> | ARN of your user
+    \<DataSetId> | Replace with Dataset ID's from the data sets you created in the Preparing Quicksight section **NOTE:** There are 6 unique Dataset IDs
+
+5. Run the import
+```
+aws quicksight create-dashboard --cli-input-json file://kpi_import.json --region <Region> --dashboard-id kpi_dashboard
+```
+
+6. Check the status of your deployment
+```
+aws quicksight describe-dashboard --dashboard-id kpi_dashboard --region <Region> --aws-account-id <Account_ID>
+```
+
+If you encounter no errors, open **QuickSight** from the AWS Console, and navigate to **Dashboards**. You should now see **KPI Dashboard** available. This dashboard can be shared with other users, but is otherwise ready for viewing and customizing.
+
+If something goes wrong in the dashboard creation step, correct the issue then delete the failed deployment before re-deploying
+
+```
+aws quicksight delete-dashboard --dashboard-id kpi_dashboard --region <Region> --aws-account-id <Account_ID>
+```
+{{% /expand%}}
+
+
+### Saving and Sharing your Dashboard in QuickSight
+Now that you have your dashboard created you can share your dashboard with users or customize your own version of this dashboard.
+	
+- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
+	
+### Add your Account Names to your Dashboard
+Learn how to replace the Accound IDs with the Account Names for each of your linked accounts in AWS Organizations by following these steps. 
+
+- [Steps for adding account names](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
+
+### Update Dashboard Template - Optional
+
+{{%expand "Click here to update your dashboard with the latest version" %}}
+
+If you are tracking our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes/CHANGELOG-kpi.md), you already know that we are always improving the Cloud Intelligence Dashboards.
+
+To pull the latest version of the dashboard from the public template please use the following steps.
+
+### Option 1: Command Line Tool
+
+1. In your Terminal application write the following command and press enter. 
+
+```bash
+cid-cmd update
+```
+
+1. Choose the dashboard you wish to update and press enter.  
+
+### Option 2: Manual Update
+
+1. Create a **cid_update.json** file by removing permissions section from the **cid_import.json** file. Sample for Cost Intelligence Dashboard **cid_update.json** file below:
+```json
+{
+    "AwsAccountId": "<Account_ID>",
+    "DashboardId": "cost_intelligence_dashboard",
+    "Name": "Cost Intelligence Dashboard",
+    "DashboardPublishOptions": {
+      "AdHocFilteringOption": {
+        "AvailabilityStatus": "DISABLED"
+      }
+    },
+    "SourceEntity": {
+      "SourceTemplate": {
+        "DataSetReferences": [
+          {
+            "DataSetPlaceholder": "summary_view",
+            "DataSetArn": "arn:aws:quicksight:<region>:<Account_ID>:dataset/<DatasetID>"
+          },
+          {
+            "DataSetPlaceholder": "ec2_running_cost",
+            "DataSetArn": "arn:aws:quicksight:<region>:<Account_ID>:dataset/<DatasetID>"
+          },
+          {
+            "DataSetPlaceholder": "compute_savings_plan_eligible_spend",
+            "DataSetArn": "arn:aws:quicksight:<region>:<Account_ID>:dataset/<DatasetID>"
+          },
+          {
+            "DataSetPlaceholder": "s3_view",
+            "DataSetArn": "arn:aws:quicksight:<region>:<Account_ID>:dataset/<DatasetID>"
+          }
+        ],
+        "Arn": "arn:aws:quicksight:us-east-1:223485597511:template/Cost_Intelligence_Dashboard"
+          }
+      }
+}
+```
+
+2. If needed update the **cid_update.json** to match your details by replacing the following placeholders:
+
+    Placeholder | Replace with
+    ------------ | -------------
+    \<Account_ID> | AWS Account ID where the dashboard will be deployed
+    \<Region> | [Region Code](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions) where the dashboard will be deployed (Example eu-west-1)
+    \<DatasetID> | Replace with Dataset ID's from the datasets you created in the Preparing Quicksight section **NOTE:** There are 4 unique Dataset IDs
+
+
+3. Pull the latest published version of the dashboard template. Example for CID Dashboard below:
+```
+aws quicksight update-dashboard --cli-input-json file://cid_update.json --region <region>
+```
+
+4. Query the version number of the published dashboard. Example for CID Dashboard below:
+```
+aws quicksight list-dashboard-versions --region <region> --aws-account-id <Account_ID> --dashboard-id cost_intelligence_dashboard
+```
+
+5. Apply the latest pulled changes to the deployed dashboard with this CLI command. Example for CID Dashboard below:
+```
+aws quicksight update-dashboard-published-version --region <region> --aws-account-id <Account_ID> --dashboard-id cost_intelligence_dashboard --version-number <version>
+```
+**NOTE:** The update commands were successfully tested in AWS CloudShell (recommended)
+    ------------ | -------------
+
 
 {{% /expand%}}
 
