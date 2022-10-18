@@ -336,10 +336,10 @@ To find your QuickSight username:
 1. Update your **CURBucketPath** and set the **CURisAggregated** flag;
    1. If you used the CFN Template in the CUR setup process above then;
       1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
-      2. **CURisAggregated** = `yes`
+      2. **CURIsManagedByCloudFormation** = `yes`
    2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then;
       1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there)
-      2. **CURisAggregated** = `no`
+      2. **CURIsManagedByCloudFormation** = `no`
 
 2. Select the Dashboards you want to install. We recommend deploying all three.
 
