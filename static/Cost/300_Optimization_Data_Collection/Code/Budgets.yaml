@@ -151,6 +151,7 @@ Resources:
                       body = json.loads(record["body"])
                       account_id = body["account_id"]
                       account_name = body["account_name"]
+                      payer_id = body["payer_id"]
                       print(account_id)
                       budgets_client = assume_role(account_id, "budgets")
                       paginator = budgets_client.get_paginator("describe_budgets") #Paginator for a large list of accounts
@@ -165,12 +166,12 @@ Resources:
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
                                   f.write("\n")
-                      s3_upload(account_id)
+                      s3_upload(account_id, payer_id)
                       start_crawler()
               except Exception as e:
                   logging.warning(e)
 
-          def s3_upload(account_id):
+          def s3_upload(account_id, payer_id):
             fileSize = os.path.getsize("/tmp/data.json")
             if fileSize == 0:  
                 print(f"No data in file for {DestinationPrefix}")
@@ -187,7 +188,7 @@ Resources:
                     DestinationPrefix = os.environ["DEST_PREFIX"]
                     s3 = boto3.client('s3', 
                                         config=Config(s3={'addressing_style': 'path'}))
-                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/year={year}/month={month}/budgets-{dt_string}-{account_id}.json")
+                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/payer_id={payer_id}/year={year}/month={month}/budgets-{dt_string}-{account_id}.json")
                     print(f"Budget data in s3 {S3BucketName}")
                 except Exception as e:
                     # Send some context about this error to Lambda Logs

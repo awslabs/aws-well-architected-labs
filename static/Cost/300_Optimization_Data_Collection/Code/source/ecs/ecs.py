@@ -18,7 +18,7 @@ def lambda_handler(event, context):
            
             body = json.loads(record["body"])
             account_id = body["account_id"]
-            
+            payer_id = body["payer_id"]
             print(account_id)
             list_region = lits_regions()
             with open(
@@ -86,7 +86,7 @@ def lambda_handler(event, context):
                 client.upload_file(
                     "/tmp/data.json",
                     bucket,
-                    f"{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
+                    f"{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
                 )  # uploading the file with the data to s3
                 print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
                 start_crawler()

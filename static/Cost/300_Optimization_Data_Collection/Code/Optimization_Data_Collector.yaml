@@ -31,7 +31,7 @@ Metadata:
       ManagementAccountRole:
         default: 'Management account role'
       ManagementAccountID:
-        default: 'Management account Id'
+        default: 'Comma Delimited list of Account IDs for all Management Account IDs'
       MultiAccountRoleName:
         default: 'Multi Account Role Name'
       Schedule:
@@ -88,7 +88,8 @@ Parameters:
     Default: Lambda-Assume-Role-Management-Account
   ManagementAccountID: 
     Type: String
-    Description: Your Management Account ID
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   MultiAccountRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
@@ -334,7 +335,9 @@ Resources:
       Parameters:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
-          RoleName: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+          MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
+          ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+          ManagementAccountID: !Ref ManagementAccountID
           GlueRoleARN: !GetAtt GlueRole.Arn
           RolePrefix: !Ref RolePrefix
       TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
@@ -368,7 +371,8 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
-        RoleNameARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+        ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+        ManagementAccountID: !Ref ManagementAccountID
         S3CrawlerQue: !GetAtt S3CrawlerQue.Arn
         Schedule: !Ref Schedule
         RolePrefix: !Ref RolePrefix
@@ -409,7 +413,8 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         Schedule: !Ref Schedule
-        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+        ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+        ManagementAccountID: !Ref ManagementAccountID
         RolePrefix: !Ref RolePrefix
   BudgetsModule:
     Type: AWS::CloudFormation::Stack
@@ -440,6 +445,8 @@ Resources:
           TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
+            ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+            ManagementAccountID: !Ref ManagementAccountID
             RolePrefix: !Ref RolePrefix
             Schedule: !Ref Schedule
             TaskQueuesUrl: 

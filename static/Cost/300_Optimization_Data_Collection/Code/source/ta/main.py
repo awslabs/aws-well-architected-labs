@@ -19,18 +19,19 @@ def lambda_handler(event, context):
             body = json.loads(record["body"])
             account_id = body["account_id"]
             account_name = body["account_name"]
+            payer_id = body["payer_id"]
             if DestinationPrefix == 'ta':
                 ta.main(account_id,account_name)
             else:
                 print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
             print(f"{DestinationPrefix} respose gathered")
-            upload_to_s3(DestinationPrefix, account_id)
+            upload_to_s3(DestinationPrefix, account_id, payer_id)
             start_crawler()
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def upload_to_s3(DestinationPrefix, account_id):
+def upload_to_s3(DestinationPrefix, account_id, payer_id):
 
 
     fileSize = os.path.getsize("/tmp/data.json")
@@ -52,7 +53,7 @@ def upload_to_s3(DestinationPrefix, account_id):
             s3.upload_file(
                 "/tmp/data.json",
                 bucket,
-                f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{date_formatted}.json",
+                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{date_formatted}.json",
             )  # uploading the file with the data to s3
             print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
         except Exception as e:

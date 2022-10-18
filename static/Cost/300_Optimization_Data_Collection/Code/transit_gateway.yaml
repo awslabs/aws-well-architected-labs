@@ -131,6 +131,7 @@ Resources:
                   body = json.loads(record["body"])
                   account_id = body["account_id"]
                   account_name = body["account_name"]
+                  payer_id = body["payer_id"]
                   print(account_id)
                   regions = get_supported_regions()
                   for region_name in regions: 
@@ -173,7 +174,7 @@ Resources:
                               s3.upload_file(
                                   "/tmp/data.json",
                                   bucket,
-                                  f"{os.environ['TABLE']}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
+                                  f"{os.environ['TABLE']}/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
 
                       except Exception as e:
                           # Send some context about this error to Lambda Logs

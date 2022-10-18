@@ -25,7 +25,7 @@ If you wish to provide feedback on this lab, report an error, or you have a sugg
 ## Introduction
 Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, security and enterprise applications. These services help organizations move faster, lower IT costs and scale.
 
-This lab is designed to **enable you to collect utilization data from different AWS services to help you identify optimization opportunities**. This lab provides set of optional modules to automate data collection and explains how to create custom modules to pull additional data sets. 
+This lab is designed to **enable you to collect utilization data from different AWS services to help you identify optimization opportunities**. This lab provides set of optional modules to automate data collection across multiple payer accounts and explains how to create custom modules to pull additional data sets. 
 
 ## Modules
 The main sources of the data used in optional modules:
