@@ -435,7 +435,7 @@ Resources:
               Service: config.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSConfigRole'
+        - 'arn:aws:iam::aws:policy/service-role/AWS_ConfigRole'
       Path: /service-role/
       Policies:
         - PolicyDocument:
