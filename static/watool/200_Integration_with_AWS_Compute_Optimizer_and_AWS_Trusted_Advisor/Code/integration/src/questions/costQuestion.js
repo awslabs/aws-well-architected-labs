@@ -1,12 +1,14 @@
 const AWS = require('aws-sdk');
 const currentRegion = process.env.AWS_REGION;
 const computeoptimizer = new AWS.ComputeOptimizer({ apiVersion: '2019-11-01', region: currentRegion });
-//const computeoptimizer = new AWS.ComputeOptimizer({ apiVersion: '2019-11-01', region: 'us-east-1' });
+const support = new AWS.Support({apiVersion: '2013-04-15', region: 'us-east-1'});
 const { date } = require('../libraries/date');
 const { describe } = require('../ec2/describe');
 const { checkTag } = require('../ec2/checkTag');
 const { getTAQ6, getTAQ7 } = require('../trustedadvisor/costTA');
 const { updateNotes } = require('../wellarchitected/updateNotes');
+//sample data when AWS Compute Optimizer and Trusted Advisor has no recommendation yet.
+const fs = require("fs");
 
 async function question6(accountId, workloadId, workloadTagKey, workloadTagValue, questionId, taCheckId) {
     try {
@@ -96,6 +98,8 @@ async function question6(accountId, workloadId, workloadTagKey, workloadTagValue
     }
     catch (err) {
         console.error(err);
+        const questionNumber = 'Q6';
+        const sampleDataResponse = await sampleData(accountId, workloadId, questionId, questionNumber);
         return err;
     }
 }
@@ -105,6 +109,11 @@ async function question7(accountId, workloadId, questionId, taCheckId) {
         //console.log("event details: ", event);
         //get the current date
         const currentDate = await date();
+        //just to make sure if this lambda can access to TA
+        const params = {
+            language: 'en',
+        };
+        const allChecks = await support.describeTrustedAdvisorChecks(params).promise();
         // new updates in notes in Well-Architected Tool
         let notes = '     ================= ' + 'Updated at ' + currentDate + '=================     ' + '\n';
         //get Pricing Model Recommendations from AWS Trusted Advisor
@@ -131,6 +140,33 @@ async function question7(accountId, workloadId, questionId, taCheckId) {
 
     }
     catch (err) {
+        console.error(err);
+        const questionNumber = 'Q7';
+        const sampleDataRespomse = await sampleData(accountId, workloadId, questionId, questionNumber);
+        return err;
+    }
+}
+
+//if AWS compute optimizer has not been enabled and support subscription is not Premium Support to use all checks in Trusted Advisor.
+async function sampleData(accountId, workloadId, questionId, questionNumber) {
+    try {
+        var notes = '';
+        const sampleNumber = '/sampledata' + questionNumber + '.txt';
+        const data = fs.readFileSync(__dirname +sampleNumber, "utf8");
+        console.log("File content:", data);
+        notes += data;
+        const noteParams = {
+            accountId,
+            workloadId,
+            questionId,
+            notes,
+        };
+        console.log("Notes Params: ", noteParams);
+        
+        const updateNote = await updateNotes(noteParams);
+        console.log("Update Note status: ", updateNote);
+        return updateNote;
+    }catch(err){
         console.error(err);
         return err;
     }
