@@ -45,29 +45,32 @@ This step will create a new CUR for you. You can request a [backfill](https://do
 	
 ![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
 
-4. Enter your Management (Payer) Account Id. 
+3. Set CreateCUR to **true**.
+   
+![Images/multi-account/cfn_dash_param_dst_dedicated_3.png.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_3.png?classes=lab_picture_small)
 
-5. Set CreateCUR to **true**.
+4. Enter your Management (Payer) Account ID. Leave Source Account Empty. 
 
-6. Leave Source account empty 
    
 ![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
 
-7. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
+5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
-8.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 ![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
 
-10. You will see the stack will start with **CREATE_IN_PROGRESS**.
+7. You will see the stack will start with **CREATE_IN_PROGRESS**.
 **NOTE:** This step can take 5-15mins
     ------------ | -------------
 
-11. Once complete, the stack will show **CREATE_COMPLETE**.
+8. Once complete, the stack will show **CREATE_COMPLETE**.
 
 **You will now need to wait 24 hours for your first CUR to be deployed into S3 before you can continue**
 
 ### Enable QuickSight
-QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
+
+**If you are already a regular QuickSight user** you will need to make sure you have an enterprise license and add permissions for QuickSight to read your CUR bucket. You can accomplish this by going to the persona icon in the upper right hand corner of QuickSight, clicking Manage Quicksight, clicking on Security and Permissions, clicking on managing QuickSight access to AWS Service, selecting S3, then selecting the CUR bucket from the list of S3 buckets. If you are new to QuickSight, complete the steps below.
 
 1. Log into your AWS Account and search for **QuickSight** in the list of Services
 
