@@ -71,6 +71,7 @@ https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optim
 
 10. This role will now be deployed to all linked accounts. 
 
+If you face an issue with `AWSCloudFormationStackSetAdministrationRole` please make sure you activated 'Tusted Access' (2nd step) or follow [AWS Documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html) for activating this via additional CloudFormation.
 
 ### (Optional) Read Only roles in Management Account
 
