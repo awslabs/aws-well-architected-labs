@@ -1,0 +1,152 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWS Well-Architected Tool Integration with AWS Compute Optimizer and AWS Trusted Advisor
+Resources:
+##########################################################################
+#   API Gateway                                                 #
+##########################################################################
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      EndpointConfiguration:
+        Type: REGIONAL
+##########################################################################
+#   Lambda Function                                                      #
+##########################################################################
+  WAIntegrations:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Environment:
+        Variables:
+          DatabaseTable: !Ref MapEngineTable
+      Policies:
+        ## Read more about SAM Policy templates at:
+        ## https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+        - DynamoDBReadPolicy:
+            TableName: !Ref MapEngineTable
+        - EC2DescribePolicy: {}
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: ComputeOptimizer
+              Effect: Allow
+              Action:
+                - 'compute-optimizer:GetEC2InstanceRecommendations'
+              Resource:
+                - '*'
+            - Sid: TrustedAdvisor
+              Effect: Allow
+              Action:
+                - 'support:DescribeTrustedAdvisorChecks'
+                - 'support:DescribeTrustedAdvisorCheckResult'
+              Resource:
+                - '*'
+            - Sid: WellArchitected
+              Effect: Allow
+              Action:
+                - 'wellarchitected:GetWorkload'
+                - 'wellarchitected:GetAnswer'
+                - 'wellarchitected:UpdateAnswer'
+                - 'wellarchitected:UpdateWorkload'
+                - 'wellarchitected:TagResource'
+                - 'wellarchitected:CreateMilestone'
+              Resource:
+                - '*'
+# update dynamodb
+  LambdaPutDynamoDB:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/dynamodb
+      Handler: mappingEngine.handler
+      Runtime: nodejs14.x
+      Timeout: 3
+      Environment:
+        Variables:
+          DatabaseTable: !Ref MapEngineTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref MapEngineTable
+      Events:
+        HttpPost:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+            RestApiId:
+              Ref: ApiGatewayApi
+##########################################################################
+#   Amazon EventBridge Rule                                                            #
+##########################################################################       
+  WAEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Well-Architected Events Rule
+      EventPattern: 
+        source:
+        - aws.wellarchitected
+        detail:
+          eventName: 
+            - CreateWorkload
+      Name: WAEventRule
+      State: ENABLED
+      Targets:
+      - 
+        Arn: 
+          Fn::GetAtt:
+            - WAIntegrations
+            - Arn
+        Id: WAEventRulev1
+
+  PermissionForEventsToInvokeLambda: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref WAIntegrations
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        Fn::GetAtt: 
+          - WAEventRule
+          - Arn
+##########################################################################
+#   DynamoDB                                                            #
+##########################################################################
+  MapEngineTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: wa-mapping
+      AttributeDefinitions:
+      - AttributeName: PillarNumber
+        AttributeType: S
+      KeySchema:
+      - AttributeName: PillarNumber
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+##########################################################################
+#   OUTPUTS                                                              #
+##########################################################################
+  
+Outputs:
+  WAIntegrations:
+    Value: !Ref WAIntegrations
+    Description: WAIntegrations function Arn
+  
+  LambdaPutDynamoDB:
+    Value: !Ref LambdaPutDynamoDB
+    Description: LambdaPutDynamoDB function  Arn
+
+  DynamoDbTable:
+    Value: !Ref MapEngineTable
+    Description: DynamoDb Table 
+  
+  APIGWUrl:
+    Value:
+      Fn::Sub:
+      - https://${ServerlessRestApi}.execute-api.${Region}.amazonaws.com/Prod
+      - Region: !Ref AWS::Region
+        ServerlessRestApi: !Ref ApiGatewayApi
+    Description: Use this url to put items into MapEngineTable

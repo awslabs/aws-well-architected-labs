@@ -432,7 +432,7 @@ Resources:
       Properties:
         FunctionName: 'LoadDynamoDBLambda'
         Handler: 'index.handler'
-        Runtime: 'python3.6'
+        Runtime: 'python3.9'
         Timeout: '30'
         Role: !GetAtt LoadDynamoDBLambdaRole.Arn
         Code:

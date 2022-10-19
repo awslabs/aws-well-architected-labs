@@ -1,0 +1,277 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SustainabilityApp deployment for Well-Architected Lab
+Parameters:
+  #KeyName:
+    #Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    #Type: AWS::EC2::KeyPair::KeyName
+    #ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  DemoVPCName:
+    Description: The name of the Demo VPC being created.
+    Type: String
+    Default: DemoVPC
+  LatestAmiId:
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-arm64-gp2'
+
+Resources:
+  DemoEnvVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+      - Key: Name
+        Value:
+          Ref: DemoVPCName
+  DemoEnvSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: DemoEnvVPC
+      AvailabilityZone:
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: 'true'
+      Tags:
+      - Key: Network
+        Value: Public
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: DemoVPCName
+            - -public
+  DemoEnvRouteTable:
+    Type: AWS::EC2::RouteTable
+    DependsOn:
+    - DemoEnvVPC
+    - DemoEnvSubnet
+    Properties:
+      VpcId:
+        Ref: DemoEnvVPC
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: DemoVPCName
+            - -public-route-table
+  DemoEnvRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DependsOn:
+    - DemoEnvSubnet
+    - DemoEnvRouteTable
+    Properties:
+      SubnetId:
+        Ref: DemoEnvSubnet
+      RouteTableId:
+        Ref: DemoEnvRouteTable
+  DemoEnvAllRoute:
+    Type: AWS::EC2::Route
+    DependsOn:
+    - DemoEnvRouteTable
+    Properties:
+      RouteTableId:
+        Ref: DemoEnvRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: DemoGateway
+  DemoGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - Ref: DemoVPCName
+            - -IGW
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    DependsOn:
+    - DemoEnvVPC
+    Properties:
+      VpcId:
+        Ref: DemoEnvVPC
+      InternetGatewayId:
+        Ref: DemoGateway
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: 't4g.xlarge'
+      SubnetId:
+        Ref: DemoEnvSubnet      
+      SecurityGroupIds:
+        - !GetAtt InstanceSecurityGroup.GroupId
+      #KeyName: !Ref 'KeyName'
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile:
+        Ref: EC2InstanceProfile
+      UserData:
+        Fn::Base64:
+          !Sub |
+            Content-Type: multipart/mixed; boundary="//"
+            MIME-Version: 1.0
+
+            --//
+            Content-Type: text/cloud-config; charset="us-ascii"
+            MIME-Version: 1.0
+            Content-Transfer-Encoding: 7bit
+            Content-Disposition: attachment; filename="cloud-config.txt"
+
+            #cloud-config
+            cloud_final_modules:
+            - [scripts-user, always]
+
+            --//
+            Content-Type: text/x-shellscript; charset="us-ascii"
+            MIME-Version: 1.0
+            Content-Transfer-Encoding: 7bit
+            Content-Disposition: attachment; filename="userdata.txt"
+
+            #!/bin/sh
+            #!/bin/sh
+
+            # Install a LAMP stack
+            amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+            yum -y install httpd php-mbstring
+
+            # Start the web server
+            chkconfig httpd on
+            systemctl start httpd
+
+            # Install the web pages for our lab (update github repo)
+            if [ ! -f /var/www/html/immersion-day-app-php7.zip ]; then
+              cd /var/www/html
+              wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/immersion-day-app-php7.zip
+              unzip -j immersion-day-app-php7.zip
+            fi
+
+            # Install the AWS SDK for PHP
+            if [ ! -f /var/www/html/aws.zip ]; then
+              cd /var/www/html
+              mkdir vendor
+              cd vendor
+              wget https://docs.aws.amazon.com/aws-sdk-php/v3/download/aws.zip
+              unzip aws.zip
+            fi
+
+            # Update existing packages
+            yum -y update
+
+            # Install CloudWatch Agent
+            yum -y install amazon-cloudwatch-agent
+
+            mkdir -p /usr/share/collectd
+            touch /usr/share/collectd/types.db
+
+            amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-linux -s
+
+            #send access_log to CloudWatch (update github repo)
+            cd /opt/aws/amazon-cloudwatch-agent/etc
+            sudo wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/amazon-cloudwatch-agent.json
+            sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
+
+            #memory monitoring  (update github repo)
+            sudo cd /opt/aws/amazon-cloudwatch-agent/bin/
+            sudo wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/config.json
+            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
+
+            # Put vCPU custom metrics
+            mkdir /project
+            cat <<EOF > /project/cpumetric.sh
+            #!/bin/sh
+
+            TOTALVCPU=\$(lscpu | egrep 'CPU\(s\)' | head -1 | awk '{print \$2}')
+            INSTANCEID=\$(curl http://169.254.169.254/latest/meta-data/instance-id)
+            INSTANCEREGION=\$(curl http://169.254.169.254/latest/meta-data/placement/region)
+
+            aws cloudwatch put-metric-data --metric-name totalvcpu --dimensions Instance=\$INSTANCEID --namespace "Sustainability" --value \$TOTALVCPU --unit "Count" --region \$INSTANCEREGION
+            EOF
+            chmod +x /project/cpumetric.sh
+
+            cat <<EOF > /project/cron.tab
+            */1 * * * * /project/cpumetric.sh
+            EOF
+            crontab /project/cron.tab
+
+            # 3 request per a minute
+            screen -d -m watch -n 20 "curl 'http://127.0.0.1/businessapi.php'"
+
+      Tags:
+      - Key: Name
+        Value: SustainabilityApp
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      VpcId:
+        Ref: DemoEnvVPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: 0.0.0.0/0
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - Ref: CloudWatchAgentServerRole
+  CloudWatchAgentServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
+      - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+  CloudLogGroup:    
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: httpd_access_log
+      RetentionInDays: 30
+      Tags:
+      - Key: Name
+        Value: SustainabilityApp
+  CloudLogStream:  
+    Type: AWS::Logs::LogStream
+    Properties: 
+      LogGroupName: 
+        Ref: CloudLogGroup
+      LogStreamName:
+        Fn::Join:
+        - ''
+        - - Ref: EC2Instance
+          - /var/log/httpd/access_log
+
+Outputs:
+  WebsiteURL:
+    Description: URL for newly created LAMP stack
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - EC2Instance
+          - PublicDnsName

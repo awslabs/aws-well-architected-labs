@@ -78,7 +78,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
@@ -97,7 +97,9 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -149,6 +151,7 @@ Resources:
                       body = json.loads(record["body"])
                       account_id = body["account_id"]
                       account_name = body["account_name"]
+                      payer_id = body["payer_id"]
                       print(account_id)
                       budgets_client = assume_role(account_id, "budgets")
                       paginator = budgets_client.get_paginator("describe_budgets") #Paginator for a large list of accounts
@@ -158,17 +161,17 @@ Resources:
                               for budget in budgets['Budgets']:
                                   print(budget)
                                   budget.update({'Account_ID': account_id, 'Account_Name': account_name})
-                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0:
+                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0 or 'PlannedBudgetLimits' not in budget:
                                     budget.update({'CostFilters': {'Filter': ['None']}})
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
                                   f.write("\n")
-                      s3_upload(account_id)
+                      s3_upload(account_id, payer_id)
                       start_crawler()
               except Exception as e:
                   logging.warning(e)
 
-          def s3_upload(account_id):
+          def s3_upload(account_id, payer_id):
             fileSize = os.path.getsize("/tmp/data.json")
             if fileSize == 0:  
                 print(f"No data in file for {DestinationPrefix}")
@@ -185,7 +188,7 @@ Resources:
                     DestinationPrefix = os.environ["DEST_PREFIX"]
                     s3 = boto3.client('s3', 
                                         config=Config(s3={'addressing_style': 'path'}))
-                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/year={year}/month={month}/budgets-{dt_string}-{account_id}.json")
+                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/payer_id={payer_id}/year={year}/month={month}/budgets-{dt_string}-{account_id}.json")
                     print(f"Budget data in s3 {S3BucketName}")
                 except Exception as e:
                     # Send some context about this error to Lambda Logs
@@ -219,8 +222,9 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:

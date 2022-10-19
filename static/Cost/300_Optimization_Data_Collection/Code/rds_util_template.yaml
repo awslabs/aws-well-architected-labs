@@ -81,7 +81,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CFDataName}Crawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
@@ -143,7 +143,9 @@ Resources:
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -253,7 +255,7 @@ Resources:
               transfer.upload_file(src, bucket_name, dest, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
 
-          def store_data_to_s3(data, s3client, region, service, path, resource_type, resource_value, filename, accountID):
+          def store_data_to_s3(data, s3client, region, service, path, resource_type, resource_value, filename, accountID, payer_id):
               
                 filepath=f"/tmp/{region}-{filename}"
                 with open(filepath, 'w') as f:
@@ -265,7 +267,7 @@ Resources:
                     print(f"No data in file for {DestinationPrefix}")
                 else:
                     upload_file_to_s3(s3client, DEST_BUCKET, filepath,
-                                    f"{DEST_PREFIX}/{path}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
+                                    f"{DEST_PREFIX}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
           def start_crawler():
               glue_client = boto3.client('glue')
               try:
@@ -275,7 +277,7 @@ Resources:
                   # Send some context about this error to Lambda Logs
                   print("%s" % e)
 
-          def get_rds_stats(cwclient, client, s3client, region, service, path, filename, accountID):
+          def get_rds_stats(cwclient, client, s3client, region, service, path, filename, accountID, payer_id):
               datapoints = {}
               data = {}
               rds_inventory = client.describe_db_instances()
@@ -288,7 +290,7 @@ Resources:
                       Dimensions=[{"Name": "DBInstanceIdentifier", "Value": rds["DBInstanceIdentifier"]}])
                       datapoints.update({metric:results['Datapoints']})
                   rds["Datapoints"] = datapoints
-                  store_data_to_s3(rds, s3client, region, service, path, 'rds_id', rds['DBInstanceIdentifier'], filename, accountID)
+                  store_data_to_s3(rds, s3client, region, service, path, 'rds_id', rds['DBInstanceIdentifier'], filename, accountID, payer_id)
           
           def assume_role(account_id, service, region):
             role_name = os.environ['ROLENAME']
@@ -321,6 +323,7 @@ Resources:
                   for record in event['Records']:
                       body = json.loads(record["body"])
                       account_id = body["account_id"]
+                      payer_id = body["payer_id"]
                       print(account_id)
                       s3client = boto3.client('s3')
                       regions = get_supported_regions('ec2')
@@ -331,8 +334,8 @@ Resources:
                               for region in regions:
                                   client = assume_role(account_id, functions[service]['api'], region['RegionName'])
                                   for f in functions[service]['functions']:
-                                      cw_client = boto3.client('cloudwatch', region_name = region['RegionName'])
-                                      data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id)
+                                      cw_client = assume_role(account_id, 'cloudwatch', region['RegionName'])
+                                      data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id, payer_id)
                           else:
                               client=boto3.client(service)
                               for f in functions[service]['functions']:
@@ -375,8 +378,9 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:

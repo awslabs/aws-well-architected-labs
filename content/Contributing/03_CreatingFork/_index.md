@@ -30,6 +30,11 @@ You will create a local copy of the Fork to work on, and make the required edits
   ![Images/git2.png](/Contributing/Images/git2.png?classes=lab_picture_small)
  - You now have your local copy setup & have your own GitHub repository to push to
 
+
+### Create Upstream of fork
+
+You must configure a remote that points to the upstream repository in Git to sync changes you make in a fork with the original repository. This also allows you to sync changes made in the original repository with the fork [git instructions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork) 
+
 ### Serve Hugo
 After creating your local Fork verify locally
  - Navigate back to the `aws-well-architected-labs` parent folder
