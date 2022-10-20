@@ -16,7 +16,7 @@ pre: "<b>10. </b>"
   - **Measures**: % of workloads reviewed in each stage
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Ensures the correct level review is performed inline with organization requirements. It also allows for tradeoffs if the organization is prioritizing speed to market for some workloads.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 
@@ -29,7 +29,7 @@ pre: "<b>10. </b>"
   - **Measures**: Number of milestones completed, number of teams delivering
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Ensures workloads are actively maintained and inline with best practices. Will result in higher operational costs if there are minimal changes in the workload, and no additional services/features available.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 
