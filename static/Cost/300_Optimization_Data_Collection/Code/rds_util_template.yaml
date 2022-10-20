@@ -386,6 +386,7 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   AthenaQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
