@@ -22,7 +22,7 @@ This migration method works for all RDS databases that support Graviton, includi
 
 With this migration type applications can continue to use the existing endpoints
 
-## Check the database has fully
+## Check the database has fully created
 
 1. Check the mysql-lab1 database is in an Available state (click refresh to update the current state)
 
