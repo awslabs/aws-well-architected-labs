@@ -17,7 +17,7 @@ pre: "<b>7. </b>"
  - **Measures**: $ value of unpurchased plans above 10% discount
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Maximizes high quality, low risk SP consumption, & ensures SP's that dont make business sense are not purchased
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 #### Purchasing Savings Plans
@@ -27,7 +27,7 @@ pre: "<b>7. </b>"
  - **Measures**: Coverage %
  - **Good/Bad**: Bad
  - **Why? When does it work well or not?**: It ignores the return on investment in SP & the risk. If you run <100% uptime or small resources with licensed operating systems and/or software, there can be low returns & also high risks. It can force a purchase which would be a bad business decision
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 
@@ -39,7 +39,7 @@ pre: "<b>7. </b>"
   - **Measures**: $ value of unpurchased RI's above 10% discount that pay off in less than 9 months
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Maximizes high quality, low risk RI consumption, & ensures RI's that dont make business sense are not purchased
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 #### Purchase Reserved Instances
@@ -49,7 +49,7 @@ pre: "<b>7. </b>"
   - **Measures**: Wasted $ per RI
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Minimizes waste from unused RI's, it ensures you only act when it makes business sense & effort can be recovered by making a change.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 #### Purchase Reserved Instances
@@ -59,7 +59,7 @@ pre: "<b>7. </b>"
   - **Measures**: RI utilization %
  - **Good/Bad**: Bad
  - **Why? When does it work well or not?**: High amounts of effort required to know whether you're actually losing money, and how much money. It can work in environments that have only a few different resource types running. This target can lead to large effort resulting in minimal gains or even a loss.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 {{< prev_next_button link_prev_url="../6_resource_type_size_number/" link_next_url="../8_data_transfer/" />}}
