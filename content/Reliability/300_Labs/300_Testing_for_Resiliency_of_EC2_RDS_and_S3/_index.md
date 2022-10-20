@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Testing for Resiliency of EC2, RDS, and AZ"
+title: "Level 300: Testing Resilience of EC2, RDS, and AZ using Chaos Engineering"
 menutitle: "Test Resiliency EC2, RDS, & AZ"
 description: "Use code to inject faults simulating EC2, RDS, and Availability Zone failures. These are used as part of Chaos Engineering to test workload resiliency"
 date: 2021-09-14T11:16:08-04:00
