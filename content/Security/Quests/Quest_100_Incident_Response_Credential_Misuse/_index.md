@@ -141,6 +141,15 @@ List roles:
 
 If you are at an event and you and your partner are ahead, experiment with other read-only type commands e.g. describe, list, get.
 
+Here are a few to get you started:
+
+Lists trails in the account, you'll need the trail ARN for the next command:
+```aws cloudtrail list-trails```
+
+Gets settings on the specified trail:
+```aws cloudtrail get-trail --name <ARN of the trail>```
+
+[AWS CLI Reference](https://docs.aws.amazon.com/cli/latest/index.html)
 
 ***
 
