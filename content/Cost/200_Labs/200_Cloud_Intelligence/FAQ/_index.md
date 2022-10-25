@@ -110,6 +110,18 @@ On KPI dashboard, under *Set KPI Goals* tab. Choose a specific KPI and adjust th
 
 {{% /expand%}}
 
+#### I am getting the error "Casting from TimestampTZ to Timestamp is not supported" - what do I do?
+{{%expand "Click here to expand answer" %}}
+
+This error is caused by V3 engine of Athena. To fix it, you will need to update your Athena view ri_sp_mapping. Go to Athena, click on the three dots next to the view, select show/edit query, and replace it with one of the following (depending on the scenario). Change the FROM "${cur_table_name} to your CUR table name which you can see in Athena under tables. Click RUN on the query. Then visit QuickSight, and go to your datasets, click edit data set, then click save & publish. 
+
+- [RIs but not SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
+- [SPs but not RIs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp.sql)
+- [Both RIs and SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
+
+
+{{% /expand%}}
+
 #### When running the summary_view.sql query from Athena, I get the error "Column 'product_database_engine' cannot be resolved". How do I resolve it?
 If you get this error it is very likely that none of your accounts have launched an RDS instance. To make this column show up in the CUR, launch a database in the RDS service, let it run for a couple of minutes and then shut it down. In the next iteration of the crawler, the column will appear. Running the query again should now result in success.
 
