@@ -12,8 +12,7 @@ weight: 5
 This failure injection will simulate a critical failure of the Amazon RDS DB instance.
 
 In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **hypothesis**.  For this experiment the hypothesis is:
-> Hypothesis: If the primary RDS instance dies, then availability will not be impacted
-
+> Hypothesis: If the primary RDS instance dies, then steady state will be maintained. Steady state is defined here as downtime less than one minute.
 
 1. [Optional] Before starting, view the deployment machine in the [AWS Step Functions console](https://console.aws.amazon.com/states) to verify the deployment has reached the stage where you can start testing:
     * **single region**: `WaitForMultiAZDB` shows completed (green)
@@ -104,8 +103,8 @@ Watch how the service responds. Note how AWS systems help maintain service avail
 * AWS RDS Database failover took less than a minute
 * Time for AWS Auto Scaling to detect that the instances were unhealthy and to start up new ones took four minutes. This resulted in a four minute non-availability event.
 
-Our requirements for availability require that downtime be under one minute.  Therefore our **hypothesis** is _not_ confirmed:
-> Hypothesis: If the primary RDS instance dies, then availability will not be impacted
+Our requirements for availability require that downtime be less than one minute.  Therefore our **hypothesis** is _not_ confirmed:
+> Hypothesis: If the primary RDS instance dies, then steady state will be maintained. Steady state is defined here as downtime less than one minute.
 
 Chaos Engineering uses the scientific method. We ran the experiment, and in the verify step found that our hypothesis was not confirmed, therefore the next step is to _improve_ and run the experiment again.
 
@@ -242,7 +241,7 @@ We would not normally change our execution approach as part of the "**improve / 
 ### 5.5 RDS failure injection - conclusion
 
 After making the necessary _improvements_, now our **hypothesis** is confirmed:
-> Hypothesis: If the primary RDS instance dies, then availability will not be impacted
+> Hypothesis: If the primary RDS instance dies, then steady state will be maintained. Steady state is defined here as downtime less than one minute. 
 
 ---
 

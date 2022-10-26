@@ -3,14 +3,35 @@ title: "Additional Dashboards"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
 weight: 5
-pre: "<b>3. </b>"
+pre: "<b>4 </b>"
 ---
 
 ## Introduction
 In addition to the two foundational Cloud Intelligence Dashboards CUR Dashboards, Cost Intelligence Dashboard and CUDOS, we have service and specific use case dashboards that help you dive deeper and gain additional insights.
 
-### Data Transfer Dashboard
+### Trends Dashboard
 
+The Trends Dashboard provides Financial and Technology organizational leaders access to proactive trends, signals, insights and anomalies to understand and analyze their AWS cloud usage.
+
+{{%expand "Click here to continue with the Trends Dashboard deployment" %}}
+
+This guide requires that you've already deployed the Cloud Intelligence Dashboards. 
+
+1. Visit CloudShell in the account where you have deployed the Cloud Intelligence Dashboards
+2. Run the following command and make sure you hit enter ```python3 -m ensurepip --upgrade```
+3. Run the following command and make sure you hit enter ```pip3 install --upgrade cid-cmd```
+4. Run the following command and make sure you hit enter ```cid-cmd deploy```
+5. Select the Trends dashboard and hit enter.
+6. Follow any instructions in the command line tool. 
+7. Dashboard will deploy with a link. 
+
+**NOTE:** All dashboards should be validated before use. 
+    ------------ | -------------
+
+ {{% /expand%}}
+
+ ### Data Transfer Dashboard
+{{%expand "Click here to continue with the  Data Transfer Dashboard deployment" %}}
 The Data Transfer Dashboard is an interactive, customizable and accessible QuickSight dashboard to help customers gain insights into their data transfer. It will analyze any data transfer that incurs a cost such as outbound internet and regional data transfer from all services.
 
 This dashboard contains data transfer breakdowns with the following visuals:
@@ -23,7 +44,7 @@ This dashboard contains data transfer breakdowns with the following visuals:
 ## Authors
 - Chaitanya Shah, Sr. Technical Account Manager 
 
-{{%expand "Click here to continue with the  Data Transfer Dashboard deployment" %}}
+
 
 ![Images/quicksight_dashboard_dt_new_analysis.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt_new_analysis.png)
 
@@ -216,16 +237,6 @@ Now that you have your dashboard created you can share your dashboard with users
 
 {{% /expand%}}
 
-### Trends Dashboard
+---
 
-The Trends Dashboard provides Financial and Technology organizational leaders access to proactive trends, signals, insights and anomalies to understand and analyze their AWS cloud usage.
-
-{{%expand "Click here to continue with the Trends Dashboard deployment" %}}
-- [Click to navigate Trends Dashboard workshop](https://cudos.workshop.aws/workshop-trends.html)
-
-**NOTE:** The Trends Dashboard is provided as an AWS Workshop and not an official Well-Architected lab due to the differences in the data sets and attribute names. All dashboards should be validated before use. 
-    ------------ | -------------
-
- {{% /expand%}}
-
-{{< prev_next_button link_prev_url="../2_deploy_dashboards"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/">}}
+{{< prev_next_button link_prev_url="../alternative_deployments"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/">}}

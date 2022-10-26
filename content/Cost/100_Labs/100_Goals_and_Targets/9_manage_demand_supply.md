@@ -17,7 +17,7 @@ pre: "<b>9. </b>"
   - **Measures**: Deviation % and $
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Ensure there is not an excess of resources compared to the workload demand, and if there is variable demand that the resourcing follows this closely.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 ### Supply resources
@@ -28,7 +28,7 @@ pre: "<b>9. </b>"
   - **Measures**: Deviation %
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Can be hard to track when development/test activities occur outside of defined hours.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 
@@ -43,7 +43,7 @@ pre: "<b>9. </b>"
   - **Measures**: Deviation %
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Will be unachievable when demand cannot be altered. Works well when demand can be throttled or buffered to smooth out the peaks.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 

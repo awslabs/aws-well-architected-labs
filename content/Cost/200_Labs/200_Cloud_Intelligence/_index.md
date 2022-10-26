@@ -1,13 +1,13 @@
 ---
 title: "Level 200: Cloud Intelligence Dashboards"
-#menutitle: "Lab #1"
-date: 2020-09-07T11:16:08-04:00
+#menutitle: "CID Lab"
+date: 2020-10-10T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
 ---
 ## Last Updated
-August 2022
+October 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -47,12 +47,27 @@ This Well Architected lab will walk you through implementing a series of dashboa
 
 ### Overview 
 In this lab, you will find step-by-step guides on how to implement some or all of the foundational Cloud Intelligence Dashboards as well as additional dashboards.
-- [**Cost Intelligence Dashboard (CID) - Overview**](#cost-intelligence-dashboard-cid)
-- [**CUDOS Dashboard - Overview**](#cudos-dashboard)
-- [**Trusted Advisor Organizational (TAO) Dashboard - Overview**](#trusted-advisor-organizational-tao-dashboard)
-- [**KPI & Modernization Dashboard (KPI) - Overview**](#kpi-dashboard)
-- [**Compute Optimizer Dashboard (COD) - Overview**](#compute-optimizer-dashboard)
-- [**Additional Dashboards - Overview**](#additional-dashboards)
+- [Last Updated](#last-updated)
+- [Feedback](#feedback)
+- [Get Help](#get-help)
+- [Leadership](#leadership)
+- [Introduction](#introduction)
+- [Cloud Intelligence Dashboards](#cloud-intelligence-dashboards)
+	- [Overview](#overview)
+	- [Cost Intelligence Dashboard (CID)](#cost-intelligence-dashboard-cid)
+- [Authors](#authors)
+- [Contributors](#contributors)
+	- [CUDOS Dashboard](#cudos-dashboard)
+- [Authors](#authors-1)
+	- [Trusted Advisor Organizational (TAO) Dashboard](#trusted-advisor-organizational-tao-dashboard)
+	- [KPI Dashboard](#kpi-dashboard)
+- [Authors](#authors-2)
+- [Contributors](#contributors-1)
+	- [Compute Optimizer Dashboard (COD)](#compute-optimizer-dashboard-cod)
+	- [Additional Dashboards](#additional-dashboards)
+- [Steps:](#steps)
+- [Authors](#authors-3)
+- [Contributors](#contributors-2)
 
 The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
 
@@ -198,6 +213,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 
 ## Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
+- Alex Head, OPTICS Manager 
 - Barry Miller, Technical Account Manager
 - Chaitanya Shah, Sr. Technical Account Manager
 - Cristian Popa, Sr. Technical Account Manager
@@ -209,5 +225,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Oleksandr Moskalenko, Sr. Technical Account Manager
 - William Hughes, Sr. Solutions Architect
 - Thomas Buatois, Cloud Infrastructure Architect
+  
+---
 
 {{< prev_next_button link_next_url="./cost-usage-report-dashboards/" button_next_text="Next" first_step="true" />}}

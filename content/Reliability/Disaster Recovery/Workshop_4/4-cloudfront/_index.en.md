@@ -14,13 +14,9 @@ You can improve resiliency and increase availability for specific scenarios by s
 
 {{< img cf-16.png >}}
 
-{{% notice warning %}}
-In Step 1.3, **DO NOT** choose the Amazon S3 **hot-primary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
-{{% /notice %}}
+1.3 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. Virginia (us-east-1)** region.
 
-1.3 Enter the **hot-primary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**.
-
-{{< img cf-17.png >}}
+{{< img cf-32.png >}}
 
 1.4 In the **Cache key and origin requests** section, select **CachingDisabled** for the **Cache Policy** to disable CloudFront caching. 
 
@@ -42,17 +38,13 @@ We will now add an additional **Origin** and use our **hot-secondary-uibucket-xx
 
 {{< img cf-19.png >}}
 
-{{% notice warning %}}
-In Step 2.2,  **DO NOT** choose the Amazon S3 **hot-secondary-uibucket-xxxx** bucket in the dropdown for the **Origin Domain**.  The Cloudfront distribution will not work if you do this.
-{{% /notice %}}
+2.2 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. California (us-west-1)** region.
 
-2.2 Enter the **hot-secondary CloudFormation Stack Output WebsiteURL** value that you copied to your clipboard in the **Verify Websites** section as the **Origin Domain**. Click the **Create origin** button.
-
-{{< img cf-20.png >}}
+{{< img cf-33.png >}}
 
 #### Configure the Origin Group 
 
-3.1 Click the **Create Origin Group** link.
+3.1 If you configured the origins correctly, you should see **Custom Origin** for the **Origin type**. Click the **Create Origin Group** link.
 
 {{< img cf-21.png >}}
 

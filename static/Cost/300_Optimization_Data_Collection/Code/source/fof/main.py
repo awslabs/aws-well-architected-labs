@@ -18,34 +18,35 @@ def lambda_handler(event, context):
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
+            payer_id = body["payer_id"]
             print(account_id)
 
             #AMI Data
             DestinationPrefix = 'ami'
             ami.main(account_id)
             print(f"{DestinationPrefix} response gathered")
-            s3(DestinationPrefix, account_id)
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["AMICrawler"])
 
             #EBS Data
             DestinationPrefix = 'ebs'
             ebs.main(account_id)
             print(f"{DestinationPrefix} response gathered")
-            s3(DestinationPrefix, account_id)
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["EBSCrawler"])
 
             #Snapshot Data
             DestinationPrefix = 'snapshot'
             snapshot.main(account_id)
             print(f"{DestinationPrefix} response gathered")
-            s3(DestinationPrefix, account_id)
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["SnapshotCrawler"])
                 
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def s3(DestinationPrefix, account_id):
+def s3(DestinationPrefix, account_id, payer_id):
     
     fileSize = os.path.getsize("/tmp/data.json")
     if fileSize == 0:  
@@ -67,9 +68,9 @@ def s3(DestinationPrefix, account_id):
             s3.upload_file(
                 "/tmp/data.json",
                 bucket,
-                f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
+                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
             )  # uploading the file with the data to s3
-            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
+            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}")
         except Exception as e:
             print(e)
 

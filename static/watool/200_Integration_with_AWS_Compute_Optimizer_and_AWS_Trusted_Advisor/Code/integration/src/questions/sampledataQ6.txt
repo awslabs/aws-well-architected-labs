@@ -1,0 +1,21 @@
+     ======================= Sample Data ========================     
+[AWS Compute Optimizer]
+arn: arn:aws:ec2:us-east-1:123412341234:instance/i-0262c7d87000fe5c6
+name: wademo1
+instanceType: t3.xlarge
+finding: OVER_PROVISIONED
+reason: CPUOverprovisioned,MemoryOverprovisioned,EBSIOPSOverprovisioned,EBSThroughputOverprovisioned,NetworkBandwidthOverprovisioned
+recommendedInstanceType: t3.micro t3.small t3.medium 
+arn: arn:aws:ec2:us-east-1:123412341234:instance/i-0907ff48570d26fa6
+name: wademo2
+instanceType: c4.xlarge
+finding: OVER_PROVISIONED
+reason: CPUOverprovisioned,EBSIOPSOverprovisioned,EBSThroughputOverprovisioned,NetworkBandwidthOverprovisioned
+recommendedInstanceType: t3.large m5.large m6i.large 
+
+[AWS Trusted Advisor]
+Low Utilization Amazon EC2 Instances
+instanceId       instanceName       instanceType       estimated Monthly Savings       averageCPUUtilization
+i-0262c7d87000fe5c6  wademo1  t3.xlarge  $119.81  2.6%
+i-0907ff48570d26fa6  wademo2  c4.xlarge  $143.28  3.3%
+     ============================ Done ============================     

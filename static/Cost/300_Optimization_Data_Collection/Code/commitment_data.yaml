@@ -6,9 +6,13 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket that is created to hold org data
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
-  ManagementAccountRole:
+  ManagementRoleName:
     Type: String
-    Description:  ARN of the IAM role deployed in the management accounts which can retrieve lambda data.
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+  ManagementAccountID:
+    Type: String
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   DatabaseName:
     Type: String
     Description: Athena Database name where you table will be created
@@ -72,27 +76,32 @@ Resources:
 
 
           def lambda_handler(event, context):
-              management_role_arn = os.environ["MANAGMENTARN"]
-              sts_connection = boto3.client('sts')
-              acct_b = sts_connection.assume_role(
-                  RoleArn=management_role_arn,
-                  RoleSessionName="cross_acct_lambda"
-              )
-              ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
-              SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
-              SESSION_TOKEN = acct_b['Credentials']['SessionToken']
-              ce_client = boto3.client("ce", 
-                  aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
+              role_name = os.environ['ROLE']
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  try:
+                        management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                        sts_connection = boto3.client('sts')
+                        acct_b = sts_connection.assume_role(
+                            RoleArn=management_role_arn,
+                            RoleSessionName="cross_acct_lambda"
+                        )
+                        ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+                        SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+                        SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+                        ce_client = boto3.client("ce", 
+                            aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
-              savings_plan = fetch_savingsplan(ce_client)
-              save_s3(savings_plan, BUCKET_NAME, f"savingsplan/year={year}/month={month}/data.csv")
-              print('Savings Plans Uploaded')
-              start_crawler(os.environ["SPCRAWLER"])
+                        savings_plan = fetch_savingsplan(ce_client)
+                        save_s3(savings_plan, BUCKET_NAME, f"savingsplan/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                        print('Savings Plans Uploaded')
+                        start_crawler(os.environ["SPCRAWLER"])
 
-              riRecommendation = fetch_rirecommendation(ce_client)
-              save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/year={year}/month={month}/data.csv")
-              print('Reserve Instance Uploaded')
-              start_crawler(os.environ["RICRAWLER"])
+                        riRecommendation = fetch_rirecommendation(ce_client)
+                        save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                        print('Reserve Instance Uploaded')
+                        start_crawler(os.environ["RICRAWLER"])
 
 
           def start_crawler(Crawler_Name):
@@ -373,9 +382,10 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME: !Ref DestinationBucket
-          MANAGMENTARN: !Ref ManagementAccountRole
           SPCRAWLER: !Ref SPCrawler
-          RICRAWLER: !Ref RICrawler          
+          RICRAWLER: !Ref RICrawler  
+          ROLE: !Ref ManagementRoleName
+          MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID        
   SPCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -421,8 +431,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  Ref: ManagementAccountRole
+                Resource: "*"
         - PolicyName: "S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
