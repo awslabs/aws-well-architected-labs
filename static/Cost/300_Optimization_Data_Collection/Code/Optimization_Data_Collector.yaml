@@ -229,6 +229,7 @@ Conditions:
   DeployPricingModule: !Or
     - !Condition DeployInventoryCollectorModule
     - !Condition DeployRDSUtilizationModule
+    - !Condition DeployCommitmentsModule
   DeployAccountCollector: !Or
     - !Condition DeployTAModule
     - !Condition DeployInventoryCollectorModule
