@@ -117,7 +117,7 @@ This error is caused by V3 engine of Athena. To fix it, you will need to update 
 
 - [RIs but not SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
 - [SPs but not RIs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp.sql)
-- [Both RIs and SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
+- [Both RIs and SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp_ri.sql)
 
 
 {{% /expand%}}
