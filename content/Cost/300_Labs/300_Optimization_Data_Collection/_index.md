@@ -39,6 +39,7 @@ The main sources of the data used in optional modules:
 * **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
 * **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
 * **AWS Transit Gateway Chargeback Module** uses [AWS Transit Gateway Chargeback Module](https://aws.amazon.com/transit-gateway/)
+* **Commitments Data Module** gets [Amazon Reserved Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html) and [AWS Savings Plans](https://aws.amazon.com/savingsplans/compute-pricing/)
 
 
 Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. Detailed description of each module can be found [here](../3_data_collection_modules).

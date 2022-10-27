@@ -224,6 +224,11 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
 ![Images/Budget_viz.png](/Cost/300_Optimization_Data_Collection/Images/Budget_viz.png)
 {{% /expand%}}
 
+### AWS Commitments
+[200 Pricing Model Analysis Lab](https://wellarchitectedlabs.com/cost/200_labs/200_pricing_model_analysis/)
+You can use this data to to run the . This hands-on lab will guide you through setting up pricing and usage data sources, then creating a visualization to view your costs over time for EC2 in Savings Plans rates, allowing you to make low risk, high return purchases for pricing models.
+
+
 ### AWS EBS Volumes and Snapshots
 
 If you wish to see whats volumes have what snapshots attached to them from a holistic view then this query can combine these two data sources. This could provide information into which snapshots you could archive using [Elastic Block Storage Snapshots Archive](https://aws.amazon.com/ebs/snapshots/faqs/#Snapshots_Archive)

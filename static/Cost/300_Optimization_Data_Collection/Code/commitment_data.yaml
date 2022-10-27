@@ -97,12 +97,12 @@ Resources:
                           aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
                       savings_plan = fetch_savingsplan(ce_client)
-                      save_s3(savings_plan, BUCKET_NAME, f"savingsplan/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                      save_s3(savings_plan, BUCKET_NAME, f"savingsplan/recommendations/payer_id={payer_id}/year={year}/month={month}/data.csv")
                       print('Savings Plans Uploaded')
                       start_crawler(os.environ["SPCRAWLER"])
 
                       riRecommendation = fetch_rirecommendation(ce_client)
-                      save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                      save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/recommendations/payer_id={payer_id}/year={year}/month={month}/data.csv")
                       print('Reserve Instance Uploaded')
                       start_crawler(os.environ["RICRAWLER"])
                 

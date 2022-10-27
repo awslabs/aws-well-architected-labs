@@ -501,6 +501,26 @@ AWS Transit Gateway allows you to connect Cloud Watch data and Cost and Usage Re
 * [Test your Lambda](#testing-your-deployment) 
 {{% /expand%}}
 
+{{%expand "Commitments Data" %}}
+## Commitments Data
+
+This collects your Reserved Instance and Savings Plans recommendations from your Management Account. 
+Savings Plans purchase recommendation:
+  - Compute
+
+Reservation purchase recommendation:
+   - Amazon Redshift
+   - Amazon Elastic Compute Cloud - Compute
+   - Amazon Relational Database Service
+   - Amazon ElastiCache
+   - Amazon Elasticsearch Service
+
+
+
+* [Test your Lambda](#testing-your-deployment) 
+{{% /expand%}}
+
+
 ## Testing your deployment 
 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -515,6 +535,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 - **Cost Explorer Rightsizing Recommendations** module -> **Rightsize-Data-Lambda-Function-OptimizationDataCollectionStack** Lambda function
 - **Compute Optimizer Collector** module -> **ComputeOptimizer-Trigger-Export** Lambda function
 - **AWS Organization Data Export** module -> **Lambda_Organization_Data_OptimizationDataCollectionStack** Lambda function
+- **Commitments Data** module -> **commitments-Lambda-Function-OptimizationDataCollectionStack** Lambda function
 
 
 2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
