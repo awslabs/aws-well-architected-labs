@@ -448,8 +448,9 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
         Schedule: !Ref Schedule
-        ManagementAccountRole: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         RolePrefix: !Ref RolePrefix
+        ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+        ManagementAccountID: !Ref ManagementAccountID
   TransitGatewayModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTransitGatewayModule

@@ -61,6 +61,9 @@ Resources:
           import gzip
           import urllib3
           import datetime
+          import logging
+          from botocore.exceptions import ClientError
+          from botocore.client import Config
 
           BUCKET_NAME = os.environ["BUCKET_NAME"]
           S3 = boto3.client('s3')
@@ -81,27 +84,32 @@ Resources:
               
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
                   try:
-                        management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
-                        sts_connection = boto3.client('sts')
-                        acct_b = sts_connection.assume_role(
-                            RoleArn=management_role_arn,
-                            RoleSessionName="cross_acct_lambda"
-                        )
-                        ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
-                        SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
-                        SESSION_TOKEN = acct_b['Credentials']['SessionToken']
-                        ce_client = boto3.client("ce", 
-                            aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
+                      management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                      sts_connection = boto3.client('sts')
+                      acct_b = sts_connection.assume_role(
+                          RoleArn=management_role_arn,
+                          RoleSessionName="cross_acct_lambda"
+                      )
+                      ACCESS_KEY = acct_b['Credentials']['AccessKeyId']
+                      SECRET_KEY = acct_b['Credentials']['SecretAccessKey']
+                      SESSION_TOKEN = acct_b['Credentials']['SessionToken']
+                      ce_client = boto3.client("ce", 
+                          aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, aws_session_token=SESSION_TOKEN, )
 
-                        savings_plan = fetch_savingsplan(ce_client)
-                        save_s3(savings_plan, BUCKET_NAME, f"savingsplan/payer_id={payer_id}/year={year}/month={month}/data.csv")
-                        print('Savings Plans Uploaded')
-                        start_crawler(os.environ["SPCRAWLER"])
+                      savings_plan = fetch_savingsplan(ce_client)
+                      save_s3(savings_plan, BUCKET_NAME, f"savingsplan/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                      print('Savings Plans Uploaded')
+                      start_crawler(os.environ["SPCRAWLER"])
 
-                        riRecommendation = fetch_rirecommendation(ce_client)
-                        save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/payer_id={payer_id}/year={year}/month={month}/data.csv")
-                        print('Reserve Instance Uploaded')
-                        start_crawler(os.environ["RICRAWLER"])
+                      riRecommendation = fetch_rirecommendation(ce_client)
+                      save_s3(riRecommendation, BUCKET_NAME, f"reserveinstance/payer_id={payer_id}/year={year}/month={month}/data.csv")
+                      print('Reserve Instance Uploaded')
+                      start_crawler(os.environ["RICRAWLER"])
+                
+                  except Exception as e:
+                        # Send some context about this error to Lambda Logs
+                        logging.warning("%s" % e)
+                        continue 
 
 
           def start_crawler(Crawler_Name):

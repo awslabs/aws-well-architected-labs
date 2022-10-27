@@ -104,6 +104,6 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - ""ce:GetSavingsPlansPurchaseRecommendation"
+                  - "ce:GetSavingsPlansPurchaseRecommendation"
                   - "ce:GetReservationPurchaseRecommendation"
                 Resource: "*"
