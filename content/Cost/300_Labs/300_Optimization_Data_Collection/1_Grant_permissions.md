@@ -10,14 +10,17 @@ pre: "<b>1. </b>"
 
 To ensure Data Collection account can collect information across all accounts in the AWS Organization you must deploy  **2 IAM roles for each Management account** you wish to collect data from. (if you want to collect data from multiple payers, follow steps for each one)
 
-1. One Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. These must be deployed into any Management account you wish to collect data from. 
-2. A second [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) must be installed in each Linked accout of Organization via a StackSet.
+The rest of this page is broken into two sets of instructions: 
+1. **Role for Management Account**  - One Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. These must be deployed into any Management account you wish to collect data from. 
+2. **Read Only roles for Data Collector modules** - A second [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) must be installed in each Linked account of Organization via a StackSet.
 
 ### 1/2 Role for Management Account 
 
 Some of the data needed for the modules is in the **Management account** we will now create a read only role to assume into that account to get the data. 
 
 1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml)
+and use **Amazon S3 URL**
+https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml 
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
