@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 
 ### Create Main Resources
 
-The first step is to create a set of reusable resources and respective data collection modules. 
+The first step is to create a set of reusable resources and respective data collection modules. To learn more 
 
 
 1.  Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your Cost Optimization linked account (recommended)
@@ -41,4 +41,4 @@ If you see the an issue with stack creation please check the status of nested st
 
 {{% /expand%}}
 
-{{< prev_next_button link_prev_url="../1_grant_permissions/" link_next_url="../3_data_collection_modules" />}}
+{{< prev_next_button link_prev_url="../1_grant_permissions/" link_next_url="../3_test_modules" />}}
