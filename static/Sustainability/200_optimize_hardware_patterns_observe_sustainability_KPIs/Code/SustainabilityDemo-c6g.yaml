@@ -171,18 +171,10 @@ Resources:
             /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-linux -s
 
             #send access_log to CloudWatch
-            cd /opt/aws/amazon-cloudwatch-agent/etc
-            sudo wget https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Sustainability/200_optimize_hardware_patterns_observe_sustainability_kpis/amazon-cloudwatch-agent.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
-
             #memory monitoring  
-            cd /opt/aws/amazon-cloudwatch-agent/bin/
-            sudo wget https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Sustainability/200_optimize_hardware_patterns_observe_sustainability_kpis/config.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
-
+            cd /opt/aws/amazon-cloudwatch-agent/etc
+            sudo wget https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Sustainability/200_optimize_hardware_patterns_observe_sustainability_kpis/cloudwatch-config.json
+            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json
 
             # Put vCPU custom metrics
             mkdir /project
