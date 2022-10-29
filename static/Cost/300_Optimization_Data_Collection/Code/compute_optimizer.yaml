@@ -43,6 +43,9 @@ Parameters:
   DeployRegions:
     Type: String
     Description: "A comma separated list of AWS regions where compute-optimizer needs to collect info. Example: us-east-1,eu-west-1"
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaARN:
     Description: Lambda Arn
@@ -680,3 +683,8 @@ Resources:
     Type: Custom::CustomResource
     Properties:
       ServiceToken: !GetAtt CustomRessourceFunctionFinalize.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

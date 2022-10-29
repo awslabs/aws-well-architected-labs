@@ -55,6 +55,9 @@ Parameters:
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
   GlueRoleARN:
     Type: String
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -178,3 +181,8 @@ Resources:
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
       FunctionName: !GetAtt LambdaFunction.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

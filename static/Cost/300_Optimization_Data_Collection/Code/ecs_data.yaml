@@ -53,6 +53,9 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -311,3 +314,8 @@ Resources:
         where \"cluster\" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),bu_usage_view.month = '12', bu_usage_view.month = CAST((month(now())-1) AS VARCHAR) )
         and  if((date_format(current_timestamp , '%M') = 'January'), bu_usage_view.year = CAST((year(now())-1) AS VARCHAR) ,bu_usage_view.year = CAST(year(now()) AS VARCHAR))
         GROUP BY  \"cluster\", services, servicearn, value, bu_usage_view.month, bu_usage_view.year, bu_usage_view.line_item_usage_account_id, total_usage, ec2_cost"
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

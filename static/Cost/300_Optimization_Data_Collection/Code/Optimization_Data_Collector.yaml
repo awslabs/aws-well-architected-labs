@@ -12,6 +12,7 @@ Metadata:
           - MultiAccountRoleName
           - Schedule
           - RolePrefix
+          - CFNTemplateSourceBucket
       - Label:
           default: 'Available modules'
         Parameters:
@@ -38,6 +39,8 @@ Metadata:
         default: "Schedule swap to cron(0 8 1 * ? *) for 1st day of the month"
       RolePrefix:
         default: "Role Prefix"
+      CFNTemplateSourceBucket:
+        default: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be allways 'aws-well-architected-labs'"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
@@ -102,6 +105,10 @@ Parameters:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: "WA-"
+  CFNTemplateSourceBucket:
+    Type: String
+    Description: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be allways 'aws-well-architected-labs'"
+    Default: "aws-well-architected-labs"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
@@ -314,11 +321,85 @@ Resources:
                           - ''
                           - - !GetAtt S3Bucket.Arn 
                             - '*'
+  LambdaAnalyticsRole: #Execution role for the custom resource
+    Type: AWS::IAM::Role
+    Properties:
+      Path:
+        Fn::Sub: /${RolePrefix}/
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  LambdaAnalytics:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      FunctionName: !Sub ${RolePrefix}DataCollectionLab-Analytics
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt LambdaAnalyticsRole.Arn
+      Timeout: 15
+      Environment:
+        Variables:
+          WA_ANALYTICS_ENDPOINT: https://okakvoavfg.execute-api.eu-west-1.amazonaws.com/
+      Code:
+        ZipFile: |
+          import os
+          import json
+          import uuid
+          import urllib3
+          import boto3
+
+          endpoint = os.environ['WA_ANALYTICS_ENDPOINT']
+          account_id = boto3.client("sts").get_caller_identity()["Account"]
+
+          def lambda_handler(event, context):
+              print(json.dumps(event))
+              try:
+                  if event['RequestType'].upper() not in ['CREATE', 'UPDATE', 'UPDATE']:
+                      raise Exception(f"Unknown RequestType {event['RequestType']}")
+                  action = event['RequestType'].upper()
+                  name = event['ResourceProperties']['Name']
+                  method = {'CREATE':'PUT', 'UPDATE': 'PATCH', 'DELETE': 'DELETE'}.get(action)
+                  via_key = {'CREATE':'created_via', 'UPDATE': 'updated_via', 'DELETE': 'deleted_via'}.get(action)
+                  payload = {'dashboard_id': 'data-collection-lab/' + name, 'account_id': account_id, via_key: 'CFN'}
+                  r =  urllib3.PoolManager().request(method, endpoint, body=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json'})
+                  if r.status != 200:
+                      raise Exception(f"There has been an issue logging action, server did not respond with a 200 response, actual status: {r.status}, response data {r.data.decode('utf-8')}. This issue will be ignored")
+                  res, reason = 'SUCCESS', 'success'
+              except Exception as exc:
+                  res, reason = 'SUCCESS', f"{exc} . This issue will be ignored"
+              body = {
+                  'Status': res,
+                  'Reason': reason,
+                  'PhysicalResourceId': event.get('PhysicalResourceId', str(uuid.uuid1())),
+                  'StackId': event.get('StackId'),
+                  'RequestId': event.get('RequestId'),
+                  'LogicalResourceId': event.get('LogicalResourceId'),
+                  'NoEcho': False,
+                  'Data':  {'Reason': reason},
+              }
+              json_body=json.dumps(body)
+              print(json_body)
+              url = event.get('ResponseURL')
+              if not url: return
+              try:
+                  response = urllib3.PoolManager().request('PUT', url, body=json_body, headers={'content-type' : '', 'content-length' : str(len(json_body))}, retries=False)
+                  print(f"Status code: {response}")
+              except Exception as exc:
+                  print("Failed sending PUT to CFN: " + str(exc))
   TrustedAdvisorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTAModule
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
+          TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/trusted_advisor.yaml"
           Parameters:
             DestinationBucket: !Ref S3Bucket
             DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -328,6 +409,8 @@ Resources:
             MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
             CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
             RolePrefix: !Ref RolePrefix
+            RolePrefix: !Ref RolePrefix
+            LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   RightsizeModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRightsizingModule
@@ -340,12 +423,13 @@ Resources:
           ManagementAccountID: !Ref ManagementAccountID
           GlueRoleARN: !GetAtt GlueRole.Arn
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
+          LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_rightsizing_lambda.yaml"
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/lambda_data.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
@@ -353,20 +437,22 @@ Resources:
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   PricingModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployPricingModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/pricing_data.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/compute_optimizer.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         DestinationBucket: !Ref S3Bucket
@@ -382,33 +468,36 @@ Resources:
             - ComputeOptimizerRegionsIsEmpty
             - !Sub "${AWS::Region}"
             - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   EcsChargebackModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/ecs_data.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
         RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   RDSUtilizationModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRDSUtilizationModule
     Properties:
-      TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/rds_util_template.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   OrgDataModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL:  "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/organization_data.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
@@ -416,6 +505,7 @@ Resources:
         ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
         ManagementAccountID: !Ref ManagementAccountID
         RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   BudgetsModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployBudgetsModule
@@ -423,10 +513,11 @@ Resources:
       Parameters:
           DestinationBucket: !Ref S3Bucket
           DestinationBucketARN: !GetAtt S3Bucket.Arn 
-          GlueRoleArn: !GetAtt GlueRole.Arn 
+          GlueRoleArn: !GetAtt GlueRole.Arn
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
+          LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/budgets.yaml"
   TransitGatewayModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTransitGatewayModule
@@ -437,12 +528,13 @@ Resources:
           GlueRoleArn: !GetAtt GlueRole.Arn 
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
-      TemplateURL: "https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/transit_gateway.yaml"
+          LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/transit_gateway.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-          TemplateURL: "https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
+          TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/get_accounts.yaml"
           Parameters:
             RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
             ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
@@ -458,5 +550,6 @@ Resources:
                   - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
                   - !If [DeployTransitGatewayModule, !Sub "${TransitGatewayModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
-  
+
+
 

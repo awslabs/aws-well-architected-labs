@@ -102,6 +102,7 @@ def initial_deploy_stacks():
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml').read(),
             Parameters=[
                 {'ParameterKey': 'CostAccountID',                   'ParameterValue': account_id},
+                {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeInventoryCollectorModule', 'ParameterValue': "yes"},
@@ -122,8 +123,11 @@ def initial_deploy_stacks():
             StackName="OptimizationDataCollectionStack",
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml').read(),
             Parameters=[
+
+                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': "aws-wa-labs-staging"},
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
                 {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costoptimizationdata"},
+                {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeComputeOptimizerModule',   'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
@@ -159,7 +163,10 @@ def update_nested_stacks():
     nested_stack_file_names = {}
     for k, v in  cfn['Resources'].items():
         if v['Type'] == 'AWS::CloudFormation::Stack':
-            nested_stack_file_names[k] = v.get('Properties',{}).get('TemplateURL','').split('/')[-1]
+            TemplateURL = v.get('Properties',{}).get('TemplateURL','')
+            print (TemplateURL)
+            template_fn =  list(TemplateURL.values())[-1]
+            nested_stack_file_names[k] =template_fn.split('/')[-1]
 
     logger.info('Updating nested stacks')
     for r in cloudformation.describe_stack_resources(StackName='OptimizationDataCollectionStack')['StackResources']:
@@ -220,15 +227,15 @@ def trigger_update():
     main_stack_name = 'OptimizationDataCollectionStack'
     for name in [
         f'Accounts-Collector-Function-{main_stack_name}',
-        'Lambda_Organization_Data_Collector',
-        'aws-cost-explorer-rightsizing-recommendations-function',
+        #'Lambda_Organization_Data_Collector',
+        f'Rightsize-Data-Lambda-Function-{main_stack_name}',
         ]:
         logger.info('Invoking ' + name)
         response = boto3.client('lambda').invoke(FunctionName=name)
 
 def setup():
     initial_deploy_stacks()
-    update_nested_stacks()
+    #update_nested_stacks()
     clean_bucket()
     trigger_update()
     logger.info('Waiting 1 min')

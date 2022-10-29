@@ -23,6 +23,9 @@ Parameters:
     Type: String
     Default: "cron(30 12 L * ? *)"
     Description: Cloud watch event Schedule to trigger the lambda 
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -446,3 +449,8 @@ Resources:
         'sizeKey'='2217375799',
         'skip.header.line.count'='6',
         'typeOfData'='file')"
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

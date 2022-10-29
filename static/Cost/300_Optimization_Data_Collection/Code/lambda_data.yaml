@@ -12,6 +12,9 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -520,3 +523,8 @@ Resources:
               gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost AS gp3_total_cost,
               (current_gb_cost + current_iops_cost) - (gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost) as gp3_saving
           from ebs_data"
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

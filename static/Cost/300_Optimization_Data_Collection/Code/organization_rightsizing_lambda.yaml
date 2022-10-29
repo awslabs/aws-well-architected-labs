@@ -39,6 +39,9 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   CostExplorerRightsizingLambdaRoleARN:
     Description: Role for Lambda execution of AWS Cost Explorer Rightsizing recommendations.
@@ -283,7 +286,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the rightsizing recommendations for same family
       Name: same-familyrightsizing-summary-view
-      QueryString:
+      QueryString: |
         --  Click Create as view then you can run from that
 
         WITH rightsizing_dates AS (
@@ -396,7 +399,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the rightsizing recommendations for cross family
       Name: cross-familyrightsizing-summary-view
-      QueryString:
+      QueryString: |
         --  Click Create as view then you can run from that
 
         WITH rightsizing_dates AS (
@@ -527,3 +530,8 @@ Resources:
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt CloudWatchTrigger.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

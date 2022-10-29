@@ -13,6 +13,10 @@ Parameters:
     Type: String
     AllowedPattern: ([a-z0-9\-, ]*?$)
     Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: Org-Data
   DatabaseName:
     Type: String
     Description: Athena Database name where you table will be created
@@ -26,6 +30,9 @@ Parameters:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
     Default: "rate(14 days)"
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaFunctionName:
     Value:
@@ -273,3 +280,8 @@ Resources:
           FROM ("managementcur"."cur" cur
           INNER JOIN "managementcur"."organisation_data"
             ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

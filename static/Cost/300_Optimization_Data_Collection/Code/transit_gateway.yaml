@@ -31,6 +31,9 @@ Parameters:
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   SQSUrl:
     Description: TaskQueue URL the account collector lambda
@@ -422,3 +425,8 @@ Resources:
                     , ("total_Networking_cost" * (usage_account_dx_total / total_data_transfer)) as chargeback_cost_final
                     FROM
                       summary
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName
