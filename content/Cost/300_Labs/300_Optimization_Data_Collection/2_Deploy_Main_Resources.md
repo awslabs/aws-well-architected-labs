@@ -8,10 +8,10 @@ pre: "<b>2. </b>"
 
 ### Create Main Resources
 
-The first step is to create a set of reusable resources and respective data collection modules. To learn more 
+The first step is to create a set of reusable resources and respective data collection modules
 
 
-1.  Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your Cost Optimization linked account (recommended)
+1.  Log into your Optimization Data Collector account (dedicated linked account for cost optimization work - reccomended). Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) if you are deploying to your Cost Optimization linked account.
 
 Or if you wish to keep this on your local machine please copy [CloudFormation template](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Optimization_Data_Collector.yaml) locally and deploy with your preferred method of choice:
 

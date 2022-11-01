@@ -44,7 +44,7 @@ For **Compute Optimizer Collector** module processing can take up to 30 mins (15
 
 ![Images/Optimization_Data_DB.png](/Cost/300_Optimization_Data_Collection/Images/Optimization_Data_DB.png)
 
-8. If your module has a saved query you will be able to see it in the **Saved queries** section. 
+8. Some modules has a saved queries, see next section for details, you will be able to see it in the **Saved queries** section. 
 ![Images/Saved_queries.png](/Cost/300_Optimization_Data_Collection/Images/Saved_queries.png)
 Otherwise you can query each table directly by clicking on **Preview Table** button
 ![Images/athena_query_table.png](/Cost/300_Optimization_Data_Collection/Images/athena_query_table.png)
