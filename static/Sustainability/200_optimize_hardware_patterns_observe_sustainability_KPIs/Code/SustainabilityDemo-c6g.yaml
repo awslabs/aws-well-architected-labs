@@ -146,8 +146,8 @@ Resources:
             # Install the web pages for our lab (update github repo)
             if [ ! -f /var/www/html/immersion-day-app-php7.zip ]; then
               cd /var/www/html
-              wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/immersion-day-app-php7.zip
-              unzip -j immersion-day-app-php7.zip
+              wget https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Sustainability/200_optimize_hardware_patterns_observe_sustainability_kpis/immersion-day-app-php7.zip
+              unzip -j /var/www/html/immersion-day-app-php7.zip
             fi
 
             # Install the AWS SDK for PHP
@@ -168,18 +168,13 @@ Resources:
             mkdir -p /usr/share/collectd
             touch /usr/share/collectd/types.db
 
-            amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-linux -s
+            /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-linux -s
 
-            #send access_log to CloudWatch (update github repo)
+            #send access_log to CloudWatch
+            #memory monitoring  
             cd /opt/aws/amazon-cloudwatch-agent/etc
-            sudo wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/amazon-cloudwatch-agent.json
-            sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
-
-            #memory monitoring  (update github repo)
-            sudo cd /opt/aws/amazon-cloudwatch-agent/bin/
-            sudo wget https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/static/Sustainability/200_optimize_ec2_using_cloudwatch_compute_optimizer/app/config.json
-            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
+            sudo wget https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Sustainability/200_optimize_hardware_patterns_observe_sustainability_kpis/cloudwatch-config.json
+            sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-config.json
 
             # Put vCPU custom metrics
             mkdir /project
