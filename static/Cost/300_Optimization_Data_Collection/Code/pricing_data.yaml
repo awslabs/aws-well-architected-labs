@@ -350,6 +350,22 @@ Resources:
                   'statusCode': 200,
                   'body': json.dumps('YAY!')
               }
+              graviton_data(s3Bucket, s3)
+
+          def graviton_data(s3Bucket, s3):
+
+              #Create a Source Dictionary That Specifies Bucket Name and Key Name of the Object to Be Copied
+              copy_source = {
+                  'Bucket': 'aws-well-architected-labs',
+                  'Key': 'Cost/Labs/300_Optimization_Data_Collection/graviton/rds_graviton_mapping.csv'
+              }
+              
+              bucket = s3.Bucket(s3Bucket)
+              
+              bucket.copy(copy_source, 'pricing/graviton/rds_graviton_mapping.csv')
+              
+              # Printing the Information That the File Is Copied.
+              print('Single File is copied')
 
       Handler: 'index.lambda_handler'
       MemorySize: 2880
