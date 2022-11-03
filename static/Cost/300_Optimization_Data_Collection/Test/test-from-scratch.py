@@ -61,10 +61,10 @@ def watch_stacks(stack_names = []):
                 if 'does not exist' in exc.response['Error']['Message']:
                     stack_names.remove(stack_name)
             else:
+                # Check events
                 for e in events:
-                    if not last_update[stack_name] or  last_update[stack_name] < e['Timestamp']:
-                        logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
-                    if not last_update[stack_name] or last_update[stack_name] < e['Timestamp']:
+                    if not last_update.get(stack_name) or last_update.get(stack_name) < e['Timestamp']:
+                        logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), stack_name, e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
                         last_update[stack_name] = e['Timestamp']
             try:
                 current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
@@ -73,19 +73,21 @@ def watch_stacks(stack_names = []):
             except:
                 pass
 
-            # try:
-            #     for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
-            #         if res['ResourceType'] == 'AWS::CloudFormation::Stack':
-            #             name = res['PhysicalResourceId'].split('/')[-2]
-            #             if name not in stack_names:
-            #                 stack_names.append(name)
-            # except:
-            #     pass
+            try:
+                # Check nested stacks
+                for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
+                    if res['ResourceType'] == 'AWS::CloudFormation::Stack':
+                        name = res['PhysicalResourceId'].split('/')[-2]
+                        if name not in stack_names:
+                            stack_names.append(name)
+            except:
+                pass
 
         if not stack_names or not in_progress: break
         time.sleep(5)
 
 def initial_deploy_stacks():
+    logger.info(f"account_id={account_id} region={boto3.session.Session().region_name}")
     create_options = dict(
         TimeoutInMinutes=60,
         Capabilities=['CAPABILITY_IAM','CAPABILITY_NAMED_IAM'],
@@ -366,5 +368,5 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     main()
