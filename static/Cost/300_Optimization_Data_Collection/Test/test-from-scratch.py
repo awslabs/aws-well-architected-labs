@@ -73,14 +73,14 @@ def watch_stacks(stack_names = []):
             except:
                 pass
 
-            try:
-                for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
-                    if res['ResourceType'] == 'AWS::CloudFormation::Stack':
-                        name = res['PhysicalResourceId'].split('/')[-2]
-                        if name not in stack_names:
-                            stack_names.append(name)
-            except:
-                pass
+            # try:
+            #     for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
+            #         if res['ResourceType'] == 'AWS::CloudFormation::Stack':
+            #             name = res['PhysicalResourceId'].split('/')[-2]
+            #             if name not in stack_names:
+            #                 stack_names.append(name)
+            # except:
+            #     pass
 
         if not stack_names or not in_progress: break
         time.sleep(5)
