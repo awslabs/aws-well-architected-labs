@@ -12,6 +12,9 @@ Parameters:
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CodeBucket:
+    Type: String
+    Description: S3 Bucket that exists and holds code
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -89,6 +92,7 @@ Resources:
           import urllib.request
           import os
           import logging
+          CODE_BUCKET = os.environ['CODE_BUCKET']
 
           def lambda_handler(event, context):
 
@@ -112,7 +116,7 @@ Resources:
 
             #Create a Source Dictionary That Specifies Bucket Name and Key Name of the Object to Be Copied
             copy_source = {
-                'Bucket': 'aws-well-architected-labs',
+                'Bucket': CODE_BUCKET,
                 'Key': 'Cost/Labs/300_Optimization_Data_Collection/Region/regions.csv'
             }
             
@@ -133,8 +137,8 @@ Resources:
           - Arn
       Environment:
         Variables:
-          BUCKET_NAME:
-            !Ref DestinationBucket
+          BUCKET_NAME: !Ref DestinationBucket
+          CODE_BUCKET: !Ref CodeBucket
           ACCOUNT_ID: AWS::AccountId
           DEST_PREFIX: !Ref CFDataName
   CloudWatchTrigger:

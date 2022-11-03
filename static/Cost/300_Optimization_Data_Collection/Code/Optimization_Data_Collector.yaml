@@ -235,6 +235,7 @@ Conditions:
   ComputeOptimizerRegionsIsEmpty: !Equals
     - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
     - ""
+  ProdCFNTemplateUsed: !Equals [ !Ref CFNTemplateSourceBucket,  'aws-well-architected-labs' ]
 #Reusable Resources:
 Resources:
   S3CrawlerQue: 
@@ -407,7 +408,7 @@ Resources:
             CFDataName: "TA"
             GlueRoleARN: !GetAtt GlueRole.Arn
             MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-            CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
+            CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]
             RolePrefix: !Ref RolePrefix
             RolePrefix: !Ref RolePrefix
             LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
@@ -435,7 +436,7 @@ Resources:
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         GlueRoleARN: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
+        CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   PricingModule:
@@ -447,6 +448,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn 
         RolePrefix: !Ref RolePrefix
+        CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   ComputeOptimizerModule:
     Type: AWS::CloudFormation::Stack
@@ -478,7 +480,7 @@ Resources:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn 
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
-        CodeBucket: !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket]
+        CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   RDSUtilizationModule:

@@ -26,29 +26,10 @@ Parameters:
       Type: String
       Description: S3 Bucket that exists and holds code
       Default: aws-well-architected-labs
-      AllowedValues:
-        - aws-well-architected-labs-ireland
-        - aws-well-architected-labs
-        - aws-well-architected-labs-ohio
-        - aws-well-architected-labs-virginia
-        - aws-well-architected-labs-california
-        - aws-well-architected-labs-oregon
-        - aws-well-architected-labs-singapore
-        - aws-well-architected-labs-frankfurt
-        - aws-well-architected-labs-london
-        - aws-well-architected-labs-stockholm
-        - aws-well-architected-labs-ap-sydney
-        - aws-well-architected-labs-mumbai
-        - aws-well-architected-labs-osaka
-        - aws-well-architected-labs-seoul
-        - aws-well-architected-labs-tokyo
-        - aws-well-architected-labs-canada
-        - aws-well-architected-labs-milan
-        - aws-well-architected-labs-paris
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/fof_dev.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
   GlueRoleARN:
     Type: String
   RolePrefix:

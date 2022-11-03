@@ -31,3 +31,5 @@ aws s3 cp $path/pricing_data.yaml                     s3://$bucket/Cost/Labs/300
 aws s3 cp $path/source/ecs.zip                        s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/  --acl public-read
 aws s3 cp $path/source/fof.zip                        s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/  --acl public-read
 aws s3 cp $path/source/ta.zip                         s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/  --acl public-read
+aws s3 cp $path/source/regions.csv                    s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/Region/  --acl public-read
+

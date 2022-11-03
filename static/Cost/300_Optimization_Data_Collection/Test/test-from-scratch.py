@@ -41,6 +41,7 @@ from collections import Counter
 import boto3
 from cfn_tools import load_yaml
 
+BUCKET = os.environ.get('BUCKET', "aws-wa-labs-staging")
 logger = logging.getLogger(__name__)
 account_id = boto3.client("sts").get_caller_identity()["Account"]
 
@@ -59,17 +60,28 @@ def watch_stacks(stack_names = []):
             except cloudformation.exceptions.ClientError as exc:
                 if 'does not exist' in exc.response['Error']['Message']:
                     stack_names.remove(stack_name)
-            for e in events:
-                if not last_update[stack_name] or  last_update[stack_name] < e['Timestamp']:
-                    logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
-                if not last_update[stack_name] or last_update[stack_name] < e['Timestamp']:
-                    last_update[stack_name] = e['Timestamp']
-        try:
-            current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
-            if 'IN_PROGRESS' in current_stack['StackStatus']:
-                in_progress = True
-        except:
-            pass
+            else:
+                for e in events:
+                    if not last_update[stack_name] or  last_update[stack_name] < e['Timestamp']:
+                        logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
+                    if not last_update[stack_name] or last_update[stack_name] < e['Timestamp']:
+                        last_update[stack_name] = e['Timestamp']
+            try:
+                current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
+                if 'IN_PROGRESS' in current_stack['StackStatus']:
+                    in_progress = True
+            except:
+                pass
+
+            try:
+                for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
+                    if res['ResourceType'] == 'AWS::CloudFormation::Stack':
+                        name = res['PhysicalResourceId'].split('/')[-2]
+                        if name not in stack_names:
+                            stack_names.append(name)
+            except:
+                pass
+
         if not stack_names or not in_progress: break
         time.sleep(5)
 
@@ -124,7 +136,7 @@ def initial_deploy_stacks():
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml').read(),
             Parameters=[
 
-                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': "aws-wa-labs-staging"},
+                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': BUCKET}, 
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
                 {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costoptimizationdata"},
                 {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
