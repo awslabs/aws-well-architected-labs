@@ -181,11 +181,11 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: region_names
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE 'region_names'(
-        'region' string, 
-        'regionname' string, 
-        'endpoint' string, 
-        'protocol' string)
+        "CREATE EXTERNAL TABLE region_names(
+        region' string, 
+        regionname string, 
+        endpoint string, 
+        protocol string)
       ROW FORMAT DELIMITED 
         FIELDS TERMINATED BY ',' 
       STORED AS INPUTFORMAT 
@@ -196,8 +196,7 @@ Resources:
         's3://${DestinationBucket}/pricing/region'
       TBLPROPERTIES (
         'has_encrypted_data'='false', 
-        'skip.header.line.count'='1', 
-        'transient_lastDdlTime'='1611498146')"  
+        'skip.header.line.count'='1')"  
   AthenaEC2PricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
