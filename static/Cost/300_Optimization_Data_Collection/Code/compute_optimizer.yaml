@@ -303,24 +303,11 @@ Resources:
 
               MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
-                  try: 
-                      ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{ROLE_NAME}"
-                      sts_connection = boto3.client('sts')
-                      acct_b = sts_connection.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")
-
-                      account_b_creds = {
-                        "aws_access_key_id":     acct_b['Credentials']['AccessKeyId'],
-                        "aws_secret_access_key": acct_b['Credentials']['SecretAccessKey'],
-                        "aws_session_token":     acct_b['Credentials']['SessionToken'],
-                      }
-
-                      acc = boto3.client("sts", **account_b_creds).get_caller_identity()["Account"]
-
+                  try:
                       result_messages = []
                       error_messages = []
                       for region in [r.strip() for r in REGIONS.split(',')]:
-                          # create service client using the assumed role credentials
-                          co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
+                          co = assume_role(payer_id, "compute-optimizer", region)
                           export_funcs = {
                               'ec2_instance': co.export_ec2_instance_recommendations,
                               'auto_scale':   co.export_auto_scaling_group_recommendations,
@@ -336,6 +323,8 @@ Resources:
                                       s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
                                   )
                                   result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                              except co.exceptions.LimitExceededException:
+                                  result_messages.append(f"{region} {name} export already running.")
                               except Exception as exc:
                                   error_messages.append(f"ERROR: {region} {name} - {exc}")
                       if result_messages:
@@ -343,9 +332,20 @@ Resources:
                       if error_messages:
                           raise Exception(f"There were {len(error_messages)} errors, out of {len(result_messages) + len(error_messages)} exports: \n" + "\n".join(error_messages))
                   except Exception as e:
-                      # Send some context about this error to Lambda Logs
-                      logging.warning("%s" % e)
-                      continue
+                      print(f'{type(e)}: {e}')
+
+          def assume_role(account_id, service, region):
+              try:
+                  assumed = boto3.client('sts').assume_role(RoleArn=f"arn:aws:iam::{account_id}:role/{ROLE_NAME}", RoleSessionName='--')
+                  creds = assumed['Credentials']
+                  return boto3.client(service, region_name=region,
+                      aws_access_key_id=creds['AccessKeyId'],
+                      aws_secret_access_key=creds['SecretAccessKey'],
+                      aws_session_token=creds['SessionToken'],
+                  )
+              except ClientError as e:
+                  print(f"{account_id} {type(e)}: {e}")
+
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
