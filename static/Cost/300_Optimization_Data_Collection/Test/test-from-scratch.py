@@ -49,6 +49,16 @@ cloudformation = boto3.client('cloudformation')
 athena = boto3.client('athena')
 s3 = boto3.resource("s3")
 
+HEADER = '\033[95m'
+BLUE = '\033[94m'
+CYAN = '\033[96m'
+GREEN = '\033[92m'
+WARNING = '\033[93m'
+RED = '\033[91m'
+END = '\033[0m'
+BOLD = '\033[1m'
+UNDERLINE = '\033[4m'
+
 def watch_stacks(stack_names = []):
     ''' watch stacks while they are IN_PROGRESS and/or until they are deleted'''
     last_update = {stack_name: None for stack_name in stack_names}
@@ -64,7 +74,18 @@ def watch_stacks(stack_names = []):
                 # Check events
                 for e in events:
                     if not last_update.get(stack_name) or last_update.get(stack_name) < e['Timestamp']:
-                        logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), stack_name, e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
+                        line = '\t'.join( list( dict.fromkeys([
+                            e['Timestamp'].strftime("%H:%M:%S"),
+                            stack_name,
+                            e['LogicalResourceId'],
+                            e['ResourceStatus'],
+                            e.get('ResourceStatusReason',''),
+                        ])))
+                        if '_COMPLETE' in line: color = GREEN
+                        elif '_IN_PROGRESS' in line: color = ''
+                        elif '_FAILED' in line or 'failed to create' in line: color = RED
+                        else: color = ''
+                        logger.info(f'{color}{line}{END}')
                         last_update[stack_name] = e['Timestamp']
             try:
                 current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
@@ -312,7 +333,10 @@ def test_ta():
     assert len(ta_data)>0, 'table ta_data is empty'
 
 def teardown():
-    clean_bucket()
+    try:
+        clean_bucket()
+    except:
+        pass
     for stack_name in [
         'OptimizationManagementDataRoleStack',
         'OptimizationDataRoleStack',
@@ -359,9 +383,8 @@ def main():
 
     except Exception as exc:
         logger.exception(exc)
-        raise
     finally:
-        logger.info('Press Ctr-C to stop before teardown')
+        logger.info('Press Ctr-C to stop before teardown. 30s')
         time.sleep(30)
         logger.info('teardown')
         teardown()
