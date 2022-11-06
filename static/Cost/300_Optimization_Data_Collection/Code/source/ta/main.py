@@ -94,7 +94,5 @@ def read_ta(account_id, account_name):
                 output.update({"AccountId":account_id, "AccountName":account_name, "Category": check["category"], 'DateTime': dt, 'Timestamp': ts, "CheckName": check["name"], "CheckId": check["id"]})
                 output.update(resource)
                 f.write(json.dumps(output, cls=DateTimeEncoder) + "\n")
-            else:
-                pass
         except Exception as e:
             print(f'{type(e)}: {e}')
