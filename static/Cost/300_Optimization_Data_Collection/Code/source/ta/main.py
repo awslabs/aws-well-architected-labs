@@ -36,7 +36,7 @@ def upload_to_s3(prefix, account_id, payer_id):
     month = d.strftime("%m")
     year = d.strftime("%Y")
     _date = d.strftime("%d%m%Y-%H%M%S")
-    path = f"optics-data-collector/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{_date}.json"
+    path = f"optics-data-collector/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{_date}.json"
     try:
         s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
         s3.upload_file(TEMP, bucket, path )
