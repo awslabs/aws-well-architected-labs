@@ -11,7 +11,7 @@ prefix = os.environ["PREFIX"]
 bucket = os.environ["BUCKET_NAME"]
 role_name = os.environ['ROLENAME']
 crawler = os.environ["CRAWLER_NAME"]
-costonly = os.environ.get('COSTONLY').lower() == 'yes'
+costonly = os.environ['COSTONLY'].lower() == 'yes'
 
 TEMP = "/tmp/data.json"
 
