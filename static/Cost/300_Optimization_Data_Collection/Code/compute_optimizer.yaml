@@ -307,7 +307,7 @@ Resources:
                       result_messages = []
                       error_messages = []
                       for region in [r.strip() for r in REGIONS.split(',')]:
-                          co = assume_role(payer_id, "compute-optimizer", region)
+                          co = assume_role(payer_id, "compute-optimizer", region, ROLE_NAME)
                           export_funcs = {
                               'ec2_instance': co.export_ec2_instance_recommendations,
                               'auto_scale':   co.export_auto_scaling_group_recommendations,
@@ -334,17 +334,14 @@ Resources:
                   except Exception as e:
                       print(f'{type(e)}: {e}')
 
-          def assume_role(account_id, service, region):
-              try:
-                  assumed = boto3.client('sts').assume_role(RoleArn=f"arn:aws:iam::{account_id}:role/{ROLE_NAME}", RoleSessionName='--')
-                  creds = assumed['Credentials']
-                  return boto3.client(service, region_name=region,
-                      aws_access_key_id=creds['AccessKeyId'],
-                      aws_secret_access_key=creds['SecretAccessKey'],
-                      aws_session_token=creds['SessionToken'],
-                  )
-              except ClientError as e:
-                  print(f"{account_id} {type(e)}: {e}")
+          def assume_role(account_id, service, region, role):
+              assumed = boto3.client('sts').assume_role(RoleArn=f"arn:aws:iam::{account_id}:role/{role}", RoleSessionName='--')
+              creds = assumed['Credentials']
+              return boto3.client(service, region_name=region,
+                  aws_access_key_id=creds['AccessKeyId'],
+                  aws_secret_access_key=creds['SecretAccessKey'],
+                  aws_session_token=creds['SessionToken'],
+              )
 
   CloudWatchTrigger:
     Type: AWS::Events::Rule
