@@ -83,7 +83,7 @@ def read_ta(account_id, account_name):
             #print(json.dumps(result))
             if result.get("status") == "not_available": continue
             dt = result['timestamp']
-            ts = datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ').strftime('%s')
+            ts = datetime.strptime(dt, '%Y-%m-%dT%H:%M:%SZ').strftime('%s')
             for resource in result["flaggedResources"]:
                 output = {}
                 if "metadata" in resource:
