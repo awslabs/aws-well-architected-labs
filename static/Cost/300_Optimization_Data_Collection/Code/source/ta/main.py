@@ -11,6 +11,7 @@ prefix = os.environ["PREFIX"]
 bucket = os.environ["BUCKET_NAME"]
 role_name = os.environ['ROLENAME']
 crawler = os.environ["CRAWLER_NAME"]
+costonly = os.environ.get('COSTONLY').lower() == 'yes'
 
 TEMP = "/tmp/data.json"
 
@@ -76,7 +77,7 @@ def read_ta(account_id, account_name):
     checks = support.describe_trusted_advisor_checks(language="en")["checks"]
     for check in checks:
         #print(json.dumps(check))
-        if (os.environ.get('COSTONLY') == 'yes' and check.get("category")): continue
+        if (costonly and check.get("category") != "cost_optimizing"): continue
         try:
             result = support.describe_trusted_advisor_check_result(checkId=check["id"], language="en")['result']
             #print(json.dumps(result))
