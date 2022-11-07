@@ -398,4 +398,37 @@ The Cloud Watch data collection is automated for all the regions. However, if yo
 Now your views are created and you can run your report
 {{% /expand%}}
 
-{{< prev_next_button link_prev_url="../3_test_modules/" link_next_url="../5_teardown/" />}}
+
+### RDS Graviton Eligibility
+Graviton2 instances provide up to 35% performance improvement and up to 52% price/performance improvement for open source databases depending on database engine, version, and workload. You can easily determine what databases in your account can take advantage of Graviton using the RDS Graviton Eligibility query. This query will output all existing RDS databases, if they are eligible for graviton, if it requires any version upgrades in order to to migrate, the target graviton instance, as well as estimated savings. 
+
+This section requires you to have the **RDS Module** deployed. 
+
+{{%expand "Optimize RDS with Graviton" %}}
+
+1. Navigate to Lambda and test the **Accounts-Collector-Function-OptimizationDataCollectionStack** and **pricing-Lambda-Function-OptimizationDataCollectionStack** lambdas 
+2. Navigate to Athena 
+3. Go to Saved queries at the top of the screen
+4. Run the region_names Query to create a normalized region name table
+5. Run the rds_pricing_table Query to create a pricing look up table for RDS
+6. Run the graviton_mapping Query to create a mapping of existing Intel based instances to the proper Graviton based instance
+7. Run the rds_metrics-rds-graviton Query to provide the output of your RDS instances and their graviton eligibility and savings. You can download the results to further filter and analyze the results 
+
+{{%expand "Analyzing Your Results" %}}
+1. Use the **graviton_eligible** column to sort through 
+  * Already Graviton - this instance is already a graviton instance and is already receiving the price performance benefits
+  * Eligible - this instance meets both DB Engine and Version Number requirements, and can be immediately moved to Graviton with no modifications necessary
+  * Requires Updates - this instance meets the DB Engine requirement, but will [require a version upgrade prior to being migrated to Graviton](https://aws.amazon.com/blogs/database/key-considerations-in-moving-to-graviton2-for-amazon-rds-and-amazon-aurora-databases/)
+  * Ineligible - this database engine is not eligible to be moved to graviton
+2. **graviton_instancetype** will tell you what the equivilant graviton instance type is
+3. Calculate your savings by moving to graviton: 
+  * existing_unit_price	- your hourly price based on the configuration of your database
+  * existing_monthly_price - price to run your database for 24 hours per day for 30 days
+  * graviton_unit_price	- hourly price for the graviton equivilant of your existing database configuration
+  * graviton_montlhy_price - price to run your database for 24 hours per day for 30 days after being moved to Graviton	
+  * monthly_savings	- savings seen by moving a database to to Graviton if it ran 24 hours per day for 30 days
+  * estimated_annual_savings - savings seen by moving a database to to Graviton if it ran 24 hours per day for 365 days
+  * percentage_savings - percent difference in unit cost between the existing instance and its Graviton equivilant
+
+{{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
+
