@@ -180,6 +180,14 @@ This Lab can collects multiple types of data across accounts and AWS Organizatio
 
 - [Click to navigate to Level 300 Optimization Data Collection/]({{< ref "/Cost/300_Labs/300_optimization_data_collection" >}})
 
+Create or update your account_map view by running the following query. 
+
+		CREATE OR REPLACE VIEW account_map AS
+		SELECT DISTINCT
+			"id" "account_id", 
+			"name" "account_name"
+		FROM
+			"optimization_data"."organisation_data"
 
 #### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
 

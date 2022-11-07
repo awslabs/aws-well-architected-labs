@@ -398,6 +398,7 @@ The Cloud Watch data collection is automated for all the regions. However, if yo
 Now your views are created and you can run your report
 {{% /expand%}}
 
+
 ### RDS Graviton Eligibility
 Graviton2 instances provide up to 35% performance improvement and up to 52% price/performance improvement for open source databases depending on database engine, version, and workload. You can easily determine what databases in your account can take advantage of Graviton using the RDS Graviton Eligibility query. This query will output all existing RDS databases, if they are eligible for graviton, if it requires any version upgrades in order to to migrate, the target graviton instance, as well as estimated savings. 
 
@@ -430,3 +431,4 @@ This section requires you to have the **RDS Module** deployed.
   * percentage_savings - percent difference in unit cost between the existing instance and its Graviton equivilant
 
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
+
