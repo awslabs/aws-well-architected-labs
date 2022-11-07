@@ -15,8 +15,9 @@ May 2022
 - Iakov Gan, Sr. Technical Account Manager (AWS)
 
 ## Contributors  
-- Andy Brown, OPTICS Manager - Commercial Architects IBUs
+- Andy Brown, OPTICS Manager Commercial Architects IBUs
 - Xianshu Zeng, OPTICS Commercial Architect
+- Rem Baumann, OPTICS Commercial Architect
 
 
 ## Feedback
