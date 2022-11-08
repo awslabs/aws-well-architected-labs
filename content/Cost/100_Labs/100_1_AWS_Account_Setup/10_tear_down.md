@@ -18,7 +18,7 @@ To cancel your QuickSight subscription follow the steps below.
 2. Click on **Account settings**:
 ![Images/AWSQuicksight76.png](/Cost/100_1_AWS_Account_Setup/Images/AWSQuicksight76.png)
 
-3. Cluck on **Unsubscribe**:
+3. Click on **Unsubscribe**:
 ![Images/AWSQuicksight77.png](/Cost/100_1_AWS_Account_Setup/Images/AWSQuicksight77.png)
 
 4. Review the notifications, click **Unsubscribe**:

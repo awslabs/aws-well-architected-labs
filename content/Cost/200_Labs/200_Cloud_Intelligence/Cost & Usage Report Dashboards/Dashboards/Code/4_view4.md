@@ -165,7 +165,7 @@ To add your tags locate the the "line_item_usage_account_id" "linked_account_id"
 - Example: Add your project tag by first locating the tag in your CUR attributes for project it will show up as **resource_tags_user_projects**. You will then find the **,"line_item_usage_account_id" "linked_account_id"** line in your query and add **, resource_tags_user_projects** then add **,13** in at the bottom of your query in the group by section.
 
 {{% /expand%}}
-- Confirm the view is working, run the following Athena query and you should receive 10 rows of data:
+- Confirm the view is working, run the following Athena query and substitute (database) for your CUR database and you should receive 10 rows of data:
 
-        select * from costmaster.s3_view
+        select * from (database).s3_view
         limit 10

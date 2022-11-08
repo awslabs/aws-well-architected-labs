@@ -12,25 +12,11 @@ Parameters:
       - 'yes'
       - 'no'
     Description: 'Is primary region'
-  IsPromote:
-    Type: String
-    Default: 'no'
-    AllowedValues:
-      - 'yes'
-      - 'no'
-    Description: 'Promote secondary'
 Conditions:
   CreatePrimaryDB:
     !Equals [!Ref IsPrimary, 'yes']
   CreateSecondaryDB:
     !Equals [!Ref IsPrimary, 'no']
-  CreateApp: !Or
-    - !Equals ['pilot', 'warm']
-    - !Condition CreatePrimaryDB
-    - !Equals [!Ref IsPromote, 'yes']
-  EnableWriteFwd: !And
-    - !Equals ['pilot', 'warm']
-    - !Condition CreateSecondaryDB
 Resources:
   UniShopAppV1VPC:
     Type: 'AWS::EC2::VPC'
@@ -41,13 +27,13 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: UniShopAppV1VPC
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1IGW:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
-          Value: UniShopAppV1IGW
+          Value: !Ref 'AWS::StackName'
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -65,7 +51,7 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet1
+          Value:  !Sub '${AWS::StackName}-1'
   UniShopAppV1Subnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -78,14 +64,14 @@ Resources:
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
-          Value: UniShopAppV1Subnet2
+          Value:  !Sub '${AWS::StackName}-2'
   UniShopAppV1PublicRoutTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref UniShopAppV1VPC
       Tags:
         - Key: Name
-          Value: UniShopAppV1PublicRoute
+          Value: !Ref 'AWS::StackName'
   UniShopAppV1PublicRout:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
@@ -115,7 +101,7 @@ Resources:
           SourceSecurityGroupId: !Ref EC2SecurityGroup
       Tags:
         - Key: Name
-          Value: UniShopAppV1DBSG
+          Value: !Ref 'AWS::StackName'
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
@@ -148,7 +134,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2SG
+          Value: !Ref 'AWS::StackName'
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -173,13 +159,21 @@ Resources:
       PolicyName: !Sub S3Policy-pilot
       PolicyDocument:
         Statement:
-          - Effect: Allow
+          - Sid: AllowForOther
+            Effect: Allow
             Action:
               - 's3:GetBucketLocation'
               - 's3:GetObject'
               - 's3:GetObjectAcl'
               - 's3:PutObject'
               - 's3:PutObjectAcl'
+              - 's3:GetReplicationConfiguration'
+              - 's3:GetObjectVersion'
+              - 's3:GetObjectVersionAcl'
+              - 's3:GetObjectVersionTagging'
+              - 's3:ReplicateObject'
+              - 's3:ReplicateDelete'
+              - 's3:ReplicateTags'     
             Resource:
               - !GetAtt
                 - UIBucket
@@ -190,12 +184,24 @@ Resources:
                     - UIBucket
                     - Arn
                   - /*
+          - Sid: AllowForListBucket
+            Effect: Allow
+            Action:
+              - 's3:ListAllMyBuckets'
+            Resource:
+              - 'arn:aws:s3:::*'         
+          - Sid: AllowForRDS
+            Effect: Allow
+            Action:
+              - 'rds:Describe*'
+            Resource:
+              - '*'                     
       Roles:
         - !Ref S3Role
   S3Role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Sub 'UniShopAppV1Role-pilot-${AWS::Region}'
+      RoleName:  !Sub '${AWS::StackName}-${AWS::Region}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -213,18 +219,18 @@ Resources:
     Condition: CreatePrimaryDB
     Type: 'AWS::RDS::GlobalCluster'
     Properties:
-      GlobalClusterIdentifier: !Sub 'dr-immersionday-global-pilot'
+      GlobalClusterIdentifier: !Sub 'pilot-global'
       SourceDBClusterIdentifier: !Ref RDSClusterPrimary
   RDSClusterPrimary:
     Condition: CreatePrimaryDB
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       MasterUsername: UniShopAppV1User
       MasterUserPassword: UniShopAppV1Password
-      DBClusterIdentifier: !Sub 'dr-immersionday-primary-pilot'
+      DBClusterIdentifier: !Ref 'AWS::StackName'
       Port: 3306
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
@@ -232,16 +238,16 @@ Resources:
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      DatabaseName: !Sub 'UniShopAppV1DBpilot'
+      DatabaseName: unishop
   RDSClusterSecondary:
     Condition: CreateSecondaryDB
     DependsOn:
       - DBSubnetGroup
     Type: 'AWS::RDS::DBCluster'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
-      GlobalClusterIdentifier: !Sub 'dr-immersionday-global-pilot'
-      DBClusterIdentifier: !Sub 'dr-immersionday-secondary-pilot'
+      GlobalClusterIdentifier: !Sub 'pilot-global'
+      DBClusterIdentifier: !Sub 'pilot-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
       EngineVersion: 5.7.mysql_aurora.2.09.2
@@ -250,14 +256,14 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
   RDSDBInstance:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       Engine: aurora-mysql
       DBClusterIdentifier: !If [CreatePrimaryDB, !Ref RDSClusterPrimary, !Ref RDSClusterSecondary]
       PubliclyAccessible: 'true'
       DBInstanceClass: db.r5.xlarge
       DBParameterGroupName: default.aurora-mysql5.7
-      DBInstanceIdentifier: !Sub 'UniShopAppV1DBpilot'
+      DBInstanceIdentifier: unishop
   UIBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -265,7 +271,7 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
   EC2Instance:
-    Condition: CreateApp
+    Condition: CreatePrimaryDB
     Type: 'AWS::EC2::Instance'
     DependsOn: RDSDBInstance
     CreationPolicy:
@@ -280,12 +286,6 @@ Resources:
             - install
             - configure
             - create-tables
-            - create-service-files
-            - start-service
-          secondary:
-            - update
-            - install
-            - configure
             - create-service-files
             - start-service
         update:
@@ -352,7 +352,7 @@ Resources:
               command: !Join
                 - ''
                 - - 'sudo mysql -u UniShopAppV1User -h '
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
+                  - !GetAtt RDSClusterPrimary.Endpoint.Address
                   - |2
                      -P 3306 -pUniShopAppV1Password < /home/ec2-user/create_tables.sql
         create-service-files:
@@ -375,15 +375,15 @@ Resources:
                   - |
                     [Service]
                   - |
-                    Type=simple
+                    Type=forking
                   - |
-                    ExecStart=/home/ec2-user/unishopinit.sh
+                    ExecStart=/home/ec2-user/unishopstart.sh
                   - |
-                    Restart=on-failure
+                    ExecReload=/home/ec2-user/unishoprestart.sh
                   - |
-                    RestartSec=60
-                  - |
-                    KillMode=process
+                    ExecStop=/home/ec2-user/unishopstop.sh
+                  - |                                    
+                    PrivateTmp=true
                   - |+
 
                   - |
@@ -393,61 +393,84 @@ Resources:
               mode: '000644'
               group: root
               user: root
-            /home/ec2-user/unishopinit.sh:
-              encoding: plain
-              content: !Join
-                - ''
-                - - |
-                    #!/bin/bash
-                  - |
-                    source /home/ec2-user/unishopcfg.sh
-                  - |
-                    source /home/ec2-user/unishoprun.sh
-              mode: '000555'
-              group: ec2-user
-              user: ec2-user
             /home/ec2-user/unishopcfg.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - export Database=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
                   - export DB_ENDPOINT=
-                  - !If [CreatePrimaryDB, !GetAtt RDSClusterPrimary.Endpoint.Address, !GetAtt RDSClusterSecondary.ReadEndpoint.Address]
-                  - |+
-
-                  - export AWS_DEFAULT_REGION=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-                  - export UI_RANDOM_NAME=
-                  - !Ref UIBucket
-                  - |+
-
+                  - !GetAtt RDSClusterPrimary.Endpoint.Address
+                  - |+                  
               mode: '000555'
               group: ec2-user
               user: ec2-user
-            /home/ec2-user/unishoprun.sh:
+            /home/ec2-user/unishoprestart.sh:
               encoding: plain
               content: !Join
                 - ''
                 - - |
                     #!/bin/bash
-                  - java -jar
-                  - ' '
-                  - !If [EnableWriteFwd, '-Dspring.profiles.active=warm ','']
-                  - >
-                    /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar
-                    &>
-                    /home/ec2-user/app.log
-                    &
+                  - |          
+                    source /home/ec2-user/unishopstop.sh                   
+                  - |
+                    source /home/ec2-user/unishopstart.sh
+                  - |+
               mode: '000555'
               group: ec2-user
               user: ec2-user
+            /home/ec2-user/unishopstop.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |
+                    APP_NAME=UniShopAppV1-0.0.1-SNAPSHOT.jar                                                                     
+                  - | 
+                    pid=`ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+                  - |
+                    if [ -z "${pid}" ]; 
+                  - |
+                    then echo ""
+                  - |
+                    else
+                  - |
+                    echo "kill thread...$pid"
+                  - |
+                    kill -9 $pid                  
+                  - |
+                    fi
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
+            /home/ec2-user/unishopstart.sh:
+              encoding: plain
+              content: !Join
+                - ''
+                - - |
+                    #!/bin/bash
+                  - |          
+                    export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
+                  - |
+                    export UI_RANDOM_NAME=$(aws s3api list-buckets --region $AWS_DEFAULT_REGION --output text --query 'Buckets[?starts_with(Name, `pilot-secondary-`) == `true`]'.Name)
+                  - |
+                    export HOSTNAME="http://$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
+                  - |
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ /home/ec2-user/UniShopUI/ --no-sign-request --recursive                     
+                  - |
+                    echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
+                  - |
+                    sudo aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                  - |
+                    sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request                                               
+                  - |                    
+                    source /home/ec2-user/unishopcfg.sh            
+                  - |                                            
+                  - java -jar /home/ec2-user/UniShopAppV1-0.0.1-SNAPSHOT.jar &> /home/ec2-user/app.log &
+              mode: '000555'
+              group: ec2-user
+              user: ec2-user              
             /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json:
               content: !Join
                 - ''
@@ -530,7 +553,7 @@ Resources:
             - '         --resource EC2Instance '
             - '         --region '
             - !Ref 'AWS::Region'
-            - !If [CreatePrimaryDB, '         --configsets default','         --configsets secondary']
+            - '         --configsets default '
             - |+
 
             - /opt/aws/bin/cfn-signal -e $?
@@ -543,7 +566,7 @@ Resources:
 
       Tags:
         - Key: Name
-          Value: UniShopAppV1EC2
+          Value:  !Ref 'AWS::StackName'
 Outputs:
   WebsiteURL:
     Value: !GetAtt UIBucket.WebsiteURL

@@ -57,21 +57,44 @@ Resources:
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
                 Resource: "*"
-        - PolicyName: "ComputeOptimizerPolicy"
+        - PolicyName: "ComputeOptimizer-ExportLambdaFunctionRecommendations"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "compute-optimizer:*"
-                  - "EC2:DescribeInstances"
-                  - "cloudwatch:GetMetricData"
-                  - "autoscaling:DescribeAutoScalingGroups"
-                  - "compute-optimizer:*"
-                  - "organizations:ListAccounts"
-                  - "organizations:DescribeOrganization"
-                  - "organizations:DescribeAccount"
+                  - "compute-optimizer:ExportLambdaFunctionRecommendations"
+                  - "compute-optimizer:GetLambdaFunctionRecommendations"
                   - "lambda:ListFunctions"
                   - "lambda:ListProvisionedConcurrencyConfigs"
-                  - "EC2:DescribeVolumes" 
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportAutoScalingGroupRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportAutoScalingGroupRecommendations"
+                  - "compute-optimizer:GetAutoScalingGroupRecommendations"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEBSVolumeRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEBSVolumeRecommendations"
+                  - "compute-optimizer:GetEBSVolumeRecommendations"
+                  - "EC2:DescribeVolumes"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportEC2InstanceRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportEC2InstanceRecommendations"
+                  - "compute-optimizer:GetEC2InstanceRecommendations"
+                  - "EC2:DescribeInstances"
                 Resource: "*"

@@ -13,7 +13,7 @@ The first step in your Cost Optimization journey is to setup your account correc
 ---
 
 ## Step 1 - Account Setup
-**Administrative privlieges required** This first step will set your organization up correctly for Cost Optimization. It will build an account structure, configure the required data sources and settings, and create a Cost Optimization team with the required permissions to perform Cost Optimization activities.
+**Administrative privileges required** This first step will set your organization up correctly for Cost Optimization. It will build an account structure, configure the required data sources and settings, and create a Cost Optimization team with the required permissions to perform Cost Optimization activities.
 
 
 

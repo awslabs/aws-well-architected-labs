@@ -24,6 +24,10 @@ You will create two Amazon S3 buckets in two different AWS regions. The **Ohio**
 
 You will deploy the infrastructure for two Amazon S3 buckets. Since these will be in two different regions, you will need to create an AWS CloudFormation stack in each region. You will use the same CloudFormation template for both regions.
 
+{{% notice note %}}
+You must use the same **NamingPrefix** parameter for **both** CloudFormation templates in **both** regions, or replication will fail!
+{{% /notice %}}
+
 * Download the [_s3_bucket.yaml_](/Reliability/200_Bidirectional_Replication_for_S3/Code/CloudFormation/s3_bucket.yaml) CloudFormation template
 
 #### 1.2.1 Deploy _east_ S3 bucket
@@ -41,7 +45,7 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
       * Must be string consisting of lowercase letters, numbers, periods (.), and dashes (-) between five and 40 characters
       * This will be part of your Amazon S3 bucket name, which must be unique across all of S3.
       * Record this value in an accessible place -- you will need it again later in the lab.
-1. Click **Next** until the last page
+1. Click **Next** on the following pages until the page that requires you to acknowledge IAM resouces
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 1. You can go ahead and create the _west_ bucket before this CloudFormation stack completes
@@ -66,7 +70,7 @@ You will deploy the infrastructure for two Amazon S3 buckets. Since these will b
 1. For **Stack name** use **`S3-CRR-lab-west`**
 1. Under **Parameters** enter a **NamingPrefix**
       * You must use the _same_ value as you did previously
-1. Click **Next** until the last page
+1. Click **Next** on the following pages until the page that requires you to acknowledge IAM resouces
 1. At the bottom of the page, select **I acknowledge that AWS CloudFormation might create IAM resources with custom names**
 1. Click **Create stack**
 

@@ -18,6 +18,7 @@ Metadata:
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
         - IncludeBudgetsModule
+        - IncludeTransitGatewayModule
     ParameterLabels:
       CostAccountID:
         default: 'Cost Account Id'
@@ -37,6 +38,8 @@ Metadata:
         default: 'Include RDS Utilization Data Collection Module' 
       IncludeBudgetsModule:
         default: 'Include Budgets Collection Module'    
+      IncludeTransitGatewayModule:
+        default: 'Include Transit Gateway Module'  
 Parameters:
   CostAccountID:
     Type: String
@@ -85,6 +88,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no"
+  IncludeTransitGatewayModule:
+    Type: String
+    Description: Collects TransitGateway from your accounts
+    AllowedValues:
+      - "yes"
+      - "no"    
 
 Conditions:
   IncludeTAModulePolicy: !Equals 
@@ -105,6 +114,10 @@ Conditions:
   IncludeBudgetsModulePolicy: !Equals
     - !Ref IncludeBudgetsModule
     - "yes"
+  IncludeTransitGatewayModulePolicy: !Equals
+    - !Ref IncludeTransitGatewayModule
+    - "yes"
+
 Outputs:
   LambdaRole:
     Description: For lambda to assume in cost account 
@@ -140,7 +153,7 @@ Resources:
             Action:
               - "imagebuilder:ListImages"
               - "imagebuilder:GetImage"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   TAPolicy:
@@ -153,10 +166,15 @@ Resources:
         Statement:
           - Effect: "Allow"
             Action:
-              - "trustedadvisor:*"
+              - "trustedadvisor:Describe*"
+              - "trustedadvisor:List*"
+              - "trustedadvisor:GenerateReport"
+              - "trustedadvisor:IncludeCheckItems"
+              - "trustedadvisor:ExcludeCheckItems"
+              - "trustedadvisor:RefreshCheck"                   
               - "support:DescribeTrustedAdvisorChecks"
               - "support:DescribeTrustedAdvisorCheckResult"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   RightsizeReadOnlyPolicy:
@@ -170,7 +188,7 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ce:GetRightsizingRecommendation"
-            Resource: "*"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   BudgetsReadOnlyPolicy:
@@ -185,7 +203,7 @@ Resources:
             Action:
               - "budgets:ViewBudget"
               - "budgets:Describe*"
-            Resource: "*"
+            Resource: "arn:aws:budgets::*:budget/*"
       Roles:
         - Ref: LambdaRole
   InventoryCollectorPolicy:
@@ -287,7 +305,28 @@ Resources:
               - "rds:DescribeAccountAttributes"
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
-              - "ec2:DescribeRegions"
             Resource: "*"
+          - Effect: "Allow"
+            Action:
+              - "ec2:DescribeRegions"
+              - "cloudwatch:GetMetricStatistics"
+            Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
+  TransitGatewayPolicy:
+    Type: 'AWS::IAM::Policy'
+    Condition: IncludeTransitGatewayModulePolicy
+    Properties:
+      PolicyName: TransitGatewayPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "ec2:DescribeTransitGatewayAttachments"
+              - "cloudwatch:Describe*"
+              - "cloudwatch:Get*"
+              - "cloudwatch:List*"
+            Resource: "*"
+      Roles:
+        - Ref: LambdaRole 

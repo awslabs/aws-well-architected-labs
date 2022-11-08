@@ -1,5 +1,6 @@
 import boto3
 from botocore.exceptions import ClientError
+from boto3.session import Session
 import json
 import datetime
 import logging
@@ -15,14 +16,16 @@ class DateTimeEncoder(JSONEncoder):
 def main(account_id):
     list_region = lits_regions()
     with open("/tmp/data.json", "w") as f:  # Saving in the temporay folder in the lambda
+        session = assume_session(account_id)      
         for region in list_region:
             print(region)
-            client = assume_role(account_id, "ec2", region)
+            client = session.client("ec2",region_name = region)
             try:
                 paginator = client.get_paginator('describe_snapshots')
                 response_iterator = paginator.paginate(OwnerIds=["self"])
                 for response in response_iterator:
                     for image in response["Snapshots"]:
+                        image['region']=region
                         dataJSONData = json.dumps(image, cls=DateTimeEncoder)
                         f.write(dataJSONData)
                         f.write("\n")
@@ -31,7 +34,7 @@ def main(account_id):
                             print(e)
                             pass
 
-def assume_role(account_id, service, region):
+def assume_session(account_id):
     role_name = os.environ['ROLENAME']
     role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" 
     sts_client = boto3.client('sts')
@@ -43,14 +46,12 @@ def assume_role(account_id, service, region):
             )
         
         credentials = assumedRoleObject['Credentials']
-        client = boto3.client(
-            service,
+        session = Session(
             aws_access_key_id=credentials['AccessKeyId'],
             aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken'],
-            region_name = region
+            aws_session_token=credentials['SessionToken']
         )
-        return client
+        return session
 
     except ClientError as e:
         logging.warning(f"Unexpected error Account {account_id}: {e}")
@@ -58,8 +59,6 @@ def assume_role(account_id, service, region):
 
 
 def lits_regions():
-    from boto3.session import Session
-
     s = Session()
     ecs_regions = s.get_available_regions('ecs')
     return ecs_regions

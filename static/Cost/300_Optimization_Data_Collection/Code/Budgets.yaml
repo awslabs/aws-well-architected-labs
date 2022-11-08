@@ -78,26 +78,28 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
               - Effect: "Allow"
                 Action:
                   - "cloudwatch:GetMetricStatistics"
-                Resource: "*"
+                Resource: "*"  ## only * can be used as a Resource for this action
               - Effect: "Allow"
                 Action:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: "*"
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:BudgetsModule-TaskQueue
               - Effect: "Allow"
                 Action:
                   - "budgets:ViewBudget"
                   - "budgets:Describe*"
-                Resource: "*"
+                Resource: !Sub "arn:aws:budgets:${AWS::Region}:${AWS::AccountId}:*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${CFDataName}-Lambda-Function"
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
       Runtime: python3.8
       Code:
@@ -149,6 +151,7 @@ Resources:
                       body = json.loads(record["body"])
                       account_id = body["account_id"]
                       account_name = body["account_name"]
+                      payer_id = body["payer_id"]
                       print(account_id)
                       budgets_client = assume_role(account_id, "budgets")
                       paginator = budgets_client.get_paginator("describe_budgets") #Paginator for a large list of accounts
@@ -158,35 +161,38 @@ Resources:
                               for budget in budgets['Budgets']:
                                   print(budget)
                                   budget.update({'Account_ID': account_id, 'Account_Name': account_name})
-                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0:
+                                  if 'CostFilters' not in budget or len(budget['CostFilters']) == 0 or 'PlannedBudgetLimits' not in budget:
                                     budget.update({'CostFilters': {'Filter': ['None']}})
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
                                   f.write("\n")
-                      s3_upload(account_id)
+                      s3_upload(account_id, payer_id)
                       start_crawler()
               except Exception as e:
                   logging.warning(e)
 
-          def s3_upload(account_id):
-            d = datetime.datetime.now()
-            month = d.strftime("%m")
-            year = d.strftime("%Y")
-            dt_string = d.strftime("%d%m%Y-%H%M%S")
-
-            today = datetime.date.today()
-            year = today.year
-            month = today.month
-            try:
-                S3BucketName = os.environ["BUCKET_NAME"]
-                DestinationPrefix = os.environ["DEST_PREFIX"]
-                s3 = boto3.client('s3', 
-                                    config=Config(s3={'addressing_style': 'path'}))
-                s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/year={year}/month={month}/budgets-{dt_string}-{account_id}.json")
-                print(f"Budget data in s3 {S3BucketName}")
-            except Exception as e:
-                # Send some context about this error to Lambda Logs
-                logging.warning("%s" % e)
+          def s3_upload(account_id, payer_id):
+            fileSize = os.path.getsize("/tmp/data.json")
+            if fileSize == 0:  
+                print(f"No data in file for {DestinationPrefix}")
+            else:
+                d = datetime.datetime.now()
+                month = d.strftime("%m")
+                year = d.strftime("%Y")
+                dt_string = d.strftime("%d%m%Y-%H%M%S")
+                today = datetime.date.today()
+                year = today.year
+                month = today.month
+                try:
+                    S3BucketName = os.environ["BUCKET_NAME"]
+                    DestinationPrefix = os.environ["DEST_PREFIX"]
+                    s3 = boto3.client('s3', 
+                                        config=Config(s3={'addressing_style': 'path'}))
+                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/payer_id={payer_id}/year={year}/month={month}/budgets-{account_id}.json")
+                    print(f"Budget data in s3 {S3BucketName}")
+                except Exception as e:
+                    # Send some context about this error to Lambda Logs
+                    logging.warning("%s" % e)
 
           def start_crawler():
             glue_client = boto3.client("glue")
@@ -216,8 +222,9 @@ Resources:
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        !Sub "${CFDataName}Crawler"
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleArn
       DatabaseName: !Ref DatabaseName
       Targets:
@@ -238,6 +245,9 @@ Resources:
             , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
             , timeunit
             , budgettype budget_type
+            , account_id
+            ,timeperiod.start start_date, 
+            ,timeperiod."end"  end_date, 
             , year budget_year
             , month budget_month
             FROM
@@ -258,7 +268,10 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
       KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'BudgetsModule-TaskQueue'
   EventSourceMapping:
+    DependsOn:
+      - EventPermission
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn

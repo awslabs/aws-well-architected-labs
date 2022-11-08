@@ -1,12 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Retrieves AWS Cost Explorer Rightsizing information from across an organization
 Parameters:
-  CrawlerName:
-    Type: String
-    Default: crawl-rightsizing-recommendations
-    Description: Name of the AWS crawler to be created
-    AllowedPattern: ^.*[^0-9]$
-    ConstraintDescription: Must end with non-numeric character.
   DatabaseName:
     Type: String
     Description: Name of the Athena database to be created to hold lambda information
@@ -22,9 +16,16 @@ Parameters:
     Type: String
     Description: Name of the folder/prefix for rightsizing information to be stored in
     Default: rightsizing
-  RoleName:
+  ManagementRoleName:
     Type: String
-    Description: ARN of the IAM role deployed in the management accounts which can retrieve AWS Cost Explorer rightsizing information.
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+  ManagementAccountID:
+    Type: String
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -78,8 +79,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  Ref: RoleName
+                Resource: "*"
         - PolicyName: "Rightsizing-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -91,18 +91,20 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: "*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${RightsizingCrawler}"
               - Effect: "Allow"
                 Action:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-cost-explorer-rightsizing-recommendations-function*"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: aws-cost-explorer-rightsizing-recommendations-function
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction to retreive list of organization
       Runtime: python3.8
       Code:
@@ -121,7 +123,6 @@ Resources:
           BENEFITS_CONSIDERED = True
           GENERIC_FILENAME = 'ce_rightsizing_recommendations.json'
           BUCKET = os.environ['S3_BUCKET']
-          ROLE_ARN = os.environ['ROLE_ARN']
           PATH = os.environ['PATH']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
 
@@ -140,20 +141,23 @@ Resources:
               print('file upload successful')
 
 
-          def store_data_to_s3(data, s3client, path, filename):
-
+          def store_data_to_s3(data, s3client, path, filename, payer_id):
               today = date.today()
               year = today.year
               month = today.strftime('%m')
               day = today.day
-
               filepath = '/tmp/%s-%s' % (today, filename)
+
               with open(filepath, 'w') as f:
                   json.dump(data, f, default=str)
                   f.write('\n')
-              upload_file_to_s3(s3client, BUCKET, filepath,
-                                "%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
-                                % (path, year, month, day, year, month, day, filename))
+              fileSize = os.path.getsize(filepath)
+              if fileSize == 0:  
+                  print(f"No data in file for {DestinationPrefix}")
+              else:
+                upload_file_to_s3(s3client, BUCKET, filepath,
+                                  "%s/payer_id=%s/year=%s/month=%s/day=%s/%s-%s-%s-%s"
+                                  % (path, payer_id, year, month, day, year, month, day, filename))
 
           def lambda_handler(event, context):
 
@@ -162,78 +166,84 @@ Resources:
 
               sts_connection = boto3.client('sts')
               s3client = boto3.client('s3')
-              try:
-                  assumed_role = sts_connection.assume_role(
-                                  RoleArn=ROLE_ARN,
-                                  RoleSessionName="cross_acct_lambda"
-                              )
-                  ACCESS_KEY = assumed_role['Credentials']['AccessKeyId']
-                  SECRET_KEY = assumed_role['Credentials']['SecretAccessKey']
-                  SESSION_TOKEN = assumed_role['Credentials']['SessionToken']
 
-                  assumed_role_session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
-                                                               aws_secret_access_key=SECRET_KEY,
-                                                               aws_session_token=SESSION_TOKEN)
+              role_name = os.environ['ROLE']
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                  try:
+                      assumed_role = sts_connection.assume_role(
+                                      RoleArn=ROLE_ARN,
+                                      RoleSessionName="cross_acct_lambda"
+                                  )
+                      ACCESS_KEY = assumed_role['Credentials']['AccessKeyId']
+                      SECRET_KEY = assumed_role['Credentials']['SecretAccessKey']
+                      SESSION_TOKEN = assumed_role['Credentials']['SessionToken']
 
-                  cost_explorer = assumed_role_session.client(AWS_COST_EXPLORER_SERVICE_KEY, AWS_REGION)
+                      assumed_role_session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
+                                                                  aws_secret_access_key=SECRET_KEY,
+                                                                  aws_session_token=SESSION_TOKEN)
 
-                  today = date.today()
-                  datestr = today.strftime('%Y') + '-' + today.strftime('%m') + '-' + today.strftime('%d')
-                  
-                  RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
-                  
-                  token = None
-                  result = {"RecommendationDate": datestr,
-                                      "RightsizingRecommendationsSameFamily":[],
-                                      "RightsizingRecommendationsCrossFamily":[]
-                              }
-                  while True:
-                      kwargs = {}
-                      if token:
-                          kwargs = {"NextPageToken": token}
-                      response = cost_explorer.get_rightsizing_recommendation(
-                              Service='AmazonEC2',
-                              Configuration={
-                                  'RecommendationTarget': RECOMMENDATION_TARGET,
-                                  'BenefitsConsidered': BENEFITS_CONSIDERED
-                              },
-                              PageSize=5000,
-                              **kwargs)
-                      print("Same family Data")
-                      print(response)
-                      result["RightsizingRecommendationsSameFamily"] += response["RightsizingRecommendations"]
-                      print(response["RightsizingRecommendations"])
+                      cost_explorer = assumed_role_session.client(AWS_COST_EXPLORER_SERVICE_KEY, AWS_REGION)
+
+                      today = date.today()
+                      datestr = today.strftime('%Y') + '-' + today.strftime('%m') + '-' + today.strftime('%d')
                       
-                      RECOMMENDATION_TARGET = 'CROSS_INSTANCE_FAMILY'
+                      RECOMMENDATION_TARGET = 'SAME_INSTANCE_FAMILY'
+                      
                       token = None
-                      kwargs = {}
-                      if token:
-                          kwargs = {"NextPageToken": token}
-                      response = cost_explorer.get_rightsizing_recommendation(
-                              Service='AmazonEC2',
-                              Configuration={
-                                  'RecommendationTarget': RECOMMENDATION_TARGET,
-                                  'BenefitsConsidered': BENEFITS_CONSIDERED
-                              },
-                              PageSize=5000,
-                              **kwargs)
-                      print("Cross family Data")
-                      print(response)
-                      result["RightsizingRecommendationsCrossFamily"] += response["RightsizingRecommendations"]
-                      print(response["RightsizingRecommendations"])
+                      result = {"RecommendationDate": datestr,
+                                          "RightsizingRecommendationsSameFamily":[],
+                                          "RightsizingRecommendationsCrossFamily":[]
+                                  }
+                      while True:
+                          kwargs = {}
+                          if token:
+                              kwargs = {"NextPageToken": token}
+                          response = cost_explorer.get_rightsizing_recommendation(
+                                  Service='AmazonEC2',
+                                  Configuration={
+                                      'RecommendationTarget': RECOMMENDATION_TARGET,
+                                      'BenefitsConsidered': BENEFITS_CONSIDERED
+                                  },
+                                  PageSize=5000,
+                                  **kwargs)
+                          print("Same family Data")
+                          print(response)
+                          result["RightsizingRecommendationsSameFamily"] += response["RightsizingRecommendations"]
+                          print(response["RightsizingRecommendations"])
+                          
+                          RECOMMENDATION_TARGET = 'CROSS_INSTANCE_FAMILY'
+                          token = None
+                          kwargs = {}
+                          if token:
+                              kwargs = {"NextPageToken": token}
+                          response = cost_explorer.get_rightsizing_recommendation(
+                                  Service='AmazonEC2',
+                                  Configuration={
+                                      'RecommendationTarget': RECOMMENDATION_TARGET,
+                                      'BenefitsConsidered': BENEFITS_CONSIDERED
+                                  },
+                                  PageSize=5000,
+                                  **kwargs)
+                          print("Cross family Data")
+                          print(response)
+                          result["RightsizingRecommendationsCrossFamily"] += response["RightsizingRecommendations"]
+                          print(response["RightsizingRecommendations"])
 
-                      token = response.get("NextPageToken", None)
-                      if not token:
-                          break
-                  store_data_to_s3(result, s3client, PATH, GENERIC_FILENAME)
-                  start_crawler()
-                  return "Successful"
+                          token = response.get("NextPageToken", None)
+                          if not token:
+                              break
+                      store_data_to_s3(result, s3client, PATH, GENERIC_FILENAME, payer_id)
+                      start_crawler()
+                      return "Successful"
 
 
-              except Exception as e:
-                  # Send some context about this error to Lambda Logs
-                  logging.warning("%s" % e)
-                  return "Failed"
+                  except Exception as e:
+                      # Send some context about this error to Lambda Logs
+                      logging.warning("%s" % e)
+                      continue 
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688
@@ -246,19 +256,21 @@ Resources:
         Variables:
           S3_BUCKET:
             Ref: DestinationBucket
-          ROLE_ARN:
-            Ref: RoleName
           PATH:
             Ref: DestinationPrefix
           CRAWLER_NAME:
             Ref: RightsizingCrawler
           RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
-
+          ROLE: 
+            Ref: MultiAccountRoleName
+          MANAGEMENT_ACCOUNT_IDS: 
+            Ref: ManagementAccountID
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
     Properties:
-      Name:
-        Ref: CrawlerName
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
       Targets:

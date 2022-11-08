@@ -17,7 +17,7 @@ pre: "<b>5. </b>"
   - **Measures**: Number of workloads converted
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Works well to reduce licensing costs, significant effort in conversion may reduce overall savings.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 

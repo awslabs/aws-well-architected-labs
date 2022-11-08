@@ -18,56 +18,61 @@ def lambda_handler(event, context):
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
+            payer_id = body["payer_id"]
             print(account_id)
 
             #AMI Data
             DestinationPrefix = 'ami'
             ami.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix, account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["AMICrawler"])
 
             #EBS Data
             DestinationPrefix = 'ebs'
             ebs.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix, account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["EBSCrawler"])
 
             #Snapshot Data
             DestinationPrefix = 'snapshot'
             snapshot.main(account_id)
-            print(f"{DestinationPrefix} respose gathered")
-            s3(DestinationPrefix, account_id)
+            print(f"{DestinationPrefix} response gathered")
+            s3(DestinationPrefix, account_id, payer_id)
             start_crawler(os.environ["SnapshotCrawler"])
-           
+                
     except Exception as e:
         print(e)
         logging.warning(f"{e}" )
 
-def s3(DestinationPrefix, account_id):
+def s3(DestinationPrefix, account_id, payer_id):
+    
+    fileSize = os.path.getsize("/tmp/data.json")
+    if fileSize == 0:  
+        print(f"No data in file for {DestinationPrefix}")
+    else:
+        d = datetime.now()
+        month = d.strftime("%m")
+        year = d.strftime("%Y")
+        dt_string = d.strftime("%d%m%Y-%H%M%S")
 
-    d = datetime.now()
-    month = d.strftime("%m")
-    year = d.strftime("%Y")
-    dt_string = d.strftime("%d%m%Y-%H%M%S")
-
-    bucket = os.environ[
-        "BUCKET_NAME"
-    ]  # Using enviroment varibles below the lambda will use your S3 bucket
-    today = date.today()
-    year = today.year
-    month = today.month
-    try:
-        s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-        s3.upload_file(
-            "/tmp/data.json",
-            bucket,
-            f"optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
-        )  # uploading the file with the data to s3
-        print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
-    except Exception as e:
-        print(e)
+        bucket = os.environ[
+            "BUCKET_NAME"
+        ]  # Using enviroment varibles below the lambda will use your S3 bucket
+        today = date.today()
+        year = today.year
+        month = today.month
+        try:
+            s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+            s3.upload_file(
+                "/tmp/data.json",
+                bucket,
+                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{dt_string}.json",
+            )  # uploading the file with the data to s3
+            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}")
+        except Exception as e:
+            print(e)
 
 
 def assume_role(account_id, service, region):

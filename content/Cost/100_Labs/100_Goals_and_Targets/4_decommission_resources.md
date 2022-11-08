@@ -17,7 +17,7 @@ pre: "<b>4. </b>"
   - **Measures**: % of workloads with automatic decommission, cost of non-decommissioned resources
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Reduce cost of manual decommission work
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 
@@ -28,7 +28,7 @@ pre: "<b>4. </b>"
   - **Measures**: amount of waste removed
  - **Good/Bad**: Bad
  - **Why? When does it work well or not?**: Does not work long term as it requires waste to always exist, but it could be possibly used as a short term goal. Instead, set a positive goal of minimizing waste creation - such as having waste not exceed a set $ amount.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 

@@ -20,9 +20,9 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 
 ## Labs:
-The labs are structured around the five pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
+The labs are structured around the six pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
 {{% children depth=1 %}}
 
 
 ## Contributing
-[Click here for the process to perform a pull request to contribute to the labs]({{< ref "/Well-ArchitectedTool/100_Labs/Contributing" >}})
+[Click here for the process to perform a pull request to contribute to the labs]({{< ref "/Contributing" >}})

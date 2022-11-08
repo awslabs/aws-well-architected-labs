@@ -7,7 +7,7 @@ weight: 7
 hidden: false
 ---
 ## Last Updated
-February 2021
+March 2022
 
 {{< rawhtml >}}
 <video width="600" height="450" controls>
@@ -18,9 +18,10 @@ February 2021
 
 
 ## Authors
+- Stephanie Gooch, Commercial Architect (AWS)
 - Nathan Besh, Cost Lead, Well-Architected (AWS)
 - Nataliya Godunok, Technical Account Manager (AWS)
-- Stephanie Gooch, Commercial Architect (AWS)
+
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com

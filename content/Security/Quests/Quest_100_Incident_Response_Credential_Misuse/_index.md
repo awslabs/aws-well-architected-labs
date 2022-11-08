@@ -1,7 +1,7 @@
 ---
 title: "Quest: AWS Incident Response - Credential Misuse"
 menutitle: "IR - Credential Misuse"
-date: 2021-06-27T11:16:08-04:00
+date: 2022-10-19T15:37:00+10:00
 chapter: false
 weight: 3
 description: "This quest is the guide for incident response workshop on credential misuse at AWS organized events."
@@ -50,6 +50,8 @@ In this practical we are going to:
 ### 2. Deploy detective controls using CloudFormation
 
 2.1 Follow the instructions in [Automated Deployment of Detective Controls](https://www.wellarchitectedlabs.com/security/200_labs/200_automated_deployment_of_detective_controls/1_create_stack/) and wait for the deployment to complete. It's important that you name your S3 buckets to be globally unique and adhere to [bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html). It's a common practice to include your account ID as part of the name.
+
+![ir-credential-diagram](/Security/Quests/Quest_100_Incident_Response_Credential_Misuse/Images/ir-credential-diagram.png)
 
 ### 3. Accept email subscription request for GuardDuty
 
@@ -257,7 +259,7 @@ select
    requestParameters
 from default.cloudtrail_log
 WHERE useridentity.accesskeyid = 'AKIAEXAMPLE'
-AND from\_iso8601\_timestamp(eventtime) > date\_add('day', -90, now());
+AND from_iso8601_timestamp(eventTime) > current_timestamp - interval '90' day
 order by eventTime
 ```
 

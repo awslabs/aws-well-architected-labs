@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Well-Architected Tool Integration with AWS Compute Optimizer and AWS Trusted Advisor
+
+Resources:
+  #Cloud9 to provide IDE
+  Cloud9:
+    Type: 'AWS::Cloud9::EnvironmentEC2'
+    Properties:
+      Name: !Sub '${AWS::StackName}-Cloud9-IDE'
+      Description: 'Cloud9 Environment for WA Lab'
+      AutomaticStopTimeMinutes: 30
+      InstanceType: 't2.micro'
+      Repositories:
+        - PathComponent: /aws-well-architected-labs
+          RepositoryUrl: 'https://github.com/awslabs/aws-well-architected-labs.git'
+
+Outputs:
+  Cloud9URL:
+    Description: Cloud9 EnvironmentSp
+    Value:
+      Fn::Join:
+      - ''
+      - - !Sub https://${AWS::Region}.console.aws.amazon.com/cloud9/ide/
+        - !Ref 'Cloud9'

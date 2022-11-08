@@ -15,7 +15,7 @@ We recommend large customers with over 500 linked accounts or more than $10M a m
 {{% /notice %}}
 
 {{% notice note %}}
-If you get the error that the column 'product_database_engine' does not exist, then it is very likely that in none of your accounts a database in the RDS service has been started. To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next interation of the crawler the column will appear. You can verify this by running the Athena query: `SHOW COLUMNS FROM tablename` - and replace the tablename accordinly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
+This view is dependent on having or historically having an RDS database instance run in your organization. If you get the **error that the column 'product_database_engine' or product_deployment_option does not exist**, then you do not have any RDS database instances running. To make this column show up in the CUR spin up a database in the RDS service, let it run for a couple of minutes and in the next integration of the crawler the column will appear. You can **verify** this by running the Athena query: `SHOW COLUMNS FROM tablename` - and replace the tablename accordingly after selecting the correct CUR database in the dropdown on the left side in the Athena view.
 {{% /notice %}}
 
 
@@ -406,7 +406,7 @@ To add your tags locate the the "line_item_usage_account_id" "linked_account_id"
 
 ### Validate View 
 
-- Confirm the view is working, run the following Athena query and you should receive 10 rows of data:
+-  Confirm the view is working, run the following Athena query and substitute (database) for your CUR database and you should receive 10 rows of data:
 
-        select * from costmaster.summary_view
+        select * from (database).summary_view
         limit 10

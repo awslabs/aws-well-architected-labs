@@ -7,15 +7,15 @@ hidden: FALSE
 
 
 ## View 0 - Account Map
-The Cost & Usage Report data doesn't contain account names and other business or organization specific mapping so the first view you will create is a view that enhances your CUR data. There are a few options you can leverage to create your account_map view to provide opportunities to leverage your existing mapping tables. organization information, or other business mappings allows for deeper insights and additional  This view will be used to create the **Account_Map** for your dashboards.
+The Cost & Usage Report data doesn't contain account names and other business or organization specific mapping so the first view you will create is a view that enhances your CUR data. There are a few options you can leverage to create your account_map view to provide opportunities to leverage your existing mapping tables, organization information, or other business mappings allows for deeper insights.  This view will be used to create the **Account_Map** for your dashboards.
 
 {{% notice tip %}}
-You can update your account_map view or change options at a future time. If you are unsure of what option to use we suggest starting with Option 1
+You can update your account_map view or change options at a future time. If you are unsure of what option to use we suggest starting with Option 1. If you are creating AWS Accounts frequently, we suggest using Option 3-A   
 {{% /notice %}}
 
 ### Option 1: Placeholder Account Map data
 The Account Map placeholder option is a quick way to create your view if you do not use AWS Organizations, have an existing account mapping document, or are looking to quickly create the dashboards for a proof of concept. 
-- {{%expand "Click here - to create using placeholder data" %}}
+- {{%expand "Click here - to create using placeholder data manually" %}}
 
 Modify the following SQL query for View0 - Account Map: 
  - On line 5, replace **(database.table_name)** with your Cost & Usage Report database and table name
@@ -27,6 +27,13 @@ Modify the following SQL query for View0 - Account Map:
 			(database.table_name)
 			
 {{% /expand%}}
+
+- {{%expand "Click here - to create using placeholder data with cid-cmd tool" %}}
+
+		cid-cmd map --account-map-source dummy
+
+{{% /expand%}}
+
 
 ### Option 2: Account Map CSV file using your existing AWS account mapping data
 Many organizations already maintain their account mapping outside of AWS. You can leverage your existing mapping data by creating a csv file with your account mapping data including any additional organization attributes. 
@@ -139,7 +146,7 @@ Modify the following SQL query with your table names:
 		)  a
 		LEFT JOIN (
 		   SELECT DISTINCT
-			 "lpad"("account_number", 12, '0') "account_id"
+			 "lpad"("account_id", 12, '0') "account_id"
 		   , account_name
 		   , business_unit
 		   , team
@@ -150,11 +157,39 @@ Modify the following SQL query with your table names:
 
 {{% /expand%}}
 
+- {{%expand "Click here - to one-time update account map from CSV data with cid-cmd tool" %}}
+
+		cid-cmd map --account-map-source csv --account-map-file FILE.CSV
+
+{{% /expand%}}
+
+- {{%expand "Click here - to one-time update account map from AWS Organizations data data with cid-cmd tool" %}}
+
+		cid-cmd map --account-map-source organization
+
+{{% /expand%}}
+
 ### Option 3: Leverage your existing AWS Organizations account mapping
 This option allows your to bring in your AWS Organizations data including OU grouping
-- {{%expand "Click here - to create using your AWS Organization Data" %}}
 
-#### Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
+- {{%expand "Click here - to set up auto-update of Account Names using your AWS Organization Data (recommended)" %}}
+
+#### Option3-A: Complete Level 300: Optimization Data Collection Lab (recommended)
+
+This Lab can collects multiple types of data across accounts and AWS Organization, including Trusted Advisor and Compute Optimizer Data. For Account Names you will need only one module **AWS Organization Module**, but we recommend to explore other modules of this lab as well.
+
+- [Click to navigate to Level 300 Optimization Data Collection/]({{< ref "/Cost/300_Labs/300_optimization_data_collection" >}})
+
+Create or update your account_map view by running the following query. 
+
+		CREATE OR REPLACE VIEW account_map AS
+		SELECT DISTINCT
+			"id" "account_id", 
+			"name" "account_name"
+		FROM
+			"optimization_data"."organisation_data"
+
+#### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
 
 - [Click to navigate to Level 300 Organization CUR connection steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
 

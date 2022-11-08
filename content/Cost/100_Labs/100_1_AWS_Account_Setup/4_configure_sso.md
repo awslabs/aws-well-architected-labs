@@ -27,7 +27,7 @@ You will create an AWS Organization with the management account.
 4. Click **Create group**:
 ![Images/ssogroups_create.png](/Cost/100_1_AWS_Account_Setup/Images/ssogroups_create.png)
 
-5. Enter a Group name of **Cost_Optimization** and a description, click **Create**:
+5. Enter a Group name of **Cost_Optimization** and a description, click **Create group**:
 ![Images/ssogroup_details.png](/Cost/100_1_AWS_Account_Setup/Images/ssogroup_details.png)
 
 6. Click **Users**:
@@ -38,35 +38,42 @@ You will create an AWS Organization with the management account.
 
 8. Enter the following details:
  - **Username**
- - **Password**
+ - **Password** - 
  - **Email address**
  - **First name** 
  - **Last name** 
  - **Display name**
  - Configure the optional fields as required
-click **Next: Groups**: 
+click **Next**: 
 ![Images/ssouser_detail.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_detail.png)
 
-9. Select the **Cost_Optimization** group and click **Add user**:
+9. Select the **Cost_Optimization** group and click **Next**:
 ![Images/ssouser_group.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_group.png)
 
-10. The user will receive an email, with a link to **Accept invitation**, the **Portal URL** and their **Username**:
+10. Review user details and click **Add User**
+![Images/ssouser_addusersubmit.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_addusersubmit.png)
+
+11. The user will receive an email, with a link to **Accept invitation**, the **Portal URL** and their **Username**:
 ![Images/ssouser_email.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_email.png)
 
-11. When the user goes to the portal, they will enter in a **Password** and click **Update user**:
+12. When the user goes to the portal, they will enter in a **Password** and click **Set new password**:
 ![Images/ssouser_login.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_login.png)
 
-12. The user will then Click **Continue**:
+13. Enter the new SSO Username and Password click **Sign In**:
 ![Images/ssouser_activate.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_activate.png)
 
 {{% notice note %}}
 Users will not have permissions until you complete the rest of this step.
+A management and member permission set will be created
 {{% /notice %}}
 
-13. Click on **AWS accounts**, select **Permission sets**, and click **Create permission set**:
+14. Create the management permission set. Click on **Permission sets**, and click **Create permission set**:
 ![Images/ssoaccount_createpermission.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_createpermission.png)
 
-14. Select **Create a custom permission set**, enter a name of **management_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements and paste it in the policy field,  click **Create**.
+15. Select **Custom permission set** and click **Next**:
+![Images/ssouser_permission.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_permission.png)
+
+16. Select **Inline Policy**. Use the policy below as a starting point, modify it to your requirements and paste it in the policy field,  click **Next**.
 
 {{% notice warning %}}
 You **MUST** work with your security team/specialist to ensure you create the policies inline with least privileges for your organization.
@@ -97,12 +104,21 @@ You **MUST** work with your security team/specialist to ensure you create the po
         ]
     }
 {{% /expand%}}
+![Images/ssouser_inlinepolicy.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_inlinepolicy.png)
 
+17. Enter a Permission set name of **management_CostOptimization**, enter a **Description**, set the **Session duration**, click **Next**. 
+![Images/ssouser_permissionsetdetails.png](/Cost/100_1_AWS_Account_Setup/Images/permissionsetdetails.png)
+
+18. Review and **Create** the custom permissions policy. 
 ![Images/ssopermissionset_create.png](/Cost/100_1_AWS_Account_Setup/Images/ssopermissionset_create.png)
 
-15. Click **Create permission set**
+19. Create the member permission set. Click on **Permission sets**, and click **Create permission set**:
+![Images/ssoaccount_createpermission.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_createpermission.png)
 
-16. Select **Create a custom permission set**, enter a name of **Member_CostOptimization**, enter a **Description**, set the **Session duration**, select **Create a custom permissions policy**. Use the policy below as a starting point, modify it to your requirements, replace **(management CUR bucket)** and **(Cost Optimization Member Account ID)** and paste it in the policy field,  click **Create**.
+20. Select **Custom permission set** and click **Next**:
+![Images/ssouser_permission.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_permission.png)
+
+21. Select **Inline Policy**. Use the policy below as a starting point, replace **(management CUR bucket)** and **(Cost Optimization Member Account ID)** click **Next**.
 
 {{% notice warning %}}
 You **MUST** work with your security team/specialist to ensure you create the policies inline with least privileges for your organization.
@@ -199,29 +215,43 @@ You **MUST** work with your security team/specialist to ensure you create the po
     ]
     }
 {{% /expand%}}
+![Images/ssouser_inlinepolicy.png](/Cost/100_1_AWS_Account_Setup/Images/ssouser_inlinepolicy.png)
 
+22. Enter a Permission set name of **member_CostOptimization**, enter a **Description**, set the **Session duration**, click **Next**. 
+![Images/ssouser_memberpermissionsetdetails.png](/Cost/100_1_AWS_Account_Setup/Images/memberpermissionsetdetails.png)
+
+23. Review and **Create** the custom permissions policy. 
 ![Images/ssopermissionset_create.png](/Cost/100_1_AWS_Account_Setup/Images/ssopermissionset_create.png)
 
-17. Click **AWS organization**, select the **management account**, click **Assign users**:
+24. Setup the Cost Optimization management account. Click **AWS accounts**, select the **management account**, click **Assign users or groups**:
 ![Images/ssoaccount_organizationusers.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_organizationusers.png)
 
-18. Select **Groups**, select the **Cost_Optimization** group, click **Next: Permission sets**:
+25. Select **Groups**, select the **Cost_Optimization** group, click **Next**:
 ![Images/ssoaccount_groups.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_groups.png)
 
-19. Select the **management_CostOptimization** Permission set, click **Finish**:
+26. Select the **management_CostOptimization** Permission set, click **Next**:
 ![Images/ssoaccount_grouppermission.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_grouppermission.png)
 
-20. Click **Proceed to AWS accounts**:
+27. Review and **Submit**:
+![Images/ssoaccount_permissionsubmit.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_permissionsubmit.png)
+
+28. Verify account was updated with permission set:
 ![Images/ssoaccount_success.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_success.png)
 
-21. setup the Cost Optimization member account, select the **Member account**, click **Assign users**
+29. Setup the Cost Optimization member account. Click **AWS accounts**, select the **member account**, click **Assign users or groups**:
+![Images/ssoaccount_memberorganizationusers.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_memberorganizationusers.png)
 
-22. Select **Groups**, select the **Cost_Optimization** group, click **Next: Permission sets**:
+30. Select **Groups**, select the **Cost_Optimization** group, click **Next**:
 ![Images/ssoaccount_groups.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_groups.png)
 
-23. Select the **Member_CostOptimization** Permission set, click **Finish**
+31. Select the **member_CostOptimization** Permission set, click **Next**:
+![Images/ssoaccount_membergroups.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_membergroups.png)
 
-24. Click **Proceed to AWS accounts**
+32. Review and **Submit**:
+![Images/ssoaccount_memberpermissionsubmit.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_memberpermissionsubmit.png)
+
+33. Verify account was updated with permission set:
+![Images/ssoaccount_success.png](/Cost/100_1_AWS_Account_Setup/Images/ssoaccount_success.png)
 
 
 {{% notice tip %}}
