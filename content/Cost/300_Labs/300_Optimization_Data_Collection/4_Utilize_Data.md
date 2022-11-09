@@ -23,6 +23,21 @@ This video shows you how to use the Optimization Data Collection Lab to pull in 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
+You can also use the below query to update your **account_map** table in athena to read from this data
+
+{{%expand "New Account Map Query" %}}
+
+      CREATE OR REPLACE VIEW "account_map" AS 
+      SELECT DISTINCT
+        id account_id
+      , split_part(arn, ':',5) parent_account_id
+      , name account_name
+      , email account_email_id
+      FROM
+        "optimization_data"."organisation_data" 
+
+{{% /expand%}}
+
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
 
