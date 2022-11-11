@@ -424,8 +424,6 @@
                 "iam:AttachRolePolicy",
                 "iam:CreateInstanceProfile",
                 "iam:CreateRole",
-                "iam:DescribeInstanceProfiles",
-                "iam:DescribeRoles",
                 "iam:PassRole",
                 "iam:PutRolePolicy",
                 "iam:GetRolePolicy",
