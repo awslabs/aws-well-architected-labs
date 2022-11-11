@@ -392,6 +392,10 @@
                 "iam:GetRolePolicy",
                 "iam:CreatePolicy",
                 "iam:GetRole",
+                "iam:ListUserTags",
+                "iam:TagUser",
+                "iam:ListRoleTags",
+                "iam:TagRole",
                 "elasticloadbalancing:AddTags",
                 "elasticloadbalancing:RemoveTags",
                 "elasticloadbalancing:CreateListener",
@@ -405,6 +409,7 @@
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
                 "logs:DescribeLogGroups",
+                "logs:TagLogGroup",
                 "ssm:GetParameter",
                 "s3:CreateBucket",
                 "synthetics:CreateCanary"
