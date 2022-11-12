@@ -19,7 +19,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: ComputeOptimizer
+    Default: compute-optimizer
   Schedule:
     Type: String
     Description: Cron job to trigger the lambda using cloudwatch event
@@ -336,7 +336,7 @@ Resources:
                               try:
                                   res = func(
                                       includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
-                                      s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'Compute_Optimizer/Compute_Optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
+                                      s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'compute_optimizer/compute_optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
                                   )
                                   result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
                               except Exception as exc:
@@ -472,7 +472,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_ec2_instance"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/compute_optimizer_ec2_instance"
             Exclusions:
               - "**.json"
   AUTOCrawler:
@@ -483,7 +483,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_auto_scale"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/compute_optimizer_auto_scale"
             Exclusions:
               - "**.json"
   EBSCrawler:
@@ -494,7 +494,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_ebs_volume"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/compute_optimizer_ebs_volume"
             Exclusions:
               - "**.json"
   LambdaCrawler:
@@ -505,7 +505,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/Compute_Optimizer/Compute_Optimizer_lambda"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/compute_optimizer_lambda"
             Exclusions:
               - "**.json"
   EC2AthenaQuery:
