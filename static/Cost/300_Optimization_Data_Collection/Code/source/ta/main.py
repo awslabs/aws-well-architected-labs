@@ -1,96 +1,93 @@
-import boto3
-import logging
-from datetime import date, datetime
 import os
 import json
-from botocore.exceptions import ClientError
-from botocore.client import Config
+from datetime import date, datetime
+from json import JSONEncoder
 
-# Data code to import
-import ta
+import boto3
+from botocore.client import Config
+from botocore.exceptions import ClientError
+
+prefix = os.environ["PREFIX"]
+bucket = os.environ["BUCKET_NAME"]
+role_name = os.environ['ROLENAME']
+crawler = os.environ["CRAWLER_NAME"]
+costonly = os.environ['COSTONLY'].lower() == 'yes'
 
 def lambda_handler(event, context):
-    # Read from accounts collector?
-    # Use same setup as mult ecs
-    # pass in account id 
-    DestinationPrefix = os.environ["PREFIX"]
-    try:
-        for record in event['Records']:
-            body = json.loads(record["body"])
+    print(json.dumps(event))
+    f_name = "/tmp/data.json"
+    for r in event.get('Records', []):
+        try:
+            body = json.loads(r["body"])
             account_id = body["account_id"]
             account_name = body["account_name"]
-            payer_id = body["payer_id"]
-            if DestinationPrefix == 'ta':
-                ta.main(account_id,account_name)
-            else:
-                print(f"These aren't the datapoints you're looking for: {DestinationPrefix}")
-            print(f"{DestinationPrefix} respose gathered")
-            upload_to_s3(DestinationPrefix, account_id, payer_id)
-            start_crawler()
-    except Exception as e:
-        print(e)
-        logging.warning(f"{e}" )
-
-def upload_to_s3(DestinationPrefix, account_id, payer_id):
-
-
-    fileSize = os.path.getsize("/tmp/data.json")
-    if fileSize == 0:  
-        print(f"No data in file for {DestinationPrefix}")
-    else:
-        d = datetime.now()
-        month = d.strftime("%m")
-        year = d.strftime("%Y")
-        date_formatted = d.strftime("%d%m%Y-%H%M%S")
-
-        # Using environment variables below the lambda will use your S3 bucket
-        bucket = os.environ["BUCKET_NAME"]  
-        today = date.today()
-        year = today.year
-        month = today.month
-        try:
-            s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-            s3.upload_file(
-                "/tmp/data.json",
-                bucket,
-                f"optics-data-collector/{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}-{date_formatted}.json",
-            )  # uploading the file with the data to s3
-            print(f"Data {account_id} in s3 - {bucket}/optics-data-collector/{DestinationPrefix}-data/year={year}/month={month}")
+            read_ta(account_id, account_name, f_name)
+            upload_to_s3(prefix, account_id, body.get("payer_id"), f_name)
+            start_crawler(crawler)
         except Exception as e:
-            print(e)
+            print(f"{type(e)}: {e}")
 
-
-def assume_role(account_id, service, region):
-    role_name = os.environ['ROLENAME']
-    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
-    sts_client = boto3.client('sts')
-    
+def upload_to_s3(prefix, account_id, payer_id, f_name):
+    if os.path.getsize(f_name) == 0:
+        print(f"No data in file for {prefix}")
+        return
+    d = datetime.now()
+    month = d.strftime("%m")
+    year = d.strftime("%Y")
+    _date = d.strftime("%d%m%Y-%H%M%S")
+    path = f"optics-data-collector/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{_date}.json"
     try:
-        #region = sts_client.meta.region_name
-        assumedRoleObject = sts_client.assume_role(
-            RoleArn=role_arn,
-            RoleSessionName="AssumeRoleRoot"
-            )
-        
-        credentials = assumedRoleObject['Credentials']
-        client = boto3.client(
-            service,
-            aws_access_key_id=credentials['AccessKeyId'],
-            aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken'],
-            region_name = region
-        )
-        return client
-
-    except ClientError as e:
-        logging.warning(f"Unexpected error Account {account_id}: {e}")
-        return None
-
-
-def start_crawler():
-    glue_client = boto3.client("glue")
-    try:
-        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+        s3.upload_file(f_name, bucket, path )
+        print(f"Data for {account_id} in s3 - {path}")
     except Exception as e:
-        # Send some context about this error to Lambda Logs
-        logging.warning("%s" % e)
+        print(f"{type(e)}: {e}")
+
+def assume_role(account_id, service, region, role):
+    assumed = boto3.client('sts').assume_role(RoleArn=f"arn:aws:iam::{account_id}:role/{role}", RoleSessionName='--')
+    creds = assumed['Credentials']
+    return boto3.client(service, region_name=region,
+        aws_access_key_id=creds['AccessKeyId'],
+        aws_secret_access_key=creds['SecretAccessKey'],
+        aws_session_token=creds['SessionToken'],
+    )
+
+def start_crawler(crawler):
+    glue = boto3.client("glue")
+    try:
+        glue.start_crawler(Name=crawler)
+    except Exception as e:
+        if ('has already started' in str(e)):
+            print('crawler has already started')
+        else:
+            print(f"{type(e)}: {e}")
+
+def _json_serial(self, obj):
+    if isinstance(obj, (datetime, date)): return obj.isoformat()
+    return JSONEncoder.default(self, obj)
+
+def read_ta(account_id, account_name, f_name):
+    f = open(f_name, "w")
+    support = assume_role(account_id, "support", "us-east-1", role_name)
+    checks = support.describe_trusted_advisor_checks(language="en")["checks"]
+    for check in checks:
+        #print(json.dumps(check))
+        if (costonly and check.get("category") != "cost_optimizing"): continue
+        try:
+            result = support.describe_trusted_advisor_check_result(checkId=check["id"], language="en")['result']
+            #print(json.dumps(result))
+            if result.get("status") == "not_available": continue
+            dt = result['timestamp']
+            ts = datetime.strptime(dt, '%Y-%m-%dT%H:%M:%SZ').strftime('%s')
+            for resource in result["flaggedResources"]:
+                output = {}
+                if "metadata" in resource:
+                    output.update(dict(zip(check["metadata"], resource["metadata"])))
+                    del resource['metadata']
+                resource["Region"] = resource.pop("region") if "region" in resource else '-'
+                resource["Status"] = resource.pop("status") if "status" in resource else '-'
+                output.update({"AccountId":account_id, "AccountName":account_name, "Category": check["category"], 'DateTime': dt, 'Timestamp': ts, "CheckName": check["name"], "CheckId": check["id"]})
+                output.update(resource)
+                f.write(json.dumps(output, default=_json_serial) + "\n")
+        except Exception as e:
+            print(f'{type(e)}: {e}')

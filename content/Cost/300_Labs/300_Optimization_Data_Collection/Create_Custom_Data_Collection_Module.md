@@ -2,8 +2,8 @@
 title: "Create Custom Data Collection Module (Optional)"
 date: 2020-10-21T11:16:08-04:00
 chapter: false
-weight: 5
-pre: "<b>5. </b>"
+weight: 6
+#pre: "<b>6. </b>"
 ---
 
 ### Example Module Explanation

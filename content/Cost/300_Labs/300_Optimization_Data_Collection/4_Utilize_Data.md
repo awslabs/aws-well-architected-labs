@@ -398,4 +398,4 @@ The Cloud Watch data collection is automated for all the regions. However, if yo
 Now your views are created and you can run your report
 {{% /expand%}}
 
-{{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
+{{< prev_next_button link_prev_url="../3_test_modules/" link_next_url="../5_teardown/" />}}

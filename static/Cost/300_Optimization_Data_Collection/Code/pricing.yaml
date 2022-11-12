@@ -188,7 +188,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: region_names
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE 'pricing_region'(
+        "CREATE EXTERNAL TABLE 'pricing_region_names'(
         'region' string, 
         'regionname' string, 
         'endpoint' string, 
@@ -452,8 +452,11 @@ Resources:
         'sizeKey'='2217375799',
         'skip.header.line.count'='6',
         'typeOfData'='file')"
+<<<<<<< HEAD:static/Cost/300_Optimization_Data_Collection/Code/pricing.yaml
   LambdaAnalyticsExecutor:
     Type: Custom::LambdaAnalyticsExecutor
     Properties:
       ServiceToken: !Ref LambdaAnalyticsARN
       Name: !Ref CFDataName
+=======
+>>>>>>> refactor-ta-module:static/Cost/300_Optimization_Data_Collection/Code/pricing_data.yaml
