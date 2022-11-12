@@ -11,7 +11,7 @@ prefix = os.environ["PREFIX"]
 bucket = os.environ["BUCKET_NAME"]
 role_name = os.environ['ROLENAME']
 crawler = os.environ["CRAWLER_NAME"]
-costonly = os.environ['COSTONLY'].lower() == 'yes'
+costonly = os.environ.get('COSTONLY', 'no').lower() == 'yes'
 
 def lambda_handler(event, context):
     print(json.dumps(event))
@@ -35,7 +35,7 @@ def upload_to_s3(prefix, account_id, payer_id, f_name):
     month = d.strftime("%m")
     year = d.strftime("%Y")
     _date = d.strftime("%d%m%Y-%H%M%S")
-    path = f"optics-data-collector/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{_date}.json"
+    path = f"{prefix}/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{_date}.json"
     try:
         s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
         s3.upload_file(f_name, bucket, path )
