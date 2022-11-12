@@ -13,14 +13,18 @@ fi
 
 code_path=$(git rev-parse --show-toplevel)/static/Cost/300_Optimization_Data_Collection/Code
 
+RED='\033[0;31m'
+BLUE='\034[0;31m'
+YELLOW='\033[0;33m'
+END='\033[0m' # No Color
 
 echo "linting CFN templates" 
 for template in $code_path/*.yaml; do
-  echo "Linting $template"
-  cfn-lint  --ignore-checks W3005 -- $template
+  echo "Linting $(basename $template)"
+  echo "$(cfn-lint  --ignore-checks W3005 -- $template && echo 'OK')"
 done
 
-echo "building zips"
+echo "Building zips"
 zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/fof.zip $code_path/source/fof -x "**/__pycache__/*"
 zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/ta.zip  $code_path/source/ta  -x "**/__pycache__/*"
 zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/ecs.zip $code_path/source/ecs -x "**/__pycache__/*"
@@ -33,7 +37,3 @@ aws s3 sync $code_path/       s3://$bucket/Cost/Labs/300_Optimization_Data_Colle
 aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.zip' --acl public-read
 aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/Region/ --exclude='*' --include='regions.csv' --acl public-read
 
-
-
-
-zip -r fof.zip fof -x "**/__pycache__/*"

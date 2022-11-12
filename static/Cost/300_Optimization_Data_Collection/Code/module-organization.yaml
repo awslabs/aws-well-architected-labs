@@ -21,6 +21,10 @@ Parameters:
     Type: String
     Description: Athena Database name where you table will be created
     Default: optimization_data
+  CURTable:
+    Type: String
+    Description: Athena Table with CUR
+    Default: cid_cur.cur
   GlueRoleARN:
     Type: String
   RolePrefix:
