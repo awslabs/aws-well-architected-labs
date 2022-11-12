@@ -101,7 +101,7 @@ Resources:
 
               url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.csv'
               s3Bucket =  os.environ["BUCKET_NAME"]
-              key = f'{os.environ["DEST_PREFIX"]}/ec2/ec2_prices.csv'
+              key = f'{os.environ["DEST_PREFIX"]}/{os.environ["DEST_PREFIX"]}-ec2/ec2_prices.csv'
 
               urllib.request.urlopen(url)   #Provide URL
               s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
@@ -188,7 +188,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: region_names
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE 'region_names'(
+        "CREATE EXTERNAL TABLE 'pricing_region'(
         'region' string, 
         'regionname' string, 
         'endpoint' string, 
@@ -200,11 +200,10 @@ Resources:
       OUTPUTFORMAT 
         'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
       LOCATION
-        's3://${DestinationBucket}/pricing/region'
+        's3://${DestinationBucket}/pricing/pricing-region'
       TBLPROPERTIES (
         'has_encrypted_data'='false', 
-        'skip.header.line.count'='1', 
-        'transient_lastDdlTime'='1611498146')"  
+        'skip.header.line.count'='1')"  
   AthenaEC2PricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
@@ -212,7 +211,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: ec2_pricing_table
       QueryString: !Sub
-        "CREATE EXTERNAL TABLE ec2_pricing(
+        "CREATE EXTERNAL TABLE pricing_ec2(
         sku string, 
         offertermcode string, 
         ratecode string, 
@@ -314,7 +313,7 @@ Resources:
         OUTPUTFORMAT 
           'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
         LOCATION
-          's3://${DestinationBucket}/${CFDataName}/ec2'
+          's3://${DestinationBucket}/${CFDataName}/pricing-ec2'
         TBLPROPERTIES (
           'has_encrypted_data'='false', 
           'skip.header.line.count'='6', 
@@ -348,7 +347,7 @@ Resources:
 
               url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/index.csv'
               s3Bucket =  os.environ["BUCKET_NAME"]
-              key = f'{os.environ["DEST_PREFIX"]}/rds/rds_prices.csv'
+              key = f'{os.environ["DEST_PREFIX"]}/{os.environ["DEST_PREFIX"]}-rds/rds_prices.csv'
 
               urllib.request.urlopen(url)   #Provide URL
               s3.meta.client.upload_fileobj(http.request('GET', url, preload_content=False), s3Bucket, key)
@@ -378,7 +377,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: rds_pricing_table
       QueryString: !Sub  
-        "CREATE EXTERNAL TABLE rds_pricing(
+        "CREATE EXTERNAL TABLE pricing_rds(
         sku string, 
         offertermcode string, 
         ratecode string, 
@@ -437,7 +436,7 @@ Resources:
         OUTPUTFORMAT
         'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
         LOCATION
-        's3://${DestinationBucket}/${CFDataName}/rds'
+        's3://${DestinationBucket}/${CFDataName}/${CFDataName}-rds'
         TBLPROPERTIES (
         'CrawlerSchemaDeserializerVersion'='1.0',
         'CrawlerSchemaSerializerVersion'='1.0',

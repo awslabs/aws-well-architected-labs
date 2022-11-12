@@ -16,7 +16,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: Org-Data
+    Default: organization
   DatabaseName:
     Type: String
     Description: Athena Database name where you table will be created
@@ -165,10 +165,11 @@ Resources:
               return tags
 
           def s3_upload(file_name, payer_id):
-              bucket = os.environ["BUCKET_NAME"] 
+              bucket = os.environ["BUCKET_NAME"]
+              prefix = os.environ["BUCKET_NAME"]
               try:
                   s3 = boto3.client('s3', os.environ["REGION"],config=Config(s3={'addressing_style': 'path'}))
-                  s3.upload_file(f'/tmp/{file_name}.json', bucket, f"organisation-data/{file_name}-{payer_id}.json") 
+                  s3.upload_file(f'/tmp/{file_name}.json', bucket, f"{prefix}/{prefix}-data/{file_name}-{payer_id}.json") 
                   print(f"{file_name}org data in s3")
               except Exception as e:
                   print(e)
@@ -196,6 +197,7 @@ Resources:
           CRAWLER: !Ref OrgCrawler
           ROLE: !Ref ManagementRoleName
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
+          PREFIX: !Ref CFDataName
   OrgCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -207,7 +209,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/organisation-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:

@@ -15,22 +15,18 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: Trusted_Advisor
+    Default: trusted-advisor
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
   CodeBucket:
-      Type: String
-      Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs
+    Type: String
+    Description: S3 Bucket that exists and holds code
+    Default: aws-well-architected-labs
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
     Default: Cost/Labs/300_Optimization_Data_Collection/ta.zip
-  Prefix:
-    Type: String
-    Description: Service which the data collector is looking at
-    Default: ta
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
@@ -124,8 +120,6 @@ Resources:
             Ref: CFDataName
           CRAWLER_NAME:
             Ref: Crawler
-          PREFIX:
-            Ref: Prefix
           COSTONLY:
             "no"
   Crawler:
@@ -138,7 +132,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/${Prefix}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/{CFDataName}/${CFDataName}-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
