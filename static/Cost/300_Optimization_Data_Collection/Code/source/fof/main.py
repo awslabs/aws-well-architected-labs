@@ -33,14 +33,14 @@ def lambda_handler(event, context):
                 try:
                     func(account_id)
                     print(f"{name} response gathered")
-                    s3(name, account_id, payer_id)
+                    upload_to_s3(name, account_id, payer_id)
                     start_crawler(crawler)
                 except:
                     logging.warning(f"{name}: {type(e)} - {e}" )
         except Exception as e:
             logging.warning(f"{name}: {type(e)} - {e}" )
 
-def s3(name, account_id, payer_id):
+def upload_to_s3(name, account_id, payer_id):
     local_file = "/tmp/data.json"
     if os.path.getsize(local_file) == 0:  
         print(f"No data in file for {name}")
@@ -84,10 +84,10 @@ def assume_role(account_id, service, region):
         return None
 
 
-def start_crawler(CrawlerName):
+def start_crawler(crawler):
     glue_client = boto3.client("glue")
     try:
-        glue_client.start_crawler(Name=CrawlerName)
+        glue_client.start_crawler(Name=crawler)
     except Exception as e:
         # Send some context about this error to Lambda Logs
         logging.warning("%s" % e)

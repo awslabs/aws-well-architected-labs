@@ -18,7 +18,7 @@ Parameters:
   CURTable:
     Type: String
     Description: The name of your Cost and Usage Report table in Athena
-    Default: replace_me_with_cur_table
+    Default: cid_cur.cur
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information

@@ -48,9 +48,9 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub
-        - 'Lambda_Organization_Data_${Id}'
+        - 'Organization-Data-${Id}'
         - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
-      Description: LambdaFunction of python3.8.
+      Description: Well Architected Lab - Collecting Accounts
       Runtime: python3.8
       Code:
         ZipFile: |
@@ -65,15 +65,17 @@ Resources:
           import datetime
           import json
 
+          bucket = os.environ["BUCKET_NAME"]
+          prefix = os.environ["PREFIX"]
+          crawler = os.environ["CRAWLER"]
+          MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+          role_name = os.environ['ROLE']
+
           def timeconverter(o):
               if isinstance(o, datetime.datetime):
                   return o.__str__()
               
           def lambda_handler(event, context):
-              #management_role_arn = os.environ["MANAGMENTARN"]
-              role_name = os.environ['ROLE']
-              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
-              
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
                   try:
                       management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
@@ -99,7 +101,7 @@ Resources:
                       with open('/tmp/acc-org.json', 'w') as f:
                           account_data(f, root_id, root_id, client,'')
                       s3_upload('acc-org', payer_id)
-                      start_crawler(os.environ["CRAWLER"])
+                      start_crawler(crawler)
                   except Exception as e:
                       # Send some context about this error to Lambda Logs
                       logging.warning("%s" % e)
@@ -165,8 +167,6 @@ Resources:
               return tags
 
           def s3_upload(file_name, payer_id):
-              bucket = os.environ["BUCKET_NAME"]
-              prefix = os.environ["BUCKET_NAME"]
               try:
                   s3 = boto3.client('s3', os.environ["REGION"],config=Config(s3={'addressing_style': 'path'}))
                   s3.upload_file(f'/tmp/{file_name}.json', bucket, f"{prefix}/{prefix}-data/{file_name}-{payer_id}.json") 
@@ -273,15 +273,15 @@ Resources:
   AthenaQuery:
       Type: AWS::Athena::NamedQuery
       Properties:
-        Database: optimization_data
+        Database: !Ref DatabaseName
         Description: Provides a summary view of the budgets
-        Name: org_cur
-        QueryString:  
-          CREATE OR REPLACE VIEW org_cur AS
+        Name: budgets_cur
+        QueryString: !Sub
+          CREATE OR REPLACE VIEW budgets_cur AS
           SELECT *
-          FROM ("managementcur"."cur" cur
-          INNER JOIN "managementcur"."organisation_data"
-            ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
+          FROM ("${CURTable}" cur
+          INNER JOIN "${DatabaseName}"."organisation_data"
+            ON ("cur"."line_item_usage_account_id" = "${DatabaseName}"."organisation_data"."id")) 
   LambdaAnalyticsExecutor:
     Type: Custom::LambdaAnalyticsExecutor
     Properties:

@@ -106,22 +106,14 @@ Resources:
       Handler: 'main.lambda_handler'
       MemorySize: 2688
       Timeout: 300
-      Role:
-        Fn::GetAtt:
-          - LambdaRole
-          - Arn
+      Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
-          BUCKET_NAME:
-            Ref: DestinationBucket
-          ROLENAME:
-            Ref: MultiAccountRoleName
-          PATH:
-            Ref: CFDataName
-          CRAWLER_NAME:
-            Ref: Crawler
-          COSTONLY:
-            "no"
+          BUCKET_NAME: !Ref DestinationBucket
+          ROLENAME: !Ref MultiAccountRoleName
+          PREFIX: !Ref CFDataName
+          CRAWLER_NAME: !Ref Crawler
+          COSTONLY: "no"
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -141,9 +133,9 @@ Resources:
       Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
+  TaskQueue:
     Type: AWS::SQS::Queue
-    Properties: 
+    Properties:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2

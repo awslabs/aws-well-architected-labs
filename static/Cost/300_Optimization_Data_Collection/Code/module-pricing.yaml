@@ -452,11 +452,8 @@ Resources:
         'sizeKey'='2217375799',
         'skip.header.line.count'='6',
         'typeOfData'='file')"
-<<<<<<< HEAD:static/Cost/300_Optimization_Data_Collection/Code/pricing.yaml
   LambdaAnalyticsExecutor:
     Type: Custom::LambdaAnalyticsExecutor
     Properties:
       ServiceToken: !Ref LambdaAnalyticsARN
       Name: !Ref CFDataName
-=======
->>>>>>> refactor-ta-module:static/Cost/300_Optimization_Data_Collection/Code/pricing_data.yaml

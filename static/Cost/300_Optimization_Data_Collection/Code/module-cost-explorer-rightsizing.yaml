@@ -12,10 +12,6 @@ Parameters:
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
-  DestinationPrefix:
-    Type: String
-    Description: Name of the folder/prefix for rightsizing information to be stored in
-    Default: rightsizing
   ManagementRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
@@ -106,7 +102,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub
-          - '${CFDataName}-Lambda-Function-${Id}'
+          - '${CFDataName}-${Id}'
           - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction to retreive list of organization
       Runtime: python3.8
@@ -147,7 +143,7 @@ Resources:
                   f.write('\n')
 
               if os.path.getsize(local_file) == 0:
-                  print(f"No data in file for {DestinationPrefix}")
+                  print(f"No data in file for {path}")
                   return
 
               s3client = boto3.client('s3')
@@ -270,7 +266,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${DestinationPrefix}/${DestinationPrefix}-rightsizing-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   
   AthenaQuerySameFamilyRightSizing:
     Type: AWS::Athena::NamedQuery
@@ -399,13 +395,13 @@ Resources:
                 , min(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "earliest_date"
                 , max(date_parse(concat("year", "month", "day"), '%Y%m%d')) AS "latest_date"
                 , count(*)                                                  AS "frequency"
-            FROM (optimization_data.cost_explorer_rightsizing
+            FROM (optimization_data.cost_explorer_rightsizing_data
                 CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
             GROUP BY 1
         ),
             data AS (
                 SELECT recommendations
-                FROM (optimization_data.cost_explorer_rightsizing
+                FROM (optimization_data.cost_explorer_rightsizing_data
                     CROSS JOIN UNNEST("rightsizingrecommendationscrossfamily") t(recommendations))
                 WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL '7' DAY))
 

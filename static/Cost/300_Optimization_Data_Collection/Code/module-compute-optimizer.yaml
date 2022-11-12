@@ -272,7 +272,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${RolePrefix}${CFDataName}-Trigger-Export"
-      Description: !Sub "LambdaFunction to retrieve Compute_Optimizer"
+      Description: "LambdaFunction to retrieve Compute_Optimizer"
       Handler: index.lambda_handler
       Runtime: python3.8
       MemorySize: 2688
