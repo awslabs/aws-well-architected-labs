@@ -16,28 +16,27 @@ You can test this lab in a dedicated account that preferably has following asset
 ## Prerequisites for local environment
 * cfn-lint https://github.com/aws-cloudformation/cfn-lint#install
 * python3.8+
-* 
+* `pip3 instal -U boto3, cfn_tools`
 
 ## Testing
 
-1. check the quality of cfn code
+1. Check the quality of cfn code
 
 ```bash
 ./static/Cost/300_Optimization_Data_Collection/Code/lint.sh
 ```
 
-2. Upload code to a bucket and run integration tests
+2. Upload code to a bucket and run integration tests in your Testing environment
 
 ```bash
 export bucket='mybucket'
 ./static/Cost/300_Optimization_Data_Collection/Code/upload.sh  "$bucket"
 python3 ./static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py
 ```
+The test will install stacks from scratch in a single account, and then check the presence of Athena tables and deletes the stack. I also it deletes all artefacts that are not deleted by CFN.
 
 # Realease process
-All yaml are files are in the account 87******** - well-architected-content@amazon.com 
-
-In the bucket aws-well-architected-labs. These are then replicated to the other regional buckets.
+All yaml and zip files are in the account 87******** - well-architected-content@amazon.com, in the bucket `aws-well-architected-labs`. These are then replicated to the other regional buckets.
 
 ```bash
 ./static/Cost/300_Optimization_Data_Collection/Code/upload.sh "aws-well-architected-labs"
