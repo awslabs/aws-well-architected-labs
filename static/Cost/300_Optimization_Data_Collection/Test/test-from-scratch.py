@@ -308,33 +308,43 @@ def athena_query(sql_query, sleep_duration=1, database: str=None, catalog: str='
     keys = [r['VarCharValue'] for r in results['ResultSet']['Rows'][0]['Data']]
     return [ dict(zip(keys, [r.get('VarCharValue') for r in row['Data']])) for row in results['ResultSet']['Rows'][1:]]
 
-def test_ebs_data():
-    ebs_data = athena_query('SELECT * FROM "optimization_data"."ebs_data" limit 10;')
-    assert len(ebs_data)>0, 'table ebs_data is empty'
 
-def test_snapshot_data():
-    snapshot_data = athena_query('SELECT * FROM "optimization_data"."snapshot_data" limit 10;')
-    assert len(snapshot_data)>0, 'table snapshot_data is empty'
+def test_budgets_data():
+    data = athena_query('SELECT * FROM "optimization_data"."budgets_data" LIMIT 10;')
+    assert len(data) > 0, 'budgets_data is empty'
 
-def test_rds_metrics():
-    rds_metrics = athena_query('SELECT * FROM "optimization_data"."rds_metrics" limit 10;')
-    assert len(rds_metrics)>0, 'table rds_metrics is empty'
+def test_cost_explorer_rightsizing_data():
+    data = athena_query('SELECT * FROM "optimization_data"."cost_explorer_rightsizing_data" LIMIT 10;')
+    assert len(data) > 0, 'cost_explorer_rightsizing_data is empty'
 
-def test_budgets():
-    budgets = athena_query('SELECT * FROM "optimization_data"."budgets" limit 10;')
-    assert len(budgets)>0, 'table budgets is empty'
+def test_ecs_chargeback_data():
+    data = athena_query('SELECT * FROM "optimization_data"."ecs_chargeback_data" LIMIT 10;')
+    assert len(data) > 0, 'ecs_chargeback_data is empty'
 
-def test_ecs_services_clusters():
-    ecs_services_clusters = athena_query('SELECT * FROM "optimization_data"."ecs_services_clusters_data" limit 10;')
-    assert len(ecs_services_clusters)>0, 'table ecs_services_clusters is empty'
+def test_inventory_ami_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_ami_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_ami_data is empty'
 
-def test_ami():
-    ami_data = athena_query('SELECT * FROM "optimization_data"."ami_data" limit 10;')
-    assert len(ami_data)>0, 'table ami_data is empty'
+def test_inventory_ebs_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_ebs_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_ebs_data is empty'
 
-def test_ta():
-    ta_data = athena_query('SELECT * FROM "optimization_data"."ta_data" limit 10;')
-    assert len(ta_data)>0, 'table ta_data is empty'
+def test_inventory_snapshot_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_snapshot_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_snapshot_data is empty'
+
+def test_rds_usage_data():
+    data = athena_query('SELECT * FROM "optimization_data"."rds_usage_data" LIMIT 10;')
+    assert len(data) > 0, 'rds_usage_data is empty'
+
+def test_trusted_advisor_data():
+    data = athena_query('SELECT * FROM "optimization_data"."trusted_advisor_data" LIMIT 10;')
+    assert len(data) > 0, 'trusted_advisor_data is empty'
+
+def test_transit_gateway_data():
+    data = athena_query('SELECT * FROM "optimization_data"."transit_gateway_data" LIMIT 10;')
+    assert len(data) > 0, 'transit_gateway_data is empty'
+
 
 def teardown():
     try:
@@ -369,12 +379,16 @@ def main():
     try:
         setup()
         for f in [
+                test_budgets_data,
+                test_cost_explorer_rightsizing_data,
+                test_ecs_chargeback_data,
+                test_inventory_ami_data,
+                test_inventory_ebs_data,
+                test_inventory_snapshot_data,
+                test_rds_usage_data,
+                test_trusted_advisor_data,
                 test_ebs_data,
-                test_snapshot_data,
-                test_rds_metrics,
-                test_budgets,
-                test_ami,
-                test_ta,
+                test_transit_gateway_data,
             ]:
             try:
                 logger.info('Testing ' +  f.__name__)
