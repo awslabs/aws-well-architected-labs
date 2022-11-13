@@ -158,9 +158,9 @@ Resources:
       Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
+  TaskQueue:
     Type: AWS::SQS::Queue
-    Properties: 
+    Properties:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
@@ -196,7 +196,7 @@ Resources:
       Description: Provides a summary view of the lambda data
       Name: ecs_chargeback_ec2_cluster_costs
       QueryString: !Sub |
-        CREATE OR REPLACE VIEW ecs_chargeback_ec2_cluster_costs AS 
+        CREATE OR REPLACE VIEW ecs_chargeback_ec2_cluster_costs AS
         SELECT
           line_item_product_code
         , line_item_usage_account_id
@@ -267,7 +267,7 @@ Resources:
           FROM
             ecs_chargeback_cluster_metadata_view
         )  clusters_data ON ((("clusters_data"."account_id" = "cur"."line_item_usage_account_id") AND (("clusters_data"."services" = "cur"."resource_tags_aws_ecs_service_name") AND ("clusters_data"."year" = "cur"."year"))) AND ("clusters_data"."month" = "cur"."month")))
-        GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "cur"."month", "cur"."year", "cluster", "services", "servicearn", "value", "task", "account_id""  
+        GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "cur"."month", "cur"."year", "cluster", "services", "servicearn", "value", "task", "account_id"
   AthenaEC2CChargeBackQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
@@ -283,16 +283,16 @@ Resources:
           ecs_chargeback_bu_usage.month,
           ecs_chargeback_bu_usage.year
         FROM "ecs_chargeback_bu_usage"
-        left join (select line_item_usage_account_id, sum(sum_line_item_usage_amount) as total_usage, year, month from "ecs_chargeback_bu_usage" where "cluster" <> '' group by line_item_usage_account_id, year, month) sum
+        LEFT JOIN (select line_item_usage_account_id, sum(sum_line_item_usage_amount) as total_usage, year, month from "ecs_chargeback_bu_usage" where "cluster" <> '' group by line_item_usage_account_id, year, month) sum
         on sum.line_item_usage_account_id = ecs_chargeback_bu_usage.line_item_usage_account_id
         and sum.month=ecs_chargeback_bu_usage.month
         and sum.year=ecs_chargeback_bu_usage.year
-        left join
+        LEFT JOIN
         (SELECT line_item_usage_account_id, month, year, sum(sum_line_item_amortized_cost) as ec2_cost FROM "ec2_cluster_costs_view" group by  line_item_usage_account_id,month,year) ec2_cost
         on ec2_cost.month=ecs_chargeback_bu_usage.month
         and ec2_cost.year=ecs_chargeback_bu_usage.year
         and ec2_cost.line_item_usage_account_id=ecs_chargeback_bu_usage.line_item_usage_account_id
-        where "cluster" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),ecs_chargeback_bu_usage.month = '12', ecs_chargeback_bu_usage.month = CAST((month(now())-1) AS VARCHAR) )
+        WHERE "cluster" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),ecs_chargeback_bu_usage.month = '12', ecs_chargeback_bu_usage.month = CAST((month(now())-1) AS VARCHAR) )
         and  if((date_format(current_timestamp , '%M') = 'January'), ecs_chargeback_bu_usage.year = CAST((year(now())-1) AS VARCHAR) ,ecs_chargeback_bu_usage.year = CAST(year(now()) AS VARCHAR))
         GROUP BY  "cluster", services, servicearn, value, ecs_chargeback_bu_usage.month, ecs_chargeback_bu_usage.year, ecs_chargeback_bu_usage.line_item_usage_account_id, total_usage, ec2_cost
   LambdaAnalyticsExecutor:
