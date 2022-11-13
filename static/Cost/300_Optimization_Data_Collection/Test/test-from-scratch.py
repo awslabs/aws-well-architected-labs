@@ -266,10 +266,11 @@ def trigger_update():
         f'pricing-Lambda-Function-{main_stack_name}',
         f'cost-explorer-rightsizing-{main_stack_name}',
         'WA-compute-optimizer-Trigger-Export',
+        f'pricing-Lambda-Function-{main_stack_name}',
         ]:
         logger.info('Invoking ' + name)
         response = boto3.client('lambda').invoke(FunctionName=name)
-        print(json.dumps(response, indent=2))
+        print(json.dumps(response, default=str, indent=2))
 
 def setup():
     initial_deploy_stacks()

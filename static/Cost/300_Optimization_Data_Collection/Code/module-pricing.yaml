@@ -122,7 +122,7 @@ Resources:
             
             bucket = s3.Bucket(s3Bucket)
             
-            bucket.copy(copy_source, 'pricing/region/regions.csv')
+            bucket.copy(copy_source, 'pricing/pricing-region/regions.csv')
             
             # Printing the Information That the File Is Copied.
             print('Single File is copied')
@@ -185,31 +185,31 @@ Resources:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
-      Description: Provides a summary view of the lambda data
-      Name: region_names
+      Description: Provides a summary view region data
+      Name: pricing_region_names
       QueryString: !Sub |
-        CREATE EXTERNAL TABLE 'pricing_region_names'(
-        'region' string, 
-        'regionname' string, 
-        'endpoint' string, 
-        'protocol' string)
-        ROW FORMAT DELIMITED 
-          FIELDS TERMINATED BY ',' 
-        STORED AS INPUTFORMAT 
-          'org.apache.hadoop.mapred.TextInputFormat' 
-        OUTPUTFORMAT 
+        CREATE EXTERNAL TABLE pricing_region_names(
+          region string,
+          regionname string,
+          endpoint string,
+          protocol string)
+        ROW FORMAT DELIMITED
+          FIELDS TERMINATED BY ','
+        STORED AS INPUTFORMAT
+          'org.apache.hadoop.mapred.TextInputFormat'
+        OUTPUTFORMAT
           'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
         LOCATION
           's3://${DestinationBucket}/pricing/pricing-region'
         TBLPROPERTIES (
-          'has_encrypted_data'='false', 
+          'has_encrypted_data'='false',
           'skip.header.line.count'='1')
   AthenaEC2PricingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: ec2_pricing_table
+      Name: pricing_ec2_creat_table
       QueryString: !Sub |
         CREATE EXTERNAL TABLE pricing_ec2(
           sku string,
@@ -375,56 +375,56 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: rds_pricing_table
+      Name: pricing_rds_creat_table
       QueryString: !Sub |
         CREATE EXTERNAL TABLE pricing_rds(
-          sku string, 
-          offertermcode string, 
-          ratecode string, 
-          termtype string, 
-          pricedescription string, 
-          effectivedate string, 
-          startingrange string, 
-          endingrange string, 
-          unit string, 
-          priceperunit string, 
-          currency string, 
-          relatedto string, 
-          leasecontractlength string, 
-          purchaseoption string, 
-          offeringclass string, 
-          productfamily string, 
-          servicecode string, 
-          location string, 
-          locationtype string, 
-          instancetype string, 
-          currentgeneration string, 
-          instancefamily string, 
-          vcpu string, 
-          physicalprocessor string, 
-          clockspeed string, 
-          memory string, 
-          storage string, 
-          networkperformance string, 
-          processorarchitecture string, 
-          storagemedia string, 
-          volumetype string, 
-          minvolumesize string, 
-          maxvolumesize string, 
-          enginecode string, 
-          databaseengine string, 
-          databaseedition string, 
-          licensemodel string, 
-          deploymentoption string, 
-          group string, 
-          groupdescription string, 
-          usagetype string, 
-          operation string, 
-          dedicatedebsthroughput string, 
-          enhancednetworkingsupported string, 
-          instancetypefamily string, 
-          normalizationsizefactor string, 
-          processorfeatures string, 
+          sku string,
+          offertermcode string,
+          ratecode string,
+          termtype string,
+          pricedescription string,
+          effectivedate string,
+          startingrange string,
+          endingrange string,
+          unit string,
+          priceperunit string,
+          currency string,
+          relatedto string,
+          leasecontractlength string,
+          purchaseoption string,
+          offeringclass string,
+          productfamily string,
+          servicecode string,
+          location string,
+          locationtype string,
+          instancetype string,
+          currentgeneration string,
+          instancefamily string,
+          vcpu string,
+          physicalprocessor string,
+          clockspeed string,
+          memory string,
+          storage string,
+          networkperformance string,
+          processorarchitecture string,
+          storagemedia string,
+          volumetype string,
+          minvolumesize string,
+          maxvolumesize string,
+          enginecode string,
+          databaseengine string,
+          databaseedition string,
+          licensemodel string,
+          deploymentoption string,
+          group string,
+          groupdescription string,
+          usagetype string,
+          operation string,
+          dedicatedebsthroughput string,
+          enhancednetworkingsupported string,
+          instancetypefamily string,
+          normalizationsizefactor string,
+          processorfeatures string,
           servicename string)
         ROW FORMAT SERDE
           'org.apache.hadoop.hive.serde2.OpenCSVSerde'

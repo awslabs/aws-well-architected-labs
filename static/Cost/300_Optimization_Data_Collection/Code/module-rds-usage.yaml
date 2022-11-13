@@ -18,7 +18,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: rds-metrics
+    Default: rds-usage
   DAYS:
     Type: Number
     Description: Number of days going back that you want to get data for
@@ -172,7 +172,7 @@ Resources:
                           'api' : 'rds',
                           'functions' : [
                               {'name' : 'get_rds_stats',
-                              'output_path' : 'rds-metrics',
+                              'output_path' : 'rds-usage-data',
                               'output_file_name' : 'rds_stats.json' }
                           ]
                           }
@@ -261,7 +261,7 @@ Resources:
               if os.path.getsize(local_file) == 0:
                   print(f"No data in file for {path}")
                   return
-              key = f"{prefix}/{prefix}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}"
+              key = f"{prefix}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}"
               s3client = boto3.client('s3')
               print("Uploading file %s to %s/%s" %(local_file, bucket, key))
               S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
@@ -384,7 +384,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
       Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   AthenaQuery:
     Type: AWS::Athena::NamedQuery
