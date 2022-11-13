@@ -177,7 +177,7 @@ Resources:
                               s3.upload_file(
                                   "/tmp/data.json",
                                   bucket,
-                                  f"{os.environ['PREFIX']}/{os.environ['PREFIX']}_data/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
+                                  f"{os.environ['PREFIX']}/{os.environ['PREFIX']}-data/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
 
                       except Exception as e:
                           # Send some context about this error to Lambda Logs
