@@ -246,8 +246,8 @@ Resources:
         , timeunit
         , budgettype budget_type
         , account_id
-        , timeperiod.start start_date,
-        , timeperiod."end"  end_date,
+        , timeperiod.start start_date
+        , timeperiod."end"  end_date
         , year budget_year
         , month budget_month
         FROM
