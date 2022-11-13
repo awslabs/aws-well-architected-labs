@@ -268,7 +268,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the rightsizing recommendations for same family
-      Name: same-familyrightsizing-summary-view
+      Name: cost-explorer-rightsizing-same-family
       QueryString: |
         --  Click Create as view then you can run from that
 
@@ -381,7 +381,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the rightsizing recommendations for cross family
-      Name: cross-familyrightsizing-summary-view
+      Name: cost-explorer-rightsizing-cross-family
       QueryString: |
         --  Click Create as view then you can run from that
 

@@ -178,11 +178,11 @@ Resources:
               except Exception as e:
                   print(e)
 
-          def start_crawler(Crawler_Name):
+          def start_crawler(crawler):
               glue_client = boto3.client("glue")
               try:
-                  glue_client.start_crawler(Name=Crawler_Name)
-                  print(f"{Crawler_Name} has been started")
+                  glue_client.start_crawler(Name=crawler)
+                  print(f"{crawler} has been started")
               except Exception as e:
                   # Send some context about this error to Lambda Logs
                   logging.warning("%s" % e)
@@ -190,7 +190,7 @@ Resources:
       Handler: 'index.lambda_handler'
       MemorySize: 2688
       Timeout: 600
-      Role: 
+      Role:
         Fn::GetAtt:
           - LambdaRole
           - Arn
@@ -207,7 +207,7 @@ Resources:
     Properties:
       Name:  !Join
           - '-'
-          - - 'OrgGlueCrawler'
+          - - !Ref CFDataName
             - !Select [0, !Split ['-', !Ref AWS::StackName]]
       Role: !Ref GlueRoleARN
       DatabaseName: !Ref DatabaseName
