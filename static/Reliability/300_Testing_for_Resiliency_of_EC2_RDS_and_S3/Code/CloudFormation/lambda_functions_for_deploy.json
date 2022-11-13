@@ -385,8 +385,6 @@
                 "iam:AttachRolePolicy",
                 "iam:CreateInstanceProfile",
                 "iam:CreateRole",
-                "iam:DescribeInstanceProfiles",
-                "iam:DescribeRoles",
                 "iam:PassRole",
                 "iam:PutRolePolicy",
                 "iam:GetRolePolicy",
@@ -405,6 +403,7 @@
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
                 "logs:DescribeLogGroups",
+                "logs:TagLogGroup",
                 "ssm:GetParameter",
                 "s3:CreateBucket",
                 "synthetics:CreateCanary"

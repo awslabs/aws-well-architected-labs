@@ -392,8 +392,8 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-summary-view
-      QueryString: !Sub
-        "SELECT dbinstanceidentifier, 'memory' as Metric, memory.timestamp, memory.maximum
+      QueryString: !Sub |
+        SELECT dbinstanceidentifier, 'memory' as Metric, memory.timestamp, memory.maximum
         FROM ${DatabaseName}.${CFDataName}
         cross join unnest(datapoints.FreeableMemory) as t(memory)
         union
@@ -419,7 +419,7 @@ Resources:
         union
         SELECT dbinstanceidentifier, 'FreeStorageSpace' as Metric, FreeStorageSpace.timestamp, FreeStorageSpace.maximum
         FROM ${DatabaseName}.${CFDataName}
-        cross join unnest(datapoints.FreeStorageSpace) as t(FreeStorageSpace)"
+        cross join unnest(datapoints.FreeStorageSpace) as t(FreeStorageSpace)
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -448,3 +448,303 @@ Resources:
     Properties:
       ServiceToken: !Ref LambdaAnalyticsARN
       Name: !Ref CFDataName
+  GravitonMappingTable:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a summary view of the lambda data
+      Name: graviton_mapping
+      QueryString: !Sub |
+        CREATE EXTERNAL TABLE `rds_graviton_mapping`(
+          `dbtype` varchar(255), 
+          `databaseengine` varchar(255), 
+          `instancetype` varchar(255), 
+          `graviton_instancetype` varchar(255))
+          ROW FORMAT DELIMITED 
+          FIELDS TERMINATED BY ',' 
+        STORED AS INPUTFORMAT 
+          'org.apache.hadoop.mapred.TextInputFormat' 
+        OUTPUTFORMAT 
+          'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        LOCATION
+          's3://${DestinationBucket}/pricing/graviton'
+        TBLPROPERTIES (
+          'classification'='csv', 
+          'transient_lastDdlTime'='1666191659')
+
+  GravitonAthenaQuery:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a view of modernization opportunities for Graviton
+      Name: !Sub ${CFDataName}-rds-graviton
+      QueryString: !Sub |
+        WITH 
+        raw_data AS (
+          SELECT dbinstanceidentifier,
+            dbinstanceclass,
+            concat(
+              split_part(dbinstanceclass, '.', 1),
+              '.',
+              split_part(dbinstanceclass, '.', 2)
+            ) instance_family,
+            availabilityzone,
+            rtrim(availabilityzone, 'abcdef') region,
+            (CASE
+                WHEN (multiaz = false) THEN 'Single-AZ'
+                WHEN (multiaz = true) THEN 'Mutli-AZ' ELSE 'Error check deploymentoption'
+              END
+            ) deploymentoption,
+            (CASE
+                WHEN (engine LIKE 'aurora%') THEN 'Aurora' ELSE 'AmazonRDS'
+              END
+            ) rds_type,
+            engine,
+            (CASE
+                WHEN (engine LIKE '%postgres%') THEN 'PostgreSQL'
+                WHEN (engine LIKE '%mysql%') THEN 'MySQL'
+                WHEN (engine LIKE '%mariadb%') THEN 'MariaDB'
+                WHEN (engine LIKE '%oracle%') THEN 'Oracle'
+                WHEN (engine LIKE '%docdb%') THEN 'DocDB'
+                WHEN (engine LIKE '%sqlserver%') THEN 'SQL Server'
+                WHEN (engine LIKE 'aurora 5.6.10a') THEN 'aurora 5.6.10a'
+                WHEN (engine LIKE '%neptune%') THEN 'Neptune' ELSE 'Check DB Engine'
+              END) db_engine,
+            (CASE
+                WHEN (engineversion LIKE '%aurora%') THEN concat(
+                  split_part(substr(engineversion, 18, 6), '.', 1),
+                  '.',
+                  split_part(substr(engineversion, 18, 6), '.', 2),
+                  '.',
+                  split_part(substr(engineversion, 18, 6), '.', 3)
+                ) ELSE engineversion
+              END) engineversion,
+            (CASE
+                WHEN (engineversion LIKE '%aurora%') THEN split_part(substr(engineversion, 18, 6), '.', 1) ELSE split_part(engineversion, '.', 1)
+              END) major,
+            (CASE
+                WHEN (engineversion LIKE '%aurora%') THEN split_part(substr(engineversion, 18, 6), '.', 2) ELSE split_part(engineversion, '.', 2)
+              END) minor,
+            (CASE
+                WHEN (engineversion LIKE '%aurora%') THEN split_part(substr(engineversion, 18, 6), '.', 3) ELSE split_part(engineversion, '.', 3)
+              END) fix,
+            accountid,
+            year,
+            month
+          FROM rds_metrics),
+        rds_pricing AS (
+          SELECT (CASE
+                WHEN (databaseengine LIKE 'Aurora%') THEN 'Aurora'
+                WHEN (databaseengine = 'Any') THEN 'Any' ELSE 'AmazonRDS'
+              END
+            ) rds_type,
+            (CASE
+                WHEN (databaseengine LIKE 'Aurora%') THEN split_part(databaseengine, ' ', 2) ELSE databaseengine
+              END
+            ) db_engine,
+            deploymentoption,
+            location,
+            instancetype,
+            (CASE
+                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal)
+              END
+            ) priceperunit,
+            unit
+          FROM optimization_data.rds_pricing
+          WHERE (((locationtype = 'AWS Region')AND (purchaseoption = ''))AND (productfamily = 'Database Instance'))),
+        graviton_mapping AS (
+          SELECT raw_data.dbinstanceidentifier,
+            raw_data.rds_type,
+            raw_data.db_engine,
+            raw_data.dbinstanceclass,
+            (CASE
+                WHEN (raw_data.dbinstanceclass LIKE '%g.%') THEN 'Already Graviton'
+                WHEN (raw_data.dbinstanceclass LIKE '%gd.%') THEN 'Already Graviton'
+                WHEN (raw_data.dbinstanceclass LIKE '%serverless%') THEN 'Ineligible' ELSE (
+                  CASE
+                    WHEN (raw_data.rds_type = 'AmazonRDS') THEN (
+                      CASE
+                        WHEN (raw_data.db_engine = 'MySQL') THEN (
+                          CASE
+                            WHEN (CAST(raw_data.major AS integer) > 8) THEN 'Eligible'
+                            WHEN (
+                              (CAST(raw_data.major AS integer) = 8)
+                              AND (CAST(raw_data.minor AS integer) > 0)
+                            ) THEN 'Eligible'
+                            WHEN (
+                              (
+                                (CAST(raw_data.major AS integer) = 8)
+                                AND (CAST(raw_data.minor AS integer) = 0)
+                              )
+                              AND (CAST(raw_data.fix AS integer) >= 17)
+                            ) THEN 'Eligible' ELSE 'Requires Update'
+                          END
+                        )
+                        WHEN (raw_data.db_engine = 'PostgreSQL') THEN (
+                          CASE
+                            WHEN (CAST(raw_data.major AS integer) > 12) THEN 'Eligible'
+                            WHEN (
+                              (CAST(raw_data.major AS integer) = 12)
+                              AND (CAST(raw_data.minor AS integer) >= 3)
+                            ) THEN 'Eligible' ELSE 'Requires Update'
+                          END
+                        )
+                        WHEN (raw_data.db_engine = 'MariaDB') THEN (
+                          CASE
+                            WHEN (CAST(raw_data.major AS integer) > 10) THEN 'Eligible'
+                            WHEN (
+                              (CAST(raw_data.major AS integer) = 10)
+                              AND (CAST(raw_data.minor AS integer) > 4)
+                            ) THEN 'Eligible'
+                            WHEN (
+                              (
+                                (CAST(raw_data.major AS integer) = 10)
+                                AND (CAST(raw_data.minor AS integer) = 4)
+                              )
+                              AND (CAST(raw_data.fix AS integer) >= 13)
+                            ) THEN 'Eligible' ELSE 'Requires Update'
+                          END
+                        ) ELSE 'Ineligible'
+                      END
+                    )
+                    WHEN (raw_data.rds_type = 'Aurora') THEN (
+                      CASE
+                        WHEN (raw_data.db_engine = 'MySQL') THEN (
+                          CASE
+                            WHEN (CAST(raw_data.major AS integer) > 2) THEN 'Eligible'
+                            WHEN (
+                              (CAST(raw_data.major AS integer) = 2)
+                              AND (CAST(raw_data.minor AS integer) > 9)
+                            ) THEN 'Eligible'
+                            WHEN (
+                              (
+                                (CAST(raw_data.major AS integer) = 2)
+                                AND (CAST(raw_data.minor AS integer) = 9)
+                              )
+                              AND (CAST(raw_data.fix AS integer) >= 2)
+                            ) THEN 'Eligible' ELSE 'Ineligible'
+                          END
+                        )
+                        WHEN (raw_data.db_engine = 'PostgreSQL') THEN (
+                          CASE
+                            WHEN (CAST(raw_data.major AS integer) > 12) THEN 'Eligible'
+                            WHEN (
+                              (CAST(raw_data.major AS integer) = 12)
+                              AND (CAST(raw_data.minor AS integer) >= 3)
+                            ) THEN 'Eligible' ELSE 'Ineligible'
+                          END
+                        ) ELSE 'Ineligible'
+                      END
+                    )
+                  END
+                )
+              END
+            ) graviton_eligible,
+            rds_graviton_mapping.graviton_instancetype,
+            raw_data.region,
+            region_names.regionname,
+            raw_data.deploymentoption,
+            raw_data.engineversion,
+            raw_data.accountid,
+            raw_data.year,
+            raw_data.month
+          FROM (
+              (
+                raw_data
+                LEFT JOIN optimization_data.region_names ON (raw_data.region = region_names.region)
+              )
+              LEFT JOIN optimization_data.rds_graviton_mapping ON (
+                (
+                  (raw_data.rds_type = rds_graviton_mapping.dbtype)
+                  AND (
+                    raw_data.db_engine = rds_graviton_mapping.databaseengine
+                  )
+                )
+                AND (
+                  raw_data.dbinstanceclass = rds_graviton_mapping.instancetype
+                )
+              )
+            )
+        )
+        SELECT graviton_mapping.*,
+          PL1.priceperunit existing_unit_price,
+          (PL1.priceperunit * 720) existing_monthly_price,
+          PL2.priceperunit graviton_unit_price,
+          (PL2.priceperunit * 720) graviton_montlhy_price,
+          round(
+            (
+              (PL1.priceperunit * 720) - (PL2.priceperunit * 720)
+            ),
+            2
+          ) monthly_savings,
+          round(
+            (
+              (
+                (PL1.priceperunit * 720) - (PL2.priceperunit * 720)
+              ) * 12
+            ),
+            2
+          ) estimated_annual_savings,
+          round((1 - (PL2.priceperunit / PL1.priceperunit)), 2) percentage_savings
+        FROM (
+            (
+              graviton_mapping
+              LEFT JOIN rds_pricing PL1 ON (
+                (
+                  (
+                    (
+                      (graviton_mapping.rds_type = PL1.rds_type)
+                      AND (graviton_mapping.db_engine = PL1.db_engine)
+                    )
+                    AND (
+                      graviton_mapping.deploymentoption = PL1.deploymentoption
+                    )
+                  )
+                  AND (graviton_mapping.regionname = PL1.location)
+                )
+                AND (
+                  graviton_mapping.dbinstanceclass = PL1.instancetype
+                )
+              )
+            )
+            LEFT JOIN rds_pricing PL2 ON (
+              (
+                (
+                  (
+                    (
+                      graviton_mapping.graviton_instancetype = PL2.instancetype
+                    )
+                    AND (graviton_mapping.regionname = PL2.location)
+                  )
+                  AND (graviton_mapping.rds_type = PL2.rds_type)
+                )
+                AND (graviton_mapping.db_engine = PL2.db_engine)
+              )
+              AND (
+                graviton_mapping.deploymentoption = PL2.deploymentoption
+              )
+            )
+          )
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'RDSUtilizationModule-TaskQueue'
+  EventSourceMapping:
+    DependsOn:
+      - EventPermission
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
