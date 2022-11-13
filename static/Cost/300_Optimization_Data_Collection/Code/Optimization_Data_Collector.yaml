@@ -484,7 +484,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRDSUtilizationModule
     Properties:
-      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-rds-metrics.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-rds-usage.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn

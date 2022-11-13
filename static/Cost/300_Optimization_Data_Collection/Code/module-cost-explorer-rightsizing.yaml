@@ -118,8 +118,7 @@ Resources:
           import os
 
           BENEFITS_CONSIDERED = True
-          BUCKET = os.environ['S3_BUCKET']
-          PATH = os.environ['PATH']
+          bucket = os.environ['S3_BUCKET']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
           prefix = os.environ['PREFIX']
 
@@ -131,12 +130,12 @@ Resources:
                   # Send some context about this error to Lambda Logs
                   logging.warning("%s" % e)
 
-          def store_data_to_s3(data, path, filename, payer_id):
+          def store_data_to_s3(data, path, payer_id):
               today = date.today()
               year = today.year
               month = today.strftime('%m')
               day = today.day
-              local_file = '/tmp/{today}-{filename}'
+              local_file = '/tmp/tmp.json'
 
               with open(local_file, 'w') as f:
                   json.dump(data, f, default=str)
@@ -147,8 +146,8 @@ Resources:
                   return
 
               s3client = boto3.client('s3')
-              key = f"{path}/{path}-rightsizing-data/payer_id={payer_id}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json"
-              print(f"Uploading file {local_file} to {bucket}/{key}" % (local_file, bucket, key))
+              key = f"{path}/{path}-data/payer_id={payer_id}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json"
+              print(f"Uploading file {local_file} to {bucket}/{key}")
               S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
 
@@ -227,7 +226,7 @@ Resources:
                           token = response.get("NextPageToken", None)
                           if not token:
                               break
-                      store_data_to_s3(result, PATH, payer_id)
+                      store_data_to_s3(result, prefix, payer_id)
                       start_crawler()
                       return "Successful"
 
@@ -247,15 +246,11 @@ Resources:
       Environment:
         Variables:
           PREFIX: !Ref CFDataName
-          S3_BUCKET:
-            Ref: DestinationBucket
-          CRAWLER_NAME:
-            Ref: RightsizingCrawler
+          S3_BUCKET: !Ref DestinationBucket
+          CRAWLER_NAME: !Ref RightsizingCrawler
           RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
-          ROLE: 
-            Ref: MultiAccountRoleName
-          MANAGEMENT_ACCOUNT_IDS: 
-            Ref: ManagementAccountID
+          ROLE: !Ref MultiAccountRoleName
+          MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
     Properties:

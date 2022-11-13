@@ -18,7 +18,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: rds_metrics
+    Default: rds-metrics
   DAYS:
     Type: Number
     Description: Number of days going back that you want to get data for
@@ -165,6 +165,7 @@ Resources:
           #Environment Variables
           bucket = os.environ['S3_BUCKET']
           prefix = os.environ['PREFIX']
+          crawler = os.environ["CRAWLER_NAME"]
 
           functions = {'rds':
                           {'regional' : 1,
@@ -258,9 +259,9 @@ Resources:
                   json.dump(data, f, default=str)
                   f.write('\n')
               if os.path.getsize(local_file) == 0:
-                  print(f"No data in file for {DestinationPrefix}")
+                  print(f"No data in file for {path}")
                   return
-              key = f"{prefix}/{prefix}-/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}"
+              key = f"{prefix}/{prefix}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}"
               s3client = boto3.client('s3')
               print("Uploading file %s to %s/%s" %(local_file, bucket, key))
               S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
@@ -269,7 +270,7 @@ Resources:
           def start_crawler():
               glue_client = boto3.client('glue')
               try:
-                  glue_client.start_crawler(Name= os.environ["CRAWLER_NAME"])
+                  glue_client.start_crawler(Name=crawler)
                   print("crawler started")
               except Exception as e:
                   # Send some context about this error to Lambda Logs

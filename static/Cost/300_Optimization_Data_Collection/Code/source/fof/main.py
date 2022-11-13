@@ -29,7 +29,7 @@ def lambda_handler(event, context):
             account_id = body["account_id"]
             payer_id = body["payer_id"]
             print(account_id)
-            for name, (func, crawler) in sub_modules.keys():
+            for name, (func, crawler) in sub_modules.items():
                 try:
                     func(account_id)
                     print(f"{name} response gathered")
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
                 except:
                     logging.warning(f"{name}: {type(e)} - {e}" )
         except Exception as e:
-            logging.warning(f"{name}: {type(e)} - {e}" )
+            logging.warning(f"{type(e)} - {e}" )
 
 def upload_to_s3(name, account_id, payer_id):
     local_file = "/tmp/data.json"
@@ -50,7 +50,7 @@ def upload_to_s3(name, account_id, payer_id):
     year = d.strftime("%Y")
     dt_string = d.strftime("%d%m%Y-%H%M%S")
     try:
-        key =  f"{prefix}/{prefix}-{name}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{dt_string}.json",
+        key =  f"{prefix}/{prefix}-{name}-data/payer_id={payer_id}/year={year}/month={month}/{prefix}-{account_id}-{dt_string}.json"
         s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
         s3.upload_file(local_file, bucket, key)
         print(f"Data {account_id} in s3 - {bucket}/{key}")

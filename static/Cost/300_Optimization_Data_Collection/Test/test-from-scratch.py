@@ -35,6 +35,7 @@ Python:
 """
 import os
 import time
+import json
 import logging
 from collections import Counter
 
@@ -262,11 +263,13 @@ def trigger_update():
     main_stack_name = 'OptimizationDataCollectionStack'
     for name in [
         f'Accounts-Collector-Function-{main_stack_name}',
-        #'Lambda_Organization_Data_Collector',
-        f'Rightsize-Data-Lambda-Function-{main_stack_name}',
+        f'pricing-Lambda-Function-{main_stack_name}',
+        f'cost-explorer-rightsizing-{main_stack_name}',
+        'WA-compute-optimizer-Trigger-Export',
         ]:
         logger.info('Invoking ' + name)
         response = boto3.client('lambda').invoke(FunctionName=name)
+        print(json.dumps(response, indent=2))
 
 def setup():
     initial_deploy_stacks()

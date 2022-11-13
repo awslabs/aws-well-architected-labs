@@ -124,7 +124,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/{CFDataName}/${CFDataName}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:

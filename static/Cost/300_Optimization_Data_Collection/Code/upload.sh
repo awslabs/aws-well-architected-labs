@@ -10,7 +10,7 @@ else
   echo " stage aws-wa-labs-staging"
   exit 1
 fi
-
+folder=$(pwd)
 code_path=$(git rev-parse --show-toplevel)/static/Cost/300_Optimization_Data_Collection/Code
 
 RED='\033[0;31m'
@@ -20,20 +20,29 @@ END='\033[0m' # No Color
 
 echo "linting CFN templates" 
 for template in $code_path/*.yaml; do
-  echo "Linting $(basename $template)"
-  echo "$(cfn-lint  --ignore-checks W3005 -- $template && echo 'OK')"
+  rel_path=$(realpath $template --relative-to="$(pwd)")
+  echo "Linting $rel_path"
+  echo "$(cfn-lint  --ignore-checks W3005 -- $rel_path && echo ' OK')" | awk '{ print "\t" $0 }'
 done
 
 echo "Building zips"
-zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/fof.zip $code_path/source/fof -x "**/__pycache__/*"
-zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/ta.zip  $code_path/source/ta  -x "**/__pycache__/*"
-zip -rq -D -X -9 -A --compression-method deflate -r $code_path/source/ecs.zip $code_path/source/ecs -x "**/__pycache__/*"
+
+for mod in fof ecs ta
+do
+  echo Buidling $mod
+  cd $code_path/source
+  rm -f $mod.zip
+  cd $code_path/source/$mod
+  zip -r $mod.zip * -x "**/__pycache__/*"
+  mv $mod.zip ../
+done
+
 # FIXME: zips are allways recreated so allways uploaded. We can check if md5 is the same as before to avoid updates.
-
-
 
 echo 'Sync to $bucket'
 aws s3 sync $code_path/       s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.yaml' --acl public-read
 aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.zip' --acl public-read
 aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/Region/ --exclude='*' --include='regions.csv' --acl public-read
+
+cd $pwd
 
