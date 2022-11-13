@@ -3,9 +3,7 @@
 #Gets org data, grouped by ous and tags from managment accounts in json
 #Author Stephanie Gooch 2020
 
-import argparse
 import boto3
-from botocore.exceptions import ClientError
 from botocore.client import Config
 import os
 import datetime

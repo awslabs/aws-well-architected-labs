@@ -35,7 +35,7 @@ def lambda_handler(event, context):
                     print(f"{name} response gathered")
                     upload_to_s3(name, account_id, payer_id)
                     start_crawler(crawler)
-                except:
+                except Exception as e:
                     logging.warning(f"{name}: {type(e)} - {e}" )
         except Exception as e:
             logging.warning(f"{type(e)} - {e}" )

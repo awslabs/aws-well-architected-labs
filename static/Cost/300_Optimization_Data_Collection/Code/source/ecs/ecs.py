@@ -5,7 +5,6 @@ from datetime import date
 import json
 import os
 from botocore.exceptions import ClientError
-from botocore.client import Config
 
 bucket = os.environ["BUCKET_NAME"]
 prefix = os.environ["PREFIX"]

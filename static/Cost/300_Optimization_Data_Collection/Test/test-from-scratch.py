@@ -37,7 +37,6 @@ import os
 import time
 import json
 import logging
-from collections import Counter
 
 import boto3
 from cfn_tools import load_yaml
@@ -119,7 +118,7 @@ def initial_deploy_stacks():
         NotificationARNs=[],
     )
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName='OptimizationManagementDataRoleStack',
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Management.yaml').read(),
             Parameters=[
@@ -133,7 +132,7 @@ def initial_deploy_stacks():
         logger.info('OptimizationManagementDataRoleStack exists')
 
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName='OptimizationDataRoleStack',
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml').read(),
             Parameters=[
@@ -155,14 +154,14 @@ def initial_deploy_stacks():
 
 
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName="OptimizationDataCollectionStack",
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml').read(),
             Parameters=[
 
-                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': BUCKET}, 
+                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': BUCKET},
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
-                {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costoptimizationdata"},
+                {'ParameterKey': 'DestinationBucket',               'ParameterValue': "costoptimizationdata"},
                 {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeComputeOptimizerModule',   'ParameterValue': "yes"},
@@ -247,7 +246,7 @@ def update_nested_stacks():
     func_conf = boto3.client('lambda').get_function_configuration(FunctionName=f'Accounts-Collector-Function-{main_stack_name}')
     logger.info(str(sqs_urls))
     func_conf['Environment']['Variables']['SQS_URL'] = ','.join(sqs_urls)
-    response = boto3.client('lambda').update_function_configuration(
+    boto3.client('lambda').update_function_configuration(
             FunctionName=f'Accounts-Collector-Function-{main_stack_name}',
             Environment=func_conf['Environment']
     )
@@ -387,7 +386,6 @@ def main():
                 test_inventory_snapshot_data,
                 test_rds_usage_data,
                 test_trusted_advisor_data,
-                test_ebs_data,
                 test_transit_gateway_data,
             ]:
             try:

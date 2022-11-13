@@ -69,6 +69,3 @@ def lits_regions():
     s = Session()
     ecs_regions = s.get_available_regions('ecs')
     return ecs_regions
-
-if __name__ == "__main__":
-    lambda_handler(None, None)
