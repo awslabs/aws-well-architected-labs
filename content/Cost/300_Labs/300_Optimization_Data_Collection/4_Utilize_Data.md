@@ -15,12 +15,12 @@ You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchite
 ### Visualization of Compute Optimizer data with Amazon QuickSight
 You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). 
 
-### AWS Organisation Data and The Cost Intelligence Dashboard
+### AWS Organization Data and The Cost Intelligence Dashboard
 
-This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organisation data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
+This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organization data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
 
 {{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EGSIpanIuH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
 You can also use the below query to update your **account_map** table in athena to read from this data
