@@ -20,7 +20,7 @@ You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](htt
 This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organisation data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
 
 {{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EGSIpanIuH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
 You can also use the below query to update your **account_map** table in athena to read from this data
