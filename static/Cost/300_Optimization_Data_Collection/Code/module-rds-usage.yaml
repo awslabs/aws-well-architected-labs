@@ -478,7 +478,7 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a view of modernization opportunities for Graviton
       Name: !Sub ${CFDataName}-rds-graviton
-      QueryString: !Sub |
+      QueryString: |
         WITH 
         raw_data AS (
           SELECT dbinstanceidentifier,
@@ -725,26 +725,3 @@ Resources:
               )
             )
           )
-  EventPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
-      Action: lambda:InvokeFunction
-      Principal: sqs.amazonaws.com
-      SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
-    Type: AWS::SQS::Queue
-    Properties: 
-      VisibilityTimeout: 300
-      ReceiveMessageWaitTimeSeconds: 20
-      DelaySeconds: 2
-      KmsMasterKeyId: "alias/aws/sqs"
-      QueueName: 'RDSUtilizationModule-TaskQueue'
-  EventSourceMapping:
-    DependsOn:
-      - EventPermission
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      EventSourceArn: !GetAtt TaskQueue.Arn
-      FunctionName: !GetAtt LambdaFunction.Arn

@@ -37,6 +37,7 @@ import os
 import time
 import json
 import logging
+from textwrap import indent
 
 import boto3
 from cfn_tools import load_yaml
@@ -265,11 +266,12 @@ def trigger_update():
         f'pricing-Lambda-Function-{main_stack_name}',
         f'cost-explorer-rightsizing-{main_stack_name}',
         'WA-compute-optimizer-Trigger-Export',
-        f'pricing-Lambda-Function-{main_stack_name}',
+        f'Organization-Data-{main_stack_name}',
         ]:
         logger.info('Invoking ' + name)
         response = boto3.client('lambda').invoke(FunctionName=name)
-        print(json.dumps(response, default=str, indent=2))
+        stdout = response['Payload'].read().decode('utf-8')
+        print(indent(stdout, ' ' * 4))
 
 def setup():
     initial_deploy_stacks()
