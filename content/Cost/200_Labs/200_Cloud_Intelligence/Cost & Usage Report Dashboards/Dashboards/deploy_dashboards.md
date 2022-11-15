@@ -7,9 +7,9 @@ pre: "<b>1 </b>"
 ---
 
 ## Authors
-- Thomas Buatois, AWS Cloud Infrastructure Architect (ProServe)
 - Yuriy Prykhodko, AWS Principal Technical Account Manager
 - Iakov Gan, AWS Sr. Technical Account Manager
+- Thomas Buatois, AWS Cloud Infrastructure Architect (ProServe)
 
 ## Contributors
 - Aaron Edell, Global Head of Business and GTM - Customer Cloud Intelligence
