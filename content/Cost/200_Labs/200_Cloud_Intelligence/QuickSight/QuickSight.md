@@ -60,6 +60,10 @@ Co-owners can edit and share the dashboard. You have the option to provide them 
 
 
 ### Customize your Dashboard by saving your Dashboard as an Analysis
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YNQBBM5RQtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 {{%expand "Click here to continue saving your dashboard as a customizable analysis " %}}
 
 1. Go to the **QuickSight** service homepage inside your account. Be sure to select the correct region from the top right user menu or you will not see your expected tables
