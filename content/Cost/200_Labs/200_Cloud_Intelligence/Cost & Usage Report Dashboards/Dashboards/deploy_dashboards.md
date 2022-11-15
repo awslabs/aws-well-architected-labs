@@ -104,26 +104,27 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards&param_DeployCUDOSDashboard=yes&param_DeployKPIDashboard=yes&param_DeployCostIntelligenceDashboard=yes)
 	
-3. Enter a **Stack name** for your template such as **CID**
-4. Review **Readme Sections** parameter to confirm prerequisites before specifying the other parameters. You must answer 'yes' to all.
+3. Enter a **Stack name** for your template such as **Cloud-Intelligence-Dashboards**
+4. Review **Common Parameters** and confirm prerequisites before specifying the other parameters. You must answer 'yes' to both prerequisites questions.
 5. Copy and paste your **QuicksightUserName** into the parameter text box
-
 To find your QuickSight username:
 	- Open a new tab or window and navigate to the **QuickSight** console
 	- Find your username in the top right navigation bar
 ![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
-1. Update your **CURBucketPath** and set the **CURisAggregated** flag to `yes`;
-   
-2. Select the Dashboards you want to install. We recommend deploying all three CUR-based dashboards; Cost Intelligence Dashboard, CUDOS, and the KPI Dashboard.
+1. Update your **CURBucketPath** if needed. 
+   1. (Default) If you used the CFN Template in the CUR setup process above then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
+   2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there)
 
-3. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
 
-4.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+2. Select the Dashboards you want to install. We recommend deploying all three: Cost Intelligence Dashboard, CUDOS, and the KPI Dashboard.
 
-5.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+3.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+
+4.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+
 
 **NOTE:** This step can take up to 7 minutes. 
     ------------ | -------------
@@ -324,31 +325,26 @@ All other resources are created automatically: Athena Workgroup and bucket, Glue
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards&param_DeployCUDOSDashboard=yes&param_DeployKPIDashboard=yes&param_DeployCostIntelligenceDashboard=yes)
 	
-3. Enter a **Stack name** for your template such as **CID**
-4. Review **Readme Sections** parameter to confirm prerequisites before specifying the other parameters. You must answer 'yes' to all.
+3. Enter a **Stack name** for your template such as **Cloud-Intelligence-Dashboards**
+4. Review **Common Parameters** and confirm prerequisites before specifying the other parameters. You must answer 'yes' to both prerequisites questions.
 5. Copy and paste your **QuicksightUserName** into the parameter text box
 To find your QuickSight username:
 	- Open a new tab or window and navigate to the **QuickSight** console
 	- Find your username in the top right navigation bar
 ![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
-1. Update your **CURBucketPath** and set the **CURisAggregated** flag;
-   1. If you used the CFN Template in the CUR setup process above then;
-      1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
-      2. **CURIsManagedByCloudFormation** = `yes`
-   2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then;
-      1. **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there)
-      2. **CURIsManagedByCloudFormation** = `no`
+1. Update your **CURBucketPath** if needed. 
+   1. (Default) If you used the CFN Template in the CUR setup process above then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
+   2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there)
 
-2. Select the Dashboards you want to install. We recommend deploying all three.
 
-3. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+2. Select the Dashboards you want to install. We recommend deploying all three: Cost Intelligence Dashboard, CUDOS, and the KPI Dashboard.
 
-4.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
+3.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
-5.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+4.  You will see the stack will start in **CREATE_IN_PROGRESS** 
 
 **NOTE:** This step can take 5mins
     ------------ | -------------
