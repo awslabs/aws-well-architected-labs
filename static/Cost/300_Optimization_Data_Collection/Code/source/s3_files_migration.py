@@ -18,6 +18,8 @@ except:
 
 s3 = boto3.client('s3')
 
+
+
 mods = {
     # Migration from v0 (no payer_id)
     "ecs-chargeback-data/year=": f"ecs-chargeback/ecs-chargeback-data/payer_id={payer_id}/year=",
@@ -56,12 +58,12 @@ mods = {
 
 for old_prefix, new_prefix in mods.items():
     print('Searching for', old_prefix)
-    contents = s3.list_objects_v2(Bucket=bucket, Prefix=old_prefix)['Contents']
+    contents =s3.list_objects_v2(Bucket=bucket, Prefix=old_prefix).get('Contents', [])
     for content in contents:
         try:
             key = content["Key"]
             new_key = key.replace(old_prefix, new_prefix)
-            print('Moving {key} to {new_key}')
+            print(f'  Moving {key} to {new_key}')
             copy_source = {'Bucket': bucket, 'Key': key}
             s3.copy_object(Bucket=bucket, CopySource=copy_source, Key=new_key)
             s3.delete_object(Bucket=bucket, Key=key)

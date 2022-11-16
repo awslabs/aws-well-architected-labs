@@ -23,14 +23,14 @@ You can test this lab in a dedicated account that preferably has following asset
 1. Check the quality of cfn code
 
 ```bash
-./static/Cost/300_Optimization_Data_Collection/Code/lint.sh
+./static/Cost/300_Optimization_Data_Collection/Tools/lint.sh
 ```
 
 2. Upload code to a bucket and run integration tests in your Testing environment
 
 ```bash
 export bucket='mybucket'
-./static/Cost/300_Optimization_Data_Collection/Code/upload.sh  "$bucket"
+./static/Cost/300_Optimization_Data_Collection/Tools/upload.sh  "$bucket"
 python3 ./static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py
 ```
 The test will install stacks from scratch in a single account, and then check the presence of Athena tables and deletes the stack. I also it deletes all artefacts that are not deleted by CFN.
