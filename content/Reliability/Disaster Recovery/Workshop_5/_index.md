@@ -1,0 +1,31 @@
++++
+title = "Module 5: Multi-Region Resiliency"
+date = 2021-05-06T09:52:56-04:00
+weight = 140
+chapter = false
+pre = ""
++++
+
+In this module, you will extend the Hot Standby disaster recovery strategy, and centrally coordinate failover and readiness for our application. To learn more about how Amazon Route 53 Application Recovery Controller (Route 53 ARC) can help you build highly resilient applications, you can review this [blog](https://aws.amazon.com/blogs/networking-and-content-delivery/building-highly-resilient-applications-using-amazon-route-53-application-recovery-controller-part-1-single-region-stack/).
+
+Cells are instantiations of a service that are isolated from each other. To maximize resiliency, you should partition your application into isolated cells, so that when one cell fails, that failure can’t affect the other cells. Route 53 ARC's  features enable you to continually monitor your application’s ability to recover from failures, and to control application recovery across multiple AWS Regions, AZs, and on premises. Route 53 ARC’s capabilities make application recovery simpler and more reliable by eliminating manual steps required by traditional tools and processes.
+
+Our application is currently deployed in our primary region **N. Virginia (us-east-1)** and we will use **N. California (us-west-1)** as our secondary region.
+
+Our test application is Unishop. It is a Spring Boot Java application deployed on a single [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2) instance using a public subnet. Our datastore is an [Amazon Aurora](https://aws.amazon.com/rds/aurora/) MySQL database which has user data. Our test application is also deployed using [Amazon API Gateway](https://aws.amazon.com/api-gateway/) and [AWS Lambda](https://aws.amazon.com/lambda/). Our datastore is [Amazon DynamoDB](https://aws.amazon.com/dynamodb) which has shopping cart data. The frontend is written using bootstrap and hosted in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/pm/serv-s3).  
+
+Our test application is using two datastores, Amazon Aurora and DynamoDB to showcase the Disaster Recovery features of each. For your workloads, you would choose the right datastore for your use case.
+
+This module takes advantage of [Amazon Route 53 Application Recovery Controller](https://aws.amazon.com/route53/application-recovery-controller/) to monitor readiness and control application recovery across our primary and secondary regions. Take a look at the [Route 53 ARC components](https://docs.aws.amazon.com/r53recovery/latest/dg/introduction-components.html) to familiarize yourself with them before starting this lab.
+
+We are also taking advantage of [Amazon Aurora Global Database](https://aws.amazon.com/rds/aurora/global-database/) to replicate our Amazon Aurora MySQL data to our secondary region and [Amazon DynamoDB Global Tables](https://aws.amazon.com/dynamodb/global-tables/) to replicate our DynamoDB data to our secondary region. 
+
+[CloudFormation](https://aws.amazon.com/cloudformation/) will be used to configure the infrastructure and deploy the application. Provisioning your infrastructure with infrastructure as code (IaC) methodologies is a best practice. CloudFormation is an easy way to speed up cloud provisioning with infrastructure as code.
+
+Prior experience with the AWS Console and Linux command line are helpful but not required.
+
+TODO: UPDATE THE ARCHITECTURE IMAGE HERE
+
+{{< img HotStandby.png >}}
+
+{{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
