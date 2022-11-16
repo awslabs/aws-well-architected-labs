@@ -76,7 +76,9 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 
 1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200_200_Cloud_Intelligence/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
 
-2. Fill in the Parameters as seen below.
+2. Click **Next**.
+
+3. Fill in the Parameters as seen below.
 
 * CodeBucket - LEAVE AS DEFAULT
 * CodeKey - LEAVE AS DEFAULT
@@ -85,4 +87,38 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 * ManagementAccountRole - The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
 * RolePrefix - This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
 * Schedule - Cron job to trigger the lambda using cloudwatch event. Default is once a day 
+ 
 
+ **** SCREEN SHOT*****
+
+4. Tick the boxes and click **Create stack**.
+![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
+
+5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
+
+## Test Lambda Function
+
+Your lambda functions will run automatically on the schedule you chose at deployment. However, if you would like to test your functions please see the steps below. 
+Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
+
+1. From CloudFormation Click **Resources** and find the Lambda Function and click the Physical ID
+2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
+
+3. Enter an **Event name** of **Test**, click **Create**:
+
+![Images/Configure_Test.png](/Cost/300_Organization_Data_CUR_Connection/Images/Configure_Test.png)
+
+4.	Click **Test**
+
+5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
+
+6. You can go to your bucket in S3 and there should be a file in the folder CUDOS_RLS. Copy the link***
+
+
+## Create RLS
+We will now create the RLS Dataset in Amazon QuickSight and attach it to your datasets for CID. Please ensure the bucket you have placed the RLS file into has access to Amazon QuickSight, see [here](https://docs.aws.amazon.com/quicksight/latest/user/troubleshoot-connect-S3.html)
+
+1. Go to Amazon QuickSight and login
+2. Go to Datasets and click **New dataset**
+3. Create new Dataset by clicking **S3**
+4. Set Data source name as **CID RLS** and Paste the S3 URL you copied earlier into the Upload box
