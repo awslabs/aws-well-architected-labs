@@ -11,7 +11,7 @@ November 2022
 
 ## Introduction
 
-CID allows everyone in your organization to understand your cost data by exploring interactive dashboards that you manage. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. 
+CID allows everyone in your organization to understand your cost data by exploring interactive dashboards that you manage. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Payers.
 
 ## PrerRequisite
 
@@ -42,7 +42,7 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
-3. In the Parameters section set **CostAccountID** as the ID of Data Collection Account ( where you plan to deploy the OptimizationDataCollectionStack)  
+3. In the Parameters section set **CostAccountID** as the ID of Cloud ntelligence Dashboard
 
 4. Scroll to the bottom and click **Next**
 
@@ -69,4 +69,20 @@ You can select different levels of access. Tag one of the following and the use 
 4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are **colon delimited**. Once added click **Save changes**
 
 5. Repeat on all resources with relevant emails. 
+
+## Deploy Lambda Function
+
+Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
+
+1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200_200_Cloud_Intelligence/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
+
+2. Fill in the Parameters as seen below.
+
+* CodeBucket - LEAVE AS DEFAULT
+* CodeKey - LEAVE AS DEFAULT
+* DestinationBucket - Amazon S3 Bucket in your account in the same region (this can be one from your Optimization data collector where where your CUR is stored)
+* ManagementAccountID - List of Payer IDs you wish to collect data for. Can just be one Accounts(Ex: 111222333,444555666,777888999) 
+* ManagementAccountRole - The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+* RolePrefix - This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+* Schedule - Cron job to trigger the lambda using cloudwatch event. Default is once a day 
 
