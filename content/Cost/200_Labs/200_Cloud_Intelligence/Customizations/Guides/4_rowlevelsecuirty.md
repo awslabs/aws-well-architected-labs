@@ -53,5 +53,20 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 ### Tag your AWS Organization Resources
 
+You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to see the resources cost data. The below will show you how to tag a resource and this can be repeated. 
 
+1. Log into your **Management account** then click on the top right hand corner on your account and select **Organization**
+2. Ensure you are on the **AWS accounts**
+
+You can select different levels of access. Tag one of the following and the use will have access to all data of that resource and any child accounts below it.
+
+* Tag an Account
+* Tag an Organization Unit
+* Tag the Root 
+
+3. To tag the resource click its name an scroll down to the tag section and click **Manage tags**
+
+4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are **colon delimited**. Once added click **Save changes**
+
+5. Repeat on all resources with relevant emails. 
 
