@@ -25,6 +25,7 @@ Prior to deleting resources, check with the application owner that your analysis
   * [Elastic Load Balancing - Idle ELB](#elastic-load-balancing---idle-elb)
   * [Elastic Compute Cloud - Unallocated Elastic IPs](#ec2-unallocated-elastic-ips)
   * [Graviton Usage](#graviton-usage)
+  * [Lambda Graviton Cost Savings](#lambda-graviton-savings)
 - End User Computing 
   * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)  
 - Networking & Content Delivery   
@@ -204,6 +205,67 @@ ORDER BY
 
 [Back to Table of Contents](#table-of-contents)
 
+### Lambda Graviton Savings
+
+#### Cost Optimization Technique
+This query will output all Lambda queries and their processor architecture.  Lambda functions which are running on X86 may be 
+cost optimized by moving to ARM64 architecture.  On average functions using the Arm/Graviton2 architecture, duration charges are 20 percent lower than the current pricing for x86.  Thus the query calculates a 20% savings on each X86 Lambda.
+
+
+#### Copy Query
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/lambda-graviton-savings.sql) 
+
+```tsql
+WITH x86_v_arm_spend AS (
+SELECT
+   line_item_resource_id      AS line_item_resource_id,
+   bill_payer_account_id      AS bill_payer_account_id,
+   line_item_usage_account_id AS line_item_usage_account_id,
+   line_item_line_item_type AS line_item_line_item_type,
+   CASE SUBSTR(line_item_usage_type, length(line_item_usage_type)-2)
+      WHEN 'ARM' THEN 'arm64'
+      ELSE 'x86_64'
+   END AS "processor",
+   CASE SUBSTR(line_item_usage_type, length(line_item_usage_type)-2)
+      WHEN 'ARM' THEN 0
+      ELSE line_item_unblended_cost * .2
+   END AS "potential_arm_savings",
+   SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
+FROM 
+${table_name}
+WHERE 
+   line_item_product_code  = 'AWSLambda'
+   AND line_item_operation = 'Invoke'
+   AND ( 
+      line_item_usage_type    LIKE '%Request%'
+      OR line_item_usage_type LIKE '%Lambda-GB-Second%'
+   )
+   AND line_item_usage_start_date > CURRENT_DATE - INTERVAL '1' MONTH
+   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 1,2,3,5,6,4
+)
+SELECT 
+line_item_resource_id,
+bill_payer_account_id,
+line_item_usage_account_id,
+line_item_line_item_type,
+processor,
+sum(sum_line_item_unblended_cost)           AS sum_line_item_unblended_cost,
+sum(potential_arm_savings) AS "potential_arm_savings"
+FROM 
+x86_v_arm_spend
+GROUP BY 2,3,1,5,4
+```
+
+#### Helpful Links
+* [Lambda Functions Powered By AWS Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/)
+
+
+{{< email_button category_text="Cost Optimization" service_text="Lambda Graviton2 Savings" query_text="Lambda Graviton2 Savings" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
 ### Amazon WorkSpaces - Auto Stop
 
 #### Cost Optimization Technique
@@ -278,7 +340,6 @@ ORDER BY
   product_operating_system,
   pricing_unit;
 ```
-
 {{% /expand%}}
 
 #### Helpful Links
