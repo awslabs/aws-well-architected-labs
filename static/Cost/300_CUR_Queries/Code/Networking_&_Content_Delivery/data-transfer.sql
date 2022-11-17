@@ -1,4 +1,4 @@
--- modified: 2021-04-25
+-- modified: 2022-11-14
 -- query_id: data-transfer
 -- query_description: This query provides daily unblended cost and usage information about Data Transfer usage including resource id that sourced the traffic, the product code corresponding to the source traffic, and the to/from locations of the usage.
 -- query_columns: line_item_product_code,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type,product_from_location,product_product_family,product_to_location
@@ -20,7 +20,6 @@ FROM -- automation_from_stmt
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND product_product_family = 'Data Transfer'
-  AND line_item_line_item_type = 'Usage'
   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt
   line_item_product_code,
