@@ -122,3 +122,19 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 2. Go to Datasets and click **New dataset**
 3. Create new Dataset by clicking **S3**
 4. Set Data source name as **CID RLS** and Paste the S3 URL you copied earlier into the Upload box
+5. Click on your new dataset and select the **Refresh** tab and click **ADD NEW SCHEDULE**
+6. Choose Daily and click **SAVE**
+7. Go back to Datasets and select your CID data **summary_view**
+8. On the Summary tab find Row-level security and click **Edit**
+9. Click the toggle **User-based ON** then expand the **User-based rules** section and select the **CID RLS** dataset we made earlier
+10. Scroll down and click **Apply dataset**
+
+{{% notice tip %}}
+If you would like to turn off RLS you can just toggle the **User-based ON** to **OFF**
+{{% /notice %}}
+
+## See the impact
+
+Now when you go to your Dashboard the users who had been tagged on the accounts will only see their data
+
+See below a before and after picture. 
