@@ -36,8 +36,10 @@ This solution will use tags from your AWS Organization resources to create a dat
 If you are deploying this in a linked account you will need a Role in you Management account to let you access your AWS Organizations Data. There are two options for this:
 
 **Option1** If you already have the [Optimization Data Collector Lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/1_grant_permissions/#12-role-for-management-account) deployed you can use the Management role in that. 
+
 **Option2** Else, you can deploy using the below:
 
+{{%expand "Deployed Management Role" %}}
 1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml&stackName=OptimizationManagementDataRoleStack)
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
@@ -51,12 +53,14 @@ If you are deploying this in a linked account you will need a Role in you Manage
 6. You can see the role that was collected by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
 ![Images/Managment_CF_deployed.png](/Cost/300_Optimization_Data_Collection/Images/Managment_CF_deployed.png)
 
+{{% /expand%}}
+
 ### Tag your AWS Organization Resources
 
-You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to see the resources cost data. The below will show you how to tag a resource and this can be repeated. 
+You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. 
 
 1. Log into your **Management account** then click on the top right hand corner on your account and select **Organization**
-2. Ensure you are on the **AWS accounts**
+2. Ensure you are on the **AWS accounts** tab
 
 You can select different levels of access. Tag one of the following and the use will have access to all data of that resource and any child accounts below it.
 
@@ -74,7 +78,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
 
-1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200_200_Cloud_Intelligence/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
+1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
 
 2. Click **Next**.
 
