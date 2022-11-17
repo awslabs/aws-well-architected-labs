@@ -1,0 +1,877 @@
+
+<!doctype html>
+<html><head><title>Amazon Macie Lab for Sensitive Data Discovery copy_updated</title><meta charset="UTF-8"><link href="http://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic|Roboto:400,700,700italic,400italic" rel="stylesheet" type="text/css"><style>/*
+ * Copyright 2014 Quip
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+body {
+    font-size: 15px;
+    color: #333;
+    background: white;
+    padding: 60px 95px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern";
+    font-kerning: normal;
+    -moz-font-feature-settings: "kern";
+    -webkit-font-feature-settings: "kern";
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+th {
+    font-family: Roboto, sans-serif;
+    font-weight: 700;
+    margin: 0;
+    margin-top: 1.25em;
+    margin-bottom: 0.75em;
+}
+
+h1 {
+    font-size: 35px;
+    line-height: 42px;
+}
+
+h1:first-child {
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 22px;
+    line-height: 22px;
+}
+
+h3 {
+    font-size: 18px;
+    line-height: 16px;
+}
+
+h4,
+h5,
+h6 {
+    font-size: 15px;
+    line-height: 14px;
+}
+h5 {
+    font-style: italic;
+}
+
+h6 {
+    font-weight: unset;
+    text-decoration: underline;
+}
+
+.capitalize-h3 h3 {
+    text-transform: uppercase;
+}
+
+/* Body text */
+body,
+p,
+ul,
+ol,
+td {
+    font-family: "Crimson Text", serif;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+blockquote,
+q {
+    display: block;
+    margin: 1em 0;
+    font-style: italic;
+}
+
+blockquote a,
+q a {
+    text-decoration: underline;
+}
+
+blockquote {
+    padding-left: 10px;
+    border-left: 4px solid #a6a6a6;
+}
+
+q {
+    color: #a6a6a6;
+    line-height: 40px;
+    font-size: 24px;
+    text-align: center;
+    quotes: none;
+}
+
+q a {
+    color: #a6a6a6;
+}
+
+code,
+pre {
+    font-family: Consolas, "Liberation Mono", Menlo, "Courier Prime Web",
+        Courier, monospace;
+    background: #f2f2f2;
+}
+
+code {
+    padding: 1px;
+    margin: 0 -1px;
+    border-radius: 3px;
+}
+
+pre {
+    display: block;
+    line-height: 20px;
+    text-shadow: 0 1px white;
+    padding: 5px 5px 5px 30px;
+    white-space: nowrap;
+    position: relative;
+    margin: 1em 0;
+}
+
+pre:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    border-left: solid 1px #dadada;
+}
+
+/* Text Alignment */
+.line {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: end;
+}
+
+/* Lists */
+div[data-section-style="5"],
+div[data-section-style="6"],
+div[data-section-style="7"] {
+    margin: 12px 0;
+}
+
+ul {
+    padding: 0 0 0 40px;
+}
+
+ul li {
+    margin-bottom: 0.4em;
+}
+
+/* Bulleted list */
+div[data-section-style="5"] ul {
+    list-style-type: disc;
+}
+div[data-section-style="5"] ul ul {
+    list-style-type: circle;
+}
+div[data-section-style="5"] ul ul ul {
+    list-style-type: square;
+}
+div[data-section-style="5"] ul ul ul ul {
+    list-style-type: disc;
+}
+div[data-section-style="5"] ul ul ul ul ul {
+    list-style-type: circle;
+}
+div[data-section-style="5"] ul ul ul ul ul ul {
+    list-style-type: square;
+}
+
+/* Numbered list */
+div[data-section-style="6"] ul {
+    list-style-type: decimal;
+}
+div[data-section-style="6"] ul ul {
+    list-style-type: lower-alpha;
+}
+div[data-section-style="6"] ul ul ul {
+    list-style-type: lower-roman;
+}
+div[data-section-style="6"] ul ul ul ul {
+    list-style-type: decimal;
+}
+div[data-section-style="6"] ul ul ul ul ul {
+    list-style-type: lower-alpha;
+}
+div[data-section-style="6"] ul ul ul ul ul ul {
+    list-style-type: lower-roman;
+}
+
+/* Checklist */
+div[data-section-style="7"] ul {
+    list-style-type: none;
+}
+
+div[data-section-style="7"] ul li:before {
+    content: "\2610";
+    position: absolute;
+    display: inline;
+    margin-right: 1.2em;
+    margin-left: -1.2em;
+}
+
+div[data-section-style="7"] ul li.parent:before {
+    content: "";
+}
+
+div[data-section-style="7"] ul li.checked {
+    text-decoration: line-through;
+}
+
+div[data-section-style="7"] ul li.checked:before {
+    content: "\2611";
+    text-decoration: none;
+}
+
+/* Tables */
+div[data-section-style="8"] {
+    margin: 12px 0;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: separate;
+    border: solid 1px #bbb;
+    table-layout: fixed;
+    position: relative;
+}
+
+table th,
+table td {
+    padding: 2px 2px 0;
+    min-width: 1.5em;
+    word-wrap: break-word;
+}
+
+table th {
+    border-bottom: 1px solid #c7cbd1;
+    background: #f2f2f2;
+    font-weight: bold;
+    vertical-align: bottom;
+    color: #3a4449;
+    text-align: center;
+}
+
+table td {
+    padding-top: 0;
+    border-left: 1px solid #c7cbd1;
+    border-top: 1px solid #c7cbd1;
+    vertical-align: top;
+}
+
+table td.bold {
+    font-weight: bold;
+}
+
+table td.italic {
+    font-style: italic;
+}
+
+table td.underline {
+    text-decoration: underline;
+}
+
+table td.strikethrough {
+    text-decoration: line-through;
+}
+
+table td.underline.strikethrough {
+    text-decoration: underline line-through;
+}
+
+table td:first-child {
+    border-left: hidden;
+}
+
+table tr:first-child td {
+    border-top: hidden;
+}
+
+/* Images */
+div[data-section-style="11"] {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div[data-section-style="11"][data-section-float="0"] {
+    clear: both;
+    text-align: center;
+}
+
+div[data-section-style="11"][data-section-float="1"] {
+    float: left;
+    clear: left;
+    margin-right: 20px;
+}
+
+div[data-section-style="11"][data-section-float="2"] {
+    float: right;
+    clear: right;
+    margin-left: 20px;
+}
+
+div[data-section-style="11"] img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}
+
+div[data-section-style="11"].show-border {
+    outline: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+hr {
+    width: 70px;
+    margin: 20px auto;
+}
+
+/* Apps */
+div[data-section-style="19"].placeholder {
+    margin: 0.8em auto;
+    padding: 4px 0;
+    display: block;
+    color: #3d87f5;
+    text-align: center;
+    border: 1px solid rgba(41, 182, 242, 0.2);
+    border-radius: 3px;
+    background: #e9f8fe;
+    font-family: Roboto, sans-serif;
+}
+
+div[data-section-style="19"].first-party-element {
+    margin-bottom: 10px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+div[data-section-style="19"].first-party-element.kanban {
+    background-image: url("https://quip-cdn.com/nK0hSyhsb4jrLIL2s5Ma-g");
+    height: 166px;
+}
+
+div[data-section-style="19"].first-party-element.calendar {
+    background-image: url("https://quip-cdn.com/OYujqLny03RILxcLIiyERg");
+    height: 244px;
+}
+
+div[data-section-style="19"].first-party-element.poll {
+    background-image: url("https://quip-cdn.com/fbIiFrcKGv__4NB7CBfxoA");
+    height: 116px;
+}
+
+div[data-section-style="19"].first-party-element.countdown {
+    background-image: url("https://quip-cdn.com/3bPhykD2dBei9sSjCWteTQ");
+    height: 96px;
+}
+
+div[data-section-style="19"].first-party-element.process_bar {
+    background-image: url("https://quip-cdn.com/ybQlHnHEIIBLog5rZmYs_w");
+    height: 36px;
+}
+
+div[data-section-style="19"].first-party-element.project_tracker {
+    background-image: url("https://quip-cdn.com/OFQU087b4Mxzz1ZaHwtjXA");
+    height: 164px;
+}
+
+div[data-section-style="19"] img {
+    margin: 0.5em;
+}
+
+div[data-section-style="19"] img.masked-image {
+    margin: 0;
+    transform-origin: top left;
+}
+
+div[data-section-style="19"] .image-mask {
+    position: relative;
+    overflow: hidden;
+}
+/*
+ * Copyright 2019 Quip
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+body {
+    counter-reset: indent0 indent1 indent2 indent3 indent4 indent5 indent6
+        indent7 indent8;
+}
+
+/* Numbered list */
+div[data-section-style="6"] {
+    counter-reset: indent0 indent1 indent2 indent3 indent4 indent5 indent6
+        indent7 indent8;
+}
+div[data-section-style="6"].list-numbering-continue {
+    counter-reset: none;
+}
+div[data-section-style="6"].list-numbering-restart-at {
+    counter-reset: indent0 var(--indent0) indent1 indent2 indent3 indent4
+        indent5 indent6 indent7 indent8;
+}
+div[data-section-style="6"] ul {
+    /* indent0 is not reset since it is shared across the div elements */
+    list-style-type: none !important;
+}
+div[data-section-style="6"] ul ul {
+    counter-reset: indent1;
+}
+div[data-section-style="6"] ul ul ul {
+    counter-reset: indent2;
+}
+div[data-section-style="6"] ul ul ul ul {
+    counter-reset: indent3;
+}
+div[data-section-style="6"] ul ul ul ul ul {
+    counter-reset: indent4;
+}
+div[data-section-style="6"] ul ul ul ul ul ul {
+    counter-reset: indent5;
+}
+div[data-section-style="6"] ul li {
+    counter-increment: indent0;
+}
+div[data-section-style="6"] ul ul li {
+    counter-increment: indent1;
+}
+div[data-section-style="6"] ul ul ul li {
+    counter-increment: indent2;
+}
+div[data-section-style="6"] ul ul ul ul li {
+    counter-increment: indent3;
+}
+div[data-section-style="6"] ul ul ul ul ul li {
+    counter-increment: indent4;
+}
+div[data-section-style="6"] ul ul ul ul ul ul li {
+    counter-increment: indent5;
+}
+div[data-section-style="6"] ul li:before {
+    content: counter(indent0, decimal) ". ";
+}
+div[data-section-style="6"] ul ul li:before {
+    content: counter(indent1, lower-alpha) ". ";
+}
+div[data-section-style="6"] ul ul ul li:before {
+    content: counter(indent2, lower-roman) ". ";
+}
+div[data-section-style="6"] ul ul ul ul li:before {
+    content: counter(indent3, decimal) ". ";
+}
+div[data-section-style="6"] ul ul ul ul ul li:before {
+    content: counter(indent4, lower-alpha) ". ";
+}
+div[data-section-style="6"] ul ul ul ul ul ul li:before {
+    content: counter(indent5, lower-roman) ". ";
+}
+</style></head><body><h1 id='temp:C:XGL53fed56f9f7a44be8dfb06be8'>Amazon Macie Lab for Sensitive Data Discovery copy_updated</h1>
+
+<a href="https://www.wellarchitectedlabs.com/">AWS Well-Architected Labs</a><span style="color:#232f3e" textcolor="#232f3e"><span bgcolor="#f6f6f6" style="background-color:#f6f6f6"> &gt; </span></span><a href="https://www.wellarchitectedlabs.com/security/">Security</a><span style="color:#232f3e" textcolor="#232f3e"><span bgcolor="#f6f6f6" style="background-color:#f6f6f6"> &gt; </span></span><a href="https://www.wellarchitectedlabs.com/security/quests/">Quests</a><span style="color:#232f3e" textcolor="#232f3e"><span bgcolor="#f6f6f6" style="background-color:#f6f6f6"> &gt; Quest: Classify Data</span></span><br/>
+
+<br/>
+
+<b>Title</b>:  Identify, detect and notify relevant stakeholders for sensitive data in Amazon Simple Storage Service (S3) buckets using Amazon Macie<br/>
+
+<br/>
+
+Level 300<br/>
+
+<h2 id='temp:C:XGL3bcfda4ad1be41baac1f5d572'><b>Introduction</b></h2>
+
+<b><a href="https://aws.amazon.com/pm/serv-s3/?trk=fecf68c9-3874-4ae2-a7ed-72b6d19c8034&amp;sc_channel=ps&amp;s_kwcid=AL!4422!3!536452728638!e!!g!!amazon%20s3&amp;ef_id=Cj0KCQjwy5maBhDdARIsAMxrkw1tDCm9624mBWXfPLbEXmShJsOLYJBW3VjxI8NJ5bZKq70Vs3GT_wMaAhxiEALw_wcB:G:s&amp;s_kwcid=AL!4422!3!536452728638!e!!g!!amazon%20s3">Amazon S3</a></b><span style="color:#232f3e" textcolor="#232f3e"> is object storage service built to store and retrieve any amount of data from anywhere. It’s a simple storage service that offers durability, availability, performance, security, and virtually unlimited scalability at very low costs. </span><br/>
+
+<span style="color:#232f3e" textcolor="#232f3e"><br>Amazon S3 is also designed to be highly flexible. Store any type and amount of data that you want, read the same piece of data a million times or only for emergency disaster recovery, build a simple FTP application or a sophisticated web application such as the </span><a href="http://Amazon.com">Amazon.com</a><span style="color:#232f3e" textcolor="#232f3e"> retail web site. Amazon S3 frees developers to focus on innovation instead of figuring out how to store their data.</span><br/>
+
+<br/>
+
+<b><a href="http://aws.amazon.com/macie">Amazon Macie</a></b> is a managed data security and data privacy service that uses machine learning and pattern matching to discover and protect your sensitive data that is stored in Amazon S3. <br/>
+
+<br>This hands-on lab will guide you step by step,  to discover sensitive data in your S3 bucket, by creating sensitive data discovery job policies, executing discovery jobs based on custom data identifier, and review findings to act on security control activities. <br/>
+
+<br/>
+
+When Amazon Macie is enabled in your AWS account,  the service will start generating the list of all <b>S3 buckets</b> in the region where you enabled it. Macie will then perform periodic data discovery scans to monitor  the <a href="https://docs.aws.amazon.com/macie/latest/user/monitoring-s3-how-it-works.html">security configuration</a> of the S3 buckets.<br/>
+
+<br/>
+
+The skills you learn in this lab will help you to secure your workloads, that requires Sensitive data/PII data management .<br/>
+
+<br/>
+
+<h2 id='temp:C:XGL41662ef13708451f91120300e'><b>Solution Overview and Architecture<br></b></h2>
+
+This lab uses Serverless technologies and managed AWS services, including:<br/>
+
+<div class="" style="" data-section-style='5'><ul id='temp:C:XGL14804ee5e5a74618b5a464c2f'><li id='temp:C:XGL810e01596ab64a349943fee6c' class='' value='1'><a href="https://aws.amazon.com/macie/">Amazon Macie</a> – A fully managed data security and data privacy service that uses machine learning and pattern matching to discover and protect your sensitive data in <a href="https://aws.amazon.com/">Amazon Web Services (AWS)</a>.
+
+<br/></li><li id='temp:C:XGLaee2f8b6380d486fba0d09383' class=''><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Amazon S3 -</a> For  data storage and  scanning for sensitive data.
+
+<br/></li><li id='temp:C:XGLb8278288a58347f6810eacf5b' class=''><a href="https://aws.amazon.com/lambda">AWS Lambda</a> –  Code execution in response to events such as changes in data, changes in application state, or user actions. In this solution, a Lambda function is initiated by EventBridge.
+
+<br/></li><li id='temp:C:XGLe1a711f95a9e43f39ba97ab8a' class=''><a href="https://aws.amazon.com/eventbridge">AWS EventBridge</a> – A Serverless event bus that connects application data from your Application, SaaS, and AWS services. EventBridge can respond to specific events or run according to a schedule. The solution presented in this lab uses EventBridge to initiate a custom Lambda function in response to a specific event.
+
+<br/></li><li id='temp:C:XGL1a3f959743774281b915e5425' class=''><a href="https://aws.amazon.com/sqs/">Amazon Simple Queue Service (SQS)</a> is a fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and Serverless applications. 
+
+<br/></li><li id='temp:C:XGL91632d7889e642ccb6c0ffa3a' class=''><a href="https://aws.amazon.com/sns/">Amazon Simple Notification Service</a> to allow us to send email notification when an event occurs.
+
+<br/></li></ul></div><b>Solution Architecture:</b><br/>
+
+<div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/sekFCDRtW8WnKm0sOTvsjA' id='temp:C:XGLdcf4d5b107ea47ba93b9bb2f2' width='800' height='250' alt="Macie v3.jpg"></img></div><div data-section-style='6' class="" style=""><ul id='temp:C:XGL0a79532f6d0340c1b6bcab348'><li id='temp:C:XGLf9ad1ef0770744d1806a4f1db' class='' value='1'>User or application uploads an object to S3 bucket.
+
+<br/></li><li id='temp:C:XGLc619a4e8348f460a8b87c99c8' class=''>Event notification is enabled for S3 event type “<i>s3:ObjectCreated:“, </i>this sends a notification message to a predefined SQS queue destination whenever those events occur.
+
+<br/></li><li id='temp:C:XGL92225446409042d2ac939b31d' class=''>To avoid duplicate scanning of S3 objects, SQS purge is used since this won’t delete the an Amazon SQS queue instead delete all of the messages from it, purge the queue. The message deletion process takes up to 60 seconds. 
+
+<br/></li><li id='temp:C:XGL2cb0321b6f034f91b066b854a' class=''>SQS queue invokes an AWS Lambda function which initiates Macie data discovery scan
+
+<br/></li><li id='temp:C:XGL057061955dfa42978b9408770' class=''>AWS Lambda function calls Amazon Macie service and initiates Macie data discovery scan
+
+<br/></li><li id='temp:C:XGLfa03c298fbdc430f9cf2caf83' class=''>If any findings are identified via data discovery scan then they are sent to Security Hub for centralized findings aggregation location.
+
+<br/></li><li id='temp:C:XGLc2789ba131e9441bb02e41423' class=''>Amazon EventBridge, formerly Amazon CloudWatch Events, is a serverless event bus service. Macie publishes the findings as events to EventBridge which can be monitored and processed in near-real time. 
+
+<br/></li><li id='temp:C:XGLb10cb04513df44338bc2dba51' class=''>In Amazon EventBridge based on Amazon Macie findings, rules are created to monitor for findings which are rated as critical, high and medium.
+
+<br/></li><li id='temp:C:XGL20215ae44e3e412a862c1d05d' class=''>Amazon EventBridge rule will detect events that use the event schema and pattern for Macie findings, and sends those events to an AWS Lambda function for processing.
+
+<br/></li><li id='temp:C:XGL9250966839a74e4784f5adcf1' class=''>The Lambda function then perform tasks such as sending the findings detail to notification channels, in this lab we will send the notification to a SNS topic which will send the finding detail via email.
+
+<br/></li><li id='temp:C:XGL29573f7a420846b582eb93485' class=''>The notification is then sent to the SNS topic.
+
+<br/></li></ul></div>The AWS Lambda function might then process and send the data to your security incident and event management (SIEM) system.<br/>
+
+<h2 id='temp:C:XGL823ccc9d9db2482dbf695624d'><b>About the lab </b></h2>
+
+This lab is divided into three main categories: <br/>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL1ae42882328d45fc818ed4d4d'><li id='temp:C:XGL10a56bd035774562ad1319001' class='' value='1'>Enabling Amazon Macie and discovering sensitive data in a designated S3 bucket (can be achieved manually through console or using CloudFormation script available with this lab)
+
+<br/></li><li id='temp:C:XGLe71c2d512be14af99efc302f8' class=''>Analyzing Amazon Macie findings using Macie Console
+
+<br/></li><li id='temp:C:XGLf27668ff56fd4d678657bee99' class=''>Creating alerts for Macie findings using EventBridge and AWS SecurityHub (can be achieved manually through console or using CloudFormation script available with this lab)
+
+<br/></li></ul></div><h2 id='temp:C:XGL3acbdce8e7ab46d7a38c1a814'><b>Goals</b> </h2>
+
+Learn how to<br/>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL35c14dc8aad74e3597012ac71'><li id='temp:C:XGLc343048d12ec4377a90153116' class='' value='1'>Evaluate your Amazon S3 environment for sensitive data using on-demand and automated sensitive data discovery jobs.
+
+<br/></li><li id='temp:C:XGL10b91d6a9cdc4068a9aa53968' class=''>Perform data discovery scan using both managed and custom-defined sensitive data types.
+
+<br/></li><li id='temp:C:XGL94e5155956ca4d4db95efc484' class=''>Review actionable security and sensitive data discovery findings.
+
+<br/></li><li id='temp:C:XGLbd1d43e65acd4e288667b80d7' class=''>Integrate SNS to respond appropriately to the sensitive data discovery findings.
+
+<br/></li></ul></div><h2 id='temp:C:XGLe9ed9761ff7e4840ba52738b1'><b>Prerequisites</b> </h2>
+
+<div class="" style="" data-section-style='5'><ul id='temp:C:XGL86ff8b882e7c4e75b5bf5d09f'><li id='temp:C:XGL760fe4c29fdb4e96b993b09bc' class='' value='1'>An <a href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html">AWS account</a> that you are able to use for testing, that is not used for production or other purposes.
+
+<br/></li><li id='temp:C:XGLec4655d17bee43d88f385cfd4' class='parent'>An IAM user with MFA enabled and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Identity and Access Management (IAM) managed policies</a> that grant the necessary permissions to following AWS services, if you need exact details on the API actions then please refer to the cloudformation script.<br>
+
+<br/></li><ul><li id='temp:C:XGL0d60735e237941af8cdb26f46' class=''><a href="https://aws.amazon.com/macie/">Amazon Macie</a>
+
+<br/></li><li id='temp:C:XGL2b6114af85db4386b2c4c9dae' class=''><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Amazon S3</a>
+
+<br/></li><li id='temp:C:XGLdb9c6f9e332b4067b724d70ed' class=''><a href="https://aws.amazon.com/lambda">AWS Lambda</a>
+
+<br/></li><li id='temp:C:XGL8708e1b4c4a8456389ddaebd0' class=''><a href="https://aws.amazon.com/eventbridge">AWS EventBridge</a>
+
+<br/></li><li id='temp:C:XGL4714a6491de443eea5ebb04bf' class=''><a href="https://aws.amazon.com/sqs/">Amazon Simple Queue Service (SQS)</a>
+
+<br/></li><li id='temp:C:XGL6adaee5a70374d86970d41fe6' class=''><a href="https://aws.amazon.com/sns/">Amazon Simple Notification Service</a>
+
+<br/></li><li id='temp:C:XGL47ba24fa29ef4b19b496d068b' class=''><a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>
+
+<br/></li></ul><li id='temp:C:XGL1d8d5c2a51aa4d91ac8822b21' class=''><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">S3 buckets</a> to store data: A <i>scanning</i> bucket where objects are scanned for sensitive data.
+
+<br/></li><li id='temp:C:XGLc13df507fece4b47bb5a87ab5' class=''>NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the <a href="https://aws.amazon.com/free/">AWS Free Tier</a>.
+
+<br/></li></ul></div><br/>
+
+<h3 id='temp:C:XGL7bf9409c7a4b4b218fef94200'>Section 1. Enabling Amazon Macie and Discovering sensitive data in S3 bucket</h3>
+
+This can be achieved via two mechanisms.<br/>
+
+<br/>
+
+<b>Option 1: Use CloudFormation to implement the lab environments:</b><br/>
+
+<div class="" style="" data-section-style='5'><ul id='temp:C:XGLe99221b9c3084652af6a0a7c2'><li id='temp:C:XGL69026c1a08db46bda59525b57' class='' value='1'>Download and run the CloudFormation script for Macie enablement and automated data discovery scan using SQS queue and Lambda function. This script will also enable the services detailed in Step 3. 
+
+<br/></li><li id='temp:C:XGL5ce4b8672d1c40d3a548d8904' class='parent'><b>Note:</b> this script supports data discovery scan using managed data identifier.
+
+<br/></li><ul><li id='temp:C:XGLae5109f24f8643eeb709dfc07' class=''>Go to the <a href="https://quip-amazon.com/VPV2ATXzntt3/console.aws.amazon.com/cloudformation/home">CloudFormation service portal</a>, click <b>Create stack</b> button.
+
+<br/></li><li id='temp:C:XGLf788c30f586f41c7a689912e3' class=''>Select <b>Template is ready</b>, and <b>Upload a template file</b>, then select the CloudFormation script you’ve just downloaded, and click <b>Next</b>.
+
+<br/></li></ul></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/EGmSiNpNA4hzjauWRS0Dew' id='temp:C:XGL0c6316c3b42a468c926fae93d' alt="image.png"></img></div><br/>
+
+<div class="" style="" data-section-style='5'><ul id='temp:C:XGL1f80048db933455ba7e5af911'><ul><li id='temp:C:XGLfda4561988784f8692d945f30' class='' value='1'>Give the CloudFormation stack a name (e.g. <b>macie-wa-lab-stack</b>), and specify an email address that will receive the notification from SNS service. Then click <b>Next</b>.
+
+<br/></li></ul></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/LC36cPlDCJYsk2UxoYTtKw' id='temp:C:XGL65eeb1742beb4603bf6cb79cf' width='800' height='466' alt="image.png"></img></div><div class="" style="" data-section-style='5'><ul id='temp:C:XGLbcedf25e3ce543f1b6a0926c6'><ul><li id='temp:C:XGL2d2d8f3a22694ba79868ac1f7' class='' value='1'>In the <b>Configure stack options</b> page, leave all options as default and click <b>Next</b>.
+
+<br/></li><li id='temp:C:XGL13c7732c7ed04618b2a5f24ab' class=''>In the <b>Review</b> page, tick the box to acknowledge that AWS CloudFormation might create IAM resources. Leave all options as default and click <b>Create stack</b>. Then CloudFormation will automatically provision the lab environment.
+
+<br/></li></ul></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/C0zZdQplVYET_U2gyJ7C6A' id='temp:C:XGL722d010d29cb402b903a417b7' width='800' height='283' alt="image.png"></img></div><br/>
+
+<br/>
+
+<b>Option 2: Implement the lab environments manually</b><br/>
+
+<br/>
+
+If you prefer to do it manually, the following steps guide you through the configuration through the AWS console. <br><br/>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL2094d615eb524ad6a14bb0f21'><li id='temp:C:XGL5273e05f5e2944cb9b56fb9cc' class='' value='1'>Open the Amazon Macie console at <a href="https://console.aws.amazon.com/macie/">https://console.aws.amazon.com/macie/</a>.
+
+<br/></li><li id='temp:C:XGL89e7f0366bc84266ad50acfee' class=''>First select the AWS Region in which you want to enable Macie and click on <b>“Get started”</b>.
+
+<br/></li></ul></div><div data-section-style='6' class="" style=""><ul id='temp:C:XGL3d3e1b997f44455da1ee588ce'><ul><li id='temp:C:XGL25c5d3342208477fbf04704e0' class='' value='1'><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/8tKPF9ChzaO_7s1sYnRHgg' id='temp:C:XGL25c5d3342208477fbf04704e0' width='800' height='485' alt="image.png"></img></span></li></ul></ul></div><div data-section-style='6' style="--indent0: 3" class="list-numbering-restart-at"><ul id='temp:C:XGLced31bbb610b461c83de3a73f'><li id='temp:C:XGL1dc2fe347d9f43479680c06f0' class='' value='1'>Once Macie is enabled, Macie creates a service-linked role that grants Macie the permissions that it requires to call other AWS services on your behalf. The permissions policy for the role, is named <b>AmazonMacieServiceRolePolicy</b>, which allows Macie to perform tasks such as :
+
+<br/></li></ul></div><div data-section-style='6' class="" style=""><ul id='temp:C:XGLff1f20ec0ec347598e9c68324'><ul><li id='temp:C:XGLb20ca861a8084b29a5dc9bb92' class='' value='1'>Use Amazon S3 actions to retrieve information about S3 buckets and objects.
+
+<br/></li><li id='temp:C:XGL3c7d4e7e295f4357a0bc5c038' class=''>Use Amazon S3 actions to retrieve S3 objects.
+
+<br/></li><li id='temp:C:XGLa5a4f61e01974b0a98bddd859' class=''>Use AWS Organizations actions to retrieve information about associated accounts.
+
+<br/></li><li id='temp:C:XGL01c2e29ecc514f68b77337338' class=''>Use Amazon CloudWatch Logs actions to log events for sensitive data discovery jobs.
+
+<br/></li><li id='temp:C:XGLd261eb00b3684a3382b03eb4e' class=''>To learn more about this role, see Service-linked roles for Amazon Macie (p. 276) in <a href="https://docs.aws.amazon.com/macie/latest/user/macie-user-guide.pdf">Macie user guide</a>.
+
+<br/></li></ul></ul></div><br/>
+
+<div data-section-style='6' style="--indent0: 4" class="list-numbering-restart-at"><ul id='temp:C:XGL672e0cca1d084c7e9e9756ced'><li id='temp:C:XGL4c631f95447a44969dbd40220' class='parent' value='1'>Choose <b>“Enable”</b> Macie.
+
+<br/></li><ul><li id='temp:C:XGL35ba4db585cb4ed6b522db213' class=''><span data-section-style='11' style='max-width:72%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/Wp1Hbew0cQyPhN_VSZAsJQ' id='temp:C:XGL35ba4db585cb4ed6b522db213' width='583' height='525' alt="image.png"></img></span></li></ul></ul></div><br/>
+
+<div data-section-style='6' style="--indent0: 5" class="list-numbering-restart-at"><ul id='temp:C:XGL66b3f9c3d03d4a9697e100a2c'><li id='temp:C:XGLe8f92c480a164c3b9904dccbf' class='' value='1'>And then just click on <b>“Get started”</b> in the menu
+
+<br/></li></ul></div><br/>
+
+Once you’ve completed the Macie setup process manually, you can continue the following steps:<br/>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL4ec46cc01bdb46f49e7eb635f'><li id='temp:C:XGLe6796540cafa4937a819ccd57' class='parent' value='1'><b>Step 1:</b> Go to the <b><a href="https://console.aws.amazon.com/macie/home#jobs">Jobs</a></b> in navigation bar in the left-hand side, Analyze the S3 bucket first by clicking on the <b>Create job</b> and this provides you the option to select and review the S3 buckets contain objects that you want the job to analyze. These can be specific buckets that you select or buckets that match specific criteria. 
+
+<br/></li><ul><li id='temp:C:XGLf21dad04916e4ea48c78ae4cb' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/mk3MdSDhKwRwQMEoNmV7YQ' id='temp:C:XGLf21dad04916e4ea48c78ae4cb' width='800' height='332' alt="image.png"></img></span></li></ul></ul></div><div data-section-style='6' style="--indent0: 7" class="list-numbering-restart-at"><ul id='temp:C:XGLa6b5c6de4817478088ab09249'><li id='temp:C:XGLe0c8ef64ec2d447696f7a3128' class='parent' value='1'><b>Step 2: </b>In the <b>Review S3 buckets</b> page, select <b>Next</b>.
+
+<br/></li><ul><li id='temp:C:XGLd4e3b89ced0e4bad90f97bcd3' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/7PMJ9lZAhQCc8EaiddA0Sg' id='temp:C:XGLd4e3b89ced0e4bad90f97bcd3' width='800' height='408' alt="image.png"></img></span></li></ul></ul></div><br/>
+
+<div data-section-style='6' style="--indent0: 8" class="list-numbering-restart-at"><ul id='temp:C:XGL62e3b22bf39a443ca399b2abd'><li id='temp:C:XGLc1c2e5bb8f644789b74e99150' class='parent' value='1'><b>Step 3: </b>Select the S3 buckets which contain objects that you want the job to analyze. These can be specific buckets that you select or buckets that match specific criteria. For the Refine the scope step, choose One-time job, leave other options as default, and then choose Next. 
+
+<br/></li><ul><li id='temp:C:XGL35e3e0f6b123427591df7ad10' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/UtboFOdT-pkiPu5vs66J7Q' id='temp:C:XGL35e3e0f6b123427591df7ad10' width='800' height='398' alt="image.png"></img></span></li></ul></ul></div>With managed data identifiers, Amazon Macie uses a combination of criteria and techniques, including machine learning and pattern matching, to detect sensitive data. These criteria and techniques, collectively referred to as <i>managed data identifiers</i>, can detect a large and growing list of sensitive data types for many countries and regions, including multiple types of financial data, personal health information (PHI), and personally identifiable information (PII).<br/>
+
+<div data-section-style='6' style="--indent0: 9" class="list-numbering-restart-at"><ul id='temp:C:XGLfdc08ec47a2641a6936de94e2'><li id='temp:C:XGL21f6aa7e80c348c39f527c7d8' class='parent' value='1'><b>Step 4: </b>Choose All, and then skip the Select custom data identifiers step, choose <b>Next</b>. 
+
+<br/></li><ul><li id='temp:C:XGL2c67aa623c70436db9b2309a2' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/hSRq69DaMMxhYpLF_HkwZA' id='temp:C:XGL2c67aa623c70436db9b2309a2' width='800' height='394' alt="image.png"></img></span></li></ul></ul></div><div style="--indent0: 11" data-section-style='6' class="list-numbering-restart-at"><ul id='temp:C:XGL3ccaa323d6e04d8293f64b764'><li id='temp:C:XGL611f294a76024490b061754f1' class='parent' value='1'><b>Step 6:</b> Use the default settings, and click <b>Next</b>.
+
+<br/></li><ul><li id='temp:C:XGL4822f87910054d3b84f29ec82' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/UpOeEL95XM79jdGQsYbOEg' id='temp:C:XGL4822f87910054d3b84f29ec82' width='800' height='360' alt="image.png"></img></span></li></ul></ul></div><br/>
+
+<div data-section-style='6' style="--indent0: 12" class="list-numbering-restart-at"><ul id='temp:C:XGL8f3241a3c1144143b7f4bd17c'><li id='temp:C:XGLd04c9b66610a4a60b6c9a0773' class='parent' value='1'><b>Step 7:</b> Enter a name and, optionally, a description of the job. Then choose <b>Next</b>.
+
+<br/></li><ul><li id='temp:C:XGLbd95f886736b4f899ebc2a0a3' class=''>You may set the Job name as <b>my-macie-test-job</b>, with a description as “<b>My Macie test job to kick start the data scanning and corresponding protection.</b>” 
+
+<br/></li><li id='temp:C:XGLc30a1a89563d47f3b9333c5ed' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/_eH0UQ-n3jHdJ4wj_lRFpQ' id='temp:C:XGLc30a1a89563d47f3b9333c5ed' width='800' height='446' alt="image"></img></span></li></ul><li id='temp:C:XGLfca7ec3339354c76bd7c5eaeb' class='parent'>For the “Review and create” step, review the job's configuration settings and verify that they're correct. You can also review the total estimated cost (in US Dollars) of running the job. When you finish reviewing and verifying the job's settings, choose <b>Submit</b>.
+
+<br/></li><ul><li id='temp:C:XGLe3c9960b6b844e8ebe0d43f69' class=''><span data-section-style='11' style='max-width:89%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/LVCLUderWzIY84e53yVi4Q' id='temp:C:XGLe3c9960b6b844e8ebe0d43f69' width='718' height='689' alt="image.png"></img></span></li></ul><li id='temp:C:XGL47dacad932e84eef9ca5a7de8' class='parent'> Now you have created a data discovery scans for based on default managed data identifiers option in the Macie.
+
+<br/></li><ul><li id='temp:C:XGLf8d8e43ec44b4fc9a2abd8c25' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/Q6qxWGB3gIa7PIaVvLU5TA' id='temp:C:XGLf8d8e43ec44b4fc9a2abd8c25' width='800' height='411' alt="image.png"></img></span></li></ul></ul></div><br/>
+
+<br/>
+
+<h3 id='temp:C:XGLea2328a36494416fba3ac483d'>Section 2: Analyze Amazon Macie findings using Amazon Macie Console</h3>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL9ea6185a407e42488897a4b1b'><li id='temp:C:XGL437e031d4d8e4fc3bdf9ef548' class='' value='1'>Amazon Macie generates findings when it discovers potential policy violations, issues with the security or privacy of your Amazon Simple Storage Service (Amazon S3) buckets, or sensitive data in S3 objects. A finding is a detailed report of an issue or sensitive data discovered by Macie. Each discovery contains a severity rating, details about the affected resource, and additional information.
+
+<br/></li><li id='temp:C:XGL0b59191dc4f14ecfbed415a2e' class=''>The <i>Findings</i> pages on the Amazon Macie console list your discoveries and provide specific information for each. In addition, these pages provide options for grouping, filtering, and sorting findings as well as creating and managing <a href="https://docs.aws.amazon.com/macie/latest/user/findings-suppression.html">suppression rules</a>. Suppression rules can facilitate the streamlining of data analysis.
+
+<br/></li><li id='temp:C:XGL39b7c7f181f846609fe66453d' class='parent'><span style="color:#16191f" textcolor="#16191f">In the navigation pane, choose </span><b><span style="color:#16191f" textcolor="#16191f">Findings</span></b><span style="color:#16191f" textcolor="#16191f">. The </span><b><span style="color:#16191f" textcolor="#16191f">Findings</span></b><span style="color:#16191f" textcolor="#16191f"> page displays findings that Macie created or updated for your account in the current AWS Region during the past 90 days. By default, this doesn't include findings that were suppressed by a </span><a href="https://docs.aws.amazon.com/macie/latest/user/findings-suppression.html"><span style="color:#16191f" textcolor="#16191f">suppression rule</span></a><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><ul><li id='temp:C:XGL802a92185dc84785ab0c7618f' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/w9pECODZVc0mNbSurTWGPA' id='temp:C:XGL802a92185dc84785ab0c7618f' width='800' height='459' alt="image(1).png"></img></span></li><li id='temp:C:XGL2627d5da7a8f452f9812d896e' class=''><span style="color:#16191f" textcolor="#16191f">To display findings that were suppressed by a suppression rule, choose </span><b><span style="color:#16191f" textcolor="#16191f">Current</span></b><span style="color:#16191f" textcolor="#16191f"> in the filter bar. Then choose </span><b><span style="color:#16191f" textcolor="#16191f">Archived</span></b><span style="color:#16191f" textcolor="#16191f"> to display only suppressed findings, or choose </span><b><span style="color:#16191f" textcolor="#16191f">All</span></b><span style="color:#16191f" textcolor="#16191f"> to display both current and suppressed findings.</span>
+
+<br/></li><li id='temp:C:XGL401006c4dcdb4b6dba26086a1' class=''>Place your cursor in the filter bar and add a filter condition for the attribute to display only those findings that have the specified attribute. Add conditions for additional attributes to further refine the results. Refer to <a href="https://docs.aws.amazon.com/macie/latest/user/findings-filter-procedure.html">Creating and applying filters to findings</a> for information on filter conditions.
+
+<br/></li><li id='temp:C:XGLec475628a3f84c88a538fafed' class=''><span style="color:#16191f" textcolor="#16191f">To remove a filter condition, choose the remove condition icon (  ) in the filter box.</span>
+
+<br/></li><li id='temp:C:XGL30d4df47b66b449699d1bf2db' class=''><span style="color:#16191f" textcolor="#16191f">To save your filter settings, choose </span><b><span style="color:#16191f" textcolor="#16191f">Save rule</span></b><span style="color:#16191f" textcolor="#16191f"> in the filter bar. Then enter a name and, optionally, a description for the settings. When you finish, choose </span><b><span style="color:#16191f" textcolor="#16191f">Save</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li></ul></ul></div><br/>
+
+<h4 id='temp:C:XGLc955dfdca6c14c778fbfad0af'><b><span style="color:#16191f" textcolor="#16191f">Analyzing Macie findings using AWS Security Hub</span><br></b></h4>
+
+<span style="color:#16191f" textcolor="#16191f">For additional, broader analysis of your organization's security posture, you can also review and analyze Macie findings by using AWS Security Hub. To use Macie integration with Security Hub, you must enable Security Hub in your AWS account.<br></span><br/>
+
+<br/>
+
+Please follow these steps:<br/>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL5955970dbbbb4d318883c8704'><li id='temp:C:XGL13937386456140ceb038ca18f' class='' value='1'><span style="color:#16191f" textcolor="#16191f">In the navigation pane in Macie console, choose </span><b><span style="color:#16191f" textcolor="#16191f">Settings</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL3618efed2c10411fa52239d4e' class='parent'><span style="color:#16191f" textcolor="#16191f">In the </span><b><span style="color:#16191f" textcolor="#16191f">Publication of findings</span></b><span style="color:#16191f" textcolor="#16191f"> section, under </span><b><span style="color:#16191f" textcolor="#16191f">Destinations</span></b><span style="color:#16191f" textcolor="#16191f">, choose from the following options:</span>
+
+<br/></li><ul><li id='temp:C:XGL8905f7b36bee4a968c38d661f' class=''><b><span style="color:#16191f" textcolor="#16191f">Publish policy findings to</span></b><span style="color:#16191f" textcolor="#16191f"> – Select the </span><b><span style="color:#16191f" textcolor="#16191f">Security Hub</span></b><span style="color:#16191f" textcolor="#16191f"> check box to automatically publish new and updated policy findings to Security Hub. To stop publishing new and updated policy findings to Security Hub, clear this check box.</span>
+
+<br/></li><li id='temp:C:XGLafd096ebfed8477a8f4e20295' class=''><b><span style="color:#16191f" textcolor="#16191f">Publish sensitive data findings to</span></b><span style="color:#16191f" textcolor="#16191f"> – Select the </span><b><span style="color:#16191f" textcolor="#16191f">Security Hub</span></b><span style="color:#16191f" textcolor="#16191f"> check box to automatically publish sensitive data findings to Security Hub. To stop publishing sensitive data findings to Security Hub, clear this check box and c</span><span style="color:#16191f" textcolor="#16191f">hoose </span><b><span style="color:#16191f" textcolor="#16191f">Save</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL1680addc89d844998212b67e5' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/AHrD5gf5ekS6KNTZIT67jw' id='temp:C:XGL1680addc89d844998212b67e5' width='800' height='323' alt="image.png"></img></span></li></ul><li id='temp:C:XGLea2803820a324c36b1e3f5dea' class=''>Findings can be seen at SecurityHub console as well, <a href="https://us-east-2.console.aws.amazon.com/securityhub">https://us-east-2.console.aws.amazon.com/securityhub</a>
+
+<br/></li></ul></div><br/>
+
+<h3 id='temp:C:XGLa064ef713256479b885629905'>Section 3:  Alerting on Macie findings with EventBridge and Simple Notification Service (SNS)</h3>
+
+Using Amazon EventBridge and an Amazon Simple Notification Service (Amazon SNS) topic, you can configure email alerts for Macie findings. The steps below demonstrates how to configure EventBridge, with SNS to receive Macie notifications. When your event occurs, Amazon SNS notifies the email address or addresses subscribed to the topic based on the EventBridge Macie findings rule. The generated message may be difficult to read due to its formatting. However, you can optionally add an AWS Lambda function to generate a customized alert message with enhanced formatting prior to sending it to SNS subscribers.<br/>
+
+<br/>
+
+CloudFormation script provided in Step 1 includes an EventBridge rule, an SNS notification topic, and a Lambda function which collectively enable customized alerting on Macie findings.<br/>
+
+<br/>
+
+If you wish to enable the settings via manual process in the AWS console then please follow the steps listed below,<br/>
+
+<h4 id='temp:C:XGL7e424f3f3874407c95e3dcaec'>Create a SNS topic and a subscription to the topic</h4>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGL358495273dca42e98a75fe459'><li id='temp:C:XGL8ba161c527c3416e984141d82' class='' value='1'>Sign in to the <a href="https://console.aws.amazon.com/sns/home">Amazon SNS console</a>
+
+<br/></li><li id='temp:C:XGLfe69cc03f911425cbc5f6b2e7' class=''>In the left navigation pane, choose <b>Topics </b>and on the <b>Topics</b> page, choose <b>Create topic</b>.
+
+<br/></li><li id='temp:C:XGL81c8c3127e2b44df832bed2fd' class=''>By default, the console creates a FIFO topic. Choose <b>Standard</b>, in the <b>Details</b> section, enter a <b>Name</b> for the topic, such as <code>MyTopic</code>.
+
+<br/></li><li id='temp:C:XGL6a482968edb4462ebed036c37' class=''>Scroll to the end of the form and choose <b>Create topic</b>. The console opens the new topic's <b>Details</b> page.
+
+<br/></li></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/Fo0SsRpoEJMEfMP10WHgSg' id='temp:C:XGLc0079dfc9c0941939a79702e6' width='800' height='777' alt="image.png"></img></div><br/>
+
+<div data-section-style='6' style="--indent0: 5" class="list-numbering-restart-at"><ul id='temp:C:XGL26dd80af745043a19da7b8ab2'><li id='temp:C:XGL4f3990901df8419aa4a3cd668' class='' value='1'>In the left navigation pane, choose <b>Subscriptions</b>. On the <b>Subscriptions</b> page, choose <b>Create subscription</b>.
+
+<br/></li><li id='temp:C:XGLf6adf29af9ee413fae8bd71da' class=''>On the <b>Create subscription</b> page, choose the <b>Topic ARN</b> field to see a list of the topics in your AWS account.
+
+<br/></li><li id='temp:C:XGL4d5d0ade3bd2453c923bf20f3' class=''>Choose the topic that you created in the previous step. For <b>Protocol</b>, choose <b>Email </b>and for <b>Endpoint</b>, enter an email address that can receive notifications.
+
+<br/></li><li id='temp:C:XGL49e8e079a1404ad7b713b6095' class=''>Choose <b>Create subscription</b>.
+
+<br/></li></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/TnCUmUSFX6Zoh2NHf7QfXw' id='temp:C:XGL87c6c9cf24ce4112bc5fa8b47' alt="image.png"></img></div><br/>
+
+<div data-section-style='6' style="--indent0: 9" class="list-numbering-restart-at"><ul id='temp:C:XGLf2306b2bc2874757a443d2a1b'><li id='temp:C:XGL075a062bf1bd4715bafefe834' class='' value='1'>Check your email inbox and choose <b>Confirm subscription</b> in the email from AWS Notifications. The sender ID is usually "<a href="mailto:no-reply@sns.amazonaws.com">no-reply@sns.amazonaws.com</a>".
+
+<br/></li></ul></div><h4 id='temp:C:XGL7545818186cf401bae2a480a4'>Creating EventBridge rules for Macie finding events</h4>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGLd834a8bb3a1a4ada8d642a292'><li id='temp:C:XGL9a3a75d3f1ed4b0481ec030f5' class='' value='1'><span style="color:#16191f" textcolor="#16191f">Open the Amazon EventBridge console at </span><a href="https://console.aws.amazon.com/events/"><span style="color:#16191f" textcolor="#16191f">https://console.aws.amazon.com/events/</span></a><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGLf2a0fe06dd85498599786dc20' class=''><span style="color:#16191f" textcolor="#16191f">In the navigation pane, under </span><b><span style="color:#16191f" textcolor="#16191f">Events</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><span style="color:#16191f" textcolor="#16191f"><b>Rules </b>and i</span><span style="color:#16191f" textcolor="#16191f">n the </span><b><span style="color:#16191f" textcolor="#16191f">Rules</span></b><span style="color:#16191f" textcolor="#16191f"> section, choose </span><b><span style="color:#16191f" textcolor="#16191f">Create rule</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li></ul></div><div data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/a-F3-DjPllTf8dCGDJM6eQ' id='temp:C:XGL359c517740eb42a68e2439a71' width='800' height='300' alt="image.png"></img></div><br/>
+
+<div data-section-style='6' style="--indent0: 3" class="list-numbering-restart-at"><ul id='temp:C:XGL49f61b5bce2745859d3e2e7bc'><li id='temp:C:XGL297ef55fd8f647a49f3047f07' class='' value='1'><span style="color:#16191f" textcolor="#16191f">On the </span><b><span style="color:#16191f" textcolor="#16191f">Define rule detail</span></b><span style="color:#16191f" textcolor="#16191f"> page, do the following:</span>
+
+<br/></li></ul></div><div data-section-style='6' class="" style=""><ul id='temp:C:XGL4730e0b0ee864a149196bf735'><ul><li id='temp:C:XGL5e2bc9b7290c4fadb68df4602' class='' value='1'><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Name</span></b><span style="color:#16191f" textcolor="#16191f">, enter a name for the rule (e.g. <b>wa-macie-lab-eb-rule</b>).</span>
+
+<br/></li><li id='temp:C:XGLde4b7f2b7aa34fc3b8dae3d7a' class=''><span style="color:#16191f" textcolor="#16191f">(Optional) For </span><b><span style="color:#16191f" textcolor="#16191f">Description</span></b><span style="color:#16191f" textcolor="#16191f">, enter a brief description of the rule.</span>
+
+<br/></li><li id='temp:C:XGL601baa7edc5749edb5b870fce' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Event bus</span></b><span style="color:#16191f" textcolor="#16191f">, ensure that </span><b><span style="color:#16191f" textcolor="#16191f">default</span></b><span style="color:#16191f" textcolor="#16191f"> is selected and </span><b><span style="color:#16191f" textcolor="#16191f">Enable the rule on the selected event bus</span></b><span style="color:#16191f" textcolor="#16191f"> is turned on.</span>
+
+<br/></li><li id='temp:C:XGL87a6bea8244d4a1ea55a0ad2b' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Rule type</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><b><span style="color:#16191f" textcolor="#16191f">Rule with an event pattern</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL77ae2604a7d346b2a540236a8' class=''><span style="color:#16191f" textcolor="#16191f">When you finish, choose </span><b><span style="color:#16191f" textcolor="#16191f">Next</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL58f3e16c9b114758a657ee16c' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/2R1SntJK1UJFQwU_j0LHfg' id='temp:C:XGL58f3e16c9b114758a657ee16c' width='800' height='441' alt="image.png"></img></span></li><li id='temp:C:XGL30293ee375d54025a2d37552d' class='parent'><span style="color:#16191f" textcolor="#16191f">On the </span><b><span style="color:#16191f" textcolor="#16191f">Build event pattern</span></b><span style="color:#16191f" textcolor="#16191f"> page, do the following:</span>
+
+<br/></li><ul><ul><li id='temp:C:XGL5549bc71c3df4dbbbc86de81d' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Event source</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><b><span style="color:#16191f" textcolor="#16191f">AWS events or EventBridge partner events</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL1520c96c25f5465c84be50140' class='parent'><span style="color:#16191f" textcolor="#16191f">Scroll down - For </span><b><span style="color:#16191f" textcolor="#16191f">Event pattern</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><b><span style="color:#16191f" textcolor="#16191f">Event pattern form</span></b><span style="color:#16191f" textcolor="#16191f">. Then enter the following settings:</span>
+
+<br/></li><ul><li id='temp:C:XGL10539c711aea4e32a2b5f7868' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Event source</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><b><span style="color:#16191f" textcolor="#16191f">AWS services</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGLff145607eb884198aa0fe64ab' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">AWS service</span></b><span style="color:#16191f" textcolor="#16191f">, enter </span><b><span style="color:#16191f" textcolor="#16191f">Macie</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGLd38e73c6cb5941d0b52b36858' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Event type</span></b><span style="color:#16191f" textcolor="#16191f">, enter </span><b><span style="color:#16191f" textcolor="#16191f">Macie Finding</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL5ada8b4af11948f29478ed8be' class=''><span style="color:#16191f" textcolor="#16191f">When you finish, choose </span><b><span style="color:#16191f" textcolor="#16191f">Next</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL40ae7d969aa34831ba5621526' class=''><span data-section-style='11' style='max-width:100%' class='tall'><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/yPWJXX4owdzJtpcxg9i7ZA' id='temp:C:XGL40ae7d969aa34831ba5621526' width='800' height='942' alt="image.png"></img></span></li></ul><li id='temp:C:XGL6de3608fd9a748e59744ab076' class='parent'><span style="color:#16191f" textcolor="#16191f">On the </span><b><span style="color:#16191f" textcolor="#16191f">Select targets</span></b><span style="color:#16191f" textcolor="#16191f"> page, do the following:</span>
+
+<br/></li><ul><li id='temp:C:XGLf12865b913b54b65ba29f24c2' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Target types</span></b><span style="color:#16191f" textcolor="#16191f">, choose </span><b><span style="color:#16191f" textcolor="#16191f">AWS service</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL9445a01fb43245b9acf42444d' class=''><span style="color:#16191f" textcolor="#16191f">For </span><b><span style="color:#16191f" textcolor="#16191f">Select a target</span></b><span style="color:#16191f" textcolor="#16191f">, enter </span><b><span style="color:#16191f" textcolor="#16191f">SNS Topic</span></b><span style="color:#16191f" textcolor="#16191f">. Then, for </span><b><span style="color:#16191f" textcolor="#16191f">Topic</span></b><span style="color:#16191f" textcolor="#16191f">, choose the </span><b><span style="color:#16191f" textcolor="#16191f">SNS Topic</span></b><span style="color:#16191f" textcolor="#16191f"> that you want to send finding events to.</span>
+
+<br/></li><li id='temp:C:XGL618fab7d0793456ab9d804305' class=''><span style="color:#16191f" textcolor="#16191f">When you finish, choose </span><b><span style="color:#16191f" textcolor="#16191f">Next</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL15e0dca251704a889407662b6' class=''><span data-section-style='11' style='max-width:100%' class=''><img src='https://quip-amazon.com/blob/XGL9AA8TiBc/cKl196mSQQaXrhKB9Wi7GA' id='temp:C:XGL15e0dca251704a889407662b6' width='800' height='433' alt="image.png"></img></span></li></ul><li id='temp:C:XGLecde8a81d0c345578f57a5d50' class=''><span style="color:#16191f" textcolor="#16191f">On the </span><b><span style="color:#16191f" textcolor="#16191f">Configure tags</span></b><span style="color:#16191f" textcolor="#16191f"> page, optionally enter one or more tags to assign to the rule. Then choose </span><b><span style="color:#16191f" textcolor="#16191f">Next</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGL404ca1443c5e49a78ff7b5e32' class='parent'><span style="color:#16191f" textcolor="#16191f">On the </span><b><span style="color:#16191f" textcolor="#16191f">Review and create</span></b><span style="color:#16191f" textcolor="#16191f"> page, review the rule’s settings and verify that they're correct. </span>
+
+<br/></li><ul><li id='temp:C:XGLf34dc698ac564e98abda009fb' class=''><span style="color:#16191f" textcolor="#16191f">To change a setting, choose </span><b><span style="color:#16191f" textcolor="#16191f">Edit</span></b><span style="color:#16191f" textcolor="#16191f"> in the section that contains the setting, and then enter the correct setting. You can also use the navigation tabs to go to the page that contains a setting.</span>
+
+<br/></li></ul><li id='temp:C:XGL5b4f61c50be54f36b8d6bb1ff' class=''><span style="color:#16191f" textcolor="#16191f">When you finish verifying the settings, choose </span><b><span style="color:#16191f" textcolor="#16191f">Create rule</span></b><span style="color:#16191f" textcolor="#16191f">.</span>
+
+<br/></li><li id='temp:C:XGLcbdb13bbd162453fb347415a0' class=''>After this when you run a Macie job and if there is a finding then you will receive a notification via email from <a href="mailto:no-reply@sns.amazonaws.com">no-reply@sns.amazonaws.com</a>.
+
+<br/></li></ul></ul></ul></ul></div><br/>
+
+<h4 id='temp:C:XGLb1db3f80dec343bdaf648c0ea'>Clean up</h4>
+
+<div data-section-style='6' class="" style=""><ul id='temp:C:XGLff73cb5ff80943b5af9bf47b7'><li id='temp:C:XGLd0783982ab7344ff9ac8a2bb5' class='parent' value='1'>Delete the CloudFormation stack.
+
+<br/></li><ul><li id='temp:C:XGL684f4552121a434f9b5a7838c' class=''>Go to <a href="https://quip-amazon.com/VPV2ATXzntt3/console.aws.amazon.com/cloudformation/home">CloudFormation</a> service page, and click on the <b>stacks</b> in the navigation pane
+
+<br/></li><li id='temp:C:XGLeea457243db545b29e9b61b21' class=''>Select the stack you’ve created for this lab, and click the <b>Delete</b> button.
+
+<br/></li></ul><li id='temp:C:XGLfa07ca95008441afb3146ebdd' class='parent'>Disable Macie (If Macie is manually enabled)
+
+<br/></li><ul><li id='temp:C:XGL0d36057ffa5f48d8a04227740' class=''>Please refer to documentation: <a href="https://docs.aws.amazon.com/macie/latest/user/macie-suspend-disable.html">Suspending or disabling Amazon Macie</a>
+
+<br/></li></ul><li id='temp:C:XGL0ebc9314e62d43409d1e42ab8' class='parent'>Manually remove the EventBrdige, SNS Topic 
+
+<br/></li><ul><li id='temp:C:XGL438e8914433c456f9ff948ffe' class='parent'>Please refer to documentations:
+
+<br/></li><ul><li id='temp:C:XGL0a7a4ef4b28d472591b0f6f75' class=''><a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-delete-rule.html">Disabling or deleting an Amazon EventBridge rule</a>
+
+<br/></li><li id='temp:C:XGLe340c447985b48be97719582b' class=''><a href="https://docs.aws.amazon.com/sns/latest/dg/sns-delete-subscription-topic.html">Deleting an Amazon SNS subscription and topic</a>
+
+<br/></li></ul></ul></ul></div><br/>
+
+<br/>
+
+<br/>
+
+</body></html>
