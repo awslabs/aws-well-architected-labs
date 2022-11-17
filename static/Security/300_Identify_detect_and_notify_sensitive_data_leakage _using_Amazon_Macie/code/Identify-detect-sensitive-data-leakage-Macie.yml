@@ -1,0 +1,343 @@
+Parameters:
+  pSNSEmailAddress:
+    Type: String
+    Description: "Enter the email address where Macie Findings will be sent to (Note: Will have to accept SNS subscription prior to creation of Macie Findings in order to receive them.)"
+    MinLength: 5
+
+Resources:
+  S3Queue: 
+    Type: 'AWS::SQS::Queue'
+    Properties: 
+      DelaySeconds: 0
+      VisibilityTimeout: 120
+
+  LoggingBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      AccessControl: LogDeliveryWrite
+
+  StartBucket:
+    DependsOn: 
+      - S3Queue
+      - EventQueuePolicy
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      AccessControl: Private
+      LoggingConfiguration:
+        DestinationBucketName: !Ref LoggingBucket
+        LogFilePrefix: testing-logs
+      BucketName: !Join
+        - "-"
+        - - "macie-test-bucket"
+          - !Select
+            - 2
+            - !Split
+              - "/"
+              - !Ref "AWS::StackId"
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: s3:ObjectCreated:*
+            Queue: !GetAtt S3Queue.Arn
+            
+            
+  EventQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    DependsOn:
+      - S3Queue
+    Properties:
+      PolicyDocument:
+        Id:  EventQueuePolicy
+        Version: '2012-10-17'
+        Statement:
+          - Sid: Send_Permission
+            Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+            Action:
+              - sqs:SendMessage
+            Resource: !GetAtt S3Queue.Arn
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Join
+                  - "-"
+                  - - "arn:aws:s3:::macie-test-bucket"
+                    - !Select
+                      - 2
+                      - !Split
+                        - "/"
+                        - !Ref "AWS::StackId"
+      Queues:
+        - !Ref S3Queue
+          
+  SQSLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: sqsLambdaLogs
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+      - PolicyName: sqsLambdaSQSPermissions
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+            - sqs:ChangeMessageVisibility
+            Resource: !GetAtt S3Queue.Arn
+      - PolicyName: macie2JobPermissions
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - macie2:CreateClassificationJob
+            Resource: "arn:aws:macie2:*:*:classification-job/*"
+            
+      
+  SQSLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      Handler: index.lambda_handler
+      Timeout: 120
+      Role: !GetAtt SQSLambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+          import logging
+          import traceback
+          import time
+          from urllib.parse import unquote_plus
+          
+          def lambda_handler(event, context):
+              print(f'Event: {json.dumps(event)}')
+              
+              receiptHandle=event['Records'][0]['receiptHandle']
+              bodyString=event['Records'][0]['body']
+              eventSource=event['Records'][0]['eventSource']
+              eventSourceARN=event['Records'][0]['eventSourceARN']
+              
+              if eventSource == 'aws:sqs':
+                  
+                  body=json.loads(bodyString)
+                  print(f'Body: {body}')
+                  
+                  try:
+                      bodyEventSource=body['Records'][0]['eventSource']
+                      bodyEventName=body['Records'][0]['eventName']
+                      bodyUserIdentity=body['Records'][0]['userIdentity']['principalId']
+                      
+                      bodyS3Bucket=body['Records'][0]['s3']['bucket']['name']
+                      bodyObjectKey=unquote_plus(body['Records'][0]['s3']['object']['key'])
+                      
+                      sourceAccountNumber=eventSourceARN.split(":")[4]
+                      
+                      macieName=bodyObjectKey+str(int(time.time()))
+                      
+                      client = boto3.client('macie2')
+                      response = client.create_classification_job(
+                          description='macie',
+                          initialRun=True,
+                          jobType='ONE_TIME',
+                          name=macieName,
+                          s3JobDefinition={
+                              'bucketDefinitions': [
+                                  {
+                                      'accountId': sourceAccountNumber,
+                                      'buckets': [ bodyS3Bucket ]
+                                  }
+                              ],
+                              'scoping': {
+                                  'includes': {
+                                      'and': [
+                                          {
+                                              'simpleScopeTerm': {
+                                                  'comparator': 'STARTS_WITH',
+                                                  'key': 'OBJECT_KEY',
+                                                  'values': [
+                                                      bodyObjectKey,
+                                                  ]
+                                              }
+                                          },
+                                      ]
+                                  }
+                              }
+                          }
+                      )
+                      
+                      # TODO implement
+                      return {
+                      'statusCode': 200,
+                      'body': json.dumps('Processed message from queue and created Macie job.')
+                      }
+                  except:
+                      return {
+                      'statusCode': 500,
+                      'body': json.dumps('Could not process from queue. May have been an S3 test event.')
+                      } 
+              else:
+                  return {
+                  'statusCode': 500,
+                  'body': json.dumps('Failure to get message from queue.')
+                  }
+
+
+  LambdaFunctionEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !GetAtt S3Queue.Arn
+      FunctionName: !GetAtt SQSLambda.Arn
+            
+            
+
+  MacieSession:
+    Type: AWS::Macie::Session
+    Properties:
+      FindingPublishingFrequency: FIFTEEN_MINUTES
+      Status: ENABLED
+      
+  MacieLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: snsLambdaLogs
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+      - PolicyName: macieLambdaSNSPermissions
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - sns:Publish
+            Resource: !Ref MacieSNSTopic
+  
+  EventLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      Handler: index.lambda_handler
+      Timeout: 120
+      Role: !GetAtt MacieLambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref MacieSNSTopic
+      Code:
+        ZipFile: |
+            import json
+            import boto3
+            import os
+            import logging
+            import traceback
+            
+            def lambda_handler(event, context):
+            
+              score=event['detail']['severity']['score']
+              
+              type=event['detail']['type']
+              
+              fileAndPath=event['detail']['resourcesAffected']['s3Object']['path']
+              
+              print(fileAndPath)
+              
+              snsMessage = f"Found event of type: {type} for file: {fileAndPath}"
+              client = boto3.client('sns')
+              response = client.publish (
+                TargetArn = os.environ.get('SNS_TOPIC_ARN'),
+                Message = json.dumps({'default': snsMessage}),
+                MessageStructure = 'json',
+                Subject = 'Macie Event Finding'
+              )
+              
+              # TODO implement
+              return {
+                'statusCode': 200,
+                'body': json.dumps('Macie SNS sent.')
+              }
+            
+  MacieEventsRule:
+    DependsOn: EventLambda
+    Type: 'AWS::Events::Rule'
+    Properties:
+      Name: MacieEventsRule
+      Description: 'EventBridge Event Rule to enable Macie Findings in SNS '
+      State: ENABLED
+      EventPattern:
+        source: 
+          - "aws.macie"
+        detail-type: 
+          - "Macie Finding"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt 
+            - EventLambda
+            - Arn
+          Id: MacieEventsRule
+          
+  LambdaInvokePermission:
+    DependsOn:
+      - EventLambda
+      - MacieEventsRule
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      FunctionName: !GetAtt 
+        - EventLambda
+        - Arn
+      SourceArn: !GetAtt 
+        - MacieEventsRule
+        - Arn
+          
+  MacieSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "Macie Event Finding"
+      Subscription:
+      - Endpoint: !Ref pSNSEmailAddress
+        Protocol: email
+        
+  EnableSecurityHub:
+    Type: 'AWS::SecurityHub::Hub'
