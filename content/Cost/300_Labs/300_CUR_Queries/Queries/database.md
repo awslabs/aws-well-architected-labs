@@ -295,18 +295,17 @@ SELECT
     WHEN line_item_usage_type LIKE '%CapacityUnit%' THEN 'DynamoDB Provisioned Capacity'
     WHEN line_item_usage_type LIKE '%HeavyUsage%' THEN 'DynamoDB Provisioned Capacity'
     WHEN line_item_usage_type LIKE '%RequestUnit%' THEN 'DynamoDB On-Demand Capacity'
-    ELSE 'DynamoDB Usage'
+    WHEN line_item_usage_type LIKE '%TimedStorage%' THEN 'DynamoDB Storage'
+    WHEN line_item_usage_type LIKE '%TimedBackup%' THEN 'DynamoDB Backups'
+    WHEN line_item_usage_type LIKE '%TimedPITR%' THEN 'DynamoDB Backups'
+    WHEN line_item_usage_type like '%DataTransfer%'THEN 'DynamoDB Data Transfer'
+    ELSE 'DynamoDB Other Usage'
   END AS case_line_item_usage_type,
   CASE
     WHEN line_item_line_item_type LIKE '%Fee' THEN 'DynamoDB Reserved Capacity'
     WHEN line_item_line_item_type = 'DiscountedUsage' THEN 'DynamoDB Reserved Capacity'
     ELSE 'DynamoDB Usage' 
-  END AS case_purchase_option,
-  CASE
-    WHEN product_product_family = 'Data Transfer' THEN 'DynamoDB Data Transfer'
-    WHEN product_product_family LIKE '%Storage' THEN 'DynamoDB Storage'
-    ELSE 'DynamoDB Usage' 
-  END AS case_product_product_family,   
+  END AS case_purchase_option, 
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
   SUM(CAST(line_item_blended_cost AS DECIMAL(16,8))) AS sum_line_item_blended_cost,
   SUM(CAST(reservation_unused_quantity AS DOUBLE)) AS sum_reservation_unused_quantity,
@@ -326,7 +325,6 @@ GROUP BY
   SPLIT_PART(line_item_resource_id, 'table/', 2),
   6, -- refers to case_line_item_usage_type
   7, -- refers to case_purchase_option
-  8, -- refers to case_product_product_family
   reservation_reservation_a_r_n
 ORDER BY 
   sum_line_item_blended_cost DESC;
