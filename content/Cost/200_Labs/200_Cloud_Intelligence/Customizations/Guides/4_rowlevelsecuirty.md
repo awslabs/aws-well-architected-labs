@@ -13,13 +13,13 @@ November 2022
 
 CID allows everyone in your organization to understand your cost data by exploring interactive dashboards that you manage. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Payers.
 
-## PrerRequisite
+## Prerequisite
 
 For this solution you must have the following:
 
 * Access to your AWS Organizations and ability to tag resources
-* An AWS Cost and Usage Reports (https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) (CUR) or if from the multiple payers these must be replicated into a bucket, more info here (https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/3_cur/#option-2-replicate-the-cur-bucket-to-your-cost-optimization-account-consolidate-multi-payer-curs)
-* A CID deployed over this CUR data, checkout the new single deployment method here (https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/)
+* An [AWS Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) (CUR) or if from the multiple payers these must be replicated into a bucket, more info [here](https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/3_cur/#option-2-replicate-the-cur-bucket-to-your-cost-optimization-account-consolidate-multi-payer-curs)
+* A CID deployed over this CUR data, checkout the new single deployment method [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/)
 * A list of users and what level of access they require. This can be member accounts, organizational units (OU) or payers. 
 
 
@@ -44,7 +44,7 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
-3. In the Parameters section set **CostAccountID** as the ID of Cloud ntelligence Dashboard
+3. In the Parameters section set **CostAccountID** as the ID of Cloud Intelligence Dashboard
 
 4. Scroll to the bottom and click **Next**
 
@@ -57,7 +57,7 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 ### Tag your AWS Organization Resources
 
-You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. 
+You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. We will be using **AWS Quicksight User Emails**, see more [here](https://docs.aws.amazon.com/quicksight/latest/user/managing-users.html)
 
 1. Log into your **Management account** then click on the top right hand corner on your account and select **Organization**
 2. Ensure you are on the **AWS accounts** tab
@@ -102,7 +102,7 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 
 ## Test Lambda Function
 
-Your lambda functions will run automatically on the schedule you chose at deployment. However, if you would like to test your functions please see the steps below. 
+Your lambda functions will run automatically on the schedule you chose at deployment and will be ready within an hour. However, if you would like to test your functions please see the steps below. 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
 1. From CloudFormation Click **Resources** and find the Lambda Function and click the Physical ID
@@ -127,11 +127,14 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 3. Create new Dataset by clicking **S3**
 4. Set Data source name as **CID RLS** and Paste the S3 URL you copied earlier into the Upload box
 5. Click on your new dataset and select the **Refresh** tab and click **ADD NEW SCHEDULE**
-6. Choose Daily and click **SAVE**
+6. Choose Hourly and click **SAVE**
 7. Go back to Datasets and select your CID data **summary_view**
 8. On the Summary tab find Row-level security and click **Edit**
 9. Click the toggle **User-based ON** then expand the **User-based rules** section and select the **CID RLS** dataset we made earlier
 10. Scroll down and click **Apply dataset**
+11. Refresh the summary_view datasets 
+12. Repeat for all other CID Datasets
+
 
 {{% notice tip %}}
 If you would like to turn off RLS you can just toggle the **User-based ON** to **OFF**
