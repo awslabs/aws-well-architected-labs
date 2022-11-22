@@ -74,7 +74,7 @@ def get_payer():
     except org.exceptions.AccessDeniedException:
         logger.info('Cannot read organizations. Please enter payer_id (12 digits)')
         payer_id = input('payer_id>')
-        assert re.match(r'^\d{2}$', payer_id), 'Wrong user input. Payer id must be 12 digits'
+        assert re.match(r'^\d{12}$', payer_id), 'Wrong user input. Payer id must be 12 digits'
     except org.exceptions.AWSOrganizationsNotInUseException:
         sts = boto3.client('sts')
         payer_id = sts.get_caller_identity()['Account']
