@@ -18,7 +18,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: rds_metrics
+    Default: rds-usage
   DAYS:
     Type: Number
     Description: Number of days going back that you want to get data for
@@ -29,6 +29,9 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   AthenaSavedQuery:
     Description: This saved query will provide you a summary of your lambda data
@@ -160,15 +163,16 @@ Resources:
           import logging
 
           #Environment Variables
-          DEST_BUCKET = os.environ['S3_BUCKET']
-          DEST_PREFIX = os.environ['DEST_PREFIX']
+          bucket = os.environ['S3_BUCKET']
+          prefix = os.environ['PREFIX']
+          crawler = os.environ["CRAWLER_NAME"]
 
           functions = {'rds':
                           {'regional' : 1,
                           'api' : 'rds',
                           'functions' : [
                               {'name' : 'get_rds_stats',
-                              'output_path' : 'rds_stats',
+                              'output_path' : 'rds-usage-data',
                               'output_file_name' : 'rds_stats.json' }
                           ]
                           }
@@ -201,7 +205,6 @@ Resources:
           month = tod.strftime('%m')
           future = now# + timedelta(minutes=10)
           period = 3600
-          s3client = boto3.client('s3')
 
           def format_rds(rds):
 
@@ -249,29 +252,25 @@ Resources:
 
               return rds_inventory
 
-          def upload_file_to_s3(s3client, bucket_name, src, dest):
-              transfer = S3Transfer(s3client)
-              print("Uploading file %s to %s/%s" %(src, bucket_name, dest))
-              transfer.upload_file(src, bucket_name, dest, extra_args={'ACL': 'bucket-owner-full-control'})
+  
+          def store_data_to_s3(data, region, service, path, resource_type, resource_value, filename, accountID, payer_id):
+              local_file = f"/tmp/{region}-{filename}"
+              with open(local_file, 'w') as f:
+                  json.dump(data, f, default=str)
+                  f.write('\n')
+              if os.path.getsize(local_file) == 0:
+                  print(f"No data in file for {path}")
+                  return
+              key = f"{prefix}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}"
+              s3client = boto3.client('s3')
+              print("Uploading file %s to %s/%s" %(local_file, bucket, key))
+              S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
 
-          def store_data_to_s3(data, s3client, region, service, path, resource_type, resource_value, filename, accountID, payer_id):
-              
-                filepath=f"/tmp/{region}-{filename}"
-                with open(filepath, 'w') as f:
-                    json.dump(data, f, default=str)
-                    f.write('\n')
-                #Check file size
-                fileSize = os.path.getsize(filepath)
-                if fileSize == 0:  
-                    print(f"No data in file for {DestinationPrefix}")
-                else:
-                    upload_file_to_s3(s3client, DEST_BUCKET, filepath,
-                                    f"{DEST_PREFIX}/{path}/payer_id={payer_id}/accountid={accountID}/region={region}/{resource_type}={resource_value}/year={year}/month={month}/{today}-{filename}")
           def start_crawler():
               glue_client = boto3.client('glue')
               try:
-                  glue_client.start_crawler(Name= os.environ["CRAWLER_NAME"])
+                  glue_client.start_crawler(Name=crawler)
                   print("crawler started")
               except Exception as e:
                   # Send some context about this error to Lambda Logs
@@ -290,7 +289,7 @@ Resources:
                       Dimensions=[{"Name": "DBInstanceIdentifier", "Value": rds["DBInstanceIdentifier"]}])
                       datapoints.update({metric:results['Datapoints']})
                   rds["Datapoints"] = datapoints
-                  store_data_to_s3(rds, s3client, region, service, path, 'rds_id', rds['DBInstanceIdentifier'], filename, accountID, payer_id)
+                  store_data_to_s3(rds, region, service, path, 'rds_id', rds['DBInstanceIdentifier'], filename, accountID, payer_id)
           
           def assume_role(account_id, service, region):
             role_name = os.environ['ROLENAME']
@@ -373,7 +372,7 @@ Resources:
           DAYS:
             !Ref DAYS
           CRAWLER_NAME: !Ref Crawler
-          DEST_PREFIX: !Ref CFDataName
+          PREFIX: !Ref CFDataName
           ROLENAME: !Ref MultiAccountRoleName
   Crawler:
     Type: AWS::Glue::Crawler
@@ -385,7 +384,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
       Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   AthenaQuery:
     Type: AWS::Athena::NamedQuery
@@ -393,8 +392,8 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: !Sub ${CFDataName}-summary-view
-      QueryString: !Sub
-        "SELECT dbinstanceidentifier, 'memory' as Metric, memory.timestamp, memory.maximum
+      QueryString: !Sub |
+        SELECT dbinstanceidentifier, 'memory' as Metric, memory.timestamp, memory.maximum
         FROM ${DatabaseName}.${CFDataName}
         cross join unnest(datapoints.FreeableMemory) as t(memory)
         union
@@ -420,7 +419,7 @@ Resources:
         union
         SELECT dbinstanceidentifier, 'FreeStorageSpace' as Metric, FreeStorageSpace.timestamp, FreeStorageSpace.maximum
         FROM ${DatabaseName}.${CFDataName}
-        cross join unnest(datapoints.FreeStorageSpace) as t(FreeStorageSpace)"
+        cross join unnest(datapoints.FreeStorageSpace) as t(FreeStorageSpace)
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -444,30 +443,34 @@ Resources:
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
       FunctionName: !GetAtt LambdaFunction.Arn
-
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName
   GravitonMappingTable:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: graviton_mapping
-      QueryString: !Sub
-        "CREATE EXTERNAL TABLE `rds_graviton_mapping`(
-        `dbtype` varchar(255), 
-        `databaseengine` varchar(255), 
-        `instancetype` varchar(255), 
-        `graviton_instancetype` varchar(255))
-      ROW FORMAT DELIMITED 
-        FIELDS TERMINATED BY ',' 
-      STORED AS INPUTFORMAT 
-        'org.apache.hadoop.mapred.TextInputFormat' 
-      OUTPUTFORMAT 
-        'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
-      LOCATION
-        's3://${DestinationBucket}/pricing/graviton'
-      TBLPROPERTIES (
-        'classification'='csv', 
-        'transient_lastDdlTime'='1666191659')"
+      QueryString: !Sub |
+        CREATE EXTERNAL TABLE `rds_graviton_mapping`(
+          `dbtype` varchar(255), 
+          `databaseengine` varchar(255), 
+          `instancetype` varchar(255), 
+          `graviton_instancetype` varchar(255))
+          ROW FORMAT DELIMITED 
+          FIELDS TERMINATED BY ',' 
+        STORED AS INPUTFORMAT 
+          'org.apache.hadoop.mapred.TextInputFormat' 
+        OUTPUTFORMAT 
+          'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        LOCATION
+          's3://${DestinationBucket}/pricing/graviton'
+        TBLPROPERTIES (
+          'classification'='csv', 
+          'transient_lastDdlTime'='1666191659')
 
   GravitonAthenaQuery:
     Type: AWS::Athena::NamedQuery
@@ -475,8 +478,8 @@ Resources:
       Database: !Ref DatabaseName
       Description: Provides a view of modernization opportunities for Graviton
       Name: !Sub ${CFDataName}-rds-graviton
-      QueryString: !Sub
-        "WITH 
+      QueryString: |
+        WITH 
         raw_data AS (
           SELECT dbinstanceidentifier,
             dbinstanceclass,
@@ -721,29 +724,4 @@ Resources:
                 graviton_mapping.deploymentoption = PL2.deploymentoption
               )
             )
-          )"
-
-  EventPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
-      Action: lambda:InvokeFunction
-      Principal: sqs.amazonaws.com
-      SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
-    Type: AWS::SQS::Queue
-    Properties: 
-      VisibilityTimeout: 300
-      ReceiveMessageWaitTimeSeconds: 20
-      DelaySeconds: 2
-      KmsMasterKeyId: "alias/aws/sqs"
-      QueueName: 'RDSUtilizationModule-TaskQueue'
-  EventSourceMapping:
-    DependsOn:
-      - EventPermission
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      EventSourceArn: !GetAtt TaskQueue.Arn
-      FunctionName: !GetAtt LambdaFunction.Arn
-
+          )

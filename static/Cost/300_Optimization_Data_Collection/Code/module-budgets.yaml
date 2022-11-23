@@ -26,6 +26,9 @@ Parameters:
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   AthenaSavedQuery:
     Description: This saved query will provide you a summary of your lambda data
@@ -114,6 +117,11 @@ Resources:
           from botocore.client import Config
           from botocore.exceptions import ClientError
 
+          bucket = os.environ["BUCKET_NAME"]
+          prefix = os.environ["PREFIX"]
+          crawler = os.environ["CRAWLER_NAME"]
+          role_name = os.environ['ROLENAME']
+
           # subclass JSONEncoder
           class DateTimeEncoder(JSONEncoder):
             # Override the default method
@@ -122,7 +130,6 @@ Resources:
                     return obj.isoformat()
 
           def assume_role(account_id, service):
-              role_name = os.environ['ROLENAME']
               role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
               sts_client = boto3.client('sts')
               
@@ -162,7 +169,7 @@ Resources:
                                   print(budget)
                                   budget.update({'Account_ID': account_id, 'Account_Name': account_name})
                                   if 'CostFilters' not in budget or len(budget['CostFilters']) == 0 or 'PlannedBudgetLimits' not in budget:
-                                    budget.update({'CostFilters': {'Filter': ['None']}})
+                                      budget.update({'CostFilters': {'Filter': ['None']}})
                                   dataJSONData = json.dumps(budget, cls=DateTimeEncoder)
                                   f.write(dataJSONData)
                                   f.write("\n")
@@ -172,37 +179,30 @@ Resources:
                   logging.warning(e)
 
           def s3_upload(account_id, payer_id):
-            fileSize = os.path.getsize("/tmp/data.json")
-            if fileSize == 0:  
-                print(f"No data in file for {DestinationPrefix}")
-            else:
-                d = datetime.datetime.now()
-                month = d.strftime("%m")
-                year = d.strftime("%Y")
-                dt_string = d.strftime("%d%m%Y-%H%M%S")
-                today = datetime.date.today()
-                year = today.year
-                month = today.month
-                try:
-                    S3BucketName = os.environ["BUCKET_NAME"]
-                    DestinationPrefix = os.environ["DEST_PREFIX"]
-                    s3 = boto3.client('s3', 
-                                        config=Config(s3={'addressing_style': 'path'}))
-                    s3.upload_file(f'/tmp/data.json', S3BucketName, f"{DestinationPrefix}/payer_id={payer_id}/year={year}/month={month}/budgets-{account_id}.json")
-                    print(f"Budget data in s3 {S3BucketName}")
-                except Exception as e:
-                    # Send some context about this error to Lambda Logs
-                    logging.warning("%s" % e)
+              if os.path.getsize("/tmp/data.json") == 0:
+                  print(f"No data in file for {prefix}")
+                  return
+              d = datetime.datetime.now()
+              month = d.strftime("%m")
+              year = d.strftime("%Y")
+              dt_string = d.strftime("%d%m%Y-%H%M%S")
+              today = datetime.date.today()
+              year = today.year
+              month = today.month
+              try:
+                  s3 = boto3.client('s3', config=Config(s3={'addressing_style': 'path'}))
+                  s3.upload_file(f'/tmp/data.json', bucket, f"{prefix}/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/budgets-{account_id}.json")
+                  print(f"Budget data in s3 {bucket}")
+              except Exception as e:
+                  logging.warning("%s" % e)
 
           def start_crawler():
-            glue_client = boto3.client("glue")
-            Crawler_Name = os.environ["CRAWLER_NAME"]
-            try:
-                glue_client.start_crawler(Name=Crawler_Name)
-                print(f"{Crawler_Name} has been started")
-            except Exception as e:
-                # Send some context about this error to Lambda Logs
-                logging.warning("%s" % e)
+              glue_client = boto3.client("glue")
+              try:
+                  glue_client.start_crawler(Name=crawler)
+                  print(f"{crawler} has been started")
+              except Exception as e:
+                  logging.warning("%s" % e)
 
       Handler: 'index.lambda_handler'
       MemorySize: 2688
@@ -217,7 +217,7 @@ Resources:
             !Ref DestinationBucket
           ACCOUNT_ID: AWS::AccountId
           CRAWLER_NAME: !Ref Crawler
-          DEST_PREFIX: !Ref CFDataName
+          PREFIX: !Ref CFDataName
           ROLENAME: !Ref MultiAccountRoleName
   Crawler:
     Type: AWS::Glue::Crawler
@@ -229,30 +229,30 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   AthenaQuery:
-      Type: AWS::Athena::NamedQuery
-      Properties:
-        Database: optimization_data
-        Description: Provides a summary view of the budgets
-        Name: aws_budgets
-        QueryString:
-            CREATE OR REPLACE VIEW aws_budgets_view AS 
-            SELECT
-              budgetname budget_name
-            , CAST(budgetlimit.amount AS decimal) budget_amount
-            , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
-            , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
-            , timeunit
-            , budgettype budget_type
-            , account_id
-            ,timeperiod.start start_date, 
-            ,timeperiod."end"  end_date, 
-            , year budget_year
-            , month budget_month
-            FROM
-              "optimization_data"."budgets"
-            WHERE (budgettype = 'COST')  AND costfilters.filter[1] = 'None'
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: optimization_data
+      Description: Provides a summary view of the budgets
+      Name: budgets_view
+      QueryString:
+        CREATE OR REPLACE VIEW budgets_view AS
+        SELECT
+          budgetname budget_name
+        , CAST(budgetlimit.amount AS decimal) budget_amount
+        , CAST(calculatedspend.actualspend.amount AS decimal) actualspend
+        , CAST(calculatedspend.forecastedspend.amount AS decimal) forecastedspend
+        , timeunit
+        , budgettype budget_type
+        , account_id
+        , timeperiod.start start_date
+        , timeperiod."end"  end_date
+        , year budget_year
+        , month budget_month
+        FROM
+          optimization_data.budgets_data
+        WHERE (budgettype = 'COST')  AND costfilters.filter[1] = 'None'
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -261,9 +261,9 @@ Resources:
       Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
+  TaskQueue:
     Type: AWS::SQS::Queue
-    Properties: 
+    Properties:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
@@ -276,3 +276,8 @@ Resources:
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
       FunctionName: !GetAtt LambdaFunction.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

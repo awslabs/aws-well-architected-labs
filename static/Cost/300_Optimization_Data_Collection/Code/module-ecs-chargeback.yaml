@@ -16,7 +16,7 @@ Parameters:
   CURTable:
     Type: String
     Description: The name of your Cost and Usage Report table in Athena
-    Default: managementcur
+    Default: cid_cur.cur
   GlueRoleArn:
     Type: String
     Description: ARN of the IAM role deployed to use for glue.
@@ -24,35 +24,19 @@ Parameters:
     Type: String
     Description: S3 Bucket that exists and holds code
     Default: aws-well-architected-labs
-    AllowedValues:
-      - aws-well-architected-labs-ireland
-      - aws-well-architected-labs
-      - aws-well-architected-labs-ohio
-      - aws-well-architected-labs-virginia
-      - aws-well-architected-labs-california
-      - aws-well-architected-labs-oregon
-      - aws-well-architected-labs-singapore
-      - aws-well-architected-labs-frankfurt
-      - aws-well-architected-labs-london
-      - aws-well-architected-labs-stockholm
-      - aws-well-architected-labs-ap-sydney
-      - aws-well-architected-labs-mumbai
-      - aws-well-architected-labs-osaka
-      - aws-well-architected-labs-seoul
-      - aws-well-architected-labs-tokyo
-      - aws-well-architected-labs-canada
-      - aws-well-architected-labs-milan
-      - aws-well-architected-labs-paris
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/ecs_dev.zip
+    Default: Cost/Labs/300_Optimization_Data_Collection/ecs.zip
   MultiAccountRoleName:
     Type: String
     Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -165,7 +149,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -174,9 +158,9 @@ Resources:
       Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
+  TaskQueue:
     Type: AWS::SQS::Queue
-    Properties: 
+    Properties:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
@@ -194,24 +178,25 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: cluster_metadata_view
-      QueryString:
-        "CREATE OR REPLACE VIEW cluster_metadata_view AS 
+      Name: ecs_chargeback_cluster_metadata_view
+      QueryString: |
+          CREATE OR REPLACE VIEW ecs_chargeback_cluster_metadata_view AS 
           SELECT
             *
-          , \"tag\".\"value\"
+          , "tag"."value"
           FROM
-            (ecs_services_clusters_data
-          CROSS JOIN UNNEST(\"tags\") t (tag))
-          WHERE (\"tag\".\"key\" = 'BU')"
+            ( ecs_chargeback_ecs_services_clusters_data
+              CROSS JOIN UNNEST("tags") t (tag)
+            )
+          WHERE ("tag"."key" = 'BU')
   AthenaEc2ClusterCostsView:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: ec2_cluster_costs_view
-      QueryString: !Sub
-        "CREATE OR REPLACE VIEW ec2_cluster_costs_view AS 
+      Name: ecs_chargeback_ec2_cluster_costs
+      QueryString: !Sub |
+        CREATE OR REPLACE VIEW ecs_chargeback_ec2_cluster_costs AS
         SELECT
           line_item_product_code
         , line_item_usage_account_id
@@ -226,88 +211,92 @@ Resources:
           ${CURTable}
         WHERE (((product_product_name = 'Amazon Elastic Compute Cloud') AND ((resource_tags_user_name LIKE '%ECS%') OR (resource_tags_user_name LIKE '%ecs%'))) AND (((line_item_usage_type LIKE '%BoxUsage%') OR (line_item_usage_type LIKE '%Spot%')) OR (line_item_usage_type LIKE '%%EBS%%Volume%%')))
         GROUP BY resource_tags_user_name, line_item_product_code, line_item_usage_account_id, line_item_resource_id, line_item_usage_type, month, year
-        "
   AthenaBUUsageView:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: bu_usage_view
-      QueryString: !Sub
-        "CREATE OR REPLACE VIEW bu_usage_view AS 
+      Name: ecs_chargeback_bu_usage
+      QueryString: !Sub |
+        CREATE OR REPLACE VIEW ecs_chargeback_bu_usage AS 
         SELECT
-          \"bill_payer_account_id\"
-        , \"line_item_product_code\"
-        , \"line_item_usage_account_id\"
-        , \"line_item_resource_id\"
-        , \"task\"
-        , \"resource_tags_aws_ecs_service_Name\"
-        , \"line_item_usage_type\"
-        , \"line_item_operation\"
-        , \"sum\"(CAST(\"sum_line_item_usage_amount\" AS double)) \"sum_line_item_usage_amount\"
-        , \"cur\".\"month\"
-        , \"cur\".\"year\"
-        , \"cluster\"
-        , \"services\"
-        , \"servicearn\"
-        , \"account_id\"
-        , \"value\"
+          "bill_payer_account_id"
+        , "line_item_product_code"
+        , "line_item_usage_account_id"
+        , "line_item_resource_id"
+        , "task"
+        , "resource_tags_aws_ecs_service_Name"
+        , "line_item_usage_type"
+        , "line_item_operation"
+        , "sum"(CAST("sum_line_item_usage_amount" AS double)) "sum_line_item_usage_amount"
+        , "cur"."month"
+        , "cur"."year"
+        , "cluster"
+        , "services"
+        , "servicearn"
+        , "account_id"
+        , "value"
         FROM
           ((
           SELECT
-            \"bill_payer_account_id\"
-          , \"line_item_product_code\"
-          , \"line_item_usage_account_id\"
-          , \"line_item_resource_id\"
-          , \"split\"(\"line_item_resource_id\", '/')[2] \"task\"
-          , \"resource_tags_aws_ecs_service_Name\"
-          , \"line_item_usage_type\"
-          , \"line_item_operation\"
-          , \"sum\"(CAST(\"line_item_usage_amount\" AS double)) \"sum_line_item_usage_amount\"
-          , \"month\"
-          , \"year\"
+            "bill_payer_account_id"
+          , "line_item_product_code"
+          , "line_item_usage_account_id"
+          , "line_item_resource_id"
+          , "split"("line_item_resource_id", '/')[2] "task"
+          , "resource_tags_aws_ecs_service_Name"
+          , "line_item_usage_type"
+          , "line_item_operation"
+          , "sum"(CAST("line_item_usage_amount" AS double)) "sum_line_item_usage_amount"
+          , "month"
+          , "year"
           FROM
             ${CURTable}
-          WHERE (((\"line_item_operation\" = 'ECSTask-EC2') AND (\"line_item_product_code\" IN ('AmazonECS'))) AND (\"line_item_usage_type\" LIKE '%GB%'))
-          GROUP BY \"bill_payer_account_id\", \"line_item_usage_account_id\", \"line_item_product_code\", \"line_item_operation\", \"line_item_resource_id\", \"resource_tags_aws_ecs_service_Name\", \"line_item_usage_type\", \"line_item_operation\", \"month\", \"year\"
+          WHERE ((("line_item_operation" = 'ECSTask-EC2') AND ("line_item_product_code" IN ('AmazonECS'))) AND ("line_item_usage_type" LIKE '%GB%'))
+          GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "month", "year"
         )  cur
         LEFT JOIN (
           SELECT
-            \"cluster\"
-          , \"services\"
-          , \"servicearn\"
-          , \"value\"
-          , \"year\"
-          , \"month\"
-          , \"account_id\"
+            "cluster"
+          , "services"
+          , "servicearn"
+          , "value"
+          , "year"
+          , "month"
+          , "account_id"
           FROM
-            cluster_metadata_view
-        )  clusters_data ON (((\"clusters_data\".\"account_id\" = \"cur\".\"line_item_usage_account_id\") AND ((\"clusters_data\".\"services\" = \"cur\".\"resource_tags_aws_ecs_service_name\") AND (\"clusters_data\".\"year\" = \"cur\".\"year\"))) AND (\"clusters_data\".\"month\" = \"cur\".\"month\")))
-        GROUP BY \"bill_payer_account_id\", \"line_item_usage_account_id\", \"line_item_product_code\", \"line_item_operation\", \"line_item_resource_id\", \"resource_tags_aws_ecs_service_Name\", \"line_item_usage_type\", \"line_item_operation\", \"cur\".\"month\", \"cur\".\"year\", \"cluster\", \"services\", \"servicearn\", \"value\", \"task\", \"account_id\""  
+            ecs_chargeback_cluster_metadata_view
+        )  clusters_data ON ((("clusters_data"."account_id" = "cur"."line_item_usage_account_id") AND (("clusters_data"."services" = "cur"."resource_tags_aws_ecs_service_name") AND ("clusters_data"."year" = "cur"."year"))) AND ("clusters_data"."month" = "cur"."month")))
+        GROUP BY "bill_payer_account_id", "line_item_usage_account_id", "line_item_product_code", "line_item_operation", "line_item_resource_id", "resource_tags_aws_ecs_service_Name", "line_item_usage_type", "line_item_operation", "cur"."month", "cur"."year", "cluster", "services", "servicearn", "value", "task", "account_id"
   AthenaEC2CChargeBackQuery:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
       Name: ecs_chargeback_report
-      QueryString: 
-        "SELECT bu_usage_view.line_item_usage_account_id, sum(sum_line_item_usage_amount) AS task_usage, total_usage, (sum(sum_line_item_usage_amount)/total_usage) as percent,  ec2_cost, ((sum(sum_line_item_usage_amount)/total_usage)*ec2_cost) as ecs_cost,
-        \"cluster\",
-        services,
-        servicearn,
-        value,
-        bu_usage_view.month,
-        bu_usage_view.year
-        FROM \"bu_usage_view\"
-        left join (select line_item_usage_account_id, sum(sum_line_item_usage_amount) as total_usage, year, month from \"bu_usage_view\" where \"cluster\" <> '' group by line_item_usage_account_id, year, month) sum
-        on sum.line_item_usage_account_id = bu_usage_view.line_item_usage_account_id
-        and sum.month=bu_usage_view.month
-        and sum.year=bu_usage_view.year
-        left join
-        (SELECT line_item_usage_account_id, month, year, sum(sum_line_item_amortized_cost) as ec2_cost FROM \"ec2_cluster_costs_view\" group by  line_item_usage_account_id,month,year) ec2_cost
-        on ec2_cost.month=bu_usage_view.month
-        and ec2_cost.year=bu_usage_view.year
-        and ec2_cost.line_item_usage_account_id=bu_usage_view.line_item_usage_account_id
-        where \"cluster\" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),bu_usage_view.month = '12', bu_usage_view.month = CAST((month(now())-1) AS VARCHAR) )
-        and  if((date_format(current_timestamp , '%M') = 'January'), bu_usage_view.year = CAST((year(now())-1) AS VARCHAR) ,bu_usage_view.year = CAST(year(now()) AS VARCHAR))
-        GROUP BY  \"cluster\", services, servicearn, value, bu_usage_view.month, bu_usage_view.year, bu_usage_view.line_item_usage_account_id, total_usage, ec2_cost"
+      QueryString: |
+        SELECT ecs_chargeback_bu_usage.line_item_usage_account_id, sum(sum_line_item_usage_amount) AS task_usage, total_usage, (sum(sum_line_item_usage_amount)/total_usage) as percent,  ec2_cost, ((sum(sum_line_item_usage_amount)/total_usage)*ec2_cost) as ecs_cost,
+          "cluster",
+          services,
+          servicearn,
+          value,
+          ecs_chargeback_bu_usage.month,
+          ecs_chargeback_bu_usage.year
+        FROM "ecs_chargeback_bu_usage"
+        LEFT JOIN (select line_item_usage_account_id, sum(sum_line_item_usage_amount) as total_usage, year, month from "ecs_chargeback_bu_usage" where "cluster" <> '' group by line_item_usage_account_id, year, month) sum
+        on sum.line_item_usage_account_id = ecs_chargeback_bu_usage.line_item_usage_account_id
+        and sum.month=ecs_chargeback_bu_usage.month
+        and sum.year=ecs_chargeback_bu_usage.year
+        LEFT JOIN
+        (SELECT line_item_usage_account_id, month, year, sum(sum_line_item_amortized_cost) as ec2_cost FROM "ec2_cluster_costs_view" group by  line_item_usage_account_id,month,year) ec2_cost
+        on ec2_cost.month=ecs_chargeback_bu_usage.month
+        and ec2_cost.year=ecs_chargeback_bu_usage.year
+        and ec2_cost.line_item_usage_account_id=ecs_chargeback_bu_usage.line_item_usage_account_id
+        WHERE "cluster" <> ''  and  if((date_format(current_timestamp , '%M') = 'January'),ecs_chargeback_bu_usage.month = '12', ecs_chargeback_bu_usage.month = CAST((month(now())-1) AS VARCHAR) )
+        and  if((date_format(current_timestamp , '%M') = 'January'), ecs_chargeback_bu_usage.year = CAST((year(now())-1) AS VARCHAR) ,ecs_chargeback_bu_usage.year = CAST(year(now()) AS VARCHAR))
+        GROUP BY  "cluster", services, servicearn, value, ecs_chargeback_bu_usage.month, ecs_chargeback_bu_usage.year, ecs_chargeback_bu_usage.line_item_usage_account_id, total_usage, ec2_cost
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName
