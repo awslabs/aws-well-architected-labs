@@ -62,6 +62,7 @@ You must tag the AWS Organization Resources with the emails of the Quicksight Us
 1. Log into your **Management account** then click on the top right hand corner on your account and select **Organization**
 ![Images/rls_organization.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization.png?classes=lab_picture_small)
 2. Ensure you are on the **AWS accounts** tab
+
 ![Images/rls_organization_accounts.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts.png?classes=lab_picture_small)
 You can select different levels of access. Tag one of the following and the use will have access to all data of that resource and any child accounts below it.
 
@@ -71,11 +72,11 @@ You can select different levels of access. Tag one of the following and the use 
 
 3. To tag the resource click its name an scroll down to the tag section and click **Manage tags**
 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_organization_accounts_tags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_tags.png?classes=lab_picture_small)
 
 4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are **colon delimited**. Once added click **Save changes**
 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_organization_accounts_cudostags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_cudostags.png?classes=lab_picture_small)
 
 5. Repeat on all resources with relevant emails. 
 
@@ -85,7 +86,7 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 
 1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_cfn.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn.png?classes=lab_picture_small)
 
 2. Click **Next**.
 
@@ -100,12 +101,13 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 * Schedule - Cron job to trigger the lambda using cloudwatch event. Default is once a day 
  
 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_cfn_parameters.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn_parameters.png?classes=lab_picture_small)
 
 4. Tick the boxes and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
 5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
+![Images/rls_cfn_complete.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn_complete.png?classes=lab_picture_small)
 
 ## Test Lambda Function
 
@@ -114,7 +116,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 1. From CloudFormation Click **Resources** and find the Lambda Function and click the Physical ID
 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_cfn_resources.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn_resources.png?classes=lab_picture_small)
 2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
 
 3. Enter an **Event name** of **Test**, click **Create**:
@@ -126,7 +128,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
 
 6. You can go to your bucket in S3 and there should be a file in the folder CUDOS_RLS. 
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_s3_object.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_s3_object.png?classes=lab_picture_small)
 
 7. Download this file and replace <bucket name> 
 
@@ -135,33 +137,31 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 
 1. Go to Amazon QuickSight and login
 2. Go to Datasets and click **New dataset**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_qs_datasets.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_datasets.png?classes=lab_picture_small)
 
 3. Create new Dataset by clicking **S3**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_qs_datasets_s3.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_datasets_s3.png?classes=lab_picture_small)
 
 4. Set Data source name as **CID RLS** and Paste the S3 URL you copied earlier into the Upload box
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_qs_dataset_manifest.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_dataset_manifest.png?classes=lab_picture_small)
 
-Find your new dataset by searching **CID RLS** then click on it
+5. Find your new dataset by searching **CID RLS** then click on it
+![Images/rls_qs_rls_dataset.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_rls_dataset.png?classes=lab_picture_small)
 
-5. Click on your new dataset and select the **Refresh** tab and click **ADD NEW SCHEDULE**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+6. Click on your new dataset and select the **Refresh** tab and click **ADD NEW SCHEDULE**
+![Images/rls_qs_rls_dataset_refresh.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_rls_dataset_refresh.png?classes=lab_picture_small)
 
-6. Choose Hourly and click **SAVE**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+7. Choose Hourly and click **SAVE**
+![Images/rls_qs_rls_dataset_refreshhourly.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_rls_dataset_refreshhourly.png?classes=lab_picture_small)
 
-7. Go back to Datasets and select your CID data **summary_view**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
-
-8. On the Summary tab find Row-level security and click **Edit**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+8. Go back to Datasets and select your CID data **summary_view**. On the Summary tab find Row-level security and click **Edit**
+![Images/rls_qs_summary.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_summary.png?classes=lab_picture_small)
 
 9. Click the toggle **User-based ON** then expand the **User-based rules** section and select the **CID RLS** dataset we made earlier
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_qs_summary_addrls.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_summary_addrls.png?classes=lab_picture_small)
 
 10. Scroll down and click **Apply dataset**
-![Images/rls_.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_.png?classes=lab_picture_small)
+![Images/rls_qs_summary_addrls_apply.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_qs_summary_addrls_apply.png?classes=lab_picture_small)
 
 11. Refresh the summary_view datasets 
 12. Repeat for all other CID Datasets
@@ -175,4 +175,3 @@ If you would like to turn off RLS you can just toggle the **User-based ON** to *
 
 Now when you go to your Dashboard the users who had been tagged on the accounts will only see their data
 
-See below a before and after picture. 
