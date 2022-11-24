@@ -24,7 +24,7 @@ Parameters:
     Default: "rate(1 day)"
   CodeBucket:
       Type: String
-      Description: S3 Bucket that exists and holds code
+      Description: S3 Bucket that exists and holds code aws-well-architected-labs-{REGION-NAME} e.g. aws-well-architected-labs-ireland
       Default: aws-well-architected-labs
       AllowedValues:
         - aws-well-architected-labs-ireland
