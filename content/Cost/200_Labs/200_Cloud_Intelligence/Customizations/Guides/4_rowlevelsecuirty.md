@@ -11,7 +11,7 @@ November 2022
 
 ## Introduction
 
-CID allows everyone in your organization to understand your cost data by exploring interactive dashboards that you manage. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Payers.
+CID enable people in your organization understanding cost data by exploring interactive dashboards. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Management Accounts (Payers).
 
 ## Prerequisite
 
@@ -74,7 +74,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 ![Images/rls_organization_accounts_tags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_tags.png?classes=lab_picture_small)
 
-4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are **colon delimited**. Once added click **Save changes**
+4. Add the Key **cid_users** and the Value of any **emails** you wish to allow access. These are colon delimited. Once added click **Save changes**
 
 ![Images/rls_organization_accounts_cudostags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_cudostags.png?classes=lab_picture_small)
 
