@@ -92,7 +92,7 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 
 3. Fill in the Parameters as seen below.
 
-* CodeBucket - LEAVE AS DEFAULT
+* CodeBucket - aws-well-architected-labs-{REGION-NAME} e.g. aws-well-architected-labs-ireland
 * CodeKey - LEAVE AS DEFAULT
 * DestinationBucket - Amazon S3 Bucket in your account in the same region (this can be one from your Optimization data collector where where your CUR is stored). This bucket must have access to Amazon Quicksight
 * ManagementAccountID - List of Payer IDs you wish to collect data for. Can just be one Accounts(Ex: 111222333,444555666,777888999) 
