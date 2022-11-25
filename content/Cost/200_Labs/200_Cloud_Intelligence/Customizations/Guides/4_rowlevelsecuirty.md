@@ -84,7 +84,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
 
-1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
+1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/row-level-security/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
 
 ![Images/rls_cfn.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn.png?classes=lab_picture_small)
 
@@ -93,6 +93,29 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 3. Fill in the Parameters as seen below.
 
 * CodeBucket - aws-well-architected-labs-{REGION-NAME} e.g. aws-well-architected-labs-ireland
+
+{{%expand "AllowedValues S3" %}}
+
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs        (Oregon)
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
+        - aws-well-architected-labs-california
+        - aws-well-architected-labs-oregon
+        - aws-well-architected-labs-singapore
+        - aws-well-architected-labs-frankfurt
+        - aws-well-architected-labs-london
+        - aws-well-architected-labs-stockholm
+        - aws-well-architected-labs-ap-sydney
+        - aws-well-architected-labs-mumbai
+        - aws-well-architected-labs-osaka
+        - aws-well-architected-labs-seoul
+        - aws-well-architected-labs-tokyo
+        - aws-well-architected-labs-canada
+        - aws-well-architected-labs-milan
+        - aws-well-architected-labs-paris
+{{% /expand%}}
+
 * CodeKey - LEAVE AS DEFAULT
 * DestinationBucket - Amazon S3 Bucket in your account in the same region (this can be one from your Optimization data collector where where your CUR is stored). This bucket must have access to Amazon Quicksight
 * ManagementAccountID - List of Payer IDs you wish to collect data for. Can just be one Accounts(Ex: 111222333,444555666,777888999) 
