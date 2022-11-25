@@ -48,7 +48,7 @@ Parameters:
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/RLS/create_rls.zip # RLS Folder to be updated, once the LAB will be created
+    Default: Cost/Labs/row-level-security/create_rls.zip # RLS Folder to be updated, once the LAB will be created
 Outputs:
   LambdaFunctionName:
     Value:
