@@ -98,7 +98,7 @@ You can follow the identical process as for the primary region, but substituting
 
 ### Test the Application Load Balancer endpoints
 
-Finally, we’re going to test the endpoints you’ve just set up. You will have noted down the DNS names for the Application Load Balancer in **us-east-1** and **us-west-1**. In your browser, navigate to each of these URLs, and compare the results you get when you navigate to the S3 website endpoint available in the CloudFormation outputs for your primary and secondary stacks.
+Finally, we’re going to test the endpoints you’ve just set up. You will have noted down the DNS names for the Application Load Balancer in **N. Virginia (us-east-1)** and **N. California (us-west-1)**. In your browser, navigate to each of these URLs, and compare the results you get when you navigate to the S3 website endpoint available in the CloudFormation outputs for your primary and secondary stacks.
 
 You should see the same application from all 4 endpoints. If you don’t, review the steps above to ensure that you have set up the ALBs in each region, and the nginx server correctly on the EC2 instances. 
 

@@ -77,7 +77,7 @@ Verify that the nginx reverse proxy is up and running with **curl**:
 curl localhost:8080
 ```
 
-You should see the Unishop front-end application HTML returned to you from the S3 website endpoint in the primary region, **us-east-1**. 
+You should see the Unishop front-end application HTML returned to you from the S3 website endpoint in the primary region, **N. Virginia (us-east-1)**. 
 
 ### Secondary Region
 
@@ -119,7 +119,7 @@ Verify that the nginx reverse proxy is up and running with **curl**:
 curl localhost:8080
 ```
 
-You should see the Unishop front-end application HTML returned to you from the S3 website endpoint in the secondary region, **us-west-1**. 
+You should see the Unishop front-end application HTML returned to you from the S3 website endpoint in the secondary region, **N. California (us-west-1)**. 
 
 
 

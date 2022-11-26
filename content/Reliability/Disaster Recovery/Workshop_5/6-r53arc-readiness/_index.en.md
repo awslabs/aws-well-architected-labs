@@ -6,9 +6,9 @@ weight = 6
 
 Click [Route 53 Application Recovery Controller](https://us-west-2.console.aws.amazon.com/route53recovery/home#/dashboard) to navigate to the Amazon Route 53 Recovery Controller console.
 
-We’re going to build a readiness check for our application. We have two running stacks, our hot primary in **us-east-1** and the hot secondary in **us-west-1**.  We’re going to set up a **Recovery Group** composed of **cells** to represent the readiness of the application components across our regions. This will allow us to check the readiness of the application for failover.
+We’re going to build a readiness check for our application. We have two running stacks, our hot primary in **N. Virginia (us-east-1)** and the hot secondary in **N. California (us-west-1)**.  We’re going to set up a **Recovery Group** composed of **cells** to represent the readiness of the application components across our regions. This will allow us to check the readiness of the application for failover.
 
-Our application is relatively simple. We’ll be representing it with two cells, once in **us-east-1** and one in **us-west-1**. It is possible to nest cells for more complex applications, as is visible in the diagram. Read through the Readiness check section, and then click **“create recovery group”** to proceed:
+Our application is relatively simple. We’ll be representing it with two cells, once in **N. Virginia (us-east-1)** and one in **N. California (us-west-1)**. It is possible to nest cells for more complex applications, as is visible in the diagram. Read through the Readiness check section, and then click **“create recovery group”** to proceed:
 
 {{< img intro.png >}}
 
@@ -44,7 +44,7 @@ Next we need to create a **Resource set** which contains the DynamoDB tables tha
 
 {{< img step-3c.png >}}
 
-Open another browser another tab, and navigate to the DynamoDB console in **us-east-1** and **us-west-1**. Select the **“unishophotstandby”** table in each region, and copy down the **ARN** of each table. You'll find the **ARN** in the **“Overview”** tab for your table, and click **“Additional info”** to expand the **“General information”** section:
+Open another browser another tab, and navigate to the DynamoDB console in **N. Virginia (us-east-1)** and **N. California (us-west-1)**. Select the **“unishophotstandby”** table in each region, and copy down the **ARN** of each table. You'll find the **ARN** in the **“Overview”** tab for your table, and click **“Additional info”** to expand the **“General information”** section:
 
 {{< img step-3d.png >}}
 
@@ -60,7 +60,7 @@ When ready, click Next:
 
 {{< img step-3f.png >}}
 
-Next, we’ll associate the resources in the resource set with either the East or West cells. Select the **“Associate with an existing recovery group”** radio button, select the recovery group you created in Step 2 above, and assign each DynamoDB table to the correct cell, **us-east-1** with **UnicornAppRecoveryGroup-East**, etc. and then click Next. 
+Next, we’ll associate the resources in the resource set with either the East or West cells. Select the **“Associate with an existing recovery group”** radio button, select the recovery group you created in Step 2 above, and assign each DynamoDB table to the correct cell, **N. Virginia (us-east-1)** with **UnicornAppRecoveryGroup-East**, etc. and then click Next. 
 
 The DynamoDB table ARN contains the region, use this to help you:
 
@@ -72,13 +72,13 @@ Review your configuration and click Create readiness check when ready:
 
 You have now created readiness checks for the DynamoDB tables in our application. Congratulations!
 
-4. Next, we’re going to create readiness checks for the S3 website endpoints in **us-east-1** and **us-west-1**. These are available in the CloudFormation Outputs section for the stack that you deployed in the primary and secondary regions. 
+4. Next, we’re going to create readiness checks for the S3 website endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**. These are available in the CloudFormation Outputs section for the stack that you deployed in the primary and secondary regions. 
 
 First, we’re going to need to create Route 53 health checks for the S3 website endpoints. The Route 53 Application Recovery Controller will monitor the status of these health checks to determine readiness.
 
 Click [Health Checks](https://us-east-1.console.aws.amazon.com/route53/healthchecks/home#/create) to navigate to the Route 53 health check page. 
 
-Create two health checks for the S3 website endpoints in **us-east-1** and **us-west-1**, giving them a meaningful name (e.g. `S3WebsiteEndpointEast` and `S3WebsiteEndpointWest`). Don’t create an alarm for either of them:
+Create two health checks for the S3 website endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**, giving them a meaningful name (e.g. `S3WebsiteEndpointEast` and `S3WebsiteEndpointWest`). Don’t create an alarm for either of them:
 
 {{< img step-4a.png >}}
 
