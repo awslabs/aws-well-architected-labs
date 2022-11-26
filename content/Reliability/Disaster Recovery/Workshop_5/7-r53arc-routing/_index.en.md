@@ -8,7 +8,7 @@ Now that we have a readiness check for the application, we’re going to build t
 
 1. Click [Route 53 Application Recovery Controller](https://us-west-2.console.aws.amazon.com/route53recovery/home#/recovery-control/clusters) to navigate to the Amazon Route 53 Recovery Controller cluster console.
 
-Get started by creating a cluster, and giving it a meaningful name (e.g. `UnicornCluster`), and accept the **Confirm pricing changes" before clicking **Create cluster**:
+Get started by creating a cluster, and giving it a meaningful name (e.g. `UnicornCluster`), and accept the **"Confirm pricing changes"**, then click **Create cluster**:
 
 {{< img step-1a.png >}}
 

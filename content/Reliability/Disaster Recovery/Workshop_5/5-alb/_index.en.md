@@ -24,7 +24,7 @@ Select the security group with the **“Security group name“** field starting 
 
 Select the **“Outbound rules”** tab, and add an outbound rule for TCP port 8080 with a destination CIDR range of `0.0.0.0/0`:
 
-{{< img ALB-primary-step-2a.png >}}
+{{< img ALB-primary-step-2b.png >}}
 
 1.3 Click [ALB Target Groups](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#CreateTargetGroup) to navigate to the primary Application Load Balancer Target Groups page in the **N. Virginia (us-east-1)** region.
 

@@ -116,7 +116,7 @@ Ensure that you can see the Route 53 S3 website endpoint readiness check and the
 
 {{< img step-6b.png >}}
 
-(If you don’t see the resources, you can navigate to the Resource sets by clicking [here](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/resource-sets), and then update the **Readiness scope** of the resource sets to assign them to the correct cells.) 
+(If you don’t see the resources, you can navigate to the Resource sets by clicking [Route 53 ARC resource sets](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/resource-sets), and then update the **Readiness scope** of the resource sets to assign them to the correct cells.) 
 
 
 
