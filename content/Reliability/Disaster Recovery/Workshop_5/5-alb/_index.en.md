@@ -88,6 +88,8 @@ Finally, select the ALB we’ve just created, and while it’s provisioning, cop
 
 You can follow the identical process as for the primary region, but substituting **“primary”** for **“secondary”** when selecting or creating resources.
 
+{{% notice note %}}
+
 2.1 However, click [Security Groups](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#SecurityGroups) to navigate to the secondary region Security Groups section of the Amazon EC2 dashboard in the **N. California (us-west-1)** region. Complete the rest of the actions in step 1.1 above, substituting or selecting **“secondary”** instead of **“primary**” as required.
 
 2.2 Complete the steps in 1.2 above, again substituting or selecting **“secondary”** instead of **“primary**” as required.
@@ -95,6 +97,9 @@ You can follow the identical process as for the primary region, but substituting
 2.3 Click [ALB Target Groups](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#CreateTargetGroup) to navigate to the primary Application Load Balancer Target Groups page in the **N. California (us-west-1)** region. Complete the rest of the actions in step 1.3 above, substituting or selecting **“secondary”** instead of **“primary**” as required.
 
 2.4 And finally, click [Create ALB](https://us-west-1.console.aws.amazon.com/ec2/home?region=us-west-1#LoadBalancers:sort=loadBalancerName) to navigate to the Application Load Balancer console in the **N. California (us-west-1)** region. Complete the rest of the actions in step 1.4 above, substituting or selecting **“secondary”** instead of **“primary**” as required.
+
+{{% /notice %}}
+
 
 ### Test the Application Load Balancer endpoints
 

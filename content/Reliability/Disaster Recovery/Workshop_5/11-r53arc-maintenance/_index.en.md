@@ -53,9 +53,14 @@ sh-4.2$ curl -v -H "Host: www.example.com" http://shop.unicorns.magic
 
 Because we used **www.example.com** as a maintenance page for convenience, we needed to provide the **”Host: “** HTTP header so that the HTTP server for **www.example.com** could serve the page, otherwise it would return an HTTP 404 error.
 
+{{% notice note %}}
+
 This illustrates an important consideration. Your maintenance page should be as robust as possible. If, as in this case, it is served from an HTTP endpoint that requires the HTTP **“Host: ”** header to be provided, this may not work as expected. Bear in mind that S3 static website endpoints also require the bucket name to match the URL prefix. Learn more by reviewing the [documentation for S3 Virtual Hosting here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html).
 
 Construction of your catch-all, or maintenance page is beyond the scope of this lab. But bear in mind the considerations outlined above as you build the right strategy for your application.
+
+{{% /notice %}}
+
 
 Next, confirm you see the same result in your **N. California (us-west-1)** EC2 Session Manager browser tab console. Finally, we’ll confirm that the routing controls are working as expected using **dig**:
 

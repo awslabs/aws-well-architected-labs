@@ -96,8 +96,12 @@ Continue as per Step 3 above to create a Route 53 health check readiness check f
 
 Next, we’ll create a resource set and add the health checks. You’ll need to construct the ARNs as per [this reference](https://docs.aws.amazon.com/r53recovery/latest/dg/recovery-readiness.resource-types-arns.html).
 
-A Route 53 health check is formatted as:
-**ARN format:** arn::route53:::healthcheck/YOUR_HEALTH_CHECK_ID
+{{% notice note %}}
+
+A Route 53 health check **ARN format** is: arn::route53:::healthcheck/YOUR_HEALTH_CHECK_ID
+
+{{% /notice %}}
+
 
 Construct the ARNs with the health check IDs that you created in Step 4 above, substituting the IDs from your health checks for **YOUR_HEALTH_CHECK_ID** :
 

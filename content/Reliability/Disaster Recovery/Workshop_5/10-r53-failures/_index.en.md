@@ -20,11 +20,11 @@ You may have to click refresh and wait for the health checks to update. Route 53
 
 Return to the Readiness check page and note that the **“Not ready”** state has propagated up to the recovery group. From the top level, you can monitor the readiness for your recovery groups. If any cell is not ready, the recovery group is likewise not ready too:
 
-{{< img step-2a.png >}}
+{{< img step-2b.png >}}
 
 You can explore the cells to see which resource and readiness check has failed. This allows you to identify which cells are ready and able to accept traffic, and which cells need to have traffic directed away from them: 
 
-{{< img step-2a.png >}}
+{{< img step-2c.png >}}
 
 3. Now that we’ve detected a failure, we need to update the routing controls to direct traffic away from our **East** cell that’s not ready to receive traffic, and towards our **West** cell that remains ready.
 
@@ -34,13 +34,13 @@ Navigate to your **DefaultControlPanel** in your Route 53 Application Recovery C
 
 This should result in a failure:
 
-{{< img step-3a.png >}}
+{{< img step-3b.png >}}
 
 Reading the red error banner at the top of the page, you will see that the **AtLeastOneEndpoint** safety rule has prevented this update, as otherwise we’d fail open, as neither the **Maintenance** nor the **CellWest** routing controls are active, and able to accept traffic in this configuration. 
 
 Instead, we’ll turn on the **CellWest** routing control at the same time. Select both the **CellWest** and **CellEast** routing controls, and click **Change routing control states** again. Set **CellWest** to **On** and **CellEast** to **Off**, confirm, and click **Change traffic routing**: 
 
-{{< img step-3a.png >}}
+{{< img step-3c.png >}}
 
 This time you’ll see it succeeds, as the requested update satisfies the assertion from our **AtLeastOneEndpoint** safety rule. We are now routing traffic away from our **East** cell to our **West** cell, which remains healthy and ready to accept traffic.
 
