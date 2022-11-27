@@ -6,7 +6,7 @@ weight = 2
 
 When you create a [DynamoDB global table](https://aws.amazon.com/dynamodb/global-tables/), it consists of multiple replica tables (one per AWS Region) that DynamoDB treats as a single unit. Every replica has the same table name and the same primary key schema. When an application writes data to a replica table in one AWS region, DynamoDB propagates the write to the other replica tables in the other AWS regions automatically.
 
-(If you are using the same architecture that you have deployed from the [Module 4: Hot Standby](../../Workshop_4/) and you have not yet cleaned it up, you will find that Amazon DynamoDB Global Tables is already configured as described below. Verify that your configuration matches the steps below, and if so, **continue to the [Verify Websites](../3-verify-websites/) section of the workshop.**)
+(If you are using the same architecture that you have deployed from the [Module 4: Hot Standby](../../Workshop_4/) lab, and you have not yet cleaned it up, you will find that Amazon DynamoDB Global Tables is already configured as described below. Verify that your configuration matches the steps below, and if so, **continue to the [Verify Websites](../3-verify-websites/) section of the workshop.**)
 
 #### Configure Amazon DynamoDB Global Tables
 
