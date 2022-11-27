@@ -24,8 +24,6 @@ We are also taking advantage of [Amazon Aurora Global Database](https://aws.amaz
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
-TODO: UPDATE THE ARCHITECTURE IMAGE HERE
-
-{{< img HotStandby.png >}}
+{{< img HotStandbyMRRARC.png >}}
 
 {{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
