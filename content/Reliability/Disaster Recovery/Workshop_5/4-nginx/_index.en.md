@@ -33,7 +33,7 @@ Once the installation completes, we’ll edit the config file to include a direc
 Paste the following into the console to edit the nginx config file at ```/etc/nginx/nginx.conf``` using **vim** (or your favourite editor):
 
 ```
-vim /etc/nginx/nginx.conf
+sudo vim /etc/nginx/nginx.conf
 ```
 
 We’ll need to set the nginx server to listen on TCP port 8080 rather than the default HTTP port 80, as the unicorn shop back-end application is running on port 80 already. Find the first server section, it looks like this:
@@ -44,7 +44,7 @@ We’ll need to set the nginx server to listen on TCP port 8080 rather than the 
         listen       [::]:80;
 ```
 
-Then, update (by hitting “i” to enter insert mode in vim) the nginx server to listen on 8080 on both lines like so:
+Then, update (by hitting “i” to enter insert mode in **vim**) the nginx server to listen on 8080 on both lines like so:
 
 ```
  server {
