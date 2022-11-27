@@ -98,7 +98,7 @@ Next, we’ll create a resource set and add the health checks. You’ll need to 
 
 {{% notice note %}}
 
-A Route 53 health check **ARN format** is: arn::route53:::healthcheck/YOUR_HEALTH_CHECK_ID
+A Route 53 health check **ARN** format is: **arn:aws:route53:::healthcheck/YOUR_HEALTH_CHECK_ID**
 
 {{% /notice %}}
 
