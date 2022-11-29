@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 6
 +++
 
-Click [Route 53 Application Recovery Controller](https://us-west-2.console.aws.amazon.com/route53recovery/home#/dashboard) to navigate to the Amazon Route 53 Recovery Controller console.
+Click [Route 53 Application Recovery Controller](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/home) to navigate to the Amazon Route 53 Recovery Controller console.
 
 We’re going to build a readiness check for our application. We have two running stacks, our hot primary in **N. Virginia (us-east-1)** and the hot secondary in **N. California (us-west-1)**.  We’re going to set up a **Recovery Group** composed of **cells** to represent the readiness of the application components across our regions. This will allow us to check the readiness of the application for failover.
 

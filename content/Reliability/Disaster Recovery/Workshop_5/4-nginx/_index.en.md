@@ -68,6 +68,7 @@ Now, save and exit the editor (ESC then “:wq” to save and exit **vim**).
 Next, we’ll start nginx and make it re-load the config file to check for any errors. Back in the console terminal command line, paste in:
 
 ```
+sudo nginx -s reload
 sudo systemctl start nginx
 ```
 
