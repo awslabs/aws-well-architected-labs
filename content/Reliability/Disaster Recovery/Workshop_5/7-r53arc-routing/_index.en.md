@@ -66,7 +66,7 @@ In the **Safety rules** section of the **DefaultControlPanel**, click **Add safe
 
 Click the **Assertion rule** radio button. An assertion rule enforces the criteria you set, or else does not allow the routing control states to be changed. A typical use for this type of rule is to prevent a fail-open scenario, which is what we’ll be configuring. 
 
-The first safety rule we will create asserts that the either the **Maintenance** routing control or the **Application** routing control must be enabled. This is the first part of the fail-open prevention, ensuring that users will either be routed to the unicorn shop application, or otherwise the maintenance page, preventing both controls from being disabled at the same time.
+The first safety rule we will create asserts that either the **Maintenance** routing control or the **Application** routing control must be enabled. This is the first part of the fail-open prevention, ensuring that users will either be routed to the unicorn shop application, or otherwise the maintenance page, preventing both controls from being disabled at the same time.
 
 Give your routing control a meaningful name (e.g. `MaintenanceORApplication`), leave the **Wait period** at the default to prevent overly frequent state changes. Then, in the **Routing control configuration section**, select the **Maintenance** and **Application** routing controls. This sets the scope our safety rule to just these two routing controls:
 
