@@ -86,7 +86,7 @@ When you have created both health checks, copy down the IDs. We’ll need them t
 
 {{< img step-4b.png >}}
 
-5. When done, return to the Application Recovery Controller readiness check page, and click **Create** and select **Readiness Check** to get started.
+5. When done, return to the [Application Recovery Controller readiness check page](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/home), and click **Create** and select **Readiness Check** to get started.
 
 {{< img step-5a.png >}}
 
