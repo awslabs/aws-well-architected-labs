@@ -200,7 +200,7 @@ s3://<prefix>-<destination-accountid>-shared/
 
 The Glue crawler will create the partitions source_account_id, year, and month.
 
-### Step 1. Configure Destination Account (data collection account where you will deploy your dashboards) using CloudFormation
+### Step 1. Deploy a Bucket for CUR Aggregation in Data Collection Account 
 
 Here we will deploy the CFN template but setting the CFN parameters for a Destination Account.
 
@@ -235,7 +235,7 @@ Here we will deploy the CFN template but setting the CFN parameters for a Destin
 
 11. Once complete, the stack will show **CREATE_COMPLETE**.
 
-### Step 2. Create CUR in Source Account(s) using CloudFormation
+### Step 2. Create CUR and Replication in Source Account (Management Account)
 
 1. Login to your Source Account (can be management account or linked account if you're using [member CURs](https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/)).
 
@@ -374,7 +374,7 @@ Please note that **CURBucketPath** parameter currently cannot be updated once th
 If you see no data please check the following:
  1) Double check that QuickSight has permissions to read from your CUR bucket.
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Billing/Reporting category requesting a backfill of your CUR (name=cid) with 12 month of data.
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Billing/Reporting category requesting a backfill of your CUR (name=cid) with 12 months of data.
  4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night.
 
 {{% /expand%}}
