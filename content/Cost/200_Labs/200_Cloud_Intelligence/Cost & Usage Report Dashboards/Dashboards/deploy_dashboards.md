@@ -374,7 +374,7 @@ Please note that **CURBucketPath** parameter currently cannot be updated once th
 If you see no data please check the following:
  1) Double check that QuickSight has permissions to read from your CUR bucket.
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Billing/Reporting category requesting a backfill of your CUR (name=cid) with 12 months of data.
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Service=Billing and category=Invoices and Reporting, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from your Source Account (Management/Payer account).
  4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night.
 
 {{% /expand%}}
