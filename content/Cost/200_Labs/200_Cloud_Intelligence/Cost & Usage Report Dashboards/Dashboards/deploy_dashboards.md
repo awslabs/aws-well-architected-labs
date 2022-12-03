@@ -156,12 +156,6 @@ If you want to deploy **CUDOS**, **KPI** and **Cost Intelligence Dashboard** in 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
-
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}
-
-
 {{%expand "Click here to continue with Advanced Setup" %}}
 
 
