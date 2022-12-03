@@ -200,7 +200,7 @@ s3://<prefix>-<destination-accountid>-shared/
 
 The Glue crawler will create the partitions source_account_id, year, and month.
 
-### Step 1. Deploy a Bucket for CUR Aggregation in Data Collection Account 
+### Step 1. Deploy a Bucket for CUR Aggregation in Data Collection Account (where you will deploy your dashboards) 
 
 Here we will deploy the CFN template but setting the CFN parameters for a Destination Account.
 
