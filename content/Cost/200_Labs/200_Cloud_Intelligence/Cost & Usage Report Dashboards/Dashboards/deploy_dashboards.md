@@ -152,7 +152,16 @@ If you see no data please check the following:
 ## Advanced Setup
 If you want to deploy **CUDOS**, **KPI** and **Cost Intelligence Dashboard** in an account other than your Management (Payer) Account, or wish to deploy the dashboards on top of multiple Management (Payer) Accounts or multiple linked accounts, use this method. 
 
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
+
 {{%expand "Click here to continue with Advanced Setup" %}}
+
+
+
+## Deployment Overview
 
 ![Images/arch5.png](/Cost/200_Cloud_Intelligence/Images/arch5.png?classes=lab_picture_small)
 
@@ -191,7 +200,7 @@ s3://<prefix>-<destination-accountid>-shared/
 
 The Glue crawler will create the partitions source_account_id, year, and month.
 
-### Step1. Configure Destination Account (data collection account where you will deploy your dashboards) using CloudFormation
+### Step 1. Deploy a Bucket for CUR Aggregation in Data Collection Account 
 
 Here we will deploy the CFN template but setting the CFN parameters for a Destination Account.
 
@@ -226,7 +235,7 @@ Here we will deploy the CFN template but setting the CFN parameters for a Destin
 
 11. Once complete, the stack will show **CREATE_COMPLETE**.
 
-### Step2. Create CUR in Source Account(s) using CloudFormation
+### Step 2. Create CUR and Replication in Source Account (Management Account)
 
 1. Login to your Source Account (can be management account or linked account if you're using [member CURs](https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/)).
 
@@ -288,7 +297,7 @@ The guide in this section will only work if you have already deployed the CUR re
 
 8.  Once complete, the stack will show **UPDATE_COMPLETE**
 
-## Enable QuickSight 
+## Step 3. Enable QuickSight in Data Collection Account
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
 1. Log into your Destination Linked Account and search for **QuickSight** in the list of Services
@@ -316,7 +325,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 1. Click on the persona icon on the top right and select manage QuickSight. 
 2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
 
-## Deploy Dashboards
+## Step 4. Deploy Dashboards in Data Collection Account
 In this option we use guide you through using a CloudFormation template that will deploy **all needed resources**. You will cut and paste some parameters (An S3 path to CUR data, A QuickSight user that will be the owner of the QuickSight assets, and which dashboards you want to deploy) into the template and click run. 
 
 All other resources are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, and finally the dashboards. The template uses a custom resource (a Lambda with [this CLI tool](https://github.com/aws-samples/aws-cudos-framework-deployment/)) to create, delete, or update assets. 
@@ -337,8 +346,9 @@ To find your QuickSight username:
 
 1. Update your **CURBucketPath** if needed. 
    1. (Default) If you used the CFN Template in the CUR setup process above then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where account IDs are. For example `s3://cid-1234567890123-shared/cur/`
-   2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there)
+   2. If you did *not* use the CFN automated CUR setup process above and have just one CUR you setup manually then **CURBucketPath** needs to be the s3 path to the folder in your CUR bucket where the year folders are. For example `s3://cid-1234567890123-shared/prefix/name/name/` (double check this path, you must see /year=xxxx partitions in there).
 
+Please note that **CURBucketPath** parameter currently cannot be updated once the stack is created. If you need to change it you can delete and re-create the stack.
 
 2. Select the Dashboards you want to install. We recommend deploying all three: Cost Intelligence Dashboard, CUDOS, and the KPI Dashboard.
 
@@ -362,9 +372,9 @@ To find your QuickSight username:
 11. Navigate back to CloudFormation and to the **Output of the Stack** tab and check dashboard URLS. Click on a URL to open the dashboards.
 
 If you see no data please check the following:
- 1) Double check that QuickSight has permissions to read from your CUR bucket **and** your Query Results location bucket. Query results bucket name will be something like `aws-athena-query-results-cid-1234567890123-us-east-1`
+ 1) Double check that QuickSight has permissions to read from your CUR bucket.
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives.
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Service=Billing and category=Invoices and Reporting, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from your Source Account (Management/Payer account).
  4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night.
 
 {{% /expand%}}
