@@ -35,18 +35,30 @@ Python:
 """
 import os
 import time
+import json
 import logging
-from collections import Counter
+from textwrap import indent
 
 import boto3
 from cfn_tools import load_yaml
 
+BUCKET = os.environ.get('BUCKET', "aws-wa-labs-staging")
 logger = logging.getLogger(__name__)
 account_id = boto3.client("sts").get_caller_identity()["Account"]
 
 cloudformation = boto3.client('cloudformation')
 athena = boto3.client('athena')
 s3 = boto3.resource("s3")
+
+HEADER = '\033[95m'
+BLUE = '\033[94m'
+CYAN = '\033[96m'
+GREEN = '\033[92m'
+WARNING = '\033[93m'
+RED = '\033[91m'
+END = '\033[0m'
+BOLD = '\033[1m'
+UNDERLINE = '\033[4m'
 
 def watch_stacks(stack_names = []):
     ''' watch stacks while they are IN_PROGRESS and/or until they are deleted'''
@@ -59,21 +71,45 @@ def watch_stacks(stack_names = []):
             except cloudformation.exceptions.ClientError as exc:
                 if 'does not exist' in exc.response['Error']['Message']:
                     stack_names.remove(stack_name)
-            for e in events:
-                if not last_update[stack_name] or  last_update[stack_name] < e['Timestamp']:
-                    logger.info('\t'.join([e['Timestamp'].strftime("%H:%M:%S"), e['LogicalResourceId'], e['ResourceStatus'], e.get('ResourceStatusReason',''), ]))
-                if not last_update[stack_name] or last_update[stack_name] < e['Timestamp']:
-                    last_update[stack_name] = e['Timestamp']
-        try:
-            current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
-            if 'IN_PROGRESS' in current_stack['StackStatus']:
-                in_progress = True
-        except:
-            pass
+            else:
+                # Check events
+                for e in events:
+                    if not last_update.get(stack_name) or last_update.get(stack_name) < e['Timestamp']:
+                        line = '\t'.join( list( dict.fromkeys([
+                            e['Timestamp'].strftime("%H:%M:%S"),
+                            stack_name,
+                            e['LogicalResourceId'],
+                            e['ResourceStatus'],
+                            e.get('ResourceStatusReason',''),
+                        ])))
+                        if '_COMPLETE' in line: color = GREEN
+                        elif '_IN_PROGRESS' in line: color = ''
+                        elif '_FAILED' in line or 'failed to create' in line: color = RED
+                        else: color = ''
+                        logger.info(f'{color}{line}{END}')
+                        last_update[stack_name] = e['Timestamp']
+            try:
+                current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
+                if 'IN_PROGRESS' in current_stack['StackStatus']:
+                    in_progress = True
+            except:
+                pass
+
+            try:
+                # Check nested stacks
+                for res in cloudformation.list_stack_resources(StackName=stack_name)['StackResourceSummaries']:
+                    if res['ResourceType'] == 'AWS::CloudFormation::Stack':
+                        name = res['PhysicalResourceId'].split('/')[-2]
+                        if name not in stack_names:
+                            stack_names.append(name)
+            except:
+                pass
+
         if not stack_names or not in_progress: break
         time.sleep(5)
 
 def initial_deploy_stacks():
+    logger.info(f"account_id={account_id} region={boto3.session.Session().region_name}")
     create_options = dict(
         TimeoutInMinutes=60,
         Capabilities=['CAPABILITY_IAM','CAPABILITY_NAMED_IAM'],
@@ -83,7 +119,7 @@ def initial_deploy_stacks():
         NotificationARNs=[],
     )
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName='OptimizationManagementDataRoleStack',
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Management.yaml').read(),
             Parameters=[
@@ -97,11 +133,12 @@ def initial_deploy_stacks():
         logger.info('OptimizationManagementDataRoleStack exists')
 
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName='OptimizationDataRoleStack',
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml').read(),
             Parameters=[
                 {'ParameterKey': 'CostAccountID',                   'ParameterValue': account_id},
+                {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeInventoryCollectorModule', 'ParameterValue': "yes"},
@@ -118,12 +155,15 @@ def initial_deploy_stacks():
 
 
     try:
-        response = cloudformation.create_stack(
+        cloudformation.create_stack(
             StackName="OptimizationDataCollectionStack",
             TemplateBody=open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml').read(),
             Parameters=[
+
+                {'ParameterKey': 'CFNTemplateSourceBucket',         'ParameterValue': BUCKET},
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
-                {'ParameterKey': 'DestinationBucket',               'ParameterValue': f"costoptimizationdata"},
+                {'ParameterKey': 'DestinationBucket',               'ParameterValue': "costoptimizationdata"},
+                {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeComputeOptimizerModule',   'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
@@ -159,7 +199,10 @@ def update_nested_stacks():
     nested_stack_file_names = {}
     for k, v in  cfn['Resources'].items():
         if v['Type'] == 'AWS::CloudFormation::Stack':
-            nested_stack_file_names[k] = v.get('Properties',{}).get('TemplateURL','').split('/')[-1]
+            TemplateURL = v.get('Properties',{}).get('TemplateURL','')
+            print (TemplateURL)
+            template_fn =  list(TemplateURL.values())[-1]
+            nested_stack_file_names[k] =template_fn.split('/')[-1]
 
     logger.info('Updating nested stacks')
     for r in cloudformation.describe_stack_resources(StackName='OptimizationDataCollectionStack')['StackResources']:
@@ -204,7 +247,7 @@ def update_nested_stacks():
     func_conf = boto3.client('lambda').get_function_configuration(FunctionName=f'Accounts-Collector-Function-{main_stack_name}')
     logger.info(str(sqs_urls))
     func_conf['Environment']['Variables']['SQS_URL'] = ','.join(sqs_urls)
-    response = boto3.client('lambda').update_function_configuration(
+    boto3.client('lambda').update_function_configuration(
             FunctionName=f'Accounts-Collector-Function-{main_stack_name}',
             Environment=func_conf['Environment']
     )
@@ -220,15 +263,19 @@ def trigger_update():
     main_stack_name = 'OptimizationDataCollectionStack'
     for name in [
         f'Accounts-Collector-Function-{main_stack_name}',
-        'Lambda_Organization_Data_Collector',
-        'aws-cost-explorer-rightsizing-recommendations-function',
+        f'pricing-Lambda-Function-{main_stack_name}',
+        f'cost-explorer-rightsizing-{main_stack_name}',
+        'WA-compute-optimizer-Trigger-Export',
+        f'Organization-Data-{main_stack_name}',
         ]:
         logger.info('Invoking ' + name)
         response = boto3.client('lambda').invoke(FunctionName=name)
+        stdout = response['Payload'].read().decode('utf-8')
+        print(indent(stdout, ' ' * 4))
 
 def setup():
     initial_deploy_stacks()
-    update_nested_stacks()
+    #update_nested_stacks()
     clean_bucket()
     trigger_update()
     logger.info('Waiting 1 min')
@@ -262,36 +309,49 @@ def athena_query(sql_query, sleep_duration=1, database: str=None, catalog: str='
     keys = [r['VarCharValue'] for r in results['ResultSet']['Rows'][0]['Data']]
     return [ dict(zip(keys, [r.get('VarCharValue') for r in row['Data']])) for row in results['ResultSet']['Rows'][1:]]
 
-def test_ebs_data():
-    ebs_data = athena_query('SELECT * FROM "optimization_data"."ebs_data" limit 10;')
-    assert len(ebs_data)>0, 'table ebs_data is empty'
 
-def test_snapshot_data():
-    snapshot_data = athena_query('SELECT * FROM "optimization_data"."snapshot_data" limit 10;')
-    assert len(snapshot_data)>0, 'table snapshot_data is empty'
+def test_budgets_data():
+    data = athena_query('SELECT * FROM "optimization_data"."budgets_data" LIMIT 10;')
+    assert len(data) > 0, 'budgets_data is empty'
 
-def test_rds_metrics():
-    rds_metrics = athena_query('SELECT * FROM "optimization_data"."rds_metrics" limit 10;')
-    assert len(rds_metrics)>0, 'table rds_metrics is empty'
+def test_cost_explorer_rightsizing_data():
+    data = athena_query('SELECT * FROM "optimization_data"."cost_explorer_rightsizing_data" LIMIT 10;')
+    assert len(data) > 0, 'cost_explorer_rightsizing_data is empty'
 
-def test_budgets():
-    budgets = athena_query('SELECT * FROM "optimization_data"."budgets" limit 10;')
-    assert len(budgets)>0, 'table budgets is empty'
+def test_ecs_chargeback_data():
+    data = athena_query('SELECT * FROM "optimization_data"."ecs_chargeback_data" LIMIT 10;')
+    assert len(data) > 0, 'ecs_chargeback_data is empty'
 
-def test_ecs_services_clusters():
-    ecs_services_clusters = athena_query('SELECT * FROM "optimization_data"."ecs_services_clusters_data" limit 10;')
-    assert len(ecs_services_clusters)>0, 'table ecs_services_clusters is empty'
+def test_inventory_ami_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_ami_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_ami_data is empty'
 
-def test_ami():
-    ami_data = athena_query('SELECT * FROM "optimization_data"."ami_data" limit 10;')
-    assert len(ami_data)>0, 'table ami_data is empty'
+def test_inventory_ebs_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_ebs_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_ebs_data is empty'
 
-def test_ta():
-    ta_data = athena_query('SELECT * FROM "optimization_data"."ta_data" limit 10;')
-    assert len(ta_data)>0, 'table ta_data is empty'
+def test_inventory_snapshot_data():
+    data = athena_query('SELECT * FROM "optimization_data"."inventory_snapshot_data" LIMIT 10;')
+    assert len(data) > 0, 'inventory_snapshot_data is empty'
+
+def test_rds_usage_data():
+    data = athena_query('SELECT * FROM "optimization_data"."rds_usage_data" LIMIT 10;')
+    assert len(data) > 0, 'rds_usage_data is empty'
+
+def test_trusted_advisor_data():
+    data = athena_query('SELECT * FROM "optimization_data"."trusted_advisor_data" LIMIT 10;')
+    assert len(data) > 0, 'trusted_advisor_data is empty'
+
+def test_transit_gateway_data():
+    data = athena_query('SELECT * FROM "optimization_data"."transit_gateway_data" LIMIT 10;')
+    assert len(data) > 0, 'transit_gateway_data is empty'
+
 
 def teardown():
-    clean_bucket()
+    try:
+        clean_bucket()
+    except:
+        pass
     for stack_name in [
         'OptimizationManagementDataRoleStack',
         'OptimizationDataRoleStack',
@@ -320,12 +380,15 @@ def main():
     try:
         setup()
         for f in [
-                test_ebs_data,
-                test_snapshot_data,
-                test_rds_metrics,
-                test_budgets,
-                test_ami,
-                test_ta,
+                test_budgets_data,
+                test_cost_explorer_rightsizing_data,
+                test_ecs_chargeback_data,
+                test_inventory_ami_data,
+                test_inventory_ebs_data,
+                test_inventory_snapshot_data,
+                test_rds_usage_data,
+                test_trusted_advisor_data,
+                test_transit_gateway_data,
             ]:
             try:
                 logger.info('Testing ' +  f.__name__)
@@ -338,14 +401,13 @@ def main():
 
     except Exception as exc:
         logger.exception(exc)
-        raise
     finally:
-        logger.info('Press Ctr-C to stop before teardown')
+        logger.info('Press Ctr-C to stop before teardown. 30s')
         time.sleep(30)
         logger.info('teardown')
         teardown()
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     main()

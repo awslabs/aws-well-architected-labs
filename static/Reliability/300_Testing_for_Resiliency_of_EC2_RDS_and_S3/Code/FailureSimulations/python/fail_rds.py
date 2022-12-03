@@ -39,7 +39,7 @@ try:
                     DBInstanceIdentifier=db['DBInstanceIdentifier'],
                     ForceFailover=True|False
           )
-    break
+          break
 
 except Exception as error:
     print(error)

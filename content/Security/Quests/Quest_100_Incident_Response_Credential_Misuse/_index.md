@@ -141,6 +141,15 @@ List roles:
 
 If you are at an event and you and your partner are ahead, experiment with other read-only type commands e.g. describe, list, get.
 
+Here are a few to get you started:
+
+Lists trails in the account, you'll need the trail ARN for the next command:
+```aws cloudtrail list-trails```
+
+Gets settings on the specified trail:
+```aws cloudtrail get-trail --name <ARN of the trail>```
+
+[AWS CLI Reference](https://docs.aws.amazon.com/cli/latest/index.html)
 
 ***
 
@@ -328,13 +337,21 @@ You need to create at least one method of maintaining persistence in your partne
 
 Each IAM user can have 2 access keys, each of which can be enabled or disabled. It’s simple to create a new access key for an existing user if they only have 1 assigned or 1 disabled. If your partner is looking for new events from the IAM user they will start to see the new access key used. This is very simple and can easily be discovered.
 
+Create a new access key:
+```aws iam create-access-key --user-name <username>```
+
 1.2 Create new IAM user
 
 Simple creating a new IAM user, especially if the account has many of them, is simple however you can gain console access by using a new password instead of changing an existing one. This is very simple and can easily be discovered.
 
+Create a new IAM user:
+```aws iam create-user --user-name <username>```
+
 1.3 Create new IAM role
 
 Create an IAM role that can be assumed by an IAM user (using the trust policy) or another AWS service. You could name the new IAM role to look similar to existing ones however you are limited in the names so experiment. You can use this new IAM role in the CLI, the console, and AWS services like EC2.
+
+It is suggested that a new role is created via the console for simplicity during this lab as multiple CLI steps are required. 
 
 1.4 Launch EC2 instance with IAM role
 

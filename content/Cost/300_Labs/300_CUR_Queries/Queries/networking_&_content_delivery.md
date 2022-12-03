@@ -164,7 +164,6 @@ Please refer to each individual service pricing page for more details on how dat
     WHERE 
       ${date_filter}
       AND product_product_family = 'Data Transfer'
-      AND line_item_line_item_type = 'Usage'
       AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       line_item_product_code,

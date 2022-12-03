@@ -15,46 +15,26 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: Trusted_Advisor
+    Default: trusted-advisor
   DestinationBucketARN:
     Type: String
     Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
   CodeBucket:
-      Type: String
-      Description: S3 Bucket that exists and holds code
-      Default: aws-well-architected-labs
-      AllowedValues:
-        - aws-well-architected-labs-ireland
-        - aws-well-architected-labs
-        - aws-well-architected-labs-ohio
-        - aws-well-architected-labs-virginia
-        - aws-well-architected-labs-california
-        - aws-well-architected-labs-oregon
-        - aws-well-architected-labs-singapore
-        - aws-well-architected-labs-frankfurt
-        - aws-well-architected-labs-london
-        - aws-well-architected-labs-stockholm
-        - aws-well-architected-labs-ap-sydney
-        - aws-well-architected-labs-mumbai
-        - aws-well-architected-labs-osaka
-        - aws-well-architected-labs-seoul
-        - aws-well-architected-labs-tokyo
-        - aws-well-architected-labs-canada
-        - aws-well-architected-labs-milan
-        - aws-well-architected-labs-paris
+    Type: String
+    Description: S3 Bucket that exists and holds code
+    Default: aws-well-architected-labs
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
-    Default: Cost/Labs/300_Optimization_Data_Collection/ta_dev.zip
-  Prefix:
-    Type: String
-    Description: Service which the data collector is looking at
-    Default: ta
+    Default: Cost/Labs/300_Optimization_Data_Collection/ta.zip
   RolePrefix:
     Type: String
     Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
   GlueRoleARN:
     Type: String
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
 Outputs:
   LambdaRoleARN:
     Description: Role for Lambda execution of lambda data.
@@ -126,24 +106,14 @@ Resources:
       Handler: 'main.lambda_handler'
       MemorySize: 2688
       Timeout: 300
-      Role:
-        Fn::GetAtt:
-          - LambdaRole
-          - Arn
+      Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
-          BUCKET_NAME:
-            Ref: DestinationBucket
-          ROLENAME:
-            Ref: MultiAccountRoleName
-          PATH:
-            Ref: CFDataName
-          CRAWLER_NAME:
-            Ref: Crawler
-          PREFIX:
-            Ref: Prefix
-          COSTONLY:
-            "no"
+          BUCKET_NAME: !Ref DestinationBucket
+          ROLENAME: !Ref MultiAccountRoleName
+          PREFIX: !Ref CFDataName
+          CRAWLER_NAME: !Ref Crawler
+          COSTONLY: "no"
   Crawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -154,7 +124,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/optics-data-collector/${Prefix}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -163,9 +133,9 @@ Resources:
       Principal: sqs.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !GetAtt TaskQueue.Arn
-  TaskQueue: 
+  TaskQueue:
     Type: AWS::SQS::Queue
-    Properties: 
+    Properties:
       VisibilityTimeout: 300
       ReceiveMessageWaitTimeSeconds: 20
       DelaySeconds: 2
@@ -178,3 +148,8 @@ Resources:
     Properties:
       EventSourceArn: !GetAtt TaskQueue.Arn
       FunctionName: !GetAtt LambdaFunction.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

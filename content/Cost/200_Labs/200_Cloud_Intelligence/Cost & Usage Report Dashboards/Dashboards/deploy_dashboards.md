@@ -16,10 +16,10 @@ pre: "<b>1 </b>"
 ---
 
 ## Introduction
-There are two primary method for deploying the Cloud Intelligence Dashboard listed below; *basic* and *advanced*. Both methods use CloudFormation templates to automate the setup. If you wish to use a command line tool or to deploy manually, see the alternative deployment methods section. 
+There are two primary method for deploying **CUDOS**, **KPI** and **Cost Intelligence Dashboard** listed below; *basic* and *advanced*. Both methods use CloudFormation templates to automate the setup. If you wish to use a command line tool or to deploy manually, see the alternative deployment methods section. 
 
 ## Basic Setup
-If you want to deploy the Cloud Intelligence Dashboards into your Management (Payer) Account, follow these steps. 
+If you want to deploy **CUDOS**, **KPI** and **Cost Intelligence Dashboard** into your Management (Payer) Account, follow these steps. 
 
 {{%expand "Click here to continue with Basic Setup" %}}
 
@@ -150,7 +150,12 @@ If you see no data please check the following:
 {{% /expand%}}
 
 ## Advanced Setup
-If you want to deploy the Cloud Intelligence Dashboards in an account other than your Management (Payer) Account, or wish to deploy the Cloud Intelligence Dashboards on top of multiple Management (Payer) Accounts or multiple linked accounts, use this method. 
+If you want to deploy **CUDOS**, **KPI** and **Cost Intelligence Dashboard** in an account other than your Management (Payer) Account, or wish to deploy the dashboards on top of multiple Management (Payer) Accounts or multiple linked accounts, use this method. 
+
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 
 {{< rawhtml >}}
 <iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
