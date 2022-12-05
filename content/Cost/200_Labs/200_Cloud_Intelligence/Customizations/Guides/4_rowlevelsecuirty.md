@@ -74,7 +74,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 ![Images/rls_organization_accounts_tags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_tags.png?classes=lab_picture_small)
 
-4. Add the Key **cid_users** and the Value of any **emails** you wish to allow access. These are colon delimited. Once added click **Save changes**
+4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are colon delimited. Once added click **Save changes**
 
 ![Images/rls_organization_accounts_cudostags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_cudostags.png?classes=lab_picture_small)
 
