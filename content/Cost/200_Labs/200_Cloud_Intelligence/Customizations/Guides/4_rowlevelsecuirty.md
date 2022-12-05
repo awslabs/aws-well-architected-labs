@@ -9,6 +9,10 @@ pre: "<b>4. </b>"
 
 November 2022
 
+## Authors
+Stephanie Gooch, Sr. Commercial Architect, AWS OPTICS
+Veaceslav Mindru, Sr. Technical Account Manager, AWS
+
 ## Introduction
 
 CID enable people in your organization understanding cost data by exploring interactive dashboards. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Management Accounts (Payers).
