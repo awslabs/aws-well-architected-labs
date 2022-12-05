@@ -7,99 +7,19 @@ pre: "<b>3. </b>"
 ---
 
 ## Deployment Options
-There are 3 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 2 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
 
-
-### Option 1: Manual Deployment
-This option is the manual deployment and will walk you through all steps required to create this dashboard without any automation. We recommend this option users new to Athena and QuickSight. 
-{{%expand "Click here to continue with the  manual deployment" %}}
-### Stage 1 - Prepare config files
-
-1. **Collect information to create config files**
-    + `{account}` - AWS Account in which Dashboard is deployed
-    + `{region}` - AWS region for dashboard deployment
-    + `{user_arn}` - QuickSight user arn with admin permissions.
-    
-    Can be retrieved with following command:
-    ```bash
-    aws quicksight list-users --aws-account-id {account} --namespace default --region {region} --query 'UserList[*].Arn'
-    ```
-    + `{s3FolderPath}` - path to S3 folder created in Stage 1 in following format `s3://{bucket_name}/reports/`
-    + `{databaseName}` - AWS glue data catalog database name. You can use any existing database or create new
-
-1. **Create AWS Glue database**
-    ![Image](/Cost/200_Cloud_Intelligence/Images/Glue_databaseName.png?classes=lab_picture_small)
-
-1. **Download following files and replace placeholders with respective values**
-    + [athena-table.json](/Cost/200_Cloud_Intelligence/templates/tao/athena-table.json) - placeholders `{databaseName}` in **line 2**, `{account}` in **line 3** and `{s3FolderPath}` in **line 7**
-    + [dashboard-input.json](/Cost/200_Cloud_Intelligence/templates/tao/dashboard-input.json) - placeholders `{account}` in **lines 2 and 30**, `{region}` in **line 30** and `{user_arn}` in **line 7**
-    + [data-set-input.json](/Cost/200_Cloud_Intelligence/templates/tao/data-set-input.json) - placeholders `{user_arn}` in **line 6**, `{account}` in **line 24**, `{region}` in **line 24**, `{databaseName}` in **line 26**
-    + [data-source-input.json](/Cost/200_Cloud_Intelligence/templates/tao/data-source-input.json) - placeholder `{user_arn}` in **line 15**
-    + [update-dashboard-input.json](/Cost/200_Cloud_Intelligence/templates/tao/update-dashboard-input.json) - placeholder `{account}` in **line 2 and 15** and `{region}` in **line 15**
-
-    **OR**
-    
-    [download all templates in one click](/Cost/200_Cloud_Intelligence/templates/tao/templates.zip)
-
-### Stage 2 - Create required resources and deploy dashboard
-
-1. **We recommend to use AWS CloudShell for workshop**
-    ![Image](/Cost/200_Cloud_Intelligence/Images/CloudShell.png?classes=lab_picture_small)
-
-1. Verify **AWS CLI** is **v2.1.16** and above. Check the version by issuing the `aws --version` command at the shell prompt. To upgrade AWS CLI, find the [instructions here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-
-1. Upload all 5 config files to **CloudShell**
-
-1. **Using CloudShell** change a directory to where you've uploaded files in the previous step
-
-1. Create resources
-    + Create Glue table is the metadata definition:
-    ```
-    aws glue create-table --region {region} --cli-input-json file://athena-table.json
-    ```
-
-    + Create QuickSight datasource:
-    ```
-    aws quicksight create-data-source --aws-account-id {account} --region {region} --cli-input-json file://data-source-input.json
-    ```
-
-    + Create QuickSight dataset:
-    ```
-    aws quicksight create-data-set --aws-account-id {account} --region {region} --cli-input-json file://data-set-input.json
-    ```
-
-    + Create QuickSight dashboard:
-    ```
-    aws quicksight create-dashboard --aws-account-id {account} --region {region} --cli-input-json file://dashboard-input.json
-    ```
-
-    + Get status of dashboard deployment:
-    ```
-    aws quicksight describe-dashboard --aws-account-id {account} --region {region} --dashboard-id ta-organizational-view
-    ```
-**NOTE:** Congratulations dashboard is deployed! Please log in to QuickSight and open `https://{region}.quicksight.aws.amazon.com/sn/dashboards/ta-organizational-view/`
-    ------------ | -------------	
-
-{{% /expand%}}
-### Option 2: Automation Scripts Deployment
-The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
-
-{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
-
-- Follow the [How to use steps](https://github.com/aws-samples/aws-cudos-framework-deployment#how-to-use) for installation and dashboard deployment. We recommend to use **AWS CloudShell** for automated deployment
-{{% /expand%}}
-
-### Option 3: CloudFormation Deployment
-This section is optional way to deploy TAO Dashboard using a **CloudFormation template**. The CloudFormation template allows you to complete the lab in less than half the time as the standard setup. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use the Manual or Automation Scripts Deployment**. 
+### Option 1: CloudFormation Deployment
+This section is optional way to deploy TAO Dashboard using a **CloudFormation template**. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use Automation Scripts Deployment**. 
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
-**NOTE:** An IAM role will be created when you create the CloudFormation stack. Please review the CloudFormation template with your security team and switch to the manual setup if required
+**NOTE:** An IAM role will be created when you create the CloudFormation stack.
     ------------ | -------------
 
 ### Create TAO Dashboard using a CloudFormation Template
 
-1. Login via SSO in your Cost Optimization account
+1. Login in your Cost Optimization account
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
@@ -151,7 +71,36 @@ To validate your QuickSight username complete the tasks below:
 ![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_12.png?classes=lab_picture_small)
 {{% /expand%}}
 
+### Option 2: Automation Scripts Deployment
+The [Cloud Intelligence Dashboards automation repo](https://github.com/aws-samples/aws-cudos-framework-deployment) is an optional way to create the Cloud Intelligence Dashboards using a collection of setup automation scripts. The supplied scripts allow you to complete the workshops in less than half the time as the standard manual setup.
 
+{{%expand "Click here to continue with the Automation Scripts Deployment" %}}
+
+#### Step 1: Prepare Athena
+If this is the first time you will be using Athena you will need to complete a few setup steps before you are able to create the views needed. If you are already a regular Athena user you can skip these steps and move on to the [Enable Quicksight](https://www.wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/1_prerequistes/#enable-quicksight) section below.
+
+To get Athena warmed up:
+
+1. From the services list, choose **S3**
+
+1. Create a new S3 bucket for Athena queries to be logged to. Keep to the same region as the S3 bucket created for your Trusted Advisor Organizational View reports.
+
+1. From the services list, choose **Athena**
+
+1. Select **Get Started** to enable Athena and start the basic configuration
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/Athena-GetStarted.png?classes=lab_picture_small)
+
+1. At the top of this screen select **Before you run your first query, you need to set up a query result location in Amazon S3.**
+
+    ![Image of Athena Query Editor](/Cost/200_Cloud_Intelligence/Images/Athena-S3.png?classes=lab_picture_small)
+
+1. Enter the path of the bucket created for Athena queries, it is recommended that you also select the AutoComplete option **NOTE:** The trailing “/” in the folder path is required!
+
+**NOTE:** Configuration **MUST** be performed at the Athena workgroup level. 
+    ------------ | -------------
+#### Step 2: Deploy Dashboard
+Follow the [How to use steps](https://github.com/aws-samples/aws-cudos-framework-deployment#how-to-use) for installation and dashboard deployment. We recommend to use **AWS CloudShell** for automated deployment
+{{% /expand%}}
 
 ### Saving and Sharing your Dashboard in QuickSight 
 Now that you have your dashboard created you will need want to share your dashboard with users or customize your own version of this dashboard

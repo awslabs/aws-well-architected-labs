@@ -9,15 +9,23 @@ pre: "<b>2. </b>"
 
 ### Create and upload Trusted Advisor Organizational View report
 There are 2 supported data collection methods:
+1. **Trusted Advisor API via deployment of [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) (recommended)** - provides an automated way to collect Trusted Advisor checks for all accounts in your AWS Organizations via deployment of required AWS resources from provided AWS CloudFormation templates. Supports automated data refresh.
 1. **Trusted Advisor Organizational View** - provides an easy way to collect Trusted Advisor checks for all accounts in your AWS Organizations without need to provision any additional resources. Only manual data refresh is supported.
-2. **Trusted Advisor API via deployment of [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)** - provides an automated way to collect Trusted Advisor checks for all accounts in your AWS Organizations via deployment of required AWS resources from provided AWS CloudFormation templates. Supports automated data refresh.
+
 
 Please expand data collection method which you used in prerequisites step to proceed with workshop:
+{{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab (recommended)" %}}
+Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `ta-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`
+
+**NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
+    ------------ | -------------
+{{% /expand%}}
+
 {{%expand "Trusted Advisor Organizational View" %}}
 
-
-**NOTE:** At the moment TA Organizational View supports only manual report generation. Periodic refresh is required for the latest trends
+**NOTE:** Only use this method of data collection method if you for some reasons you can't and don't plan to deploy [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). Otherwise use recommended method with [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)
     ------------ | -------------
+
 
 1. **Create** Organizational View report
 
@@ -40,18 +48,14 @@ You can select certain accounts but please ensure you maintain consistency in fo
 
 1. **Unzip** downloaded report
 
-1. **Upload** downloaded report to the `reports` folder in the S3 bucket
+1. **Upload** downloaded report to the `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/` folder in the S3 bucket
 
     Make sure you upload **unzipped** folder to S3 bucket
-    ![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report.png?classes=lab_picture_small)![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report2.png?classes=lab_picture_small)
+    ![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report.png?classes=lab_picture_small)
 
 **NOTE:** You can upload as many folders with reports as you need. Dashboard will use all uploaded data to show trends over time
     ------------ | -------------
+    
 {{% /expand%}}
-{{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab" %}}
-Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `ta-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`
 
-**NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
-    ------------ | -------------
-{{% /expand%}}
 {{< prev_next_button link_prev_url="../1_prerequistes" link_next_url="../3_deployment/" />}}
