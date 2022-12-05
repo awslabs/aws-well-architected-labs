@@ -7,7 +7,7 @@ weight: 8
 hidden: false
 ---
 ## Last Updated
-October 2022
+December 2022
 
 {{% notice tip %}}
 This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
@@ -24,11 +24,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Leadership
 The Cloud Intelligence Dashboards are managed by:
-
 - Yuriy Prykhodko, AWS Principal Technical Account Manager (founder)
 - Aaron Edell, Global Head of Business, Cloud Intelligence Dashboards (founder)
 - Iakov Gan, AWS Sr. Technical Account Manager
-- Oleksandr Moskalenko, AWS Sr. Technical Account Manager
 
 ## Introduction
 Do you know how much you’re spending per hour on AWS Lambda? How about per S3 bucket? How do you know buying Savings Plan or using Spot Instances is saving you money? Does your team know how much their application costs to run on AWS? Visualizing and understanding your cost and usage data is critical to good cloud financial management and accountability.
@@ -41,11 +39,9 @@ Cloud resources are disposable, and with a pay-per-use model it requires a stron
 
 This Well Architected lab will walk you through implementing a series of dashboards for all of your AWS accounts that will help you drive financial accountability, optimize cost, track usage goals, implement best-practices for governance, and achieve operational excellence. 
 
-## Cloud Intelligence Dashboards
-
 ![Images/CIDframework.png](/Cost/200_Cloud_Intelligence/Images/CIDframework.png?classes=lab_picture_small)
 
-### Overview 
+## Overview 
 In this lab, you will find step-by-step guides on how to implement some or all of the foundational Cloud Intelligence Dashboards as well as additional dashboards.
 - [Last Updated](#last-updated)
 - [Feedback](#feedback)
@@ -54,17 +50,17 @@ In this lab, you will find step-by-step guides on how to implement some or all o
 - [Introduction](#introduction)
 - [Cloud Intelligence Dashboards](#cloud-intelligence-dashboards)
 	- [Overview](#overview)
-	- [Cost Intelligence Dashboard (CID)](#cost-intelligence-dashboard-cid)
-- [Authors](#authors)
-- [Contributors](#contributors)
-	- [CUDOS Dashboard](#cudos-dashboard)
-- [Authors](#authors-1)
-	- [Trusted Advisor Organizational (TAO) Dashboard](#trusted-advisor-organizational-tao-dashboard)
-	- [KPI Dashboard](#kpi-dashboard)
-- [Authors](#authors-2)
-- [Contributors](#contributors-1)
-	- [Compute Optimizer Dashboard (COD)](#compute-optimizer-dashboard-cod)
-	- [Additional Dashboards](#additional-dashboards)
+- [Cost Intelligence Dashboard (CID)](#cost-intelligence-dashboard-cid)
+	- [Authors](#authors)
+	- [Contributors](#contributors)
+- [CUDOS Dashboard](#cudos-dashboard)
+	- [Authors](#authors-1)
+- [Trusted Advisor Organizational (TAO) Dashboard](#trusted-advisor-organizational-tao-dashboard)
+- [KPI Dashboard](#kpi-dashboard)
+	- [Authors](#authors-2)
+	- [Contributors](#contributors-1)
+- [Compute Optimizer Dashboard (COD)](#compute-optimizer-dashboard-cod)
+- [Additional Dashboards](#additional-dashboards)
 - [Steps:](#steps)
 - [Authors](#authors-3)
 - [Contributors](#contributors-2)
@@ -91,12 +87,12 @@ The Cloud Intelligence Dashboards include (but are not limited to) the following
 	
 
 
-### Cost Intelligence Dashboard (CID)
+## Cost Intelligence Dashboard (CID)
 
-## Authors
+#### Authors
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 
-## Contributors 
+#### Contributors 
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
 - Kareem Syed-Mohammed, Senior Product Manager - Technical (Amazon QuickSight)
 - Aaron Edell, Global Head of Business - Cloud Intelligence Dashboards
@@ -121,9 +117,9 @@ The Cost Intelligence Dashboard is a customizable and accessible dashboard to he
 
 - [Explore a sample Cost Intelligence Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cid) 
 
-### CUDOS Dashboard
+## CUDOS Dashboard
 
-## Authors
+#### Authors
 
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yuriy Prykhodko, AWS Principal Technical Account Manager
@@ -138,7 +134,7 @@ The CUDOS Dashboard is an in-depth, granular, and recommendation-driven dashboar
 
 - [Explore a sample CUDOS Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cudos) 
 
-### Trusted Advisor Organizational (TAO) Dashboard
+## Trusted Advisor Organizational (TAO) Dashboard
 
 Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve security and performance, reduce overall costs, and monitors service limits. Organizational view lets you view Trusted Advisor checks for all accounts in your AWS Organizations. The only way to visualize the organizational view is to use the TAO dashboard. The TAO dashboard is a set of visualizations that provide comprehensive details and trends across your entire AWS Organization. Out-of-the-box benefits of the TAO dashboard include (but are not limited to):
 
@@ -155,12 +151,12 @@ Trusted Advisor Organizational (TAO) requires the management account in your org
 
 - [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
-### KPI Dashboard
+## KPI Dashboard
 
-## Authors
+#### Authors
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
 
-## Contributors 
+#### Contributors 
 - Aaron Edell, Global Head of Business - Cloud Intelligence Dashboards
 - Alex Head, OPTICS Manager 
 - Georgios Rozakis, AWS Technical Account Manager
@@ -180,16 +176,18 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
 
 
-### Compute Optimizer Dashboard (COD)
+## Compute Optimizer Dashboard (COD)
 This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportunities for over provisioned resources and also see the Operational risk from under provisioned ones.
 
 **Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample Compute Optimizer Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
 
+#### Authors
+- Iakov Gan, Sr. Techical Account Manager
 
 
-### Additional Dashboards
+## Additional Dashboards
 In addition to the 3 foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.   
 
 * Data Transfer Dashboard 
@@ -198,12 +196,12 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 
-## Steps:
+#### Steps:
 - [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
-- [Get started with the COD](compute-optimizer-dashboards/)
+- [Get started with the Comute Optimizer Dashboard](compute-optimizer-dashboards/)
 
-## Authors
+#### Authors
 
 - Aaron Edell, Global Head of Business and GTM (Cloud Intelligence Dashboards)
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS)
@@ -211,7 +209,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Yuriy Prykhodko, AWS Principal Technical Account Manager
 - Iakov Gan, Senior Technical Account Manager
 
-## Contributors
+#### Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
 - Alex Head, OPTICS Manager 
 - Barry Miller, Technical Account Manager

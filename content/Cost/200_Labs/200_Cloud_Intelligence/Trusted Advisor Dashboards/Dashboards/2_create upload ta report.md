@@ -49,7 +49,7 @@ You can select certain accounts but please ensure you maintain consistency in fo
     ------------ | -------------
 {{% /expand%}}
 {{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab" %}}
-Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `ta-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`
+Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `trusted-advisor-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`
 
 **NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
     ------------ | -------------

@@ -83,11 +83,11 @@ If you deployed TAO Dashboard with Trusted Advisor Organizational View as data c
     ./shell-script/tao.sh --action=change-source-location
      ```       
 {{% notice note %}}
-When asked, provide S3 URI path to ta-data folder in optimization data bucket created in the [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). The path should be similar to s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/
+When asked, provide S3 URI path to trusted-advisor-data folder in optimization data bucket created in the [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). The path should be similar to s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/
 {{% /notice %}}
 {{% /expand%}}
 {{%expand "Manual deployment" %}}
-1. **Change** `{s3FolderPath}` in `athena-table.json` file created in [Prepare configuration](../workshop/prepare-configs.html) step to S3 URI path to ta-data folder in optimization data bucket created in the [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). The path should be similar to `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`
+1. **Change** `{s3FolderPath}` in `athena-table.json` file created in [Prepare configuration](../workshop/prepare-configs.html) step to S3 URI path to trusted-advisor-data folder in optimization data bucket created in the [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). The path should be similar to `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`
 1. **Update** Glue table is the metadata definition with following command:
     ```bash
     aws glue update-table --region {region} --cli-input-json file://athena-table.json

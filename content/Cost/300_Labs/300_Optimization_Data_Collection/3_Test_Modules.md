@@ -8,7 +8,7 @@ pre: "<b>3. </b>"
 
 ## Testing your deployment 
 
-Your lambda functions will run automatically on the schedule you chose at deployment. However, if you would like to test your functioms please see the steps below. 
+Your lambda functions will run automatically on the schedule you chose at deployment. However, if you would like to test your functions please see the steps below. 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
 
 1. Depending on the module which you would like to test the following Lambda functions should be triggered. Find your module and search for the function in the [AWS Lambda Portal](console.aws.amazon.com/lambda/home):

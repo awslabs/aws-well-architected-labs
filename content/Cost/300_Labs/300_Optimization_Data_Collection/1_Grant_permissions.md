@@ -18,7 +18,7 @@ The rest of this page is broken into two sets of instructions:
 
 Some of the data needed for the modules is in the **Management account** we will now create a read only role for the Data Collector Account to assume. 
 
-1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml)
+1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml&stackName=OptimizationManagementDataRoleStack)
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
@@ -79,7 +79,7 @@ If you wish to also access data in your management account, deploy the same Clou
 
 {{%expand "To do this follow these instructions" %}}
 
-1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml)
+1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml&stackName=OptimizationDataRoleStack)
 
 2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
 
