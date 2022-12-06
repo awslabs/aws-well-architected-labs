@@ -37,5 +37,3 @@ The first step to customizing your dashboards is to make sure you save your Quic
 
 ### Customization Guides
 {{% children  /%}}
-
-{{< prev_next_button link_next_url="./dashboards/1_prerequistes/" button_next_text="Start Lab" first_step="true" />}}

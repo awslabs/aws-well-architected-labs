@@ -2,7 +2,7 @@
 title: "Row Level Security"
 date: 2022-11-16T11:16:08-04:00
 chapter: false
-weight: 1
+weight: 4
 pre: "<b>4. </b>"
 ---
 ## Last Updated
