@@ -223,7 +223,8 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Oleksandr Moskalenko, Sr. Technical Account Manager
 - William Hughes, Sr. Solutions Architect
 - Thomas Buatois, Cloud Infrastructure Architect
-  
+- Stephanie Gooch, Sr. Commercial Architect, AWS OPTICS
+- Veaceslav Mindru, Sr. Technical Account Manager, AWS
 ---
 
 {{< prev_next_button link_next_url="./cost-usage-report-dashboards/" button_next_text="Next" first_step="true" />}}
