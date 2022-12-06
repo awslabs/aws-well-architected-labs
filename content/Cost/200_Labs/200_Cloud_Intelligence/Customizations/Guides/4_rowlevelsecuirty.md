@@ -10,12 +10,12 @@ pre: "<b>4. </b>"
 November 2022
 
 ## Authors
-Stephanie Gooch, Sr. Commercial Architect, AWS OPTICS
-Veaceslav Mindru, Sr. Technical Account Manager, AWS
+- Stephanie Gooch, Sr. Commercial Architect, AWS OPTICS
+- Veaceslav Mindru, Sr. Technical Account Manager, AWS
 
 ## Introduction
 
-CID enable people in your organization understanding cost data by exploring interactive dashboards. However, having all data available for all users can be too overwhelming and mean it is more difficult to find the data they care about. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This works for Multiple Management Accounts (Payers).
+Cloud Intelligence Dashboards (CID) helps you to visualize and understand AWS cost and usage data in your organization by exploring interactive dashboards. However, in order to maintain least privilege principle, customers who use CID at scale of organization often would like to provide their users access only to the data for linked accounts which they own. Using [Row Level Security](https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html) (RLS) enables you to restrict the data a user can see to just what they are allowed to. This also applicable for customers with Multiple Management (Payer) Accounts .
 
 ## Prerequisite
 
@@ -23,7 +23,7 @@ For this solution you must have the following:
 
 * Access to your AWS Organizations and ability to tag resources
 * An [AWS Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) (CUR) or if from the multiple payers these must be replicated into a bucket, more info [here](https://wellarchitectedlabs.com/cost/100_labs/100_1_aws_account_setup/3_cur/#option-2-replicate-the-cur-bucket-to-your-cost-optimization-account-consolidate-multi-payer-curs)
-* A CID deployed over this CUR data, checkout the new single deployment method [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/)
+* A CID deployed over this CUR data, checkout the new single deployment method [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/). 
 * A list of users and what level of access they require. This can be member accounts, organizational units (OU) or payers. 
 
 
