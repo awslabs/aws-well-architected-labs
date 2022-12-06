@@ -41,31 +41,25 @@ This step will create a new CUR for you. You can request a [backfill](https://do
    
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination&param_CreateCUR=True&param_DestinationAccountId=REPLACE%20WITH%20CURRENT%20ACCOUNT%20ID&param_SourceAccountIds=)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination&param_CreateCUR=True&param_DestinationAccountId=REPLACE%20WITH%20CURRENT%20ACCOUNT%20ID&param_SourceAccountIds=)
 	
-![Images/multi-account/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cf_dash_launch_2.png?classes=lab_picture_small)
+![Images/multi-account/basic-setup-step1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/basic-setup-step1.png?classes=lab_picture_small)
 
-3. Set CreateCUR to **true**.
-   
-![Images/multi-account/cfn_dash_param_dst_dedicated_3.png.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_3.png?classes=lab_picture_small)
+3. Make sure CreateCUR set to **true**.
 
-4. Enter your Management (Payer) Account ID. Leave Source Account Empty. 
+4. Enter your Management (Payer) Account ID. Leave Source Account Empty.
 
-   
-![Images/multi-account/cfn_dash_param_dst_dedicated_2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/cfn_dash_param_dst_dedicated_2.png?classes=lab_picture_small)
+5.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources**, and click **Create stack**.
 
-5. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page.
-
-6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_9.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
-
-7. You will see the stack will start with **CREATE_IN_PROGRESS**.
+6. You will see the stack will start with **CREATE_IN_PROGRESS**.
    **NOTE:** This step can take 5-15mins
     ------------ | -------------
 
 8. Once complete, the stack will show **CREATE_COMPLETE**.
 
-**You will now need to wait 24 hours for your first CUR to be deployed into S3 before you can continue**
+**You will now need to wait 24 hours for your first CUR to be deployed into S3.** Before that dasbhoards will be empty.
+
+We also recommend creating a Support Case in Service=Billing and category=Invoices and Reporting, requesting a backfill of your CUR (name=cid) with 12 months of data.
 
 ### Enable QuickSight
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
