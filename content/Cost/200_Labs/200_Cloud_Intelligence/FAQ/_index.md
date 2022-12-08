@@ -3,7 +3,7 @@ title: "FAQ"
 #menutitle: "FAQs"
 date: 2022-08-31T11:16:08-04:00
 chapter: false
-weight: 8
+weight: 7
 hidden: false
 ---
 #### Last Updated
