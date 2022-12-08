@@ -78,9 +78,9 @@ You can select different levels of access. Tag one of the following and the use 
 
 ![Images/rls_organization_accounts_tags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_tags.png?classes=lab_picture_small)
 
-4. Add the Key **cudos_users** and the Value of any **emails** you wish to allow access. These are colon delimited. Once added click **Save changes**
+4. Add the Key **cid_users** and the Value of any **emails** you wish to allow access. These are colon delimited. Once added click **Save changes**
 
-![Images/rls_organization_accounts_cudostags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_cudostags.png?classes=lab_picture_small)
+![Images/rls_organization_accounts_cidtags.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization_accounts_cidtags.png?classes=lab_picture_small)
 
 5. Repeat on all resources with relevant emails. 
 
@@ -88,7 +88,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
 
-1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/row-level-security/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
+1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/row-level-security/cid_rls.yaml&stackName=CIDRowLevelSecurity) 
 
 ![Images/rls_cfn.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn.png?classes=lab_picture_small)
 
@@ -154,7 +154,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 5. The function will run, it will take a minute or two given the size of the Organizations files and processing required, then return success. Click **Details** and view the output. 
 
-6. You can go to your bucket in S3 and there should be a file in the folder CUDOS_RLS. 
+6. You can go to your bucket in S3 and there should be a file in the folder CID_RLS. 
 ![Images/rls_s3_object.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_s3_object.png?classes=lab_picture_small)
 
 7. Download this [file](/Cost/200_Cloud_Intelligence/qs_s3_manifest.json) and replace <bucket> with the bucket you can see your data in. 
