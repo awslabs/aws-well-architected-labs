@@ -140,6 +140,7 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-ami-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   SnapshotCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -152,6 +153,7 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-snapshot-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   EBSCrawler:
     Type: AWS::Glue::Crawler
     Properties:
@@ -164,6 +166,7 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-ebs-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -194,14 +197,15 @@ Resources:
       Description: Identifies snapshots connected to AMI's
       Name: inventory_snapshot_connected_to_ami
       QueryString: |
-        SELECT *,
+        SELECT distinct(snapshotid),volume,volumesize,starttime,snapdescription, ownerid, 
+        snap_ami_id, imageid, name, description, state, rootdevicetype, virtualizationtype,year, month, 
         CASE
         WHEN snap_ami_id = imageid THEN 'AMI Avalible'
         WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed'
         ELSE 'Not AMI'
         END AS status
           FROM ( 
-        (SELECT snapshotid AS snap_id,
+        (SELECT snapshotid,
             volumeid as volume,
             volumesize,
             starttime,
@@ -218,8 +222,8 @@ Resources:
             WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN
             split_part(Description,' ', 4)
             ELSE ''
-            END AS "snap_ami_id"
-        FROM "optimization_data"."inventory_snapshot_data"
+            END AS snap_ami_id
+        FROM optimization_data.inventory_snapshot_data
         ) AS snapshots
         LEFT JOIN 
             (SELECT imageid,
@@ -228,14 +232,14 @@ Resources:
             state,
             rootdevicetype,
             virtualizationtype
-            FROM "optimization_data"."inventory_ami_data") AS ami
-                ON snapshots.snap_ami_id = ami.imageid )"
+            FROM optimization_data.inventory_ami_data) AS ami
+                ON snapshots.snap_ami_id = ami.imageid )
   AthenaSnaphotAMIPricing:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's with Pricing data 
-      Name: snapshot-ami-query
+      Name: inventory_snapshot_connected_to_ami_with_pricing
       QueryString: |
         CREATE OR REPLACE VIEW snapshot_ami_quicksight_view AS 
         SELECT *,
@@ -291,14 +295,14 @@ Resources:
         )  mapping ON (mapping.volume_mapping = snapshots.volume)) s
         LEFT JOIN (
           SELECT
-            "product family"
+            "productfamily"
           , location
           , priceperunit
           , unit
           FROM
             optimization_data.pricing_ec2
-          WHERE ((("product family" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND ("location type" = 'AWS Region'))
-        )  snap_unit_price ON (s.regionname = snap_unit_price.location))"
+          WHERE ((("productfamily" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND ("locationtype" = 'AWS Region'))
+        )  snap_unit_price ON (s.regionname = snap_unit_price.location))
 
   AthenaEBSTA:
     Type: AWS::Athena::NamedQuery
@@ -349,7 +353,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Identifies snapshots connected to AMI's with Pricing data 
-      Name: ebs-ta-query-pricing
+      Name: inventory_ebs_with_ta_data_with_pricing
       QueryString: |
         CREATE OR REPLACE VIEW ebs_quicksight_view AS
           SELECT

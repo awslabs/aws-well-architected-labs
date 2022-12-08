@@ -16,7 +16,7 @@ You can test this lab in a dedicated account that preferably has following asset
 ## Prerequisites for local environment
 * cfn-lint https://github.com/aws-cloudformation/cfn-lint#install
 * python3.8+
-* `pip3 instal -U boto3, cfn_tools`
+* `pip3 install -U boto3, cfn_tools`
 
 ## Testing
 
