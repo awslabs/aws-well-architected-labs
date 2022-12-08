@@ -91,6 +91,16 @@ Follow the [How to use steps](https://github.com/aws-samples/aws-cudos-framework
 5. In your Terminal, type the following and hit return. You are now starting the process of deploying the dashboards. 
 `cid-cmd deploy`
 
+    Or you can provide all parameters in the command line. Please make sure the S3 path is the one where you have Trusted Advisor data collected.
+
+```bash
+cid-cmd -vv deploy \
+  --dashboard-id ta-organizational-view \
+  --athena-database optimization_data \
+  --view-ta-organizational-view-reports-s3FolderPath \
+  's3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data'
+```
+
 6. Select the Trusted Advisor Organizational View dashboard and proceed with deployment. 
 
 {{% /expand%}}
