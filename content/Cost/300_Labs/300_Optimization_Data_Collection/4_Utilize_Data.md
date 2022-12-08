@@ -98,7 +98,7 @@ There is an option to add pricing data to this query. This assumes you have alre
 **Athena**
 1. Go to AWS Athena
 2. Go to *Saved queries* at the top of the screen
-3. Run the *ec2_pricing* Query to create a pricing table
+3. Run the *pricing_ec2_create_table* Query to create a pricing table
 4. In *Saved queries* Run the *region_names* Query to create a normalized region name table 
 5. In *Saved queries* run *snapshot-ami-query* to create a view 
 6. Run the below to see your data
