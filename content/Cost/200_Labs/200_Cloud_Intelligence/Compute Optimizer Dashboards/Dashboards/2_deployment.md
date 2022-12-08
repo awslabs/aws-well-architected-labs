@@ -7,7 +7,13 @@ pre: "<b>2. </b>"
 ---
 
 ## Deployment Options
-Currently this dashboard can only be installed via CID tool. 
+Dashboard can be installed via CID tool or via CloudFormation. 
+
+
+### Deploy via CloudFormation
+If you already have CUDOS, Cost Intellegence Dashboard or KPI Dashboard installed via CloudFormation as described [here](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/), you can update the Stack by setting DeployComputeOptimizerDashboard to "yes" and updating the path of Data Collection S3 bucket (if different from default).
+
+If you do not have the stack installed, you can install using the instructions [here](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/) (you can ignore the Cost and Usage report part as it is not required for this dashboard).
 
 
 ### Deploy via CID tool
