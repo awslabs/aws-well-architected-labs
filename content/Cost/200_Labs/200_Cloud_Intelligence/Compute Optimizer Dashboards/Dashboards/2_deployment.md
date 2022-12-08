@@ -28,10 +28,10 @@ Or you can provide all parameters in the command line. Please pay attention to t
 cid-cmd -vv deploy \
   --dashboard-id compute-optimizer-dashboard \
   --athena-database optimization_data \
-  --view-compute-optimizer-lambda-lines-s3FolderPath       's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_lambda' \
-  --view-compute-optimizer-ebs-volume-lines-s3FolderPath   's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_ebs_volume' \
-  --view-compute-optimizer-auto-scale-lines-s3FolderPath   's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_auto_scale' \
-  --view-compute-optimizer-ec2-instance-lines-s3FolderPath 's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_ec2_instance'
+  --view-compute-optimizer-lambda-lines-s3FolderPath       's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_lambda' \
+  --view-compute-optimizer-ebs-volume-lines-s3FolderPath   's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_ebs_volume' \
+  --view-compute-optimizer-auto-scale-lines-s3FolderPath   's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_auto_scale' \
+  --view-compute-optimizer-ec2-instance-lines-s3FolderPath 's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_ec2_instance'
 ```
 
 After deployment you will need to set up a daily refresh of following dataset:
@@ -56,10 +56,10 @@ You can also provide all parameters in the command line. Please make sure the pa
 cid-cmd -vv -yes update --recursive --force \
   --dashboard-id compute-optimizer-dashboard \
   --athena-database optimization_data \
-  --view-compute-optimizer-lambda-lines-s3FolderPath       's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_lambda' \
-  --view-compute-optimizer-ebs-volume-lines-s3FolderPath   's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_ebs_volume' \
-  --view-compute-optimizer-auto-scale-lines-s3FolderPath   's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_auto_scale' \
-  --view-compute-optimizer-ec2-instance-lines-s3FolderPath 's3://costoptimizationdata{account_id}/Compute_Optimizer/Compute_Optimizer_ec2_instance'
+  --view-compute-optimizer-lambda-lines-s3FolderPath       's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_lambda' \
+  --view-compute-optimizer-ebs-volume-lines-s3FolderPath   's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_ebs_volume' \
+  --view-compute-optimizer-auto-scale-lines-s3FolderPath   's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_auto_scale' \
+  --view-compute-optimizer-ec2-instance-lines-s3FolderPath 's3://costoptimizationdata{account_id}/compute_optimizer/compute_optimizer_ec2_instance'
 ```
 
 
