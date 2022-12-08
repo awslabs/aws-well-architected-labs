@@ -33,7 +33,7 @@ This section is optional way to deploy TAO Dashboard using a **CloudFormation te
 4. Review **Information** parameter to confirm prerequisites before specifying the other parameters
 ![Images/cf_dash_4.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_4.png?classes=lab_picture_small)
 
-5. Update your **S3 Bucket Path to the TA Reports** with the S3 path where your **Trusted Advisor reports** are stored. Path should look like ``s3://{bucketname}/reports`` or ``s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`` depending on data collection method used in [Create and Upload Trusted Advisor Report](http://localhost:1313/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/2_create-upload-ta-report/) step before.
+5. Update your **S3 Bucket Path to the TA Reports** with the S3 path where your **Trusted Advisor reports** are stored. Path should look like ``s3://{bucketname}/reports`` or ``s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`` depending on data collection method used in [Create and Upload Trusted Advisor Report](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/2_create-upload-ta-report/) step before.
 ![Images/cf_dash_5.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_5.png?classes=lab_picture_small)
 
 

@@ -3,7 +3,7 @@ title: "Customizations"
 #menutitle: "Customizations"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
-weight: 8
+weight: 5
 hidden: false
 ---
 #### Last Updated
@@ -15,9 +15,12 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 Now that you have the Cloud Intelligence Dashboards deployed, you can follow some of these steps to see how you can customize your deployment to suit your needs. The amount of customization you can do is unlimited, so here we will attempt to show you how to get started with some common customization requests. Have an idea for another one - please send it to us at the e-mail address above. 
 
-### Customization Prerequisites
+### Customization Prerequisites - Save Dashboard as Analysis
 
 The first step to customizing your dashboards is to make sure you save your QuickSight dashboard as an Analysis.
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YNQBBM5RQtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
 
 {{%expand "Click here to expand step by step instructions on creating an editable Analysis" %}}
 
@@ -37,5 +40,3 @@ The first step to customizing your dashboards is to make sure you save your Quic
 
 ### Customization Guides
 {{% children  /%}}
-
-{{< prev_next_button link_next_url="./dashboards/1_prerequistes/" button_next_text="Start Lab" first_step="true" />}}
