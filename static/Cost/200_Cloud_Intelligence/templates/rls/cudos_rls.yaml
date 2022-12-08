@@ -69,8 +69,8 @@ Resources:
       Description: LambdaFunction of python3.8.
       Runtime: python3.9
       Code:
-          S3Bucket: !Ref CodeBucket
-          S3Key: !Ref CodeKey
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Ref CodeKey
       Handler: 'create_rls.lambda_handler'
       MemorySize: 2688
       Timeout: 600
