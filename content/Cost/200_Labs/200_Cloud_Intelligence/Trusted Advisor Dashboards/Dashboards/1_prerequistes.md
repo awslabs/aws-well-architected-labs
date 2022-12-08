@@ -36,7 +36,7 @@ For the step by step guide please follow [the documentation](https://docs.aws.am
 
 1. Create an S3 bucket with the name `costoptimizationdata{account_id}` in a [QuickSight supported AWS region](https://docs.aws.amazon.com/quicksight/latest/user/regions.html) (for example us-east-1)
 
-2. Create new folder `optics-data-collector` and then `ta-data` within it so the whole path looks like `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`.
+2. Create new folder `trusted-advisor` and then `trusted-advisor-data` within it so the whole path looks like `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`.
 
 {{% notice note %}}
 You can use any S3 bucket name. Please save {bucket} name. It will be needed in Stage 2
@@ -63,7 +63,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
         ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
     
-    + Enable the Amazon S3 option and select the bucket where your Trusted Advisor Organizational View reports are located
+    + Enable the Amazon S3 option and select the bucket where your Trusted Advisor Organizational View reports are located, by default it's costoptimizationdata{account_id}
 
         ![Image of s3 buckets that are linked to the QuickSight account. Enable bucket and give Athena Write permission to it.](/Cost/200_Cloud_Intelligence/Images/QS-s3-bucket.png?classes=lab_picture_small)
 

@@ -10,65 +10,43 @@ pre: "<b>3. </b>"
 There are 2 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
 
 ### Option 1: CloudFormation Deployment
-This section is optional way to deploy TAO Dashboard using a **CloudFormation template**. You will require permissions to modify CloudFormation templates and create an IAM role. **If you do not have the required permissions use Automation Scripts Deployment**. 
+If you already have CUDOS, Cost Intellegence Dashboard or KPI Dashboard installed via CloudFormation as described [here](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/), you can update the Stack (default name Cloud-Intelligence-Dashboards) by setting **Deploy TAO Dashboard** to "yes" and updating the path of Data Collection S3 bucket (if different from default).
 
 {{%expand "Click here to continue with the CloudFormation Deployment" %}}
 
 **NOTE:** An IAM role will be created when you create the CloudFormation stack.
     ------------ | -------------
 
-### Create TAO Dashboard using a CloudFormation Template
-
-1. Login in your Cost Optimization account
+1. Login into your Linked (Data Collection) Account where you would like to deploy dashboard
 
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3.us-west-2.amazonaws.com/Cost/Labs/200-cloud-intelligence-dashboards/tao.cfn.yml)
+	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards&param_DeployTAODashboard=yes)
 	
-![Images/cf_dash_2.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_2.png?classes=lab_picture_small)
-
-3. Enter a **Stack name** for your template such as **TAO-Dashboard-QuickSight**
-![Images/cf_dash_3.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_3.png?classes=lab_picture_small)
-
-4. Review **Information** parameter to confirm prerequisites before specifying the other parameters
-![Images/cf_dash_4.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_4.png?classes=lab_picture_small)
-
-5. Update your **S3 Bucket Path to the TA Reports** with the S3 path where your **Trusted Advisor reports** are stored. Path should look like ``s3://{bucketname}/reports`` or ``s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`` depending on data collection method used in [Create and Upload Trusted Advisor Report](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/2_create-upload-ta-report/) step before.
-![Images/cf_dash_5.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_5.png?classes=lab_picture_small)
-
-
-6. Update your **Athena Database Name** with the name of the CUR Athena Database where you want to deploy table for TA reports. Leave **default** if you are not sure which database name provide:
-![Images/cf_dash_6.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_6.png?classes=lab_picture_small)
-
-7. Update **QuickSight Username** parameter with your **QuickSight username** 
-![Images/cf_dash_7.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_7.png?classes=lab_picture_small)
-To validate your QuickSight username complete the tasks below:
+3. Enter a **Stack name** for your template such as **Cloud-Intelligence-Dashboards**
+4. Review **Common Parameters** and confirm prerequisites before specifying the other parameters. You must answer 'yes' to both prerequisites questions.
+5. Copy and paste your **QuicksightUserName** into the parameter text box.
+To find your QuickSight username:
 	- Open a new tab or window and navigate to the **QuickSight** console
 	- Find your username in the top right navigation bar
-![Images/cf_dash_7_2.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_7_2.png?classes=lab_picture_small)
-	- Add the identified username to the CloudFormation parameter
-	
-8. Update **Quicksight Identity Region** parameter with your **QuickSight region** 
-![Images/cf_dash_8.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_8.png?classes=lab_picture_small)
+![Images/cf_dash_qs_2.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_qs_2.png?classes=lab_picture_small)
 
-	- **Optional** add a **Suffix** if you want to create multiple instances of the same account. 
-    - **Optional** specify a **Preferred Refresh Schedule** for QuickSight dataset refresh. Leave empty if no automated refresh is needed.
-9. Select **Next** at the bottom of **Specify stack details** and then select **Next** again on the **Configure stack options** page
+1. Update your **Path to Optimization Data Collection S3 bucket** if needed. 
 
-10. Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
-![Images/cf_dash_10.png](/Cost/200_Cloud_Intelligence/Images/cf_dash_9.png?classes=lab_picture_small)
+2. Check that **Deploy TAO Dashboard** is set to yes.
 
-11. You will see the stack will start in **CREATE_IN_PROGRESS** 
-![Images/cf_dash_10.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_10.png?classes=lab_picture_small)
+3.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
-**NOTE:** This step can take 5-15mins
+4.  You will see the stack will start in **CREATE_IN_PROGRESS** 
+   **NOTE:** This step can take 5mins
     ------------ | -------------
 
-12. Once complete, the stack will show **CREATE_COMPLETE**
-![Images/cf_dash_11.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_11.png?classes=lab_picture_small)
+1. Once complete, the stack will show **CREATE_COMPLETE**
 
-13. Navigate to **Dashboards** page in your QuickSight console, click on **Trusted Advisor Organizational View** dashboard to open it
-![Images/cf_dash_12.png](/Cost/200_Cloud_Intelligence/Images/tao/cf_dash_12.png?classes=lab_picture_small)
+11. Navigate back to CloudFormation and to the **Output of the Stack** tab and check dashboard URLS. Click on a URL to open the dashboards.
+   **NOTE:** This Output Section will be available once the Stack is Completed
+    ------------ | -------------
+
 {{% /expand%}}
 
 ### Option 2: Automation Scripts Deployment
@@ -100,10 +78,21 @@ To get Athena warmed up:
     ------------ | -------------
 #### Step 2: Deploy Dashboard
 Follow the [How to use steps](https://github.com/aws-samples/aws-cudos-framework-deployment#how-to-use) for installation and dashboard deployment. We recommend to use **AWS CloudShell** for automated deployment
-{{% /expand%}}
+1. Open up a terminal application with permissions to run API requests against your AWS account. We recommend [CloudShell](https://console.aws.amazon.com/cloudshell).
 
-### Saving and Sharing your Dashboard in QuickSight 
-Now that you have your dashboard created you will need want to share your dashboard with users or customize your own version of this dashboard
-	- [Click to navigate QuickSight steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/quicksight/quicksight)
+2. We will be following the steps outlined in the [Cloud Intelligence Dashboards automation GitHub repo.](https://github.com/aws-samples/aws-cudos-framework-deployment/) For more information on the CLI tool, please visit the repo. 
+
+3. In your Terminal type the following and hit return. This will make sure you have the latest pip package installed.
+`python3 -m ensurepip --upgrade`
+
+4. In your Terminal type the following and hit return. This will download and install the CID CLI tool.
+`pip3 install --upgrade cid-cmd`
+
+5. In your Terminal, type the following and hit return. You are now starting the process of deploying the dashboards. 
+`cid-cmd deploy`
+
+6. Select the Trusted Advisor Organizational View dashboard and proceed with deployment. 
+
+{{% /expand%}}
 
 {{< prev_next_button link_prev_url="../2_create-upload-ta-report" link_next_url="../4_update-dashboard" />}}
