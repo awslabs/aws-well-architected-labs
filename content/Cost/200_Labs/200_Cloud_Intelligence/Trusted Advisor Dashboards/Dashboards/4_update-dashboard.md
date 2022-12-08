@@ -33,7 +33,7 @@ You can select certain accounts but please ensure you maintain consistency in fo
 
 1. **Unzip** downloaded report
 
-1. **Upload** downloaded report to the `reports` folder in the S3 bucket
+1. **Upload** downloaded report to the `trusted-advisor/trusted-advisor-data` folder in the S3 bucket
 
     Make sure you upload **unzipped** folder to S3 bucket
     ![Image](/Cost/200_Cloud_Intelligence/Images/S3-upload-report.png?classes=lab_picture_small)![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report2.png?classes=lab_picture_small)
