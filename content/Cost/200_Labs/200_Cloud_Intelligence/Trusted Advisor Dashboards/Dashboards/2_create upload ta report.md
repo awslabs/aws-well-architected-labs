@@ -15,7 +15,7 @@ There are 2 supported data collection methods:
 
 Please expand data collection method which you used in prerequisites step to proceed with workshop:
 {{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab (recommended)" %}}
-Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `ta-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/`
+Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `trusted-advisor-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`
 
 **NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
     ------------ | -------------
@@ -48,7 +48,7 @@ You can select certain accounts but please ensure you maintain consistency in fo
 
 1. **Unzip** downloaded report
 
-1. **Upload** downloaded report to the `s3://costoptimizationdata{account_id}/optics-data-collector/ta-data/` folder in the S3 bucket
+1. **Upload** downloaded report to the `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/` folder in the S3 bucket
 
     Make sure you upload **unzipped** folder to S3 bucket
     ![Image](/Cost/200_Cloud_Intelligence/Images/tao/S3-upload-report.png?classes=lab_picture_small)
