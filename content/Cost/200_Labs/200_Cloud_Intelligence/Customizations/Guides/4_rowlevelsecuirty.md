@@ -157,7 +157,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 6. You can go to your bucket in S3 and there should be a file in the folder CUDOS_RLS. 
 ![Images/rls_s3_object.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_s3_object.png?classes=lab_picture_small)
 
-7. Download this [file](/Cost/200_Cloud_Intelligence/qs_s3_manifest.json) and replace <bucket> with the bucket you can see your data in. 
+7. Download this [qs_s3_manifest.json](/Cost/200_Cloud_Intelligence/qs_s3_manifest.json) file and replace <bucket> with the bucket you can see your data in. 
 
 ## Create RLS
 We will now create the RLS Dataset in Amazon QuickSight and attach it to your datasets for CID. Please ensure the bucket you have placed the RLS file into has access to Amazon QuickSight, see [here](https://docs.aws.amazon.com/quicksight/latest/user/troubleshoot-connect-S3.html)

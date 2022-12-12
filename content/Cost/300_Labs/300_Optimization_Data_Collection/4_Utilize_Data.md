@@ -87,7 +87,7 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
 
 There is an option to add pricing data to this query. This assumes you have already run the accounts collector lambda. 
 
-{{%expand "Optimization Data Snapshots and AMIs with pricing data" %}}
+{{%expand "Optimization Data Snapshots and AMIs with OD pricing data" %}}
 
 **Lambda**
 1. Go to AWS Lambda 
@@ -104,6 +104,22 @@ There is an option to add pricing data to this query. This assumes you have alre
 6. Run the below to see your data
         
         SELECT * FROM "optimization_data"."snapshot_ami_quicksight_view" limit 10;
+
+{{% /expand%}}
+
+
+{{%expand "Optimization Data Snapshots and AMIs with CUR data" %}}
+
+You must have access to your Cost & Usage data in the same account and region so you can join through athena
+
+**Athena**
+1. Go to AWS Athena
+2. Go to *Saved queries* at the top of the screen
+3. In *Saved queries* run *inventory_snapshot_connected_to_ami_with_cur* to create a view 
+4. Change the value ${table_name} to your Cost and Usage report database and name and your ${date_filter} to look at a certain month/year
+5. You will see the price of all Snapshots and how much they cost based on their connection with AMIS
+
+Please note that if you delete the snapshot and it is part of a lineage you may only make a small saving
 
 {{% /expand%}}
 
