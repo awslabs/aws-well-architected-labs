@@ -14,7 +14,7 @@ Enabling AWS-Generated Cost Allocation Tags, generates a cost allocation tag con
 2. Select **Cost Allocation Tags** from the left menu:
 ![Images/AWSBillTag1.png](/Cost/100_1_AWS_Account_Setup/Images/AWSBillTag1.png)
 
-3. Click on **AWS-generated cost allocaiton tags**:
+3. Click on **AWS-generated cost allocation tags**:
 ![Images/AWSBillTag2.png](/Cost/100_1_AWS_Account_Setup/Images/AWSBillTag2.png)
 
 4. Select *aws:createdBy* tag key and click on **Activate** to enable the tag:

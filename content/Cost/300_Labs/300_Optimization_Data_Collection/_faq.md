@@ -60,9 +60,9 @@ To fix please follow the steps below:
 
 1. Ensure your costoptimization bucket does have the new **payer_id=your_payer_id** folder in your data. 
 2. Delete your new tables with names that have long hashs attached to them and start with payer or year
-3. Run the following python script [Link to Code](/Cost/300_Optimization_Data_Collection/Code/source/s3_backwards_comp.py) 
+3. Run the following python script [Link to Code](/Cost/300_Optimization_Data_Collection/Code/source/s3_files_migration.py) 
 
-   ```python3 s3_backwards_comp.py <payer_id> <ODC_your_bucket_name> ```
+   ```python3 s3_files_migration.py <ODC_your_bucket_name> ```
    
    This will move all current files into the new format
 4. Run your crawlers to update your tables

@@ -2,7 +2,7 @@
 title: "Teardown"
 date: 2020-07-26T11:16:08-04:00
 chapter: false
-weight: 4
+weight: 6
 pre: "<b> </b>"
 ---
 
