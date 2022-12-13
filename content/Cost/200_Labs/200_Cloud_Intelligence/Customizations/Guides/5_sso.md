@@ -133,9 +133,10 @@ note: This step is done in the target account where the CID lives, this may diff
 
 2. Click the **Actions** button and select **Edit attribute mapping**
 
-3. Add three new mappings by clicking on **Add new attribute mapping**, replacing your ACCOUNT_ID with your CID account ID
+3. Add two new mappings by clicking on **Add new attribute mapping**, replacing your ACCOUNT_ID with your CID account ID
 
-        https ://aws.amazon.com/SAML/Attributes/RoleSessionName: | ${user:email} | arn:aws:iam::ACCOUNT_ID:role/QuickSightSamlRole
-arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSightProvider
-        https://aws.amazon.com/SAML/Attributes/Role: | arn:aws:iam::ACCOUNT_ID:rol 
+        https ://aws.amazon.com/SAML/Attributes/RoleSessionName: | ${user:email}  
+        https://aws.amazon.com/SAML/Attributes/Role: | arn:aws:iam::ACCOUNT_ID:role/QuickSightSamlRole, arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSightProvider
         https://aws.amazon.com/SAML/Attributes/PrincipalTag:Email: | ${user:email}
+
+4. After this step is done, a new ICON will appear in SSO, give it 5 minutes to start
