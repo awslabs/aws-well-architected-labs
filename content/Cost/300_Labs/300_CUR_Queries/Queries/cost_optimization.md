@@ -24,9 +24,9 @@ Prior to deleting resources, check with the application owner that your analysis
 - Compute
   * [Elastic Load Balancing - Idle ELB](#elastic-load-balancing---idle-elb)
   * [Elastic Compute Cloud - Unallocated Elastic IPs](#ec2-unallocated-elastic-ips)
+  * [Elastic Compute Cloud - Instance Cost by Pricing Term](#ec2-instance-cost-by-pricing-term)
   * [Graviton Usage](#graviton-usage)
   * [Lambda Graviton Cost Savings](#lambda-graviton-savings)
-  * [Elastic Compute Cloud - Instance Cost by Pricing Term](#ec2-instance-cost-by-pricing-term)
 - End User Computing 
   * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)  
 - Networking & Content Delivery   
