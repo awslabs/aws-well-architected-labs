@@ -15,7 +15,7 @@ November 2022
 
 ## Introduction
 
-Cloud Intelligence Dashboards (CID) helps you to visualize and understand AWS cost and usage data in your organization by exploring interactive dashboards.
+Cloud Intelligence Dashboards (CID) helps you to visualize and understand AWS cost and usage data in your organization by exploring interactive dashboards. To simplify access for users you can now set up an SSO application for them to enter into. We recommend combining this with the Row Level Security customization to ensure they see the data they really matters to them. 
 
 ## Prerequisite
 
@@ -35,18 +35,19 @@ For this solution you must have the following:
 
 2. Select your CID and open it. Copy the Dashboard URL to somewhere local as we will use this later
 
-On the top right click on the Share icon then Share Dashboard
+3. On the top right click on the Share icon then Share Dashboard
 
-Share your CID Dashboard in Amazon QuickSight with all users by clicking on the toggle **Everyone in this account**
+4. Share your CID Dashboard in Amazon QuickSight with all users by clicking on the toggle **Everyone in this account**
 
 ## Step 2: IAM Identity Centre
-Open the **IAM Identity Centre** and select **Applications** on the left and Click **Add application**
 
-Search in Preintegrated applications for **Amazon Quicksight** then click **Next**
+1. Open the **IAM Identity Centre** and select **Applications** on the left and Click **Add application**
 
-Type a Display name **QuickSightProvider**
+2. Search in Preintegrated applications for **Amazon Quicksight** then click **Next**
 
-Under **IAM Identity Center metadata** Download IAM Identity Center **SAML metadata file**
+3. Type a Display name **QuickSightProvider**
+
+4. 5. Under **IAM Identity Center metadata** Download IAM Identity Center **SAML metadata file**
 
 Under **Application properties** paste your CID Link under Relay state. Click **Submit**
 
