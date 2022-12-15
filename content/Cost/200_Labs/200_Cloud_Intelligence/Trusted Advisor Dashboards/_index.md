@@ -9,16 +9,16 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-September 2022
+December 2022
 
 ## Authors
 
-+ Yuriy Prykhodko, Senior Technical Account Manager, EMEA
-+ Timur Tulyaganov, Senior Technical Account Manager, EMEA
++ Yuriy Prykhodko, Principal Technical Account Manager, AWS
++ Timur Tulyaganov, Principal Technical Account Manager, AWS
 
 ## Contributors
-+ Oleksandr Moskalenko, Technical Account Manager, EMEA
-+ Georgios Rozakis, Technical Account Manager, EMEA
++ Oleksandr Moskalenko, Technical Account Manager, AWS
++ Georgios Rozakis, Technical Account Manager, AWS
 
 
 ## Feedback
@@ -57,7 +57,10 @@ These dashboards and their content: (a) are for informational purposes only, (b)
 
 This workshop can be deployed by any user who has permission to access the **Trusted Advisor Organizational view, S3, Athena, Glue and QuickSight**.
 
+
+{{% notice note %}}
 The management account in your organization must have a **Business** or **Enterprise** support plan.
+{{% /notice %}}
 
 ## Costs 
 
