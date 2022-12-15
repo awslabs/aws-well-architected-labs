@@ -33,8 +33,6 @@ Resources:
               AWS:
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
       Path: /
       Policies:
         - PolicyName: "Management-Account-permissions"
