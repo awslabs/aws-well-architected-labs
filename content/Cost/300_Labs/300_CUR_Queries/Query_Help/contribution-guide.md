@@ -27,7 +27,7 @@ For a reference of a properly constructed query please reference the Examples be
 
 **SELECT SECTION RULES:**
 
-It is recommended to sanitize the query of your account and resource related data.  Please reference the [Fictitious names and numbers](https://alpha-docs-aws.amazon.com/awsstyleguide/latest/styleguide/safenames.html) documentation. Be advised, during the review process, queries submitted with customer account data will be sanitized.
+It is recommended to sanitize the query of your account and resource related data. Be advised, during the review process, queries submitted with customer account data will be sanitized.
 
 To fill fields with dummy data, use the following select statement (example shown fills *bill_payer_account_id* with dummy data):
 - EXAMPLE: `'111122223333' AS bill_payer_account_id`
