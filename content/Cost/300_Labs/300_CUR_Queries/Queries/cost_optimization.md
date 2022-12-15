@@ -24,7 +24,7 @@ Prior to deleting resources, check with the application owner that your analysis
 - Compute
   * [Elastic Load Balancing - Idle ELB](#elastic-load-balancing---idle-elb)
   * [Elastic Compute Cloud - Unallocated Elastic IPs](#ec2-unallocated-elastic-ips)
-  * [Elastic Compute Cloud - Instance Cost by Pricing Term](#ec2-instance-cost-by-pricing-term)
+  * [Elastic Compute Cloud - Instance Cost by Pricing Model](#ec2-instance-cost-by-pricing-model)
   * [Graviton Usage](#graviton-usage)
   * [Lambda Graviton Cost Savings](#lambda-graviton-savings)
 - End User Computing 
@@ -266,8 +266,8 @@ GROUP BY 2,3,1,5,4
 
 [Back to Table of Contents](#table-of-contents)
 
-### EC2 Instance Cost by Pricing Term
-The latest generation of instances are more performant and cheaper to operate.  Identifying which accounts are using [pervious generation](https://aws.amazon.com/ec2/previous-generation/) instances and determining if those instances are running on-demand or covered by a commitment based pricing term (On-Demand, Reserved Instance or Savings Plan) is challenging.   This query may be used to group instance usage by account in a given time period and filter by pricing term.  It will help customers find old generation instances running on-demand which may be candidates for an upgrade.
+### EC2 Instance Cost by Pricing Model
+The latest generation of instances are more performant and cheaper to operate.  Identifying which accounts are using [pervious generation](https://aws.amazon.com/ec2/previous-generation/) instances and determining if those instances are running on-demand or covered by a commitment based pricing model (On-Demand, Reserved Instance or Savings Plan) is challenging.   This query may be used to group instance usage by account in a given time period and filter by pricing model.  It will help customers find old generation instances running on-demand which may be candidates for an upgrade.
 
 #### Copy Query
 {{%expand "Click here - to expand the query" %}}
@@ -276,6 +276,11 @@ Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/
 ```tsql
 SELECT
   line_item_usage_account_id, 
+  CASE 
+    WHEN reservation_reservation_a_r_n <> '' THEN split_part(reservation_reservation_a_r_n,':',5)
+    WHEN savings_plan_savings_plan_a_r_n <> '' THEN split_part(savings_plan_savings_plan_a_r_n,':',5)
+    ELSE 'NA'
+  END AS ri_sp_owner_id,
 	(CASE 
 		WHEN (line_item_usage_type LIKE '%SpotUsage%') THEN 'Spot' 
 		WHEN 
@@ -293,14 +298,14 @@ SELECT
 			OR ("product_usagetype" LIKE '%DedicatedUsage:%')) 
 			AND ("line_item_line_item_type" LIKE 'Usage')) 
 		THEN 'OnDemand' 
-		ELSE 'Other' END) pricing_term, 
+		ELSE 'Other' END) pricing_model, 
 	CASE 
 		WHEN 
 			line_item_usage_type like '%BoxUsage' 
 			OR line_item_usage_type LIKE '%DedicatedUsage' 
 		THEN product_instance_type 
 		ELSE SPLIT_PART (line_item_usage_type, ':', 2) END instance_type, 
-	ROUND(SUM (line_item_unblended_cost),2) BilledCost, 
+	ROUND(SUM (line_item_unblended_cost),2) sum_line_item_unblended_cost, 
 	ROUND (
 		SUM((
 			CASE 
@@ -320,15 +325,19 @@ SELECT
 				THEN 0
 				ELSE line_item_unblended_cost END)), 2) amortized_cost  
 FROM 
-	${table_name}
+	customer_all    
 WHERE
-	${date_filter}
+	year = '2022' AND month = '11'
 	AND line_item_operation LIKE '%RunInstance%' AND line_item_product_code = 'AmazonEC2' 
 	AND (product_instance_type <> '' OR (line_item_usage_type  LIKE '%SpotUsage%' AND line_item_line_item_type = 'Usage'))  
 GROUP BY 
 1, -- account id
-2, -- pricing term
-3  -- instance type
+3, -- pricing model
+4, -- instance type
+2  -- ri_sp_owner_id
+ORDER BY
+pricing_model,
+sum_line_item_unblended_cost DESC
 ;
 ```
 {{% /expand%}}

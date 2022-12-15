@@ -7,6 +7,11 @@
 
 SELECT
   line_item_usage_account_id, 
+  CASE 
+    WHEN reservation_reservation_a_r_n <> '' THEN split_part(reservation_reservation_a_r_n,':',5)
+    WHEN savings_plan_savings_plan_a_r_n <> '' THEN split_part(savings_plan_savings_plan_a_r_n,':',5)
+    ELSE 'NA'
+  END AS ri_sp_owner_id,
 	(CASE 
 		WHEN (line_item_usage_type LIKE '%SpotUsage%') THEN 'Spot' 
 		WHEN 
@@ -24,14 +29,14 @@ SELECT
 			OR ("product_usagetype" LIKE '%DedicatedUsage:%')) 
 			AND ("line_item_line_item_type" LIKE 'Usage')) 
 		THEN 'OnDemand' 
-		ELSE 'Other' END) pricing_term, 
+		ELSE 'Other' END) pricing_model, 
 	CASE 
 		WHEN 
 			line_item_usage_type like '%BoxUsage' 
 			OR line_item_usage_type LIKE '%DedicatedUsage' 
 		THEN product_instance_type 
 		ELSE SPLIT_PART (line_item_usage_type, ':', 2) END instance_type, 
-	ROUND(SUM (line_item_unblended_cost),2) BilledCost, 
+	ROUND(SUM (line_item_unblended_cost),2) sum_line_item_unblended_cost, 
 	ROUND (
 		SUM((
 			CASE 
@@ -51,13 +56,17 @@ SELECT
 				THEN 0
 				ELSE line_item_unblended_cost END)), 2) amortized_cost  
 FROM 
-	${table_name}
+	customer_all    
 WHERE
-	${date_filter}
+	year = '2022' AND month = '11'
 	AND line_item_operation LIKE '%RunInstance%' AND line_item_product_code = 'AmazonEC2' 
 	AND (product_instance_type <> '' OR (line_item_usage_type  LIKE '%SpotUsage%' AND line_item_line_item_type = 'Usage'))  
 GROUP BY 
 1, -- account id
-2, -- pricing term
-3  -- instance type
+3, -- pricing model
+4, -- instance type
+2  -- ri_sp_owner_id
+ORDER BY
+pricing_model,
+sum_line_item_unblended_cost DESC
 ;
