@@ -689,7 +689,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -740,7 +740,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -791,7 +791,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -842,7 +842,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -893,7 +893,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -944,7 +944,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -995,7 +995,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
@@ -1046,7 +1046,7 @@ Resources:
                   return await pageLoadBlueprint();
               };
       ArtifactS3Location: !Sub 's3://${CanaryBucket}'
-      RuntimeVersion: syn-nodejs-puppeteer-3.3
+      RuntimeVersion: syn-nodejs-puppeteer-3.8
       Schedule:
         Expression: rate(1 minute)
       StartCanaryAfterCreation: true
