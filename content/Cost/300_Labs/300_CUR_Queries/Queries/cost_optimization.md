@@ -325,9 +325,9 @@ SELECT
 				THEN 0
 				ELSE line_item_unblended_cost END)), 2) amortized_cost  
 FROM 
-	customer_all    
+	${table_name}    
 WHERE
-	year = '2022' AND month = '11'
+	${date_filter}
 	AND line_item_operation LIKE '%RunInstance%' AND line_item_product_code = 'AmazonEC2' 
 	AND (product_instance_type <> '' OR (line_item_usage_type  LIKE '%SpotUsage%' AND line_item_line_item_type = 'Usage'))  
 GROUP BY 
