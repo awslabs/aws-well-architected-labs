@@ -199,7 +199,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 #### Steps:
 - [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 - [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
-- [Get started with the Comute Optimizer Dashboard](compute-optimizer-dashboards/)
+- [Get started with the Compute Optimizer Dashboard](compute-optimizer-dashboards/)
 
 #### Authors
 
