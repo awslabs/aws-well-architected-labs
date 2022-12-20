@@ -7,6 +7,10 @@ hidden: false
 ---
 ### Update Dashboard Template
 
+{{< rawhtml >}}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ub7VWL2GJ84" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< /rawhtml >}}
+
 We always improve Cloud Intelligence Dashboards by adding new actionable insights and recommendations. All new dashboard versions announced in our [Changelog](https://github.com/aws-samples/aws-cudos-framework-deployment/blob/main/changes). You can find your current dashboard version on About tab of each of the dashboards.
 
 To pull the latest version of the dashboard from the public template please use the following steps.
