@@ -7,7 +7,7 @@ weight: 7
 hidden: false
 ---
 #### Last Updated
-October 2022
+December 2022
 
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
@@ -15,7 +15,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ### General
 
 #### Which dashboards are available for installation?
-We have several dashboards- CUDOS, KPI, CID, Compute Optimizer, Trusted Advisor (TAO) and Trends, Full documentation can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/#cost-intelligence-dashboard-cid)
+We have several dashboards: CUDOS, KPI, CID, Compute Optimizer, Trusted Advisor (TAO) and Trends. Full documentation can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/)
 
 
 #### How can I install Cloud Intelligent Dashboards?
@@ -34,9 +34,8 @@ The CUR must be in Parquet (Athena) format.
 The CUR must be have resource ids. 
 
 #### In which regions can Cloud Intelligent Dashboards be deployed?
-CID requires QuickSight, Athena and Glue , All regions that support QuickSight, Athena and S3. Cost Usage Reports (CUR) Bucket would also have to be in the same region as those services. CUR bucket can be replicated to the region that supports CIDs via S3 bucket replication.
-When using the cid-cmd, you can define the Region to deploy the dashboard in as a parameter eg. cid-cmd --region_name eu-west-2 deploy This is especially helpful when using Cloudshell and the region you want to deploy in,  does not support Cloudshell.
-
+CID requires QuickSight, Athena and Glue. Cost Usage Reports (CUR) Bucket has to be in the same region as those services. CUR bucket can be replicated to the region that supports CIDs via S3 bucket replication.
+When using the cid-cmd, you can define the Region to deploy the dashboard in as a parameter eg. *`cid-cmd --region_name eu-west-2 deploy`*. This is especially helpful when the region you want to deploy in, does not support Cloudshell.
 
 * https://www.aws-services.info/quicksight.html
 * https://www.aws-services.info/glue.html
@@ -44,7 +43,7 @@ When using the cid-cmd, you can define the Region to deploy the dashboard in as 
 
 
 #### How long does it take to initially deploy the Cloud Intelligent Dashboards Framework?
-Assuming [pre-requisites](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/)were met correctly the automation would take around 5-10 minutes to deploy, manual lab execution can take up to 60 minutes.
+Assuming [pre-requisites](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/)were met correctly the automation would take around 5-10 minutes to deploy.
 
 #### Do I need to learn any coding skills to customize the analysis?
 No, just AWS native BI service QuickSight and customer facing data Cost and Usage Reports structure. Here is public documentation for [QuickSight](https://docs.aws.amazon.com/quicksight/index.html) and [Cost Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/data-dictionary.html).
@@ -52,18 +51,18 @@ No, just AWS native BI service QuickSight and customer facing data Cost and Usag
 #### How do I edit or customize the dashboards?
 In order to create an analysis from any of the CUDOS Dashboards, Go edit the newly created dashboard's permissions to enable the “Save As” option:
 
-    Go to your Templated Dashboard.
-    Click “Share”
-    Click “Share dashboard”
-    Enable the "Allow "save as"" next to your username
-    Click "Confirm"
-    Click the link in the top left corner to Go back to 'LazyMBR'
-    You should now see a “Save as” (you might have to refresh browser)
-    Click "Save as"
-    Name your Analysis
-    Once completed, you can then customize the Analysis filters, visuals etc.
+   1. Go to your Dashboard.
+   1. Click “Share”
+   1. Click “Share dashboard”
+   1. Enable the "Allow "save as"" next to your username
+   1. Click "Confirm"
+   1. Click the link in the top left corner to Go back to 'LazyMBR'
+   1. You should now see a “Save as” (you might have to refresh browser)
+   1. Click "Save as"
+   1. Name your Analysis
+   1. Once completed, you can then customize the Analysis filters, visuals etc.
 
-You can see an example on [this](https://www.youtube.com/watch?v=dzRKDSXCtAs) video (1:23)
+You can see [this](https://youtu.be/YNQBBM5RQtc) video.
 
 
 #### How do I setup the dashboards in an account other than my payer account or on top of multiple payer accounts?
@@ -122,12 +121,20 @@ This error is caused by V3 engine of Athena. To fix it, you will need to update 
 
 {{% /expand%}}
 
-#### When running the summary_view.sql query from Athena, I get the error "Column 'product_database_engine' cannot be resolved". How do I resolve it?
-If you get this error it is very likely that none of your accounts have launched an RDS instance. To make this column show up in the CUR, launch a database in the RDS service, let it run for a couple of minutes and then shut it down. In the next iteration of the crawler, the column will appear. Running the query again should now result in success.
 
+#### How do I fix the ‘product_cache_engine’ or 'product_database_engine' cannot be resolved error?
+Some CID views dependent on having or historically having an RDS database instance and an ElastiCache instance run in your organization.
+{{%expand "Click here to expand answer" %}}
 
-#### How do I fix the ‘product_cache_engine’ cannot be resolved error?
-This view is dependent on having or historically having an RDS database instance and an ElastiCache cache instance run in your organization. If you get the error that the column product_database_engine or product_deployment_option does not exist, then you do not have any RDS database instances running. There are two options to resolve this.
+The CloudFormation deployment do not have this dependancy.
+
+For fixing this in existing deployment you can simply run at least one RDS database and at least one ElastiCache instance for a couple of minutes.
+
+If you get the error that the column *`product_database_engine`* or *`product_deployment_option`* does not exist, then you need to run an RDS database instance.  If you get the error that the column *`product_cache_engine`* does not exist, then you need to spin up an ElastiCache instance.
+
+After you run these instances, on the next CUR generation and Crawler run, the new columns will appear in your CUR table and you can retry. Typically this takes 24 hours.
+
+{{% /expand%}}
 
 #### I’m getting an error in QuickSight that is saying Athena timed out?
 For very large CUR files, Athena may time out trying to query the data for summary_view. In Athena, find the summary_view view, click the three dots next to it and select show/edit query. Modify the following:
@@ -138,12 +145,9 @@ For very large CUR files, Athena may time out trying to query the data for summa
 * In QuickSight, refresh your dataset.
 
 #### Account list is missing/incorrect, how can I update them?
-You can update the account list with the following query:
-CREATE OR REPLACE VIEW account_map AS
+The Cost & Usage Report data doesn’t contain account names and other business or organization specific mapping. There are a few options you can leverage to create your account_map view to provide opportunities to leverage your existing mapping tables, organization information, or other business mappings allows for deeper insights. 
 
-SELECT account_id,
-concat (account_name,': ', account_id) account_name
-from acc_metadata_details
+[Account Map Creation](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/code/0_view0/)
 
 #### How do I fix the COLUMN_GEOGRAPHIC_ROLE_MISMATCH error?
 When attempting to deploy the dashboard manually, some users get an error that states COLUMN_GEOGRAPHIC_ROLE_MISMATCH. 
@@ -160,7 +164,7 @@ Unless you know which datasets are tied to which data sources, it is faster to s
 #### I’ve deployed the Compute Optimizer Dashboard. If a new linked account is created after deployment, can the dashboard collect the data from the newly created linked account automatically?
 {{%expand "Click here to expand answer" %}}
 
-[If the stackset deployment is made via Organizations](https://medium.com/swlh/automatically-deploy-cloudformation-stacks-into-newly-created-accounts-in-aws-organization-a0b80b2fc43e) it will be present on newly created accounts. 
+[If the stackset deployment is made via Organizations](https://medium.com/swlh/automatically-deploy-cloudformation-stacks-into-newly-created-accounts-in-aws-organization-a0b80b2fc43e) it will be present on newly created accounts.
 
 {{% /expand%}}
 
@@ -176,11 +180,17 @@ Edit your Glue crawler to refresh the metadata from the partitions by following 
 ### Pricing
 
 #### How much does it cost to run the CID Framework?
-Cost breakdown using Calculator -
+Assumptions:
+* Number of working days per month = (22)
+* SPICE capacity = (100 GB)
+* Number of authors = (3)
+* Number of readers = (15)
+
+Cost breakdown using Calculator:
 * S3 cost for CUR: < $5-10/mon
 * QuickSight Enterprise: < $30/mon/author or $5max/mon/reader
 * QuickSight SPICE capacity: < $10-20/mon
-* Total: $100-$200 (for Number of working days per month (22), SPICE capacity in gigabytes (GB) (100), Number of authors (3), Number of readers (15), 
+* Total: $100-$200
 
 
 
@@ -212,9 +222,10 @@ IMPORTANT: This statement is to be added to an existing kms key policy and not t
 
  - replace `region` with your region
  - replace `account` with account number
- - replace `crawler-rone` with cur glue crawler IAM role (can be found in crawler config/Service role)
+ - replace `crawler-role` with cur glue crawler IAM role (can be found in crawler config/Service role)
  - replace `key-id` with the id of your KMS key or alias (or use `*`)
 
+```json
     {
         "Sid": "Allow Quicksight and Glue",
         "Action": "kms:Decrypt",
@@ -224,11 +235,12 @@ IMPORTANT: This statement is to be added to an existing kms key policy and not t
             "AWS":
             [
                 "arn:aws:iam::{account}:role/service-role/aws-quicksight-service-role-v0",
-                "arn:aws:iam::{account}:role/{CRAWLER-ROLE}"
+                "arn:aws:iam::{account}:role/{crawler-role}"
             ]
         },
-        "Resource": ""arn:aws:kms:{region}:{account}:key/{key-id or *}"
+        "Resource": "arn:aws:kms:{region}:{account}:key/{key-id or *}"
     }
+```
 {{% /expand%}}
 
 
