@@ -11,28 +11,28 @@ hidden: false
 - **Jeff Forrest**, Senior Solutions Architect.
 
 ## Introduction
-AWS Graviton is a custom CPU with 64-bit ARM processor cores
+[AWS Graviton processors](https://aws.amazon.com/ec2/graviton/) are custom custom built by Amazon Web Services using 64-bit Arm Neoverse cores.
 
-Graviton CPUs have excellent energy efficiency, switching to Graviton EC2 instances can reduce energy usage by as much as 60% for the same performance as x86 instances.
+AWS Graviton CPUs have excellent energy efficiency, switching to Graviton EC2 instances can reduce energy usage by as much as 60% for the same performance as comparable x86-64 instances.
 
-Amazon control the end to end lifecycle of the chip from design to consumption enhancing efficiency, [read more here](https://aws.amazon.com/ec2/graviton/)
+AWS control the end to end lifecycle of the chip, from design to consumption, enhancing overall efficiency. [Read more here](https://aws.amazon.com/ec2/graviton/).
 
 
 ## RDS on Graviton
-* Up to 35% faster than non-Graviton
-* Up to 53% better price/performance than non-Graviton
-* Almost zero effort migration from X86
-* Supported for RDS databases MySQL, PostgreSQL, MariaDB and for Amazon Aurora
-* Not currently supported for commercial databases Oracle and SQL Server
+* Up to 35% faster than non-Graviton.
+* Up to 53% better price/performance than non-Graviton.
+* Almost zero effort migration from x86-64.
+* Supported for RDS databases MySQL, PostgreSQL, MariaDB and for Amazon Aurora.
+* Not currently supported for commercial databases Oracle and SQL Server.
 
-Running your database on AWS Graviton is only one way of improving sustainability for RDS, for other options see [this blog post](https://aws.amazon.com/blogs/architecture/optimizing-your-aws-infrastructure-for-sustainability-part-iv-databases/)
+Running your database on AWS Graviton is only one way of improving sustainability for RDS, for other options see [this blog post](https://aws.amazon.com/blogs/architecture/optimizing-your-aws-infrastructure-for-sustainability-part-iv-databases/).
 
 ## Goals
 At the end of this lab you will:
 
-* Understand which RDS databases can be migrated from X86 to Graviton
-* Understand the different migration options and how they apply to each database type
-* Have practical hands on experience migrating RDS databases from X86 to Graviton
+* Understand which RDS databases can be migrated from x86-64 to Graviton.
+* Understand the different migration options and how they apply to each database type.
+* Have practical hands on experience migrating RDS databases from x86-64 to Graviton.
 
 ## Prerequisites
 
