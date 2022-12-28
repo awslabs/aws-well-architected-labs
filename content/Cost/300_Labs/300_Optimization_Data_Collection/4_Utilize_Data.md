@@ -34,7 +34,7 @@ You can also use the below query to update your **account_map** table in athena 
       , name account_name
       , email account_email_id
       FROM
-        "optimization_data"."organisation_data" 
+        "optimization_data"."organization_data" 
 
 {{% /expand%}}
 
