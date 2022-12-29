@@ -187,7 +187,7 @@ Create or update your account_map view by running the following query.
 			"id" "account_id", 
 			"name" "account_name"
 		FROM
-			"optimization_data"."organisation_data"
+			"optimization_data"."organization_data"
 
 #### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
 
