@@ -24,7 +24,7 @@ However there's an opportunity to use [AWS Health API](https://docs.aws.amazon.c
 
 ## Well-Architected Best Practices
 
-{{% notice Well-Architected Best Practices %}}
+{{% notice Well-Architected_Best_Practices %}}
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 {{% /notice %}}
 
