@@ -40,6 +40,9 @@ This Lab only works in AWS **N.Virginia region (us-east-1)**, while the followin
 
 Click [here](mockup-s3-bucket-link-us-east-1) (**complement the actual CFN URL here**) to deploy the stack. 
 
+You need to provide a stack name (e.g. **well-architected-lab-health-aware-operation-change**), and also provide a valid email address to receive the Amazon SNS notification emails.
+
+![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_cfn_implementation.png)
 
 The stack takes about 2 minutes to create all the resources. Periodically refresh the page until you see that the **STACK STATUS** is in **CREATE_COMPLETE**. Once the stack is in **CREATE_COMPLETE**, you may proceed to the next step to create the **Change Template** in the Systems Manager Change Manager, alongside the **Inventory**.
 

@@ -14,6 +14,14 @@ hidden: false
 * **Rich Boyd**, Well-Architected Operational Excellence Pillar Lead.
 * **Phong Le**, Well-Architected Geo Solutions Architect.
 
+## Well-Architected Best Practices
+
+This lab helps you to exercise the following Well-Architected Best Practices in your operation change process:
+
+* [OPS07-BP05](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html) - **Make informed decisions to deploy systems and changes**
+* [OPS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_plan_for_unsucessful_changes.html) - **Plan for unsuccessful change**
+
+
 ## Introduction
 
 In the context of making production changes on AWS, whenever a failure occurs during the change window, your operation team have to check the root cause apart from potentially reverting the environment back to the last functioning version. They are often under huge pressure to conclude the root cause within the change window, so to make a Go or No-Go decision.
@@ -21,14 +29,6 @@ In the context of making production changes on AWS, whenever a failure occurs du
 To accelerate the troubleshooting process, you need an approach to determine whether the change failure was caused by active AWS service events before proceeding to other aspects of application related investigations. You can achieve this goal by manually checking the [AWS Health Dashboard](https://health.aws.amazon.com/health), or open an AWS support case to engage AWS support engineers. 
 
 However there's an opportunity to use [AWS Health API](https://docs.aws.amazon.com/health/latest/ug/health-api.html) to build an AWS health aware operation change process with [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html), so the operation change pipeline is capable of checking the health status of AWS services to ensure there's no active AWS service events before kicking in the change execution, which derisk the change process being impacted by the service events.
-
-## Well-Architected Best Practices
-
-{{% notice Well-Architected_Best_Practices %}}
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
-{{% /notice %}}
-
-
 
 ## Goals: 
 
