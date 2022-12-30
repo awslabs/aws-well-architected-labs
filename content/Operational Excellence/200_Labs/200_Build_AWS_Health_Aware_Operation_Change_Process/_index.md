@@ -22,6 +22,14 @@ To accelerate the troubleshooting process, you need an approach to determine whe
 
 However there's an opportunity to use [AWS Health API](https://docs.aws.amazon.com/health/latest/ug/health-api.html) to build an AWS health aware operation change process with [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html), so the operation change pipeline is capable of checking the health status of AWS services to ensure there's no active AWS service events before kicking in the change execution, which derisk the change process being impacted by the service events.
 
+## Well-Architected Best Practices
+
+{{% notice Well-Architected Best Practices %}}
+NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+{{% /notice %}}
+
+
+
 ## Goals: 
 
 * Build a Systems Manager [automation runbook](https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-documents.html) to encapsulate the automated change process.
