@@ -19,10 +19,25 @@ The following diagram shows the workflow defined by the Change Template.
 * *2 - The change request got approved, as we've configured the auto  approve in the Automation runbook created by the CloudFormation template.*
 * *3 - Systems Manager runbook starts the execution.*
 * *4 - Automation runbook calls AWS Health API to retrieve service health status.*
-* *5a - If there's no active AWS service events, the Automation runbook will execute the planned action (In this lab it'll install Windows updates upon the test EC2 instance).*
+* *5a - If there's no active AWS service events, the Automation runbook will execute the planned action (In this lab it'll stop the EC2 instance created by the CloudFormation stack, which with the **SSMFleetEnv** tag value to be **test**).*
 * *5b - If there's active AWS service events, the Automation runbook will send email notification with a list of services that're impacted.*  
 
 ### 2.1 Configure the Change Template
+
+Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/) to go to Systems Manager Change Manager. If the right hand side of the page shows **Get started with Change Manager**, then follow the instructions in **2.1.1 Set up Change Manager**. Otherwise, you may skip **2.1.1**, and jump straight to **2.1.2** to Create the **Change Template**.
+
+(Follow instructions in **2.1.1** to set up Change Manager if you haven't done so as shown below):
+![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_setup_change_manager.png)
+
+#### 2.1.1 Set up Change Manager (Optional - Depending on whether you've already set up Change Manager)
+
+1. Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/) to go to Systems Manager Change Manager. Then click the **Set up Change Manager** button.
+![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_setup_change_manager_step1.png)
+
+
+
+
+#### 2.1.2 Configure the Change Template
 
 1. Sign in to the AWS **Systems Manager Change Manager** console via [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#)
 
@@ -82,7 +97,7 @@ The following diagram shows the workflow defined by the Change Template.
 
 ### 2.2 Approve the Change Template
 
-To approve the Change Template, you have to use another user with the SSM Full Access permissions to complete it. This step will use the IAM user **approval-user** created by the CloudFormation to accomplish the approval process.
+To approve the Change Template, you have to use another user with the SSM Full Access permissions to complete it. This step will use the IAM user **walab-approval-user** created by the CloudFormation to accomplish the approval process.
 
 1. Log out in the AWS Console - click your username in top right corner, and click the **Sign out** button to sign out from your console.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_signout_account.png)

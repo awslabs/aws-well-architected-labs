@@ -32,6 +32,10 @@ In this lab you will take the following actions on the [Change Manager](https://
 * Full access to [AWS Identity and Access Management (IAM)](https://aws.amazon.com/iam/) 
 * Full access to [Amazon S3](https://aws.amazon.com/s3/)
 
+Click [this link](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false) to validate there's a **running** EC2 instance named **well-architected-lab-windows-ec2**.
+![Section3 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section3_ec2_running_validation.png)
+
+
 2. Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/dashboard/templates) to go to Templates tab in the Change Manager.
 
 3. Select the Change Template **wa-ssm-health-aware-lab-template**.
@@ -68,10 +72,13 @@ You will also receive an SNS email notification regarding the successful submiss
 In case there's active AWS service event(s) when you executed the Change Request, then you will find the operation change will be suspended, which is as expected for this AWS Health Aware operation change process. You can also visit the [AWS Health Dashboard](https://health.aws.amazon.com/health/home) in your AWS Console to verify if there's any active service event in that case.
 {{% /notice %}}
 
-12. **(Optional)** Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/documents?region=us-east-1) to go to **Documents** in Systems Manager, click the **Owned by me** tab, and click the **AWS_health_aware_normal_operation_runbook** Automation runbook.
+12. Click [this link](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false) to view the EC2 instance. You will find the original EC2 instance has been stopped (or still in stopping status) by the Change Manager Automation Runbook.
+![Section3 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section3_ec2_stopped_validation.png)
+
+13. **(Optional)** Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/documents?region=us-east-1) to go to **Documents** in Systems Manager, click the **Owned by me** tab, and click the **AWS_health_aware_normal_operation_runbook** Automation runbook.
 ![Section3 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section3_document_normal_operation_runbook_clickin.png)
 
-13. **(Optional)** Click the **Content** tab and review the automation runbook content. Please note that the current runbook is to monitor those AWS health events which status are **"open"**.
+14. **(Optional)** Click the **Content** tab and review the automation runbook content. Please note that the current runbook is to monitor those AWS health events which status are **"open"**.
 ![Section3 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section3_automation_runbook_open_health_events.png)
 
 Now you have successfully created the change request, and completed the runbook executions.

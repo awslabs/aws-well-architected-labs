@@ -38,11 +38,19 @@ This Lab only works in AWS **N.Virginia region (us-east-1)**, while the followin
 
 ### 1.2 Deploy the infrastructure using AWS CloudFormation
 
-Click [here](mockup-s3-bucket-link-us-east-1) (**complement the actual CFN URL here**) to deploy the stack. 
+1. Click the following button to deploy the stack. (Use [this link](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?stackName=well-architected-lab-health-aware-operation-change&templateURL=https://aws-walab-build-health-aware-operation-change-process.s3.amazonaws.com/cfn_health_aware_ssm_stack.yaml) if the following button doesn't work. )
 
-You need to provide a stack name (e.g. **well-architected-lab-health-aware-operation-change**), and also provide a valid email address to receive the Amazon SNS notification emails.
+[\
+![](https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2019/10/30/LaunchCFN.png)](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?stackName=well-architected-lab-health-aware-operation-change&templateURL=https://aws-walab-build-health-aware-operation-change-process.s3.amazonaws.com/cfn_health_aware_ssm_stack.yaml)
+
+
+
+You need to provide a stack name (e.g. **well-architected-lab-health-aware-operation-change** that's been prepopulated), and also provide a valid email address to receive the Amazon SNS notification emails.
 
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_cfn_implementation.png)
+
+2. scroll down to click the **checkbox** to acknowledge that the CloudFormation template might create IAM resources with custom names, and then click the **Create stack** button to proceed the stack creation.
+![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_cfn_acknowledgement_create_stack.png)
 
 The stack takes about 2 minutes to create all the resources. Periodically refresh the page until you see that the **STACK STATUS** is in **CREATE_COMPLETE**. Once the stack is in **CREATE_COMPLETE**, you may proceed to the next step to create the **Change Template** in the Systems Manager Change Manager, alongside the **Inventory**.
 

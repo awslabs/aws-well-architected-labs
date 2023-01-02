@@ -224,18 +224,43 @@
 
                 Suspended the automation runbook.
             - name: option2_execute_planned_operation_activity
-              action: 'aws:runCommand'
+              action: 'aws:executeScript'
               inputs:
-                DocumentName: AWS-InstallWindowsUpdates
-                Targets:
-                  - Key: 'tag:SSMFleetEnv'
-                    Values:
-                      - test
+                Runtime: python3.8
+                Handler: script_handler
+                Script: |-
+                  import boto3
+
+                  def script_handler(events, context):
+                    ec2 = boto3.client('ec2', region_name='us-east-1')
+                    a = ec2.describe_instances(Filters=[{'Name':'tag:SSMFleetEnv', 'Values':['test']}])
+                    print ("a is: ", a)
+                    print ("type of a is: ", type(a))
+
+                    b = a['Reservations']
+                    print ("b is: ", b)
+                    print ("type of b is: ", type(b))
+
+                    for c in b:
+                      inst = c['Instances']
+            
+                      for d in inst:
+                        instid = d['InstanceId']
+                        instrun = d['State']['Name']
+              
+                        if instrun == 'running':
+                          ec2.stop_instances(InstanceIds=[instid])
+                          print("The instance is stopped:" + instid)
+                        else:
+                          print("The instance in stop state:" + instid)
+
+                    return {'message': 'Hello'}
+
               isEnd: true
               description: |-
                 **There's NO active service event:**
 
-                Conduct the planned operational change process as there's NO existed active AWS service event.
+                Conduct the planned operational change process as there's NO existed active AWS service event. In this case it's to stop the EC2 instance with **SSMFleetEnv** tag value set to be **test**.
         DocumentFormat: YAML
         DocumentType: Automation
         Name: AWS_health_aware_normal_operation_runbook
@@ -381,18 +406,43 @@
 
                 Suspended the automation runbook.
             - name: option2_execute_planned_operation_activity
-              action: 'aws:runCommand'
+              action: 'aws:executeScript'
               inputs:
-                DocumentName: AWS-InstallWindowsUpdates
-                Targets:
-                  - Key: 'tag:SSMFleetEnv'
-                    Values:
-                      - test
+                Runtime: python3.8
+                Handler: script_handler
+                Script: |-
+                  import boto3
+
+                  def script_handler(events, context):
+                    ec2 = boto3.client('ec2', region_name='us-east-1')
+                    a = ec2.describe_instances(Filters=[{'Name':'tag:SSMFleetEnv', 'Values':['test']}])
+                    print ("a is: ", a)
+                    print ("type of a is: ", type(a))
+
+                    b = a['Reservations']
+                    print ("b is: ", b)
+                    print ("type of b is: ", type(b))
+
+                    for c in b:
+                      inst = c['Instances']
+            
+                      for d in inst:
+                        instid = d['InstanceId']
+                        instrun = d['State']['Name']
+              
+                        if instrun == 'running':
+                          ec2.stop_instances(InstanceIds=[instid])
+                          print("The instance is stopped:" + instid)
+                        else:
+                          print("The instance in stop state:" + instid)
+
+                    return {'message': 'Hello'}
+
               isEnd: true
               description: |-
                 **There's NO active service event:**
 
-                Conduct the planned operational change process as there's NO existed active AWS service event.
+                Conduct the planned operational change process as there's NO existed active AWS service event. In this case it's to stop the EC2 instance with **SSMFleetEnv** tag value set to be **test**.
         DocumentFormat: YAML
         DocumentType: Automation
         Name: AWS_health_aware_event_simulated_runbook
