@@ -35,7 +35,7 @@ This solution will use tags from your AWS Organization resources to create a dat
 
 ## Step by Step Guide
 
-### Roles
+### Part1: Roles
 
 If you are deploying this in a linked account you will need a Role in you Management account to let you access your AWS Organizations Data. There are two options for this:
 
@@ -59,7 +59,7 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 {{% /expand%}}
 
-### Tag your AWS Organization Resources
+### Part2: Tag your AWS Organization Resources
 
 You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. We will be using **AWS Quicksight User Emails**, see more [here](https://docs.aws.amazon.com/quicksight/latest/user/managing-users.html)
 
@@ -84,7 +84,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 5. Repeat on all resources with relevant emails. 
 
-## Deploy Lambda Function
+## Part3: Deploy Lambda Function
 
 Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
 
@@ -136,7 +136,7 @@ Using AWS CloudFormation we will deploy the lambda function to collect these tag
 5. Wait until your CloudFormation has a status of **CREATE_COMPLETE**.
 ![Images/rls_cfn_complete.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn_complete.png?classes=lab_picture_small)
 
-## Test Lambda Function
+## Part4: Test Lambda Function
 
 Your lambda functions will run automatically on the schedule you chose at deployment and will be ready within an hour. However, if you would like to test your functions please see the steps below. 
 Once you have deployed your modules you will be able to test your Lambda function to get your first set of data in Amazon S3. 
@@ -159,7 +159,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 
 7. Download this [file](/Cost/200_Cloud_Intelligence/qs_s3_manifest.json) and replace <bucket> with the bucket you can see your data in. 
 
-## Create RLS
+## Part5: Create RLS
 We will now create the RLS Dataset in Amazon QuickSight and attach it to your datasets for CID. Please ensure the bucket you have placed the RLS file into has access to Amazon QuickSight, see [here](https://docs.aws.amazon.com/quicksight/latest/user/troubleshoot-connect-S3.html)
 
 1. Go to Amazon QuickSight and login
