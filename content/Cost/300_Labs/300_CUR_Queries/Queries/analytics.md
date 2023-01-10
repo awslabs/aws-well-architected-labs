@@ -33,10 +33,6 @@ This query will provide daily unblended and usage information for Amazon Athena.
 #### Pricing
 Please refer to the [Athena pricing page](https://aws.amazon.com/athena/pricing/).
 
-#### Sample Output
-![Images/athena.png](/Cost/300_CUR_Queries/Images/Analytics/athena.png)
-
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/athena.sql)
 
@@ -82,10 +78,6 @@ This query will provide daily unblended and usage information per linked account
 
 #### Pricing
 Please refer to the [Glue pricing page](https://aws.amazon.com/glue/pricing/).
-
-#### Sample Output
-![Images/gluewrid.png](/Cost/300_CUR_Queries/Images/Analytics/gluewrid.png)
-
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/gluewrid.sql)
@@ -144,9 +136,6 @@ Please refer to the Kinesis pricing pages:
 
 [Amazon Kinesis Video Streams pricing](https://aws.amazon.com/kinesis/video-streams/pricing)
 
-#### Sample Output
-![Images/kinesis-output.png](/Cost/300_CUR_Queries/Images/Analytics/kinesis.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/kinesis.sql)
 
@@ -188,9 +177,6 @@ This query will provide daily unblended and amortized cost as well as usage info
 
 #### Pricing
 Please refer to the [Elasticsearch pricing page](https://aws.amazon.com/elasticsearch-service/pricing/).  Please refer to this blog for [Cost Optimization techniques](https://aws.amazon.com/blogs/database/reducing-cost-for-small-amazon-elasticsearch-service-domains/). 
-
-#### Sample Output
-![Images/elasticsearch-output.png](/Cost/300_CUR_Queries/Images/Analytics/elasticsearch.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/elasticsearch.sql)
@@ -272,9 +258,6 @@ This query will provide daily unblended cost and usage information per linked ac
 #### Pricing 
 Please refer to the [EMR pricing page](https://aws.amazon.com/emr/pricing/).
 
-#### Sample Output
-![Images/emr.png](/Cost/300_CUR_Queries/Images/Analytics/emr.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/emr.sql)
 
@@ -317,10 +300,6 @@ This query will provide monthly unblended and usage information per linked accou
 
 #### Pricing
 Please refer to the [Amazon QuickSight pricing page](https://aws.amazon.com/quicksight/pricing/).
-
-#### Sample Output
-![Images/quicksight.png](/Cost/300_CUR_Queries/Images/Analytics/quicksight.png)
-
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Analytics/quicksight.sql)

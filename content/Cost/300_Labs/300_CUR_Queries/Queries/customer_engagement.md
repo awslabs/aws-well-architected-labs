@@ -27,9 +27,6 @@ This query will provide daily unblended cost and usage information per linked ac
 #### Pricing
 Please refer to the [Connect pricing page](https://aws.amazon.com/connect/pricing/).
 
-#### Sample Output
-![Images/connect.png](/Cost/300_CUR_Queries/Images/Customer_Engagement/connect.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Customer_Engagement/connect.sql)
 

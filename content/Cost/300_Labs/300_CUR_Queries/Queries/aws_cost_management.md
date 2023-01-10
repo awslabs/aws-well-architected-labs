@@ -29,9 +29,6 @@ This query provides AWS Marketplace subscription costs including subscription pr
 #### Pricing
 Please refer to the [AWS Marketplace FAQ](https://aws.amazon.com/marketplace/help/).
 
-#### Sample Output
-![Images/subscriptions-output.png](/Cost/300_CUR_Queries/Images/AWS_Cost_Management/marketplacespend.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/marketplacespend.sql)
 
@@ -71,9 +68,6 @@ ORDER BY
 
 #### Query Description
 This query provides a list of refunds and credits issued. Output is grouped by payer, linked account, month, line item type, service, and line item description. This allows for analysis of refunds and credits along any of these grouped dimensions. For example, "what refunds or credits were issued to account 111122223333 for service ABC in January 2022?" or "what was the total refund issued across all accounts for payer 444455556666 with line item description XYZ?" 
-
-#### Sample Output
-![Images/refundcreditdetail.png](/Cost/300_CUR_Queries/Images/AWS_Cost_Management/refundcreditdetail.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/refundcreditdetail.sql)
@@ -126,9 +120,6 @@ Please refer to the relevant service reservation pricing page.
 * [OpenSearch (formerly Amazon ElasticSearch)](https://aws.amazon.com/opensearch-service/pricing/#Reserved_Instance_pricing)
 * [Redshift](https://aws.amazon.com/redshift/pricing/#Reserved_Instance_pricing)
 * [RDS](https://aws.amazon.com/rds/pricing/)
-
-#### Sample Output
-![Images/subscriptions-output.png](/Cost/300_CUR_Queries/Images/AWS_Cost_Management/reservation-savings.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/reservation-savings.sql)
