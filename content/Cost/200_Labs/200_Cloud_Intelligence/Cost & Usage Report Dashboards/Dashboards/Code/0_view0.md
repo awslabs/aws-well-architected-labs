@@ -172,9 +172,8 @@ Modify the following SQL query with your table names:
 ### Option 3: Leverage your existing AWS Organizations account mapping
 This option allows your to bring in your AWS Organizations data including OU grouping
 
-- {{%expand "Click here - to set up auto-update of Account Names using your AWS Organization Data (recommended)" %}}
-
 #### Option3-A: Complete Level 300: Optimization Data Collection Lab (recommended)
+- {{%expand "Click here to expand" %}}
 
 This Lab can collects multiple types of data across accounts and AWS Organization, including Trusted Advisor and Compute Optimizer Data. For Account Names you will need only one module **AWS Organization Module**, but we recommend to explore other modules of this lab as well.
 
@@ -189,7 +188,10 @@ Create or update your account_map view by running the following query.
 		FROM
 			"optimization_data"."organization_data"
 
+{{% /expand%}}
+	
 #### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
+- {{%expand "Click here to expand" %}}
 
 - [Click to navigate to Level 300 Organization CUR connection steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
 
@@ -207,4 +209,8 @@ Create your account_map view by running the following query.
 			"name" "account_name"
 		FROM
 			(database).(tablename)
+
 {{% /expand%}}
+
+### Final Steps
+Once you update and tested the account_map view in Ahtena, you need to make sure QuickSight has access to the bucket of Optimization Data Collection and then refresh summary_view dataset in QuickSight. 
