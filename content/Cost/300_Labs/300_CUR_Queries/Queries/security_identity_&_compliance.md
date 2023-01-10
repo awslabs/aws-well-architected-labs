@@ -29,9 +29,6 @@ This query provides daily unblended cost and usage information about Amazon Guar
 #### Pricing
 Please refer to the [Amazon GuardDuty pricing page](https://aws.amazon.com/guardduty/pricing/) for more details.
 
-#### Sample Output
-![Images/guardduty.png](/Cost/300_CUR_Queries/Images/Security_Identity_&_Compliance/guardduty.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/guardduty.sql)
 
@@ -80,9 +77,6 @@ This query provides daily unblended cost and usage information about Amazon Cogn
 #### Pricing
 Please refer to the [Amazon Cognito pricing page](https://aws.amazon.com/cognito/pricing/) for more details.
 
-#### Sample Output
-![Images/cognito.png](/Cost/300_CUR_Queries/Images/Security_Identity_&_Compliance/cognito.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/cognito.sql)
 
@@ -126,9 +120,6 @@ This query provides daily unblended cost and usage information about AWS WAF Usa
 
 #### Pricing
 Please refer to the [WAF pricing page](https://aws.amazon.com/waf/pricing/) for more details.
-
-#### Sample Output
-![Images/waf.png](/Cost/300_CUR_Queries/Images/Security_Identity_&_Compliance/waf.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Security_Identity_&_Compliance/waf.sql)

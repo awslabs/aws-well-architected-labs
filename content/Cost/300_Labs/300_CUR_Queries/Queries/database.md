@@ -57,9 +57,6 @@ In this example, the following resource IDs would be needed:
 #### Pricing 
 Please refer to the [Amazon Aurora pricing page](https://aws.amazon.com/rds/aurora/pricing/).
 
-#### Sample Output
-![Images/auroraglobaldb.png](/Cost/300_CUR_Queries/Images/Database/auroraglobaldb.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/auroraglobaldb.sql)
 
@@ -109,9 +106,6 @@ This query will output the daily sum per resource for all RDS purchase options a
 
 #### Pricing
 Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing/).
-
-#### Sample Output
-![Images/rds-w-rid.png](/Cost/300_CUR_Queries/Images/Database/rds-w-rid.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/rds-w-id.sql)
@@ -182,9 +176,6 @@ This query will output the total monthly blended costs for RDS grouped by usage 
 #### Pricing
 Please refer to the [Amazon RDS pricing page](https://aws.amazon.com/rds/pricing/).
 
-#### Sample Output
-![Images/monthly_rds_usage_type_by_tag.png](/Cost/300_CUR_Queries/Images/Database/monthly_rds_usage_type_by_tag.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/monthly_rds_usage_type_by_tag.sql)
 
@@ -224,9 +215,6 @@ This query will output the total daily unblended costs for RDS Instances running
 
 #### Pricing
 Please refer to the [Amazon RDS on Outposts pricing page](https://aws.amazon.com/rds/outposts/pricing/).
-
-#### Sample Output
-![Images/rds_outposts.png](/Cost/300_CUR_Queries/Images/Database/rds_outposts.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/rds_outposts.sql)
@@ -276,9 +264,6 @@ This query will output the total monthly sum per resource for all DynamoDB purch
 
 #### Pricing
 Please refer to the [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pricing/).
-
-#### Sample Output
-![Images/dynamodb.png](/Cost/300_CUR_Queries/Images/Database/dynamodb.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/dynamodb.sql)
@@ -342,9 +327,6 @@ This query will provide daily unblended and amortized cost as well as usage info
 
 #### Pricing
 Please refer to the [Redshift pricing page](https://aws.amazon.com/redshift/pricing/). Please refer to the [Redshift Cost Optimization Whitepaper](https://d1.awsstatic.com/whitepapers/amazon-redshift-cost-optimization.pdf) for Cost Optimization techniques. 
-
-#### Sample Output
-![Images/redshiftwrid.png](/Cost/300_CUR_Queries/Images/Database/redshiftwrid.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/redshiftwrid.sql)
@@ -419,9 +401,6 @@ This query will output the total monthly sum per resource for all Amazon ElastiC
 #### Pricing
 Please refer to the [Amazon ElastiCache pricing page](https://aws.amazon.com/elasticache/pricing/).
 
-#### Sample Output
-![Images/elasticache.png](/Cost/300_CUR_Queries/Images/Database/elasticachewrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/elasticachewrid.sql)
 
@@ -489,9 +468,6 @@ This query will output the total daily cost per DocumentDB cluster. The output w
 
 #### Pricing
 Please refer to the [Amazon DocumentDB pricing page](https://aws.amazon.com/documentdb/pricing/).
-
-#### Sample Output
-![Images/documentdb_daily_cost.png](/Cost/300_CUR_Queries/Images/Database/documentdb_daily_cost.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Database/documentdb_daily_cost.sql)

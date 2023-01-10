@@ -29,10 +29,6 @@ This query will provide daily unblended and usage information per linked account
 #### Pricing
 Please refer to the [Rekognition pricing page](https://aws.amazon.com/rekognition/pricing/).
 
-#### Sample Output
-![Images/rekognition.png](/Cost/300_CUR_Queries/Images/Machine_Learning/rekognition.png)
-
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Machine_Learning/rekognition.sql)
 
@@ -73,10 +69,6 @@ This query will provide daily unblended cost and usage information per resource 
 
 #### Pricing
 Please refer to the [SageMaker pricing page](https://aws.amazon.com/sagemaker/pricing/).
-
-#### Sample Output
-![Images/sagemakerwrid.png](/Cost/300_CUR_Queries/Images/Machine_Learning/sagemakerwrid.png)
-
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Machine_Learning/sagemakerwrid.sql)
@@ -120,9 +112,6 @@ This query will provide daily unblended and usage information per linked account
 
 #### Pricing
 Please refer to the [Textract pricing page](https://aws.amazon.com/textract/pricing/).
-
-#### Sample Output
-![Images/textract.png](/Cost/300_CUR_Queries/Images/Machine_Learning/textract.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Machine_Learning/textract.sql)

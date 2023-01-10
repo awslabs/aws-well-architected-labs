@@ -33,9 +33,6 @@ Please refer to the [WorkSpaces pricing page](https://aws.amazon.com/workspaces/
 This query will **not** run against CUR data that does not have any Amazon WorkSpaces usage.  
 {{% /notice%}}
 
-#### Sample Output
-![Images/workspaceswrid.png](/Cost/300_CUR_Queries/Images/End_User_Computing/workspaceswrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/workspaceswrid.sql)
 
@@ -97,9 +94,6 @@ Please refer to the [WorkSpaces pricing page](https://aws.amazon.com/workspaces/
 {{% notice note %}}
 This query will **not** run against CUR data that does not have any Amazon WorkSpaces usage.  
 {{% /notice%}}
-
-#### Sample Output
-![Images/workspaceswrid.png](/Cost/300_CUR_Queries/Images/End_User_Computing/workspaces_autostop_wrid.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/amazon-workspaces-auto-stop.sql)
@@ -182,9 +176,6 @@ This query will provide unblended cost and usage information per linked account 
 
 #### Pricing
 Please refer to the [Amazon AppStream 2.0 pricing page](https://aws.amazon.com/appstream2/pricing/).
-
-#### Sample Output
-![Images/appstream.png](/Cost/300_CUR_Queries/Images/End_User_Computing/appstream.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/End_User_Computing/appstream.sql)

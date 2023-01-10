@@ -41,8 +41,6 @@ Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 These links are provided as an example to compare CUR report output to Cost Explorer output.
 
 Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=None&hasBlended=false&hasAmortized=false&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Custom&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&filter=%5B%7B%22dimension%22:%22Service%22,%22values%22:%5B%22Amazon%20Elastic%20Compute%20Cloud%20-%20Compute%22,%22Amazon%20Elastic%20Block%20Store%22%5D,%22include%22:true,%22children%22:null%7D%5D&chartStyle=Group&forecastTimeRangeOption=None&usageAs=usageQuantity&startDate=2020-12-01&endDate=2020-12-31)
-#### Sample Output
-![Images/ec2_total_spend.png](/Cost/300_CUR_Queries/Images/Compute/ec2_total_spend.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2totalspend.sql)
@@ -81,9 +79,6 @@ This query will **not** run against CUR data from accounts which have purchased 
 
 #### Pricing Page
 Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
-
-#### Sample Output
-![Images/ec2runninghours.png](/Cost/300_CUR_Queries/Images/Compute/ec2runninghours.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2runninghours.sql)
@@ -149,9 +144,6 @@ This query will provide EC2 consumption of Savings Plans across Compute resource
 #### Pricing
 Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
 
-#### Sample Output
-![Images/ec2speffective.png](/Cost/300_CUR_Queries/Images/Compute/ec2speffective.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2speffective.sql)
 
@@ -203,9 +195,6 @@ This query will provide details about Compute usage that is covered by Savings P
 
 #### Pricing
 Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsplans/pricing/).
-
-#### Sample Output
-![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/compute_sp.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/computesp.sql)
@@ -259,9 +248,6 @@ This query focuses on surfacing accounts which have utilized AWS Savings Plans f
 #### Pricing
 Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsplans/pricing/).
 
-#### Sample Output
-![Images/compute_sp.png](/Cost/300_CUR_Queries/Images/Compute/account_spend_of_shared_sp.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/accountspendofsharedsp.sql)
 
@@ -304,9 +290,6 @@ This query focuses on Lambda and the breakdown of its costs by different usage e
 
 #### Pricing
 Please refer to the [Lambda pricing page](https://aws.amazon.com/lambda/pricing/).
-
-#### Sample Output
-![Images/lambda_sp.png](/Cost/300_CUR_Queries/Images/Compute/lambda_sp.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/lambdasp.sql)
@@ -434,9 +417,6 @@ This query will display cost and usage of Elastic Load Balancers which didn't re
 #### Pricing
 Please refer to the [Elastic Load Balancing pricing page](https://aws.amazon.com/elasticloadbalancing/pricing/).
 
-#### Sample Output
-![Images/elb_unused_wrid.png](/Cost/300_CUR_Queries/Images/Compute/elb_unused_wrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/elastic-load-balancing-idle-elbs.sql)
 
@@ -504,9 +484,6 @@ Please refer to the [Savings Plans pricing page](https://aws.amazon.com/savingsp
 
 [Savings Plans Inventory Report](https://console.aws.amazon.com/cost-management/home?region=us-east-1#/savings-plans/inventory)
 
-#### Sample Output
-![Images/ec2_sp_inventory.png](/Cost/300_CUR_Queries/Images/Compute/ec2_sp_inventory.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2_sp_inventory.sql)
 
@@ -568,10 +545,6 @@ Cost and Usage columns are dynamic and their visibility in the Athena tables dep
 
 #### Pricing
 Please refer to the [EC2 reserved instances pricing page](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/).
-
-#### Sample Output
-*Sample output includes a subset of query columns*
-![Images/ec2ricoverage.png](/Cost/300_CUR_Queries/Images/Compute/ec2ricoverage.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2ricoverage.sql)
@@ -636,10 +609,6 @@ AWS Services running locally on [AWS Outposts](https://docs.aws.amazon.com/white
 
 #### Pricing
 Please refer to the [AWS Outposts pricing page](https://aws.amazon.com/outposts/pricing/).
-
-#### Sample Output
-*Sample output includes a subset of query columns*
-![Images/ec2ricoverage.png](/Cost/300_CUR_Queries/Images/Compute/outposts_ec2runninghours.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Compute/outposts_ec2runninghours.sql)

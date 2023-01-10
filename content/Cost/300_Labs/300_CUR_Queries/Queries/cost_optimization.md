@@ -114,9 +114,6 @@ This query will return cost for unallocated Elastic IPs. Elastic IPs incur hourl
 #### Pricing
 Please refer to the [EC2 Elastic IP pricing page](https://aws.amazon.com/ec2/pricing/on-demand/#Elastic_IP_Addresses).
 
-#### Sample Output
-![Images/ec2-unallocated-elastic-ips.png](/Cost/300_CUR_Queries/Images/Cost_Optimization/ec2-unallocated-elastic-ips.png)
-
 #### Download SQL File
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/ec2-unallocated-elastic-ips.sql)
 
