@@ -79,6 +79,7 @@ Mappings:
        ap-northeast-1:   {CodeBucket: aws-well-architected-labs-tokyo }
        ca-central-1:     {CodeBucket: aws-well-architected-labs-canada }
        eu-west-3:        {CodeBucket: aws-well-architected-labs-paris }
+       sa-east-1:        {CodeBucket: aws-well-architected-labs-san-paulo }
 Parameters:
   DestinationBucket:
     Type: String

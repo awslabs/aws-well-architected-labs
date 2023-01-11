@@ -52,6 +52,7 @@ Each region requires a bucket for lambda code. To add a regional bucket follow t
 * Add bucket policy below
 * create a replication role on the aws-well-architected-labs bucket on prefix Cost/Labs/300_Optimization_Data_Collection/
 * Use the s3-replication-role role
+* Select replicate existing files
 * New files will be replicated
 
 ```json
@@ -66,7 +67,7 @@ Each region requires a bucket for lambda code. To add a regional bucket follow t
                     "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E3RRAWK7UHVS3O"
                 },
                 "Action": "s3:GetObject",
-                "Resource": "arn:aws:s3:::aws-well-architected-labs-ap-sydney/*"
+                "Resource": "arn:aws:s3:::aws-well-architected-labs-[bucket location]/*"
             }
         ]
     }
