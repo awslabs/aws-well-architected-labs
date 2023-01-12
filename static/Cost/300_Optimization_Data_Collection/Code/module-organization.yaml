@@ -173,7 +173,7 @@ Resources:
           def s3_upload(file_name, payer_id):
               try:
                   s3 = boto3.client('s3', os.environ["REGION"],config=Config(s3={'addressing_style': 'path'}))
-                  s3.upload_file(f'/tmp/{file_name}.json', bucket, f"{prefix}/{prefix}-data/{file_name}-{payer_id}.json") 
+                  s3.upload_file(f'/tmp/{file_name}.json', bucket, f"{prefix}/{prefix}-data/{payer_id}/{file_name}.json") 
                   print(f"{file_name}org data in s3")
               except Exception as e:
                   print(e)
