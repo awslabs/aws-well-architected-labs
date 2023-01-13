@@ -120,6 +120,8 @@ WHERE
     OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
     OR (line_item_line_item_type = 'DiscountedUsage')
   )
+  -- excludes consumed ODCR running hours from total
+  AND product_capacitystatus != 'AllocatedCapacityReservation'
 GROUP BY 
   bill_billing_period_start_date,
   line_item_usage_start_date, 
