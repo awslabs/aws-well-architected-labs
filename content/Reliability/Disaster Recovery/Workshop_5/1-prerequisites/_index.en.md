@@ -8,14 +8,13 @@ weight = 1
 
 #### Using an account provided by instructor at virtual or in-person workshop
 
-If you are running this workshop as part of an instructor led workshop, please log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
+If you are running this workshop as part of an instructor led workshop, please first log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
 
-All resources for this workshop have been pre-provisioned.
+Proceed to the [**Primary region** setup](1.1-account-setup/1.1.2-primary-region/) step. 
 
-**Continue to the [DynamoDB](../2-dynamodb/) section of the workshop.**
 
 #### Using your own AWS account
 
-If you are running this workshop in your own account, click **Next Step**.
+Click **Next Step** to continue the account setup.
 
 {{< prev_next_button link_prev_url="../" link_next_url="./1.1-account-setup/" />}}

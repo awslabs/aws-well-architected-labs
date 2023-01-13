@@ -97,25 +97,45 @@ This step is required as we did manual promotion for the Aurora Database.
 Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
+#### Route 53 cleanup
+
+5.1 Delete Route 53 health checks
+
+{{< img cl-r53-hc.png >}}
+
+5.2 Delete Route 53 hosted zone records for `application.` and `shop.` subdomains
+
+{{< img cl-r53-records.png >}}
+
+5.3 Delete Route 53 hosted zone
+
+{{< img cl-r53-zone.png >}}
+
+#### Route 53 Application Recovery Controller cleanup
+
+6.1 ...
+
+
+
 #### CloudFormation Cleanup
 
-5.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+7.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-5.2 Select **hot-secondary**, then click the **Delete** button.
+7.2 Select **hot-secondary**, then click the **Delete** button.
 
 {{< img cl-16.png >}}
 
-5.3 Click the **Delete stack** button.
+7.3 Click the **Delete stack** button.
 
 {{< img cl-9.png >}}
 
-5.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+7.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-5.5 Select **hot-primary**, then click the **Delete** button.
+7.5 Select **hot-primary**, then click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-5.6 Click the **Delete stack** button.
+7.6 Click the **Delete stack** button.
 
 {{< img cl-7.png >}}
 

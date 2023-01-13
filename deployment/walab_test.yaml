@@ -1,0 +1,374 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Well-Architected Labs on Amplify using Hugo/Learn'
+
+Parameters:
+  AmplifyName:
+    Description: Name for Amplify deploy
+    Type: String
+    Default: "WALabs"
+  AmplifyDescription:
+    Description: Description for Amplify deploy
+    Type: String
+    Default: "Production WA Labs Branch"
+  GitHubAcccesToken:
+    Description: Github Access token for repository
+    Type: String
+  GitHubRepoName:
+    Description: Github repository URL
+    Type: String
+    Default: "https://github.com/awslabs/aws-well-architected-labs"
+  HugoVersion:
+    Description: Version of Hugo to deploy
+    Type: String
+    Default: "0.72.0"
+  GitHubBranchName:
+    Description: Branch to Deploy
+    Type: String
+    Default: "master"
+
+Resources:
+  WALabSite:
+    Type: AWS::Amplify::App
+    Properties:
+      AccessToken: !Ref GitHubAcccesToken
+      CustomRules:
+        - Source: "/<*>"
+          Target: "/index.html"
+          Status: '404'
+
+        - Source: "/README.html"
+          Target: "/"
+          Status: '301'
+
+        # Operational Excellence
+        - Source: "/Operations/README.html"
+          Target: "/operational-excellence/"
+          Status: '301'
+
+        - Source: "/Operations/100_Inventory_and_Patch_Mgmt/<*>.html"
+          Target: "/operational-excellence/100_labs/100_inventory_patch_management/"
+          Status: '301'
+
+        - Source: "/Operations/"
+          Target: "/operational-excellence/"
+          Status: '301'
+
+        # Security
+        - Source: "/Security/README.html"
+          Target: "/security/"
+          Status: '301'
+
+        - Source: "/Security/100_AWS_Account_and_Root_User/<*>.html"
+          Target: "/security/100_labs/100_aws_account_and_root_user/"
+          Status: '301'
+
+        - Source: "/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/<*>.html"
+          Target: "/security/100_labs/100_basic_identity_and_access_management_user_group_role/"
+          Status: '301'
+
+        - Source: "/Security/100_CloudFront_with_S3_Bucket_Origin/<*>.html"
+          Target: "/security/100_labs/100_cloudfront_with_s3_bucket_origin/"
+          Status: '301'
+
+        - Source: "/Security/100_Create_a_Data_Bunker/<*>.html"
+          Target: "/security/100_labs/100_create_a_data_bunker/"
+          Status: '301'
+
+        - Source: "/Security/100_Enable_Security_Hub/<*>.html"
+          Target: "/security/100_labs/100_enable_security_hub/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_Deployment_of_Detective_Controls/<*>.html"
+          Target: "/security/200_labs/200_automated_deployment_of_detective_controls/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_Deployment_of_EC2_Web_Application/<*>.html"
+          Target: "/security/200_labs/200_automated_deployment_of_ec2_web_application/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_Deployment_of_IAM_Groups_and_Roles/<*>.html"
+          Target: "/security/200_labs/200_automated_deployment_of_iam_groups_and_roles/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_Deployment_of_VPC/<*>.html"
+          Target: "/security/200_labs/200_automated_deployment_of_vpc/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_Deployment_of_Web_Application_Firewall/<*>.html"
+          Target: "/security/200_labs/200_automated_deployment_of_web_application_firewall/"
+          Status: '301'
+
+        - Source: "/Security/200_Automated_IAM_User_Cleanup/<*>.html"
+          Target: "/security/200_labs/200_automated_iam_user_cleanup/"
+          Status: '301'
+
+        - Source: "/Security/200_Basic_EC2_with_WAF_Protection/<*>.html"
+          Target: "/security/200_labs/200_basic_ec2_with_waf_protection/"
+          Status: '301'
+
+        - Source: "/Security/200_Certificate_Manager_Request_Public_Certificate/<*>.html"
+          Target: "/security/200_labs/200_certificate_manager_request_public_certificate/"
+          Status: '301'
+
+        - Source: "/Security/200_CloudFront_for_Web_Application/<*>.html"
+          Target: "/security/200_labs/200_cloudfront_for_web_application/"
+          Status: '301'
+
+        - Source: "/Security/200_CloudFront_with_WAF_Protection/<*>.html"
+          Target: "/security/200_labs/200_cloudfront_with_waf_protection/"
+          Status: '301'
+
+        - Source: "/Security/300_IAM_Permission_Boundaries_Delegating_Role_Creation/<*>.html"
+          Target: "/security/300_labs/300_iam_permission_boundaries_delegating_role_creation/"
+          Status: '301'
+
+        - Source: "/Security/300_IAM_Tag_Based_Access_Control_for_EC2/<*>.html"
+          Target: "/security/300_labs/300_iam_tag_based_access_control_for_ec2/"
+          Status: '301'
+
+        - Source: "/Security/300_Incident_Response_Playbook_with_Jupyter-AWS_IAM/<*>.html"
+          Target: "/security/300_labs/300_incident_response_playbook_with_jupyter-aws_iam/"
+          Status: '301'
+
+        - Source: "/Security/300_Incident_Response_with_AWS_Console_and_CLI/<*>.html"
+          Target: "/security/300_labs/300_incident_response_with_aws_console_and_cli/"
+          Status: '301'
+
+        - Source: "/Security/300_Lambda_Cross_Account_Bucket_Policy/<*>.html"
+          Target: "/security/300_labs/300_lambda_cross_account_bucket_policy/"
+          Status: '301'
+
+        - Source: "/Security/300_Lambda_Cross_Account_IAM_Role_Assumption/<*>.html"
+          Target: "/security/300_labs/300_lambda_cross_account_iam_role_assumption/"
+          Status: '301'
+
+        - Source: "/Security/Quest_100_Loft_Introduction_to_Security/<*>.html"
+          Target: "/security/quests/quest_100_loft_introduction_to_security/"
+          Status: '301'
+
+        - Source: "/Security/Quest_100_Quick_Steps_to_Security_Success/<*>.html"
+          Target: "/security/quests/quest_100_quick_steps_to_security_success/"
+          Status: '301'
+
+        - Source: "/Security/Quest_200_Incident_Response_Day/<*>.html"
+          Target: "/security/quests/quest_200_incident_response_day/"
+          Status: '301'
+
+        - Source: "/Security/Quest_300_Security_Best_Practices_Day/<*>.html"
+          Target: "/security/quests/quest_300_security_best_practices_day/"
+          Status: '301'
+
+        - Source: "/Security/Quest_300_Security_Best_Practices_Workshop_EC/<*>.html"
+          Target: "/security/quests/quest_300_security_best_practices_workshop_ec2/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Classify_Data/<*>.html"
+          Target: "/security/quests/quest_classify_data/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Control_Human_Access/<*>.html"
+          Target: "/security/quests/quest_control_human_access/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Control_Programmatic_Access/<*>.html"
+          Target: "/security/quests/quest_control_programmatic_access/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Defend_Against_New_Threats/<*>.html"
+          Target: "/security/quests/quest_defend_against_new_threats/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Detect_and_Investigate_Events/<*>.html"
+          Target: "/security/quests/quest_detect_and_investigate_events/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Incident_Response/<*>.html"
+          Target: "/security/quests/quest_incident_response/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Managing_Credentials_and_Authentication/<*>.html"
+          Target: "/security/quests/quest_managing_credentials_and_authentication/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Protect_Compute/<*>.html"
+          Target: "/security/quests/quest_protect_compute/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Protect_Data_at_Rest/<*>.html"
+          Target: "/security/quests/quest_protect_data_at_rest/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Protect_Data_in_Transit/<*>.html"
+          Target: "/security/quests/quest_protect_data_in_transit/"
+          Status: '301'
+
+        - Source: "/Security/Quest_Protect_Networks/<*>.html"
+          Target: "/security/quests/quest_protect_networks/"
+          Status: '301'
+
+        - Source: "/Security/"
+          Target: "/security/"
+          Status: '301'
+
+        # Reliability
+        - Source: "/Reliability/README.html"
+          Target: "/reliability/"
+          Status: '301'
+
+        - Source: "/Reliability/200_Bidirectional_Replication_for_S3/<*>.html"
+          Target: "/reliability/200_labs/200_bidirectional_replication_for_s3/"
+          Status: '301'
+
+        - Source: "/Reliability/200_Deploy_and_Update_CloudFormation/<*>.html"
+          Target: "/reliability/200_labs/200_deploy_and_update_cloudformation/"
+          Status: '301'
+
+        - Source: "/Reliability/200_Testing_Backup_and_Restore_of_Data/<*>.html"
+          Target: "/reliability/200_labs/200_testing_backup_and_restore_of_data/"
+          Status: '301'
+
+        - Source: "/Reliability/200_Testing_for_Resiliency_of_EC2/<*>.html"
+          Target: "/reliability/200_labs/200_testing_for_resiliency_of_ec2/"
+          Status: '301'
+
+        - Source: "/Reliability/300_Health_Checks_and_Dependencies/<*>.html"
+          Target: "/reliability/300_labs/300_health_checks_and_dependencies/"
+          Status: '301'
+
+        - Source: "/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/<*>.html"
+          Target: "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/"
+          Status: '301'
+
+          # saw this in the logs, so adding a special case
+        - Source: "/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Lab_Guide.htmlSlow"
+          Target: "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/"
+          Status: '301'
+
+        - Source: "/Reliability/"
+          Target: "/reliability/"
+          Status: '301'
+
+        # Cost
+        - Source: "/Cost/README.html"
+          Target: "/cost/"
+          Status: '301'
+
+        - Source: "/Cost/Fundamentals.html"
+          Target: "/cost/fundamentals/"
+          Status: '301'
+
+        - Source: "/Cost/ExpenditureAwareness.html"
+          Target: "/cost/expenditureawareness/"
+          Status: '301'
+
+        - Source: "/Cost/CostEffectiveResources.html"
+          Target: "/cost/costeffectiveresources/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Effective_Resources/100_AWS_Resource_Optimization/<*>.html"
+          Target: "/cost/100_labs/100_aws_resource_optimization/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/<*>.html"
+          Target: "/cost/100_labs/100_1_aws_account_setup/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/<*>.html"
+          Target: "/cost/100_labs/100_2_cost_and_usage_governance/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/100_3_Pricing_Models/<*>.html"
+          Target: "/cost/100_labs/100_3_pricing_models/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/<*>.html"
+          Target: "/cost/100_labs/100_4_cost_and_usage_analysis/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/100_5_Cost_Visualization/<*>.html"
+          Target: "/cost/100_labs/100_5_cost_visualization/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/<*>.html"
+          Target: "/cost/200_labs/200_2_cost_and_usage_governance/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/200_3_Pricing_Models/<*>.html"
+          Target: "/cost/200_labs/200_3_pricing_models/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/<*>.html"
+          Target: "/cost/200_labs/200_4_cost_and_usage_analysis/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Fundamentals/200_5_Cost_Visualization/<*>.html"
+          Target: "/cost/200_labs/200_5_cost_visualization/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/<*>.html"
+          Target: "/cost/200_labs/200_aws_resource_optimization/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/<*>.html"
+          Target: "/cost/200_labs/200_pricing_model_analysis/"
+          Status: '301'
+
+        - Source: "/Cost/Expenditure_Awareness/Workload_Efficiency/<*>.html"
+          Target: "/cost/200_labs/200_workload_efficiency/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/<*>.html"
+          Target: "/cost/300_labs/300_automated_cur_updates_and_ingestion/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/<*>.html"
+          Target: "/cost/300_labs/300_multi_account_cur_access/"
+          Status: '301'
+
+        - Source: "/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/<*>.html"
+          Target: "/cost/300_labs/300_splitting_sharing_cur_access/"
+          Status: '301'
+
+        - Source: "/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/<*>.html"
+          Target: "/cost/300_labs/300_automated_cur_query_and_email_delivery/"
+          Status: '301'
+
+        - Source: "/Cost/"
+          Target: "/cost/"
+          Status: '301'
+
+        # WAT
+        - Source: Well-ArchitectedTool/README.html
+          Target: "/well-architectedtool/"
+          Status: '301'
+
+        - Source: Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/<*>.html
+          Target: "/well-architectedtool/100_labs/100_walkthrough_of_the_well-architected_tool/"
+          Status: '301'
+
+      EnvironmentVariables:
+        -
+          Name: "_LIVE_UPDATES"
+          Value: !Sub "[{\"name\":\"Hugo\",\"pkg\":\"hugo\",\"type\":\"hugo\",\"version\":\"${HugoVersion}\"}]"
+        -
+          Name: "_DISABLE_L2_CACHE"
+          Value: "true"
+      Name: !Ref AmplifyName
+      Repository: !Ref GitHubRepoName
+      BuildSpec: "version: 0.1\nfrontend:\n  phases:\n    build:\n      commands:\n        - hugo --minify\n  artifacts:\n    baseDirectory: public\n    files:\n      - '**/*'\n  cache:\n    paths: []\n"
+      # Tags:
+      #   - Tag
+
+  WALabSiteBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt WALabSite.AppId
+      BranchName: !Ref GitHubBranchName
+      Description: !Ref AmplifyDescription
+      EnableAutoBuild: True
+      EnablePullRequestPreview: False
+      Stage: PRODUCTION
+      Tags:
+        -
+          Key: "displayName"
+          Value: !Ref GitHubBranchName
