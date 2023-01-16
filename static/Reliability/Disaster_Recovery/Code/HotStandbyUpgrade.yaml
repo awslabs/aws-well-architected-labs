@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'This deployment includes SSM, CloudWatch, and allows instance reboot'
+Description: 'Upgraded stack for hot standby Unicorn Shop with ALB'
 Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'

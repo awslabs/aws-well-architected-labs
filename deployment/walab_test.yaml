@@ -16,7 +16,7 @@ Parameters:
   GitHubRepoName:
     Description: Github repository URL
     Type: String
-    Default: "https://github.com/awslabs/aws-well-architected-labs"
+    Default: "https://github.com/andrew-grischenko/aws-well-architected-labs"
   HugoVersion:
     Description: Version of Hugo to deploy
     Type: String
@@ -24,7 +24,7 @@ Parameters:
   GitHubBranchName:
     Description: Branch to Deploy
     Type: String
-    Default: "master"
+    Default: "Module-5-Automated"
 
 Resources:
   WALabSite:

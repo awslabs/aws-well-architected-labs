@@ -12,7 +12,7 @@ Follow these steps if you are running this lab without previsouly completeing [M
 If you want to reuse [Module 4: Hot Standby](/reliability/disaster-recovery/workshop_4/) infrastructure, please follow the steps described in the next section [Option 2: Making changes to the existing resources using AWS CloudFormation template](/reliability/disaster-recovery/workshop_5/1-prerequisites/1.1-account-setup/1.1.3-secondary-region/#option-2-making-changes-to-the-existing-resources-using-aws-cloudformation-template)
 {{% /notice %}}
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://resilience-worksop.s3.ap-southeast-2.amazonaws.com/HotStandbyUpgrade.yaml).
 
 1.2  Specify stack parameters:
 * Stack name: **hot-secondary**
@@ -49,7 +49,7 @@ Follow these steps if you are reusing resources created and not removed yet by [
 
 {{< img pr-chs-1.png >}}
 
-1.3 Select **Replace current template** and use this [CloudFormation Template - URL TO BE CHANGED](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.3 Select **Replace current template** and use this [CloudFormation Template](https://resilience-worksop.s3.ap-southeast-2.amazonaws.com/HotStandbyUpgrade.yaml).
 
 {{< img pr-chs-2.png >}}
 

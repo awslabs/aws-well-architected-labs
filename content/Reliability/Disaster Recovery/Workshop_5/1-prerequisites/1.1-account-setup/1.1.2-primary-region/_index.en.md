@@ -13,7 +13,7 @@ If you want to reuse [Module 4: Hot Standby](/reliability/disaster-recovery/work
 {{% /notice %}}
 
 
-1.1 Deploy the application to the primary region **N. Virginia (us-east-1)** by launching this [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.1 Deploy the application to the primary region **N. Virginia (us-east-1)** by launching this [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://resilience-worksop.s3.ap-southeast-2.amazonaws.com/HotStandbyUpgrade.yaml).
 
 1.2  Specify the stack parameters:
 * Stack name: **hot-primary**
@@ -48,7 +48,7 @@ Follow these steps if you are reusing resources created and not removed yet by [
 
 {{< img pr-chs-1.png >}}
 
-1.3 Select **Replace current template** and use this [CloudFormation Template - URL TO BE CHANGED](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=hot-primary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.3 Select **Replace current template** and use this [CloudFormation Template](https://resilience-worksop.s3.ap-southeast-2.amazonaws.com/HotStandbyUpgrade.yaml).
 
 {{< img pr-chs-2.png >}}
 

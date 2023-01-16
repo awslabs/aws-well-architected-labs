@@ -37,33 +37,15 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 2.1 Click [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-2.2 Click the **Tables** link.
+2.2 Click the **Tables** link and the find and click on teh name of the **unishophotstandby** table in the list.
 
-{{< img dd-2.png >}}
+{{< img cl-ddbreplica.png >}}
 
-2.3 Click **unishophotstandby**.
-
-{{< img dd-3.png >}}
-
-2.4 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
+2.3 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
 
 {{< img cl-10.png >}}
 
-2.5 Enter `delete` then click the **Delete** button.
-
-{{< img cl-11.png >}}
-
-#### CloudFront Cleanup
-
-3.1 Click [CloudFront](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions) to navigate to the dashboard.
-
-3.2 Select the CloudFront distribution, then click the **Disable** button and confirm disable.
-
-{{< img cl-17.png >}}
-
-3.3 Wait for the CloudFront distribution to have a status of **Disabled**, then select the CloudFront distribution and click the **Delete** button and confirm deletion.
-
-{{< img cl-18.png >}}
+2.4 Enter `delete` then click the **Delete** button.
 
 #### Database Cleanup
 
@@ -89,7 +71,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
-4.6 Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
+4.6 Delete the remaining global database. Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
 
 {{< img cl-15.png >}}
 

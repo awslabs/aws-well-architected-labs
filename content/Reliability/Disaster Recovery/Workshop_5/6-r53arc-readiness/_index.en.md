@@ -120,6 +120,10 @@ Ensure that you can see the Route 53 S3 website endpoint readiness check and the
 
 {{< img step-6b.png >}}
 
+{{% notice warning %}}
+It may take up to 5 mins for the readiness checks status to become **Ready**.
+{{% /notice %}}
+
 (If you don’t see the resources, you can navigate to the Resource sets by clicking [Route 53 ARC resource sets](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/resource-sets), and then update the **Readiness scope** of the resource sets to assign them to the correct cells.) 
 
 {{< prev_next_button link_prev_url="../3-verify-websites/" link_next_url="../7-r53arc-routing/" />}}
