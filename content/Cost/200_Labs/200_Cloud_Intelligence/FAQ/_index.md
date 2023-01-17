@@ -33,6 +33,19 @@ The CUR must be in Parquet (Athena) format.
 #### Do the Cloud Intelligent Dashboards support CUR without resource ids?
 The CUR must be have resource ids. 
 
+#### I want more than 7 months in my CUDOS / CID Dashboard
+
+By default CUDOS has 7 months of data, If you need to pull more data, you can follow below steps as long as you have that additional data in CUR.
+- Go to Athena
+- Edit/Show query for summary_view view
+- Modify the line towards the bottom that has 2 entries saying "7" months (6 past + 1 current) and replace them with your desired months
+- Run the query and it should complete successfully and that will automatically update the view.
+- Go to QuickSight and select Dataset in the left tab
+- Select the summary_view and click on refresh dataset and do a full refresh. It might take some time depending on data. If you run into SPICE issues, make sure to adjust spice capacity in your QS account as needed.
+- Once it is done, check your QuickSight dashboard and select a visual and click on view dashboard filter to modify the date to either Relative date or Date and Time range to verify the data for the past years.
+
+Note: Some visuals are additionally limited by filters. Feel free to adjust them within dashboard as needed.
+
 #### In which regions can Cloud Intelligent Dashboards be deployed?
 CID requires QuickSight, Athena and Glue. Cost Usage Reports (CUR) Bucket has to be in the same region as those services. CUR bucket can be replicated to the region that supports CIDs via S3 bucket replication.
 When using the cid-cmd, you can define the Region to deploy the dashboard in as a parameter eg. *`cid-cmd --region_name eu-west-2 deploy`*. This is especially helpful when the region you want to deploy in, does not support Cloudshell.
