@@ -18,7 +18,7 @@ In this lab, you will become familiar with using AWS Resilience Hub to understan
 
 In addition to resiliency recommendations, Resilience Hub also provides operational recommendations that will help you detect disruptions to your application as well as Standard Operating Procedures (SOPs) that you can use to speed up recovery. Resilience Hub also integrates with AWS Fault Injection Simulator (FIS) which will enable you to run chaos engineering experiments to validate the resilience of your applications.
 
-The skills you learn will help you understand and implement multiple [Reliability best practices](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/contributors.html) of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+The skills you learn will help you understand and implement multiple [Reliability best practices](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html) of the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 
 ## Goals:
 
