@@ -1,8 +1,8 @@
 ---
 title: "Level 200: Understanding application resilience using AWS Resilience Hub"
 menutitle: "Understand resilience with Resilience Hub"
-description: "Implement shuffle sharding to minimize scope of impact of failures"
-date: 2020-18-11T11:16:08-04:00
+description: "Use Resilience Hub to understand and improve application resilience"
+date: 2023-19-01T11:16:08-04:00
 chapter: false
 weight: 3
 tags:
