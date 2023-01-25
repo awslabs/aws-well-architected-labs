@@ -54,8 +54,14 @@ At the end of this lab you will:
 
 ## Lab Duration
 This lab consists of different independent modules. Each module should take around ¿45? min to complete.
+## Modules
+### Introduction to he modules
+In each of the following modules, you will analyse the significance to business outcomes of one dataset to determine the best storage tier to use, the most appropriate data format and consider compression from a sustainability perspective. 
 
-{{< prev_next_button link_next_url="./1_prerequisites/" button_next_text="Start Lab" first_step="true" />}}
+For each dataset, you will go through the process of understanding its access data patterns, choosing the best technologies that support data access and storage patterns, understanding how to implement lifecycle policies to store efficiently your data and to delete unnecessary and redundant data, etc.
 
-## Steps:
+List of modules:
+
 {{% children  %}}
+
+{{< prev_next_button link_next_url="./1_1_Static_csv_dataset/" button_next_text="Start Lab" first_step="true" />}}
