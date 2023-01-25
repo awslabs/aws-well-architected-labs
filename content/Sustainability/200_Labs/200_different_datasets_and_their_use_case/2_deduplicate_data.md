@@ -28,4 +28,4 @@ You learn how to identify and deduplicate records in a *<XYZ> dataset*. This dat
 
 **Click on *Next Step* to continue to the next module.**
 
-{{< prev_next_button link_prev_url="../1_static_csv_dataset" link_next_url="../3_baseline_sustainability_kpi" />}}
+{{< prev_next_button link_prev_url="../1_static_csv_dataset" link_next_url="../3_images" />}}

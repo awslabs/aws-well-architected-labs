@@ -60,8 +60,10 @@ In each of the following modules, you will analyse the significance to business 
 
 For each dataset, you will go through the process of understanding its access data patterns, choosing the best technologies that support data access and storage patterns, understanding how to implement lifecycle policies to store efficiently your data and to delete unnecessary and redundant data, etc.
 
+{{< prev_next_button link_next_url="./1_static_csv_dataset/" button_next_text="First module" first_step="true" />}}
+
 List of modules:
 
 {{% children  %}}
 
-{{< prev_next_button link_next_url="./1_1_Static_csv_dataset/" button_next_text="Start Lab" first_step="true" />}}
+
