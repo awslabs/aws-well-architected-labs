@@ -11,10 +11,6 @@ hidden: false
 - **Ana Suja**, Solutions Architect.
 - **Bob Molitor**, Solutions Architect.
 
-## Contributor
-- **TBC**, role.
-- **TBC**, role.
-
 ## Introduction
 
 This lab focuses on optimizing [data patterns for sustainability](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/data-patterns.html) to reduce the provisioned storage required to support your workload, and the resources required to use it. In this lab you will analyse 2 different datasets, with different use case.
