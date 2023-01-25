@@ -1,5 +1,5 @@
 ---
-title: "Module 1: Static .csv dataset used for business intelligence"
+title: "Static .csv dataset used for business intelligence"
 date: 2023-01-24T09:16:09-04:00
 chapter: false
 weight: 2
