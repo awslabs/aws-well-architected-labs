@@ -10,7 +10,7 @@ pre: "<b>4. </b>"
 Now you have pulled together optimization data there different ways in which you can analyze and visualize it and use to make infrastructure optimization decisions 
 
 ### Visualization of Trusted Advisor data with Amazon QuickSight
-You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) To deploy [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) please follow either [automated](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/3_auto_deployment/) or [manual](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/4_manual-deployment-prepare/) deployment steps and specify organizational data collection bucket created in this lab as a source
+You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) To deploy TAO Dashboard please follow [TAO Dashboard deployment steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/1_prerequistes/) and specify organizational data collection bucket created in this lab as a source
 
 ### Visualization of Compute Optimizer data with Amazon QuickSight
 You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). 
