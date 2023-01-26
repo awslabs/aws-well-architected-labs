@@ -628,8 +628,9 @@ def lensTabCreation(
                 Title = choices['Title'].replace('  ','').replace('\t', '').replace('\n', '')
                 if any(choices['ChoiceId'] in d for d in ipList):
                     worksheet.write_url(cell, ipList[choices['ChoiceId']], myCell, string=Title)
-                    ipItemHTML, questionIdText = getImprovementPlanHTMLDescription(ipList[choices['ChoiceId']],answers['PillarId'])
-                    htmlString = ipItemHTML.text
+                    #ipItemHTML, questionIdText = getImprovementPlanHTMLDescription(ipList[choices['ChoiceId']],answers['PillarId'])
+                    #htmlString = ipItemHTML.text
+                    htmlString = "" 
                     htmlString = htmlString.replace('\n         ','').replace('  ','').replace('\t', '').strip().rstrip()
                     # print(htmlString)
                     worksheet.write_comment(cell, htmlString, {'author': 'Improvement Plan'})
