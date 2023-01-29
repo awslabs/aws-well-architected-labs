@@ -42,7 +42,7 @@ ACL we previously created and test.
 ![alb-create-load-balancer-7](/Security/200_Basic_EC2_with_WAF_Protection/Images/alb-create-load-balancer-7.png)
 
 10. A successful message should appear, click Close.
-11. Take not of the DNS name under the Description tab, you will need this for testing.
+11. Take note of the DNS name under the Description tab, you will need this for testing.
 
 ### 3.2 Configure Application Load Balancer with WAF
 
