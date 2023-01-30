@@ -26,10 +26,10 @@ done
 
 # FIXME: zips are allways recreated so allways uploaded. We can check if md5 is the same as before to avoid updates.
 echo "Sync to $bucket" # sync is faster than copy as it does not upload if already there
-aws s3 sync $code_path/       s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.yaml' --acl public-read
-aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.zip' --acl public-read
-aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/Region/ --exclude='*' --include='regions.csv' --acl public-read
-aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/graviton/ --exclude='*' --include='rds_graviton_mapping.csv' --acl public-read
+aws s3 sync $code_path/       s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.yaml' #--acl public-read
+aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/ --exclude='*' --include='*.zip' #--acl public-read
+aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/Region/ --exclude='*' --include='regions.csv' #--acl public-read
+aws s3 sync $code_path/source s3://$bucket/Cost/Labs/300_Optimization_Data_Collection/graviton/ --exclude='*' --include='rds_graviton_mapping.csv' #--acl public-read
 
 echo 'Done'
 cd $pwd

@@ -6,6 +6,7 @@ from json import JSONEncoder
 import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
+import logging
 
 prefix = os.environ["PREFIX"]
 bucket = os.environ["BUCKET_NAME"]
@@ -14,18 +15,21 @@ crawler = os.environ["CRAWLER_NAME"]
 costonly = os.environ.get('COSTONLY', 'no').lower() == 'yes'
 
 def lambda_handler(event, context):
-    print(json.dumps(event))
-    f_name = "/tmp/data.json"
-    for r in event.get('Records', []):
-        try:
+    try:
+        for r in event['Records']:
             body = json.loads(r["body"])
             account_id = body["account_id"]
             account_name = body["account_name"]
+            f_name = "/tmp/data.json"
             read_ta(account_id, account_name, f_name)
             upload_to_s3(prefix, account_id, body.get("payer_id"), f_name)
             start_crawler(crawler)
-        except Exception as e:
-            print(f"{type(e)}: {e}")
+    except Exception as e:
+        e_str = str(e)
+        if e_str.strip("\'")=="Records":
+            print('*** THIS MODULE CANNOT BE RUN ON ITS OWN. PLEASE RUN THE Accounts-Collector-Function-OptimizationDataCollectionStack LAMBDA FUNCTION ***')
+            logging.warning(e)
+        else: logging.warning(e)
 
 def upload_to_s3(prefix, account_id, payer_id, f_name):
     if os.path.getsize(f_name) == 0:

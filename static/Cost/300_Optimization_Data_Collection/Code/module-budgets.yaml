@@ -176,7 +176,12 @@ Resources:
                       s3_upload(account_id, payer_id)
                       start_crawler()
               except Exception as e:
-                  logging.warning(e)
+                  e_str = str(e)
+                  if e_str.strip("\'")=="Records":
+                      print(e)
+                      print('*** THIS MODULE CANNOT BE RUN ON ITS OWN. PLEASE RUN THE Accounts-Collector-Function-OptimizationDataCollectionStack LAMBDA FUNCTION***')
+                      logging.warning(e)
+                  else: logging.warning(e)
 
           def s3_upload(account_id, payer_id):
               if os.path.getsize("/tmp/data.json") == 0:

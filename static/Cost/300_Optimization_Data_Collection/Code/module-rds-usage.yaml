@@ -345,7 +345,12 @@ Resources:
                       return "Successful"
               except Exception as e:
                   # Send some context about this error to Lambda Logs
-                  logging.warning("%s" % e)
+                  e_str = str(e)
+                  if e_str.strip("\'")=="Records":
+                      print(e)
+                      print('*** THIS MODULE CANNOT BE RUN ON ITS OWN. PLEASE RUN THE Accounts-Collector-Function-OptimizationDataCollectionStack LAMBDA FUNCTION ***')
+                      logging.warning(e)
+                  else: logging.warning(e)
 
 
 
