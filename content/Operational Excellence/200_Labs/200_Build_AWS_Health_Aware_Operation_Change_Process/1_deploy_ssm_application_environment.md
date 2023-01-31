@@ -27,14 +27,8 @@ This Lab only works in AWS **N.Virginia region (us-east-1)**, while the followin
 {{% /notice %}}
 
 
-**Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has the following permissions to ensure successful execution of this lab:**
-* Full access to [CloudFormation](https://aws.amazon.com/cloudformation/)
-* Full access to [Amazon EC2](https://aws.amazon.com/ec2/) 
-* Full access to [Amazon Systems Manager](https://aws.amazon.com/systems-manager/) 
-* Full access to [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/) 
-* Full access to [AWS Identity and Access Management (IAM)](https://aws.amazon.com/iam/) 
-* Full access to [Amazon S3](https://aws.amazon.com/s3/)
 
+**Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has either AdministratorAccess or PowerUserAccess (with full IAM access) permissions to ensure successful execution of this lab.**
 
 ### 1.2 Deploy the infrastructure using AWS CloudFormation
 

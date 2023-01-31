@@ -59,74 +59,77 @@ Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/chang
 6. Click the **Enable auto-approval** check box under the **Approval workflow options**. This will allow the Change Request be automatically approved, while the Change Template will still need approval.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_enable_auto_approval.png)
 
-7. In the **First-level approvals**, click the **Add approver** dropdown box and select **Template specified approvers**.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_template_specified_approvers.png)
+7. Click the **Add approval level** button.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_add_approver.png)
 
-8. In the **Users** tab of the pop-up window, check the box left to **walab-approval-user**, and click the **Add approvers** button.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_select_iam_approver.png)
+8. In the **First-level approvals** section, click the **Add approver** dropdown box and select **Template specified approvers**.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_add_approver_button.png)
 
-9. In the ****Amazon SNS topic for approval notifications**, keep the default option **Select an existing Amazon SNS topic**, and search the SNS Topic created by the CloudFormation with Topic name as **ssms-change-process-interruption-notification-sns-topic**, then click **Add notification** button.
+9. In the **Roles** tab of the pop-up window, search role name **SSMChangeTemplateApprovalRole**, then check the box left to the role, and click the **Add approvers** button.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_IAM_approval_role_add.png)
+
+10. In the ****Amazon SNS topic for approval notifications**, keep the default option **Select an existing Amazon SNS topic**, and search the SNS Topic created by the CloudFormation with Topic name as **ssms-change-process-interruption-notification-sns-topic**, then click **Add notification** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_select_sns_topic_for_approval.png)
 
-10. Leave the **Mornitoring** as default.
+11. Leave the **Mornitoring** as default.
 
-11. In the **Notifications**, select the **Select an existing Amazon SNS topic**, and search the SNS Topic created by the CloudFormation with Topic name as **ssms-change-process-interruption-notification-sns-topic**, then click **Add notification** button.
+12. In the **Notifications**, select the **Select an existing Amazon SNS topic**, and search the SNS Topic created by the CloudFormation with Topic name as **ssms-change-process-interruption-notification-sns-topic**, then click **Add notification** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_notifications_sns_topic.png)
 
-12. Leave the **Tags** as default, and click the **Save and preview** button.
+13. Leave the **Tags** as default, and click the **Save and preview** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_change_template_save_review.png)
 
-13. In the **Template details** page, review all the settings, and then click the **Submit for review** button.
+14. In the **Template details** page, review all the settings, and then click the **Submit for review** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_change_template_submit_for_review.png)
 
-14. After the Change Template has been submitted, please click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/dashboard/settings) to go to Change Manager Settings, and click the **Edit** button.
+15. After the Change Template has been submitted, please click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/dashboard/settings) to go to Change Manager Settings, and click the **Edit** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_change_manager_settings_edit.png)
 
-15. Scroll down to the **Template reviewers**, and click the **Add** button.
+16. Scroll down to the **Template reviewers**, and click the **Add** button.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_template_reviewer_add.png)
 
-16. In the pop-up window, check the box left to the IAM user **walab-approval-user**, then click the **Add approvers** button.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_template_approver_select_iam_user.png)
+17. In the pop-up window, search role name **SSMChangeTemplateApprovalRole**, then check the box left to the role, and click the **Add approvers** button.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_select_approver.png)
 
-17. You will find the **walab-approval-user** has been added as a Template reviewer as below. 
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_verify_template_reviewer_iam_user.png)
+18. You will find the **SSMChangeTemplateApprovalRole** has been added as a Template reviewer as below. 
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_role_added_as_reviewer.png)
 
-18. Scroll to the bottom of the Change Manager Settings page and click the **Save** button. Once you've seen the green banner with **Successfully updated service settings** message, you can proceed to the next step - Approve the Change Template.
+19. Scroll to the bottom of the Change Manager Settings page and click the **Save** button. Once you've seen the green banner with **Successfully updated service settings** message, you can proceed to the next step - Approve the Change Template.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_successfully_updated_service_settings.png)
 
 
 ### 2.2 Approve the Change Template
 
-To approve the Change Template, you have to use another user with the SSM Full Access permissions to complete it. This step will use the IAM user **walab-approval-user** created by the CloudFormation to accomplish the approval process.
+To approve the Change Template, you have to switch to the **SSMChangeTemplateApprovalRole** to complete it, because we need to use an IAM role or user different from the user who created the change template to approve it.
 
-1. Log out in the AWS Console - click your username in top right corner, and click the **Sign out** button to sign out from your console.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_signout_account.png)
 
-2. Click the **Sign In to the Console** button in the top right corner.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_sign_in_the_console.png)
+1. Click the user name dropdown box at the top right corner, copy your Account ID, and then click the **Switch role** button.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_click_switch_role_button.png)
 
-3. Input your **Account ID**, and use **walab-approval-user** as IAM user name, with initial password **walab123@**, then click the **Sign in** button.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_sign_in_page.png)
+2. In the Switch Role page, paste your **Account ID** into the **Account**, and type in **SSMChangeTemplateApprovalRole** in the **Role** and **Display Name** accordingly, then click **Switch Role** button.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_switch_role_page.png)
 
-4. The console will ask you to change your password. Please input **walab123@** as Old password, and choose a new password that you prefer, then click **Confirm password change** button to enter the AWS console. 
+3. You will be redirected back to the AWS console page. Then you can see you have assumed the **SSMChangeTemplateApprovalRole**. You can skip the warning, as it won't impact the lab process.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_switched_role.png)
 
-5. Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#) to go to System Manager Change Manager page. Click the **Templates** tab, and then click the **wa-ssm-health-aware-lab-template** Change Template to view it.
+4. Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#/dashboard/templates) to go to System Manager Change Manager **Templates** page, and then click the **wa-ssm-health-aware-lab-template** Change Template to view it.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_change_template_review_page1.png)
 
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_change_manager_template_overview_page.png)
-
-{{% notice note %}}
-NOTE: You can ignore the "Failed to load IAM users" related red banner in the page if you see it, as it's caused by the fact that **walab-approval-user** doesn't have all the required permissions to view Systems Managers options. But you still can use this user to approve the Change Template.
-{{% /notice %}}
-
-6. Click the **Approve** button in the Change Template detail page.
+5. Click the **Approve** button in the Change Template detail page.
 ![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_approve_change_template.png)
 
-7. Click the **Approve** button in the pop-up window.
-![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_pop_up_approve_change_template.png)
+6. Click the **Approve** button in the pop-up window.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_approve_change_template_role.png)
+
+7. Type in a comment in the **Approve change template** pop-up window, then click the **Approve** button to complete the change template approval.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_type_approve_button.png)
+
+8. Click the user name dropdown box at the top right corner, and click the **Switch back** button to switch back to your original role for the rest part of the lab.
+![Section2 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section2_switch_back_role.png)
 
 You have now completed the second section of the lab.
 
-You have created the Change Template in the Change Manager, and have it approved through IAM user **walab-approval-user**. 
+You have created the Change Template in the Change Manager, and have it approved with an IAM role **SSMChangeTemplateApprovalRole**. 
 
 This concludes **Section 2** of this lab. Click 'Next step' to continue to the next section of the lab where we will create a [Change Request](https://docs.aws.amazon.com/systems-manager/latest/userguide/change-requests-create.html) to execute the AWS Health Aware change process.
 

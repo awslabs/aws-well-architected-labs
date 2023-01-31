@@ -17,19 +17,19 @@
             Value: "well-architected-lab-windows-ec2"
           - Key: "SSMFleetEnv"
             Value: "test"
-    SSMApprovalUser:
-      Type: AWS::IAM::User
+    SSMChangeTemplateApprovalRole:
+      Type: AWS::IAM::Role
       Properties:
-        ManagedPolicyArns: 
+        RoleName: SSMChangeTemplateApprovalRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonSSMFullAccess
-        - arn:aws:iam::aws:policy/IAMUserChangePassword
-        UserName: walab-approval-user
-        LoginProfile:
-          Password: walab123@
-          PasswordResetRequired: True
-        Tags: 
-          - Key: "Name"
-            Value: "well-architected-lab-IAM-user"
     HASSMInstanceProfileRole:
       Type: AWS::IAM::Role
       Properties:
