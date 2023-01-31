@@ -28,7 +28,7 @@ In the context of making production changes on AWS, whenever a failure occurs du
 
 To accelerate the troubleshooting process, you need an approach to determine whether the change failure was caused by active AWS service events before proceeding to other aspects of application related investigations. You can achieve this goal by manually checking the [AWS Health Dashboard](https://health.aws.amazon.com/health), or open an AWS support case to engage AWS support engineers. 
 
-However there's an opportunity to use [AWS Health API](https://docs.aws.amazon.com/health/latest/ug/health-api.html) to build an AWS health aware operation change process with [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html), so the operation change pipeline is capable of checking the health status of AWS services to ensure there's no active AWS service events before kicking in the change execution, which derisk the change process being impacted by the service events.
+However there's an opportunity to use [AWS Health API](https://docs.aws.amazon.com/health/latest/ug/health-api.html) to build an AWS health aware operation change process with [AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html), so the operation change pipeline is capable of checking the health status of AWS services to ensure there's no active AWS service events before kicking in the change execution, which avoids the change process being impacted by the service events.
 
 ## Goals: 
 

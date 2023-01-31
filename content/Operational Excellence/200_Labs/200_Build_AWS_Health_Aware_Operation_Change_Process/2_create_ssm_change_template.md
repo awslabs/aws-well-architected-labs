@@ -35,8 +35,6 @@ Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/chang
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_setup_change_manager_step1.png)
 
 
-
-
 #### 2.1.2 Configure the Change Template
 
 1. Sign in to the AWS **Systems Manager Change Manager** console via [this link](https://us-east-1.console.aws.amazon.com/systems-manager/change-manager?region=us-east-1#)

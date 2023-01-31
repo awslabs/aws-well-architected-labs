@@ -37,13 +37,11 @@ This Lab only works in AWS **N.Virginia region (us-east-1)**, while the followin
 [\
 ![](https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2019/10/30/LaunchCFN.png)](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?stackName=well-architected-lab-health-aware-operation-change&templateURL=https://aws-walab-build-health-aware-operation-change-process.s3.amazonaws.com/cfn_health_aware_ssm_stack.yaml)
 
-
-
 You need to provide a stack name (e.g. **well-architected-lab-health-aware-operation-change** that's been prepopulated), and also provide a valid email address to receive the Amazon SNS notification emails.
 
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_cfn_implementation.png)
 
-2. scroll down to click the **checkbox** to acknowledge that the CloudFormation template might create IAM resources with custom names, and then click the **Create stack** button to proceed the stack creation.
+2. Scroll down to click the **checkbox** to acknowledge that the CloudFormation template might create IAM resources with custom names, and then click the **Create stack** button to proceed the stack creation.
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_cfn_acknowledgement_create_stack.png)
 
 The stack takes about 2 minutes to create all the resources. Periodically refresh the page until you see that the **STACK STATUS** is in **CREATE_COMPLETE**. Once the stack is in **CREATE_COMPLETE**, you may proceed to the next step to create the **Change Template** in the Systems Manager Change Manager, alongside the **Inventory**.
@@ -57,7 +55,7 @@ This step is mainly used to create the [Systems Manager service-linked role](htt
 
 #### 1.3.1 Go to Systems Manager Inventory
 
-You can click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/inventory?region=us-east-1) to go to Systems Manager Inventory in the console service. Or you may click the **Inventory** in the left navigation pane of the Systems Manager service page. 
+Click [this link](https://us-east-1.console.aws.amazon.com/systems-manager/inventory?region=us-east-1) to go to Systems Manager Inventory in the console service. Or you may click the **Inventory** in the left navigation pane of the Systems Manager service page. 
 
 #### 1.3.2 Create a new Inventory
 
@@ -79,7 +77,7 @@ Once you've been redirected to a page shows "**Setup inventory request succeeded
 
 #### 1.3.3 Subscribe to the SNS Topic
 
-When you created the CloudFormation stack in the previous step, it's provisioned a SNS Topic **ssms-change-process-interruption-notification-sns-topic** to be used in this lab. To be able to receive notifications properly, you'd need to subscribe to the Topic.
+When you created the CloudFormation stack in the previous step, it's provisioned a SNS Topic **ssms-change-process-interruption-notification-sns-topic** to be used in this lab. To be able to receive notifications properly, you need to subscribe to the SNS Topic.
 
 To complete the email subscription to the SNS Topic, you can take either one of the following approaches:
 
@@ -93,10 +91,10 @@ You should have received an email sent from **no-reply@sns.amazonaws.com**. Clic
 
 If you haven't received the email sent from **no-reply@sns.amazonaws.com**, you can follow these steps to complete the subscription:
 
-**Step 1:** Go to [SNS Topic page](https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/topics), where there's a topic named **ssms-change-process-interruption-notification-sns-topic** that's been created. Click on that topic link to see the details.
+**Step 1:** Go to [SNS Topic page](https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/topics), where there's a SNS Topic named **ssms-change-process-interruption-notification-sns-topic** that's been created. Click on that topic link to see the details.
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_sns_topic_page.png)
 
-**Step 2:** In the Topic detail page, click the **Create subscription** button.
+**Step 2:** In the SNS Topic detail page, click the **Create subscription** button.
 ![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_sns_topic_detail_page.png)
 
 **Step 3:** In the Create subscription page, select **Email** as the Protocol, and input **your email address** under the Endpoint blank, then click **Create subscription** button to create the subscription.
