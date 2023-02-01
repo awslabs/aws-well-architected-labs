@@ -16,6 +16,8 @@ costonly = os.environ.get('COSTONLY', 'no').lower() == 'yes'
 
 def lambda_handler(event, context):
     try:
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
         for r in event['Records']:
             body = json.loads(r["body"])
             account_id = body["account_id"]
@@ -25,11 +27,7 @@ def lambda_handler(event, context):
             upload_to_s3(prefix, account_id, body.get("payer_id"), f_name)
             start_crawler(crawler)
     except Exception as e:
-        e_str = str(e)
-        if e_str.strip("\'")=="Records":
-            print('*** THIS MODULE CANNOT BE RUN ON ITS OWN. PLEASE RUN THE Accounts-Collector-Function-OptimizationDataCollectionStack LAMBDA FUNCTION ***')
-            logging.warning(e)
-        else: logging.warning(e)
+        logging.warning(e)
 
 def upload_to_s3(prefix, account_id, payer_id, f_name):
     if os.path.getsize(f_name) == 0:

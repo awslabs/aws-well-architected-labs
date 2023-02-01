@@ -13,6 +13,8 @@ crawler = os.environ["CRAWLER_NAME"]
 
 def lambda_handler(event, context):
     try:
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
@@ -70,11 +72,7 @@ def lambda_handler(event, context):
             print(f"Data in s3 - {key}")
             start_crawler()
     except Exception as e:
-        e_str = str(e)
-        if e_str.strip("\'")=="Records":
-            print('*** THIS MODULE CANNOT BE RUN ON ITS OWN. PLEASE RUN THE Accounts-Collector-Function-OptimizationDataCollectionStack LAMBDA FUNCTION ***')
-            logging.warning(e)
-        else: logging.warning(e)
+        logging.warning(e)
         
 
 
