@@ -1,9 +1,10 @@
 ---
 title: "Level 100: Optimization CheckList"
-#menutitle: "Lab #3"
+menutitle: "Level 100: Optimization CheckList"
 date: 2023-02-01T11:16:08-04:00
 chapter: false
 weight: 9
+hidden: false
 ---
 ## Last Updated
 Feb 2022
@@ -43,4 +44,4 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Steps:
 {{% children /%}}
 
-{{< prev_next_button link_next_url="./1_tag_policy/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./1_tools_checklist/" button_next_text="Start Lab" first_step="true" />}}

@@ -27,5 +27,5 @@ By using the right pricing model for your workload resources, you pay the lowest
 
 | | |
 | --- | --- |
-| [![Go to lab](/Common/images/100lab.png)]({{< ref "/Cost/100_Labs/100_AWS_Resource_Optimization" >}}) | This lab will show you how to use Cost Explorer to perform right sizing recommendations on your resources. |
+| [![Go to lab](/Common/images/100lab.png)]({{< ref "/Cost/100_Labs/100_6_AWS_Resource_Optimization" >}}) | This lab will show you how to use Cost Explorer to perform right sizing recommendations on your resources. |
 | [![Go to lab](/Common/images/200lab.png)]({{< ref "/Cost/200_Labs/200_AWS_Resource_Optimization" >}}) | This lab will show you how to install the memory agent. |

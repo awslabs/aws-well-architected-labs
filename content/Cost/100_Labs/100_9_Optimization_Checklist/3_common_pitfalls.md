@@ -1,5 +1,5 @@
 ---
-title: " Common Pitfalls "
+title: "Common Pitfalls"
 date: 2021-05-20T11:16:08-04:00
 chapter: false
 weight: 3
