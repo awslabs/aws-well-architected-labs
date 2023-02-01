@@ -12,9 +12,10 @@ role_name = os.environ['ROLENAME']
 crawler = os.environ["CRAWLER_NAME"]
 
 def lambda_handler(event, context):
-    try:
-        if 'Records' not in event: 
+    if 'Records' not in event: 
             raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
+        
+    try:
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
