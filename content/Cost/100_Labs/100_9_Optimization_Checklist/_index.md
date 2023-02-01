@@ -1,13 +1,14 @@
 ---
 title: "Level 100: Optimization CheckList"
-menutitle: "Level 100: Optimization CheckList"
-date: 2023-02-01T11:16:08-04:00
-#chapter: false
+#menutitle: "Level 100: Optimization CheckList"
+date: 2022-02-01T11:16:08-04:00
+chapter: false
 weight: 9
 hidden: false
+
 ---
 ## Last Updated
-Feb 2022
+Feb 2023
 
 ## Authors
 
