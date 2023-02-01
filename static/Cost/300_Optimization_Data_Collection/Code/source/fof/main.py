@@ -22,9 +22,9 @@ def lambda_handler(event, context):
         'ebs':      [ebs.main,      os.environ.get("EBSCrawler")],
         'snapshot': [snapshot.main, os.environ.get("SnapshotCrawler")],
     }
-    if 'Records' not in event: 
-            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
     try:
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
         for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]

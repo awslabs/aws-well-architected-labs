@@ -15,10 +15,9 @@ crawler = os.environ["CRAWLER_NAME"]
 costonly = os.environ.get('COSTONLY', 'no').lower() == 'yes'
 
 def lambda_handler(event, context):
-    if 'Records' not in event: 
-            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
-        
     try:
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
         for r in event['Records']:
             body = json.loads(r["body"])
             account_id = body["account_id"]
