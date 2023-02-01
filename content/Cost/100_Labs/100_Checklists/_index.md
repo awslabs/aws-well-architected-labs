@@ -2,7 +2,7 @@
 title: "Level 100: Optimization CheckList"
 menutitle: "Level 100: Optimization CheckList"
 date: 2023-02-01T11:16:08-04:00
-chapter: false
+#chapter: false
 weight: 9
 hidden: false
 ---
