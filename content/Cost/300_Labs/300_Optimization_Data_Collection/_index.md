@@ -42,7 +42,7 @@ The main sources of the data used in optional modules:
 * **AWS Transit Gateway Chargeback Module** uses [AWS Transit Gateway Chargeback Module](https://aws.amazon.com/transit-gateway/)
 
 
-Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. Detailed description of each module can be found [here](../3_data_collection_modules).
+Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. 
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:
