@@ -6,15 +6,14 @@ weight = 1
 
 ### Account setup 
 
-#### Using an account provided by instructor at virtual or in-person workshop
-
 If you are running this workshop as part of an instructor led workshop, please first log into the console using [this link](https://dashboard.eventengine.run/) and enter the hash provided to you as part of the workshop.
 
-Proceed to the [**Primary region** setup](1.1-account-setup/1.1.2-primary-region/) step. 
+#### I have completed Module 4 and didn't clean up resources
 
+If you have completed "Module 4: Hot Stand-By" and haven't cleaned up resources created by it - everything is set to go! Just continue to [Verify Websites](/reliability/disaster-recovery/workshop_5/3-verify-websites/) section of the lab now.
 
-#### Using your own AWS account
+#### I didn't complete Module 4 in my own account OR have cleaned up its resources 
 
-Click **Next Step** to continue the account setup.
+In this case, you need to complete teh following steps and **Next Step** to continue the account setup.
 
 {{< prev_next_button link_prev_url="../" link_next_url="./1.1-account-setup/" />}}
