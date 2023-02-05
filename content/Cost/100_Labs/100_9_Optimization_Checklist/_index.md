@@ -20,29 +20,20 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Introduction
 
-
+Are you knew to AWS? Know you need to work on your Cloud Financial Management but not sure where to start? Want to check if you are missing anything? Well this lab can help! 
+This Lab will provide a set of checklists list based on different AWS Service areas so you can make sure your not missing anything.
 
 
 ## Goals
-
+* Give you checklists to compare your AWS Accounts against
+* ********* CSV EXPORT to plug into ticket system??????****
 
 
 ## Prerequisites
 - [AWS Account Setup]({{< ref "100_1_AWS_Account_Setup" >}}) has been completed
--	AWS organization must have all features enabled - If you aren’t sure if all features is enabled, please reference [this](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html") documentation.
--	Must be signed into organization's Management account
 
 
-## Permissions required
-- Access to the Cost Optimization team created in [AWS Account Setup]({{< ref "100_1_AWS_Account_Setup" >}})
-
-## Costs
-
-
-## Time to complete
-
-
-## Steps:
+## Areas:
 {{% children /%}}
 
 {{< prev_next_button link_next_url="./1_tools_checklist/" button_next_text="Start Lab" first_step="true" />}}

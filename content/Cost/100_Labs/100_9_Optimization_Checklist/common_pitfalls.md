@@ -15,7 +15,7 @@ We often get asked what are common pitfalls we see customers fall into. This is 
 * Not using Infrastructure as Code (IAC) - Using IAC will enable development to be faster, will reduce the risk of recourses being idle and allow for ease of changes to infrastructure
 * Leaving around Idle resources - Trusted Advisor will show you resources which are idle. These are often costing money and not being used. Manually deleting them is a good start, but using automation or having all resources created through IAC will prevent costs growing
 * Buying Instance Savings Plans for unstable workloads - If you know your workload is stable buying instance savings plans will give you the best discount. If you are unsure then choose compute as it covers more options and gives you flexibility. The ideal situation is having a mixed of both. 
-* Modernising without checking RI Fleet  
+* Modernizing without checking RI Fleet  
 * Having CloudWatch frequency set to ‘Never expire’ for all logs - Logs should be kept for a relevant amount of time. If they are created daily, then they may only be needed for a month. If they are created monthly, then maybe for 6month. 
 * 3rd party monitoring on CW - 3rd part tools often ping CloudWatch very regularly. Check how much data is needed. 
 * Having Detailed monitoring enabled when you don’t need it - Data is available in 1-minute periods, you are charged per metric that is sent to CloudWatch.
