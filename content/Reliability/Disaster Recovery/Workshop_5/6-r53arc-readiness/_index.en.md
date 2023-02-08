@@ -36,7 +36,7 @@ Review the recovery group with our two cells, and click **Create recovery group*
 
 {{< img step-3a.png >}}
 
-For our application, we’re going to set up readiness checks for the DynamoDB tables, and the S3 website endpoints. These are two example resources that our sample application will be monitored on. We’ll start with a readiness check for DynamoDB. Give your readiness check a meaningful name (e.g. `DynamoDBReadinessCheck`), select **“DynamoDB table”** from the **Resource type pulldown**, and click Next:
+For our application, we’re going to set up readiness checks for the DynamoDB tables, and the website endpoints. These are two example resources that our sample application will be monitored on. We’ll start with a readiness check for DynamoDB. Give your readiness check a meaningful name (e.g. `DynamoDBReadinessCheck`), select **“DynamoDB table”** from the **Resource type pulldown**, and click Next:
 
 {{< img step-3b.png >}}
 
@@ -72,13 +72,13 @@ Review your configuration and click Create readiness check when ready:
 
 You have now created readiness checks for the DynamoDB tables in our application. Congratulations!
 
-4. Next, we’re going to create readiness checks for the S3 website endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**. These are available in the CloudFormation Outputs section for the stack that you deployed in the primary and secondary regions. 
+4. Next, we’re going to create readiness checks for the website ALB endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**. These are available in the [Load Balancers section](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#LoadBalancers:) in the primary and secondary regions. 
 
-First, we’re going to need to create Route 53 health checks for the S3 website endpoints. The Route 53 Application Recovery Controller will monitor the status of these health checks to determine readiness.
+First, we’re going to need to create Route 53 health checks for the website ALB endpoints. The Route 53 Application Recovery Controller will monitor the status of these health checks to determine readiness.
 
 Click [Health Checks](https://us-east-1.console.aws.amazon.com/route53/healthchecks/home#/create) to navigate to the Route 53 health check page. 
 
-Create two health checks for the S3 website endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**, giving them a meaningful name (e.g. `S3WebsiteEndpointEast` and `S3WebsiteEndpointWest`). Don’t create an alarm for either of them:
+Create two health checks for the website endpoints in **N. Virginia (us-east-1)** and **N. California (us-west-1)**, giving them a meaningful name (e.g. `WebsiteEndpointEast` and `WebsiteEndpointWest`). Don’t create an alarm for either of them:
 
 {{< img step-4a.png >}}
 
@@ -90,11 +90,11 @@ When you have created both health checks, copy down the IDs. We’ll need them t
 
 {{< img step-5a.png >}}
 
-Continue as per Step 3 above to create a Route 53 health check readiness check for the S3 website endpoints. 
+Continue as per Step 3 above to create a Route 53 health check readiness check for the website ALB endpoints. Give it a name (e.g. `WebsiteEndpointReadinessCheck`( and choose resource type as "Route 53 health check":
 
 {{< img step-5b.png >}}
 
-Next, we’ll create a resource set and add the health checks. You’ll need to construct the ARNs as per [this reference](https://docs.aws.amazon.com/r53recovery/latest/dg/recovery-readiness.resource-types-arns.html).
+Next, we’ll create a resource set (name it e.g. `WebsiteEndpointResourceSet`) and add the Route 53 health checks ARNs. You’ll need to construct the ARNs as per [this reference](https://docs.aws.amazon.com/r53recovery/latest/dg/recovery-readiness.resource-types-arns.html).
 
 {{% notice note %}}
 
@@ -116,7 +116,7 @@ Then, ensure you associate the Route 53 health checks in each region with the co
 
 {{< img step-6a.png >}}
 
-Ensure that you can see the Route 53 S3 website endpoint readiness check and the DynamoDB readiness check in each cell. If you can’t see them, double check your actions from Step 3 or Step 4 above, as you may have missed assigning a resource to a cell:
+Ensure that you can see the Route 53 website endpoint readiness check and the DynamoDB readiness check in each cell. If you can’t see them, double check your actions from Step 3 or Step 4 above, as you may have missed assigning a resource to a cell:
 
 {{< img step-6b.png >}}
 

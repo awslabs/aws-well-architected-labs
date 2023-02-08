@@ -32,13 +32,31 @@ Click Create record to get started:
 
 {{< img step-2a.png >}}
 
-We’ll start by creating the primary record for the application. Give record the name `application`, and select the **Record type** of **“A- Routes traffic to an IPV4 address and some AWS resources”** from the pulldown. Click the toggle to select **Alias**, and under **“Route traffic to”**, select **“Alias to Application and Classic Load Balancer”**. Next, select **N. Virginia (us-east-1)** as the region. Select the ALB from the next pulldown, which should begin with **“dualstack.PrimaryALB-”**.
+We’ll start by creating the primary record for the application. Give record the name `application` and:
+* Select **Record type** of **“A- Routes traffic to an IPV4 address and some AWS resources”** from the pulldown. 
+* Click the toggle to select **Alias**
+* Under **“Route traffic to”**, select **“Alias to Application and Classic Load Balancer”**. 
+* Select **N. Virginia (us-east-1)** as the region. 
+* Select the ALB from the next pulldown, which should begin with **“dualstack.PrimaryALB-”**.
+* For **Routing policy**, select **Failover**
+* For **Failover record type**, select **Primary**. 
+* Next, you’ll select the **Health check ID**. This will be the health check we created the **CellEast** routing control. Select **CellEastRoutingControl** and ensure **Evaluate target health** is set to **Yes**. 
+* Give your record a meaningful ID, such as `us-east-1-ALB`. 
 
-For **Routing policy**, select **Failover**, and for **Failover record type**, select **Primary**. Next, you’ll select the **Health check ID**. This will be the health check we created the **CellEast** routing control. Select **CellEastRoutingControl** and ensure **Evaluate target health** is set to **Yes**. Next, give your record a meaningful ID, such as `us-east-1-ALB`. Then, click **“Add another record”**:
+Now let's add another record for teh secondary endpoint - click **“Add another record”**:
 
 {{< img step-2b.png >}}
 
-We’ll now repeat the process to set up the entry for the ALB in **N. California (us-west-1)**. For the second record, use the same record name, `application`, for the subdomain. Again, create an Alias A record to an Application Load Balancer. Next, select **N. California (us-west-1)** as the region, and select the ALB which starts with “**dualstack.HotSecondaryALB-”**. Select **Failover** as the Routing policy and **Secondary** for the failover record type. Then, select the **CelLWestRoutingControl** as the **Health check ID**, **Evaluate target health** to **Yes**, and give your record a meaningful name such as `us-west-1-ALB`, and click **Create record**:
+We’ll now repeat the process to set up the entry for the ALB in **N. California (us-west-1)**. For the second record, use the same record name, `application`, for the subdomain. Follow similar steps as for previous record:
+* Select **Record type** of **“A- Routes traffic to an IPV4 address and some AWS resources”** from the pulldown. 
+* Click the toggle to select **Alias**
+* Under **“Route traffic to”**, select **“Alias to Application and Classic Load Balancer”**. 
+* Select **N. California (us-west-1)** as the region this time. 
+* Select the ALB from the next pulldown, which should begin with **“dualstack.SecondaryALB-”**.
+* For **Routing policy**, select **Failover**
+* For **Failover record type**, select **Secondary**. 
+* Next, you’ll select the **Health check ID**. This will be the health check we created the **CellWest** routing control. Select **CelLWestRoutingControl** and ensure **Evaluate target health** is set to **Yes**. 
+* Give your record a meaningful ID, such as `us-west-1-ALB` and click **Create records**. 
 
 {{< img step-2c.png >}}
 
@@ -48,7 +66,14 @@ Once complete, you should see the two new zone records for **application.unicorn
 
 3. Now, having set up the zone records for the application, we’re going to set up the application “front-door”. In the event that the application is not healthy, and we don’t want to route traffic to it at all, we’ll need to set up some sort of maintenance site so that our traffic is handled, and we don’t “fail-open”. To represent this, we’re going to create another set of records that will route traffic to the application endpoint at **application.unicorns.magic**, and our simulated maintenance page. We’ll use **www.example.com** to simulate our maintenance page. 
 
-We’re going to call our “front-door” domain name **shop.unicorns.magic**. We’ll create the maintenance record first. Create a hosted zone record with `shop` as the subdomain name. Start creating a CNAME record to route traffic to `www.example.com`. Leave **Alias** de-selected, set the **TTL** to **60**, set **Routing policy** to **Failover**, and **Failover record type** to **Secondary**. Then select the **MaintenanceRoutingControl** Health check ID, and set the **Record ID** to `Maintenance`.
+We’re going to call our “front-door” domain name **shop.unicorns.magic**. We’ll create the maintenance record first. Create a hosted zone record with `shop` as the subdomain name:
+* Select record type CNAME.
+* Enter `www.example.com` into the **Value** section 
+* Leave **Alias** de-selected.
+* Set the **TTL** to **60**
+* Set **Routing policy** to **Failover**, and **Failover record type** to **Secondary**. 
+* Then select the **MaintenanceRoutingControl** Health check ID
+* Set the **Record ID** to `Maintenance`.
 
 Please note, Route 53 requires that records in a zone with the same subdomain are of the same type. This will cause two DNS queries from a client, so for a production deployment, you may wish to route your traffic to an AWS Alias or A record, or a AAAA IP address record, instead. The CNAME is used for this example for illustrative purposes.
 
@@ -56,7 +81,14 @@ Once complete, click **Add another record**:
 
 {{< img step-3a.png >}}
 
-Then, configure another `shop` subdomain for the application endpoint. Again, create a CNAME record for the same subdomain, with the **Value** `application.unicorns.magic`. Set the **TTL** to **60**, **Routing policy** to **Failover**, **Failover record type** to **Primary**”, set the **Health Check ID** to **ApplicationRoutingControl** and set the **Record ID** to `Application`.
+Then, configure another `shop` subdomain for the application endpoint:
+* Select record type CNAME.
+* Enter `application.unicorns.magic` into the **Value** section.
+* Leave **Alias** de-selected.
+* Set the **TTL** to **60**
+* Set **Routing policy** to **Failover** and  **Failover record type** to **Primary**
+* Set the **Health Check ID** to **ApplicationRoutingControl**
+* Set the **Record ID** to `Application`.
 
 Again, please note that for production purposes, using a CNAME record like this will result in two DNS queries for the client. For more information on how Route 53 is configured to return records in the same hosted zone, please see the (Route 53 documentation here)[https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-values-alias-common.html#rrsets-values-alias-common-target].
 

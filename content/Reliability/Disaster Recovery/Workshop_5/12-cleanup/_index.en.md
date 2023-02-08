@@ -95,7 +95,39 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 #### Route 53 Application Recovery Controller cleanup
 
-6.1 ...
+6.1 Delete the Safety Rules from the **DefaultControlPanel**:
+* MaintenanceORApplication
+* AtLeastOneEndpoint
+
+{{< img rcc-1.png >}}
+
+{{< img rcc-2.png >}}
+
+6.2 Delete the Readiness Checks:
+* DynamoDBReadinessCheck
+* WebsiteReadinessCheck
+
+{{< img rcc-3.png >}}
+
+{{< img rcc-4.png >}}
+
+6.3 Delete the Recovery Group **UnicornAppRecoveyGroup**
+
+{{< img rcc-5.png >}}
+
+6.4 Delete the Resource Sets:
+* DynamoDBResourceSet
+* WebsiteEndpointResourceSet
+
+{{< img rcc-6.png >}}
+
+{{< img rcc-7.png >}}
+
+6.5 Delete the **UnicornCluster** recovery cluster:
+
+{{< img rcc-8.png >}}
+
+{{< img rcc-9.png >}}
 
 
 

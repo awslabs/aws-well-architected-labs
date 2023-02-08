@@ -8,7 +8,12 @@ We’ve set up the Route 53 private hosted zones for our unicorn shop single pag
 
 1. Click [Route 53 ARC clusters](https://us-west-2.console.aws.amazon.com/route53recovery/home#/recovery-control/clusters) to navigate back to routing control clusters page.
 
-And then select your cluster and **DefaultControlPanel** to get started. Select the **CellEast** and **Application routing controls**, and click **Change routing control states**. Turn them both to **on** in the following dialog, confirm the routing change, and click **Change traffic routing**:
+And then select your cluster and **DefaultControlPanel** to get started. Select the **CellEast** and **Application routing controls**, and click **Change routing control states**. 
+
+{{< img step-0a.png >}}
+
+
+Turn them both to **on** in the following dialog, confirm the routing change, and click **Change traffic routing**:
 
 {{< img step-1a.png >}}
 
