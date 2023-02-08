@@ -34,7 +34,7 @@ Some of the data needed for the modules is in the **Management account** we will
 
 ### 2/2 Read Only roles for Data Collector modules
 
-We will use a CloudFormation StackSet to deploy a single read only role to all accounts. Modules that we will deploy later **OptimizationDataCollectionStack** allow to collect data from all of the accounts in an AWS Organization. 
+We will use a CloudFormation StackSet to deploy a single read only role to all accounts. It will allow the modules that we will deploy later with the  **OptimizationDataCollectionStack** to collect data from all of the accounts in an AWS Organization. 
 
 1. Login to your Management account and search for **Cloud Formation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
