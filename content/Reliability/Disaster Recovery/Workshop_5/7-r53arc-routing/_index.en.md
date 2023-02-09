@@ -84,5 +84,5 @@ We’ll create another assertion safety rule, but this time we’ll configure th
 
 You should now have 4 routing controls and 2 safety rules set up for the **DefaultControlPanel**. The routing control state for all routing controls will be **Off**, which is a violation of the safety rule assertions. However, safety rules are evaluated on the future state of the routing controls when you attempt to update them.
 
-{{< prev_next_button link_prev_url="../6-r53arc-readiness/" link_next_url="../8-r53-zone/" />}}
+{{< prev_next_button link_prev_url="../6-r53arc-readiness/6.3-readiness-check-websites/" link_next_url="../8-r53-zone/" />}}
 
