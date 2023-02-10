@@ -122,7 +122,7 @@ note: This step is done in the target account where the CID lives, this may diff
                         ],
                         "Effect": "Allow",
                         "Resource": [
-                                "arn:aws:quicksight::ACCOUNT_ID:user/${aws:userid}"
+                                "*"
                         ]
                         }
                 ],
