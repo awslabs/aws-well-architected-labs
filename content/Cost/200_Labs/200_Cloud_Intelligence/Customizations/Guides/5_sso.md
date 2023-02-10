@@ -125,7 +125,7 @@ note: This step is done in the target account where the CID lives, this may diff
                         {
                         "Effect": "Allow",
                         "Principal": {
-                                "Federated": "arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSIghtProvider"
+                                "Federated": "arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSightProvider"
                         },
                         "Action": "sts:AssumeRoleWithSAML",
                         "Condition": {
@@ -137,7 +137,7 @@ note: This step is done in the target account where the CID lives, this may diff
                         {
                         "Effect": "Allow",
                         "Principal": {
-                                "Federated": "arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSIghtProvider"
+                                "Federated": "arn:aws:iam::ACCOUNT_ID:saml-provider/QuickSightProvider"
                         },
                         "Action": "sts:TagSession",
                         "Condition": {
@@ -162,7 +162,7 @@ note: This step is done in the target account where the CID lives, this may diff
 
 3. Add two new mappings by clicking on **Add new attribute mapping**, replacing your ACCOUNT_ID with your CID account ID
 
-* ADD: https://aws.amazon.com/SAML/Attributes/Role | arn:aws:iam::111122223333:role/QuickSightSamlRole, arn:aws:iam::111122223333:saml-provider/QuickSightProvider
+* ADD: https://aws.amazon.com/SAML/Attributes/Role | arn:aws:iam::111122223333:role/QuickSightSAMLRole, arn:aws:iam::111122223333:saml-provider/QuickSightProvider
 * ADD: https://aws.amazon.com/SAML/Attributes/PrincipalTag:Email | ${user:email}
 
 ![Images/sso_iic_mapping_update.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_mapping_update.png?classes=lab_picture_small)
