@@ -60,6 +60,8 @@ The CUR Query Library Help section is intended to provide tips and information a
 
 [Database]({{< ref "Queries/database.md" >}} "Database")
 
+[Developer Tools]({{< ref "Queries/developer_tools.md" >}} "Developer Tools") 
+
 [End User Computing]({{< ref "Queries/end_user_computing.md" >}} "End User Computing")
 
 [Global]({{< ref "Queries/global.md" >}} "Global")

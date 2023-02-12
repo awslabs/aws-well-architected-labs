@@ -130,62 +130,67 @@ Resources:
           month = today.month
 
           def lambda_handler(event, context):
-              for record in event['Records']:
-                  body = json.loads(record["body"])
-                  account_id = body["account_id"]
-                  account_name = body["account_name"]
-                  payer_id = body["payer_id"]
-                  print(account_id)
-                  regions = get_supported_regions()
-                  for region_name in regions: 
-                      print(region_name)
-                      try:
-                          cw_client = assume_role('cloudwatch', account_id, region_name['RegionName'])
-                          ec2_client = assume_role('ec2', account_id, region_name['RegionName'])
-                          tgw_attachment_results = []
-                          final_result = []
-                          list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
-                          for item in list_tgw_attachments['TransitGatewayAttachments']:
-                              tgw_attachment_results.append(item)
-                          
-                          cw_result = []
-                          for item in tgw_attachment_results:
-                              response_in = metrics(cw_client, 'BytesIn', item)
+              try:
+                  if 'Records' not in event: 
+                      raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
+                  for record in event['Records']:
+                      body = json.loads(record["body"])
+                      account_id = body["account_id"]
+                      account_name = body["account_name"]
+                      payer_id = body["payer_id"]
+                      print(account_id)
+                      regions = get_supported_regions()
+                      for region_name in regions: 
+                          print(region_name)
+                          try:
+                              cw_client = assume_role('cloudwatch', account_id, region_name['RegionName'])
+                              ec2_client = assume_role('ec2', account_id, region_name['RegionName'])
+                              tgw_attachment_results = []
+                              final_result = []
+                              list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
+                              for item in list_tgw_attachments['TransitGatewayAttachments']:
+                                  tgw_attachment_results.append(item)
                               
-                              with open("/tmp/data.json", "w") as f:
+                              cw_result = []
+                              for item in tgw_attachment_results:
+                                  response_in = metrics(cw_client, 'BytesIn', item)
                                   
-                                  for cwitem in response_in['MetricDataResults']:
-                                      cw_results = {
-                                              'TGW': item['TransitGatewayId'],
-                                              'NetworkingAccount': item['TransitGatewayOwnerId'],
-                                              'CustomerAccount': item['ResourceOwnerId'],
-                                              'TGW-Attachment': item['TransitGatewayAttachmentId'],
-                                              'BytesIn': cwitem['Values'],
-                                              'Region': region_name['RegionName']
-                                          }
-                              
-                                  response_out = metrics(cw_client, 'BytesOut', item)
+                                  with open("/tmp/data.json", "w") as f:
                                       
-                                  for cwitemout in response_out['MetricDataResults']:
-                                      cw_results['BytesOut']= cwitemout['Values']
-                                      print (cw_results)
-                                      jsondata = json.dumps(cw_results) 
-                                      f.write(jsondata)
-                                      f.write('\n')
-                                                          
-                              s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
-                              s3.upload_file(
-                                  "/tmp/data.json",
-                                  bucket,
-                                  f"{os.environ['PREFIX']}/{os.environ['PREFIX']}-data/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
+                                      for cwitem in response_in['MetricDataResults']:
+                                          cw_results = {
+                                                  'TGW': item['TransitGatewayId'],
+                                                  'NetworkingAccount': item['TransitGatewayOwnerId'],
+                                                  'CustomerAccount': item['ResourceOwnerId'],
+                                                  'TGW-Attachment': item['TransitGatewayAttachmentId'],
+                                                  'BytesIn': cwitem['Values'],
+                                                  'Region': region_name['RegionName']
+                                              }
+                                  
+                                      response_out = metrics(cw_client, 'BytesOut', item)
+                                          
+                                      for cwitemout in response_out['MetricDataResults']:
+                                          cw_results['BytesOut']= cwitemout['Values']
+                                          print (cw_results)
+                                          jsondata = json.dumps(cw_results) 
+                                          f.write(jsondata)
+                                          f.write('\n')
+                                                              
+                                  s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+                                  s3.upload_file(
+                                      "/tmp/data.json",
+                                      bucket,
+                                      f"{os.environ['PREFIX']}/{os.environ['PREFIX']}-data/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
 
-                      except Exception as e:
-                          # Send some context about this error to Lambda Logs
-                          logging.warning("%s" % e)
-                          continue
-                      
-              start_crawler()
-              print("Done")
+                          except Exception as e:
+                              # Send some context about this error to Lambda Logs
+                              logging.warning("%s" % e)
+                              continue
+                          
+                  start_crawler()
+                  print("Done")
+              except Exception as e:
+                  logging.warning(e)
 
           def metrics(cw_client, byte, item):
               cw_data = cw_client.get_metric_data(
