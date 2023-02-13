@@ -51,16 +51,16 @@ anymore to save the cost
 
 #### Console:
 
-1.  Sign in to the AWS Management Console using management account admin
+1. Sign in to the AWS Management Console using management account admin
     credentials and open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
 
-2.  In the navigation pane, choose **Cost allocation tags**.
+2. In the navigation pane, choose **Cost allocation tags**.
 
-3.  Under **User-defined cost allocation tags** select "CostCentre",
+3. Under **User-defined cost allocation tags** select "CostCentre",
     "Department", "ProjectName" and "TeamName" to activate the tags.
 
-4.  Choose **Deactivate**.
+4. Choose **Deactivate**.
 
 
 {{< prev_next_button link_prev_url="../5_visualize_in_cost_explorer/"  title="Congratulations!" final_step="true" >}}
