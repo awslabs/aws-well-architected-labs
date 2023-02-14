@@ -47,7 +47,28 @@ For this solution you must have the following:
 5. Copy the Dashboard URL to somewhere local as we will use this later
 ![Images/sso_iic_qs_url.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_qs_url.png?classes=lab_picture_small)
 
-## Step 2: IAM Identity Centre
+
+## Step 2: Create Users and Group
+
+1. Open the **IAM Identity Centre**. Click on **Groups** on the left then **Create group**
+
+2. Under Group name, give the name **CID** then click **Create group**
+![Images/sso_user_group.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_user_group.png?classes=lab_picture_small)
+
+4. Click on **Users** then **Add user**
+![Images/sso_user_users.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_user_users.png?classes=lab_picture_small)
+
+5. Fill out the details using the same email that will be used for Amazon QuickSight. Click **Next**.
+![Images/sso_user_user_email.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_user_user_email.png?classes=lab_picture_small)
+
+6. Click on the box next to the **CID** group you made earlier. Then Click **Next**.
+![Images/sso_user_add_to_group.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_user_add_to_group.png?classes=lab_picture_small)
+
+7. Scroll down and click **Add user**
+
+
+
+## Step 3: IAM Identity Centre
 
 1. Open the **IAM Identity Centre** and select **Applications** on the left and Click **Add application**
 ![Images/sso_iic_add_app.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_add_app.png?classes=lab_picture_small)
@@ -61,7 +82,15 @@ For this solution you must have the following:
 4. Under **Application properties** paste your CID Link under Relay state.  Click **Submit**
 ![Images/sso_iic_qs_url.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_qs_url.png?classes=lab_picture_small)
 
-## Step 3: Provider 
+5. Click into your application and slick **Assign Users**
+![Images/sso_iic_assign.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_assign.png?classes=lab_picture_small)
+
+6. Click on the **Groups** tab and select the CID group the click the **Assign Users** button
+![Images/sso_iic_group.png](/Cost/200_Cloud_Intelligence/Images/sso/sso_iic_group.png?classes=lab_picture_small)
+
+
+
+## Step 4: Provider 
 note: This step is done in the target account where the CID lives, this may differ from the SSO account. 
 
 1. Open IAM, on the left click **Identity providers** then click the **Add provider** button
@@ -93,7 +122,7 @@ note: This step is done in the target account where the CID lives, this may diff
                         ],
                         "Effect": "Allow",
                         "Resource": [
-                                "arn:aws:quicksight::ACCOUNT_ID:user/${aws:userid}"
+                                "*"
                         ]
                         }
                 ],
