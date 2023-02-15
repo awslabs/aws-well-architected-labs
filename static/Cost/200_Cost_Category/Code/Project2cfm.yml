@@ -271,6 +271,42 @@ Resources:
           ToPort: 65535
           CidrIp: 0.0.0.0/0 
 
+  #Web tier infrastructure, This will be an ASG, Launchconfig, some autoscaling alarms and scaling polices. 
+  InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: taginstancepolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:Describe*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ec2:CreateTags'
+                Resource:
+                  - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:volume/*'
+                  - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*'
+  InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref InstanceRole
+
 #Web tier infrascture, This will be an ASG, Launchconfig, some autoscaling alarms and scaling polices. 
   myASG:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -304,9 +340,15 @@ Resources:
         - !GetAtt WebAppSG.GroupId
       InstanceType: 
         !Ref InstanceType  
+      IamInstanceProfile: !Ref InstanceProfile
       UserData:
          Fn::Base64: |
             #!/bin/bash
+            AWS_AVAIL_ZONE=$(curl http://169.254.169.254/latest/meta-data/placement/availability-zone)
+            AWS_REGION=${AWS_AVAIL_ZONE::-1}
+            AWS_INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+            ROOT_VOLUME_IDS=$(aws ec2 describe-instances --region $AWS_REGION --instance-id $AWS_INSTANCE_ID --output text --query Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
+            aws ec2 create-tags --resources $ROOT_VOLUME_IDS --region $AWS_REGION --tags Key=Name,Value=project2Volume Key=Department,Value=Digital
             yum update -y
             yum install -y httpd
             systemctl start httpd

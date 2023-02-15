@@ -15,6 +15,7 @@ Parameters:
     Description: Region specific image from the Parameter Store
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+  
   InstanceType:
     Description: Amazon EC2 instance type for the instances
     Type: String
@@ -270,7 +271,42 @@ Resources:
           ToPort: 65535
           CidrIp: 0.0.0.0/0 
 
-#Web tier infrascture, This will be an ASG, Launchconfig, some autoscaling alarms and scaling polices. 
+#Web tier infrastructure, This will be an ASG, Launchconfig, some autoscaling alarms and scaling polices. 
+  InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: taginstancepolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:Describe*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'ec2:CreateTags'
+                Resource:
+                  - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:volume/*'
+                  - !Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*'
+  InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref InstanceRole
+
   myASG:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:      
@@ -294,7 +330,8 @@ Resources:
         Value: project1webapp
       - Key: Department
         PropagateAtLaunch: true
-        Value: Digital           
+        Value: Digital
+           
   myLaunchConfig: 
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -303,14 +340,21 @@ Resources:
         - !GetAtt WebAppSG.GroupId
       InstanceType: 
         !Ref InstanceType  
+      IamInstanceProfile: !Ref InstanceProfile
       UserData:
          Fn::Base64: |
             #!/bin/bash
+            AWS_AVAIL_ZONE=$(curl http://169.254.169.254/latest/meta-data/placement/availability-zone)
+            AWS_REGION=${AWS_AVAIL_ZONE::-1}
+            AWS_INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+            ROOT_VOLUME_IDS=$(aws ec2 describe-instances --region $AWS_REGION --instance-id $AWS_INSTANCE_ID --output text --query Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
+            aws ec2 create-tags --resources $ROOT_VOLUME_IDS --region $AWS_REGION --tags Key=Name,Value=project1Volume Key=Department,Value=Digital
             yum update -y
             yum install -y httpd
             systemctl start httpd
             systemctl enable httpd
             echo '<h1>Hello World</h1>' > /var/www/html/index.html
+
   WebTierLoadBalancer:
     Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
     Properties:
