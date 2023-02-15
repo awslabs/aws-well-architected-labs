@@ -8,7 +8,7 @@ pre: "<b>3. </b>"
 
 ## Overview
 
-You can use cost allocation tags to track your AWS costs on a detailed
+You can use **cost allocation tags** to track your AWS costs on a detailed
 level. After you activate cost allocation tags, AWS uses the cost
 allocation tags to organize your resource costs on your cost allocation
 report, to make it easier for you to categorize and track your AWS
@@ -35,10 +35,10 @@ activation, it can take up to 24 hours for tags to activate.
 1.  Sign in to the AWS Management Console using management account admin
     credentials and open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
- ![Section3 Billing](/Cost/200_Cost_Category/Images/section3/billing.png)
+ ![Section3 Billing](/Cost/200_Cost_Category/Images/section3/billingService.png)
 
 2.  In the navigation pane, choose **Cost allocation tags**.
- ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTags.png)
+ ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTagsService.png)
 
 3.  Under **User-defined cost allocation tags** select **"CostCentre"**,
     **"Department"** , **"ProjectName"** and **"TeamName"** to activate the tags

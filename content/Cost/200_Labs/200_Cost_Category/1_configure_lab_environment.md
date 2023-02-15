@@ -38,7 +38,7 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 
 3. Select the stack template which you downloaded earlier, and click
     **choose file** to upload **project1cfm.yaml** and click **Next**.
- ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/createStackTeamAlpha cfm.png)
+ ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/createStackTeamAlpha.png)
 
 4. For the **stack name** use any stack name you can identify and click
     **Next**. For this case, We have used **Alpha-Team-Resources** as a stack
