@@ -34,19 +34,19 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
     and Click **create a stack**. 
- ![Section1 CFStack](/Cost/200_Cost_Category/Images/section1/create stack page.png)
+ ![Section1 CFStack](/Cost/200_Cost_Category/Images/section1/createStackLandingPage.png)
 
 3. Select the stack template which you downloaded earlier, and click
     **choose file** to upload **project1cfm.yaml** and click **Next**.
- ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/choose project1 cfm.png)
+ ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/createStackTeamAlpha cfm.png)
 
 4. For the **stack name** use any stack name you can identify and click
     **Next**. For this case, We have used **Alpha-Team-Resources** as a stack
     name.
- ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/project1 specify stack details.png)
+ ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/specifyStackDetailsTeamAlpha.png)
 
 5. Keep **configure stack options** as default and click **Next**.
- ![Section1 StackOptions](/Cost/200_Cost_Category/Images/section1/configure stack options project1.png)
+ ![Section1 StackOptions](/Cost/200_Cost_Category/Images/section1/configureStackOptionsTeamAlpha.png)
 
 6. Scroll down to the bottom of the **review alpha team resources**
     page and after reviewing click on **submit** to run the stack. It
@@ -56,12 +56,12 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 7. Now go to your newly created stack and go to the **Resources**
     section of the CloudFormation stack to find all the resources for
     team **Alpha**
- ![Section1 StackResourcesAlpha](/Cost/200_Cost_Category/Images/section1/alpha team resources final.png)
+ ![Section1 StackResourcesAlpha](/Cost/200_Cost_Category/Images/section1/resourcesTeamAlpha.png)
 
 8. Follow the same procedure step by step and select
     **project2cfm.yaml** in step 2 to create resources for team Beta as
     **Beta-Team-Resources**
- ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/beta team resources final.png)
+ ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/resourcesTeamBeta.png)
 
 {{% notice note %}}
 **Note** - You can add tags for the individual resources that will be
