@@ -14,8 +14,7 @@ allocation tags to organize your resource costs on your cost allocation
 report, to make it easier for you to categorize and track your AWS
 costs.
 
-AWS provides two types of cost allocation tags, an ***AWS generated
-tags*** and ***user-defined tags***. AWS, or AWS Marketplace ISV
+AWS provides two types of cost allocation tags, an **AWS generated tags** and **user-defined tags**. AWS, or AWS Marketplace ISV
 defines, creates, and applies the **AWS generated tags** for you, and
 you define, create, and apply **user-defined tags**. You must activate
 both types of tags separately before they can appear in Cost Explorer or
@@ -41,12 +40,12 @@ activation, it can take up to 24 hours for tags to activate.
 2.  In the navigation pane, choose **Cost allocation tags**.
  ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTags.png)
 
-3.  Under **User-defined cost allocation tags** select "CostCentre",
-    "Department" , "ProjectName" and "TeamName" to activate the tags
+3.  Under **User-defined cost allocation tags** select **"CostCentre"**,
+    **"Department"** , **"ProjectName"** and **"TeamName"** to activate the tags
 
 4.  Choose **Activate**. -- TBD Screenshot
 
-5.  Once activated, status should show as Active for mentioned Tag keys
+5.  Once activated, status should show as **Active** for the above mentioned Tag keys
  ![Section3 UserDefinedCostAllocationTags](/Cost/200_Cost_Category/Images/section3/userDefinedCostAllocationTags.png)
 
 ### Congratulations!

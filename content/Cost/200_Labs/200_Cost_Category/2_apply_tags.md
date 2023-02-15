@@ -27,20 +27,16 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
 1. Login as the Cost Optimization team(admin account), created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
     & In the AWS management console Choose **Services**. Then, under
-    **Management & Governance**, choose **Resource Groups & Tag
-    Editor**. In the navigation pane on the left, choose **Tag Editor**.
+    **Management & Governance**, choose **Resource Groups & Tag Editor**. In the navigation pane on the left, choose **Tag Editor**.
  ![Section2 ResourceGroupEditor](/Cost/200_Cost_Category/Images/section2/resourceGroupTagEditor.png)
 
 2. Choose the AWS Regions in which to search for resources to tag. By
-    default, your current region is used. Use us-east-1 for the current
-    lab. Choose **All supported resource types** in the **Resource
-    types** section.Choose Tag Key as "Department" and tag value as
-    "Digital" in Tags section. Then click on **Search resources**
+    default, your current region is used. Use **us-east-1** for the current
+    lab. Choose **All supported resource types** in the **Resource types** section. Choose **Tag Key** as **"Department"** and **tag value** as
+    **"Digital"** in **Tags** section. Then click on **Search resources**
  ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditor.png)
 
-3. From the **Resource search results** select the resources starting
-    with **project1**. Then click on **Manage tags of selected
-    resources**
+3. In the **Resource search results** enter **project1** in **filter resources** search box and select all the resources . Then click on **Manage tags of selected resources**
  ![Section2 ResourceProject1](/Cost/200_Cost_Category/Images/section2/resourceSearchProject1.png)
 
 4. In the **Edit tags of all selected resources** add the below tags
@@ -56,9 +52,7 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
  ![Section2 ManageTagsProject1](/Cost/200_Cost_Category/Images/section2/manageTagsProject1.png)
 
-5.  Repeat step-1 & step-2, from the **Resource search results** select
-    the resources starting with **project2**. Then click on **Manage
-    tags of selected resources**
+5.  Repeat step-1 & step-2, from the **Resource search results** enter **project2** in **filter resources** search box and select all the resources. Then click on **Manage tags of selected resources**
 
  ![Section2 ResourceProject2](/Cost/200_Cost_Category/Images/section2/resourceSearchProject2.png)
 
@@ -71,12 +65,10 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
  ![Section2 ManageTagsProject2](/Cost/200_Cost_Category/Images/section2/manageTagsProject2.png)
 
 7. You will be able to see the resources corresponding to the
-    particular tag and region, which means if we filter out by tag **Key:
-    TeamName and Value: Alpha** we will be able to see all the resources
-    for team Alpha.  ![Section2 ValidateTags](/Cost/200_Cost_Category/Images/section2/validateTags.png)
+    particular tag and region, which means if you filter out by tag **Key:TeamName** and **Value: Alpha** you will be able to see all the resources
+    for **team Alpha**.  ![Section2 ValidateTags](/Cost/200_Cost_Category/Images/section2/validateTags.png)
    
-   Similarly, if we filter out by tag **Key: TeamName and Value: Beta**, we will be able to see resources
-   corresponding to the applied tag value.
+   Similarly, if you filter out by tag **Key: TeamName** and **Value: Beta**, you will be able to see resources corresponding to the applied tag value.
 
 
 

@@ -8,7 +8,7 @@ pre: "<b>4. </b>"
 
 ## Overview
 
-AWS Cost Categories is a feature within AWS Cost Management product
+AWS **Cost Categories** is a feature within AWS Cost Management product
 suite that enables you to group cost and usage information into
 meaningful categories based on your needs. You can create custom
 categories and map your cost and usage information into these categories
@@ -50,14 +50,12 @@ your usage records to be updated with values.
  ![Section4 CreateCostCategories](/Cost/200_Cost_Category/Images/section4/createCostCategory.png)
 
 4. Under **Cost category details**, enter the name of your cost
-    category as "cost by team". Your cost category name must be unique
+    category as **cost by team**. Your cost category name must be unique
     within your account. Keep rest of the fields with default values and
     click **Next**
  ![Section4 NameCostCategoryTeam](/Cost/200_Cost_Category/Images/section4/nameCostCategoryTeam.png)
 
-5. Choose **Define category rules,** in the **rule type** choose
-    **inherited value,** choose **Cost Allocation Tag** as **dimension**
-    and **TeamName** as **Tag Key,** click **Next.**
+5. In **Define category rules** , Under **new category rule** choose **inherited value** as **rule type** , ** choose **Cost Allocation Tag** as **dimension** and **TeamName** as **Tag Key, ** click **Next.**
  ![Section4 DefineCostCategoriesRulesTeam](/Cost/200_Cost_Category/Images/section4/defineCatgoryRulesTeam.png)
 
 6. Skip **Define split charges** for this lab. 
@@ -71,11 +69,7 @@ your usage records to be updated with values.
     enter the name of your cost category as "cost by department".
  ![Section4 NameCostCategoryDept](/Cost/200_Cost_Category/Images/section4/nameCostCategoryDept.png)
 
-10. Choose **Define category rules,** in the **rule type** choose
-     **inherited value,** choose **Cost Allocation Tag** as **dimension**
-     and **Department** as **Tag Key,** click on **Add rule and** in the
-     **rule type** choose **inherited value,** choose **Cost Allocation
-     Tag** as **dimension** and **CostCentre** as **Tag Key.**
+10. In **Define category rules**, Under **new category rule** choose **inherited value** as **rule type**, ** choose **Cost Allocation Tag** as **dimension** and **Department** as **Tag Key** , click on **Add rule** and choose **inherited value** as **rule type**,  choose **Cost Allocation Tag** as **dimension** and **CostCentre** as **Tag Key**.
  ![Section4 DefineCostCategoriesRulesDept](/Cost/200_Cost_Category/Images/section4/defineCategoryRulesDept.png)
 
 11. Repeat step 6 & 7

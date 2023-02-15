@@ -18,7 +18,7 @@ that both alpha and beta teams are using for their respective projects. This is 
 important task to be completed on priority basis, and can be achieved using 
 **AWS Well-Architected cost management using tag-editor and cost categories**.
 
-The lab uses two CloudFormation template for project1 and project2, and
+The lab uses two CloudFormation template for **project1** and **project2**, and
 will teach you the techniques to apply tags for cost categorization and
 further use cost categories for expenditure awareness.
 
@@ -42,7 +42,7 @@ stack from within the console, please follow this
  ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/upload_CFStackProject1.png)
 
 4. For the stack name use any stack name you can identify and click
-    **Next**. For this case, I used Alpha-Team-Resources as a stack
+    **Next**. For this case, We have used **Alpha-Team-Resources** as a stack
     name.
  ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/stackNameAlphaTeam.png)
 
@@ -61,7 +61,7 @@ stack from within the console, please follow this
 
 8. Follow the same procedure step by step and select
     **project2cfm.yaml** in step 2 to create resources for team Beta as
-    Beta-Team-Resources
+    **Beta-Team-Resources**
  ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/stackResourcesBetaTeam.png)
 
 {{% notice note %}}
