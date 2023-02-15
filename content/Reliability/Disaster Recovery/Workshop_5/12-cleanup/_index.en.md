@@ -1,12 +1,11 @@
 +++
 title = "Cleanup"
 date =  2021-05-11T11:43:28-04:00
-weight = 7
+weight = 12
 +++
 
 {{% notice info %}}
-If you are running this workshop via an instructor led training OR if you continue to [Module 5: Multi-region resiliency](/reliability/disaster-recovery/workshop_5/) of the lab, please do **NOT** complete this section and move on to the Module 5 straight away. This way, all resources will be ready for you to complete the module. 
-Continue to [Module 5: Multi-region resiliency](/reliability/disaster-recovery/workshop_5/) 
+If you are running this workshop via an instructor led training, you do **NOT** need to complete this section.
 {{% /notice %}}
 
 #### S3 Cleanup
@@ -38,33 +37,15 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 2.1 Click [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-2.2 Click the **Tables** link.
+2.2 Click the **Tables** link and the find and click on teh name of the **unishophotstandby** table in the list.
 
-{{< img dd-2.png >}}
+{{< img cl-ddbreplica.png >}}
 
-2.3 Click **unishophotstandby**.
-
-{{< img dd-3.png >}}
-
-2.4 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
+2.3 Click the **Global Tables** link.  Select **US West(N. California)**, then click the **Delete replica** button.
 
 {{< img cl-10.png >}}
 
-2.5 Enter `delete` then click the **Delete** button.
-
-{{< img cl-11.png >}}
-
-#### CloudFront Cleanup
-
-3.1 Click [CloudFront](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions) to navigate to the dashboard.
-
-3.2 Select the CloudFront distribution, then click the **Disable** button and confirm disable.
-
-{{< img cl-17.png >}}
-
-3.3 Wait for the CloudFront distribution to have a status of **Disabled**, then select the CloudFront distribution and click the **Delete** button and confirm deletion.
-
-{{< img cl-18.png >}}
+2.4 Enter `delete` then click the **Delete** button.
 
 #### Database Cleanup
 
@@ -90,7 +71,7 @@ This step is required as we did manual promotion for the Aurora Database.
 
 {{< img cl-12.png >}}
 
-4.6 Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
+4.6 Delete the remaining global database. Select **hot-global** and select **Delete** under **Actions** and then confirm deletion.
 
 {{< img cl-15.png >}}
 
@@ -98,25 +79,77 @@ This step is required as we did manual promotion for the Aurora Database.
 Wait for all the databases and clusters to finish deleting before moving to the next step.
 {{% /notice %}}
 
+#### Route 53 cleanup
+
+5.1 Delete Route 53 health checks
+
+{{< img cl-r53-hc.png >}}
+
+5.2 Delete Route 53 hosted zone records for `application.` and `shop.` subdomains
+
+{{< img cl-r53-records.png >}}
+
+5.3 Delete Route 53 hosted zone
+
+{{< img cl-r53-zone.png >}}
+
+#### Route 53 Application Recovery Controller cleanup
+
+6.1 Delete the Safety Rules from the **DefaultControlPanel**:
+* MaintenanceORApplication
+* AtLeastOneEndpoint
+
+{{< img rcc-1.png >}}
+
+{{< img rcc-2.png >}}
+
+6.2 Delete the Readiness Checks:
+* DynamoDBReadinessCheck
+* WebsiteReadinessCheck
+
+{{< img rcc-3.png >}}
+
+{{< img rcc-4.png >}}
+
+6.3 Delete the Recovery Group **UnicornAppRecoveyGroup**
+
+{{< img rcc-5.png >}}
+
+6.4 Delete the Resource Sets:
+* DynamoDBResourceSet
+* WebsiteEndpointResourceSet
+
+{{< img rcc-6.png >}}
+
+{{< img rcc-7.png >}}
+
+6.5 Delete the **UnicornCluster** recovery cluster:
+
+{{< img rcc-8.png >}}
+
+{{< img rcc-9.png >}}
+
+
+
 #### CloudFormation Cleanup
 
-5.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
+7.1 Click [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) to navigate to the dashboard in the **N. California (us-west-1)** region.
 
-5.2 Select **hot-secondary**, then click the **Delete** button.
+7.2 Select **hot-secondary**, then click the **Delete** button.
 
 {{< img cl-16.png >}}
 
-5.3 Click the **Delete stack** button.
+7.3 Click the **Delete stack** button.
 
 {{< img cl-9.png >}}
 
-5.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
+7.4 Change the region to **N. Virginia (us-east-1)** using the Region Selector in the upper right corner.
 
-5.5 Select **hot-primary**, then click the **Delete** button.
+7.5 Select **hot-primary**, then click the **Delete** button.
 
 {{< img cl-6.png >}}
 
-5.6 Click the **Delete stack** button.
+7.6 Click the **Delete stack** button.
 
 {{< img cl-7.png >}}
 
