@@ -28,16 +28,16 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 1. Login as the Cost Optimization team(admin account), created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
     & In the AWS management console Choose **Services**. Then, under
     **Management & Governance**, choose **Resource Groups & Tag Editor**. In the navigation pane on the left, choose **Tag Editor**.
- ![Section2 ResourceGroupEditor](/Cost/200_Cost_Category/Images/section2/resourceGroupTagEditor.png)
+ ![Section2 ResourceGroupEditor](/Cost/200_Cost_Category/Images/section2/resourcegroupTageditorService.png)
 
-2. Choose the AWS Regions in which to search for resources to tag. By
+2. Choose the AWS Regions in which you have deployed the resources. By
     default, your current region is used. Use **us-east-1** for the current
     lab. Choose **All supported resource types** in the **Resource types** section. Choose **Tag Key** as **"Department"** and **tag value** as
     **"Digital"** in **Tags** section. Then click on **Search resources**
- ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditor.png)
+ ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditorFindResources.png)
 
 3. In the **Resource search results** enter **project1** in **filter resources** search box and select all the resources . Then click on **Manage tags of selected resources**
- ![Section2 ResourceProject1](/Cost/200_Cost_Category/Images/section2/resourceSearchProject1.png)
+ ![Section2 ResourceProject1](/Cost/200_Cost_Category/Images/section2/resourceSearchResultProject1.png)
 
 4. In the **Edit tags of all selected resources** add the below tags
     and click on **Review and apply tag changes** 
@@ -54,7 +54,7 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
 5.  Repeat step-1 & step-2, from the **Resource search results** enter **project2** in **filter resources** search box and select all the resources. Then click on **Manage tags of selected resources**
 
- ![Section2 ResourceProject2](/Cost/200_Cost_Category/Images/section2/resourceSearchProject2.png)
+ ![Section2 ResourceProject2](/Cost/200_Cost_Category/Images/section2/resourceSearchResultProject2.png)
 
 6.  In the **Edit tags of all selected resources** add the below tags and click on **Review and apply tag changes**:
 
@@ -66,7 +66,7 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
 7. You will be able to see the resources corresponding to the
     particular tag and region, which means if you filter out by tag **Key:TeamName** and **Value: Alpha** you will be able to see all the resources
-    for **team Alpha**.  ![Section2 ValidateTags](/Cost/200_Cost_Category/Images/section2/validateTags.png)
+    for **team Alpha**.  ![Section2 ValidateTags](/Cost/200_Cost_Category/Images/section2/validateTagsTeamAlpha.png)
    
    Similarly, if you filter out by tag **Key: TeamName** and **Value: Beta**, you will be able to see resources corresponding to the applied tag value.
 
