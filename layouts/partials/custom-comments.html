@@ -4,6 +4,14 @@
        <li><a href="https://aws.amazon.com/privacy/?nc1=f_pr">Privacy</a></li>
        <li>|</li>
        <li><a href="https://aws.amazon.com/terms/?nc1=f_pr">Site Terms |</a></li>
-       <li>© 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved.</li>
+       <li>© <span class="year"></span>, Amazon Web Services, Inc. or its affiliates. All rights reserved.</li>
       </ul>
     </div>
+
+<script>
+  let el = document.getElementsByClassName("year");
+
+  for (var i = 0; i < el.length; i++) {
+    el[i].append(new Date().getFullYear())
+}
+</script>
