@@ -19,6 +19,10 @@ values.
 This is an administrative feature, and it can only be customized by the
 management account or regular accounts in AWS Organizations.
 
+{{% notice note %}}
+**Note** - You must have Cost Explorer enabled for this account to allow billing data access. Once Cost Explorer is enabled, it can take up to 24 hours for changes to take effect.
+{{% /notice %}}
+
 #### Console:
 
 1.  Sign in to the AWS Management Console using management account admin
@@ -30,7 +34,7 @@ management account or regular accounts in AWS Organizations.
 3.  Navigate to **Cost Explorer** under **AWS Cost Management**.
  ![Section5 NavigateCostExplorer](/Cost/200_Cost_Category/Images/section5/navigateCostExplorer.png)
 
-4.  Choose **the Date Range** as **past 1 month**
+4.  Choose **the Date Range** as **Month to Date**
  ![Section5 SelectDateRange](/Cost/200_Cost_Category/Images/section5/costAndUsagePastMonth.png)
 
 5.  Under **Group by** choose **Dimension** as **Cost Category** and
