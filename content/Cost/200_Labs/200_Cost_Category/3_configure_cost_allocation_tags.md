@@ -1,6 +1,6 @@
 ---
 title: "Configure Cost Allocation Tags"
-date: 2023-02-24T11:16:09-04:00
+date: 2023-02-12T11:16:09-04:00
 chapter: false
 weight: 3
 pre: "<b>3. </b>"
@@ -24,13 +24,13 @@ activation, it can take up to 24 hours for tags to activate.
 
 #### Console:
 
-1. Log in into **management account** created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) 
+1. Login to **management account** created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) 
 
 2. Search for **billing** in AWS console and select **Billing** from Services or open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
  ![Section3 Billing](/Cost/200_Cost_Category/Images/section3/billingService.png)
 
-3. In the navigation pane, choose **Cost allocation tags**.
+3. In the navigation pane on the left, choose **Cost allocation tags**.
  ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTags.png)
 
 4. Under **User-defined cost allocation tags** select **"CostCentre"**,
@@ -45,7 +45,7 @@ activation, it can take up to 24 hours for tags to activate.
 ### Congratulations!
 
 You have completed this section of the lab. In this section you
-activated user defined tags using AWS Cost Allocation Tag service.
+activated user defined tags using AWS Cost Allocation Tags.
 
 Click on **Next Step** to continue to the next section.
 
