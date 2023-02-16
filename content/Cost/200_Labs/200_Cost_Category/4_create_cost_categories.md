@@ -31,15 +31,10 @@ your usage records to be updated with values.
 
 #### Console:
 
-1. Sign in to the AWS Management Console using management account admin
-    credentials and open the AWS Billing console at
-    [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
- ![Section4 Billing](/Cost/200_Cost_Category/Images/section4/billingService.png)
-
-2. In the navigation pane, choose **AWS Cost Categories**.
+1. In the navigation pane on the left, choose **AWS Cost Categories**.
  ![Section4 CostCategories](/Cost/200_Cost_Category/Images/section4/costCategoriesService.png)
 
-3. At the top of the page, choose **Create Cost category**. 
+2. At the top of the page, choose **Create Cost category**. 
 
   Note: For our current lab purpose we will create two cost categories for
   simplification and better understanding of the service. However you
