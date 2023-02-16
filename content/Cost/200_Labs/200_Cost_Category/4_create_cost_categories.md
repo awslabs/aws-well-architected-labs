@@ -8,7 +8,7 @@ pre: "<b>4. </b>"
 
 ## Overview
 
-AWS **Cost Categories** is a feature within AWS Cost Management product
+AWS **Cost Categories** is a feature within **AWS Cost Management** product
 suite that enables you to group cost and usage information into
 meaningful categories based on your needs. You can create custom
 categories and map your cost and usage information into these categories
@@ -19,8 +19,7 @@ cost and usage information by these categories starting at the beginning
 of the month in AWS Cost Explorer, AWS Budgets, and AWS Cost and Usage
 Report (CUR).
 
-You can create cost categories to organize your cost and usage
-information. Regular accounts and the management account in AWS
+You can create cost categories to **organize your cost and usage information**. Regular accounts and the management account in AWS
 Organizations have default access to create cost categories. Rules
 aren\'t mutually exclusive, and you can control the order that the rules
 apply in.
@@ -35,10 +34,10 @@ your usage records to be updated with values.
 1. Sign in to the AWS Management Console using management account admin
     credentials and open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
- ![Section4 Billing](/Cost/200_Cost_Category/Images/section4/billing.png)
+ ![Section4 Billing](/Cost/200_Cost_Category/Images/section4/billingService.png)
 
 2. In the navigation pane, choose **AWS Cost Categories**.
- ![Section4 CostCategories](/Cost/200_Cost_Category/Images/section4/costCategories.png)
+ ![Section4 CostCategories](/Cost/200_Cost_Category/Images/section4/costCategoriesService.png)
 
 3. At the top of the page, choose **Create Cost category**. 
 
@@ -62,8 +61,10 @@ your usage records to be updated with values.
     
    Note : For more information on **split charges** please visit
    <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/splitcharge-cost-categories.html>
+   ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
 
 8. Choose **Create cost category**.
+   
 
 9. Repeat step-1 to step-3 and then under **Cost category details**,
     enter the name of your cost category as "cost by department".
