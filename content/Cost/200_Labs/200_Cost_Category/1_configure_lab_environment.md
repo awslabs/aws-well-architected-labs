@@ -48,9 +48,8 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
     team **Alpha**
  ![Section1 StackResourcesAlpha](/Cost/200_Cost_Category/Images/section1/resourcesTeamAlpha.png)
 
-8. Follow the same procedure step by step and select
-    **project2cfm.yaml** in step 3 to create resources for team Beta as
-    **Beta-Team-Resources**
+8. Follow the same procedure step by step. Select
+    **project2cfm.yaml** in step 3 to create resources for team Beta. we have used **Beta-Team-Resources** as a stack name in step 4.
  ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/resourcesTeamBeta.png)
 
 {{% notice note %}}
