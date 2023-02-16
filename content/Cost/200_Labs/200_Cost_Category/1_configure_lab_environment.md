@@ -6,19 +6,11 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 ## Overview
-Any Company (an fictional Enterprise organization) is running different projects on AWS cloud in us-east-1 region, 
-which is owned by various departments in the organization for their respective teams. 
-The **digital department** has implemented two critical 2-tier web applications **project1** and **project2** 
-for two different teams **alpha** and **beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
+Any Company (an fictional Enterprise organization) is running different projects on AWS cloud in **us-east-1** region, which various departments in the organization own for their respective teams. For example, the **digital department** has implemented two critical 2-tier web applications **project1** and **project2** for two different teams called **alpha** and **beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
 
-The CFO is highly concerned about the entire cost of cloud resources that is generating 
-as part of the digital department and have asked the head of digital department to share 
-a consolidated cost report exclusive to digital department including cost for each service
-that both alpha and beta teams are using for their respective projects. This is a very 
-important task to be completed on priority basis, and can be achieved using 
-**AWS Well-Architected cost management using tag-editor and cost categories**.
+The CFO is highly concerned about the entire cost of cloud resources that is generated as part of the digital department and have asked the head of the digital department to share a consolidated cost report exclusive to the digital department including cost for each service that both alpha and beta teams are using for their respective projects. This is a very important task to be completed on a priority basis, and can be achieved using **AWS Well-Architected cost management using AWS Tag Editor and AWS Cost Categories**.
 
-The lab uses two CloudFormation template for **project1** and **project2**, and
+The lab uses two CloudFormation templates for **project1** and **project2**, and
 will teach you the techniques to apply tags for cost categorization and
 further use cost categories for expenditure awareness.
 
@@ -33,7 +25,7 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
-    and Click **create a stack**. 
+    and Click **Create stack** button. 
  ![Section1 CFStack](/Cost/200_Cost_Category/Images/section1/createStackLandingPage.png)
 
 3. Select the stack template which you downloaded earlier, and click
@@ -45,7 +37,7 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
     name.
  ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/specifyStackDetailsTeamAlpha.png)
 
-5. Keep **configure stack options** as default and click **Next**.
+5. Keep **configure stack options** as default. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting the check box. Click **Next**.
  ![Section1 StackOptions](/Cost/200_Cost_Category/Images/section1/configureStackOptionsTeamAlpha.png)
 
 6. Scroll down to the bottom of the **review alpha team resources**

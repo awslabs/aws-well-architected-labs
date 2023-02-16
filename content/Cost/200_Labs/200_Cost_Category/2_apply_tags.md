@@ -7,16 +7,9 @@ pre: "<b>2. </b>"
 ---
 ## Overview
 
-Tags are key and value pairs that act as metadata for organizing your
-AWS resources. With most AWS resources, you have the option of adding
-tags when you create the resource, whether it\'s an Amazon EC2 instance,
-an Amazon RDS, or other resource. However, you can also add tags to
-multiple, supported resources at once by using Tag Editor. To add tags
-to---or edit or delete tags of---multiple resources at once, use Tag
-Editor. With Tag Editor, you search for the resources that you want to
-tag, and then manage tags for the resources in your search results.
+Tags are key and value pairs that act as metadata for organizing your AWS resources. With most AWS resources, you can add tags when you create the resource, whether it's an Amazon EC2 instance, an Amazon RDS, or other resources. However, you can also add or edit or delete tags to multiple supported resources at once using AWS Tag Editor. You can also search for the resources you want to add tag and then manage tags in your search results.
 
-For AWS tagging best practices please follow the below link :
+For AWS tagging best practices, please follow the below link :
 
 <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>
 
@@ -25,25 +18,22 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
 #### Console:
 
-1. Login as the Cost Optimization team(admin account), created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
-    & In the AWS management console Choose **Services**. Then, under
-    **Management & Governance**, choose **Resource Groups & Tag Editor**. In the navigation pane on the left, choose **Tag Editor**.
+1. Login as the Cost Optimization team(admin account) created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) Search for **tag editor** in AWS console and select **Resource Groups & Tag Editor** from Services. In the navigation pane on the left, choose **Tag Editor** under Tagging.
  ![Section2 ResourceGroupEditor](/Cost/200_Cost_Category/Images/section2/resourceGroupTagEditorService.png)
 
 2. Choose the AWS Regions in which you have deployed the resources. By
     default, your current region is used. Use **us-east-1** for the current
     lab. Choose **All supported resource types** in the **Resource types** section. Choose **Tag Key** as **"Department"** and **tag value** as
-    **"Digital"** in **Tags** section. Then click on **Search resources**
+    **"Digital"** in **Tags** section. Then click on **Search resources** button.
  ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditorFindResources.png)
 
-3. In the **Resource search results** enter **project1** in **filter resources** search box and select all the resources . Then click on **Manage tags of selected resources**
+3. In the **Resource search results** enter **project1** in **filter resources** search box and select all the resources . Then click on **Manage tags of selected resources**.
  ![Section2 ResourceProject1](/Cost/200_Cost_Category/Images/section2/resourceSearchResultProject1.png)
 
-4. In the **Edit tags of all selected resources** add the below tags
-    and click on **Review and apply tag changes** 
+4. In the **Edit tags of all selected resources**, add the below tags and click on **Review and apply tag changes**.
 
    Note: Keep the **prepopulated** tag as is since we have deployed the resources
-    through cloud formation template and AWS create some managed tags as
+    through cloud formation template and AWS creates managed tags as
     part of the resource creation.
 
 - Enter the tag **Key: TeamName | Value: Alpha**

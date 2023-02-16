@@ -23,7 +23,7 @@ Feb 2023
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-This hands-on lab will guide you through the steps to **govern cost and usage** of an organisation and create visibility for your **cloud finance** using AWS provided **tag editor** & **cost categories** features. **Tag editor** can be used to see any tags that are attached to resources and allow you to modify tags for them and **cost categories** can be used for resource categorization which can be used for expenditure and usage awareness.
+This hands-on lab will guide you through the steps to **govern cost and usage** of an organisation and create visibility for your **cloud finance** using **AWS Tag Editor** & **AWS Cost Categories** features. **AWS Tag Editor** can be used to see any tags that are attached to resources and allow you to modify tags for them. **AWS Cost Categories** can be used for resource categorization which can be used for expenditure and usage awareness.
 
 ## Goals
 - Organize cloud workloads/resources
