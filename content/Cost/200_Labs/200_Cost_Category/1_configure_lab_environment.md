@@ -21,7 +21,7 @@ You can get both the CloudFormation templates used in this lab here - [Project1]
 If you need detailed instructions on how to deploy a **CloudFormation stack** from within the console, please follow this
 [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
-1. Log in into **member account**, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
+1. Login into **member account**, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
 
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
