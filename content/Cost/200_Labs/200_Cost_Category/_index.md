@@ -1,7 +1,7 @@
 ---
-title: "Level 200: Cost Categories"
+title: "Level 200: Cost Management using Tag Editor and Cost Categories"
 #menutitle: "Lab #1"
-date: 2023-02-16T11:16:08-04:00
+date: 2020-04-24T11:16:08-04:00
 chapter: false
 weight: 8
 hidden: false
@@ -10,13 +10,11 @@ hidden: false
 ## Last Updated
 Feb 2023
 
-## Authors
-- **Archana Kar**, Associate Solution Architect.
-- **Neha Garg**, Enterprise Solution Architect.
 
-## Contributor
-- **Jang Whan Han**, Solutions Architect, AWS Well-Architected.
-- **Ben Mergen**, Sr Cost Lead SA WA.
+## Authors
+- Archana Kar, Associate Solution Architect
+- Neha Garg, Enterprise Solution Architect
+- Ben Mergen, Sr Cost Lead SA WA
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -42,14 +40,11 @@ We will require to login using admin permissions for both the Management Account
 {{% /notice %}}
 
 ## Costs
-- Costs will be less than $5 per day if all steps including the teardown are performed.
-  {{% notice note %}}
-  **Note** - This lab uses cost allocation tags and cost categories features under Billing Service that can take up to 72 hours for the changes to take effect to complete this lab. 
-  You will be billed for any applicable AWS resources used for that duration.  
-  {{% /notice %}}
+- Costs will be less than $10 per day if all steps including the teardown are performed
+
 
 ## Time to complete
-- The lab should take approximately 60 minutes to complete
+- The lab should take approximately 50-60 minutes to complete
 
 ## Steps:
 {{% children  /%}}
