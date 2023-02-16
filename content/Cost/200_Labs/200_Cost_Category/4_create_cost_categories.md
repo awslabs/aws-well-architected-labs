@@ -29,6 +29,10 @@ apply in.
 your usage records to be updated with values.
 {{% /notice %}}
 
+{{% notice note %}}
+**Note** - Cost categories are effective at the start of the current month. If you create or update your cost category in the middle of the month, it retroactively takes effect on cost and usage from the beginning of the month.
+{{% /notice %}}
+
 #### Console:
 
 1. If you are already in Billing Service, proceed to step-2, else search for **billing** in AWS console and select **Billing** from Services
