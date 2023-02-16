@@ -18,7 +18,7 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 
 #### Console:
 
-1. Login as the Cost Optimization team(admin account) created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) Search for **tag editor** in AWS console and select **Resource Groups & Tag Editor** from Services. In the navigation pane on the left, choose **Tag Editor** under Tagging.
+1. Login as the Cost Optimization team (admin account) created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) Search for **tag editor** in AWS console and select **Resource Groups & Tag Editor** from Services. In the navigation pane on the left, choose **Tag Editor** under Tagging.
  ![Section2 ResourceGroupEditor](/Cost/200_Cost_Category/Images/section2/resourceGroupTagEditorService.png)
 
 2. Choose the AWS Regions in which you have deployed the resources. By
