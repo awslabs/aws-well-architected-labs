@@ -31,17 +31,20 @@ your usage records to be updated with values.
 
 #### Console:
 
-1. In the navigation pane on the left, choose **AWS Cost Categories**.
+1. If you are already in Billing Service, proceed to step-2, else search for **billing** in AWS console and select **Billing** from Services
+   ![Section4 Billing](/Cost/200_Cost_Category/Images/section4/billingService.png)
+
+2. In the navigation pane on the left, choose **AWS Cost Categories**.
  ![Section4 CostCategories](/Cost/200_Cost_Category/Images/section4/costCategoriesService.png)
 
-2. At the top of the page, choose **Create Cost category**. 
-
-  Note: For our current lab purpose we will create two cost categories for
-  simplification and better understanding of the service. However you
-  can also create complex cost categories by following
-  <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/create-cost-categories.html>
-  documentation.
+3. At the top of the page, choose **Create Cost category**.
  ![Section4 CreateCostCategories](/Cost/200_Cost_Category/Images/section4/createCostCategory.png)
+
+   **Note:** For our current lab purpose we will create two cost categories for
+   simplification and better understanding of the service. However you
+   can also create complex cost categories by following
+   <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/create-cost-categories.html>
+   documentation.
 
 4. Under **Cost category details**, enter the name of your cost
     category as **cost by team**. Your cost category name must be unique
@@ -49,26 +52,25 @@ your usage records to be updated with values.
     click **Next**
  ![Section4 NameCostCategoryTeam](/Cost/200_Cost_Category/Images/section4/nameCostCategoryTeam.png)
 
-5. In **Define category rules** , Under **new category rule** choose **inherited value** as **rule type** , ** choose **Cost Allocation Tag** as **dimension** and **TeamName** as **Tag Key, ** click **Next.**
- ![Section4 DefineCostCategoriesRulesTeam](/Cost/200_Cost_Category/Images/section4/defineCatgoryRulesTeam.png)
+5. In **Define category rules** , Under **New category rule** choose **Inherited value** as **Rule type** , choose **Cost Allocation Tag** as **Dimension** and **TeamName** as **Tag Key**, click **Next**.
+ ![Section4 DefineCostCategoriesRuleTeam](/Cost/200_Cost_Category/Images/section4/defineCategoryRuleTeam.png)
 
-6. Skip **Define split charges** for this lab. 
+6. Skip **Define split charges** for this lab. Choose **Create cost category**.
     
    Note : For more information on **split charges** please visit
    <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/splitcharge-cost-categories.html>
    ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
 
-8. Choose **Create cost category**.
-   
-
-9. Repeat step-1 to step-3 and then under **Cost category details**,
-    enter the name of your cost category as "cost by department".
+7. Repeat step-3 and then under **Cost category details**,
+    enter the name of your cost category as **cost by department**.
  ![Section4 NameCostCategoryDept](/Cost/200_Cost_Category/Images/section4/nameCostCategoryDept.png)
 
-10. In **Define category rules**, Under **new category rule** choose **inherited value** as **rule type**, ** choose **Cost Allocation Tag** as **dimension** and **Department** as **Tag Key** , click on **Add rule** and choose **inherited value** as **rule type**,  choose **Cost Allocation Tag** as **dimension** and **CostCentre** as **Tag Key**.
- ![Section4 DefineCostCategoriesRulesDept](/Cost/200_Cost_Category/Images/section4/defineCategoryRulesDept.png)
+8. In **Define category rules**, Under **New category rule** choose **Inherited value** as **Rule type**, choose **Cost Allocation Tag** as **Dimension** and **Department** as **Tag Key**, 
+   click on **Add rule** and choose **Inherited value** as **Rule type**, choose **Cost Allocation Tag** as **Dimension** and **CostCentre** as **Tag Key**. click **Next**.
+ ![Section4 DefineCostCategoriesRuleDept](/Cost/200_Cost_Category/Images/section4/defineCategoryRulesDept.png)
 
-11. Repeat step 6 & 7
+9. Skip **Define split charges** for this lab. Choose **Create cost category**.
+ ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
 
 ### Congratulations!
 
