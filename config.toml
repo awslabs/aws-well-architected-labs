@@ -11,7 +11,7 @@ theme = "learn"
     languageName = 'Español'
     title = 'AWS Well-Architected Labs'
     weight = 2
-  [languages.pt_BR]
+  [languages.pt_br]
     languageName = 'Português Brasileiro'
     title = 'AWS Well-Architected Labs'
     weight = 3

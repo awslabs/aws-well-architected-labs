@@ -6,23 +6,19 @@ chapter = false
 pre = ""
 +++
 
-![MainPageHeader.png](images/MainPageHeader.png)
+![MainPageHeader.png](/images/MainPageHeader.png)
 
-## Introduction
+## Introdução
 
-The [Well-Architected](https://aws.amazon.com/well-architected) framework has been developed to help cloud architects build the most secure, high-performing, resilient, and efficient infrastructure possible for their applications. This framework provides a consistent approach for customers and partners to evaluate architectures, and provides guidance to help implement designs that will scale with your application needs over time.
+O framework [Well-Architected](https://aws.amazon.com/well-architected)foi desenvolvido para auxiliar arquitetos clou a construirem as mais seguas, performáticas, resilientes e eficientes infraestrutura para suas aplicações. Este framework proporciona uma abordagem consistente para clientes e parceiros avaliarem suas arquiteturas, e providenciar direcionamento a auxiliar a implementar desgins que irão escalar com sua aplicação ao longo do tempo.
 
-This repository contains documentation and code in the format of hands-on labs to help you learn, measure, and build using architectural best practices. The labs are categorized into levels, where 100 is introductory, 200/300 is intermediate and 400 is advanced.
+Este repositório contém documentação e código no formato de laboratórios práticos para ajudar a aprender, mensurar e construir utilizando as melhores práticas arquiteturais. Os laboratórios são categorizados em níveis onde 100 são introdutórios, 200/300 intermediários e 400, avançados.
 
-## Prerequisites:
-An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing, that is not used for production or other purposes.
-NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
+## Pré-requisitos:
+Uma [conta AWS](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) que você seja capaz de utilizar para testar e que não seja utilizada para produção ou outros propósitos. NOTA: você terá cobranças de qualquer recurso AWS quando aplicável usado se você completar laboratórios que não sejam cobertos pelo [nível gratuito da AWS](https://aws.amazon.com/pt/free/?nc1=h_ls).
 
 
 ## Labs:
-The labs are structured around the six pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
+Os laboratórios são estruturados ao redor dos seis pilares do [Well-Architected Framework](https://aws.amazon.com/well-architected):
+
 {{% children depth=1 %}}
-
-
-## Contributing
-[Click here for the process to perform a pull request to contribute to the labs]({{< ref "/Contributing" >}})
