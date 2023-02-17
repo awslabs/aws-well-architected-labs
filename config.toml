@@ -11,6 +11,10 @@ theme = "learn"
     languageName = 'Español'
     title = 'AWS Well-Architected Labs'
     weight = 2
+  [languages.pt_BR]
+    languageName = 'Português Brasileiro'
+    title = 'AWS Well-Architected Labs'
+    weight = 3
 [params]
 themeVariant = "walabs"
 disableShortcutsTitle = true
