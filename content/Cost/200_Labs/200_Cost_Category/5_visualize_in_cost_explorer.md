@@ -30,7 +30,7 @@ values.
  ![Section5 NavigateCostExplorer](/Cost/200_Cost_Category/Images/section5/navigateCostExplorer.png)
 
 4.  Choose **the Date Range** as **Month to Date**
- ![Section5 SelectDateRange](/Cost/200_Cost_Category/Images/section5/costAndUsagePastMonth.png)
+ ![Section5 SelectDateRange](/Cost/200_Cost_Category/Images/section5/costAndUsageMonthToDate.png)
 
 5.  Under **Group by** choose **Dimension** as **Cost Category** and
     choose **cost by team**
@@ -88,7 +88,7 @@ values.
  ![Section5 CreateAlphaTeamsReport](/Cost/200_Cost_Category/Images/section5/createAlphaTeamsReport.png)
 
 22. At the end of this section you will be able to see three cost
-    reports under Reports section by the names **cost report by teams**,
+    reports under **Reports** section by the names **cost report by teams**,
     **cost report by department** and **cost report by team alpha**.
  ![Section5 ValidateCostReports](/Cost/200_Cost_Category/Images/section5/validateCostReports.png)
 
