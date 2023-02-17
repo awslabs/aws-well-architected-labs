@@ -18,16 +18,12 @@ values.
 
 **This is an administrative feature, and it can only be customized by the management account or regular accounts in AWS Organizations.**
 
-{{% notice note %}}
-**Note** - You must have Cost Explorer enabled for this account to allow billing data access. Once Cost Explorer is enabled, it can take up to 24 hours for changes to take effect.
-{{% /notice %}}
-
 #### Console:
 
 1.  Sign in to the **AWS Management Console** using management account admin
     credentials.
 
-2.  In the navigation pane, choose **AWS Cost Explorer**.
+2.  In the navigation pane on the left, click **Cost explorer**.
  ![Section5 CostExplorer](/Cost/200_Cost_Category/Images/section5/costExplorer.png)
 
 3.  Navigate to **Cost Explorer** under **AWS Cost Management**.

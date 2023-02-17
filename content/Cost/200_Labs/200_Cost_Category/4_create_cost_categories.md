@@ -76,6 +76,10 @@ your usage records to be updated with values.
 9. Skip **Define split charges** for this lab. Choose **Create cost category**.
  ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
 
+{{% notice note %}}
+**Note** - After you create or edit a cost category, it can take up to 24 hours before it has categorized your cost and usage information in the AWS Cost and Usage Report, Cost Explorer, and other cost management products.
+{{% /notice %}}
+
 ### Congratulations!
 
 You have completed this section of the lab. In this section you created
