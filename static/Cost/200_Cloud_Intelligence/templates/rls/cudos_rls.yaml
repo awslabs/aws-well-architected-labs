@@ -52,19 +52,19 @@ Parameters:
 Outputs:
   LambdaFunctionName:
     Value:
-      Ref: CUDOSRLS
+      Ref: CIDRLS
   LambdaFunctionARN:
     Description: Lambda function ARN.
     Value:
       Fn::GetAtt:
-        - CUDOSRLS
+        - CIDRLS
         - Arn
 Resources:
-  CUDOSRLS:
+  CIDRLS:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub
-        - 'CUDOSRLS_${Id}'
+        - 'CIDRLS_${Id}'
         - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       Description: LambdaFunction of python3.8.
       Runtime: python3.9
@@ -87,7 +87,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "${RolePrefix}CUDOS-RLS-Role"
+      RoleName: !Sub "${RolePrefix}CID-RLS-Role"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -119,7 +119,7 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                   - "logs:DescribeLogStreams"
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/CUDOS-RLS*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/CID-RLS*"
               - Effect: "Allow"
                 Action:
                   - "s3:PutObject"
@@ -134,20 +134,20 @@ Resources:
     Properties:
       Description: Scheduler
       Name: !Sub
-        - 'Scheduler_ForCUDOSRLS_${Id}'
+        - 'Scheduler_ForCIDRLS_${Id}'
         - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
         - Arn:
             Fn::GetAtt:
-              - CUDOSRLS
+              - CIDRLS
               - Arn
-          Id: TriggerForCUDOSRLS
+          Id: TriggerForCIDRLS
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt CUDOSRLS.Arn
+      FunctionName: !GetAtt CIDRLS.Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
