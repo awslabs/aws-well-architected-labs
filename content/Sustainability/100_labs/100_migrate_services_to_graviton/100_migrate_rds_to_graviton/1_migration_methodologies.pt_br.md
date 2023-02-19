@@ -4,6 +4,7 @@ date: 2023-02-17T20:33:27.634Z
 chapter: false
 weight: 2
 pre: "<b>1 </b>"
+lang: "pt_br"
 ---
 
 - [x] [Metodologias de Migração]({{< ref "./1_migration_methodologies.md" >}})

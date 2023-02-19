@@ -1,18 +1,19 @@
 ---
-title: "Clean Up"
+title: "Limpeza"
 date: 2023-02-17T20:33:27.634Z
 chapter: false
 weight: 8
 pre: "<b>4 </b>"
+lang: "pt_br"
 ---
 
-- [x] [Migration Methodologies]({{< ref "./1_migration_methodologies.md" >}})
-- [x] [Preparation]({{< ref "./2_preparation.md" >}})
-- [x] [Lab 1 - Change Database Instance Type]({{< ref "./3-1_change_instance_type_and_restart.md" >}})
-- [x] [Lab 2 - Promote Read Replica]({{< ref "./3-2_promote_read_replica.md" >}})
-- [x] [Lab 3 - Failover to Read Replica]({{< ref "./3-3_failover_to_read_replica.md" >}})
-- [x] [Lab 4 - Restore from snapshot]({{< ref "./3-4_restore_from_snapshot.md" >}})
-- [x] [Cleanup]({{< ref "./cleanup.md" >}})
+- [x] [Metodologias de Migração]({{< ref "./1_migration_methodologies.md" >}})
+- [x] [Preparação]({{< ref "./2_preparation.md" >}})
+- [x] [Lab 1 - Alterar o tipo de instância do banco de dados]({{< ref "./3-1_change_instance_type_and_restart.md" >}})
+- [x] [Lab 2 - Promovendo uma réplica de leitura]({{< ref "./3-2_promote_read_replica.md" >}})
+- [x] [Lab 3 - Failover para réplica de leitura]({{< ref "./3-3_failover_to_read_replica.md" >}})
+- [x] [Lab 4 - Restore de um snapshot]({{< ref "./3-4_restore_from_snapshot.md" >}})
+- [x] [Limpeza]({{< ref "./cleanup.md" >}})
 
 
 ## In the RDS Console delete all the created databases
@@ -51,4 +52,4 @@ To cleanup and to avoid any additional charges, the database instances created a
 
 If you took any manual snapshots, they should also be deleted by following the steps in the [docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteSnapshot.html).
 
-{{< prev_next_button link_prev_url="../3-4_restore_from_snapshot" final_step="true" />}}
+{{< prev_next_button link_prev_url="../2-5_restore_from_snapshot" final_step="true" button_next_text="Próximo" button_prev_text="Anterior" />}}

@@ -4,6 +4,7 @@ date: 2023-02-17T20:33:27.634Z
 chapter: false
 weight: 3
 pre: "<b>2 </b>"
+lang: "pt_br"
 ---
 
 - [x] [Metodologias de Migração]({{< ref "./1_migration_methodologies.md" >}})
@@ -96,4 +97,4 @@ From the Amazon RDS console:
 
 All 4 databases should now be created or at least in the process of creating. Now you can move on to the labs themselves.
 
-{{< prev_next_button link_prev_url="../1_migration_methodologies" link_next_url="../3-1_change_instance_type_and_restart" />}}
+{{< prev_next_button link_prev_url="../1_migration_methodologies" link_next_url="../3-1_change_instance_type_and_restart" button_next_text="Próximo" button_prev_text="Anterior"/>}}
