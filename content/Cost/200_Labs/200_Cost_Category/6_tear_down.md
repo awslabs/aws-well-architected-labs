@@ -20,17 +20,17 @@ anymore to save the cost
 2. In the navigation pane, choose **CloudFormation**
     ![Section6 CloudFormation](/Cost/200_Cost_Category/Images/section6/cloudFormation.png)
 
-3. Select **alpha-team-resources** and under choose **delete(**Note :
-    this will delete all the resources created as part cloudformation
-    and will take up to 15 mins)
-    ![Section6 DeleteAlphaTeamResources](/Cost/200_Cost_Category/Images/section6/deleteAlphaTeamResources.png)
+3. Select **alpha-team-resources** and and under **action** choose **delete**. **(Note : This will delete all the resources created as part cloudformation and will take up to 15 mins)**
+    ![Section6 DeleteAlphaTeamResources](/Cost/200_Cost_Category/Images/section6/selectStackTeamAlpha.png)
 
-4. Click on Delete stack.
-    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteAlphaTeamStack.png)
+4. Click on **Delete stack**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteStackTeamAlpha.png)
 
 5. Similarly select **beta-team-resources** and under **action** choose **delete**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteStackTeamBeta.png)
 
-6. Confirm there are no io1 unattached EBS volumes, go to the **EC2 dashboard**,
+
+6. Confirm there are no unattached EBS volumes, go to the **EC2 dashboard**,
    click on **Elastic Block Store**, click **Volumes**.
 
 ### Delete cost category
@@ -40,12 +40,16 @@ anymore to save the cost
 1. Sign in to the AWS Management Console using management admin account
     credentials and open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/billingService.png)
 
 2. In the navigation pane, choose **AWS Cost Categories**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/costCategoriesFeature.png)
 
-3. Choose **cost by department** and delete the category.
+3. Choose **cost by department** and click on **Delete** to delete the category.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteCostCategoriesDept.png)
 
-4. Similarly choose **cost by team** and delete the category.
+4. Similarly choose **cost by team** and click on **Delete**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteCostCategoriesTeam.png)
 
 ### Deactivate user defined tags
 
@@ -54,13 +58,30 @@ anymore to save the cost
 1. Sign in to the AWS Management Console using management account admin
     credentials and open the AWS Billing console at
     [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/billingService.png)
 
 2. In the navigation pane, choose **Cost allocation tags**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/costAllocationTagsService.png)
 
 3. Under **User-defined cost allocation tags** select "CostCentre",
-    "Department", "ProjectName" and "TeamName" to activate the tags.
+    "Department", "ProjectName" and "TeamName" & Choose **Deactivate** to deactivate the tags.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/costAllocationTagDeactivate.png)
 
-4. Choose **Deactivate**.
+### Delete Cost Report
+
+#### Console:
+
+1.  Sign in to the **AWS Management Console** using management account admin
+    credentials.
+
+2.  In the navigation pane on the left, click **Cost explorer**.
+    ![Section5 CostExplorer](/Cost/200_Cost_Category/Images/section6/costExplorerService.png)
+
+2. In the navigation pane, choose **Reports**.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/reportsFeature.png)
+
+3. Select three cost reports under **Reports** section by the names **cost report by teams**,**cost report by department** and **cost report by team alpha** & click on **Delete** to delete the reports.
+    ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteCostReport.png)
 
 
 {{< prev_next_button link_prev_url="../5_visualize_in_cost_explorer/"  title="Congratulations!" final_step="true" >}}
