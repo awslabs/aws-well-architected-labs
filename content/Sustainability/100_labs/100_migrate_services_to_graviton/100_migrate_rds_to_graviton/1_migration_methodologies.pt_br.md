@@ -16,7 +16,7 @@ pre: "<b>1 </b>"
 
 ## Métodos de migração
 
-There are four options to migrate RDS instances from x86-64 to Graviton which we will cover in this lab.
+Existem quatro opções para migrar instâncias de x86-64 para Graviton as quais iremos cobrir neste laboratório.
 
 ### 1. Altere o tipo de instância e restart o banco de dados
 
@@ -37,9 +37,9 @@ Snashots dos bancos de dados são independentes do tipo de CPU, logo um snapshot
 
 ## Suporte dos bancos de dados para métodos de migração
 
-|	|Alterar o tipo de instância e restartar	|Criar um novo banco ao promover a réplica de leitura	|Failover existing database to read replica	| Restore database snapshot |
+|	|Alterar o tipo de instância e restartar	|Criar um novo banco ao promover para réplica de leitura	|Failover de uma réplica de leitura existente	| Restore de um snapshot do banco de dados |
 |---	| :---:	| :---:	| :---:	| :---:	|
 |RDS: MySQL, Postgres, MariaDB	|Sim|Sim|Não|Sim|
 |Aurora: MySQL, Postgres	|Não|Não|Sim|Sim|
 
-{{< prev_next_button link_prev_url="../" link_next_url="../2_preparation" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../2_preparation" button_next_text="Próximo" button_prev_text="Anterior" />}}
