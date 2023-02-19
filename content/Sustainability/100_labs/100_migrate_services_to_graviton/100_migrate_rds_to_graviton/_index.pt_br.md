@@ -1,7 +1,7 @@
 ---
 title: "Nível 100: Migrando bancos de dados Amazon RDS para Graviton"
 menutitle: "Migrando bancos de dados Amazon RDS para Graviton"
-date: 2020-11-18T09:00:08-04:00
+date: 2023-02-17T20:33:27.634Z
 chapter: false
 weight: 1
 hidden: false
@@ -38,3 +38,8 @@ Ao final deste laboratório você irá:
 
 * Este laboratório foi criado para rodar em sua própria conta.
 * Pode ser realizado em qualquer região que suporte RDS e Graviton mas us-east-1 é recomendado.
+
+{{< prev_next_button link_next_url="./1_migration_methodologies/"  first_step="true" title="Próximo" />}}
+
+## Passos:
+{{% children  %}}
