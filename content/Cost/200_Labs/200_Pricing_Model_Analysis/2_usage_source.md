@@ -35,6 +35,7 @@ We will combine the pricing information with our Cost and Usage Report (CUR). Th
         `unit` string,
         `priceperunit` double,
         `currency` string,
+        `relatedto` string,
         `leasecontractlength` string,
         `purchaseoption` string,
         `offeringclass` string,
