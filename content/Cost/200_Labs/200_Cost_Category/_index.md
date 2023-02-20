@@ -50,7 +50,7 @@ We will require to login using administrator access for both the management acco
 - The lab should take approximately 60 minutes to complete.
 
 **Note** - This lab uses cost allocation tags page under 
-AWS Billing Console that can take upto 48 hours for tags to activate and complete all steps of lab.
+AWS Billing Console that can take upto 72 hours for tags to activate and complete all steps of lab.
 
 ## Steps:
 {{% children  /%}}
