@@ -81,7 +81,7 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME: !Ref DestinationBucket
-          MANAGMENTROLENAME: !Ref ManagementAccountRole
+          MANAGEMENTROLENAME: !Ref ManagementAccountRole
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
           QS_REGION: !Ref AWS::Region
   LambdaRole:
