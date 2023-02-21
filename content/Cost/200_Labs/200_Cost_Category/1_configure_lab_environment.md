@@ -21,7 +21,7 @@ You can get both the CloudFormation templates used in this lab here - [Project1]
 If you need detailed instructions on how to deploy a **CloudFormation stack** from within the console, please follow this
 [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
-1. Log in to **member account**, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
+1. Log in as the **Cost Optimization team(admin account)**, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
 
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
@@ -36,20 +36,23 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
     **Next**. For this case, We have used **Alpha-Team-Resources** as a stack
     name.
  ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/specifyStackDetailsTeamAlpha.png)
- 
-5. Keep **configure stack options** as default and click **Next**.
+
+5. Keep **configure stack options** as default. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting the check box. Click **Next**.
  ![Section1 StackOptions](/Cost/200_Cost_Category/Images/section1/configureStackOptionsTeamAlpha.png)
 
-6. Scroll down to the bottom of the stack creation page and acknowledge the IAM resources creation by selecting the check box. Click **Submit**. It may take 15 minutes to complete the baseline deployment.
-   ![Section1 IAM](/Cost/200_Cost_Category/Images/section1/acknowledgeResourcesTeamAlpha.png)
+6. Scroll down to the bottom of the **review alpha team resources**
+    page and after reviewing click on **submit** to run the stack. It
+    may take 15 minutes to complete the baseline deployment.
+
 
 7. Now go to your newly created stack and go to the **Resources**
     section of the CloudFormation stack to find all the resources for
     team **Alpha**
  ![Section1 StackResourcesAlpha](/Cost/200_Cost_Category/Images/section1/resourcesTeamAlpha.png)
 
-8. Follow the same procedure step by step. Select
-    **project2cfm.yaml** in step 3 to create resources for team Beta. We have used **Beta-Team-Resources** as a stack name in step 4.
+8. Follow the same procedure step by step and select
+    **project2cfm.yaml** in step 2 to create resources for team Beta as
+    **Beta-Team-Resources**
  ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/resourcesTeamBeta.png)
 
 {{% notice note %}}

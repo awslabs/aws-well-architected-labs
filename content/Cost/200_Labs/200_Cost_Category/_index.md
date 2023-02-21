@@ -36,10 +36,10 @@ This hands-on lab will guide you through the steps to **govern cost and usage** 
 
 
 ## Permissions required
-We will require to login using administrator access for both the management account and member account to complete this lab.
+We will require to login using administrator access for both the Management Account and Cost Optimization Member Account to complete this lab.
 
 {{% notice note %}}
-**Note** - We shall login with administrator access to run cloud formation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
+**Note** - We shall login with administrator permission to run cloud formation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
 {{% /notice %}}
 
 ## Costs
@@ -47,10 +47,11 @@ We will require to login using administrator access for both the management acco
 
 
 ## Time to complete
-- The lab should take approximately 60 minutes to complete.
+- The lab should take approximately 60 minutes to complete, except the time for cost allocation tags and cost categories to be shown. 
 
-**Note** - This lab uses cost allocation tags page under 
-AWS Billing Console that can take upto 72 hours for tags to activate and complete all steps of lab.
+{{% notice note %}}
+**Note** - This lab uses cost allocation tags page under AWS Billing Console that can take upto 72 hours for tags to activate and complete all steps of lab.
+{{% /notice %}}
 
 ## Steps:
 {{% children  /%}}
