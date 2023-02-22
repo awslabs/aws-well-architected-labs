@@ -30,7 +30,7 @@ applied tags in the Billing and Cost Management console.
 3. In the navigation pane on the left, choose **Cost allocation tags**.
  ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTags.png)
 
-4. Under **User-defined cost allocation tags**, search for **"CostCentre"**, **"Department"**, **"ProjectName"** and **"TeamName"** tag key and select each of them to activate.
+4. Under **User-defined cost allocation tags**, search for **CostCentre**, **Department**, **ProjectName** and **TeamName** tag key and select each of them to activate.
 
 5. Choose **Activate**.
  ![Section3 ActivateCostAllocationTags](/Cost/200_Cost_Category/Images/section3/activateCostAllocationTags.png)
@@ -41,7 +41,7 @@ applied tags in the Billing and Cost Management console.
 ### Congratulations!
 
 You have completed this section of the lab. In this section you
-activated user defined tags using AWS Cost Allocation Tag service.
+activated user defined tags using AWS cost allocation tag service.
 
 Click on **Next Step** to continue to the next section.
 
