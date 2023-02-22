@@ -21,20 +21,21 @@ applied tags in the Billing and Cost Management console.
 
 #### Console:
 
-1.  Search for **billing** in AWS console and select **Billing** from Services or open the AWS Billing console at
-    [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
+1. Log into **Management Account** created in [AWS Account Setup.]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}})
+
+2. Search for **billing** in AWS console and select **Billing** from Services or open the AWS Billing console at
+ [https://console.aws.amazon.com/billing/](https://console.aws.amazon.com/billing/)
  ![Section3 Billing](/Cost/200_Cost_Category/Images/section3/billingService.png)
 
-2.  In the navigation pane, choose **Cost allocation tags**.
- ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTagsService.png)
+3. In the navigation pane on the left, choose **Cost allocation tags**.
+ ![Section3 CostAllocationTags](/Cost/200_Cost_Category/Images/section3/costAllocationTags.png)
 
-3.  Under **User-defined cost allocation tags**, search for **"CostCentre"**,
-    **"Department"** , **"ProjectName"** and **"TeamName"** tag key and select each of them to activate.
+4. Under **User-defined cost allocation tags**, search for **"CostCentre"**, **"Department"**, **"ProjectName"** and **"TeamName"** tag key and select each of them to activate.
 
-4.  Choose **Activate**.
+5. Choose **Activate**.
  ![Section3 ActivateCostAllocationTags](/Cost/200_Cost_Category/Images/section3/activateCostAllocationTags.png)
 
-5.  Once activated, status should show as **Active** for the above mentioned Tag keys
+6. Once activated, status should show as **Active** for the above mentioned Tag keys.
  ![Section3 UserDefinedCostAllocationTags](/Cost/200_Cost_Category/Images/section3/userDefinedCostAllocationTags.png)
 
 ### Congratulations!
@@ -45,4 +46,3 @@ activated user defined tags using AWS Cost Allocation Tag service.
 Click on **Next Step** to continue to the next section.
 
 {{< prev_next_button link_prev_url="../2_apply_tags/" link_next_url="../4_create_cost_categories/" />}}
-
