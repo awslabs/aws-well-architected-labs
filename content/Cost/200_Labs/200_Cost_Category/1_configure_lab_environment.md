@@ -6,11 +6,11 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 ## Overview
-Any Company (a fictional Enterprise organization) is running different projects on AWS cloud in **us-east-1** region, which various departments in the organization own for their respective teams. For example, the **digital department** has implemented two critical 2-tier web applications **project1** and **project2** for two different teams called **alpha** and **beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
+Any Company (a fictional Enterprise organization) is running different projects on AWS cloud in **us-east-1** region, which various departments in the organization own for their respective teams. For example, the **Digital** department has implemented two critical 2-tier web applications **Project1** and **Project2** for two different teams called **Alpha** and **Beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
 
-The CFO is highly concerned about the entire cost of cloud resources that is generated as part of the digital department and have asked the head of the digital department to share a consolidated cost report exclusive to the digital department including cost for each service that both alpha and beta teams are using for their respective projects. This is a very important task to be completed on a priority basis, and can be achieved using **AWS Well-Architected cost management using AWS Tag Editor and AWS Cost Categories**.
+The CFO is highly concerned about the entire cost of cloud resources that is generated as part of the digital department and have asked the head of the digital department to share a consolidated cost report exclusive to the digital department including cost for each service that both Alpha and Beta teams are using for their respective projects. This is a very important task to be completed on a priority basis.
 
-The lab uses two CloudFormation templates for **project1** and **project2**, and
+The lab uses two CloudFormation templates for **Project1** and **Project2**, and
 will teach you the techniques to apply tags for cost categorization and
 further use cost categories for expenditure awareness.
 
@@ -25,15 +25,15 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
-    and Click **Create stack** button. 
+    and click **Create stack** button. 
  ![Section1 CFStack](/Cost/200_Cost_Category/Images/section1/createStackLandingPage.png)
 
 3. Select the stack template which you downloaded earlier, and click
     **Choose file** to upload **Project1cfm.yaml** and click **Next**.
  ![Section1 Upload_CFStack](/Cost/200_Cost_Category/Images/section1/createStackTeamAlpha.png)
 
-4. For the **Stack name** use any stack name you can identify and click
-    **Next**. For this case, We have used **Alpha-Team-Resources** as a stack
+4. For the **Stack name** use any stack name of your choice and click
+    **Next**. For this case, We have used **Alpha-Team-Resources** as a Stack
     name.
  ![Section1 StackName](/Cost/200_Cost_Category/Images/section1/specifyStackDetailsTeamAlpha.png)
 
@@ -47,19 +47,13 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
 
 7. Now go to your newly created stack and go to the **Resources**
     section of the CloudFormation stack to find all the resources for
-    team **Alpha**
+    team **Alpha**.
  ![Section1 StackResourcesAlpha](/Cost/200_Cost_Category/Images/section1/resourcesTeamAlpha.png)
 
 8. Follow the same procedure step by step and select
     **Project2cfm.yaml** in step 3 to create resources for team Beta. We have used **Beta-Team-Resources** as a stack name in step 4.
  ![Section1 StackResourcesBeta](/Cost/200_Cost_Category/Images/section1/resourcesTeamBeta.png)
 
-{{% notice note %}}
-**Note** - You can add tags for the individual resources that will be
-created during CloudFormation template deployment however we won\'t add
-any tags manually here since we will apply tags in bulk with using tag
-editor in the upcoming sections.
-{{% /notice %}}
 
 ### Congratulations!
 
