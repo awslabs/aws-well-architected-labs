@@ -23,7 +23,7 @@ Feb 2023
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
 
 ## Introduction
-This hands-on lab will guide you through the steps to **govern cost and usage** of an organisation and create visibility for your **cloud finance** using **AWS Tag Editor** & **AWS Cost Categories** features. **AWS Tag Editor** can be used to see any tags that are attached to resources and allow you to modify tags for them. **AWS Cost Categories** can be used for resource categorization which can be used for expenditure and usage awareness.
+This hands-on lab will guide you through the steps to govern cost and usage of an organisation and create visibility for your cloud finance using **AWS Tag Editor** and **AWS Cost Categories** features. AWS Tag Editor can be used to see any tags that are attached to resources and allow you to modify tags for them. AWS Cost Categories can be used for resource categorization which can be used for expenditure and usage awareness.
 
 ## Goals
 - Organize cloud workloads/resources
@@ -39,7 +39,7 @@ This hands-on lab will guide you through the steps to **govern cost and usage** 
 We will require to login using administrator access for both the Management Account and Cost Optimization Member Account to complete this lab.
 
 {{% notice note %}}
-**Note** - We shall login with administrator permission to run cloud formation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
+**Note** - We shall login with administrator permission to run AWS CloudFormation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
 {{% /notice %}}
 
 ## Costs
@@ -50,7 +50,7 @@ We will require to login using administrator access for both the Management Acco
 - The lab should take approximately 60 minutes to complete, except the time for cost allocation tags and cost categories to be shown. 
 
 {{% notice note %}}
-**Note** - This lab uses cost allocation tags page under AWS Billing Console that can take upto 72 hours for tags to activate and complete all steps of lab.
+**Note** - This lab uses Cost allocation tags and Cost categories features under AWS Billing Console that can take up to 72 hours to complete all steps.
 {{% /notice %}}
 
 ## Steps:
