@@ -53,7 +53,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
       - Key: Name
-        Value: project1VPC
+        Value: Project1VPC
       - Key: Department
         Value: Digital
 
@@ -62,7 +62,7 @@ Resources:
     Properties:
       Tags:
       - Key: Name
-        Value: project1IGW
+        Value: Project1IGW
       - Key: Department
         Value: Digital
 
@@ -198,7 +198,7 @@ Resources:
       SubnetId: !Ref Project1PrivateSubnet2
   
   #SecurityGroups, make sure your Egress rule are correct or it will not talk to back end.
-  #You can lock your inbound on the project1webapp to just your IP if you so choose to be more secure
+  #You can lock your inbound on the Project1webapp to just your IP if you so choose to be more secure
   ApplicationLoadBalancerSG:
     Type: AWS::EC2::SecurityGroup
     DependsOn: VPC
@@ -327,7 +327,7 @@ Resources:
       Tags:
       - Key: Name
         PropagateAtLaunch: true
-        Value: project1webapp
+        Value: Project1webapp
       - Key: Department
         PropagateAtLaunch: true
         Value: Digital
@@ -348,7 +348,7 @@ Resources:
             AWS_REGION=${AWS_AVAIL_ZONE::-1}
             AWS_INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
             ROOT_VOLUME_IDS=$(aws ec2 describe-instances --region $AWS_REGION --instance-id $AWS_INSTANCE_ID --output text --query Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
-            aws ec2 create-tags --resources $ROOT_VOLUME_IDS --region $AWS_REGION --tags Key=Name,Value=project1Volume Key=Department,Value=Digital
+            aws ec2 create-tags --resources $ROOT_VOLUME_IDS --region $AWS_REGION --tags Key=Name,Value=Project1Volume Key=Department,Value=Digital
             yum update -y
             yum install -y httpd
             systemctl start httpd
@@ -358,7 +358,7 @@ Resources:
   WebTierLoadBalancer:
     Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
     Properties:
-      Name: project1WebTierLoadBalancer
+      Name: Project1WebTierLoadBalancer
       Subnets: 
        - !Ref Project1PublicSubnet1
        - !Ref Project1PublicSubnet2
@@ -366,7 +366,7 @@ Resources:
         - !GetAtt ApplicationLoadBalancerSG.GroupId 
       Tags:
       - Key: Name
-        Value: project1WebTierLoadBalancer
+        Value: Project1WebTierLoadBalancer
       - Key: Department
         Value: Digital
   WebTierListener:
@@ -398,7 +398,7 @@ Resources:
       PubliclyAccessible: 'false'
       DBInstanceClass: db.t2.micro
       Engine: MySQL
-      DBInstanceIdentifier: project1Database
+      DBInstanceIdentifier: Project1Database
       MasterUsername: MyName
       MasterUserPassword: MyPassword
       DBSubnetGroupName: !Ref DatabaseSubnetGroup
@@ -410,7 +410,7 @@ Resources:
           Ref: 'AWS::Region'
       Tags:
       - Key: Name
-        Value: project1Database
+        Value: Project1Database
       - Key: Department
         Value: Digital
       
