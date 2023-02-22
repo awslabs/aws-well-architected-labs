@@ -33,7 +33,7 @@ apply in.
 2. In the navigation pane on the left, choose **Cost categories**.
  ![Section4 CostCategories](/Cost/200_Cost_Category/Images/section4/costCategoriesService.png)
 
-3. At the top of the page, choose **Create Cost category**.
+3. At the top of the page, choose **Create cost category**.
  ![Section4 CreateCostCategories](/Cost/200_Cost_Category/Images/section4/createCostCategory.png)
 
    Note: For current lab purpose we will create two cost categories for
@@ -58,7 +58,7 @@ apply in.
    ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
 
 7. Repeat step-3 for creating second cost category. Under **Cost category details**,
-   enter the name of your cost category as **cost by department**.
+   enter the name of your cost category as **cost by department** and click **Next**.
  ![Section4 NameCostCategoryDept](/Cost/200_Cost_Category/Images/section4/nameCostCategoryDept.png)
 
 8. In **Define category rules**, Under **New category rule** choose **Inherited value** as **Rule type**, choose **Cost Allocation Tag** as **Dimension** and **Department** as **Tag Key**,
