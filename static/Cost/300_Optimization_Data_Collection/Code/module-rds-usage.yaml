@@ -534,7 +534,7 @@ Resources:
             accountid,
             year,
             month
-          FROM rds_metrics),
+          FROM rds_usage_data),
         rds_pricing AS (
           SELECT (CASE
                 WHEN (databaseengine LIKE 'Aurora%') THEN 'Aurora'
@@ -553,7 +553,7 @@ Resources:
               END
             ) priceperunit,
             unit
-          FROM optimization_data.rds_pricing
+          FROM optimization_data.pricing_rds
           WHERE (((locationtype = 'AWS Region')AND (purchaseoption = ''))AND (productfamily = 'Database Instance'))),
         graviton_mapping AS (
           SELECT raw_data.dbinstanceidentifier,
@@ -645,7 +645,7 @@ Resources:
             ) graviton_eligible,
             rds_graviton_mapping.graviton_instancetype,
             raw_data.region,
-            region_names.regionname,
+            pricing_region_names.regionname,
             raw_data.deploymentoption,
             raw_data.engineversion,
             raw_data.accountid,
@@ -654,7 +654,7 @@ Resources:
           FROM (
               (
                 raw_data
-                LEFT JOIN optimization_data.region_names ON (raw_data.region = region_names.region)
+                LEFT JOIN optimization_data.pricing_region_names ON (raw_data.region = pricing_region_names.region)
               )
               LEFT JOIN optimization_data.rds_graviton_mapping ON (
                 (
