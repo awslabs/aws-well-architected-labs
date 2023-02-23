@@ -498,7 +498,7 @@ Resources:
             - ''
             - - s3://
               - Ref: ResultsBucket
-        RuntimeVersion: syn-nodejs-puppeteer-3.0
+        RuntimeVersion: syn-nodejs-puppeteer-3.5
         Schedule: 
           Expression: 'rate(1 minute)'
           DurationInSeconds: 0
