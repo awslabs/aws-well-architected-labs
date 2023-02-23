@@ -50,6 +50,9 @@ def migrate(bucket):
         "reserveinstance/payer_id=": "reserveinstance/payer_id=",
         "savingsplan/payer_id=": "savingsplan/payer_id=",
         "transitgateway/payer_id=": "transit-gateway/transit-gateway-data/payer_id=",
+
+        # Migration from v1.1 (adding payer to organizations)
+        "organization/organization-data/([a-z\-]*?)-(\d{12}).json": rf"organization/organization-data/payer_id=\2/\1.json",
     }
 
     for old_prefix, new_prefix in mods.items():
@@ -58,7 +61,7 @@ def migrate(bucket):
         for content in contents:
             try:
                 key = content["Key"]
-                new_key = key.replace(old_prefix, new_prefix)
+                new_key = re.sub(old_prefix, new_prefix, key)
                 logger.info(f'  Moving {key} to {new_key}')
                 copy_source = {'Bucket': bucket, 'Key': key}
                 s3.copy_object(Bucket=bucket, CopySource=copy_source, Key=new_key)
