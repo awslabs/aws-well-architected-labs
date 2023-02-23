@@ -533,7 +533,8 @@ Resources:
               END) fix,
             accountid,
             year,
-            month
+            month,
+            CAST("concat"("year", '-', "month", '-01') AS date) "billing_period"
           FROM rds_usage_data),
         rds_pricing AS (
           SELECT (CASE
@@ -650,7 +651,8 @@ Resources:
             raw_data.engineversion,
             raw_data.accountid,
             raw_data.year,
-            raw_data.month
+            raw_data.month, 
+            raw_data.billing_period
           FROM (
               (
                 raw_data
