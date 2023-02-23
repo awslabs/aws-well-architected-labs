@@ -549,7 +549,7 @@ Resources:
             location,
             instancetype,
             (CASE
-                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal)
+                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal(18,2))
               END
             ) priceperunit,
             unit
@@ -633,7 +633,7 @@ Resources:
                             WHEN (CAST(raw_data.major AS integer) > 12) THEN 'Eligible'
                             WHEN (
                               (CAST(raw_data.major AS integer) = 12)
-                              AND (CAST(raw_data.minor AS integer) >= 3)
+                              AND (CAST(raw_data.minor AS integer) >= 4)
                             ) THEN 'Eligible' ELSE 'Ineligible'
                           END
                         ) ELSE 'Ineligible'
