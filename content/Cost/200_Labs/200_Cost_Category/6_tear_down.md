@@ -85,7 +85,10 @@ anymore to save the cost.
 {{< prev_next_button link_prev_url="../5_visualize_in_cost_explorer/"  title="Congratulations!" final_step="true" >}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+[COST03-BP03 - "Establish organization metrics”](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_monitor_usage_define_kpi.html)
+[COST03-BP04 - "Configure billing and cost management tools”](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_monitor_usage_config_tools.html)
 [COST03-BP05 - “Add organization information to cost and usage”](https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_monitor_usage_org_information.html)
+[COST03-BP06 - "Allocate costs based on workload metrics”](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_monitor_usage_allocate_outcome.html)
 {{< /prev_next_button >}}
 
 
