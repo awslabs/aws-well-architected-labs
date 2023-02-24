@@ -227,7 +227,7 @@ Here we will deploy the CFN template but setting the CFN parameters for a Destin
 
 3. Enter a **Stack name** for your template such as **CID-CUR-Replication**.
 
-4. Enter your **Desitnation** AWS Account ID as a parameter (Your Data Collection Account, where you will deploy dashboards).
+4. Enter your **Destination** AWS Account ID as a parameter (Your Data Collection Account, where you will deploy dashboards).
 
 6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
