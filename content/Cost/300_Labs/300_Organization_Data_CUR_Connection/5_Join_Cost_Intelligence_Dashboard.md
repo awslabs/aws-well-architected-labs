@@ -13,7 +13,11 @@ This section is **optional** and shows how you can add your AWS Organization Dat
 
 1. Login to your Data Collection Account account and go into the Athena console.
 
-2. Modify and run the following query to override the **account_map** view so that it includes the enhanced organisation data. Make sure you replace the correct cur database and if your organisation data resides in a separate athena database, ensure you pick the correct database for your organisation data table. Also if you added tags to the organisation data ensure you add your custom tags as well, in this example we have a team tag and an environment tag in the SQL query.
+2. Modify and run the following query to override the **account_map** view to inclue the enhanced organisation data.
+
+Make sure you replace the correct cur database and if your organisation data resides in a separate Athena database, ensure you pick the correct database for your organisation data table.
+
+Also if you added tags to the organisation data ensure you add your custom tags as well, in this example we have a team tag and an environment tag in the SQL query.
 
         ```SQL
         CREATE OR REPLACE (database).account_map AS
@@ -37,4 +41,6 @@ This section is **optional** and shows how you can add your AWS Organization Dat
 
 3. Navigate to the QuickSight console, select datasets, "Edit" and then "Save and Publish" all datasets one by one(this will also trigger a refresh).
 
-4. Now your Cloud Intelligence dashboards should have the correct mapping of account name to account numbers and if you're trying to enhance your dashboard via custom analises you should be able to enrich your dashboards to display and slice and dice the additional fields included such as parent OU, account status, joined method and tags.
+4. Now you can create an analysis from Cloud Intelligence Dashboards and you should have additional fields.
+
+You should be able to filter and slice and dice using additional fields such as parent OU, account status, joined method and tags.
