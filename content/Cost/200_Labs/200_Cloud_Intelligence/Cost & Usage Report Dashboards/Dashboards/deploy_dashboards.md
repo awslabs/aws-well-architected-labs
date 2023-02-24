@@ -45,7 +45,7 @@ This step will create a new CUR for you. You can request a [backfill](https://do
 
 ![Images/multi-account/basic-setup-step1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/basic-setup-step1.png?classes=lab_picture_small)
 
-3. Make sure CreateCUR set to **true**.
+3. Make sure CreateCUR parameter is set to **True**.
 
 4. Enter your Management (Payer) Account ID. Leave Source Account Empty.
 
@@ -157,11 +157,11 @@ If you want to deploy **CUDOS**, **KPI** and **Cost Intelligence Dashboard** in 
 ## Architecture
 
 ![Images/arch5.png](/Cost/200_Cloud_Intelligence/Images/arch5.png?classes=lab_picture_small)
-The Cost and Usage report is generated in one or multiple Management (Payer) accounts. S3 replication transfer CUR files from **Source** (**Management Account**) to the **Destination** (**Data Collection Account**).
+The Cost and Usage report (CUR) is generated in one or multiple Management (Payer) accounts. S3 replication copies CUR files from **Source** (**Management Account**) to the **Destination** (**Data Collection Account**).
 
-This architecture support aggregation of CURs from multiple **Sources** to one **Data Collection Account**. This is useful if you want have a visibility across multiple Management (Payer) Accounts. 
+This architecture supports aggregation of CURs from multiple **Sources** to one **Data Collection Account**. This is useful if you want have visibility across multiple Management (Payer) Accounts.
 
-Also the same aggregation can be used when you do not have access Management (Payer) and you need a visibility across multiple Linked Accounts that belong to a single Business Unit.
+Also the same aggregation can be used when you do not have access to the Management (Payer) account and you need visibility across multiple Linked Accounts that belong to a single Business Unit.
 
 ## Deployment overview
 
