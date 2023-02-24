@@ -380,7 +380,7 @@ Resources:
               
               bucket = s3.Bucket(s3Bucket)
               
-              bucket.copy(copy_source, 'pricing/region/regions.csv')
+              bucket.copy(copy_source, 'pricing/pricing-region/regions.csv')
               
               # Printing the Information That the File Is Copied.
               print('Single File is copied')
