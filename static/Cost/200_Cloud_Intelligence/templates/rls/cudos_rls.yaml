@@ -1,0 +1,229 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda to collect Org data and store in S3 
+Parameters:
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that is created to hold org data
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  ManagementAccountRole:
+    Type: String
+    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Default: WA-Lambda-Assume-Role-Management-Account
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+    Default: WA-
+  ManagementAccountID:
+    Type: String
+    AllowedPattern: ([a-z0-9\-, ]*?$)
+    Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
+  Schedule:
+    Type: String
+    Description: Cron job to trigger the lambda using cloudwatch event
+    Default: "rate(1 day)"
+  CodeBucket:
+      Type: String
+      Description: S3 Bucket that exists and holds code aws-well-architected-labs-{REGION-NAME} e.g. aws-well-architected-labs-ireland
+      Default: aws-well-architected-labs
+      AllowedValues:
+        - aws-well-architected-labs-ireland
+        - aws-well-architected-labs
+        - aws-well-architected-labs-ohio
+        - aws-well-architected-labs-virginia
+        - aws-well-architected-labs-california
+        - aws-well-architected-labs-oregon
+        - aws-well-architected-labs-singapore
+        - aws-well-architected-labs-frankfurt
+        - aws-well-architected-labs-london
+        - aws-well-architected-labs-stockholm
+        - aws-well-architected-labs-ap-sydney
+        - aws-well-architected-labs-mumbai
+        - aws-well-architected-labs-osaka
+        - aws-well-architected-labs-seoul
+        - aws-well-architected-labs-tokyo
+        - aws-well-architected-labs-canada
+        - aws-well-architected-labs-milan
+        - aws-well-architected-labs-paris
+  CodeKey:
+    Type: String
+    Description: file name of ZipFile with data code
+    Default: Cost/Labs/row-level-security/create_rls.zip # RLS Folder to be updated, once the LAB will be created
+Outputs:
+  LambdaFunctionName:
+    Value:
+      Ref: CUDOSRLS
+  LambdaFunctionARN:
+    Description: Lambda function ARN.
+    Value:
+      Fn::GetAtt:
+        - CUDOSRLS
+        - Arn
+Resources:
+  CUDOSRLS:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+        - 'CUDOSRLS_${Id}'
+        - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: LambdaFunction of python3.8.
+      Runtime: python3.9
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Ref CodeKey
+      Handler: 'create_rls.lambda_handler'
+      MemorySize: 2688
+      Timeout: 600
+      Role: 
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DestinationBucket
+          MANAGMENTROLENAME: !Ref ManagementAccountRole
+          MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
+          QS_REGION: !Ref AWS::Region
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}CUDOS-RLS-Role"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: "Assume-Management-Organization-Data-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource:
+                  "*"
+        - PolicyName: "Logs"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/CUDOS-RLS*"
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:ListBucket"
+                Resource: !Sub "arn:aws:s3:::${DestinationBucket}/*"
+              - Effect: "Allow"
+                Action:
+                  - "quicksight:ListUsers"
+                Resource: "*"
+  CloudWatchTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Scheduler
+      Name: !Sub
+        - 'Scheduler_ForCUDOSRLS_${Id}'
+        - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - CUDOSRLS
+              - Arn
+          Id: TriggerForCUDOSRLS
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CUDOSRLS.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt CloudWatchTrigger.Arn
+  LambdaAnalyticsRole: #Execution role for the custom resource
+    Type: AWS::IAM::Role
+    Properties:
+      Path:
+        Fn::Sub: /${RolePrefix}/
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  LambdaAnalytics:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      FunctionName: !Sub ${RolePrefix}DataCollectionLab-Analytics
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt LambdaAnalyticsRole.Arn
+      Timeout: 15
+      Environment:
+        Variables:
+          WA_ANALYTICS_ENDPOINT: https://okakvoavfg.execute-api.eu-west-1.amazonaws.com/
+      Code:
+        ZipFile: |
+          import os
+          import json
+          import uuid
+          import urllib3
+          import boto3
+          endpoint = os.environ['WA_ANALYTICS_ENDPOINT']
+          account_id = boto3.client("sts").get_caller_identity()["Account"]
+          def lambda_handler(event, context):
+              print(json.dumps(event))
+              try:
+                  if event['RequestType'].upper() not in ['CREATE', 'UPDATE', 'UPDATE']:
+                      raise Exception(f"Unknown RequestType {event['RequestType']}")
+                  action = event['RequestType'].upper()
+                  method = {'CREATE':'PUT', 'UPDATE': 'PATCH', 'DELETE': 'DELETE'}.get(action)
+                  via_key = {'CREATE':'created_via', 'UPDATE': 'updated_via', 'DELETE': 'deleted_via'}.get(action)
+                  payload = {'dashboard_id': 'cid/rls-org', 'account_id': account_id, via_key: 'CFN'}
+                  r =  urllib3.PoolManager().request(method, endpoint, body=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json'})
+                  if r.status != 200:
+                      raise Exception(f"There has been an issue logging action, server did not respond with a 200 response, actual status: {r.status}, response data {r.data.decode('utf-8')}. This issue will be ignored")
+                  res, reason = 'SUCCESS', 'success'
+              except Exception as exc:
+                  res, reason = 'SUCCESS', f"{exc} . This issue will be ignored"
+              body = {
+                  'Status': res,
+                  'Reason': reason,
+                  'PhysicalResourceId': event.get('PhysicalResourceId', str(uuid.uuid1())),
+                  'StackId': event.get('StackId'),
+                  'RequestId': event.get('RequestId'),
+                  'LogicalResourceId': event.get('LogicalResourceId'),
+                  'NoEcho': False,
+                  'Data':  {'Reason': reason},
+              }
+              json_body=json.dumps(body)
+              print(json_body)
+              url = event.get('ResponseURL')
+              if not url: return
+              try:
+                  response = urllib3.PoolManager().request('PUT', url, body=json_body, headers={'content-type' : '', 'content-length' : str(len(json_body))}, retries=False)
+                  print(f"Status code: {response}")
+              except Exception as exc:
+                  print("Failed sending PUT to CFN: " + str(exc))
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !GetAtt LambdaAnalytics.Arn

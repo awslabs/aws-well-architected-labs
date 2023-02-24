@@ -31,9 +31,6 @@ This query will provide daily unblended and usage information per linked account
 #### Pricing
 Please refer to the [AWS Config pricing page](https://aws.amazon.com/config/pricing/).
 
-#### Sample Output
-![Images/config.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/config.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/config.sql)
 
@@ -84,9 +81,6 @@ This query will provide monthly unblended and usage information per linked accou
 #### Pricing
 Please refer to the [CloudTrail pricing page](https://aws.amazon.com/cloudtrail/pricing/).
 
-#### Sample Output
-![Images/cloudtrail.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/cloudtrail.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/cloudtrail.sql)
 
@@ -132,9 +126,6 @@ Resource ID can also be included by uncommenting the appropriate lines in the qu
 
 #### Pricing
 Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/pricing/).
-
-#### Sample Output
-![Images/cloudwatch-spend.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/cloudwatch-spend.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/cloudwatch-spend.sql)
@@ -188,9 +179,6 @@ Please refer to the [CloudWatch pricing page](https://aws.amazon.com/cloudwatch/
 Amazon Web Services publishes our most up-to-the-minute information on our [Service Health Dashboard](https://status.aws.amazon.com/).  This dashboard is based on region and service.  While we try to notify you of ongoing problems that may be impactful to your workloads via your [Personal Health Dashboard](https://aws.amazon.com/premiumsupport/technology/personal-health-dashboard/) you may want to proactively check where you currently have service usage and cost that may be impacted by our event or another regional issue.
 
 This Regional Service Usage Mapping query transforms your billing data into a summarized view of your usage of AWS services by region and availability zone, providing your operations teams with the ability to respond quickly and accurately during impacting service events.
-
-#### Sample Output
-![Images/rsum.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/rsum.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/rsum.sql)
@@ -246,9 +234,6 @@ This query will return a the percentage of resources which are tagged by linked 
         AND column_name LIKE 'resource_tags%'
 ```
 
-
-#### Sample Output
-![Images/tag_coverage.png](/Cost/300_CUR_Queries/Images/Management_&_Governance/tag_coverage.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Management_&_Governance/tag_coverage.sql)

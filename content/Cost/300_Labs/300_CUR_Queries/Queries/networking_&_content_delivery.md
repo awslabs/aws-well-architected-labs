@@ -40,9 +40,6 @@ This query provides daily unblended cost and usage information about Amazon API 
 #### Pricing
 Please refer to the [Amazon API Gateway pricing page](https://aws.amazon.com/api-gateway/pricing/) for more details.
 
-#### Sample Output
-![Images/apigateway.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/apigateway.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/apigateway.sql)
 
@@ -93,9 +90,6 @@ This query provides daily unblended cost and usage information about Amazon Clou
 #### Pricing
 Please refer to the [Amazon CloudFront pricing page](https://aws.amazon.com/cloudfront/pricing/) for more details.
 
-#### Sample Output
-![Images/cloudfront.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/cloudfront.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/cloudfront.sql)
 
@@ -141,9 +135,6 @@ This query provides daily unblended cost and usage information about Data Transf
 #### Pricing
 Please refer to each individual service pricing page for more details on how data transfer charges are handled for that service.
 
-#### Sample Output
-![Images/data-transfer.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer.sql)
 
@@ -164,7 +155,6 @@ Please refer to each individual service pricing page for more details on how dat
     WHERE 
       ${date_filter}
       AND product_product_family = 'Data Transfer'
-      AND line_item_line_item_type = 'Usage'
       AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
     GROUP BY 
       line_item_product_code,
@@ -191,9 +181,6 @@ This query provides monthly unblended cost and usage information about Data Tran
 
 #### Pricing
 Please refer to each individual service pricing page for more details on how data transfer charges are handled for that service.
-
-#### Sample Output
-![Images/data-transfer-regional.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer-regional.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer-regional.sql)
@@ -242,9 +229,6 @@ This query provides monthly unblended cost and usage information about Data Tran
 #### Pricing
 Please refer to the [Amazon MSK pricing page](https://aws.amazon.com/msk/pricing/) for more details.
 
-#### Sample Output:
-![Images/data-transfer-msk.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/data-transfer-msk.png)
-
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/data-transfer-msk.sql)
 
@@ -289,9 +273,6 @@ The query will output AWS Direct Connect charges split by Direct Connect port ch
 
 #### Pricing
 Please refer to the [AWS Direct Connect pricing page](https://aws.amazon.com/directconnect/pricing/) for more details.
-
-#### Sample Output:
-![Images/direct-connect.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/direct-connect.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/direct-connect.sql)
@@ -351,9 +332,6 @@ This query provides monthly unblended cost and usage information about NAT Gatew
 #### Pricing
 Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for more details.
 
-#### Sample Output:
-![Images/natgatewaywrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgatewaywrid.png)
-
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/natgatewaywrid.sql)
 
@@ -399,9 +377,6 @@ This query shows cost and usage of NAT Gateways which didn't receive any traffic
 
 #### Pricing
 Please refer to the [VPC pricing page](https://aws.amazon.com/vpc/pricing/) for more details.
-
-#### Sample Output:
-![Images/natgateway_idle_wrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/natgateway_idle_wrid.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/nat-gateway-idle.sql)
@@ -466,9 +441,6 @@ This query provides monthly unblended cost and usage information about AWS Trans
 #### Pricing
 Please refer to the [TGW pricing page](https://aws.amazon.com/transit-gateway/pricing/) for more details.
 
-#### Sample Output:
-![Images/tgwwrid.sql](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/tgwwrid.png)
-
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/tgwwrid.sql)
 
@@ -526,9 +498,6 @@ This query provides daily unblended cost and usage information about AWS Network
 #### Pricing
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
-#### Sample Output
-![Images/networkusagewrid.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/networkusagewrid.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/networkusagewrid.sql)
 
@@ -583,9 +552,6 @@ This query shows cost and usage of inbalance inter-az data transfer last month. 
 #### Pricing
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
-#### Sample Output
-![Images/imbalance-inter-az-transfer.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/imbalance-inter-az-transfer.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/imbalance-interaz-transfer.sql)
 
@@ -623,9 +589,6 @@ This query shows cost and usage of Interface Endpoints which did not receive sig
 #### Pricing
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
 
-#### Sample Output
-![Images/interface-endpoints-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/interface-endpoints-idle.png)
-
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/interface-endpoint-idle.sql)
 
@@ -661,9 +624,6 @@ This query shows cost and usage of Network Firewall Endpoints which did not rece
 
 #### Pricing
 The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting with cost estimates for data transfer costs.  To aid in Cost Analysis we highly recommend implementing the [Data Transfer Cost Analysis Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/3_create_data_transfer_cost_analysis/).
-
-#### Sample Output
-![Images/network-firewalls-idle.png](/Cost/300_CUR_Queries/Images/Networking_&_Content_Delivery/network-firewalls-idle.png)
 
 #### Download SQL File
 [Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/network-firewall-idle.sql)

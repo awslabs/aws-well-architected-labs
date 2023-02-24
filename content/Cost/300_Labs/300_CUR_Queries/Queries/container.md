@@ -28,10 +28,6 @@ This query will output the daily cost and usage per resource, by operation and s
 #### Pricing
 Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing/) and the [Amazon EKS pricing page](https://aws.amazon.com/eks/pricing/).
 
-#### Sample Output
-*Sample output includes a subset of query columns*
-![Images/ecs_eks.png](/Cost/300_CUR_Queries/Images/Container/ecs_eks.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Container/ecs_eks.sql)
 
@@ -59,7 +55,7 @@ FROM
 WHERE 
   ${date_filter} 
   and line_item_product_code IN ('AmazonECS','AmazonEKS')
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanRecurringFee','SavingsPlanNegation','SavingsPlanUpfrontFee')
 GROUP BY 
   bill_payer_account_id,
   line_item_usage_account_id,
@@ -85,10 +81,6 @@ This query will output the daily ECS cost and usage per resource, by usage type 
 
 #### Pricing
 Please refer to the [Amazon ECS pricing page](https://aws.amazon.com/ecs/pricing/).
-
-#### Sample Output
-*Sample output includes a subset of query columns*
-![Images/ecs_hours_day.png](/Cost/300_CUR_Queries/Images/Container/ecs_hours_day.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Container/ecs_hours_day.sql)
@@ -134,7 +126,7 @@ WHERE
   AND line_item_product_code IN ('AmazonECS')
   AND line_item_operation != 'ECSTask-EC2'
   AND product_product_family != 'Data Transfer'
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee')
 GROUP BY 
   bill_payer_account_id,
   line_item_usage_account_id,

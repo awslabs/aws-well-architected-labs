@@ -1,0 +1,155 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves Inventory data for the chosen service
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to be created to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: trusted-advisor
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CodeBucket:
+    Type: String
+    Description: S3 Bucket that exists and holds code
+    Default: aws-well-architected-labs
+  CodeKey:
+    Type: String
+    Description: file name of ZipFile with data code
+    Default: Cost/Labs/300_Optimization_Data_Collection/ta.zip
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  GlueRoleARN:
+    Type: String
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
+Outputs:
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+  GlueCrawler:
+    Value:
+      Fn::Sub: "${CFDataName}Crawler"
+  SQSUrl:
+    Description: TaskQueue URL the account collector lambda
+    Value: !Ref TaskQueue
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: "*"
+        - PolicyName: !Sub "${CFDataName}-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource:
+                  !Ref DestinationBucketARN
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
+              - Effect: "Allow"
+                Action:
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:TrustedAdvisorModule-TaskQueue
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Code:
+         S3Bucket: !Ref CodeBucket
+         S3Key: !Ref CodeKey
+      Handler: 'main.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DestinationBucket
+          ROLENAME: !Ref MultiAccountRoleName
+          PREFIX: !Ref CFDataName
+          CRAWLER_NAME: !Ref Crawler
+          COSTONLY: "no"
+  Crawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'TrustedAdvisorModule-TaskQueue'
+  EventSourceMapping:
+    DependsOn:
+      - EventPermission
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

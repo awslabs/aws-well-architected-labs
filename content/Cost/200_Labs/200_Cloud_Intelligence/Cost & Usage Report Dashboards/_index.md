@@ -1,5 +1,5 @@
 ---
-title: "Cost & Usage Report Dashboards"
+title: "CUDOS, KPI and Cost Intelligence Dashboard"
 #menutitle: "Lab #2"
 date: 2022-10-10T11:16:08-04:00
 chapter: false
@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-October 2022
+November 2022
 
 
 ## Feedback
