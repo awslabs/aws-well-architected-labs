@@ -42,6 +42,7 @@ Parameters:
   CreateCUR:
     Type: String
     Description: Whenever or not create Local CUR. Put it to False on Destination only if the management (payer) account of Destiation is used as CUR Source.
+    Description: Whether to create a local CUR in the destination account or not. Set this to false in the Destination account only if the management (payer) account of the the Destination is used as the CUR source.
     AllowedValues:
       - "True"
       - "False"
