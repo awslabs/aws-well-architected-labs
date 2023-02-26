@@ -36,11 +36,9 @@ apply in.
 3. At the top of the page, choose **Create cost category**.
  ![Section4 CreateCostCategories](/Cost/200_Cost_Category/Images/section4/createCostCategory.png)
 
-   Note: For current lab purpose we will create two cost categories for
-   simplification and better understanding of the service. However you
-   can also create complex cost categories by following
-   <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/create-cost-categories.html>
-   documentation.
+   Note: For current lab purposes, we will create two cost categories for
+   simplification and better understanding of the service. Refer [here](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/create-cost-categories.html) if you
+   want to create complex cost categories.
 
 4. Under **Cost category details**, enter the name of your cost
    category as **cost by team**. Your cost category name must be unique
@@ -61,12 +59,15 @@ apply in.
    enter the name of your cost category as **cost by department** and click **Next**.
  ![Section4 NameCostCategoryDept](/Cost/200_Cost_Category/Images/section4/nameCostCategoryDept.png)
 
-8. In **Define category rules**, Under **New category rule** choose **Inherited value** as **Rule type**, choose **Cost Allocation Tag** as **Dimension** and **Department** as **Tag Key**,
-   click on **Add rule** and choose **Inherited value** as **Rule type**, choose **Cost Allocation Tag** as **Dimension** and **CostCentre** as **Tag Key**. click **Next**.
+8. In Define category rules, select **Inherited value** as Rule type, choose **Cost Allocation Tag** as Dimension and **Department** as Tag key,
+   click on **Add rule** and select **Inherited value** as Rule type, choose **Cost Allocation Tag** as Dimension and **CostCentre** as Tag key. click on **Next**.
    ![Section4 DefineCostCategoriesRuleDept](/Cost/200_Cost_Category/Images/section4/defineCategoryRulesDept.png)
 
-9. Skip **Define split charges** for this lab. Choose **Create cost category**.
+9. Skip **Define split charges** for this lab. Click on **Create cost category**.
  ![Section4 DefineSplitCharges](/Cost/200_Cost_Category/Images/section4/defineSplitCharges.png)
+
+10. The status will be shown as **Processing** as follows and wait until it is shown as **Applied** before you start the next lab:
+ ![Section4 CostCategoriesResults](/Cost/200_Cost_Category/Images/section4/costCategoriesResults.png)
 
 {{% notice note %}}
 **Note** - After you create or edit a cost category, it can take up to 24 hours before it has categorized your cost and usage information in the AWS Cost and Usage Report, Cost Explorer, and other cost management products.

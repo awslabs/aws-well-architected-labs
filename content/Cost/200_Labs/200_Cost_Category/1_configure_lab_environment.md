@@ -6,9 +6,10 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 ## Overview
-Any Company (a fictional Enterprise organization) is running different projects on AWS cloud in **us-east-1** region, which various departments in the organization own for their respective teams. For example, the **Digital** department has implemented two critical 2-tier web applications **Project1** and **Project2** for two different teams called **Alpha** and **Beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
+Any Company (a fictitious Enterprise organization) is running various projects on the AWS cloud in the us-east-1 region, which are owned by various departments within the organization for their respective teams. For example, the **Digital** department has implemented two critical 2-tier web applications **Project1** and **Project2** for two different teams called **Alpha** and **Beta** under two different cost centres **CostCenter-1111** and **CostCenter-2222** respectively.
+  ![Section1 Architecture](/Cost/200_Cost_Category/Images/section1/Architecture.png)
 
-The CFO is highly concerned about the entire cost of cloud resources that is generated as part of the digital department and have asked the head of the digital department to share a consolidated cost report exclusive to the digital department including cost for each service that both Alpha and Beta teams are using for their respective projects. This is a very important task to be completed on a priority basis.
+The CFO is highly concerned about the entire cost of cloud resources that are generated as part of the digital department and has asked the head of the digital department to share a consolidated cost report exclusive to the digital department, including cost for each service that Alpha and Beta teams are using for their respective projects. A consolidated cost report will provide a centralized view of usage and costs, enable accurate chargeback, and allow for better forecasting. 
 
 The lab uses two CloudFormation templates for **Project1** and **Project2**, and
 will teach you the techniques to apply tags for cost categorization and
@@ -21,7 +22,7 @@ You can get both the CloudFormation templates used in this lab here - [Project1]
 If you need detailed instructions on how to deploy a **CloudFormation stack** from within the console, please follow this
 [guide.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)
 
-1. Log into the **Cost Optimization Member Account**, created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
+1. Log into the **Cost Optimization Member Account** created in [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}).
 
 2. Open the CloudFormation console at
     [https://console.aws.amazon.com/cloudformation](https://console.aws.amazon.com/cloudformation/)
@@ -41,7 +42,7 @@ If you need detailed instructions on how to deploy a **CloudFormation stack** fr
  ![Section1 StackOptions](/Cost/200_Cost_Category/Images/section1/configureStackOptionsTeamAlpha.png)
 
 6. Scroll down to the bottom of the **Review Alpha-Team-Resources**
-    page and acknowledge the IAM resources creation by selecting the check box. After reviewing click on **Submit** to run the stack. It
+    page and acknowledge the IAM resources creation by selecting the check box. After reviewing, click on **Submit** to run the stack. It
     may take 15 minutes to complete the baseline deployment.
  ![Section1 IAM](/Cost/200_Cost_Category/Images/section1/acknowledgeResourcesTeamAlpha.png)
 

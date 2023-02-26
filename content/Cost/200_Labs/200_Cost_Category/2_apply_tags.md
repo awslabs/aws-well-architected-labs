@@ -7,13 +7,12 @@ pre: "<b>2. </b>"
 ---
 ## Overview
 
-Tags are key and value pairs that act as metadata for organizing your AWS resources. With most AWS resources, you can add tags when you create the resource, whether it's an Amazon EC2 instance, an Amazon RDS, or other resources. However, you can also add or edit or delete tags to multiple supported resources at once using AWS Tag Editor. You can also search for the resources you want to add tag and then manage tags in your search results.
+Tags are key and value pairs that act as metadata for organizing your AWS resources. You can tag resources for all cost-accruing services in AWS. Tags can help you manage, identify, organize, search for, and filter resources. You can create tags to categorize resources by purpose, owner, environment, or other criteria. 
+You can also add or edit or delete tags to multiple supported resources at once using **AWS Tag Editor**. You can also search for the resources you want to add tag and then manage tags in your search results.
 
-For AWS tagging best practices, please follow the below link:
+Refer [here](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)for more information about AWS tagging best practices.
 
-<https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>
-
-For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag keys for the resources created for Project1 and Project2.
+For our lab we will use **CostCentre**, **ProjectName** and **TeamName** as tag keys for the resources created for Project1 and Project2.
 
 
 #### Console:
@@ -24,18 +23,17 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 2. In the navigation pane on the left, choose **Tag Editor** under Tagging.
  ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditor.png)
 
-3. Choose the AWS Regions in which you have deployed the resources. By
-    default, your current region is used. We have used **us-east-1** for the current
+3. Choose the AWS Regions in which you have deployed the resources. We have used **us-east-1** for the current
     lab. Choose **All supported resource types** in the **Resource types** section. Choose **Tag Key** as **Department** and **tag value** as
     **Digital** in **Tags** section. Then click on **Search resources** button.
  ![Section2 TagEditor](/Cost/200_Cost_Category/Images/section2/tagEditorFindResources.png)
 
-4. In the **Resource search results** enter **project1** in **filter resources** search box and hit **Enter** key. Select all the resources. Then click on **Manage tags of selected resources**.
+4. In the **Resource search results** enter **Project1** in **filter resources** search box and hit **Enter** key. Select all the resources. Then click on **Manage tags of selected resources**.
  ![Section2 ResourceProject1](/Cost/200_Cost_Category/Images/section2/resourceSearchResultProject1.png)
 
 5. In the **Edit tags of all selected resources**, add the below tags and click on **Review and apply tag changes**.
 
-   Note: Keep the **prepopulated** tag as is since we have deployed the resources
+   Note: Keep the prepopulated tag as is since we have deployed the resources
     through Cloud Formation template and AWS creates managed tags as
     part of the resource creation.
 
@@ -47,9 +45,9 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 6. Review Tag keys and Tag values and click on **Apply changes to all selected**.
  ![Section2 ApplyTagsProject1](/Cost/200_Cost_Category/Images/section2/applyTagChangesProject1.png)
 
-7. Repeat step-2 & step-3 for applying tags for **Project2**.
+7. Repeat step-2 and step-3 for applying tags for **Project2**.
 
-8. In the **Resource search results** enter **project2** in **filter resources** search box and hit **Enter** key. Select all the resources. Then click on **Manage tags of selected resources**.
+8. In the **Resource search results** enter **Project2** in **filter resources** search box and hit **Enter** key. Select all the resources. Then click on **Manage tags of selected resources**.
  ![Section2 ResourceProject2](/Cost/200_Cost_Category/Images/section2/resourceSearchResultProject2.png)
 
 9. In the **Edit tags of all selected resources**, modify the below tags and click on **Review and apply tag changes**:
@@ -59,7 +57,7 @@ For our lab we will use **CostCentre**, **ProjectName** and **TeamName** tag key
 - **Tag key: TeamName | Tag value: Beta**
  ![Section2 ManageTagsProject2](/Cost/200_Cost_Category/Images/section2/manageTagsProject2.png)
 
-10. Review Tag keys and Tag values and click on **Apply changes to all selected**".
+10. Review Tag keys and Tag values and click on **Apply changes to all selected**.
  ![Section2 ApplyTagsProject2](/Cost/200_Cost_Category/Images/section2/applyTagChangesProject2.png)
 
 11. You will be able to see the resources corresponding to the

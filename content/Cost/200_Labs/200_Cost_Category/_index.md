@@ -39,7 +39,7 @@ This hands-on lab will guide you through the steps to govern cost and usage of a
 We will require to login using administrator access for both the Management Account and Cost Optimization Member Account to complete this lab.
 
 {{% notice note %}}
-**Note** - We shall login with administrator permission to run AWS CloudFormation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
+**Note** - Login with administrator permission to run AWS CloudFormation template to create multiple resources. We are proceeding with broad permissions here. Best Practice is to reduce the permissions that you grant to work toward least privilege.
 {{% /notice %}}
 
 ## Costs

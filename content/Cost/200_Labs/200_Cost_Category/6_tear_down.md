@@ -78,7 +78,7 @@ anymore to save the cost.
 2. In the navigation pane on the left, choose **Reports**.
    ![Section6 NavigateReports](/Cost/200_Cost_Category/Images/section6/reportsFeature.png)
 
-3. Select three cost reports under **Reports** section by the names **cost report by teams**, **cost report by department** and **cost report by team alpha** & click on **Delete** to delete the reports.
+3. Select three cost reports under **Reports** section by the names **cost report by teams**, **cost report by department** and **cost report by team alpha**. Click on **Delete** to delete the reports.
  ![Section6 DeleteAlphaTeamStack](/Cost/200_Cost_Category/Images/section6/deleteCostReport.png)
 
 
