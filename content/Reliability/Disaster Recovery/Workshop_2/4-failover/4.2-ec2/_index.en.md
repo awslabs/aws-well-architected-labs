@@ -44,8 +44,8 @@ Copy and paste the below script as the **User data**, then click the **Launch in
 **User Data Script**:
 
 ```bash
-#!/bin/bash     
-sudo su ec2-user                        
+#!/bin/bash
+sudo su ec2-user
 export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | python -c "import json,sys; print json.loads(sys.stdin.read())['region']")
 export DATABASE=$(aws rds describe-db-clusters --region $AWS_DEFAULT_REGION --db-cluster-identifier pilot-secondary --query 'DBClusters[*].[Endpoint]' --output text)
 sudo bash -c "cat >/home/ec2-user/unishopcfg.sh" <<EOF

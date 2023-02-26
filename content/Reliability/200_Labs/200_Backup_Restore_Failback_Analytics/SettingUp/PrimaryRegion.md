@@ -21,6 +21,10 @@ Download the following files:
 * [tweetmaker.py](/Reliability/200_Backup_Restore_Failback_Analytics/Code/src/tweetmaker.py)
 * [compaction.py](/Reliability/200_Backup_Restore_Failback_Analytics/Code/glue/compaction.py)
 
+{{% notice note %}}
+Make sure that your browser does not change the file extensions of these files. The CloudFormation template should have a `.yaml` extension.
+{{% /notice %}}
+
 Let's review what's in these files.  You can open them in your favorite text editor to review in detail.  The CloudFormation script, `workload.yaml`, creates the analytics workload, including the S3 CRR policy.  The script accepts six groups of inputs, and we have provided sane default values for most of them.
 
 * VPC networking parameters.  The defaults will work for most of these arguments, and the driver script `create.sh` will prompt for the others.
