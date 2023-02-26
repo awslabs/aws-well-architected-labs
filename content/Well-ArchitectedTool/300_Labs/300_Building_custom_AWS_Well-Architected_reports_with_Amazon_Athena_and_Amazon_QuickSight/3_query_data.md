@@ -77,11 +77,11 @@ CROSS JOIN unnest(lens_summary) AS t(lens)
 CROSS JOIN unnest(lens.PillarReviewSummaries) AS tt(lens_pillar_summary)
 ```
 
-Previewing the newly created well_architected_workload_risk_view:
+Previewing the newly created well_architected_workload_lens_risk_view:
 
 ```
 SELECT *
-FROM "YOUR_DATABASE_NAME"."well_architected_workload_risk_view"
+FROM "YOUR_DATABASE_NAME"."well_architected_workload_lens_risk_view"
 LIMIT 4;
 ```
 

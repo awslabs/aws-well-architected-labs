@@ -533,8 +533,9 @@ Resources:
               END) fix,
             accountid,
             year,
-            month
-          FROM rds_metrics),
+            month,
+            CAST("concat"("year", '-', "month", '-01') AS date) "billing_period"
+          FROM rds_usage_data),
         rds_pricing AS (
           SELECT (CASE
                 WHEN (databaseengine LIKE 'Aurora%') THEN 'Aurora'
@@ -549,11 +550,11 @@ Resources:
             location,
             instancetype,
             (CASE
-                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal)
+                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal(18,2))
               END
             ) priceperunit,
             unit
-          FROM optimization_data.rds_pricing
+          FROM optimization_data.pricing_rds
           WHERE (((locationtype = 'AWS Region')AND (purchaseoption = ''))AND (productfamily = 'Database Instance'))),
         graviton_mapping AS (
           SELECT raw_data.dbinstanceidentifier,
@@ -633,7 +634,7 @@ Resources:
                             WHEN (CAST(raw_data.major AS integer) > 12) THEN 'Eligible'
                             WHEN (
                               (CAST(raw_data.major AS integer) = 12)
-                              AND (CAST(raw_data.minor AS integer) >= 3)
+                              AND (CAST(raw_data.minor AS integer) >= 4)
                             ) THEN 'Eligible' ELSE 'Ineligible'
                           END
                         ) ELSE 'Ineligible'
@@ -645,16 +646,17 @@ Resources:
             ) graviton_eligible,
             rds_graviton_mapping.graviton_instancetype,
             raw_data.region,
-            region_names.regionname,
+            pricing_region_names.regionname,
             raw_data.deploymentoption,
             raw_data.engineversion,
             raw_data.accountid,
             raw_data.year,
-            raw_data.month
+            raw_data.month, 
+            raw_data.billing_period
           FROM (
               (
                 raw_data
-                LEFT JOIN optimization_data.region_names ON (raw_data.region = region_names.region)
+                LEFT JOIN optimization_data.pricing_region_names ON (raw_data.region = pricing_region_names.region)
               )
               LEFT JOIN optimization_data.rds_graviton_mapping ON (
                 (

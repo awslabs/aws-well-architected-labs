@@ -25,7 +25,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Leadership
 The Cloud Intelligence Dashboards are managed by:
 - Yuriy Prykhodko, AWS Principal Technical Account Manager (founder)
-- Aaron Edell, Global Head of Business, Cloud Intelligence Dashboards (founder)
 - Iakov Gan, AWS Sr. Technical Account Manager
 
 ## Introduction

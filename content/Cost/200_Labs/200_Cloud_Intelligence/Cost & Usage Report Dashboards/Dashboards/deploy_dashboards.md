@@ -189,7 +189,7 @@ s3://<prefix>-<destination-accountid>-shared/
 
 Here we will deploy the CFN template but setting the CFN parameters for a Destination Account.
 
-1. Login to the Destination account in the region of your choice. I can be any account inside or outside your AWS Organization.
+1. Login to the Destination account in the region of your choice. It can be any account inside or outside your AWS Organization.
    
 2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**.
 
@@ -227,7 +227,7 @@ Here we will deploy the CFN template but setting the CFN parameters for a Destin
 
 3. Enter a **Stack name** for your template such as **CID-CUR-Replication**.
 
-4. Enter your **Desitnation** AWS Account ID as a parameter (Your Data Collection Account, where you will deploy dashboards).
+4. Enter your **Destination** AWS Account ID as a parameter (Your Data Collection Account, where you will deploy dashboards).
 
 6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 

@@ -12,7 +12,7 @@ pre: "<b>3. </b>"
     * Click on the **CloudFormationLab** stack
     * Click on the **Outputs** tab
     * For the Key **WebsiteURL** copy the value.  This is the URL of your test web service
-      * _Hint_: it will start with _`http://healt-alb`_ and end in _`<aws region>.elb.amazonaws.com`_
+      * _Hint_: it will end in _`<aws region>.elb.amazonaws.com`_
     
 
 1. Click the URL and it will bring up the website: 

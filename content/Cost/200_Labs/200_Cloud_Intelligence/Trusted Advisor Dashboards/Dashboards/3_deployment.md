@@ -7,7 +7,7 @@ pre: "<b>3. </b>"
 ---
 
 ## Deployment Options
-There are 2 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the Manual deployment
+There are 2 options to deploy the TAO Dashboard. If you are unsure what option to select, we recommend using the CloudFormation
 
 ### Option 1: CloudFormation Deployment
 If you already have CUDOS, Cost Intellegence Dashboard or KPI Dashboard installed via CloudFormation as described [here](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards/), you can update the Stack (default name Cloud-Intelligence-Dashboards) by setting **Deploy TAO Dashboard** to "yes" and updating the path of Data Collection S3 bucket (if different from default).
