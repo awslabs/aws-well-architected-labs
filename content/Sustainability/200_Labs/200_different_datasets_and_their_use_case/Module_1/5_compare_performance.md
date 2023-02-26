@@ -6,12 +6,12 @@ weight: 6
 pre: "<b>Step 5: </b>"
 ---
 
-Let’s recap what we have done until now. 
-1. We started uploading our CSV dataset to Amazon S3. 
-2. We defined a database on AWS Glue, configured a crawler to explore data in an Amazon S3 bucket, and created a table from it. 
-3. Then, we transformed the CSV file into Parquet.
+Let’s recap what you have done until now. 
+1. You started uploading our CSV dataset to Amazon S3. 
+2. You defined a database on AWS Glue, configured a crawler to explore data in an Amazon S3 bucket, and created a table from it. 
+3. Then, you transformed the CSV file into Parquet.
 
-Now that we have the same dataset both in CSV and Parquet formats, let's see the differences.
+Now that you have the same dataset both in CSV and Parquet formats, let's see the differences.
 
 #### 5. Compare storage and performance
 
@@ -20,18 +20,18 @@ Let’s compare now both objetcs, SaaS-Sales.csv and its Parquet transformation.
 
 ![Size](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_1_size.png) 
 
-We can see the different in size of both objects:
+You can see the different in size of both objects:
 - CSV dataset size: **1.6 MB**
 - Parquet dataset size: **613.3 KB**
 
-Here we are only using one dataset for test. However, this gives us an idea of the storage resources customers could save by using columnar format, reducing their infrastructure footprint. 
+Here you are only using one dataset for test. However, this gives us an idea of the storage resources customers could save by using columnar format, reducing their infrastructure footprint. 
 
 
 #### Query Performance
 
 Let's know compare how these two formats compare when performing querys to the data. 
 
-To do so we will use [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0).
+To do so you will use [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0).
 
 {{%notice info%}}
 [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0)a is an interactive analytics service that makes it easier to analyze data in Amazon Simple Storage Service (S3) using Python or standard SQL. Athena is serverless, so there is no infrastructure to set up or manage, and you can start analyzing data immediately. You don’t even need to load your data into Athena; it works directly with data stored in Amazon S3.
@@ -45,8 +45,8 @@ If a banner like the one below show on your Athena console, follow [this instruc
 
 **5.2.** [Athena uses the AWS Glue Data Catalog](https://docs.aws.amazon.com/athena/latest/ug/querying-glue-catalog.html) to store and retrieve table metadata for the Amazon S3 data in your Amazon Web Services account. The table metadata lets the Athena query engine know how to find, read, and process the data that you want to query. 
 - In the Athena Console, under **Data**, choose _AWSDataCatalog_ under **_Data Source_**
-- Choose the database we have been working with as **_database_**: `lab-module-1-databse`.
-- Under **Tables** you should be able to see listed both of the tables we created with our Glue Crawlers: the one corresponding to the CSV file and the one corresponding to the Parquet file. 
+- Choose the database you have been working with as **_database_**: `lab-module-1-databse`.
+- Under **Tables** you should be able to see listed both of the tables you created with our Glue Crawlers: the one corresponding to the CSV file and the one corresponding to the Parquet file. 
 
 ![Athena data](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_2_Athena.png)
 
@@ -57,7 +57,7 @@ Let's run a couple of example queries to see which of both datasets (CSV and Par
 
 ![Preview table](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_3_PreviewTable.png)
 
-Looking at the data we can see, as we mentioned at the beginning, this is a dataset listing customer orders. Let's run a test query where we want to obtain the orders in a specific `country`. 
+Looking at the data you can see, as you mentioned at the beginning, this is a dataset listing customer orders. Let's run a test query where you want to obtain the orders in a specific `country`. 
 
 **5.4.** **CSV data**: 
 
@@ -68,7 +68,7 @@ WHERE country = 'Spain';
 ```
 ![CSV Spain](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_5_csvSpain.png)
 
-- Take note of the **Query results**. In this case we get the information
+- Take note of the **Query results**. In this case you get the information
     - Run time: **566 ms**
     - Data scanned: **1.56 KMB**
 
@@ -80,13 +80,13 @@ WHERE country = 'Spain';
 ```
 ![CSV Parquet](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_6_parquetSpain.png)
 
-- Take note of the **Query results**. In this case we get the information
+- Take note of the **Query results**. In this case you get the information
     - Run time: **543 ms**
     - Data scanned: **629.15 KB**
 
 
 
-**5.6.** As we can see, when running the same query, Athena needs to scan significantly less data on the Parquet dataset than on the CSV dataset. This means, to query our Parquet dataset, we need **less resources**.  
+**5.6.** As you can see, when running the same query, Athena needs to scan significantly less data on the Parquet dataset than on the CSV dataset. This means, to query our Parquet dataset, you need **less resources**.  
 
 **5.7.** Try some other queries to see how it compares in both datasets, to keep testing this difference. 
 

@@ -8,7 +8,7 @@ pre: "<b>Step 2: </b>"
 
 #### 2. Create an IAM role to use during this lab.
 
-During this lab, we will use AWS Glue to scan our data stored in Amazon S3, to transform that data and to store it transformed on Amazon S3. We need a service role that will give AWS Glue the permissions to do so.
+During this lab, you will use AWS Glue to scan our data stored in Amazon S3, to transform that data and to store it transformed on Amazon S3. You need a service role that will give AWS Glue the permissions to do so.
 
 **2.1** On the AWS Console, navigate to AWS IAM or click [here](https://us-east-1.console.aws.amazon.com/iamv2/home#/home). 
 
@@ -54,7 +54,7 @@ On the _Filter policies by property or policy name and press enter_ field, write
 ![review role](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/7_8_review_role.png)
 ![review role](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/7_9_role_create.png)
 
-We will use this role int he next steps of the lab. Let's explore the dataset!
+You will use this role int he next steps of the lab. Let's explore the dataset!
 
 **Click on *Next Step* to continue to the next module.**
 

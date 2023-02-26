@@ -6,16 +6,16 @@ weight: 4
 pre: "<b>Step 3: </b>"
 ---
 
-In this step, we will create a [AWS Glue Crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) to scan our data.
+In this step, you will create a [AWS Glue Crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) to scan our data.
 
 #### 3. Discover your data
 
-In the following steps we will explore our **SaaS-sales.csv** dataset. As we just saw, our dataset is in **CSV format**.  
+In the following steps you will explore our **SaaS-sales.csv** dataset. As you just saw, our dataset is in **CSV format**.  
 
-To do so, we will use [AWS Glue](https://aws.amazon.com/glue/) and [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0). 
+To do so, you will use [AWS Glue](https://aws.amazon.com/glue/) and [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0). 
 
 {{% notice info %}}
-[AWS Glue](https://aws.amazon.com/glue/)is a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development. AWS Glue provides all of the capabilities needed for data integration so that you can start analyzing your data and putting it to use in minutes instead of months. We will use AWS Glue and setup a Crawler to scan our dataset to obtain its schema.
+[AWS Glue](https://aws.amazon.com/glue/)is a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development. AWS Glue provides all of the capabilities needed for data integration so that you can start analyzing your data and putting it to use in minutes instead of months. You will use AWS Glue and setup a Crawler to scan our dataset to obtain its schema.
 {{% /notice %}}
 {{% notice info %}}
 [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0)a is an interactive analytics service that makes it easier to analyze data in Amazon Simple Storage Service (S3) using Python or standard SQL. Athena is serverless, so there is no infrastructure to set up or manage, and you can start analyzing data immediately. You don’t even need to load your data into Athena; it works directly with data stored in Amazon S3.
@@ -23,9 +23,9 @@ To do so, we will use [AWS Glue](https://aws.amazon.com/glue/) and [Amazon Athen
 
 
 
-We will use AWS Glue Crawlers to scan our data and infer schema information integrating it into your AWS Glue Data Catalog. . An [AWS Glue crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) connects to a data store, progresses through a prioritized list of classifiers to extract the schema of your data and other statistics, and then populates the [Glue Data Catalog](https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html) with this metadata.
+You will use AWS Glue Crawlers to scan our data and infer schema information integrating it into your AWS Glue Data Catalog. . An [AWS Glue crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) connects to a data store, progresses through a prioritized list of classifiers to extract the schema of your data and other statistics, and then populates the [Glue Data Catalog](https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html) with this metadata.
 
-First, we will use Glue Crawlers to crawl the dataset so we can later on use the tables created by Glue Crawlers to query using Athena.
+First, you will use Glue Crawlers to crawl the dataset so you can later on use the tables created by Glue Crawlers to query using Athena.
 
 ##### Exercise
 
@@ -44,7 +44,7 @@ First, we will use Glue Crawlers to crawl the dataset so we can later on use the
 **.5.** Paste the S3 URI you copied earlier (ex: `s3://[YOUR_BUCKET]/csv/SaaS-Sales.csv`),click **Add an S3 data source** and click **Next**:
 ![Add Datasource](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/8_5_AddDatasource_2.png)
 
-**3.6.** From the drop down menu, select the IAM role we created at the beginnig of the lab: `AWSGlueRole-module-1-lab`. This role allows your crawler to scan the data on your bucket, and thus, the data under */csv/* folder. Click **Next**:
+**3.6.** From the drop down menu, select the IAM role you created at the beginnig of the lab: `AWSGlueRole-module-1-lab`. This role allows your crawler to scan the data on your bucket, and thus, the data under */csv/* folder. Click **Next**:
 ![IAM Role](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/8_6_IAMGlueRole.png)
 
 **3.7.** Click **Add databse**. This will open a new window to **Create a Glue database**.

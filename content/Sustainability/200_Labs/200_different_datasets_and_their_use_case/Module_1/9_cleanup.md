@@ -3,7 +3,7 @@ title: "Clean up"
 date: 2023-01-24T09:16:09-04:00
 chapter: false
 weight: 9
-pre: "<b>Step 8: </b>"
+pre: "<b>Step 9: </b>"
 ---
 
 In order to delete the resources deployed and created fot this lab:
@@ -15,7 +15,7 @@ In order to delete the resources deployed and created fot this lab:
     - The database you created
     - The crawlers you created
 
-3. Go to AWS Glue Jobs and delete the jobs we created during the lab 
+3. Go to AWS Glue Jobs and delete the jobs you created during the lab 
 
 4.  Go to [Amazon IAM and delete the role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_manage_delete.html) and permissions created at the beginning of the lab
 

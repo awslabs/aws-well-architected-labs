@@ -15,7 +15,7 @@ Columnar data formats like Parquet and ORC require less storage capacity compare
 
 (More info can be found in this [blog](https://aws.amazon.com/blogs/architecture/optimizing-your-aws-infrastructure-for-sustainability-part-ii-storage/))
 
-In this step, we will convert our dataset to a columnar format so we can compare the storage and query efficiency. To do so, we will use [AWS Glue Studio.](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html)
+In this step, you will convert our dataset to a columnar format so you can compare the storage and query efficiency. To do so, you will use [AWS Glue Studio.](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html)
 
 {{% notice info %}}
 [AWS Glue Studio](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html) is a new graphical interface that makes it easy to create, run, and monitor extract, transform, and load (ETL) jobs in AWS Glue. You can visually compose data transformation workflows and seamlessly run them on AWS Glue’s Apache Spark-based serverless ETL engine. You can inspect the schema and data results in each step of the job.
@@ -39,7 +39,7 @@ In this step, we will convert our dataset to a columnar format so we can compare
 
 * Under “S3 Target Location”, select “*Browse S3*” browse to the bucket you created for this lab and select it. 
 
-* In the textbox, append parquet/ to the S3 url. The path should look similar to`s3://[YOUR_BUCKET]/parquet/` - don’t forget the "**/**" at the end. The job will automatically create the folder (as it has the permissions, thanks to the IAM role we created).
+* In the textbox, append parquet/ to the S3 url. The path should look similar to`s3://[YOUR_BUCKET]/parquet/` - don’t forget the "**/**" at the end. The job will automatically create the folder (as it has the permissions, thanks to the IAM role you created).
 ![destination](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/9_5_destination.png)
 
 **4.6.** Finally, select the **Job details** tab at the top. 
@@ -68,14 +68,14 @@ In this step, we will convert our dataset to a columnar format so we can compare
 
 Congrats! You have converted your dataset from CSV to Parquet. 
 
-**4.11** Before jumping to the next section, we need to crawl the new dataset, so it's included in our Glue Data Catalog. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md) to create a new crawler to scan your new data:
+**4.11** Before jumping to the next section, you need to crawl the new dataset, so it's included in our Glue Data Catalog. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md) to create a new crawler to scan your new data:
 
 * Go to Services and type Glue. Click on AWS Glue or open the AWS console [here](https://eu-central-1.console.aws.amazon.com/glue/home?region=eu-central-1#/v2/home).On the Glue console click on Crawlers, on the left bar, select Crawlers.
 * Choose **Create Crawler**
 * Enter a **name** for your crawler (e.g. `crawler-module-1-parquet`) and click **Next**.
 * Click **Add data source**
 * Browse S3 to find the path to your Parquet object (ex: `s3://[YOUR_BUCKET]/parquet/`) and click **Add an S3 data source**. 
-* From the drop down menu, select the IAM role we created at the beginnig of the lab: `AWSGlueRole-module-1-lab`
+* From the drop down menu, select the IAM role you created at the beginnig of the lab: `AWSGlueRole-module-1-lab`
 * Click **Next**
 * On the target database, choose the database you created on **Step 2**,  `lab-module-1-databaseb`.
 * Click **Next**

@@ -6,11 +6,11 @@ weight: 7
 pre: "<b>Step 6: </b>"
 ---
 
-At the beginning of [Step 4](../4_convert_to_parquet/), we mentioned how columnar data formats like Parquet and ORC require less storage capacity compared to row-based formats like CSV and JSON.
+At the beginning of [Step 4](../4_convert_to_parquet/), you mentioned how columnar data formats like Parquet and ORC require less storage capacity compared to row-based formats like CSV and JSON.
 
-We saw how Parquet requires less storage capacity and allows for more efficient queries because of its columnar format. However, we haven't yet explored the posibility to partition the data to make queries even more efficient. 
+You saw how Parquet requires less storage capacity and allows for more efficient queries because of its columnar format. However, you haven't yet explored the posibility to partition the data to make queries even more efficient. 
 
-In this optional module, we will create a new Glue Job to transform our CSV file into partitionned Parquet, we will crawl the data and then compare the scanning of our 3 datasets: CSV, Parquet and partitionned Parquet.
+In this optional module, you will create a new Glue Job to transform our CSV file into partitionned Parquet, you will crawl the data and then compare the scanning of our 3 datasets: CSV, Parquet and partitionned Parquet.
 
 #### 6. Partitioned data
 
@@ -43,7 +43,7 @@ In this optional module, we will create a new Glue Job to transform our CSV file
 
 - Once your job has succeeded, you can go to your Amazon S3 bucket to check if your new Parquet file is stored there. 
 
-**6.2.** We need to crawl the new dataset. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md):
+**6.2.** You need to crawl the new dataset. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md):
 * Go to Services and type Glue. Click on AWS Glue or open the AWS console [here](https://eu-central-1.console.aws.amazon.com/glue/home?region=eu-central-1#/v2/home).On the Glue console click on Crawlers, on the left bar, select Crawlers.
 
 * Choose **Create Crawler**
@@ -54,7 +54,7 @@ In this optional module, we will create a new Glue Job to transform our CSV file
 
 * Browse S3 to find the path to your Parquet object (ex: `s3://[YOUR_BUCKET]/parquet_partitioned/`) and click **Add an S3 data source**. 
 
-* From the drop down menu, select the IAM role we created at the beginnig of the lab: `AWSGlueRole-module-1-lab`
+* From the drop down menu, select the IAM role you created at the beginnig of the lab: `AWSGlueRole-module-1-lab`
 
 * Click **Next**
 
@@ -70,7 +70,7 @@ In this optional module, we will create a new Glue Job to transform our CSV file
 
 **6.3.** Let's query our data in Athena. 
 
-Let's run a couple of simple queries to see the differences between the different formats. For example, let's imagine we want to know how our SaaS sales are in a specific country for certain industry:
+Let's run a couple of simple queries to see the differences between the different formats. For example, let's imagine you want to know how our SaaS sales are in a specific country for certain industry:
 
 **Query 1:** Querying to the table that points at the CSV dataset
 ```
@@ -98,14 +98,16 @@ WHERE country = 'Spain' and industry= 'Energy';
 
 
 ## Results
-As you can see, scanned data for the different queries changes significantly. For this lab, we have used small amount of data. But imagine the optimization of ressources we could obtain applying this to larges amounts of data across an organization. 
+As you can see, scanned data for the different queries changes significantly. 
 
 File format | Data scanned for the query 
 --- | --- 
 CSV| **1.56MB** 
 Parquet | **87.53 KB** 
-Parquet with partitions | **0.28 KB**
+Parquet with partitions | **0.28 KB** 
+
+As you can see, partitioning Parquet data results in a significantly higher query performance. For this lab, you have used small amount of data. Imagine the optimization of ressources organizations could reach by using a columnar format to query their data.
 
 **Click on *Next Step* to continue to the next module.**
 
-{{< prev_next_button link_prev_url="../5_compare_performance" link_next_url="../7_conclusion" />}}
+{{< prev_next_button link_prev_url="../5_compare_performance" link_next_url="../7_lifecycle_rules" />}}

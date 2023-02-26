@@ -5,7 +5,7 @@ chapter: false
 weight: 3
 pre: "<b>Step 1: </b>"
 ---
-Before starting we will create: 
+Before starting you will create: 
 - an Amazon S3 bucket to store the resources used and created in the lab
 - an IAM role to give AWS Glue permissions to access our bucket. 
 
@@ -19,7 +19,7 @@ Before starting we will create:
 
 - In the **Region** drop-down list select the same region where you want to deploy the lab. Make sure [AWS Glue](https://aws.amazon.com/es/glue/) is available in the region by checking [AWS Regional Services List](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/)). This module `eu-central-1 (Frankfurt)`.
 
-- The next section is **"Block Public Access settings for this bucket"**. We will be working with a private bucket so leave *__Block all public access__* checked.
+- The next section is **"Block Public Access settings for this bucket"**. You will be working with a private bucket so leave *__Block all public access__* checked.
 
 - You can leave the rest of the settings as default and click on the **Create bucket**. button.
   ![Bucket Details](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/2_BucketDetails.jpg)
@@ -43,16 +43,14 @@ Then click on the **Add Files** button to select your files for upload. Upload t
 
 **1.5.** When the upload is complete you should see "Upload succeeded". Click on *Close* to return to the bucket overview page.
 
-**1.6.** In your new bucket overview page, you already have information about the object uploaded. We can see:
+**1.6.** In your new bucket overview page, you already have information about the object uploaded. You can see:
 * The type of object: **.csv**
 * The Size in MB: **1.6MB**
 * The storage class: **Amazon S3 Standard**
 ![Object Details](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/6_2_ObjectProperties.png)
 
-**1.7.** Select the dataset and copy its S3 URI, we will use it later (ex: `s3://[YOUR_BUCKET_NAME]/csv/SaaS-Sales.csv`)
+**1.7.** Select the dataset and copy its S3 URI, you will use it later (ex: `s3://[YOUR_BUCKET_NAME]/csv/SaaS-Sales.csv`)
 ![Object URI](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/6_1_ObjectURI.png)
-
-
 
 
 **Click on *Next Step* to continue to the next module.**
