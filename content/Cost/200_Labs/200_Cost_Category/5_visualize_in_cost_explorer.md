@@ -44,10 +44,10 @@ For more information about controlling access for AWS Cost Explorer, see [AWS Co
     Click on **Save to report library** to view it later.
  ![Section5 VisualizeTeamsCosts](/Cost/200_Cost_Category/Images/section5/visualizeTeamsCosts.png)
 
-9. Give the name as **cost report by teams** and click on save report.
+9. Give the name as **cost report by teams** and click on save report. We have created a cost report to analyze costs at team level. 
  ![Section5 CreateTeamsReport](/Cost/200_Cost_Category/Images/section5/createTeamsReport.png)
 
-10. Repeat step-3 and step-4 for creating **cost by department** report.
+10. Now you will create another cost report at department level using AWS Cost Categories. Repeat step-3 and step-4 for creating **cost by department** report.
 
 11. Under **Group by**, select **Cost Category** as Dimension and **cost by department** as Cost category.
  ![Section5 GroupByCostCategoryDimensionByDept](/Cost/200_Cost_Category/Images/section5/groupByCostCategoryDimensionByDept.png)
@@ -62,10 +62,10 @@ For more information about controlling access for AWS Cost Explorer, see [AWS Co
     Click on **Save to report library** to view it later.
  ![Section5 VisualizeDeptCosts](/Cost/200_Cost_Category/Images/section5/visualizeDeptCosts.png)
 
-15. Give the name as **cost report by department** and click on **Save report**.
+15. Give the name as **cost report by department** and click on **Save report**. We have created a cost report to analyze costs at department level. 
  ![Section5 CreateDeptReport](/Cost/200_Cost_Category/Images/section5/createDeptReport.png)
 
-16. Repeat step-3 and step-4 for creating **cost by Service** report for team **Alpha**.
+16. Now you will create the last report at service the level to analyze which AWS services Alpha team is using. Repeat step-3 and step-4 for creating **cost by Service** report for team **Alpha**.
 
 17. Under **Group by**, select **Service** as Dimension.
  ![Section5 GroupByDimensionAsService](/Cost/200_Cost_Category/Images/section5/groupByDimensionAsService.png)
