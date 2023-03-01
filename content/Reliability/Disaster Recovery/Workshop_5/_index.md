@@ -38,7 +38,7 @@ Prior experience with the AWS Console and Linux command line are helpful but not
 
 #### Contributors
 
-* **Jesus Rodriguez**, Public Sector Partner Solutions Architect
+* **Jesus Rodriguez**, Partner Solutions Architect
 * **Simon Lovering**, Partner Solutions Architect
 * **Andrew Grischenko**, Partner Sales Solutions Architect
 
