@@ -10,7 +10,7 @@ If you are running this workshop as part of an instructor led workshop, please f
 
 #### I have completed Module 4 and didn't clean up resources
 
-If you have completed "Module 4: Hot Stand-By" and haven't cleaned up resources created by it - everything is set to go! Just continue to [Verify Websites](/reliability/disaster-recovery/workshop_5/3-verify-websites/) section of the lab now.
+If you have completed "Module 4: Hot Stand-By" and haven't cleaned up resources created by it - everything is set to go! Just continue to [S3 access](/reliability/disaster-recovery/workshop_5/1.1.1-s3-access/) section of the lab now.
 
 #### I didn't complete Module 4 in my own account OR have cleaned up its resources 
 

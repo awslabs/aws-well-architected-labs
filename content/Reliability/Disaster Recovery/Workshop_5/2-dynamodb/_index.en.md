@@ -37,4 +37,4 @@ When you create a [DynamoDB global table](https://aws.amazon.com/dynamodb/global
 Wait for the status to show **Active** before moving on to the next step. 
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-verify-websites/" />}}
+{{< prev_next_button link_prev_url="../1.1.1-s3-access/" link_next_url="../3-verify-websites/" />}}

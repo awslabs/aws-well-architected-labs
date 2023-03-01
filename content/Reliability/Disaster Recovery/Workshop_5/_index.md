@@ -6,6 +6,7 @@ chapter = false
 pre = ""
 +++
 
+
 In this module, you will extend the Hot Standby disaster recovery strategy, and centrally coordinate failover and readiness for our application. To learn more about how Amazon Route 53 Application Recovery Controller (Route 53 ARC) can help you build highly resilient applications, you can review this [blog](https://aws.amazon.com/blogs/networking-and-content-delivery/building-highly-resilient-applications-using-amazon-route-53-application-recovery-controller-part-1-single-region-stack/).
 
 Cells are instantiations of a service that are isolated from each other. To maximize resiliency, you should partition your application into isolated cells, so that when one cell fails, that failure can’t affect the other cells. Route 53 ARC's  features enable you to continually monitor your application’s ability to recover from failures, and to control application recovery across multiple AWS Regions, AZs, and on premises. Route 53 ARC’s capabilities make application recovery simpler and more reliable by eliminating manual steps required by traditional tools and processes.
@@ -28,6 +29,17 @@ We are also taking advantage of [Amazon Aurora Global Database](https://aws.amaz
 
 Prior experience with the AWS Console and Linux command line are helpful but not required.
 
+
 {{< img HotStandbyMRRARC.png >}}
+
+#### Author
+
+* **Richard Wilmot**, Senior Partner Solutions Architect
+
+#### Contributors
+
+* **Jesus Rodriguez**, Public Sector Partner Solutions Architect
+* **Simon Lovering**, Partner Solutions Architect
+* **Andrew Grischenko**, Partner Sales Solutions Architect
 
 {{< prev_next_button link_next_url="./1-prerequisites/" button_next_text="Start Lab" first_step="true" />}}
