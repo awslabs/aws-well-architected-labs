@@ -17,7 +17,7 @@ hidden: false
 July 2021
 
 ## Authors
-- Nathan Besh 1, Cost Lead Well-Architected
+- Nathan Besh, Cost Lead Well-Architected
 - Matt Berk, Sr. Technical Account Manager
 - Timur Tulyaganov, AWS Principal Technical Account Manager
 - Yuriy Prykhodko, AWS Sr. Technical Account Manager
