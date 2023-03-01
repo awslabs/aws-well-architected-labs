@@ -3,7 +3,7 @@ title: "Level 200: Pricing Model Analysis"
 #menutitle: "Lab #1"
 date: 2021-02-07T11:16:09-04:00
 chapter: false
-weight: 7
+weight: 8
 hidden: false
 ---
 ## Last Updated

@@ -3,7 +3,7 @@ title: "Level 200: Cost Visualization"
 #menutitle: "Lab #1"
 date: 2020-04-24T11:16:08-04:00
 chapter: false
-weight: 5
+weight: 6
 hidden: false
 ---
 ## Last Updated
