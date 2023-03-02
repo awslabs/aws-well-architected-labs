@@ -20,7 +20,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [AWS Marketplace](#aws-marketplace)
   * [Refund and Credit Detail](#refund-and-credit-detail)
   * [Reservation Savings](#reservation-savings)
-  * [Enterprise Discount Plan (EDP) Credits](#edp-credit)
+  * [Enterprise Discount Plan (EDP) Credits](#enterprise-discount-plan-credits)
   
 ### AWS Marketplace
 
@@ -167,8 +167,7 @@ ORDER BY
   split_line_item_usage_type;
   ```
 
-<a name="edp-credit"></a>
-### Enterprise Discount Plan (EDP) Credits
+### Enterprise Discount Plan Credits
 
 #### Query Description
 This query provides EDP credits grouped by month and year.  Default is for all EDP credits. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
