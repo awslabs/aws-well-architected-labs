@@ -20,6 +20,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [AWS Marketplace](#aws-marketplace)
   * [Refund and Credit Detail](#refund-and-credit-detail)
   * [Reservation Savings](#reservation-savings)
+  * [Enterprise Discount Plan (EDP) Credits](#edp-credit)
   
 ### AWS Marketplace
 
@@ -165,6 +166,34 @@ ORDER BY
   line_item_product_code,
   split_line_item_usage_type;
   ```
+
+<a name="edp-credit"></a>
+### Enterprise Discount Plan (EDP) Credits
+
+#### Query Description
+This query provides EDP credits grouped by month and year.  Default is for all EDP credits. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/EDPCredits.sql)
+
+#### Copy Query
+```tsql
+select 
+    month, 
+	year, 
+	SUM(line_item_unblended_cost) as monthly_cost
+FROM "customer_cur_data"."customer_all" 
+where line_item_line_item_type ='EdpDiscount'
+-- default is all EDP credits for the entire account for all time, add next line to filter
+-- and ${date_filter}
+group by 
+	1, --month
+	2 --year;
+```
+
+{{< email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="Enterprise Discount Plan (EDP) Credits" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
