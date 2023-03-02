@@ -62,7 +62,7 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 {{< img vw-9.png >}}
 
-3.8 Return to your primary region website. If you already have it open, refresh your browser window, otherwise follow steps above in **Primary Region** section. You should see the increased cart total in your primary region **N. Virginia (us-east-1)**.
+3.8 Return to your primary region website. If you already have it open, click on the Cart in the top menu to see the newly added items, otherwise follow steps above in **Primary Region** section. You should see the increased cart total in your primary region **N. Virginia (us-east-1)**.
 
 {{< img vw-10.png >}}
 
