@@ -14,7 +14,7 @@ You can improve resiliency and increase availability for specific scenarios by s
 
 {{< img cf-16.png >}}
 
-1.3 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. Virginia (us-east-1)** region.
+1.3 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. Virginia (us-east-1)** region. There are differences when choosing to host from a Standard Amazon S3 bucket versus an Amazon S3 bucket thats configured as a website endpoint. For more information see [Using various origins with CloudFront distributions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistS3AndCustomOrigins.html#using-s3-as-origin).
 
 {{< img cf-32.png >}}
 
