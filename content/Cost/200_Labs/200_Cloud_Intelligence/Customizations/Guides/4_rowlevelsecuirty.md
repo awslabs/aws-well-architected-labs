@@ -88,7 +88,7 @@ You can select different levels of access. Tag one of the following and the use 
 
 Using AWS CloudFormation we will deploy the lambda function to collect these tags. 
 
-1. Log into your account with CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/row-level-security/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
+1. Log into your account with your QuickSight Cloud Inteligence Dashboards also known as CID. Click [Launch CloudFormation template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/row-level-security/cudos_rls.yaml&stackName=CIDRowLevelSecurity) 
 
 ![Images/rls_cfn.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_cfn.png?classes=lab_picture_small)
 
