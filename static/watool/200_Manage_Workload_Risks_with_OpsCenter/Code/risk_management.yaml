@@ -74,10 +74,14 @@ Resources:
       AttributeDefinitions:
         - AttributeName: workload_id
           AttributeType: S
+        - AttributeName: question_id
+          AttributeType: S
       TableName: wa_workload_data
       KeySchema:
         - AttributeName: workload_id
           KeyType: HASH
+        - AttributeName: question_id
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
