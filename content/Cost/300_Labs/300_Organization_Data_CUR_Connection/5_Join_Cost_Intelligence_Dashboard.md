@@ -8,7 +8,7 @@ pre: "<b>5. </b>"
 
 ### Join with the Enterprise Cloud Intelligence Dashboards
 
-This section is **optional** and shows how you can add your AWS Organization Data to your **Cloud Intelligence Dashboards** - [Cloud_Intelligence_Dashboards]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}}).
+This section is **optional** and shows how you can add your AWS Organization Data to your - [Cloud_Intelligence_Dashboards]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}}).
 
 
 1. Login to your Data Collection Account account and go into the Athena console.
@@ -33,8 +33,8 @@ Also if you added tags to the organisation data ensure you add your custom tags 
             environment account_tag_environment,
             team as account_tag_team
         FROM
-		     --if organisation data resides in a different database than the CUR database please modify accordingly below
-        	 (database).organisation_data
+            --if organisation data resides in a different database than the CUR database please modify accordingly below
+            (database).organisation_data
 
 
 3. Navigate to the QuickSight console, select datasets, "Edit" and then "Save and Publish" all datasets one by one(this will also trigger a refresh).
