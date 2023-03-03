@@ -19,7 +19,6 @@ Make sure you replace the correct cur database and if your organisation data res
 
 Also if you added tags to the organisation data ensure you add your custom tags as well, in this example we have a team tag and an environment tag in the SQL query.
 
-        ```SQL
         CREATE OR REPLACE (database).account_map AS
         SELECT
             id account_id,
@@ -36,7 +35,6 @@ Also if you added tags to the organisation data ensure you add your custom tags 
         FROM
 		     --if organisation data resides in a different database than the CUR database please modify accordingly below
         	 (database).organisation_data
-        ```
 
 
 3. Navigate to the QuickSight console, select datasets, "Edit" and then "Save and Publish" all datasets one by one(this will also trigger a refresh).
