@@ -7,7 +7,7 @@ pre: "<b>Step 5: </b>"
 ---
 
 Let’s recap what you have done until now. 
-1. You started uploading our CSV dataset to Amazon S3. 
+1. You started uploading your CSV dataset to Amazon S3. 
 2. You defined a database on AWS Glue, configured a crawler to explore data in an Amazon S3 bucket, and created a table from it. 
 3. Then, you transformed the CSV file into Parquet.
 
@@ -16,7 +16,7 @@ Now that you have the same dataset both in CSV and Parquet formats, let's see th
 #### 5. Compare storage and performance
 
 #### Storage
-Let’s compare now both objetcs, SaaS-Sales.csv and its Parquet transformation. If you go to your Amazon S3 bucket, and explore both objects, you can notice the smaller size of our Parquet dataset compared to our CSV dataset.
+Let’s compare now both objetcs, SaaS-Sales.csv and its Parquet transformation. If you go to your Amazon S3 bucket, and explore both objects, you can notice the smaller size of your Parquet dataset compared to your CSV dataset.
 
 ![Size](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_1_size.png) 
 
@@ -46,13 +46,13 @@ If a banner like the one below show on your Athena console, follow [this instruc
 **5.2.** [Athena uses the AWS Glue Data Catalog](https://docs.aws.amazon.com/athena/latest/ug/querying-glue-catalog.html) to store and retrieve table metadata for the Amazon S3 data in your Amazon Web Services account. The table metadata lets the Athena query engine know how to find, read, and process the data that you want to query. 
 - In the Athena Console, under **Data**, choose _AWSDataCatalog_ under **_Data Source_**
 - Choose the database you have been working with as **_database_**: `lab-module-1-databse`.
-- Under **Tables** you should be able to see listed both of the tables you created with our Glue Crawlers: the one corresponding to the CSV file and the one corresponding to the Parquet file. 
+- Under **Tables** you should be able to see listed both of the tables you created with your Glue Crawlers: the one corresponding to the CSV file and the one corresponding to the Parquet file. 
 
 ![Athena data](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_2_Athena.png)
 
 Let's run a couple of example queries to see which of both datasets (CSV and Parquet) is more efficient to scan. 
 
-**5.3.** First, let's inspect our data. On the three dots on the right of each table's name, you can open a menu. Click on **Preview Table**. This will run a query to preview the first 10 rows of the dataset running automatically the following query:
+**5.3.** First, let's inspect your data. On the three dots on the right of each table's name, you can open a menu. Click on **Preview Table**. This will run a query to preview the first 10 rows of the dataset running automatically the following query:
 `SELECT * FROM "lab-module-1-database"."csv" limit 10;`
 
 ![Preview table](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/10_3_PreviewTable.png)
@@ -90,7 +90,8 @@ WHERE country = 'Spain';
 
 **5.7.** Try some other queries to see how it compares in both datasets, to keep testing this difference. 
 
-Let's compare the differences in the next section!
+
+
 
 **Click on *Next Step* to continue to the next module.**
 

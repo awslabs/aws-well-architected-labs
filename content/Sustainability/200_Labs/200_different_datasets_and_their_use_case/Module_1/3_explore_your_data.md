@@ -6,16 +6,16 @@ weight: 4
 pre: "<b>Step 3: </b>"
 ---
 
-In this step, you will create a [AWS Glue Crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) to scan our data.
+In this step, you will create a [AWS Glue Crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) to scan your data.
 
 #### 3. Discover your data
 
-In the following steps you will explore our **SaaS-sales.csv** dataset. As you just saw, our dataset is in **CSV format**.  
+In the following steps you will explore your **SaaS-sales.csv** dataset. As you just saw, your dataset is in **CSV format**.  
 
 To do so, you will use [AWS Glue](https://aws.amazon.com/glue/) and [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0). 
 
 {{% notice info %}}
-[AWS Glue](https://aws.amazon.com/glue/)is a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development. AWS Glue provides all of the capabilities needed for data integration so that you can start analyzing your data and putting it to use in minutes instead of months. You will use AWS Glue and setup a Crawler to scan our dataset to obtain its schema.
+[AWS Glue](https://aws.amazon.com/glue/)is a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development. AWS Glue provides all of the capabilities needed for data integration so that you can start analyzing your data and putting it to use in minutes instead of months. You will use AWS Glue and setup a Crawler to scan your dataset to obtain its schema.
 {{% /notice %}}
 {{% notice info %}}
 [Amazon Athena](https://aws.amazon.com/athena/?nc=sn&loc=0)a is an interactive analytics service that makes it easier to analyze data in Amazon Simple Storage Service (S3) using Python or standard SQL. Athena is serverless, so there is no infrastructure to set up or manage, and you can start analyzing data immediately. You don’t even need to load your data into Athena; it works directly with data stored in Amazon S3.
@@ -23,7 +23,7 @@ To do so, you will use [AWS Glue](https://aws.amazon.com/glue/) and [Amazon Athe
 
 
 
-You will use AWS Glue Crawlers to scan our data and infer schema information integrating it into your AWS Glue Data Catalog. . An [AWS Glue crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) connects to a data store, progresses through a prioritized list of classifiers to extract the schema of your data and other statistics, and then populates the [Glue Data Catalog](https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html) with this metadata.
+You will use AWS Glue Crawlers to scan your data and infer schema information integrating it into your AWS Glue Data Catalog. . An [AWS Glue crawler](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) connects to a data store, progresses through a prioritized list of classifiers to extract the schema of your data and other statistics, and then populates the [Glue Data Catalog](https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html) with this metadata.
 
 First, you will use Glue Crawlers to crawl the dataset so you can later on use the tables created by Glue Crawlers to query using Athena.
 
@@ -61,7 +61,7 @@ First, you will use Glue Crawlers to crawl the dataset so you can later on use t
 **3.9.** Wait for the crawler to finish crawling your dataset stored on Amazon S3. Once it’s finished, you should be able to see a new table on Glue Data Catalog, under the database you created `database-module-1-lab`. 
 ![table](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/8_9_database.png)
 
-Clicking on your new table name you can see details about our dataset including location (the S3 bucket where it’s stored) and its schema.
+Clicking on your new table name you can see details about your dataset including location (the S3 bucket where it’s stored) and its schema.
 ![table details](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/8_9_table_details.png)
 
 Let's convert this dataset to Parquet and check the differences. 

@@ -15,9 +15,9 @@ hidden: false
 
 This lab focuses on optimizing [data patterns for sustainability](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/data-patterns.html) to reduce the provisioned storage required to support your workload, and the resources required to use it. 
 
-In this lab you will find different independent module. Each of them will analyse a different dataset, with a different use case where data is used to achieve different business goals.
+In this lab you will find different independent modules. In each of them you will analyse a different dataset, with a different use case where data is used to achieve different business goals.
 
-From a sustainability perspective, you will learn how to trade off those needs with the best approach for *distribution*, *retention*, and *deletion* of your data, to **efficiently use your resources**.
+From a sustainability perspective, you will learn how to trade off those needs with the best approach for *availability*, *retention*, and *deletion* of your data, to **efficiently use your resources**.
 
 {{% notice note %}}
 **NOTE:** Each module is independent. You don't need to follow any order. 
@@ -27,18 +27,18 @@ One of the best practices from the Well Architected Framework Sustainability Pil
 
  *"Define and update Service Level Agreements (SLAs) such as availability or data retention periods to minimize the number of resources required to support your workload while continuing to meet business requirements"*.
 
- To define our SLAs aligned with our sustainability goals, we need to think about:
-* What are our business objectives?
-* How long do we need to store this dataset?
+ To define your SLAs aligned with your sustainability goals, you need to think about:
+* What are your business objectives?
+* How long do you need to store this dataset?
 * Is this data easy to reproduce?
 
-Thus, in these series of Modules, we cover topics such as:
+Thus, in these series of Modules, you will cover topics such as:
 
-* Metrics to monitor to understand data access patterns and usage
-* How to leverage Amazon S3 Storage tiers for sustainability according to those patterns
+* Exploring metrics to monitor to understand data access patterns and usage
+* Leveraging Amazon S3 Storage tiers for sustainability according to those patterns
 * Choosing the best data format
-* Identify and manage unused storage resources
-* Deduplicate data
+* Identifying and managing unused storage resources
+* Deduplicating data
 
 
 ## Goals

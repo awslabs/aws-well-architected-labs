@@ -7,10 +7,11 @@ weight: 1
 hidden: false
 ---
 
-In this module, you are going to answer this questions for a static CSV dataset. We will:
+In this module you will:
 * Learn how to transform a CSV file to a partitioned Parquet file
 * Compare the efficiency of columnar formats (Parquet) compared to plain text format (CSV)
 * Explore Amazon S3 Lifecycle rules 
+
 
 ### Introduction
 
@@ -20,14 +21,19 @@ In this module, you will be working with the dataset SaaS-Sales.cvs provided [he
 
 This dataset represents sales data from a small fictitious SaaS (Software as a Service) company that sells sales and marketing software to other businesses (B2B). Each row of data is one transaction/order. 
 
-You will imagine that you work on the BI business unit of the SaaS company and that our goal is to perform queries to our SaaS-Sales dataset to build monthly reports. Every month, the data team shares with us a new dataset with new data. Thus, each month, you use a new dataset to build the report and you don't need the previous ones.
+Let's imagine that you work on the BI business unit of the SaaS company and that our goal is to perform queries to our SaaS-Sales dataset to build monthly reports. Every month, the data team shares with us a new dataset with new data. Thus, each month, you use a new dataset to build the report and you don't need the previous ones.
 
 The company has a focus on sustainability and wants us to optimize our resource usage.
 
 **Business goals**
-From the context, you understand that you want to query this dataset and that, after a month, you no longer need it. To optimize our resources you need to:
-- Choose a format that makes our dataset more efficient to query
-- Make sure that you are not storing data you do not need to minimize our storage resources
+From the context, you understand that:
+- The use case for this dataset is to be queried
+- You need to keep your data for at least a month
+
+**Sustainability goals**
+To optimize our resources you need to make use and store this data, you need to think about:
+- Choosing a format that makes your dataset more efficient to query
+- Making sure that you are not storing data you do not need to minimize our storage resources
 
 **Exercise**
 

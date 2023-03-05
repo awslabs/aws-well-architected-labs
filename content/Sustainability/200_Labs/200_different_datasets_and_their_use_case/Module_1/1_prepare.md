@@ -5,6 +5,7 @@ chapter: false
 weight: 3
 pre: "<b>Step 1: </b>"
 ---
+
 Before starting you will create: 
 - an Amazon S3 bucket to store the resources used and created in the lab
 - an IAM role to give AWS Glue permissions to access our bucket. 

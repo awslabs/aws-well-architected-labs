@@ -15,7 +15,7 @@ Columnar data formats like Parquet and ORC require less storage capacity compare
 
 (More info can be found in this [blog](https://aws.amazon.com/blogs/architecture/optimizing-your-aws-infrastructure-for-sustainability-part-ii-storage/))
 
-In this step, you will convert our dataset to a columnar format so you can compare the storage and query efficiency. To do so, you will use [AWS Glue Studio.](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html)
+In this step, you will convert your dataset to a columnar format so you can compare the storage and query efficiency. To do so, you will use [AWS Glue Studio.](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html)
 
 {{% notice info %}}
 [AWS Glue Studio](https://docs.aws.amazon.com/glue/latest/ug/what-is-glue-studio.html) is a new graphical interface that makes it easy to create, run, and monitor extract, transform, and load (ETL) jobs in AWS Glue. You can visually compose data transformation workflows and seamlessly run them on AWS Glue’s Apache Spark-based serverless ETL engine. You can inspect the schema and data results in each step of the job.
@@ -68,7 +68,7 @@ In this step, you will convert our dataset to a columnar format so you can compa
 
 Congrats! You have converted your dataset from CSV to Parquet. 
 
-**4.11** Before jumping to the next section, you need to crawl the new dataset, so it's included in our Glue Data Catalog. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md) to create a new crawler to scan your new data:
+**4.11** Before jumping to the next section, you need to crawl the new dataset, so it's included in your Glue Data Catalog. Repeat steps followed in [Section 2](../Module_1/3_explore_your_data.md) to create a new crawler to scan your new data:
 
 * Go to Services and type Glue. Click on AWS Glue or open the AWS console [here](https://eu-central-1.console.aws.amazon.com/glue/home?region=eu-central-1#/v2/home).On the Glue console click on Crawlers, on the left bar, select Crawlers.
 * Choose **Create Crawler**

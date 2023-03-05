@@ -35,7 +35,7 @@ During this lab, you will use AWS Glue to scan our data stored in Amazon S3, to 
     ]
 }
 ```
-This policy allows the principal it is attach to to get and put objects on your newly created Amazon S3 bucket. Click **Next: Tags**, and **Next: Review**. Give your policy a name such as: `module-1-s3-policy` and enter a description `Read and write on asl-aws-module-1-lab bucket`. Click on **Create policy**.
+This policy allows the principal it is attach to get and put objects on your newly created Amazon S3 bucket. Click **Next: Tags**, and **Next: Review**. Give your policy a name such as: `module-1-s3-policy` and enter a description `Read and write on asl-aws-module-1-lab bucket`. Click on **Create policy**.
 
 ![Policy review](/Sustainability/200_different_datasets_and_their_use_case/Module_1/Images/7_3_review_policy.png)
 
