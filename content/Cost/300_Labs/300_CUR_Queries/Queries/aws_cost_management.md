@@ -20,7 +20,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [AWS Marketplace](#aws-marketplace)
   * [Refund and Credit Detail](#refund-and-credit-detail)
   * [Reservation Savings](#reservation-savings)
-  * [Enterprise Discount Plan (EDP) Credits](#enterprise-discount-plan-credits)
+  * [Migration Acceleration Program (MAP) Credits](#migration-acceleration-program-credits)
   
 ### AWS Marketplace
 
@@ -167,27 +167,30 @@ ORDER BY
   split_line_item_usage_type;
   ```
 
-### Enterprise Discount Plan Credits
+### Migration Acceleration Program Credits
 
 #### Query Description
-This query provides EDP credits grouped by month and year.  Default is for all EDP credits. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
+This query provides all rewarded MAP credits grouped by month, year, product credit source and account id.  Default is for all time. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
 
 #### Download SQL File
-[Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/EDPCredits.sql)
+[Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/MAPCredits.sql)
 
 #### Copy Query
 ```tsql
-select 
-    month, 
-	year, 
-	SUM(line_item_unblended_cost) as monthly_cost
-FROM "customer_cur_data"."customer_all" 
-where line_item_line_item_type ='EdpDiscount'
--- default is all EDP credits for the entire account for all time, add next line to filter
+select
+  month,
+  year,
+  line_item_line_item_type,
+  line_item_line_item_description,
+  line_item_usage_account_id,
+  sum(line_item_unblended_cost) cost
+from customer_all
+where
+  line_item_line_item_type in ('Refund','Credit') and
+  line_item_line_item_description like '%MPE%'
+-- default is all MAP credits for the entire account for all time, add next line to filter
 -- and ${date_filter}
-group by 
-	1, --month
-	2 --year;
+group by 1,2,3,4,5;
 ```
 
 {{< email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="Enterprise Discount Plan (EDP) Credits" button_text="Help & Feedback" >}}
