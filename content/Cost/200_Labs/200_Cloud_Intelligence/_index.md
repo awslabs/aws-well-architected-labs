@@ -3,7 +3,7 @@ title: "Level 200: Cloud Intelligence Dashboards"
 #menutitle: "CID Lab"
 date: 2020-10-10T11:16:08-04:00
 chapter: false
-weight: 8
+weight: 9
 hidden: false
 ---
 ## Last Updated
@@ -25,7 +25,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Leadership
 The Cloud Intelligence Dashboards are managed by:
 - Yuriy Prykhodko, AWS Principal Technical Account Manager (founder)
-- Aaron Edell, Global Head of Business, Cloud Intelligence Dashboards (founder)
 - Iakov Gan, AWS Sr. Technical Account Manager
 
 ## Introduction

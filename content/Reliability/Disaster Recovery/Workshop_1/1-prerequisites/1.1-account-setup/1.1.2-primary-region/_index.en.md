@@ -28,4 +28,4 @@ weight = 2
 
 {{< img pr-5.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.1-s3-access" link_next_url="../1.1.3-secondary-region" />}}
+{{< prev_next_button link_prev_url="../1.1.1-s3-access/" link_next_url="../1.1.3-secondary-region/" />}}

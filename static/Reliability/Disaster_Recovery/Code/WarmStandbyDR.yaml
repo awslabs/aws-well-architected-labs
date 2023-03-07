@@ -233,7 +233,7 @@ Resources:
       Port: 3306
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
-      EngineVersion: 5.7.mysql_aurora.2.09.2
+      EngineVersion: 5.7.mysql_aurora.2.11.1
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
@@ -249,7 +249,7 @@ Resources:
       DBClusterIdentifier: !Sub 'warm-secondary'
       DBClusterParameterGroupName: default.aurora-mysql5.7
       Engine: aurora-mysql
-      EngineVersion: 5.7.mysql_aurora.2.09.2
+      EngineVersion: 5.7.mysql_aurora.2.11.1
       VpcSecurityGroupIds:
          - !Ref DBSecurityGroup
       DBSubnetGroupName: !Ref DBSubnetGroup

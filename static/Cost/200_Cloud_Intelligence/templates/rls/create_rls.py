@@ -5,20 +5,20 @@ from os import environ as os_environ
 from sys import exit
 from botocore.client import Config
 
-OWNER_TAG = os_environ['CUDOS_OWNER_TAG'] if 'CUDOS_OWNER_TAG' in os_environ else 'cudos_users'
+OWNER_TAG = os_environ['CID_OWNER_TAG'] if 'CID_OWNER_TAG' in os_environ else 'cid_users'
 BUCKET_NAME = os_environ['BUCKET_NAME'] if 'BUCKET_NAME' in os_environ else exit(
     "Missing bucket for uploading CSV. Please define bucket as ENV VAR BUCKET_NAME")
-TMP_RLS_FILE = os_environ['TMP_RLS_FILE'] if 'TMP_RLS_FILE' in os_environ else '/tmp/cudos_rls.csv'
+TMP_RLS_FILE = os_environ['TMP_RLS_FILE'] if 'TMP_RLS_FILE' in os_environ else '/tmp/cid_rls.csv'
 RLS_HEADER = ['UserName', 'account_id', 'payer_account_id']
 QS_ACCOUNT_ID = boto3.client('sts').get_caller_identity().get('Account')
-QS_REGION = os_environ['QS_REGION']
+QS_REGION = os_environ['QS_REGION'] if 'QS_REGION' in os_environ else exit("Missing QS_REGION var name, please define")
 MANAGEMENT_ACCOUNT_IDS = os_environ['MANAGEMENT_ACCOUNT_IDS'] if 'MANAGEMENT_ACCOUNT_IDS' in os_environ else QS_ACCOUNT_ID
-MANAGMENTROLENAME = os_environ['MANAGMENTROLENAME'] if 'MANAGMENTROLENAME' in os_environ else exit(
-    "Missing MANAGEMENT ROLE NAME. Please define bucket as ENV VAR MANAGMENTROLENAME")
+MANAGEMENTROLENAME = os_environ['MANAGEMENTROLENAME'] if 'MANAGEMENTROLENAME' in os_environ else exit(
+    "Missing MANAGEMENT ROLE NAME. Please define bucket as ENV VAR MANAGEMENTROLENAME")
 
 
 def assume_management(payer_id, region):
-    role_name = os_environ["MANAGMENTROLENAME"]
+    role_name = os_environ["MANAGEMENTROLENAME"]
     management_role_arn = f"arn:aws:iam::{payer_id}:role/{role_name}"
     sts_connection = boto3.client('sts')
     acct_b = sts_connection.assume_role(
@@ -61,7 +61,7 @@ def get_ou_children(ou, org_client):
     NextToken = True
     ous_list = []
     while NextToken:
-        if NextToken is str:
+        if type(NextToken) is str:
             list_ous_result = org_client.list_organizational_units_for_parent(ParentId=ou, MaxResults=20, NextToken=NextToken)
         else:
             list_ous_result = org_client.list_organizational_units_for_parent(ParentId=ou, MaxResults=20)
@@ -80,7 +80,7 @@ def get_ou_accounts(org_client, ou, accounts_list=None, process_ou_children=True
     if accounts_list is None:
         accounts_list = []
     while NextToken:
-        if NextToken is str:
+        if type(NextToken) is str:
             list_accounts_result = org_client.list_accounts_for_parent(ParentId=ou, MaxResults=20, NextToken=NextToken)
         else:
             list_accounts_result = org_client.list_accounts_for_parent(ParentId=ou, MaxResults=20)
@@ -98,13 +98,13 @@ def get_ou_accounts(org_client, ou, accounts_list=None, process_ou_children=True
     return accounts_list
 
 
-def get_cudos_users(account_list):
-    cudos_users = []
+def get_cid_users(account_list):
+    cid_users = []
     for account in account_list:
         for index, key in enumerate(account['AccountTags']):
-            if key['Key'] == 'cudos_users':
-                cudos_users.append((account['Id'], account['AccountTags'][index]['Value']))
-    return cudos_users
+            if key['Key'] == 'cid_users':
+                cid_users.append((account['Id'], account['AccountTags'][index]['Value']))
+    return cid_users
 
 
 def dict_list_to_csv(dict):
@@ -155,7 +155,7 @@ def main(separator=":"):
                     qs_rls[qs_user] = ou_tag_data[user]
     print("QS EMAIL USER MAPPING: {}".format(qs_email_user_map))
     print("QS RLS DATA: {}".format(qs_rls))
-    rls_s3_filename = "cudos_rls.csv"
+    rls_s3_filename = "cid_rls.csv"
     write_csv(qs_rls, rls_s3_filename)
 
 
@@ -181,10 +181,10 @@ def process_account(account_id, ou_tag_data, ou, org_client):
     print(f"DEBUG: proessing account level tags, processing account_id: {account_id}")
     tags = org_client.list_tags_for_resource(ResourceId=account_id)['Tags']
     for tag in tags:
-        if tag['Key'] == 'cudos_users':
-            cudos_users_tag_value = tag['Value']
+        if tag['Key'] == 'cid_users':
+            cid_users_tag_value = tag['Value']
             print(f"DEBUG: processing child account: {account_id} for ou: {ou}")
-            ou_tag_data = update_tag_data(account_id, cudos_users_tag_value, ou_tag_data)
+            ou_tag_data = update_tag_data(account_id, cid_users_tag_value, ou_tag_data)
     return ou_tag_data
 
 
@@ -192,9 +192,9 @@ def process_root_ou(org_client, payer_id, root_ou, ou_tag_data):
     "PROCESS OU MUST BE PROCESSED LAST"
     tags = org_client.list_tags_for_resource(ResourceId=root_ou)['Tags']
     for tag in tags:
-        if tag['Key'] == 'cudos_users':
-            cudos_users_tag_value = tag['Value']
-            for user in cudos_users_tag_value.split(':'):
+        if tag['Key'] == 'cid_users':
+            cid_users_tag_value = tag['Value']
+            for user in cid_users_tag_value.split(':'):
                 if user in ou_tag_data:
                     if 'payer_id' in ou_tag_data[user]:
                         if payer_id not in ou_tag_data[user]['payer_id']:
@@ -210,14 +210,14 @@ def process_ou(org_client, ou, ou_tag_data, root_ou):
     print("DEBUG: processing ou {}".format(ou))
     tags = org_client.list_tags_for_resource(ResourceId=ou)['Tags']
     for tag in tags:
-        if tag['Key'] == 'cudos_users':
-            cudos_users_tag_value = tag['Value']
+        if tag['Key'] == 'cid_users':
+            cid_users_tag_value = tag['Value']
             """ Do not process all children if this is root ou, this is done bellow in separate cycle. """
             process_ou_children = bool(ou != root_ou)
             for account in get_ou_accounts(org_client, ou, process_ou_children=process_ou_children):
                 account_id = account['Id']
-                print(f"DEBUG: processing inherit tag: {cudos_users_tag_value} for ou: {ou} account_id: {account_id}")
-                ou_tag_data = update_tag_data(account_id, cudos_users_tag_value, ou_tag_data)
+                print(f"DEBUG: processing inherit tag: {cid_users_tag_value} for ou: {ou} account_id: {account_id}")
+                ou_tag_data = update_tag_data(account_id, cid_users_tag_value, ou_tag_data)
 
     children_ou = get_ou_children(ou, org_client)
     if len(children_ou) > 0:
@@ -236,8 +236,8 @@ def process_ou(org_client, ou, ou_tag_data, root_ou):
 
 
 def write_csv(qs_rls, rls_s3_filename):
-    with open(TMP_RLS_FILE, 'w', newline='') as cudos_rls_csv_file:
-        wrt = csv.DictWriter(cudos_rls_csv_file, fieldnames=RLS_HEADER)
+    with open(TMP_RLS_FILE, 'w', newline='') as cid_rls_csv_file:
+        wrt = csv.DictWriter(cid_rls_csv_file, fieldnames=RLS_HEADER)
         wrt.writeheader()
         for user in qs_rls:
             """ we will write empty account_id, if payer_id is present, cause the user should see all accounts under one payer
@@ -252,19 +252,6 @@ def write_csv(qs_rls, rls_s3_filename):
                               'payer_account_id': ""})
 
     upload_to_s3(TMP_RLS_FILE, rls_s3_filename)
-
-
-def create_athena_rls_table(qs_rls):
-    rows = []
-    for user in qs_rls:
-        """ we will write empty account_id, if payer_id is present, cause the user should see all accounts under one payer
-            and we will write empty payer_id if payer_id is absent """
-        if 'payer_id' in qs_rls[user]:
-            payer_ids = ",".join(qs_rls[user]['payer_id'])
-            rows.append(f"\'{user}\',\'\',\'{payer_ids}\'")
-        else:
-            account_ids = ",".join(qs_rls[user]['account_id'])
-            rows.append(f"\'{user}\',\'{account_ids}\',\'\'")
 
 
 def lambda_handler(event, context):

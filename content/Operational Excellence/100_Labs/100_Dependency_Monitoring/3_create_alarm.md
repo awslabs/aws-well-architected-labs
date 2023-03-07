@@ -9,7 +9,7 @@ pre: "<b>3. </b>"
 
 Now that the right metric has been identified to monitor the dependency, it is time to create an alarm to monitor the metric and send notifications based on thresholds defined. [CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#CloudWatchAlarms) can be used to automatically initiate actions on your behalf. An alarm watches a single metric over a specified time period, and performs one or more specified actions, based on the value of the metric relative to a threshold over time. The action is a notification sent to an Amazon SNS topic or an Auto Scaling policy.
 
-An alarm needs to be created that checks the Lambda function invocation every minute to ensure that it has been invoked at least one time, and treats missing data as an indication that the function has not not been invoked, and as such the dependency that is being monitoring has failed. If the alarm is triggered, a notification should be sent to an SNS topic so that someone can be notified and respond, or an automatic remediation activity can be triggered as a result.
+An alarm needs to be created that checks the Lambda function invocation every minute to ensure that it has been invoked at least one time, and treats missing data as an indication that the function has not been invoked, and as such the dependency that is being monitoring has failed. If the alarm is triggered, a notification should be sent to an SNS topic so that someone can be notified and respond, or an automatic remediation activity can be triggered as a result.
 
 1. Go to the Amazon CloudWatch console at <https://console.aws.amazon.com/cloudwatch>, click on **Alarms**, and then **Create alarm**
 

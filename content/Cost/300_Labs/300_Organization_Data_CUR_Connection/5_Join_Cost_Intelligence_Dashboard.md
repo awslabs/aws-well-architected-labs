@@ -1,68 +1,44 @@
 ---
-title: "Join with the Enterprise Cost Intelligence Dashboard"
-date: 2020-07-26T11:16:08-04:00
+title: "Join with the Enterprise Cloud Intelligence Dashboards"
+date: 2023-02-24T12:00:00-06:00
 chapter: false
 weight: 5
 pre: "<b>5. </b>"
 ---
 
-### Join with the Enterprise Cost Intelligence Dashboard
+### Join with the Enterprise Cloud Intelligence Dashboards
+
+This section is **optional** and shows how you can add your AWS Organization Data to your - [Cloud_Intelligence_Dashboards]({{< ref "/Cost/200_Labs/200_Cloud_Intelligence" >}}).
 
 
-This section is **optional** and shows how you can add your AWS Organization Data to your **Enterprise Dashboards** - [200_Enterprise_Dashboards]({{< ref "/Cost/200_Labs/200_Enterprise_Dashboards" >}}).
+1. Login to your Data Collection Account account and go into the Athena console.
 
-This example will show you how to map your Enterprise Dashboard linked_account_id to your Organizations account_number to add account information that is meaningful to your organization.
-This is to replace this step: https://wellarchitectedlabs.com/cost/200_labs/200_enterprise_dashboards/2_modify_cost_intelligence/. 
+2. Modify and run the following query to override the **account_map** view to inclue the enhanced organisation data.
 
-1. Go to the **Amazon QuickSight** service homepage
+Make sure you replace the correct cur database and if your organisation data resides in a separate Athena database, ensure you pick the correct database for your organisation data table.
 
-2. In **QuickSight**, select the **summary_view** Data Set
+Also if you added tags to the organisation data ensure you add your custom tags as well, in this example we have a team tag and an environment tag in the SQL query.
 
-3. Select **Edit data set**
-
-4. Select **Add data**:
-![Images/dashboard_mapping_3.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_3.png)
-
-5. Select your Amazon Athena **organization_data** table and click **Select**
-![Images/Org_Data.png](/Cost/300_Organization_Data_CUR_Connection/Images/Org_Data.png)
-
-6. Select the **two circles** to open the join configuration then select **Left** to change your join type:
-![Images/dashboard_mapping_6.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_6.png)
-
-7. Create following **join clause** :
-	- **linked_account_id** = **id**
-Click **Apply**
-
-![Images/dashboard_mapping_7.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_7.png)
-
-8. Select **Save**
-
-9. Repeat **steps 2-9**, creating mapping joins for your remaining QuickSight data sets:
-
-	- s3_view
-	- ec2_running_cost
-    - compute_savings_plan_eligible_spend
-
-{{% notice tip %}}
-You now have new fields that can be used on the visuals in the Cost Intelligence Dashboard - we will now use them
-{{% /notice %}}
-
-10. Go to the **Cost Intelligence Analysis**
-
-11. Edit the calculated field **Account**:
-![Images/dashboard_mapping_12.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_12.png)
-
-12. Change the formula from **toString({linked_account_id})** to **{name}**
-![Images/dashboard_mapping_13.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_13.png)
-
-13. You can now select a visual, select the **Account** field, and you will see the account names in your visuals, instead of the Account number:
-![Images/dashboard_mapping_14.png](/Cost/300_Organization_Data_CUR_Connection/Images/dashboard_mapping_14.png)
+        CREATE OR REPLACE (database).account_map AS
+        SELECT
+            id account_id,
+            name account_name,
+            status account_status,
+            email account_email,
+            arn account_arn,
+            joinedmethod account_joined_method,
+            joinedtimestamp account_joined_timestamp,
+            parent account_parent,
+            --remove or edit these 2 lines below based on the account tags your organisation data lambda is collecting
+            environment account_tag_environment,
+            team as account_tag_team
+        FROM
+            --if organisation data resides in a different database than the CUR database please modify accordingly below
+            (database).organisation_data
 
 
-{{% notice tip %}}
-You now have successfully utilized Organization mapping data on your Cost Intelligence Dashboard
-{{% /notice %}}
+3. Navigate to the QuickSight console, select datasets, "Edit" and then "Save and Publish" all datasets one by one(this will also trigger a refresh).
 
+4. Now you can create an analysis from Cloud Intelligence Dashboards and you should have additional fields.
 
-{{< prev_next_button link_prev_url="../4_visualize_organization_data_in_quicksight/" link_next_url="../6_teardown/" />}}
-
+You should be able to filter and slice and dice using additional fields such as parent OU, account status, joined method and tags.

@@ -3,7 +3,7 @@ title: "Level 200: Enterprise Dashboards"
 #menutitle: "Lab #1"
 date: 2020-09-07T11:16:08-04:00
 chapter: false
-weight: 8
+weight: 9
 hidden: true
 ---
 

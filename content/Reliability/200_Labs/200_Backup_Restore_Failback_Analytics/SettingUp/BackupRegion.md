@@ -22,6 +22,10 @@ Download the following files:
 * [create-dr.sh](/Reliability/200_Backup_Restore_Failback_Analytics/Code/scripts/create-dr.sh)
 * [dr-data.yaml](/Reliability/200_Backup_Restore_Failback_Analytics/Code/cfn/dr-data.yaml)
 
+{{% notice note %}}
+Make sure that your browser does not change the file extensions of these files. The CloudFormation template should have a `.yaml` extension.
+{{% /notice %}}
+
 Let's review what's in these files.  You can open them in your favorite text editor to review in detail.  The CloudFormation script, `dr-data.yaml`, creates the S3 buckets used for data replication and inventory, the AWS Glue metadata catalog and table definitions, and a Lambda function used to update metadata catalog partitions.  The script accepts eight input parameters.  Five of these are for the AWS Glue metadata catalog, and the default settings should be fine, although you are free to change them.  Another parameter defines a tag value that helps us identify resources used in this stack, and again the default value should be fine.  The last two parameters define the names of the S3 buckets that we use for data replication and for capturing S3 inventory.  We will pass in these parameters through the `create-dr.sh` script.
 
 The `create-dr.sh` script is purely for convenience.  It uploads `dr-data.yaml` to the S3 template bucket, and then creates the CloudFormation stack, passing in the required input arguments.

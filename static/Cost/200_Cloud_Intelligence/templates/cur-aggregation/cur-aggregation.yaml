@@ -41,7 +41,7 @@ Parameters:
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]{1,61}[a-z0-9]+$"
   CreateCUR:
     Type: String
-    Description: Whenever or not create Local CUR. Put it to False on Destination only if the management (payer) account of Destiation is used as CUR Source.
+    Description: Whether to create a local CUR in the destination account or not. Set this to False only if the current account is covered in the CUR of its Management (Payer) Account.
     AllowedValues:
       - "True"
       - "False"
