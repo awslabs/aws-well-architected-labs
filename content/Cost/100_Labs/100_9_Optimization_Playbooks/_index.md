@@ -4,7 +4,7 @@ title: "Level 100: Optimization Playbooks"
 date: 2022-02-01T11:16:08-04:00
 chapter: false
 weight: 9
-hidden: false
+hidden: True
 
 ---
 ## Last Updated
