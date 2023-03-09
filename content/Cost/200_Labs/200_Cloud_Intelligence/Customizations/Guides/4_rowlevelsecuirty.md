@@ -194,6 +194,35 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 12. Repeat for all other CID Datasets
 
 
+
+### Use script to tag accounts
+If you have a large number of accounts that need to be tagged then please use the guide below to do a scripted method to save time.
+{{%expand "Click here to expand guide" %}}
+
+For this you will need:
+* a list of all of your accounts you wish to tag. If you do not have one, you can export your AWS Organizations using this [guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_export.html)
+* a list of all QuickSight users email which you wish to tag this Organization with. Currently you cannot directly download this data but you can use the following cli command replacing 111122223333 with your Management account
+* cli credentials for your management account or ability to create a lambda function
+
+``` aws quicksight list-users --namespace default --output text --aws-account-id 111122223333 quicksight_user.txt```
+
+### Steps to tag
+1. Download this [example file](/Cost/200_Cloud_Intelligence/templates/rls/tagger/data.csv)
+
+2. In the file, remove the example line and add your list of account id's in the first coloumn. Then add the relevent QuickSight users emails that you want to have access to the account. Remember if multiple they need tbe **separated by :**
+
+3. Save this file.
+
+4. You can either run the script using cli or creating a lambda function.
+
+* If CLI then ensure your data.csv file and aws_org_tagger_lambda.py are in the same folder
+* Run ```python3 aws_org_tagger_lambda.py```
+
+
+
+{{% /expand%}}
+
+
 {{% notice tip %}}
 If you would like to turn off RLS you can just toggle the **User-based ON** to **OFF**
 {{% /notice %}}
