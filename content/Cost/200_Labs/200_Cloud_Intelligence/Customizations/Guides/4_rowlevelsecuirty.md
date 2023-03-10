@@ -218,6 +218,7 @@ For this you will need:
 
 #### CLI
 * If CLI then ensure your data.csv file and aws_org_tagger_lambda.py are in the same folder
+* Uncomment like 44 by removing the hash
 * Run ```python3 aws_org_tagger_lambda.py```
 
 #### Lambda
