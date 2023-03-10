@@ -198,7 +198,6 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 
 ### Use script to tag accounts
 If you have a large number of accounts that need to be tagged then please use the guide below to do a scripted method to save time.
-**Note** this version only works for accounts not OUs or Roots currently
 {{%expand "Click here to expand guide" %}}
 
 For this you will need:
