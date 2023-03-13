@@ -41,5 +41,11 @@ def lambda_handler(event, context):
         except Exception as e:
             logging.info("%s" % e)
             pass
-#lambda_handler(None, None)
-    
+
+def lambda_handler(event, context):
+    main()
+
+if __name__ == '__main__':
+    main()
+
+        

@@ -203,9 +203,9 @@ If you have a large number of accounts that need to be tagged then please use th
 For this you will need:
 * a list of all of your accounts you wish to tag. If you do not have one, you can export your AWS Organizations using this [guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_export.html)
 * a list of all QuickSight users email which you wish to tag this Organization with. Currently you cannot directly download this data but you can use the following cli command replacing 111122223333 with your Management account
-* cli credentials for your management account or ability to create a lambda function
+* cli credentials for your management account or ability to create a lambda function and you will find the file in your tmp folder
 
-``` aws quicksight list-users --namespace default --output text --aws-account-id 111122223333 quicksight_user.txt```
+``` aws quicksight list-users --namespace default --output text --aws-account-id 111122223333 > /tmp/quicksight_user.txt```
 
 ### Steps to tag
 1. Download this [example file](/Cost/200_Cloud_Intelligence/templates/rls/tagger/data.csv) and this [code file](/Cost/200_Cloud_Intelligence/templates/rls/tagger/aws_org_tagger_lambda.py) and save as aws_org_tagger_lambda.py
@@ -218,7 +218,6 @@ For this you will need:
 
 #### CLI
 * If CLI then ensure your data.csv file and aws_org_tagger_lambda.py are in the same folder
-* Uncomment like 44 by removing the hash
 * Run ```python3 aws_org_tagger_lambda.py```
 
 #### Lambda
