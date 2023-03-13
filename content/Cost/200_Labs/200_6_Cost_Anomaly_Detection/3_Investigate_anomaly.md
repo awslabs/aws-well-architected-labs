@@ -2,7 +2,7 @@
 title: "Dive deep into detected cost anomaly"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
-weight: 1
+weight: 4
 pre: "<b>2. </b>"
 ---
 

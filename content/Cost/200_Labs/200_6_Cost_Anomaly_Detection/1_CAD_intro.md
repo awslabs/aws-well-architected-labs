@@ -2,7 +2,7 @@
 title: "Getting to know AWS Cost Anomaly Detection"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
-weight: 1
+weight: 2
 pre: "<b>1. </b>"
 ---
 

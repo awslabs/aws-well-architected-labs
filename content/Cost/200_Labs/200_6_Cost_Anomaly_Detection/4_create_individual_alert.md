@@ -2,7 +2,7 @@
 title: "Creating additional alert subscription for individual alerts"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
-weight: 1
+weight: 5
 pre: "<b>2. </b>"
 ---
 

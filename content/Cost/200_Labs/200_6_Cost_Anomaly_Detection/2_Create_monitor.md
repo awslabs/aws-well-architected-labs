@@ -2,7 +2,7 @@
 title: "Create A Cost Monitor"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
-weight: 1
+weight: 3
 pre: "<b>2. </b>"
 ---
 

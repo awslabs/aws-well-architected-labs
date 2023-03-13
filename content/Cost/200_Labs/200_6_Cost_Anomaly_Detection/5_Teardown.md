@@ -3,7 +3,7 @@ title: "Teardown"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
 pre: "<b>6. </b>"
-weight: 1
+weight: 6
 ---
 
 1. Delete cost monitor by going to Cost Anomaly Detection **Overview** page and under **Cost monitors** tab, select the monitor and click **Delete**:
