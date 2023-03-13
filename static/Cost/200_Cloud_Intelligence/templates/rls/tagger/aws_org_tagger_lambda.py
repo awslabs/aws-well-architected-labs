@@ -28,7 +28,7 @@ def org_function(key,value, account_id):
     )
     return response
 
-def lambda_handler(event, context):
+def main():
     filename = 'data.csv'
     key = 'cid_users'
     map_data = read_csv_function(filename)
