@@ -3,7 +3,7 @@ title: "Creating additional alert subscription for individual alerts"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
 weight: 5
-pre: "<b>2. </b>"
+pre: "<b>4. </b>"
 ---
 
 Earlier in this lab, an alert subscription was created as part of creating cost monitor. The alert frequency was selected to be daily summaries. This section guides you on how to create an additional alert subscription with Individual alert mechanism and attach it to the existing cost monitor.

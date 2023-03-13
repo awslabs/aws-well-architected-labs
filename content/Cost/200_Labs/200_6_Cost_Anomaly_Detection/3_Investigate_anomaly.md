@@ -3,7 +3,7 @@ title: "Dive deep into detected cost anomaly"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
 weight: 4
-pre: "<b>2. </b>"
+pre: "<b>3. </b>"
 ---
 
 In this section, we will walk you through the steps to analyze anomalies detected by Cost Anomaly Detection service and investigate the associated root cause. For the purpose of demonstration, screenshots from a test AWS account are used in this sections. Note that anomaly detection leverages historical data and machine learning mechanism to identify unusual spend. This means that anomalies are specific to individual use case. For example $10 increase in daily spend for an AWS account that has historical daily spend pattern of around $5, is a sharp increase and an unusual trend, whereas the same increase for an AWS account that has historical daily spend pattern of around $500 is not significant and might not be considered unusual. 
