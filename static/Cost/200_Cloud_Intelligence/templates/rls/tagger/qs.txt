@@ -1,0 +1,6 @@
+ba3a5f73-8d77-4d17-acde-7bc1fd62fec2	200
+USERLIST	True	arn:aws:quicksight:eu-west-1:455007007237:user/default/RootAccountAdmin/awssteph-Isengard	awsteph@amazon.com	IAM	federated/iam/AROAWT4EH6ICRD6RADMW2:awssteph-Isengard	ADMIN	RootAccountAdmin/awssteph-Isengard
+USERLIST	False	arn:aws:quicksight:eu-west-1:455007007237:user/default/test	awssteph@amazon.com	QUICKSIGHT	user/d-9367054df8/8cc64138-1f02-40f7-8a70-856694656d40	READER	test
+USERLIST	False	arn:aws:quicksight:eu-west-1:455007007237:user/default/awssteph@amazon.com	awssteph@amazon.com	QUICKSIGHT	user/d-9367054df8/28e1ffc9-4e08-4567-8231-8d3afe61903c	ADMIN	awssteph@amazon.com
+USERLIST	False	arn:aws:quicksight:eu-west-1:455007007237:user/default/steph	awssteph@amazon.com	QUICKSIGHT	user/d-9367054df8/39bd4a49-f467-4d2a-a5ef-aa042c412e32	READER	steph
+USERLIST	True	arn:aws:quicksight:eu-west-1:455007007237:user/default/RootAccountAdmin/rebauma-Isengard	rebauma@amazon.com	IAM	federated/iam/AROAWT4EH6ICRD6RADMW2:rebauma-Isengard	ADMIN	RootAccountAdmin/rebauma-Isengard
