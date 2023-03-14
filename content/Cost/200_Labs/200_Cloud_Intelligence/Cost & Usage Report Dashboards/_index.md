@@ -58,7 +58,7 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 ## Costs
 
-See [FAQ#pricing](/Cost/200_labs/200_cloud_intelligence/faq/#pricing)
+See [FAQ#pricing](/cost/200_labs/200_cloud_intelligence/faq/#pricing)
 
 ## Time to complete
 
