@@ -337,13 +337,20 @@ Resources:
                                   client = assume_role(account_id, functions[service]['api'], region['RegionName'])
                                   for f in functions[service]['functions']:
                                       cw_client = assume_role(account_id, 'cloudwatch', region['RegionName'])
-                                      data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id, payer_id)
+                                      try:
+                                          data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id, payer_id)
+                                      except Exception as e:
+                                          # Send some context about this error to Lambda Logs
+                                          logging.warning(e)
                           else:
                               client=boto3.client(service)
                               for f in functions[service]['functions']:
                                   cw_client = boto3.client('cloudwatch', region_name = 'us-east-1')
-                  
-                                  data = globals()[f['name']](cw_client, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
+                                  try:
+                                      data = globals()[f['name']](cw_client, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
+                                  except Exception as e:
+                                      # Send some context about this error to Lambda Logs
+                                      logging.warning(e)
                       start_crawler()
                       return "Successful"
               except Exception as e:

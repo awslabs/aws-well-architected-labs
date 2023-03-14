@@ -8,7 +8,7 @@ weight: 6
 
 ---
 
-### 7.1 Web server failure injection
+### 6.1 Web server failure injection
 
 This failure injection will simulate a critical failure of the web server running on the EC2 instances using FIS.
 
@@ -19,7 +19,7 @@ In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **
    * **single region**: `WaitForWebApp` shows completed (green)
    * **multi region**: `WaitForWebApp1` shows completed (green)
 
-#### 7.1.1 Create experiment template
+#### 6.1.1 Create experiment template
 
 1. Navigate to the FIS console at <http://console.aws.amazon.com/fis> and click **Experiment templates** in the left pane.
    * Troubleshooting: If screen is blank, then select the region **US East (Ohio)**
@@ -60,7 +60,7 @@ In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **
 
     ![CreateTemplate](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/CreateTemplate.png?classes=lab_picture_auto)
 
-#### 7.1.2 Run the experiment
+#### 6.1.2 Run the experiment
 
 1. Click on **Experiment templates** from the menu on the left.
 
@@ -78,11 +78,11 @@ In [Chaos Engineering](https://principlesofchaos.org/) we always start with a **
 
     ![StartExperiment](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/StartExperiment.png?classes=lab_picture_auto)
 
-### 7.2 System response to web server failure
+### 6.2 System response to web server failure
 
 The instances launched as part of this lab are running simple Python webservers. This experiment uses [AWS Systems Manager](https://aws.amazon.com/systems-manager/) to run a command on the selected instance(s). In this workshop, the command used is **kill-process**. When the experiment runs, the **python3** web server process is terminated on one of the instances and it can no longer handle requests. Watch how the service responds. Note how AWS systems help maintain service availability. Test if there is any non-availability, and if so then how long.
 
-#### 7.2.1 System availability
+#### 6.2.1 System availability
 
 Refresh the service website several times. Note the following:
 
@@ -102,7 +102,7 @@ Load balancing and Auto Scaling work here much the way they did for the [EC2 fai
 
 {{%expand "[Optional] If you want to review the Load balancing and Auto Scaling behavior again for this case, click here" %}}
 
-#### 7.2.2 Load balancing
+#### 6.2.2 Load balancing
 
 Load balancing ensures service requests are not routed to unhealthy resources, such as the EC2 instance where the web server process was killed.
 
@@ -121,7 +121,7 @@ Load balancing ensures service requests are not routed to unhealthy resources, s
 
       ![TargetGroupsMonitoring](/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Images/TargetGroupsMonitoring.png)
 
-#### 7.2.3 Auto scaling
+#### 6.2.3 Auto scaling
 
 Auto Scaling ensures we have the capacity necessary to meet customer demand. The auto scaling for this service is a simple configuration that ensures at least three EC2 instances are running. More complex configurations in response to CPU or network load are also possible using AWS. [Auto scaling uses health checks](https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html) to ensure that all instances that are part of the Auto Scaling group are running as expected. In this lab, the Auto scaling group's health check is configured to use the Load Balancer's health check. If the Load Balancer marks one of the EC2 instances as unhealthy, Auto Scaling will also consider the instance to be unhealthy and replace it.
 
@@ -142,7 +142,7 @@ _Auto Scaling_ helps you ensure that you have the correct number of Amazon EC2 i
 
 {{% /expand%}}
 
-### 7.3 Web server failure injection - conclusion
+### 6.3 Web server failure injection - conclusion
 
 In this section, you simulated an application level failure where the web server process running the application was killed using FIS and SSM. Although there was no infrastructure failure, your workload was able to detect and correct the issue by replacing the EC2 instance. Deploying multiple servers and Elastic Load Balancing enables a service suffer the loss of a server with no availability disruptions as user traffic is automatically routed to the healthy servers. Amazon Auto Scaling ensures unhealthy hosts are removed and replaced with healthy ones to maintain high availability.
 

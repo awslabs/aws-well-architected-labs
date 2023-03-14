@@ -27,6 +27,7 @@ For this solution you must have the following:
 * A list of users and what level of access they require. This can be member accounts, organizational units (OU) or payers. 
 
 
+
 ## Solution 
 This solution will use tags from your AWS Organization resources to create a dataset that will be used for the Row Level Security.
 
@@ -61,7 +62,7 @@ If you are deploying this in a linked account you will need a Role in you Manage
 
 ### Part2: Tag your AWS Organization Resources
 
-You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. We will be using **AWS Quicksight User Emails**, see more [here](https://docs.aws.amazon.com/quicksight/latest/user/managing-users.html)
+You must tag the AWS Organization Resources with the emails of the Quicksight Users that you wish to allow access to see the resources cost data. The below will show you how to tag a resource and this can be repeated. We will be using **AWS Quicksight User Emails**, see more [here](https://docs.aws.amazon.com/quicksight/latest/user/managing-users.html). If you have a large list of accounts and want to use a script, please see the section below [Use script to tag accounts](#use-script-to-tag-accounts)  
 
 1. Log into your **Management account** then click on the top right hand corner on your account and select **Organization**
 ![Images/rls_organization.png](/Cost/200_Cloud_Intelligence/Images/rls/rls_organization.png?classes=lab_picture_small)
@@ -192,6 +193,51 @@ We will now create the RLS Dataset in Amazon QuickSight and attach it to your da
 
 11. Refresh the summary_view datasets 
 12. Repeat for all other CID Datasets
+
+
+
+### Use script to tag accounts
+If you have a large number of accounts that need to be tagged then please use the guide below to do a scripted method to save time.
+{{%expand "Click here to expand guide" %}}
+
+For this you will need:
+* a list of all of your accounts you wish to tag. If you do not have one, you can export your AWS Organizations using this [guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_export.html)
+* a list of all QuickSight users email which you wish to tag this Organization with. Currently you cannot directly download this data but you can use the following cli command replacing 111122223333 with your Management account
+* cli credentials for your management account or ability to create a lambda function and you will find the file in your tmp folder
+
+``` aws quicksight list-users --namespace default --output text --aws-account-id 111122223333 > /tmp/quicksight_user.txt```
+
+### Steps to tag
+1. Download this [example file](/Cost/200_Cloud_Intelligence/templates/rls/tagger/data.csv) and this [code file](/Cost/200_Cloud_Intelligence/templates/rls/tagger/aws_org_tagger_lambda.py) and save as aws_org_tagger_lambda.py
+
+2. In the file, remove the example line and add your list of account id's in the first column. Then add the relevant QuickSight users emails that you want to have access to the account. Remember if multiple they need tbe **separated by :**
+
+3. Save this file.
+
+4. You can either run the script using cli or creating a lambda function.
+
+#### CLI
+* If CLI then ensure your data.csv file and aws_org_tagger_lambda.py are in the same folder
+* Run ```python3 aws_org_tagger_lambda.py```
+
+#### Lambda
+* Log into your Management account and go to Lambda
+* Create new Lambda and call it **Tag-Organization** and use **Python 3.9**
+* In the lambda, copy the code from the aws_org_tagger_lambda.py file
+* Click on the left hand side of the Environment and click **New File**
+* In the file paste your data.csv data *making sure it has the comers in it**
+* Click **Deploy**
+* Click on **Configuration** then **Permissions**. There will be a Role Name in blue, click on that link.
+* This will take you to IAM where you **Add permissions** > **Attach policies**
+* Search for **AWSOrganizationsFullAccess** and add this policy
+* Go back to lambda and click to the **Test** tab then the orange **Test** button. 
+
+Now your AWS Organization will have new or updated tags with the data from your excel sheet
+
+
+
+
+{{% /expand%}}
 
 
 {{% notice tip %}}
