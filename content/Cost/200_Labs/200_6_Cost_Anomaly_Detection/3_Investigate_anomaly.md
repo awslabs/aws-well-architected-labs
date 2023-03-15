@@ -26,4 +26,4 @@ Let's see how to view detected anomalies and the depth of information available.
 ![Images/CostAnomaly14.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_14.png?classes=lab_picture_small)
 
 
-{{< prev_next_button link_prev_url="../2_create_monitor/" link_next_url="../3_create_individual_alert/" />}}
+{{< prev_next_button link_prev_url="../2_create_monitor/" link_next_url="../4_create_individual_alert/" />}}
