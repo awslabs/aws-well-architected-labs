@@ -34,4 +34,4 @@ For the purpose of this lab, **percent above expected spend** is selected. In th
 
 {{% notice note %}} NOTE: A new monitor can take 24 hours to begin detecting new anomalies. {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1_CAD_intro/" link_next_url="../3_Investigate_anomaly/" />}}
+{{< prev_next_button link_prev_url="../1_cad_intro/" link_next_url="../3_investigate_anomaly/" />}}

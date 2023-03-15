@@ -32,4 +32,4 @@ Scenario 2 shows sudden spikes in spend which are disregarded by AWS Budgets due
 4. A window will pop-up welcoming you to Cost Anomaly Detection. Click **Show me around** to start service tour or click **Skip tour** to continue to next step:
 ![Images/CostAnomaly02.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_02.png?classes=lab_picture_small)
 
-{{< prev_next_button link_prev_url="../" link_next_url="../2_create_subscription/" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../2_create_monitor/" />}}

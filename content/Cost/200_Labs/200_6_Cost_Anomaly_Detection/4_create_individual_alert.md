@@ -51,4 +51,4 @@ Note that for notifications to be sent, you must accept the subscription to the 
 9. **Alert subscription details** page shows that the subscription is successfully created with **Individual alerts** frequency. 
 ![Images/CostAnomaly25.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_25.png?classes=lab_picture_small) 
 
-{{< prev_next_button link_prev_url="../3_Investigate_anomaly/" link_next_url="../5_Teardown/" />}}
+{{< prev_next_button link_prev_url="../3_investigate_anomaly/" link_next_url="../5_teardown/" />}}
