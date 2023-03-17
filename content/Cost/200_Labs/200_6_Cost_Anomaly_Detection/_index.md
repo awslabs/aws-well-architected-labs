@@ -39,7 +39,11 @@ This lab helps you to exercise the following Well-Architected Best Practices in 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
 
 {{% notice note %}}
-NOTE: Cost Anomaly Detection require at least 10 days of historical service usage data before anomalies can be detected for that service.
+NOTE: It is strongly advised not to use production account for the purpose of this lab, use a test or sandbox account to understand the functionalities and capabilities of the service and then replicate the relevant configurations to the production accounts.
+{{% /notice %}}
+
+{{% notice note %}}
+Cost Anomaly Detection require at least 10 days of historical service usage data before anomalies can be detected for that service. Make sure to use an account that has active resources for the past 10 days.
 {{% /notice %}}
 
 * AWS Cost Anomaly Detection is a feature within Cost Explorer. To access AWS Cost Anomaly Detection, Cost Explorer must be enabled. For instructions on how to enable Cost Explorer using the console, see [Enabling Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html).
