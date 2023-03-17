@@ -45,9 +45,13 @@ The default SNS access policy allow all Principals with in the owner account to 
 ![Images/CostAnomaly21.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_21.png?classes=lab_picture_small)
 
 6. On the **Create Subscription** page, select **Email** under the **Protocol** drop down menu and enter an email address in the text field under **Endpoint**. Then click **Create Subscription** at the bottom of the page to finish creating subscription:
-![Images/CostAnomaly22.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_22.png?classes=lab_picture_small) 
+![Images/CostAnomaly22.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_22.png?classes=lab_picture_small)
 
-Note that for notifications to be sent, you must accept the subscription to the Amazon SNS notification topic.
+At times, there is a requirement to alert multiple different teams or individuals such as FinOps, DevOps, SRE or Team Lead teams. In such a scenario additional subscriptions can be created.
+
+{{% notice note %}}
+For notifications to be sent, you must accept the subscription to the Amazon SNS notification topic.
+{{% /notice %}}
 
 7. Now go back to Cost Anomaly Detection **Create a subscription** page and enter SNS ARN:
 ![Images/CostAnomaly23.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_23.png?classes=lab_picture_small) 
@@ -56,6 +60,8 @@ Note that for notifications to be sent, you must accept the subscription to the 
 ![Images/CostAnomaly24.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_24.png?classes=lab_picture_small) 
 
 9. **Alert subscription details** page shows that the subscription is successfully created with **Individual alerts** frequency. 
-![Images/CostAnomaly25.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_25.png?classes=lab_picture_small) 
+![Images/CostAnomaly25.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_25.png?classes=lab_picture_small)
+
+10. Users also have the option to cost anomaly alerts in a Slack channel or an Amazon Chime chat room. For this a AWS Chatbot configuration needs to be created that maps the SNS topic to a Slack Channel or an Amazon Chime chat room. For details refer to [Receiving AWS Cost Anomaly Detection alerts in Amazon Chime and Slack](https://docs.aws.amazon.com/cost-management/latest/userguide/cad-alert-chime.html)
 
 {{< prev_next_button link_prev_url="../3_investigate_anomaly/" link_next_url="../5_teardown/" />}}

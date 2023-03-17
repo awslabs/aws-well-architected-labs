@@ -27,7 +27,7 @@ This lab helps you to exercise the following Well-Architected Best Practices in 
 
 ## Introduction
 
- This hands-on lab will guide you through the steps to setup AWS Cost Anomaly Detection in your AWS account. AWS Cost Anomaly Detection is a monitoring feature that leverages advanced Machine Learning technologies to identify anomalous spend. Based on selected spend segments, Cost Anomaly Detection automatically determines patterns each day by adjusting for organic growth and seasonal trends. It triggers an alert when spend seems abnormal based on your normal resource usage pattern. This lab will walk you through the steps to analyze these alerts and investigate root cause. 
+ Reduce cost surprises and enhance control without slowing innovation with [AWS Cost Anomaly Detection](https://aws.amazon.com/aws-cost-management/aws-cost-anomaly-detection/). This hands-on lab will guide you through the steps to setup AWS Cost Anomaly Detection in your AWS account. AWS Cost Anomaly Detection is a monitoring feature that leverages advanced Machine Learning technologies to identify anomalous spend. Based on selected spend segments, Cost Anomaly Detection automatically determines patterns each day by adjusting for organic growth and seasonal trends. It triggers an alert when spend seems abnormal based on your normal resource usage pattern. This lab will walk you through the steps to analyze these alerts and investigate root cause. 
 
 ## Goals: 
 
@@ -37,17 +37,22 @@ This lab helps you to exercise the following Well-Architected Best Practices in 
 
 ## Prerequisites:
 
-* An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
-
-{{% notice note %}}
-It is strongly advised not to use production account for the purpose of this lab, use a test or sandbox account to understand the functionalities and capabilities of the service and then replicate the relevant configurations to the production accounts.
-{{% /notice %}}
+* [AWS Account Setup]({{< ref "100_1_AWS_Account_Setup" >}}) has been completed
 
 {{% notice note %}}
 Cost Anomaly Detection require at least 10 days of historical service usage data before anomalies can be detected for that service. Make sure to use an account that has active resources for the past 10 days.
 {{% /notice %}}
 
+As an alternative an existing AWS account can be used to run this workshop.
+
+{{% notice note %}}
+It is strongly advised not to use production account for the purpose of this lab, use a test or sandbox account to understand the functionalities and capabilities of the service and then replicate the relevant configurations to the production accounts.
+{{% /notice %}}
+
 * AWS Cost Anomaly Detection is a feature within Cost Explorer. To access AWS Cost Anomaly Detection, Cost Explorer must be enabled. For instructions on how to enable Cost Explorer using the console, see [Enabling Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html).
+
+For a multi-account AWS environment, Cost Anomaly Detection needs to be set up in the management account in order to analyze cost across whole AWS organisation and alert on anomalies for each linked account.
+
 * An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) or an [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) in your AWS account with full access to [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) and [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/).
 
 {{% notice note %}}

@@ -8,7 +8,7 @@ pre: "<b>2. </b>"
 
 Cost Anomaly Detection is a feature of AWS Cost Explorer that performs the heavy lifting of continuous cost monitoring, and saves users the tedious work of manually identifying unusual spend patterns in their AWS account. In other words, it helps users better govern their AWS cost and prevents unexpected charges at the end of the month. 
 
-This section walks you through the steps to get started with Cost Anomaly Detection by creating a cost monitor. Cost monitors continuously look at your AWS spend and uses machine learning to detect anomalies. A cost monitor can be configured to analyze all of your AWS services independently or by member accounts, cost allocation tags or cost categories. There is a possibility of creating multiple monitors if there is a need to analyze spend across different segments. However, for the purpose of this lab a single monitor is created to analyze spend segmented by AWS services. During the process of creating the monitor, an alert subscription is also created. Alert subscription is a mechanism of notifying relevant users or administrators in case an anomaly is detected. Depending on the required alert frequency, you can notify designated individuals by email or Amazon SNS.
+This section walks you through the steps to get started with Cost Anomaly Detection by creating a cost monitor which will enable you to establish spending segments. Based on the segments you have defined, AWS can assess any unusual expenses at a more specific and preferred level. Cost monitors continuously look at your AWS spend and uses machine learning to detect anomalies. **A cost monitor can be configured to analyze all of your AWS services independently or by member accounts, cost allocation tags or cost categories**. There is a possibility of creating multiple monitors if there is a need to analyze spend across different segments. However, for the purpose of this lab a single monitor is created to analyze spend segmented by AWS services. During the process of creating the monitor, an alert subscription is also created. Alert subscription is a mechanism of notifying relevant users or administrators in case an anomaly is detected. Depending on the required alert frequency, you can notify designated individuals by email or Amazon SNS.
 
 Follow the following steps to setup up a new cost monitor and an alert subscription:
 
@@ -39,9 +39,11 @@ Once above options are configured, a **Summary** is displayed to inform the user
 
 ![Images/CostAnomaly08.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_08.png?classes=lab_picture_small)
 
-> There are two types of thresholds: absolute and percentage. 
-> - Absolute thresholds trigger alerts when an anomaly's total cost impact exceeds your chosen threshold.
-> - Percentage thresholds trigger alerts when an anomaly's total impact percentage exceeds your chosen threshold. Total impact percentage is the percentage difference between the total expected spend and total actual spend.
+There are two types of thresholds: absolute and percentage. 
+- Absolute thresholds trigger alerts when an anomaly's total cost impact exceeds your chosen threshold.
+- Percentage thresholds trigger alerts when an anomaly's total impact percentage exceeds your chosen threshold. Total impact percentage is the percentage difference between the total expected spend and total actual spend.
+
+While setting threshold values, customers must consider their individual use case and risk appetite. For example, a 5% increase might be significant for some customers while negligible for others. Also consider any upcoming migrations or other upcoming events that can cause significant changes in your spend pattern as that will require re-adjusting your threshold values. 
 
 7. At the end of **Configure alert subscription** step, there is an option to create additional subscriptions. For the purpose of this lab, no more subscriptions are created. Click **Create monitor** to finish creating the monitor and subscription:
 ![Images/CostAnomaly09.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_09.png?classes=lab_picture_small)
