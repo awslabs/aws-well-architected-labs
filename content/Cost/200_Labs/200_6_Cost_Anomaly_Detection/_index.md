@@ -12,6 +12,7 @@ hidden: false
 * **Bilal Shuja**, Technical Account Manager.
 
 ## Contributors
+* **Ben Mergen**, Sr Cost Lead SA WA.
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -39,7 +40,7 @@ This lab helps you to exercise the following Well-Architected Best Practices in 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
 
 {{% notice note %}}
-NOTE: It is strongly advised not to use production account for the purpose of this lab, use a test or sandbox account to understand the functionalities and capabilities of the service and then replicate the relevant configurations to the production accounts.
+It is strongly advised not to use production account for the purpose of this lab, use a test or sandbox account to understand the functionalities and capabilities of the service and then replicate the relevant configurations to the production accounts.
 {{% /notice %}}
 
 {{% notice note %}}
@@ -50,7 +51,7 @@ Cost Anomaly Detection require at least 10 days of historical service usage data
 * An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) or an [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) in your AWS account with full access to [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) and [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/).
 
 {{% notice note %}}
-NOTE: These permissions will allow the IAM user or the role to view your AWS account spend.
+These permissions will allow the IAM user or the role to view your AWS account spend.
 {{% /notice %}}
 
 ## Costs

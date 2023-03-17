@@ -35,7 +35,7 @@ Follow the following steps to setup up a new cost monitor and an alert subscript
 * Enter **20** in the text box and
 * Select **percent above expected spend** from the drop down menu
 
-A **Summary** is displayed informing the user of the condition in which they will receive anomaly alerts. 
+Once above options are configured, a **Summary** is displayed to inform the user of the condition in which they will receive anomaly alerts. 
 
 ![Images/CostAnomaly08.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_08.png?classes=lab_picture_small)
 
@@ -47,7 +47,7 @@ A **Summary** is displayed informing the user of the condition in which they wil
 ![Images/CostAnomaly09.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_09.png?classes=lab_picture_small)
 
 {{% notice note %}}
-NOTE: A new monitor can take 24 hours to begin detecting new anomalies.
+A new monitor can take 24 hours to begin detecting new anomalies.
 {{% /notice %}}
 
 {{< prev_next_button link_prev_url="../1_cad_intro/" link_next_url="../3_investigate_anomaly/" />}}
