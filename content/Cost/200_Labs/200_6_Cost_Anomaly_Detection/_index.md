@@ -9,9 +9,10 @@ hidden: false
 
 ## Authors
 * **Bilal Shuja**, Technical Account Manager.
-* **Jerry Chen**, Well-Architected Geo Solutions Architect.
+* **Jerry Chen**, Solutions Architect, AWS Well-Architected.
 
 ## Contributors
+* **Jang Whan Han**, Solutions Architect, AWS Well-Architected.
 * **Ben Mergen**, Sr Cost Lead SA WA.
 
 ## Feedback
