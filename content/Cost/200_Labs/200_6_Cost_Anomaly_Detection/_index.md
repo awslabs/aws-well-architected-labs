@@ -8,8 +8,8 @@ hidden: false
 ---
 
 ## Authors
-* **Jerry Chen**, Well-Architected Geo Solutions Architect.
 * **Bilal Shuja**, Technical Account Manager.
+* **Jerry Chen**, Well-Architected Geo Solutions Architect.
 
 ## Contributors
 * **Ben Mergen**, Sr Cost Lead SA WA.
