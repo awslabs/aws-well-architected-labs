@@ -23,7 +23,7 @@ A confirmation window will appear, type **delete me** in the text box and click 
 ![Images/CostAnomaly27.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_27.png?classes=lab_picture_small)
 
 4. Delete SNS subscription by going to Amazon SNS console, click **Subscriptions** from the left navigation pane. Then select the radio button next to the subscription you created and click **Delete**.
-![Images/CostAnomaly28.png](/Co8st/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_28.png?classes=lab_picture_small)
+![Images/CostAnomaly28.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_28.png?classes=lab_picture_small)
 
 A confirmation window will appear, click **Delete** to continue.
 
