@@ -47,7 +47,7 @@ The default SNS access policy allow all Principals with in the owner account to 
 6. On the **Create Subscription** page, select **Email** under the **Protocol** drop down menu and enter an email address in the text field under **Endpoint**. Then click **Create Subscription** at the bottom of the page to finish creating subscription:
 ![Images/CostAnomaly22.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_22.png?classes=lab_picture_small)
 
-At times, there is a requirement to alert multiple different teams or individuals such as FinOps, DevOps, SRE or Team Lead teams. In such a scenario additional subscriptions can be created.
+At times, there is a requirement to alert multiple individuals or multiple teams such as FinOps, DevOps, SRE or Management team. In such a scenario additional subscriptions can be created.
 
 {{% notice note %}}
 For notifications to be sent, you must accept the subscription to the Amazon SNS notification topic.
