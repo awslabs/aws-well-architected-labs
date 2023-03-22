@@ -55,7 +55,7 @@ It is strongly advised not to use a production account for this lab but to use a
 
 For a multi-account AWS environment, Cost Anomaly Detection needs to be set up in the management account to analyze cost across the entire AWS Organizations and alert on anomalies for each linked account.
 
-* An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) or an [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) in your AWS account with full access to [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) and [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/) requires.
+* An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) or an [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) in your AWS account with full access to [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) and [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/) is required.
 
 {{% notice note %}}
 These permissions will allow the IAM user or the role to view your AWS account spend.
