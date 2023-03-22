@@ -7,18 +7,18 @@ pre: "<b>1. </b>"
 ---
 
 ### Getting to know AWS Cost Anomaly Detection
-AWS Cost Anomaly Detection leverages advanced Machine Learning technologies to identify anomalous spend and root causes, so you can quickly take action. With three simple steps, you can create your own contextualized cost monitor and receive alerts when any anomalous spend is detected. This is possible by using machine learning to learn your spend patterns, including organic growth and seasonal trends, and trigger alert as they seem abnormal. You can improve the model by providing feedback on the alerts. At the moment, Anomaly Detection focuses on monitoring spend by individual AWS service, Cost Allocation tags, Cost Categories, and linked/member accounts. 
+AWS Cost Anomaly Detection leverages advanced Machine Learning technologies to identify unusual spends and root causes, so you can quickly take action. With three simple steps, you can create your own contextualized cost monitor and receive alerts when any anomalous spend is detected. This is possible by using machine learning to learn your spend patterns, including organic growth and seasonal trends, and trigger an alert as they seem abnormal. In addition, you can improve the model by providing feedback on the alerts. Currently, Anomaly Detection focuses on monitoring spend by individual AWS service, Cost Allocation tags, Cost Categories, and linked/member accounts.
 
 {{% notice note %}}
 After your billing data is processed, AWS Cost Anomaly Detection runs approximately three times a day. You might experience a slight delay in receiving alerts. Cost Anomaly Detection uses data from Cost Explorer, which has a delay of up to 24 hours. As a result, it can take up to 24 hours to detect an anomaly after a usage occurs. If you create a new monitor, it can take 24 hours to begin detecting new anomalies. For a new service subscription, 10 days of historical service usage data is needed before anomalies can be detected for that service.
 {{% /notice %}}
 
 ### How Cost Anomaly Detection differs from AWS Budgets?
-AWS Budgets is helpful in monitoring aggregated spend where it is under a specific dollar threshold that you set. However, it does not evaluates the usage patterns or have the capability to detect spend which is unusual if it is within the pre-set budget. The following diagram really helps understand the different spend patterns detected by AWS Budgets vs AWS Cost Anomaly Detection. 
+AWS Budgets helps monitor aggregated spend where it is under a specific dollar threshold that you set. However, it does not evaluate the usage patterns or have the capability to detect unusual spends if it is within the pre-set budget. The following diagram helps understand the different spend patterns detected by AWS Budgets versus AWS Cost Anomaly Detection.
 
 ![Images/CADvsBudgets.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cad_vs_budgets.png?classes=lab_picture_small)
 
-Scenario 2 shows sudden spikes in spend which are disregarded by AWS Budgets due to not exceeding the budget threshold. On the contrary, Cost Anomaly Detection learns usage and spend pattern based on historical data and detects such spikes in spend as an unusual behavior and consequently alerts the user. 
+Scenario 2 shows sudden spikes in spend, which are disregarded by AWS Budgets due to staying within the budget threshold. On the contrary, Cost Anomaly Detection learns usage and spend patterns based on historical data, detects such spikes in spend as unusual behavior, and consequently alerts the user.
 
 ### Accessing Cost Anomaly Detection
 
