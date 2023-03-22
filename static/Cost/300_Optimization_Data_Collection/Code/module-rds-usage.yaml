@@ -502,7 +502,7 @@ Resources:
             rtrim(availabilityzone, 'abcdef') region,
             (CASE
                 WHEN (multiaz = false) THEN 'Single-AZ'
-                WHEN (multiaz = true) THEN 'Mutli-AZ' ELSE 'Error check deploymentoption'
+                WHEN (multiaz = true) THEN 'Multi-AZ' ELSE 'Error check deploymentoption'
               END
             ) deploymentoption,
             (CASE

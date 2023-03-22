@@ -131,9 +131,12 @@ This error is caused by V3 engine of Athena. To fix it, you will need to update 
 - [SPs but not RIs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp.sql)
 - [Both RIs and SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp_ri.sql)
 
-
 {{% /expand%}}
 
+#### I see this error Error: CUR not detected and we have AWS Lake Formation activated
+{{%expand "Click here to expand answer" %}}
+CID is not compatible yet with AWS Lake Formation. You can deploy CID in an account where no Lake Formation activated.
+{{% /expand%}}
 
 #### How do I fix the ‘product_cache_engine’ or 'product_database_engine' cannot be resolved error?
 Some CID views dependent on having or historically having an RDS database instance and an ElastiCache instance run in your organization.

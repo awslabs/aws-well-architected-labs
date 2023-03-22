@@ -110,7 +110,7 @@ Resources:
 
               return {
                   'statusCode': 200,
-                  'body': json.dumps('YAY!')
+                  'body': json.dumps('AmazonEC2 Pricing Complete')
               }
           def region_data(s3Bucket, s3):
 
