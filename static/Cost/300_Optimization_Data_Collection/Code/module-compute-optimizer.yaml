@@ -263,7 +263,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
   LambdaTriggerExport:
