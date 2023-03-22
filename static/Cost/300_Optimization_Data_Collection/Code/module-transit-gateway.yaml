@@ -64,8 +64,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource:
-                  "*"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
         - PolicyName: "LambdaTWGPolicy"
           PolicyDocument:
             Version: "2012-10-17"
