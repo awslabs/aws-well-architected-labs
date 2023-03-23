@@ -34,4 +34,12 @@ Scenario 2 shows sudden spikes in spend, which are disregarded by AWS Budgets du
 4. A window will pop-up welcoming you to Cost Anomaly Detection. Click **Show me around** to start service tour or click **Skip tour** to continue to next step:
 ![Images/CostAnomaly02.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_02.png?classes=lab_picture_small)
 
+### Congratulations!
+**This is an example....**
+You have completed this section of the lab. In this section you
+successfully deployed two AWS CloudFormation templates of the lab and
+confirmed the relevant resources were created using the AWS Console.
+
+Click on **Next Step** to continue to the next section.
+
 {{< prev_next_button link_prev_url="../" link_next_url="../2_create_monitor/" />}}
