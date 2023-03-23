@@ -53,4 +53,11 @@ While setting threshold values, customers must consider their individual use cas
 A new monitor can take **24 hours** to begin detecting new anomalies.
 {{% /notice %}}
 
+### Congratulations!
+**This is an example....**
+You have completed this section of the lab. In this section you
+successfully deployed two AWS CloudFormation templates of the lab and
+confirmed the relevant resources were created using the AWS Console.
+
+Click on **Next Step** to continue to the next section.
 {{< prev_next_button link_prev_url="../1_cad_intro/" link_next_url="../3_investigate_anomaly/" />}}

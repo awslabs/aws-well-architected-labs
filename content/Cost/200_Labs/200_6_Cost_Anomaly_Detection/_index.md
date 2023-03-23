@@ -1,5 +1,5 @@
 ---
-title: "Level 200 - Cost Anomaly Detection"
+title: "Level 200: Cost Anomaly Detection"
 ## menutitle: "Lab #1"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
