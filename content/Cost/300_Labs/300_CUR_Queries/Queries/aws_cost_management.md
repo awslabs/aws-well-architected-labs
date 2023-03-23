@@ -187,7 +187,7 @@ select
 from customer_all
 where
   line_item_line_item_type in ('Refund','Credit') and
-  line_item_line_item_description like '%MPE%'
+  line_item_line_item_description like '%_MPE%'
 -- default is all MAP credits for the entire account for all time, add next line to filter
 -- and ${date_filter}
 group by 1,2,3,4,5;
