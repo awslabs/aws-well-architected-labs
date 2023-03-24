@@ -35,10 +35,8 @@ Scenario 2 shows sudden spikes in spend, which are disregarded by AWS Budgets du
 ![Images/CostAnomaly02.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_02.png?classes=lab_picture_small)
 
 ### Congratulations!
-**This is an example....**
 You have completed this section of the lab. In this section you
-successfully deployed two AWS CloudFormation templates of the lab and
-confirmed the relevant resources were created using the AWS Console.
+learned the fundamentals of AWS Cost Anomaly Detection and how it differs from AWS Budgets. You also learned how to access the service using AWS console.
 
 Click on **Next Step** to continue to the next section.
 
