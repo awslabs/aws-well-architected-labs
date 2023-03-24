@@ -34,7 +34,7 @@ Users can click the gear icon on the right side to add or change columns in the 
 ![Images/CostAnomaly14.png](/Cost/200_6_Cost_Anomaly_Detection/Images/cost_anomaly_14.png?classes=lab_picture_small)
 
 ### Congratulations!
-You have completed this section of the lab. In this section you
+You have completed this section of the lab. In this section, you
 learned how to navigate through the history of detected anomalies, dive deep into specific anomaly and investigate the associated root cause. 
 
 Click on **Next Step** to continue to the next section.

@@ -55,7 +55,7 @@ A new monitor can take **24 hours** to begin detecting new anomalies.
 
 ### Congratulations!
 You have completed this section of the lab. In this section, you
-successfully created a Cost Monitor to analyze cost segmented by AWS services. An alert subscription was also configured to send daily summary report of detected anomalies via email.  
+successfully created a Cost Monitor for analyzing cost segmented by AWS services. An alert subscription was also configured to send daily summary report of detected anomalies via email.  
 
 Click on **Next Step** to continue to the next section.
 {{< prev_next_button link_prev_url="../1_cad_intro/" link_next_url="../3_investigate_anomaly/" />}}

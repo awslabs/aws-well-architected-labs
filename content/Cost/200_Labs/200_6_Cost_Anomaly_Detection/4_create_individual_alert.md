@@ -58,7 +58,7 @@ While setting threshold value, customers must consider their individual use case
 11. Users also have the option to cost anomaly alerts in a Slack channel or an Amazon Chime chat room. For the details, refer to [Receiving AWS Cost Anomaly Detection alerts in Amazon Chime and Slack](https://docs.aws.amazon.com/cost-management/latest/userguide/cad-alert-chime.html)
 
 ### Congratulations!
-You have completed this section of the lab. In this section you
+You have completed this section of the lab. In this section, you
 successfully created an alert subscription which leverages [Amazon Simple Notification Service(SNS)](https://aws.amazon.com/sns/) to notify the subscribers every time an anomaly is detected. 
 
 Click on **Next Step** to continue to the next section.
