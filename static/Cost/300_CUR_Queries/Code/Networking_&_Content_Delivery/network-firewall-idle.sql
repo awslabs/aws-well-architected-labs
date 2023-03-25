@@ -11,11 +11,10 @@ SELECT
   , round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2) as "hourly_cost"
   , round (sum (IF ((line_item_usage_type LIKE '%Traffic-GB%'), line_item_unblended_cost, 0)), 2) as "traffic_cost"
 FROM ${table_name}
-WHERE (line_item_product_code = 'AWSNetworkFirewall')
+WHERE ${date_filter}
+  and (line_item_product_code = 'AWSNetworkFirewall')
   and (line_item_line_item_type = ('Usage'))
   and ((line_item_usage_type LIKE '%Endpoint-Hour%') or (line_item_usage_type LIKE '%Traffic-GB%'))
-  and (month(bill_billing_period_start_date) = month((current_date) - INTERVAL '1' month))
-  and (year(bill_billing_period_start_date) = year((current_date) - INTERVAL '1' month))
 GROUP BY line_item_usage_account_id, product_region, line_item_resource_id
 HAVING (round (sum (IF ((line_item_usage_type LIKE '%Endpoint-Hour%'), line_item_unblended_cost, 0)), 2)/round (sum (IF   ((line_item_usage_type LIKE '%Traffic-GB%'), line_item_unblended_cost, 0)), 2) > 20)
 ORDER BY "hourly_cost" DESC, "traffic_cost" DESC, account ASC, region ASC, resource ASC
