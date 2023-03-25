@@ -27,6 +27,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [EC2 Savings Plans Inventory](#ec2-savings-plans-inventory)
   * [EC2 Reserved Instance Coverage](#ec2-reserved-instance-coverage)
   * [AWS Outposts - EC2 Hours a Day](#aws-outposts---ec2-hours-a-day)
+  * [EC2 CPU Architecture Spend](#ec2-cpu-architecture-spend)
 
 ### EC2 Total Spend
 
@@ -661,3 +662,103 @@ ORDER BY
 {{< email_button category_text="Compute" service_text="Outposts" query_text="AWS Outposts EC2 Hours a Day" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### EC2 CPU Architecture Spend
+
+#### Query Description
+This query will provide the EC2 spend for CPU architectures (AMD, Intel, Graviton, Mac) by account.  The spend covers on-demand, savings plan, reserved instances, and spot.
+
+#### Pricing Page
+Please refer to the [EC2 pricing page](https://aws.amazon.com/ec2/pricing/).
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/Compute/ec2cpuspend.sql)
+
+#### Copy Query
+```tsql
+SELECT
+  DATE_FORMAT(bill_billing_period_start_date,'%Y-%m') as "billing_period"
+, line_item_usage_account_id as "account_id"
+, round 
+    (sum 
+      (IF ((product_physical_processor LIKE '%AMD%'), 
+        (CASE 
+            WHEN (product_usagetype LIKE '%SpotUsage%') THEN line_item_unblended_cost 
+            WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+            WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+            WHEN (line_item_line_item_type LIKE 'Usage') THEN line_item_unblended_cost ELSE 0E0 END
+        ), 
+      0)
+    ), 
+  2) "amd_cost"
+, round 
+    (sum
+      (IF (((product_physical_processor LIKE '%Intel%') OR (product_physical_processor LIKE '%Variable%')), 
+        (CASE 
+           WHEN (product_usagetype LIKE '%SpotUsage%') THEN line_item_unblended_cost 
+           WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+           WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+           WHEN (line_item_line_item_type LIKE 'Usage') THEN line_item_unblended_cost ELSE 0E0 END
+        ),
+      0)
+    ),
+  2) "intel_cost"
+, round 
+    (sum
+      (IF ((product_physical_processor LIKE '%Graviton%'), 
+        (CASE 
+           WHEN (product_usagetype LIKE '%SpotUsage%') THEN line_item_unblended_cost 
+           WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+           WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+           WHEN (line_item_line_item_type LIKE 'Usage') THEN line_item_unblended_cost ELSE 0E0 END
+        ),
+      0)
+    ),
+  2) "graviton_cost"
+, round 
+    (sum
+      (IF ((product_physical_processor LIKE 'Apple%'), 
+        (CASE 
+          WHEN (product_usagetype LIKE '%SpotUsage%') THEN line_item_unblended_cost 
+          WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+          WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+          WHEN (line_item_line_item_type LIKE 'Usage') THEN line_item_unblended_cost ELSE 0E0 END
+        ),
+      0)
+    ),
+  2) "mac_cost" 
+, round 
+    (sum
+      (CASE 
+         WHEN (product_usagetype LIKE '%SpotUsage%') THEN line_item_unblended_cost 
+         WHEN (line_item_line_item_type = 'SavingsPlanCoveredUsage') THEN savings_plan_savings_plan_effective_cost 
+         WHEN (line_item_line_item_type = 'DiscountedUsage') THEN reservation_effective_cost 
+         WHEN (line_item_line_item_type LIKE 'Usage') THEN line_item_unblended_cost ELSE 0E0 END
+    ),
+  2) "total_cost"
+FROM
+  ${table_name}
+WHERE
+  ${date_filter} 
+  AND (product_product_name = 'Amazon Elastic Compute Cloud') 
+  AND ((product_usagetype LIKE '%SpotUsage%') 
+    OR (product_usagetype LIKE '%BoxUsage%') 
+    OR (product_usagetype LIKE '%HostUsage%') 
+    OR (product_usagetype LIKE '%DedicatedUsage%')
+  ) 
+  AND ((line_item_line_item_type = 'Usage')
+    OR (line_item_line_item_type = 'SavingsPlanCoveredUsage')
+    OR (line_item_line_item_type = 'DiscountedUsage')
+  )
+GROUP BY 
+  bill_billing_period_start_date, 
+  line_item_usage_account_id
+ORDER BY total_cost DESC;
+```
+
+{{< email_button category_text="Compute" service_text="EC2" query_text="EC2 Hours a Day" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
+
