@@ -4,8 +4,8 @@ select
   line_item_line_item_type,
   line_item_line_item_description,
   line_item_usage_account_id,
-  sum(line_item_unblended_cost) cost
-from customer_all
+  sum(line_item_unblended_cost) sum_line_item_unblended_cost
+from ${tableName}
 where
   line_item_line_item_type in ('Refund','Credit') and
   line_item_line_item_description like '%_MPE%'

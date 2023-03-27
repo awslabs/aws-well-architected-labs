@@ -170,7 +170,7 @@ ORDER BY
 ### Migration Acceleration Program Credits
 
 #### Query Description
-This query provides all rewarded MAP credits grouped by month, year, product credit source and account id.  Default is for all time. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
+This query provides all rewarded [Migration Acceleration Program](https://aws.amazon.com/migration-acceleration-program/) (MAP) credits grouped by month, year, product credit source and account id.  Default is for all time. A line is included as an example if a date filter is desired. Please refer to the [CUR Query Library Helpers section](/cost/300_labs/300_cur_queries/query_help/) for assistance.  
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/MAPCredits.sql)
@@ -183,8 +183,8 @@ select
   line_item_line_item_type,
   line_item_line_item_description,
   line_item_usage_account_id,
-  sum(line_item_unblended_cost) cost
-from customer_all
+  sum(line_item_unblended_cost) sum_line_item_unblended_cost
+from ${tableName}
 where
   line_item_line_item_type in ('Refund','Credit') and
   line_item_line_item_description like '%_MPE%'
