@@ -2,8 +2,8 @@
 title: "Teardown"
 date: 2022-11-30T11:16:09-04:00
 chapter: false
-weight: 3
-pre: "<b>8. </b>"
+weight: 4
+pre: "<b>4. </b>"
 ---
 
 In this section you will delete all resources related to the lab environment.
