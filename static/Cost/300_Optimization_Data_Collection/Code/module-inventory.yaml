@@ -72,7 +72,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
         - PolicyName: !Sub "${CFDataName}-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -291,12 +291,12 @@ Resources:
                 line_item_usage_account_id,
                 product_region,
                 split("line_item_resource_id", '/')[2]resource_id,
-                mybillingreport.month, 
-                mybillingreport.year,
+                ${table_name}.month, 
+                ${table_name}.year,
                 SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
                 SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
               FROM
-                ${table_name}
+                ${database}.${table_name}
               WHERE
                 ${date_filter}
                 AND product_product_name = 'Amazon Elastic Compute Cloud'

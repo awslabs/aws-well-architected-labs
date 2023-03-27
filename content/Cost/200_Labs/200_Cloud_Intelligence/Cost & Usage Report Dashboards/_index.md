@@ -9,7 +9,7 @@ pre: "<b> </b>"
 ---
 ## Last Updated
 
-November 2022
+March 2023
 
 
 ## Feedback
@@ -58,9 +58,7 @@ The AWS Cost & Usage Report (CUR) contains the most comprehensive set of AWS cos
 
 ## Costs
 
-- A QuickSight Enterprise license starts at $18 per month.
-- Incremental costs associated with AWS Glue, Amazon Athena, and Amazon S3.
-- Estimated total cost for all Dashboards together in a large AWS deployment is $100 per month.
+See [FAQ#pricing](/cost/200_labs/200_cloud_intelligence/faq/#pricing)
 
 ## Time to complete
 

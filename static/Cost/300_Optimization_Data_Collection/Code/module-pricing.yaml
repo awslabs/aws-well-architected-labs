@@ -110,7 +110,7 @@ Resources:
 
               return {
                   'statusCode': 200,
-                  'body': json.dumps('YAY!')
+                  'body': json.dumps('AmazonEC2 Pricing Complete')
               }
           def region_data(s3Bucket, s3):
 
@@ -209,7 +209,7 @@ Resources:
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the lambda data
-      Name: pricing_ec2_creat_table
+      Name: pricing_ec2_create_table
       QueryString: !Sub |
         CREATE EXTERNAL TABLE pricing_ec2(
           sku string,
@@ -223,6 +223,7 @@ Resources:
           unit string,
           priceperunit string,
           currency string,
+          relatesto string,
           leasecontractlength string,
           purchaseoption string,
           offeringclass string,
@@ -260,6 +261,7 @@ Resources:
           tolocationtype string,
           usagetype string,
           operation string,
+          abdinstanceclass string,
           availabilityzone string,
           capacitystatus string,
           classicnetworkingsupport string,
@@ -380,7 +382,7 @@ Resources:
               
               bucket = s3.Bucket(s3Bucket)
               
-              bucket.copy(copy_source, 'pricing/region/regions.csv')
+              bucket.copy(copy_source, 'pricing/pricing-region/regions.csv')
               
               # Printing the Information That the File Is Copied.
               print('Single File is copied')

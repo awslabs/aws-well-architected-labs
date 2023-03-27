@@ -13,7 +13,9 @@ crawler = os.environ["CRAWLER_NAME"]
 
 def lambda_handler(event, context):
     try:
-        for record in event.get('Records', []):
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
+        for record in event['Records']:
             body = json.loads(record["body"])
             account_id = body["account_id"]
             payer_id = body["payer_id"]
@@ -70,8 +72,7 @@ def lambda_handler(event, context):
             print(f"Data in s3 - {key}")
             start_crawler()
     except Exception as e:
-        print(e)
-        logging.warning(f"{e}" )
+        logging.warning(e)
         
 
 

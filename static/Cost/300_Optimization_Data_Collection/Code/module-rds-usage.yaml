@@ -70,7 +70,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
         - PolicyName: !Sub "${CFDataName}-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -319,6 +319,9 @@ Resources:
 
           def lambda_handler(event, context):
               try:
+                  if 'Records' not in event: 
+                      raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
+                  
                   for record in event['Records']:
                       body = json.loads(record["body"])
                       account_id = body["account_id"]
@@ -334,18 +337,25 @@ Resources:
                                   client = assume_role(account_id, functions[service]['api'], region['RegionName'])
                                   for f in functions[service]['functions']:
                                       cw_client = assume_role(account_id, 'cloudwatch', region['RegionName'])
-                                      data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id, payer_id)
+                                      try:
+                                          data = globals()[f['name']](cw_client, client, s3client, region['RegionName'], service, f['output_path'], f['output_file_name'], account_id, payer_id)
+                                      except Exception as e:
+                                          # Send some context about this error to Lambda Logs
+                                          logging.warning(e)
                           else:
                               client=boto3.client(service)
                               for f in functions[service]['functions']:
                                   cw_client = boto3.client('cloudwatch', region_name = 'us-east-1')
-                  
-                                  data = globals()[f['name']](cw_client, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
+                                  try:
+                                      data = globals()[f['name']](cw_client, client, s3client, 'us-east-1', service, f['output_path'], f['output_file_name'], account_id)
+                                  except Exception as e:
+                                      # Send some context about this error to Lambda Logs
+                                      logging.warning(e)
                       start_crawler()
                       return "Successful"
               except Exception as e:
                   # Send some context about this error to Lambda Logs
-                  logging.warning("%s" % e)
+                  logging.warning(e)
 
 
 
@@ -492,7 +502,7 @@ Resources:
             rtrim(availabilityzone, 'abcdef') region,
             (CASE
                 WHEN (multiaz = false) THEN 'Single-AZ'
-                WHEN (multiaz = true) THEN 'Mutli-AZ' ELSE 'Error check deploymentoption'
+                WHEN (multiaz = true) THEN 'Multi-AZ' ELSE 'Error check deploymentoption'
               END
             ) deploymentoption,
             (CASE
@@ -530,8 +540,9 @@ Resources:
               END) fix,
             accountid,
             year,
-            month
-          FROM rds_metrics),
+            month,
+            CAST("concat"("year", '-', "month", '-01') AS date) "billing_period"
+          FROM rds_usage_data),
         rds_pricing AS (
           SELECT (CASE
                 WHEN (databaseengine LIKE 'Aurora%') THEN 'Aurora'
@@ -546,11 +557,11 @@ Resources:
             location,
             instancetype,
             (CASE
-                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal)
+                WHEN (priceperunit = '') THEN 0E0 ELSE CAST(priceperunit AS decimal(18,2))
               END
             ) priceperunit,
             unit
-          FROM optimization_data.rds_pricing
+          FROM optimization_data.pricing_rds
           WHERE (((locationtype = 'AWS Region')AND (purchaseoption = ''))AND (productfamily = 'Database Instance'))),
         graviton_mapping AS (
           SELECT raw_data.dbinstanceidentifier,
@@ -630,7 +641,7 @@ Resources:
                             WHEN (CAST(raw_data.major AS integer) > 12) THEN 'Eligible'
                             WHEN (
                               (CAST(raw_data.major AS integer) = 12)
-                              AND (CAST(raw_data.minor AS integer) >= 3)
+                              AND (CAST(raw_data.minor AS integer) >= 4)
                             ) THEN 'Eligible' ELSE 'Ineligible'
                           END
                         ) ELSE 'Ineligible'
@@ -642,16 +653,17 @@ Resources:
             ) graviton_eligible,
             rds_graviton_mapping.graviton_instancetype,
             raw_data.region,
-            region_names.regionname,
+            pricing_region_names.regionname,
             raw_data.deploymentoption,
             raw_data.engineversion,
             raw_data.accountid,
             raw_data.year,
-            raw_data.month
+            raw_data.month, 
+            raw_data.billing_period
           FROM (
               (
                 raw_data
-                LEFT JOIN optimization_data.region_names ON (raw_data.region = region_names.region)
+                LEFT JOIN optimization_data.pricing_region_names ON (raw_data.region = pricing_region_names.region)
               )
               LEFT JOIN optimization_data.rds_graviton_mapping ON (
                 (

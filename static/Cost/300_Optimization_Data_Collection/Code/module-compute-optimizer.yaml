@@ -263,7 +263,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
   LambdaTriggerExport:
@@ -327,6 +327,7 @@ Resources:
                               'auto_scale':   co.export_auto_scaling_group_recommendations,
                               'lambda':       co.export_lambda_function_recommendations,
                               'ebs_volume':   co.export_ebs_volume_recommendations,
+                              # 'ecs_service':  co.export_ecs_service_recommendations,  # does not work with boto3 versions below 1.26
                           }
                           bkt = BUCKET_PREFIX + '-' + region
                           print(f"INFO: bucket={bkt}")

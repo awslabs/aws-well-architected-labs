@@ -26,13 +26,14 @@ def lambda_handler(event, context):
 
     if opsItem_status == 'Resolved':
         workload = opsItem['OpsItem']['OperationalData']['/aws/resources']['Value'].split('"')[3].split('/')[1]
+        lens = opsItem['OpsItem']['OperationalData']['Lens']['Value']
         question_id = opsItem['OpsItem']['OperationalData']['QuestionId']['Value']
         new_bp = opsItem['OpsItem']['OperationalData']['ChoiceId']['Value']
 
         #Get current answer for the question
         current_answer = wa.get_answer(
             WorkloadId=workload,
-            LensAlias='wellarchitected',
+            LensAlias=lens,
             QuestionId=question_id
         )
 
@@ -42,15 +43,17 @@ def lambda_handler(event, context):
         if new_bp in selected_choices:
             print('Workload already up to date, no action needed')
         else:
-            #Check if none of these is a selected option
+            #Check if none of these is a selected option 
+            none_of_these = None
             for bp_choice in current_answer['Answer']['Choices']:
                 if bp_choice['Title'] == 'None of these':
                     none_of_these = bp_choice['ChoiceId']
 
-            #If none of these is selected, no best practices applied for this question
-            for choice_id in selected_choices:
-                if choice_id == none_of_these:
-                    selected_choices = []
+            if none_of_these is not None:
+                #If none of these is selected, no best practices applied for this question
+                for choice_id in selected_choices:
+                    if choice_id == none_of_these:
+                        selected_choices = []
 
             selected_choices.append(new_bp)
 
@@ -59,7 +62,7 @@ def lambda_handler(event, context):
             #Update the answers for the question on the AWS WA Tool
             updated_answer = wa.update_answer(
                 WorkloadId=workload,
-                LensAlias='wellarchitected',
+                LensAlias=lens,
                 QuestionId=question_id,
                 SelectedChoices=selected_choices
             )
@@ -69,7 +72,10 @@ def lambda_handler(event, context):
                 TableName='wa_workload_data',
                 Key={
                     'workload_id': {
-                        'S': workload
+                        'S': workload 
+                    },
+                    'question_id': {
+                        'S': question_id
                     }
                 }
             )
@@ -78,10 +84,10 @@ def lambda_handler(event, context):
 
         #Get current HRI and MRI count for the workload from DynamoDB
         workload_details = wa.get_workload(
-            WorkloadId=workload
+            WorkloadId=workload 
         )
 
-        hri_count = workload_details['Workload']['RiskCounts']['HIGH']
+        hri_count = workload_details['Workload']['RiskCounts']['HIGH'] 
         mri_count = workload_details['Workload']['RiskCounts']['MEDIUM']
 
         #If risk count is 0, remove workload entry from DynamoDB, else update state for the workload on DynamoDB
@@ -92,6 +98,9 @@ def lambda_handler(event, context):
                     Key={
                         'workload_id': {
                             'S': workload
+                        },
+                        'question_id': {
+                            'S': question_id
                         }
                     }
                 )
@@ -101,7 +110,10 @@ def lambda_handler(event, context):
                 TableName='wa_workload_data',
                 Item={
                     'workload_id': {
-                        'S': workload
+                        'S': workload #add questionId
+                    },
+                    'question_id': {
+                        'S': question_id
                     },
                     'missing_bps': {
                         'SS': current_state

@@ -3,7 +3,7 @@ title: "Level 200: Rightsizing with Compute Optimizer"
 #menutitle: "Lab #3"
 date: 2020-04-24T11:16:08-04:00
 chapter: false
-weight: 6
+weight: 7
 ---
 ## Last Updated
 October 2021

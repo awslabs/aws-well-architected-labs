@@ -55,7 +55,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
         - PolicyName: "S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
