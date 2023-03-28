@@ -6,63 +6,71 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-In this section, you will deploy the lab environment. Once the solution has been implemented, you will be able to embed AWS Health API insights into the test operational change process to automatically suspend operational changes whenever an AWS Health event is reported in a Region that you’re operating in.
+In this section, we will deploy the [**Instance Scheduler on AWS**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) from the AWS Solutions Library. And also small sample fleet of EC2 instances that we will use as the target for the Instance Scheduler solution.
 
 ### Architecture Overview
 
-The solution leverages the following AWS Services and features in your AWS Account:
+![section1_01_solution](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_01_solution.png)
 
-* [AWS Systems Manager Change Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/change-manager.html) which is an enterprise change management framework for requesting, approving, implementing, and reporting on operational changes to your application configuration and infrastructure. 
-* AWS Systems Manager [automation runbook](https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-documents.html) helps you to build automated solutions to deploy, configure, and manage AWS resources at scale.
-* AWS Health provides ongoing visibility into the availability of your AWS services, where you can programmatically retrieve those availability data via [AWS Health API](https://docs.aws.amazon.com/health/latest/ug/health-api.html).
+**Instance Scheduler on the AWS Cloud**
 
-![Section1 App Arch](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Images/section1_solution_architect.png)
+1. The AWS CloudFormation template sets up an Amazon CloudWatch event at a customer-defined interval. This event invokes the Instance Scheduler AWS Lambda function. During configuration, the user defines the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
 
-You will use AWS CloudFormation to provision some resources needed for this lab. As part of this lab, the CloudFormation stack that you provision will create a Systems Manager automation runbook, a SNS notification topic, a test EC2 instance, an IAM user to approve the SSM Change Template, and other relevant IAM roles and permissions. You can view the CloudFormation template [here](/Operations/200_Build_AWS_Health_Aware_Operation_Change_Process/Code/cfn_health_aware_ssm_stack.yaml) for a complete list of all resources that are provisioned. This lab will only work in us-east-1.
+2. These values are stored in Amazon DynamoDB, and the Lambda function retrieves them each time it runs. You can then apply the custom tag to applicable instances.
 
-### 1.1 Log into the AWS console
+3. During initial configuration of the Instance Scheduler, you define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) Schedule and create a schedule called uk-office-hours. To identify an instance that will use the uk-office-hours schedule, the user adds the Schedule tag key with a value of uk-office-hours.
+
+Please refer to the Instance Scheduler solution [implementation guidance document](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/solution-overview.html) for more details.
+
+
+#### 1. Log into the AWS console
 
 {{% notice note %}}
 This Lab only works in AWS **N.Virginia region (us-east-1)**, while the following instructions assume that you are using **your own AWS account**. If you are attending an in-person workshop and were provided with an AWS account, please follow the instructions from the lab coordinator.
 {{% /notice %}}
 
-**Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has either AdministratorAccess or PowerUserAccess (with full IAM access) permissions to ensure successful execution of this lab.**
+Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has either AdministratorAccess or PowerUserAccess (with full IAM access) permissions to ensure successful execution of this lab.
 
-#### Instance Scheduler installation steps
+#### 2. Sample instance fleet deployment steps
 
-1. Download instance scheduler template using the following link, with a template created on purpose for this workshop. In production you should use the official template referenced at the end of the page. Save this template on your local computer.
+1. Download the **sample_environment_template.yml** CloudFormation template using the following link:
 
-    * [Download the cloudformation for InstanceScheduler](https://static.us-east-1.prod.workshops.aws/public/074b7ca8-8f0c-4a8f-b17c-8412087636b1/assets/aws-instance-scheduler-sup304v2.template)
+    * [Download the sample environment template](/Cost/200_EC2_Scheduling_at_Scale/Code/sample_environment_template.yml)
 
-2. Open the CloudFormation console using the following link: https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new 
+2. Open the CloudFormation console in **us-east-1** region using the following link: https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new
 
-3. Click on upload a ``template file``
+3. Click on **Upload a template file**, and then on **Choose file**. Select the template file downloaded in step 1, named **"sample_environment_template.yml"**. Click on **Next**.
 
-4. Click on the ``Choose File`` button
+![section1_1_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_1_sampleenvstack.png)
 
-5. Choose the file downloaded in step 1, by default the name is ``aws-instance-scheduler-sup304v2.template``
+4. For the **Stack name**, use ``walab-l200-scheduling-sample-env``. Leave other parameters as default and click on **Next** button twice.
 
-![install_instance_scheduler_1](/Cost/200_EC2_Scheduling_at_Scale/Images/install_instance_scheduler_1.png)
+5. In the **Review** page, scroll down, check the **"I acknowledge that AWS CloudFormation might create IAM resources."** box and click on the **Submit** button.
 
-6. Click on next
+![section1_2_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_2_sampleenvstack.png)
 
-7. Enter "InstanceScheduler" as a stack name. We will need the name later to see configuration of the schedules.
+While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue to the next section below to deploy the [Instance Scheduler on AWS solution](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/).
 
-![install_instance_scheduler_2](/Cost/200_EC2_Scheduling_at_Scale/Images/install_instance_scheduler_2.png)
+#### 3. Instance Scheduler installation steps
 
-8. Scroll down and click on next
+1. Use below link to automatically open this solution template in your CloudFormation console in **us-east-1** region:
 
-9. Scroll down and click on next once again
+    * [Launch Instance Scheduler solution in the AWS Console](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https:%2F%2Fs3.amazonaws.com%2Fsolutions-reference%2Faws-instance-scheduler%2Flatest%2Faws-instance-scheduler.template)
 
-10. Scroll up and crosscheck that the name of the cloudformation stack is "InstanceScheduler", if this the case the first title at the very top of the page will be "Review InstanceScheduler"
+2. Click on the **Next** button.
 
-![install_instance_scheduler_3](/Cost/200_EC2_Scheduling_at_Scale/Images/install_instance_scheduler_3.png)
+3. For the **Stack name**, use ``InstanceScheduler``. Leave all other parameters as default.
 
-11. If the name of the cloudformation stack is "InstanceScheduler", scroll down and click on ``Submit``, otherwise go back and change the name of the stack to "InstanceScheduler"
+    **Important**: Use this exact name as will need it later to see the configuration of the schedules.
 
-![install_instance_scheduler_4b](/Cost/200_EC2_Scheduling_at_Scale/Images/install_instance_scheduler_4b.png)
+4. Scroll down and click on the **Submit** button twice.
 
-12. Make sure that the cloudformation stack is deployed successfully before continuing with the next steps. This might take up to 5 minutes to complete.
+5. In the **Review** page, scroll down, check the **"I acknowledge that AWS CloudFormation might create IAM resources."** box and click on the **Submit** button.
+
+![section1_2_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_2_sampleenvstack.png)
+
+6. Finally, go back to the [CloudFormation Stacks console](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks) and wait for both **walab-l200-scheduling-sample-env** and **InstanceScheduler** to be in a **"CREATE_COMPLETE"** status. This might take up to 5 minutes to complete.
+
 
 ### Congratulations! 
 
