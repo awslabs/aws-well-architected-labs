@@ -180,7 +180,7 @@ FROM
   ${table_name}
 WHERE 
   ${date_filter}
-  AND REGEXP_LIKE(line_item_usage_type, '.[a-z]([1-9]|[1-9][0-9]).?.?[g]\.')
+  AND REGEXP_LIKE(line_item_usage_type, '.?[a-z]([1-9]|[1-9][0-9]).?.?[g][a-zA-Z]?\.')
   AND line_item_usage_type NOT LIKE '%EBSOptimized%' 
   AND (line_item_line_item_type = 'Usage'
     OR line_item_line_item_type = 'SavingsPlanCoveredUsage'
