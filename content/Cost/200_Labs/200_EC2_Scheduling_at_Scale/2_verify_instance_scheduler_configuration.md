@@ -6,55 +6,65 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-To configure the scheduler, you can use the scheduler-cli tool that has been preinstalled into the EC2 instances named admin-instance. The admin instance in this workshop is accessible using SSM Session Manager. In order to login to the admin-instance follow the steps below:
+With the sample environment deployed, we can now proceed to verify the defaults configuration available for the Instance Scheduler solution.
 
-1. Open the EC2 Console using this link
-    * [Direct link for EC2 Console admin instance](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running;tag:Name=admin-instance;v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false)
+To configure the scheduler, you can use the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) that has been preinstalled into an EC2 instance in the sample environment named ``walab-admin-instance``. The admin instance in this lab is accessible using SSM Session Manager. In order to login to the **walab-admin-instance** follow the steps below:
 
-2. Select the admin instance, clicking on the checkbox on the left
+1. Open the EC2 Console using below link:
+    * [Direct link for EC2 Console "walab" instances](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running,stopped,stopping;tag:Name=:walab-;v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false)
 
-3. Click on Connect
+2. Select the admin instance and click on the **Connect** button:
 
-![connect_to_admin_instance_1](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_1.png)
+![section2_1_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_1_schedulerconfiguration.png)
 
-4. Click on Session Manager as a connection method
+3. Click on **Session Manager** as a connection method, and click on **Connect**:
 
-5. Click on Connect
+![section2_2_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_2_schedulerconfiguration.png)
 
-![connect_to_admin_instance_2](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_2.png)
+4. You have now logged in into the **walab-admin-instance**, without using SSH or a bastion and you can configure the Instance Scheduler solution using the ``scheduler-cli`` command.
+    * Note: The Instance Scheduler can stop/start EC2 and RDS instances based on a customizable set of schedules. Schedules might contain several periods. Refer to the [Sample schedule documentation](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/sample-schedule.html) for more information.
 
-6. You have now logged in, into the admin-instance, without using SSH or a bastion and you can configure AWS Instance Scheduler using the ``scheduler-cli`` command.
-    * Note: AWS Instance Scheduler can stop/start EC2 and RDS instances based on a customizable set of schedules. Schedules might contain several periods.
+5. Execute below command to see the available options of the cli, including how to list the preinstalled schedules and time periods:
 
-7. Execute the ``scheduler-cli -h`` command to see the available options of the cli, including how to list the preinstalled schedules and timeperiods.
+```
+scheduler-cli -h
+```
 
-![connect_to_admin_instance_3](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_3.png)
+![section2_3_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_3_schedulerconfiguration.png)
 
-8. In this workshop we will leverage the predefined schedules, defining new schedules is outside the scope of this workshop. Execute the following command to see the schedules that are preinstalled:
-    * ``scheduler-cli describe-schedules --region us-east-1 --stack InstanceScheduler``
+6. In this lab we will leverage the predefined schedules, defining new schedules is outside the scope of this lab. Execute the following command to see the schedules that are preinstalled:
 
-![connect_to_admin_instance_4](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_4.png)
+```
+scheduler-cli describe-schedules --region us-east-1 --stack InstanceScheduler
+```
 
-9. We will use the preinstalled schedule named ``seattle-office-hours``, this schedule will stop the instances with a tag key: ``Schedule``, and a tag value ``seattle-office-hours`` outside the period ``office-hours`` in the timezone ``US/Pacific``
+![section2_4_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_4_schedulerconfiguration.png)
 
-![connect_to_admin_instance_5](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_5.png)
+7. We will use the preinstalled schedule named **"seattle-office-hours"**, this schedule will stop the instances with a tag key **"Schedule"**, and a tag value **"seattle-office-hours"** outside the period **"office-hours"** in the timezone **"US/Pacific"**:
 
-10. Execute the command ``scheduler-cli describe-periods --region us-east-1 --stack InstanceScheduler`` to see the list of periods preconfigured
+![section2_5_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_5_schedulerconfiguration.png)
 
-![connect_to_admin_instance_6](/Cost/200_EC2_Scheduling_at_Scale/Images/connect_to_admin_instance_6.png)
+8. Execute below command to see the list of periods pre-configured:
 
-11. The period ``office-hours`` highlighted defines the period for which the instances associated with it should be running from 9.00 AM to 5.00 PM, Monday to Friday. Using this schedule for the DEV instances will allow to save costs and reduce energy consumption by 77% as they will run only 23% of the time (8 hours per day * 5 days).
-    * In other words, every week, the instance with the tag Schedule=seattle-office-hours will run for ``8*5=40 hours`` instead of ``24*7=168 hours``
+```
+scheduler-cli describe-periods --region us-east-1 --stack InstanceScheduler
+```
 
-#### Conclusions
+![section2_6_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_6_schedulerconfiguration.png)
 
-Congratulations, you have now completed the first section of the lab.
+9. The period **"office-hours"** highlighted above defines the period for which the instances associated with it should be running: From 9:00 AM to 5:00 PM, Monday to Friday. 
 
-In this scenario we have optimized the cost and sustainability footprint of the dev EC2 instances using AWS instance Scheduler.
+    Using this schedule for any **"dev"** (non-prod) instances will allow to save costs and reduce energy consumption by 77% as they will run only 23% of the time (8 hours per day * 5 days).
+    
+    In other words, every week, instances that include the tag key/value **"Schedule=seattle-office-hours"** will run for **8*5=40 hours** instead of **24*7=168 hours**.
 
-This concludes the first scenario of "EC2 Scheduling at scale" for the **Optimizing EC2 Usage and Spend** section of this lab.
+---
 
-Click 'Next Step' to continue to clean up the resources created.
+You have now completed this section of the lab.
+
+In the next section we will explore how to use the [AWS Resource Groups Tag Editor](https://docs.aws.amazon.com/tag-editor/latest/userguide/tag-editor.html) in combination with the Instance Scheduler solution for making sure our **"dev"** (non-prod) instances are shut-down outside of business hours.
+
+Click "Next Step" to continue with the "Scheduling at scale" section.
 
 {{< prev_next_button link_prev_url="../1_deploy_sample_instances_and_scheduler_solution/" link_next_url="../3_scheduling_at_scale/" />}}
 

@@ -14,13 +14,15 @@ In this section, we will deploy the [**Instance Scheduler on AWS**](https://aws.
 
 **Instance Scheduler on the AWS Cloud**
 
-1. The AWS CloudFormation template sets up an Amazon CloudWatch event at a customer-defined interval. This event invokes the Instance Scheduler AWS Lambda function. During configuration, the user defines the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
+1. The AWS CloudFormation template provided as part of the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) sets up an Amazon EventBridge schedule rule at a user-defined interval. This event invokes the Instance Scheduler AWS Lambda function. During configuration, the user defines the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
 
 2. These values are stored in Amazon DynamoDB, and the Lambda function retrieves them each time it runs. You can then apply the custom tag to applicable instances.
 
-3. During initial configuration of the Instance Scheduler, you define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) Schedule and create a schedule called uk-office-hours. To identify an instance that will use the uk-office-hours schedule, the user adds the Schedule tag key with a value of uk-office-hours.
+3. During initial configuration of the Instance Scheduler, you can define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) "Schedule" and create a schedule called "seattle-office-hours". To identify an instance that will use the "seattle-office-hours" schedule, the user adds the tag named "Schedule" value "seattle-office-hours" to the target EC2 instances.
 
-Please refer to the Instance Scheduler solution [implementation guidance document](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/solution-overview.html) for more details.
+Notice that even though, the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) supports the scheduling of EC2 instances and RDS instances in multiple AWS accounts and Regions, for this lab we will use the default settings for this solution for scheduling EC2 instances in a single AWS Region.
+
+For more specific details about the solution, please refer to the Instance Scheduler solution [implementation guidance document](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/solution-overview.html).
 
 
 #### 1. Log into the AWS console

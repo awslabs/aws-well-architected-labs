@@ -6,51 +6,45 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-By now...
-
-This scenario covers use cases where the compute power is not needed 24x7 and can be scheduled.
-
-Your team needs to evaluate and optimize the cost and sustainability footprint of the current EC2 deployed instances as per CTO objectives:
-
-"Use resources when they are needed: optimize idle workloads in development environments, no need to have them running when the developers are not using them".
+With its default configuration, the Instance Scheduler solution will apply the **"seattle-office-hours"** schedule to all EC2 Instances that have a tag with **Key="Schedule"** and **Value="seattle-office-hours"**. This is the only configuration that needs to be done to stop the instance outside Seattle Office hours. A [Cloud Center of Excellence (CCOE) Team](https://docs.aws.amazon.com/whitepapers/latest/cost-optimization-laying-the-foundation/cloud-center-of-excellence.html) could configure this at scale using Tag Editor feature of [AWS Resource Groups](https://docs.aws.amazon.com/tag-editor/latest/userguide/tag-editor.html) with batch of 500 instances, or with custom automation (i.e. with AWS SSM). End users and application owners could do the same for their resources. In the following steps we will use Resource Groups and Tag Editor to configure the tag **Schedule=seattle-office-hours** to all DEV instances in this account/region.
 
 #### Apply the seattle-office-hours schedule to DEV EC2 instances at scale
-
-AWS Instance Scheduler will apply the ``seattle-office-hours`` schedule to all EC2 Instances that have a tag with Key="Schedule" and Value="seattle-office-hours". This is the only configuration that needs to be done to stop the instance outside Seattle Office hours. The Cloud Center of Excellence (CCOE) Team could configure this at scale using Tag Editor with batch of 500 instances, or with custom automations (i.e. with AWS SSM). End Users and application owners could do the same for their resources. In the following steps we will use Resource Groups and Tag Editor to configure the tag Schedule=seattle-office-hours to all DEV instances in this account/region.
 
 1. Open the Resource Groups and Tag Editor Console using this link:
     * [Direct link for Resource Groups and Tag Editor console](https://us-east-1.console.aws.amazon.com/resource-groups/home?region=us-east-1#)
 
-2. Click on Tag Editor on the left side panel
+2. Click on **Tag Editor** on the left side panel:
 
-![add_tag_schedule_at_scale1](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale1.png)
+![section3_1_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_1_scheduleatscale.png)
 
-3. Select as Resource Types ``AWS::EC2::Instance``
+3. For Resource Types, select ``AWS::EC2::Instance``:
 
-![add_tag_schedule_at_scale2](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale2.png)
+![section3_2_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_2_scheduleatscale.png)
 
-4. Set as TAG key the ``environment`` tag, and as tag value ``dev``, then click on "Add" and then on "Search resources"
+4. As the **Tags key** use ``walab-environment``, and as the **Tags value** use ``dev``. Then, click on **"Add"** and then on the **"Search resources"** button:
 
-![add_tag_schedule_at_scale3](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale3.png)
+![section3_3_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_scheduleatscale.png)
 
 5. Scroll down, you should now see the list of dev instances that are present in this account, select them all and click on "Manage Tags of selected resources"
 
-![add_tag_schedule_at_scale4](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale4.png)
+![section3_4_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_4_scheduleatscale.png)
 
-6. Scroll down once you see the "Edit Tags for all selected resources" section, let's add there the tag key "Schedule" with value "seattle-office-hours". In order to do so, click on Add Tag and insert the Key "Schedule" and as Value "seattle-office-hours" and click on "Review and apply tag changes". Note that tags are case sensitive, be aware of trailing blank spaces!
+6. Scroll down until you see the **"Edit tags of all selected resources"** section. Click on the **"Add tag"** button and a new tag key named ``Schedule`` with value ``seattle-office-hours``. Then, click on **"Review and apply tag changes"**. (Note that tags are case sensitive, be aware of any trailing blank spaces.)
 
-![add_tag_schedule_at_scale5](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale5.png)
+![section3_5_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_5_scheduleatscale.png)
 
 7. You will now see the confirmation window, go ahead and accept the changes:
 
-![add_tag_schedule_at_scale6](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale6.png)
+![section3_6_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_6_scheduleatscale.png)
 
-8. Verify that the tag is now present on the EC2 instances, going to EC2 and selecting all instances with the tag "Schedule=seattle-office-hours"
+8. Verify that the tag is now present on the EC2 instances, going to EC2 and selecting all instances with the tag **"Schedule=seattle-office-hours"**:
     * [You can use also the following direct link to go to the console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:tag:Schedule=seattle-office-hours;v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false;sort=tag:Name)
 
-![add_tag_schedule_at_scale7](/Cost/200_EC2_Scheduling_at_Scale/Images/add_tag_schedule_at_scale7.png)
+![section3_7_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_7_scheduleatscale.png)
 
 9. You have now configured all DEV EC2 instances in this account to be turned off outside Seattle office hours! No other action is needed. The scheduler will now take care of stopping eligible EC2 instances outside office hours and starting them back again during office hours.
+
+![section3_8_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_8_scheduleatscale.png)
 
 #### Considerations
 

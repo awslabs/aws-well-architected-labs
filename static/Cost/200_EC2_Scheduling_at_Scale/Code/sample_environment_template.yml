@@ -158,7 +158,7 @@ Resources:
         - Key: walab-environment
           Value: dev
         - Key: Name
-          Value: walab-sample-instance
+          Value: walab-sample
   
   EC2Instance2:
     Type: AWS::EC2::Instance
@@ -176,7 +176,7 @@ Resources:
         - Key: walab-environment
           Value: dev
         - Key: Name
-          Value: walab-sample-instance
+          Value: walab-sample
 
   EC2Instance3:
     Type: AWS::EC2::Instance
@@ -194,7 +194,7 @@ Resources:
         - Key: walab-environment
           Value: dev
         - Key: Name
-          Value: walab-sample-instance
+          Value: walab-sample
   
   EC2Instance4:
     Type: AWS::EC2::Instance
@@ -212,7 +212,7 @@ Resources:
         - Key: walab-environment
           Value: dev
         - Key: Name
-          Value: walab-sample-instance
+          Value: walab-sample
 
   EC2Instance5:
     Type: AWS::EC2::Instance
@@ -230,4 +230,4 @@ Resources:
         - Key: walab-environment
           Value: dev
         - Key: Name
-          Value: walab-sample-instance
+          Value: walab-sample
