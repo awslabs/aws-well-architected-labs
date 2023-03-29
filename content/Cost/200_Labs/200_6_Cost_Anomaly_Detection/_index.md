@@ -3,7 +3,7 @@ title: "Level 200: Cost Anomaly Detection"
 ## menutitle: "Lab #1"
 date: 2023-03-13T11:16:09-04:00
 chapter: false
-weight: 1
+weight: 9
 hidden: false
 ---
 
@@ -20,7 +20,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Well-Architected Best Practices
 
-This lab helps you to exercise the following Well-Architected Best Practices in your operation change process:
+This lab helps you to exercise the following Well-Architected Best Practices:
 
 * [COST01-BP03](https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_cloud_financial_management_budget_forecast.html) - **Establish cloud budgets and forecasts**
 * [COST01-BP05](https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/cost_cloud_financial_management_usage_report.html) - **Report and notify on cost optimization**
