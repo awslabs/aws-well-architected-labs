@@ -3,7 +3,7 @@ title: "Level 200: Cost Journey"
 menutitle: "Level 200: Cost Journey"
 date: 2021-03-01T26:16:08-04:00
 chapter: false
-weight: 12
+weight: 13
 hidden: false
 ---
 {{< rawhtml >}}
