@@ -169,50 +169,28 @@ Modify the following SQL query with your table names:
 
 {{% /expand%}}
 
-### Option 3: Leverage your existing AWS Organizations account mapping
+### Option 3: Leverage your existing AWS Organizations account mapping (recommended)
 This option allows your to bring in your AWS Organizations data including OU grouping
 
-#### Option3-A: Complete Level 300: Optimization Data Collection Lab (recommended)
 - {{%expand "Click here to expand" %}}
 
 You will need an additional Lab. This can collects multiple types of data across accounts and AWS Organization, including Trusted Advisor and Compute Optimizer Data. For Account Names you will need only one module **AWS Organization Module**, but we recommend to explore other modules of this lab as well.
 
 - [Click to navigate to Level 300 Optimization Data Collection/]({{< ref "/Cost/300_Labs/300_optimization_data_collection" >}})
 
-Create or update your account_map view by running the following query in Athena Query Editor. 
+After succesful deployment create or update your account_map view by running the following query in Athena Query Editor. 
 
 		CREATE OR REPLACE VIEW account_map AS
 		SELECT DISTINCT
 			"id" "account_id", 
-			"name" "account_name"
+			"name" "account_name",
+	                ' ' parent_account_id,
+	                ' ' account_email_id 
 		FROM
 			"optimization_data"."organization_data"
 
-
 {{% /expand%}}
-	
-#### Option3-B: Complete sections 1-3 of the Level 300: Organization Data CUR Connection Lab 
-- {{%expand "Click here to expand" %}}
 
-You will need to install an additional Lab with a Lambda that pulls AWS Organization data on schedule and stores it on S3.
-
-- [Click to navigate to Level 300 Organization CUR connection steps]({{< ref "/Cost/300_Labs/300_organization_data_cur_connection" >}})
-	
-NOTE: Stop at section 3. Utilize Organization Data Source when you reach the **Join with Cost and Usage Report**
-    ------------ | -------------
-
-Create your account_map view by running the following query in Athena Query Editor. 
-  - Replace (database).(tablename) in line 6 with your account_mapping database and organization table name 
-
-
-		CREATE OR REPLACE VIEW account_map AS
-		SELECT DISTINCT
-			"id" "account_id", 
-			"name" "account_name"
-		FROM
-			(database).(tablename)
-
-{{% /expand%}}
 
 ### Final Steps
 Once you update and tested the account_map view in Ahtena, you need to make sure QuickSight has access to the bucket of Optimization Data Collection and then refresh summary_view dataset in QuickSight. 
