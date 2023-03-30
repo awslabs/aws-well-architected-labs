@@ -38,6 +38,56 @@ You can also use the below query to update your **account_map** table in athena 
 
 {{% /expand%}}
 
+
+### Join with Cost and Usage Report
+
+Example query on how you can connect your CUR to this Organizations data as a one off. In this query you will see the service costs split by account names. 
+{{%expand "Steps" %}}
+
+1.	In the **Athena** service page run the below query to join the Organizations data with the CUR table. Make the below changes as needed:
+
+- Change managementcur if your named your database differently
+- month = **Chosen Month**
+- year = **Chosen Year**
+
+		SELECT line_item_usage_account_id,
+			line_item_product_code,
+			 name,
+			sum(line_item_unblended_cost) AS line_item_unblended_cost_cost
+		FROM "managementcur"."cur" cur
+		JOIN  "managementcur"."organisation_data"
+		ON "cur".line_item_usage_account_id = organisation_data.id
+		WHERE month = '10'
+				AND year = '2020'
+		GROUP BY  line_item_usage_account_id,  name, line_item_product_code
+		limit 10;
+
+![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
+
+2. The important part of this query is the join. The **line_item_usage_account_id** from your Cost & Usage Report should match a **account_number** from the Organizations data. You can now see the account name in your data.
+
+![Images/Athena_Example.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Example.png)
+
+### Create a View with Cost and Usage Report
+
+If you would like to always have your Organizations data connected to your CUR then we can create a view. 
+
+1.	In the Athena service page run the below query to join the Organizations data with the CUR table as a view. 
+
+		CREATE OR REPLACE VIEW org_cur AS
+		SELECT *
+		FROM ("managementcur"."cur" cur
+		INNER JOIN "managementcur"."organisation_data"
+			ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
+			
+
+
+2. Going forward you will now be able to run your queries from this view and have the data connected to your Organizations data. To see a preview where your org data is, which is at the end of the returned data, run the below query.
+
+		SELECT * FROM "managementcur"."org_cur" limit 10;
+{{% /expand%}}
+
+
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
 
