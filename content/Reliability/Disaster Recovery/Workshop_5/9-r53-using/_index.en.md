@@ -29,7 +29,7 @@ Select the **hot-secondary** instance, and click **Connect**, and start a **Sess
 
 Open another browser tab, and click [Running EC2 instances in **N. Virginia (us-east-1)**](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running) to navigate to your EC2 instance in **N. Virginia (us-east-1)**. 
 
-Start a **Session Manager* connection to your **hot-primary** instance in the same way.
+Start a **Session Manager** connection to your **hot-primary** instance in the same way.
 
 You will now have two consoles, one to the EC2 instance in your **East** cell and one in your **West** cell. Take note of which is which. You can easily tell by the URL in the Session Manager browser session, the first part of the URL is the region.
 

@@ -14,6 +14,10 @@ Create two health checks for the website endpoints in **N. Virginia (us-east-1)*
 
 {{< img step-4a.png >}}
 
+For **Domain name** use the Application Load Balancers' (ALB) DNS name from the [Load Balancers section](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#LoadBalancers:).
+
+{{< img alb-1.png >}}
+
 When you have created both health checks, copy down the IDs. We’ll need them to construct the health check ARNs.
 
 {{< img step-4b.png >}}
@@ -22,7 +26,7 @@ When you have created both health checks, copy down the IDs. We’ll need them t
 
 {{< img step-5a.png >}}
 
-Give it a name (e.g. `WebsiteEndpointReadinessCheck`( and choose resource type as "Route 53 health check":
+Give it a name (e.g. `WebsiteEndpointReadinessCheck`) and choose resource type as "Route 53 health check".
 
 {{< img step-5b.png >}}
 
@@ -34,9 +38,13 @@ A Route 53 health check **ARN** format is: **arn:aws:route53:::healthcheck/YOUR_
 
 {{% /notice %}}
 
+{{% notice warning %}}
 
-Construct the ARNs with the health check IDs that you created in Step 4 above, substituting the IDs from your health checks for **YOUR_HEALTH_CHECK_ID** :
+IMPORTANT: Please make sure that there are no space symbols at the end of your health check id left when copied via a clipboard. If an invisible space left, it's not detected as an invalid resource name, but the readines  check will remain in the "Unknown" state. If this does happen, return to your resource set and delete the extra spaces or other invisible characters. 
 
+{{% /notice %}}
+
+Construct the ARNs with the health check IDs that you created in Step 3 above, substituting the IDs from your health checks for **YOUR_HEALTH_CHECK_ID**:
 
 {{< img step-5c.png >}}
 
@@ -55,7 +63,7 @@ Ensure that you can see the Route 53 website endpoint readiness check and the Dy
 {{< img step-6b.png >}}
 
 {{% notice warning %}}
-It may take up to 5 mins for the readiness checks status to become **Ready**.
+It may take up to 5 mins for the readiness checks status to become **Ready**. If it takes any longer, return to your resource set and check if there are any extra spaces or other invisible characters in the resource names and delete those. 
 {{% /notice %}}
 
 (If you don’t see the resources, you can navigate to the Resource sets by clicking [Route 53 ARC resource sets](https://us-west-2.console.aws.amazon.com/route53recovery/home#/readiness/resource-sets), and then update the **Readiness scope** of the resource sets to assign them to the correct cells.) 

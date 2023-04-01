@@ -8,7 +8,7 @@ weight = 1
 
 Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
 
-If you completed Module 4, you may have the public access disabled as a result of the step simulating the failure. Follow the below steps to restore the access to the static website. 
+If you completed Module 4, you may have the public access disabled as a result of the step simulating the failure. Follow the steps below to restore the access to the static website.
 
 1.1 Click [S3](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#/) to navigate to the dashboard.
 
@@ -16,11 +16,11 @@ If you completed Module 4, you may have the public access disabled as a result o
 
 {{< img pr-1.png >}}
 
-1.3 If you see that "Block all public access" is "On," then click on the "Edit" button to get to the next screen.
+1.3 If you see that “Block all public access” is “On”, then click on the “Edit” button to get to the next screen.
 
 {{< img pr-2.png >}}
 
-1.4 Uncheck "Block all public access," including any child selections. Click the "Save Changes" button. You will be required to confirm the changes.
+1.4 Uncheck “Block all public access”, including any child selections. Click the “Save Changes” button. You will be required to confirm the changes.
 
 {{< img pr-3.png >}}
 

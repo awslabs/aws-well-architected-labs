@@ -37,7 +37,7 @@ Please repeat steps **1.1** through **1.4** for the following buckets:
 
 2.1 Click [DynamoDB](https://us-east-1.console.aws.amazon.com/dynamodb/home?region=us-east-1#/) to navigate to the dashboard in the **N. Virginia (us-east-1)** region.
 
-2.2 Click the **Tables** link and the find and click on teh name of the **unishophotstandby** table in the list.
+2.2 Click the **Tables** link and the find and click on the name of the **unishophotstandby** table in the list.
 
 {{< img cl-ddbreplica.png >}}
 
@@ -105,7 +105,7 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 6.2 Delete the Readiness Checks:
 * DynamoDBReadinessCheck
-* WebsiteReadinessCheck
+* WebsiteEndpointReadinessCheck
 
 {{< img rcc-3.png >}}
 
@@ -119,9 +119,9 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 * DynamoDBResourceSet
 * WebsiteEndpointResourceSet
 
-{{< img rcc-6.png >}}
-
 {{< img rcc-7.png >}}
+
+{{< img rcc-6.png >}}
 
 6.5 Delete the **UnicornCluster** recovery cluster:
 

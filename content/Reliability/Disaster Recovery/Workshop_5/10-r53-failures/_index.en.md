@@ -12,7 +12,7 @@ We’re going to disable public access on the S3 bucket hosting our unicorn shop
 
 {{< img step-1.png >}}
 
-2. Then, return to the Route 53 Application Recovery Controller readiness check for our **East** cell, and note that the S3 website readiness check shows **“Not ready”** as the Route 53 health check has failed. 
+2. Then, return to the Route 53 Application Recovery Controller, select the **View by cell** tab, and check the readiness check for our East cell, and note that the S3 website readiness check shows **“Not ready”** as the Route 53 health check has failed.
 
 You may have to click refresh and wait for the health checks to update. Route 53 aggregates data from multiple health checkers in multiple region to determine if an endpoint is healthy or not. Each health check requires a number of consecutive health checks to succeed (based on the threshold value you configured), to ensure that transient network events don’t affect the determination:
 

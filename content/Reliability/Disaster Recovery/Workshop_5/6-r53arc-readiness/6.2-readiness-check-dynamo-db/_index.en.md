@@ -4,7 +4,7 @@ date =  2021-05-11T11:43:28-04:00
 weight = 6
 +++
 
-Now we need to create readiness checks for our cells. For our application, we’re going to set up readiness checks for the DynamoDB tables, and the website endpoints. These are two example resources that our sample application will be monitored on. 
+Now we need to create readiness checks for our cells. For our application, we’re going to set up readiness checks for the DynamoDB tables, and the website endpoints. These are two examples of resources that we will be monitoring for our sample application. 
 
 1. We’ll start with a readiness check for DynamoDB. Click **“Create a new readiness check”** to start:
 
@@ -26,7 +26,7 @@ Return to your Route 53 ARC browser tab, and add both DynamoDB ARNs to the **Res
 
 {{< img step-3e.png >}}
 
-The readiness rules are applied based on the resource types selected. Take a look at them to see what readiness rules will be in effect. A key part of any readiness check is that data in primary and secondary locations is synced, and also the configuration match. The pre-configured DynamoDB readiness rules inspect tables in the resource set and ensures that the configurations match across the readiness set. 
+The readiness rules are applied based on the resource types selected. Take a look at them to see what readiness rules will be in effect. A key part of any readiness check is that data in primary and secondary locations are synced, and also that the configurations match. The pre-configured DynamoDB readiness rules inspect tables in the resource set and ensures that the configurations match across the readiness set. 
 
 You can read more about readiness rules, and their descriptions in the [documentation here](https://docs.aws.amazon.com/r53recovery/latest/dg/recovery-readiness.rules-resources.html).
 

@@ -12,11 +12,13 @@ Get started by creating a cluster, and giving it a meaningful name (e.g. `Unicor
 
 {{< img step-1a.png >}}
 
-Once created, you can see the 5 regional API endpoints. In a DR scenario, you would use the API, rather than the console, and ensure that your recovery logic retries all available endpoints. You also should ensure that your actions are restricted to the Route 53 Application Recovery data plane only:
+Once created, you can see the 5 regional API endpoints (see the image below). In a DR scenario, you would use the [Routing Control API](https://docs.aws.amazon.com/routing-control/latest/APIReference/API_Operations.html), rather than the console, and ensure that your recovery logic retries all available endpoints. You also should ensure that your actions are restricted to the Route 53 Application Recovery data plane only. 
+
+Read more about [Control planes and data planes in the documentation](https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/control-planes-and-data-planes.html) and this blog: [Building highly resilient applications using Amazon Route 53 Application Recovery Controller](https://aws.amazon.com/blogs/networking-and-content-delivery/building-highly-resilient-applications-using-amazon-route-53-application-recovery-controller-part-1-single-region-stack/)
 
 {{< img step-1b.png >}}
 
-2. Having created a cluster, we now need to create the routing controls for the cluster. We’re going to set up a total of 4 routing controls. These will relate to entries in Route 53 hosted zone that we’ll create later. We will set up routing control for a maintenance page, another for our unicorn shop application, and then a routing control for each of our cells in **N. Virginia (us-east-1)** and **N. California (us-west-1)**.
+2. Having created a cluster, we now need to create the routing controls for the cluster. We’re going to set up a total of 4 routing controls. These will relate to entries in the Route 53 hosted zone that we’ll create later. We will set up routing control for a maintenance page, another for our unicorn shop application, and then a routing control for each of our cells in **N. Virginia (us-east-1)** and **N. California (us-west-1)**.
 
 This will allow us to easily configure how traffic flows, either to our application or to a maintenance page, and then within the application, whether we’re routing traffic to both cells or diverting traffic away from a cell that’s not ready.
 
