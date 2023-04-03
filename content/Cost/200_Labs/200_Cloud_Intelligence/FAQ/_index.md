@@ -28,7 +28,7 @@ CUR documentation can be found [here](https://docs.aws.amazon.com/cur/latest/use
 On average, CURs are updated up to 3 times daily, but that will fluctuate depending on the size of the file/amount of user usage and many other factors. you can monitor your CUR S3 bucket to see the date/time the new month's file is deposited. Within the CUR itself you can see the corresponding usage dates/times to infer which usage is reflected within that file.
 
 #### Can I use exising Cost and Usage Report (CUR) instead of the one created by CID?
-We do not recommend using existing CUR unless it is for an installation within a Management (Payer) Account AND existing CUR strictly conforms to the CID requirequirements:
+We do not recommend using existing CUR unless it is for an installation within a Management (Payer) Account AND existing CUR strictly conforms to the CID requirements:
 {{%expand "Expand" %}}
 
     * Additional report details: Include Resource IDs
@@ -39,12 +39,12 @@ We do not recommend using existing CUR unless it is for an installation within a
 
 {{% /expand%}}
 
-When creating a new CUR with CloudFormation you can request a backfill of up to 3 years of data via a support case. If you had an existing CUR with the required structure and you need more than 3 years of historical data you can just copy the data from existing CUR bucket to the new bucket respecting the folders structure.
+When creating a new CUR with CloudFormation you can request a backfill of up to 3 years of data via a support case. If you had an existing CUR with the required structure and you need more than 3 years of historical data, you can just copy the data from existing CUR bucket to the new bucket respecting the folders structure.
 
-By default you can have up to 10 CUR configurations in parallel.
+By default, you can have up to 10 CUR configurations in parallel.
 
-#### Why do we need to copy Cost and Usage Report (CUR) across accounts? Isn't it less expensive to provide a direct access? 
-CID uses s3 replication for CUR aggregation. The data will are not stored in the source account due to the LifeCycle policy. The s3 replication is a cheap, secure and reliable way to aggregate data and avoid operational complexity. 
+#### Why do we need to copy Cost and Usage Report (CUR) across accounts? Isn't it less expensive to provide a direct access?
+CID uses s3 replication for CUR aggregation. The data will are not stored in the source account thanks to LifeCycle policy. The s3 replication is a cheap, secure and reliable way to aggregate data and avoid operational complexity.
 
 #### I want more than 7 months in my CUDOS / CID Dashboard
 
