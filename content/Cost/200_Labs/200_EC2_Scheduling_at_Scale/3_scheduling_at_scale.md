@@ -6,7 +6,7 @@ weight: 3
 pre: "<b>3. </b>"
 ---
 
-With its default configuration, the Instance Scheduler solution will apply the **"seattle-office-hours"** schedule to all EC2 Instances that have a tag with **Key="Schedule"** and **Value="seattle-office-hours"**. This is the only configuration that needs to be done to stop the instance outside Seattle Office hours. A [Cloud Center of Excellence (CCOE) Team](https://docs.aws.amazon.com/whitepapers/latest/cost-optimization-laying-the-foundation/cloud-center-of-excellence.html) could configure this at scale using Tag Editor feature of [AWS Resource Groups](https://docs.aws.amazon.com/tag-editor/latest/userguide/tag-editor.html) with batch of 500 instances, or with custom automation (i.e. with AWS SSM). End users and application owners could do the same for their resources. In the following steps we will use Resource Groups and Tag Editor to configure the tag **Schedule=seattle-office-hours** to all DEV instances in this account/region.
+With its default configuration, the Instance Scheduler solution will apply the **"seattle-office-hours"** schedule to all EC2 Instances that have a tag with **Key="Schedule"** and **Value="seattle-office-hours"**. This is the only configuration that needs to be done to stop the instance outside Seattle Office hours. A [Cloud Center of Excellence (CCOE)](https://docs.aws.amazon.com/whitepapers/latest/cost-optimization-laying-the-foundation/cloud-center-of-excellence.html) team could configure this at scale using Tag Editor feature of [AWS Resource Groups](https://docs.aws.amazon.com/tag-editor/latest/userguide/tag-editor.html) with batch of 500 instances, or with custom automation (i.e. with AWS SSM). End users and application owners could do the same for their resources. In the following steps we will use Resource Groups and Tag Editor to configure the tag **Schedule=seattle-office-hours** to all DEV instances in this account/region.
 
 #### Apply the seattle-office-hours schedule to DEV EC2 instances at scale
 
@@ -25,11 +25,11 @@ With its default configuration, the Instance Scheduler solution will apply the *
 
 ![section3_3_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_scheduleatscale.png)
 
-5. Scroll down, you should now see the list of dev instances that are present in this account, select them all and click on "Manage Tags of selected resources"
+5. Scroll down. You should now see the list of dev instances that are present in this account, select them all and click on **"Manage Tags of selected resources"**
 
 ![section3_4_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_4_scheduleatscale.png)
 
-6. Scroll down until you see the **"Edit tags of all selected resources"** section. Click on the **"Add tag"** button and a new tag key named ``Schedule`` with value ``seattle-office-hours``. Then, click on **"Review and apply tag changes"**. (Note that tags are case sensitive, be aware of any trailing blank spaces.)
+6. Scroll down until you see the **"Edit tags of all selected resources"** section. Click on the **"Add tag"** button and add new tag key named ``Schedule`` with value ``seattle-office-hours``. Then, click on **"Review and apply tag changes"**. (Note that tags are case sensitive, be aware of any trailing blank spaces)
 
 ![section3_5_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_5_scheduleatscale.png)
 
@@ -42,25 +42,23 @@ With its default configuration, the Instance Scheduler solution will apply the *
 
 ![section3_7_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_7_scheduleatscale.png)
 
-9. You have now configured all DEV EC2 instances in this account to be turned off outside Seattle office hours! No other action is needed. The scheduler will now take care of stopping eligible EC2 instances outside office hours and starting them back again during office hours.
+9. You have now configured all DEV EC2 instances in this account and region to be turned off outside of the Seattle office hours. No other action is needed. The scheduler will now take care of stopping eligible EC2 instances outside office hours and starting them back again during office hours.
 
 ![section3_8_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_8_scheduleatscale.png)
 
-#### Considerations
+#### Congratulations!
 
-You can benefit from Instance Scheduler to increase the elasticity of your AWS infrastructure, keeping instances in a stopped state when they are not needed will decrease both your carbon footprint and your costs. With the default schedule ``seattle-office-hours`` we have reduced by 77% the costs and the energy consumptions of the DEV workloads. Using the ``scheduler-cli`` you could define your own schedules, and instruct the end-users to apply such schedules on their dev environments. This will shift the responsibility around elasticity for EC2 workloads to the application owners and the end users. You can then measure savings using Cost Explorer or the Cost and Usage Report (CUR). Cost Explorer and CUR billing data are delayed by ~48hours, after ~2days you will be able to visualize the savings. Have a look how cost explorer will look like, when stopping instances during weekend, at a large scale. You can see the daily costs for EC2 instances at ~22K USD/day during weekdays and ~15K USD/day during weekends, which consists of ~55K USD/month savings, in the following example:
+You have completed the last section of this lab!
+
+In this lab you could see how to benefit from the [Instance Scheduler on AWS](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) solution to increase the elasticity of your AWS infrastructure and follow a [time-based supply approach](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html) for cost optimization. As keeping instances in a stopped state when they are not needed will decrease your costs considerable.
+
+With the default **seattle-office-hours** schedule used in this lab, we have reduced by 76% the costs of the DEV workloads. Using the [scheduler-cli](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) you could define your own schedules, and instruct the end-users to apply such schedules on their DEV environments. This would shift the responsibility around elasticity for EC2 workloads to the application owners and the end users. You can then measure savings using [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) or the [Cost and Usage Report (CUR)](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html). Cost Explorer and CUR billing data are delayed by ~48hours, so after ~2days you should be able to visualize the savings.
+
+To get a better idea on how a time-based supply approach can help in optimizing cost, in below image, you can see how the Cost Explorer report would look like when stopping instances at a large scale, only during weekends. For below example a larger fleet of EC2 instances was used, accounting to ~22K USD/day across all instances. Notice that after using Instance Scheduler for stopping a subset of those instances, the cost was reduced to ~15K USD/day during weekends, which equates to a total of ~55K USD/month savings.
 
 ![scheduler_costexplorer](/Cost/200_EC2_Scheduling_at_Scale/Images/scheduler_costexplorer.png)
 
-#### Conclusions
-
-Congratulations, you have now completed the first section of the lab.
-
-In this scenario we have optimized the cost and sustainability footprint of the dev EC2 instances using AWS instance Scheduler.
-
-This concludes the first scenario of "EC2 Scheduling at scale" for the **Optimizing EC2 Usage and Spend** section of this lab.
-
-Click 'Next Step' to continue to clean up the resources created.
+Click on **Next Step** and follow the steps to clean up the resources created in this lab.
 
 {{< prev_next_button link_prev_url="../2_verify_instance_scheduler_configuration/" link_next_url="../4_cleanup/" />}}
 

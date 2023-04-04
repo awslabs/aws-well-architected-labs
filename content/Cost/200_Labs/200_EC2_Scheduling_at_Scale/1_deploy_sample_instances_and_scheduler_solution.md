@@ -6,21 +6,21 @@ weight: 1
 pre: "<b>1. </b>"
 ---
 
-In this section, we will deploy the [**Instance Scheduler on AWS**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) from the AWS Solutions Library. And also small sample fleet of EC2 instances that we will use as the target for the Instance Scheduler solution.
+In this section, we will deploy the [**Instance Scheduler on AWS**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) from the AWS Solutions Library. We will also deploy a small sample fleet of EC2 instances that will be our target for the Instance Scheduler solution.
 
 ### Architecture Overview
 
 ![section1_01_solution](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_01_solution.png)
 
-**Instance Scheduler on the AWS Cloud**
+**Instance Scheduler solution overview**
 
-1. The AWS CloudFormation template provided as part of the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) sets up an Amazon EventBridge schedule rule at a user-defined interval. This event invokes the Instance Scheduler AWS Lambda function. During configuration, the user defines the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
+1. The AWS CloudFormation template provided as part of the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) sets up an Amazon EventBridge schedule rule at a user-defined interval. This rule invokes the Instance Scheduler AWS Lambda function. During configuration, users can define the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
 
 2. These values are stored in Amazon DynamoDB, and the Lambda function retrieves them each time it runs. You can then apply the custom tag to applicable instances.
 
 3. During initial configuration of the Instance Scheduler, you can define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) "Schedule" and create a schedule called "seattle-office-hours". To identify an instance that will use the "seattle-office-hours" schedule, the user adds the tag named "Schedule" value "seattle-office-hours" to the target EC2 instances.
 
-Notice that even though, the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) supports the scheduling of EC2 instances and RDS instances in multiple AWS accounts and Regions, for this lab we will use the default settings for this solution for scheduling EC2 instances in a single AWS Region.
+Notice that, even though the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) supports the scheduling of EC2 instances and RDS instances in multiple AWS accounts and Regions, for this lab we will use the default settings of this solution for scheduling EC2 instances in a single AWS Region, **us-east-1** (N. Virginia).
 
 For more specific details about the solution, please refer to the Instance Scheduler solution [implementation guidance document](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/solution-overview.html).
 
@@ -45,19 +45,19 @@ Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com
 
 ![section1_1_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_1_sampleenvstack.png)
 
-4. For the **Stack name**, use ``walab-l200-scheduling-sample-env``. Leave other parameters as default and click on **Next** button twice.
+4. For the **Stack name**, use ``walab-l200-scheduling-sample-env``. Leave other parameters as default and click on the **Next** button until you get to the Review page.
 
 5. In the **Review** page, scroll down, check the **"I acknowledge that AWS CloudFormation might create IAM resources."** box and click on the **Submit** button.
 
 ![section1_2_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_2_sampleenvstack.png)
 
-While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue to the next section below to deploy the [Instance Scheduler on AWS solution](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/).
+While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue with below steps to deploy the Instance Scheduler on AWS solution.
 
 #### 3. Instance Scheduler installation steps
 
 1. Use below link to automatically open this solution template in your CloudFormation console in **us-east-1** region:
 
-    * [Launch Instance Scheduler solution in the AWS Console](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https:%2F%2Fs3.amazonaws.com%2Fsolutions-reference%2Faws-instance-scheduler%2Flatest%2Faws-instance-scheduler.template)
+    * [Launch the Instance Scheduler solution in the AWS Console](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https:%2F%2Fs3.amazonaws.com%2Fsolutions-reference%2Faws-instance-scheduler%2Flatest%2Faws-instance-scheduler.template)
 
 2. Click on the **Next** button.
 
@@ -65,22 +65,21 @@ While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue
 
     **Important**: Use this exact name as will need it later to see the configuration of the schedules.
 
-4. Scroll down and click on the **Submit** button twice.
+4. Scroll down and click on the **Next** button until you get to the Review page.
 
 5. In the **Review** page, scroll down, check the **"I acknowledge that AWS CloudFormation might create IAM resources."** box and click on the **Submit** button.
 
-![section1_2_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_2_sampleenvstack.png)
+6. Finally, go back to the [CloudFormation Stacks console](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks) and wait for both stacks **walab-l200-scheduling-sample-env** and **InstanceScheduler** to be in a **"CREATE_COMPLETE"** status. This might take up to 5 minutes to complete.
 
-6. Finally, go back to the [CloudFormation Stacks console](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks) and wait for both **walab-l200-scheduling-sample-env** and **InstanceScheduler** to be in a **"CREATE_COMPLETE"** status. This might take up to 5 minutes to complete.
-
+![section1_3_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_3_sampleenvstack.png)
 
 ### Congratulations! 
 
-You have now completed the first section of the Lab.
+You have now completed the first section of the lab.
 
-You should have a working lab environment which we will use for the remainder of the lab.
+You should have a working lab environment which we will use for the remainder sections of the lab.
 
-Click on **Next Step** to continue to the next section.
+Click on **Next Step** to continue with the next section.
 
 {{< prev_next_button link_prev_url="..//" link_next_url="../2_verify_instance_scheduler_configuration/" />}}
 
