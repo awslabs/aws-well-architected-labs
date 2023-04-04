@@ -35,14 +35,14 @@ You will learn about best practices for cost optimization and the implementation
 
 
 
-## Goals: 
+## Goals
 
 * Deploy and verify the configuration of the [AWS Instance Scheduler solution](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/)
 * Leverage the AWS Instance Scheduler to implement a schedule with the following requirement:
     * EC2 instances with the tag key **"walab-environment"** and value **"dev"** should be in stopped state outside of the Seattle business hours
 
 
-## Prerequisites:
+## Prerequisites
 
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing. The account should not be used for production purposes.
 * An [IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) in your AWS account who has either AdministratorAccess or PowerUserAccess (with full IAM access).
