@@ -29,14 +29,28 @@ class RequestHandler(BaseHTTPRequestHandler):
         super().__init__(*args, **kwargs)
 
     def _execute_db_sql(self, sql, return_results=False):
-        db = pymysql.connect(host=self.db_host, user=self.db_user, password=self.db_pswd, database=self.db_name)
+        results = None
         try:
-            with db.cursor() as cursor:
-              cursor.execute(sql)
-              results = cursor.fetchall() if return_results else None
-              db.commit()
-        finally:
-            db.close()
+            db = pymysql.connect(host=self.db_host, user=self.db_user, password=self.db_pswd, database=self.db_name, read_timeout=1, write_timeout=1)
+            # print("Database connection success")
+        except Exception as e:
+            print("Database connection error: ", e)
+        else:
+            try:
+                # print("sql query start: ", sql)
+                with db.cursor() as cursor:
+                    # print("db.cursor succeeded")
+                    cursor.execute(sql)
+                    # print("cursor.execute succeeded")
+                    results = cursor.fetchall() if return_results else None
+                    # print("results succeeded")
+                    db.commit()
+                    # print("db.commit succeeded")
+                # print("sql query success")
+            except Exception as e:
+                print("sql query error: ", e)
+            finally:
+                db.close()
         return results
 
     def do_GET(self):
