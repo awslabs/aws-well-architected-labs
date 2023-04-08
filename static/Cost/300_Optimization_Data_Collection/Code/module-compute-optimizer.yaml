@@ -110,9 +110,26 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - iam:*
-                  - s3:*
-                Resource: '*'
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:ListBucket
+                  - s3:Put*
+                  - s3:Set*
+                  - s3:Get*
+                  - s3:Replicate*
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
+              - Effect: Allow
+                Action:
+                  - iam:GetRole
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:PassRole
+                  - iam:DeleteRolePolicy
+                  - iam:GetRolePolicy
+                  - iam:PutRolePolicy
+                Resource:
+                  - !Sub 'arn:aws:iam::${AWS::AccountId}:role/StackSet-${BucketPrefix}*' # Shorter version of StackSetName
   ReplicaitonBucketsStackSet:
     Type: AWS::CloudFormation::StackSet
     DependsOn:
