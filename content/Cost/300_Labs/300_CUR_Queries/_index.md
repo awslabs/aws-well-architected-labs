@@ -56,6 +56,8 @@ The CUR Query Library Help section is intended to provide tips and information a
 
 [Cost Optimization]({{< ref "Queries/cost_optimization.md" >}} "Cost Optimization")
 
+[Cost Efficiency]({{< ref "Queries/cost_efficiency.md" >}} "Cost Efficiency")
+
 [Customer Engagement]({{< ref "Queries/customer_engagement.md" >}} "Customer Engagement")
 
 [Database]({{< ref "Queries/database.md" >}} "Database")
