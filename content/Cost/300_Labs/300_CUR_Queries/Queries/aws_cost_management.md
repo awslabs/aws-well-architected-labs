@@ -1,6 +1,6 @@
 ---
 title: "AWS Cost Management"
-date: 2020-08-28T11:16:09-04:00
+date: 2023-04-10T11:16:09-04:00
 chapter: false
 weight: 3
 pre: "<b> </b>"
@@ -21,6 +21,9 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Refund and Credit Detail](#refund-and-credit-detail)
   * [Reservation Savings](#reservation-savings)
   * [Migration Acceleration Program (MAP) Credits](#migration-acceleration-program-credits)
+  * [EC2 Reservation Utilization](#ec2-reservation-utilization)
+  * [Savings Plans Utilization](#savings-plans-utilization)
+
   
 ### AWS Marketplace
 
@@ -196,6 +199,134 @@ group by 1,2,3,4,5;
 {{< email_button category_text="AWS Cost Management" service_text="AWS Marketplace" query_text="Enterprise Discount Plan (EDP) Credits" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### EC2 Reservation Utilization
+
+#### Query Description
+This query pulls all ACTIVE Reserved Instance ARNs for Amazon EC2 and produces their utilization for last month.  This query will give you a very granular look at which Reserved Instance purchases were not being utilized to their full extent last month.  This query is written for Amazon EC2, however, commenting the line_item_product_code line in the WHERE clause will output all Reserved Instances.
+
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/ec2-reservation-utilization.sql)
+
+#### Copy Query
+```tsql
+-- EC2 Reservations active in current month ordered by expiration first
+SELECT
+bill_payer_account_id,
+line_item_usage_account_id,
+DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date,
+bill_bill_type,
+line_item_product_code,
+line_item_usage_type,
+product_region,
+reservation_subscription_id,
+reservation_reservation_a_r_n,
+pricing_purchase_option,
+pricing_offering_class,
+pricing_lease_contract_length,
+reservation_number_of_reservations,
+reservation_start_time,
+reservation_end_time,
+reservation_modification_status,
+reservation_total_reserved_units,
+reservation_unused_quantity,
+TRY_CAST(1 - (TRY_CAST(reservation_unused_quantity AS Decimal(16,8)) / TRY_CAST(reservation_total_reserved_units AS Decimal(16,8))) as Decimal(16,8)) AS calc_percentage_utilized
+FROM
+  ${table_name}
+WHERE 
+  CAST("concat"("year", '-', "month", '-01') AS date) = "date_trunc"('month', current_date) - INTERVAL  '1' MONTH --last month
+  AND pricing_term = 'Reserved'
+  AND line_item_line_item_type IN ('Fee','RIFee')
+  AND line_item_product_code = 'AmazonEC2' --EC2 only, comment out for all reservation types
+  AND bill_bill_type = 'Anniversary' --identify 
+  AND try_cast(date_parse(SPLIT_PART(reservation_end_time, 'T', 1), '%Y-%m-%d') as date) > cast(current_date as date) --res exp time after today's date
+GROUP BY 
+bill_bill_type,
+bill_payer_account_id,
+line_item_usage_account_id,
+reservation_reservation_a_r_n,
+reservation_subscription_id,
+DATE_FORMAT((line_item_usage_start_date),'%Y-%m'),
+line_item_product_code,
+line_item_usage_type,
+product_region,
+pricing_purchase_option,
+pricing_offering_class,
+pricing_lease_contract_length,
+reservation_number_of_reservations,
+reservation_start_time,
+reservation_end_time,
+reservation_modification_status,
+reservation_total_reserved_units,
+reservation_unused_quantity
+ORDER BY 
+reservation_unused_quantity DESC,
+reservation_end_time ASC,
+calc_percentage_utilized ASC
+  ```
+
+[Back to Table of Contents](#table-of-contents)
+
+{{< email_button category_text="AWS Cost Management" service_text="EC2 Reservation Utilization" query_text="EC2 Reservation Utilization" button_text="Help & Feedback" >}}
+
+### Savings Plans Utilization
+
+#### Query Description
+This query pulls all ACTIVE Savings Plan ARNs and produces their utilization for last month.  This query will give you a very granular look at which Savings Plan purchases were not being utilized to their full extent last month.
+
+#### Download SQL File
+[Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/savings-plans-utilization.sql)
+
+#### Copy Query
+```tsql
+SELECT
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date,
+  savings_plan_offering_type,
+  savings_plan_region,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_start_time),'%Y-%m-%d') AS day_savings_plan_start_time,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_end_time),'%Y-%m-%d') AS day_savings_plan_end_time,
+  savings_plan_payment_option,
+  savings_plan_purchase_term,
+  SUM(TRY_CAST(savings_plan_recurring_commitment_for_billing_period AS DECIMAL(16, 8))) AS sum_savings_plan_recurring_committment_for_billing_period,
+  SUM(TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(16, 8))) AS sum_savings_plan_total_commitment_to_date, 
+  SUM(TRY_CAST(savings_plan_used_commitment AS DECIMAL(16, 8))) AS sum_savings_plan_used_commitment,
+  AVG(CASE
+    WHEN line_item_line_item_type = 'SavingsPlanRecurringFee' THEN TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(8, 2))
+  END) AS "Hourly Commitment",
+  -- (used commitment / total commitment) * 100 = utilization %
+  TRY_CAST(((SUM(TRY_CAST(savings_plan_used_commitment AS DECIMAL(16, 8))) / SUM(TRY_CAST(savings_plan_total_commitment_to_date AS DECIMAL(16, 8))))) AS DECIMAL(16, 8)) AS calc_savings_plan_utilization_percent
+FROM
+  ${table_name}
+WHERE 
+  CAST("concat"("year", '-', "month", '-01') AS date) = "date_trunc"('month', current_date) - INTERVAL  '1' MONTH --last month
+  AND savings_plan_savings_plan_a_r_n <> ''
+  AND line_item_line_item_type = 'SavingsPlanRecurringFee'
+  AND try_cast(date_parse(SPLIT_PART(savings_plan_end_time, 'T', 1), '%Y-%m-%d') as date) > cast(current_date as date) --res exp time after today's date
+GROUP BY
+  SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2),
+  bill_payer_account_id,
+  line_item_usage_account_id,
+  DATE_FORMAT((line_item_usage_start_date),'%Y-%m'),
+  savings_plan_offering_type,
+  savings_plan_region,
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_start_time),'%Y-%m-%d'),
+  DATE_FORMAT(FROM_ISO8601_TIMESTAMP(savings_plan_end_time),'%Y-%m-%d'),
+  savings_plan_payment_option,
+  savings_plan_purchase_term
+ORDER BY
+  calc_savings_plan_utilization_percent DESC,
+  day_savings_plan_end_time,
+  split_savings_plan_savings_plan_a_r_n,
+  month_line_item_usage_start_date;
+  ```
+
+[Back to Table of Contents](#table-of-contents)
+
+{{< email_button category_text="AWS Cost Management" service_text="Savings Plans Utilization" query_text="Savings Plans Utilization" button_text="Help & Feedback" >}}
 
 {{% notice note %}}
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
