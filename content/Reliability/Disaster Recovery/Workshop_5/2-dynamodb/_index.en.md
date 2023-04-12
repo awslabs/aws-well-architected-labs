@@ -43,4 +43,4 @@ You may be prompted with a message about the global tables versions. Please disr
 Wait for the status to show **Active** before moving on to the next step. 
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1.1.1-s3-access/" link_next_url="../3-verify-websites/" />}}
+{{< prev_next_button link_prev_url="../1-prerequisites/1.2-s3-access/" link_next_url="../3-verify-websites/" />}}

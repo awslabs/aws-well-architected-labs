@@ -36,4 +36,4 @@ Change the **IsPrimary** parameter to value ` no `.
 You will need to wait for the **Hot Secondary Region** stack to have a status of **Completed** before moving on to the next step. This will take approximately 15 minutes.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1.1.2-primary-region/" link_next_url="../../../1.1.1-s3-access/" />}}
+{{< prev_next_button link_prev_url="../1.1.2-primary-region/" link_next_url="../../1.2-s3-access/" />}}
