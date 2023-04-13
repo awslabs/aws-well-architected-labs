@@ -9,7 +9,7 @@ weight = 3
 Skip this step if you continue from "Module 4: Hot Stand-By" of the lab and didn't clean up its resources. You can move on to the [Verify Websites](/reliability/disaster-recovery/workshop_5/3-verify-websites/) step now.
 {{% /notice %}}
 
-1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v7/HotStandby.yaml).
+1.1 Create the application in the secondary region **N. California (us-west-1)** by launching this  [CloudFormation Template](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=hot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v9/HotStandby.yaml).
 
 1.2  Specify stack parameters:
 * Stack name: **hot-secondary**
