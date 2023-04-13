@@ -35,6 +35,8 @@ Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com
 
 #### 2. Sample instance fleet deployment steps
 
+With below steps, we will deploy 6 EC2 instances. One instance will be the "walab-admin-instance" which will be used in the next sections for running the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html). The other five EC2 instances will be our small sample fleet of DEV instances that we will use as the target for the Instance Scheduler solution.
+
 1. Download the **sample_environment_template.yml** CloudFormation template using the following link:
 
     * [Download the sample environment template](/Cost/200_EC2_Scheduling_at_Scale/Code/sample_environment_template.yml)
@@ -64,6 +66,40 @@ While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue
 3. For the **Stack name**, use ``InstanceScheduler``. Leave all other parameters as default.
 
     **Important**: Use this exact name as will need it later to see the configuration of the schedules.
+
+    {{%expand "Click here to learn more about some of the main parameters we are leaving as default."%}}
+
+---
+
+Here you can see a list of some of the **main parameters** available in the CloudFormation stack of this solution.
+
+* Instance Scheduler tag name: This is the parameter where you can define the name of the Tag that identifies the instances that will be stopped/started by the Instance Scheduler solution. The default value is ``Schedule``, meaning that all the EC2 instances that have a Tag named ``Schedule`` will be targeted by this solution.
+
+* Service(s) to schedule: The Instance Scheduler solution allows automating the starting and stopping of Amazon EC2 and Amazon RDS instances. This parameter lets you select both, or, a specific service to schedule. For this lab we will use the default option which is ``EC2``.
+
+* Schedule Aurora Clusters: In the case the service to schedule was set as ``Both`` or as ``RDS``, this parameter lets you include Amazon Aurora clusters as part of the scheduling. The default is ``No``.
+
+* Create RDS instance snapshot: In the case the service to schedule was set as ``Both`` or as ``RDS``, you can use this parameter to make the solution take a snapshot of the RDS instance before stopping it. The default is ``Yes`` (but, it is only considered for when you are scheduling RDS instances).
+
+* Scheduling enabled: This parameters lets you temporarily turn off the scheduling solution. The default is ``Yes`` (enabled).
+
+* Region(s): The Instance Scheduler solution allows the scheduling of cross-region and cross-account resources. With this parameter you can define a list of Regions where instances will be scheduled. By leaving this parameter as default (``blank``), the solution will use the current region.
+
+* Cross-account roles: When using this Instance Scheduler for scheduling cross-account resources, you need to provide the IAM roles that the solution will assume and use for stopping/starting the instances in those other accounts. This parameter allows you to add a list of cross-account IAM roles ARNs as a comma-delimited list or as a reference to AWS Systems Manager Parameter Store. This parameter is ``blank`` by default.
+
+* This account: You can select ``Yes`` for this parameter when you want the solution to schedule resources in the current account. If the parameter is set to ``No``, then, you must list the IAM roles for the "Cross-account roles" parameter. The default is ``Yes``.
+
+* Frequency: With this parameter you can define the frequency at which the Lambda function (which performs the stopping/starting actions) runs and check for instances that need to be scheduled. The default value is ``5 minutes``, this means that every 5 minutes the solution will check for instances that need to be stopped or started (depending on the schedule defined for those instances). 
+
+* Memory size: This parameter controls the memory size of the Lambda function. Consider increasing this value if you are planning to schedule a large number of instances. The default value is ``128 MB``.
+
+For more information about all the available parameters in this CloudFormation stack, you can refer to the [**Launch the instance scheduler stack**](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/deployment.html#step1) section of the Implementation Guide for this solution.
+
+Also for more context around the core components of this solution, please refer to the [**Solution components**](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/components.html) documentation.
+
+---
+
+    {{%/expand%}}
 
 4. Scroll down and click on the **Next** button until you get to the Review page.
 

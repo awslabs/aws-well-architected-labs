@@ -21,9 +21,21 @@ With its default configuration, the Instance Scheduler solution will apply the *
 
 ![section3_2_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_2_scheduleatscale.png)
 
-4. As the **Tags key** use ``walab-environment``, and as the **Tags value** use ``dev``. Then, click on **"Add"** and then on the **"Search resources"** button:
+4. For the **Tags**, we need to search based on two tags.
 
-![section3_3_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_scheduleatscale.png)
+    Add a tag named ``walab-environment`` with value ``dev``. Click on the **"Add"** button.
+
+    ![section3_3_1_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_1_scheduleatscale.png)
+
+    Add another tag named ``aws:autoscaling:groupName`` with value ``(not tagged)``. Click on the **"Add"** button. 
+    
+    ![section3_3_2_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_2_scheduleatscale.png)
+
+    By adding the above, we are excluding any EC2 instances that has a tag named ``aws:autoscaling:groupName`` (those launched by EC2 Auto Scaling Groups). We need to exclude any instances that are part of an Auto Scaling Group (ASG) to avoid the Instance Scheduler solution entering into a loop where it will stop instances that an ASG would immediately replace with new ones.
+
+    Now that both tag definitions were added to the search criteria, click on the **"Search resources"** button:
+
+    ![section3_3_3_scheduleatscale](/Cost/200_EC2_Scheduling_at_Scale/Images/section3_3_3_scheduleatscale.png)
 
 5. Scroll down. You should now see the list of dev instances that are present in this account, select them all and click on **"Manage Tags of selected resources"**
 
@@ -52,9 +64,13 @@ You have completed the last section of this lab!
 
 In this lab you could see how to benefit from the [Instance Scheduler on AWS](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) solution to increase the elasticity of your AWS infrastructure and follow a [time-based supply approach](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html) for cost optimization. As keeping instances in a stopped state when they are not needed will decrease your costs considerable.
 
-With the default **seattle-office-hours** schedule used in this lab, we have reduced by 76% the costs of the DEV workloads. Using the [scheduler-cli](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) you could define your own schedules, and instruct the end-users to apply such schedules on their DEV environments. This would shift the responsibility around elasticity for EC2 workloads to the application owners and the end users. You can then measure savings using [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) or the [Cost and Usage Report (CUR)](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html). Cost Explorer and CUR billing data are delayed by ~48hours, so after ~2days you should be able to visualize the savings.
+With the default **seattle-office-hours** schedule used in this lab, we have **reduced by 76% the costs** of the DEV workloads. Using the [scheduler-cli](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) you could define your own schedules, and instruct the end-users to apply such schedules on their DEV environments. This would shift the responsibility around elasticity for EC2 workloads to the application owners and the end users. You can then measure savings using [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) or the [Cost and Usage Report (CUR)](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html). Cost Explorer and CUR billing data are delayed by ~48hours, so after ~2days you should be able to visualize the savings.
 
-To get a better idea on how a time-based supply approach can help in optimizing cost, in below image, you can see how the Cost Explorer report would look like when stopping instances at a large scale, only during weekends. For below example a larger fleet of EC2 instances was used, accounting to ~22K USD/day across all instances. Notice that after using Instance Scheduler for stopping a subset of those instances, the cost was reduced to ~15K USD/day during weekends, which equates to a total of ~55K USD/month savings.
+#### Reducing cost by 50 - 70% 
+
+To get a better idea on how a time-based supply approach can help in optimizing cost, in below image, you can see how the Cost Explorer report would look like when stopping instances at a large scale, but only during weekends.
+
+For this example, a larger fleet of EC2 instances was used, accounting to ~22K USD/day across all instances. Notice that after using Instance Scheduler for stopping a subset of those instances, the cost was reduced to ~15K USD/day during weekends, which equates to a total of ~55K USD/month savings (**68% cost reduction for the instances' usage during weekends**).
 
 ![scheduler_costexplorer](/Cost/200_EC2_Scheduling_at_Scale/Images/scheduler_costexplorer.png)
 
