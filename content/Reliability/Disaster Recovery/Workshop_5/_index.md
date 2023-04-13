@@ -1,5 +1,5 @@
 +++
-title = "Module 5: Multi-Region Resiliency"
+title = "Module 5: Multi-Region Resiliency with Route 53 ARC"
 date = 2021-05-06T09:52:56-04:00
 weight = 140
 chapter = false
