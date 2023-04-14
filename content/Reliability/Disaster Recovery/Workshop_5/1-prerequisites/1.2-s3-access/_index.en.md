@@ -30,4 +30,4 @@ If you completed Module 4, you may have the public access disabled as a result o
 
 {{< img pr-5.png >}}
 
-{{< prev_next_button link_prev_url="../../1.1-account-setup" link_next_url="../1.1.2-primary-region" />}}
+{{< prev_next_button link_prev_url="../1.1-account-setup" link_next_url="../../2-dynamodb" />}}
