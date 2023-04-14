@@ -135,6 +135,9 @@ On KPI dashboard, under *Set KPI Goals* tab. Choose a specific KPI and adjust th
 
 {{% /expand%}}
 
+#### I am getting the error "SOURCE_RESOURCE_LIMIT_EXCEEDED" on dataset update - what do I do?
+Athena may face processing limitations if the CUR has a significant volume. To overcome this, one possible solution is to change the cur granularity from 'hourly' to 'daily'. This will reduce the number of lines in CUR by x24, but it will also necessitate modifying the visuals that depict hourly ec2 usage by switching to daily granularity.
+
 #### I am getting the error "Casting from TimestampTZ to Timestamp is not supported" - what do I do?
 {{%expand "Click here to expand answer" %}}
 
