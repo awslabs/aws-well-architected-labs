@@ -6,14 +6,14 @@ weight: 2
 pre: "<b>2. </b>"
 ---
 
-With a sample environment deployed, we can now proceed to verify the defaults configuration available for the Instance Scheduler solution.
+With a sample environment deployed, we can now proceed to verify the default configuration available for the Instance Scheduler solution.
 
-To configure the scheduler, you can use the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) that has been preinstalled into an EC2 instance in the sample environment named ``walab-admin-instance``. The admin instance in this lab is accessible using SSM Session Manager. In order to login to the **walab-admin-instance** instance follow the steps below:
+To configure the scheduler, you can use the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html) preinstalled into an EC2 instance in the sample environment named ``walab-admin-instance``. The admin instance in this lab is accessible using SSM Session Manager. In order to login to the **walab-admin-instance** instance follow the steps below:
 
 1. Open the EC2 Console using below link:
     * [Direct link for EC2 Console "walab" instances](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running,stopped,stopping;tag:Name=:walab-;v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false)
 
-2. Select the admin instance and click on the **Connect** button:
+2. Select the instance named **walab-admin-instance**, and click on the **Connect** button:
 
 ![section2_1_schedulerconfiguration](/Cost/200_EC2_Scheduling_at_Scale/Images/section2_1_schedulerconfiguration.png)
 

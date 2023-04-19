@@ -14,11 +14,11 @@ In this section, we will deploy the [**Instance Scheduler on AWS**](https://aws.
 
 **Instance Scheduler solution overview**
 
-1. The AWS CloudFormation template provided as part of the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) sets up an Amazon EventBridge schedule rule at a user-defined interval. This rule invokes the Instance Scheduler AWS Lambda function. During configuration, users can define the AWS Regions and accounts, as well as a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
+1. The AWS CloudFormation template provided as part of the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) sets up an Amazon EventBridge schedule rule at a user-defined interval. This rule invokes the Instance Scheduler AWS Lambda function. During configuration, users can define the AWS Regions and accounts, and a custom tag that Instance Scheduler on AWS uses to associate schedules with applicable Amazon EC2, Amazon RDS instances, and clusters.
 
 2. These values are stored in Amazon DynamoDB, and the Lambda function retrieves them each time it runs. You can then apply the custom tag to applicable instances.
 
-3. During initial configuration of the Instance Scheduler, you can define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) "Schedule" and create a schedule called "seattle-office-hours". To identify an instance that will use the "seattle-office-hours" schedule, the user adds the tag named "Schedule" value "seattle-office-hours" to the target EC2 instances.
+3. During the initial configuration of the Instance Scheduler, you can define a tag key you will use to identify applicable Amazon EC2 and Amazon RDS instances. When you create a schedule, the name you specify is used as the tag value that identifies the schedule you want to apply to the tagged resource. For example, a user might use the solution’s default tag name (tag key) "Schedule" and create a schedule called "seattle-office-hours". To identify an instance that will use the "seattle-office-hours" schedule, the user adds the tag named "Schedule" value "seattle-office-hours" to the target EC2 instances.
 
 Notice that, even though the [**Instance Scheduler solution**](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) supports the scheduling of EC2 instances and RDS instances in multiple AWS accounts and Regions, for this lab we will use the default settings of this solution for scheduling EC2 instances in a single AWS Region, **us-east-1** (N. Virginia).
 
@@ -31,11 +31,11 @@ For more specific details about the solution, please refer to the Instance Sched
 This Lab only works in AWS **N.Virginia region (us-east-1)**, while the following instructions assume that you are using **your own AWS account**. If you are attending an in-person workshop and were provided with an AWS account, please follow the instructions from the lab coordinator.
 {{% /notice %}}
 
-Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has either AdministratorAccess or PowerUserAccess (with full IAM access) permissions to ensure successful execution of this lab.
+Sign in to the [AWS Management Console](https://us-east-1.console.aws.amazon.com/console) as an IAM user who has either AdministratorAccess or PowerUserAccess (with full IAM access) permissions to ensure the successful execution of this lab.
 
 #### 2. Sample instance fleet deployment steps
 
-With below steps, we will deploy 6 EC2 instances. One instance will be the "walab-admin-instance" which will be used in the next sections for running the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html). The other five EC2 instances will be our small sample fleet of DEV instances that we will use as the target for the Instance Scheduler solution.
+With the below steps, we will deploy 6 EC2 instances. One instance will be the "walab-admin-instance" which will be used in the next sections for running the [scheduler-cli tool](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/scheduler-cli.html). The other five EC2 instances will be our small sample fleet of DEV instances that we will use as the target for the Instance Scheduler solution.
 
 1. Download the **sample_environment_template.yml** CloudFormation template using the following link:
 
@@ -53,7 +53,7 @@ With below steps, we will deploy 6 EC2 instances. One instance will be the "wala
 
 ![section1_2_sampleenvstack](/Cost/200_EC2_Scheduling_at_Scale/Images/section1_2_sampleenvstack.png)
 
-While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue with below steps to deploy the Instance Scheduler on AWS solution.
+While the **walab-l200-scheduling-sample-env** stack is being deployed. Continue with the below steps to deploy the Instance Scheduler on AWS solution.
 
 #### 3. Instance Scheduler installation steps
 

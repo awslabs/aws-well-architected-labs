@@ -29,7 +29,7 @@ In this lab, we will leverage AWS resource tags and the AWS Instance Scheduler s
 
 Implementing an [effective tagging strategy](https://docs.aws.amazon.com/whitepapers/latest/cost-optimization-laying-the-foundation/tagging.html) is fundamental for setting up your environment for cost optimization. Among many advantages, such as attributing your costs and usage throughout your organization, tagging also allows you to categorize and distinguish resources between your development, test and production environments. This can help you to effectively identify workloads and implement mechanisms to supply resources dynamically based on the environment.
 
-The [Instance Scheduler solution](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) used in this lab allows you to follow a time-based approach for making resources available only at times when they are actually needed. The solution leverages [AWS resource tags](https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html) and [AWS Lambda](https://aws.amazon.com/lambda/) for automating the starting and stopping of Amazon EC2 and Amazon RDS instances, which can result in up to 70% savings of operational costs.
+The [Instance Scheduler solution](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) used in this lab allows you to follow a time-based approach for making resources available only at times when they are actually needed. In addition, the solution leverages [AWS resource tags](https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html) and [AWS Lambda](https://aws.amazon.com/lambda/) for automating the starting and stopping of Amazon EC2 and Amazon RDS instances, which can result in up to 70% savings of operational costs.
 
 You will learn about best practices for cost optimization and the implementation of mechanisms, aided by automation at scale, that empower application owners to follow actionable tasks for cost optimization.
 
@@ -50,7 +50,7 @@ You will learn about best practices for cost optimization and the implementation
 ## Costs
 
 * **Instance Scheduler Cost:** As of January 2023, the cost for running the [Instance Scheduler solution](https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/cost.html) with default settings in the US East (N. Virginia) Region is approximately 9.90USD per month in AWS Lambda charges, or less if you have [Lambda free tier](https://aws.amazon.com/lambda/pricing/) monthly usage credit.
-* **Sample workload instances Cost:** Five on-demand **t3.nano** EC2 instances will be launched as part of a sample fleet. Cost per **t3.nano** instance is $0.0052 per hour. For 5 instances running, for the whole month, the cost would be 18.98USD.
+* **Sample workload instances Cost:** Five on-demand **t3.nano** EC2 instances will be launched as part of a sample fleet. The cost per **t3.nano** instance is $0.0052 per hour. For 5 instances running, for the whole month, the cost would be 18.98USD.
 * After completion of the lab, in section 4, you will find steps to delete the resources created. The cost figures mentioned above are only in case this lab's related resources are left running for the whole month.
 
 {{% notice note %}}
