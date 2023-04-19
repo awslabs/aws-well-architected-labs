@@ -5,7 +5,8 @@ weight = 7
 +++
 
 {{% notice info %}}
-If you are running this workshop via an instructor led training, you do **NOT** need to complete this section.
+If you are running this workshop via an instructor led training OR if you continue to [Module 5: Multi-Region Resiliency with Route 53 ARC](/reliability/disaster-recovery/workshop_5/) of the lab, please do **NOT** complete this section and move on to the Module 5 straight away. This way, all resources will be ready for you to complete the module. 
+Continue to [Module 5: Multi-Region Resiliency with Route 53 ARC](/reliability/disaster-recovery/workshop_5/) 
 {{% /notice %}}
 
 #### S3 Cleanup

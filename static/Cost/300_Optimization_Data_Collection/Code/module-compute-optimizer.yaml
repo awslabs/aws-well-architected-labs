@@ -61,7 +61,6 @@ Outputs:
 Resources:
   StackSetAdminRole:
     Type: AWS::IAM::Role
-    DependsOn: StackSetExecutionRole
     Properties:
       RoleName:  StackSetAdminRole
       Description: "This role is used by cloudformation to create StackSets in different regions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html"
@@ -91,7 +90,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+              AWS: !GetAtt StackSetAdminRole.Arn
             Action: sts:AssumeRole
       Policies:
         - PolicyName: StackSetParameterExecutionPolicy
@@ -104,16 +103,37 @@ Resources:
                   - cloudformation:DescribeStacks
                   - cloudformation:DeleteStack
                   - cloudformation:UpdateStack
-                Resource: !Sub
-                  - 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${SelectValue}*' 
-                  - SelectValue: !Select [0, !Split ["-", !Ref AWS::StackName]]
-      ManagedPolicyArns:
-        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess # Only can be used by cloud formation service to create assets in stackset
+                Resource: !Sub 'arn:aws:cloudformation:*:${AWS::AccountId}:stack/StackSet-${BucketPrefix}${AWS::AccountId}-comp-optim-buckets*'
+        - PolicyName: ResourcesPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:ListBucket
+                  - s3:Put*
+                  - s3:Set*
+                  - s3:Get*
+                  - s3:Replicate*
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
+              - Effect: Allow
+                Action:
+                  - iam:GetRole
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:PassRole
+                  - iam:DeleteRolePolicy
+                  - iam:GetRolePolicy
+                  - iam:PutRolePolicy
+                Resource:
+                  - !Sub 'arn:aws:iam::${AWS::AccountId}:role/StackSet-${BucketPrefix}*' # Shorter version of StackSetName
   ReplicaitonBucketsStackSet:
     Type: AWS::CloudFormation::StackSet
     DependsOn:
       - StackSetExecutionRole
-      - StackSetAdminRole
     Properties:
       Description: !Sub "S3 buckets in multiple regions replicating data to s3://${DestinationBucket}."
       PermissionModel: SELF_MANAGED

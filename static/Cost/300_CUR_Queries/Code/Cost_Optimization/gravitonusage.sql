@@ -1,4 +1,4 @@
--- modified: 2022-06-21
+-- modified: 2023-01-31
 -- query_id: gravitonusage
 -- query_description: AWS Graviton processors are designed by AWS to deliver the best price performance ratio for cloud workloads, delivering up to 40% improvement over comparable current gen x86 processors. Due to the improved price performance, many organizations track Graviton usage as a KPI to drive cost-savings for their cloud workloads. Graviton-based EC2 instances are available, and many other AWS services such as Amazon Relational Database Service, Amazon ElastiCache, Amazon EMR, and Amazon OpenSearch also support Graviton-based instance types. This query provides detail on Graviton-based usage. Amortized cost, usage hours, and a count of unique resources are summed. Output is grouped by day, payer account ID, linked account ID, service, instance type, and region. Output is sorted by day (descending) and amortized cost (descending).
 
@@ -21,7 +21,7 @@ FROM
   ${table_name}
 WHERE 
   ${date_filter}
-  AND REGEXP_LIKE(line_item_usage_type, '.[a-z]([1-9]|[1-9][0-9]).?.?[g]\.')
+  AND REGEXP_LIKE(line_item_usage_type, '.?[a-z]([1-9]|[1-9][0-9]).?.?[g][a-zA-Z]?\.')
   AND line_item_usage_type NOT LIKE '%EBSOptimized%' 
   AND (line_item_line_item_type = 'Usage'
     OR line_item_line_item_type = 'SavingsPlanCoveredUsage'

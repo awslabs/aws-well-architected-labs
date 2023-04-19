@@ -18,7 +18,7 @@ We need to create an IAM role that has access to perform the functions in this l
 
 {{< img ir-2.png >}}
 
-1.4 Search for **AWSBackupFullAccess** and then select as the **Policy Name**, then click the **Next** button.
+1.4 Search for **AWSBackupServiceRolePolicyForBackup** and then select as the **Policy Name**, then click the **Next** button.
 
 {{< img ir-3.png >}}
 

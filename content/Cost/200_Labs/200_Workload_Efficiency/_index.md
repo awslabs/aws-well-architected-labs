@@ -3,7 +3,7 @@ title: "Level 200: Workload Efficiency"
 #menutitle: "Lab #1"
 date: 2020-04-24T11:16:08-04:00
 chapter: false
-weight: 10
+weight: 11
 hidden: false
 ---
 
