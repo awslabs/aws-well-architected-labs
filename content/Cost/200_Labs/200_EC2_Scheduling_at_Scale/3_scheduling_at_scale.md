@@ -68,9 +68,9 @@ With the default **seattle-office-hours** schedule used in this lab, we have **r
 
 #### Reducing cost by 50 - 70% 
 
-To get a better idea on how a time-based supply approach can help in optimizing cost, in below image, you can see how the Cost Explorer report would look like when stopping instances at a large scale, but only during weekends.
+To get a better idea **with another example** on how a time-based supply approach can help in optimizing cost, in below image, you can see how the Cost Explorer report would look like when stopping instances at a large scale, **but only during weekends**.
 
-For this example, a larger fleet of EC2 instances was used, accounting to ~22K USD/day across all instances. Notice that after using Instance Scheduler for stopping a subset of those instances, the cost was reduced to ~15K USD/day during weekends, which equates to a total of ~55K USD/month savings (**68% cost reduction for the instances' usage during weekends**).
+For this example, a larger fleet of EC2 instances was used, accounting to ~22K USD/day across all instances. Notice that after using Instance Scheduler for stopping a subset of those instances, the cost was reduced to ~15K USD/day during weekends, which equates to a total of ~55K USD/month savings.
 
 ![scheduler_costexplorer](/Cost/200_EC2_Scheduling_at_Scale/Images/scheduler_costexplorer.png)
 
