@@ -33,6 +33,7 @@ The [Instance Scheduler solution](https://aws.amazon.com/solutions/implementatio
 
 You will learn about best practices for cost optimization and the implementation of mechanisms, aided by automation at scale, that empower application owners to follow actionable tasks for cost optimization.
 
+**References:** *This lab focuses in one of the modules from the re:Invent 2022 workshop [SUP304 - Continuous Cost and Sustainability Optimization](https://catalog.us-east-1.prod.workshops.aws/workshops/42c0fe7e-8d1c-4d5f-8b48-c818c7952242/en-US)*
 
 
 ## Goals
