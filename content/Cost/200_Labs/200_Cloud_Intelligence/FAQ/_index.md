@@ -140,9 +140,9 @@ Athena may face processing limitations if the CUR has a significant volume. To o
 
 #### I am getting the error "SQL_EXCEPTION View is stale; it must be re-created" - what do I do?
 {{%expand "Click here to expand answer" %}}
-This Athena issue can happen if the CUR table changes a lot. Please check folowing resources:
-* https://repost.aws/knowledge-center/athena-view-is-stale-error
-* https://youtu.be/7GpIgSaVYoI?t=88
+This Athena issue can happen if the CUR table changes a lot. Please check following resources:
+- [https://repost.aws/knowledge-center/athena-view-is-stale-error](https://repost.aws/knowledge-center/athena-view-is-stale-error)
+- [Video](https://youtu.be/7GpIgSaVYoI?t=88)
 {{% /expand%}}
 
 #### I am getting the error "Casting from TimestampTZ to Timestamp is not supported" - what do I do?
