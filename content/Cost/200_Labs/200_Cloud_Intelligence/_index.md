@@ -7,17 +7,12 @@ weight: 10
 hidden: false
 ---
 ## Last Updated
-December 2022
-
-{{% notice tip %}}
-This Well Architected lab is a consolidation of labs and AWS workshops formerly called Enterprise Dashboards, CUDOS Workshop, and the TAO Workshop. 
-{{% /notice %}}
+April 2023
 
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: cloud-intelligence-dashboards@amazon.com
 
-## Get Help
 [Ask your questions](https://repost.aws/tags/TANKNkVH-tSUa2jYNx4F159g/cloud-intelligence-dashboards) on re:Post and get answers from our team, other AWS experts, and other customers using the dashboards. 
 
 [Subscribe to our YouTube channel](https://www.youtube.com/channel/UCl0O3ASMCwA_gw0QIKzoU3Q/) to see guides, tutorials, and walkthroughs on all things Cloud Intelligence Dashboards. 
@@ -36,54 +31,30 @@ Cloud infrastructure provides more agility and responsiveness than traditional I
 
 Cloud resources are disposable, and with a pay-per-use model it requires a strong integration between IT governance and organizational governance. Builders need to be able to operate in a cloud environment that’s agile and safe at the same time.
 
-This Well Architected lab will walk you through implementing a series of dashboards for all of your AWS accounts that will help you drive financial accountability, optimize cost, track usage goals, implement best-practices for governance, and achieve operational excellence. 
-
 ![Images/CIDframework.png](/Cost/200_Cloud_Intelligence/Images/CIDframework.png?classes=lab_picture_small)
 
-## Overview 
-In this lab, you will find step-by-step guides on how to implement some or all of the foundational Cloud Intelligence Dashboards as well as additional dashboards.
-- [Last Updated](#last-updated)
-- [Feedback](#feedback)
-- [Get Help](#get-help)
-- [Leadership](#leadership)
-- [Introduction](#introduction)
-- [Cloud Intelligence Dashboards](#cloud-intelligence-dashboards)
-	- [Overview](#overview)
-- [Cost Intelligence Dashboard (CID)](#cost-intelligence-dashboard-cid)
-	- [Authors](#authors)
-	- [Contributors](#contributors)
-- [CUDOS Dashboard](#cudos-dashboard)
-	- [Authors](#authors-1)
-- [Trusted Advisor Organizational (TAO) Dashboard](#trusted-advisor-organizational-tao-dashboard)
-- [KPI Dashboard](#kpi-dashboard)
-	- [Authors](#authors-2)
-	- [Contributors](#contributors-1)
-- [Compute Optimizer Dashboard (COD)](#compute-optimizer-dashboard-cod)
-- [Additional Dashboards](#additional-dashboards)
-- [Steps:](#steps)
-- [Authors](#authors-3)
-- [Contributors](#contributors-2)
+The Cloud Intelligence Dashboards offer various advantages, including, but not restricted to:
 
-The Cloud Intelligence Dashboards include (but are not limited to) the following benefits:
+ - **Easy to Use**: All the data insights are presented in clear and understandable language, arranged by services, and include high-level summaries.
+ - **Secure**: The dashboards support Identity and Access Management (IAM), do not require any agents to be installed, keep all data within the
+   organization, and use only native AWS services.
+ - **In Depth**: The dashboards provide hundreds of pre-built visuals, offer resource-level granularity, are fully customizable, and provide machine
+   learning-driven insights.
+ - **Cost Efficient**: Since the dashboards are serverless, users only need to pay for what they use.	See [FAQ#pricing](/cost/200_labs/200_cloud_intelligence/faq/#pricing)
 
- - **Easy to Use** 
-	 - All insights in plain language 
-	 - Organized by services 
-	 - Includes high level overviews 
-- **Secure**
-	- Supports IAM
-	- No agents running anywhere
-	- Data stays in your organizations
-	- Uses all AWS native services
-- **In Depth**
-	- 100s of pre-built visuals
-	- Resource level granularity
-	- Fully customizable
-	- Machine Learning driven Insights
-- **Cost Efficient**
-	- Amazing QuickSight Enterprise licenses start at $18 per month
-	- Serverless so only pay as you go
-	
+
+This Well Architected lab will walk you through implementing a series of dashboards for all of your AWS accounts that will help you drive financial accountability, optimize cost, track usage goals, implement best-practices for governance, and achieve operational excellence. 
+
+You will find step-by-step guides on how to implement some or all of the foundational Cloud Intelligence Dashboards as well as additional dashboards.
+
+- Cost and Usage Dashboards
+   - [Cost Intelligence Dashboard (CID)](#cost-intelligence-dashboard-cid)
+   - [KPI Dashboard](#kpi-dashboard)
+   - [CUDOS Dashboard](#cudos-dashboard)
+   - [Additional Dashboards](#additional-dashboards)
+- Dashboards for other Data Collections
+   - [Trusted Advisor Organizational (TAO) Dashboard](#trusted-advisor-organizational-tao-dashboard)
+   - [Compute Optimizer Dashboard (COD)](#compute-optimizer-dashboard-cod)
 
 
 ## Cost Intelligence Dashboard (CID)
@@ -115,6 +86,12 @@ The Cost Intelligence Dashboard is a customizable and accessible dashboard to he
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample Cost Intelligence Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cid) 
+- [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
+
+{{% notice note %}}
+For explanations on each field and visual found in the **Cost Intelligence Dashboard** (as well as some FAQs) download and read the [CID User Guide](/Cost/200_Enterprise_Dashboards/Cost_Intelligence_Dashboard_ReadMe.pdf)
+{{% /notice %}}
+
 
 ## CUDOS Dashboard
 
@@ -132,6 +109,7 @@ The CUDOS Dashboard is an in-depth, granular, and recommendation-driven dashboar
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample CUDOS Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=cudos) 
+- [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 
 ## Trusted Advisor Organizational (TAO) Dashboard
 
@@ -144,11 +122,13 @@ Amazon Trusted Advisor helps you optimize your AWS infrastructure, improve secur
 
 **Services used:** AWS Trusted Advisor, AWS Trusted Advisor Organizational report, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight.
 
+- [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
+- [Get started with the TAO Dashboard](trusted-advisor-dashboards/)
+
 {{% notice note %}}
 Trusted Advisor Organizational (TAO) requires the management account in your organization to have Business or Enterprise support plan and enabled organizational view. [Click to learn more](https://docs.aws.amazon.com/awssupport/latest/user/organizational-view.html)
 {{% /notice %}}
 
-- [Explore a sample TAO Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=tao) 
 
 ## KPI Dashboard
 
@@ -173,24 +153,31 @@ The KPI and Modernization Dashboard helps your organization combine DevOps and I
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample KPI Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=kpi)
+- [Get started with the Cost and Usage Dashboards](cost-usage-report-dashboards/)
 
 
 ## Compute Optimizer Dashboard (COD)
+
+#### Authors
+- Iakov Gan, Sr. Techical Account Manager
+
 This dashboard helps your organization to visualize and trace right sizing recommendations from AWS Compute Optimizer. These recommendations will help you indentify Cost savings opportunities for over provisioned resources and also see the Operational risk from under provisioned ones.
 
 **Services used:** AWS Compute Optimizer, Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
 - [Explore a sample Compute Optimizer Dashboard](https://d1s0yx3p3y3rah.cloudfront.net/anonymous-embed?dashboard=compute-optimizer-dashboard)
+- [Get started with the Compute Optimizer Dashboard](compute-optimizer-dashboards/)
 
-#### Authors
-- Iakov Gan, Sr. Techical Account Manager
 
 
 ## Additional Dashboards
-In addition to the 3 foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.   
+In addition to the foundational dashboards, there are additional dashboards you can leverage to gain deeper insights into your cost and usage.
 
-* Data Transfer Dashboard 
+* Data Transfer Dashboard
 * Trends Dashboard
+
+- [Get started with additional Dashboards](cost-usage-report-dashboards/dashboards/3_additional_dashboards/)
+
 
 **Services used:** AWS Cost and Usage Report (CUR), Amazon Athena, AWS Glue, Amazon S3, and Amazon QuickSight. 
 
@@ -210,7 +197,7 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 
 #### Contributors
 - Arun Santhosh, Specialist SA (Amazon QuickSight)
-- Alex Head, OPTICS Manager 
+- Alex Head, OPTICS Manager
 - Barry Miller, Technical Account Manager
 - Chaitanya Shah, Sr. Technical Account Manager
 - Cristian Popa, Sr. Technical Account Manager
@@ -224,6 +211,12 @@ In addition to the 3 foundational dashboards, there are additional dashboards yo
 - Thomas Buatois, Cloud Infrastructure Architect
 - Stephanie Gooch, Sr. Commercial Architect, AWS OPTICS
 - Veaceslav Mindru, Sr. Technical Account Manager, AWS
+
+{{% notice note %}}
+ These dashboards and their content: (a) are for informational purposes only, (b) represents current AWS product offerings and practices, which are subject to change without notice, and (c) does not create any commitments or assurances from AWS and its affiliates, suppliers or licensors. AWS content, products or services are provided “as is” without warranties, representations, or conditions of any kind, whether express or implied. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers. We recommend validating your data by comparing the aggregate un-grouped Payer and Linked Account spend for a prior month. Customers are responsible for making their own independent assessment of these dashboards and their content.
+{{% /notice %}}
+
+
 ---
 
 {{< prev_next_button link_next_url="./cost-usage-report-dashboards/" button_next_text="Next" first_step="true" />}}

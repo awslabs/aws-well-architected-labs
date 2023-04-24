@@ -125,7 +125,7 @@ You will be able to add or delete Source Account CURs later by updating this sta
 
 ## Step 3. (IN DATA COLLECTION ACCOUNT) Deploy Dashboards
 
-### Enable QuickSight Enterprise
+### 3.1 Enable QuickSight Enterprise
 
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular QuickSight user you can skip these steps and move on to the next step. If not, complete the steps below.
 
@@ -152,9 +152,9 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 6. Click **Go to Amazon QuickSight**
 ![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
 1. Click on the persona icon on the top right and select manage QuickSight. 
-2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards.
 
-### Deploy Dashboards using CloudFormation
+### 3.2 Deploy Dashboards using CloudFormation
 In this option we use guide you through using a CloudFormation template that will deploy **all needed resources**. You will cut and paste some parameters (An S3 path to CUR data, A QuickSight user that will be the owner of the QuickSight assets, and which dashboards you want to deploy) into the template and click run. 
 
 All other resources are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, and finally the dashboards. The template uses a custom resource (a Lambda with [this CLI tool](https://github.com/aws-samples/aws-cudos-framework-deployment/)) to create, delete, or update assets. 
@@ -203,15 +203,18 @@ To find your QuickSight username:
     ------------ | -------------
 
 
-If you see no data in QuickSight Dahsboards, plase check the following:
+If you see no data in QuickSight Dahsboards after 24 hours, plase check the following:
  1) Double check that QuickSight has permissions to read from your CUR bucket.
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
- 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Service=Billing and category=Invoices and Reporting, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from your Source Account (Management/Payer account).
+ 3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Service=`Billing` and Category=`Invoices and Reporting`, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from the same account as CUR (Typically Management/Payer account).
  4) The QuickSight datasets refresh once per day at midnight, if your first CUR was delivered after midnight, you may need to click manual refresh on each dataset to see data in the dashboard. This will auto-resolve after midnight the next night.
 
 
 
-If you can see data in your dashboards, you can continue to the post deployment steps for customizations and adding Account Names.
+Any issue? Visit our [FAQ](../../../faq/#troubleshooting).
+
+If you can see data in your dashboards, you can continue to the [post deployment steps](../post_deployment_steps) for adding Account Names.
+
 
 ---
 
