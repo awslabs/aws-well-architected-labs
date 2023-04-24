@@ -68,16 +68,18 @@ Here we will deploy the CFN template but setting the CFN parameters for a Destin
 
 1. Login to the Destination account in the region of your choice. It can be any account inside or outside your AWS Organization.
    
-2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console.
+2. Click the **Launch Stack button** below to open the **pre-populated stack template** in your CloudFormation console.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination&param_CreateCUR=False&param_DestinationAccountId=REPLACE%20WITH%20THE%20CURRENT%20ACCOUNT%20ID&param_SourceAccountIds=PUT%20HERE%20PAYER%20ACCOUNT%20ID)
-	
-![Images/multi-account/advanced-step1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/advanced-step1.png?classes=lab_picture_small)
+
+[![LaunchStack](/images/LaunchStack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Destination&param_CreateCUR=False&param_DestinationAccountId=REPLACE%20WITH%20THE%20CURRENT%20ACCOUNT%20ID&param_SourceAccountIds=PUT%20HERE%20PAYER%20ACCOUNT%20ID)
 
 3. Enter your **Destination** Account Id (Current Account). 
-   
+
    **NOTE:** Please note this Account ID, we will need it later when we will deploy this same stack in your management (payer)/source accounts.
     ------------ | -------------
+
+![Images/multi-account/advanced-step1.png](/Cost/200_Cloud_Intelligence/Images/multi-account/advanced-step1.png?classes=lab_picture_small)
+
 
 4. Disable CUR creation by entering **False** as the parameter value if you are replicating CURs from management (payer) accounts. You will only need to activate this if you are replicating CURs from linked accounts (not management payer accounts) and you want to have cost and usage data for this Destination account as well.
    
@@ -99,17 +101,16 @@ You will be able to add or delete Source Account CURs later by updating this sta
 
 1. Login to your Source Account (can be management account or linked account if you're using [member CURs](https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/)).
 
-2. Click the **Launch CloudFormation button** below to open the **stack template** in your CloudFormation console and select **Next**.
+2. Click the **Launch Stack button** below to open the **stack template** in your CloudFormation console.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Replication&param_CreateCUR=True&param_DestinationAccountId=REPLACE%20WITH%20DATA%20COLLECTION%20ACCOUNT%20ID&param_SourceAccountIds=)
-	
-
-![Images/multi-account/advanced-step2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/advanced-step2.png?classes=lab_picture_small)
+	[![LaunchStack](/images/LaunchStack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?&templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cur-aggregation.yaml&stackName=CID-CUR-Replication&param_CreateCUR=True&param_DestinationAccountId=REPLACE%20WITH%20DATA%20COLLECTION%20ACCOUNT%20ID&param_SourceAccountIds=)
 
 
 3. Enter a **Stack name** for your template such as **CID-CUR-Replication**.
 
 4. Enter your **Destination** AWS Account ID as a parameter (Your Data Collection Account, where you will deploy dashboards).
+
+![Images/multi-account/advanced-step2.png](/Cost/200_Cloud_Intelligence/Images/multi-account/advanced-step2.png?classes=lab_picture_small)
 
 6.  Review the configuration, click **I acknowledge that AWS CloudFormation might create IAM resources, and click Create stack**.
 
@@ -119,11 +120,9 @@ You will be able to add or delete Source Account CURs later by updating this sta
 
 8.  Once complete, the stack will show **CREATE_COMPLETE**.
 
-**NOTE:** It takes 24 hours for your first CUR to be delivered. You can proceed with Deployment of dashboards, but they will be empty.
-    ------------ | -------------
 
-9. It will take about 24 hours for your CUR to populate and replicate to your destination (data collection) account where you will deploy the dashboards. Return to this step after 24 hours. We also recommend creating a Support Case in Service=Billing and category=Invoices and Reporting, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from your Source Account (Management/Payer account).
-     
+9. It will take about 24 hours for your CUR to populate and replicate to your destination (data collection) account where you will deploy the dashboards. You can continue, but the dashboards will be empty. Or you can return to the next steps after 24 hours. We also recommend creating a Support Case in Service=`Billing` and Category=`Invoices and Reporting`, requesting a backfill of your CUR (name=`cid`) with 12 months of data. Case must be created from your Source Account (Management/Payer account).
+
 ## Step 3. (IN DATA COLLECTION ACCOUNT) Deploy Dashboards
 
 ### Enable QuickSight Enterprise
@@ -162,9 +161,9 @@ All other resources are created automatically: Athena Workgroup and bucket, Glue
 
 1. Login into your Linked (Data Collection) Account
 
-2. Click the **Launch CloudFormation button** below to open the **pre-populated stack template** in your CloudFormation console and select **Next**
+2. Click the **Launch Stack button** below to open the **pre-populated stack template** in your CloudFormation.
 
-	- [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards&param_DeployCUDOSDashboard=yes&param_DeployKPIDashboard=yes&param_DeployCostIntelligenceDashboard=yes)
+	[![LaunchStack](/images/LaunchStack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://aws-managed-cost-intelligence-dashboards.s3.amazonaws.com/cfn/cid-cfn.yml&stackName=Cloud-Intelligence-Dashboards&param_DeployCUDOSDashboard=yes&param_DeployKPIDashboard=yes&param_DeployCostIntelligenceDashboard=yes)
 
 3. Enter a **Stack name** for your template such as **Cloud-Intelligence-Dashboards**
 4. Review **Common Parameters** and confirm prerequisites before specifying the other parameters. You must answer 'yes' to both prerequisites questions.
