@@ -35,12 +35,12 @@ Cloud resources are disposable, and with a pay-per-use model it requires a stron
 
 The Cloud Intelligence Dashboards offer various advantages, including, but not restricted to:
 
- - **User-Friendly**: All the data insights are presented in clear and understandable language, arranged by services, and include high-level summaries.
+ - **Easy to Use**: All the data insights are presented in clear and understandable language, arranged by services, and include high-level summaries.
  - **Secure**: The dashboards support Identity and Access Management (IAM), do not require any agents to be installed, keep all data within the
    organization, and use only native AWS services.
- - **Comprehensive**: The dashboards provide hundreds of pre-built visuals, offer resource-level granularity, are fully customizable, and provide machine
+ - **In Depth**: The dashboards provide hundreds of pre-built visuals, offer resource-level granularity, are fully customizable, and provide machine
    learning-driven insights.
- - **Cost-Effective**: Since the dashboards are serverless, users only need to pay for what they use.	See [FAQ#pricing](/cost/200_labs/200_cloud_intelligence/faq/#pricing)
+ - **Cost Efficient**: Since the dashboards are serverless, users only need to pay for what they use.	See [FAQ#pricing](/cost/200_labs/200_cloud_intelligence/faq/#pricing)
 
 
 This Well Architected lab will walk you through implementing a series of dashboards for all of your AWS accounts that will help you drive financial accountability, optimize cost, track usage goals, implement best-practices for governance, and achieve operational excellence. 
