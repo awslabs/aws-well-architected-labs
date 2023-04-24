@@ -22,7 +22,7 @@ Prior to deleting resources, check with the application owner that your analysis
 
 ### Cost Efficiency
 
-AWS provides IT resources on-demand, which makes it easy for customers to stop and start resources and use only what they need to deliver on a business outcome. However, it can be difficult to assess exactly how resource efficient a workload is on AWS.  This set of queries helps customers assess and understand how they use AWS resources. In the Sustainability Pillar of the Well Architected Framework, [proxy metrics](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/improvement-process.html) are introduced as a way to understand how to measure efficiency in a workload. Customers looking to optimize their workloads for sustainability (or understand their AWS usage in order to report for frameworks and standards like [SASB](https://www.sasb.org/)), need to first understand what they have provisioned in AWS and then relate this to how much work they have done with those resources. This set of queries helps customers understand what they have provisioned in AWS as a necessary first step for optimizations decisions in line with the Sustainability Pillar of the WA Framework.
+AWS provides IT resources on-demand, which makes it easy for customers to stop and start resources and use only what they need to deliver on a business outcome. However, it can be difficult to assess exactly how resource efficient a workload is on AWS.  This set of queries helps customers assess and understand how they use AWS resources. In the Sustainability Pillar of the Well Architected Framework, [proxy metrics](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/improvement-process.html) are introduced as a way to understand how to measure efficiency in a workload. Customers looking to optimize their workloads for sustainability (or understand their AWS usage in order to report for frameworks and standards like [SASB](https://www.sasb.org/)), need to first understand what they have provisioned in AWS and then relate this to how much work they have done with those resources. This set of queries helps customers understand what they have provisioned in AWS as a necessary first step for optimization decisions in line with the Sustainability Pillar of the WA Framework.
 
 ### Table of Contents
 - Compute
@@ -51,7 +51,7 @@ WHERE
   -- optionally define data range (see query help section)
   ${date_filter}
   AND product_vcpu <> ''
-  AND line_item_line_item_type like '%%Usage%%'
+  AND line_item_line_item_type like '%Usage%'
 GROUP BY
     product_product_name,
     product_product_family

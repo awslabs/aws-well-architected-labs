@@ -14,7 +14,7 @@ WHERE
   -- optionally define data range (see query help section)
   ${date_filter}
   AND product_vcpu <> ''
-  AND line_item_line_item_type like '%%Usage%%'
+  AND line_item_line_item_type like '%Usage%'
 GROUP BY
     product_product_name,
     product_product_family
