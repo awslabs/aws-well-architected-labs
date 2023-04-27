@@ -96,3 +96,15 @@ Resources:
                   - "compute-optimizer:GetEC2InstanceRecommendations"
                   - "EC2:DescribeInstances"
                 Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportECSRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportECSServiceRecommendations"
+                  - "compute-optimizer:GetECSServiceRecommendations"
+                  - "compute-optimizer:GetECSServiceRecommendationProjectedMetrics"
+                  - "ecs:ListServices"
+                  - "ecs:ListClusters"
+                Resource: "*"
