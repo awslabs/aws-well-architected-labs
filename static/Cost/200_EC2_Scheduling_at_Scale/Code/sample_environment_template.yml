@@ -1,0 +1,233 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Well-Architected L200 EC2 Scheduling Lab - walab-l200-scheduling-sample-env
+
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-InternetGateway"
+
+  IGWAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs ''
+      CidrBlock: 172.31.1.0/24
+      MapPublicIpOnLaunch: true
+
+  PublicRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-Public-RouteTable1"
+
+  PublicRoute1:
+    Type: 'AWS::EC2::Route'
+    DependsOn: 
+      - IGW
+      - IGWAttach
+    Properties:
+      RouteTableId: !Ref PublicRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+
+  PublicSubnet1RouteTableAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable1
+
+  EC2IAMRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ec2.amazonaws.com]
+            Action: ['sts:AssumeRole']
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [!Ref EC2IAMRole]
+
+  IAMRoleInlinePolicy:
+    Type: AWS::IAM::Policy
+    Properties: 
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+              - cloudformation:DescribeStackResource
+            Resource: '*'
+      PolicyName: SchedulerCLIInlinePolicy
+      Roles: 
+        - !Ref EC2IAMRole
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all outbound traffic by default
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+
+  EC2InstanceSchedulerAdmin:
+    Type: AWS::EC2::Instance
+    DependsOn:
+        - EC2IAMRole
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      UserData:
+        Fn::Base64: !Sub | 
+                   #!/bin/bash
+                   yum update -y
+                   cat > /home/ec2-user/install_scheduler_cli.sh << 'EOF'
+                   mkdir /home/ec2-user/scheduler_cli
+                   cd /home/ec2-user/scheduler_cli
+                   wget https://s3.amazonaws.com/solutions-reference/aws-instance-scheduler/latest/scheduler-cli.zip
+                   unzip scheduler-cli.zip
+                   python3 setup.py install
+                   EOF
+                   chown ec2-user /home/ec2-user/install_scheduler_cli.sh
+                   chmod 755 /home/ec2-user/install_scheduler_cli.sh
+                   chown ec2-user.ec2-user -R /home/ec2-user/scheduler_cli
+                   sudo /home/ec2-user/install_scheduler_cli.sh
+      Tags:
+        - Key: Name
+          Value: walab-admin-instance
+
+  EC2Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      Tags:
+        - Key: walab-environment
+          Value: dev
+        - Key: Name
+          Value: walab-sample
+  
+  EC2Instance2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      Tags:
+        - Key: walab-environment
+          Value: dev
+        - Key: Name
+          Value: walab-sample
+
+  EC2Instance3:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      Tags:
+        - Key: walab-environment
+          Value: dev
+        - Key: Name
+          Value: walab-sample
+  
+  EC2Instance4:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      Tags:
+        - Key: walab-environment
+          Value: dev
+        - Key: Name
+          Value: walab-sample
+
+  EC2Instance5:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.nano
+      AvailabilityZone: 
+        Fn::Select: 
+          - 0
+          - Fn::GetAZs: ""
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !GetAtt "InstanceSecurityGroup.GroupId"
+      Tags:
+        - Key: walab-environment
+          Value: dev
+        - Key: Name
+          Value: walab-sample
