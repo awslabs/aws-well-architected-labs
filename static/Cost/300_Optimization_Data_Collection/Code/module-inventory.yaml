@@ -430,7 +430,7 @@ Resources:
             "region" "region_code"
           , regionname
           FROM
-            optimization_data.region_names
+            optimization_data.pricing_region_names
         )  region ON (inventory_ebs_data.region = region.region_code)
   AthenaEBSTAPricing:
     Type: AWS::Athena::NamedQuery
