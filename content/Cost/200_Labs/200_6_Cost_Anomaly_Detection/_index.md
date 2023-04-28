@@ -51,7 +51,7 @@ As an alternative, an existing AWS account can be used to run this workshop.
 It is strongly advised not to use a production account for this lab but to use a test or sandbox account to understand the functionalities and capabilities of the service. And then replicate the relevant configurations to the production accounts.
 {{% /notice %}}
 
-* AWS Cost Anomaly Detection is a feature within Cost Explorer. To access AWS Cost Anomaly Detection, Cost Explorer must be enabled. For instructions on how to enable Cost Explorer using the console, see [Enabling Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html).
+* AWS Cost Anomaly Detection is a feature within Cost Explorer. To access AWS Cost Anomaly Detection, Cost Explorer must be enabled. For instructions on how to enable Cost Explorer using the console, see [Enabling Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html). Customers enabling Cost Explorer on or after March 27, 2023, will automatically have a default configuration of AWS Cost Anomaly Detection that monitors the spend by AWS service, and emails a daily summary report when a cost anomaly above a certain threshold is detected. For more details, refer to [New Cost Explorer users now get Cost Anomaly Detection by default](https://aws.amazon.com/blogs/aws-cloud-financial-management/new-aws-cost-explorer-users-can-now-automatically-detect-cost-anomalies/).
 
 For a multi-account AWS environment, Cost Anomaly Detection needs to be set up in the management account to analyze cost across the entire AWS Organizations and alert on anomalies for each linked account.
 
