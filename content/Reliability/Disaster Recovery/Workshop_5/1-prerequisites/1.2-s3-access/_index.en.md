@@ -6,7 +6,9 @@ weight = 1
 
 #### Allow Amazon S3 Public Access
 
-Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access.
+{{% notice warning %}}
+Our application employs AWS Simple Storage Service (S3) Static website hosting. To make the application available to Internet users, we must disable the AWS account policy that blocks public access. Please review the best practices for Access control for you S3 bucket [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-best-practices.html).
+{{% /notice %}}
 
 If you completed Module 4, you may have the public access disabled as a result of the step simulating the failure. Follow the steps below to restore the access to the static website.
 

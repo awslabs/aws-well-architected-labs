@@ -22,7 +22,7 @@ We need to create an IAM role that has access to perform the functions in this l
 
 {{< img ir-3.png >}}
 
-1.5 1.3 Enter `Team-Role` as the **Role name**, then scroll down and click the **Create role** button.
+1.5 1.3 Enter `TeamRole` as the **Role name**, then scroll down and click the **Create role** button.
 
 {{< img ir-4.png >}}
 
