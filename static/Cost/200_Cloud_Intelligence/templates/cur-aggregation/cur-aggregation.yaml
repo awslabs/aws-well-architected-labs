@@ -532,7 +532,7 @@ Resources:
           - id: 'W89'
             reason: "Lambdas do not need VPC"
           - id: 'W92'
-            reason: "One Time execution dot need ReservedConcurrentExecutions"
+            reason: "One Time execution. No need for ReservedConcurrentExecutions"
 
 
 ###########################################################################
@@ -651,7 +651,7 @@ Resources:
           - id: 'W89'
             reason: "Lambdas do not need VPC"
           - id: 'W92'
-            reason: "One Time execution dot need ReservedConcurrentExecutions"
+            reason: "One Time execution. No need for ReservedConcurrentExecutions"
 
   CIDLambdaAnalyticsExecutor:
     Type: Custom::CIDLambdaAnalyticsExecutor
