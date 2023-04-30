@@ -26,4 +26,4 @@ We need to create an IAM role that has access to perform the functions in this l
 
 {{< img ir-4.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.3-secondary-region/" link_next_url="../../../2-s3-crr/" />}}
+{{< prev_next_button link_prev_url="../1.1.2-secondary-region/" link_next_url="../../../2-s3-crr/" />}}

@@ -12,8 +12,9 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
+{{% notice info %}}
 **Continue to the [S3 Cross-Region Replication](../2-s3-crr/) section of the workshop.**
-
+{{% /notice %}}
 
 #### Using your own AWS account
 

@@ -49,4 +49,4 @@ aws ssm put-parameter --name "/deployer/backupandrestore-secondary/default-vpc" 
 You will need to wait for the **BackupAndRestore Primary Region** stack to have a status of **Completed** before moving on to the next step. This will take approximately 15 minutes.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1.1.2-primary-region/" link_next_url="../1.1.4-iam-role/" />}}
+{{< prev_next_button link_prev_url="../1.1.1-primary-region/" link_next_url="../1.1.3-iam-role/" />}}

@@ -32,4 +32,4 @@ weight = 3
 Debe esperar a que la pila **BackupAndRestore Primary Region** tenga un estado de **Completado** antes de seguir al siguiente paso. Esto tomará 15 minutos aproximadamente.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../1.1.2-s3/" link_next_url="../../../2-s3-crr/" />}}
+{{< prev_next_button link_prev_url="../1.1.1-primary-region/" link_next_url="../1.1.3-iam-role/" />}}
