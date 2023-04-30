@@ -1,0 +1,125 @@
+
+    AWSTemplateFormatVersion: '2010-09-09'
+    Resources:
+      S3LifecycleFunction:
+        Type: AWS::Lambda::Function
+        Properties:
+          Code:
+            ZipFile: |
+                import boto3
+                import json
+                from botocore.exceptions import ClientError
+                from time import strftime 
+                from datetime import datetime
+        
+                def lambda_handler(event, context):
+                    
+                    s3 = boto3.client('s3')
+                    client = boto3.client('sts')
+                    
+                    now = datetime.now()
+                    current_time = now.strftime("%H:%M:%S")
+                    TransitionStatus = []
+                    
+                    
+                    def createLCP(Name):
+                        policy = {
+                                    'Rules': [
+                                        {
+                                            'ID': "AddedthroughAutomation-S3IntelligentTieringLC"+"-"+current_time,
+                                            'Filter': {},
+                                            'Status': 'Enabled',
+                                            'Transitions': [
+                                                {
+                                                    'Days': 0,
+                                                    'StorageClass': 'INTELLIGENT_TIERING'
+                                                },
+                                            ],
+                                            'NoncurrentVersionTransitions': [
+                                                {
+                                                    'NoncurrentDays': 0,
+                                                    'StorageClass': 'INTELLIGENT_TIERING'
+                                                },
+                                            ],
+                                        }
+                                    ]
+                                }
+                        return policy
+        
+                    #get buckets in the account
+                    BucketNames = s3.list_buckets()
+                    for bucket in BucketNames['Buckets']:
+                        Name = bucket['Name'] 
+                        try:
+                            #Case 1 - Check the existing lifecycle policies, if there are any then skip the bucket but record it in the excel for reference
+                            result = s3.get_bucket_lifecycle_configuration(Bucket=Name) #, ExpectedBucketOwner=ownerAccountId)
+                            Rules= result['Rules']
+                            if any("Transitions" in keys for keys in Rules):
+                                for Rule in Rules:
+                                    for key, value in Rule.items():
+                                        if key == 'Transitions':
+                                            Days = value[0]['Days']
+                                            StorageClass = value[0]['StorageClass']
+                                            TransitionStatus.append(Name)
+                                            TransitionStatus.append(Days)
+                                            TransitionStatus.append(StorageClass)
+                                            TransitionStatus.append('No changes made to S3 Lifecycle configuration')
+                            #Additional customization - if you want to modify existing policy, that logic will go here in else block
+                            # else:
+                            #     policy = createLCP(Name)
+                            #     for p in policy['Rules']:
+                            #         for key, value in p.items():
+                            #             if key =='Transitions':
+                            #                 Days = value[0]['Days']
+                            #                 StorageClass = value[0]['StorageClass']
+                            #                 TransitionStatus.append(Name)
+                            #                 TransitionStatus.append(Days)
+                            #                 TransitionStatus.append(StorageClass)
+                            #                 TransitionStatus.append('Updated the existing Lifecycle with Transition rule to S3 INT')
+                            #     Rules.append(policy['Rules'][0])
+                            #     s3.put_bucket_lifecycle_configuration(Bucket=Name, LifecycleConfiguration = {'Rules':Rules })
+                        except ClientError as err: 
+                            #Case 2 - if no lifecycle policy exists, then create and attach it to the bucket
+                            if err.response['Error']['Code'] == 'NoSuchLifecycleConfiguration': 
+                                print("No LifeCycle Configuration for " + Name) 
+                                policy = createLCP(Name)
+                                for p in policy['Rules']:
+                                    for key, value in p.items():
+                                        if key =='Transitions':
+                                            Days = value[0]['Days']
+                                            StorageClass = value[0]['StorageClass']
+                                            TransitionStatus.append(Name)
+                                            TransitionStatus.append(Days)
+                                            TransitionStatus.append(StorageClass)
+                                            TransitionStatus.append('Added a new S3 Lifecycle Transition Rule to S3 INT')
+                                s3.put_bucket_lifecycle_configuration(Bucket=Name, LifecycleConfiguration = policy)
+                            else:
+                                print ("err.response['Error']['Code']")
+          Handler: index.lambda_handler
+          Timeout: 300
+          Runtime: python3.8
+          Role: !GetAtt LambdaRole.Arn
+      LambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: sts:AssumeRole
+          Path: /
+          Policies:
+          - PolicyName: 's3-lifecycle'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - "s3:GetLifecycleConfiguration"
+                - "s3:ListAllMyBuckets"
+                - "s3:PutLifecycleConfiguration"
+                - "sts:GetCallerIdentity"
+                Resource: arn:aws:s3:::*
+    
