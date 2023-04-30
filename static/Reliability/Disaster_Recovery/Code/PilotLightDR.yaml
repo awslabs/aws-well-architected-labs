@@ -164,16 +164,10 @@ Resources:
             Action:
               - 's3:GetBucketLocation'
               - 's3:GetObject'
-              - 's3:GetObjectAcl'
-              - 's3:PutObject'
-              - 's3:PutObjectAcl'
-              - 's3:GetReplicationConfiguration'
-              - 's3:GetObjectVersion'
-              - 's3:GetObjectVersionAcl'
-              - 's3:GetObjectVersionTagging'
-              - 's3:ReplicateObject'
-              - 's3:ReplicateDelete'
-              - 's3:ReplicateTags'     
+              - 's3:PutObject'      
+              - 's3:ListAllMyBuckets'
+              - 's3:ListBucket'
+              - 's3:CreateBucket'              
             Resource:
               - !GetAtt
                 - UIBucket
@@ -270,6 +264,30 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false         
+  UIBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UIBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ''
+                - - 'arn:aws:s3:::'
+                  - Ref: 'UIBucket'
+                  - '/*'
+            Principal:
+              AWS:
+                - '*'              
   EC2Instance:
     Condition: CreatePrimaryDB
     Type: 'AWS::EC2::Instance'
