@@ -10,7 +10,7 @@ weight = 3
 Debe esperar a que la pila de **Warm Primary Region** tenga el estado de **Completado** antes de pasar a esta sección. Esto llevará aproximadamente 15 minutos.
 {{% /notice %}}
 
-1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando una [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=warm-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v9/WarmStandbyDR.yaml).
+1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando una [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=warm-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v10/WarmStandbyDR.yaml).
 
 1.2  Especifíque los detalles de la pila.
 

@@ -10,7 +10,7 @@ weight = 3
 Debe esperar que la pila **Pilot Primary Region** tenga el estado **Completado** antes de continuar con ésatsección. El proceso debe demorar unos 15 minutos.
 {{% /notice %}}
 
-1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando una [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=pilot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v9/PilotLightDR.yaml).
+1.1 Cree la aplicación en la región secundaria **N. California (us-west-1)** lanzando una [Plantilla de CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/template?stackName=pilot-secondary&templateURL=https://ee-assets-prod-us-east-1.s3.amazonaws.com/modules/7ebe40ac15b94a1e815828a877bde9b3/v10/PilotLightDR.yaml).
 
 1.2  Especifíque los detalles de la pila.
 
