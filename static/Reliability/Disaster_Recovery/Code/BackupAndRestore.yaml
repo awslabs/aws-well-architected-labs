@@ -152,9 +152,9 @@ Resources:
             Action:
               - 's3:GetBucketLocation'
               - 's3:GetObject'
-              - 's3:GetObjectAcl'
-              - 's3:PutObject'
-              - 's3:PutObjectAcl'              
+              - 's3:PutObject'      
+              - 's3:GetBucketPolicy'
+              - 's3:PutBucketPolicy'  
             Resource:
               - !GetAtt
                 - UIBucket
@@ -198,7 +198,6 @@ Resources:
             Effect: Allow
             Action:
               - 's3:GetObjectVersionForReplication'
-              - 's3:GetObjectVersionAcl'
               - 's3:GetObjectVersionTagging'              
             Resource:
               - !Join
@@ -294,7 +293,31 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
       VersioningConfiguration:
-        Status: Enabled        
+        Status: Enabled       
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false         
+  UIBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UIBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ''
+                - - 'arn:aws:s3:::'
+                  - Ref: 'UIBucket'
+                  - '/*'
+            Principal:
+              AWS:
+                - '*'        
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     DependsOn: DBInstance
@@ -360,18 +383,29 @@ Resources:
                     echo $JSON_STRING | sudo tee /home/ec2-user/UniShopUI/config.json    
 
                   - >
-                    aws s3api create-bucket --acl bucket-owner-full-control --bucket $SECONDARY_BUCKET --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
+                    aws s3api create-bucket --bucket $SECONDARY_BUCKET --create-bucket-configuration LocationConstraint=us-west-1 --region us-west-1
 
                   - >
-                    aws s3api put-bucket-versioning --bucket $SECONDARY_BUCKET --versioning-configuration Status=Enabled      
+                    aws s3api put-bucket-versioning --bucket $SECONDARY_BUCKET --versioning-configuration Status=Enabled                                            
+
+                  - >
+                    aws s3api put-public-access-block --bucket $SECONDARY_BUCKET --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"                    
+
+                  - >
+                    aws s3api get-bucket-policy --bucket $UI_RANDOM_NAME --query Policy --output text > policy.json
+
+                  - >
+                    sed -i 's/primary/secondary/g' policy.json
+                    
+                  - >
+                    aws s3api put-bucket-policy --bucket $SECONDARY_BUCKET --policy file://policy.json                            
 
                   - >
                     aws s3 website s3://$SECONDARY_BUCKET/ --index-document index.html --error-document error.html                  
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/
-                    s3://$UI_RANDOM_NAME/ --recursive --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                    s3://$UI_RANDOM_NAME/ --recursive        
                     
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
@@ -496,7 +530,7 @@ Resources:
                   - |
                     echo '{"host":"'"$HOSTNAME"'","region":"'"$AWS_DEFAULT_REGION"'"}' | sudo tee /home/ec2-user/UniShopUI/config.json                    
                   - |
-                    sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                    sudo aws s3 cp /home/ec2-user/UniShopUI/config.json s3://$UI_RANDOM_NAME/config.json   
                   - |   
                     source /home/ec2-user/unishopcfg.sh  
                   - |                                                      

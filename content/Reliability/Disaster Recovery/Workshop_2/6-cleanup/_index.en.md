@@ -93,6 +93,10 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 {{< img cl-7.png >}}
 
+#### Allow Amazon S3 Public Access
+
+If you changed your account-level Block Level Public Access settings for this workshop, return them to their pre-workshop settings. For more information, see [Blocking public access to your Amazon S3 storage](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html). 
+
 {{< prev_next_button link_prev_url="../5-verify-secondary/" title="Congratulations!" final_step="true" >}}
 This lab specifically helps you with the best practices covered in question [REL 13  How do you plan for disaster recovery (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
 {{< /prev_next_button >}}
