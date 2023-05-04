@@ -27,6 +27,7 @@ Review the warning message. If you desire to continue deleting your bucket, type
 ![Images/S3IntelligentTiering34.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-34.png)
 
 3. **Delete CloudFormation Stack**
+
 To delete the CloudFormation stack created as part of [section 4]({{< ref "4_cfn_lifecycle_policy" >}}), navigate to AWS Cloudformation console, select the stack and click **Delete**.
 ![Images/S3IntelligentTiering35.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-35.png)
 
@@ -38,6 +39,6 @@ Stack deletion will remove the lambda function and the associated IAM role.
 **Important** - this cleanup process deletes resources created by cloudformation template but it retains the policies created and applied to Amazon S3 bucket. If you wish to modify/remove those then you need to do it manually by navigating to **Amazon S3 bucket** → **Management tab** → **Lifecycle Rules** 
 
 
-**Conclusion**
+## Conclusion
 
 Congratulations, you have now completed this lab. Objects that are not in the intelligent tiering storage class, will be assessed and transitioned daily by the lifecycle rule as needed. This will reduce your costs for this S3 bucket. Now, to implement such best practices proactively, you could propose your organization to have such rule implemented by default in every newly created S3 bucket.
