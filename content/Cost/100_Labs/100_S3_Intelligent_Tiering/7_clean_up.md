@@ -20,12 +20,22 @@ Next, you will be presented with a banner indicating if the deletion has been su
 
 2. **Delete test bucket**
 
-Finally, you need to delete your bucket. Return to the list of buckets. Select the radio button against your bucket and then click **Delete**.
+To delete your bucket, return to the S3 bucket console. Select the radio button against your bucket and then click **Delete**.
 
 Review the warning message. If you desire to continue deleting your bucket, type the bucket name in the confirmation pop-up window and then click **Delete bucket**.
 ![Images/S3IntelligentTiering33.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-33.png)
 ![Images/S3IntelligentTiering34.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-34.png)
 
+3. **Delete CloudFormation Stack**
+To delete the CloudFormation stack created as part of [section 4]({{< ref "4_cfn_lifecycle_policy" >}}), navigate to AWS Cloudformation console, select the stack and click **Delete**.
+![Images/S3IntelligentTiering35.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-35.png)
+
+Click **Delete** on the confirmation window to continue. 
+![Images/S3IntelligentTiering36.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-36.png)
+
+Stack deletion will remove the lambda function and the associated IAM role. 
+
+**Important** - this cleanup process deletes resources created by cloudformation template but it retains the policies created and applied to Amazon S3 bucket. If you wish to modify/remove those then you need to do it manually by navigating to **Amazon S3 bucket** → **Management tab** → **Lifecycle Rules** 
 
 
 **Conclusion**
