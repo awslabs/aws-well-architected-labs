@@ -15,7 +15,9 @@ In this lab, we are going to deploy a Lambda function using AWS CloudFormation t
 
 1. Download the [s3lifecycle-automation.yaml](/Cost/100_S3_Intelligent_Tiering/Code/s3lifecycle-automation.yaml) CloudFormation template to your machine.
 
-{{% common/CreateNewCloudFormationStack stackname="S3TieringLifecycleAutomation" templatename="s3lifecycle-automation.yaml" /%}}
+{{% common/CreateNewCloudFormationStack stackname="S3TieringLifecycleAutomation" templatename="s3lifecycle-automation.yaml" %}}
+    * **BucketNameParam** - Name of the bucket to store automation result.
+{{% /common/CreateNewCloudFormationStack %}}
 
 ## Understanding this automation template deployment
 

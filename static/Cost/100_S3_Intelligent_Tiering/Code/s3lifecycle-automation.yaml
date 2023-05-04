@@ -1,32 +1,46 @@
 
     AWSTemplateFormatVersion: '2010-09-09'
+    Parameters:
+        BucketNameParam:
+            Description: Name of the bucket to store automation result
+            Type: String
     Resources:
       S3LifecycleFunction:
         Type: AWS::Lambda::Function
         Properties:
+          Environment:
+            Variables:
+              outputbucketname:
+                Ref: BucketNameParam
           Code:
             ZipFile: |
                 import boto3
+                import os
                 import json
                 from botocore.exceptions import ClientError
                 from time import strftime 
                 from datetime import datetime
-        
+
                 def lambda_handler(event, context):
                     
                     s3 = boto3.client('s3')
                     client = boto3.client('sts')
                     
+                    #define variables for formatted date, and an output file for header row
                     now = datetime.now()
-                    current_time = now.strftime("%H:%M:%S")
-                    TransitionStatus = []
+                    current_time = now.strftime("%m-%d-%Y-%H:%M")
+                    TransitionOutput = "Bucket Name, Transition In Days, Storage Class, Transition Status"
                     
-                    
-                    def createLCP(Name):
+                    #add user identity in bucket creation
+                    user_id = client.get_caller_identity()
+                    user_role = (user_id['Arn'].split(':')[5]).split('/')[1]
+
+                    #create S3 lifecycle policy
+                    def createPolicy(Name):
                         policy = {
                                     'Rules': [
                                         {
-                                            'ID': "AddedthroughAutomation-S3IntelligentTieringLC"+"-"+current_time,
+                                            'ID': "S3IntelligentTieringLC-AddedviaAutomation-"+"-"+current_time,
                                             'Filter': {},
                                             'Status': 'Enabled',
                                             'Transitions': [
@@ -45,14 +59,14 @@
                                     ]
                                 }
                         return policy
-        
+                    
                     #get buckets in the account
                     BucketNames = s3.list_buckets()
                     for bucket in BucketNames['Buckets']:
                         Name = bucket['Name'] 
                         try:
                             #Case 1 - Check the existing lifecycle policies, if there are any then skip the bucket but record it in the excel for reference
-                            result = s3.get_bucket_lifecycle_configuration(Bucket=Name) #, ExpectedBucketOwner=ownerAccountId)
+                            result = s3.get_bucket_lifecycle_configuration(Bucket=Name) 
                             Rules= result['Rules']
                             if any("Transitions" in keys for keys in Rules):
                                 for Rule in Rules:
@@ -60,41 +74,33 @@
                                         if key == 'Transitions':
                                             Days = value[0]['Days']
                                             StorageClass = value[0]['StorageClass']
-                                            TransitionStatus.append(Name)
-                                            TransitionStatus.append(Days)
-                                            TransitionStatus.append(StorageClass)
-                                            TransitionStatus.append('No changes made to S3 Lifecycle configuration')
+                                            TransitionStatus = Name + ',' + str(Days) + ',' + StorageClass + ', No changes made to S3 Lifecycle configuration' 
+                                            TransitionOutput = TransitionOutput + '\n' + TransitionStatus
                             #Additional customization - if you want to modify existing policy, that logic will go here in else block
-                            # else:
-                            #     policy = createLCP(Name)
-                            #     for p in policy['Rules']:
-                            #         for key, value in p.items():
-                            #             if key =='Transitions':
-                            #                 Days = value[0]['Days']
-                            #                 StorageClass = value[0]['StorageClass']
-                            #                 TransitionStatus.append(Name)
-                            #                 TransitionStatus.append(Days)
-                            #                 TransitionStatus.append(StorageClass)
-                            #                 TransitionStatus.append('Updated the existing Lifecycle with Transition rule to S3 INT')
-                            #     Rules.append(policy['Rules'][0])
-                            #     s3.put_bucket_lifecycle_configuration(Bucket=Name, LifecycleConfiguration = {'Rules':Rules })
                         except ClientError as err: 
                             #Case 2 - if no lifecycle policy exists, then create and attach it to the bucket
-                            if err.response['Error']['Code'] == 'NoSuchLifecycleConfiguration': 
-                                print("No LifeCycle Configuration for " + Name) 
-                                policy = createLCP(Name)
+                            if err.response['Error']['Code'] == 'NoSuchLifecycleConfiguration':
+                                policy = createPolicy(Name)
                                 for p in policy['Rules']:
                                     for key, value in p.items():
                                         if key =='Transitions':
                                             Days = value[0]['Days']
                                             StorageClass = value[0]['StorageClass']
-                                            TransitionStatus.append(Name)
-                                            TransitionStatus.append(Days)
-                                            TransitionStatus.append(StorageClass)
-                                            TransitionStatus.append('Added a new S3 Lifecycle Transition Rule to S3 INT')
+                                            TransitionStatus = Name + ',' + str(Days) + ',' + StorageClass + ', Added a new S3 Lifecycle Transition Rule to S3 INT' 
+                                            TransitionOutput = TransitionOutput + '\n' + TransitionStatus
                                 s3.put_bucket_lifecycle_configuration(Bucket=Name, LifecycleConfiguration = policy)
                             else:
                                 print ("err.response['Error']['Code']")
+                                
+                    try:
+                        s3.put_object(Body=TransitionOutput,Key='s3automationresultbucket.csv',Bucket=os.environ['outputbucketname'])
+                        body = ('your lambda function has been executed successfully. Please check the output file saved in S3 bucket - ' + os.environ['outputbucketname'] + ' and File name - s3automationresultbucket.csv')
+                    except ClientError as err:
+                        body = err.response['Error']
+                        
+                    return {
+                        'body': body
+                    }
           Handler: index.lambda_handler
           Timeout: 300
           Runtime: python3.8
@@ -122,4 +128,14 @@
                 - "s3:PutLifecycleConfiguration"
                 - "sts:GetCallerIdentity"
                 Resource: arn:aws:s3:::*
-    
+          - PolicyName: 's3-lifecycle-write'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - "s3:PutObject"
+                - "s3:ListAllMyBuckets"
+                - "s3:PutLifecycleConfiguration"
+                - "sts:GetCallerIdentity"
+                Resource: arn:aws:s3:::*/s3automationresultbucket.csv
