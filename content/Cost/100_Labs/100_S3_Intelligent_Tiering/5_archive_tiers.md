@@ -15,7 +15,7 @@ The chart below shows how it adds into upto 95% of cost savings once you start u
 ![Images/S3IntelligentTiering15b.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-15b.png)
 
 
-1. Log into the [S3 console](https://s3.console.aws.amazon.com/s3/home) and select the Buckets menu option. From the list of available buckets, select the bucket name of the bucket you created in section 2.
+1. Log into your AWS Account and navigate to S3 Bucket console. Then select the bucket you used in [section 2]({{< ref "../2_upload_new_object/" >}}).
 ![Images/S3IntelligentTiering16.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-16.png)
 
 2. Select the **Properties** tab.
@@ -27,28 +27,28 @@ The chart below shows how it adds into upto 95% of cost savings once you start u
 4. In the **Archive configuration settings** section, specify a descriptive **Configuration name** for your S3 Intelligent-Tiering Archive configuration.
 ![Images/S3IntelligentTiering19.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-19.png)
 
-5. For this lab, we are going to limit the scope of configuration using tags. To do so, under Choose a configuration scope, select Limit the scope of this configuration using one or more filters.
-In the Object Tags section, choose Add tag, and enter “opt-in-archive” as Key and “true” as Value of the tag. Make sure that the Status of the configuration is Enable.
+5. For this lab, we are going to limit the scope of configuration by using tags. To do so, under **Choose a configuration scope**, select **Limit the scope of this configuration using one or more filters**.
+In the **Object Tags** section, click **Add tag**, and then enter "opt-in-archive" as **Key** and “true” as **Value**. Make sure that **Status** configuration is **Enable**.
 ![Images/S3IntelligentTiering20.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-20.png)
 
-6. Objects in the S3 Intelligent-Tiering storage class can be archived to the Deep Archive Access tier after they haven’t been accessed for a time between six months and two years. 
+6. Objects in S3 Intelligent-Tiering storage class are archived to Deep Archive Access tier after they haven’t been accessed for a time between six months and two years depending on your configuration. 
 
 Refer to the following object flow e.g with minimum days of object storage required before object is moved from frequent access tier to deep archive access tier
-![Images/S3IntelligentTiering21.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-19.png)
+![Images/S3IntelligentTiering21.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-21.png)
 
-For this lab, we want to archive objects that haven’t been accessed for 6 months, to ensure that we only archive data that is not being used. To do so, in the Archive rule actions section, select Deep Archive Access tier, enter 180 as number of consecutive days without access before archiving the objects to the Deep Archive Access tier, and choose Create.
+For this lab, we want to archive objects that haven’t been accessed for 6 months, to ensure that we only archive data that is not being used. To do so, in the **Archive rule actions** section, select **Deep Archive Access tier**, enter **180** as number of consecutive days without access before archiving the objects to the Deep Archive Access tier, and choose **Create**.
 ![Images/S3IntelligentTiering22.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-22.png)
 
 7. To upload a new object with **opt-in-archive** tag, go to your S3 Bucket and click **Upload**:
 ![Images/S3IntelligentTiering23.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-23.png)
 
-8. Then, choose Add files. Navigate to your local file system to locate the file you would like to upload. Select the appropriate file and then choose Open. Your file will be listed in the Files and folders section.
+8. Then, choose Add files. Navigate to your local file system to locate the file you would like to upload. Select the file and then choose **Open**. Your file will be listed in **Files and folders** section.
 ![Images/S3IntelligentTiering24.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-24.png)
 
-9. In the Properties section, select Intelligent-Tiering. For more information about the Amazon S3 Intelligent-Tiering storage class, see the [Amazon S3 User Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html).
+9. In the **Properties** section, select **Intelligent-Tiering**. For more information about the Amazon S3 Intelligent-Tiering storage class, see the [Amazon S3 User Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html).
 ![Images/S3IntelligentTiering25.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-25.png)
 
-10. Because we want the file to be archived after 6 months of no access, in the Tags – optional section we select Add tag with Key “opt-in-archive” and Value “true”, and click **Upload**.
+10. Because we want the file to be archived after 6 months of no access, in the **Tags – optional** section we select **Add tag** with **Key** “opt-in-archive” and **Value** “true”, and click **Upload**.
 ![Images/S3IntelligentTiering26.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-26.png)
 
 ### Congratulations! 

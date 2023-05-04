@@ -7,7 +7,7 @@ weight: 9
 hidden: false
 ---
 ## Last Updated
-April 2023
+May 2023
 
 ## Authors
 * **Mugdha Vartak**, AWS Solutions Architect
@@ -26,7 +26,7 @@ This lab helps you to exercise the following Well-Architected Best Practices in 
 * [COST09-BP01](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html) - **Perform an analysis on the workload demand**
 
 ## Introduction
-This hands-on lab will guide you through the steps to configure **S3 intelligent-tiering** using AWS Console to move objects within Amazon S3 storage tiers automatically. The skills you learn will help you optimize the storage cost based on your access patterns in alignment with your business requirements.
+This hands-on lab will guide you through the steps to configure [S3 Intelligent tiering](https://aws.amazon.com/s3/storage-classes/intelligent-tiering/) using AWS Console to move objects within Amazon S3 storage tiers automatically. The skills you learn will help you optimize the storage cost based on your access patterns in alignment with your business requirements.
 
 ## Goals
 * Learn the fundamentals of Amazon S3 Intelligent Tiering object storage class 
@@ -34,7 +34,7 @@ This hands-on lab will guide you through the steps to configure **S3 intelligent
 
 
 ## Prerequisites
-* An [AWS account](https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fportal.aws.amazon.com%2Fbilling%2Fsignup%2Fresume&client_id=signup)]
+* An [AWS account](https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fportal.aws.amazon.com%2Fbilling%2Fsignup%2Fresume&client_id=signup)
 
 {{% notice note %}}
 It is strongly advised not to use a production account for this lab but to use a test or sandbox account to understand the functionalities and capabilities of the service. And then replicate the relevant configurations to the production accounts.
@@ -49,7 +49,7 @@ Refer to S3 Intelligent-Tiering [Pricing](https://aws.amazon.com/s3/pricing/) pa
 
 The lab should take approximately 30 minutes to complete
 
-## Steps
+## Lab Sections
 {{% children  /%}}
 
 {{< prev_next_button link_next_url="./1_int_tiering_overview/" button_next_text="Start Lab" first_step="true" />}}

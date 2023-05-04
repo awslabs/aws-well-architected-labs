@@ -6,23 +6,23 @@ weight: 7
 pre: "<b>7. </b>"
 ---
 
-In the following steps, you clean up the resources you created in this tutorial. It is a best practice to delete resources that you are no longer using so that you do not incur unintended charges.
+In this section, you will clean up the resources you created as part of this workshop. It is a best practice to delete resources you are no longer require to avoid incurring on-going charges.
 
 1. **Delete test objects**
 
-If you have logged out of your AWS Management Console session, log back in. Navigate to the [S3 console](https://s3.console.aws.amazon.com/s3/home) and select the Buckets menu option. First you will need to delete the test object(s) from your test bucket. Select the radio button to the left of the bucket you created for this tutorial, and then choose Empty.
+If you have logged out of your AWS Account, log back in. Navigate to [S3 console](https://s3.console.aws.amazon.com/s3/home) and click **Buckets** on the left navigation pane. Before deleting the bucket, all its objects need to be deleted. Select the radio button against your bucket and then click **Empty**.
 
 ![Images/S3IntelligentTiering32.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-32.png)
 
-In the Empty bucket page, type “permanently delete” into the Permanently delete all objects confirmation box. Then, choose Empty to continue.
+Type “*permanently delete*” in the confirmation window that pops up. Then, click **Empty** to continue.
 
 Next, you will be presented with a banner indicating if the deletion has been successful.
 
 2. **Delete test bucket**
 
-Finally, you need to delete the test bucket you have created. Return to the list of buckets in your account. Select the radio button to the left of the bucket you created for this tutorial, and then choose Delete.
+Finally, you need to delete your bucket. Return to the list of buckets. Select the radio button against your bucket and then click **Delete**.
 
-Review the warning message. If you desire to continue deletion of this bucket, type the bucket name into the Delete bucket confirmation box and choose Delete bucket.
+Review the warning message. If you desire to continue deleting your bucket, type the bucket name in the confirmation pop-up window and then click **Delete bucket**.
 ![Images/S3IntelligentTiering33.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-33.png)
 ![Images/S3IntelligentTiering34.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-34.png)
 
