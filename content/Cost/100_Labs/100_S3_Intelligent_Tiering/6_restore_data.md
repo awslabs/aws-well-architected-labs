@@ -8,7 +8,7 @@ pre: "<b>6. </b>"
 
 In this step, you will learn how to restore a file. This will happen after the file remains in deep archive storage class for 180 days. After 180 days, before you can download a file stored in the Deep Archive Access tier, you must initiate the restore request and wait until the object is moved to the Frequent Access tier.
 
-1. Log into your AWS Account and navigate to S3 Bucket console. Then select the bucket you used in [section 5]({{< ref "../5_archive_tiers/" >}}).
+1. Log into your AWS Account and navigate to S3 Bucket console. Then select the bucket you used in [section 5]({{< ref "5_archive_tiers" >}}).
 
 2. In the **Objects** tab, select the file stored in the Intelligent-Tiering Deep Archive Access tier.
 In **Properties** tab, you will notice that both **Download** and **Open** buttons are grayed out, and a banner notifies you that in order to access the file you must first restore it. Click **Inititate restore**.

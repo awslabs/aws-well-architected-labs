@@ -15,7 +15,7 @@ The chart below shows how it adds into upto 95% of cost savings once you start u
 ![Images/S3IntelligentTiering15b.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-15b.png)
 
 
-1. Log into your AWS Account and navigate to S3 Bucket console. Then select the bucket you used in [section 2]({{< ref "../2_upload_new_object/" >}}).
+1. Log into your AWS Account and navigate to S3 Bucket console. Then select the bucket you used in [section 2]({{< ref "2_upload_new_object" >}}).
 ![Images/S3IntelligentTiering16.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-16.png)
 
 2. Select the **Properties** tab.

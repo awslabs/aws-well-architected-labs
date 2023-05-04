@@ -7,7 +7,7 @@ pre: "<b>4. </b>"
 ---
 
 In the previous section, we learnt how to enable [S3 Intelligent-Tiering](https://aws.amazon.com/s3/storage-classes/intelligent-tiering/) through a lifecycle rule for a single bucket.
-In real-world scenarios, customers may accumulate petabytes of objects in the S3 Standard storage class across tens to hundreds of buckets and in multiple accounts who look for an easier approach to apply a single [S3 Lifecycle](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html) configuration across all of their buckets to transition data from S3 Standard tier to S3 Intelligent-Tiering.
+In real-world scenarios, customers may accumulate petabytes of objects in the S3 Standard storage class across tens to hundreds of buckets and in multiple accounts who look for an easier approach to apply a single [S3 Lifecycle](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html) configuration across multiple buckets to transition data from S3 Standard tier to S3 Intelligent-Tiering.
 
 In this lab, we are going to deploy a Lambda function using AWS CloudFormation template to make this process easier.
 
