@@ -10,7 +10,7 @@ New objects uploaded to S3 Intelligent-Tiering storage class are initially store
 
 This section walks you through the steps to first create a new S3 bucket and then upload an object to S3 Intelligent-Tiering storage class. If you prefer to use an existing bucket for the purpose of this lab, you can skip steps 1 to 4 and go straight to step 5.
 
-1. Log into the [AWS Management Console](https://console.aws.amazon.com/). Navigate to Amazon S3 console by typing **S3** in the services search bar and clicking **S3** in the search results.
+1. Log into [AWS Management Console](https://console.aws.amazon.com/). Navigate to Amazon S3 console by typing **S3** in the services search bar and clicking **S3** in the search results.
 ![Images/S3IntelligentTiering03.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-03.png)
 
 2. In the **Amazon S3** navigation pane on the left, select **Buckets**, and then click **Create bucket** in the **Buckets** section.
