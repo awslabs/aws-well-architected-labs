@@ -41,6 +41,7 @@ It is strongly advised not to use a production account for this lab but to use a
 {{% /notice %}}
 
 * [AWS IAM](https://aws.amazon.com/iam/) user/role with permission to create/modify an Amazon S3 bucket
+* An object of size greater than 128KB. The object will be uploaded to an S3 bucket during the lab. You may choose to use multiple objects for the lab. 
 
 ## Costs
 Refer to S3 Intelligent-Tiering [Pricing](https://aws.amazon.com/s3/pricing/) page

@@ -26,8 +26,9 @@ This AWS Cloudformation template creates a stack in your AWS account. Stack reso
 Navigate to AWS Lambda console to review the function code.
 
 This automation logic caters the following two use-cases:
-Case 1 - Check existing lifecycle policies, if there are any then skip the bucket
-Case 2 - If no lifecycle policy exists, then create a new policy and attach it to the bucket
+
+* Case 1 - Check existing lifecycle policies, if there are any then skip the bucket
+* Case 2 - If no lifecycle policy exists, then create a new policy and attach it to the bucket
 
 {{% notice note %}}
 This automation template does not modify Amazon S3 buckets with existing lifecycle policies. But you can customize this lambda function to modify existing S3 lifecycle policy by adding logic in the placeholder **Additional customization**.
@@ -35,7 +36,7 @@ This automation template does not modify Amazon S3 buckets with existing lifecyc
 
 Review **createPolicy** function. The Amazon S3 lifecycle policy defined in the the lambda function creates a rule to move all the existing objects in all the AWS S3 buckets in a given account to S3 Intelligent Tiering Storage Class on the day 0 of object creation/upload. You can customize this logic to define your own transition rule statements. You can refer to some customization examples [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-configuration-examples.html).
 
-**How to trigger the deployed lambda function? **
+**Trigger Lambda Function**
 
 1. In the Lambda console, click on **Test** to create a test event.
 ![Images/S3IntelligentTiering14a.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14a.png)
