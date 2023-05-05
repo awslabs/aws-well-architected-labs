@@ -34,12 +34,10 @@ This hands-on lab will guide you through the steps to configure [S3 Intelligent 
 
 
 ## Prerequisites
-* An [AWS account](https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fportal.aws.amazon.com%2Fbilling%2Fsignup%2Fresume&client_id=signup)
-
+* [AWS Account Setup]({{< ref "/Cost/100_labs/100_1_aws_account_setup">}}) has been completed
 {{% notice note %}}
 It is strongly advised not to use a production account for this lab but to use a test or sandbox account to understand the functionalities and capabilities of the service. And then replicate the relevant configurations to the production accounts.
 {{% /notice %}}
-
 * [AWS IAM](https://aws.amazon.com/iam/) user/role with permission to create/modify an Amazon S3 bucket
 * An object of size greater than 128KB. The object will be uploaded to an S3 bucket during the lab. You may choose to use multiple objects for the lab. 
 
