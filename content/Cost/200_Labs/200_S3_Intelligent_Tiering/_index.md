@@ -1,9 +1,9 @@
 ---
-title: "Level 100: Amazon S3 Intelligent Tiering"
-menutitle: "Level 100: Amazon S3 Intelligent Tiering"
+title: "Level 200: Amazon S3 Intelligent Tiering"
+menutitle: "Level 200: Amazon S3 Intelligent Tiering"
 date: 2023-04-03T26:16:08-04:00
 chapter: false
-weight: 9
+weight: 14
 hidden: false
 ---
 ## Last Updated

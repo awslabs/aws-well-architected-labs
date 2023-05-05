@@ -13,7 +13,7 @@ In this lab, we are going to deploy a Lambda function using AWS CloudFormation t
 
 ## Deploy CloudFormation Template
 
-1. Download the [s3lifecycle-automation.yaml](/Cost/100_S3_Intelligent_Tiering/Code/s3lifecycle-automation.yaml) CloudFormation template to your machine.
+1. Download the [s3lifecycle-automation.yaml](/Cost/200_S3_Intelligent_Tiering/Code/s3lifecycle-automation.yaml) CloudFormation template to your machine.
 
 {{% common/CreateNewCloudFormationStack stackname="S3TieringLifecycleAutomation" templatename="s3lifecycle-automation.yaml" %}}
     * **BucketNameParam** - Name of the bucket to store automation result.
@@ -39,20 +39,20 @@ Review **createPolicy** function. The Amazon S3 lifecycle policy defined in the 
 **Trigger Lambda Function**
 
 1. In the Lambda console, click on **Test** to create a test event.
-![Images/S3IntelligentTiering14a.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14a.png)
+![Images/S3IntelligentTiering14a.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14a.png)
 
 2. Specify a name for your test event, keep everything else to default and click **Save**.
-![Images/S3IntelligentTiering14b.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14b.png)
+![Images/S3IntelligentTiering14b.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14b.png)
 
 3. Before running the event, review the lambda function code for any customization as suggested above. Run **Test**.
-![Images/S3IntelligentTiering14c.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14c.png)
+![Images/S3IntelligentTiering14c.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14c.png)
 
 4. Review the execution log to see if the function has been executed successfully. It will generate the output file in the Amazon S3 bucket you specified during cloudformation stack creation.
-![Images/S3IntelligentTiering14d.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14d.png)
-![Images/S3IntelligentTiering14e.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14e.png)
+![Images/S3IntelligentTiering14d.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14d.png)
+![Images/S3IntelligentTiering14e.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14e.png)
 
 5. Once the lambda function execution is successful, go back to S3 console and verify the bucket lifecycle policies created.
-![Images/S3IntelligentTiering14f.png](/Cost/100_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14f.png)
+![Images/S3IntelligentTiering14f.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-14f.png)
 
 {{% notice note %}}
 You can also deploy this cloudformation template as a stack set if you wish to run this across multiple accounts within your organization. More information around AWS Clouformation Stack set deployment can be found [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-getting-started-create.html#stacksets-getting-started-create-self-managed-console).
