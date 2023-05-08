@@ -18,7 +18,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: rds-usage
+    Default: rds_usage_data
   DAYS:
     Type: Number
     Description: Number of days going back that you want to get data for

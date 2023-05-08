@@ -269,8 +269,30 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
-      VersioningConfiguration:
-        Status: Enabled                
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false         
+  UIBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UIBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ''
+                - - 'arn:aws:s3:::'
+                  - Ref: 'UIBucket'
+                  - '/*'
+            Principal:
+              AWS:
+                - '*'              
   WebServerGroup:
     DependsOn: RDSDBInstance
     Type: 'AWS::AutoScaling::AutoScalingGroup'
@@ -371,7 +393,7 @@ Resources:
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/config.json
-                    s3://$UI_RANDOM_NAME/config.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers         
+                    s3://$UI_RANDOM_NAME/config.json    
                     
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
@@ -649,7 +671,7 @@ Resources:
 
                     aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                           
                   - >
-                    aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --exclude "config.json" --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers  
+                    aws s3 cp /home/ec2-user/UniShopUI/ s3://$UI_RANDOM_NAME/ --exclude "config.json" --recursive 
         create-tables:
           commands:
             1-create-tables:
