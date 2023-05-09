@@ -48,11 +48,13 @@ For this lab, we want to archive objects that haven’t been accessed for 6 mont
 9. In the **Properties** section, select **Intelligent-Tiering**. For more information about the Amazon S3 Intelligent-Tiering storage class, see the [Amazon S3 User Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html).
 ![Images/S3IntelligentTiering25.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-25.png)
 
-10. Because we want the file to be archived after 6 months of no access, in the **Tags – optional** section we select **Add tag** with **Key** “opt-in-archive” and **Value** “true”, and click **Upload**.
+10. In the **Tags – optional** section we select **Add tag** with **Key** “opt-in-archive” and **Value** “true”, and click **Upload**.
 ![Images/S3IntelligentTiering26.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-26.png)
 
+11. The uploaded file will automatically be moved to deep archived tier if not accessed for 6 months.
+
 ### Congratulations! 
-You have completed this section of the lab. In this section you learned how to configure optional archive storage tier and use object tag to transfer objects to deep archive access tier.
+You have completed this section of the lab. In this section you learned how to configure optional archive storage tier and use object tag to transfer objects to deep archive access tier. In the next section, you will learn to restore archived data. 
 
 Click on **Next Step** to continue to the next section.
 

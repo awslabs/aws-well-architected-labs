@@ -17,7 +17,7 @@ In this section of the lab, you will learn how to configure an S3 Lifecycle poli
 
 3. When you create S3 Lifecycle rule, you have the option to limit the scope of the rule by prefix, tag, or object size. For this lab we want to apply the Lifecycle rule to all objects in the bucket and therefore we won’t apply any filters.
 
-    * Enter a descriptive **Lifecycle rule name**.
+    * Enter **Lifecycle rule name** as **Lifecycle to transition objects through intelligent tiering**.
     * Select **Apply to all objects in the bucket**.
     * Select **I acknowledge that this rule will apply to all objects in the bucket checkbox**.
     * Under **Lifecycle rule actions** section, select **Move current versions of objects between storage classes**. For more information, see [Using versioning in S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html).

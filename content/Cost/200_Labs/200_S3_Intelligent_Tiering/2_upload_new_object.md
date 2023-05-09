@@ -41,7 +41,11 @@ Now that your bucket has been created and configured, you are ready to upload da
 8. In the **Properties** section, select **Intelligent-Tiering**. Leave rest of the options as default, and click **Upload**.
 ![Images/S3IntelligentTiering10.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-10.png)
 
-At the end of upload operation, a summary is presented to indicate whether the object is uploaded successfully or not. Click **Close** to return to the bucket
+At the end of upload operation, a summary is presented to indicate whether the object is uploaded successfully or not. Take a moment to review. Once the upload is successfull, you can view storage class of the object under **Properties** section.
+![Images/S3IntelligentTiering10a.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-10a.png)
+
+Click **Close** to return to the bucket and finish this lab section. 
+![Images/S3IntelligentTiering10b.png](/Cost/200_S3_Intelligent_Tiering/Images/S3-IntelligentTiering-10b.png)
 
 ### Congratulations!
 You have completed this section of the lab. In this section you created Amazon S3 bucket and uploaded an object to the S3 Intelligent tiering storage class.
