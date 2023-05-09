@@ -35,6 +35,7 @@ This hands-on lab will guide you through the steps to configure [S3 Intelligent 
 
 ## Prerequisites
 * An [AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) that you are able to use for testing.
+{{% notice note %}}
 It is strongly advised not to use a production account for this lab but to use a test or sandbox account to understand the functionalities and capabilities of the service. And then replicate the relevant configurations to the production accounts.
 {{% /notice %}}
 * [AWS IAM](https://aws.amazon.com/iam/) user/role with permission to create/modify an Amazon S3 bucket
