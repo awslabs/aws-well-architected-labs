@@ -12,7 +12,9 @@ If you are running this workshop as part of an instructor led workshop, please l
 
 All resources for this workshop have been pre-provisioned.
 
+{{% notice info %}}
 **Continue to the [DynamoDB](../2-dynamodb/) section of the workshop.**
+{{% /notice %}}
 
 #### Using your own AWS account
 

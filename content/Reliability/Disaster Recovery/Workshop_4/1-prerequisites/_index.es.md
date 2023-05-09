@@ -12,7 +12,9 @@ Si está realizando este taller como parte de un taller liderado por un instruct
 
 Todos los recursos para este taller han sido provisionados con anterioridad.
 
+{{% notice info %}}
 **Continue a la sección [Salidas de CloudFormation](../prerequisites/cfn-outputs/) del taller.**
+{{% /notice %}}
 
 ### Utilizando su propia cuenta de AWS
 
