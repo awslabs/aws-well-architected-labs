@@ -14,7 +14,9 @@ In this lab, we are going to create a AWS CloudFormation stack which will deploy
 ```
 IF (lifecycle policy already exist on the bucket)
     THEN Skip the bucket
-    ELSE Create a new policy to transition objects to S3 Intelligent Tiering and attach the policy to the bucket
+    
+ELSE Create a new policy to transition objects to S3 Intelligent Tiering and attach the policy to the bucket
+
 ENDIF;
 ```
 {{% notice note %}}
