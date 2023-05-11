@@ -25,3 +25,7 @@ dist/
 /.vs
 /static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/c#/AppResiliency/.vs/AppResiliency/v16
 /static/Reliability/300_Testing_for_Resiliency_of_EC2_RDS_and_S3/Code/FailureSimulations/c#/AppResiliency/output
+
+__pycache__
+.pytest_cache
+pytest.ini

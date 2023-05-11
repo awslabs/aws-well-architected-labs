@@ -23,10 +23,11 @@
 ## Run (expect 15 mins):
 Pytest:
 
-    pytest static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py  \
-       -o log_cli_format="%(asctime)s [%(levelname)8s] %(message)s"
-       -o log_cli=true \
-       --log-level=INFO -s \
+    pytest static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py
+       --log_cli_format="%(asctime)s [%(levelname)8s] %(message)s"
+       --log_cli=true \
+       --log-level=INFO -s
+      
 
 Python:
     python3 static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py 
@@ -41,7 +42,8 @@ import logging
 from textwrap import indent
 
 import boto3
-from cfn_tools import load_yaml
+import yaml
+# from cfntools import load_yaml
 
 BUCKET = os.environ.get('BUCKET', "aws-wa-labs-staging")
 logger = logging.getLogger(__name__)
@@ -197,7 +199,8 @@ def update_nested_stacks():
     """ update all nested stacks with the leatest versions from git """
     main_stack_name = 'OptimizationDataCollectionStack'
     logger.info('Analyzing nested stacks')
-    cfn = load_yaml(open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml'))
+    with open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml') as fp:
+        cfn = yaml.safe_load(fp)
     nested_stack_file_names = {}
     for k, v in  cfn['Resources'].items():
         if v['Type'] == 'AWS::CloudFormation::Stack':
@@ -356,7 +359,9 @@ def test_compute_optimizer_export_triggered():
     for region in ['us-east-1', 'eu-west-1']:
         co = boto3.client('compute-optimizer', region_name=region)
         jobs = co.describe_recommendation_export_jobs()['recommendationExportJobs']
+        logger.info(f'Jobs: {jobs}')
         jobs_since_start = [job for job in jobs if job['creationTimestamp'].replace(tzinfo=None) > start_time.replace(tzinfo=None)]
+        logger.info(f'Found {len(jobs_since_start)}: {jobs_since_start}')
         assert len(jobs_since_start) == 4, 'Not all jobs launched'
         jobs_failed = [job for job in jobs_since_start if job.get('status') == 'failed']
         assert len(jobs_failed) == 0, f'Some jobs failed {jobs_failed}'
