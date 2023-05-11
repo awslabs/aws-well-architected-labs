@@ -99,6 +99,21 @@ You will be able to add or delete Source Account CURs later by updating this sta
 
 ### Step 2. (IN PAYER / SOURCE ACCOUNT) Create CUR and Replication
 
+{{%expand "Click here if you are installing dashboards in Management / Payer Account." %}}
+
+**WARNING**: Please note that it is typically recommended to install dashboards in a dedicated Data Collection Account in order to keep the number of users in Payer to a minimum. However, if you do decide to proceed with installing dashboards in a Payer Account, we recommend taking steps to mitigate any associated risks. This could include limiting access to a smaller team or implementing better access control measures.
+    ------------ | -------------
+
+You need to update the stack created on **Step 1** with parameters:
+* CreateCUR = True
+* and also set your SourceAccountID (the same as destinaton).
+
+Then go directly to the **[Step 3](#step-3-in-data-collection-account-deploy-dashboards)**.
+------------ | -------------
+
+{{% /expand%}}
+
+
 1. Login to your Source Account (can be management account or linked account if you're using [member CURs](https://aws.amazon.com/about-aws/whats-new/2020/12/cost-and-usage-report-now-available-to-member-linked-accounts/)).
 
 2. Click the **Launch Stack button** below to open the **stack template** in your CloudFormation console.

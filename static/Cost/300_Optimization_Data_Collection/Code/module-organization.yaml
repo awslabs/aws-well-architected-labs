@@ -284,8 +284,8 @@ Resources:
           CREATE OR REPLACE VIEW budgets_cur AS
           SELECT *
           FROM ("${CURTable}" cur
-          INNER JOIN "${DatabaseName}"."organisation_data"
-            ON ("cur"."line_item_usage_account_id" = "${DatabaseName}"."organisation_data"."id")) 
+          INNER JOIN "${DatabaseName}"."organization_data"
+            ON ("cur"."line_item_usage_account_id" = "${DatabaseName}"."organization_data"."id")) 
   LambdaAnalyticsExecutor:
     Type: Custom::LambdaAnalyticsExecutor
     Properties:

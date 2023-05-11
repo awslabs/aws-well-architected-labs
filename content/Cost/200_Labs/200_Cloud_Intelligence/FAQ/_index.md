@@ -138,10 +138,17 @@ On KPI dashboard, under *Set KPI Goals* tab. Choose a specific KPI and adjust th
 #### I am getting the error "SOURCE_RESOURCE_LIMIT_EXCEEDED" on dataset update - what do I do?
 Athena may face processing limitations if the CUR has a significant volume. To overcome this, one possible solution is to change the CUR granularity from 'hourly' to 'daily'. This will reduce the number of lines in CUR by x24, but it will also necessitate modifying the visuals that depict hourly ec2 usage by switching to daily granularity.
 
+#### I am getting the error "SQL_EXCEPTION View is stale; it must be re-created" - what do I do?
+{{%expand "Click here to expand answer" %}}
+This Athena issue can happen if the CUR table changes a lot. Please check following resources:
+- [https://repost.aws/knowledge-center/athena-view-is-stale-error](https://repost.aws/knowledge-center/athena-view-is-stale-error)
+- [Video](https://youtu.be/7GpIgSaVYoI?t=88)
+{{% /expand%}}
+
 #### I am getting the error "Casting from TimestampTZ to Timestamp is not supported" - what do I do?
 {{%expand "Click here to expand answer" %}}
 
-This error is caused by V3 engine of Athena. To fix it, you will need to update your Athena view ri_sp_mapping. Go to Athena, click on the three dots next to the view, select show/edit query, and replace it with one of the following (depending on the scenario). Change the FROM "${cur_table_name} to your CUR table name which you can see in Athena under tables. Click RUN on the query. Then visit QuickSight, and go to your datasets, click edit data set, then click save & publish. 
+This error is caused by V3 engine of Athena. To fix it, you will need to update your Athena view ri_sp_mapping. You need to update CID or just one view. Go to Athena, click on the three dots next to the view, select show/edit query, and replace it with one of the following (depending on the scenario). Change the FROM "${cur_table_name} to your CUR table name which you can see in Athena under tables. Click RUN on the query. Then visit QuickSight, and go to your datasets, click edit data set, then click save & publish. 
 
 - [RIs but not SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
 - [SPs but not RIs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp.sql)
