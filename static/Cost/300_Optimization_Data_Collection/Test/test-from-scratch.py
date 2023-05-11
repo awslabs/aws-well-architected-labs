@@ -42,8 +42,7 @@ import logging
 from textwrap import indent
 
 import boto3
-import yaml
-# from cfntools import load_yaml
+
 
 BUCKET = os.environ.get('BUCKET', "aws-wa-labs-staging")
 logger = logging.getLogger(__name__)
@@ -194,68 +193,6 @@ def initial_deploy_stacks():
         "OptimizationDataCollectionStack",
     ])
 
-
-def update_nested_stacks():
-    """ update all nested stacks with the leatest versions from git """
-    main_stack_name = 'OptimizationDataCollectionStack'
-    logger.info('Analyzing nested stacks')
-    with open('static/Cost/300_Optimization_Data_Collection/Code/Optimization_Data_Collector.yaml') as fp:
-        cfn = yaml.safe_load(fp)
-    nested_stack_file_names = {}
-    for k, v in  cfn['Resources'].items():
-        if v['Type'] == 'AWS::CloudFormation::Stack':
-            TemplateURL = v.get('Properties',{}).get('TemplateURL','')
-            print (TemplateURL)
-            template_fn =  list(TemplateURL.values())[-1]
-            nested_stack_file_names[k] =template_fn.split('/')[-1]
-
-    logger.info('Updating nested stacks')
-    for r in cloudformation.describe_stack_resources(StackName='OptimizationDataCollectionStack')['StackResources']:
-        if r['ResourceType'] == 'AWS::CloudFormation::Stack':
-            stack_name = r['PhysicalResourceId'].split('/')[1]
-            stack_id = r['LogicalResourceId']
-            current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
-            try:
-                cloudformation.update_stack(
-                    StackName=stack_name,
-                    TemplateBody=open(f'static/Cost/300_Optimization_Data_Collection/Code/{nested_stack_file_names[stack_id]}').read(),
-                    Parameters=current_stack['Parameters'],
-                    Capabilities=['CAPABILITY_IAM','CAPABILITY_NAMED_IAM'],
-                )
-            except cloudformation.exceptions.ClientError as exc:
-                if exc.response['Error']['Message'] == 'No updates are to be performed.':
-                    logger.info(f'No updates are to be performed in {stack_name}')
-                else:
-                    raise
-            except FileNotFoundError:
-                logger.info(f'No file for {stack_name}')
-            else:
-                logger.info(f'Updated {stack_name}')
-
-    nested_stacks = []
-    for r in cloudformation.describe_stack_resources(StackName=main_stack_name)['StackResources']:
-        if r['ResourceType'] == 'AWS::CloudFormation::Stack':
-            nested_stacks.append(r['PhysicalResourceId'].split('/')[1])
-
-    time.sleep(5)
-    watch_stacks(nested_stacks)
-
-    logger.info('Patching SQS urls in AWS-Organization-Account-Collector')
-    sqs_urls = []
-    for r in cloudformation.describe_stack_resources(StackName=main_stack_name)['StackResources']:
-        if r['ResourceType'] == 'AWS::CloudFormation::Stack':
-            stack_name = r['PhysicalResourceId'].split('/')[1]
-            current_stack = cloudformation.describe_stacks(StackName=stack_name)['Stacks'][0]
-            for out in current_stack['Outputs']:
-                if 'SQSUrl' == out['OutputKey']:
-                    sqs_urls.append(out['OutputValue'])
-    func_conf = boto3.client('lambda').get_function_configuration(FunctionName=f'Accounts-Collector-Function-{main_stack_name}')
-    logger.info(str(sqs_urls))
-    func_conf['Environment']['Variables']['SQS_URL'] = ','.join(sqs_urls)
-    boto3.client('lambda').update_function_configuration(
-            FunctionName=f'Accounts-Collector-Function-{main_stack_name}',
-            Environment=func_conf['Environment']
-    )
 
 def clean_bucket():
     try:
