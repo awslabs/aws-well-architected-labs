@@ -57,7 +57,7 @@ In a production environment, we would **automate** these steps as part of our CI
 
 ```sh
 export S3_BUCKET=$(aws s3api list-buckets --region us-east-1 --output text --query 'Buckets[?starts_with(Name, `backupandrestore-primary-uibucket`) == `true`]'.Name)
-aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ s3://$S3_BUCKET/ --exclude "config.json" --recursive --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers    
+aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/ s3://$S3_BUCKET/ --exclude "config.json" --recursive 
 ```
 
 #### Verify Replication

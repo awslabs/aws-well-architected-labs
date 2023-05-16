@@ -430,7 +430,7 @@ Resources:
             "region" "region_code"
           , regionname
           FROM
-            storage.region_names
+            optimization_data.pricing_region_names
         )  region ON (inventory_ebs_data.region = region.region_code)
   AthenaEBSTAPricing:
     Type: AWS::Athena::NamedQuery
@@ -509,7 +509,7 @@ Resources:
                     ELSE unit
                 END, priceperunit) kv1
         FROM optimization_data.pricing_ec2
-        JOIN optimization_data.pricing_region_names ON region_names.regionname = pricing_ec2.location
+        JOIN optimization_data.pricing_region_names ON pricing_region_names.regionname = pricing_ec2.location
         WHERE "volume api name" IN ('io1','io2','gp3','gp2')
         GROUP BY region
         ),
