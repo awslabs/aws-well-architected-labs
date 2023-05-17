@@ -4,7 +4,7 @@ menutitle: "Optimize Hardware Patterns and Observe Sustainability KPIs"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
 weight: 1
-hidden: false
+hidden: true
 ---
 
 ## Introduction

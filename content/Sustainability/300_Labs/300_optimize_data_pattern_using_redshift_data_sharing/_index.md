@@ -4,7 +4,7 @@ menutitle: "Optimize Data Pattern using Amazon Redshift Data Sharing"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
 weight: 1
-hidden: false
+hidden: true
 ---
 
 ## Introduction
