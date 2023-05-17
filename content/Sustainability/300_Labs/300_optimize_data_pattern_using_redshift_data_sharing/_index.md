@@ -14,9 +14,9 @@ This lab focuses on optimizing data patterns for sustainability, specifically fo
 ## Well-Architected Best Practices
 This lab helps you to exercise the following AWS Well-Architected Best Practices for Sustainability:
 
-* [SUS04-BP05](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a6.html) - Remove unneeded or redundant data
-* [SUS04-BP07](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a8.html) - Minimize data movement across networks
-* [SUS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html) - Adopt methods that can rapidly introduce sustainability improvements
+* [SUS04-BP05](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a6.html) - **Remove unneeded or redundant data**
+* [SUS04-BP07](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a8.html) - **Minimize data movement across networks**
+* [SUS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html) - **Adopt methods that can rapidly introduce sustainability improvements**
 
 ## Goals
 At the end of this lab you will:
