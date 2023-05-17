@@ -1,5 +1,5 @@
 ---
-title: "Level 300: Turning Cost & Usage Reports into Efficiency Reports"
+title: "Turning Cost & Usage Reports into Efficiency Reports"
 menutitle: "Turning Cost & Usage Reports into Efficiency Reports"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
@@ -7,10 +7,19 @@ weight: 1
 hidden: false
 ---
 
+## Introduction
+
+The outcomes of this lab are:
+1. To give you an overview of what proxy metrics are and what you need to think about when selecting them.
+2. Identifying proxy metrics and using them from your AWS cost and usage report.
+3. Preparing this data in a way that can be queried for dashboarding later.
+4. Learning how to bring your own data in the form of assumptions.
+
+
 ## Well-Architected Best Practices
 This lab helps you to exercise the following AWS Well-Architected Best Practices for Sustainability:
 
-[SUS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html) - **Adopt methods that can rapidly introduce sustainability improvements**
+* [SUS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html) - **Adopt methods that can rapidly introduce sustainability improvements**
 
 ## Goals
 At the end of this lab you will:

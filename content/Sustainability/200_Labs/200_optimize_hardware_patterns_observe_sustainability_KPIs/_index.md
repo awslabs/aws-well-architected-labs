@@ -1,5 +1,5 @@
 ---
-title: "Level 200: Optimize Hardware Patterns and Observe Sustainability KPIs"
+title: "Optimize Hardware Patterns and Observe Sustainability KPIs"
 menutitle: "Optimize Hardware Patterns and Observe Sustainability KPIs"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
@@ -10,6 +10,12 @@ hidden: false
 ## Introduction
 
 This lab focuses on optimizing hardware patterns for sustainability by minimizing the amount of resources required to efficiently deploy your workload.
+
+## Well-Architected Best Practices
+This lab helps you to exercise the following AWS Well-Architected Best Practices for Sustainability:
+
+* [SUS05-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_hardware_a2.html) - **Use the minimum amount of hardware to meet your needs**
+* [SUS06-BP01](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html) - **Adopt methods that can rapidly introduce sustainability improvements**
 
 ## Goals
 At the end of this lab you will:

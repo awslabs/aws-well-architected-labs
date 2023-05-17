@@ -1,14 +1,11 @@
 ---
-title: "Level 100: Migrating AWS RDS Databases to Graviton"
+title: "Migrating AWS RDS Databases to Graviton"
 menutitle: "Migrating AWS RDS Databases to Graviton"
 date: 2020-11-18T09:00:08-04:00
 chapter: false
 weight: 1
 hidden: false
 ---
-## Authors
-
-- **Jeff Forrest**, Senior Solutions Architect.
 
 ## Introduction
 [AWS Graviton processors](https://aws.amazon.com/ec2/graviton/) are custom custom built by Amazon Web Services using 64-bit Arm Neoverse cores.
@@ -17,6 +14,10 @@ AWS Graviton CPUs have excellent energy efficiency, switching to Graviton EC2 in
 
 AWS control the end to end lifecycle of the chip, from design to consumption, enhancing overall efficiency. [Read more here](https://aws.amazon.com/ec2/graviton/).
 
+## Well-Architected Best Practices
+This lab helps you to exercise the following AWS Well-Architected Best Practices for Sustainability:
+
+* [SUS05-BP02](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_hardware_a3.html) - **Use instance types with the least impact**
 
 ## RDS on Graviton
 * Up to 35% faster than non-Graviton.
