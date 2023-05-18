@@ -12,8 +12,9 @@ Si está realizando este taller como parte de un taller liderado por un instruct
 
 Todos los recursos para este taller han sido provisionados con anterioridad.
 
+{{% notice info %}}
 **Continue a la sección [Replicación entre regiones en S3](../2-s3-crr/) del taller.**
-
+{{% /notice  %}}
 
 ##### Utilizando su cuenta de AWS
 
