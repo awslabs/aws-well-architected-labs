@@ -332,7 +332,7 @@ ORDER BY
 ### Top 50 Resource Movers
 
 #### Query Description
-This query produces the top 50 moving resources by 1/ cost delta and 2/ change in percentage.  The parameters have been adjusted for comparison of resources from three days prior and two days prior as CUR may take up to 48 hours to update all estimated charges.  Additionally, this query pulls only resources with greater than $5 in unblended cost in order to reduce noise from resources which did not exist in one of the look back periods or spun up at the end of one of the look back periods.  These parameters may be adjusted as needed.  
+This query produces the top 50 moving resources by 1/ cost delta and 2/ change in percentage.  The parameters have been adjusted for comparison of resources from three days prior and two days prior as CUR may take up to 48 hours to update all estimated charges.  Additionally, this query only pulls resources with greater than $5 in unblended cost in order to reduce noise from resources which did not exist in one of the look back periods or spun up at the end of one of the look back periods.  These parameters may be adjusted as needed.  
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/AWS_Cost_Management/top-50-resource-movers.sql)

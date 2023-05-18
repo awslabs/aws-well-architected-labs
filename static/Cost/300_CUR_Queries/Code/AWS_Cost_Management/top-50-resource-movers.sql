@@ -1,6 +1,6 @@
 -- modified: 2023-04-28
 -- query_id: top-50-resource-movers
--- query_description: This query produces the top 50 moving resources by 1/ cost delta and 2/ change in percentage.  The parameters have been adjusted for comparison of resources from three days prior and two days prior as CUR can take up to 48 hours to update all estimated charges.  Additionally, this query pulls only resources with greater than $5 in unblended cost in order to reduce noise from resources which did not exist in one of the look back periods or spun up at the end of one of the look back periods.  These parameters may be adjusted as needed.  
+-- query_description: This query produces the top 50 moving resources by 1/ cost delta and 2/ change in percentage.  The parameters have been adjusted for comparison of resources from three days prior and two days prior as CUR can take up to 48 hours to update all estimated charges.  Additionally, this query only pulls resources with greater than $5 in unblended cost in order to reduce noise from resources which did not exist in one of the look back periods or spun up at the end of one of the look back periods.  These parameters may be adjusted as needed.  
 -- query_columns: 
 -- query_link: /cost/300_labs/300_cur_queries/queries/aws_cost_management/
 
