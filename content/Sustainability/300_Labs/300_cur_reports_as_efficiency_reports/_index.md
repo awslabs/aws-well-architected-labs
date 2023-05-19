@@ -28,4 +28,4 @@ At the end of this lab you will:
 * Draw these proxy metrics from your AWS Cost & Usage Report (or sample data) and prepare the data ready for dashboarding with e.g. Amazon QuickSight
 * Learn how you can add your own data and combine it with the AWS Cost & Usage Reports
 
-## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/34f8e4fb-14de-4b10-8dee-d9e2b8db9eb2/en-US/5-process-and-culture/cur-reports-as-efficiency-reports)
+## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/well-architected-sustainability/en-US/5-process-and-culture/cur-reports-as-efficiency-reports)

@@ -35,4 +35,4 @@ At the end of this lab you will:
 * Understand the different migration options and how they apply to each database type.
 * Have practical hands on experience migrating RDS databases from x86-64 to Graviton.
 
-## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/34f8e4fb-14de-4b10-8dee-d9e2b8db9eb2/en-US/4-hardware-and-services/migrate-rds-to-graviton)
+## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/well-architected-sustainability/en-US/4-hardware-and-services/migrate-rds-to-graviton)

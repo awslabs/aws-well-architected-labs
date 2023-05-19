@@ -13,4 +13,4 @@ Environmental sustainability is a shared responsibility between customers and AW
 
 The labs in this workshop focus on sustainability **in** the cloud.
 
-## [Start the Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/34f8e4fb-14de-4b10-8dee-d9e2b8db9eb2/en-US)
+## [Start the Workshop](https://catalog.workshops.aws/well-architected-sustainability/)

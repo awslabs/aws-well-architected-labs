@@ -25,4 +25,4 @@ At the end of this lab you will:
 * Learn how to optimize your architecture for minimum amount of hardware usage using [AWS Compute Optimizer](https://aws.amazon.com/aws-cost-management/aws-cost-optimization/right-sizing/)
 * Learn how to use [Amazon CloudWatch  metric math](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html) feature to observe **[sustainability key performance indicators (KPIs)](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/evaluate-specific-improvements.html#key-performance-indicators)**. 
 
-## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/34f8e4fb-14de-4b10-8dee-d9e2b8db9eb2/en-US/4-hardware-and-services/optimize-hardware-patterns-observe-sustainability-kpis)
+## [Start the lab](https://catalog.us-east-1.prod.workshops.aws/workshops/well-architected-sustainability/en-US/4-hardware-and-services/optimize-hardware-patterns-observe-sustainability-kpis)

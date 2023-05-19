@@ -24,3 +24,5 @@ At the end of this lab you will:
 * Understand how to identify optimization areas using AWS Well-Architected Sustainability Pillar best practices
 * Baseline and optimize workloads by identifying sustainability key performance indicators (KPIs)
 * Learn how to use the Amazon Redshift Data Sharing feature to implement [data management best practices](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/data-patterns.html) described in [AWS Well-Architected Sustainability Pillar](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html)
+
+## [Start the lab](https://catalog.workshops.aws/well-architected-sustainability/en-US/4-hardware-and-services/optimize-hardware-patterns-observe-sustainability-kpis)
