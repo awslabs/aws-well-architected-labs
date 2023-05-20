@@ -64,7 +64,7 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
    * Choose **Next**.
 1. On the **Options** page under **Tags**, define a **Key** of **Owner**, with **Value** set to the username you choose for your administrator. You may define additional keys as needed. The CloudFormation template creates all the example tags given in the discussion on tagging above.
 1. Leave all other sections unmodified. Scroll to the bottom of the page and choose **Next**.
-1. On the **Review** page, review your choices and then choose **Create**.
+1. On the **Review** page, review your choices and then choose **Submit**.
 1. On the CloudFormation console page
     1. **Check the box next to your Stack Name** to see its details.
     1. If your **Stack Name** is not displayed, click the **refresh** button (circular arrow) in the top right until it appears.
