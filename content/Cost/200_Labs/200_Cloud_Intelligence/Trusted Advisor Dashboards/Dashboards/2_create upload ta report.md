@@ -14,14 +14,14 @@ There are 2 supported data collection methods:
 
 
 Please expand data collection method which you used in prerequisites step to proceed with workshop:
-{{%expand "Trusted Advisor API via deployment of Optimization Data Collection lab (recommended)" %}}
+{{<expand "Trusted Advisor API via deployment of Optimization Data Collection lab (recommended)" />}}
 Please makes sure you've deployed [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) as prerequisite step. Once [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/) completed, please proceed with next steps. During next steps please provide S3 URI path to `trusted-advisor-data` folder in optimization data bucket created in the lab. The path should be similar to `s3://costoptimizationdata{account_id}/trusted-advisor/trusted-advisor-data/`
 
 **NOTE:** Only **Trusted Advisor Data Collection Module** is required to be deployed. Consider other modules form the lab as optional
     ------------ | -------------
-{{% /expand%}}
+{{< expand />}}
 
-{{%expand "Trusted Advisor Organizational View" %}}
+{{<expand "Trusted Advisor Organizational View" />}}
 
 **NOTE:** Only use this method of data collection method if you for some reasons you can't and don't plan to deploy [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/). Otherwise use recommended method with [Optimization Data Collection lab](https://wellarchitectedlabs.com/cost/300_labs/300_optimization_data_collection/)
     ------------ | -------------

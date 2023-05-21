@@ -59,4 +59,4 @@ Typically less than $20 per month if the account is only used for personal testi
 - [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

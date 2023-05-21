@@ -59,4 +59,4 @@ _Note: Please refer to [pricing](https://aws.amazon.com/pricing/) page for curre
 {{< prev_next_button link_next_url="./1_enable_vpc_flow_logs/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

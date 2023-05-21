@@ -122,4 +122,4 @@ When you decide to stop the lab at any point in time, please revisit the [clean 
 {{< prev_next_button link_next_url="./1-1_prepare_cur_data/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

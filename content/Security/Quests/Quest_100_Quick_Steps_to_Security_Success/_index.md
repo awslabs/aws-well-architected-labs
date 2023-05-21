@@ -21,4 +21,4 @@ This quest leverages [AWS Control Tower](https://aws.amazon.com/controltower/) t
 
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

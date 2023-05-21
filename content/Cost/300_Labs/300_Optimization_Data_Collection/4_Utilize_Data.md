@@ -25,7 +25,7 @@ This video shows you how to use the Optimization Data Collection Lab to pull in 
 
 You can also use the below query to update your **account_map** table in athena to read from this data
 
-{{%expand "New Account Map Query" %}}
+{{<expand "New Account Map Query" >}}
 
       CREATE OR REPLACE VIEW "account_map" AS 
       SELECT DISTINCT
@@ -36,13 +36,13 @@ You can also use the below query to update your **account_map** table in athena 
       FROM
         "optimization_data"."organization_data" 
 
-{{% /expand%}}
+{{< /expand >}}
 
 
 ### Join with Cost and Usage Report
 
 Example query on how you can connect your CUR to this Organizations data as a one off. In this query you will see the service costs split by account names. 
-{{%expand "Steps" %}}
+{{<expand "Steps" >}}
 
 1.	In the **Athena** service page run the below query to join the Organizations data with the CUR table. Make the below changes as needed:
 
@@ -63,6 +63,8 @@ Example query on how you can connect your CUR to this Organizations data as a on
 		limit 10;
 
 ![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
+
+{{< /expand >}}
 
 2. The important part of this query is the join. The **line_item_usage_account_id** from your Cost & Usage Report should match a **account_number** from the Organizations data. You can now see the account name in your data.
 
@@ -85,13 +87,13 @@ If you would like to always have your Organizations data connected to your CUR t
 2. Going forward you will now be able to run your queries from this view and have the data connected to your Organizations data. To see a preview where your org data is, which is at the end of the returned data, run the below query.
 
 		SELECT * FROM "managementcur"."org_cur" limit 10;
-{{% /expand%}}
+{{< expand />}}
 
 
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
 
-{{%expand "Optimization Data Snapshots and AMIs Query" %}}
+{{<expand "Optimization Data Snapshots and AMIs Query" >}}
 
 
       SELECT *,
@@ -133,11 +135,11 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
           FROM "optimization_data"."ami_data") AS ami
               ON snapshots.snap_ami_id = ami.imageid )
     
-{{% /expand%}}
+{{< /expand >}}
 
 There is an option to add pricing data to this query. This assumes you have already run the accounts collector lambda. 
 
-{{%expand "Optimization Data Snapshots and AMIs with OD pricing data" %}}
+{{<expand "Optimization Data Snapshots and AMIs with OD pricing data" >}}
 
 **Lambda**
 1. Go to AWS Lambda 
@@ -155,10 +157,10 @@ There is an option to add pricing data to this query. This assumes you have alre
         
         SELECT * FROM "optimization_data"."snapshot_ami_quicksight_view" limit 10;
 
-{{% /expand%}}
+{{< / expand >}}
 
 
-{{%expand "Optimization Data Snapshots and AMIs with CUR data" %}}
+{{<expand "Optimization Data Snapshots and AMIs with CUR data" >}}
 
 You must have access to your Cost & Usage data in the same account and region so you can join through athena
 
@@ -171,7 +173,7 @@ You must have access to your Cost & Usage data in the same account and region so
 
 Please note that if you delete the snapshot and it is part of a lineage you may only make a small saving
 
-{{% /expand%}}
+{{< /expand >}}
 
 ### EBS Volumes and Trusted Advisor Recommendations
 
@@ -179,7 +181,7 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
 
 This section requires you to have the **Inventory Module** and the **Trusted Advisor Module** deployed.
 
-{{%expand "Optimization Data EBS Volumes and Trusted Advisors Query" %}}
+{{<expand "Optimization Data EBS Volumes and Trusted Advisors Query" >}}
 
         SELECT * FROM
             "optimization_data"."ebs_data"
@@ -189,11 +191,11 @@ This section requires you to have the **Inventory Module** and the **Trusted Adv
         "optimization_data".ta_data ) ta
         ON "ebs_data"."volumeid" = "ta"."volume id" and "ebs_data"."year" = "ta"."year" and "ebs_data"."month" = "ta"."month"
 
-{{% /expand%}}
+{{< /expand >}}
 
 There is an option to add pricing data to this query.
 
-{{%expand "Optimization Data EBS Volumes and Trusted Advisor with pricing data" %}}
+{{<expand "Optimization Data EBS Volumes and Trusted Advisor with pricing data" >}}
 
 **Lambda**
 1. Go to AWS Lambda 
@@ -211,11 +213,11 @@ There is an option to add pricing data to this query.
         
         SELECT * FROM "optimization_data"."ebs_quicksight_view" limit 10;
 
-{{% /expand%}}
+{{< /expand >}}
 
 The section below will bring in opportunities to move EBS volumes to gp3
 
-{{%expand "EBS Volumes and Trusted Advisor moving to gp3" %}}
+{{<expand "EBS Volumes and Trusted Advisor moving to gp3" >}}
 
 1. Go to AWS Athena and run the below
 2. Go to **Saved queries** at the top of the screen
@@ -225,7 +227,7 @@ The section below will bring in opportunities to move EBS volumes to gp3
 6. In **Saved queries** run **gp3-opportunity** to create a view 
 
 
-{{% /expand%}}
+{{< /expand >}}
 
 
 ### EBS Volumes and Trusted Advisor Recommendations
@@ -234,7 +236,7 @@ Trusted advisor identifies idle and underutilized volumes. This query joins toge
 
 This section requires you to have the **Inventory Module** and the **Trusted Advisor Module** deployed.
 
-{{%expand "Optimization Data EBS Volumes and Trusted Advisors Query" %}}
+{{<expand "Optimization Data EBS Volumes and Trusted Advisors Query" >}}
         
         CREATE OR REPLACE VIEW "ebs_view" AS 
         SELECT *FROM
@@ -253,7 +255,7 @@ This section requires you to have the **Inventory Module** and the **Trusted Adv
             storage.region_names
         )  region ON ("ebs_data"."region" = "region"."region_code")
 
-{{% /expand%}}
+{{< /expand>}}
 
 ### AWS Budgets into Cost Dashboard
 
@@ -265,7 +267,7 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
 {{< /rawhtml >}}
 
 
-{{%expand "Guide to add AWS Budgets into Cost Dashboard" %}}
+{{<expand "Guide to add AWS Budgets into Cost Dashboard" >}}
 
 1. Ensure you have budget data in your Amazon Athena table
 
@@ -303,13 +305,13 @@ There is a saved query called **aws_budgets** created in the CloudFormation. Thi
 
 7. In your Analysis you can now add a Budget figure to your lines. Make sure to change to **Average**.
 ![Images/Budget_viz.png](/Cost/300_Optimization_Data_Collection/Images/Budget_viz.png)
-{{% /expand%}}
+{{< /expand >}}
 
 ### AWS EBS Volumes and Snapshots
 
 If you wish to see whats volumes have what snapshots attached to them from a holistic view then this query can combine these two data sources. This could provide information into which snapshots you could archive using [Elastic Block Storage Snapshots Archive](https://aws.amazon.com/ebs/snapshots/faqs/#Snapshots_Archive)
 
-{{%expand "Optimization Data Snapshots with EBS" %}}
+{{<expand "Optimization Data Snapshots with EBS" >}}
         WITH data as (
             Select volumeid,
               snapshotid,
@@ -342,11 +344,11 @@ If you wish to see whats volumes have what snapshots attached to them from a hol
             from data
             Left JOIN ratio ON ratio.volumeid = data.volumeid
             ORDER by volumeid, snapshot_lineage
-{{% /expand%}}
+{{< /expand>}}
 
 If you wish to connect to your Cost and Usage report for snapshot costs please use the below:
 
-{{%expand "Optimization Data Snapshots with EBS and CUR" %}}
+{{<expand "Optimization Data Snapshots with EBS and CUR" >}}
           WITH cur_mapping AS (
             SELECT DISTINCT 
             split_part(line_item_resource_id,'/',2) AS "snapshot_id",
@@ -412,13 +414,13 @@ If you wish to connect to your Cost and Usage report for snapshot costs please u
             from data
             LEFT JOIN ratio ON ratio.volumeid = data.volumeid
 
-{{% /expand%}}
+{{< /expand >}}
 
 
 ### ECS Chargeback
 
 Report to show costs associated with ECS Tasks leveraging EC2 instances within a Cluster
-{{%expand "Athena Configuration" %}}
+{{<expand "Athena Configuration" >}}
 
 
 1. Navigate to the Athena service
@@ -453,13 +455,13 @@ Breakdown:
 * Services: Name of service 
 * servicearn: Arn of service
 * Value: Value of specified tag for the ECS service (could be App, TeamID, etc?)
-{{% /expand%}}
+{{< /expand >}}
 
 ### AWS Transit Gateway Chargeback
 AWS Transit Gateway data transfer cost billed at the central networking account is allocated proportionally to the end usage accounts. The proportion is calculated by connecting with AWS CloudWatch bytes in bytes out data at each Transit Gateway attachement level. The total central data transfer cost is calculated at the central networking account with Cost and Usage Report. The chargeback amount is the corresponding proportional cost of the total central amount. 
 
 
-{{%expand "Athena Configuration" %}}
+{{<expand "Athena Configuration" >}}
 
 1. Navigate to the Athena service and open **Saved Queries**. 
 2. Select your database where you have your Cost and Usage Report 
@@ -477,7 +479,7 @@ The Cloud Watch data collection is automated for all the regions. However, if yo
 9. Click the **Run** button
 
 Now your views are created and you can run your report
-{{% /expand%}}
+{{</ expand>}}
 
 
 ### RDS Graviton Eligibility
@@ -485,7 +487,7 @@ Graviton2 instances provide up to 35% performance improvement and up to 52% pric
 
 This section requires you to have the **RDS Module** deployed. 
 
-{{%expand "Optimize RDS with Graviton" %}}
+{{<expand "Optimize RDS with Graviton" >}}
 
 1. Navigate to Lambda and test the **Accounts-Collector-Function-OptimizationDataCollectionStack** and **pricing-Lambda-Function-OptimizationDataCollectionStack** lambdas 
 2. Navigate to Athena 
@@ -494,8 +496,8 @@ This section requires you to have the **RDS Module** deployed.
 5. Run the rds_pricing_table Query to create a pricing look up table for RDS
 6. Run the graviton_mapping Query to create a mapping of existing Intel based instances to the proper Graviton based instance
 7. Run the rds_metrics-rds-graviton Query to provide the output of your RDS instances and their graviton eligibility and savings. You can download the results to further filter and analyze the results 
-
-{{%expand "Analyzing Your Results" %}}
+{{</ expand>}}
+{{<expand "Analyzing Your Results" >}}
 1. Use the **graviton_eligible** column to sort through 
   * Already Graviton - this instance is already a graviton instance and is already receiving the price performance benefits
   * Eligible - this instance meets both DB Engine and Version Number requirements, and can be immediately moved to Graviton with no modifications necessary
@@ -510,6 +512,6 @@ This section requires you to have the **RDS Module** deployed.
   * monthly_savings	- savings seen by moving a database to to Graviton if it ran 24 hours per day for 30 days
   * estimated_annual_savings - savings seen by moving a database to to Graviton if it ran 24 hours per day for 365 days
   * percentage_savings - percent difference in unit cost between the existing instance and its Graviton equivilant
-
+{{</ expand>}}
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
 

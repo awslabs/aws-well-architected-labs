@@ -21,4 +21,4 @@ For more information about Cost Optimization on AWS visit the Well-Architected t
 
 
 ## Labs
-{{% children depth=2 %}}
+{{< children depth=2 / >}}

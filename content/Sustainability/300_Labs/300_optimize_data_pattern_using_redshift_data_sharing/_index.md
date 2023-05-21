@@ -92,4 +92,4 @@ Refer to [Sustainability Pillar Whitepaper](https://docs.aws.amazon.com/wellarch
 {{< prev_next_button link_next_url="./1_understand_data_sharing/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

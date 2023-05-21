@@ -75,4 +75,4 @@ Refer to [Evaluate specific improvements in Sustainability Pillar](https://docs.
 {{< prev_next_button link_next_url="./1_prerequisites/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{<children  />}}

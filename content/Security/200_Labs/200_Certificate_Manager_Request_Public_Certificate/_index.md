@@ -24,4 +24,4 @@ weight: 8
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/). See [pricing](https://aws.amazon.com/certificate-manager/pricing/) for further information on AWS Certificate Manager.
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

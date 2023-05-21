@@ -18,4 +18,4 @@ This quest is the guide for an [AWS Loft](https://aws.amazon.com/start-ups/loft/
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

@@ -23,7 +23,7 @@ hidden: false
 * [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}
 
 ## References & useful resources
 * [AWS Security Hub](https://aws.amazon.com/security-hub/)

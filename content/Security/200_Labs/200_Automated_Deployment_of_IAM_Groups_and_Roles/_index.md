@@ -31,4 +31,4 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 - [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
-{{% children  %}}
+{{< children />}}

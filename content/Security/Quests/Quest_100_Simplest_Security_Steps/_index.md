@@ -23,7 +23,7 @@ These are the six things we encourage all customers to do to improve their secur
 
 ## Steps:
 
-{{% children  %}}
+{{< children  />}}
 
 
 

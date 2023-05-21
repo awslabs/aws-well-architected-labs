@@ -40,8 +40,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 ## Costs
 - [QuickSight pricing](https://aws.amazon.com/quicksight/pricing/?nc=sn&loc=4)
-- Approx $9-$12 monthly for QuickSight Authors
-- Estimated additional costs should be <$5 a month for small accounts
+- Standard Edition:  begins at $9-$12 / month per QuickSight user (Each user is an "author." "Readers" do not exist.)
+- Enterprise Edition: begins at $18-$24 / month per author; additional users ("readers") billed per user or by capacity (# of unique sessions) 
+
 
 
 ## Time to complete

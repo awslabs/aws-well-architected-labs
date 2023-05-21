@@ -14,16 +14,11 @@ The following resources were created in this lab:
 
 Before deleting Stacks and StackSet please make sure all related buckets are empty.
 
-When deleting the OptimizationDataRoleStack stackset, if you deployed to all accounts in your organization then add your AWS Organization id where it asks for **AWS OU ID**. Please make sure you empty s3 buckets before deletion of OptimizationDataCollectionStack. 
+When deleting the OptimizationDataRoleStack stackset, if you deployed to all accounts in your organization then add your AWS Organization id where it asks for **AWS OU ID**. Please make sure you empty s3 buckets before deletion of OptimizationDataCollectionStack.
 
-{{< prev_next_button link_prev_url="../5_utilize_data/"  title="Congratulations!" final_step="true" >}}
+Congratulations!
 
-
-Now that you have completed the lab, if you have implemented this knowledge in your environment,
-you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
+Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 
 Or if you would like to contribute a module please see our contribution page or email costoptimization@amazon.com
 [COST3 - "How do you monitor usage and cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
-
-
-

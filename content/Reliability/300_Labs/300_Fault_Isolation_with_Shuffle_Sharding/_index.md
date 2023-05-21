@@ -38,4 +38,4 @@ The skills you learn will help you [use fault isolation to protect your workload
 {{< prev_next_button link_next_url="./1_deploy_workload/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

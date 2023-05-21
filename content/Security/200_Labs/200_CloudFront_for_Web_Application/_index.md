@@ -28,4 +28,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 * A web application to configure as the origin to CloudFront.
 
 ## Steps:
-{{% children  %}}
+{{<children  />}}

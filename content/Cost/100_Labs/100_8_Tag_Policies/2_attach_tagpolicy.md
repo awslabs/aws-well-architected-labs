@@ -20,4 +20,4 @@ pre: "<b>2. </b>"
 
 ![Images/AWSTagPol9.png](/Cost/100_8_Tag_Policies/Images/AWSTagPol9.png)
 
-{{< prev_next_button link_prev_url="..//1_tag_policy/" link_next_url="../3_compliance_report/" />}}
+{{< prev_next_button link_prev_url="../1_tag_policy/" link_next_url="../2_attach_tagpolicy/" />}}

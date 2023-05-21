@@ -28,4 +28,4 @@ Apply these design principles when architecting your cloud workloads to maximize
 For more information about sustainability at AWS, please visit [Sustainability in the Cloud](https://sustainability.aboutamazon.com/environment/the-cloud) and read the [AWS Well-Architected Sustainability Pillar whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html).
 
 ## Labs
-{{% children depth=2 %}}
+{{< children depth=2 />}}

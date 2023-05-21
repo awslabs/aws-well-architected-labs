@@ -56,4 +56,4 @@ We have included a single script to assist you with the application deployment. 
 
 ## Steps:
 
-{{% children  %}}
+{{< children  />}}

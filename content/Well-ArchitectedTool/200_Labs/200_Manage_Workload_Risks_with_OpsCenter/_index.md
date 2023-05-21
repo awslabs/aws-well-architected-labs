@@ -40,4 +40,4 @@ The skills you learn will help you create risk management workflows which will h
 {{< prev_next_button link_next_url="./1_deploy_infrastructure/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

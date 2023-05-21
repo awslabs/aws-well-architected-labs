@@ -48,4 +48,4 @@ When you decide to stop the lab at any point in time, please revisit the [clean 
 {{< prev_next_button link_next_url="./1_migration_methodologies/"  first_step="true" />}}
 
 ## Steps:
-{{% children  %}}
+{{< children  />}}

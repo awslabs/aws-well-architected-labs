@@ -10,4 +10,4 @@ disableToc = "false"
 # AWS Well-Architected Performance Efficiency Labs
 ## 100 Level Labs:
 
-{{% children description="true" %}}
+{{< children description="true" / >}}
