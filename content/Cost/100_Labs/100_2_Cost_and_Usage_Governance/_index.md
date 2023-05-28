@@ -12,7 +12,7 @@ July 2021
 - Nathan Besh, Cost Lead Well-Architected
 
 ## Contributor
-- Cy Hopkins, Enterprise Solutions Architect
+- Cy Hopkins, Sr. Solutions Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com

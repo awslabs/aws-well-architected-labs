@@ -5,8 +5,14 @@ date: 2020-04-24T11:16:08-04:00
 chapter: false
 weight: 4
 ---
+## Last Updated
+May 2023
+
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
+
+## Contributors
+- Cy Hopkins, Sr. Solutions Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com

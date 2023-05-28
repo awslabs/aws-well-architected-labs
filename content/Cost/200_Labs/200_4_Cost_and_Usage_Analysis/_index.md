@@ -7,7 +7,7 @@ weight: 4
 hidden: false
 ---
 ## Last Updated
-July 2021
+May 2023
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
@@ -16,6 +16,7 @@ July 2021
 ## Contributors
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS) 
 - Duncan Bell, Solutions Architect, Well-Architected
+- Cy Hopkins, Sr. Solutions Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -23,7 +24,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Introduction
  This hands-on lab will guide you through the steps to setup a platform to analyze your cost and usage reports. The skills you learn will help you perform analysis on your cost and usage, in alignment with the AWS Well-Architected Framework.
 
-![Images/AWSCostReadme.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSCostReadme.png)
+![Images/AWSCostReadme.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/0.0-AWSCostReadme.png?classes=lab_picture_small)
 
 ## Goals
 - Setup an analysis platform for your cost and usage data
@@ -45,7 +46,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## Time to complete
-- The lab should take approximately 20 minutes to complete
+- The lab should take approximately 20-30 minutes to complete
 
 ## Steps:
 {{% children  /%}}

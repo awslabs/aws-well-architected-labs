@@ -5,113 +5,149 @@ chapter: false
 weight: 2
 pre: "<b>2. </b>"
 ---
-We will use AWS Glue and setup a scheduled Crawler, which will run each day. This crawler will scan the CUR files and create a database and tables for the delivered files. If there are new versions of a CUR, or new months delivered - they will be automatically included.
 
-We will use Athena to access and view our CUR files via SQL. Athena is a serverless solution to be able to execute SQL queries across very large amounts of data. Athena is only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.
+The next step is to setup an AWS Glue Crawler that will scan the CUR files and create a Glue Catalog from delivered parquet files. If new months or a new version of a CUR is delivered, they will be automatically added to the database. You can also setup the crawler manually [here]({{< ref "#setup-manually" >}}).
 
+The Cost and Usage Report automatically generates a YML file that can be used with CloudFormation to automatically create the resources needed. The CloudFormation script will create the Glue crawler with a Lambda function that will be used to start the crawler. It will also setup an S3 event that will trigger the Lambda function whenever new files are delivered to the CUR bucket.
 
+We will use Athena to access and view our Glue Catalog as an Athena database. Athena is a serverless solution that is able to execute SQL queries across very large amounts of data. With Athena you are only charged for data that is scanned, and there are no ongoing costs if data is not being queried, unlike a traditional database solution.
+
+1. In the S3 console open the bucket that is used to store your Cost and Usage Report. Navigate two levels down until you are in the folder/prefix that contains your **crawler-cfn.yml** file. In the example below the file is located in (BucketName)/CUR/LabsCUR/. 
+
+- **Select** the **crawler-cfn.yml** file to open the object properties.
+![Images/2.0-LocateYMLFile.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.0-LocateYMLFile.png?classes=lab_picture_small)
+
+2. Under "Object URL" select the "copy" icon to copy the full object URL.
+![Images/2.1-YMLObjectProperties.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.1-YMLObjectProperties.png?classes=lab_picture_small)
+
+3. With the URL copied you can now open the [CloudFormation console](https://console.aws.amazon.com/cloudformation) to run the YML CloudFormation script.
+![Images/2.2-OpenCloudFormation.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.2-OpenCloudFormation.png?classes=lab_picture_small)
+
+4. Select the **Create stack** button in the upper right hand corner and then select **With new resources (standard)**.
+![Images/2.3-CreateStack.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.3-CreateStack.png?classes=lab_picture_small)
+
+5. On the "Create stack" page, paste the URL in the "Amazon S3 URL" field and then select the **Next** button.
+![Images/2.4-PasteURL.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.4-PasteURL.png?classes=lab_picture_small)
+
+6. On the "Specify stack details" page, input `CUR-Glue-Crawler` in the "Stack Name" field and then select the **Next** button.
+![Images/2.5-StackName.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.5-StackName.png?classes=lab_picture_small)
+
+7. On the "Configure stack options" page, leave everything as default and select the **Next** button.
+8. On the "Review CUR-Glue-Crawler" page, scroll to the bottom of the page and put a **check** in the box next to "I acknowledge that AWS CloudFormation might create IAM resources." and then select the **Submit** button.
+![Images/2.6-CFN-IAM.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.6-CFN-IAM.png?classes=lab_picture_small)
+
+9. Your CloudFormation script will now start creating resources. It will not refresh on its own, you will need to occasionally select the manual refresh button. When the "Logical ID" status of the **CUR-Glue-Crawler** says **CREATE_COMPLETE** your CloudFormation script is finished.
+![Images/2.7-StackComplete.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.7-StackComplete.png?classes=lab_picture_small)
+
+10. Navigate to the [Amazon Athena service page](https://console.aws.amazon.com/athena/home) and select **Query editor**. Select your database from the "Database" dropdown menu. Your database may have a different name then the one pictured below. The correct database will have a table named **labscur**.
+![Images/2.8-AthenaQueryEditor.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.8-AthenaQueryEditor.png?classes=lab_picture_small)
+
+### Setup Manually
+
+{{%expand "Click here to setup the Glue Crawler manually" %}}
+
+Below are the steps to manually setup an AWS Glue crawler that will run on a daily schedule. 
 
 1.  Go to the **Glue** console:
-![Images/Glue0.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue0.png?classes=lab_picture_small)
+![Images/2.9-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.9-Glue.png?classes=lab_picture_small)
 
-2. Click on **Get started** if you have not used Glue before
+2. Click on **Get started** if you have not used Glue before.
 
-3. Ensure you are in the region where your CUR files are delivered, click on **Crawlers** and click **Add crawler**:
-![Images/Glue1.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue1.png?classes=lab_picture_small)
+3. Ensure you are in the region where your CUR files are being delivered. From the left hand menu under "Data Catalog" click on **Crawlers** and select the **Create crawler** button:
+![Images/2.10-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.10-Glue.png?classes=lab_picture_small)
 
-4. Enter a **Crawler name** starting with **Cost**, and click **Next**:
-![Images/Glue2.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue2.png?classes=lab_picture_small)
+4. Under "Crawler details" enter a **Name** starting with "Cost", and click **Next**:
+![Images/2.11-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.11-Glue.png?classes=lab_picture_small)
 
-5. Select **Data stores**, and click **Next**:
-![Images/Glue3.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue3.png?classes=lab_picture_small)
+5. Under "Data source configuration" select **Not yet** and select the **Add a data source** button:
+![Images/2.12-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.12-Glue.png?classes=lab_picture_small)
 
-6. Ensure you select **Specified path in another account**, and enter the S3 path of your bucket **s3://(CUR bucket)**, expand **Exclude patterns**, enter the following patterns one line at a time and click next:
+6. Select **S3** as your "Data source", the "Location of S3 data" is **In this account**, and then select the **Browse S3** button to select your bucket. Make sure that **Crawl all sub-folders** is selected and put a check in the **Exclude files matching pattern** box. Enter the following exclusion patterns one line at a time (See below) and click the **Add an S3 data source** button when finished:
 
-            **.json, **.yml, **.sql, **.csv, **.gz, **.zip, **/cost_and_usage_data_status/*, aws-programmatic-access-test-object
+- `**.json`
+- `**.yml`
+- `**.sql` 
+- `**.csv` 
+- `**.gz`
+- `**.zip` 
+- `**/cost_and_usage_data_status/*` 
+- `aws-programmatic-access-test-object`
 
 {{% notice note %}}
-If you replicated the objects to the Cost Management Account or if using in the same account select **Specified path my account** instead of Specified path in another account.
+If your CUR bucket is located in another account make sure you select **In a different account** instead of **In this account**. You will need to copy and paste the name of your CUR bucket from the other account.
 {{% /notice %}}			
 
-![Images/Glue4.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue4.png?classes=lab_picture_small)
+![Images/2.13-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.13-Glue.png?classes=lab_picture_small)
 
-7. Add another data store, click **Next**:
-![Images/Glue7.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue7.png?classes=lab_picture_small)
+7. With the S3 data source now added to the configuration, select the **Next** button:
+![Images/2.14-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.14-Glue.png?classes=lab_picture_small)
 
-8. Select **Create an IAM role**, enter a **role name** of **Cost_Crawler**, and click **Next**:
-![Images/Glue8.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue8.png?classes=lab_picture_small)
+8. Under IAM role, select the **Create new IAM role** button:
+![Images/2.15-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.15-Glue.png?classes=lab_picture_small)
 
-9. Click the **Down arrow**, and select a **Daily** Frequency:
-The CUR refreshes multiple times a day. You can adjust your frequency if you would like to run it more than once a day.
-![Images/Glue9.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue9.png?classes=lab_picture_small)
+9. Under "Enter new IAM role" add `Cost_Crawler` to the end of **AWSGlueServiceRole-**, and click **Create**:
+![Images/2.16-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.16-Glue.png?classes=lab_picture_small)
 
-10. Enter in a **Start Hour** and **Start Minute**, then click **Next**:
-![Images/Glue10.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue10.png?classes=lab_picture_small)
+10. With the successful creation of the IAM role, select the **Next** button:
+![Images/2.17-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.17-Glue.png?classes=lab_picture_small)
 
-11. Click **Add database**:
-![Images/Glue11.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue11.png?classes=lab_picture_small)
+11. Under "Output configuration" click on the **Add database** button, this will open a new tab in the browser:
+![Images/2.18-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.18-Glue.png?classes=lab_picture_small)
 
-12. Enter a **Database name** of **cost**, and click **Create**:
-![Images/Glue12.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue12.png?classes=lab_picture_small)
+12. Under "Database details" enter the "Name" `cost_optimization_labs_cur` and then select the **Create database** button:
+![Images/2.19-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.19-Glue.png?classes=lab_picture_small)
 
-**NOTE:** Your Database name cannot contain **-**
-    ------------ | -------------
+13. Return to the "Set output and scheduling" page in your previous browser tab. Select the "Target database" refresh button and select the **cost_optimization_labs_cur** database you just created.
 
-13. Configure the Crawler's output by **updating the following fields** then select **Next:
-	- Select Create a single schema for each S3 path
-	- Select Add new columns only
-	- Select Ignore the Change and don't update the table in the data catalog
-![Images/Glue13.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue13.png?classes=lab_picture_small)
+Select the arrow next to "Advanced options" and select the following options:
+- Select **Create a single schema for each S3 path**
+- Select **Add new columns only**
+- Select **Ignore the change and don't update the table in the data catalog**
 
-14. Review the crawler and click **Finish**:
-![Images/Glue14.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue14.png?classes=lab_picture_small)
+Under "Crawler schedule" select the "Frequency" as **Daily** and enter your desired start hour and minute. (See below) When finished select the **Next** button.
+![Images/2.20-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.20-Glue.png?classes=lab_picture_small)
 
-15. Select the checkbox next to the crawler, click **Run crawler**:
-![Images/Glue15.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue15.png?classes=lab_picture_small)
+14. On the "Review and create" page, review all the setting and then select the **Create crawler** button:
+![Images/2.21-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.21-Glue.png?classes=lab_picture_small)
 
-16. You will see the Crawler was successful and created a table:
-![Images/Glue16.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue16.png?classes=lab_picture_small)
+15. You will now be on the "Cost_CUR_Crawler" crawler detail page, now click on the **Run crawler** to start the initial crawl of your Cost and Usage Report:
+![Images/2.22-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.22-Glue.png?classes=lab_picture_small)
 
-17. Click **Databases**
-![Images/Glue20.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue20.png?classes=lab_picture_small)
+16. The crawler's status will change to "Running", when the status to changes to "Completed" it should show that there has been "Table changes":
+![Images/2.23-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.23-Glue.png?classes=lab_picture_small)
 
-18. Select the **cost** database that Glue created:
-![Images/Glue21.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue21.png?classes=lab_picture_small)
+17. From the left-hand menu select **Databases** and then select the new database named **cost_optimization_labs_cur**.
+![Images/2.24-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.24-Glue.png?classes=lab_picture_small)
 
-19. Click **Tables in cost**:
-![Images/Glue22.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue22.png?classes=lab_picture_small)
+18. Select the newly created table created by the Glue crawler: (Should be the same name as your CUR S3 bucket)
+![Images/2.25-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.25-Glue.png?classes=lab_picture_small)
 
-20. Click the table name:
-![Images/Glue23.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue23.png?classes=lab_picture_small)
+19. In the "Table details" you should see a schema has been created. If you do not see a schema or your "recordCount" under "Advanced properties" is **0**, please go back and verify all the previous steps.
+![Images/2.26-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.26-Glue.png?classes=lab_picture_small)
 
-21. Verify the **recordCount** is not zero, if it is - go back and verify the steps above:
-![Images/Glue24.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue24.png?classes=lab_picture_small)
+20. For the next step, open the [Amazon Athena service page](https://console.aws.amazon.com/athena/home):
+![Images/2.27-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.27-Glue.png?classes=lab_picture_small)
 
-22. Go to the **Athena** Console:
-![Images/Glue17.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue17.png?classes=lab_picture_small)
+21. Under "Database" select the drop down arrow and select the new database named **cost_optimization_labs_cur**:
+![Images/2.28-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.28-Glue.png?classes=lab_picture_small)
 
-23. Select the drop down arrow, and click on the new database:
-![Images/Glue18.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/Glue18.png?classes=lab_picture_small)
+22. You will now see the table we reviewed in step 19 that is named after the S3 CUR bucket. We will now load the partitions by clicking on the **Menu with 3 dots** and selecting **Load partitions**:
+![Images/2.29-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.29-Glue.png?classes=lab_picture_small)
 
-24. A new table will have been created (named after the CUR), we will now load the partitions. Click on the **3 dot menu** and select **Load partitions**:
-![Images/AWSBillingAnalysis_14.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSBillingAnalysis_14.png?classes=lab_picture_small)
-
-25. You will see it execute the command **MSCK REPAIR TABLE**, and in the results it **may** add partitions to the metastore for each month that has a billing file:
-![Images/AWSBillingAnalysis_15.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSBillingAnalysis_15.png?classes=lab_picture_small)
+23. You will see it execute the command **MSCK REPAIR TABLE**, and in the results it **may** add partitions to the meta store for each month that has a billing file:
+![Images/2.30-Glue.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.30-Glue.png?classes=lab_picture_small)
 
 {{% notice note %}}
 NOTE: It may or may not add partitions and show the messages above.
 {{% /notice %}}
 
-If you are using the supplied files for this lab, check:
-- The folder names **year** and **month** are in S3 and the case matches
-- There are parquet files in each of the month folders
+{{% /expand%}}
 
-26.  We will now preview the data.  Click on the **3 dot menu** and select **Preview table**:
-![Images/AWSBillingAnalysis_16.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSBillingAnalysis_16.png?classes=lab_picture_small)
+11.  We will now preview the data.  Click on the **Menu with 3 dots** and select **Preview table**:
+![Images/2.31-PreviewTable.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.31-PreviewTable.png?classes=lab_picture_small)
 
 27. It will execute a **Select * from** query, and in the results you will see the first 10 lines of your CUR file:
-![Images/AWSBillingAnalysis_17.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSBillingAnalysis_17.png?classes=lab_picture_small)
+![Images/2.32-QueryResults.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/2.32-QueryResults.png?classes=lab_picture_small)
 
 {{% notice tip %}}
 You have successfully setup your CUR file to be analyzed. You can now query your usage and costs via SQL.
