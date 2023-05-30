@@ -24,11 +24,13 @@ Some of the data needed for the modules is in the **Management account** we will
 
 3. In the Parameters section set **CostAccountID** as the ID of Data Collection Account ( where you plan to deploy the OptimizationDataCollectionStack)  
 
-4. Scroll to the bottom and click **Next**
+4. **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab.
 
-5. Tick the acknowledge boxes and click **Create stack**.
+5. Scroll to the bottom and click **Next**
 
-6. You can see the role that was collected by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
+6. Tick the acknowledge boxes and click **Create stack**.
+
+7. You can see the role that was collected by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
 ![Images/Managment_CF_deployed.png](/Cost/300_Optimization_Data_Collection/Images/Managment_CF_deployed.png)
 
 
@@ -57,20 +59,22 @@ https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optim
 
 6. In the Parameters section for **CostAccountID** use the  Account ID that where you will deploy the OptimizationDataCollectionStack. Under available modules section select modules that you need. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
 
+7. **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab.
+
 ![Images/SS_param.png](/Cost/300_Optimization_Data_Collection/Images/SS_param.png)
 
-7. Leave all as default and Click **Next**.
+8. Leave all as default and Click **Next**.
 
 ![Images/ods_stackset_config.png](/Cost/300_Optimization_Data_Collection/Images/ods_stackset_config.png)
 
-8. Select the **region** you are currently deploying to.
+9. Select the **region** you are currently deploying to.
 
 ![Images/ods_stackset_region.png](/Cost/300_Optimization_Data_Collection/Images/ods_stackset_region.png)
 
-9. Tick the boxes and click **Create stack**.
+10. Tick the boxes and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-10. This role will now be deployed to all linked accounts. 
+11. This role will now be deployed to all linked accounts. 
 
 If you face an issue with `AWSCloudFormationStackSetAdministrationRole` please make sure you activated 'Tusted Access' (2nd step) or follow [AWS Documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html) for activating this via additional CloudFormation.
 
@@ -82,7 +86,7 @@ If you wish to also access data in your management account, deploy the same Clou
 
 1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml&stackName=OptimizationDataRoleStack)
 
-2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
+2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. . **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
 
 4. Scroll to the bottom and click **Next**
 
