@@ -6,11 +6,11 @@ Parameters:
     Description: AccountId of where the collector is deployed
   ManagementAccountRole:
     Type: String
-    Description: Name of role deployed into Management account to read high level data
+    Description: Name of role deployed into Management account to read high level data. DO NOT ENTER THE ROLE PREFIX HERE. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT.
     Default: "Lambda-Assume-Role-Management-Account" 
   RolePrefix:
     Type: String
-    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Description: Keep this consistent with the prefix used for the Stacks and StackSets created as part of this lab. This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: "WA-"
 Outputs:
   LambdaRole:
