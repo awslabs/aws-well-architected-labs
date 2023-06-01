@@ -358,6 +358,8 @@ Resources:
                                       s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'compute_optimizer/compute_optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
                                   )
                                   result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                              except co.exceptions.LimitExceededException:
+                                  result_messages.append(f"{region} {name} export was already queued. Skiping.")
                               except Exception as exc:
                                   error_messages.append(f"ERROR: {region} {name} - {exc}")
                       if result_messages:
