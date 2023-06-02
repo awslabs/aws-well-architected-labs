@@ -198,7 +198,7 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
 
                         }
                     ],
-                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-aga-est-cost-analysis-template-enhanced-v1"
+                            "Arn": "arn:aws:quicksight:us-east-1:869004330191:template/data-transfer-aga-est-cost-analysis-template-enhanced-v3"
                 }
             },
             "VersionDescription": "1"
