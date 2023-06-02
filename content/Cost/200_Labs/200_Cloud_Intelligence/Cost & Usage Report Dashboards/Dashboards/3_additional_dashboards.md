@@ -62,9 +62,6 @@ This dashboard contains data transfer breakdowns with the following visuals:
  - Internet data transfer 
  - Regional Data transfer
 
-### Request Template Access
-Ensure you have requested access to the Cost Intelligence template [here.](http://d3ozd1vexgt67t.cloudfront.net/)
-
 ### Create Athena Views
 The data source for the dashboard will be an Athena view of your existing Cost and Usage Report (CUR). 
 
@@ -133,9 +130,7 @@ You now have your data set setup ready to create a visualization.
 ### Create the Dashboard
 We will now use the CLI to create the dashboard from the Data Transfer Cost and Usage Analysis Dashboard template, then create an Analysis you can customize and modify in the next step.
 
-1. If you have not requested access, go to this we page to request access to the template: [Template Access](http://d3ozd1vexgt67t.cloudfront.net/)
-
-2. Edit the following command, replacing **AccountID** with your account ID, and **region** with the region you are working in, then using the CLI list the QuickSight datasets and copy the **Name** and **Arn** for the dataset: **data_transfer_view**:
+1. Edit the following command, replacing **AccountID** with your account ID, and **region** with the region you are working in, then using the CLI list the QuickSight datasets and copy the **Name** and **Arn** for the dataset: **data_transfer_view**:
 
         aws quicksight list-data-sets --aws-account-id (AccountID) --region (region)
     &nbsp;
@@ -151,7 +146,7 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
 
   <!-- ![Images/quicksight_dashboard_2.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_2.png) -->
 
-3. Get your users **Arn** by editing the following command, replacing **AccountID** with your account ID, and **region** with the region you are working in, then using the CLI run the command:
+2. Get your users **Arn** by editing the following command, replacing **AccountID** with your account ID, and **region** with the region you are working in, then using the CLI run the command:
 
         aws quicksight list-users --aws-account-id (AccountID) --namespace default --region (region)
     
@@ -168,7 +163,7 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
 
  <!-- ![Images/quicksight_dashboard_3.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_3.png) -->
 
-4. Create a local file **create-data-transfer-dashboard.json** with the text below, replace the values **(Account ID)** with your account ID on line 2 and line 25, **(User ARN)** with your user ARN on line 7, and **(DataTransfer view Dataset ID)** with your dataset ARN on line 25:
+3. Create a local file **create-data-transfer-dashboard.json** with the text below, replace the values **(Account ID)** with your account ID on line 2 and line 25, **(User ARN)** with your user ARN on line 7, and **(DataTransfer view Dataset ID)** with your dataset ARN on line 25:
 
         {
             "AwsAccountId": "(Account ID)",
@@ -204,16 +199,16 @@ We will now use the CLI to create the dashboard from the Data Transfer Cost and 
             "VersionDescription": "1"
         }
 
-5. To create the dashboard from the template, edit then run the following command, replacing **(region)** with the region you are working in, and you should receive a 202 response:
+4. To create the dashboard from the template, edit then run the following command, replacing **(region)** with the region you are working in, and you should receive a 202 response:
 
         aws quicksight create-dashboard --cli-input-json file://create-data-transfer-dashboard.json --region (region)
     - Response:
 ![Images/quicksight_dashboard_dt_resp.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt_resp.png)
 
-6. After a few minutes the dashboard will become available in QuickSight under **All dashboard**, click on the **Dashboard name**:
+5. After a few minutes the dashboard will become available in QuickSight under **All dashboard**, click on the **Dashboard name**:
 ![Images/quicksight_dashboard_dt-14.png](/Cost/200_Cloud_Intelligence/Images/cid/quicksight_dashboard_dt-14.png)
 
-7. Follow step 7 if you do not see your dashboard
+6. Follow step 7 if you do not see your dashboard
 
 Edit and run the following command:
 
