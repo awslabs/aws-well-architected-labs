@@ -90,7 +90,6 @@ Resources:
                   - "s3.GetObject"
                 Resource:
                   - !Ref DestinationBucketARN
-                  - !Ref DestinationBucketARN/*
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
