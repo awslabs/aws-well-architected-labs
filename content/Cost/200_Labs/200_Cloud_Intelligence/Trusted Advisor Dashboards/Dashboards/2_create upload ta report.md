@@ -56,4 +56,6 @@ You can select certain accounts but please ensure you maintain consistency in fo
 **NOTE:** You can upload as many folders with reports as you need. Dashboard will use all uploaded data to show trends over time
     ------------ | -------------
 
+{{% /expand%}}
+
 {{< prev_next_button link_prev_url="../1_prerequistes" link_next_url="../3_deployment/" />}}
