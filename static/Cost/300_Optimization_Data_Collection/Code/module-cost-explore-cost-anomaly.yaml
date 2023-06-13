@@ -123,9 +123,7 @@ Resources:
           bucket = os.environ['S3_BUCKET']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
           prefix = os.environ['PREFIX']
-          AWSAccountId = os.environ['AWSAccountId']
-
-
+          MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
           def start_crawler():
               glue_client = boto3.client('glue')
               try:
@@ -149,7 +147,7 @@ Resources:
                   return
            
               s3client = boto3.client('s3')
-              key = f"{path}/AccountID={AWSAccountId}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json"
+              key = f"{path}/MANAGEMENT_ACCOUNT_IDS={MANAGEMENT_ACCOUNT_IDS}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json"
               print(f"Uploading file {local_file} to {bucket}/{key}")
               S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
