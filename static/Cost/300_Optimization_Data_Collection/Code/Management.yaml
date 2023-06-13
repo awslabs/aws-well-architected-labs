@@ -42,6 +42,7 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "ce:GetRightsizingRecommendation"
+                  - "ce:GetAnomalies"
                   - "organizations:ListAccounts"
                   - "organizations:ListCreateAccountStatus"
                   - "organizations:DescribeOrganization"
