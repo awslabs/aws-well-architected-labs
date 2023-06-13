@@ -18,6 +18,7 @@ Metadata:
         Parameters:
           - IncludeTAModule
           - IncludeRightsizingModule
+          - IncludeCostAnomalyModule
           - IncludeInventoryCollectorModule
           - IncludeComputeOptimizerModule
           - ComputeOptimizerRegions
@@ -45,6 +46,8 @@ Metadata:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
         default: 'Include Rightsizing Recommendations Data Collection Module'
+      IncludeCostAnomalyModule:
+        default: 'Include RCost Anomolies ightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
@@ -119,6 +122,12 @@ Parameters:
   IncludeRightsizingModule:
     Type: String
     Description: "Collects AWS Cost Explorer Rightsizing Recommendations"
+    AllowedValues:
+      - "yes"
+      - "no"
+  IncludeCostAnomolyModule:
+    Type: String
+    Description: "Collects AWS Cost Explorer Cost Anomolies Recommendations"
     AllowedValues:
       - "yes"
       - "no"
@@ -200,6 +209,9 @@ Conditions:
     - "yes"
   DeployRightsizingModule: !Equals
     - !Ref IncludeRightsizingModule
+    - "yes"
+  DeployCostAnomalyModule: !Equals
+    - !Ref IncludeCostAnomalyModule
     - "yes"
   DeployInventoryCollectorModule: !Equals
     - !Ref IncludeInventoryCollectorModule
@@ -424,6 +436,23 @@ Resources:
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
       TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-rightsizing.yaml"
+
+  CostAnomalyModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployCostAnomalyModule
+    Properties:
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn
+        MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
+        ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+        ManagementAccountID: !Ref ManagementAccountID
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-cost-anomaly.yaml"
+
+
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
