@@ -14,6 +14,7 @@ Metadata:
       Parameters:
         - IncludeTAModule
         - IncludeRightsizingModule
+        - IncludeCostAnomalyModule
         - IncludeInventoryCollectorModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
@@ -30,6 +31,8 @@ Metadata:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
         default: 'Include Rightsizing Recommendations Data Collection Module'
+      IncludeCostAnomalyModule:
+        default: 'Include Cost Anomaly Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeECSChargebackModule:
@@ -61,6 +64,12 @@ Parameters:
   IncludeRightsizingModule:
     Type: String
     Description: "Collects AWS Cost Explorer Rightsizing Recommendations"    
+    AllowedValues:
+      - "yes"
+      - "no" 
+  IncludeCostAnomalyModule:
+    Type: String
+    Description: "Collects AWS Cost Explorer Cost Anomolies Recommendations"    
     AllowedValues:
       - "yes"
       - "no" 
@@ -99,8 +108,11 @@ Conditions:
   IncludeTAModulePolicy: !Equals 
     - !Ref IncludeTAModule
     - "yes"
-  IncludeRightsizingModulePolicy: !Equals 
+  IncludeRightsizingModulePolicy: !Equals
     - !Ref IncludeRightsizingModule
+    - "yes"
+  IncludeCostAnomalyModulePolicy: !Equals 
+    - !Ref IncludeCostAnomalyModule
     - "yes"
   IncludeInventoryCollectorModulePolicy: !Equals 
     - !Ref IncludeInventoryCollectorModule
@@ -188,6 +200,20 @@ Resources:
           - Effect: "Allow"
             Action:
               - "ce:GetRightsizingRecommendation"
+            Resource: "*" ## only * can be used as a Resource for this action
+      Roles:
+        - Ref: LambdaRole
+  CostAnomalyReadOnlyPolicy:
+    Type: 'AWS::IAM::Policy'
+    Condition: IncludeCostAnomalyModulePolicy
+    Properties:
+      PolicyName: CostAnomalyReadOnlyPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "ce:GetAnomalies"
             Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
