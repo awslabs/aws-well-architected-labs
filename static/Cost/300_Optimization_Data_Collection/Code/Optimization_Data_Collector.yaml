@@ -25,7 +25,7 @@ Metadata:
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
-          - IncludeBudgetsModule
+         - IncludeBudgetsModule
           - IncludeTransitGatewayModule
     ParameterLabels:
       DestinationBucket:
@@ -47,7 +47,7 @@ Metadata:
       IncludeRightsizingModule:
         default: 'Include Rightsizing Recommendations Data Collection Module'
       IncludeCostAnomalyModule:
-        default: 'Include Cost Anomolies Recommendations Data Collection Module'
+        default: 'Include Cost Anomalies ightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
@@ -95,7 +95,7 @@ Parameters:
     Default: Lambda-Assume-Role-Management-Account
   ManagementAccountID:
     Type: String
-    AllowedPattern: ([a-z0-9\-, ]*?$)
+   AllowedPattern: ([a-z0-9\-, ]*?$)
     Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   MultiAccountRoleName:
     Type: String
@@ -118,7 +118,7 @@ Parameters:
     Description: Collects AWS Trusted Advisor recommendations data
     AllowedValues:
       - "yes"
-      - "no" 
+      - "no"
   IncludeRightsizingModule:
     Type: String
     Description: "Collects AWS Cost Explorer Rightsizing Recommendations"
@@ -127,13 +127,13 @@ Parameters:
       - "no"
   IncludeCostAnomalyModule:
     Type: String
-    Description: "Collects AWS Cost Explorer Cost Anomolies Recommendations"
+    Description: "Collects AWS Cost Explorer Cost Anomalies Recommendations"
     AllowedValues:
       - "yes"
       - "no"
   IncludeInventoryCollectorModule:
     Type: String
-    Description: Collects data about AMIs, EBS volumes and snapshots   
+    Description: Collects data about AMIs, EBS volumes and snapshots  
     AllowedValues:
       - "yes"
       - "no"
@@ -156,7 +156,7 @@ Parameters:
       - "no"
   IncludeRDSUtilizationModule:
     Type: String
-    Description: Collects RDS CloudWatch metrics from your accounts 
+    Description: Collects RDS CloudWatch metrics from your accounts
     AllowedValues:
       - "yes"
       - "no"
@@ -370,10 +370,10 @@ Resources:
           import uuid
           import urllib3
           import boto3
-
+ 
           endpoint = os.environ['WA_ANALYTICS_ENDPOINT']
           account_id = boto3.client("sts").get_caller_identity()["Account"]
-
+ 
           def lambda_handler(event, context):
               print(json.dumps(event))
               try:
@@ -413,7 +413,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTAModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-trusted-advisor.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-trusted-advisor.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn
@@ -435,7 +435,7 @@ Resources:
         GlueRoleARN: !GetAtt GlueRole.Arn
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-cost-explorer-rightsizing.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-rightsizing.yaml"
   CostAnomalyModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployCostAnomalyModule
@@ -449,12 +449,12 @@ Resources:
         GlueRoleARN: !GetAtt GlueRole.Arn
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-cost-explorer-cost-anomaly.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-cost-anomaly.yaml"
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-inventory.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-inventory.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn
@@ -467,7 +467,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployPricingModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-pricing.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-pricing.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn
@@ -478,7 +478,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployComputeOptimizerModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-compute-optimizer.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-compute-optimizer.yaml"
       Parameters:
         DestinationBucketARN: !GetAtt S3Bucket.Arn
         DestinationBucket: !Ref S3Bucket
@@ -499,7 +499,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployEcsChargebackModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-ecs-chargeback.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-ecs-chargeback.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleArn: !GetAtt GlueRole.Arn
@@ -511,7 +511,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployRDSUtilizationModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-rds-usage.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-rds-usage.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         DestinationBucketARN: !GetAtt S3Bucket.Arn
@@ -523,7 +523,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
     Properties:
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-organization.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-organization.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
         GlueRoleARN: !GetAtt GlueRole.Arn
@@ -543,7 +543,7 @@ Resources:
           MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
           RolePrefix: !Ref RolePrefix
           LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-budgets.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-budgets.yaml"
   TransitGatewayModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployTransitGatewayModule
@@ -555,12 +555,12 @@ Resources:
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
-      TemplateURL: !Sub "https://datacollector-cid.s3.amazonaws.com/module-transit-gateway.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-transit-gateway.yaml"
   AccountCollector:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-      TemplateURL: !Sub https://datacollector-cid.s3.amazonaws.com/account-collector.yaml"
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/account-collector.yaml"
       Parameters:
         RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
