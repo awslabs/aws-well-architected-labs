@@ -285,7 +285,7 @@ Resources:
                 Action: "sts:AssumeRole"
                 Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
@@ -510,7 +510,7 @@ Resources:
                   - s3:DeleteBucket
                 Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   FinalizeSetup:
     DependsOn:
       - LambdaTriggerExport
