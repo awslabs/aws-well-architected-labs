@@ -263,7 +263,7 @@ Resources:
       Description: Provides a summary view of the costanomoly recommendations for same family
       Name: cost-explorer-costanomoly-same-family
       QueryString: >
-        CREATE OR REPLACE VIEW "ca_summary_view" AS
+        CREATE OR REPLACE VIEW "ca_summary_view" AS 
         SELECT DISTINCT
           "year"
         , "month"
@@ -276,7 +276,7 @@ Resources:
         , CAST(totalexpectedspend AS int) totalexpectedspend
         , CAST(totalimpact AS int) tota_impact
         , CAST(totalimpactpercentage AS int) totalimpactpercentage
-        , (CASE WHEN ((anomalyenddate IS NULL) OR (CAST("substring"(anomalyenddate, 1, 10) AS date) < (current_date - INTERVAL  '2' DAY))) THEN 'Closed' ELSE 'Open' END) Status
+        , EXTRACT(DAY FROM (CAST("from_iso8601_timestamp"("anomalyenddate") AS date) - CAST("from_iso8601_timestamp"("anomalystartdate") AS date))) duration
         , monitorarn
         , region
         , service
@@ -284,9 +284,10 @@ Resources:
         , linkedaccountname
         , usagetype
         FROM
-          "optimization_data"."cost_explorer_cost_anomaly"
+          "aws-cost-anomalies-db"."aws_cost_anomalies_774028859993_us_east_1"
         WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '1' MONTH))
         GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
