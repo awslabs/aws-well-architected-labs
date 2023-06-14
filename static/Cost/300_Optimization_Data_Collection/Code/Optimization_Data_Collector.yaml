@@ -25,7 +25,6 @@ Metadata:
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
-         - IncludeBudgetsModule
           - IncludeTransitGatewayModule
     ParameterLabels:
       DestinationBucket:
