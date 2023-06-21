@@ -140,7 +140,7 @@ Resources:
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
   AMIPolicy:
     Type: 'AWS::IAM::Policy'
