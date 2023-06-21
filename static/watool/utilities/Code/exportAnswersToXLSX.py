@@ -87,15 +87,17 @@ PILLAR_PARSE_MAP = {
                     "security": "SEC",
                     "reliability": "REL",
                     "performance": "PERF",
-                    "costOptimization": "COST"
-                    }
+                    "costOptimization": "COST",
+                    "sustainability": "SUS"
+}
 
 PILLAR_PROPER_NAME_MAP = {
                     "operationalExcellence": "Operational Excellence",
                     "security": "Security",
                     "reliability": "Reliability",
                     "performance": "Performance Efficiency",
-                    "costOptimization": "Cost Optimization"
+                    "costOptimization": "Cost Optimization",
+                    "sustainability": "Sustainability"
 }
 
 # Helper class to convert a datetime item to JSON.
@@ -297,7 +299,6 @@ def getQuestionDetails(
         logger.error("ERROR - Unexpected error: %s" % e)
 
 
-
     qDescription = jmespath.search("Answer.QuestionDescription", response)
     qImprovementPlanUrl = jmespath.search("Answer.ImprovementPlanUrl", response)
     qHelpfulResourceUrl = jmespath.search("Answer.HelpfulResourceUrl", response)
@@ -345,7 +346,6 @@ def getImprovementPlanItems(
     # This will parse the IP Items to gather the links we need
     response = {}
     htmlString = ""
-    # unanswered = getUnansweredForQuestion(waclient,workloadId,'wellarchitected',QuestionId)
     urlresponse = urllib.request.urlopen(ImprovementPlanUrl)
     htmlBytes = urlresponse.read()
     htmlStr = htmlBytes.decode("utf8")
