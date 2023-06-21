@@ -23,6 +23,7 @@ import argparse
 from pkg_resources import packaging
 import urllib.request
 from bs4 import BeautifulSoup, NavigableString, Tag
+from lxml import etree
 
 
 __author__    = "Eric Pullen"
@@ -334,7 +335,7 @@ def updateAnswersForQuestion(
     answers = jmespath.search(jmesquery, response)
     return answers
 
-def getImprovementPlanItems(
+def getBestPractices(
     waclient,
     workloadId,
     lensAlias,
@@ -344,65 +345,49 @@ def getImprovementPlanItems(
     ChoiceList
 ):
     # This will parse the IP Items to gather the links we need
-    response = {}
-    htmlString = ""
     urlresponse = urllib.request.urlopen(ImprovementPlanUrl)
     htmlBytes = urlresponse.read()
     htmlStr = htmlBytes.decode("utf8")
     htmlSplit = htmlStr.split('\n')
-    ipHTMLList = {}
+    bpList = {}
     for line in htmlSplit:
         for uq in ChoiceList:
             if uq in line:
-                parsed = BeautifulSoup(line,features="html.parser")
-                ipHTMLList.update({uq: str(parsed.a['href'])})
-    return ipHTMLList
+                parsed = BeautifulSoup(line, features="html.parser")
+                bpUrl = str(parsed.a['href'])
+                bpRisk = getBestPracticeRiskLevel(bpUrl, PillarId)
+                bpList.update({ uq: {
+                            'BestPracticeUrl': bpUrl, 
+                            'BestPracticeRisk': bpRisk
+                        }})
+    return bpList
 
-def getImprovementPlanHTMLDescription(
-    ImprovementPlanUrl,
+def getBestPracticeRiskLevel(
+    BestPracticeUrl,
     PillarId
     ):
 
-    logger.debug("ImprovementPlanUrl: %s for pillar %s " % (ImprovementPlanUrl,PILLAR_PARSE_MAP[PillarId]))
-    stepRaw = ImprovementPlanUrl.rsplit('#')[1]
-
-    # Grab the number of the step we are referencing
-    # This will work as long as their are less than 99 steps.
-    if len(stepRaw) <= 5:
-        stepNumber = stepRaw[-1]
-    else:
-        stepNumber = stepRaw[-2]
-
-    #Generate the string for the step number
-    firstItem = "step"+stepNumber
-    secondItem = ("step"+str((int(stepNumber)+1)))
-    logger.debug ("Going from %s to %s" % (firstItem, secondItem))
-    urlresponse = urllib.request.urlopen(ImprovementPlanUrl)
+    # Get the level of risk exposed if this best practice is not established
+    urlresponse = urllib.request.urlopen(BestPracticeUrl)
     htmlBytes = urlresponse.read()
     htmlStr = htmlBytes.decode("utf8")
-    htmlSplit = htmlStr.split('\n')
+    parsed = BeautifulSoup(htmlStr, features="html.parser")
+    domtree = etree.HTML(str(parsed))
+    levelOfRiskBold = domtree.xpath("//p/b[contains(text(), 'established')]")
+    bpRisk = ""
+    if len(levelOfRiskBold) > 0:
+        levelOfRisk = levelOfRiskBold[0].tail
+        if "High" in levelOfRisk:
+            bpRisk = "High"
+        elif "Medium" in levelOfRisk:
+            bpRisk = "Medium"
+        elif "Low" in levelOfRisk:
+            bpRisk = "Low"
 
-    foundit = 0
-    ipString = ""
-    questionIdText = ""
-    for i in htmlSplit:
-        if PILLAR_PARSE_MAP[PillarId] in i:
-            bsparse = BeautifulSoup(i,features="html.parser")
-            questionIdText = str(bsparse.text).split(':')[0].strip()
-        if (secondItem in i) or ("</div>" in i):
-            foundit = 0
-        if firstItem in i:
-            foundit = 1
-            ipString+=i
-        elif foundit:
-            ipString+=i
+    if bpRisk == "":
+        logger.debug("Failed to resolve the risk from %s - Pillar: %s" % (BestPracticeUrl, PILLAR_PARSE_MAP[PillarId]))
 
-    prettyHTML = BeautifulSoup(ipString,features="html.parser")
-    # Need to remove all of the "local glossary links" since they point to relative paths
-    for a in prettyHTML.findAll('a', 'glossref'):
-        a.replaceWithChildren()
-
-    return prettyHTML, questionIdText
+    return bpRisk
 
 def lensTabCreation(
     WACLIENT,
@@ -515,13 +500,14 @@ def lensTabCreation(
     worksheet.set_paper(1)
 
     # Set the column widths
-    worksheet.set_column('A:A', 11)
-    worksheet.set_column('B:B', 32)
-    worksheet.set_column('C:C', 56)
-    worksheet.set_column('D:D', 29)
-    worksheet.set_column('E:E', 57)
-    worksheet.set_column('F:F', 18)
-    worksheet.set_column('G:G', 70)
+    worksheet.set_column('A:A', 11) # pillar
+    worksheet.set_column('B:B', 32) # question
+    worksheet.set_column('C:C', 56) # question explanation
+    worksheet.set_column('D:D', 29) # choice (best practice)
+    worksheet.set_column('E:E', 11) # risk
+    worksheet.set_column('F:F', 57) # choice detail
+    worksheet.set_column('G:G', 18) # response
+    worksheet.set_column('H:H', 70) # notes
 
     # Top of sheet
     worksheet.merge_range('A1:G1', 'Workload Overview', heading)
@@ -549,15 +535,16 @@ def lensTabCreation(
     worksheet.write('B8', 'Question', sub_heading)
     worksheet.write('C8', 'Explanation', sub_heading)
     worksheet.write('D8', 'Choice (Best Practice)', sub_heading)
-    worksheet.write('E8', 'Detail', sub_heading)
-    worksheet.write('F8', 'Response', sub_heading)
-    worksheet.write('G8', 'Notes (optional)', sub_heading)
+    worksheet.write('E8', 'Risk', sub_heading)
+    worksheet.write('F8', 'Detail', sub_heading)
+    worksheet.write('G8', 'Response', sub_heading)
+    worksheet.write('H8', 'Notes (optional)', sub_heading)
 
     # Freeze the top of the sheet
     worksheet.freeze_panes(8,0)
 
-    # AutoFilter on the first two columns
-    worksheet.autofilter('A8:B8')
+    # AutoFilter on the first seven columns
+    worksheet.autofilter('A8:G8')
 
     # Make it easier to print
     worksheet.repeat_rows(1, 8)
@@ -572,6 +559,7 @@ def lensTabCreation(
     myCellnoborder = lineAnoborder
 
     for pillar in PILLAR_PARSE_MAP:
+        logger.info("Working on %s pillar" % pillar)
         # This is the question number for each pillar (ex: OPS1, OPS2, etc)
         qNum = 1
 
@@ -598,9 +586,9 @@ def lensTabCreation(
             if qImprovementPlanUrl:
                 jmesquery = "[?QuestionId=='"+answers['QuestionId']+"'].Choices[].ChoiceId"
                 choiceList = jmespath.search(jmesquery, allQuestionsForLens)
-                ipList = getImprovementPlanItems(WACLIENT,workloadId,lens,answers['QuestionId'],answers['PillarId'],qImprovementPlanUrl,choiceList)
+                bpList = getBestPractices(WACLIENT,workloadId,lens,answers['QuestionId'],answers['PillarId'],qImprovementPlanUrl,choiceList)
             else:
-                ipList = []
+                bpList = []
 
             startingCellID=cellID
             # If its the first time through this particular pillar question:
@@ -626,19 +614,20 @@ def lensTabCreation(
                 # Start writing each of the BP's, details, etc
                 cell = 'D'+str(cellID)
                 Title = choices['Title'].replace('  ','').replace('\t', '').replace('\n', '')
-                if any(choices['ChoiceId'] in d for d in ipList):
-                    worksheet.write_url(cell, ipList[choices['ChoiceId']], myCell, string=Title)
-                    #ipItemHTML, questionIdText = getImprovementPlanHTMLDescription(ipList[choices['ChoiceId']],answers['PillarId'])
-                    #htmlString = ipItemHTML.text
-                    htmlString = "" 
-                    htmlString = htmlString.replace('\n         ','').replace('  ','').replace('\t', '').strip().rstrip()
-                    # print(htmlString)
-                    worksheet.write_comment(cell, htmlString, {'author': 'Improvement Plan'})
+                if any(choices['ChoiceId'] in d for d in bpList):
+                    bpUrl = bpList[choices['ChoiceId']]['BestPracticeUrl']
+                    bpRisk = bpList[choices['ChoiceId']]['BestPracticeRisk']
+
+                    worksheet.write_url(cell, bpUrl, myCell, string=Title)
+                    cell = 'E'+str(cellID)
+                    worksheet.write(cell, bpRisk, myCell)
                 else:
-                    worksheet.write(cell,Title,myCell)
+                    worksheet.write(cell, Title, myCell)
+                    cell = 'E'+str(cellID)
+                    worksheet.write(cell, "", myCell)
 
                 # Add all Details for each best practice/choice
-                cell = 'E'+str(cellID)
+                cell = 'F'+str(cellID)
                 # Remove all of the extra spaces in the description field
                 Description = choices['Description'].replace('\n               ','')
                 Description = Description.replace('\n         ','')
@@ -649,7 +638,7 @@ def lensTabCreation(
 
                 # If this is an existing workload, we will show SELECTED if the have it checked
                 # I would love to use a XLSX checkbox, but this library doesn't support it
-                cell = 'F'+str(cellID)
+                cell = 'G'+str(cellID)
                 responseText = ""
                 if choices['ChoiceId'] in answers['SelectedChoices']:
                     responseText = "SELECTED"
@@ -665,7 +654,7 @@ def lensTabCreation(
             worksheet.merge_range(cellMerge, qDescription,myCell)
 
             # Notes field
-            cellMerge = 'G'+str(startingCellID)+':G'+str(cellID-1)
+            cellMerge = 'H'+str(startingCellID)+':H'+str(cellID-1)
             if WORKLOADID:
                 worksheet.merge_range(cellMerge, qNotes, myCell)
             else:
@@ -746,6 +735,7 @@ def main():
 
     # Iterate over each lens that we either have added or is in the workload
     for lens in LENSES:
+        logger.info("Working on %s lens" % lens)
         # Grab all questions for a particular lens
         allQuestions = findAllQuestionId(WACLIENT,workloadId,lens)
         if WORKLOADID:

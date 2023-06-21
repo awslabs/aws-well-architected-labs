@@ -35,7 +35,9 @@ pip3 install boto3 --upgrade --user
 You may need to install the following modules for this script to run:
 1. [BeautifulSoup4](https://pypi.org/project/beautifulsoup4/)
     * pip install beautifulsoup4
-1. [xlsxwriter](https://github.com/jmcnamara/XlsxWriter)
+2. [xlsxwriter](https://github.com/jmcnamara/XlsxWriter)
     * pip install XlsxWriter
+3. [lxml](https://pypi.org/project/lxml/)
+    * pip install lxml
 
 {{< prev_next_button link_prev_url="../" link_next_url="../2_python_code/" />}}
