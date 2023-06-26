@@ -283,6 +283,7 @@ This query pulls all ACTIVE Savings Plan ARNs and produces their utilization for
 ```tsql
 SELECT
   SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2) AS split_savings_plan_savings_plan_a_r_n,
+  SPLIT_PART(savings_plan_savings_plan_a_r_n,':', 5) AS savings_plan_owner_accountID,
   bill_payer_account_id,
   line_item_usage_account_id,
   DATE_FORMAT((line_item_usage_start_date),'%Y-%m') AS month_line_item_usage_start_date,
@@ -309,6 +310,7 @@ WHERE
   AND try_cast(date_parse(SPLIT_PART(savings_plan_end_time, 'T', 1), '%Y-%m-%d') as date) > cast(current_date as date) --res exp time after today's date
 GROUP BY
   SPLIT_PART(savings_plan_savings_plan_a_r_n, '/', 2),
+  SPLIT_PART(savings_plan_savings_plan_a_r_n,':', 5),
   bill_payer_account_id,
   line_item_usage_account_id,
   DATE_FORMAT((line_item_usage_start_date),'%Y-%m'),
