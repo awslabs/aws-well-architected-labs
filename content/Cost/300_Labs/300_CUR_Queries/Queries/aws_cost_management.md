@@ -133,7 +133,8 @@ Please refer to the relevant service reservation pricing page.
 ```tsql
 SELECT
   bill_payer_account_id,
-  line_item_usage_account_id,
+  line_item_usage_account_id AS "Usage Accccoud ID",
+  SPLIT_PART(reservation_reservation_a_r_n,':', 5) AS commitment_owner_accountID,
   DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
   line_item_product_code,
   reservation_reservation_a_r_n,
@@ -163,6 +164,7 @@ GROUP BY
   DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
   line_item_product_code,
   reservation_reservation_a_r_n,
+  SPLIT_PART(reservation_reservation_a_r_n,':', 5),
   SPLIT_PART(line_item_usage_type,':', 2),
   SPLIT_PART(reservation_reservation_a_r_n,':', 4)
 ORDER BY
