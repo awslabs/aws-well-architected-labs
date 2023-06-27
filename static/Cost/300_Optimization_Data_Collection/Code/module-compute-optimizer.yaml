@@ -194,6 +194,15 @@ Resources:
                           s3:x-amz-acl:  bucket-owner-full-control
                           aws:SourceAccount: !Split [',', !Ref ManagementAccountID]
                   Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
+                - Effect: Deny
+                  Principal: "*"
+                  Action: s3:*
+                  Condition:
+                    Bool:
+                      aws:SecureTransport: 'false'
+                  Resource:
+                    - !Sub "arn:aws:s3:::${Name}-${AWS::Region}"
+                    - !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role
             Properties:
@@ -262,6 +271,11 @@ Resources:
                     NoncurrentVersionExpiration:
                       NoncurrentDays: 1
                       NewerNoncurrentVersions: 1
+              PublicAccessBlockConfiguration:
+                BlockPublicAcls : true
+                BlockPublicPolicy : true
+                IgnorePublicAcls : true
+                RestrictPublicBuckets : true
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
@@ -285,7 +299,7 @@ Resources:
                 Action: "sts:AssumeRole"
                 Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
@@ -515,7 +529,7 @@ Resources:
                   - s3:DeleteBucket
                 Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   FinalizeSetup:
     DependsOn:
       - LambdaTriggerExport
