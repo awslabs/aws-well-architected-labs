@@ -19,7 +19,7 @@ Or if you wish to keep this on your local machine please copy [CloudFormation te
 ![Images/upload_templates3.png](/Cost/300_Optimization_Data_Collection/Images/upload_templates3.png)
 
 3. Call the stack **OptimizationDataCollectionStack** and fill Deployment parameters. The Role mentioned in **Multi Account Role Name** parameter will be deployed in the next step.
- Select the **Code bucket** for the region you are deploying in and fill **Management Account Id**. You have the option to change the name of your access roles, if you do please make the same changes in the **Role for Management Account** and the  **Read Only roles for Data Collector** deployments.
+ Select the **Code bucket** for the region you are deploying in and fill **Management Account Id**. You have the option to change the name of your prefix & access roles, **if you do** please make sure to use the same names used in the **Role for Management Account** and the  **Read Only roles for Data Collector** deployments.
  
  Under available modules section select modules which you would like to deploy. Detailed description of each module can be found [here](../3_data_collection_modules)
  Click **Next** and **Next again**
