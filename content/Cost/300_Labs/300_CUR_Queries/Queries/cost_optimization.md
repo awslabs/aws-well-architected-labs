@@ -28,7 +28,7 @@ Prior to deleting resources, check with the application owner that your analysis
   * [Graviton Usage](#graviton-usage)
   * [Lambda Graviton Cost Savings](#lambda-graviton-savings)
 - Database
-  * [Amazon Amazon Aurora I/O Optimized Savings](#amazon-aurora-io-optimized-savings)
+  * [Amazon Aurora I/O Optimized Savings](#amazon-aurora-io-optimized-savings)
 - End User Computing 
   * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)  
 - Networking & Content Delivery   
@@ -346,7 +346,7 @@ sum_line_item_unblended_cost DESC
 
 {{< email_button category_text="Cost Optimization" service_text="EC2 Instance Cost By Pricing Term" query_text="EC2 Instance Cost By Pricing Term" button_text="Help & Feedback" >}}
 
-### Amazon Amazon Aurora I/O Optimized Savings
+### Amazon Aurora I/O Optimized Savings
 Amazon Aurora I/O optimized provides improved price performance and predictable pricing for customers with I/O-intensive applications. Aurora I/O-Optimized offers improved performance, increasing throughput and reducing latency for customers’ most demanding workloads. With Aurora I/O Optimized, there are zero charges for read and write I/O operations.  You only pay for your database instances and storage usage, making it easy to predict your database spend up front. Aurora I/O-Optimized offers up to 40% cost savings for I/O-intensive applications where I/O charges exceed 25% of the total Aurora database spend. 
 
 For this query there are multiple nested queries to discover storage and I/O cost for the account.  This means you will have to replace the table_name and date_filter variables multiple times.  In addition, you can filter for specific accounts where noted in the query.  For tutorials on how to replace variables in queries, please see our CUR Query Library help section. 
