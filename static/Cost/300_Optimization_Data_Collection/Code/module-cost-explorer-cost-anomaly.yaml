@@ -195,8 +195,6 @@ Resources:
                   last_modified_date = get_last_modified_date(objects['Contents'])
                   if last_modified_date and last_modified_date >= start_date:
                       start_date = last_modified_date
-                  if end_date == datetime.now().date():
-                      start_date = end_date - timedelta(days=1)
               return start_date, end_date
 
           def get_last_modified_date(contents):
