@@ -55,7 +55,7 @@ SELECT
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
   SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
 FROM 
-  ${table_Name} 
+  ${table_name} 
 WHERE 
   ${date_filter} 
   AND product_product_name = 'Amazon MQ'
