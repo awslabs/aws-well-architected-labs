@@ -7,11 +7,11 @@ Parameters:
     Default: optimization_data
   DestinationBucket:
     Type: String
-    Description: Name of the S3 Bucket that exists or needs to be created to hold costanomoly information
+    Description: Name of the S3 Bucket that exists or needs to be created to hold costanomaly information
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
   DestinationBucketARN:
     Type: String
-    Description: ARN of the S3 Bucket that exists or needs to be created to hold costanomoly information
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold costanomaly information
   ManagementRoleName:
     Type: String
     Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
@@ -25,7 +25,7 @@ Parameters:
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
-    Default: cost-explorer-cost-anomoly
+    Default: cost-explorer-cost-anomaly
   Schedule:
     Type: String
     Default: "cron(30 12 L * ? *)"
@@ -39,26 +39,26 @@ Parameters:
     Type: String
     Description: Arn of lambda for Analytics
 Outputs:
-  CostExplorerCostAnomolyLambdaRoleARN:
-    Description: Role for Lambda execution of AWS Cost Explorer CostAnomoly recommendations.
+  CostExplorerCostAnomalyLambdaRoleARN:
+    Description: Role for Lambda execution of AWS Cost Explorer CostAnomaly recommendations.
     Value:
       Fn::GetAtt:
-        - CostAnomolyLambdaRole
+        - CostAnomalyLambdaRole
         - Arn
-  LambdaCostExplorerCostAnomolyARN:
-    Description: Lambda function ARN for retrieving AWS Cost Explorer CostAnomoly recommendations
+  LambdaCostExplorerCostAnomalyARN:
+    Description: Lambda function ARN for retrieving AWS Cost Explorer CostAnomaly recommendations
     Value:
       Fn::GetAtt:
         - LambdaFunction
         - Arn
   GlueCrawler:
     Value:
-      Ref: CostAnomolyCrawler
+      Ref: CostAnomalyCrawler
 Resources:
-  CostAnomolyLambdaRole:
+  CostAnomalyLambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "${RolePrefix}AWS-Cost-Explorer-CostAnomoly-Execute-Lambda"
+      RoleName: !Sub "${RolePrefix}AWS-Cost-Explorer-CostAnomaly-Execute-Lambda"
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -69,17 +69,17 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
-        - PolicyName: "Assume-Management-CostAnomoly-Account-Role"
+        - PolicyName: "Assume-Management-CostAnomaly-Account-Role"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
-        - PolicyName: "CostAnomoly-S3-Access"
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management accounts
+        - PolicyName: "CostAnomaly-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -87,20 +87,13 @@ Resources:
                 Action:
                   - "s3:PutObject"
                   - "s3:ListBucket"
-                  - "s3.GetObject"
+                  - "s3:GetObject"
                 Resource:
                   - !Ref DestinationBucketARN
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
-                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CostAnomolyCrawler}"
-              - Effect: "Allow"
-                Action:
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
-                  - "logs:DescribeLogStreams"
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-cost-explorer-costanomoly-recommendations-function*"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${CostAnomalyCrawler}"
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -108,28 +101,28 @@ Resources:
         - "${CFDataName}-${Id}"
         - Id: !Select [0, !Split ["-", !Ref AWS::StackName]]
       Description: LambdaFunction to retreive AWS Cost Anomolies
-      Runtime: python3.8
+      Runtime: python3.10
       Code:
         ZipFile: |
-          import boto3.session
+          import os
+          import json
+          import logging
+          from datetime import date, timedelta, datetime
+
           import boto3
           from boto3.s3.transfer import S3Transfer
-          from datetime import date, timedelta, datetime
-          import logging
-          import json
-          import os
-          BENEFITS_CONSIDERED = True
+
           bucket = os.environ['S3_BUCKET']
+          PREFIX = os.environ['PREFIX'] # Not used
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
-          prefix = os.environ['PREFIX']
           MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+
           def start_crawler():
-              glue_client = boto3.client('glue')
+              glue = boto3.client('glue')
               try:
-                  glue_client.start_crawler(Name=CRAWLER_NAME)
-              except Exception as e:
-                  # Send some context about this error to Lambda Logs
-                  logging.warning("%s" % e)
+                  glue.start_crawler(Name=CRAWLER_NAME)
+              except Exception as exc:
+                  logging.warning(exc)
 
           def store_data_to_s3(flattened_data, path):
               today = date.today()
@@ -138,113 +131,117 @@ Resources:
               day = today.day
               local_file = '/tmp/tmp.json'
               with open(local_file, 'w') as f:
-                  #json.dump(flattened_data, f, default=str)
-                  f.write('\n' .join([json.dumps(result) for result in flattened_data]))
-
+                  f.write('\n'.join([json.dumps(result) for result in flattened_data]))
               if os.path.getsize(local_file) == 0:
                   print(f"No data in file for {path}")
                   return
-           
               s3client = boto3.client('s3')
-              key = f"{path}/MANAGEMENT_ACCOUNT_IDS={MANAGEMENT_ACCOUNT_IDS}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json"
+              key = today.strftime(f"{path}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json")
               print(f"Uploading file {local_file} to {bucket}/{key}")
               S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
 
-          ce = boto3.client('ce')
-
-          def get_ce_costanomaly(start_date, end_date):
-              client = boto3.client('ce')
-             
-              response_list = []
-              next_token = ''
+          def get_ce_costanomaly(ce, start_date, end_date):
+              results = []
+              next_token = None
               while True:
-                  response = client.get_anomalies(
+                  params = dict(
                       DateInterval={
-
-                          'StartDate': str(start_date),
-                          'EndDate': str(end_date)
+                        'StartDate': str(start_date),
+                        'EndDate': str(end_date)
                       },
-                      MaxResults=100
+                      MaxResults=100,
                   )
-                  response_list.append(response)
+                  if next_token:
+                      params['NextPageToken'] = next_token
+                  response = ce.get_anomalies(**params)
+                  results += response['Anomalies']
                   if 'NextPageToken' in response:
                       next_token = response['NextPageToken']
                   else:
                       break
-              return response_list
+              return results
+
           def flatten_results(results):
               flattened_results = []
-              for result in results:
-                  for anomaly in result['Anomalies']:
-                      flattened_anomaly = {
-                          'AnomalyId': anomaly['AnomalyId'],
-                          'AnomalyStartDate': anomaly['AnomalyStartDate'],
-                          'AnomalyEndDate': anomaly['AnomalyEndDate'],
-                          'DimensionValue': anomaly['DimensionValue'],
-                          'MaxImpact': anomaly['Impact']['MaxImpact'],
-                          'TotalActualSpend': anomaly['Impact']['TotalActualSpend'],
-                          'TotalExpectedSpend': anomaly['Impact']['TotalExpectedSpend'],
-                          'TotalImpact': anomaly['Impact']['TotalImpact'],
-                          'TotalImpactpercentage': anomaly['Impact'].get('TotalImpactPercentage', 0),
-                          'MonitorArn': anomaly['MonitorArn'],
-                          'LinkedAccount': anomaly['RootCauses'][0].get('LinkedAccount'),
-                          'LinkedAccountName': anomaly['RootCauses'][0].get('LinkedAccountName'),
-                          'Region': anomaly['RootCauses'][0].get('Region'),
-                          'Service': anomaly['RootCauses'][0].get('Service'),
-                          'UsageType': anomaly['RootCauses'][0].get('UsageType')
-                      }
-                      flattened_results.append(flattened_anomaly)
+              for anomaly in results:
+                  flattened_anomaly = {
+                      'AnomalyId': anomaly['AnomalyId'],
+                      'AnomalyStartDate': anomaly['AnomalyStartDate'],
+                      'AnomalyEndDate': anomaly['AnomalyEndDate'],
+                      'DimensionValue': anomaly['DimensionValue'],
+                      'MaxImpact': anomaly['Impact']['MaxImpact'],
+                      'TotalActualSpend': anomaly['Impact']['TotalActualSpend'],
+                      'TotalExpectedSpend': anomaly['Impact']['TotalExpectedSpend'],
+                      'TotalImpact': anomaly['Impact']['TotalImpact'],
+                      'TotalImpactpercentage': anomaly['Impact'].get('TotalImpactPercentage', 0),
+                      'MonitorArn': anomaly['MonitorArn'],
+                      'LinkedAccount': anomaly['RootCauses'][0].get('LinkedAccount'),
+                      'LinkedAccountName': anomaly['RootCauses'][0].get('LinkedAccountName'),
+                      'Region': anomaly['RootCauses'][0].get('Region'),
+                      'Service': anomaly['RootCauses'][0].get('Service'),
+                      'UsageType': anomaly['RootCauses'][0].get('UsageType')
+                  }
+                  flattened_results.append(flattened_anomaly)
               return flattened_results
+
           def calculate_dates():
-              # Set the start date as today minus 90 days as Cost anomolies are available for last 90days
-              start_date = datetime.now().date() - timedelta(days=90)
-              # Set the end date as today
               end_date = datetime.now().date()
+              start_date = datetime.now().date() - timedelta(days=90) #Cost anomolies are available for last 90days
+
               # Check if there are any objects in the S3 bucket
-              s3_bucket_name = bucket
-              s3_client = boto3.client('s3')
-              objects = s3_client.list_objects_v2(Bucket=s3_bucket_name)
+              objects = boto3.client('s3').list_objects_v2(Bucket=bucket)
               if 'Contents' in objects:
                   last_modified_date = get_last_modified_date(objects['Contents'])
-                  if last_modified_date is not None and last_modified_date >= start_date:
+                  if last_modified_date and last_modified_date >= start_date:
                       start_date = last_modified_date
                   if end_date == datetime.now().date():
-                      # Set the start date as end date minus 1 day
                       start_date = end_date - timedelta(days=1)
               return start_date, end_date
+
           def get_last_modified_date(contents):
               last_modified_dates = [obj['LastModified'].date() for obj in contents]
               last_modified_dates_within_90_days = [date for date in last_modified_dates if date >= datetime.now().date() - timedelta(days=90)]
               if last_modified_dates_within_90_days:
                   return max(last_modified_dates_within_90_days)
               return None
+
           def lambda_handler(event, context):
               logger = logging.getLogger()
-              logger.setLevel(logging.INFO)
-              sts_connection = boto3.client('sts')
+              sts = boto3.client('sts')
               start_date, end_date = calculate_dates()
-              # Call cost anomomaly detection API
-              response_list = get_ce_costanomaly(start_date, end_date)
-              flattened_data = flatten_results(response_list)
-              store_data_to_s3(flattened_data, prefix)
+              role_name = os.environ['ROLE']
+              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
+                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                  try:
+                      creds = sts.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")['Credentials']
+                      assumed_role_session = boto3.session.Session(
+                          aws_access_key_id=creds['AccessKeyId'],
+                          aws_secret_access_key=creds['SecretAccessKey'],
+                          aws_session_token=creds['SessionToken']
+                      )
+                      ce = assumed_role_session.client("ce", "us-east-1")
+                      data = get_ce_costanomaly(ce, start_date, end_date)
+                      flattened_data = flatten_results(data)
+                      store_data_to_s3(flattened_data, f'{PREFIX}/cost-anomaly/payer={payer_id}/')
+                  except Exception as exc:
+                    raise
               start_crawler()
               return "Successful"
-
       Handler: "index.lambda_handler"
       MemorySize: 2688
       Timeout: 600
-      Role:
-        Fn::GetAtt:
-          - CostAnomolyLambdaRole
-          - Arn
+      Role: !GetAtt CostAnomalyLambdaRole.Arn
       Environment:
         Variables:
           PREFIX: !Ref CFDataName
           S3_BUCKET: !Ref DestinationBucket
-          CRAWLER_NAME: !Ref CostAnomolyCrawler
+          CRAWLER_NAME: !Ref CostAnomalyCrawler
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
-  CostAnomolyCrawler:
+          ROLE: !Ref ManagementRoleName
+
+  CostAnomalyCrawler:
     Type: AWS::Glue::Crawler
     Properties:
       Name: !Sub
@@ -256,12 +253,12 @@ Resources:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
 
-  AthenaQueryAWSCostAnomoly:
+  AthenaQueryAWSCostAnomaly:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
-      Description: Provides a summary view of the costanomoly recommendations for same family
-      Name: cost-explorer-costanomoly-same-family
+      Description: Provides a summary view of the costanomaly recommendations for same family
+      Name: cost-explorer-costanomaly-same-family
       QueryString: >
         CREATE OR REPLACE VIEW "ca_summary_view" AS 
         SELECT DISTINCT
@@ -284,7 +281,7 @@ Resources:
         , linkedaccountname
         , usagetype
         FROM
-          "aws-cost-anomalies-db"."aws_cost_anomalies__us_east_1"
+          "${DatabaseName}"."aws_cost_anomalies"
         WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '1' MONTH))
         GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 

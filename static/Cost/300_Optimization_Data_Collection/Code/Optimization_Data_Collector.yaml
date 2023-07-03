@@ -94,7 +94,7 @@ Parameters:
     Default: Lambda-Assume-Role-Management-Account
   ManagementAccountID:
     Type: String
-   AllowedPattern: ([a-z0-9\-, ]*?$)
+    AllowedPattern: ([a-z0-9\-, ]*?$)
     Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   MultiAccountRoleName:
     Type: String

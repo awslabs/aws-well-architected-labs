@@ -13,8 +13,6 @@ Metadata:
         default: 'Available modules'
       Parameters:
         - IncludeTAModule
-        - IncludeRightsizingModule
-        - IncludeCostAnomalyModule
         - IncludeInventoryCollectorModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
@@ -29,10 +27,6 @@ Metadata:
         default: "Role Prefix"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
-      IncludeRightsizingModule:
-        default: 'Include Rightsizing Recommendations Data Collection Module'
-      IncludeCostAnomalyModule:
-        default: 'Include Cost Anomaly Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeECSChargebackModule:
@@ -61,18 +55,6 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no"  
-  IncludeRightsizingModule:
-    Type: String
-    Description: "Collects AWS Cost Explorer Rightsizing Recommendations"    
-    AllowedValues:
-      - "yes"
-      - "no" 
-  IncludeCostAnomalyModule:
-    Type: String
-    Description: "Collects AWS Cost Explorer Cost Anomolies Recommendations"    
-    AllowedValues:
-      - "yes"
-      - "no" 
   IncludeInventoryCollectorModule:
     Type: String
     Description: Collects data about AMIs, EBS volumes and snapshots
@@ -107,12 +89,6 @@ Parameters:
 Conditions:
   IncludeTAModulePolicy: !Equals 
     - !Ref IncludeTAModule
-    - "yes"
-  IncludeRightsizingModulePolicy: !Equals
-    - !Ref IncludeRightsizingModule
-    - "yes"
-  IncludeCostAnomalyModulePolicy: !Equals 
-    - !Ref IncludeCostAnomalyModule
     - "yes"
   IncludeInventoryCollectorModulePolicy: !Equals 
     - !Ref IncludeInventoryCollectorModule
@@ -186,34 +162,6 @@ Resources:
               - "trustedadvisor:RefreshCheck"                   
               - "support:DescribeTrustedAdvisorChecks"
               - "support:DescribeTrustedAdvisorCheckResult"
-            Resource: "*" ## only * can be used as a Resource for this action
-      Roles:
-        - Ref: LambdaRole
-  RightsizeReadOnlyPolicy:
-    Type: 'AWS::IAM::Policy'
-    Condition: IncludeRightsizingModulePolicy
-    Properties:
-      PolicyName: RightsizeReadOnlyPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "ce:GetRightsizingRecommendation"
-            Resource: "*" ## only * can be used as a Resource for this action
-      Roles:
-        - Ref: LambdaRole
-  CostAnomalyReadOnlyPolicy:
-    Type: 'AWS::IAM::Policy'
-    Condition: IncludeCostAnomalyModulePolicy
-    Properties:
-      PolicyName: CostAnomalyReadOnlyPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "ce:GetAnomalies"
             Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
