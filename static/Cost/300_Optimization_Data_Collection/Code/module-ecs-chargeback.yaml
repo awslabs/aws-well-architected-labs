@@ -5,6 +5,9 @@ Parameters:
     Type: String
     Description: Name of the S3 Bucket to that will be created by the management template
     AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
@@ -68,7 +71,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
@@ -88,7 +91,10 @@ Resources:
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                   - "sqs:GetQueueAttributes"
-                Resource: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue"
+                Resource: 
+                  - !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:EcsChargebackModule-TaskQueue"
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
               - Effect: "Allow"
                 Action:
                 - "ecs:ListAttributes"

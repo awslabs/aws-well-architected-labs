@@ -194,6 +194,15 @@ Resources:
                           s3:x-amz-acl:  bucket-owner-full-control
                           aws:SourceAccount: !Split [',', !Ref ManagementAccountID]
                   Resource: !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
+                - Effect: Deny
+                  Principal: "*"
+                  Action: s3:*
+                  Condition:
+                    Bool:
+                      aws:SecureTransport: 'false'
+                  Resource:
+                    - !Sub "arn:aws:s3:::${Name}-${AWS::Region}"
+                    - !Sub "arn:aws:s3:::${Name}-${AWS::Region}/*"
           ReplicaRole:
             Type: AWS::IAM::Role
             Properties:
@@ -262,6 +271,11 @@ Resources:
                     NoncurrentVersionExpiration:
                       NoncurrentDays: 1
                       NewerNoncurrentVersions: 1
+              PublicAccessBlockConfiguration:
+                BlockPublicAcls : true
+                BlockPublicPolicy : true
+                IgnorePublicAcls : true
+                RestrictPublicBuckets : true
   LambdaTriggerExportRole:
     Type: AWS::IAM::Role
     Properties:
@@ -285,7 +299,7 @@ Resources:
                 Action: "sts:AssumeRole"
                 Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   LambdaTriggerExport:
     Type: AWS::Lambda::Function
     Properties:
@@ -316,6 +330,7 @@ Resources:
           INCLUDE_MEMBER_ACCOUNTS = os.environ.get("INCLUDE_MEMBER_ACCOUNTS", 'yes').lower() == 'yes'
           REGIONS = os.environ["REGIONS"]
           ROLE_NAME = os.environ['ROLE_NAME']
+          ARCH = os.environ.get('ARCH', 'AWS_ARM64,CURRENT').split(',')
 
           def lambda_handler(event, context):
               today = date.today()
@@ -342,22 +357,26 @@ Resources:
                       for region in [r.strip() for r in REGIONS.split(',')]:
                           # create service client using the assumed role credentials
                           co = boto3.client("compute-optimizer", region_name=region, **account_b_creds)
+                          pars = {'recommendationPreferences': {'cpuVendorArchitectures': ARCH}}
                           export_funcs = {
-                              'ec2_instance': co.export_ec2_instance_recommendations,
-                              'auto_scale':   co.export_auto_scaling_group_recommendations,
-                              'lambda':       co.export_lambda_function_recommendations,
-                              'ebs_volume':   co.export_ebs_volume_recommendations,
-                              'ecs_service':  co.export_ecs_service_recommendations,
+                              'ec2_instance': (co.export_ec2_instance_recommendations, pars),
+                              'auto_scale':   (co.export_auto_scaling_group_recommendations, pars),
+                              'lambda':       (co.export_lambda_function_recommendations, {}),
+                              'ebs_volume':   (co.export_ebs_volume_recommendations, {}),
+                              'ecs_service':  (co.export_ecs_service_recommendations, {}),
                           }
                           bkt = BUCKET_PREFIX + '-' + region
                           print(f"INFO: bucket={bkt}")
-                          for name, func in export_funcs.items():
+                          for name, (func, pars) in export_funcs.items():
                               try:
                                   res = func(
                                       includeMemberAccounts=INCLUDE_MEMBER_ACCOUNTS,
-                                      s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'compute_optimizer/compute_optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'}
+                                      s3DestinationConfig={'bucket': bkt, 'keyPrefix': f'compute_optimizer/compute_optimizer_{name}/payer_id={payer_id}/year={year}/month={month}'},
+                                      **pars
                                   )
                                   result_messages.append(f"{region} {name} export queued. JobId: {res['jobId']}")
+                              except co.exceptions.LimitExceededException:
+                                  result_messages.append(f"{region} {name} export was already queued. Skiping.")
                               except Exception as exc:
                                   error_messages.append(f"ERROR: {region} {name} - {exc}")
                       if result_messages:
@@ -510,7 +529,7 @@ Resources:
                   - s3:DeleteBucket
                 Resource: !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
   FinalizeSetup:
     DependsOn:
       - LambdaTriggerExport
