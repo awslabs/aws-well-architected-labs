@@ -63,7 +63,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
@@ -72,7 +72,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
         - PolicyName: !Sub "${CFDataName}-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -80,8 +80,9 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "s3:PutObject"
-                Resource:
-                  !Ref DestinationBucketARN
+                Resource: 
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"

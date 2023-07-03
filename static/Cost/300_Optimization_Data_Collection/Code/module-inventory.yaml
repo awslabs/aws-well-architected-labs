@@ -63,7 +63,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
@@ -72,7 +72,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: "*"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
         - PolicyName: !Sub "${CFDataName}-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -80,8 +80,9 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "s3:PutObject"
-                Resource:
-                  !Ref DestinationBucketARN
+                Resource: 
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
@@ -430,7 +431,7 @@ Resources:
             "region" "region_code"
           , regionname
           FROM
-            storage.region_names
+            optimization_data.pricing_region_names
         )  region ON (inventory_ebs_data.region = region.region_code)
   AthenaEBSTAPricing:
     Type: AWS::Athena::NamedQuery
@@ -509,7 +510,7 @@ Resources:
                     ELSE unit
                 END, priceperunit) kv1
         FROM optimization_data.pricing_ec2
-        JOIN optimization_data.pricing_region_names ON region_names.regionname = pricing_ec2.location
+        JOIN optimization_data.pricing_region_names ON pricing_region_names.regionname = pricing_ec2.location
         WHERE "volume api name" IN ('io1','io2','gp3','gp2')
         GROUP BY region
         ),

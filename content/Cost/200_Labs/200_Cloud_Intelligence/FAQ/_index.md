@@ -27,11 +27,24 @@ CUR documentation can be found [here](https://docs.aws.amazon.com/cur/latest/use
 #### Where can I find more info about CUR delivery timelines and any FAQs for CUR?
 On average, CURs are updated up to 3 times daily, but that will fluctuate depending on the size of the file/amount of user usage and many other factors. you can monitor your CUR S3 bucket to see the date/time the new month's file is deposited. Within the CUR itself you can see the corresponding usage dates/times to infer which usage is reflected within that file.
 
-#### Do the Cloud Intelligent Dashboards support gzip compression formats or CSV CUR files?
-The CUR must be in Parquet (Athena) format. 
+#### Can I use exising Cost and Usage Report (CUR) instead of the one created by CID?
+We do not recommend using existing CUR unless it is for an installation within a Management (Payer) Account AND existing CUR strictly conforms to the CID requirements:
+{{%expand "Expand" %}}
 
-#### Do the Cloud Intelligent Dashboards support CUR without resource ids?
-The CUR must be have resource ids. 
+    * Additional report details: Include Resource IDs
+    * Time Granularity: Hourly
+    * Report Versioning: Overwrite existing report
+    * Report data integration for: Amazon Athena
+    * Compression type: Parquet
+
+{{% /expand%}}
+
+When creating a new CUR with CloudFormation you can request a backfill of up to 3 years of data via a support case. If you had an existing CUR with the required structure and you need more than 3 years of historical data, you can just copy the data from existing CUR bucket to the new bucket respecting the folders structure.
+
+By default, you can have up to 10 CUR configurations in parallel.
+
+#### Why do we need to copy Cost and Usage Report (CUR) across accounts? Isn't it less expensive to provide a direct access?
+CID uses s3 replication for CUR aggregation. The data will are not stored in the source account thanks to LifeCycle policy. The s3 replication is a cheap, secure and reliable way to aggregate data and avoid operational complexity.
 
 #### I want more than 7 months in my CUDOS / CID Dashboard
 
@@ -122,18 +135,31 @@ On KPI dashboard, under *Set KPI Goals* tab. Choose a specific KPI and adjust th
 
 {{% /expand%}}
 
+#### I am getting the error "SOURCE_RESOURCE_LIMIT_EXCEEDED" on dataset update - what do I do?
+Athena may face processing limitations if the CUR has a significant volume. To overcome this, one possible solution is to change the CUR granularity from 'hourly' to 'daily'. This will reduce the number of lines in CUR by x24, but it will also necessitate modifying the visuals that depict hourly ec2 usage by switching to daily granularity.
+
+#### I am getting the error "SQL_EXCEPTION View is stale; it must be re-created" - what do I do?
+{{%expand "Click here to expand answer" %}}
+This Athena issue can happen if the CUR table changes a lot. Please check following resources:
+- [https://repost.aws/knowledge-center/athena-view-is-stale-error](https://repost.aws/knowledge-center/athena-view-is-stale-error)
+- [Video](https://youtu.be/7GpIgSaVYoI?t=88)
+{{% /expand%}}
+
 #### I am getting the error "Casting from TimestampTZ to Timestamp is not supported" - what do I do?
 {{%expand "Click here to expand answer" %}}
 
-This error is caused by V3 engine of Athena. To fix it, you will need to update your Athena view ri_sp_mapping. Go to Athena, click on the three dots next to the view, select show/edit query, and replace it with one of the following (depending on the scenario). Change the FROM "${cur_table_name} to your CUR table name which you can see in Athena under tables. Click RUN on the query. Then visit QuickSight, and go to your datasets, click edit data set, then click save & publish. 
+This error is caused by V3 engine of Athena. To fix it, you will need to update your Athena view ri_sp_mapping. You need to update CID or just one view. Go to Athena, click on the three dots next to the view, select show/edit query, and replace it with one of the following (depending on the scenario). Change the FROM "${cur_table_name} to your CUR table name which you can see in Athena under tables. Click RUN on the query. Then visit QuickSight, and go to your datasets, click edit data set, then click save & publish. 
 
 - [RIs but not SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_ri.sql)
 - [SPs but not RIs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp.sql)
 - [Both RIs and SPs](https://raw.githubusercontent.com/aws-samples/aws-cudos-framework-deployment/main/cid/builtin/core/data/queries/cid/ri_sp_mapping_sp_ri.sql)
 
-
 {{% /expand%}}
 
+#### I see this error Error: CUR not detected and we have AWS Lake Formation activated
+{{%expand "Click here to expand answer" %}}
+CID is not compatible yet with AWS Lake Formation. You can deploy CID in an account where no Lake Formation activated.
+{{% /expand%}}
 
 #### How do I fix the ‘product_cache_engine’ or 'product_database_engine' cannot be resolved error?
 Some CID views dependent on having or historically having an RDS database instance and an ElastiCache instance run in your organization.
@@ -201,10 +227,11 @@ Assumptions:
 
 Cost breakdown using Calculator:
 * S3 cost for CUR: < $5-10/mon
-* QuickSight Enterprise: < $30/mon/author or $5max/mon/reader
+* QuickSight Enterprise: <= $24/mon/author or $5max/mon/reader [Pricing](https://aws.amazon.com/quicksight/pricing/)
 * QuickSight SPICE capacity: < $10-20/mon
-* Total: $100-$200
+* Total: $100-$200 
 
+Also there is free in trial for 30 days for 4 users of QuickSight, so the First month the overall cost of solution for the 1st month should be < $30.
 
 
 ### Customization

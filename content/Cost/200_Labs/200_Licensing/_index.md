@@ -3,7 +3,7 @@ title: "Level 200: Licensing"
 #menutitle: "Lab #1"
 date: 2020-08-30T11:16:09-04:00
 chapter: false
-weight: 11
+weight: 12
 hidden: false
 ---
 {{< rawhtml >}}

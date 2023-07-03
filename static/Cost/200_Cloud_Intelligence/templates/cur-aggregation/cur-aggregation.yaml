@@ -24,7 +24,6 @@ Metadata:
         default: "Source Account Ids"
 
 
-
 Parameters:
 
   ##
@@ -105,6 +104,11 @@ Resources:
           - Id: Object&Version Expiration
             Status: Enabled
             NoncurrentVersionExpirationInDays: 32 # 1 month 
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: 'W35'
+            reason: "Data buckets would generate too much logs"
 
   DestinationS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
@@ -233,6 +237,11 @@ Resources:
             Status: Enabled
             NoncurrentVersionExpirationInDays: 32 # 1 month
             ExpirationInDays: 64 # 2 months
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: 'W35'
+            reason: "Data buckets would generate too much logs"
 
   SourceS3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
@@ -517,6 +526,13 @@ Resources:
                 else:
                     print("SUCCESS")
                     cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, physicalResourceId)
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: 'W89'
+            reason: "Lambdas do not need VPC"
+          - id: 'W92'
+            reason: "One Time execution. No need for ReservedConcurrentExecutions"
 
 
 ###########################################################################
@@ -629,6 +645,13 @@ Resources:
                   cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, physicalResourceId )
               else:
                   cfnresponse.send(event, context, cfnresponse.FAILED, response_data, physicalResourceId )
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: 'W89'
+            reason: "Lambdas do not need VPC"
+          - id: 'W92'
+            reason: "One Time execution. No need for ReservedConcurrentExecutions"
 
   CIDLambdaAnalyticsExecutor:
     Type: Custom::CIDLambdaAnalyticsExecutor
