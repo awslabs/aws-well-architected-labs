@@ -501,6 +501,7 @@ Resources:
       TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-ecs-chargeback.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn
         GlueRoleArn: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]
