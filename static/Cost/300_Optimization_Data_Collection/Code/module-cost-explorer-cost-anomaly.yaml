@@ -271,7 +271,7 @@ Resources:
         , "month"
         , anomalyid
         , dimensionvalue
-        , CAST("from_iso8601_timestamp"("anomalystartdate") AS date) anomalystartdate
+        , CAST("from_iso8601_timestamp"("anomalystartdate") AS date) anomaly_start_date
         , CAST("from_iso8601_timestamp"("anomalyenddate") AS date) anomalylastupdatedate
         , CAST(maximpact AS int) maximpact
         , CAST(totalactualspend AS int) totalactualspend
