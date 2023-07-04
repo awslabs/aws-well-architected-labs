@@ -207,6 +207,7 @@ def trigger_update():
         f'Accounts-Collector-Function-{main_stack_name}',
         f'pricing-Lambda-Function-{main_stack_name}',
         f'cost-explorer-rightsizing-{main_stack_name}',
+        f'cost-explorer-cost-anomaly-{main_stack_name}',
         'WA-compute-optimizer-Trigger-Export',
         f'Organization-Data-{main_stack_name}',
         ]:

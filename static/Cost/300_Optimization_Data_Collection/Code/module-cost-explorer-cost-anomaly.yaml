@@ -86,10 +86,15 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "s3:PutObject"
-                  - "s3:ListBucket"
                   - "s3:GetObject"
+                  - "s3:PutObjectAcl"
                 Resource:
-                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
+              - Effect: "Allow"
+                Action:
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub "${DestinationBucketARN}"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
@@ -112,7 +117,8 @@ Resources:
           import boto3
           from boto3.s3.transfer import S3Transfer
 
-          bucket = os.environ['S3_BUCKET']
+          BUCKET = os.environ['S3_BUCKET']
+          ROLE = os.environ['ROLE']
           PREFIX = os.environ['PREFIX']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
           MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
@@ -137,8 +143,8 @@ Resources:
                   return
               s3client = boto3.client('s3')
               key = today.strftime(f"{path}/year={year}/month={month}/day={day}/{year}-{month}-{day}.json")
-              print(f"Uploading file {local_file} to {bucket}/{key}")
-              S3Transfer(s3client).upload_file(local_file, bucket, key, extra_args={'ACL': 'bucket-owner-full-control'})
+              print(f"Uploading file {local_file} to {BUCKET}/{key}")
+              S3Transfer(s3client).upload_file(local_file, BUCKET, key, extra_args={'ACL': 'bucket-owner-full-control'})
               print('file upload successful')
 
           def get_ce_costanomaly(ce, start_date, end_date):
@@ -185,12 +191,12 @@ Resources:
                   flattened_results.append(flattened_anomaly)
               return flattened_results
 
-          def calculate_dates():
+          def calculate_dates(s3_path):
               end_date = datetime.now().date()
               start_date = datetime.now().date() - timedelta(days=90) #Cost anomalies are available for last 90days
 
               # Check if there are any objects in the S3 bucket
-              objects = boto3.client('s3').list_objects_v2(Bucket=bucket)
+              objects = boto3.client('s3').list_objects_v2(Bucket=BUCKET, Prefix=s3_path)
               if 'Contents' in objects:
                   last_modified_date = get_last_modified_date(objects['Contents'])
                   if last_modified_date and last_modified_date >= start_date:
@@ -207,11 +213,10 @@ Resources:
           def lambda_handler(event, context):
               logger = logging.getLogger()
               sts = boto3.client('sts')
-              start_date, end_date = calculate_dates()
-              role_name = os.environ['ROLE']
-              MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
+              start_date, end_date = calculate_dates(s3_path=f'{PREFIX}/cost-anomaly-data/')
+              total_count = 0
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
-                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{role_name}"
+                  ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{ROLE}"
                   try:
                       creds = sts.assume_role(RoleArn=ROLE_ARN, RoleSessionName="cross_acct_lambda")['Credentials']
                       assumed_role_session = boto3.session.Session(
@@ -222,10 +227,12 @@ Resources:
                       ce = assumed_role_session.client("ce", "us-east-1")
                       data = get_ce_costanomaly(ce, start_date, end_date)
                       flattened_data = flatten_results(data)
-                      store_data_to_s3(flattened_data, f'{PREFIX}/cost-anomaly/payer={payer_id}/')
+                      total_count += len(flattened_data)
+                      store_data_to_s3(flattened_data, f'{PREFIX}/cost-anomaly-data/payer_id={payer_id}')
                   except Exception as exc:
-                    raise
-              start_crawler()
+                      print(exc)
+              if total_count:
+                  start_crawler()
               return "Successful"
       Handler: "index.lambda_handler"
       MemorySize: 2688
@@ -249,22 +256,22 @@ Resources:
       DatabaseName: !Ref DatabaseName
       Targets:
         S3Targets:
-          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/cost-anomaly-data/"
 
   AthenaQueryAWSCostAnomaly:
     Type: AWS::Athena::NamedQuery
     Properties:
       Database: !Ref DatabaseName
       Description: Provides a summary view of the costanomaly recommendations for same family
-      Name: cost-explorer-costanomaly-same-family
-      QueryString: >
-        CREATE OR REPLACE VIEW "ca_summary_view" AS 
+      Name: cost-explorer-cost-anomaly-data
+      QueryString: !Sub |
+        CREATE OR REPLACE VIEW "cost_anomalies" AS
         SELECT DISTINCT
           "year"
         , "month"
         , anomalyid
         , dimensionvalue
-        , CAST("from_iso8601_timestamp"("anomalystartdate") AS date) anomaly_start_date
+        , CAST("from_iso8601_timestamp"("anomalystartdate") AS date) anomalystartdate
         , CAST("from_iso8601_timestamp"("anomalyenddate") AS date) anomalylastupdatedate
         , CAST(maximpact AS int) maximpact
         , CAST(totalactualspend AS int) totalactualspend
@@ -279,30 +286,24 @@ Resources:
         , linkedaccountname
         , usagetype
         FROM
-          "${DatabaseName}"."aws_cost_anomalies"
+          "${DatabaseName}"."cost_anomaly_data"
         WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '1' MONTH))
         GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 
   CloudWatchTrigger:
     Type: AWS::Events::Rule
     Properties:
-      Description: Daily Notification Event for lambda data
-      Name: !Sub "${CFDataName}-Daily-Scheduler"
+      Description: Notification Event for lambda trigger
+      Name: !Sub "${CFDataName}-Scheduler"
       ScheduleExpression: !Ref Schedule
       State: ENABLED
       Targets:
-        - Arn:
-            Fn::GetAtt:
-              - LambdaFunction
-              - Arn
-          Id: WeeklyTriggerForEBSUtilization
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: TriggerLambda
   EventPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName:
-        Fn::GetAtt:
-          - LambdaFunction
-          - Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceAccount: !Ref "AWS::AccountId"
