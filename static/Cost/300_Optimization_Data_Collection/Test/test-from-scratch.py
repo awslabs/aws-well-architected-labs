@@ -296,9 +296,10 @@ def test_compute_optimizer_export_triggered():
     for region in ['us-east-1', 'eu-west-1']:
         co = boto3.client('compute-optimizer', region_name=region)
         jobs = co.describe_recommendation_export_jobs()['recommendationExportJobs']
-        logger.info(f'Jobs: {jobs}')
         jobs_since_start = [job for job in jobs if job['creationTimestamp'].replace(tzinfo=None) > start_time.replace(tzinfo=None)]
-        assert len(jobs_since_start) == 5, 'Not all jobs launched'
+        if len(jobs_since_start) < 5:
+           logger.info(f'Jobs: {jobs_since_start}')
+           raise Exception(f'Not all jobs launched {len(jobs_since_start)}, must be 5 in {region}')
         jobs_failed = [job for job in jobs_since_start if job.get('status') == 'failed']
         assert len(jobs_failed) == 0, f'Some jobs failed {jobs_failed}'
     # TODO: check how we can add better test, taking into account 15-30 mins delay of export in CO
