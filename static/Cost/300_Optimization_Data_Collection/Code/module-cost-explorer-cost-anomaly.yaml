@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Retrieves AWS Cost Explorer Cost Anomolies details accross AWS organization
+Description: Retrieves AWS Cost Explorer Cost Anomalies details accross AWS organization
 Parameters:
   DatabaseName:
     Type: String
@@ -100,7 +100,7 @@ Resources:
       FunctionName: !Sub
         - "${CFDataName}-${Id}"
         - Id: !Select [0, !Split ["-", !Ref AWS::StackName]]
-      Description: LambdaFunction to retreive AWS Cost Anomolies
+      Description: LambdaFunction to retreive AWS Cost Anomalies
       Runtime: python3.10
       Code:
         ZipFile: |
@@ -113,7 +113,7 @@ Resources:
           from boto3.s3.transfer import S3Transfer
 
           bucket = os.environ['S3_BUCKET']
-          PREFIX = os.environ['PREFIX'] # Not used
+          PREFIX = os.environ['PREFIX']
           CRAWLER_NAME = os.environ['CRAWLER_NAME']
           MANAGEMENT_ACCOUNT_IDS = os.environ['MANAGEMENT_ACCOUNT_IDS']
 
@@ -187,7 +187,7 @@ Resources:
 
           def calculate_dates():
               end_date = datetime.now().date()
-              start_date = datetime.now().date() - timedelta(days=90) #Cost anomolies are available for last 90days
+              start_date = datetime.now().date() - timedelta(days=90) #Cost anomalies are available for last 90days
 
               # Check if there are any objects in the S3 bucket
               objects = boto3.client('s3').list_objects_v2(Bucket=bucket)
