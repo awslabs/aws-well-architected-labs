@@ -127,8 +127,6 @@ Resources:
               AWS:
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
   AMIPolicy:
     Type: 'AWS::IAM::Policy'
@@ -177,7 +175,7 @@ Resources:
             Action:
               - "budgets:ViewBudget"
               - "budgets:Describe*"
-            Resource: "arn:aws:budgets::*:budget/*"
+            Resource: "arn:aws:budgets::*:budget/*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   InventoryCollectorPolicy:
@@ -195,7 +193,7 @@ Resources:
               - "ec2:DescribeVolumes"
               - "ec2:DescribeSnapshots"
               - "ec2:DescribeSnapshotAttribute"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole
   ECSChargebackPolicy:
@@ -224,7 +222,7 @@ Resources:
               - "ecs:DescribeTasks"
               - "ecs:ListTaskDefinitions"
               - "ecs:ListClusters"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole 
   RDSUtilizationPolicy:
@@ -280,7 +278,7 @@ Resources:
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
             Resource: "*"
-          - Effect: "Allow"
+          - Effect: "Allow" ## only * can be used for inventory
             Action:
               - "ec2:DescribeRegions"
               - "cloudwatch:GetMetricStatistics"
@@ -301,6 +299,6 @@ Resources:
               - "cloudwatch:Describe*"
               - "cloudwatch:Get*"
               - "cloudwatch:List*"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole 

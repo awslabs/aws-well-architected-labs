@@ -10,7 +10,7 @@
     EC2Instance:
       Type: AWS::EC2::Instance
       Properties:
-        ImageId: ami-064d05b4fe8515623
+        ImageId: ami-02f3f602d23f1659d
         InstanceType: t2.micro
         Tags: 
           - Key: "Name"
