@@ -18,6 +18,7 @@ May 2022
 - Andy Brown, OPTICS Manager Commercial Architects IBUs
 - Xianshu Zeng, OPTICS Commercial Architect
 - Rem Baumann, OPTICS Commercial Architect
+- Yash Bindlish, Enterprise Support Manager
 
 
 ## Feedback
