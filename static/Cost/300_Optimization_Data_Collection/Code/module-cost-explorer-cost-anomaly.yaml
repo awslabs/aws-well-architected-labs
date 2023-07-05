@@ -192,12 +192,12 @@ Resources:
               end_date = datetime.now().date()
               start_date = datetime.now().date() - timedelta(days=90) #Cost anomalies are available for last 90days
 
-              # Check if there are any objects in the S3 bucket
-              objects = boto3.client('s3').list_objects_v2(Bucket=BUCKET, Prefix=s3_path)
-              if 'Contents' in objects:
-                  last_modified_date = get_last_modified_date(objects['Contents'])
-                  if last_modified_date and last_modified_date >= start_date:
-                      start_date = last_modified_date
+              # Check the create time of objects in the S3 bucket
+              paginator = boto3.client('s3').get_paginator('list_objects_v2')
+              contents = sum( [page.get('Contents', []) for page in paginator.paginate(Bucket=BUCKET, Prefix=s3_path)], [])
+              last_modified_date = get_last_modified_date(contents)
+              if last_modified_date and last_modified_date >= start_date:
+                  start_date = last_modified_date
               return start_date, end_date
 
           def get_last_modified_date(contents):
@@ -211,6 +211,7 @@ Resources:
               logger = logging.getLogger()
               sts = boto3.client('sts')
               start_date, end_date = calculate_dates(s3_path=f'{PREFIX}/cost-anomaly-data/')
+              print(f'start_date={start_date}, end_date={end_date}')
               total_count = 0
               for payer_id in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
                   ROLE_ARN = f"arn:aws:iam::{payer_id}:role/{ROLE}"
@@ -254,38 +255,6 @@ Resources:
       Targets:
         S3Targets:
           - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/cost-anomaly-data/"
-
-  AthenaQueryAWSCostAnomaly:
-    Type: AWS::Athena::NamedQuery
-    Properties:
-      Database: !Ref DatabaseName
-      Description: Provides a summary view of the costanomaly recommendations for same family
-      Name: cost-explorer-cost-anomaly-data
-      QueryString: !Sub |
-        CREATE OR REPLACE VIEW "cost_anomalies" AS
-        SELECT DISTINCT
-          "year"
-        , "month"
-        , anomalyid
-        , dimensionvalue
-        , CAST("from_iso8601_timestamp"("anomalystartdate") AS date) anomaly_start_date
-        , CAST("from_iso8601_timestamp"("anomalyenddate") AS date) anomalylastupdatedate
-        , CAST(maximpact AS int) maximpact
-        , CAST(totalactualspend AS int) totalactualspend
-        , CAST(totalexpectedspend AS int) totalexpectedspend
-        , CAST(totalimpact AS int) tota_impact
-        , CAST(totalimpactpercentage AS int) totalimpactpercentage
-        , EXTRACT(DAY FROM (CAST("from_iso8601_timestamp"("anomalyenddate") AS date) - CAST("from_iso8601_timestamp"("anomalystartdate") AS date))) duration
-        , monitorarn
-        , region
-        , service
-        , linkedaccount
-        , linkedaccountname
-        , usagetype
-        FROM
-          "${DatabaseName}"."cost_anomaly_data"
-        WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '1' MONTH))
-        GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 
   CloudWatchTrigger:
     Type: AWS::Events::Rule
