@@ -19,17 +19,14 @@ Parameters:
     Type: String
     AllowedPattern: ([a-z0-9\-, ]*?$)
     Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
-  MultiAccountRoleName:
-    Type: String
-    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
   CFDataName:
     Type: String
     Description: The name of what this cf is doing.
     Default: cost-explorer-cost-anomaly
   Schedule:
     Type: String
-    Default: "cron(30 12 L * ? *)"
-    Description: Cloud watch event Schedule to trigger the lambda
+    Default: "cron(15 0 * * ? *)"
+    Description: CloudWatch event Schedule to trigger the lambda
   GlueRoleARN:
     Type: String
   RolePrefix:
