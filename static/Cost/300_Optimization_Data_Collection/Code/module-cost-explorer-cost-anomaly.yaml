@@ -281,11 +281,12 @@ Resources:
         , service
         , linkedaccount
         , linkedaccountname
+        , ManagementAccountId
         , usagetype
         FROM
           "${DatabaseName}"."cost_anomaly_data"
-        WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '1' MONTH))
-        GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+        WHERE ("date_parse"("concat"("year", "month", "day"), '%Y%m%d') >= (current_timestamp - INTERVAL  '3' MONTH))
+        GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,19
 
   CloudWatchTrigger:
     Type: AWS::Events::Rule
