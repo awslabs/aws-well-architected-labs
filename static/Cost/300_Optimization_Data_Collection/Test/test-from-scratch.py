@@ -146,7 +146,6 @@ def initial_deploy_stacks():
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeInventoryCollectorModule', 'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeRDSUtilizationModule',     'ParameterValue': "yes"},
-                {'ParameterKey': 'IncludeRightsizingModule',        'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeTAModule',                 'ParameterValue': "yes"},
                 {'ParameterKey': 'MultiAccountRoleName',            'ParameterValue': "Optimization-Data-Multi-Account-Role"},
                 {'ParameterKey': 'RolePrefix',                      'ParameterValue': "WA-"},
@@ -167,6 +166,7 @@ def initial_deploy_stacks():
                 {'ParameterKey': 'ComputeOptimizerRegions',         'ParameterValue': "us-east-1,eu-west-1"},
                 {'ParameterKey': 'DestinationBucket',               'ParameterValue': "costoptimizationdata"},
                 {'ParameterKey': 'IncludeTransitGatewayModule',     'ParameterValue': "yes"},
+                {'ParameterKey': 'IncludeCostAnomalyModule',        'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeBudgetsModule',            'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeComputeOptimizerModule',   'ParameterValue': "yes"},
                 {'ParameterKey': 'IncludeECSChargebackModule',      'ParameterValue': "yes"},
@@ -207,6 +207,7 @@ def trigger_update():
         f'Accounts-Collector-Function-{main_stack_name}',
         f'pricing-Lambda-Function-{main_stack_name}',
         f'cost-explorer-rightsizing-{main_stack_name}',
+        f'cost-explorer-cost-anomaly-{main_stack_name}',
         'WA-compute-optimizer-Trigger-Export',
         f'Organization-Data-{main_stack_name}',
         ]:
