@@ -101,6 +101,8 @@ PILLAR_PROPER_NAME_MAP = {
                     "sustainability": "Sustainability"
 }
 
+IMPROVMENT_PLAN_FALLBACK_URL = 'https://wa.aws.amazon.com/TypeII/en/wellarchitected/wellarchitected.{}.improvement-plan.en.html'
+
 # Helper class to convert a datetime item to JSON.
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, z):
@@ -299,13 +301,14 @@ def getQuestionDetails(
     except botocore.exceptions.ClientError as e:
         logger.error("ERROR - Unexpected error: %s" % e)
 
-
     qDescription = jmespath.search("Answer.QuestionDescription", response)
     qImprovementPlanUrl = jmespath.search("Answer.ImprovementPlanUrl", response)
+    if qImprovementPlanUrl is None:
+        qImprovementPlanUrl = IMPROVMENT_PLAN_FALLBACK_URL.format(questionId)
+
     qHelpfulResourceUrl = jmespath.search("Answer.HelpfulResourceUrl", response)
     qNotes = jmespath.search("Answer.Notes", response)
     return qDescription, qImprovementPlanUrl, qHelpfulResourceUrl, qNotes
-
 
 def updateAnswersForQuestion(
     waclient,
@@ -582,13 +585,14 @@ def lensTabCreation(
 
             cellID = cellPosition + 1
 
-            # If the question has been answered (which we do for the TEMP workload) we grab the URL and parse for the HTML content
             if qImprovementPlanUrl:
                 jmesquery = "[?QuestionId=='"+answers['QuestionId']+"'].Choices[].ChoiceId"
                 choiceList = jmespath.search(jmesquery, allQuestionsForLens)
                 bpList = getBestPractices(WACLIENT,workloadId,lens,answers['QuestionId'],answers['PillarId'],qImprovementPlanUrl,choiceList)
+                bpIds = bpList.keys()
             else:
                 bpList = []
+                bpIds = []
 
             startingCellID=cellID
             # If its the first time through this particular pillar question:
@@ -614,18 +618,19 @@ def lensTabCreation(
                 # Start writing each of the BP's, details, etc
                 cell = 'D'+str(cellID)
                 Title = choices['Title'].replace('  ','').replace('\t', '').replace('\n', '')
-                if any(choices['ChoiceId'] in d for d in bpList):
-                    bpUrl = bpList[choices['ChoiceId']]['BestPracticeUrl']
-                    bpRisk = bpList[choices['ChoiceId']]['BestPracticeRisk']
-
+                choiceId = choices['ChoiceId']
+                if choiceId in bpIds:
+                    bpUrl = bpList[choiceId]['BestPracticeUrl']
+                    bpRisk = bpList[choiceId]['BestPracticeRisk']
                     worksheet.write_url(cell, bpUrl, myCell, string=Title)
+
                     cell = 'E'+str(cellID)
                     worksheet.write(cell, bpRisk, myCell)
                 else:
                     worksheet.write(cell, Title, myCell)
                     cell = 'E'+str(cellID)
                     worksheet.write(cell, "", myCell)
-
+                
                 # Add all Details for each best practice/choice
                 cell = 'F'+str(cellID)
                 # Remove all of the extra spaces in the description field
