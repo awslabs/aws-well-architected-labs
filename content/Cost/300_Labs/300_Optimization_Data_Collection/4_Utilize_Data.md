@@ -17,12 +17,6 @@ You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard](http
 
 ### AWS Organization Data and The Cost Intelligence Dashboard
 
-This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organization data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
-
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/EGSIpanIuH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}
-
 You can also use the below query to update your **account_map** table in athena to read from this data
 
 {{%expand "New Account Map Query" %}}
@@ -259,11 +253,6 @@ This section requires you to have the **Inventory Module** and the **Trusted Adv
 
 In these labs we have a couple of amazing cost dashboards that can be found [here](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/). If you would like to add your budget data into these dashboard please follow the below steps. Data must be collected and the crawler finished running before this query can be run. 
 There is a saved query called **aws_budgets** created in the CloudFormation. This is used when connecting to dashboard.
-
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2SFO4SF0WN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}
-
 
 {{%expand "Guide to add AWS Budgets into Cost Dashboard" %}}
 

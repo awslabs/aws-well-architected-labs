@@ -17,7 +17,3 @@ If you have cost allocation tags or cost categories setup in your AWS account, y
 ## Adding Tags
 
 Follow the steps in this tutorial to add tags to any of your CID dashboards. 
-
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Yc64XsDo30M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}

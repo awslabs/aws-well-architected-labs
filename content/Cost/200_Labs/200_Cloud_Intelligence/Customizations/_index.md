@@ -19,10 +19,6 @@ Now that you have the Cloud Intelligence Dashboards deployed, you can follow som
 
 The first step to customizing your dashboards is to make sure you save your QuickSight dashboard as an Analysis. 
 
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/YNQBBM5RQtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}
-
 {{%expand "Click here to expand step by step instructions on creating an editable Analysis" %}}
 
 1. Visit your dashboard and in the top right, click **share** dashboard, then **share dashboard**. 

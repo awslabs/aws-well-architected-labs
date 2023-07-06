@@ -21,12 +21,6 @@ We recommend deployment of **CUDOS**, **KPI** and **Cost Intelligence Dashboard*
 
 If you do not want to use CloudFormation to setup your dashboards, you have an option of [using our command line tool](../alternative_deployments).
 
-
-{{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-{{< /rawhtml >}}
-
-
 ## Architecture
 
 ![Images/arch5.png](/Cost/200_Cloud_Intelligence/Images/arch5.png?classes=lab_picture_small)
