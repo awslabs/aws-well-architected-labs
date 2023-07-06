@@ -142,7 +142,7 @@ AWS Transit Gateway allows you to connect Cloud Watch data and Cost and Usage Re
 {{% /expand%}}
 
 
-
+{{%expand "Cost Explorer Cost Anomalies Findings" %}}
 ### Cost Explorer Cost Anomalies Findings
 This module will collect Cost Anomolies findings from AWS Cost Explorer in your management account. You can use the saved Athena query as a view to query these results and track your recommendations. Find out more about the recommendations [here.](https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html)
 This Data will be partitioned by year, month, day. 
