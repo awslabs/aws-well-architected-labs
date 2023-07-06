@@ -131,7 +131,7 @@ Please refer to the [AWS Shield pricing page](https://aws.amazon.com/waf/pricing
         bill_payer_account_id,
         line_item_usage_account_id,
         line_item_resource_id, 
-        product_resource_type,
+        line_item_operation,
         SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
     FROM
         ${table_name}
@@ -144,7 +144,7 @@ Please refer to the [AWS Shield pricing page](https://aws.amazon.com/waf/pricing
         bill_payer_account_id,
         line_item_usage_account_id,
         line_item_resource_id,
-        product_resource_type
+        line_item_operation
     ORDER BY
         sum_line_item_unblended_cost DESC,
         line_item_resource_id
