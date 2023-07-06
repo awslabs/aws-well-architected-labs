@@ -49,6 +49,6 @@ Refer to S3 Intelligent-Tiering [Pricing](https://aws.amazon.com/s3/pricing/) pa
 The lab should take approximately 30 minutes to complete
 
 ## Lab Sections
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_int_tiering_overview/" button_next_text="Start Lab" first_step="true" />}}

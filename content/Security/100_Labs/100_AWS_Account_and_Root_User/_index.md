@@ -28,7 +28,7 @@ This hands-on lab will guide you through the introductory steps to configure con
 
 ## Steps
 
-{{% children  %}}
+{{ children }}
 
 ## References & Useful Resources
 

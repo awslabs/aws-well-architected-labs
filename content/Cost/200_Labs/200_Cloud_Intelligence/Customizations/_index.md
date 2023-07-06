@@ -40,4 +40,4 @@ The first step to customizing your dashboards is to make sure you save your Quic
 {{%/expand%}}
 
 ### Customization Guides
-{{% children  /%}}
+{{ children }}

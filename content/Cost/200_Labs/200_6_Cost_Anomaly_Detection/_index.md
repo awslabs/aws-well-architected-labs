@@ -68,4 +68,4 @@ AWS Cost Anomaly Detection service is free to use. The only applicable charges a
 {{< prev_next_button link_next_url="./1_cad_intro/" button_next_text="Start Lab" first_step="true" />}}
 
 Steps:
-{{% children  /%}}
+{{ children }}

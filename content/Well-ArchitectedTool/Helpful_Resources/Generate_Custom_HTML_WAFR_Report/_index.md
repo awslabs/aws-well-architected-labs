@@ -27,6 +27,6 @@ The purpose of this lab is to teach you how to use the AWS SDK for Python (Boto3
 * There are no costs for copying or creating new WellArchitected Reviews
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_configure_env/" button_next_text="Start Lab" first_step="true" />}}

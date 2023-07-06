@@ -49,6 +49,6 @@ AWS Cost Explorer and Cost and Usage Report provide the ability to break down AW
 - The lab should take approximately 15 minutes to complete
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_tag_policy/" button_next_text="Start Lab" first_step="true" />}}

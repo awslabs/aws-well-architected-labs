@@ -40,7 +40,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 {{% /notice %}}
 
 ## Steps:
-{{% children  %}}
+{{ children }}
 
 ## References & useful resources
 

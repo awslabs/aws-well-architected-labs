@@ -20,7 +20,7 @@ Use the children shortcode to list the child pages of a page and the further des
 
 	{{%/* children  */%}}
 
-{{% children %}}
+{{ children }}
 
 	{{%/* children description="true" */%}}
 

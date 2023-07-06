@@ -9,4 +9,4 @@ hidden: false
 Now when you have Cloud Intelligence Dashboards deployed you can share your dashboards with users to bring your decision makers closer to the data and periodically update dashboards to get the latest features released by Cloud Intelligence Dashboards team.
 
 ### Post Deployment Steps:
-{{% children  /%}}
+{{ children }}

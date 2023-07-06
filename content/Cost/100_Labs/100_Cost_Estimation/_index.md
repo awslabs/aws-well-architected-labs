@@ -39,6 +39,6 @@ This hands-on lab will guide you through the steps to estimate AWS costs for a s
 - N/A
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_launch_aws_pricing_calculator/" button_next_text="Start Lab" first_step="true" />}}

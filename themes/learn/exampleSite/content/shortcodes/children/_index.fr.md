@@ -20,7 +20,7 @@ Utilisez le shortcode *children* pour lister les pages filles de la page et tous
 
 	{{%/* children  */%}}
 
-{{% children %}}
+{{ children }}
 
 	{{%/* children description="true"   */%}}
 

@@ -43,6 +43,6 @@ This hands-on lab will guide you through deploying an automatic CUR query & E-ma
 
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_architecture/" button_next_text="Start Lab" first_step="true" />}}

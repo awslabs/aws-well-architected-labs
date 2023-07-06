@@ -113,7 +113,7 @@ Be able to create the below in a sub account where your CUR data is accessible:
 - 30 minutes
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 
 {{< prev_next_button link_next_url="./1_grant_permissions/" button_next_text="Start Lab" first_step="true" />}}

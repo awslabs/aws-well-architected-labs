@@ -35,7 +35,7 @@ Use of AWS Compute Optimizer is free, but costs associated with CloudWatch and E
 - NOTE: There may be permission error messages during the lab, as the console may require additional privileges. These errors will not impact the lab, and we follow security best practices by implementing the minimum set of privileges required.
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 
 {{< prev_next_button link_next_url="./1_cloudwatch_intro/" button_next_text="Start Lab" first_step="true" />}}

@@ -44,4 +44,4 @@ In the lab, you will deploy an EC2 instance with Apache and PHP installed. The w
 
 
 ### Steps
-{{% children %}}
+{{ children }}

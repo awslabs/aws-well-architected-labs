@@ -50,6 +50,6 @@ The lab will create a lambda function, which reads all the AWS Well-Architected 
 - 15minutes
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_configure_services/" button_next_text="Start Lab" first_step="true" />}}

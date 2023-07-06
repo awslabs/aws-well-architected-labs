@@ -58,4 +58,4 @@ We have included CloudFormation templates for the first few steps to get your st
 {{% /notice %}}
 
 ## Steps:
-{{% children  %}}
+{{ children }}

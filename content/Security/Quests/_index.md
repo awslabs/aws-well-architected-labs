@@ -12,4 +12,4 @@ Quests are designed to collate a group of relevant labs and other resources toge
 The following quests are aligned to the security [best practice questions](https://wa.aws.amazon.com/wat.pillar.security.en.html) in AWS Well-Architected.
 
 #### List of quests available
-{{% children description="true" %}}
+{{ children description="true" }}

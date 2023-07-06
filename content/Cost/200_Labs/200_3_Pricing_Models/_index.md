@@ -38,6 +38,6 @@ Commitment discounts offer lower prices when you make a commitment to a minimum 
 - There are no associated costs for this lab
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_ri_report/" button_next_text="Start Lab" first_step="true" />}}

@@ -42,7 +42,7 @@ You will use the AWS Management Console and AWS CloudFormation to automate the c
 
 ## Steps:
 
-{{% children  %}}
+{{ children }}
 
 ## References & Useful Resources
 

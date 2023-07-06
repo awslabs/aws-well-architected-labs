@@ -42,6 +42,6 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 - The lab should take approximately 15 minutes to complete
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_create_test_group/" button_next_text="Start Lab" first_step="true" />}}

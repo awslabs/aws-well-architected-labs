@@ -39,4 +39,4 @@ The knowledge you acquire will help you learn how to programmatically access con
 {{< prev_next_button link_next_url="./1_deploy_cfn/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children /%}}
+{{ children }}

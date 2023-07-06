@@ -47,7 +47,7 @@ If you are running this at an AWS sponsored workshop then you may be provided wi
 
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 ## Costs
 {{% notice note %}}

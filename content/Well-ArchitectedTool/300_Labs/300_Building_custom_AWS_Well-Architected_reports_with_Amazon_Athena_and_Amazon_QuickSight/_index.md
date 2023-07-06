@@ -52,6 +52,6 @@ This pattern can extend the visibility of HRIs identified in the AWS WA Tool to 
 - Create and publish QuickSight dashboards
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_etl_wa_workload_data/" button_next_text="Start Lab" first_step="true" />}}

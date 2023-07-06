@@ -14,4 +14,4 @@ For more information about Operational Excellence on AWS visit the Well-Architec
 
 ## Labs
 
-{{% children depth=2 %}}
+{{ children depth=2 }}

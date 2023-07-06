@@ -39,6 +39,6 @@ This lab introduces the AWS Well-Architected Tool's [Custom lenses feature](http
 * [Implementing the AWS Well-Architected Custom Lens lifecycle in your organization](https://aws.amazon.com/blogs/architecture/implementing-the-aws-well-architected-custom-lens-lifecycle-in-your-organization/)
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_ddb_config_pillars_and_bps/" button_next_text="Start Lab" first_step="true" />}}

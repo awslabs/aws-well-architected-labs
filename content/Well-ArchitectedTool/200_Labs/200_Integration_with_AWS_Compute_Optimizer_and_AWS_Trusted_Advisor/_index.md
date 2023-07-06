@@ -52,6 +52,6 @@ To retrieve cost optimization data from AWS Compute Optimizer and AWS Trusted Ad
 - The lab should take approximately 30 minutes to complete
  
 ## Steps
-{{% children /%}}
+{{ children }}
  
 {{< prev_next_button link_next_url="./1_prerequisites/" button_next_text="Start Lab" first_step="true" />}}

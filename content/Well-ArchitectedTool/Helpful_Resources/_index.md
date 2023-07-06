@@ -8,4 +8,4 @@ disableToc = "false"
 +++
 
 #### List of helpful resources available
-{{% children %}}
+{{ children }}

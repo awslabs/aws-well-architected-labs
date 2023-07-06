@@ -1,14 +1,14 @@
 ---
-title: "Level 100: Monitoring an Amazon Linux EC2 instance with CloudWatch Dashboards"
-menutitle: "Monitoring Linux EC2 with CloudWatch Dashboards"
-date: 2020-12-01T11:16:08-04:00
+title: "Level 100: Monitoring Windows EC2 instance with CloudWatch Dashboards"
+menutitle: "Monitoring Windows EC2 with CloudWatch Dashboards"
+date: 2020-11-19T11:16:08-04:00
 chapter: false
-weight: 4
+weight: 3
 hidden: false
-description: "How to configure an Amazon CloudWatch Dashboard to get aggregated views of the health and performance of a Amazon Linux EC2 instance."
+description: "How to configure an Amazon CloudWatch Dashboard to get aggregated views of the health and performance of a Windows EC2 instance."
 tags:
- - Linux
- - Amazon Linux
+ - Windows Server
+ - Windows
  - EC2
  - CloudWatch
  - CloudWatch Dashboard
@@ -19,12 +19,12 @@ tags:
 
 ## Introduction
 
-This hands-on lab will guide you through creating an Amazon EC2 instance running Amazon Linux and then configuring a Amazon CloudWatch Dashboard to get aggregated views of the health and performance information for that instance. This lab should enables you to quickly get started with CloudWatch monitoring and explore account and resource-based views of metrics. You can find more best practices by reading the [Performance Efficiency Pillar of the AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html).
+This hands-on lab will guide you through creating an Amazon EC2 instance for Windows and then configuring a Amazon CloudWatch Dashboard to get aggregated views of the health and performance information for that instance. This lab should enables you to quickly get started with CloudWatch monitoring and explore account and resource-based views of metrics. You can find more best practices by reading the [Performance Efficiency Pillar of the AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html).
 The skills you learn will help you secure your workloads in alignment with the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/).
 
 ## Goals
 
-* Monitor a Amazon Linux EC2 machine to identify CPU and memory bottlenecks
+* Monitor a Windows EC2 machine to identify CPU and memory bottlenecks
 
 ## Prerequisites
 
@@ -46,4 +46,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 {{< prev_next_button link_next_url="./1_deploy_vpc/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children  /%}}
+{{ children }}

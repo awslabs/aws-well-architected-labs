@@ -27,4 +27,4 @@ You will use the AWS Management Console and AWS CloudFormation to guide you thro
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab.
 
 ## Steps:
-{{% children  %}}
+{{ children }}

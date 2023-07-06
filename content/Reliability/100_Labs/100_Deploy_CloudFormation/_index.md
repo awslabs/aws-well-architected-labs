@@ -44,7 +44,7 @@ If you are running this at an AWS sponsored workshop then you may be provided wi
 {{< prev_next_button link_next_url="./1_deploy_vpc/" button_next_text="Start Lab" first_step="true" />}}
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 ## Costs
 {{% notice note %}}

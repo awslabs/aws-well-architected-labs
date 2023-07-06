@@ -9,4 +9,4 @@ disableToc = "false"
 +++
 
 #### List of labs available
-{{% children %}}
+{{ children }}

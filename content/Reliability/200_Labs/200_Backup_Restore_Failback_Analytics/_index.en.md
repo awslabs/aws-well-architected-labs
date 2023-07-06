@@ -33,6 +33,6 @@ To configure the infrastructure and deploy the application, we will use [AWS Clo
 This workshop takes about two hours to complete. Prior experience with the AWS Console and Linux command line are helpful but not required.  You should also have basic familiarity with batch and stream processing architectures on AWS.
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./gettingstarted/" button_next_text="Start Lab" first_step="true" />}}

@@ -50,6 +50,6 @@ The knowledge you acquire will help you learn how to programmatically access con
 - The lab should take approximately 30 minutes to complete
 
 ## Steps:
-{{% children /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_configure_env/" button_next_text="Start Lab" first_step="true" />}}

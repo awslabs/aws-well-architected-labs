@@ -37,6 +37,6 @@ This hands-on lab will give you an overview on **Rightsizing recommendations** a
 - [Click here to check the costs associated with other AWS Cost Management tools](https://aws.amazon.com/aws-cost-management/pricing/)
 
 ## Steps
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_intro_right_sizing/" button_next_text="Start Lab" first_step="true" />}}

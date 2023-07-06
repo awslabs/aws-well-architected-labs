@@ -47,7 +47,7 @@ There is also an optional space to add contacts for the contributor, if you wish
 - N/A
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 
 {{< prev_next_button link_next_url="./1_cloud_financial_management/" button_next_text="Start Lab" first_step="true" />}}

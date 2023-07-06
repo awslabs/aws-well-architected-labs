@@ -54,6 +54,6 @@ We will require to login using administrator access for both the Management Acco
 {{% /notice %}}
 
 ## Steps:
-{{% children  /%}}
+{{ children }}
 
 {{< prev_next_button link_next_url="./1_configure_lab_environment/" button_next_text="Start Lab" first_step="true" />}}
