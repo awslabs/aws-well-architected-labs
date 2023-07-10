@@ -46,7 +46,7 @@ The deployed stack only has one resource, the VPC. But the CloudFormation Templa
 * All resources _except_ the VPC have a `Condition` statement. Since the conditions were `false` only the VPC was created
 {{% /expand%}}
 
-### Complare the CloudFormation template to the VPC resource that was created
+### Compare the CloudFormation template to the VPC resource that was created
 
 1. Return to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation)
 1. Click the **Resources** tab for the **CloudFormationLab** stack. The listing shows all the resources that were created. In this case just the VPC

@@ -153,7 +153,7 @@ FROM
   ${table_Name} 
 WHERE 
   ${date_filter} 
-  AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
+  AND line_item_product_code LIKE '%Kinesis%'
   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY 
   bill_payer_account_id,
