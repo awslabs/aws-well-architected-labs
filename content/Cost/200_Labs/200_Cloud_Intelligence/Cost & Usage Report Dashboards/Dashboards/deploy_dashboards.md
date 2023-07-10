@@ -23,7 +23,7 @@ If you do not want to use CloudFormation to setup your dashboards, you have an o
 
 
 {{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/uAiYmJu99zU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
 
@@ -171,8 +171,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 
 ### 3.2 Deploy Dashboards using CloudFormation
 In this option we use guide you through using a CloudFormation template that will deploy **all needed resources**. You will cut and paste some parameters (An S3 path to CUR data, A QuickSight user that will be the owner of the QuickSight assets, and which dashboards you want to deploy) into the template and click run. 
-
-    **Warning:** Ensure you use the same region as on the Step 1 (same region where your S3 Bucket with CUR is located) to avoid cross region Data Transfer costs. 
+   **Warning:** Ensure you use the same region as on the Step 1 (same region where your S3 Bucket with CUR is located) to avoid cross region Data Transfer costs. 
     ------------ | -------------
 
 All other resources are created automatically: Athena Workgroup and bucket, Glue table, Crawler, QS dataset, and finally the dashboards. The template uses a custom resource (a Lambda with [this CLI tool](https://github.com/aws-samples/aws-cudos-framework-deployment/)) to create, delete, or update assets. 

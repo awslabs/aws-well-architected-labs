@@ -41,7 +41,6 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "ce:GetRightsizingRecommendation"
                   - "organizations:ListAccounts"
                   - "organizations:ListCreateAccountStatus"
                   - "organizations:DescribeOrganization"
@@ -54,6 +53,22 @@ Resources:
                   - "organizations:ListParents"
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
+                Resource: "*"
+        - PolicyName: "RightsizingModule"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetRightsizingRecommendation"
+                Resource: "*"
+        - PolicyName: "AnomaliesModule"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetAnomalies"
                 Resource: "*"
         - PolicyName: "ComputeOptimizer-ExportLambdaFunctionRecommendations"
           PolicyDocument:
