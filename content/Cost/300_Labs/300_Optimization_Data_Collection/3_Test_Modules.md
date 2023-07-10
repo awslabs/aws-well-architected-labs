@@ -21,6 +21,7 @@ Once you have deployed your modules you will be able to test your Lambda functio
 - **AWS Budgets Export module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
 - **AWS Transit Gateway Chargeback module** module -> **Accounts-Collector-Function-OptimizationDataCollectionStack** Lambda function
 - **Cost Explorer Rightsizing Recommendations** module -> **Rightsize-Data-Lambda-Function-OptimizationDataCollectionStack** Lambda function
+- **Cost Explorer Cost Anomaly Findings** module -> **CostAnomaly-Data-Lambda-Function-OptimizationDataCollectionStack** Lambda function
 
 
 2. To test your Lambda function open respective Lambda in AWS Console and click **Test**
