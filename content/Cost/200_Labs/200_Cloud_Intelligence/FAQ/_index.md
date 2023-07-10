@@ -82,7 +82,7 @@ In order to create an analysis from any of the CUDOS Dashboards, Go edit the new
    1. Click “Share dashboard”
    1. Enable the "Allow "save as"" next to your username
    1. Click "Confirm"
-   1. Click the link in the top left corner to Go back to 'LazyMBR'
+   1. Click the link in the top left corner to Go back to 'CUDOS Dashboard' (or similar)
    1. You should now see a “Save as” (you might have to refresh browser)
    1. Click "Save as"
    1. Name your Analysis
