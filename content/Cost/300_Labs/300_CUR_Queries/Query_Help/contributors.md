@@ -37,3 +37,5 @@ The CUR Library is intended to be an open source library of Cost & Usage Reports
 - Geno Erickson, Sr. TAM, AWS Enterprise Support
 - Gaurav Garg - TAM, AWS Enterprise Support
 - Sornavel Perumal - TAM, AWS Enterprise Support
+- Ameen Raffic - Sr. TAM, AWS Enterprise Support
+- Tom March - Practice Manager, AWS Professional Services
