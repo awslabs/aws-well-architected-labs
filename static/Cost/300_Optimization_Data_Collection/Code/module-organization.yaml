@@ -246,7 +246,7 @@ Resources:
                 Action:
                   - "s3:PutObject"
                 Resource: 
-                  - !Sub "${DestinationBucketARN}/*"
+                  - !Sub "arn:aws:s3:::${DestinationBucket}/*"
         - PolicyName: "CloudWatch-Access"
           PolicyDocument:
             Version: "2012-10-17"
