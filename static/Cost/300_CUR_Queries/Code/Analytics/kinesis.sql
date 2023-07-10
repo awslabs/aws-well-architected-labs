@@ -16,7 +16,7 @@ FROM -- automation_from_stmt
   ${table_Name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
-  AND product_product_name IN ('Amazon Kinesis','Amazon Kinesis Firehose','Amazon Kinesis Analytics','Amazon Kinesis Video')
+  AND line_item_product_code LIKE '%Kinesis%'
   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
