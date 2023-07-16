@@ -59,7 +59,7 @@ We have upgraded the lab to work for multi-payers. For this we added a new parti
 To fix please follow the steps below:
 
 1. Ensure your costoptimization bucket does have the new **payer_id=your_payer_id** folder in your data. 
-2. Delete your new tables with names that have long hashs attached to them and start with payer or year
+2. Delete your new tables with names that have long hashes attached to them and start with payer or year
 3. Run the following python script [Link to Code](/Cost/300_Optimization_Data_Collection/Code/source/s3_files_migration.py) 
 
    ```python3 s3_files_migration.py <ODC_your_bucket_name> ```

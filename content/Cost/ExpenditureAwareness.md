@@ -48,7 +48,16 @@ Implementing usage controls will ensure excess usage and accompanying costs does
 
 ---
 
-## Step 5 - Monitor Usage and Cost - Advanced Analysis
+## Step 5 - Automated CUR Updates and Ingestion
+This hands-on lab will guide you through the steps to enable automated updates of your CUR files into Athena, every time a new CUR file is delivered.
+
+| | |
+|---|---|
+| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/200_Labs/200_Automated_CUR_Updates_and_Ingestion" >}}) | **200 Level Lab**: This lab will guide you in setting up the CUR as an Athena database. It uses S3 events and Lambda to trigger a Glue crawler and update Athena when a new CUR is delivered. |
+
+---
+
+## Step 6 - Monitor Usage and Cost - Advanced Analysis
 Advanced analysis using your Cost and Usage Report (CUR) will allow you to answer the most challenging questions on your usage and cost. It is the most detailed source of information on your cost and usage available.
 
 | | |
@@ -57,7 +66,7 @@ Advanced analysis using your Cost and Usage Report (CUR) will allow you to answe
 
 ---
 
-## Step 6 - Monitor Usage and Cost - Advanced Visualization
+## Step 7 - Monitor Usage and Cost - Advanced Visualization
 Utilizing the CUR data source in the previous step, you can provide more detailed and custom visualizations and dashboards.
 
 | | |
@@ -66,21 +75,12 @@ Utilizing the CUR data source in the previous step, you can provide more detaile
 
 ---
 
-## Step 7 - Monitor Workload Efficiency
+## Step 8 - Monitor Workload Efficiency
 This hands-on lab will guide you through the steps to measure the efficiency of a workload. It shows you how to get the overall efficiency, then look deeper for patterns in usage to be able to allocate different weights to different outputs of a system.
 
 | | |
 |---|---|
 | [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/200_Labs/200_Workload_Efficiency" >}}) | **200 Level Lab**: This lab combines your application logs with cost data, to provide an efficiency metric and insights for your workloads. |
-
----
-
-## Step 8 (Optional) - Automated CUR Updates and Ingestion
-This hands-on lab will guide you through the steps to enable automated updates of your CUR files into Athena, every time a new CUR file is delivered.
-
-| | |
-|---|---|
-| [![Go to lab](/Common/images/gotolab.png)]({{< ref "/Cost/300_Labs/300_Automated_CUR_Updates_and_Ingestion" >}}) | **300 Level Lab**: This lab uses s3 events and Lambda to trigger a Glue crawler and update Athena when a new CUR is delivered. |
 
 ---
 

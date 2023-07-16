@@ -3,11 +3,11 @@ title: "Level 200: Cost and Usage Analysis"
 #menutitle: "Lab #1"
 date: 2020-04-24T11:16:08-04:00
 chapter: false
-weight: 4
+weight: 4.2
 hidden: false
 ---
 ## Last Updated
-July 2021
+July 2023
 
 ## Authors
 - Nathan Besh, Cost Lead, Well-Architected
@@ -16,6 +16,7 @@ July 2021
 ## Contributors
 - Alee Whitman, Sr. Commercial Architect (AWS OPTICS) 
 - Duncan Bell, Solutions Architect, Well-Architected
+- Cy Hopkins, Sr. Solutions Architect
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: costoptimization@amazon.com
@@ -23,7 +24,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Introduction
  This hands-on lab will guide you through the steps to setup a platform to analyze your cost and usage reports. The skills you learn will help you perform analysis on your cost and usage, in alignment with the AWS Well-Architected Framework.
 
-![Images/AWSCostReadme.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/AWSCostReadme.png)
+![Images/AWSCostReadme.png](/Cost/200_4_Cost_and_Usage_Analysis/Images/0.0-AWSCostReadme.png?classes=lab_picture_small)
 
 ## Goals
 - Setup an analysis platform for your cost and usage data
@@ -32,7 +33,7 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 ## Prerequisites
 - [AWS Account Setup]({{< ref "/Cost/100_Labs/100_1_AWS_Account_Setup" >}}) has been completed
 - Have usage that is tagged (preferred, not mandatory)
-
+- Completed the [Level 200: Automated CUR Updates and Ingestion](../200_automated_cur_updates_and_ingestion/) Lab
 
 ## Permissions required
 - Log in as the Cost Optimization team, created in [AWS Account Setup](../100_1_AWS_Account_Setup/README.md)
@@ -45,9 +46,9 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 
 
 ## Time to complete
-- The lab should take approximately 20 minutes to complete
+- The lab should take approximately 20-30 minutes to complete
 
 ## Steps:
 {{% children  /%}}
 
-{{< prev_next_button link_next_url="./1_verify_cur/" button_next_text="Start Lab" first_step="true" />}}
+{{< prev_next_button link_next_url="./cur_analysis/" button_next_text="Start Lab" first_step="true" />}}

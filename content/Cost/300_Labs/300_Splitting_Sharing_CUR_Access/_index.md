@@ -39,7 +39,7 @@ The lab has been designed to configure a system that can expand easily, for any 
 
 ## Prerequisites
 - Multiple AWS Accounts (At least two)
-- Billing reports auto update configured as per [300_Automated_CUR_Updates_and_Ingestion]({{< ref "/Cost/300_Labs/300_Automated_CUR_Updates_and_Ingestion" >}})
+- Billing reports auto update configured as per [200_Automated_CUR_Updates_and_Ingestion]({{< ref "/Cost/200_Labs/200_Automated_CUR_Updates_and_Ingestion" >}})
 
 
 ## Permissions required
