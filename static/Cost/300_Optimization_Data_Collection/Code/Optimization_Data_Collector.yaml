@@ -26,6 +26,7 @@ Metadata:
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
           - IncludeTransitGatewayModule
+          - IncludeEC2UtilizationModule
     ParameterLabels:
       DestinationBucket:
         default: 'Destination S3 bucket'
@@ -46,7 +47,7 @@ Metadata:
       IncludeRightsizingModule:
         default: 'Include Rightsizing Recommendations Data Collection Module'
       IncludeCostAnomalyModule:
-        default: 'Include Cost Anomalies ightsizing Recommendations Data Collection Module'
+        default: 'Include Cost Anomalies rightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
@@ -63,6 +64,8 @@ Metadata:
         default: 'Include AWS Budgets Collection Module'
       IncludeTransitGatewayModule:
         default: 'Include AWS TransitGateway Collection Module'
+      IncludeEC2UtilizationModule:
+        default: 'Include EC2 Utilization Data Collection Module'
 Mappings:
   RegionMap:
        eu-west-1:        {CodeBucket: aws-well-architected-labs-ireland }
@@ -177,6 +180,12 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no"
+  IncludeEC2UtilizationModule:
+    Type: String
+    Description: Collects EC2 CloudWatch metrics from your accounts
+    AllowedValues:
+      - "yes"
+      - "no"
 Outputs:
   S3Bucket:
     Description: Name of S3 Bucket which will store the AWS Cost Explorer Rightsizing recommendations
@@ -202,6 +211,7 @@ Outputs:
           - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
           - !If [DeployTransitGatewayModule, !Sub "${TransitGatewayModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+          - !If [DeployEC2UtilizationModule, !Sub "${EC2UtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
 Conditions:
   DeployTAModule: !Equals
     - !Ref IncludeTAModule
@@ -224,6 +234,9 @@ Conditions:
   DeployRDSUtilizationModule: !Equals
     - !Ref IncludeRDSUtilizationModule
     - "yes"
+  DeployEC2UtilizationModule: !Equals
+    - !Ref IncludeEC2UtilizationModule
+    - "yes"
   DeployOrgDataModule: !Equals
     - !Ref IncludeOrgDataModule
     - "yes"
@@ -242,7 +255,7 @@ Conditions:
     - !Condition DeployRDSUtilizationModule
     - !Condition DeployEcsChargebackModule
     - !Condition DeployBudgetsModule
-    - !Condition DeployRDSUtilizationModule
+    - !Condition DeployEC2UtilizationModule
     - !Condition DeployTransitGatewayModule
   ComputeOptimizerRegionsIsEmpty: !Equals
     - !Join [ '', !Split [ ' ', !Ref ComputeOptimizerRegions  ] ] # remove spaces
@@ -518,6 +531,19 @@ Resources:
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+  EC2UtilizationModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployEC2UtilizationModule
+    Properties:
+      #TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-rds-usage.yaml"
+      TemplateURL: !Sub "https://philaws-wa-lab-dev.s3.amazonaws.com/module-ec2-usage.yaml"
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn
+        GlueRoleArn: !GetAtt GlueRole.Arn
+        MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
+        RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
   OrgDataModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployOrgDataModule
@@ -559,7 +585,9 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: DeployAccountCollector
     Properties:
-      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/account-collector.yaml"
+      #TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/account-collector.yaml"
+      #TemplateURL: !Sub "https://costoptimization-philbaz-dev.s3.amazonaws.com/account-collector.yaml"
+      TemplateURL: !Sub "https://philaws-wa-lab-dev.s3.amazonaws.com/account-collector.yaml"
       Parameters:
         RoleARN: !Sub "arn:aws:iam::${ManagementAccountID}:role/${RolePrefix}${ManagementAccountRole}"
         ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
@@ -573,5 +601,6 @@ Resources:
               - !If [DeployInventoryCollectorModule, !Sub "${InventoryCollectorModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
               - !If [DeployEcsChargebackModule, !Sub "${EcsChargebackModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
               - !If [DeployRDSUtilizationModule, !Sub "${RDSUtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
+              - !If [DeployEC2UtilizationModule, !Sub "${EC2UtilizationModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
               - !If [DeployBudgetsModule, !Sub "${BudgetsModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
               - !If [DeployTransitGatewayModule, !Sub "${TransitGatewayModule.Outputs.SQSUrl}", Ref: AWS::NoValue]
