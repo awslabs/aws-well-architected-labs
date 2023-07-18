@@ -78,7 +78,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in the Management Accounts
         - PolicyName: "Rightsizing-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -251,7 +251,7 @@ Resources:
           S3_BUCKET: !Ref DestinationBucket
           CRAWLER_NAME: !Ref RightsizingCrawler
           RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
-          ROLE: !Ref MultiAccountRoleName
+          ROLE: !Ref ManagementRoleName
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
   RightsizingCrawler:
     Type: AWS::Glue::Crawler
