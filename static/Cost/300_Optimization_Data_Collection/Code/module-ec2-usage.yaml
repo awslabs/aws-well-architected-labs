@@ -353,9 +353,6 @@ Resources:
                       ec2["Datapoints"] = datapoints
                       store_data_to_s3(ec2, region, service, path, 'ec2_id', ec2['InstanceId'], filename, accountID, payer_id)
 
-
-
-
           def lambda_handler(event, context):
               account_id = event["account_id"]
               payer_id = event["payer_id"]
