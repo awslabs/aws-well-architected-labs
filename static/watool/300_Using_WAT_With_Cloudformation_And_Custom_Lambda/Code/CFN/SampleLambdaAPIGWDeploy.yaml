@@ -115,8 +115,8 @@ Resources:
       QuestionAnswers:
         - "How do you securely operate your workload": # SEC1
           - "Separate workloads using accounts"
-          - "Secure AWS account"
-          - "Keep up to date with security threats"
+          - "Secure account root user and properties"
+          - "Keep up-to-date with security threats"
 
   RELWAWorkloadQuestions:
     # DependsOn: CreateWAWorkload
