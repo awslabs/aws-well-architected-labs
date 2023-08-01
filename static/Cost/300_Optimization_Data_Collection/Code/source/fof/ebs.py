@@ -24,15 +24,18 @@ def main(account_id):
                
                 paginator = client.get_paginator('describe_volumes')
                 response_iterator = paginator.paginate()
+                volume_cnt = 0
                 for response in response_iterator:
-                    data = response["Volumes"][0]
-                    data['region']=region
-                    data['accountid']=account_id
-                    dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
+                    for volume in response["Volumes"]:
+                        data = volume
+                        data['region']=region
+                        data['accountid']=account_id
+                        dataJSONData = json.dumps(data, cls=DateTimeEncoder)  # indent=4,
 
-                    f.write(dataJSONData)
-                    f.write("\n")
-                print(f"{region} ebs data collected")
+                        f.write(dataJSONData)
+                        f.write("\n")
+                        volume_cnt+= 1
+                print(f"{region}: {volume_cnt} ebs volumes collected")
             except Exception as e:
                 print(e)
                 pass
