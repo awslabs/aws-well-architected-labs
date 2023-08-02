@@ -28,4 +28,4 @@ weight = 2
 You will need to wait for the **Hot Primary Region** stack to have a status of **Completed** before moving on to this section. This will take approximately 15 minutes.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../1.1.2-secondary-region" />}}
+{{< prev_next_button link_prev_url="../" link_next_url="../1.1.2-secondary-region/" />}}

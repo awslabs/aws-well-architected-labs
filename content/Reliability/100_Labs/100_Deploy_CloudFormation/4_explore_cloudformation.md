@@ -31,7 +31,7 @@ Look through the template. You will notice several sections:
    * It is the Amazon DynamoDB table used as the mock for the **RecommendationService**
    * It has a _logical ID_ which in this case is `DynamoDBServiceMockTable`. This logical ID is how we refer to the DynamoDB table resource within the CloudFormation template.
    * It has a `Type` which tells CloudFormation which type of resource to create. In this case a `AWS::DynamoDB::Table`
-   * And it has `Properties` that define the values used to create the VPC
+   * And it has `Properties` that define the values used to create the Amazon DynamoDB table.
 
 * The [Outputs section](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) is used to display selective information about resources in the stack.
    * In this case it uses the built-in function `!GetAtt` to get the DNS Name for the Application Load Balancer.
