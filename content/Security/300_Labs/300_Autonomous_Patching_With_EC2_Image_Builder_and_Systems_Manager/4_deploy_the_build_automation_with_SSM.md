@@ -369,7 +369,7 @@ To Execute the automation document, you can run the following command:
 ```
 aws ssm start-automation-execution \
     --document-name "<enter_document_name>" \
-    --parameters "ApplicationStack=<enter_application_stack_name>,imageBuilderPipeline=<enter_image_builder_pipeline_arn>"
+    --parameters "ApplicationStack=<enter_application_stack_name>,ImageBuilderPipeline=<enter_image_builder_pipeline_arn>"
 
 ```
 
