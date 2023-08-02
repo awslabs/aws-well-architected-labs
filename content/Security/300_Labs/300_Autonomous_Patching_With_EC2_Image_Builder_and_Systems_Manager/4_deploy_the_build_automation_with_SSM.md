@@ -74,7 +74,7 @@ The template for Section 4 which can be found [here](/Security/300_Autonomous_Pa
 To deploy the template from console please follow this [guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html) for information on how to deploy the cloudformation template. 
 
 * Use `pattern3-automate` as the **Stack Name**.
-* Provide the ARN of the pipeline you created in section **3.2.6** as **ImageBuilderPipelineARN** parameter value. 
+* Provide the cloudformation stack name you created in section **3.2.6** as **ImageBuilderPipelineStack** parameter value. 
 * Provide the cloudfromation stack name you created in section **2.1** as **ApplicationStack** parameter value. 
 
 ### 4.3. Record The CloudFormation Output.
