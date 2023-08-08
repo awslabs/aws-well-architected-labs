@@ -31,6 +31,7 @@ CUR Query Library uses placeholder variables, indicated by a dollar sign and cur
   * [Imbalance Inter-Az Data Transfer](#imbalance-inter-az-data-transfer)
   * [Low Activity VPC Interface Endpoints](#low-activity-vpc-interface-endpoints)
   * [Low Activity AWS Network Firewall](#low-activity-aws-network-firewall)
+  * [Public IPv4 Addresses Costs](#public-ipv4-addresses-costs)
   
 ### Amazon API Gateway
 
@@ -648,6 +649,49 @@ The [Pricing Calculator](https://calculator.aws/) is a useful tool for assisting
 ```
 
 {{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Network Usage Query1" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+
+### Public IPv4 Addresses Costs
+
+#### Query Description
+This query shows the daily cost and usage of all Public IPv4 addresses in the last month, split by Payer and Linked Accounts. For further analysis the column "line_item_resource_id" can be uncommented to include the resource ID that is using the public IPv4 address. The column "projected_cost_usd" provides a preview of the amount charged after the [pricing change for Public IPv4 addresses](https://aws.amazon.com/blogs/aws/new-aws-public-ipv4-address-charge-public-ip-insights/) happening in February 2024.
+#### Pricing
+Please refer to the [Public IPv4 Address Charge annoucement](https://aws.amazon.com/blogs/aws/new-aws-public-ipv4-address-charge-public-ip-insights/). Also read our new blog post, [Identify and Optimize Public IPv4 Address Usage on AWS](https://aws.amazon.com/blogs/networking-and-content-delivery/identify-and-optimize-public-ipv4-address-usage-on-aws/), for more information on how to make the best use of public IPv4 addresses.
+
+#### Download SQL File
+[Link to file](/Cost/300_CUR_Queries/Code/Networking_&_Content_Delivery/public-ipv4-costs.sql)
+
+#### Query Preview
+```tsql
+SELECT 
+	date_trunc('day',"line_item_usage_start_date") "day", 
+	"bill_payer_account_id", 
+	"line_item_usage_account_id", 
+	"line_item_usage_type" ,
+	"product_region", 
+	--"line_item_resource_id",
+	sum("line_item_usage_amount") usage_hours, 
+	sum("line_item_unblended_cost") actual_cost_usd,
+	sum("line_item_usage_amount")*0.005 projected_cost_usd
+FROM ${table_name}
+WHERE 
+	year = cast(year(date_trunc('month', current_date) - interval '1' month) as varchar) 
+	and month in (date_format(date_trunc('month', current_date) - interval '1' month,'%m'),date_format(date_trunc('month', current_date) - interval '1' month,'%c'))
+	and "line_item_usage_type" like '%PublicIPv4%'
+	and "line_item_line_item_type" = 'Usage'
+GROUP BY
+	date_trunc('day',"line_item_usage_start_date"), 
+	"bill_payer_account_id", 
+	"line_item_usage_account_id", 
+	"line_item_usage_type" ,
+	"product_region"
+	--,"line_item_resource_id"
+ORDER BY sum("line_item_usage_amount") desc
+```
+
+{{< email_button category_text="Networking %26 Content Delivery" service_text="Network Usage" query_text="Public IPv4 Costs" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
 
